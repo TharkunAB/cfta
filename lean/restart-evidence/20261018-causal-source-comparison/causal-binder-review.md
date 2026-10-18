@@ -1,0 +1,13 @@
+# Strict original-body binder comparison
+
+The public binder theorem takes only the strict original-body Law. It derives Law for either source binder form. Law retains both actual initial Contexts, live Aliases, scoped profile and cut compatibility, actual completed source equations, forward Grows from both returns, the reader Heap of old StoredMuProfileContract.Correct, and actual History from empty to reader. The reader has no Ready, Normal, or issued-set premise.
+
+The proof recovers both actual callback schedules and selected complete payload cells with NativeRetainedRootDeletion.build. The current depth and ordinary probes derive the same usesLocal decision. Actual Depth calls make both repaired ordinary names fresh on live input scope. This gives exact body alias classes, common assigned local profiles, and compatible singleton or combined local cuts. Callback entry Contexts follow from the actual calls.
+
+For retained values, the strict-body Law compares singleton-deleted raw ordinary results. Actual source output tags derive exact bare-local parity. Normal-only filter_profile then compares both actual ordinary probes under a common assigned marker. A marker is chosen outside both selected stored-body assigned leaf collections. Actual source free-name support derives the same closed/open decision. The selected oldCorrect contracts reduce retained values to the compared ordinary probes, with root marker erasure in the open case. Cuts do not descend through a retained Mu boundary.
+
+For smart-unused values, NativeUnusedRootShadow derives the actual History-dependent return law. The local profile can be Empty. The strict-body Law uses the original cuts combined with the local singleton cut. This compares actual returns without assuming their desired equality or a semantic result for the parent.
+
+The earlier selected writer can have different source syntax. The exact stored body remains in the retained reduction. No current-writer syntax equality, backward History inference, arbitrary future completion, finite Cap, or hereditary closure is used. The oldCorrect reader heap remains an explicit semantic contract. This theorem does not establish its missing general publication step or whole-library completion.
+
+Selected evidence: direct2 is terminal-zero with a literal zero-byte log. Canonical1 is warning-free with 648 jobs. Public1 prints the full public statement, full proof, and standard-three axiom list with all eight printer options. One public pair is new. This component contains no constructed pair and starts no fixture. Failed direct1 remains immutable.

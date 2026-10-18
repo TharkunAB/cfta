@@ -1,0 +1,620 @@
+@MicroCFTA.SourceCurrentCausalSourceComparison.source : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard),
+  @MicroCFTA.SourceCurrentCausalSourceRootLaw.Law Symbol Guard inst expression
+theorem MicroCFTA.SourceCurrentCausalSourceComparison.source : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard),
+  @MicroCFTA.SourceCurrentCausalSourceRootLaw.Law Symbol Guard inst expression :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] expression =>
+  @Nat.strongRecOn.{0}
+    (fun bound =>
+      ∀ (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard),
+        @Eq.{1} Nat
+            (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+              (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard (instSizeOfDefault.{1} Symbol)
+                (instSizeOfDefault.{1} Guard))
+              expression)
+            bound →
+          @MicroCFTA.SourceCurrentCausalSourceRootLaw.Law Symbol Guard inst expression)
+    (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+      (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard (instSizeOfDefault.{1} Symbol)
+        (instSizeOfDefault.{1} Guard))
+      expression)
+    (fun bound ih expression measure =>
+      @MicroCFTA.InternedNestedConstruction.Syntax.casesOn.{0} Symbol Guard
+        (fun t =>
+          @Eq.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) expression t →
+            @MicroCFTA.SourceCurrentCausalSourceRootLaw.Law Symbol Guard inst expression)
+        expression
+        (fun h =>
+          @Eq.ndrec.{0, 1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+            (@MicroCFTA.InternedNestedConstruction.Syntax.empty Symbol Guard)
+            (fun expression =>
+              @Eq.{1} Nat
+                  (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                    (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                      (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                    expression)
+                  bound →
+                @MicroCFTA.SourceCurrentCausalSourceRootLaw.Law Symbol Guard inst expression)
+            (fun measure {Atom} => @MicroCFTA.SourceCurrentCausalSourceRootLaw.empty Symbol Guard inst Atom) expression
+            (@Eq.symm.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) expression
+              (@MicroCFTA.InternedNestedConstruction.Syntax.empty Symbol Guard) h)
+            measure)
+        (fun index h =>
+          @Eq.ndrec.{0, 1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+            (@MicroCFTA.InternedNestedConstruction.Syntax.var Symbol Guard index)
+            (fun expression =>
+              @Eq.{1} Nat
+                  (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                    (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                      (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                    expression)
+                  bound →
+                @MicroCFTA.SourceCurrentCausalSourceRootLaw.Law Symbol Guard inst expression)
+            (fun measure {Atom} => @MicroCFTA.SourceCurrentCausalSourceRootLaw.var Symbol Guard inst index Atom)
+            expression
+            (@Eq.symm.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) expression
+              (@MicroCFTA.InternedNestedConstruction.Syntax.var Symbol Guard index) h)
+            measure)
+        (fun rows h =>
+          @Eq.ndrec.{0, 1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+            (@MicroCFTA.InternedNestedConstruction.Syntax.node Symbol Guard rows)
+            (fun expression =>
+              @Eq.{1} Nat
+                  (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                    (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                      (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                    expression)
+                  bound →
+                @MicroCFTA.SourceCurrentCausalSourceRootLaw.Law Symbol Guard inst expression)
+            (fun measure =>
+              @MicroCFTA.SourceCurrentCausalSourceNodeComparison.node Symbol Guard inst rows
+                fun symbol guard children member child included =>
+                have smaller :=
+                  have outer :=
+                    @List.sizeOf_lt_of_mem.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard)
+                      (@MicroCFTA.InternedNestedConstruction.EdgeSyntax.mk Symbol Guard symbol guard children)
+                      (@MicroCFTA.InternedNestedConstruction.EdgeSyntax._sizeOf_inst Symbol Guard
+                        (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                      rows member;
+                  have inner :=
+                    @List.sizeOf_lt_of_mem.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) child
+                      (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                        (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                      children included;
+                  @Decidable.byContradiction
+                    (@LT.lt.{0} Nat instLTNat
+                      (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                        (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                          (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                        child)
+                      bound)
+                    ((@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                          (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                            (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                          child).decLt
+                      bound)
+                    fun a =>
+                    @MicroCFTA.SourceCurrentCausalSourceComparison.source._proof_1_2 Symbol Guard bound rows symbol
+                      guard children child inner
+                      (@Eq.mp.{0}
+                        (@Eq.{1} Nat
+                          (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                            (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                              (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                            (@MicroCFTA.InternedNestedConstruction.Syntax.node Symbol Guard rows))
+                          bound)
+                        (@Eq.{1} Nat
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                            (@SizeOf.sizeOf.{1}
+                              (List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard))
+                              (@List._sizeOf_inst.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard)
+                                (@MicroCFTA.InternedNestedConstruction.EdgeSyntax._sizeOf_inst Symbol Guard
+                                  (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard)))
+                              rows))
+                          bound)
+                        (@congrFun'.{1, 1} Nat Prop
+                          (@Eq.{1} Nat
+                            (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                              (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                              (@MicroCFTA.InternedNestedConstruction.Syntax.node Symbol Guard rows)))
+                          (@Eq.{1} Nat
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                              (@SizeOf.sizeOf.{1}
+                                (List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard))
+                                (@List._sizeOf_inst.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard)
+                                  (@MicroCFTA.InternedNestedConstruction.EdgeSyntax._sizeOf_inst Symbol Guard
+                                    (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard)))
+                                rows)))
+                          (@congrArg.{1, 1} Nat (Nat → Prop)
+                            (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                              (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                              (@MicroCFTA.InternedNestedConstruction.Syntax.node Symbol Guard rows))
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                              (@SizeOf.sizeOf.{1}
+                                (List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard))
+                                (@List._sizeOf_inst.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard)
+                                  (@MicroCFTA.InternedNestedConstruction.EdgeSyntax._sizeOf_inst Symbol Guard
+                                    (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard)))
+                                rows))
+                            (@Eq.{1} Nat)
+                            (@MicroCFTA.InternedNestedConstruction.Syntax.node.sizeOf_spec Symbol Guard
+                              (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard) rows))
+                          bound)
+                        measure)
+                      (@Eq.mp.{0}
+                        (@LT.lt.{0} Nat instLTNat
+                          (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard)
+                            (@MicroCFTA.InternedNestedConstruction.EdgeSyntax._sizeOf_inst Symbol Guard
+                              (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                            (@MicroCFTA.InternedNestedConstruction.EdgeSyntax.mk Symbol Guard symbol guard children))
+                          (@SizeOf.sizeOf.{1} (List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard))
+                            (@List._sizeOf_inst.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard)
+                              (@MicroCFTA.InternedNestedConstruction.EdgeSyntax._sizeOf_inst Symbol Guard
+                                (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard)))
+                            rows))
+                        (@LT.lt.{0} Nat instLTNat
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                                (@SizeOf.sizeOf.{1} Symbol (instSizeOfDefault.{1} Symbol) symbol))
+                              (@SizeOf.sizeOf.{1} Guard (instSizeOfDefault.{1} Guard) guard))
+                            (@SizeOf.sizeOf.{1} (List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard))
+                              (@List._sizeOf_inst.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                  (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard)))
+                              children))
+                          (@SizeOf.sizeOf.{1} (List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard))
+                            (@List._sizeOf_inst.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard)
+                              (@MicroCFTA.InternedNestedConstruction.EdgeSyntax._sizeOf_inst Symbol Guard
+                                (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard)))
+                            rows))
+                        (@congrFun'.{1, 1} Nat Prop
+                          (@LT.lt.{0} Nat instLTNat
+                            (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard)
+                              (@MicroCFTA.InternedNestedConstruction.EdgeSyntax._sizeOf_inst Symbol Guard
+                                (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                              (@MicroCFTA.InternedNestedConstruction.EdgeSyntax.mk Symbol Guard symbol guard children)))
+                          (@LT.lt.{0} Nat instLTNat
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                                  (@SizeOf.sizeOf.{1} Symbol (instSizeOfDefault.{1} Symbol) symbol))
+                                (@SizeOf.sizeOf.{1} Guard (instSizeOfDefault.{1} Guard) guard))
+                              (@SizeOf.sizeOf.{1} (List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard))
+                                (@List._sizeOf_inst.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                  (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                    (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard)))
+                                children)))
+                          (@congrArg.{1, 1} Nat (Nat → Prop)
+                            (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard)
+                              (@MicroCFTA.InternedNestedConstruction.EdgeSyntax._sizeOf_inst Symbol Guard
+                                (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                              (@MicroCFTA.InternedNestedConstruction.EdgeSyntax.mk Symbol Guard symbol guard children))
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                                  (@SizeOf.sizeOf.{1} Symbol (instSizeOfDefault.{1} Symbol) symbol))
+                                (@SizeOf.sizeOf.{1} Guard (instSizeOfDefault.{1} Guard) guard))
+                              (@SizeOf.sizeOf.{1} (List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard))
+                                (@List._sizeOf_inst.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                  (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                    (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard)))
+                                children))
+                            (@LT.lt.{0} Nat instLTNat)
+                            (@MicroCFTA.InternedNestedConstruction.EdgeSyntax.mk.sizeOf_spec Symbol Guard
+                              (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard) symbol guard children))
+                          (@SizeOf.sizeOf.{1} (List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard))
+                            (@List._sizeOf_inst.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard)
+                              (@MicroCFTA.InternedNestedConstruction.EdgeSyntax._sizeOf_inst Symbol Guard
+                                (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard)))
+                            rows))
+                        outer)
+                      a;
+                @ih
+                  (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                    (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                      (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                    child)
+                  smaller child
+                  (@rfl.{1} Nat
+                    (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                      (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                        (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                      child)))
+            expression
+            (@Eq.symm.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) expression
+              (@MicroCFTA.InternedNestedConstruction.Syntax.node Symbol Guard rows) h)
+            measure)
+        (fun expressions h =>
+          @Eq.ndrec.{0, 1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+            (@MicroCFTA.InternedNestedConstruction.Syntax.union Symbol Guard expressions)
+            (fun expression =>
+              @Eq.{1} Nat
+                  (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                    (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                      (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                    expression)
+                  bound →
+                @MicroCFTA.SourceCurrentCausalSourceRootLaw.Law Symbol Guard inst expression)
+            (fun measure =>
+              @MicroCFTA.SourceCurrentCausalSourceUnionComparison.union Symbol Guard inst expressions
+                fun child member =>
+                have smaller :=
+                  have inside :=
+                    @List.sizeOf_lt_of_mem.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) child
+                      (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                        (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                      expressions member;
+                  @Decidable.byContradiction
+                    (@LT.lt.{0} Nat instLTNat
+                      (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                        (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                          (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                        child)
+                      bound)
+                    ((@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                          (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                            (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                          child).decLt
+                      bound)
+                    fun a =>
+                    @MicroCFTA.SourceCurrentCausalSourceComparison.source._proof_1_1 Symbol Guard bound expressions
+                      child inside
+                      (@Eq.mp.{0}
+                        (@Eq.{1} Nat
+                          (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                            (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                              (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                            (@MicroCFTA.InternedNestedConstruction.Syntax.union Symbol Guard expressions))
+                          bound)
+                        (@Eq.{1} Nat
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                            (@SizeOf.sizeOf.{1} (List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard))
+                              (@List._sizeOf_inst.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                  (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard)))
+                              expressions))
+                          bound)
+                        (@congrFun'.{1, 1} Nat Prop
+                          (@Eq.{1} Nat
+                            (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                              (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                              (@MicroCFTA.InternedNestedConstruction.Syntax.union Symbol Guard expressions)))
+                          (@Eq.{1} Nat
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                              (@SizeOf.sizeOf.{1} (List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard))
+                                (@List._sizeOf_inst.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                  (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                    (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard)))
+                                expressions)))
+                          (@congrArg.{1, 1} Nat (Nat → Prop)
+                            (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                              (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                              (@MicroCFTA.InternedNestedConstruction.Syntax.union Symbol Guard expressions))
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                              (@SizeOf.sizeOf.{1} (List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard))
+                                (@List._sizeOf_inst.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                  (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                    (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard)))
+                                expressions))
+                            (@Eq.{1} Nat)
+                            (@MicroCFTA.InternedNestedConstruction.Syntax.union.sizeOf_spec Symbol Guard
+                              (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard) expressions))
+                          bound)
+                        measure)
+                      a;
+                @ih
+                  (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                    (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                      (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                    child)
+                  smaller child
+                  (@rfl.{1} Nat
+                    (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                      (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                        (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                      child)))
+            expression
+            (@Eq.symm.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) expression
+              (@MicroCFTA.InternedNestedConstruction.Syntax.union Symbol Guard expressions) h)
+            measure)
+        (fun smart body h =>
+          @Eq.ndrec.{0, 1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+            (@MicroCFTA.InternedNestedConstruction.Syntax.binder Symbol Guard smart body)
+            (fun expression =>
+              @Eq.{1} Nat
+                  (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                    (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                      (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                    expression)
+                  bound →
+                @MicroCFTA.SourceCurrentCausalSourceRootLaw.Law Symbol Guard inst expression)
+            (fun measure =>
+              @MicroCFTA.SourceCurrentCausalSourceBinderComparison.binder Symbol Guard inst smart body
+                (have smaller :=
+                  @Decidable.byContradiction
+                    (@LT.lt.{0} Nat instLTNat
+                      (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                        (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                          (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                        body)
+                      bound)
+                    ((@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                          (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                            (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                          body).decLt
+                      bound)
+                    fun a =>
+                    @MicroCFTA.SourceCurrentCausalSourceComparison.source._proof_1_3 Symbol Guard bound smart body
+                      (@Eq.mp.{0}
+                        (@Eq.{1} Nat
+                          (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                            (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                              (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                            (@MicroCFTA.InternedNestedConstruction.Syntax.binder Symbol Guard smart body))
+                          bound)
+                        (@Eq.{1} Nat
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                              (@SizeOf.sizeOf.{1} Bool Bool._sizeOf_inst smart))
+                            (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                              (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                              body))
+                          bound)
+                        (@congrFun'.{1, 1} Nat Prop
+                          (@Eq.{1} Nat
+                            (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                              (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                              (@MicroCFTA.InternedNestedConstruction.Syntax.binder Symbol Guard smart body)))
+                          (@Eq.{1} Nat
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                                (@SizeOf.sizeOf.{1} Bool Bool._sizeOf_inst smart))
+                              (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                  (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                                body)))
+                          (@congrArg.{1, 1} Nat (Nat → Prop)
+                            (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                              (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                              (@MicroCFTA.InternedNestedConstruction.Syntax.binder Symbol Guard smart body))
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                                (@SizeOf.sizeOf.{1} Bool Bool._sizeOf_inst smart))
+                              (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                  (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                                body))
+                            (@Eq.{1} Nat)
+                            (@MicroCFTA.InternedNestedConstruction.Syntax.binder.sizeOf_spec Symbol Guard
+                              (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard) smart body))
+                          bound)
+                        measure)
+                      a;
+                @ih
+                  (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                    (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                      (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                    body)
+                  smaller body
+                  (@rfl.{1} Nat
+                    (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                      (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                        (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                      body))))
+            expression
+            (@Eq.symm.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) expression
+              (@MicroCFTA.InternedNestedConstruction.Syntax.binder Symbol Guard smart body) h)
+            measure)
+        (@Eq.refl.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) expression))
+    expression
+    (@Eq.refl.{1} Nat
+      (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+        (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard (instSizeOfDefault.{1} Symbol)
+          (instSizeOfDefault.{1} Guard))
+        expression))
+'MicroCFTA.SourceCurrentCausalSourceComparison.source' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentCausalSourceComparison.publication : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (event : @MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst),
+  @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard
+      (@MicroCFTA.SourceCurrentStoredMuProfileContract.Correct Symbol Guard)
+      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst event) →
+    ∀
+      (history :
+        @MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst
+          (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard)
+          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst event)),
+      @MicroCFTA.SourceCurrentStoredMuProfileContract.Correct Symbol Guard
+        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.entry Symbol Guard inst event)
+        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.body Symbol Guard inst event)
+        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.depth Symbol Guard inst event)
+        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.ordinary Symbol Guard inst event)
+theorem MicroCFTA.SourceCurrentCausalSourceComparison.publication : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (event : @MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst),
+  @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard
+      (@MicroCFTA.SourceCurrentStoredMuProfileContract.Correct Symbol Guard)
+      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst event) →
+    ∀
+      (history :
+        @MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst
+          (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard)
+          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst event)),
+      @MicroCFTA.SourceCurrentStoredMuProfileContract.Correct Symbol Guard
+        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.entry Symbol Guard inst event)
+        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.body Symbol Guard inst event)
+        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.depth Symbol Guard inst event)
+        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.ordinary Symbol Guard inst event) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] event earlier
+    history =>
+  @MicroCFTA.SourceCurrentCausalPublicationProfile.publication Symbol Guard inst event
+    (fun {Atom} =>
+      @MicroCFTA.SourceCurrentCausalSourceComparison.source Symbol Guard inst
+        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.expression Symbol Guard inst event) Atom)
+    earlier history
+'MicroCFTA.SourceCurrentCausalSourceComparison.publication' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentCausalSourceComparison.build_heap : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+  (environment : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard state environment →
+    ∀
+      (history :
+        @MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst
+          (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard) state),
+      @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard
+          (@MicroCFTA.SourceCurrentStoredMuProfileContract.Correct Symbol Guard) state →
+        @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard
+          (@MicroCFTA.SourceCurrentStoredMuProfileContract.Correct Symbol Guard)
+          (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression environment state))
+theorem MicroCFTA.SourceCurrentCausalSourceComparison.build_heap : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+  (environment : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard state environment →
+    ∀
+      (history :
+        @MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst
+          (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard) state),
+      @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard
+          (@MicroCFTA.SourceCurrentStoredMuProfileContract.Correct Symbol Guard) state →
+        @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard
+          (@MicroCFTA.SourceCurrentStoredMuProfileContract.Correct Symbol Guard)
+          (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression environment state)) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] expression
+    environment state context history initial =>
+  @MicroCFTA.SourceCurrentCausalPublicationProfile.build Symbol Guard inst
+    (@MicroCFTA.SourceCurrentCausalSourceComparison.source Symbol Guard inst) expression environment state context
+    history initial
+'MicroCFTA.SourceCurrentCausalSourceComparison.build_heap' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentCausalSourceComparison.closed_heap : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard),
+  @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard
+    (@MicroCFTA.SourceCurrentStoredMuProfileContract.Correct Symbol Guard)
+    (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression
+        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard)))
+theorem MicroCFTA.SourceCurrentCausalSourceComparison.closed_heap : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard),
+  @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard
+    (@MicroCFTA.SourceCurrentStoredMuProfileContract.Correct Symbol Guard)
+    (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression
+        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard))) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] expression =>
+  @MicroCFTA.SourceCurrentCausalPublicationProfile.closed Symbol Guard inst
+    (@MicroCFTA.SourceCurrentCausalSourceComparison.source Symbol Guard inst) expression
+'MicroCFTA.SourceCurrentCausalSourceComparison.closed_heap' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentCausalSourceComparison.constructed_heap : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @Eq.{1}
+      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+      (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression
+        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard))
+      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value after) →
+    @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard
+      (@MicroCFTA.SourceCurrentStoredMuProfileContract.Correct Symbol Guard) after
+theorem MicroCFTA.SourceCurrentCausalSourceComparison.constructed_heap : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @Eq.{1}
+      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+      (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression
+        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard))
+      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value after) →
+    @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard
+      (@MicroCFTA.SourceCurrentStoredMuProfileContract.Correct Symbol Guard) after :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] expression
+    value after actual =>
+  @Eq.mp.{0}
+    (@MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard
+      (@MicroCFTA.SourceCurrentStoredMuProfileContract.Correct Symbol Guard)
+      (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression
+          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard))))
+    (@MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard
+      (@MicroCFTA.SourceCurrentStoredMuProfileContract.Correct Symbol Guard) after)
+    (@congrArg.{1, 1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) Prop
+      (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression
+          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard)))
+      after
+      (@MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard
+        (@MicroCFTA.SourceCurrentStoredMuProfileContract.Correct Symbol Guard))
+      (@congrArg.{1, 1}
+        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+        (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression
+          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard))
+        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value after)
+        (fun x =>
+          @MicroCFTA.InternedNestedConstruction.Outcome.state.match_1.{1} Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (fun x => MicroCFTA.InternedConstructorTemplates.State Symbol Guard) x (fun value state => state)
+            fun key state => state)
+        actual))
+    (@MicroCFTA.SourceCurrentCausalSourceComparison.closed_heap Symbol Guard inst expression)
+'MicroCFTA.SourceCurrentCausalSourceComparison.constructed_heap' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]

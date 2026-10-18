@@ -1,7 +1,7 @@
 # Current system claim
 
 Checked against the live theorem statements on 2026-10-18.
-The root-deletion proof checkpoint is `2e24eca5`.
+The causal source comparison proof checkpoint is `43859cfd`.
 
 In simple technical English: a completed modeled reduction adds no tree
 outside the input language. It retains every input tree that satisfies its inherited
@@ -54,23 +54,27 @@ counts, ranks, enumeration, probability, finite execution, and Haskell
 correspondence remain separate contracts. A checked component does not
 establish the full target.
 
-The main current gap is general recursive source comparison. Each actual
-cache publication must establish the semantic facts used by later hits.
-The recursive guard certificate must also follow from supported public
-construction. It must not remain an unexplained initial assumption.
+General source comparison is now proved for assigned root profiles and
+original root deletion. Actual histories from empty tables derive the
+body/probe payload contract and its stronger original-root interface.
+No semantic payload heap is supplied to those history-based endpoints.
+
+The main current gap is deeper recursive guarded observation agreement.
+It must match actual Mu unfolding, full row guards and ordered children.
+The recursive guard certificate must follow from supported public
+construction. Root-profile equality alone does not establish it.
 
 General completion still needs active-owner exclusion, fresh-call bounds,
 and repeated-pass convergence. Haskell correspondence still needs demand
 and cache behavior, machine-integer adequacy, and the external interfaces.
 
 Original root filtering tests bare references before substitution.
-Equal assigned profiles alone do not preserve that test. The checked
-stronger root contract retains it. A separate causal route now derives
-actual smart-unused deletion from a later reader's history, without an
-assumed payload contract. The remaining source induction must also cover
-retained open Mu and establish each actual publication's payload law.
-See `notes-current-root-deletion-observations.md` for checked evidence and
-the next proof step. The broad guarantee above has not changed.
+Equal assigned profiles alone do not preserve that test. The stronger
+root contract is now derived for every stored recursive payload in an
+actual modeled history. Its proof covers retained open Mu, unused binders
+and earlier cache winners. See `notes-current-causal-source-comparison.md`
+for checked evidence and the next causal Empty and deeper observation
+steps. The broad reduction guarantee above has not changed.
 
 No Haskell bytes change in this checkpoint. Root `FINDINGS.md` retains the
 external repair registry first. The full-library goal remains active.

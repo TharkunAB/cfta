@@ -1,0 +1,29 @@
+import MicroCFTA.SourceCurrentCausalSourceComparison
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentCausalSourceComparison.source
+#print MicroCFTA.SourceCurrentCausalSourceComparison.source
+#print axioms MicroCFTA.SourceCurrentCausalSourceComparison.source
+
+#check @MicroCFTA.SourceCurrentCausalSourceComparison.publication
+#print MicroCFTA.SourceCurrentCausalSourceComparison.publication
+#print axioms MicroCFTA.SourceCurrentCausalSourceComparison.publication
+
+#check @MicroCFTA.SourceCurrentCausalSourceComparison.build_heap
+#print MicroCFTA.SourceCurrentCausalSourceComparison.build_heap
+#print axioms MicroCFTA.SourceCurrentCausalSourceComparison.build_heap
+
+#check @MicroCFTA.SourceCurrentCausalSourceComparison.closed_heap
+#print MicroCFTA.SourceCurrentCausalSourceComparison.closed_heap
+#print axioms MicroCFTA.SourceCurrentCausalSourceComparison.closed_heap
+
+#check @MicroCFTA.SourceCurrentCausalSourceComparison.constructed_heap
+#print MicroCFTA.SourceCurrentCausalSourceComparison.constructed_heap
+#print axioms MicroCFTA.SourceCurrentCausalSourceComparison.constructed_heap

@@ -1,0 +1,63 @@
+@MicroCFTA.SourceCurrentCausalPublicationRootContract.publication : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (event : @MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+  (history :
+    @MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst
+      (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard)
+      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst event)),
+  @MicroCFTA.SourceCurrentStoredMuRootContract.Correct Symbol Guard
+    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.entry Symbol Guard inst event)
+    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.body Symbol Guard inst event)
+    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.depth Symbol Guard inst event)
+    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.ordinary Symbol Guard inst event)
+theorem MicroCFTA.SourceCurrentCausalPublicationRootContract.publication : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (event : @MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+  (history :
+    @MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst
+      (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard)
+      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst event)),
+  @MicroCFTA.SourceCurrentStoredMuRootContract.Correct Symbol Guard
+    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.entry Symbol Guard inst event)
+    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.body Symbol Guard inst event)
+    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.depth Symbol Guard inst event)
+    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.ordinary Symbol Guard inst event) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] event
+    history =>
+  @MicroCFTA.SourceCurrentCausalPublicationRootContract.candidate✝ Symbol Guard inst event
+    (fun {Atom} =>
+      @MicroCFTA.SourceCurrentCausalSourceComparison.source Symbol Guard inst
+        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.expression Symbol Guard inst event) Atom)
+    (@MicroCFTA.SourceCurrentCausalHistoryProfiles.heap Symbol Guard inst
+      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst event) history)
+    history
+'MicroCFTA.SourceCurrentCausalPublicationRootContract.publication' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentCausalPublicationRootContract.heap : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (reader : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (history :
+    @MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst
+      (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard) reader),
+  @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard
+    (@MicroCFTA.SourceCurrentStoredMuRootContract.Correct Symbol Guard) reader
+theorem MicroCFTA.SourceCurrentCausalPublicationRootContract.heap : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (reader : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (history :
+    @MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard inst
+      (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard) reader),
+  @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap Symbol Guard
+    (@MicroCFTA.SourceCurrentStoredMuRootContract.Correct Symbol Guard) reader :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] reader
+    history =>
+  @MicroCFTA.SourceCurrentCausalPublicationRootContract.history_heap✝ Symbol Guard inst
+    (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard) reader history
+    (@MicroCFTA.SourceCurrentNativeMuPublication.History.refl Symbol Guard inst
+      (@MicroCFTA.InternedConstructorTemplates.empty Symbol Guard))
+    (@MicroCFTA.SourceCurrentPublicationHeapInduction.empty Symbol Guard
+      (@MicroCFTA.SourceCurrentStoredMuRootContract.Correct Symbol Guard))
+'MicroCFTA.SourceCurrentCausalPublicationRootContract.heap' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]

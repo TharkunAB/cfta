@@ -1,0 +1,131 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-causal-source-comparison/publication-profile-strict-2.source.lean:45:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.map id
+in the target expression
+  List.map (fun value => value) event.environment = event.environment
+
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+event : Publication
+source : SourceCurrentCausalSourceRootLaw.Law event.expression
+earlier : Heap Correct event.afterBody
+history : History empty event.afterBody
+rawOrdinary : Value Symbol Guard
+afterRawOrdinary : InternedConstructorTemplates.State Symbol Guard
+rawBody : Value Symbol Guard
+afterRawBody : InternedConstructorTemplates.State Symbol Guard
+ordinaryDone :
+  build event.expression (Value.reference (Reference.uninterned (ordinaryLevel event.depth)) :: event.environment)
+      event.afterDepth =
+    Outcome.done rawOrdinary afterRawOrdinary
+ordinaryFilter :
+  run (withoutSelfReference (Reference.uninterned (ordinaryLevel event.depth)) rawOrdinary) afterRawOrdinary =
+    (event.ordinary, event.cut)
+bodyDone :
+  build event.expression (Value.reference (Reference.interned event.entry.identity) :: event.environment)
+      event.allocated =
+    Outcome.done rawBody afterRawBody
+bodyFilter :
+  run (withoutSelfReference (Reference.interned event.entry.identity) rawBody) afterRawBody =
+    (event.body, event.afterBody)
+ordinaryGrowth : Grows afterRawOrdinary event.afterBody
+bodyGrowth : Grows afterRawBody event.afterBody
+depthContext : Context event.afterDepth event.environment
+allocatedContext : Context event.allocated event.environment
+cutContext : Context event.cut event.environment
+own : Reference := Reference.interned event.entry.identity
+ordinary : Reference := Reference.uninterned (ordinaryLevel event.depth)
+inputs : List (Value Symbol Guard ⊕ Unit) := List.map Sum.inl event.environment
+names : Unit → Reference := fun x => Reference.depth
+locals : List (Value Symbol Guard ⊕ Unit ⊕ Unit) := Sum.inr (Sum.inl ()) :: List.map liftInput inputs
+bodyNames : Unit ⊕ Unit → Reference := Sum.elim (fun x => own) names
+ordinaryNames : Unit ⊕ Unit → Reference := Sum.elim (fun x => ordinary) names
+⊢ List.map (fun value => value) event.environment = event.environment
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-causal-source-comparison/publication-profile-strict-2.source.lean:49:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.map id
+in the target expression
+  Value.reference own :: List.map (fun value => value) event.environment = Value.reference own :: event.environment
+
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+event : Publication
+source : SourceCurrentCausalSourceRootLaw.Law event.expression
+earlier : Heap Correct event.afterBody
+history : History empty event.afterBody
+rawOrdinary : Value Symbol Guard
+afterRawOrdinary : InternedConstructorTemplates.State Symbol Guard
+rawBody : Value Symbol Guard
+afterRawBody : InternedConstructorTemplates.State Symbol Guard
+ordinaryDone :
+  build event.expression (Value.reference (Reference.uninterned (ordinaryLevel event.depth)) :: event.environment)
+      event.afterDepth =
+    Outcome.done rawOrdinary afterRawOrdinary
+ordinaryFilter :
+  run (withoutSelfReference (Reference.uninterned (ordinaryLevel event.depth)) rawOrdinary) afterRawOrdinary =
+    (event.ordinary, event.cut)
+bodyDone :
+  build event.expression (Value.reference (Reference.interned event.entry.identity) :: event.environment)
+      event.allocated =
+    Outcome.done rawBody afterRawBody
+bodyFilter :
+  run (withoutSelfReference (Reference.interned event.entry.identity) rawBody) afterRawBody =
+    (event.body, event.afterBody)
+ordinaryGrowth : Grows afterRawOrdinary event.afterBody
+bodyGrowth : Grows afterRawBody event.afterBody
+depthContext : Context event.afterDepth event.environment
+allocatedContext : Context event.allocated event.environment
+cutContext : Context event.cut event.environment
+own : Reference := Reference.interned event.entry.identity
+ordinary : Reference := Reference.uninterned (ordinaryLevel event.depth)
+inputs : List (Value Symbol Guard ⊕ Unit) := List.map Sum.inl event.environment
+names : Unit → Reference := fun x => Reference.depth
+locals : List (Value Symbol Guard ⊕ Unit ⊕ Unit) := Sum.inr (Sum.inl ()) :: List.map liftInput inputs
+bodyNames : Unit ⊕ Unit → Reference := Sum.elim (fun x => own) names
+ordinaryNames : Unit ⊕ Unit → Reference := Sum.elim (fun x => ordinary) names
+captured : List.map (input names) inputs = event.environment
+⊢ Value.reference own :: List.map (fun value => value) event.environment = Value.reference own :: event.environment
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-causal-source-comparison/publication-profile-strict-2.source.lean:53:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.map id
+in the target expression
+  Value.reference ordinary :: List.map (fun value => value) event.environment =
+    Value.reference ordinary :: event.environment
+
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+event : Publication
+source : SourceCurrentCausalSourceRootLaw.Law event.expression
+earlier : Heap Correct event.afterBody
+history : History empty event.afterBody
+rawOrdinary : Value Symbol Guard
+afterRawOrdinary : InternedConstructorTemplates.State Symbol Guard
+rawBody : Value Symbol Guard
+afterRawBody : InternedConstructorTemplates.State Symbol Guard
+ordinaryDone :
+  build event.expression (Value.reference (Reference.uninterned (ordinaryLevel event.depth)) :: event.environment)
+      event.afterDepth =
+    Outcome.done rawOrdinary afterRawOrdinary
+ordinaryFilter :
+  run (withoutSelfReference (Reference.uninterned (ordinaryLevel event.depth)) rawOrdinary) afterRawOrdinary =
+    (event.ordinary, event.cut)
+bodyDone :
+  build event.expression (Value.reference (Reference.interned event.entry.identity) :: event.environment)
+      event.allocated =
+    Outcome.done rawBody afterRawBody
+bodyFilter :
+  run (withoutSelfReference (Reference.interned event.entry.identity) rawBody) afterRawBody =
+    (event.body, event.afterBody)
+ordinaryGrowth : Grows afterRawOrdinary event.afterBody
+bodyGrowth : Grows afterRawBody event.afterBody
+depthContext : Context event.afterDepth event.environment
+allocatedContext : Context event.allocated event.environment
+cutContext : Context event.cut event.environment
+own : Reference := Reference.interned event.entry.identity
+ordinary : Reference := Reference.uninterned (ordinaryLevel event.depth)
+inputs : List (Value Symbol Guard ⊕ Unit) := List.map Sum.inl event.environment
+names : Unit → Reference := fun x => Reference.depth
+locals : List (Value Symbol Guard ⊕ Unit ⊕ Unit) := Sum.inr (Sum.inl ()) :: List.map liftInput inputs
+bodyNames : Unit ⊕ Unit → Reference := Sum.elim (fun x => own) names
+ordinaryNames : Unit ⊕ Unit → Reference := Sum.elim (fun x => ordinary) names
+captured : List.map (input names) inputs = event.environment
+bodyInputs : List.map (input bodyNames) locals = Value.reference own :: event.environment
+⊢ Value.reference ordinary :: List.map (fun value => value) event.environment =
+    Value.reference ordinary :: event.environment

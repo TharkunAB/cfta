@@ -13,6 +13,44 @@ Do not bypass that decision. Continue independent local proof work.
 Read `lean/notes-current-publication-status.md`. The full-library goal stays
 active. The proof and evidence are committed, locally verified and preserved.
 
+## Current full causal source comparison and payload initialization
+
+Updated: 2026-10-18 20:44 CEST. Proof checkpoint is `43859cfd`.
+Earlier proof commit is `668e9106`. Starting checkpoint is `a0355fbc`.
+Source main remains `c0cc8a05`.
+Read `lean/notes-current-causal-source-comparison.md` and
+`lean/notes-current-system-claim.md`.
+
+General assigned root-profile comparison and original root deletion are
+now proved for all source syntax. Actual entry Contexts, live input
+agreements, completed calls and forward growth remain explicit.
+Retained closed/open Mu and raw/smart used/unused binders are covered.
+Actual publication proves each candidate before installation.
+History from empty tables derives the entire old payload contract and
+its stronger original-root contract, including exact bare tags.
+The history-only source endpoint needs no supplied semantic payload heap.
+No Ready, reader-normality or issued extension is added to that endpoint.
+
+Eight actual nested raw/smart, used/unused, cold/warm cases derive the
+history and payload heap, with changing captures and a later reader.
+Full Audit passes 3389 jobs and 72984 checks. All 29 public and two
+constructed heads pass complete proof and standard-axiom checks.
+Eleven strict module logs and two fixture logs are empty.
+Eleven canonical builds are warning-free. Audit retains its existing warning.
+Evidence is in `lean/restart-evidence/20261018-causal-source-comparison/`.
+
+Next prove causal filtered Empty fusion using the existing same-plan
+Empty abstraction and the new history-only source theorem. Then construct
+the actual source-generated Directed relation for Mu epsilon successors,
+full row guards and ordered children. Read the pinned next-consumer review.
+The old unrestricted Fusion remains refuted. Deeper guarded observations,
+general completion, repeated convergence and full Haskell correspondence
+remain open. The broad reduction guarantee remains conditional valid-input
+preservation and input-language inclusion. It does not prove all returned
+trees satisfy inherited constraints. No Haskell bytes change. FINDINGS
+retains every repair. Field-pool repair `b9219b9e` remains fixed in `c0cc8a05`.
+No push is retried. The full-library goal remains active.
+
 ## Current original root deletion and actual unused binders
 
 Updated: 2026-10-18 20:14 CEST. Proof checkpoint is `2e24eca5`.
