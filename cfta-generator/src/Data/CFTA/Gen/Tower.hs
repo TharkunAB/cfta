@@ -33,6 +33,9 @@ module Data.CFTA.Gen.Tower (
     -- * The loop
     Step (..),
     refine,
+
+    -- * The measure
+    descriptionLength,
 ) where
 
 import Data.List (minimumBy)
@@ -211,3 +214,35 @@ refine templates fallback = go []
             , observation <- members
             , observedResponse observation /= predicted term
             ]
+
+{- | The size of a spec and its vocabulary, in nodes: each predicate of the
+vocabulary, and each entry of the spec. An entry counts the nodes of its term;
+a node also counts the nodes of the refinement of its symbol. A smaller length
+means a shorter spec, as in the minimum description length of DreamCoder.
+-}
+descriptionLength :: [F.Formula] -> Map.Map (Term Symbol) response -> Int
+descriptionLength vocabulary spec = sum (map formulaSize vocabulary) + sum (map termSize $ Map.keys spec)
+  where
+    termSize (Term.Node symbol children) = 1 + refinementSize symbol + sum (map termSize children)
+    refinementSize symbol = case symbolRefinement symbol of
+        F.Top -> 0
+        refinement -> formulaSize refinement
+    formulaSize formula = case formula of
+        F.And parts -> 1 + sum (map formulaSize parts)
+        F.Or parts -> 1 + sum (map formulaSize parts)
+        F.Not part -> 1 + formulaSize part
+        F.Atom _ left right -> 1 + valueSize left + valueSize right
+        F.Forall _ part -> 1 + formulaSize part
+        F.Exists _ part -> 1 + formulaSize part
+        _ -> 1
+    valueSize value = case value of
+        F.App _ arguments -> 1 + sum (map valueSize arguments)
+        F.Neg part -> 1 + valueSize part
+        F.Add left right -> 1 + valueSize left + valueSize right
+        F.Sub left right -> 1 + valueSize left + valueSize right
+        F.Mul left right -> 1 + valueSize left + valueSize right
+        F.Div left right -> 1 + valueSize left + valueSize right
+        F.Mod left right -> 1 + valueSize left + valueSize right
+        F.Ite condition yes no -> 1 + formulaSize condition + valueSize yes + valueSize no
+        F.Cast part _ -> 1 + valueSize part
+        _ -> 1

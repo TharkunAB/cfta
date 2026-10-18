@@ -6,7 +6,7 @@ module Data.CFTA.Gen.TowerSpec (spec) where
 import qualified Data.Map.Strict as Map
 import qualified Data.Set as Set
 import qualified Data.Text as Text
-import Test.Hspec (Spec, describe, it, shouldBe)
+import Test.Hspec (Spec, describe, it, shouldBe, shouldSatisfy)
 
 import qualified Data.CFTA.Formula as F
 import Data.CFTA.Gen.Tower (Observation (..), Step (..), Verdict (..))
@@ -56,6 +56,15 @@ spec = describe "Data.CFTA.Gen.Tower" $ do
         steps `shouldBe` [Update term response]
         vocabulary' `shouldBe` vocabulary
         repaired `shouldBe` final
+    it "gives a shorter spec than the table of concrete tests" $ do
+        let (vocabulary, final, _) = Tower.refine templates fallback [] Map.empty observations
+            concrete =
+                Map.fromList
+                    [ (observedTest observation, observedResponse observation)
+                    | observation <- observations
+                    , observedResponse observation /= fallback
+                    ]
+        Tower.descriptionLength vocabulary final `shouldSatisfy` (< Tower.descriptionLength [] concrete)
   where
     agrees vocabulary final =
         and
