@@ -1,0 +1,105 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-causal-union-local/filtered-union-fragments-direct-2.source.lean:55:13: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.reference` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `FiniteAutomatonDriver.reference`
+  [apply] `SourcePhysicalSharedRows.reference`
+  [apply] `SourcePreparedSharedRows.reference`
+  [apply] `Construction.Derives.reference`
+  [apply] `Construction.Pattern.reference`
+  [apply] `EpsilonUnion.Accepts.reference`
+  [apply] `Value.reference`
+  [apply] `InternedNodeIdentityFootprint.Occurs.reference`
+  [apply] `InternedPreparedSubstitution.GuardedValue.reference`
+  [apply] `InternedShallowValues.ShallowValue.reference`
+  [apply] `InternedStoredClosedMuCompletion.PreparedWithoutMu.reference`
+  [apply] `InternedUnionHeadGuard.HeadSafe.reference`
+  [apply] `RecursiveReductionBarrier.View.reference`
+  [apply] `Literal.reference`
+  [apply] `SourceCurrentOpenPreorderSimulation.Directed.reference`
+  [apply] `SourceCurrentOpenWeakSimulation.Forward.reference`
+  [apply] `Construction.Derives.below.reference`
+  [apply] `EpsilonUnion.Accepts.below.reference`
+  [apply] `InternedNodeIdentityFootprint.Occurs.below.reference`
+  [apply] `InternedPreparedSubstitution.GuardedValue.below.reference`
+  [apply] `InternedShallowValues.ShallowValue.below.reference`
+  [apply] `InternedStoredClosedMuCompletion.PreparedWithoutMu.below.reference`
+  [apply] `InternedUnionHeadGuard.HeadSafe.below.reference`
+  [apply] `Literal.below.reference`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-causal-union-local/filtered-union-fragments-direct-2.source.lean:58:13: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.reference` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `FiniteAutomatonDriver.reference`
+  [apply] `SourcePhysicalSharedRows.reference`
+  [apply] `SourcePreparedSharedRows.reference`
+  [apply] `Construction.Derives.reference`
+  [apply] `Construction.Pattern.reference`
+  [apply] `EpsilonUnion.Accepts.reference`
+  [apply] `Value.reference`
+  [apply] `InternedNodeIdentityFootprint.Occurs.reference`
+  [apply] `InternedPreparedSubstitution.GuardedValue.reference`
+  [apply] `InternedShallowValues.ShallowValue.reference`
+  [apply] `InternedStoredClosedMuCompletion.PreparedWithoutMu.reference`
+  [apply] `InternedUnionHeadGuard.HeadSafe.reference`
+  [apply] `RecursiveReductionBarrier.View.reference`
+  [apply] `Literal.reference`
+  [apply] `SourceCurrentOpenPreorderSimulation.Directed.reference`
+  [apply] `SourceCurrentOpenWeakSimulation.Forward.reference`
+  [apply] `Construction.Derives.below.reference`
+  [apply] `EpsilonUnion.Accepts.below.reference`
+  [apply] `InternedNodeIdentityFootprint.Occurs.below.reference`
+  [apply] `InternedPreparedSubstitution.GuardedValue.below.reference`
+  [apply] `InternedShallowValues.ShallowValue.below.reference`
+  [apply] `InternedStoredClosedMuCompletion.PreparedWithoutMu.below.reference`
+  [apply] `InternedUnionHeadGuard.HeadSafe.below.reference`
+  [apply] `Literal.below.reference`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-causal-union-local/filtered-union-fragments-direct-2.source.lean:58:75: error: unsolved goals
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+reader : State Symbol Guard
+ready : Ready reader
+values filters outputs : List (Value Symbol Guard)
+available : Values reader values
+parent filtered result : Value Symbol Guard
+own : Reference
+environment : Environment Symbol Guard
+made : run (makeUnion values) reader = (parent, reader)
+parentFilter : run (withoutSelfReference own parent) reader = (filtered, reader)
+replacements : Replacements reader environment
+called : execute filtered environment reader = Outcome.done result reader
+filterCalls : All₂ (fun raw cut => run (withoutSelfReference own raw) reader = (cut, reader)) values filters
+storedCalls : All₂ (fun cut output => execute cut environment reader = Outcome.done output reader) filters outputs
+schedules :
+  ∀ (raw : Value Symbol Guard),
+    raw ∈ values →
+      ∃ cut output,
+        run (withoutSelfReference own raw) reader = (cut, reader) ∧
+          execute cut environment reader = Outcome.done output reader
+covered :
+  (∀ (atom : Value Symbol Guard),
+      Literal result atom ↔
+        ∃ raw,
+          raw ∈ values ∧
+            (raw ≠ Value.reference own ∨ parent = Value.reference own) ∧
+              ∃ cut output,
+                run (withoutSelfReference own raw) reader = (cut, reader) ∧
+                  execute cut environment reader = Outcome.done output reader ∧ Literal output atom) ∧
+    ∀ (row : EdgeValue Symbol Guard),
+      Row result row ↔
+        ∃ raw,
+          raw ∈ values ∧
+            (raw ≠ Value.reference own ∨ parent = Value.reference own) ∧
+              ∃ cut output,
+                run (withoutSelfReference own raw) reader = (cut, reader) ∧
+                  execute cut environment reader = Outcome.done output reader ∧ Row output row
+⊢ (∀ (atom : Value Symbol Guard),
+      Literal result atom ↔
+        ∃ index raw cut output,
+          values[index]? = some raw ∧
+            filters[index]? = some cut ∧
+              outputs[index]? = some output ∧ (raw ≠ ?m.102 ∨ parent = Value.reference own) ∧ Literal output atom) ∧
+    ∀ (row : EdgeValue Symbol Guard),
+      Row result row ↔
+        ∃ index raw cut output,
+          values[index]? = some raw ∧
+            filters[index]? = some cut ∧
+              outputs[index]? = some output ∧ (raw ≠ ?m.191 ∨ parent = Value.reference own) ∧ Row output row

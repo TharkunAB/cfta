@@ -1,0 +1,17 @@
+# Actual union source literal clauses
+
+Frozen on 2026-10-18 at 21:34 CEST.
+
+The `Law` definition retains the causal filtered-source premise list. It requires Ready and an actual empty-to-reader publication History. Both historical source Contexts, completed raw builds, forward raw growth, current raw availability, scoped aliases and own-name tests remain explicit. Lexical `Inputs` contains both directions of Generated membership at reference slots and exact bindings on fixed-capture free names. Actual warm reader filters and stored calls remain explicit. There is no supplied parent output comparison or future call law.
+
+The public `union` theorem takes a law for each original immediate syntax member. It constructs two finite schedules through CausalUnionPairPreparation.prepare. Its output is a produced final reader, Keeps from the original reader, an actual final publication history, and literal Clauses for the ORIGINAL two parent output values. The initial output equations replay and identify those exact values at final. The theorem does not assert the fixed-reader Law for the union at its initial reader. Such a claim would require an additional result about the preparation allocations.
+
+The member proof selects a raw member by the original parent fragment index. Ordered source, filter and stored All2 schedules identify the same syntax member, both actual historical source cuts, and both actual outputs at that index. The child Contexts and return-to-final growth come from these source receipts. The lexical Inputs transports by the actual Keeps proof. Child aliases and own-name tests follow the union support inclusion. No reader-wide lexical availability is added.
+
+Actual OutputTags.bare compares both child tags and both parent tags. This derives the second retained-member condition from the first. A bare-self member that the parent drops is excluded. The strict member law gives literal Clauses between the two actual member outputs at final. GeneratedUnionCases.retained_member derives literal Below from the second member output to the second parent. LiteralLocalSimulation.post_below then transfers the clauses through that genuine normalization fragment.
+
+FilteredUnionFragments.parts selects every reference atom, complete row and opaque Mu atom in the first parent. The proof applies the corresponding clause from the same-index member. Complete row symbols, guards, ordered child membership and actual Mu successors remain in the literal calculus. Mu successor transfer is supplied by the strict member law; it is not inferred from relation membership alone.
+
+Two public declarations are selected: Law and union. Direct-2 has a genuine zero-byte log. Canonical-1 is clean. Public-1 prints both exact signatures, complete proof bodies and axiom reports with all eight options. The hardened check finds only the three standard axioms and no omissions. Four owned checks used five-minute, 4 GiB memory.max/high and zero-swap limits. Direct-1 remains unchanged as a failed elaboration attempt. No new constructed head is claimed.
+
+The endpoint is conditional source composition. Variable laws still need local laws for lexical generators. The general used-Mu clause and a sound global progress argument remain open. In particular, relation-to-Clauses for the reflexive/transitive closure does not imply Directed for weak Mu epsilon steps. This module supplies neither that implication nor a global simulation theorem.

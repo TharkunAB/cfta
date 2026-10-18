@@ -1,11 +1,11 @@
 # Current system claim
 
 Checked against the live theorem statements on 2026-10-18.
-The causal Empty and node simulation proof checkpoint is `20cd2d78`.
+The causal union and conditional literal proof checkpoint is `fff568a7`.
 
 In simple technical English: a completed modeled reduction adds no tree
-outside the input language. It retains every input tree that satisfies its inherited
-constraints. Its initial cache, guard and resource assumptions remain
+outside the input language. It retains every input tree that satisfies its
+inherited constraints. Its initial cache, guard and resource assumptions remain
 explicit. A returned size-query API has exact enumeration, counts and
 rank/unrank laws under its separate construction assumptions.
 
@@ -65,10 +65,20 @@ Historical node calls derive local simulation in both directions with
 full guards and ordered mutual child generators. Selected Mu readback
 constructs both calls under arbitrary common replacements.
 
+Actual union preparation now constructs both ordered member schedules
+and a causal common reader. It retains the original parent results.
+Indexed literal fragments and explicit strict member laws derive a
+conditional one-way parent clause at that produced reader. The theorem
+does not prove the source Law at the original reader or for all syntax.
+
 The main current gap is the complete source-generated guarded simulation.
-Filtered union and used-Mu clauses must retain one fixed reader. The Mu
-clause must match actual unfolding with a reached related endpoint.
-The ordinary-node local result does not establish that global certificate.
+The used-Mu clause must match actual unfolding with a reached related
+endpoint at the same supported reader. Variables need the mutual
+Generated/Inputs semantic induction hypothesis. A separate checked actual
+construction rules out arbitrary weak simulation up to transitive closure.
+Causal Ready and physical Empty agreement do not repair that rule.
+A justified progress argument or stronger semantic induction is required.
+This counterexample does not concern the actual Generated relation.
 The recursive guard certificate must follow from supported public construction.
 
 General completion still needs active-owner exclusion, fresh-call bounds,
@@ -81,8 +91,10 @@ root contract is now derived for every stored recursive payload in an
 actual modeled history. Its proof covers retained open Mu, unused binders
 and earlier cache winners. See `notes-current-causal-source-comparison.md`
 for the original payload proof. See `notes-current-causal-empty-fusion.md`
-for causal Empty agreement, the guarded node clause and the next fixed-reader
-steps. The broad reduction guarantee above has not changed.
+for causal Empty agreement and the guarded node clause. See
+`notes-current-causal-union-local.md` for conditional union clauses and
+the remaining fixed-reader and progress obligations. The broad reduction
+guarantee above has not changed.
 
 No Haskell bytes change in this checkpoint. Root `FINDINGS.md` retains the
 external repair registry first. The full-library goal remains active.

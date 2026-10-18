@@ -1,0 +1,30 @@
+import MicroCFTA.SourceCurrentLiteralLocalSimulation
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+#check @MicroCFTA.SourceCurrentLiteralLocalSimulation.Relation
+#print MicroCFTA.SourceCurrentLiteralLocalSimulation.Relation
+#print axioms MicroCFTA.SourceCurrentLiteralLocalSimulation.Relation
+#check @MicroCFTA.SourceCurrentLiteralLocalSimulation.Clauses
+#print MicroCFTA.SourceCurrentLiteralLocalSimulation.Clauses
+#print axioms MicroCFTA.SourceCurrentLiteralLocalSimulation.Clauses
+#check @MicroCFTA.SourceCurrentLiteralLocalSimulation.below
+#print MicroCFTA.SourceCurrentLiteralLocalSimulation.below
+#print axioms MicroCFTA.SourceCurrentLiteralLocalSimulation.below
+#check @MicroCFTA.SourceCurrentLiteralLocalSimulation.of_ordinary
+#print MicroCFTA.SourceCurrentLiteralLocalSimulation.of_ordinary
+#print axioms MicroCFTA.SourceCurrentLiteralLocalSimulation.of_ordinary
+#check @MicroCFTA.SourceCurrentLiteralLocalSimulation.mono
+#print MicroCFTA.SourceCurrentLiteralLocalSimulation.mono
+#print axioms MicroCFTA.SourceCurrentLiteralLocalSimulation.mono
+#check @MicroCFTA.SourceCurrentLiteralLocalSimulation.post_below
+#print MicroCFTA.SourceCurrentLiteralLocalSimulation.post_below
+#print axioms MicroCFTA.SourceCurrentLiteralLocalSimulation.post_below
+#check @MicroCFTA.SourceCurrentLiteralLocalSimulation.endpoint
+#print MicroCFTA.SourceCurrentLiteralLocalSimulation.endpoint
+#print axioms MicroCFTA.SourceCurrentLiteralLocalSimulation.endpoint
