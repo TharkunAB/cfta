@@ -1,4 +1,4 @@
-# A tower of editable languages
+# Representation levels of an editable language
 
 Status: investigation and implementation plan. The APIs in the current-support
 column below exist. The document, file, checkpoint, and edit interfaces in the

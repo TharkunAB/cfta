@@ -120,3 +120,22 @@ Three kinds, never called only "variable":
   variable list of one problem (the symbolic counter, the lattice counter,
   the open integer variables of a compiled group).
 - **Recursion reference** (`RecNodeId`): the variable that a `Mu` binds.
+
+## Language chains
+
+- **Language chain**: a sequence of language versions L0, L1, ..., Ln. Each
+  version comes from the version before it by one extension or one
+  restriction.
+- **Extension**: a step that makes a language more expressive. It adds
+  constructors, states, or predicates. Do not call it a refinement: a
+  refinement is the predicate of a symbol (see Constraints).
+- **Restriction**: a step that removes terms. It removes productions, adds
+  facts, or adds named exclusions.
+- **Lowering**: a translation of the terms of one language version to terms of
+  the version before it. A **template lowering** gives each new constructor a
+  template in the earlier version, and keeps each old constructor.
+- **Language tower**: a language chain in which each extension has a lowering,
+  so that each version has a meaning in L0.
+- **Representation level**: one form of one language version: an editable
+  definition, a graph, a prepared query, or a checkpoint. Do not call the
+  levels a tower.
