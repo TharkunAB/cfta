@@ -2,6 +2,22 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 05:52 CEST. Proof checkpoint is `b82efb10`.
+Initial numeric support now derives complete Parent and outer edge receipts
+at actual returned endpoints. Parent alignment identifies the edge, Checked,
+fourth and Merge components. Actual body graphs retain their own strict Reads.
+Actual outer edge success excludes busy without a notBusy premise and
+derives the returned full Frame/Post. Internal class contexts follow from
+the existing Parent producer. No finite ordinary domain, finite Cap or
+future semantic read law is added. Initial semantic Context/Frame/Fits and
+pure reservations remain explicit. General outer summaries and recursive
+progress remain open. Full Audit passes 3234 jobs and 70904 checks.
+No Haskell patch or new production defect is added. Field-pool repair
+`b9219b9e` remains fixed in `c0cc8a05`. Read
+`lean/notes-current-parent-semantic-reads.md`. Keep this registry first.
+Record each later repair with failure, executable reproducer, paths, commit,
+checks and upstream status. Preserve every earlier repair entry below.
+
 Current proof update: 2026-10-18 05:38 CEST. Proof checkpoint is `af9a413d`.
 Initial numeric completion now derives target, class and fold semantic
 Reads at literal successful worker endpoints. Full Value/forest, Checked

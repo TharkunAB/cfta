@@ -1,6 +1,6 @@
 # Proof status at 2026-10-18
 
-Checked at proof checkpoint `af9a413d`. Source main is `c0cc8a05`,
+Checked at proof checkpoint `b82efb10`. Source main is `c0cc8a05`,
 merged into `formalize` at `896b0a1c`. This note reports the current theorem
 boundaries. It adds no theorem and no Haskell behavior change.
 
@@ -106,7 +106,19 @@ closure permits open untouched roots; no finite input Cap is added. Frame,
 semantic caches, valid globals and numeric reservations remain explicit.
 The next general bridge is that context at the actual outer class entry.
 General recursive completion and the complete ordinary outer domain are
-unchanged. Read [the current checkpoint](notes-current-actual-semantic-reads.md).
+unchanged. Read [the earlier checkpoint](notes-current-actual-semantic-reads.md).
+
+Initial numeric Parent support now derives semantic receipts at literal
+successful Parent and outer edge-body returns. All four Parent components
+align. An actual outer edge success also derives its complete receipt,
+Frame/Fits and Post without a notBusy or fuel lower-bound premise. The
+existing Parent producer derives its internal class contexts and domains.
+This supplies the endpoint for an actual rows_edge summary from supported
+initial entry facts. General rows_tail/walk_tail semantic transport and
+initial recursive resource schedules remain open. Mu cleanup is already
+unchanged. No finite ordinary domain or finite Cap is added. General
+recursive completion and the strongest complete outer domain are unchanged.
+Read [the current checkpoint](notes-current-parent-semantic-reads.md).
 
 ## Strongest current claim in plain technical English
 

@@ -1,0 +1,1 @@
+Continue from 002f0a7d. Derive semantic reads and full Frame at actual Parent and outer edge-body returns from initial numeric support. Do not add a finite ordinary domain. Review the missing general outer Frame producer. Preserve every baseline file, repair registry and raw attempt. Keep all work local. Full-library goal remains active.
