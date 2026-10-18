@@ -1,6 +1,6 @@
 # Spectacular and Specftacular
 
-The matrix compares original Spectacular with Specftacular `f4ec36bd`. The
+The matrix compares original Spectacular with Specftacular `b530f920`. The
 current revision completes 24 of 27 configurations within 300 seconds. Two
 rows adopt completed all-`-O2` HOME controls; the other 25 coordinates use a
 fresh packaged build or explicitly marked same-size inference. Original
@@ -13,33 +13,32 @@ validated polymorphic schemes and canonical annotated KBO within each bucket.
 It uses the existing enumerator and final bucket sort. Pruning precedes value
 testing. The input schedule contains 1064 cases.
 
-The [current profiles](#profiles-after-the-identifier-change) measure the
-same template implementation. They identify Template ordering as the largest
-sampled comparison cost in the selected preparation action. Earlier profiles
-retain their revision labels. A larger law count is not a better result by
-itself. False and redundant equations increase the count.
+The [current profiles](#profiles-of-carried-template-identifiers) measure the
+selected template and helper implementation. Earlier profiles retain their
+revision labels. A larger law count is not a better result by itself. False
+and redundant equations increase the count.
 
 ## Sources and method
 
 The original columns retain the earlier all-`-O2` measurements. Original
-Spectacular and QuickSpec 2 are not rerun. The current matrix measures
-`f4ec36bd` with the 1064-case schedule. HugeLists size 5, phase 3 and size 7,
-phase 2 adopt the two completed native controls. Those controls compile
-30 HOME modules at `-O2`; their runtime sources and signature match this
-revision. The other 25 coordinates use newly built packaged executables.
-Same-size timeout inference can avoid a redundant later-phase process.
-No `d8986453` timing row is reused as a current measurement.
+Spectacular and QuickSpec 2 are not rerun. The new matrix measures
+`b530f920` with the 1064-case schedule. HugeLists size 5, phase 3 and size 7,
+phase 2 adopt the two completed candidate controls. These controls compile
+30 HOME modules at `-O2` and contain the exact selected runtime sources.
+Other measured coordinates use fresh packaged executables. Same-size
+timeout inference can avoid a redundant later-phase process. No f4ec timing
+row is reused as a current measurement.
 
-Both adopted runs finished within 300 seconds. Their actual internal guards
-were 300 seconds at size 5 and 900 seconds at size 7. The adopted size-7 row
-is a measured completion within the nominal 300-second pass, not a new
-300-second process. The report keeps this HOME/package distinction explicit.
+The adopted controls used internal guards of 300 and 900 seconds. Both
+completed within 300 seconds. They are adopted completions, not new
+300-second processes. The HOME/package distinction remains explicit.
 
 | Input | Revision |
 | --- | --- |
 | [Published Spectacular artifact](https://zenodo.org/records/7565003) | `00621f4f0f03e5d0afea3c730434a8842e473546` |
-| [Latest child-part identifier change](https://github.com/TharkunAB/cfta/commit/f4ec36bd7b05c3478c92fbcb7e2e763bdad39e6b) | `f4ec36bd` |
-| [Current measured Specftacular matrix](https://github.com/TharkunAB/cfta/tree/f4ec36bd7b05c3478c92fbcb7e2e763bdad39e6b/specftacular) | `f4ec36bd` |
+| [Preceding child-part identifier change](https://github.com/TharkunAB/cfta/commit/f4ec36bd7b05c3478c92fbcb7e2e763bdad39e6b) | `f4ec36bd` |
+| [Current carried-identifier matrix](https://github.com/TharkunAB/cfta/tree/b530f920586b6551a4c2bdead16a58ca46e7196c/specftacular) | `b530f920` |
+| [Preceding f4ec matrix and profile](https://github.com/TharkunAB/cfta/tree/f4ec36bd7b05c3478c92fbcb7e2e763bdad39e6b/specftacular) | `f4ec36bd` |
 | [Preceding all-bucket matrix and profile](https://github.com/TharkunAB/cfta/tree/d898645376ae5f1e9b8e5c7b5e0b7dcfa5bfd9e8/specftacular) | `d8986453` |
 | [Historical 1064-case matrix and typed coverage](https://github.com/TharkunAB/cfta/tree/d2e91fdf297659382329e8d9375082024439dc8c/specftacular) | `d2e91fdf` |
 | [Spec-only fragment check](https://github.com/TharkunAB/cfta/commit/09caaec396a0e1f761a40cd7e218ecc6e8b5a518) | `09caaec3` |
@@ -63,7 +62,7 @@ Separate Cabal projects set `optimization: 2` globally and in `package *`.
 Executables and Cabal-built dependencies use `-O2`. The original store audit
 covers 53 external units.
 
-The f4ec36bd packaged build has fresh effective `-O2` commands for 7/7
+The b530f920 packaged build has fresh effective `-O2` commands for 7/7
 native/GHC local components and 100/111 external entries. Entries include
 build tools; compiler-distributed libraries retain their toolchain settings.
 Native unchecked, native checked and GHC sequences agree: 24 laws for Lists
@@ -107,35 +106,29 @@ equations. A trailing fragment is not another law.
 [Table I in the extended paper](https://mpg.is/papers/gissurarson2023spectacular-extended.pdf#page=8)
 reports 23 of 27 Spectacular configurations completed within 3600 seconds.
 Its four timeouts are HugeLists5P4, HugeLists6P4, HugeLists7P3 and HugeLists7P4.
-The main table's original columns instead retain our 60-second artifact
-runs: 20 completions and seven timeouts. These are separate measurements.
+The main table instead retains our original artifact runs at 60 seconds:
+20 completions and seven timeouts. These are separate measurements.
 
-The selected f4ec36bd matrix completes 24 of 27 configurations within 300
-seconds. This includes all 23 configurations completed in the paper.
-HugeLists5P4 is an additional completion against the paper. The 900-second
-pass has 24 completed configurations, including retained 300-second
-completions.
+The selected b530f920 matrix completes 24 configurations within 300 seconds
+and 24 within the 900-second policy, including retained completions. All 23
+configurations completed in the paper also complete in the new 300-second
+pass. Additional completed configurations against the paper: HugeLists-5-p4.
 
-| Configuration | Paper seconds | Paper memory, as printed | Paper laws | f4ec seconds (300 s pass) | f4ec peak RSS MiB | f4ec laws |
+| Configuration | Paper seconds | Paper memory, as printed | Paper laws | b530f920 seconds (300 s pass) | New peak RSS MiB | New laws |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Lists7P4 | 105.25 | 155.34 MB | 93 | 26.23 | 242.7 | 41 |
-| Regex7P2 | 10.64 | 16.9 MB | 42 | 52.19 | 47.7 | 60 |
-| HugeLists5P3 | 83.7 | 106.9 MB | 144 | 21.92 | 546.1 | 197 |
-| HugeLists5P4 | >3600 | 301.3 MB | — | 157.16 | 1468.8 | 305 |
-| HugeLists6P3 | 3164.75 | 434.4 MB | 211 | 156.76 | 1135.8 | 330 |
-| HugeLists7P2 | 201.51 | 54.6 (unit omitted) | 186 | 168.11 | 1102.9 | 242 |
+| Lists7P4 | 105.25 | 155.34 MB | 93 | 26.90 | 242.7 | 41 |
+| Regex7P2 | 10.64 | 16.9 MB | 42 | 52.81 | 48.7 | 60 |
+| HugeLists5P3 | 83.7 | 106.9 MB | 144 | 20.99 | 547.2 | 197 |
+| HugeLists5P4 | >3600 | 301.3 MB | — | 172.67 | 1378.5 | 305 |
+| HugeLists6P3 | 3164.75 | 434.4 MB | 211 | 138.84 | 1171.7 | 330 |
+| HugeLists7P2 | 201.51 | 54.6 (unit omitted) | 186 | 118.68 | 1103.4 | 242 |
 
-The current columns use the selected `f4ec36bd` 300-second pass. HugeLists5P3
-and HugeLists7P2 adopt the completed HOME controls; the latter had a
-900-second internal guard but completed within 300 seconds. Other rows use
-fresh packaged measurements. No current row here comes from `d8986453`.
-
-The paper used a 32 GB cloud machine with six 2 GHz Xeon vCPUs. Hardware,
-compilers, generators, validation, `usort` and equation correctness differ.
-These are completion and resource comparisons, not matched speed ratios.
-Paper memory values retain their printed units. Law counts do not establish
-validity or independence. HugeLists7P2 still uses about 1.08 GiB peak RSS.
-The memory gap remains substantial.
+The two HugeLists5P3/7P2 rows adopt completed candidate HOME controls.
+Other measured rows use fresh packaged binaries. The paper used a 32 GB
+cloud machine with six 2 GHz Xeon vCPUs. Paper memory retains its printed
+units. Hardware, compilers, generators, validation, usort semantics
+and equation correctness differ. These are completion/resource comparisons,
+not matched speed ratios. Law counts do not establish validity or independence.
 
 ## Results
 
@@ -145,32 +138,32 @@ in the two implementations, so its outputs are not identical workloads.
 
 | Signature | Size | Through phase | Original s (60 s limit) | Original MiB | Original laws | Specftacular s (300 s limit) | Specftacular MiB | Specftacular laws |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Lists | 7 | 2 | 1.07 | 21.6 | 32 | 0.39 | 21.8 | 15 |
-| Lists | 7 | 3 | 18.11 | 70.8 | 73 | 12.13 | 90.9 | 33 |
-| Lists | 7 | 4 | T | 139.5 | — | 26.23 | 242.7 | 41 |
-| Octonions | 7 | 2 | 0.15 | 21.4 | 8 | 0.90 | 21.1 | 15 |
-| Octonions | 7 | 3 | 0.17 | 20.1 | 8 | 0.92 | 21.2 | 15 |
-| Octonions | 7 | 4 | 0.22 | 24.3 | 8 | 0.94 | 21.1 | 15 |
-| Regex | 7 | 2 | 3.06 | 18.7 | 42 | 52.19 | 47.7 | 60 |
-| Regex | 7 | 3 | 4.29 | 16.8 | 42 | 52.47 | 48.5 | 60 |
-| Regex | 7 | 4 | 5.84 | 17.1 | 42 | 50.44 | 49.4 | 60 |
-| ListMonad | 7 | 2 | 0.27 | 15.4 | 8 | 3.60 | 38.0 | 9 |
-| ListMonad | 7 | 3 | 0.46 | 22.3 | 8 | 3.83 | 37.8 | 9 |
-| ListMonad | 7 | 4 | 18.04 | 208.8 | 42 | 6.18 | 193.0 | 9 |
-| HugeLists | 3 | 2 | 0.07 | 12.1 | 22 | 0.11 | 17.1 | 28 |
-| HugeLists | 3 | 3 | 0.18 | 17.0 | 27 | 0.22 | 23.5 | 40 |
-| HugeLists | 3 | 4 | 0.64 | 30.7 | 33 | 1.83 | 54.9 | 46 |
-| HugeLists | 4 | 2 | 0.20 | 14.3 | 37 | 0.54 | 26.7 | 46 |
-| HugeLists | 4 | 3 | 1.37 | 36.3 | 68 | 1.81 | 71.1 | 84 |
-| HugeLists | 4 | 4 | 28.43 | 122.7 | 90 | 9.58 | 186.8 | 125 |
-| HugeLists | 5 | 2 | 0.88 | 23.2 | 66 | 6.80 | 183.1 | 92 |
-| HugeLists | 5 | 3 | 27.27 | 104.8 | 144 | 21.92 | 546.1 | 197 |
-| HugeLists | 5 | 4 | T | 165.1 | — | 157.16 | 1468.8 | 305 |
-| HugeLists | 6 | 2 | 6.37 | 39.1 | 99 | 13.19 | 253.7 | 130 |
-| HugeLists | 6 | 3 | T | 305.6 | — | 156.76 | 1135.8 | 330 |
-| HugeLists | 6 | 4 | T | 308.9 | — | T | 1878.3 | — |
-| HugeLists | 7 | 2 | T | 60.2 | — | 168.11 | 1102.9 | 242 |
-| HugeLists | 7 | 3 | T | 58.0 | — | T | 1142.7 | — |
+| Lists | 7 | 2 | 1.07 | 21.6 | 32 | 0.44 | 21.4 | 15 |
+| Lists | 7 | 3 | 18.11 | 70.8 | 73 | 11.95 | 85.8 | 33 |
+| Lists | 7 | 4 | T | 139.5 | — | 26.90 | 242.7 | 41 |
+| Octonions | 7 | 2 | 0.15 | 21.4 | 8 | 0.90 | 21.2 | 15 |
+| Octonions | 7 | 3 | 0.17 | 20.1 | 8 | 0.91 | 21.1 | 15 |
+| Octonions | 7 | 4 | 0.22 | 24.3 | 8 | 0.95 | 21.2 | 15 |
+| Regex | 7 | 2 | 3.06 | 18.7 | 42 | 52.81 | 48.7 | 60 |
+| Regex | 7 | 3 | 4.29 | 16.8 | 42 | 50.66 | 48.2 | 60 |
+| Regex | 7 | 4 | 5.84 | 17.1 | 42 | 55.61 | 48.4 | 60 |
+| ListMonad | 7 | 2 | 0.27 | 15.4 | 8 | 3.95 | 37.7 | 9 |
+| ListMonad | 7 | 3 | 0.46 | 22.3 | 8 | 4.03 | 37.7 | 9 |
+| ListMonad | 7 | 4 | 18.04 | 208.8 | 42 | 6.41 | 192.7 | 9 |
+| HugeLists | 3 | 2 | 0.07 | 12.1 | 22 | 0.11 | 17.8 | 28 |
+| HugeLists | 3 | 3 | 0.18 | 17.0 | 27 | 0.22 | 23.0 | 40 |
+| HugeLists | 3 | 4 | 0.64 | 30.7 | 33 | 2.06 | 54.6 | 46 |
+| HugeLists | 4 | 2 | 0.20 | 14.3 | 37 | 0.62 | 33.7 | 46 |
+| HugeLists | 4 | 3 | 1.37 | 36.3 | 68 | 2.06 | 64.7 | 84 |
+| HugeLists | 4 | 4 | 28.43 | 122.7 | 90 | 10.60 | 192.6 | 125 |
+| HugeLists | 5 | 2 | 0.88 | 23.2 | 66 | 7.40 | 180.5 | 92 |
+| HugeLists | 5 | 3 | 27.27 | 104.8 | 144 | 20.99 | 547.2 | 197 |
+| HugeLists | 5 | 4 | T | 165.1 | — | 172.67 | 1378.5 | 305 |
+| HugeLists | 6 | 2 | 6.37 | 39.1 | 99 | 13.03 | 261.3 | 130 |
+| HugeLists | 6 | 3 | T | 305.6 | — | 138.84 | 1171.7 | 330 |
+| HugeLists | 6 | 4 | T | 308.9 | — | T | 1859.2 | — |
+| HugeLists | 7 | 2 | T | 60.2 | — | 118.68 | 1103.4 | 242 |
+| HugeLists | 7 | 3 | T | 58.0 | — | T | 1163.4 | — |
 | HugeLists | 7 | 4 | T | 55.6 | — | T (inferred) | — | — |
 
 At 300 seconds: 22 new packaged completions, 2 adopted completions, 2
@@ -179,17 +172,19 @@ measured timeouts, 1 same-size inferred timeout.
 HugeLists5P3 and HugeLists7P2 are the two adopted HOME rows. Their actual
 guards were 300 and 900 seconds; both completed within 300 seconds.
 
-HugeLists size 7, phase 2 retains 242 laws and takes 168.11 seconds, against
-294.80 at `d8986453`. This row is the adopted 30-HOME control. Its
-allocation changes by -10.1065% and peak RSS by +0.0702%. It remains slower
-than the earlier `d2e91fdf` result of 86.70 seconds. The profiles identify
-expensive preparation comparisons; they do not isolate all native cost
-differences.
+HugeLists size 7, phase 2 retains 242 laws and takes 118.68 seconds, against
+168.11 at `f4ec36bd`. This row is the adopted 30-HOME control against the
+preceding 30-HOME control. Its allocation changes by +2.4998% and peak RSS
+by +0.0457%. It remains slower than the earlier `d2e91fdf` result of 86.70
+seconds. The native controls include carried template identifiers and
+explicit preparation sharing; they do not isolate either change alone.
 
-The packaged HugeLists5P4 and HugeLists6P3 runs retain all 305 and 330
-ordered laws. Their elapsed times change from 183.81 to 157.16 seconds and
-from 189.82 to 156.76 seconds against the preceding d8986453 matrix. These
-are single-run observations.
+Packaged timings are mixed. HugeLists size 5, phase 4 takes 172.67 seconds,
+against 157.16 at f4ec. Size 6, phase 3 takes 138.84 seconds, against 156.76.
+Their allocations increase by 0.4758% and 1.1959%. Peak RSS changes by
+-6.1505% and +3.1561%. The next preflight after size 5, phase 4 records an
+active Lean workload. The quiet preflight does not reserve the host.
+These single observations do not identify the cause of the timing differences.
 
 The original completes 20 runs and times out in seven at 60 seconds.
 Different limits do not establish a matched-budget advantage. Single noisy
@@ -198,20 +193,20 @@ is not RSS.
 
 | Signature, size, phase | Original allocation GiB | Specftacular allocation GiB | Original residency MiB | Specftacular residency MiB | Original GC CPU s | Specftacular GC CPU s |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Lists-7-p2 | 4.275 | 2.083 | 5.35 | 2.60 | 0.231 | 0.032 |
-| Octonions-7-p2 | 0.419 | 2.097 | 12.58 | 3.16 | 0.026 | 0.024 |
-| Regex-7-p2 | 17.185 | 396.296 | 4.47 | 11.45 | 0.474 | 1.799 |
-| ListMonad-7-p2 | 0.961 | 25.894 | 3.47 | 9.32 | 0.030 | 0.979 |
-| ListMonad-7-p4 | 52.501 | 30.544 | 72.02 | 85.29 | 7.004 | 1.719 |
-| HugeLists-4-p4 | 126.783 | 45.440 | 39.68 | 76.92 | 8.920 | 2.139 |
-| HugeLists-6-p2 | 24.723 | 61.971 | 17.60 | 95.98 | 1.246 | 1.640 |
+| Lists-7-p2 | 4.275 | 2.091 | 5.35 | 2.45 | 0.231 | 0.035 |
+| Octonions-7-p2 | 0.419 | 2.098 | 12.58 | 2.98 | 0.026 | 0.024 |
+| Regex-7-p2 | 17.185 | 396.423 | 4.47 | 11.44 | 0.474 | 1.813 |
+| ListMonad-7-p2 | 0.961 | 25.897 | 3.47 | 10.00 | 0.030 | 1.004 |
+| ListMonad-7-p4 | 52.501 | 30.570 | 72.02 | 85.28 | 7.004 | 1.782 |
+| HugeLists-4-p4 | 126.783 | 45.563 | 39.68 | 76.52 | 8.920 | 2.351 |
+| HugeLists-6-p2 | 24.723 | 62.871 | 17.60 | 100.49 | 1.246 | 1.866 |
 
 ### Longer current-only trials
 
 | Configuration | 900-second outcome | Measured seconds | Peak RSS MiB | Final laws | Visible complete prefix |
 | --- | --- | ---: | ---: | ---: | ---: |
-| HugeLists-6-p4 | T | 900.06 | 2715.8 | — | 436 |
-| HugeLists-7-p3 | T | 900.00 | 2205.3 | — | 380 |
+| HugeLists-6-p4 | T | 900.00 | 2675.8 | — | 436 |
+| HugeLists-7-p3 | T | 899.97 | 2224.7 | — | 380 |
 | HugeLists-7-p4 | T (inferred) | — | — | — | — |
 
 At 900 seconds: 24 retained completions, 2 measured timeouts, 1 same-size
@@ -222,17 +217,11 @@ phases of the same signature and maximum size at the same limit. Inferred
 rows have no measured costs or law counts. Visible prefixes contain complete
 newline-terminated equations only. Buffered output can omit accepted laws.
 
-The 6P4 retry prints 436 complete laws, against 340 in the preceding
-900-second trial. The 7P3 visible count remains 380. Both new runs retain
-their 300-second prefixes. These are censored progress observations. They do
-not compare complete workloads or establish an allocation or RSS
-improvement.
-
 ## Differences in laws
 
-All 24 completed current configurations retain the exact ordered numbered
-law sequences from d8986453. This printed agreement does not establish
-equivalence of every internal Rules basis.
+24 completed configurations have a completed f4ec reference. All 24 retain
+its exact ordered numbered law sequence. Printed agreement does not
+establish equivalence of every internal Rules basis.
 
 Printed equality is separate from validity and typed derivability. A smaller
 basis can contain more general equations, or omit useful equations. A larger
@@ -266,7 +255,7 @@ Use `f = succ :: Int -> Int` and `xs = [0]`. The results are `[1]` and
 Every total Boolean endomorphism satisfies `f^3 = f`. More tests over that
 carrier cannot reject the general claim. Specftacular uses integer carriers.
 
-The complete `f4ec36bd` Lists size-7 outputs at phases 2, 3, and 4 do not
+The complete `b530f920` Lists size-7 outputs at phases 2, 3, and 4 do not
 print this form. The check permits consistent variable renaming and equation
 reversal. It preserves displayed types and repeated variable identity. The
 retained original Lists7P2 prints the form as law 24. This printed-absence
@@ -274,24 +263,15 @@ result does not establish that the new Rules cannot derive it.
 
 ### Typed law coverage
 
-A fresh `f4ec36bd` run checks 597 retained target occurrences from earlier
-Specftacular corpora. They are not original Spectacular outputs. Some targets
-are reconstructed from printed equations, as described below.
-It captures final Rules from Lists size 7, phase 4; HugeLists size 5,
-phase 3; and ListMonad size 6, phase 4. These captures contain 41, 197
-and nine numbered laws. It reuses no old Rules as a current basis.
-
-| Capture | Targets | Derived | Independently refuted, no bounded derivation | Unknown |
-| --- | ---: | ---: | ---: | ---: |
-| Lists7P4 | 152 | 152 | 0 | 0 |
-| HugeLists5P3 | 418 | 407 | 11 | 0 |
-| ListMonad6P4 | 27 | 27 | 0 | 0 |
-| Total | 597 | 586 | 11 | 0 |
-
-No bounded derivation was found for an independently refuted target.
-No target is added to a basis, and no extra completion is run.
-The larger 305-law and 330-law completed
-HugeLists bases and the 436-law timeout prefix remain outside this corpus.
+Fresh `b530f920` captures check 597 retained target occurrences against
+actual final Rules. The selected bases contain 41 Lists laws at size 7,
+phase 4; 197 HugeLists laws at size 5, phase 3; and nine Monad laws at
+size 6, phase 4. The checker derives all 586 ordinary targets. It finds no
+bounded derivation for the 11 independently refuted targets. There are no
+unknown, missing or refuted-still-derived results. These targets come from
+earlier Specftacular corpora, not original Spectacular outputs. Some printed
+targets require type reconstruction. The larger 305-law and 330-law bases
+remain outside this selected corpus.
 
 Printed-only targets lack constant annotations. Reconstruction keeps given
 types rigid, preserves repeated variable identities, freshens each constant
@@ -299,8 +279,8 @@ occurrence, and infers both sides jointly. Exactly typed targets retain their
 original labels and annotations. The checker tries direct typed subsumption
 in both directions, then normalization, with a two-second per-query bound.
 It inserts no target and performs no extra completion. Missing, failed and
-timed-out proofs remain unknown unless a concrete counterexample refutes the
-exact target. A bounded negative result is not proof of non-derivability or
+timed-out proof checks remain unknown, including checks of independently
+refuted targets. A bounded negative result is not proof of non-derivability or
 basis consistency. These named controls do not establish equivalence of all
 27 matrix bases. Monad coverage uses size 6, not the size-7 matrix workload.
 
@@ -328,7 +308,7 @@ alone do not compare the information in these different bases.
 
 ### Regex
 
-At `f4ec36bd`, all three size-7 phase bounds print the same 60 equations.
+At `b530f920`, all three size-7 phase bounds print the same 60 equations.
 Their numbered streams match `d2e91fdf` and `102965d3` exactly. General
 alternation commutativity is law 8, concatenation associativity is law 25,
 and the two distribution laws are 58 and 59. The retained original prints 42
@@ -357,7 +337,7 @@ idempotence and the zero identity. The original gives commutativity only at
 its constants 1029, 1071 and 21. Testing instances of new representative
 schemas recovers the more general result in this example.
 
-Each completed `f4ec36bd` size-7 phase bound prints the same 15 equations as
+Each completed `b530f920` size-7 phase bound prints the same 15 equations as
 `d2e91fdf` and `102965d3`. Flexibility is law 8. The middle, left and right
 Moufang forms are laws 11, 14 and 15. None of these four displayed forms
 occurs in the retained original eight-law output. The saved QuickSpec
@@ -462,22 +442,16 @@ Unsupported types request generator size zero in these new cases. A custom
 generator can ignore that request; it is not an emptiness or memory bound.
 The original 32 boundary cases and their nested extrema inputs remain.
 
-A fresh `f4ec36bd` HugeLists size 7, phase 2 capture retains all 242
-numbered laws. Its final Rules give no bounded derivation for any of the
-six false targets, in either original or generalized form. All twelve
-queries finish without an unknown result. The append-empty positive
-control derives directly. The false concat/reverse control does not derive.
-No target is added, and no extra completion is run.
-
-All 72 actual-name schedule-group checks and decision trees finish. In each of
-the 24 law/form/native-mode combinations, all old 1040 observations return
-True with no exception. The new 24 cases and the full 1064-case schedule
-return `Distinct`, with no exceptions and exact checked/unchecked agreement.
-Law 185's old-prefix pass is measured. Twelve typed witness checks also
-confirm unequal total results in both modes.
-
-The current 242-law stream removes exactly these six forms from the old
-248-law stream.
+A fresh `b530f920` HugeLists size 7, phase 2 capture contains all 242 laws.
+Bounded proof checks find no derivation for all twelve original/final forms
+of the six false targets. Twelve typed witness rows confirm the difference
+in checked and unchecked evaluation. The 72 schedule groups cover both
+forms, both evaluation modes, and the old 1040, new 24 and full 1064 cases.
+The old prefix treats all twelve forms as equal. This includes the measured
+law 185 result; the check does not assume it. The new 24 cases and the full
+schedule distinguish every form. Checked and unchecked results agree.
+No target enters the basis, and no extra completion occurs. These bounded
+checks do not prove non-derivability or basis consistency.
 
 Finite tests do not prove surviving laws. This input correction is not a
 new paper erratum.
@@ -555,119 +529,143 @@ neither proves a free theorem nor checks every type.
 
 ## Validation and current resource tradeoffs
 
-### Child-part identifiers
+### Carried template identifiers
 
-The published `f4ec36bd` change assigns local identifiers to structurally
-identical child templates. `IntSet` membership replaces repeated `notElem`
-checks. It retains the original split order, obligation lists, duplicates,
-and `meetTemplate`/`fits` guard order. It adds no automaton traversal.
-The output-list argument assumes finite, total templates and lawful
-`Eq`/`Ord` instances. It does not prove unchanged strictness for partial
-inputs or universal equivalence of recursive enumeration cutoffs.
+The selected implementation prepares one finite catalog of exact structural
+subtrees, including Hole. IDs preserve the original Template ordering
+within that catalog. Equal languages do not identify structural keys. Parts
+from different catalogs cannot be mixed. Child projection selects stored
+children or pads with Hole. Stable normalization therefore retains the same
+first occurrence, and ground groups retain structural order. Conjunctions
+used only for feasibility do not enter returned obligation lists.
 
-The direct control compares 16,560 complete ordered `edgeCopies` lists
-against the predecessor. These controls pass, as do the finite language,
-residual, constraint, and actual `preparePruning` controls. The change also
-passes all 741 existing examples and all eight allocation/Cachegrind
-controls. Checksums agree. The largest increases are 0.0005386% allocation
-and 0.0010502% instructions against the retained CFTA baseline.
+The shared worker retains tail-first splitting, keep-before-kill order,
+duplicate obligations and guard order. The Specftacular helper binds the
+exclusion function once. This shares the catalog across program nodes of
+one compilation. It adds no global query cache. Raw explicit-FTA callers
+retain their raw-template projection.
+
+The source argument assumes finite, total templates, lawful and consistent
+symbol Eq/Ord, and a catalog that fits in Int. Catalog construction can
+force previously unused parts earlier. Lazy child handles can retain it.
+The argument does not establish unchanged arbitrary partial inputs, every
+recursive cutoff stream, raw multiplicity or interning observation.
+
+The controls pass 16,560 complete raw ordered-copy cases and 16,560
+decoded prepared cases. Child projection, stable normalization, early
+guards and actual finite/residual controls pass. All 741 existing library
+examples and eight allocation plus eight Cachegrind cells pass. Four
+checksums agree in every cell. The largest increases against f4ec are
+0.0024384% allocation and 0.0016449% instructions.
 
 | Focused native control | Laws | Wall s | CPU s | Allocated bytes | Peak RSS MiB |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| HugeLists size 5, phase 3 | 197 | 21.92 | 21.916 | 107,292,734,568 | 546.1 |
-| HugeLists size 7, phase 2 | 242 | 168.11 | 168.302 | 734,878,423,008 | 1102.9 |
+| HugeLists size 5, phase 3 | 197 | 20.99 | 20.970 | 107,772,107,472 | 547.2 |
+| HugeLists size 7, phase 2 | 242 | 118.68 | 118.769 | 753,249,161,232 | 1103.4 |
 
-Both outputs match every byte of the retained `d8986453` outputs, including
-examined-term counters. Size 7 CPU falls by 42.9730% and allocation by
-10.1065%; peak RSS rises by 0.0702%. Size 5 allocation falls by 0.4505%,
-while peak RSS rises by 0.2244%. These two controls supply the adopted
-matrix rows. Their costs do not establish a general RSS reduction.
+Both native outputs match every retained f4ec stdout byte, including
+examined counters. Size 7 CPU changes by -29.4310%, allocation by +2.4998%,
+and RSS by +0.0457%. These are one fresh candidate and one retained
+observation per cell. They do not estimate timing variance or establish a
+general memory reduction.
 
-Each control is one fresh all-`-O2` run with 21 CFTA modules, eight Specftacular
-modules, and Main compiled together. No archived CFTA or Specftacular library
-is linked. The reference runs use the retained packaged `d8986453` build.
-The source delta is the template change, but the build context differs.
-Neither the baseline nor original Spectacular is rerun. The measurements
-do not estimate timing variance or isolate a matched-binary speed ratio.
+Both native variants compile 30 HOME modules at O2: 21 CFTA modules,
+eight Specftacular modules and Main. No archived CFTA or Specftacular
+library is linked. The native delta includes the Template representation
+and explicit helper sharing. The library budget contains CFTA/Gen only.
+Neither original Spectacular nor the baseline was rerun.
 
 ### Packaged frontend and resource controls
 
-The f4ec36bd packaged build has fresh effective `-O2` commands for 7/7
+The b530f920 packaged build has fresh effective `-O2` commands for 7/7
 native/GHC local components and 100/111 external entries. Entries include
 build tools; compiler-distributed libraries retain their toolchain settings.
 Native unchecked, native checked and GHC sequences agree: 24 laws for Lists
 size 5, phase 4 and 9 for Monad size 6, phase 4. Physical alias controls
 pass.
 
-| Completed configuration | Allocation change from `d8986453` | Peak RSS change from `d8986453` |
+| Completed configuration | Allocation change from `f4ec36bd` | Peak RSS change from `f4ec36bd` |
 | --- | ---: | ---: |
-| Lists-7-p4 | -0.0378% | -0.0885% |
-| ListMonad-7-p4 | +0.0876% | -13.7760% |
-| HugeLists-3-p4 | -0.0037% | +0.0784% |
-| HugeLists-4-p4 | -0.0825% | +12.5321% |
-| HugeLists-5-p3 | -0.4505% | +0.2244% |
-| HugeLists-7-p2 | -10.1065% | +0.0702% |
+| Lists-7-p4 | +0.4753% | +0.0129% |
+| ListMonad-7-p4 | +0.0830% | -0.1235% |
+| HugeLists-3-p4 | +0.1663% | -0.4272% |
+| HugeLists-4-p4 | +0.2694% | +3.0758% |
+| HugeLists-5-p3 | +0.4468% | +0.2124% |
+| HugeLists-7-p2 | +2.4998% | +0.0457% |
 
 These changes compare complete searches with the same 1064-case schedule.
-The two HugeLists pilot rows use the explicit HOME/package comparison.
+The two HugeLists adopted controls compare the same 30-HOME build shape;
+other rows compare fresh and retained packaged builds.
 Costs can move in different directions; no uniform reduction is claimed.
 
 The earlier `d8986453` Lists size 4, phase 1 control retained all 10 laws.
 Its 1.7380% allocation and 1.9235% instruction increases describe that
-revision against `d2e91fdf`; they are not fresh `f4ec36bd` measurements.
+revision against `d2e91fdf`; they are not current `b530f920` measurements.
 The older generalization change remains a separate accepted exception:
 +15.826% allocation and +17.002% instructions against `456123af`.
-The current CFTA validation is reported with the child-part controls above.
+The current CFTA validation is reported with the carried-identifier controls
+above.
 
 ## Cost-centre evidence and remaining bottlenecks
 
-### Profiles after the identifier change
+### Profiles of carried template identifiers
 
-The new profiles measure the `f4ec36bd` template implementation. All other
-runtime sources, the 1064-case schedule, Main's timing gates, and profiling
-dependencies match the preceding profile. Both variants compile 21 CFTA
-modules, eight Specftacular modules, and Main with `-O2 -prof -fprof-late`.
-Manual and automatic source SCC insertion remain disabled. No archived
-CFTA or Specftacular library is linked.
+These profiles use the selected Template and helper payloads. They compile
+30 HOME modules with O2, profiling and late cost centres. Manual and automatic
+source SCC insertion remain disabled. Audited profiling dependencies are
+unchanged; no archived CFTA or Specftacular library is linked.
 
-The whole size 5, phase 3 profile reproduces all 197 laws and all 40,814
-native stdout bytes. It has 86,881 total ticks and 68,121 application ticks.
-QuickCheck Gen accounts for 22,798 self ticks (33.4669%), CFTA Template for
-1,616 (2.3722%), Enumeration for 738 (1.0834%), and Specftacular Pruning for
-369 (0.5417%). These module self costs do not overlap. Profile wall time is
-87.0225 seconds against this implementation's retained 21.92-second native
-control. The 3.9700 ratio measures profiling distortion. These whole-run
-proportions do not describe the selected size 7 action.
+The whole size 5, phase 3 profile retains 197 laws and every native stdout
+byte. It records 84,286 total ticks and 66,625 application ticks. Profile
+wall time is 84.379113 seconds against the retained candidate native 20.99
+seconds. Their 4.0200 ratio measures profiling distortion, not a native
+gain.
 
-The size 7, phase 2 window reaches the same result-type `B` checkpoint:
-13,001 examined terms and 238 laws. All 36,431 prefix bytes match the native
-output. The timer covers the same preparation action to pair weak head
-normal form. It completes in 20.224567 wall seconds and 20.440568 CPU seconds,
-within the 60-second cap. The preceding profile took 51.4765 wall seconds
-and 52.0221 CPU seconds at this checkpoint. This is an instrumented-action
-comparison, not a native speed ratio. The new native run has no action timer.
+The selected window reaches maximum size 7, phase 2, program size 7 and
+result type B, after 13,001 examined terms and 238 laws. Its native stdout
+prefix is exact. The timer covers preparation to pair weak head normal form.
+No target enumeration or testing occurs before this profile exits.
 
-The new window has 20,225 total ticks and 16,274 application ticks. The
-application denominator excludes 3,951 GC, profiling, system and idle ticks.
-Derived Template ordering subtrees account for 10,981 ticks (67.4757282%).
-Derived Template equality subtrees have zero observed ticks. This is not
-proof of zero equality cost. Of the ordering ticks, 10,393 occur below
-`refine` outside `edgeCopies`, including 3,708 under `Set.insert`; 584 occur
-below `edgeCopies`, and four below `pruningTemplates`. Other late or inlined
-stacks do not identify every source operation. Module self totals include
-6,956 ticks in `GHC.Internal.Classes` (42.7430%) and 5,910 in CFTA Template
-(36.3156%). Do not add these totals to their inclusive comparison subtrees.
+The action completes in 5.658511 wall seconds and 5.718090 CPU seconds.
+The window has 5,659 total ticks and 4,647 application ticks.
+Runtime, GC, profiling and idle ticks are excluded from the application
+denominator.
 
-The process exits before this bucket enumerates or tests candidates. Only
-its enclosing bucket and phase emit abort records after the timer stops.
-Preparation can force previously delayed graph work. Lazy residual-template
-filtering remains outside this boundary. The process allocates
-1,408,860,067,064 bytes and reaches 1,664,152 KiB peak RSS. These resources
-include the full prefix; they are not window costs. Starting the profiling
-timer does not reset allocation or entries. The results identify remaining
-comparison work. They do not establish a general RSS reduction.
+| Selected window comparison ancestry | Ticks | Application share |
+| --- | ---: | ---: |
+| Raw Template Eq/Ord union | 22 | 0.4734% |
+| PreparedTemplate ID Eq/Ord union | 53 | 1.1405% |
 
-### Normalization census after the identifier change
+| Selected window self cost centre | Ticks | Application share |
+| --- | ---: | ---: |
+| `Data.CFTA.Template.edgeCopiesWith` | 1,745 | 37.5511% |
+| `GHC.Internal.Base.++` | 601 | 12.9331% |
+| `Data.Set.Internal.go` | 297 | 6.3912% |
+
+These self rows do not overlap. The comparison ancestry groups can overlap
+with each other and these self rows; do not add them. Missing or inlined
+centres do not prove zero operation cost. Entries, allocation and process
+RSS include the full prefix. They are not window costs. Lazy residual
+filtering remains outside this boundary. Native runs have no equivalent
+action timer, so profile ratios do not isolate native implementation gains.
+
+### Preceding f4ec profiles
+
+The preceding f4ec profile uses the same 30-HOME profiling flags, dependencies
+and checkpoint. Its size 5 control retains 197 laws and all native stdout.
+It records 68,121 application ticks; QuickCheck Gen accounts for 33.4669%
+of self ticks. Its 87.0225-second profile versus 21.92-second native run
+measures instrumentation distortion, not native engine speed.
+
+At size 7, phase 2, result B, after 13,001 examined terms and 238 laws,
+preparation completes in 20.224567 wall seconds and 20.440568 CPU seconds.
+It has 16,274 application ticks. Raw Template Ord subtrees contain 10,981
+(67.4757%); Template Eq has zero observed ticks, not proof of zero cost.
+Of those ordering ticks, 10,393 occur below refine outside edgeCopies,
+584 below edgeCopies and four below pruningTemplates. The allocation and
+RSS record includes the prefix. This observation motivated carried IDs.
+
+### Preceding f4ec normalization census
 
 A separate observer records the same size-7, phase-2, result-type `B`
 preparation action. The checkpoint has 13,001 examined terms and 238 laws.
@@ -700,96 +698,25 @@ duplicate-removal fraction.
 The observer counts demanded list cells. It does not force template elements
 or walk unused graph children. No structural key is sampled. These results
 do not measure distinct source/obligation queries, cache hits or subtree
-sizes. They support a test of exact identifiers through normalization.
+sizes. They motivated the carried-identifier experiment.
 A query cache still needs evidence of repeated exact keys. Observer costs
 are diagnostic and supply no native timing result.
 
-### Preceding preparation profile
+### Earlier diagnostic context
 
-The `d8986453` HugeLists size 7, phase 2 regression has preparation and
-cost-centre measurements. These profiles precede `f4ec36bd`. Its diagnostic
-replay reproduces every
-stdout byte of the packaged 197-law control and the completed 242-law run.
-Only Main adds a timed `compiled_prepare` boundary. Runtime modules and the
-1064-case schedule remain unchanged.
+At d8986453, the completed size-7 diagnostic attributes 182.627 of 265.923
+phase CPU seconds to preparation. Phase 2 preparation accounts for 94.0769%.
+The pair-WHNF boundary can force delayed graph work. It does not identify
+all of the native regression. At the same B checkpoint, its profile has
+42,775 application ticks. Raw Template Eq/Ord subtrees contain a disjoint
+31,583-tick union (73.8352%). Every sampled Eq subtree is under edgeCopies.
+These are preceding revision measurements, not current percentages.
 
-| Size 7 phase | Phase CPU s | Preparation CPU s | Preparation share | Other bucket CPU s |
-| --- | ---: | ---: | ---: | ---: |
-| 1 | 135.889 | 60.295 | 44.3706% | 75.593 |
-| 2 | 130.034 | 122.332 | 94.0769% | 7.701 |
-
-The closed phases total 265.923 CPU seconds; preparation accounts for
-182.627 seconds. Preparation has no nested measured stage, so its inclusive
-and exclusive totals agree. Other bucket CPU excludes preparation. Phase
-work outside buckets is below 0.003 seconds. CPU timestamps use picoseconds;
-wall timestamps use nanoseconds. Phase and bucket inclusive totals overlap.
-
-This boundary evaluates the returned pair to weak head normal form. It can
-demand graph and template work deferred from earlier bindings. Residual
-filtering can remain lazy and run later. These measurements do not isolate
-an eager compiler, or identify all of the 208.355-second CPU increase
-between the uninstrumented matrix runs.
-
-The profiles compile all 30 HOME modules with `-O2 -prof -fprof-late` and
-manual and automatic source SCC insertion disabled. No installed CFTA or
-Specftacular archive is linked. The 134 hash-bound provenance files include
-historical audit records, not 134 linked libraries. Source inverses preserve
-the runtime apart from Main's timing gates.
-
-The whole size 5 profile retains all 197 laws and all 40,814 stdout bytes.
-It has 91,448 total ticks and 71,869 application self ticks. QuickCheck Gen
-accounts for 33.3537%, CFTA Template for 2.8552%, Enumeration for 1.0060%,
-and Specftacular Pruning for 0.4912%. These module self costs are disjoint.
-Profile wall time is 91.572 seconds against native 22.590 seconds. The
-4.0536 ratio measures profiling distortion. These whole size 5 proportions
-do not describe the size 7 bottleneck.
-
-The selected window starts at phase 2, program size 7, result type `B`,
-after 13,001 examined terms and 238 laws. It preserves the exact native
-stdout prefix. Preparation completes before target enumeration or testing.
-The same native action took 15.293 CPU seconds. Its profile takes 52.022 CPU
-and 51.476 wall seconds, within the 60-second wall cap. The profile contains
-51,475 total ticks and 42,775 application self ticks. The application
-denominator excludes GC, PROFILING, SYSTEM and IDLE.
-
-| Selected preparation self cost | Ticks | Application share |
-| --- | ---: | ---: |
-| GHC.Internal.Classes | 25,130 | 58.7493% |
-| CFTA Template | 12,685 | 29.6552% |
-| CFTA Enumeration | 0 | 0% |
-| Specftacular Pruning | 0 | 0% |
-| QuickCheck Gen and decision tree | 0 | 0% |
-
-Derived Template equality and ordering subtrees contain 20,838 and 10,745
-ticks: 48.7154% and 25.1198%. Their disjoint union is 73.8352%. These
-subtrees include derived list and symbol comparisons. All sampled Template
-equality subtrees enter below `edgeCopies`. Ordering has 6,830 ticks below
-`refine`, 3,838 below the Template ordering dictionary, 76 below
-`edgeCopies`, and one below `pruningTemplates` deduplication. The source uses
-structural comparisons in duplicate guards and ordered sets. This ancestry
-does not isolate every call site or estimate removable cost.
-
-No target generation or testing occurs in this preparation window. Missing
-or inlined names are not zero-cost proofs. Other inclusive families overlap
-and must not be added. Profile allocation, entries and RTS resources include
-the whole preceding search and the selected action. These results establish
-no native speedup or implementation gain.
-
-An earlier selected-bucket predecessor had a different size 6 window:
-41.9988% Enumeration and 33.8009% Pruning self ticks after compilation and
-reduction. Those historical percentages do not identify the current size 7
-preparation cost.
-
-Earlier profiles explain the implemented fixes. At `102965d3`, long size 5
-and size 6 windows remained blocked before tests. At older port revisions,
-completion dominated some windows; typed-order and generalization fixes
-addressed those cases. At `d2e91fdf`, demand counters identified millions of
-empty annotation merges. Root-view and snapshot APIs passed finite semantic
-controls but failed performance selection. The chosen Spec-only guard kept
-the smaller interface. Compiled exclusion, one later reduction and removal
-of covered oracle patterns then completed selected size 6 controls. Those
-source-labelled experiments motivated the current integration; their raw
-logs and intermediate timings remain local.
+Older source-labelled controls identified completion/type-order defects,
+repeated annotation work and redundant oracle checks. Some finite-correct
+API candidates failed performance selection. Their intermediate results
+remain local. They do not establish current cost or universal cutoff
+correspondence.
 
 ## Memory and allocation
 
@@ -808,18 +735,18 @@ changed from 20.93 to 20.59 GiB. That control also changed comparison order
 and can treat partial values differently. It does not isolate storage alone
 or predict current large-search memory. Current memory is measured below.
 
-Fresh packaged `f4ec36bd` memory controls:
+Fresh packaged `b530f920` memory controls:
 
 | Control | Native unchecked MiB | Native checked MiB | GHC MiB |
 | --- | ---: | ---: | ---: |
-| Lists5P4 | 51.7 | 60.8 | 535.2 |
-| ListMonad6P4 | 79.6 | 94.2 | 538.4 |
+| Lists5P4 | 53.8 | 54.8 | 536.8 |
+| ListMonad6P4 | 79.6 | 94.4 | 547.8 |
 
 The modes retain the same 24-law Lists and nine-law Monad sequences. The GHC
 process includes the compiler and interpreter. Agreement does not prove
 coverage equivalence.
 
-Across the current matrix processes, maximum observed RSS is 2715.8 MiB
+Across current matrix processes, maximum observed RSS is 2675.8 MiB
 (HugeLists-6-p4, actual 900-second guard). Adopted controls remain
 explicitly labelled. Timeout resources are censored. Allocation is
 cumulative traffic, and missing RTS totals remain unknown.
@@ -891,21 +818,16 @@ engine.
 
 ## Further algorithmic work
 
-1. **Carry exact subtree identifiers through stable normalization.** The
-   current identifiers are local to one child of one `edgeCopies` call.
-   Carrying them through `refine` could avoid repeated structural ordering.
-   The census finds 97.8055% duplicate entries in completed wanted lists.
-   The observed output maximum of four applies only to this action.
-   The first change should preserve the exact first-occurrence order of
-   `nubOrd`. Retain the original templates for compatibility checks and
-   output. Do not use arbitrary identifier order for ground groups.
-   The catalog must cover all template forms, their subtrees, and `Hole`.
-   Equal languages are not equal structural keys. Finite, total templates
-   and lawful symbol `Eq`/`Ord` are required. Earlier forcing, recursive
-   cutoffs, interning order and residuals need separate controls.
+1. **Target edge-copy construction.** The selected preparation profile
+   attributes 37.5511% of application self ticks to `edgeCopiesWith`.
+   Raw structural template comparisons now account for 0.4734% of application
+   ticks. Further representation changes should address edge-copy construction.
+   The preceding f4ec normalization census does not measure current query
+   reuse. Retain finite ordered outputs, recursive/residual controls and the
+   original fallback contracts.
 
-2. **Share exact exclusion queries if a census shows reuse.** First count
-   demanded normalization requests, distinct ordered obligation lists,
+2. **Share exact exclusion queries if a census shows reuse.** Next count
+   distinct ordered obligation lists,
    subtree counts, repeated source/obligation queries and peak live state.
    Do not walk unused graph children for these counters. Query sharing must
    retain ordered obligations, source identity and recursion context. Keep
@@ -932,7 +854,8 @@ engine.
    program/type witness relation. Annotation cycles need a termination
    argument if their positive size cost is removed.
 
-These are proposed changes, not implemented APIs or measured improvements.
+Query sharing, prepared plans and new ordered extraction remain proposals.
+Their gains are unmeasured.
 Keep phase, size and type order, generalization, validation, and the original
 oracle fallback. Require exact ordered helper outputs, annotated/residual
 finite controls, complete law-stream controls, and library budgets before
