@@ -1,0 +1,60 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-guard-composition/outer-constructor-direct-1.source.lean:84:0: warning: automatically included section variable(s) unused in theorem `MicroCFTA.SourceCurrentOuterConstructorBounds.prefix_state`:
+  [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-guard-composition/outer-constructor-direct-1.source.lean:83:0: warning: `prefix_state` does not use the following hypothesis in its type:
+  • [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)] (#2)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-guard-composition/outer-constructor-direct-1.source.lean:93:0: warning: `edge` does not use the following hypothesis in its type outside of proofs:
+  • [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)] (#2) (used in type, but only in a proof)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-guard-composition/outer-constructor-direct-1.source.lean:130:4: error: Type mismatch: After simplification, term
+  have this :=
+    ⟨{ nodes := resources.left.nodes, edges := resources.left.edges, domains := fits.domains,
+        stored := resources.left.stored },
+      ⟨carrier, resources.right.right⟩⟩;
+  this
+ has type
+  And
+    (Fits (profile entry)
+      (SourceCurrentAllocatedQueryMemo.advancePhysical before
+        { heap := (run (makeNode newRows) before.native.machine.heap).snd, equality := before.operations }))
+    (Known (fun guard => guard ∈ alphabet) (run (makeNode newRows) before.native.machine.heap).snd ∧
+      (run (makeNode newRows) before.native.machine.heap).snd.nodes.next ≤ before.native.machine.heap.nodes.next + 1 ∧
+        (run (makeNode newRows) before.native.machine.heap).snd.edges.next = before.native.machine.heap.edges.next)
+but is expected to have type
+  And
+    (Fits (profile entry)
+      {
+        native :=
+          SourceEqualityNativeScoped.advanceHeap before.native (run (makeNode newRows) before.native.machine.heap).snd,
+        operations := before.operations })
+    (Known (fun guard => guard ∈ alphabet)
+        (SourceEqualityNativeScoped.advanceHeap before.native
+              (run (makeNode newRows) before.native.machine.heap).snd).machine.heap ∧
+      (SourceEqualityNativeScoped.advanceHeap before.native
+                    (run (makeNode newRows) before.native.machine.heap).snd).machine.heap.nodes.next ≤
+          before.native.machine.heap.nodes.next + 1 ∧
+        (SourceEqualityNativeScoped.advanceHeap before.native
+                    (run (makeNode newRows) before.native.machine.heap).snd).machine.heap.edges.next =
+          before.native.machine.heap.edges.next)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-guard-composition/outer-constructor-direct-1.source.lean:168:52: error: Application type mismatch: The argument
+  actual
+has type
+  SourceCurrentAllocatedPartialWorker.children fuel g s r e p h m c n limit
+      (SourceEqualityConstraintAllocation.Value.live identity records) values before =
+    SourceCurrentAllocatedPartialWorker.Outcome.done results after
+but is expected to have type
+  SourceCurrentAllocatedPartialWorker.walk fuel ?m.130 ?m.131 ?m.132 ?m.133 ?m.134 ?m.135 ?m.136 ?m.137 ?m.138 ?m.139
+      ?m.140 ?m.141 values ?m.143 =
+    SourceCurrentAllocatedPartialWorker.Outcome.done results ?m.145
+in the application
+  walk_length fuel actual

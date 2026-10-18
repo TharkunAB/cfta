@@ -1,0 +1,1096 @@
+MicroCFTA.SourceCurrentEditGuardBudget.fold_le_fuel : ∀ (count : Nat) (seed : List.{0} Int)
+  (paths : List.{0} (List.{0} Int)) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentTargetGuardAlphabet.foldCount count seed paths profile)
+    (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (@List.length.{0} (List.{0} Int) paths)
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel count seed paths profile)
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+theorem MicroCFTA.SourceCurrentEditGuardBudget.fold_le_fuel : ∀ (count : Nat) (seed : List.{0} Int)
+  (paths : List.{0} (List.{0} Int)) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentTargetGuardAlphabet.foldCount count seed paths profile)
+    (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (@List.length.{0} (List.{0} Int) paths)
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel count seed paths profile)
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))) :=
+fun count seed paths profile =>
+  @List.rec.{0, 0} (List.{0} Int)
+    (fun paths =>
+      ∀ (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+        @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentTargetGuardAlphabet.foldCount count seed paths profile)
+          (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (@List.length.{0} (List.{0} Int) paths)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel count seed paths profile)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+    (fun profile =>
+      @Eq.mpr.{0}
+        (@LE.le.{0} Nat instLENat
+          (MicroCFTA.SourceCurrentTargetGuardAlphabet.foldCount count seed (@List.nil.{0} (List.{0} Int)) profile)
+          (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@List.length.{0} (List.{0} Int) (@List.nil.{0} (List.{0} Int)))
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel count seed (@List.nil.{0} (List.{0} Int))
+                profile)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+        (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel count seed (@List.nil.{0} (List.{0} Int))
+              profile)
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+        (@id.{0}
+          (@Eq.{1} Prop
+            (@LE.le.{0} Nat instLENat
+              (MicroCFTA.SourceCurrentTargetGuardAlphabet.foldCount count seed (@List.nil.{0} (List.{0} Int)) profile)
+              (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@List.length.{0} (List.{0} Int) (@List.nil.{0} (List.{0} Int)))
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel count seed
+                    (@List.nil.{0} (List.{0} Int)) profile)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+            (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel count seed (@List.nil.{0} (List.{0} Int))
+                  profile)
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+          (@congrArg.{1, 1} Nat Prop
+            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@List.length.{0} (List.{0} Int) (@List.nil.{0} (List.{0} Int)))
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel count seed (@List.nil.{0} (List.{0} Int))
+                  profile)
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel count seed (@List.nil.{0} (List.{0} Int))
+                profile)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+            (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+            (@Eq.trans.{1} Nat
+              (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@List.length.{0} (List.{0} Int) (@List.nil.{0} (List.{0} Int)))
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel count seed
+                    (@List.nil.{0} (List.{0} Int)) profile)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+              (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel count seed
+                    (@List.nil.{0} (List.{0} Int)) profile)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel count seed (@List.nil.{0} (List.{0} Int))
+                  profile)
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+              (@congrFun'.{1, 1} Nat Nat
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@List.length.{0} (List.{0} Int) (@List.nil.{0} (List.{0} Int)))
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                (@congrArg.{1, 1} Nat (Nat → Nat)
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@List.length.{0} (List.{0} Int) (@List.nil.{0} (List.{0} Int)))
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                  (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat))
+                  (Nat.zero_add (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel count seed
+                    (@List.nil.{0} (List.{0} Int)) profile)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+              (Nat.one_mul
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel count seed
+                    (@List.nil.{0} (List.{0} Int)) profile)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))))
+        (@Decidable.byContradiction
+          (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel count seed (@List.nil.{0} (List.{0} Int))
+                profile)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+          (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel count seed (@List.nil.{0} (List.{0} Int))
+                profile)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+          fun a => MicroCFTA.SourceCurrentEditGuardBudget.fold_le_fuel._proof_1_1 count seed profile a))
+    (fun path paths ih profile =>
+      let entry := MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operand path count profile;
+      let query := MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldProfile count seed paths entry;
+      let fuel :=
+        MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel count seed
+          (@List.cons.{0} (List.{0} Int) path paths) profile;
+      have tailFuel := MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel_tail count seed path paths profile;
+      have tail :=
+        @Nat.le_trans (MicroCFTA.SourceCurrentTargetGuardAlphabet.foldCount count seed paths entry)
+          (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (@List.length.{0} (List.{0} Int) paths)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel count seed paths entry)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+          (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (@List.length.{0} (List.{0} Int) paths)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+          (ih entry)
+          (@Nat.mul_le_mul
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (@List.length.{0} (List.{0} Int) paths)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel count seed paths entry)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (@List.length.{0} (List.{0} Int) paths)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+            (Nat.le_refl
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (@List.length.{0} (List.{0} Int) paths)
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+            (@Nat.succ_le_succ (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel count seed paths entry)
+              fuel tailFuel));
+      have queryFuel :=
+        MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel_query count seed path paths profile;
+      have steps :=
+        @id.{0}
+          (@LE.le.{0} Nat instLENat
+              (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.queryFuel
+                (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldProfile count seed paths
+                  (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.operand path count profile)))
+              (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel count seed
+                (@List.cons.{0} (List.{0} Int) path paths) profile) →
+            @LE.le.{0} Nat instLENat
+              (MicroCFTA.SourceCurrentAllocatedNativeComputedBudget.instructionBound query.nodes query.edges query.mass)
+              fuel)
+          (fun queryFuel =>
+            @Decidable.byContradiction
+              (@LE.le.{0} Nat instLENat
+                (MicroCFTA.SourceCurrentAllocatedNativeComputedBudget.instructionBound query.nodes query.edges
+                  query.mass)
+                fuel)
+              ((MicroCFTA.SourceCurrentAllocatedNativeComputedBudget.instructionBound query.nodes query.edges
+                    query.mass).decLe
+                fuel)
+              fun a =>
+              MicroCFTA.SourceCurrentEditGuardBudget.fold_le_fuel._proof_1_2 count seed path paths profile queryFuel a)
+          queryFuel;
+      @id.{0}
+        (@LE.le.{0} Nat instLENat
+          (MicroCFTA.SourceCurrentTargetGuardAlphabet.foldCount count seed (@List.cons.{0} (List.{0} Int) path paths)
+            profile)
+          (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@List.length.{0} (List.{0} Int) (@List.cons.{0} (List.{0} Int) path paths))
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.foldFuel count seed
+                (@List.cons.{0} (List.{0} Int) path paths) profile)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+        (@Eq.mpr.{0}
+          (@LE.le.{0} Nat instLENat
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                (MicroCFTA.SourceCurrentTargetGuardAlphabet.foldCount count seed paths entry))
+              (MicroCFTA.SourceCurrentAllocatedNativeComputedBudget.instructionBound query.nodes query.edges
+                query.mass))
+            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (@List.length.{0} (List.{0} Int) paths)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+          (@LE.le.{0} Nat instLENat
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                (MicroCFTA.SourceCurrentTargetGuardAlphabet.foldCount count seed paths entry))
+              (MicroCFTA.SourceCurrentAllocatedNativeComputedBudget.instructionBound query.nodes query.edges
+                query.mass))
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (@List.length.{0} (List.{0} Int) paths)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+              (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))))
+          (@id.{0}
+            (@Eq.{1} Prop
+              (@LE.le.{0} Nat instLENat
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                    (MicroCFTA.SourceCurrentTargetGuardAlphabet.foldCount count seed paths entry))
+                  (MicroCFTA.SourceCurrentAllocatedNativeComputedBudget.instructionBound query.nodes query.edges
+                    query.mass))
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      (@List.length.{0} (List.{0} Int) paths)
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+              (@LE.le.{0} Nat instLENat
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                    (MicroCFTA.SourceCurrentTargetGuardAlphabet.foldCount count seed paths entry))
+                  (MicroCFTA.SourceCurrentAllocatedNativeComputedBudget.instructionBound query.nodes query.edges
+                    query.mass))
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      (@List.length.{0} (List.{0} Int) paths)
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+                  (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))))
+            (@congrArg.{1, 1} Nat Prop
+              (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@List.length.{0} (List.{0} Int) paths)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@List.length.{0} (List.{0} Int) paths)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+              (fun _a =>
+                @LE.le.{0} Nat instLENat
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                      (MicroCFTA.SourceCurrentTargetGuardAlphabet.foldCount count seed paths entry))
+                    (MicroCFTA.SourceCurrentAllocatedNativeComputedBudget.instructionBound query.nodes query.edges
+                      query.mass))
+                  _a)
+              (Nat.add_mul
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (@List.length.{0} (List.{0} Int) paths)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))))
+          (@Eq.mpr.{0}
+            (@LE.le.{0} Nat instLENat
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                  (MicroCFTA.SourceCurrentTargetGuardAlphabet.foldCount count seed paths entry))
+                (MicroCFTA.SourceCurrentAllocatedNativeComputedBudget.instructionBound query.nodes query.edges
+                  query.mass))
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@List.length.{0} (List.{0} Int) paths)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))))
+            (@LE.le.{0} Nat instLENat
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                  (MicroCFTA.SourceCurrentTargetGuardAlphabet.foldCount count seed paths entry))
+                (MicroCFTA.SourceCurrentAllocatedNativeComputedBudget.instructionBound query.nodes query.edges
+                  query.mass))
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@List.length.{0} (List.{0} Int) paths)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+            (@id.{0}
+              (@Eq.{1} Prop
+                (@LE.le.{0} Nat instLENat
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                      (MicroCFTA.SourceCurrentTargetGuardAlphabet.foldCount count seed paths entry))
+                    (MicroCFTA.SourceCurrentAllocatedNativeComputedBudget.instructionBound query.nodes query.edges
+                      query.mass))
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                        (@List.length.{0} (List.{0} Int) paths)
+                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+                    (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))))
+                (@LE.le.{0} Nat instLENat
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                      (MicroCFTA.SourceCurrentTargetGuardAlphabet.foldCount count seed paths entry))
+                    (MicroCFTA.SourceCurrentAllocatedNativeComputedBudget.instructionBound query.nodes query.edges
+                      query.mass))
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                        (@List.length.{0} (List.{0} Int) paths)
+                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))))
+              (@congrArg.{1, 1} Nat Prop
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                (fun _a =>
+                  @LE.le.{0} Nat instLENat
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                        (MicroCFTA.SourceCurrentTargetGuardAlphabet.foldCount count seed paths entry))
+                      (MicroCFTA.SourceCurrentAllocatedNativeComputedBudget.instructionBound query.nodes query.edges
+                        query.mass))
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                          (@List.length.{0} (List.{0} Int) paths)
+                          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+                      _a))
+                (Nat.one_mul
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))))
+            (@Nat.le_trans
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                  (MicroCFTA.SourceCurrentTargetGuardAlphabet.foldCount count seed paths entry))
+                (MicroCFTA.SourceCurrentAllocatedNativeComputedBudget.instructionBound query.nodes query.edges
+                  query.mass))
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                  (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      (@List.length.{0} (List.{0} Int) paths)
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+                fuel)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@List.length.{0} (List.{0} Int) paths)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+              (@Nat.add_le_add
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                  (MicroCFTA.SourceCurrentTargetGuardAlphabet.foldCount count seed paths entry))
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                  (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      (@List.length.{0} (List.{0} Int) paths)
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+                (MicroCFTA.SourceCurrentAllocatedNativeComputedBudget.instructionBound query.nodes query.edges
+                  query.mass)
+                fuel
+                (@Nat.add_le_add_left (MicroCFTA.SourceCurrentTargetGuardAlphabet.foldCount count seed paths entry)
+                  (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      (@List.length.{0} (List.{0} Int) paths)
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+                  tail (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                steps)
+              (@Decidable.byContradiction
+                (@LE.le.{0} Nat instLENat
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                          (@List.length.{0} (List.{0} Int) paths)
+                          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+                    fuel)
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                        (@List.length.{0} (List.{0} Int) paths)
+                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+                ((@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                        (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                            (@List.length.{0} (List.{0} Int) paths)
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+                      fuel).decLe
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                        (@List.length.{0} (List.{0} Int) paths)
+                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+                fun a =>
+                MicroCFTA.SourceCurrentEditGuardBudget.fold_le_fuel._proof_1_3 count seed path paths profile a)))))
+    paths profile
+'MicroCFTA.SourceCurrentEditGuardBudget.fold_le_fuel' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentEditGuardBudget.target_le_fuel : ∀ (count : Nat) (paths : List.{0} (List.{0} Int))
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentTargetGuardAlphabet.targetCount count paths profile)
+    (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (@List.length.{0} (List.{0} Int) paths)
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetFuel count paths profile)
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+theorem MicroCFTA.SourceCurrentEditGuardBudget.target_le_fuel : ∀ (count : Nat) (paths : List.{0} (List.{0} Int))
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentTargetGuardAlphabet.targetCount count paths profile)
+    (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (@List.length.{0} (List.{0} Int) paths)
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetFuel count paths profile)
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))) :=
+fun count paths profile =>
+  @List.casesOn.{0, 0} (List.{0} Int)
+    (fun t =>
+      @Eq.{1} (List.{0} (List.{0} Int)) paths t →
+        @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentTargetGuardAlphabet.targetCount count paths profile)
+          (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (@List.length.{0} (List.{0} Int) paths)
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetFuel count paths profile)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+    paths
+    (fun h =>
+      @Eq.ndrec.{0, 1} (List.{0} (List.{0} Int)) (@List.nil.{0} (List.{0} Int))
+        (fun paths =>
+          @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentTargetGuardAlphabet.targetCount count paths profile)
+            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (@List.length.{0} (List.{0} Int) paths)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetFuel count paths profile)
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+        (Nat.le_refl (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))) paths
+        (@Eq.symm.{1} (List.{0} (List.{0} Int)) paths (@List.nil.{0} (List.{0} Int)) h))
+    (fun seed paths_1 h =>
+      @Eq.ndrec.{0, 1} (List.{0} (List.{0} Int)) (@List.cons.{0} (List.{0} Int) seed paths_1)
+        (fun paths =>
+          @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentTargetGuardAlphabet.targetCount count paths profile)
+            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (@List.length.{0} (List.{0} Int) paths)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.targetFuel count paths profile)
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+        (MicroCFTA.SourceCurrentEditGuardBudget.fold_le_fuel count seed paths_1 profile) paths
+        (@Eq.symm.{1} (List.{0} (List.{0} Int)) paths (@List.cons.{0} (List.{0} Int) seed paths_1) h))
+    (@Eq.refl.{1} (List.{0} (List.{0} Int)) paths)
+'MicroCFTA.SourceCurrentEditGuardBudget.target_le_fuel' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentEditGuardBudget.force_le_fuel : ∀ (count : Nat) (paths : List.{0} (List.{0} Int)) (found : Bool)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentEditGuardAlphabet.forceCount count paths found profile)
+    (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (@List.length.{0} (List.{0} Int) paths)
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceFuel count paths found profile)
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+theorem MicroCFTA.SourceCurrentEditGuardBudget.force_le_fuel : ∀ (count : Nat) (paths : List.{0} (List.{0} Int))
+  (found : Bool) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentEditGuardAlphabet.forceCount count paths found profile)
+    (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (@List.length.{0} (List.{0} Int) paths)
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceFuel count paths found profile)
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))) :=
+fun count paths found profile =>
+  @Bool.casesOn.{0}
+    (fun t =>
+      @Eq.{1} Bool found t →
+        @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentEditGuardAlphabet.forceCount count paths found profile)
+          (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (@List.length.{0} (List.{0} Int) paths)
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceFuel count paths found profile)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+    found
+    (fun h =>
+      @Eq.ndrec.{0, 1} Bool Bool.false
+        (fun found =>
+          @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentEditGuardAlphabet.forceCount count paths found profile)
+            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (@List.length.{0} (List.{0} Int) paths)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceFuel count paths found profile)
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+        (MicroCFTA.SourceCurrentEditGuardBudget.target_le_fuel count paths profile) found
+        (@Eq.symm.{1} Bool found Bool.false h))
+    (fun h =>
+      @Eq.ndrec.{0, 1} Bool Bool.true
+        (fun found =>
+          @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentEditGuardAlphabet.forceCount count paths found profile)
+            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (@List.length.{0} (List.{0} Int) paths)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceFuel count paths found profile)
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+        (Nat.zero_le
+          (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (@List.length.{0} (List.{0} Int) paths)
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceFuel count paths Bool.true profile)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+        found (@Eq.symm.{1} Bool found Bool.true h))
+    (@Eq.refl.{1} Bool found)
+'MicroCFTA.SourceCurrentEditGuardBudget.force_le_fuel' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentEditGuardBudget.leaf_le_fuel : ∀ (count : Nat) (paths : List.{0} (List.{0} Int)) (found : Bool)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentEditGuardAlphabet.leafCount count paths found profile)
+    (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (@List.length.{0} (List.{0} Int) paths)
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile)
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+theorem MicroCFTA.SourceCurrentEditGuardBudget.leaf_le_fuel : ∀ (count : Nat) (paths : List.{0} (List.{0} Int))
+  (found : Bool) (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentEditGuardAlphabet.leafCount count paths found profile)
+    (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (@List.length.{0} (List.{0} Int) paths)
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile)
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))) :=
+fun count paths found profile =>
+  have first :=
+    @Nat.le_trans (MicroCFTA.SourceCurrentEditGuardAlphabet.forceCount count paths found profile)
+      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (@List.length.{0} (List.{0} Int) paths)
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceFuel count paths found profile)
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (@List.length.{0} (List.{0} Int) paths)
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile)
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+      (MicroCFTA.SourceCurrentEditGuardBudget.force_le_fuel count paths found profile)
+      (@Nat.mul_le_mul (@List.length.{0} (List.{0} Int) paths)
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceFuel count paths found profile)
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+        (@List.length.{0} (List.{0} Int) paths)
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile)
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+        (Nat.le_refl (@List.length.{0} (List.{0} Int) paths))
+        (@Nat.succ_le_succ (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceFuel count paths found profile)
+          (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile)
+          (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel_force count paths found profile)));
+  have last := MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel_query count paths found profile;
+  @id.{0}
+    (@LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentEditGuardAlphabet.leafCount count paths found profile)
+      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (@List.length.{0} (List.{0} Int) paths)
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile)
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+    (@Eq.mpr.{0}
+      (@LE.le.{0} Nat instLENat
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (MicroCFTA.SourceCurrentEditGuardAlphabet.forceCount count paths found profile)
+          (MicroCFTA.SourceCurrentAllocatedNativeComputedBudget.instructionBound
+            (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).nodes
+            (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).edges
+            (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).mass))
+        (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (@List.length.{0} (List.{0} Int) paths)
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile)
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+      (@LE.le.{0} Nat instLENat
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (MicroCFTA.SourceCurrentEditGuardAlphabet.forceCount count paths found profile)
+          (MicroCFTA.SourceCurrentAllocatedNativeComputedBudget.instructionBound
+            (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).nodes
+            (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).edges
+            (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).mass))
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (@List.length.{0} (List.{0} Int) paths)
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+          (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))))
+      (@id.{0}
+        (@Eq.{1} Prop
+          (@LE.le.{0} Nat instLENat
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (MicroCFTA.SourceCurrentEditGuardAlphabet.forceCount count paths found profile)
+              (MicroCFTA.SourceCurrentAllocatedNativeComputedBudget.instructionBound
+                (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).nodes
+                (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).edges
+                (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).mass))
+            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (@List.length.{0} (List.{0} Int) paths)
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile)
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+          (@LE.le.{0} Nat instLENat
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (MicroCFTA.SourceCurrentEditGuardAlphabet.forceCount count paths found profile)
+              (MicroCFTA.SourceCurrentAllocatedNativeComputedBudget.instructionBound
+                (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).nodes
+                (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).edges
+                (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).mass))
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (@List.length.{0} (List.{0} Int) paths)
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+              (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))))
+        (@congrArg.{1, 1} Nat Prop
+          (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (@List.length.{0} (List.{0} Int) paths)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (@List.length.{0} (List.{0} Int) paths)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile)
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile)
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+          (fun _a =>
+            @LE.le.{0} Nat instLENat
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (MicroCFTA.SourceCurrentEditGuardAlphabet.forceCount count paths found profile)
+                (MicroCFTA.SourceCurrentAllocatedNativeComputedBudget.instructionBound
+                  (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).nodes
+                  (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).edges
+                  (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).mass))
+              _a)
+          (Nat.add_mul (@List.length.{0} (List.{0} Int) paths)
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))))
+      (@Eq.mpr.{0}
+        (@LE.le.{0} Nat instLENat
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (MicroCFTA.SourceCurrentEditGuardAlphabet.forceCount count paths found profile)
+            (MicroCFTA.SourceCurrentAllocatedNativeComputedBudget.instructionBound
+              (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).nodes
+              (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).edges
+              (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).mass))
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (@List.length.{0} (List.{0} Int) paths)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile)
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile)
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))))
+        (@LE.le.{0} Nat instLENat
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (MicroCFTA.SourceCurrentEditGuardAlphabet.forceCount count paths found profile)
+            (MicroCFTA.SourceCurrentAllocatedNativeComputedBudget.instructionBound
+              (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).nodes
+              (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).edges
+              (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).mass))
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (@List.length.{0} (List.{0} Int) paths)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile)
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+        (@id.{0}
+          (@Eq.{1} Prop
+            (@LE.le.{0} Nat instLENat
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (MicroCFTA.SourceCurrentEditGuardAlphabet.forceCount count paths found profile)
+                (MicroCFTA.SourceCurrentAllocatedNativeComputedBudget.instructionBound
+                  (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).nodes
+                  (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).edges
+                  (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).mass))
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (@List.length.{0} (List.{0} Int) paths)
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))))
+            (@LE.le.{0} Nat instLENat
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (MicroCFTA.SourceCurrentEditGuardAlphabet.forceCount count paths found profile)
+                (MicroCFTA.SourceCurrentAllocatedNativeComputedBudget.instructionBound
+                  (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).nodes
+                  (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).edges
+                  (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).mass))
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (@List.length.{0} (List.{0} Int) paths)
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))))
+          (@congrArg.{1, 1} Nat Prop
+            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile)
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+            (fun _a =>
+              @LE.le.{0} Nat instLENat
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (MicroCFTA.SourceCurrentEditGuardAlphabet.forceCount count paths found profile)
+                  (MicroCFTA.SourceCurrentAllocatedNativeComputedBudget.instructionBound
+                    (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).nodes
+                    (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).edges
+                    (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).mass))
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                    (@List.length.{0} (List.{0} Int) paths)
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile)
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+                  _a))
+            (Nat.one_mul
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile)
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))))
+        (@Nat.le_trans
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (MicroCFTA.SourceCurrentEditGuardAlphabet.forceCount count paths found profile)
+            (MicroCFTA.SourceCurrentAllocatedNativeComputedBudget.instructionBound
+              (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).nodes
+              (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).edges
+              (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).mass))
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (@List.length.{0} (List.{0} Int) paths)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile)
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+            (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile))
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (@List.length.{0} (List.{0} Int) paths)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile)
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+          (@Nat.add_le_add (MicroCFTA.SourceCurrentEditGuardAlphabet.forceCount count paths found profile)
+            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (@List.length.{0} (List.{0} Int) paths)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile)
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+            (MicroCFTA.SourceCurrentAllocatedNativeComputedBudget.instructionBound
+              (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).nodes
+              (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).edges
+              (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).mass)
+            (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile) first
+            (@Nat.le_of_succ_le
+              (MicroCFTA.SourceCurrentAllocatedNativeComputedBudget.instructionBound
+                (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).nodes
+                (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).edges
+                (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).mass)
+              (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile) last))
+          (@Decidable.byContradiction
+            (@LE.le.{0} Nat instLENat
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (@List.length.{0} (List.{0} Int) paths)
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+                (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile))
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (@List.length.{0} (List.{0} Int) paths)
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+            ((@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                    (@List.length.{0} (List.{0} Int) paths)
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile)
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+                  (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile)).decLe
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) (@List.length.{0} (List.{0} Int) paths)
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count paths found profile)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+            fun a => MicroCFTA.SourceCurrentEditGuardBudget.leaf_le_fuel._proof_1_1 count paths found profile a))))
+'MicroCFTA.SourceCurrentEditGuardBudget.leaf_le_fuel' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentEditGuardBudget.leafBound : MicroCFTA.SourceEqualityClassOrder.Record →
+  Nat → MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile → Nat
+def MicroCFTA.SourceCurrentEditGuardBudget.leafBound : MicroCFTA.SourceEqualityClassOrder.Record →
+  Nat → MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile → Nat :=
+fun record count ceiling =>
+  @HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+      (@List.length.{0} MicroCFTA.EqualityNormalize.Path record.paths)
+      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel record count ceiling)
+      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+'MicroCFTA.SourceCurrentEditGuardBudget.leafBound' does not depend on any axioms
+MicroCFTA.SourceCurrentEditGuardBudget.leaf_le_stage : ∀ (record : MicroCFTA.SourceEqualityClassOrder.Record)
+  (count : Nat) (path : MicroCFTA.EqualityNormalize.Path),
+  @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+      (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths path →
+    ∀ (found : Bool) (profile ceiling : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le profile ceiling →
+        @LE.le.{0} Nat instLENat
+          (MicroCFTA.SourceCurrentEditGuardAlphabet.leafCount count
+            (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths path) found profile)
+          (MicroCFTA.SourceCurrentEditGuardBudget.leafBound record count ceiling)
+theorem MicroCFTA.SourceCurrentEditGuardBudget.leaf_le_stage : ∀ (record : MicroCFTA.SourceEqualityClassOrder.Record)
+  (count : Nat) (path : MicroCFTA.EqualityNormalize.Path),
+  @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+      (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths path →
+    ∀ (found : Bool) (profile ceiling : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le profile ceiling →
+        @LE.le.{0} Nat instLENat
+          (MicroCFTA.SourceCurrentEditGuardAlphabet.leafCount count
+            (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths path) found profile)
+          (MicroCFTA.SourceCurrentEditGuardBudget.leafBound record count ceiling) :=
+fun record count path member found profile ceiling bounded =>
+  have length :=
+    @Eq.mpr.{0}
+      (@LE.le.{0} Nat instLENat
+        (@List.length.{0} (List.{0} Int) (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths path))
+        (@List.length.{0} MicroCFTA.EqualityNormalize.Path record.paths))
+      (@LE.le.{0} Nat instLENat (@List.length.{0} (List.{0} Nat) (MicroCFTA.EqualityNarrowing.others record.paths path))
+        (@List.length.{0} MicroCFTA.EqualityNormalize.Path record.paths))
+      (@id.{0}
+        (@Eq.{1} Prop
+          (@LE.le.{0} Nat instLENat
+            (@List.length.{0} (List.{0} Int) (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths path))
+            (@List.length.{0} MicroCFTA.EqualityNormalize.Path record.paths))
+          (@LE.le.{0} Nat instLENat
+            (@List.length.{0} (List.{0} Nat) (MicroCFTA.EqualityNarrowing.others record.paths path))
+            (@List.length.{0} MicroCFTA.EqualityNormalize.Path record.paths)))
+        (@congrFun'.{1, 1} Nat Prop
+          (@LE.le.{0} Nat instLENat
+            (@List.length.{0} (List.{0} Int) (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths path)))
+          (@LE.le.{0} Nat instLENat
+            (@List.length.{0} (List.{0} Nat) (MicroCFTA.EqualityNarrowing.others record.paths path)))
+          (@congrArg.{1, 1} Nat (Nat → Prop)
+            (@List.length.{0} (List.{0} Int) (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths path))
+            (@List.length.{0} (List.{0} Nat) (MicroCFTA.EqualityNarrowing.others record.paths path))
+            (@LE.le.{0} Nat instLENat)
+            (@List.length_map.{0, 0} (List.{0} Nat) (List.{0} Int)
+              (MicroCFTA.EqualityNarrowing.others record.paths path) (@List.map.{0, 0} Nat Int Int.ofNat)))
+          (@List.length.{0} MicroCFTA.EqualityNormalize.Path record.paths)))
+      (@List.length_filter_le.{0} (List.{0} Nat)
+        (fun path_1 =>
+          @Decidable.decide (@Ne.{1} MicroCFTA.EqualityNormalize.Path path_1 path)
+            (@instDecidableNot (@Eq.{1} MicroCFTA.EqualityNormalize.Path path_1 path)
+              (@instDecidableEqList.{0} Nat instDecidableEqNat path_1 path)))
+        record.paths);
+  have fuel :=
+    @Nat.le_trans
+      (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count
+        (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths path) found profile)
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel record count profile)
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel record count ceiling)
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stage_leaf_fuel record count path found profile member)
+      (@MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel_mono record count profile ceiling bounded);
+  @Nat.le_trans
+    (MicroCFTA.SourceCurrentEditGuardAlphabet.leafCount count
+      (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths path) found profile)
+    (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@List.length.{0} (List.{0} Int) (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths path))
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count
+          (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths path) found profile)
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+    (MicroCFTA.SourceCurrentEditGuardBudget.leafBound record count ceiling)
+    (MicroCFTA.SourceCurrentEditGuardBudget.leaf_le_fuel count
+      (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths path) found profile)
+    (@Nat.mul_le_mul
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@List.length.{0} (List.{0} Int) (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths path))
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count
+          (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths path) found profile)
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@List.length.{0} MicroCFTA.EqualityNormalize.Path record.paths)
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel record count ceiling)
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+      (@Nat.succ_le_succ
+        (@List.length.{0} (List.{0} Int) (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths path))
+        (@List.length.{0} MicroCFTA.EqualityNormalize.Path record.paths) length)
+      (@Nat.succ_le_succ
+        (MicroCFTA.SourceCurrentConstrainedCapSharedForecast.leafFuel count
+          (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths path) found profile)
+        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.stageFuel record count ceiling) fuel))
+'MicroCFTA.SourceCurrentEditGuardBudget.leaf_le_stage' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentEditGuardBudget.nodeBound : MicroCFTA.SourceEqualityClassOrder.Record →
+  Nat → MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile → Nat → Nat
+def MicroCFTA.SourceCurrentEditGuardBudget.nodeBound : MicroCFTA.SourceEqualityClassOrder.Record →
+  Nat → MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile → Nat → Nat :=
+fun record count ceiling x =>
+  @Nat.brecOn.{1} (fun x => Nat) x (MicroCFTA.SourceCurrentEditGuardBudget.nodeBound._f record count ceiling)
+'MicroCFTA.SourceCurrentEditGuardBudget.nodeBound' does not depend on any axioms
+MicroCFTA.SourceCurrentEditGuardBudget.node_leaf : ∀ (record : MicroCFTA.SourceEqualityClassOrder.Record) (count : Nat)
+  (ceiling : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile) (level : Nat),
+  @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentEditGuardBudget.leafBound record count ceiling)
+    (MicroCFTA.SourceCurrentEditGuardBudget.nodeBound record count ceiling
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) level
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+theorem MicroCFTA.SourceCurrentEditGuardBudget.node_leaf : ∀ (record : MicroCFTA.SourceEqualityClassOrder.Record)
+  (count : Nat) (ceiling : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile) (level : Nat),
+  @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentEditGuardBudget.leafBound record count ceiling)
+    (MicroCFTA.SourceCurrentEditGuardBudget.nodeBound record count ceiling
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) level
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))) :=
+fun record count ceiling level =>
+  Nat.le_add_right (MicroCFTA.SourceCurrentEditGuardBudget.leafBound record count ceiling)
+    (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar ceiling)
+      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar ceiling)
+        (MicroCFTA.SourceCurrentEditGuardBudget.nodeBound record count ceiling level)))
+'MicroCFTA.SourceCurrentEditGuardBudget.node_leaf' does not depend on any axioms
+MicroCFTA.SourceCurrentEditGuardBudget.node_rows : ∀ (record : MicroCFTA.SourceEqualityClassOrder.Record) (count : Nat)
+  (ceiling : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile) (level rows children : Nat),
+  @LE.le.{0} Nat instLENat rows (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar ceiling) →
+    @LE.le.{0} Nat instLENat children (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar ceiling) →
+      @LE.le.{0} Nat instLENat
+        (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) rows
+          (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) children
+            (MicroCFTA.SourceCurrentEditGuardBudget.nodeBound record count ceiling level)))
+        (MicroCFTA.SourceCurrentEditGuardBudget.nodeBound record count ceiling
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) level
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+theorem MicroCFTA.SourceCurrentEditGuardBudget.node_rows : ∀ (record : MicroCFTA.SourceEqualityClassOrder.Record)
+  (count : Nat) (ceiling : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile) (level rows children : Nat),
+  @LE.le.{0} Nat instLENat rows (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar ceiling) →
+    @LE.le.{0} Nat instLENat children (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar ceiling) →
+      @LE.le.{0} Nat instLENat
+        (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) rows
+          (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) children
+            (MicroCFTA.SourceCurrentEditGuardBudget.nodeBound record count ceiling level)))
+        (MicroCFTA.SourceCurrentEditGuardBudget.nodeBound record count ceiling
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) level
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))) :=
+fun record count ceiling level rows children rowBound childBound =>
+  @Nat.le_trans
+    (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) rows
+      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) children
+        (MicroCFTA.SourceCurrentEditGuardBudget.nodeBound record count ceiling level)))
+    (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar ceiling)
+      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar ceiling)
+        (MicroCFTA.SourceCurrentEditGuardBudget.nodeBound record count ceiling level)))
+    (MicroCFTA.SourceCurrentEditGuardBudget.nodeBound record count ceiling
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) level
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+    (@Nat.mul_le_mul rows
+      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) children
+        (MicroCFTA.SourceCurrentEditGuardBudget.nodeBound record count ceiling level))
+      (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar ceiling)
+      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar ceiling)
+        (MicroCFTA.SourceCurrentEditGuardBudget.nodeBound record count ceiling level))
+      rowBound
+      (@Nat.mul_le_mul children (MicroCFTA.SourceCurrentEditGuardBudget.nodeBound record count ceiling level)
+        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar ceiling)
+        (MicroCFTA.SourceCurrentEditGuardBudget.nodeBound record count ceiling level) childBound
+        (Nat.le_refl (MicroCFTA.SourceCurrentEditGuardBudget.nodeBound record count ceiling level))))
+    (Nat.le_add_left
+      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+        (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar ceiling)
+        (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+          (MicroCFTA.SourceCurrentConstrainedCapEditForecast.scalar ceiling)
+          (MicroCFTA.SourceCurrentEditGuardBudget.nodeBound record count ceiling level)))
+      (MicroCFTA.SourceCurrentEditGuardBudget.leafBound record count ceiling))
+'MicroCFTA.SourceCurrentEditGuardBudget.node_rows' does not depend on any axioms

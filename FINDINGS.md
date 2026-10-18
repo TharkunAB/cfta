@@ -2,6 +2,21 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 06:44 CEST. Proof checkpoint is `92ddd8ff`.
+Finite raw guard carriers now compose through actual Force, Leaf, complete
+node edits, compiled classes and their tail-first fold and pass. Supported
+recursive Head exposure is included. Preparation also constructs its own
+carrier. FullClasses, Local and Parent carrier composition remains open.
+Local outer constructor bounds retain full guards and physical Fits.
+They still need chronological outer composition and equality-cache bounds.
+General recursive progress and public Haskell correspondence remain open.
+Full Audit passes 3248 jobs and 71103 checks.
+No Haskell patch or new production defect is added. Field-pool repair
+`b9219b9e` remains fixed in `c0cc8a05`. Read
+`lean/notes-current-parent-guard-composition.md`. Keep this registry first.
+Record each later repair with failure, executable reproducer, paths, commit,
+checks and upstream status. Preserve every earlier repair entry below.
+
 Current proof update: 2026-10-18 06:22 CEST. Proof checkpoint is `e43db322`.
 Finite initial cases now bound Parent output profiles and all nine fuels.
 A joined initial Room test derives its complete reservation. A computed

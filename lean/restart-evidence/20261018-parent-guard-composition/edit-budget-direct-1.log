@@ -1,0 +1,45 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-guard-composition/edit-budget-direct-1.source.lean:42:6: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  g ≥ 0
+  f ≥ 0
+  e ≥ 0
+  d ≥ 0
+  c ≥ 0
+  c - d ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 0
+  a - d - f + g ≤ -1
+  a - e ≥ 0
+  a - f ≥ 0
+where
+ a := ↑(foldFuel count seed (path :: paths) profile)
+ b := ↑(foldFuel count seed paths (SourceCurrentConstrainedCapTargetForecast.operand path count profile))
+ c := ↑(paths.length + 1) * ↑(foldFuel count seed (path :: paths) profile).succ
+ d := ↑(foldCount count seed paths entry)
+ e := ↑(SourceCurrentConstrainedCapTargetForecast.queryFuel
+    (SourceCurrentConstrainedCapTargetForecast.foldProfile count seed paths
+      (SourceCurrentConstrainedCapTargetForecast.operand path count profile)))
+ f := ↑(instructionBound query.nodes query.edges query.mass)
+ g := ↑(paths.length + 1) * ↑(fuel + 1)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-guard-composition/edit-budget-direct-1.source.lean:68:2: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  e ≥ 0
+  d ≥ 0
+  c ≥ 0
+  c - d ≥ 1
+  c - e + f ≤ -2
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 0
+where
+ a := ↑paths.length * ↑(leafFuel count paths found profile).succ
+ b := ↑(forceCount count paths found profile)
+ c := ↑(leafFuel count paths found profile)
+ d := ↑(instructionBound (SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).nodes
+    (SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).edges
+    (SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile).mass)
+ e := ↑(have query := SourceCurrentConstrainedCapSharedForecast.forceProfile count paths found profile;
+  forceCount count paths found profile + instructionBound query.nodes query.edges query.mass)
+ f := ↑paths.length * ↑(leafFuel count paths found profile + 1)

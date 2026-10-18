@@ -1,0 +1,39 @@
+import MicroCFTA.SourceCurrentEditGuardBudget
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+set_option maxHeartbeats 5000000
+
+#check @MicroCFTA.SourceCurrentEditGuardBudget.fold_le_fuel
+#print MicroCFTA.SourceCurrentEditGuardBudget.fold_le_fuel
+#print axioms MicroCFTA.SourceCurrentEditGuardBudget.fold_le_fuel
+#check @MicroCFTA.SourceCurrentEditGuardBudget.target_le_fuel
+#print MicroCFTA.SourceCurrentEditGuardBudget.target_le_fuel
+#print axioms MicroCFTA.SourceCurrentEditGuardBudget.target_le_fuel
+#check @MicroCFTA.SourceCurrentEditGuardBudget.force_le_fuel
+#print MicroCFTA.SourceCurrentEditGuardBudget.force_le_fuel
+#print axioms MicroCFTA.SourceCurrentEditGuardBudget.force_le_fuel
+#check @MicroCFTA.SourceCurrentEditGuardBudget.leaf_le_fuel
+#print MicroCFTA.SourceCurrentEditGuardBudget.leaf_le_fuel
+#print axioms MicroCFTA.SourceCurrentEditGuardBudget.leaf_le_fuel
+#check @MicroCFTA.SourceCurrentEditGuardBudget.leafBound
+#print MicroCFTA.SourceCurrentEditGuardBudget.leafBound
+#print axioms MicroCFTA.SourceCurrentEditGuardBudget.leafBound
+#check @MicroCFTA.SourceCurrentEditGuardBudget.leaf_le_stage
+#print MicroCFTA.SourceCurrentEditGuardBudget.leaf_le_stage
+#print axioms MicroCFTA.SourceCurrentEditGuardBudget.leaf_le_stage
+#check @MicroCFTA.SourceCurrentEditGuardBudget.nodeBound
+#print MicroCFTA.SourceCurrentEditGuardBudget.nodeBound
+#print axioms MicroCFTA.SourceCurrentEditGuardBudget.nodeBound
+#check @MicroCFTA.SourceCurrentEditGuardBudget.node_leaf
+#print MicroCFTA.SourceCurrentEditGuardBudget.node_leaf
+#print axioms MicroCFTA.SourceCurrentEditGuardBudget.node_leaf
+#check @MicroCFTA.SourceCurrentEditGuardBudget.node_rows
+#print MicroCFTA.SourceCurrentEditGuardBudget.node_rows
+#print axioms MicroCFTA.SourceCurrentEditGuardBudget.node_rows

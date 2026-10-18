@@ -1,0 +1,39 @@
+import MicroCFTA.SourceCurrentOuterConstructorBounds
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+#check @MicroCFTA.SourceCurrentOuterConstructorBounds.profile
+#print MicroCFTA.SourceCurrentOuterConstructorBounds.profile
+#print axioms MicroCFTA.SourceCurrentOuterConstructorBounds.profile
+#check @MicroCFTA.SourceCurrentOuterConstructorBounds.profile_ge
+#print MicroCFTA.SourceCurrentOuterConstructorBounds.profile_ge
+#print axioms MicroCFTA.SourceCurrentOuterConstructorBounds.profile_ge
+#check @MicroCFTA.SourceCurrentOuterConstructorBounds.profile_mono
+#print MicroCFTA.SourceCurrentOuterConstructorBounds.profile_mono
+#print axioms MicroCFTA.SourceCurrentOuterConstructorBounds.profile_mono
+#check @MicroCFTA.SourceCurrentOuterConstructorBounds.descend
+#print MicroCFTA.SourceCurrentOuterConstructorBounds.descend
+#print axioms MicroCFTA.SourceCurrentOuterConstructorBounds.descend
+#check @MicroCFTA.SourceCurrentOuterConstructorBounds.prefix_state
+#print MicroCFTA.SourceCurrentOuterConstructorBounds.prefix_state
+#print axioms MicroCFTA.SourceCurrentOuterConstructorBounds.prefix_state
+#check @MicroCFTA.SourceCurrentOuterConstructorBounds.children_length
+#print MicroCFTA.SourceCurrentOuterConstructorBounds.children_length
+#print axioms MicroCFTA.SourceCurrentOuterConstructorBounds.children_length
+#check @MicroCFTA.SourceCurrentOuterConstructorBounds.rows_length
+#print MicroCFTA.SourceCurrentOuterConstructorBounds.rows_length
+#print axioms MicroCFTA.SourceCurrentOuterConstructorBounds.rows_length
+#check @MicroCFTA.SourceCurrentOuterConstructorBounds.children_rebuild
+#print MicroCFTA.SourceCurrentOuterConstructorBounds.children_rebuild
+#print axioms MicroCFTA.SourceCurrentOuterConstructorBounds.children_rebuild
+#check @MicroCFTA.SourceCurrentOuterConstructorBounds.rows_rebuild
+#print MicroCFTA.SourceCurrentOuterConstructorBounds.rows_rebuild
+#print axioms MicroCFTA.SourceCurrentOuterConstructorBounds.rows_rebuild
+#check @MicroCFTA.SourceCurrentOuterConstructorBounds.mu_body
+#print MicroCFTA.SourceCurrentOuterConstructorBounds.mu_body
+#print axioms MicroCFTA.SourceCurrentOuterConstructorBounds.mu_body
