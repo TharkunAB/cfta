@@ -2,6 +2,23 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 05:12 CEST. Proof checkpoint is `aed82624`.
+Actual selected class slots now derive exact prefix/call/suffix schedules
+without a guard footprint or future semantic read law. Whole-slot callbacks
+retain the original path. Actual leaves derive target hit or miss, native
+request and full intermediate state. Initial physical facts derive validity
+and residency. Raw steps do not assert semantic traces or writer origins.
+An accepted source-built Parent operation raises ordinary height from 1 to 3
+and positive count from 0 to 1 when unions count as zero. These are failed
+candidate measures, not a Haskell defect or infinite execution. General
+recursive progress and concrete Haskell correspondence remain open.
+Full Audit passes 3227 jobs and 70874 checks. No Haskell patch or new
+production defect is added. Field-pool repair `b9219b9e` remains fixed in
+`c0cc8a05`. Read `lean/notes-current-selected-edit-events.md`.
+Keep this registry first. Record each later repair with failure, executable
+reproducer, paths, commit, checks and upstream status. Preserve every earlier
+repair entry below.
+
 Current proof update: 2026-10-18 04:58 CEST. Proof checkpoint is `1fde7bb0`.
 Cold and warm outer edge calls now derive indexed full-row origins for their
 actual captured requests. Initial empty tables and actual completed calls

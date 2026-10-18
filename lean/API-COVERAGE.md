@@ -1,5 +1,47 @@
 # Public API and source correspondence
 
+## Current selected class dispatch and literal native leaf events
+
+Updated: 2026-10-18 05:12 CEST. Proof checkpoint is `aed82624`.
+Starting local checkpoint is `6ce48bcd`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-selected-edit-events.md` for exact boundaries.
+
+Every present slot of an actual coherent active class now supplies its
+exact input, earlier siblings, selected call and later siblings. The slot
+is unchanged, executes its whole-slot leaf, or edits below it. A whole-slot
+callback retains the exact complete original path. No unselected guard
+footprint or future semantic read law is supplied.
+
+Actual shared leaves derive their target force, native intersection request,
+intermediate state and literal final advance. A target hit retains the full
+state. A miss derives the actual target call and store. Initial physical
+facts derive intermediate and final validity and residency. The native steps
+are raw execution steps. Semantic traces and historical writer origins
+remain separate obligations. Successful worker equations stay explicit.
+
+A checked closed source passes actual primary selection and Parent reduction.
+Its ordinary child height rises from 1 to 3 when unions count as zero.
+The analogous positive count rises from 0 to 1. This refutes those proposed
+measures at an accepted selected operation. It establishes no infinite
+execution or Haskell defect. General recursive progress remains open.
+
+Full Audit passes 3227 jobs and 70874 checks. Two production and three
+constructed strict logs are empty. All 7 public and 3 constructed
+full pairs pass in 5 groups with all eight settings and standard axioms.
+Audit peak is 404 MiB under 4 GiB maximum/high and zero swap. Four component
+manifests pin 206 entries. Evidence is in
+`lean/restart-evidence/20261018-selected-edit-events/`.
+
+Next derive semantic read and writer facts along the literal selected
+schedule. Complete the recursive below-edit case and chronological target
+writers. Establish all-owner separation and a fresh-call bound or a global
+well-founded measure. General recursive completion, recursive language
+preservation, used-writer alignment, repeated convergence and public Haskell
+correspondence remain open. The strongest complete ordinary outer domain
+is unchanged. No Haskell patch is added. Field-pool repair b9219b9e remains
+fixed in c0cc8a05. Keep FINDINGS first. The full-library goal stays active.
+Publication awaits the existing direct approval. No push is attempted.
+
 ## Current outer memo origins and exact indexed dispatch
 
 Updated: 2026-10-18 04:58 CEST. Proof checkpoint is `1fde7bb0`.

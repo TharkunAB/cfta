@@ -1,6 +1,6 @@
 # Proof status at 2026-10-18
 
-Checked at proof checkpoint `1fde7bb0`. Source main is `c0cc8a05`,
+Checked at proof checkpoint `aed82624`. Source main is `c0cc8a05`,
 merged into `formalize` at `896b0a1c`. This note reports the current theorem
 boundaries. It adds no theorem and no Haskell behavior change.
 
@@ -72,7 +72,18 @@ step under the original raw footprint. A general consecutive execution
 producer and global progress remain open. The checked raw conjunction
 counterexample has a rejected first input. No accepted-input closure claim
 or Haskell defect follows. Read
-[the current checkpoint](notes-current-outer-positional-dispatch.md).
+[the earlier checkpoint](notes-current-outer-positional-dispatch.md).
+
+Actual coherent active classes now derive every present slot's exact
+input and prefix/call/suffix schedule. Whole-slot callbacks retain complete
+original paths. Literal leaves derive their target force, native request,
+full intermediate state and raw steps without a future semantic read law.
+Initial physical facts derive midpoint and final validity and residency.
+Semantic traces and historical writer origins remain open at this boundary.
+An accepted source-built operation also refutes ordinary height and positive
+count measures that treat unions as opaque. General recursive completion
+and the complete ordinary outer domain are unchanged. Read
+[the current checkpoint](notes-current-selected-edit-events.md).
 
 ## Strongest current claim in plain technical English
 
