@@ -1,0 +1,61 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-row-trace/head-union-draft-1.source.lean:141:74: error: unexpected token 'at'; expected rcasesPat
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-row-trace/head-union-draft-1.source.lean:141:4: error: Unexpected syntax
+  failed to pretty print term (use 'set_option pp.rawOnError true' for raw representation)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-row-trace/head-union-draft-1.source.lean:120:86: error: unsolved goals
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+entry bodyEntry : Interned NodeKey
+originals : List (Value Symbol Guard)
+level : Nat
+free : List Reference
+depth ordinary : Value Symbol Guard
+before : InternedConstructorTemplates.State Symbol Guard
+ready : Ready before
+available : Available before (Value.mu entry (Value.union bodyEntry originals level free) depth ordinary)
+closed : (Value.mu entry (Value.union bodyEntry originals level free) depth ordinary).free = []
+body : Value Symbol Guard := Value.union bodyEntry originals level free
+value : Value Symbol Guard := Value.mu entry body depth ordinary
+environment : Environment Symbol Guard := selfEnvironment entry body depth ordinary
+bodyAvailable : Available before body
+replacements : Replacements before environment
+result : Value Symbol Guard
+after : InternedConstructorTemplates.State Symbol Guard
+head : Head value before result after
+keeps : Keeps before after
+returned : Available after result
+noFree : result.free = []
+ordinaryResult : SourceEqualityRequiredCache.Ordinary result
+chosen : Value Symbol Guard
+final : InternedConstructorTemplates.State Symbol Guard
+outputs : List (Value Symbol Guard)
+memberAfter : InternedConstructorTemplates.State Symbol Guard
+done : execute (Value.union bodyEntry originals level free) environment before = Outcome.done chosen final
+calls : Calls environment originals before outputs memberAfter
+bodyKeeps : Keeps before final
+memberKeeps : Keeps before memberAfter
+left✝² : Available final chosen
+left✝¹ : Values memberAfter outputs
+memberGrowth : Grows memberAfter final
+right✝ :
+  ∀ (depth : Nat) (view : InternedConstructorTemplates.State Symbol Guard),
+    SourceCurrentOpenObservations.Same depth view [chosen] outputs
+left✝ :
+  InternedFreshOrdinaryStoredSubstitution.unfold (Value.mu entry body depth ordinary) after = Outcome.done chosen after
+origins :
+  ∀ (index : Nat) (row : EdgeValue Symbol Guard), (nodeEdges result)[index]? = some row → Origin after [chosen] row
+growth : Grows final after
+called : execute body (selfEnvironment entry body depth ordinary) before = Outcome.done chosen final
+description : BodyRows body (selfEnvironment entry body depth ordinary) before chosen final
+paired : All₂ (fun original output => execute original environment after = Outcome.done output after) originals outputs
+indexedOrigins :
+  ∀ (row : EdgeValue Symbol Guard),
+    Origin after [chosen] row →
+      ∃ index original output,
+        originals[index]? = some original ∧ outputs[index]? = some output ∧ Origin after [output] row
+⊢ ∃ result after,
+    Head (Value.mu entry (Value.union bodyEntry originals level free) depth ordinary) before result after ∧
+      Keeps before after ∧
+        Available after result ∧
+          result.free = [] ∧
+            SourceEqualityRequiredCache.Ordinary result ∧
+              Rows entry bodyEntry originals level free depth ordinary before result after

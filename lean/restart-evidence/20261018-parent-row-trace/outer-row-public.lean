@@ -1,0 +1,43 @@
+import MicroCFTA.SourceCurrentOuterRowFieldOrigins
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentOuterRowFieldOrigins.Fields
+#print MicroCFTA.SourceCurrentOuterRowFieldOrigins.Fields
+#print axioms MicroCFTA.SourceCurrentOuterRowFieldOrigins.Fields
+#check @MicroCFTA.SourceCurrentOuterRowFieldOrigins.parent
+#print MicroCFTA.SourceCurrentOuterRowFieldOrigins.parent
+#print axioms MicroCFTA.SourceCurrentOuterRowFieldOrigins.parent
+#check @MicroCFTA.SourceCurrentOuterRowFieldOrigins.Origins
+#print MicroCFTA.SourceCurrentOuterRowFieldOrigins.Origins
+#print axioms MicroCFTA.SourceCurrentOuterRowFieldOrigins.Origins
+#check @MicroCFTA.SourceCurrentOuterRowFieldOrigins.initial
+#print MicroCFTA.SourceCurrentOuterRowFieldOrigins.initial
+#print axioms MicroCFTA.SourceCurrentOuterRowFieldOrigins.initial
+#check @MicroCFTA.SourceCurrentOuterRowFieldOrigins.edge_call
+#print MicroCFTA.SourceCurrentOuterRowFieldOrigins.edge_call
+#print axioms MicroCFTA.SourceCurrentOuterRowFieldOrigins.edge_call
+#check @MicroCFTA.SourceCurrentOuterRowFieldOrigins.node_done
+#print MicroCFTA.SourceCurrentOuterRowFieldOrigins.node_done
+#print axioms MicroCFTA.SourceCurrentOuterRowFieldOrigins.node_done
+#check @MicroCFTA.SourceCurrentOuterRowFieldOrigins.reached
+#print MicroCFTA.SourceCurrentOuterRowFieldOrigins.reached
+#print axioms MicroCFTA.SourceCurrentOuterRowFieldOrigins.reached
+#check @MicroCFTA.SourceCurrentOuterRowFieldOrigins.descendants_source
+#print MicroCFTA.SourceCurrentOuterRowFieldOrigins.descendants_source
+#print axioms MicroCFTA.SourceCurrentOuterRowFieldOrigins.descendants_source
+#check @MicroCFTA.SourceCurrentOuterRowFieldOrigins.GainSource
+#print MicroCFTA.SourceCurrentOuterRowFieldOrigins.GainSource
+#print axioms MicroCFTA.SourceCurrentOuterRowFieldOrigins.GainSource
+#check @MicroCFTA.SourceCurrentOuterRowFieldOrigins.gain_source
+#print MicroCFTA.SourceCurrentOuterRowFieldOrigins.gain_source
+#print axioms MicroCFTA.SourceCurrentOuterRowFieldOrigins.gain_source
+#check @MicroCFTA.SourceCurrentOuterRowFieldOrigins.initial_busy
+#print MicroCFTA.SourceCurrentOuterRowFieldOrigins.initial_busy
+#print axioms MicroCFTA.SourceCurrentOuterRowFieldOrigins.initial_busy

@@ -1,0 +1,40 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-parent-row-trace/outer-row-direct-7.source.lean:463:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (handle✝, FlatMemoThunk.Observation.evaluate original✝, running✝).snd.snd.edgeResults
+in the target expression
+  FlatMemoThunk.Valid (fun request key => request.key = key)
+    (fun cell =>
+      ∀ (result : Edge),
+        cell.status = FlatMemoThunk.Status.returned result →
+          Fields cell.request.value.entry.key.symbol cell.request.value.entry.key.constraint result)
+    (caller (Phase.body fuel✝ original✝ running✝)).edgeResults
+
+case node_evaluate
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+g s r e p h m c n budget width✝ : Nat
+request✝ : NodeRequest
+before✝ : Caller width✝
+handle✝ : Nat
+running✝ : Caller width✝
+original✝ : NodeRequest
+fuel✝ : Nat
+started : beginNode request✝ before✝ = (handle✝, FlatMemoThunk.Observation.evaluate original✝, running✝)
+good : Good (caller (Phase.node fuel✝ request✝ before✝))
+inputs : Inputs (Phase.node fuel✝ request✝ before✝)
+origins :
+  FlatMemoThunk.Valid (fun request key => request.key = key)
+    (fun cell =>
+      ∀ (result : Edge),
+        cell.status = FlatMemoThunk.Status.returned result →
+          Fields cell.request.value.entry.key.symbol cell.request.value.entry.key.constraint result)
+    (caller (Phase.node fuel✝ request✝ before✝)).edgeResults
+same :
+  (beginNode request✝ before✝).snd.snd.edgeResults =
+    (handle✝, FlatMemoThunk.Observation.evaluate original✝, running✝).snd.snd.edgeResults
+⊢ FlatMemoThunk.Valid (fun request key => request.key = key)
+    (fun cell =>
+      ∀ (result : Edge),
+        cell.status = FlatMemoThunk.Status.returned result →
+          Fields cell.request.value.entry.key.symbol cell.request.value.entry.key.constraint result)
+    (caller (Phase.body fuel✝ original✝ running✝)).edgeResults

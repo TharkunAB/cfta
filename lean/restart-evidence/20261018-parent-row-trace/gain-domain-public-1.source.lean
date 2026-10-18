@@ -1,0 +1,25 @@
+import MicroCFTA.SourceCurrentInheritedGainDomain
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+#check @MicroCFTA.SourceCurrentInheritedGainDomain.domain
+#print MicroCFTA.SourceCurrentInheritedGainDomain.domain
+#print axioms MicroCFTA.SourceCurrentInheritedGainDomain.domain
+#check @MicroCFTA.SourceCurrentInheritedGainDomain.heightBound
+#print MicroCFTA.SourceCurrentInheritedGainDomain.heightBound
+#print axioms MicroCFTA.SourceCurrentInheritedGainDomain.heightBound
+#check @MicroCFTA.SourceCurrentInheritedGainDomain.normalize
+#print MicroCFTA.SourceCurrentInheritedGainDomain.normalize
+#print axioms MicroCFTA.SourceCurrentInheritedGainDomain.normalize
+#check @MicroCFTA.SourceCurrentInheritedGainDomain.combine
+#print MicroCFTA.SourceCurrentInheritedGainDomain.combine
+#print axioms MicroCFTA.SourceCurrentInheritedGainDomain.combine
+#check @MicroCFTA.SourceCurrentInheritedGainDomain.inherited_prefix
+#print MicroCFTA.SourceCurrentInheritedGainDomain.inherited_prefix
+#print axioms MicroCFTA.SourceCurrentInheritedGainDomain.inherited_prefix
