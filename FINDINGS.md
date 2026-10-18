@@ -2,6 +2,20 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 21:54 CEST. Proof checkpoint is `f312f254`.
+Actual selected Mu readback now constructs both source generators with
+arbitrary common outer/local replacements and complete issued paths.
+A warm union parent supplies original-reader indexed atoms and RowCalls
+without warm ordinary subgroup calls. The checked warm-parent/cold-subgroup
+case is expected normalization behavior. It establishes no Haskell defect.
+A sound one-source-pair normalization rule is proved. Full source semantic
+clauses and used-Mu progress remain open. No Haskell repair is requested.
+Full Audit passes 3405 jobs and 73071 checks. No Haskell bytes change.
+Field-pool repair `b9219b9e` remains fixed in `c0cc8a05`.
+Read `lean/notes-current-causal-writer-generators.md`. Keep this registry
+first. Record later repairs with failure, executable reproducer, paths,
+commit, checks and upstream status. Preserve every earlier entry.
+
 Current proof update: 2026-10-18 21:35 CEST. Proof checkpoint is `fff568a7`.
 Actual causal union preparation retains both parent results at one
 produced reader. Indexed fragments and strict member literal laws derive

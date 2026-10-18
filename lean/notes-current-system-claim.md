@@ -1,7 +1,7 @@
 # Current system claim
 
 Checked against the live theorem statements on 2026-10-18.
-The causal union and conditional literal proof checkpoint is `fff568a7`.
+The causal writer and original-reader fragment proof checkpoint is `f312f254`.
 
 In simple technical English: a completed modeled reduction adds no tree
 outside the input language. It retains every input tree that satisfies its
@@ -65,11 +65,21 @@ Historical node calls derive local simulation in both directions with
 full guards and ordered mutual child generators. Selected Mu readback
 constructs both calls under arbitrary common replacements.
 
-Actual union preparation now constructs both ordered member schedules
-and a causal common reader. It retains the original parent results.
-Indexed literal fragments and explicit strict member laws derive a
-conditional one-way parent clause at that produced reader. The theorem
-does not prove the source Law at the original reader or for all syntax.
+Actual selected Mu reconstruction now derives both body/probe source
+generators under arbitrary common outer and local replacements. It retains
+complete issued paths, both actual epsilon endpoints and final warm calls.
+These are generator memberships at the explicit produced reader. They do
+not assert guarded observation equality.
+
+An actual warm union parent now supplies indexed literal-atom calls and
+full original RowCalls at the original reader. Whole subgroup calls can
+still allocate. A source-built case checks that behavior. The earlier
+conditional union theorem remains a later-reader result. Neither theorem
+establishes the full source Law for all syntax.
+
+A sound normalization rule permits literal inclusion before and after
+at most one source pair. It requires the genuine full literal clauses
+for that source relation. Arbitrary chains of source pairs remain excluded.
 
 The main current gap is the complete source-generated guarded simulation.
 The used-Mu clause must match actual unfolding with a reached related
@@ -93,8 +103,10 @@ and earlier cache winners. See `notes-current-causal-source-comparison.md`
 for the original payload proof. See `notes-current-causal-empty-fusion.md`
 for causal Empty agreement and the guarded node clause. See
 `notes-current-causal-union-local.md` for conditional union clauses and
-the remaining fixed-reader and progress obligations. The broad reduction
-guarantee above has not changed.
+the earlier fixed-reader and progress obligations. See
+`notes-current-causal-writer-generators.md` for actual selected-writer
+generators, original-reader fragment calls and sound restricted normalization.
+The broad reduction guarantee above has not changed.
 
 No Haskell bytes change in this checkpoint. Root `FINDINGS.md` retains the
 external repair registry first. The full-library goal remains active.
