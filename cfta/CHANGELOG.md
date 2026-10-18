@@ -9,6 +9,10 @@ Before release, the package was called `microcfta`.
   were prepared on.
 - Add `Data.CFTA.Language`: updates that combine with `<>` over a source
   document, and named exclusions that `restore` removes again.
+- Add `Data.CFTA.Lowering`: template lowerings, which translate the terms of
+  a language version to the version before it. `lift` gives the inverse image
+  of an automaton, and `checkLowering` checks a later grammar against an
+  earlier one.
 - `refoldEdges` is `refold` with the edge of the result that each edge of
   the input becomes, so that a caller can carry data about the edges of a
   graph through `refold`, whose new edges have new identities.
