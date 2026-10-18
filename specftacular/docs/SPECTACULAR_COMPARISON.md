@@ -2,9 +2,16 @@
 
 The matrix compares the published ICST 2023 Spectacular artifact with
 Specftacular at `d2e91fdf`. Separate controls and profiles cover the later
-`09caaec3` fragment check. The report covers elapsed time, allocation, GC,
+`09caaec3` fragment check and compiled pruning. The report covers elapsed
+time, allocation, GC,
 peak RSS, and differences in the discovered laws. A larger law count is not a
 better result by itself. False and redundant equations increase the count.
+
+The latest [compiled-pruning control](#omit-typed-patterns-already-covered-by-compiled-patterns)
+completes HugeLists size 6, phase 3 in 161.58 seconds with 330 laws and
+972.5 MiB peak RSS. All 330 laws and all stdout bytes match the preceding
+completed control. This experiment changes one selected bucket. It is not
+yet an all-bucket production change and does not replace the matrix below.
 
 The engine retains pruning during enumeration, increasing program size
 order, occurrence generalization, and validated polymorphic schemes. Sparse
@@ -32,8 +39,8 @@ absence and bounded derivability checks have separate roles below.
 The original columns retain the earlier all-`-O2` measurements. Original
 Spectacular and QuickSpec 2 are not rerun. The current matrix runs on
 2026-10-18 with `d2e91fdf` and the 1064-case schedule. The matrix retains
-those measurements. The later Spec-only callback controls do not replace
-its timing, resource, or law-count rows.
+those measurements. Later callback and compiled-pruning controls do not
+replace its timing, resource, or law-count rows.
 
 | Input | Revision |
 | --- | --- |
@@ -1344,6 +1351,219 @@ allocation increase is 0.0014961%; the largest instruction increase is
 external `-O2` units, including the `hsc2hs` build tool. Only Template runtime
 code changes. These checks validate default library costs; they do not prove
 equivalence for every recursive cutoff stream.
+
+### Profile after compiled exclusion
+
+A local full-oracle control uses the committed Template change and the
+selected Spec-only guard. All 30 HOME modules use `-O2` and late SCCs, with
+134 unchanged audited profiling files. The whole size 5 profile reproduces
+all 197 laws and all stdout bytes. Its 116.294 seconds wall is 3.4734 times
+the retained native run; profiling and build context change these costs.
+
+The size 6 window starts after `COMPILED_ENTRY` and graph validation. It
+preserves the exact 223-law prefix and samples only the first candidate-list
+demand. It times out after 60.375 seconds wall and 61.021 seconds CPU, before
+any candidate reaches tests in that bucket.
+
+| Profile scope | Application ticks | Pruning self | `matchPartial` self | Enumeration self |
+| --- | ---: | ---: | ---: | ---: |
+| Whole size 5 search | 94,382 | 11.2733% | 6.5574% | 14.8906% |
+| Size 6 first demand after compilation | 56,211 | 67.7928% | 47.5067% | 18.8984% |
+
+The matcher column is part of Pruning. Application totals exclude GC,
+PROFILING, SYSTEM and IDLE. The window has 60,373 total ticks; 4,162 belong
+to those excluded categories. Pattern matching is its largest measured
+self cost. Anonymous generated labels do not identify a more specific helper.
+Inclusive costs overlap and include CPS continuations. They are not removable
+lookup costs. Window allocation and entry counts still include the prefix
+and construction; starting the timer does not reset them. This profile
+supports the residual-oracle experiment, but does not select it or predict
+its speedup. The production Specftacular path and published matrix remain
+unchanged by this diagnostic control.
+
+### Remove the compiled patterns from the outer oracle
+
+A second local arm keeps only the uncompiled templates in the outer oracle.
+It uses the same CFTA and Spec-only guard sources. The compiler uses the fixed
+entry templates. It does not add newly discovered laws to the graph.
+The original graph and all original templates remain the fallback when
+compilation is unsupported or fails. No production integration is selected.
+
+Both size 5 builds have 13 HOME modules at `-O2` with the same audited
+dependencies. The residual arm keeps 10 templates instead of 173. Its graph
+and all 197 ordered laws match the full-oracle arm. All 40,814 stdout bytes
+also match. The table compares one observation per arm.
+
+| Whole size 5 measurement | Compiled graph, full oracle | Compiled graph, residual oracle |
+| --- | ---: | ---: |
+| Allocated bytes | 203,700,048,000 | 183,353,627,168 |
+| RTS total CPU time, s | 33.481 | 29.715 |
+| Wall time, s | 33.481 | 29.725 |
+| Peak RSS, KiB | 530,036 | 529,964 |
+
+Allocation decreases by 9.9884%. Observed CPU time decreases by 11.2482%.
+These are whole-pipeline measurements. One observation does not estimate
+timing noise or isolate the cost of a matcher call.
+
+Finite controls compare the original graph/full oracle, compiled graph/full
+oracle, and compiled graph/residual oracle. They retain the 72 applied groups
+and 27 explicit skips. Six mixed typed-pattern groups and ten constrained-Mu
+cases also pass. Each Mu case keeps one run from four, with the same raw
+sequence and residual records in all three paths. The controls use the
+current guard and pending-check policy.
+
+Successful-branch traces include a concrete program-hole case where a removed
+check has not yet failed. Its combined callback/pending trace changes, while
+the controlled output stays equal. The trace comparison includes pending
+lists; it does not establish that the chosen UVar order changed. Complete
+finite-language inclusion does not prove equivalence for every recursive
+cutoff stream.
+
+The residual arm still times out on size 6, phase 3. It keeps 56 of the 624
+entry templates. Construction takes 4.183578 seconds wall and 4.188792
+seconds CPU. The first candidate-list demand remains unfinished for
+248.339949 seconds wall and 248.674285 seconds CPU. No candidate reaches tests
+in that bucket. The exact 223-law, 28,995-byte retained prefix matches.
+The whole process uses 300.225 seconds wall, 300.547 seconds CPU,
+2,454,643,672,032 allocated bytes and 638,152 KiB peak RSS. This censored
+frontier does not measure equal completed work or establish a speedup.
+
+### One reduction pass after compiled exclusion
+
+A separate local arm applies `reducePartially` once after compilation. It
+retains all original outer-oracle templates; it does not combine this change
+with the residual-oracle arm above. The finite controls pass. Both native
+arms use the same 13-HOME `-O2` build structure and audited dependencies.
+
+The size 5 run completes with the same 197 ordered laws. The strict stdout
+gate initially fails: the final mono-polymorphic summary reports 5,917 terms
+examined instead of 5,929. Both report 5,217 unique terms. A separate review
+accepts only that exact line change. Replacing it restores all 40,814 bytes,
+including the repeated final law block. The original failed gate remains
+recorded. No build or size 5 rerun is needed for this acceptance.
+
+The examined counter counts visits, including terms already seen or not
+testable. It is not a law count. The cause of these 12 fewer visits is not
+established. The output check does not prove raw multiplicity or internal
+Rules equivalence.
+
+| Whole size 5 measurement | Compiled graph, full oracle | One later reduction pass |
+| --- | ---: | ---: |
+| Allocated bytes | 203,700,048,000 | 106,821,687,208 |
+| RTS total CPU time, s | 33.481 | 20.916 |
+| Wall time, s | 33.481 | 20.937 |
+| Peak RSS, KiB | 530,036 | 535,192 |
+
+Allocation decreases by 47.5593% and observed CPU time by 37.5287%. Peak RSS
+increases by 0.9728%. These are single whole-pipeline observations, not an
+estimate of timing variance. The added pass and graph validation take
+0.026024 seconds wall. They change the compiled program projection from
+224 states/1,422 edges to 243 states/1,178 edges.
+
+The unchanged binary then fails the size 6 diagnostic graph-role guard.
+It preserves the exact 223-law, 28,995-byte prefix. Compilation of 568
+templates completes in 4.253959 seconds wall. The next stage reports
+`UNKNOWN node has both program and opaque roles` after 0.289592 seconds
+wall. That interval includes lazy reduction forced by the failing graph
+validation. It is not a completed reduction benchmark. No target
+candidate-list demand or candidate test starts. The result remains
+`UNKNOWN_OR_FAILED`; it is neither a timeout nor a law mismatch. This arm
+does not yet establish size 6 behavior or select a production integration.
+
+### Post-reduction observation permits the completed size 6 control
+
+A new diagnostic observer permits a reduced node to occur in both program
+and annotation positions. It reports this sharing without changing the graph.
+The compiler's original role check, the reduction pass and the pruning code
+remain unchanged. The finite controls pass, including an explicit shared-role
+case. The native build has 13 HOME modules at `-O2`, with the same audited
+dependencies. This remains a local control.
+
+The fresh size 5 run retains all 197 ordered laws and 5,217 unique terms.
+It again reports 5,917 examined terms. All other stdout bytes match the
+retained reference. The original strict failure and its exact counter
+acceptance remain separate evidence.
+
+| Whole-run measurement | Size 5, phase 3 | Size 6, phase 3 |
+| --- | ---: | ---: |
+| Result | Complete, 197 laws | Complete, 330 laws |
+| Allocated bytes | 106,820,555,624 | 1,473,104,055,008 |
+| RTS total CPU time, s | 20.821 | 228.246 |
+| Wall time, s | 20.844 | 228.170 |
+| Peak RSS, KiB | 533,072 | 1,078,588 |
+| Maximum residency, bytes | 175,712,624 | 399,694,792 |
+
+Size 6 preserves the exact 223-law, 28,995-byte entry prefix. The added pass
+and graph observation take 0.128745 seconds wall. They change 710 program
+states/5,240 edges to 663 states/3,286 edges. One shared node has a `[]` edge
+with one child. It has five program references and 131 annotation references.
+This observation does not identify the child's type.
+
+The first Int candidate-list demand completes in 106.714463 seconds wall and
+106.780445 seconds CPU. The whole Int bucket takes 114.558806 seconds CPU.
+It moves from 8,369 examined terms/223 laws to 11,373 examined terms/254 laws.
+The later size 6 buckets also finish. The final output has 330 consecutive
+numbered laws and an identical repeated final law block, with 69,450 stdout
+bytes. There is no complete retained 330-law baseline for an equivalence
+claim. A completed run and an earlier timeout do not give a matched speedup
+ratio.
+
+None of the six recorded false size 7 equations occurs as the same printed
+equation, in either direction, among these 330 laws. This is a literal
+output check. It does not establish validity or non-derivability, and it does
+not replace typed law-coverage checks. The published matrix still describes
+its retained source; this experiment does not supply new matrix rows.
+
+### Omit typed patterns already covered by compiled patterns
+
+The combined arm uses the same compiled graph and one reduction pass. It
+also removes outer-oracle templates whose complete-term matches are covered
+by an original compiled pattern. A covering `Hole` accepts any subtree.
+Every other covering node requires the same exact symbol and arity, with
+coverage at each child. Typed `AnyPrefix` nodes are accepted only below a
+covering `Hole`. Failed inclusion checks retain the template. The compiled
+set stays fixed at entry; later laws are not used as premises.
+
+At size 5, the oracle keeps 5 of 173 templates: the 163 compiled patterns
+and five covered typed patterns are omitted. At size 6, it keeps 32 of 624:
+568 compiled patterns and 24 covered typed patterns are omitted. Actual
+captured lists, witness indices, order and duplicates pass independent checks.
+The finite controls retain 72 applied groups and 27 skips. Ten constrained-Mu
+cases, three nonvacuous covered-pattern cases and 1,008 partial-match
+implication checks pass. These checks do not prove every recursive cutoff or
+pending-order behavior.
+
+Both runs complete. Size 5 matches all 197 laws and all 40,814 stdout bytes
+of the corrected full-oracle control, including 5,917 examined and 5,217
+unique terms. Size 6 matches **all 330 laws and all 69,450 stdout bytes** of
+that completed control. This comparison now covers the complete output,
+not only the retained 223-law entry prefix. Both builds use the same
+13-HOME `-O2` structure and audited dependencies. No baseline is rerun.
+
+| Whole-run measurement | Size 5, full oracle | Size 5, covered oracle | Size 6, full oracle | Size 6, covered oracle |
+| --- | ---: | ---: | ---: | ---: |
+| Allocated bytes | 106,820,555,624 | 105,083,008,744 | 1,473,104,055,008 | 968,790,135,424 |
+| RTS total CPU time, s | 20.821 | 21.725 | 228.246 | 161.663 |
+| Wall time, s | 20.844 | 21.740 | 228.170 | 161.579 |
+| Peak RSS, KiB | 533,072 | 534,256 | 1,078,588 | 995,848 |
+
+Size 6 allocation decreases by 34.2348%, observed CPU time by 29.1716%, and
+peak RSS by 7.6711%. Its maximum residency is 360,027,152 bytes. Size 5
+allocation decreases by 1.6266%, but observed CPU time increases by 4.3418%.
+Each arm has one observation. These are scoped whole-run differences, with
+no estimate of timing variance or general speed guarantee.
+
+The size 6 Int first candidate-list demand takes 29.613564 seconds wall and
+29.650895 seconds CPU, versus 106.714463 and 106.780445 for the full oracle.
+The whole Int bucket takes 37.882476 seconds CPU, versus 114.558806. Both
+finish that bucket at 11,373 examined terms and 254 laws. The later buckets
+produce the same complete 330-law output. Its equality also preserves the
+earlier literal absence check for the six recorded false forms; it does not
+establish the validity of every law.
+
+This combined arm is selected for the next profile and an all-bucket
+prototype. It is not yet the production path. The complete matrix remains
+the measured `d2e91fdf` matrix until a fresh selected-runtime comparison.
 
 Compiled pruning remains a local bucket-specific control; it is not the
 default Specftacular path. The published matrix retains its measured
