@@ -1,0 +1,27 @@
+import MicroCFTA.SourceCurrentReaderFiniteOrdinaryStep
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentReaderFiniteOrdinaryStep.RelatedAt
+#print MicroCFTA.SourceCurrentReaderFiniteOrdinaryStep.RelatedAt
+#print axioms MicroCFTA.SourceCurrentReaderFiniteOrdinaryStep.RelatedAt
+
+#check @MicroCFTA.SourceCurrentReaderFiniteOrdinaryStep.AlignedAt
+#print MicroCFTA.SourceCurrentReaderFiniteOrdinaryStep.AlignedAt
+#print axioms MicroCFTA.SourceCurrentReaderFiniteOrdinaryStep.AlignedAt
+
+#check @MicroCFTA.SourceCurrentReaderFiniteOrdinaryStep.reference
+#print MicroCFTA.SourceCurrentReaderFiniteOrdinaryStep.reference
+#print axioms MicroCFTA.SourceCurrentReaderFiniteOrdinaryStep.reference
+
+#check @MicroCFTA.SourceCurrentReaderFiniteOrdinaryStep.ordinary
+#print MicroCFTA.SourceCurrentReaderFiniteOrdinaryStep.ordinary
+#print axioms MicroCFTA.SourceCurrentReaderFiniteOrdinaryStep.ordinary
+

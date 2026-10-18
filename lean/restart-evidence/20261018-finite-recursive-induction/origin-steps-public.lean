@@ -1,0 +1,54 @@
+import MicroCFTA.SourceCurrentOpenOriginSteps
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxHeartbeats 5000000
+set_option maxRecDepth 30000
+
+#check @MicroCFTA.SourceCurrentOpenOriginSteps.Path
+#print MicroCFTA.SourceCurrentOpenOriginSteps.Path
+#print axioms MicroCFTA.SourceCurrentOpenOriginSteps.Path
+#check @MicroCFTA.SourceCurrentOpenOriginSteps.RowAt
+#print MicroCFTA.SourceCurrentOpenOriginSteps.RowAt
+#print axioms MicroCFTA.SourceCurrentOpenOriginSteps.RowAt
+#check @MicroCFTA.SourceCurrentOpenOriginSteps.Path.reachable
+#print MicroCFTA.SourceCurrentOpenOriginSteps.Path.reachable
+#print axioms MicroCFTA.SourceCurrentOpenOriginSteps.Path.reachable
+#check @MicroCFTA.SourceCurrentOpenOriginSteps.path_of_reachable
+#print MicroCFTA.SourceCurrentOpenOriginSteps.path_of_reachable
+#print axioms MicroCFTA.SourceCurrentOpenOriginSteps.path_of_reachable
+#check @MicroCFTA.SourceCurrentOpenOriginSteps.origin_iff
+#print MicroCFTA.SourceCurrentOpenOriginSteps.origin_iff
+#print axioms MicroCFTA.SourceCurrentOpenOriginSteps.origin_iff
+#check @MicroCFTA.SourceCurrentOpenOriginSteps.reference_iff
+#print MicroCFTA.SourceCurrentOpenOriginSteps.reference_iff
+#print axioms MicroCFTA.SourceCurrentOpenOriginSteps.reference_iff
+#check @MicroCFTA.SourceCurrentOpenOriginSteps.row_zero
+#print MicroCFTA.SourceCurrentOpenOriginSteps.row_zero
+#print axioms MicroCFTA.SourceCurrentOpenOriginSteps.row_zero
+#check @MicroCFTA.SourceCurrentOpenOriginSteps.row_succ
+#print MicroCFTA.SourceCurrentOpenOriginSteps.row_succ
+#print axioms MicroCFTA.SourceCurrentOpenOriginSteps.row_succ
+#check @MicroCFTA.SourceCurrentOpenOriginSteps.row_node
+#print MicroCFTA.SourceCurrentOpenOriginSteps.row_node
+#print axioms MicroCFTA.SourceCurrentOpenOriginSteps.row_node
+#check @MicroCFTA.SourceCurrentOpenOriginSteps.row_union
+#print MicroCFTA.SourceCurrentOpenOriginSteps.row_union
+#print axioms MicroCFTA.SourceCurrentOpenOriginSteps.row_union
+#check @MicroCFTA.SourceCurrentOpenOriginSteps.row_mu
+#print MicroCFTA.SourceCurrentOpenOriginSteps.row_mu
+#print axioms MicroCFTA.SourceCurrentOpenOriginSteps.row_mu
+#check @MicroCFTA.SourceCurrentOpenOriginSteps.row_mu_effects
+#print MicroCFTA.SourceCurrentOpenOriginSteps.row_mu_effects
+#print axioms MicroCFTA.SourceCurrentOpenOriginSteps.row_mu_effects
+#check @MicroCFTA.SourceCurrentOpenOriginSteps.row_induction
+#print MicroCFTA.SourceCurrentOpenOriginSteps.row_induction
+#print axioms MicroCFTA.SourceCurrentOpenOriginSteps.row_induction
+#check @MicroCFTA.SourceCurrentOpenOriginSteps.reference_induction
+#print MicroCFTA.SourceCurrentOpenOriginSteps.reference_induction
+#print axioms MicroCFTA.SourceCurrentOpenOriginSteps.reference_induction

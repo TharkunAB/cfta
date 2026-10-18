@@ -1,0 +1,84 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-finite-recursive-induction/origin-steps-direct-1.source.lean:102:11: error: Tactic `cases` failed with a nested error:
+Dependent elimination failed: Failed to solve equation
+  (match last with
+    | Value.node entry edges depth free => edges
+    | x => []) =
+    row :: as✝
+at case `List.Mem.head`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-finite-recursive-induction/origin-steps-direct-1.source.lean:112:12: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-finite-recursive-induction/origin-steps-direct-1.source.lean:113:38: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 x_1 : Type) → Automaton x_0 x_1 → x_0 → List x_0
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-finite-recursive-induction/origin-steps-direct-1.source.lean:113:15: error: unsolved goals
+case succ
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+reader : InternedConstructorTemplates.State Symbol Guard
+entry : Interned NodeKey
+rows : List (EdgeValue Symbol Guard)
+depth : Nat
+free : List Reference
+row : EdgeValue Symbol Guard
+steps : Nat
+⊢ (∃ next,
+      next ∈ MergedFreshOrdinaryGraph.successors reader (Value.node entry rows depth free) ∧
+        RowAt reader steps next row) ↔
+    False
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-finite-recursive-induction/origin-steps-direct-1.source.lean:113:49: warning: This simp argument is unused:
+  List.not_mem_nil
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [row_succ, successors, exists_false, Nat.succ_ne_zero, false_and]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-finite-recursive-induction/origin-steps-direct-1.source.lean:113:66: warning: This simp argument is unused:
+  exists_false
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [row_succ, successors, List.not_mem_nil, Nat.succ_ne_zero, false_and]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-finite-recursive-induction/origin-steps-direct-1.source.lean:131:40: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 x_1 : Type) → Automaton x_0 x_1 → x_0 → List x_0
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-finite-recursive-induction/origin-steps-direct-1.source.lean:131:28: error: Type mismatch: After simplification, term
+  (row_succ reader steps (Value.union entry members depth free) row).mp actual
+ has type
+  @Exists (Value Symbol Guard) fun next =>
+    next ∈ MergedFreshOrdinaryGraph.successors reader (Value.union entry members depth free) ∧
+      RowAt reader steps next row
+but is expected to have type
+  @Exists (Value Symbol Guard) fun member => member ∈ members ∧ RowAt reader steps member row
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-finite-recursive-induction/origin-steps-direct-1.source.lean:157:42: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 x_1 : Type) → Automaton x_0 x_1 → x_0 → List x_0
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-finite-recursive-induction/origin-steps-direct-1.source.lean:157:31: error: `simp` made no progress
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-finite-recursive-induction/origin-steps-direct-1.source.lean:159:56: error: Ambiguous term
+  successors
+Possible interpretations:
+  MergedFreshOrdinaryGraph.successors : InternedConstructorTemplates.State ?m.236 ?m.237 →
+    Value ?m.236 ?m.237 → List (Value ?m.236 ?m.237)
+  
+  Productivity.successors : Automaton ?m.236 ?m.237 → ?m.236 → List ?m.236
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-finite-recursive-induction/origin-steps-direct-1.source.lean:159:44: error: Type mismatch: After simplification, term
+  present
+ has type
+  next ∈ MergedFreshOrdinaryGraph.successors reader (Value.mu entry body depth ordinary)
+but is expected to have type
+  next = result
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-finite-recursive-induction/origin-steps-direct-1.source.lean:161:42: error: Application type mismatch: The argument
+  called
+has type
+  InternedFreshOrdinaryStoredSubstitution.unfold (Value.mu entry body depth ordinary) reader =
+    InternedNestedConstruction.Outcome.done result after
+but is expected to have type
+  InternedNestedConstruction.Outcome.done result after = InternedNestedConstruction.Outcome.done result after
+in the application
+  And.intro called
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-finite-recursive-induction/origin-steps-direct-1.source.lean:165:70: error: Ambiguous term
+  successors
+Possible interpretations:
+  MergedFreshOrdinaryGraph.successors : InternedConstructorTemplates.State ?m.347 ?m.348 →
+    Value ?m.347 ?m.348 → List (Value ?m.347 ?m.348)
+  
+  Productivity.successors : Automaton ?m.347 ?m.348 → ?m.347 → List ?m.347
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-finite-recursive-induction/origin-steps-direct-1.source.lean:165:59: error: `simp` made no progress
