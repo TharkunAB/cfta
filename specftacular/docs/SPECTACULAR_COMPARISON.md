@@ -1068,7 +1068,55 @@ already uses its entry templates. The 290 matches therefore do not measure
 additional pruning that a compiled recognizer could provide. The sample
 also omits `seen` and complete-candidate reducibility checks. A full
 optimization decision needs counts of failed partial type choices and
-annotation-state work. Successful-run counts alone cannot supply them.
+annotation-state work. The next diagnostics measure those events.
+
+### Current default-pruner demand counts
+
+Two diagnostics use `d2e91fdf`, the full 1064-case schedule, and one O2
+counter binary. Counters start after reduction and refold. They stop after
+the first sorted candidate-list demand, before the selected bucket's tests.
+The size-5 control then completes with the exact current 197-law sequence.
+The size-6 control stops after a 30-second window in phase 3, size 6, `Int`.
+It prints 223 complete equations before that bucket's tests. All 24,576
+retained native output bytes match its prefix, including the fragment of
+equation 171. Buffered output does not identify the native stopping bucket.
+Neither incomplete output establishes equality of complete size-6 streams.
+
+| Executed event | Size 5: finished demand | Size 6: censored demand |
+| --- | ---: | ---: |
+| Selected eager edges | 13,613,410 | 6,530,878 |
+| Ready expansions | 6,938,011 | 3,736,700 |
+| Left oracle callbacks | 7,077,884 | 3,780,978 |
+| Fast root skips | 3,427,604 | 1,636,736 |
+| Left oracle rejections | 138,866 | 44,278 |
+| Node-merge empty failures | 6,419,835 | 2,614,276 |
+| Class-assimilation empty failures | 34,041 | 1,744 |
+| Core representative getter calls | 84,546,460 | 35,529,293 |
+| Oracle representative getter calls | 41,812,589 | 42,268,199 |
+| Oracle partial-UVar visits | 31,991,574 | 41,475,771 |
+| Oracle pending-check representative reads | 9,821,015 | 792,429 |
+| All partial-node visits | 54,201,728 | 68,782,526 |
+
+All node-merge empty failures have annotation and constraint roles. An empty
+intersection can result from symbols, paths, or recursion. It is not a count
+of distinct invalid programs or logical type contradictions. The counters
+observe executed guards. They do not scan unchosen alternatives or infer
+failures by subtracting callback totals.
+
+All partial-UVar visits have annotation or marker roles. Nodes without a
+program role account for 69.44% and 68.81% of partial traversal visits.
+Class merges can retain several roles. These observations do not identify
+which positions a later template wildcard ignores. For size 5, oracle getters
+equal partial-UVar visits plus pending-check reads exactly. The interrupted
+size-6 count differs by one tick.
+
+These are instrumented event counts, not time, allocation, or RSS shares.
+An earlier diagnostic configuration failed output agreement and was
+discarded. The accepted configuration retains the normal pruner compiler
+options. The counts support a root-only fragment-view experiment. A template
+wildcard can then omit child reads. Repeated reads across templates can offset
+that saving. Exact pending IDs, finite languages, residuals, and the full
+197-law sequence must agree before any speed claim.
 
 ### Alternatives supported by these diagnostics
 
@@ -1079,7 +1127,9 @@ annotation-state work. Successful-run counts alone cannot supply them.
    and raw multiplicities. A single principal instance cannot replace that
    relation. KBO compares annotations before later arguments. Each witness
    family therefore needs a certified minimum and a resumable remainder.
-   First count program shapes and their witnesses in the captured grammar.
+   The 512-run sample shows no duplicate complete witnesses. The demand
+   counters instead locate millions of empty annotation merges. A witness
+   join must remove enough of that work to justify the larger change.
 
 2. **Compile shared template exclusion before creating branches.** Use
    `excludeAnywhere` as the exact-language reference. Its open patterns can
