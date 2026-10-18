@@ -2,6 +2,23 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 14:09 CEST. Proof checkpoint is `faca56de`.
+Actual preparation now supports open zero-depth ordinary values with
+closed recursive Mu components. Actual source and causal history derive
+the selected writer and reconstruction schedules without a desired output
+relation. Literal normalization has a Directed instance. Source nodes
+derive local simulation clauses from strict children. A checked example
+refutes Ready-only separate-reader alignment even with available inputs
+and replacements. It explicitly lacks a compared output at the reader.
+This is a proof-contract boundary, not a Haskell defect or repair request.
+General changing-capture used-binder simulation, general open support and
+recursive completion remain open. Full Audit passes 3315 jobs and
+72078 checks. No Haskell patch or new executable defect is added.
+Field-pool repair `b9219b9e` remains fixed in `c0cc8a05`.
+Read `lean/notes-current-supported-source-simulation.md`. Keep this registry
+first. Record later repairs with failure, executable reproducer, paths,
+commit, checks and upstream status. Preserve every earlier entry.
+
 Current proof update: 2026-10-18 13:38 CEST. Proof checkpoint is `49ffeaef`.
 Actual source node and union cases derive strict publication body cases.
 Selected Mu writers construct actual finite unfolding equations at the

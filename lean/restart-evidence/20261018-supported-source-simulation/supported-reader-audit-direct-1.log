@@ -1,0 +1,90 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-supported-source-simulation/supported-reader-audit-direct-1.source.lean:238:65: error: Application type mismatch: The argument
+  false
+has type
+  Bool
+but is expected to have type
+  List InternedBinderProtocol.NodeRef
+in the application
+  EdgeKey.mk 0 false
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-supported-source-simulation/supported-reader-audit-direct-1.source.lean:244:68: warning: declaration uses `sorry`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-supported-source-simulation/supported-reader-audit-direct-1.source.lean:243:16: warning: declaration uses `sorry`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-supported-source-simulation/supported-reader-audit-direct-1.source.lean:246:70: warning: declaration uses `sorry`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-supported-source-simulation/supported-reader-audit-direct-1.source.lean:245:16: warning: declaration uses `sorry`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-supported-source-simulation/supported-reader-audit-direct-1.source.lean:247:86: warning: declaration uses `sorry`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-supported-source-simulation/supported-reader-audit-direct-1.source.lean:247:16: warning: declaration uses `sorry`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-supported-source-simulation/supported-reader-audit-direct-1.source.lean:248:91: warning: declaration uses `sorry`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-supported-source-simulation/supported-reader-audit-direct-1.source.lean:248:16: warning: declaration uses `sorry`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-supported-source-simulation/supported-reader-audit-direct-1.source.lean:255:46: error: `simp` made no progress
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-supported-source-simulation/supported-reader-audit-direct-1.source.lean:283:51: error: Application type mismatch: The argument
+  two
+has type
+  SourceCurrentOpenObservations.Same 1 reader
+    [Value.mu (fields secondResult).fst (fields secondResult).snd.fst (fields secondResult).snd.snd.fst
+        (fields secondResult).snd.snd.snd]
+    [rightLayer]
+but is expected to have type
+  SourceCurrentOpenObservations.Same 1 reader [secondResult] ?m.79
+in the application
+  SourceCurrentOpenObservations.Same.trans related.right two
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-supported-source-simulation/supported-reader-audit-direct-1.source.lean:275:79: error: unsolved goals
+related : RelatedAt 1 reader firstResult secondResult
+left :
+  unfold
+      (Value.mu (fields firstResult).fst (fields firstResult).snd.fst (fields firstResult).snd.snd.fst
+        (fields firstResult).snd.snd.snd)
+      reader =
+    Outcome.done leftLayer
+      (unfold
+          (Value.mu (fields firstResult).fst (fields firstResult).snd.fst (fields firstResult).snd.snd.fst
+            (fields firstResult).snd.snd.snd)
+          reader).state
+right :
+  unfold
+      (Value.mu (fields secondResult).fst (fields secondResult).snd.fst (fields secondResult).snd.snd.fst
+        (fields secondResult).snd.snd.snd)
+      reader =
+    Outcome.done rightLayer
+      (unfold
+          (Value.mu (fields secondResult).fst (fields secondResult).snd.fst (fields secondResult).snd.snd.fst
+            (fields secondResult).snd.snd.snd)
+          reader).state
+one :
+  SourceCurrentOpenObservations.Same 1 reader
+    [Value.mu (fields firstResult).fst (fields firstResult).snd.fst (fields firstResult).snd.snd.fst
+        (fields firstResult).snd.snd.snd]
+    [leftLayer]
+two :
+  SourceCurrentOpenObservations.Same 1 reader
+    [Value.mu (fields secondResult).fst (fields secondResult).snd.fst (fields secondResult).snd.snd.fst
+        (fields secondResult).snd.snd.snd]
+    [rightLayer]
+⊢ False
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-supported-source-simulation/supported-reader-audit-direct-1.source.lean:330:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (rowOf (item 1)).children
+in the target expression
+  ∃ other,
+    other ∈ [rowOf (item 0)] ∧
+      SourceCurrentOpenObservations.RowMatch
+        (fun left right => SourceCurrentOpenObservations.Same 0 reader [left] [right]) (rowOf (item 1)) other
+
+case right.backward
+firstNode :
+  item 0 =
+    Value.node (nodeFields (item 0)).fst [rowOf (item 0)] (nodeFields (item 0)).snd.snd.fst
+      (nodeFields (item 0)).snd.snd.snd
+secondNode :
+  item 1 =
+    Value.node (nodeFields (item 1)).fst [rowOf (item 1)] (nodeFields (item 1)).snd.snd.fst
+      (nodeFields (item 1)).snd.snd.snd
+children :
+  SourceCurrentOpenObservations.RowMatch (fun a b => SourceCurrentOpenObservations.Same 0 reader [a] [b])
+    (rowOf (item 0)) (rowOf (item 1))
+member : rowOf (item 1) ∈ [rowOf (item 1)]
+reverse :
+  SourceCurrentOpenObservations.RowMatch (fun a b => SourceCurrentOpenObservations.Same 0 reader [a] [b])
+    (rowOf (item 0)) (rowOf (item 1))
+⊢ ∃ other,
+    other ∈ [rowOf (item 0)] ∧
+      SourceCurrentOpenObservations.RowMatch
+        (fun left right => SourceCurrentOpenObservations.Same 0 reader [left] [right]) (rowOf (item 1)) other
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-supported-source-simulation/supported-reader-audit-direct-1.source.lean:306:68: warning: declaration uses `sorry`

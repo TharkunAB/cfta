@@ -1,0 +1,30 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-supported-source-simulation/zero-depth-support-kernels-1.source.lean:47:88: error: Tactic `decide` failed for proposition
+  (unfold recursive before).state.nodes.next ≠ before.nodes.next
+because its `Decidable` instance
+  instDecidableNot
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqNat`, `instDecidableNot`, and `Nat.decEq`, reduction got stuck at the `Decidable` instance
+  match h : (unfold recursive before).state.nodes.next.beq before.nodes.next with
+  | true => isTrue ⋯
+  | false => isFalse ⋯
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-supported-source-simulation/zero-depth-support-kernels-1.source.lean:62:4: error: Tactic `decide` failed for proposition
+  body.free ≠ []
+because its `Decidable` instance
+  instDecidableNot
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableNot` and `List.instDecidableEqNil`, reduction got stuck at the `Decidable` instance
+  match body.free with
+  | [] => isTrue ⋯
+  | head :: tail => isFalse ⋯
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-supported-source-simulation/zero-depth-support-kernels-1.source.lean:64:4: error: Tactic `decide` failed for proposition
+  choice.free ≠ []
+because its `Decidable` instance
+  instDecidableNot
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableNot` and `List.instDecidableEqNil`, reduction got stuck at the `Decidable` instance
+  match choice.free with
+  | [] => isTrue ⋯
+  | head :: tail => isFalse ⋯
