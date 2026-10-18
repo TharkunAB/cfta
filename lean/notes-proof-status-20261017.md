@@ -1,6 +1,6 @@
 # Proof status at 2026-10-18
 
-Checked at proof checkpoint `6c0e42bc`. Source main is `c0cc8a05`,
+Checked at proof checkpoint `dce1e970`. Source main is `c0cc8a05`,
 merged into `formalize` at `896b0a1c`. This note reports the current theorem
 boundaries. It adds no theorem and no Haskell behavior change.
 
@@ -189,6 +189,16 @@ captured edge owner. No successful enclosing call is assumed. Outer memo
 faults, outer exhaustion and general completion remain open. Read
 [the current checkpoint](notes-current-outer-parent-failure.md).
 
+An initially idle edge table now remains idle at every literal reached
+outer phase entry. Initial prefix semantics supply current valid links at
+the exact row that emits an edge memo fault. Valid links exclude absence;
+idle excludes busy. All edge memo diagnostics are therefore excluded from
+the stated initial semantic and scheduled resource facts. No lower-fuel
+ceiling or successful enclosing call is needed. A terminal Parent fault
+can still retain an evaluating edge owner. General node-owner exclusion
+and fresh-call bounds remain open. Read
+[the current checkpoint](notes-current-outer-edge-idle.md).
+
 ## Strongest current claim in plain technical English
 
 For a validated finite graph, the checked exact-size model lists exactly
@@ -225,6 +235,11 @@ With enough initial scheduled capacity and lower fuel, no outer phase can
 report a Parent fault. This excludes errors in the lower reduction and
 constructor as well as lower fuel exhaustion. It does not exclude outer
 memo collisions, outer exhaustion, domain errors or binder outcomes.
+
+For an initially idle edge table, initial semantic facts and scheduled
+capacity also exclude every edge memo diagnostic, at any lower fuels.
+Reached outer phase entries retain edge idle. A terminal lower failure
+can retain an active edge owner. Node memo collisions remain open.
 
 These are separate checked results for the implementation model. They do
 not establish that every valid public Haskell call terminates and satisfies

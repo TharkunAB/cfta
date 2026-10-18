@@ -1,5 +1,43 @@
 # Public API and source correspondence
 
+## Current initial facts exclude every edge memo diagnostic
+
+Updated: 2026-10-18 08:14 CEST. Proof checkpoint is `dce1e970`.
+Starting local checkpoint is `cf7d6049`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-outer-edge-idle.md` for exact boundaries.
+
+An initially idle edge table now stays idle at every literal reached outer
+phase entry. Earlier siblings contribute their actual completed equations.
+The existing edge-busy exclusion is retained. Valid current key links also
+exclude absent edge cells. Every edge memo fault supplies its exact reached
+row entry. Initial Context, physical bounds, one scheduled Room condition
+and edge idle therefore exclude all edge memo diagnostics in all six phases.
+No lower-fuel ceiling or successful enclosing call is assumed.
+
+The recursive integration has idle reached entries and a terminal Parent
+fault with its exact edge owner still evaluating. The proof keeps these
+two state scopes distinct. It does not assert idle at every failed endpoint.
+Its initial history, Context, Frame, carrier and computed Room are derived.
+
+The remaining node gap needs actual reconstructed source anchors for every
+runtime child request. Native query Mu and union residual branches still
+need exact captured-writer rows and ordered children. Then compose through
+class folds, Parent and actual walks. Current positional descent does not
+supply this handoff. All-ancestor node-key exclusion and a fresh-call bound
+remain open. General used-writer alignment, repeated convergence, equality
+resources, host Int adequacy and public Haskell correspondence remain open.
+
+Full Audit passes 3265 jobs and 71327 checks. Three production strict logs
+and the integration strict log are empty. All 5 public, 1 constructed and
+1 private full pairs pass in 5 groups with all eight settings and standard
+axioms. Jobs use 4 GiB maximum/high and zero swap. Closing peaks are at most
+381 MiB. Evidence is in `lean/restart-evidence/20261018-outer-edge-idle/`.
+
+No Haskell patch or new executable defect is added. Field-pool repair
+b9219b9e remains fixed in c0cc8a05. FINDINGS keeps the external repair
+registry first. The full-library goal stays active. Publication awaits
+the existing direct approval. No push is attempted or retried.
+
 ## Current initial bounds exclude outer Parent faults
 
 Updated: 2026-10-18 08:01 CEST. Proof checkpoint is `6c0e42bc`.
