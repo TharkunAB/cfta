@@ -1,5 +1,60 @@
 # Public API and source correspondence
 
+## Current actual selected writer node-body induction
+
+Updated: 2026-10-18 11:57 CEST. Proof checkpoint is `e012e2f7`.
+Starting checkpoint is `16382903`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-writer-source-induction.md`.
+
+Actual filtered publication callbacks now exclude each other's local name.
+One shared sparse replacement map therefore gives both original stored
+execution outcomes. It pairs arbitrary captured values without requiring
+the ordinary marker to be fresh in unused captures. Distinct replacements
+need the supplied relation only at the current fixed reader.
+
+An actual selected writer with a node source body now constructs both
+stored reconstructions and their final reader. Indexed strict-child
+hypotheses at depth n derive output agreement at depth n+1 there. Children
+can contain used Mu syntax. The initial producer uses one common replacement
+and reflexivity at its actual final reader. It does not transport a
+distinct-replacement relation through growth or assume the parent result.
+Closed source history recovers the chosen writer before this step is used.
+
+A separate actual union-source step derives both raw and filtered RootMatch
+from indexed strict-member hypotheses. Both source calls can start and
+return at different heaps. The proof derives the actual member calls and
+their entry contexts. Live alias tests derive the bare-self filter cases.
+This result does not assume a whole-parent RootMatch or warm-only calls.
+
+A checked integration has an outer used Mu with a nested used Mu child.
+A later requester permutes and duplicates rows and selects the same earlier
+writer despite different source syntax. Proper variable and closed nested
+child proofs discharge every indexed child hypothesis. The actual recursive
+Mu result is the replacement. The node-writer producer gives ReconstructionAt
+at every finite depth. The writer body is not BinderFree.
+
+General nested-binder result alignment and the full actual-source Forward
+instance remain open. The node theorem covers a node source root. The
+union theorem compares raw source/filter parts, not stored reconstruction.
+Reader support, initial query-operand ancestry, all active node-owner
+exclusions, fresh-call bounds and general recursive completion still need
+proof. Repeated convergence, equality-operation resources, host Int adequacy
+and public Haskell correspondence remain separate obligations. The strongest
+general outer language theorem still assumes a successful supported run.
+
+Full Audit passes 3298 jobs and 71564 checks. All ten new public
+declarations and one constructed integration pass complete statement,
+proof and axiom checks in four groups. All four selected strict logs are
+empty. All three new canonical builds have no warnings. Audit retains
+only the existing ClosedCompletion warning. Four component manifests
+pin 170 entries. Independent review finds no material issue.
+Evidence is in `lean/restart-evidence/20261018-writer-source-induction/`.
+
+No Haskell patch or new executable defect is added. FINDINGS retains the
+external repair registry first. Field-pool repair b9219b9e remains fixed
+in c0cc8a05. Publication awaits the existing direct approval. No push is
+retried. The full-library goal stays active.
+
 ## Current finite epsilon simulation and ordinary induction
 
 Updated: 2026-10-18 11:31 CEST. Proof checkpoint is `8b4f669f`.
