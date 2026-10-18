@@ -1,0 +1,383 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-positional-dispatch/dispatch-direct-2.source.lean:85:28: error: don't know how to synthesize implicit argument `final`
+  @Reached.snoc inst✝² inst✝¹ inst✝ width g s r e p h m c n budget
+    (Phase.walk (fuel + 1) combined offset (first :: ?m.910) before)
+    (Phase.walk (fuel + 1) combined offset (first :: ?m.910) before)
+    (Phase.walk fuel combined (offset + 1) ?m.910 middle)
+    (Reached.refl (Phase.walk (fuel + 1) combined offset (first :: ?m.910) before)) (Step.walk_tail called)
+context:
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+g s r e p h m c n budget : Nat
+combined : EqValue
+after : Caller width
+value : Node
+slot : Nat
+ih :
+  ∀ {fuel offset : Nat} {values results : List Node} {before : Caller width},
+    walk fuel g s r e p h m c n budget combined offset values before = Outcome.done results after →
+      values[slot]? = some value →
+        ∃ start finish childFuel returned,
+          fuel = childFuel + slot + 1 ∧
+            results[slot]? = some returned ∧
+              walk fuel g s r e p h m c n budget combined offset (List.take slot values) before =
+                  Outcome.done (List.take slot results) start ∧
+                nodeCall childFuel g s r e p h m c n budget
+                      { inherited := (descend start combined (offset + slot)).fst, value := value }
+                      (descend start combined (offset + slot)).snd =
+                    Outcome.done returned finish ∧
+                  walk childFuel g s r e p h m c n budget combined (offset + slot + 1) (List.drop (slot + 1) values)
+                        finish =
+                      Outcome.done (List.drop (slot + 1) results) after ∧
+                    Reached g s r e p h m c n budget (Phase.walk fuel combined offset values before)
+                      (Phase.node childFuel
+                        { inherited := (descend start combined (offset + slot)).fst, value := value }
+                        (descend start combined (offset + slot)).snd)
+offset : Nat
+before : Caller width
+first : Node
+rest : List Node
+input : (first :: rest)[slot + 1]? = some value
+fuel : Nat
+returned : Node
+middle : Caller width
+called :
+  nodeCall fuel g s r e p h m c n budget { inherited := (descend before combined offset).fst, value := first }
+      (descend before combined offset).snd =
+    Outcome.done returned middle
+outputs : List Node
+actual :
+  walk (fuel + 1) g s r e p h m c n budget combined offset (first :: rest) before =
+    Outcome.done (returned :: outputs) after
+later :
+  ((walk fuel g s r e p h m c n budget combined (offset + 1) rest middle).bind fun results after =>
+      Outcome.done (returned :: results) after) =
+    Outcome.done (returned :: outputs) after
+tail : walk fuel g s r e p h m c n budget combined (offset + 1) rest middle = Outcome.done outputs after
+start finish : Caller width
+childFuel : Nat
+output : Node
+count : fuel = childFuel + slot + 1
+selected : outputs[slot]? = some output
+earlier :
+  walk fuel g s r e p h m c n budget combined (offset + 1) (List.take slot rest) middle =
+    Outcome.done (List.take slot outputs) start
+child :
+  nodeCall childFuel g s r e p h m c n budget
+      { inherited := (descend start combined (offset + 1 + slot)).fst, value := value }
+      (descend start combined (offset + 1 + slot)).snd =
+    Outcome.done output finish
+suffix :
+  walk childFuel g s r e p h m c n budget combined (offset + 1 + slot + 1) (List.drop (slot + 1) rest) finish =
+    Outcome.done (List.drop (slot + 1) outputs) after
+reached :
+  Reached g s r e p h m c n budget (Phase.walk fuel combined (offset + 1) rest middle)
+    (Phase.node childFuel { inherited := (descend start combined (offset + 1 + slot)).fst, value := value }
+      (descend start combined (offset + 1 + slot)).snd)
+⊢ Phase width
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-positional-dispatch/dispatch-direct-2.source.lean:85:28: error: don't know how to synthesize implicit argument `middle`
+  @Reached.snoc inst✝² inst✝¹ inst✝ width g s r e p h m c n budget
+    (Phase.walk (fuel + 1) combined offset (first :: ?m.910) before)
+    (Phase.walk (fuel + 1) combined offset (first :: ?m.910) before)
+    (Phase.walk fuel combined (offset + 1) ?m.910 middle)
+    (Reached.refl (Phase.walk (fuel + 1) combined offset (first :: ?m.910) before)) (Step.walk_tail called)
+context:
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+g s r e p h m c n budget : Nat
+combined : EqValue
+after : Caller width
+value : Node
+slot : Nat
+ih :
+  ∀ {fuel offset : Nat} {values results : List Node} {before : Caller width},
+    walk fuel g s r e p h m c n budget combined offset values before = Outcome.done results after →
+      values[slot]? = some value →
+        ∃ start finish childFuel returned,
+          fuel = childFuel + slot + 1 ∧
+            results[slot]? = some returned ∧
+              walk fuel g s r e p h m c n budget combined offset (List.take slot values) before =
+                  Outcome.done (List.take slot results) start ∧
+                nodeCall childFuel g s r e p h m c n budget
+                      { inherited := (descend start combined (offset + slot)).fst, value := value }
+                      (descend start combined (offset + slot)).snd =
+                    Outcome.done returned finish ∧
+                  walk childFuel g s r e p h m c n budget combined (offset + slot + 1) (List.drop (slot + 1) values)
+                        finish =
+                      Outcome.done (List.drop (slot + 1) results) after ∧
+                    Reached g s r e p h m c n budget (Phase.walk fuel combined offset values before)
+                      (Phase.node childFuel
+                        { inherited := (descend start combined (offset + slot)).fst, value := value }
+                        (descend start combined (offset + slot)).snd)
+offset : Nat
+before : Caller width
+first : Node
+rest : List Node
+input : (first :: rest)[slot + 1]? = some value
+fuel : Nat
+returned : Node
+middle : Caller width
+called :
+  nodeCall fuel g s r e p h m c n budget { inherited := (descend before combined offset).fst, value := first }
+      (descend before combined offset).snd =
+    Outcome.done returned middle
+outputs : List Node
+actual :
+  walk (fuel + 1) g s r e p h m c n budget combined offset (first :: rest) before =
+    Outcome.done (returned :: outputs) after
+later :
+  ((walk fuel g s r e p h m c n budget combined (offset + 1) rest middle).bind fun results after =>
+      Outcome.done (returned :: results) after) =
+    Outcome.done (returned :: outputs) after
+tail : walk fuel g s r e p h m c n budget combined (offset + 1) rest middle = Outcome.done outputs after
+start finish : Caller width
+childFuel : Nat
+output : Node
+count : fuel = childFuel + slot + 1
+selected : outputs[slot]? = some output
+earlier :
+  walk fuel g s r e p h m c n budget combined (offset + 1) (List.take slot rest) middle =
+    Outcome.done (List.take slot outputs) start
+child :
+  nodeCall childFuel g s r e p h m c n budget
+      { inherited := (descend start combined (offset + 1 + slot)).fst, value := value }
+      (descend start combined (offset + 1 + slot)).snd =
+    Outcome.done output finish
+suffix :
+  walk childFuel g s r e p h m c n budget combined (offset + 1 + slot + 1) (List.drop (slot + 1) rest) finish =
+    Outcome.done (List.drop (slot + 1) outputs) after
+reached :
+  Reached g s r e p h m c n budget (Phase.walk fuel combined (offset + 1) rest middle)
+    (Phase.node childFuel { inherited := (descend start combined (offset + 1 + slot)).fst, value := value }
+      (descend start combined (offset + 1 + slot)).snd)
+⊢ Phase width
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-positional-dispatch/dispatch-direct-2.source.lean:85:28: error: don't know how to synthesize implicit argument `first`
+  @Reached.snoc inst✝² inst✝¹ inst✝ width g s r e p h m c n budget
+    (Phase.walk (fuel + 1) combined offset (first :: ?m.910) before)
+    (Phase.walk (fuel + 1) combined offset (first :: ?m.910) before)
+    (Phase.walk fuel combined (offset + 1) ?m.910 middle)
+    (Reached.refl (Phase.walk (fuel + 1) combined offset (first :: ?m.910) before)) (Step.walk_tail called)
+context:
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+g s r e p h m c n budget : Nat
+combined : EqValue
+after : Caller width
+value : Node
+slot : Nat
+ih :
+  ∀ {fuel offset : Nat} {values results : List Node} {before : Caller width},
+    walk fuel g s r e p h m c n budget combined offset values before = Outcome.done results after →
+      values[slot]? = some value →
+        ∃ start finish childFuel returned,
+          fuel = childFuel + slot + 1 ∧
+            results[slot]? = some returned ∧
+              walk fuel g s r e p h m c n budget combined offset (List.take slot values) before =
+                  Outcome.done (List.take slot results) start ∧
+                nodeCall childFuel g s r e p h m c n budget
+                      { inherited := (descend start combined (offset + slot)).fst, value := value }
+                      (descend start combined (offset + slot)).snd =
+                    Outcome.done returned finish ∧
+                  walk childFuel g s r e p h m c n budget combined (offset + slot + 1) (List.drop (slot + 1) values)
+                        finish =
+                      Outcome.done (List.drop (slot + 1) results) after ∧
+                    Reached g s r e p h m c n budget (Phase.walk fuel combined offset values before)
+                      (Phase.node childFuel
+                        { inherited := (descend start combined (offset + slot)).fst, value := value }
+                        (descend start combined (offset + slot)).snd)
+offset : Nat
+before : Caller width
+first : Node
+rest : List Node
+input : (first :: rest)[slot + 1]? = some value
+fuel : Nat
+returned : Node
+middle : Caller width
+called :
+  nodeCall fuel g s r e p h m c n budget { inherited := (descend before combined offset).fst, value := first }
+      (descend before combined offset).snd =
+    Outcome.done returned middle
+outputs : List Node
+actual :
+  walk (fuel + 1) g s r e p h m c n budget combined offset (first :: rest) before =
+    Outcome.done (returned :: outputs) after
+later :
+  ((walk fuel g s r e p h m c n budget combined (offset + 1) rest middle).bind fun results after =>
+      Outcome.done (returned :: results) after) =
+    Outcome.done (returned :: outputs) after
+tail : walk fuel g s r e p h m c n budget combined (offset + 1) rest middle = Outcome.done outputs after
+start finish : Caller width
+childFuel : Nat
+output : Node
+count : fuel = childFuel + slot + 1
+selected : outputs[slot]? = some output
+earlier :
+  walk fuel g s r e p h m c n budget combined (offset + 1) (List.take slot rest) middle =
+    Outcome.done (List.take slot outputs) start
+child :
+  nodeCall childFuel g s r e p h m c n budget
+      { inherited := (descend start combined (offset + 1 + slot)).fst, value := value }
+      (descend start combined (offset + 1 + slot)).snd =
+    Outcome.done output finish
+suffix :
+  walk childFuel g s r e p h m c n budget combined (offset + 1 + slot + 1) (List.drop (slot + 1) rest) finish =
+    Outcome.done (List.drop (slot + 1) outputs) after
+reached :
+  Reached g s r e p h m c n budget (Phase.walk fuel combined (offset + 1) rest middle)
+    (Phase.node childFuel { inherited := (descend start combined (offset + 1 + slot)).fst, value := value }
+      (descend start combined (offset + 1 + slot)).snd)
+⊢ Phase width
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-positional-dispatch/dispatch-direct-2.source.lean:85:59: error: don't know how to synthesize implicit argument `rest`
+  @Step.walk_tail inst✝² inst✝¹ inst✝ width g s r e p h m c n budget fuel before combined offset first returned middle
+    ?m.910 called
+context:
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+g s r e p h m c n budget : Nat
+combined : EqValue
+after : Caller width
+value : Node
+slot : Nat
+ih :
+  ∀ {fuel offset : Nat} {values results : List Node} {before : Caller width},
+    walk fuel g s r e p h m c n budget combined offset values before = Outcome.done results after →
+      values[slot]? = some value →
+        ∃ start finish childFuel returned,
+          fuel = childFuel + slot + 1 ∧
+            results[slot]? = some returned ∧
+              walk fuel g s r e p h m c n budget combined offset (List.take slot values) before =
+                  Outcome.done (List.take slot results) start ∧
+                nodeCall childFuel g s r e p h m c n budget
+                      { inherited := (descend start combined (offset + slot)).fst, value := value }
+                      (descend start combined (offset + slot)).snd =
+                    Outcome.done returned finish ∧
+                  walk childFuel g s r e p h m c n budget combined (offset + slot + 1) (List.drop (slot + 1) values)
+                        finish =
+                      Outcome.done (List.drop (slot + 1) results) after ∧
+                    Reached g s r e p h m c n budget (Phase.walk fuel combined offset values before)
+                      (Phase.node childFuel
+                        { inherited := (descend start combined (offset + slot)).fst, value := value }
+                        (descend start combined (offset + slot)).snd)
+offset : Nat
+before : Caller width
+first : Node
+rest : List Node
+input : (first :: rest)[slot + 1]? = some value
+fuel : Nat
+returned : Node
+middle : Caller width
+called :
+  nodeCall fuel g s r e p h m c n budget { inherited := (descend before combined offset).fst, value := first }
+      (descend before combined offset).snd =
+    Outcome.done returned middle
+outputs : List Node
+actual :
+  walk (fuel + 1) g s r e p h m c n budget combined offset (first :: rest) before =
+    Outcome.done (returned :: outputs) after
+later :
+  ((walk fuel g s r e p h m c n budget combined (offset + 1) rest middle).bind fun results after =>
+      Outcome.done (returned :: results) after) =
+    Outcome.done (returned :: outputs) after
+tail : walk fuel g s r e p h m c n budget combined (offset + 1) rest middle = Outcome.done outputs after
+start finish : Caller width
+childFuel : Nat
+output : Node
+count : fuel = childFuel + slot + 1
+selected : outputs[slot]? = some output
+earlier :
+  walk fuel g s r e p h m c n budget combined (offset + 1) (List.take slot rest) middle =
+    Outcome.done (List.take slot outputs) start
+child :
+  nodeCall childFuel g s r e p h m c n budget
+      { inherited := (descend start combined (offset + 1 + slot)).fst, value := value }
+      (descend start combined (offset + 1 + slot)).snd =
+    Outcome.done output finish
+suffix :
+  walk childFuel g s r e p h m c n budget combined (offset + 1 + slot + 1) (List.drop (slot + 1) rest) finish =
+    Outcome.done (List.drop (slot + 1) outputs) after
+reached :
+  Reached g s r e p h m c n budget (Phase.walk fuel combined (offset + 1) rest middle)
+    (Phase.node childFuel { inherited := (descend start combined (offset + 1 + slot)).fst, value := value }
+      (descend start combined (offset + 1 + slot)).snd)
+⊢ List Node
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-positional-dispatch/dispatch-direct-2.source.lean:85:55: error: don't know how to synthesize placeholder for argument `phase`
+context:
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+g s r e p h m c n budget : Nat
+combined : EqValue
+after : Caller width
+value : Node
+slot : Nat
+ih :
+  ∀ {fuel offset : Nat} {values results : List Node} {before : Caller width},
+    walk fuel g s r e p h m c n budget combined offset values before = Outcome.done results after →
+      values[slot]? = some value →
+        ∃ start finish childFuel returned,
+          fuel = childFuel + slot + 1 ∧
+            results[slot]? = some returned ∧
+              walk fuel g s r e p h m c n budget combined offset (List.take slot values) before =
+                  Outcome.done (List.take slot results) start ∧
+                nodeCall childFuel g s r e p h m c n budget
+                      { inherited := (descend start combined (offset + slot)).fst, value := value }
+                      (descend start combined (offset + slot)).snd =
+                    Outcome.done returned finish ∧
+                  walk childFuel g s r e p h m c n budget combined (offset + slot + 1) (List.drop (slot + 1) values)
+                        finish =
+                      Outcome.done (List.drop (slot + 1) results) after ∧
+                    Reached g s r e p h m c n budget (Phase.walk fuel combined offset values before)
+                      (Phase.node childFuel
+                        { inherited := (descend start combined (offset + slot)).fst, value := value }
+                        (descend start combined (offset + slot)).snd)
+offset : Nat
+before : Caller width
+first : Node
+rest : List Node
+input : (first :: rest)[slot + 1]? = some value
+fuel : Nat
+returned : Node
+middle : Caller width
+called :
+  nodeCall fuel g s r e p h m c n budget { inherited := (descend before combined offset).fst, value := first }
+      (descend before combined offset).snd =
+    Outcome.done returned middle
+outputs : List Node
+actual :
+  walk (fuel + 1) g s r e p h m c n budget combined offset (first :: rest) before =
+    Outcome.done (returned :: outputs) after
+later :
+  ((walk fuel g s r e p h m c n budget combined (offset + 1) rest middle).bind fun results after =>
+      Outcome.done (returned :: results) after) =
+    Outcome.done (returned :: outputs) after
+tail : walk fuel g s r e p h m c n budget combined (offset + 1) rest middle = Outcome.done outputs after
+start finish : Caller width
+childFuel : Nat
+output : Node
+count : fuel = childFuel + slot + 1
+selected : outputs[slot]? = some output
+earlier :
+  walk fuel g s r e p h m c n budget combined (offset + 1) (List.take slot rest) middle =
+    Outcome.done (List.take slot outputs) start
+child :
+  nodeCall childFuel g s r e p h m c n budget
+      { inherited := (descend start combined (offset + 1 + slot)).fst, value := value }
+      (descend start combined (offset + 1 + slot)).snd =
+    Outcome.done output finish
+suffix :
+  walk childFuel g s r e p h m c n budget combined (offset + 1 + slot + 1) (List.drop (slot + 1) rest) finish =
+    Outcome.done (List.drop (slot + 1) outputs) after
+reached :
+  Reached g s r e p h m c n budget (Phase.walk fuel combined (offset + 1) rest middle)
+    (Phase.node childFuel { inherited := (descend start combined (offset + 1 + slot)).fst, value := value }
+      (descend start combined (offset + 1 + slot)).snd)
+⊢ Phase width
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-positional-dispatch/dispatch-direct-2.source.lean:85:15: error: failed to infer `have` declaration type

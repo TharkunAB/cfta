@@ -1,5 +1,48 @@
 # Constrained languages, indexing, and distributions
 
+## Current outer memo origins and exact indexed dispatch
+
+Updated: 2026-10-18 04:58 CEST. Proof checkpoint is `1fde7bb0`.
+Starting local checkpoint is `61c6891e`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-outer-positional-dispatch.md` for exact boundaries.
+
+Actual cold outer edge calls now derive the indexed Parent relation and
+store it at their exact evaluating handle. Warm hits recover the actual
+returned cell and its complete captured request. Ready equality identities
+and coherent resident edge identity derive request equality. Initial empty
+tables need no supplied result law. Actual completed node calls and unfinished
+prefixes preserve the memo-origin invariant from those initial tables.
+
+The literal indexed walk now exposes its exact earlier sibling calls,
+inherited descent, selected node call, returned slot, suffix and reached
+prefix. Actual Parent and live walk calls compose this dispatch with the
+indexed origin. A positive row of that dispatched input has an exact
+continuation child below its explicit source anchor in structural mass.
+Source footprints, positivity and successful worker equations stay explicit.
+This is one actual scheduled step. General consecutive chains remain open.
+
+A checked raw guard example refutes unrestricted closure of effective-own
+footprints under conjunction. Its first input is also checked rejected at
+arity two. It is not an accepted-input counterexample or a Haskell defect.
+Actual global footprint producers and mixed-index progress remain open.
+
+Full Audit passes 3225 jobs and 70857 checks. Two production and three
+constructed strict logs are empty. All 8 public and 3 constructed
+full pairs pass in 5 groups with all eight settings and standard axioms.
+Audit peak is 396 MiB under 4 GiB maximum/high and zero swap. Four component
+manifests pin 210 entries. Evidence is in
+`lean/restart-evidence/20261018-outer-positional-dispatch/`.
+
+Next derive consecutive actual anchor steps with their needed footprints,
+or another global well-founded measure. Handle other indexes, plain rows,
+sibling work and native earlier writers. General recursive completion,
+all-owner separation, fresh-call bounds, recursive language preservation,
+used-writer alignment, repeated convergence and public Haskell correspondence
+remain open. The strongest complete ordinary outer domain is unchanged.
+No Haskell patch is added. Field-pool repair b9219b9e remains fixed in c0cc8a05.
+Keep FINDINGS first. The full-library goal stays active. Publication awaits
+the existing direct approval. No push is attempted or retried.
+
 ## Current Parent origins and finite positive continuation chains
 
 Updated: 2026-10-18 04:46 CEST. Proof checkpoint is `e1b8b58e`.

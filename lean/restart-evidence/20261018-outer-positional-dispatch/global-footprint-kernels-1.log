@@ -1,0 +1,57 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-positional-dispatch/global-footprint-kernels-1.source.lean:25:82: error: unsolved goals
+⊢ (match
+      match
+        some
+          (match
+            match
+              match
+                match
+                  match
+                    match (Classical.choice ⋯).1, id, 0 with
+                    | 0, x, x_1 => none
+                    | fuel.succ, parents, index =>
+                      have above := parents index;
+                      if above = index then some (index, parents)
+                      else do
+                        let __x ← ArrayUnionFind.find fuel parents above
+                        match __x with
+                          | (root, after) => pure (root, ArrayUnionFind.write after index root),
+                    fun __x =>
+                    match __x with
+                    | (leftRoot, first) => do
+                      let __x ← ArrayUnionFind.find (Classical.choice ⋯).1 first 1
+                      match __x with
+                        | (rightRoot, second) =>
+                          if leftRoot = rightRoot then some second
+                          else some (ArrayUnionFind.write second leftRoot rightRoot) with
+                  | none, x => none
+                  | some a, f => f a,
+                  EqualityArray.mergeArrays (Classical.choice ⋯).1 [] with
+                | none, x => none
+                | some a, f => f a,
+                fun parents => do
+                let __x ←
+                  EqualityArray.readArrays (Classical.choice ⋯).1
+                      (List.range (EqualityIndex.members [[[], [0]]]).length) parents
+                match __x with
+                  | (entries, snd) =>
+                    pure (EqualityNormalize.canonicalize (EqualityIndex.decodedGroups [[[], [0]]] entries)) with
+              | none, x => none
+              | some a, f => f a with
+            | none => EqualityNormalize.RunResult.timeout
+            | some a => EqualityIndex.fixArray (Classical.choice ⋯).1 50 a with
+          | EqualityNormalize.RunResult.timeout => none
+          | EqualityNormalize.RunResult.contradiction => none
+          | EqualityNormalize.RunResult.normalized val => some val) with
+      | none => { equalities := some [[[0], [1]]], guard := SourceGuards.Guard.same [] [0] }.equalities
+      | some (some []) => { equalities := some [[[0], [1]]], guard := SourceGuards.Guard.same [] [0] }.equalities
+      | some a => SourceCompactGuards.combineEqualities (some [[[0], [1]]]) a with
+    | none => Except.ok none
+    | some classes =>
+      match SourceEqualityClassOrder.recordsOf classes with
+      | none => Except.error "toPathTrie: input paths must be distinct, with none a prefix of another"
+      | some records => Except.ok (some records)) =
+    Except.ok none
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-positional-dispatch/global-footprint-kernels-1.source.lean:27:98: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information

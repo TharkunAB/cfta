@@ -1,0 +1,29 @@
+import MicroCFTA.SourceCurrentOuterPositionalOrigins
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+set_option maxHeartbeats 5000000
+#check @MicroCFTA.SourceCurrentOuterPositionalOrigins.EdgeLink
+#print MicroCFTA.SourceCurrentOuterPositionalOrigins.EdgeLink
+#print axioms MicroCFTA.SourceCurrentOuterPositionalOrigins.EdgeLink
+#check @MicroCFTA.SourceCurrentOuterPositionalOrigins.Origins
+#print MicroCFTA.SourceCurrentOuterPositionalOrigins.Origins
+#print axioms MicroCFTA.SourceCurrentOuterPositionalOrigins.Origins
+#check @MicroCFTA.SourceCurrentOuterPositionalOrigins.initial
+#print MicroCFTA.SourceCurrentOuterPositionalOrigins.initial
+#print axioms MicroCFTA.SourceCurrentOuterPositionalOrigins.initial
+#check @MicroCFTA.SourceCurrentOuterPositionalOrigins.edge_call
+#print MicroCFTA.SourceCurrentOuterPositionalOrigins.edge_call
+#print axioms MicroCFTA.SourceCurrentOuterPositionalOrigins.edge_call
+#check @MicroCFTA.SourceCurrentOuterPositionalOrigins.node_done
+#print MicroCFTA.SourceCurrentOuterPositionalOrigins.node_done
+#print axioms MicroCFTA.SourceCurrentOuterPositionalOrigins.node_done
+#check @MicroCFTA.SourceCurrentOuterPositionalOrigins.reached
+#print MicroCFTA.SourceCurrentOuterPositionalOrigins.reached
+#print axioms MicroCFTA.SourceCurrentOuterPositionalOrigins.reached

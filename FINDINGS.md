@@ -2,6 +2,22 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 04:58 CEST. Proof checkpoint is `1fde7bb0`.
+Cold and warm outer edge calls now derive indexed full-row origins for their
+actual captured requests. Initial empty tables and actual completed calls
+or unfinished prefixes produce the memo invariant. Literal walks derive the
+exact selected source slot, inherited descent, node call, prefix and suffix.
+A positive row of that dispatched input supplies a strict source-anchor
+continuation step. General consecutive execution and global progress remain
+open. A checked raw accessor footprint fails conjunction closure, but the
+same witness proves rejection of its first checked input. No accepted-input
+counterexample or Haskell defect is claimed. Full Audit passes 3225 jobs and
+70857 checks. No Haskell patch or new production defect is added.
+Field-pool repair `b9219b9e` remains fixed in `c0cc8a05`. Read
+`lean/notes-current-outer-positional-dispatch.md`. Keep this registry first.
+Record each later repair with failure, executable reproducer, paths, commit,
+checks and upstream status. Preserve every earlier repair entry below.
+
 Current proof update: 2026-10-18 04:46 CEST. Proof checkpoint is `e1b8b58e`.
 Actual Parent now derives indexed full-row origins through its literal local
 worker and checked construction. Both rejection paths derive Empty. A fixed
