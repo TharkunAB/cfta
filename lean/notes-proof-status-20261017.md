@@ -1,6 +1,6 @@
 # Proof status at 2026-10-18
 
-Checked at proof checkpoint `dce1e970`. Source main is `c0cc8a05`,
+Checked at proof checkpoint `e66b49b7`. Source main is `c0cc8a05`,
 merged into `formalize` at `896b0a1c`. This note reports the current theorem
 boundaries. It adds no theorem and no Haskell behavior change.
 
@@ -198,6 +198,15 @@ ceiling or successful enclosing call is needed. A terminal Parent fault
 can still retain an evaluating edge owner. General node-owner exclusion
 and fresh-call bounds remain open. Read
 [the current checkpoint](notes-current-outer-edge-idle.md).
+
+Closed native query rows now have an explicit terminal classification.
+Actual swap/reset forwarding preserves both operand closures and excludes
+bare-reference terminal branches. Union rows have an actual selected
+ordered member call with the same full row. Mu branches have their actual
+entered body trace and literal binder schedule. This last result does not
+establish row occurrence in an original source body. General used-writer
+alignment and source-anchor composition remain open. Read
+[the current checkpoint](notes-current-native-terminal-origins.md).
 
 ## Strongest current claim in plain technical English
 

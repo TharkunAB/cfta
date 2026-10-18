@@ -13,6 +13,46 @@ Do not bypass that decision. Continue independent local proof work.
 Read `lean/notes-current-publication-status.md`. The full-library goal stays
 active. The proof and evidence are committed, locally verified and preserved.
 
+## Current native terminal origins from actual captured writers
+
+Updated: 2026-10-18 08:36 CEST. Proof checkpoint is `e66b49b7`.
+Starting local checkpoint is `f85e3e98`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-native-terminal-origins.md` for exact boundaries.
+
+Closed root forwarding now preserves both operand closures. It excludes
+bare-reference branches at the terminal writer. Actual union writers
+supply their selected ordered member call and the same full returned row.
+Actual Mu writers supply the entered domain, body trace, available body,
+literal maybeMu result and exact internal fuel. The same captured owner
+remains evaluating until its finish. Completed closed queries construct
+this classification from their actual final history and selected row.
+
+The Mu case records the executed schedule. It does not prove that its
+selected row occurs in an original source body. General used-Mu writer
+alignment remains open. No source-publication history is inferred backwards
+from a final native history. These history types have different contracts.
+
+The next source-anchor obligation is row reconstruction at the actual Mu
+writer. Then compose these origins through class folds, Parent and actual
+walk dispatch. All-ancestor node-key exclusion, a finite fresh-call bound,
+recursive outer completion, repeated convergence, equality-operation
+resources, host Int adequacy and public Haskell correspondence remain open.
+
+Full Audit passes 3269 jobs and 71342 checks. Four production strict logs
+and the actual integration strict log are empty. All twelve public, two
+constructed and one private full pairs pass in six groups with all eight
+settings and standard axioms. The source-built right-Mu and right-union
+queries derive their own complete traces and expected selected leaf row.
+They use unused binders. Independent production review finds no material
+issue. Jobs use 4 GiB maximum/high and zero swap. Successful root peaks are
+at most 381 MiB. Evidence is in
+`lean/restart-evidence/20261018-native-terminal-origins/`.
+
+No Haskell patch or new executable defect is added. Field-pool repair
+b9219b9e remains fixed in c0cc8a05. FINDINGS keeps the external repair
+registry first. The full-library goal stays active. Publication awaits
+the existing direct approval. No push is attempted or retried.
+
 ## Current initial facts exclude every edge memo diagnostic
 
 Updated: 2026-10-18 08:14 CEST. Proof checkpoint is `dce1e970`.
