@@ -1,0 +1,18 @@
+import MicroCFTA.SourceCurrentAllocatedEqualityAbsorption
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+#check @MicroCFTA.SourceCurrentAllocatedEqualityAbsorption.combine
+#print MicroCFTA.SourceCurrentAllocatedEqualityAbsorption.combine
+#print axioms MicroCFTA.SourceCurrentAllocatedEqualityAbsorption.combine
+#check @MicroCFTA.SourceCurrentAllocatedEqualityAbsorption.inherited_prefix
+#print MicroCFTA.SourceCurrentAllocatedEqualityAbsorption.inherited_prefix
+#print axioms MicroCFTA.SourceCurrentAllocatedEqualityAbsorption.inherited_prefix
+#check @MicroCFTA.SourceCurrentAllocatedEqualityAbsorption.descend
+#print MicroCFTA.SourceCurrentAllocatedEqualityAbsorption.descend
+#print axioms MicroCFTA.SourceCurrentAllocatedEqualityAbsorption.descend

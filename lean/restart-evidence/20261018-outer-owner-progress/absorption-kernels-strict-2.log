@@ -1,0 +1,52 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-owner-progress/absorption-kernels-strict-2.source.lean:33:2: error: Type mismatch
+  SourceEqualityGuardReadback.normalized actual
+has type
+  SourceEqualityGuardReadback.NormalClasses inheritedClasses
+but is expected to have type
+  SourceEqualityGuardReadback.Cached (some inheritedClasses)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-owner-progress/absorption-kernels-strict-2.source.lean:36:2: error: Type mismatch
+  SourceEqualityGuardReadback.normalized actual
+has type
+  SourceEqualityGuardReadback.NormalClasses ownClasses
+but is expected to have type
+  SourceEqualityGuardReadback.Cached original.equalities
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-owner-progress/absorption-kernels-strict-2.source.lean:78:12: error(lean.dependsOnNoncomputable): failed to compile definition, consider marking it as 'noncomputable' because it depends on 'SourceCurrentAllocatedInheritedPrefix.run', which is 'noncomputable'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-owner-progress/absorption-kernels-strict-2.source.lean:79:12: error(lean.dependsOnNoncomputable): failed to compile definition, consider marking it as 'noncomputable' because it depends on 'SourceCurrentAllocatedInheritedPrefix.run', which is 'noncomputable'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-owner-progress/absorption-kernels-strict-2.source.lean:80:12: error(lean.dependsOnNoncomputable): failed to compile definition, consider marking it as 'noncomputable' because it depends on 'cold', which is 'noncomputable'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-owner-progress/absorption-kernels-strict-2.source.lean:97:57: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+shape : inherited = Value.live identity records
+inheritedReady : Ready before.constraints (Value.live identity records)
+compiled : SourceCompactGuards.sourceEqualities original = some ownClasses
+prefixDone :
+  (SourceCurrentAllocatedInheritedPrefix.run original (Value.live identity records) before).fst =
+      Except.ok (some (Value.live identity records)) ∧
+    SourceEqualityConstraintMemoAllocation.Valid
+        (SourceCurrentAllocatedInheritedPrefix.run original (Value.live identity records) before).snd ∧
+      Ready (SourceCurrentAllocatedInheritedPrefix.run original (Value.live identity records) before).snd.constraints
+          (Value.live identity records) ∧
+        SourceEqualityConstraintMemoAllocation.Grows before
+          (SourceCurrentAllocatedInheritedPrefix.run original (Value.live identity records) before).snd
+descending :
+  (SourceCurrentAllocatedInheritedPrefix.run original (Value.live identity records) before).fst =
+      Except.ok (some (Value.live identity records)) ∧
+    SourceCurrentOuterInheritedDescent.pathHeight
+          (SourceEqualityConstraintMemoAllocation.descend (Value.live identity records) 0
+              (SourceCurrentAllocatedInheritedPrefix.run original (Value.live identity records) before).snd).fst <
+        SourceCurrentOuterInheritedDescent.pathHeight (Value.live identity records) ∧
+      ¬(SourceEqualityConstraintMemoAllocation.descend (Value.live identity records) 0
+                (SourceCurrentAllocatedInheritedPrefix.run original (Value.live identity records)
+                    before).snd).fst.identity =
+          some identity
+⊢ ([{
+            trie :=
+              EqualityTrie.Trie.branch
+                [(0, EqualityTrie.Trie.terminal), (1, EqualityTrie.Trie.terminal), (2, EqualityTrie.Trie.terminal)],
+            paths := [[0], [1], [2]] }] =
+        [] →
+      False) ∧
+    (∀ (paths : List (List Nat)),
+        paths ∈ [[[0], [1]]] →
+          ∃ larger, larger ∈ [[[0], [1], [2]]] ∧ ∀ (path : List Nat), path ∈ paths → path ∈ larger) ∧
+      (some 2 = some 0 → False)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-owner-progress/absorption-kernels-strict-2.source.lean:99:2: error: No goals to be solved

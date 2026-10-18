@@ -1,7 +1,7 @@
 # Current system claim
 
 Checked against the live theorem statements on 2026-10-18.
-Read `notes-current-constructed-root-and-cross-local.md` for this checkpoint.
+Read `notes-current-effective-outer-progress.md` for the latest checkpoint.
 
 In simple technical English: completed modeled construction represents
 exactly the trees specified by its expression. A completed modeled root
@@ -84,6 +84,20 @@ native edits. A simple ordinary-height rank is already refuted by a
 completed source-built example. A valid measure must respect physical memo
 keys and inherited constraints. Repeated-pass convergence is separate.
 Read `notes-current-outer-progress.md` for the exact obstruction and target.
+
+Exact absorption now proves that covered own classes leave a fixed
+inherited value unchanged, including its canonical identity. Actual
+height-gain steps therefore have a distinct own path pair absent from the
+inherited components. The proof retains the exact original row and the
+active owner's actual prefix. Untouched positive continuations also have
+strict source-anchor mass descent, with exact dispatch derived from only
+completed earlier siblings. A finite chain can use different child indices.
+
+These are local progress facts. Descent can discard a class before a copied
+own field introduces it again. The remaining producer must connect that
+renewal to strict source-anchor descent or terminal rejection. A finite
+guard alphabet and one newly added pair do not bound all active ancestry.
+Read `notes-current-effective-outer-progress.md`.
 
 Haskell correspondence still needs lazy demand, cache publication and
 lifetime, field preparation, machine-integer adequacy and public adapters.

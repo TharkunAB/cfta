@@ -1,5 +1,29 @@
 # Current proof and the general outer progress boundary
 
+## Current effective gains and unfinished dispatches
+
+Updated: 2026-10-18 22:55 CEST. Proof checkpoint is `4b6f581d`.
+Read `notes-current-effective-outer-progress.md` for the current extension.
+Covered own classes now preserve the complete fixed inherited value in
+actual combination and field-prefix execution. Every actual strict
+inherited-height gain therefore contains a distinct effective-own pair
+outside the inherited components. Exact original row, Parent call and
+active owner receipts remain. The busy-failure endpoint still requires
+a nonempty captured owner payload.
+
+An unfinished walk now derives its exact selected dispatch from completed
+earlier siblings. Actual Parent origins yield strict source-anchor mass
+descent at an untouched next slot. Finite chains allow changing indices.
+The untouched footprint remains explicit. No enclosing walk or node return
+is required. Full Audit passes 3417 jobs and 73140 dependency checks.
+
+The primary missing producer is renewal of original constraint origins.
+When descent drops an old class and a copied guard introduces its origin
+again, actual selected edits must force strict source-anchor descent or
+terminal rejection. Local absorption, retained dependencies and a finite
+guard alphabet do not establish this. General completion, empty-owner
+collision exclusion, convergence and Haskell refinement remain open.
+
 Starting checkpoint: 76dcdddc. Proof commits: 2d63272f and a68b3c9b.
 Source main remains c0cc8a05, merged at 896b0a1c.
 The complete public Haskell theorem remains open.

@@ -1,0 +1,36 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-owner-progress/outer-effective-direct-1.source.lean:83:11: error: unknown tactic
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-owner-progress/outer-effective-direct-1.source.lean:81:36: error: unsolved goals
+case live.live
+original : Guard
+output : EqValue
+before : Operations
+valid : SourceEqualityConstraintMemoAllocation.Valid before
+field : SourceCurrentConjunctionEquality.FieldAvailable before original
+identity : Nat
+records : List Record
+actual :
+  (prefixRun original (SourceEqualityConstraintAllocation.Value.live identity records) before).fst =
+    Except.ok (some output)
+ready : EqReady before.constraints (SourceEqualityConstraintAllocation.Value.live identity records)
+fixed : FixedPayload (SourceEqualityConstraintAllocation.Value.live identity records).payload
+increase : pathHeight (SourceEqualityConstraintAllocation.Value.live identity records) < pathHeight output
+left✝¹ : SourceEqualityConstraintMemoAllocation.Valid (SourceCurrentConjunctionEquality.accessor original before).snd
+right✝ :
+  SourceEqualityConstraintMemoAllocation.Grows before (SourceCurrentConjunctionEquality.accessor original before).snd
+ownIdentity : Nat
+ownRecords : List Record
+loaded :
+  (SourceCurrentConjunctionEquality.accessor original before).fst =
+    Except.ok (some (SourceEqualityConstraintAllocation.Value.live ownIdentity ownRecords))
+ownReady :
+  EqReady (SourceCurrentConjunctionEquality.accessor original before).snd.constraints
+    (SourceEqualityConstraintAllocation.Value.live ownIdentity ownRecords)
+classes :
+  SourceEqualityInheritedPayload.classes
+      (SourceEqualityConstraintAllocation.Value.live ownIdentity ownRecords).payload =
+    SourceCompactGuards.sourceEqualities original
+left✝ :
+  SourceEqualityPhysicalPayload.read (SourceCompactGuards.sourceEqualities original) =
+    Except.ok (SourceEqualityConstraintAllocation.Value.live ownIdentity ownRecords).payload
+compiled : SourceCompactGuards.sourceEqualities original = some (List.map Record.paths ownRecords)
+⊢ NewPair original (SourceEqualityConstraintAllocation.Value.live identity records)

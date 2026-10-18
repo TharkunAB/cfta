@@ -2,6 +2,19 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 22:55 CEST. Proof checkpoint is `4b6f581d`.
+Actual height gains now derive an uncovered distinct own equality pair.
+Exact original row and active-owner receipts remain. Actual unfinished
+untouched dispatches derive source-anchor mass descent. These local facts
+do not bound constraint renewal or prove general completion. Empty-owner
+collision exclusion, repeated-pass convergence and Haskell refinement
+remain open. No Haskell defect or repair request is added. No Haskell
+bytes change. Full Audit passes 3417 jobs and 73140 checks. Field-pool
+repair `b9219b9e` remains fixed in `c0cc8a05`.
+Read `lean/notes-current-effective-outer-progress.md`. Keep this registry
+first. Record later repairs with failure, executable reproducer, paths,
+commit, checks and upstream status. Preserve every earlier entry.
+
 Current proof update: 2026-10-18 22:34 CEST. Proof checkpoint is `bf3014ae`.
 The new modeled constructed-root theorem derives startup facts and proves
 exact original-expression language at a completed empty-inherited return.
