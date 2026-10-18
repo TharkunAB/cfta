@@ -1,7 +1,7 @@
 # Current system claim
 
 Checked against the live theorem statements on 2026-10-18.
-The causal source comparison proof checkpoint is `43859cfd`.
+The causal Empty and node simulation proof checkpoint is `20cd2d78`.
 
 In simple technical English: a completed modeled reduction adds no tree
 outside the input language. It retains every input tree that satisfies its inherited
@@ -59,10 +59,17 @@ original root deletion. Actual histories from empty tables derive the
 body/probe payload contract and its stronger original-root interface.
 No semantic payload heap is supplied to those history-based endpoints.
 
-The main current gap is deeper recursive guarded observation agreement.
-It must match actual Mu unfolding, full row guards and ordered children.
-The recursive guard certificate must follow from supported public
-construction. Root-profile equality alone does not establish it.
+Causal filtered Empty agreement is now proved for all source syntax.
+Every pair in the recursive Generated relation has equal Empty flags.
+Historical node calls derive local simulation in both directions with
+full guards and ordered mutual child generators. Selected Mu readback
+constructs both calls under arbitrary common replacements.
+
+The main current gap is the complete source-generated guarded simulation.
+Filtered union and used-Mu clauses must retain one fixed reader. The Mu
+clause must match actual unfolding with a reached related endpoint.
+The ordinary-node local result does not establish that global certificate.
+The recursive guard certificate must follow from supported public construction.
 
 General completion still needs active-owner exclusion, fresh-call bounds,
 and repeated-pass convergence. Haskell correspondence still needs demand
@@ -73,7 +80,8 @@ Equal assigned profiles alone do not preserve that test. The stronger
 root contract is now derived for every stored recursive payload in an
 actual modeled history. Its proof covers retained open Mu, unused binders
 and earlier cache winners. See `notes-current-causal-source-comparison.md`
-for checked evidence and the next causal Empty and deeper observation
+for the original payload proof. See `notes-current-causal-empty-fusion.md`
+for causal Empty agreement, the guarded node clause and the next fixed-reader
 steps. The broad reduction guarantee above has not changed.
 
 No Haskell bytes change in this checkpoint. Root `FINDINGS.md` retains the

@@ -2,6 +2,20 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 21:06 CEST. Proof checkpoint is `20cd2d78`.
+Causal filtered Empty fusion is proved for all syntax. Actual recursive
+Generated pairs have equal Empty flags. Selected Mu readback constructs
+both calls with arbitrary common outer and local replacements. Historical
+node calls derive full guarded row matching with ordered mutual child
+generators. No supplied payload heap or child Fusion law remains in these
+endpoints. Filtered union and used-Mu fixed-reader simulation stay open.
+Full Audit passes 3395 jobs and 73023 checks. No Haskell bytes change.
+No Haskell defect or repair request is added. Field-pool repair `b9219b9e`
+remains fixed in `c0cc8a05`. Read `lean/notes-current-causal-empty-fusion.md`.
+Keep this repair registry first. Record later repairs with failure,
+executable reproducer, paths, commit, checks and upstream status.
+Preserve every earlier entry.
+
 Current proof update: 2026-10-18 20:44 CEST. Proof checkpoint is `43859cfd`.
 General source root-profile and original-cut comparison are now proved.
 Actual histories from empty tables derive both stored payload contracts,
