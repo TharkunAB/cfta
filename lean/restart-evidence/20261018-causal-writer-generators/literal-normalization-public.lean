@@ -1,0 +1,27 @@
+import MicroCFTA.SourceCurrentLiteralNormalizationSimulation
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentLiteralNormalizationSimulation.Relation
+#print MicroCFTA.SourceCurrentLiteralNormalizationSimulation.Relation
+#print axioms MicroCFTA.SourceCurrentLiteralNormalizationSimulation.Relation
+
+#check @MicroCFTA.SourceCurrentLiteralNormalizationSimulation.Relation.pre
+#print MicroCFTA.SourceCurrentLiteralNormalizationSimulation.Relation.pre
+#print axioms MicroCFTA.SourceCurrentLiteralNormalizationSimulation.Relation.pre
+
+#check @MicroCFTA.SourceCurrentLiteralNormalizationSimulation.Relation.post
+#print MicroCFTA.SourceCurrentLiteralNormalizationSimulation.Relation.post
+#print axioms MicroCFTA.SourceCurrentLiteralNormalizationSimulation.Relation.post
+
+#check @MicroCFTA.SourceCurrentLiteralNormalizationSimulation.directed
+#print MicroCFTA.SourceCurrentLiteralNormalizationSimulation.directed
+#print axioms MicroCFTA.SourceCurrentLiteralNormalizationSimulation.directed
+

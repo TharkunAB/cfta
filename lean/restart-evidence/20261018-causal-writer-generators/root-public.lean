@@ -1,0 +1,28 @@
+import MicroCFTA.SourceCurrentStoredReconstructionPath
+import MicroCFTA.SourceCurrentCausalStoredMuGenerators
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+#check @MicroCFTA.SourceCurrentStoredReconstructionPath.filter
+#print MicroCFTA.SourceCurrentStoredReconstructionPath.filter
+#print axioms MicroCFTA.SourceCurrentStoredReconstructionPath.filter
+#check @MicroCFTA.SourceCurrentStoredReconstructionPath.actual
+#print MicroCFTA.SourceCurrentStoredReconstructionPath.actual
+#print axioms MicroCFTA.SourceCurrentStoredReconstructionPath.actual
+#check @MicroCFTA.SourceCurrentStoredReconstructionPath.complete
+#print MicroCFTA.SourceCurrentStoredReconstructionPath.complete
+#print axioms MicroCFTA.SourceCurrentStoredReconstructionPath.complete
+#check @MicroCFTA.SourceCurrentCausalStoredMuGenerators.selected
+#print MicroCFTA.SourceCurrentCausalStoredMuGenerators.selected
+#print axioms MicroCFTA.SourceCurrentCausalStoredMuGenerators.selected
+#check @MicroCFTA.SourceCurrentCausalStoredMuGenerators.complete
+#print MicroCFTA.SourceCurrentCausalStoredMuGenerators.complete
+#print axioms MicroCFTA.SourceCurrentCausalStoredMuGenerators.complete
+#check @MicroCFTA.SourceCurrentCausalStoredMuGenerators.unfolding
+#print MicroCFTA.SourceCurrentCausalStoredMuGenerators.unfolding
+#print axioms MicroCFTA.SourceCurrentCausalStoredMuGenerators.unfolding

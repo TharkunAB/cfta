@@ -13,6 +13,48 @@ Do not bypass that decision. Continue independent local proof work.
 Read `lean/notes-current-publication-status.md`. The full-library goal stays
 active. The proof and evidence are committed, locally verified and preserved.
 
+## Current causal Mu generators and original-reader union fragments
+
+Updated: 2026-10-18 21:54 CEST. Proof checkpoint is `f312f254`.
+Starting checkpoint is `96385d1b`. Source main remains `c0cc8a05`.
+Read `lean/notes-current-causal-writer-generators.md` and
+`lean/notes-current-system-claim.md`.
+
+Actual stored execution now derives a complete issued publication path.
+The selected writer supplies both body/probe source generators under
+arbitrary common outer and local replacements. Initial Ready data and an
+actual issued path construct both calls, final warm replays, retained
+records and both actual Mu epsilon endpoints. The generated comparisons
+remain at the explicit produced reader. No observation law is assumed.
+
+An actual warm union parent now supplies indexed literal-atom executions
+and full original RowCalls at the original reader. Whole ordinary subgroup
+calls need not be warm. A checked source-built case proves that both a
+subgroup filter and subgroup reconstruction allocate while the parent is
+warm. The exact original atom retention and row survival rules remain.
+
+A sound normalization theorem allows literal inclusion before and after
+at most one source pair. It derives Directed from the full literal clauses
+for that source relation. It permits no arbitrary source-pair chain.
+The earlier checked arbitrary-closure counterexample remains preserved.
+
+Full Audit passes 3405 jobs and 73071 dependency checks. Five production
+modules have empty strict logs and clean canonical builds. All 12 public
+and two constructed heads pass complete proof and standard-axiom checks.
+Evidence is in `lean/restart-evidence/20261018-causal-writer-generators/`.
+
+Next derive the actual per-source literal clauses at one fixed reader.
+Factor the historical node row schedule to consume actual fragment
+RowCalls. Use the new indexed union fragments for the root-union case.
+The selected-writer body/probe memberships still need their semantic
+clause proof and a justified progress argument. The current requester and
+selected writer can have different syntax. See the pinned writer review.
+General recursive completion, convergence and Haskell correspondence
+remain open. The broad reduction and size-query guarantees are unchanged.
+No Haskell bytes change. FINDINGS retains every repair first. Field-pool
+repair `b9219b9e` remains fixed in `c0cc8a05`. No push is retried.
+The full-library goal remains active.
+
 ## Current causal union schedules and conditional literal clauses
 
 Updated: 2026-10-18 21:35 CEST. Proof checkpoint is `fff568a7`.

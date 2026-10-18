@@ -1,5 +1,26 @@
 # Public API and source correspondence
 
+## Current causal Mu generators and original-reader union fragments
+
+Checked on 2026-10-18 at proof checkpoint `f312f254`.
+Actual stored reconstruction retains complete issued publication paths.
+The selected writer derives both body/probe generators under arbitrary
+common outer and local replacements. Actual Mu unfolding constructs both
+epsilon endpoints and final warm calls. No guarded observation law is
+supplied. An actual warm union parent derives indexed literal-atom calls
+and full RowCalls at its original reader without warm subgroup calls.
+A source-built warm-parent/cold-subgroup case checks that distinction.
+
+The new sound normalization rule permits literal inclusion around at most
+one source pair. Full per-source literal clauses remain explicit.
+It does not validate arbitrary source-pair transitive closure.
+Full Audit passes 3405 jobs and 73071 checks. All 12 public and two
+constructed heads pass complete proof and standard-axiom checks. Five
+strict module logs and both strict fixture logs are empty. General source
+clauses, used-Mu semantic progress, completion, convergence and Haskell
+correspondence remain open. The broad system claim is unchanged.
+No Haskell bytes change. Read `notes-current-causal-writer-generators.md`.
+
 ## Current causal union schedules and conditional literal clauses
 
 Checked on 2026-10-18 at proof checkpoint `fff568a7`.
