@@ -2,6 +2,18 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-19 01:14 CEST. Proof checkpoint: `55873f7f9`.
+Completed class folds now retain descendant structural sources or actual
+native/Head events across their exact chronological phases. Literal
+bounded-worker returns derive this graph from initial reservations.
+Observational Mu ancestry, renewed-call bounds and termination remain open.
+No Haskell defect or repair request is added. No Haskell bytes change.
+Full default library build passes 3442 jobs; Audit checks 73634 axiom
+dependencies. Field-pool repair `b9219b9e` remains fixed in main `c0cc8a05`.
+Read `lean/notes-current-class-fold-structural.md`. Keep this registry first.
+Record every repair with failure, executable reproducer, paths, commit,
+checks and upstream status. Preserve every earlier entry.
+
 Current proof update: 2026-10-19 00:58 CEST. Proof checkpoint: `fb6abfd9a`.
 Actual Required-to-target provenance now retains original row fields and
 ordered child origins through changed children. Actual completed class
