@@ -1,0 +1,101 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filtered-source-comparison/contract-review-full-4.source.lean:108:10: warning: This simp argument is unused:
+  or_assoc
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [or_left_comm, or_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filtered-source-comparison/contract-review-full-4.source.lean:162:59: error: Type mismatch
+  Iff.rfl
+has type
+  ?m.510 ↔ ?m.510
+but is expected to have type
+  x✝ ∈
+      (match
+            match
+              match rho (Reference.uninterned 10) with
+              | some x => some (List.map Sum.inr x)
+              | none => none,
+              match
+                match rho (Reference.uninterned 11) with
+                | some x => some (List.map Sum.inr x)
+                | none => none,
+                match
+                  if
+                      Bool.rec false true
+                          (Bool.rec false
+                            (Bool.rec false true
+                              (Bool.rec true false
+                                (match
+                                  match rho (Reference.uninterned 11) with
+                                  | some x => some (List.map Sum.inr x)
+                                  | none => none with
+                                | some [] => true
+                                | x => false)))
+                            (Bool.rec true false
+                              (match
+                                match rho (Reference.uninterned 10) with
+                                | some x => some (List.map Sum.inr x)
+                                | none => none with
+                              | some [] => true
+                              | x => false))) =
+                        true then
+                    none
+                  else some [],
+                  some [] with
+                | some first, some second => some (first ++ second)
+                | x, x_1 => none with
+              | some first, some second => some (first ++ second)
+              | x, x_1 => none with
+            | some first, some second => some (first ++ second)
+            | x, x_1 => none with
+          | none => none
+          | some names =>
+            some
+              (List.filterMap
+                (fun name =>
+                  match name with
+                  | Sum.inl val => none
+                  | Sum.inr val => some val)
+                names)).getD
+        [] ↔
+    x✝ ∈
+      (match rho (Reference.uninterned 10),
+            match
+              if
+                  Bool.rec false true
+                      (Bool.rec false
+                        (Bool.rec false true
+                          (Bool.rec true false
+                            (match rho (Reference.uninterned 11) with
+                            | some [] => true
+                            | x => false)))
+                        (Bool.rec true false
+                          (match rho (Reference.uninterned 10) with
+                          | some [] => true
+                          | x => false))) =
+                    true then
+                none
+              else some [],
+              match
+                match
+                  match rho (Reference.uninterned 11) with
+                  | some x => some (List.map Sum.inr x)
+                  | none => none with
+                | none => none
+                | some names =>
+                  some
+                    (List.filterMap
+                      (fun name =>
+                        match name with
+                        | Sum.inl val => none
+                        | Sum.inr val => some val)
+                      names),
+                some [] with
+              | some first, some second => some (first ++ second)
+              | x, x_1 => none with
+            | some first, some second => some (first ++ second)
+            | x, x_1 => none with
+          | some first, some second => some (first ++ second)
+          | x, x_1 => none).getD
+        []

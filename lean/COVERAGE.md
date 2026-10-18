@@ -1,5 +1,21 @@
 # Full formalization coverage
 
+## Current original root filtering and source comparison
+
+Updated: 2026-10-18 19:33 CEST. Proof checkpoint is `9ed6c398`.
+Read `lean/notes-current-filtered-source-comparison.md` and
+`lean/notes-current-system-claim.md`.
+The pure root-filter function retains original root members before assigned
+profiles. Equal complete substitution profiles alone do not preserve this
+filter. A checked source-built local witness establishes the obstruction.
+It does not establish a Haskell defect. General filtered source comparison
+and causal publication preservation remain open. The next invariant needs
+original root-reference alternatives for external and local names.
+The exact broad reduction law is valid-input preservation plus input-language
+inclusion. Returned-constraint satisfaction remains a separate direction.
+Full Audit passes 3368 jobs and 72824 checks. No Haskell bytes change.
+The full-library goal remains active.
+
 ## Current scoped profiles and complete actual binder readback
 
 Updated: 2026-10-18 19:16 CEST. Proof checkpoint is `d2c57674`.

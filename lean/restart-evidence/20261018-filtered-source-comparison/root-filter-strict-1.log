@@ -1,0 +1,44 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filtered-source-comparison/root-filter-strict-1.source.lean:54:16: error(lean.unknownIdentifier): Unknown constant `Bool.not_eq_true.mpr`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filtered-source-comparison/root-filter-strict-1.source.lean:55:16: error: No goals to be solved
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filtered-source-comparison/root-filter-strict-1.source.lean:58:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  denote (Value.union entry members depth free) assignment
+in the target expression
+  Equivalent
+    (denote
+      (run (if false = true then makeUnion members else Work.pure (Value.union entry members depth free)) state).fst
+      assignment)
+    (combineMany (List.map (fun member => denote member assignment) members))
+
+case neg
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+own : Reference
+assignment : Reference → Profile
+state : InternedConstructorTemplates.State Symbol Guard
+ready : Ready state
+entry : Interned InternedBinderProtocol.NodeKey
+members : List (Value Symbol Guard)
+depth : Nat
+free : List Reference
+available : Available state (Value.union entry members depth free)
+present : ¬(members.any fun member => member.referenceOf == InternedBinderProtocol.NodeRef.ref own) = true
+unchanged : List.filter (fun member => member.referenceOf != InternedBinderProtocol.NodeRef.ref own) members = members
+⊢ Equivalent
+    (denote
+      (run (if false = true then makeUnion members else Work.pure (Value.union entry members depth free)) state).fst
+      assignment)
+    (combineMany (List.map (fun member => denote member assignment) members))
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filtered-source-comparison/root-filter-strict-1.source.lean:57:48: warning: This simp argument is unused:
+  ite_false
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [withoutSelfReference, present, run, filtered, unchanged]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-filtered-source-comparison/root-filter-strict-1.source.lean:57:58: warning: This simp argument is unused:
+  run
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [withoutSelfReference, present, ite_false, filtered, unchanged]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
