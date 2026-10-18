@@ -1,6 +1,6 @@
 # Proof status at 2026-10-18
 
-Checked at proof checkpoint `479741b4`. Source main is `c0cc8a05`,
+Checked at proof checkpoint `e1b8b58e`. Source main is `c0cc8a05`,
 merged into `formalize` at `896b0a1c`. This note reports the current theorem
 boundaries. It adds no theorem and no Haskell behavior change.
 
@@ -52,7 +52,16 @@ retained continuation has smaller structural mass than its explicit immediate
 source node. That node can be reconstructed. General initial-source descent
 and a global recursive rank remain open. The successful worker equations
 and initial raw footprint stay explicit. Read
-[the current checkpoint](notes-current-selected-local-lineage.md).
+[the earlier checkpoint](notes-current-selected-local-lineage.md).
+
+Actual Parent construction now retains the local indexed row relation or
+returns the Empty sentinel. A fixed positive continuation chain is
+well-founded even when intermediate containing nodes are reconstructed.
+Its next anchor must be the exact retained child. The full outer worker
+still needs a producer for those exact consecutive steps and footprints.
+A source-built closed example proves that guard footprints are not
+hereditary over nested rows. No general recursive domain is enlarged.
+Read [the current checkpoint](notes-current-parent-native-lineage.md).
 
 ## Strongest current claim in plain technical English
 

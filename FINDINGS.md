@@ -2,6 +2,22 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 04:46 CEST. Proof checkpoint is `e1b8b58e`.
+Actual Parent now derives indexed full-row origins through its literal local
+worker and checked construction. Both rejection paths derive Empty. A fixed
+positive continuation chain strictly decreases mass and cannot be infinite.
+Its consecutive exact anchors remain explicit. Actual full outer execution
+still needs that chain producer. Source-built coherent nested guards prove
+that an enclosing footprint is not hereditary. This is not a Haskell defect.
+General recursive completion, fresh-call bounds, all-owner separation,
+recursive language preservation, used-writer alignment, convergence and
+full public Haskell correspondence remain open. Full Audit passes 3223 jobs
+and 70834 checks. No Haskell patch or new production defect is added.
+Field-pool repair `b9219b9e` remains fixed in `c0cc8a05`. Read
+`lean/notes-current-parent-native-lineage.md`. Keep this registry first.
+Record each later repair with failure, executable reproducer, paths, commit,
+checks and upstream status. Preserve every earlier repair entry below.
+
 Current proof update: 2026-10-18 04:35 CEST. Proof checkpoint is `479741b4`.
 Actual local row origins now follow the raw guard, field lookup, precheck,
 original Scan, Required and class passes. Actual selection derives Root;

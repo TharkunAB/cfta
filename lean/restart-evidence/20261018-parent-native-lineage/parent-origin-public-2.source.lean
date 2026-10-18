@@ -1,0 +1,20 @@
+import MicroCFTA.SourceCurrentActualParentRowOrigins
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+set_option maxHeartbeats 5000000
+#check @MicroCFTA.SourceCurrentActualParentRowOrigins.reject_children
+#print MicroCFTA.SourceCurrentActualParentRowOrigins.reject_children
+#print axioms MicroCFTA.SourceCurrentActualParentRowOrigins.reject_children
+#check @MicroCFTA.SourceCurrentActualParentRowOrigins.build_children
+#print MicroCFTA.SourceCurrentActualParentRowOrigins.build_children
+#print axioms MicroCFTA.SourceCurrentActualParentRowOrigins.build_children
+#check @MicroCFTA.SourceCurrentActualParentRowOrigins.edge
+#print MicroCFTA.SourceCurrentActualParentRowOrigins.edge
+#print axioms MicroCFTA.SourceCurrentActualParentRowOrigins.edge
