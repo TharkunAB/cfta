@@ -2,6 +2,21 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 04:35 CEST. Proof checkpoint is `479741b4`.
+Actual local row origins now follow the raw guard, field lookup, precheck,
+original Scan, Required and class passes. Actual selection derives Root;
+source paths derive compiler absence. Untouched constrained Mu values need
+no Root premise. Positive continuations strictly decrease mass below their
+immediate source node. That node can be reconstructed, so no global rank
+or proper initial-source occurrence follows. General recursive completion,
+fresh-call bounds, writer alignment, recursive language preservation,
+convergence and full public Haskell correspondence remain open.
+Full Audit passes 3221 jobs and 70817 checks. No Haskell patch or new defect
+is added. Field-pool repair `b9219b9e` remains fixed in `c0cc8a05`.
+Read `lean/notes-current-selected-local-lineage.md`. Keep this registry first.
+Record each later repair with failure, executable reproducer, paths, commit,
+checks and upstream status. Preserve every earlier repair entry below.
+
 Current proof update: 2026-10-18 04:17 CEST. Proof checkpoint is `fe68c2e9`.
 Actual Required preparation and the class right fold now compose exact
 indexed row origins and unchanged continuation children from entry facts.

@@ -13,6 +13,47 @@ Do not bypass that decision. Continue independent local proof work.
 Read `lean/notes-current-publication-status.md`. The full-library goal stays
 active. The proof and evidence are committed, locally verified and preserved.
 
+## Current selected local row origins and immediate descent
+
+Updated: 2026-10-18 04:35 CEST. Proof checkpoint is `479741b4`.
+Starting local checkpoint is `ff10965d`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-selected-local-lineage.md` for exact boundaries.
+
+Actual retained Scan records now supply their original selected Root from
+literal false primary returns. No heap, memo or replay law is needed for
+that value property. Original source paths derive actual Required compiler
+absence through canonical selected-path sorting and duplicate removal.
+
+The complete actual local class worker now derives indexed row origins
+without a supplied Root or compiled-absence premise. Selected slots use
+actual primary support. Untouched slots retain their complete value through
+Required and the class fold, or become Empty during final propagation.
+Constrained recursive inputs are permitted in the untouched branch.
+
+The full allocated local reducer now derives the same result through actual
+field lookup, accessor, precheck, Scan, Required and class passes. The raw
+input guard's unselected footprint and successful worker equation remain
+explicit. Positive surviving rows retain the full indexed input row and the
+exact continuation child. That child has strictly smaller mass than its
+explicit immediate source node. The source node can be reconstructed;
+proper initial-source occurrence and a global decreasing rank remain open.
+
+Full Audit passes 3221 jobs and 70817 checks. Five production and five
+constructed strict logs are empty. All 11 public and 7 constructed
+full pairs pass in 10 groups with all eight settings and standard
+axioms. Audit peak is 375 MiB under 4 GiB maximum/high and zero swap.
+Evidence is in `lean/restart-evidence/20261018-selected-local-lineage/`.
+
+Next lift the local origin through actual Parent construction and native
+optional-binder/writer reconstruction. Prove proper original occurrences,
+all-owner separation and a finite fresh-call bound or a well-founded rank.
+General recursive completion, recursive outer language preservation,
+used-writer alignment, repeated convergence and public Haskell correspondence
+remain open. The complete finite ordinary outer domain is unchanged.
+No Haskell patch or new production defect is added. Field-pool b9219b9e
+remains fixed in c0cc8a05. Keep the FINDINGS repair registry first.
+Publication awaits the pending direct approval. Do not retry or bypass it.
+
 ## Current actual positional lineage and primary support
 
 Updated: 2026-10-18 04:17 CEST. Proof checkpoint is `fe68c2e9`.

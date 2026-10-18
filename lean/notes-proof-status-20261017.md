@@ -1,6 +1,6 @@
 # Proof status at 2026-10-18
 
-Checked at proof checkpoint `fe68c2e9`. Source main is `c0cc8a05`,
+Checked at proof checkpoint `479741b4`. Source main is `c0cc8a05`,
 merged into `formalize` at `896b0a1c`. This note reports the current theorem
 boundaries. It adds no theorem and no Haskell behavior change.
 
@@ -42,7 +42,17 @@ condition then survives the literal class fold. Compiler footprints and
 successful worker equations remain explicit. These are immediate input
 origins. Proper initial-source descent, all-owner separation and fresh-call
 bounds remain open. Read
-[the current checkpoint](notes-current-actual-positional-lineage.md).
+[the earlier checkpoint](notes-current-actual-positional-lineage.md).
+
+Actual full local row origins now follow the initial raw guard, its field
+lookup and precheck, literal Scan, Required preparation and class passes.
+Actual selection supplies Root. Source paths supply compiled absence.
+Untouched constrained recursive values need no Root assumption. A positive
+retained continuation has smaller structural mass than its explicit immediate
+source node. That node can be reconstructed. General initial-source descent
+and a global recursive rank remain open. The successful worker equations
+and initial raw footprint stay explicit. Read
+[the current checkpoint](notes-current-selected-local-lineage.md).
 
 ## Strongest current claim in plain technical English
 
