@@ -1,5 +1,6 @@
 module Data.CFTA.SizedSpec (spec) where
 
+import Control.Monad (forM_)
 import Data.Containers.ListUtils (nubOrd)
 import Data.List (sort)
 import qualified Data.Map.Strict as Map
@@ -17,6 +18,8 @@ import qualified Data.CFTA.Gen as Gen
 import Data.CFTA.Gen.Reference (Automaton (..), AutomatonEdge (..), automatonNode, closedAutomaton)
 import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), Size (..))
 import Data.CFTA.Interned (toFTA)
+import Data.CFTA.Lowering (Expansion (..))
+import qualified Data.CFTA.Lowering as Lowering
 import Data.CFTA.Refinement (Entailment (Entailment))
 import Data.CFTA.Sized
 import Data.CFTA.Symbol (Symbol (Symbol))
@@ -25,6 +28,25 @@ import qualified Data.CFTA.Term as Term
 
 spec :: Spec
 spec = describe "Data.CFTA.Sized" $ do
+    it "counts and ranks the inverse image of a spec under a template lowering" $ do
+        -- double(x) lowers to add(x, x). The spec keeps the sums with an even value.
+        let lowering = either (error . show) id $ Lowering.mkLowering [(sym "double", 1, Apply (sym "add") [Child 0, Child 0])]
+            later = automaton "e" [("e", [leaf "zero", leaf "one", node "add" ["e", "e"], node "double" ["e"]])]
+            evenValue =
+                automaton
+                    "even"
+                    [ ("even", [leaf "zero", node "add" ["even", "even"], node "add" ["odd", "odd"]])
+                    , ("odd", [leaf "one", node "add" ["even", "odd"], node "add" ["odd", "even"]])
+                    ]
+            lifted = either (error . show) id $ Lowering.lift lowering evenValue
+            within = either (error . show) id $ sized $ either (error . show) FTA.dropConstraints $ FTA.intersect later lifted
+            whole = either (error . show) id $ sized later
+            keeps candidate = maybe False (FTA.accepts evenValue) (Lowering.lower lowering candidate)
+        forM_ [1 .. 7] $ \size -> do
+            sort (termsOfSize within size) `shouldBe` sort (filter keeps (termsOfSize whole size))
+            let Cardinality count = countOfSize within size
+            forM_ [0 .. count - 1] $ \rank ->
+                (rankOfSize within =<< unrankOfSize within size (ClassRank rank)) `shouldBe` Just (size, ClassRank rank)
     it "lists the classes of a recursion with an empty class between two others" $ do
         let classes = fromRows "s" [("s", [leaf "a", node "g" ["s", "s"]])]
         map (countOfSize classes) [1 .. 5] `shouldBe` [1, 0, 1, 0, 2]
