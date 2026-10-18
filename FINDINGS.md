@@ -2,6 +2,20 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 18:48 CEST. Proof checkpoint is `9a840a6c`.
+Actual stored substitution now has a pure profile function with exact free-name
+support. Actual issued publication induction retains a payload predicate
+when each real candidate proves it. A parametric body/probe contract now
+transfers to actual completed calls in independent ready readers. General
+source publication has not yet derived that contract. The old unrestricted
+Fusion counterexample remains a proof-contract failure. It establishes no
+Haskell defect and requests no Haskell repair. Full Audit passes 3360 jobs
+and 72733 checks. No Haskell bytes change. Field-pool repair `b9219b9e`
+remains fixed in `c0cc8a05`. Read
+`lean/notes-current-causal-profile-invariant.md`. Keep this registry first.
+Record later repairs with failure, executable reproducer, paths, commit,
+checks and upstream status. Preserve every earlier entry.
+
 Current proof update: 2026-10-18 18:28 CEST. Proof checkpoint is `eac5f260`.
 A checked artificial cache refutes the current unrestricted bounded and
 tracked binder Fusion contracts at raw depth0. All their stated premises

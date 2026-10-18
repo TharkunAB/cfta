@@ -1,0 +1,30 @@
+import MicroCFTA.SourceCurrentStoredProfileFunction
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+set_option maxHeartbeats 5000000
+
+#check @MicroCFTA.SourceCurrentStoredProfileFunction.denote
+#print MicroCFTA.SourceCurrentStoredProfileFunction.denote
+#print axioms MicroCFTA.SourceCurrentStoredProfileFunction.denote
+#check @MicroCFTA.SourceCurrentStoredProfileFunction.empty
+#print MicroCFTA.SourceCurrentStoredProfileFunction.empty
+#print axioms MicroCFTA.SourceCurrentStoredProfileFunction.empty
+#check @MicroCFTA.SourceCurrentStoredProfileFunction.reference
+#print MicroCFTA.SourceCurrentStoredProfileFunction.reference
+#print axioms MicroCFTA.SourceCurrentStoredProfileFunction.reference
+#check @MicroCFTA.SourceCurrentStoredProfileFunction.closed
+#print MicroCFTA.SourceCurrentStoredProfileFunction.closed
+#print axioms MicroCFTA.SourceCurrentStoredProfileFunction.closed
+#check @MicroCFTA.SourceCurrentStoredProfileFunction.congr
+#print MicroCFTA.SourceCurrentStoredProfileFunction.congr
+#print axioms MicroCFTA.SourceCurrentStoredProfileFunction.congr
+#check @MicroCFTA.SourceCurrentStoredProfileFunction.execute
+#print MicroCFTA.SourceCurrentStoredProfileFunction.execute
+#print axioms MicroCFTA.SourceCurrentStoredProfileFunction.execute

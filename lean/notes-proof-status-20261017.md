@@ -1,8 +1,23 @@
 # Proof status at 2026-10-18
 
-Checked at proof checkpoint `eac5f260`. Source main is `c0cc8a05`,
+Checked at proof checkpoint `9a840a6c`. Source main is `c0cc8a05`,
 merged into `formalize` at `896b0a1c`. This note reports the current theorem
 boundaries. It adds no theorem and no Haskell behavior change.
+
+## Current stored profiles and causal publication induction
+
+Updated: 2026-10-18 18:48 CEST. Proof checkpoint is `9a840a6c`.
+Read `lean/notes-current-causal-profile-invariant.md`.
+StoredProfileFunction gives actual substitution profiles and exact free-name
+support. PublicationHeapInduction retains payload predicates through actual
+issued histories. StoredMuProfileContract transfers the proposed pure
+body/probe invariant to actual completed calls in independent ready readers.
+General source publication must still derive that invariant. The previous
+unrestricted Fusion contracts remain refuted. No Haskell bytes change.
+Full Audit passes 3360 jobs and 72733 dependency checks. The strongest broad
+claim remains conditional finite-tree preservation for successful reduction.
+General completion, semantic initialization, and Haskell correspondence
+remain open. Root FINDINGS retains the Haskell fix registry first.
 
 ## Current binder contract counterexample and derived marker premises
 

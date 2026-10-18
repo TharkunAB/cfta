@@ -1,0 +1,30 @@
+import MicroCFTA.SourceCurrentPublicationHeapInduction
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+#check @MicroCFTA.SourceCurrentPublicationHeapInduction.Heap
+#print MicroCFTA.SourceCurrentPublicationHeapInduction.Heap
+#print axioms MicroCFTA.SourceCurrentPublicationHeapInduction.Heap
+#check @MicroCFTA.SourceCurrentPublicationHeapInduction.empty
+#print MicroCFTA.SourceCurrentPublicationHeapInduction.empty
+#print axioms MicroCFTA.SourceCurrentPublicationHeapInduction.empty
+#check @MicroCFTA.SourceCurrentPublicationHeapInduction.retain
+#print MicroCFTA.SourceCurrentPublicationHeapInduction.retain
+#print axioms MicroCFTA.SourceCurrentPublicationHeapInduction.retain
+#check @MicroCFTA.SourceCurrentPublicationHeapInduction.complete
+#print MicroCFTA.SourceCurrentPublicationHeapInduction.complete
+#print axioms MicroCFTA.SourceCurrentPublicationHeapInduction.complete
+#check @MicroCFTA.SourceCurrentPublicationHeapInduction.path_heap
+#print MicroCFTA.SourceCurrentPublicationHeapInduction.path_heap
+#print axioms MicroCFTA.SourceCurrentPublicationHeapInduction.path_heap
+#check @MicroCFTA.SourceCurrentPublicationHeapInduction.build
+#print MicroCFTA.SourceCurrentPublicationHeapInduction.build
+#print axioms MicroCFTA.SourceCurrentPublicationHeapInduction.build
+#check @MicroCFTA.SourceCurrentPublicationHeapInduction.closed
+#print MicroCFTA.SourceCurrentPublicationHeapInduction.closed
+#print axioms MicroCFTA.SourceCurrentPublicationHeapInduction.closed
