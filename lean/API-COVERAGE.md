@@ -1,5 +1,57 @@
 # Public API and source correspondence
 
+## Current finite epsilon simulation and ordinary induction
+
+Updated: 2026-10-18 11:31 CEST. Proof checkpoint is `8b4f669f`.
+Starting checkpoint is `fdb04450`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-finite-recursive-induction.md`.
+
+Every actual row or bare-reference origin now has a finite witness that
+counts front epsilon steps. Union and Mu exposure each remove one step.
+The Mu case derives its successful actual stored execution. A valid reader
+also derives returned validity and growth. The shorter tail keeps the
+original reader. Row and reference induction use this strict decrease.
+The count concerns one observed path. It does not bound all execution.
+
+A new weak-simulation theorem derives all finite observations from local
+laws for bare references, physical rows and immediate epsilon steps.
+The matching path may have any finite length. Two directions give Same
+at every row depth. Physical Empty agreement remains a separate premise.
+The local laws do not assume all-depth output equivalence.
+
+A general ordinary-source step now derives depth n+1 from depth n child
+hypotheses. Each child hypothesis uses actual source row and child indices
+and a strict syntax-size bound. Actual warm raw and stored calls remain
+explicit at the same reader. The proof retains full guards, symbols,
+ordered children and row survival. Children can contain nested used Mu.
+No BinderFree or finite ordinary Cap condition is added.
+
+The next comparison must instantiate the local laws for actual arbitrary
+stored Mu results. It must derive root matching, physical Empty agreement,
+reader support and the selected writer. These remain open. Initial
+query-operand ancestry, all active node-owner exclusions, fresh-call
+bounds and general recursive completion also remain open. Repeated
+convergence, equality-operation resources, host Int adequacy and public
+Haskell correspondence remain separate obligations.
+
+The strongest general outer claim is unchanged: supported successful
+top-level runs preserve exactly the accepted finite terms, with empty
+inherited constraints and the stated initial semantic and scheduled
+resource assumptions. General recursive termination is not established.
+
+Full Audit passes 3295 jobs and 71549 checks. All 24 new public
+declarations and one constructed native Mu integration pass complete
+statement, proof and axiom checks in four groups. All four selected strict
+logs are empty. All three new canonical builds have no warnings. Audit
+retains only the existing ClosedCompletion warning. Four component
+manifests pin 161 entries. Independent review finds no material issue.
+Evidence is in `lean/restart-evidence/20261018-finite-recursive-induction/`.
+
+No Haskell patch or new executable defect is added. FINDINGS retains the
+external repair registry first. Field-pool repair b9219b9e remains fixed
+in c0cc8a05. Publication awaits the existing direct approval. No push is
+retried. The full-library goal stays active.
+
 ## Current distinct recursive replacements at one reader
 
 Updated: 2026-10-18 11:14 CEST. Proof checkpoint is `9594afff`.

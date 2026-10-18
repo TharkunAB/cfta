@@ -2,6 +2,20 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 11:31 CEST. Proof checkpoint is `8b4f669f`.
+Actual row and reference origins now have strictly decreasing finite
+epsilon witnesses. Local simulation laws derive every finite observation.
+A general ordinary-source step derives depth n+1 from indexed strict-child
+hypotheses at depth n. Actual warm calls and a fixed reader remain explicit.
+Arbitrary stored-Mu alignment, root-filter matching, reader support,
+selected writers, initial source ancestry and recursive completion remain
+open. Full Audit passes 3295 jobs and 71549 checks.
+No Haskell patch or new executable defect is added. Field-pool repair
+`b9219b9e` remains fixed in `c0cc8a05`. Read
+`lean/notes-current-finite-recursive-induction.md`. Keep this registry first.
+Record each later repair with failure, executable reproducer, paths,
+commit, checks and upstream status. Preserve every earlier entry below.
+
 Current proof update: 2026-10-18 11:14 CEST. Proof checkpoint is `9594afff`.
 Reader-relative observations and generic replacement slots now support
 distinct related recursive values. Actual fresh publication bindings keep
