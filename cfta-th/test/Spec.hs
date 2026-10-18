@@ -4,27 +4,40 @@
 {-# LANGUAGE EmptyDataDeriving #-}
 {-# LANGUAGE ExistentialQuantification #-}
 {-# LANGUAGE GADTs #-}
+{-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE TypeApplications #-}
 {-# LANGUAGE TypeOperators #-}
 -- The declarations that only deriveNode reads are not used otherwise.
 {-# OPTIONS_GHC -Wno-unused-top-binds #-}
 
--- | Generated node views: the same terms and ranks as hand-written views, and the rejected declarations.
+-- | Generated node views against hand-written views, quoted graphs against built graphs, and the rejected input.
 module Main (main) where
 
 import Data.Proxy (Proxy (Proxy))
+import qualified Data.Text as Text
 import GHC.Generics (Generic)
 import Language.Haskell.TH (recover)
-import Test.Hspec (Spec, describe, hspec, it, shouldBe)
+import Language.Haskell.TH.Quote (quoteExp)
+import Test.Hspec (Spec, describe, hspec, it, shouldBe, shouldSatisfy)
+
+import qualified Data.CFTA as FTA
+import Data.CFTA.Constraint (Constraint, equalityConstraint, noConstraint)
+import qualified Data.CFTA.Document as D
+import Data.CFTA.Equality.Constraint (mkEqConstraints)
+import Data.CFTA.Path (path)
+import qualified Data.CFTA.Refinement.Expression as Expression
+import Data.CFTA.Serialization.Text (StateCodec (StateCodec), TextError (InvalidDefinition), parseGraphWith)
 
 import qualified Data.CFTA.Gen as Gen
 import qualified Data.CFTA.Gen.Refinement as LTA
 import Data.CFTA.Gen.Refinement.Derive
 import Data.CFTA.Gen.Typing
 import Data.CFTA.Generic (HasFTA)
-import Data.CFTA.Symbol (Symbol)
-import Data.CFTA.TH (deriveNode)
+import Data.CFTA.Symbol (Symbol (RefinedSymbol))
+import Data.CFTA.TH (automaton, deriveNode)
 
 -- | The source datatype of the typed language.
 data Expr = Lit Int | Add Expr Expr
@@ -77,6 +90,18 @@ data Clash = Clash
 -- | The name that the view of 'Clash' would have.
 data ClashNode = ClashNode
 
+-- | An atom with the value 0.
+zero :: Symbol
+zero = RefinedSymbol "zero" $ Expression.refinementFormula (Expression..== 0)
+
+-- | An atom with the value 1.
+one :: Symbol
+one = RefinedSymbol "one" $ Expression.refinementFormula (Expression..== 1)
+
+-- | The two children are equal.
+equalChildren :: Constraint
+equalChildren = equalityConstraint $ mkEqConstraints [[path [0], path [1]]]
+
 $(deriveNode ''Expr)
 $(deriveNode ''Amount)
 $(deriveNode ''Record)
@@ -85,10 +110,12 @@ $(deriveNode ''Pair)
 $(deriveNode ''Empty)
 
 main :: IO ()
-main = hspec spec
+main = hspec $ do
+    nodeViews
+    quotes
 
-spec :: Spec
-spec = describe "deriveNode" $ do
+nodeViews :: Spec
+nodeViews = describe "deriveNode" $ do
     it "gives the same typed terms and ranks as a hand-written view" $ do
         let generated = typed $ [rule (LitNode (value n)) () | n <- [0, 1 :: Int]] <> [rule (AddNode (subterm [] ()) (subterm [] ())) ()]
             manual = typed $ [rule (LitManual (value n)) () | n <- [0, 1 :: Int]] <> [rule (AddManual (subterm [] ()) (subterm [] ())) ()]
@@ -125,3 +152,38 @@ spec = describe "deriveNode" $ do
     typed rules = either (error . show) id (fromTypingRules (Typing (Nesting 2) [] [()] rules)) :: Gen.Gen Symbol Expr
     refined measured = LTA.compile $ either (error . show) id $ deriveLTAFrom @Amount 0 (atom @Integer LTA.every) measured
     fieldCounts proxy = map (fmap length) <$> nodeShape proxy
+
+quotes :: Spec
+quotes = describe "automaton" $ do
+    it "reads the graph format without its first line" $
+        [automaton| start N; state N { zero @{ v == 0 }; succ(N); } |]
+            `shouldBe` parseGraphWith (StateCodec Text.pack (Right . Text.unpack)) "graph 1; start N; state N { zero @{ v == 0 }; succ(N); }"
+
+    it "puts Haskell values in place of their names" $
+        [automaton|
+            start Pair;
+            state Pair { pair(Atom, Atom) where $equalChildren; }
+            state Atom { $zero; $Main.one; }
+        |]
+            `shouldBe` Right
+                ( either (error . show) id $
+                    FTA.mkFTA
+                        "Pair"
+                        [ ("Pair", [FTA.Transition "pair" ["Atom", "Atom"] equalChildren])
+                        , ("Atom", [FTA.Transition zero [] noConstraint, FTA.Transition one [] noConstraint])
+                        ]
+                )
+
+    it "checks the symbol arities when the expression is evaluated" $
+        [automaton| start S; state S { $zero; $Main.zero(S); } |] `shouldSatisfy` \case
+            Left (InvalidDefinition (D.InvalidGraph FTA.InconsistentArity{})) -> True
+            _ -> False
+
+    it "rejects a bad quote at compile time" $
+        [ $(recover [|True|] (quoteExp automaton "start S; state S { a( ; }" >> [|False|]))
+        , $(recover [|True|] (quoteExp automaton "start S; state S { $missing; }" >> [|False|]))
+        , $(recover [|True|] (quoteExp automaton "start S; state S { a(T); }" >> [|False|]))
+        , $(recover [|True|] (quoteExp automaton "start T; state S {}" >> [|False|]))
+        , $(recover [|True|] (quoteExp automaton "start S; state S {} state S {}" >> [|False|]))
+        ]
+            `shouldBe` replicate 5 True
