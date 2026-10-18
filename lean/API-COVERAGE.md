@@ -1,5 +1,36 @@
 # Public API and source correspondence
 
+## Current open native and Required source handoffs
+
+Updated: 2026-10-19 00:31 CEST. Proof checkpoint: `8985a90ac`.
+Start: `a0ab02e2a`. Source main remains `c0cc8a05`.
+Read `lean/notes-current-mu-source-handoff.md` and the current system claim.
+Open union and reference writers now supply exact historical child calls
+and complete row origins at the same reader. Union members have smaller
+source mass. Reference resolution has no mass assertion. A selected Mu
+writer now separates a literal body row from the first opaque published
+Mu. Only the literal case derives an observational Origin. The opaque case
+retains its actual publication and raw callback. It supplies no initial
+query-operand ancestry. Initial causal histories remain explicit.
+
+Actual unfinished outer prefixes now retain union normality without a
+future whole-call return. Every bounded stopping outcome also retains it.
+A source-built normalized active two-path class changes from primary-false
+to primary-true after actual Required. Both output endpoints remain closed.
+Thus false-primary retention cannot connect the original and prepared
+forests. Direct row fields and ordered child-origin relations must supply
+that connection. Existing structural Required origins remain valid.
+
+Full Audit passes 3435 jobs and 73598 dependency checks. Eight public
+declarations and three constructed heads pass complete proof and standard
+axiom checks. All seven selected strict logs are empty. Fresh construction
+from empty caches already has a completion theorem in the model. General
+outer completion, renewal bounds, empty-owner exclusion, convergence and
+Haskell correspondence remain open. No Haskell defect or repair request
+is added. No Haskell bytes change. FINDINGS retains all repairs first.
+Field-pool fix `b9219b9e` remains in main `c0cc8a05`. No push or board write
+is attempted. The full-library goal remains active.
+
 ## Current selected and native source origins
 
 Updated: 2026-10-19 00:06 CEST. Proof checkpoint: `2364e745d`.

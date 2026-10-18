@@ -1,0 +1,101 @@
+import ast
+import json
+import re
+import runpy
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parents[2]
+
+
+def read(name):
+    return json.loads((HERE / name).read_text())
+
+
+checks = runpy.run_path(str(HERE / 'verify-probes.py'))
+assert read('selection-status.json')['finalized']
+groups = read('selected-groups.json')
+assert len({group['name'] for group in groups}) == len(groups)
+counts = {kind: sum(group['pairs'] for group in groups if group['kind'] == kind)
+          for kind in ['new-public', 'constructed', 'private-claim']}
+assert counts == read('expected-counts.json')['pairs']
+for group in groups:
+    checks['check_group'](group)
+modules = read('frozen-modules.json')
+assert len(modules) == read('expected-counts.json')['modules']
+for module, expected in modules.items():
+    assert checks['sha'](ROOT / 'lean/MicroCFTA' / (module + '.lean')) == expected
+for module, stem in read('selected-strict.json').items():
+    receipt = read(stem + '.json')
+    assert receipt['exit_code'] == 0 and not (HERE / receipt['log']).read_bytes()
+    assert checks['sha'](HERE / receipt['source']) == modules[module]
+    checks['check_limits'](stem)
+stricts = read('selected-constructed-strict.json')
+assert len(stricts) == read('expected-counts.json')['constructed_strict']
+for stem, working in stricts.items():
+    receipt = read(stem + '.json')
+    assert receipt['exit_code'] == 0 and not (HERE / receipt['log']).read_bytes()
+    assert checks['sha'](HERE / receipt['source']) == receipt['sha256']
+    assert checks['sha'](HERE / receipt['source']) == checks['sha'](HERE / working)
+    checks['check_limits'](stem)
+old_log = (ROOT / 'lean/restart-evidence/20261018-outer-owner-progress/full-audit-1.log').read_text()
+old_warnings = re.findall(r'^warning:.*$', old_log, re.M)
+assert len(old_warnings) == 1
+for module, stem in read('selected-canonical.json').items():
+    receipt = read(stem + '.json')
+    log = (HERE / receipt['log']).read_text()
+    assert receipt['exit_code'] == 0 and 'Build completed successfully' in log
+    assert re.findall(r'^warning:.*$', log, re.M) == old_warnings
+    checks['check_limits'](stem)
+component_entries = 0
+components = read('component-manifests.json')
+assert len(components) == read('expected-counts.json')['components']
+for name in components:
+    for entry in read(name).get('entries', read(name).get('files', [])):
+        path = ROOT / entry['path']
+        assert checks['sha'](path) == entry['sha256'], (name, entry['path'])
+        if 'bytes' in entry:
+            assert path.stat().st_size == entry['bytes']
+        component_entries += 1
+pins = read('progress-review-source-pins.json')['files']
+for entry in pins:
+    path = ROOT / entry['path']
+    assert checks['sha'](path) == entry['sha256'], entry['path']
+    assert path.stat().st_size == entry['bytes']
+audit = read('selected-audit.json')
+receipt = read(audit['name'] + '.json')
+assert receipt['exit_code'] == 0
+checks['check_limits'](audit['name'])
+log = (HERE / receipt['log']).read_text()
+assert re.findall(r'^warning:.*$', log, re.M) == old_warnings
+jobs = int(re.findall(r'Build completed successfully \((\d+) jobs\)\.', log)[-1])
+dependencies = int(re.findall(r'Checked axiom dependencies of (\d+) MicroCFTA theorems\.', log)[-1])
+assert jobs == audit['jobs'] == 3431 + len(modules)
+assert dependencies == audit['dependency_checks'] == read('expected-counts.json')['audit_dependency_checks']
+for path in HERE.glob('*.py'):
+    ast.parse(path.read_text(), filename=str(path))
+print(json.dumps({
+    'status': 'PASS', 'proof_commit': (HERE / 'proof-commit.txt').read_text().strip(),
+    'production_modules': modules, 'new_public_pairs': counts['new-public'],
+    'constructed_pairs': counts['constructed'], 'groups': len(groups),
+    'full_public_proofs_and_standard_axioms': True,
+    'strict_empty_logs': len(modules) + len(stricts),
+    'component_manifests': components, 'component_entries': component_entries,
+    'progress_review_source_pins': len(pins),
+    'audit_jobs': jobs, 'audit_dependency_checks': dependencies, 'old_warnings': old_warnings,
+    'memory_max': '4294967296', 'memory_high': '4294967296', 'swap_max': '0',
+    'open_union_and_reference_preserve_exact_indexed_child_calls_and_fixed_reader_origins': True,
+    'union_member_mass_bound_does_not_bound_generated_results': True,
+    'reference_resolution_has_no_mass_claim': True,
+    'mu_literal_row_derives_fixed_reader_origin_and_exact_child_writer': True,
+    'opaque_mu_row_derives_real_publication_not_observational_origin': True,
+    'mu_fixture_does_not_force_opaque_disjunct': True,
+    'actual_unfinished_outer_prefixes_and_all_stopping_outcomes_retain_union_normality': True,
+    'active_normalized_two_path_class_can_turn_primary_true_after_required': True,
+    'prepared_false_primary_transport_refuted_without_refuting_language_or_closedness': True,
+    'direct_required_to_projection_row_and_child_origin_handoff_still_open': True,
+    'existing_fresh_closed_constructor_completion_explicitly_distinguished': True,
+    'broad_constructed_root_and_exact_query_claims_unchanged': True,
+    'general_outer_completion_convergence_and_haskell_refinement_still_open': True,
+    'new_haskell_behavior_patch': False,
+}, indent=2))
