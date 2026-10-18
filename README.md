@@ -94,6 +94,11 @@ See [`docs/automata-syntax.md`](docs/automata-syntax.md) for the side-by-side
 FTA, ECTA, and LTA construction forms and the rationale for the guard-lambda
 syntax.
 
+The optional [cfta-serialization](cfta-serialization/README.md) package prints
+and parses complete graphs, source documents, and languages as readable text.
+A parsed value is equal to the saved value, so a query built on it gives the
+same ranks.
+
 ## Three flagship languages
 
 The three generator APIs close a qualified-do child block in the same way, with

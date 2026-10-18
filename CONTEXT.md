@@ -76,6 +76,9 @@ Wilf, and Feat (ranking).
   Removing a fact removes that obligation. It does not negate the constraint.
 - **Patch**: an ordered batch of edits together with the source document it
   expects. A valid patch produces a new source document.
+- **Graph snapshot**: a stored explicit graph with its symbols, refinements,
+  constraints, states, and transitions. It need not retain the source facts
+  from which its compiled constraints were made.
 
 ## Transformations
 
