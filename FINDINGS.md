@@ -2,6 +2,23 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 03:20 CEST. Proof checkpoint is `1324bb38`.
+Full pinned Audit passes 3206 jobs and 70634 dependency checks.
+Actual cold and warm outer requests retain captured full row fields.
+Initial physical facts and literal busy execution derive the exact earlier
+row for a nonempty owner's height gain. Per-call finite path bounds now
+follow from initial operands. A checked heights 2 and 1 to 3 example refutes
+a proposed scalar proof measure. It is not a Haskell defect. Union-body
+Head derives original rows for literal source-node alternatives. General
+recursive progress, global fresh-call bounds, used-writer alignment and
+complete public Haskell correspondence remain open.
+No Haskell patch or new production defect is added. Repair `b9219b9e` remains
+merged and validated in source `c0cc8a05`. The earlier field-pool issue is
+fixed. It is not an open item. Read `lean/notes-current-parent-row-trace.md`.
+Keep this registry first. Record every later repair with its failure,
+executable reproducer, affected paths, commit, checks and upstream status
+for external work.
+
 Current proof update: 2026-10-18 03:00 CEST. Proof checkpoint is `c6dd2c74`.
 Full pinned Audit passes 3203 jobs and 70592 dependency checks.
 Actual completed class reductions now retain individual full-row chains and
