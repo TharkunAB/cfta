@@ -13,6 +13,41 @@ Do not bypass that decision. Continue independent local proof work.
 Read `lean/notes-current-publication-status.md`. The full-library goal stays
 active. The proof and evidence are committed, locally verified and preserved.
 
+## Current scoped profiles and complete actual binder readback
+
+Updated: 2026-10-18 19:16 CEST. Proof checkpoint is `d2c57674`.
+Starting checkpoint is `f74c0aec`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-scoped-profile-comparison.md`.
+
+Actual completed binders now reduce through their current ordinary probes,
+including an earlier selected cache writer. The checked pure formula covers
+raw, smart used, smart unused, retained closed/open Mu and bare-self cleanup.
+The final heap's parametric body/probe contract remains explicit.
+Scoped input extensions use only surviving normalized support. Actual node
+and union normalization now compose arbitrary assigned profiles.
+
+The new contract rejects the exact preserved artificial cache counterexample.
+Actual source-built examples derive that contract, including raw/smart,
+bare/used, cold/warm calls and a nested open raw-Mu body. The general
+filtered source comparison and publication candidate step remain unproved.
+Prove them with surviving support, original aliases, scoped self tests,
+exact root-filter behavior and earlier callback heap invariants. Do not
+reuse the refuted unrestricted Fusion or uniform raw-depth hypotheses.
+
+Full Audit passes 3367 jobs and 72814 dependency checks. Twenty-five public
+and six integration/exclusion heads pass complete proofs and standard-axiom
+checks. Thirteen selected strict logs are empty. Seven canonical builds are
+clean. Seven manifests pin 413 entries. Audit has only its existing warning.
+Evidence is in `lean/restart-evidence/20261018-scoped-profile-comparison/`.
+
+The strongest broad claim remains conditional finite-tree preservation of
+successful checked-model reduction. Initial semantic cache facts, recursive
+guard-profile agreement and computed resource bounds remain explicit.
+General termination and full Haskell correspondence remain open.
+No Haskell bytes change. FINDINGS keeps the repair registry first.
+Field-pool repair b9219b9e remains fixed in c0cc8a05. Publication awaits the
+existing direct approval. No push is retried. The full-library goal is active.
+
 ## Current stored profiles and causal publication induction
 
 Updated: 2026-10-18 18:48 CEST. Proof checkpoint is `9a840a6c`.

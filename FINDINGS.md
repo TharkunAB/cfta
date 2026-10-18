@@ -2,6 +2,19 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 19:16 CEST. Proof checkpoint is `d2c57674`.
+Actual completed binders now have a complete current-probe profile formula
+under the final parametric payload invariant. It covers raw/smart,
+used/unused, closed/open and bare-self finish. Surviving support extends
+input profiles. Actual node and union normalization compose them. The new
+contract rejects the exact preserved artificial cache counterexample.
+General filtered source comparison and publication preservation remain open.
+No Haskell defect or repair is added. Full Audit passes 3367 jobs and
+72814 checks. No Haskell bytes change. Field-pool repair `b9219b9e` remains
+fixed in `c0cc8a05`. Read `lean/notes-current-scoped-profile-comparison.md`.
+Keep this registry first. Record later repairs with failure, executable
+reproducer, paths, commit, checks and upstream status. Preserve all entries.
+
 Current proof update: 2026-10-18 18:48 CEST. Proof checkpoint is `9a840a6c`.
 Actual stored substitution now has a pure profile function with exact free-name
 support. Actual issued publication induction retains a payload predicate
