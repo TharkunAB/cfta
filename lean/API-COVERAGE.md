@@ -1,5 +1,48 @@
 # Public API and source correspondence
 
+## Current outer prefix invariants and recursive probe preservation
+
+Updated: 2026-10-18 02:42 CEST. Starting checkpoint is `b49d8add`.
+Proof commit is `e9430fe3`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-outer-prefix-invariants.md` for exact results.
+Read `lean/notes-proof-status-20261017.md` for the target and strongest claim.
+
+Initial weak native Good and physical filtered probes now derive probe
+preservation through actual completed native, lower and Parent calls.
+Successful outer calls and actual unfinished execution prefixes now derive
+full physical validity and input readiness from entry facts. No future
+Ranges, InputsThrough, completed graph or per-prefix invariant is supplied.
+An actual busy failure identifies the complete captured request of its active
+owner and derives readiness plus activation growth for all active owners.
+This identifies a possible collision. It does not exclude that collision or
+bound fresh recursive requests.
+
+An initially resident Mu now constructs its exact smart cleanup and retains
+the entire caller in nodeBody at every bound, including zero. Literal-node
+stored bodies construct indexed original Head rows with full ordered warm
+child calls at the final reader. Nested Mu children are included. Actual
+used publication inputs now derive alias and filtered free-name transport,
+including the actual earlier retained writer. General used-binder output
+RootMatch, retained-Mu lineage and individual class row survival remain open.
+
+Full pinned Audit passes 3199 jobs and 70491 dependency checks.
+Only the unchanged old warning remains. Seven strict production logs are
+empty. All 69 public and 11 constructed full signature/proof/axiom pairs
+pass in 13 groups with all eight settings and only the standard axioms.
+Effective caps are 4 GiB maximum/high and zero swap. Audit peak is 353 MiB.
+Evidence is in `lean/restart-evidence/20261018-outer-prefix-invariants/`.
+
+The complete outer-pass domain remains finite ordinary sources without Mu,
+references or explicit unions in descendants. General recursive termination,
+all-ancestor collision exclusion, fresh-call bounds, recursive language
+preservation, repeated convergence and public Haskell correspondence remain
+open. Keep the full-library goal active. No Haskell patch or new production
+defect is added. Field-pool repair `b9219b9e` remains merged in `c0cc8a05`.
+Keep the root FINDINGS repair registry first. Record every later fix with
+failure, executable reproducer, paths, commit, checks and upstream status.
+Preserve all older sources, evidence, repairs and drafts. Keep the optimized
+interned core.
+
 ## Current Parent invariants and class guard origins
 
 Updated: 2026-10-18 02:21 CEST. Starting checkpoint is `55b2e1f3`.

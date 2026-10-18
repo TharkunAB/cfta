@@ -1,0 +1,26 @@
+import MicroCFTA.SourceCurrentMuReconstructionEffects
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentMuReconstructionEffects.constructed
+#print MicroCFTA.SourceCurrentMuReconstructionEffects.constructed
+#print axioms MicroCFTA.SourceCurrentMuReconstructionEffects.constructed
+
+#check @MicroCFTA.SourceCurrentMuReconstructionEffects.complete
+#print MicroCFTA.SourceCurrentMuReconstructionEffects.complete
+#print axioms MicroCFTA.SourceCurrentMuReconstructionEffects.complete
+
+#check @MicroCFTA.SourceCurrentMuReconstructionEffects.physical
+#print MicroCFTA.SourceCurrentMuReconstructionEffects.physical
+#print axioms MicroCFTA.SourceCurrentMuReconstructionEffects.physical
+
+#check @MicroCFTA.SourceCurrentMuReconstructionEffects.node_body
+#print MicroCFTA.SourceCurrentMuReconstructionEffects.node_body
+#print axioms MicroCFTA.SourceCurrentMuReconstructionEffects.node_body

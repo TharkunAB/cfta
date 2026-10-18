@@ -1,0 +1,82 @@
+import MicroCFTA.SourceCurrentOuterPrefixInvariants
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+#check @MicroCFTA.SourceCurrentOuterPrefixInvariants.NodeReady
+#print MicroCFTA.SourceCurrentOuterPrefixInvariants.NodeReady
+#print axioms MicroCFTA.SourceCurrentOuterPrefixInvariants.NodeReady
+#check @MicroCFTA.SourceCurrentOuterPrefixInvariants.EdgeReady
+#print MicroCFTA.SourceCurrentOuterPrefixInvariants.EdgeReady
+#print axioms MicroCFTA.SourceCurrentOuterPrefixInvariants.EdgeReady
+#check @MicroCFTA.SourceCurrentOuterPrefixInvariants.Good
+#print MicroCFTA.SourceCurrentOuterPrefixInvariants.Good
+#print axioms MicroCFTA.SourceCurrentOuterPrefixInvariants.Good
+#check @MicroCFTA.SourceCurrentOuterPrefixInvariants.Good.mk
+#print MicroCFTA.SourceCurrentOuterPrefixInvariants.Good.mk
+#print axioms MicroCFTA.SourceCurrentOuterPrefixInvariants.Good.mk
+#check @MicroCFTA.SourceCurrentOuterPrefixInvariants.Good.checked
+#print MicroCFTA.SourceCurrentOuterPrefixInvariants.Good.checked
+#print axioms MicroCFTA.SourceCurrentOuterPrefixInvariants.Good.checked
+#check @MicroCFTA.SourceCurrentOuterPrefixInvariants.Good.stored
+#print MicroCFTA.SourceCurrentOuterPrefixInvariants.Good.stored
+#print axioms MicroCFTA.SourceCurrentOuterPrefixInvariants.Good.stored
+#check @MicroCFTA.SourceCurrentOuterPrefixInvariants.Good.probes
+#print MicroCFTA.SourceCurrentOuterPrefixInvariants.Good.probes
+#print axioms MicroCFTA.SourceCurrentOuterPrefixInvariants.Good.probes
+#check @MicroCFTA.SourceCurrentOuterPrefixInvariants.Good.nodes
+#print MicroCFTA.SourceCurrentOuterPrefixInvariants.Good.nodes
+#print axioms MicroCFTA.SourceCurrentOuterPrefixInvariants.Good.nodes
+#check @MicroCFTA.SourceCurrentOuterPrefixInvariants.Good.edges
+#print MicroCFTA.SourceCurrentOuterPrefixInvariants.Good.edges
+#print axioms MicroCFTA.SourceCurrentOuterPrefixInvariants.Good.edges
+#check @MicroCFTA.SourceCurrentOuterPrefixInvariants.initial
+#print MicroCFTA.SourceCurrentOuterPrefixInvariants.initial
+#print axioms MicroCFTA.SourceCurrentOuterPrefixInvariants.initial
+#check @MicroCFTA.SourceCurrentOuterPrefixInvariants.Inputs
+#print MicroCFTA.SourceCurrentOuterPrefixInvariants.Inputs
+#print axioms MicroCFTA.SourceCurrentOuterPrefixInvariants.Inputs
+#check @MicroCFTA.SourceCurrentOuterPrefixInvariants.activate
+#print MicroCFTA.SourceCurrentOuterPrefixInvariants.activate
+#print axioms MicroCFTA.SourceCurrentOuterPrefixInvariants.activate
+#check @MicroCFTA.SourceCurrentOuterPrefixInvariants.same_key
+#print MicroCFTA.SourceCurrentOuterPrefixInvariants.same_key
+#print axioms MicroCFTA.SourceCurrentOuterPrefixInvariants.same_key
+#check @MicroCFTA.SourceCurrentOuterPrefixInvariants.node_done
+#print MicroCFTA.SourceCurrentOuterPrefixInvariants.node_done
+#print axioms MicroCFTA.SourceCurrentOuterPrefixInvariants.node_done
+#check @MicroCFTA.SourceCurrentOuterPrefixInvariants.body_done
+#print MicroCFTA.SourceCurrentOuterPrefixInvariants.body_done
+#print axioms MicroCFTA.SourceCurrentOuterPrefixInvariants.body_done
+#check @MicroCFTA.SourceCurrentOuterPrefixInvariants.edge_done
+#print MicroCFTA.SourceCurrentOuterPrefixInvariants.edge_done
+#print axioms MicroCFTA.SourceCurrentOuterPrefixInvariants.edge_done
+#check @MicroCFTA.SourceCurrentOuterPrefixInvariants.edge_body_done
+#print MicroCFTA.SourceCurrentOuterPrefixInvariants.edge_body_done
+#print axioms MicroCFTA.SourceCurrentOuterPrefixInvariants.edge_body_done
+#check @MicroCFTA.SourceCurrentOuterPrefixInvariants.rows_done
+#print MicroCFTA.SourceCurrentOuterPrefixInvariants.rows_done
+#print axioms MicroCFTA.SourceCurrentOuterPrefixInvariants.rows_done
+#check @MicroCFTA.SourceCurrentOuterPrefixInvariants.descendants_done
+#print MicroCFTA.SourceCurrentOuterPrefixInvariants.descendants_done
+#print axioms MicroCFTA.SourceCurrentOuterPrefixInvariants.descendants_done
+#check @MicroCFTA.SourceCurrentOuterPrefixInvariants.children_done
+#print MicroCFTA.SourceCurrentOuterPrefixInvariants.children_done
+#print axioms MicroCFTA.SourceCurrentOuterPrefixInvariants.children_done
+#check @MicroCFTA.SourceCurrentOuterPrefixInvariants.walk_done
+#print MicroCFTA.SourceCurrentOuterPrefixInvariants.walk_done
+#print axioms MicroCFTA.SourceCurrentOuterPrefixInvariants.walk_done
+#check @MicroCFTA.SourceCurrentOuterPrefixInvariants.reached
+#print MicroCFTA.SourceCurrentOuterPrefixInvariants.reached
+#print axioms MicroCFTA.SourceCurrentOuterPrefixInvariants.reached
+#check @MicroCFTA.SourceCurrentOuterPrefixInvariants.busy
+#print MicroCFTA.SourceCurrentOuterPrefixInvariants.busy
+#print axioms MicroCFTA.SourceCurrentOuterPrefixInvariants.busy
+#check @MicroCFTA.SourceCurrentOuterPrefixInvariants.initial_busy
+#print MicroCFTA.SourceCurrentOuterPrefixInvariants.initial_busy
+#print axioms MicroCFTA.SourceCurrentOuterPrefixInvariants.initial_busy

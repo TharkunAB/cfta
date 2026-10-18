@@ -1,0 +1,55 @@
+import MicroCFTA.SourceCurrentUsedBinderAliasTransport
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentUsedBinderAliasTransport.Scope
+#print MicroCFTA.SourceCurrentUsedBinderAliasTransport.Scope
+#print axioms MicroCFTA.SourceCurrentUsedBinderAliasTransport.Scope
+
+#check @MicroCFTA.SourceCurrentUsedBinderAliasTransport.Aliases
+#print MicroCFTA.SourceCurrentUsedBinderAliasTransport.Aliases
+#print axioms MicroCFTA.SourceCurrentUsedBinderAliasTransport.Aliases
+
+#check @MicroCFTA.SourceCurrentUsedBinderAliasTransport.extend
+#print MicroCFTA.SourceCurrentUsedBinderAliasTransport.extend
+#print axioms MicroCFTA.SourceCurrentUsedBinderAliasTransport.extend
+
+#check @MicroCFTA.SourceCurrentUsedBinderAliasTransport.extend_depth
+#print MicroCFTA.SourceCurrentUsedBinderAliasTransport.extend_depth
+#print axioms MicroCFTA.SourceCurrentUsedBinderAliasTransport.extend_depth
+
+#check @MicroCFTA.SourceCurrentUsedBinderAliasTransport.extend_fresh
+#print MicroCFTA.SourceCurrentUsedBinderAliasTransport.extend_fresh
+#print axioms MicroCFTA.SourceCurrentUsedBinderAliasTransport.extend_fresh
+
+#check @MicroCFTA.SourceCurrentUsedBinderAliasTransport.NamePair
+#print MicroCFTA.SourceCurrentUsedBinderAliasTransport.NamePair
+#print axioms MicroCFTA.SourceCurrentUsedBinderAliasTransport.NamePair
+
+#check @MicroCFTA.SourceCurrentUsedBinderAliasTransport.publication
+#print MicroCFTA.SourceCurrentUsedBinderAliasTransport.publication
+#print axioms MicroCFTA.SourceCurrentUsedBinderAliasTransport.publication
+
+#check @MicroCFTA.SourceCurrentUsedBinderAliasTransport.publication_raw
+#print MicroCFTA.SourceCurrentUsedBinderAliasTransport.publication_raw
+#print axioms MicroCFTA.SourceCurrentUsedBinderAliasTransport.publication_raw
+
+#check @MicroCFTA.SourceCurrentUsedBinderAliasTransport.publication_own
+#print MicroCFTA.SourceCurrentUsedBinderAliasTransport.publication_own
+#print axioms MicroCFTA.SourceCurrentUsedBinderAliasTransport.publication_own
+
+#check @MicroCFTA.SourceCurrentUsedBinderAliasTransport.publication_filtered
+#print MicroCFTA.SourceCurrentUsedBinderAliasTransport.publication_filtered
+#print axioms MicroCFTA.SourceCurrentUsedBinderAliasTransport.publication_filtered
+
+#check @MicroCFTA.SourceCurrentUsedBinderAliasTransport.retained
+#print MicroCFTA.SourceCurrentUsedBinderAliasTransport.retained
+#print axioms MicroCFTA.SourceCurrentUsedBinderAliasTransport.retained
+

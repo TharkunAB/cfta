@@ -1,0 +1,76 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-prefix-invariants/recursive-head-node-direct-2.source.lean:33:18: error: don't know how to synthesize placeholder
+context:
+A B : Type
+relation : A → B → Prop
+originals : List A
+outputs : List B
+output : B
+a✝ : A
+b✝ : B
+as✝ : List A
+bs✝ : List B
+first : relation a✝ b✝
+rest : All₂ relation as✝ bs✝
+ih : ∀ (index : Nat), bs✝[index]? = some output → ∃ original, as✝[index]? = some original ∧ relation original output
+selected : (b✝ :: bs✝)[0]? = some output
+⊢ B
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-prefix-invariants/recursive-head-node-direct-2.source.lean:37:50: error: Application type mismatch: The argument
+  output
+has type
+  B
+of sort `Type` but is expected to have type
+  bs✝[index]? = some output
+of sort `Prop` in the application
+  ih index output
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-prefix-invariants/recursive-head-node-direct-2.source.lean:37:13: error: Tactic `rcases` failed: `x✝ : ?m.81` is not an inductive datatype
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-prefix-invariants/recursive-head-node-direct-2.source.lean:52:72: error: typeclass instance problem is stuck
+  GetElem? (List (EdgeValue Symbol Guard)) (?m.108 unfolded middle outputs index row) (EdgeValue Symbol Guard)
+    (?m.111 unfolded middle outputs index row sourceIndex original)
+
+Note: Lean will not try to resolve this typeclass instance problem because the second type argument to `GetElem?` contains metavariables. This argument must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-prefix-invariants/recursive-head-node-direct-2.source.lean:75:30: error: unsolved goals
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+entry bodyEntry : Interned NodeKey
+originals : List (EdgeValue Symbol Guard)
+level : Nat
+free : List Reference
+depth ordinary : Value Symbol Guard
+before : InternedConstructorTemplates.State Symbol Guard
+ready : Ready before
+available : Available before (Value.mu entry (Value.node bodyEntry originals level free) depth ordinary)
+closed : (Value.mu entry (Value.node bodyEntry originals level free) depth ordinary).free = []
+body : Value Symbol Guard := Value.node bodyEntry originals level free
+value : Value Symbol Guard := Value.mu entry body depth ordinary
+environment : Environment Symbol Guard := selfEnvironment entry body depth ordinary
+result : Value Symbol Guard
+after : InternedConstructorTemplates.State Symbol Guard
+head : Head value before result after
+keeps : Keeps before after
+returned : Available after result
+noFree : result.free = []
+ordinaryResult : SourceEqualityRequiredCache.Ordinary result
+unfolded : Value Symbol Guard
+middle : InternedConstructorTemplates.State Symbol Guard
+called : execute body (selfEnvironment entry body depth ordinary) before = Outcome.done unfolded middle
+description :
+  SourceCurrentRecursiveHeadRowOrigins.BodyRows body (selfEnvironment entry body depth ordinary) before unfolded middle
+growth : Grows middle after
+warm :
+  InternedFreshOrdinaryStoredSubstitution.unfold (Value.mu entry body depth ordinary) after =
+    Outcome.done unfolded after
+origins :
+  ∀ (index : Nat) (row : EdgeValue Symbol Guard),
+    (nodeEdges result)[index]? = some row → MergedFreshOrdinaryGraph.Origin after [unfolded] row
+actualWarm : execute body environment after = Outcome.done unfolded after
+⊢ body = Value.node bodyEntry originals level free ∨ body = depth ∨ body = ordinary
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-prefix-invariants/recursive-head-node-direct-2.source.lean:87:8: error: No goals to be solved
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-prefix-invariants/recursive-head-node-direct-2.source.lean:75:39: warning: This simp argument is unused:
+  value
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [children]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
