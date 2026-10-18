@@ -1,0 +1,57 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-required-projection/class-structural-direct-5.source.lean:256:52: error: don't know how to synthesize implicit argument `absent`
+  @ChildEvent.unselected inst✝¹ inst✝ width formulas solver base record originals entries original values before results
+    after childIndex event offset ?m.1843 rest eventAt
+context:
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+base : Heap
+record✝ : Record
+originals✝ : List Node
+edits : Edits EqualityNormalize.Path
+input : Node
+before✝ : SharedState width
+result : Node
+after✝ : SharedState width
+memos✝ final : Memos
+actual : EditNode record✝ originals✝ edits input before✝ result after✝
+reads : NodeReads formulas solver base actual memos✝ final
+record : Record
+originals : List Node
+memos saved : Memos
+entries : List (Int × Edits EqualityNormalize.Path)
+values : List Node
+before : SharedState width
+results : List Node
+after : SharedState width
+original : Node
+offset : Nat
+absent : SourceEqualityNeededMap.lookup (↑offset) entries = none
+rest : EditChildren record originals entries (offset + 1) values before results after
+read : ChildrenReads formulas solver base rest memos saved
+ih : ChildrenLaw formulas solver base rest memos
+inventory : Inventory
+populated : Populated (Edits.editBelow entries)
+allowed : Allowed record (Edits.editBelow entries)
+ready : SharedReady formulas solver inventory record originals base before
+available : Values before.checked.native.machine.heap (original :: values)
+safe : ChildrenSafe entries offset (original :: values)
+valid : EndpointMemoGateTrace.Valid before.checked.native.machine.heap memos
+history : History before.checked
+child : Node
+path : List Position
+index : Nat
+row : Edge
+occurrence : RowAt child path index row
+childIndex : Nat
+selected : (original :: results)[childIndex + 1]? = some child
+event : Node
+suffix : List Position
+sourceIndex : Nat
+source : Edge
+eventAt : ChildEvent formulas solver base rest childIndex event
+sourceAt : RowAt event suffix sourceIndex source
+origin : RowOrigin source row
+⊢ SourceEqualityNeededMap.lookup (↑offset) entries = none

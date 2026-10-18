@@ -1,0 +1,65 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-required-projection/class-structural-direct-4.source.lean:236:50: error: don't know how to synthesize implicit argument `recursive`
+  @Event.head inst✝¹ inst✝ width formulas solver base record originals entries original before exposed heap value after
+    memos current saved ?m.1450 head body headRead bodyRead history
+context:
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+base : Heap
+record✝ : Record
+originals✝ : List Node
+edits : Edits EqualityNormalize.Path
+input : Node
+before✝ : SharedState width
+result : Node
+after✝ : SharedState width
+memos✝ final : Memos
+actual : EditNode record✝ originals✝ edits input before✝ result after✝
+reads : NodeReads formulas solver base actual memos✝ final
+record : Record
+originals : List Node
+memos current saved : Memos
+entries : List (Int × Edits EqualityNormalize.Path)
+original : Node
+before : SharedState width
+exposed : Node
+heap : Heap
+value : Node
+after : SharedState width
+recursive : SourceEqualityRequiredGraph.Recursive original
+head : SourceEqualityRequiredHead.Head original before.checked.native.machine.heap exposed heap
+body : EditNode record originals (Edits.editBelow entries) exposed (advanceHeap before heap) value after
+headRead : SourceCurrentRequiredQueryMemos.HeadReads head memos current
+headGlobal : SourceCurrentSubsumesQueryMemos.Effect before.checked.native.machine.heap heap memos current
+bodyRead : NodeReads formulas solver base body current saved
+ih : NodeLaw formulas solver base body current
+inventory : Inventory
+populated : Populated (Edits.editBelow entries)
+nonempty : HasLeaf (Edits.editBelow entries)
+allowed : Allowed record (Edits.editBelow entries)
+ready : SharedReady formulas solver inventory record originals base before
+available : Available before.checked.native.machine.heap original
+safe : Safe (Edits.editBelow entries) original
+valid : EndpointMemoGateTrace.Valid before.checked.native.machine.heap memos
+history : History before.checked
+positions : List Position
+index : Nat
+row : Edge
+occurrence : RowAt value positions index row
+closed : original.free = []
+first :
+  SharedReady formulas solver inventory record originals base (advanceHeap before heap) ∧
+    SourceCurrentConjunctionRowsAllocation.Effects (SourceCurrentAllocatedNativeEffects.physical before.checked)
+        (SourceCurrentAllocatedNativeEffects.physical (advanceHeap before heap).checked) ∧
+      Available heap exposed
+checked :
+  SourceEqualityRequiredCache.Keeps before.checked.native.machine.heap heap ∧
+    Available heap exposed ∧ exposed.free = [] ∧ SourceEqualityRequiredCache.Ordinary exposed
+path : List Position
+sourceIndex : Nat
+source : Edge
+sourceAt : RowAt exposed path sourceIndex source
+origin : RowOrigin source row
+⊢ SourceEqualityRequiredGraph.Recursive original

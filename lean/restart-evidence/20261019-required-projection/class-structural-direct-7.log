@@ -1,0 +1,66 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-required-projection/class-structural-direct-7.source.lean:322:8: error: don't know how to synthesize implicit argument `rebuilt`
+  @RowsReads.cons inst✝¹ inst✝ width formulas solver base record originals memos current current entries before values
+    middle result heap [] [] (advanceHeap middle heap) edge children ?m.3100 EditRows.nil firstRead RowsReads.nil
+context:
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+base : Heap
+record✝ : Record
+originals✝ : List Node
+edits : Edits EqualityNormalize.Path
+input : Node
+before✝ : SharedState width
+result✝ : Node
+after✝ : SharedState width
+memos✝ final : Memos
+actual : EditNode record✝ originals✝ edits input before✝ result✝ after✝
+reads : NodeReads formulas solver base actual memos✝ final
+record : Record
+originals : List Node
+memos current saved : Memos
+entries : List (Int × Edits EqualityNormalize.Path)
+before : SharedState width
+values : List Node
+middle : SharedState width
+result : Edge
+heap : Heap
+edges results : List Edge
+after : SharedState width
+edge : Edge
+children : EditChildren record originals entries 0 edge.children before values middle
+built :
+  run (makeEdge edge.entry.key.symbol edge.entry.key.constraint values) middle.checked.native.machine.heap =
+    (result, heap)
+rest : EditRows record originals entries edges (advanceHeap middle heap) results after
+firstRead : ChildrenReads formulas solver base children memos current
+restRead : RowsReads formulas solver base rest current saved
+firstIH : ChildrenLaw formulas solver base children memos
+ih : RowsLaw formulas solver base rest current
+inventory : Inventory
+populated : Populated (Edits.editBelow entries)
+allowed : Allowed record (Edits.editBelow entries)
+ready : SharedReady formulas solver inventory record originals base before
+resident : Edges before.checked.native.machine.heap (edge :: edges)
+safe : RowsSafe entries (edge :: edges)
+valid : EndpointMemoGateTrace.Valid before.checked.native.machine.heap memos
+history : History before.checked
+output : Edge
+facts : InternedNestedFacts.Facts before.checked.native.machine.heap
+childAvailable : ∀ (child : Node), child ∈ edge.children → Available before.checked.native.machine.heap child
+middleInventory : Inventory
+receipt :
+  ChildrenReceipt formulas solver middleInventory record originals base edge.children before values middle memos current
+fields :
+  have result :=
+    (run (makeEdge edge.entry.key.symbol edge.entry.key.constraint values) middle.checked.native.machine.heap).fst;
+  result.entry.key.symbol = edge.entry.key.symbol ∧
+    result.entry.key.constraint = edge.entry.key.constraint ∧ result.children = values
+sameChildren : result.children = values
+rowOrigin : RowOrigin edge result
+rawIndex : Nat
+selected : (result :: results)[rawIndex + 1]? = some output
+⊢ run (makeEdge edge.entry.key.symbol edge.entry.key.constraint values) middle.checked.native.machine.heap =
+    (result, heap)

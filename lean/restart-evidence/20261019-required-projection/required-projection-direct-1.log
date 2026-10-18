@@ -1,0 +1,56 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-required-projection/required-projection-direct-1.source.lean:124:28: error: Application type mismatch: The argument
+  member
+has type
+  RowsPlain sourceIndex
+but is expected to have type
+  ?m.262 ∈ ?m.260 :: ?m.261
+in the application
+  List.mem_cons.mp member
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-required-projection/required-projection-direct-1.source.lean:145:57: error(lean.unknownIdentifier): Unknown identifier `result`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-required-projection/required-projection-direct-1.source.lean:148:47: error(lean.unknownIdentifier): Unknown identifier `result`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-required-projection/required-projection-direct-1.source.lean:148:106: error(lean.unknownIdentifier): Unknown identifier `result`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-required-projection/required-projection-direct-1.source.lean:150:14: error(lean.unknownIdentifier): Unknown identifier `result`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-required-projection/required-projection-direct-1.source.lean:150:8: error: Tactic `cases` failed: major premise type is not an inductive type
+  ?m.258
+
+Explanation: the `cases` tactic is for constructor-based reasoning as well as for applying custom cases principles with a 'using' clause or a registered '@[cases_eliminator]' theorem. The above type neither is an inductive type nor has a registered theorem.
+
+case nil.ordinary.root
+accept : Row → Prop
+prepared : Node
+entry : Interned InternedBinderProtocol.NodeKey
+originals : List Row
+level : Nat
+free : List InternedBinderProtocol.Reference
+ordinary : SourceEqualityRequiredCache.Ordinary prepared
+mapped : RowMap originals (nodeEdges prepared)
+accepted : ∀ (row : Row), row ∈ originals → accept row
+x✝ : ?m.258
+⊢ Safe (Anchored accept) [] prepared
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-required-projection/required-projection-direct-1.source.lean:163:56: error(lean.unknownIdentifier): Unknown identifier `result`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-required-projection/required-projection-direct-1.source.lean:166:46: error(lean.unknownIdentifier): Unknown identifier `result`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-required-projection/required-projection-direct-1.source.lean:166:105: error(lean.unknownIdentifier): Unknown identifier `result`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-required-projection/required-projection-direct-1.source.lean:168:14: error(lean.unknownIdentifier): Unknown identifier `result`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-required-projection/required-projection-direct-1.source.lean:168:8: error: Tactic `cases` failed: major premise type is not an inductive type
+  ?m.556
+
+Explanation: the `cases` tactic is for constructor-based reasoning as well as for applying custom cases principles with a 'using' clause or a registered '@[cases_eliminator]' theorem. The above type neither is an inductive type nor has a registered theorem.
+
+case cons.ordinary.node
+accept : Row → Prop
+index : Int
+path : List Int
+ih :
+  ∀ {original prepared : Node},
+    Safe accept path original → Origin original prepared → Safe (Anchored accept) path prepared
+prepared : Node
+entry : Interned InternedBinderProtocol.NodeKey
+originals : List Row
+level : Nat
+free : List InternedBinderProtocol.Reference
+ordinary : SourceEqualityRequiredCache.Ordinary prepared
+mapped : RowMap originals (nodeEdges prepared)
+children :
+  ∀ (row : Row), row ∈ originals → ∀ (child : Node), select row.children index = some child → Safe accept path child
+x✝ : ?m.556
+⊢ Safe (Anchored accept) (index :: path) prepared
