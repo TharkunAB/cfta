@@ -1,0 +1,45 @@
+import MicroCFTA.SourceCurrentStoredLiteralRowLineage
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+set_option maxHeartbeats 5000000
+
+#check @MicroCFTA.SourceCurrentStoredLiteralRowLineage.RowAt
+#print MicroCFTA.SourceCurrentStoredLiteralRowLineage.RowAt
+#print axioms MicroCFTA.SourceCurrentStoredLiteralRowLineage.RowAt
+
+#check @MicroCFTA.SourceCurrentStoredLiteralRowLineage.ReferenceAt
+#print MicroCFTA.SourceCurrentStoredLiteralRowLineage.ReferenceAt
+#print axioms MicroCFTA.SourceCurrentStoredLiteralRowLineage.ReferenceAt
+
+#check @MicroCFTA.SourceCurrentStoredLiteralRowLineage.Origin
+#print MicroCFTA.SourceCurrentStoredLiteralRowLineage.Origin
+#print axioms MicroCFTA.SourceCurrentStoredLiteralRowLineage.Origin
+
+#check @MicroCFTA.SourceCurrentStoredLiteralRowLineage.RowAt.child_smaller
+#print MicroCFTA.SourceCurrentStoredLiteralRowLineage.RowAt.child_smaller
+#print axioms MicroCFTA.SourceCurrentStoredLiteralRowLineage.RowAt.child_smaller
+
+#check @MicroCFTA.SourceCurrentStoredLiteralRowLineage.anchor
+#print MicroCFTA.SourceCurrentStoredLiteralRowLineage.anchor
+#print axioms MicroCFTA.SourceCurrentStoredLiteralRowLineage.anchor
+
+#check @MicroCFTA.SourceCurrentStoredLiteralRowLineage.source_row
+#print MicroCFTA.SourceCurrentStoredLiteralRowLineage.source_row
+#print axioms MicroCFTA.SourceCurrentStoredLiteralRowLineage.source_row
+
+#check @MicroCFTA.SourceCurrentStoredLiteralRowLineage.execute_row
+#print MicroCFTA.SourceCurrentStoredLiteralRowLineage.execute_row
+#print axioms MicroCFTA.SourceCurrentStoredLiteralRowLineage.execute_row
+
+#check @MicroCFTA.SourceCurrentStoredLiteralRowLineage.complete
+#print MicroCFTA.SourceCurrentStoredLiteralRowLineage.complete
+#print axioms MicroCFTA.SourceCurrentStoredLiteralRowLineage.complete
+
