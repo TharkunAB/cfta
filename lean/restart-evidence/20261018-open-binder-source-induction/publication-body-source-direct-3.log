@@ -1,0 +1,86 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-open-binder-source-induction/publication-body-source-direct-3.source.lean:186:45: error(lean.unknownIdentifier): Unknown identifier `after`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-open-binder-source-induction/publication-body-source-direct-3.source.lean:190:39: error(lean.unknownIdentifier): Unknown identifier `after`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-open-binder-source-induction/publication-body-source-direct-3.source.lean:264:46: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.uninterned` could not be determined
+
+Hint: Using `Reference.uninterned would be unambiguous:
+  [apply] `Reference.uninterned`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-open-binder-source-induction/publication-body-source-direct-3.source.lean:264:104: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.depth` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `EqualityModel.depth`
+  [apply] `InternedBinderProtocol.Probe.depth`
+  [apply] `Reference.depth`
+  [apply] `Value.depth`
+  [apply] `InternedDepthSemantics.Shape.depth`
+  [apply] `InternedFreshOrdinaryActiveOrigins.Entered.depth`
+  [apply] `InternedFreshOrdinaryActiveOrigins.Origin.depth`
+  [apply] `InternedFreshOrdinaryDepthComposition.Observed.depth`
+  [apply] `InternedFreshOrdinaryProbeChoiceSites.Crossing.depth`
+  [apply] `InternedProbeChoiceSites.Crossing.depth`
+  [apply] `InternedProfileTraceSites.Context.depth`
+  [apply] `SourceCurrentConstrainedCapSourceHistory.Context.depth`
+  [apply] `Publication.depth`
+  [apply] `SourceEqualityRequiredCache.Ready.depth`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-open-binder-source-induction/publication-body-source-direct-3.source.lean:260:62: error: unsolved goals
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+event : Publication
+expressions : List (Syntax Symbol Guard)
+shape : event.expression = Syntax.union expressions
+depth : Nat
+view common : InternedConstructorTemplates.State Symbol Guard
+replacement : Value Symbol Guard
+environment : Environment Symbol Guard
+members :
+  let localInputs :=
+    Sum.inr (Sum.inl ()) :: List.map liftInput (List.map (fun value => Sum.inl value) event.environment);
+  let firstNames := Sum.elim (fun x => Reference.uninterned (ordinaryLevel event.depth)) fun x => Reference.depth;
+  let secondNames := Sum.elim (fun x => Reference.interned event.entry.identity) fun x => Reference.depth;
+  ∀ (index : Nat) (child : Syntax Symbol Guard),
+    expressions[index]? = some child →
+      sizeOf child < sizeOf event.expression →
+        ∀ (execution : InternedConstructorTemplates.State Symbol Guard),
+          Keeps common execution →
+            Aliases child localInputs firstNames secondNames →
+              ∀ (before later : InternedConstructorTemplates.State Symbol Guard),
+                Context before (List.map (input firstNames) localInputs) →
+                  Context later (List.map (input secondNames) localInputs) →
+                    ∀ (rawFirst : Value Symbol Guard) (rawHeap : InternedConstructorTemplates.State Symbol Guard)
+                      (rawSecond : Value Symbol Guard) (rawLater : InternedConstructorTemplates.State Symbol Guard),
+                      build child (List.map (input firstNames) localInputs) before = Outcome.done rawFirst rawHeap →
+                        build child (List.map (input secondNames) localInputs) later = Outcome.done rawSecond rawLater →
+                          Grows rawHeap execution →
+                            Grows rawLater execution →
+                              RootMatch
+                                (NamePair (Reference.uninterned (ordinaryLevel event.depth))
+                                  (Reference.interned event.entry.identity))
+                                (Executions (depth + 1) view execution
+                                  (shared event replacement replacement environment)
+                                  (shared event replacement replacement environment))
+                                rawFirst rawSecond
+execution : InternedConstructorTemplates.State Symbol Guard
+kept : Keeps common execution
+localInputs : List (Value Symbol Guard ⊕ Unit ⊕ Unit) :=
+  Sum.inr (Sum.inl ()) :: List.map liftInput (List.map (fun value => Sum.inl value) event.environment)
+⊢ have localInputs :=
+    Sum.inr (Sum.inl ()) :: List.map liftInput (List.map (fun value => Sum.inl value) event.environment);
+  have firstNames := Sum.elim (fun x => Reference.uninterned (ordinaryLevel event.depth)) fun x => Reference.depth;
+  have secondNames := Sum.elim (fun x => Reference.interned event.entry.identity) fun x => Reference.depth;
+  sizeOf event.expression < sizeOf (Syntax.binder event.smart event.expression) →
+    Aliases event.expression localInputs firstNames secondNames →
+      ∀ (before later : InternedConstructorTemplates.State Symbol Guard),
+        Context before (List.map (input firstNames) localInputs) →
+          Context later (List.map (input secondNames) localInputs) →
+            ∀ (rawFirst : Value Symbol Guard) (rawHeap : InternedConstructorTemplates.State Symbol Guard)
+              (rawSecond : Value Symbol Guard) (rawLater : InternedConstructorTemplates.State Symbol Guard),
+              build event.expression (List.map (input firstNames) localInputs) before = Outcome.done rawFirst rawHeap →
+                build event.expression (List.map (input secondNames) localInputs) later =
+                    Outcome.done rawSecond rawLater →
+                  Grows rawHeap execution →
+                    Grows rawLater execution →
+                      RootMatch
+                        (NamePair (Reference.uninterned (ordinaryLevel event.depth))
+                          (Reference.interned event.entry.identity))
+                        (Executions (depth + 1) view execution (shared event replacement replacement environment)
+                          (shared event replacement replacement environment))
+                        rawFirst rawSecond
