@@ -1,0 +1,67 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-general-filtered-fusion/binder-free-direct-1.source.lean:26:14: error: Invalid projection: Projections extract constructor fields for one-constructor inductive types. The expression
+  free
+has type `ManyBinderFree (child :: rest)` which is not a one-constructor inductive type.
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-general-filtered-fusion/binder-free-direct-1.source.lean:27:17: error: Invalid projection: Projections extract constructor fields for one-constructor inductive types. The expression
+  free
+has type `ManyBinderFree (first :: rest)` which is not a one-constructor inductive type.
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-general-filtered-fusion/binder-free-direct-1.source.lean:38:31: error: Invalid projection: Projections extract constructor fields for one-constructor inductive types. The expression
+  free
+has type
+  EdgesBinderFree (EdgeSyntax.mk symbol guard children :: rest)
+which is not a one-constructor inductive type.
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-general-filtered-fusion/binder-free-direct-1.source.lean:39:21: error: Invalid projection: Projections extract constructor fields for one-constructor inductive types. The expression
+  free
+has type
+  EdgesBinderFree (EdgeSyntax.mk own ownGuard ownChildren :: rest)
+which is not a one-constructor inductive type.
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-general-filtered-fusion/binder-free-direct-1.source.lean:47:14: error: Tactic `cases` failed: major premise type is not an inductive type
+  BinderFree (Syntax.binder smart✝ body✝)
+
+Explanation: the `cases` tactic is for constructor-based reasoning as well as for applying custom cases principles with a 'using' clause or a registered '@[cases_eliminator]' theorem. The above type neither is an inductive type nor has a registered theorem.
+
+case binder
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+smart✝ : Bool
+body✝ : Syntax Symbol Guard
+free : BinderFree (Syntax.binder smart✝ body✝)
+⊢ Fusion (Syntax.binder smart✝ body✝)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-general-filtered-fusion/binder-free-direct-1.source.lean:51:50: error: Application type mismatch: The argument
+  free
+has type
+  BinderFree (Syntax.union expressions)
+but is expected to have type
+  ManyBinderFree expressions
+in the application
+  member_free expressions free
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-general-filtered-fusion/binder-free-direct-1.source.lean:55:62: error: Application type mismatch: The argument
+  free
+has type
+  BinderFree (Syntax.node rows)
+but is expected to have type
+  EdgesBinderFree rows
+in the application
+  row_free rows free
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-general-filtered-fusion/binder-free-direct-1.source.lean:55:12: error: unsolved goals
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+_x : (expression : Syntax Symbol Guard) ×' BinderFree expression
+a✝¹ :
+  ∀ (y : (expression : Syntax Symbol Guard) ×' BinderFree expression),
+    InvImage (fun x1 x2 => x1 < x2) (fun x => PSigma.casesOn x fun expression free => sizeOf expression) y _x →
+      Fusion y.1
+rows : List (EdgeSyntax Symbol Guard)
+free✝ : BinderFree (Syntax.node rows)
+symbol : Symbol
+guard : Guard
+children : List (Syntax Symbol Guard)
+member : EdgeSyntax.mk symbol guard children ∈ rows
+child : Syntax Symbol Guard
+included : child ∈ children
+free : BinderFree (Syntax.node rows)
+a✝ :
+  ∀ (y : (expression : Syntax Symbol Guard) ×' BinderFree expression),
+    InvImage (fun x1 x2 => x1 < x2) (fun x => PSigma.casesOn x fun expression free => sizeOf expression) y
+        ⟨Syntax.node rows, free⟩ →
+      Fusion y.1
+⊢ sizeOf children ≤ sizeOf rows + 1

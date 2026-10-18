@@ -1,0 +1,97 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-general-filtered-fusion/binder-free-direct-6.source.lean:61:10: error: Type mismatch
+  ih (sizeOf child) smaller child (member_free expressions free child member) rfl
+has type
+  ∀ (reader : State Symbol Guard),
+    SourceEqualityRequiredCache.Ready reader →
+      ∀ (inputs : List (Value Symbol Guard ⊕ ?m.145))
+        (firstNames secondNames : ?m.145 → InternedBinderProtocol.Reference)
+        (firstOwn secondOwn : InternedBinderProtocol.Reference)
+        (firstMap secondMap : InternedStoredSubstitution.Environment Symbol Guard)
+        (firstBefore secondBefore firstRawHeap secondRawHeap : State Symbol Guard)
+        (firstRaw secondRaw firstFiltered secondFiltered left right : Value Symbol Guard),
+        SourceCurrentConstrainedCapSourceHistory.Context firstBefore
+            (List.map (InternedFreshOrdinaryLiveInputs.input firstNames) inputs) →
+          SourceCurrentConstrainedCapSourceHistory.Context secondBefore
+              (List.map (InternedFreshOrdinaryLiveInputs.input secondNames) inputs) →
+            SourceCurrentUsedBinderAliasTransport.Aliases child inputs firstNames secondNames →
+              (∀ (label : InternedBinderProtocol.Reference ⊕ ?m.145),
+                  label ∈ SourceCurrentUsedBinderAliasTransport.Scope child inputs →
+                    (Sum.elim id firstNames label = firstOwn ↔ Sum.elim id secondNames label = secondOwn)) →
+                SourceCurrentReaderReplacementSlots.Paired
+                    (fun a b =>
+                      (a.referenceOf == InternedBinderProtocol.NodeRef.empty) =
+                        (b.referenceOf == InternedBinderProtocol.NodeRef.empty))
+                    firstMap secondMap (List.map (InternedFreshOrdinaryLiveInputs.input firstNames) inputs)
+                    (List.map (InternedFreshOrdinaryLiveInputs.input secondNames) inputs) →
+                  InternedStoredSubstitution.Replacements reader firstMap →
+                    InternedStoredSubstitution.Replacements reader secondMap →
+                      InternedProbeProvenance.Available reader firstRaw →
+                        InternedProbeProvenance.Available reader secondRaw →
+                          InternedFreshOrdinaryConstruction.build child
+                                (List.map (InternedFreshOrdinaryLiveInputs.input firstNames) inputs) firstBefore =
+                              InternedNestedConstruction.Outcome.done firstRaw firstRawHeap →
+                            InternedFreshOrdinaryConstruction.build child
+                                  (List.map (InternedFreshOrdinaryLiveInputs.input secondNames) inputs) secondBefore =
+                                InternedNestedConstruction.Outcome.done secondRaw secondRawHeap →
+                              Grows firstRawHeap reader →
+                                Grows secondRawHeap reader →
+                                  run (withoutSelfReference firstOwn firstRaw) reader = (firstFiltered, reader) →
+                                    run (withoutSelfReference secondOwn secondRaw) reader = (secondFiltered, reader) →
+                                      InternedFreshOrdinaryStoredSubstitution.execute firstFiltered firstMap reader =
+                                          InternedNestedConstruction.Outcome.done left reader →
+                                        InternedFreshOrdinaryStoredSubstitution.execute secondFiltered secondMap
+                                              reader =
+                                            InternedNestedConstruction.Outcome.done right reader →
+                                          (left.referenceOf == InternedBinderProtocol.NodeRef.empty) =
+                                            (right.referenceOf == InternedBinderProtocol.NodeRef.empty)
+but is expected to have type
+  Fusion child
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-general-filtered-fusion/binder-free-direct-6.source.lean:72:10: error: Type mismatch
+  ih (sizeOf child) smaller child
+    (member_free children (row_free rows free symbol guard children member) child included) rfl
+has type
+  ∀ (reader : State Symbol Guard),
+    SourceEqualityRequiredCache.Ready reader →
+      ∀ (inputs : List (Value Symbol Guard ⊕ ?m.227))
+        (firstNames secondNames : ?m.227 → InternedBinderProtocol.Reference)
+        (firstOwn secondOwn : InternedBinderProtocol.Reference)
+        (firstMap secondMap : InternedStoredSubstitution.Environment Symbol Guard)
+        (firstBefore secondBefore firstRawHeap secondRawHeap : State Symbol Guard)
+        (firstRaw secondRaw firstFiltered secondFiltered left right : Value Symbol Guard),
+        SourceCurrentConstrainedCapSourceHistory.Context firstBefore
+            (List.map (InternedFreshOrdinaryLiveInputs.input firstNames) inputs) →
+          SourceCurrentConstrainedCapSourceHistory.Context secondBefore
+              (List.map (InternedFreshOrdinaryLiveInputs.input secondNames) inputs) →
+            SourceCurrentUsedBinderAliasTransport.Aliases child inputs firstNames secondNames →
+              (∀ (label : InternedBinderProtocol.Reference ⊕ ?m.227),
+                  label ∈ SourceCurrentUsedBinderAliasTransport.Scope child inputs →
+                    (Sum.elim id firstNames label = firstOwn ↔ Sum.elim id secondNames label = secondOwn)) →
+                SourceCurrentReaderReplacementSlots.Paired
+                    (fun a b =>
+                      (a.referenceOf == InternedBinderProtocol.NodeRef.empty) =
+                        (b.referenceOf == InternedBinderProtocol.NodeRef.empty))
+                    firstMap secondMap (List.map (InternedFreshOrdinaryLiveInputs.input firstNames) inputs)
+                    (List.map (InternedFreshOrdinaryLiveInputs.input secondNames) inputs) →
+                  InternedStoredSubstitution.Replacements reader firstMap →
+                    InternedStoredSubstitution.Replacements reader secondMap →
+                      InternedProbeProvenance.Available reader firstRaw →
+                        InternedProbeProvenance.Available reader secondRaw →
+                          InternedFreshOrdinaryConstruction.build child
+                                (List.map (InternedFreshOrdinaryLiveInputs.input firstNames) inputs) firstBefore =
+                              InternedNestedConstruction.Outcome.done firstRaw firstRawHeap →
+                            InternedFreshOrdinaryConstruction.build child
+                                  (List.map (InternedFreshOrdinaryLiveInputs.input secondNames) inputs) secondBefore =
+                                InternedNestedConstruction.Outcome.done secondRaw secondRawHeap →
+                              Grows firstRawHeap reader →
+                                Grows secondRawHeap reader →
+                                  run (withoutSelfReference firstOwn firstRaw) reader = (firstFiltered, reader) →
+                                    run (withoutSelfReference secondOwn secondRaw) reader = (secondFiltered, reader) →
+                                      InternedFreshOrdinaryStoredSubstitution.execute firstFiltered firstMap reader =
+                                          InternedNestedConstruction.Outcome.done left reader →
+                                        InternedFreshOrdinaryStoredSubstitution.execute secondFiltered secondMap
+                                              reader =
+                                            InternedNestedConstruction.Outcome.done right reader →
+                                          (left.referenceOf == InternedBinderProtocol.NodeRef.empty) =
+                                            (right.referenceOf == InternedBinderProtocol.NodeRef.empty)
+but is expected to have type
+  Fusion child

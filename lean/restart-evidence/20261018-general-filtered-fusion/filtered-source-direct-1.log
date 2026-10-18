@@ -1,0 +1,53 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-general-filtered-fusion/filtered-source-direct-1.source.lean:134:49: warning: Variable name `ready` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _ready
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-general-filtered-fusion/filtered-source-direct-1.source.lean:169:53: error: Application type mismatch: The argument
+  firstDone
+has type
+  execute Value.empty firstMap reader = Outcome.done left reader
+but is expected to have type
+  Outcome.done ?m.213 ?m.214 = Outcome.done ?m.215 ?m.216
+in the application
+  Outcome.done.inj firstDone
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-general-filtered-fusion/filtered-source-direct-1.source.lean:158:57: error: unsolved goals
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+Atom : Type
+reader : InternedConstructorTemplates.State Symbol Guard
+ready : Ready reader
+inputs : List (Value Symbol Guard ⊕ Atom)
+firstNames secondNames : Atom → Reference
+firstOwn secondOwn : Reference
+firstMap secondMap : Environment Symbol Guard
+firstBefore secondBefore firstRawHeap secondRawHeap : InternedConstructorTemplates.State Symbol Guard
+left right : Value Symbol Guard
+_firstContext : Context firstBefore (List.map (input firstNames) inputs)
+_secondContext : Context secondBefore (List.map (input secondNames) inputs)
+_aliases : Aliases Syntax.empty inputs firstNames secondNames
+_tests :
+  ∀ (label : Reference ⊕ Atom),
+    label ∈ Scope Syntax.empty inputs →
+      (Sum.elim id firstNames label = firstOwn ↔ Sum.elim id secondNames label = secondOwn)
+_paired :
+  Paired
+    (fun a b =>
+      (a.referenceOf == InternedBinderProtocol.NodeRef.empty) = (b.referenceOf == InternedBinderProtocol.NodeRef.empty))
+    firstMap secondMap (List.map (input firstNames) inputs) (List.map (input secondNames) inputs)
+_firstReplacements : Replacements reader firstMap
+_secondReplacements : Replacements reader secondMap
+_firstGrowth : Grows firstRawHeap reader
+_secondGrowth : Grows secondRawHeap reader
+_firstAvailable : Available reader Value.empty
+firstBuild : build Syntax.empty (List.map (input firstNames) inputs) firstBefore = Outcome.done Value.empty firstRawHeap
+_secondAvailable : Available reader Value.empty
+secondBuild :
+  build Syntax.empty (List.map (input secondNames) inputs) secondBefore = Outcome.done Value.empty secondRawHeap
+firstDone : execute Value.empty firstMap reader = Outcome.done left reader
+firstFilter : run (withoutSelfReference firstOwn Value.empty) reader = (Value.empty, reader)
+secondDone : execute Value.empty secondMap reader = Outcome.done right reader
+secondFilter : run (withoutSelfReference secondOwn Value.empty) reader = (Value.empty, reader)
+⊢ (left.referenceOf == InternedBinderProtocol.NodeRef.empty) =
+    (right.referenceOf == InternedBinderProtocol.NodeRef.empty)
