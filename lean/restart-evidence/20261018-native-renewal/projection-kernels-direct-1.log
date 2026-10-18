@@ -1,0 +1,20 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-renewal/projection-kernels-direct-1.source.lean:127:6: warning: Variable name `value` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _value
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-native-renewal/projection-kernels-direct-1.source.lean:144:4: error: Dependent elimination failed: Failed to solve equation
+  (match cold with
+    | SourceCurrentAllocatedTargetWorker.Outcome.done value state memo => state
+    | SourceCurrentAllocatedTargetWorker.Outcome.failed fault state memo => state) =
+    {
+      native :=
+        SourceRecursiveIntersectionThunks.advance
+          (SourceCurrentAllocatedQueryMemo.advancePhysical before
+              { heap := heap✝, equality := before.operations }).native
+          (have __src :=
+            (SourceCurrentAllocatedQueryMemo.advancePhysical before
+                  { heap := heap✝, equality := before.operations }).native.machine;
+          { heap := after✝.heap, domains := __src.domains }),
+      operations := after✝.equality }

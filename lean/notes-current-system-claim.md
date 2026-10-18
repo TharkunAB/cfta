@@ -1,7 +1,7 @@
 # Current system claim
 
-Checked against the live theorem statements on 2026-10-18.
-Read `notes-current-writer-history.md` for the latest checkpoint.
+Checked against the live theorem statements on 2026-10-19.
+Read `notes-current-native-renewal.md` for the latest checkpoint.
 
 In simple technical English: completed modeled construction represents
 exactly the trees specified by its expression. A completed modeled root
@@ -104,6 +104,23 @@ warm Merge tables still require their causal history. This does not cover
 every terminal lower-operation failure state. The remaining progress
 argument must compose projected sources through native edits and Mu row
 reconstruction.
+Actual selected record scans now derive false primary certificates at their
+exact final heap for the same original forest. Initial union normality
+passes through the actual scan. Nonempty forest projection and target
+operands retain exact full source rows and smaller source children. Actual
+ordinary native queries retain both source rows, at least one nonplain
+source guard, both smaller source children and the actual paired request.
+These source inputs can already be generated values. Returned children
+need not have smaller mass. Causal writer and physical premises remain.
+
+A completed source-built selected edit can import its positive continuation
+from the competing input. It need not have a positional source anchor in the selected
+original alone. The general progress relation must include those competing
+sources and compose self, union, reference and Mu receipts. An unrestricted
+empty forest path has a checked constrained-Mu self-continuation example.
+Existing live precheck paths have a separate nonempty-path proof. Neither
+example proves nontermination or a Haskell defect.
+
 An accepted opaque-guard conjunction can lose an accessor equality pair
 while retaining its Same atom. Whole-operand effective coverage therefore
 needs additional conditions. No Haskell defect is established.
