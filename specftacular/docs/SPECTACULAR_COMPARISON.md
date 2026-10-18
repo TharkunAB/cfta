@@ -15,16 +15,19 @@ node pairs once during structural subsumption. Specftacular validates stronger
 equation schemes before it adds their rules. Rule orientation now remains
 valid across type substitutions. Critical-pair batches share their incoming
 terms. Completion preserves generic critical pairs across type instances.
-Directed inputs reject the recorded integer-boundary counterexamples.
-The fresh matrix completes 21 of 27 configurations, including HugeLists
-size 5 through phase 3.
-Six HugeLists configurations still reach the limit.
+Directed inputs reject the earlier recorded integer-boundary counterexamples.
+The 60-second matrix completes 21 of 27 configurations, including HugeLists
+size 5 through phase 3. Longer trials complete size 7 through phase 2,
+bringing the retained completion count to 22. That output contains five
+further false laws with verified counterexamples. These remain unfixed.
+The longer trials therefore do not establish a quality improvement.
 The machine has other activity. Elapsed time alone does not isolate engine
 speed. The controls below record both savings and regressions.
 
 ## Sources and method
 
-The runs took place on 2026-10-17.
+The 60-second matrix ran on 2026-10-17. The longer current-only trials ran
+on 2026-10-18 with the same runtime and binary.
 
 | Input | Revision |
 | --- | --- |
@@ -46,8 +49,9 @@ shared critical-pair inputs, type-uniform completion, and the extended
 boundary inputs. The GHC frontend uses the same rewriter and retains
 generalized logical carrier resolution. The current columns below come
 from a fresh complete matrix of that runtime.
-The profiling sections identify each measured source state. Their sampled
-percentages do not describe the selected runtime.
+The diagnostic sections identify each measured source state. Current native
+traces locate phase and bucket costs. Historical cost-centre percentages
+describe their named predecessors, not the selected runtime.
 
 The host runs Ubuntu 24.04 under WSL2 on an AMD Ryzen 9 7950X. It exposes
 24 logical CPUs and 94.29 GiB of RAM. Spectacular uses GHC 8.10.7 and
@@ -70,7 +74,8 @@ of 2 to 4 GiB. These limits stay below the requested 80 GB maximum.
 The matrix compares all 27 Table I configurations. The original measurements
 come from the all-`-O2` baseline run. Every current configuration has a fresh
 run of the selected runtime.
-Each process has a 60-second timeout. The paper used 3600 seconds. Every
+Each process in the main matrix has a 60-second timeout. The paper used
+3600 seconds. The longer current-only trials use 300- and 900-second limits. Every
 matrix result below comes from an audited all-`-O2` build. Machine activity differs
 between runs. Elapsed-time ratios do not isolate engine speed.
 
@@ -140,7 +145,7 @@ original. The changes remove timeouts without closing this cost difference.
 Lists7P4 prints 41 laws in 26.17 seconds. It uses 193.8 MiB peak RSS,
 retains 69.6 MiB at the largest GC sample, and allocates 101.061 GiB.
 HugeLists5P3 prints 197 laws in 37.33 seconds, uses 516.8 MiB peak RSS,
-and allocates 210.460 GiB. The largest observed RSS is 651.6 MiB in the
+and allocates 210.460 GiB. The largest RSS in the 60-second matrix is 651.6 MiB in the
 interrupted HugeLists5P4 run. It is a censored measurement, not a completed
 peak for that search.
 
@@ -167,7 +172,7 @@ Thirteen completed runs allocate less and eight allocate more than
 `dd5da750`. The input domain and some bases changed. These are whole-search
 cost comparisons, not identical-work measurements.
 
-The six timeout outputs remain censored. HugeLists5P4 exposes 180 complete
+The six 60-second timeout outputs remain censored. HugeLists5P4 exposes 180 complete
 lines. HugeLists6P3 and P4 expose 170 each, versus 76 at `dd5da750`.
 The three HugeLists7 runs expose 148 each. These are lower bounds from
 buffered output. Trailing numbered fragments do not count as equations.
@@ -198,6 +203,51 @@ HugeLists4P3 increases by 0.77%. The regressions are not confined to small
 workloads. Later phases can benefit: allocation falls by 42.81% for
 ListMonad7P4, 37.29% for HugeLists4P4, and 10.16% for Lists7P4. Some
 printed bases change relative to `456123af`. These comparisons do not uniformly hold output fixed.
+
+### Longer current-only trials on 2026-10-18
+
+These trials retain all 21 completed 60-second cells. They use the same
+`102965d3` binary, all-O2 libraries, 1040 test cases, N1, and 6 GiB heap cap.
+The serial job has a verified 16 GiB memory cap and no swap. The original
+Spectacular measurements remain unchanged.
+
+At each maximum size, a timeout in an earlier phase makes a later-phase
+trial unnecessary for the same time limit. The later phase must execute
+that earlier prefix. Such outcomes are labelled inferred. They have no
+independent timing, RSS, or law-count measurement. Host noise can change
+elapsed time; this inference does not replace an independent measurement.
+Different maximum sizes change the search and completion bounds. No timeout
+is inferred across sizes.
+
+All rows below use HugeLists. T means a timeout at the column's limit.
+A count with ≥ is an observed complete-line prefix, not a final law count.
+
+| Size | Through phase | 300s result | Laws or prefix | Peak RSS MiB | 900s result | Laws or prefix | Peak RSS MiB |
+| --- | ---: | --- | ---: | ---: | --- | ---: | ---: |
+| 5 | 4 | T, measured | ≥180 | 832.2 | T, measured | ≥281 | 1071.6 |
+| 6 | 3 | T, measured | ≥170 | 611.6 | T, measured | ≥170 | 690.4 |
+| 6 | 4 | T, measured | ≥170 | 611.6 | T, inferred from phase 3 | — | — |
+| 7 | 2 | 88.55s, complete | 248 | 859.8 | Not needed | — | — |
+| 7 | 3 | T, measured | ≥291 | 1210.0 | NOT RUN | — | — |
+| 7 | 4 | T, inferred from phase 3 | — | — | NOT RUN | — | — |
+
+The 300-second stage raises the retained completion count to 22 of 27.
+The 900-second stage adds no completion. It measures two timeouts and
+infers one later-phase timeout at size 6. After the size-6 phase-3 timeout,
+the run plan omitted the larger size-7 phase-3 and phase-4 trials. Those two
+cells are NOT RUN by policy, not inferred timeouts. An interrupted start
+of size 7 through phase 3 is excluded from the measurements.
+
+The completed size-7 phase-2 run uses 88.625 RTS CPU seconds, including
+7.138 GC CPU seconds. It allocates 561.523 GiB and reaches 327.701 MiB
+sampled live heap and 859.8 MiB peak RSS. Its 248 printed laws preserve
+the earlier 148-line prefix. The five false equations described below are
+in the newly visible tail. More completed search does not imply valid laws.
+
+The largest RSS in these trials is 1210.0 MiB in the interrupted 300-second
+size-7 phase-3 run. Every timeout RSS is censored. Buffered prefixes do not
+locate the active phase, bucket, or computation. These timing runs alone
+do not explain where the remaining time is spent.
 
 ## Differences in laws
 
@@ -458,6 +508,46 @@ as before. Other values come from their declared generators. The shared
 lookup uses logical types, so the concrete Int cases do not replace abstract
 carrier cases in the GHC frontend. Finite testing still permits false laws
 that can affect subsequent pruning.
+
+### Longer search exposes five further false laws
+
+The completed HugeLists7P2 run prints the following four false equations.
+The numbers are its printed law numbers; variable names are shortened.
+
+| Law | Printed equation, with shorter names | Predicate |
+| --- | --- | --- |
+| 160 | `drop n (dropWhile p (takeWhile q xs)) == dropWhile p (drop n (takeWhile q xs))` | `p = (== 0)` |
+| 167 | `drop n (filter p (takeWhile q xs)) == filter p (drop n (takeWhile q xs))` | `p = (== 1)` |
+| 175 | `dropWhile p (take n (takeWhile q xs)) == take n (dropWhile p (takeWhile q xs))` | `p = (== 0)` |
+| 178 | `filter p (take n (takeWhile q xs)) == take n (filter p (takeWhile q xs))` | `p = (== 1)` |
+
+For each equation, use `Int` for the abstract carrier. Set
+`n = 1`, `xs = [0,1] :: [Int]`, and
+`q = const True`. The left side is `[]`; the right side is `[1]`.
+These witnesses use total values and functions. They require no overflow.
+An argument predicate can distinguish values even when the list operations
+are parametric.
+
+Law 208 has a separate overflow counterexample:
+
+```haskell
+drop n (drop n (drop n xs)) == drop (n + (n + n)) xs
+```
+
+Set `n = div maxBound 2 + 1 :: Int` and `xs = [0]`. On the 64-bit host,
+`n` is 4611686018427387904. The sum on the right wraps to
+−4611686018427387904. The left side is `[]`; the right side is `[0]`.
+
+A standalone Haskell control confirms all five counterexamples. These
+equations remain in the measured `102965d3` output and remain unfixed.
+The earlier boundary fixes still reject their recorded counterexamples;
+they do not cover these new cases. The cause of these validation misses
+has not been measured. Accepted false equations can affect later pruning.
+
+This is a bounded review of the new output. It does not validate the other
+243 equations. The earlier typed-coverage control uses HugeLists5P3, not
+this size-7 basis. These findings concern current Specftacular output.
+They do not establish a new defect in the published paper or artifact.
 
 ### Representative instances change the equation basis
 
@@ -766,6 +856,114 @@ and Cachegrind instructions rise by 0.00408%. The input domain changed.
 This incremental control passes the 5% budget. It does not remove the
 earlier accepted cost increase relative to `456123af`.
 
+## Current diagnostics after the longer trials
+
+A fresh diagnostic of `102965d3` records the actual phase and size/type
+boundaries. Its native driver uses the retained O2 runtime and libraries.
+It adds line buffering and phase/bucket logging. It keeps the search,
+1040-case schedule, N1, 6 GiB heap cap, and 16 GiB process-group cap.
+The 900-second size-5 trace agrees with all 281 complete numbered lines in
+the corresponding timing output. It captures 295 complete lines in total.
+Different interrupted prefix lengths do not establish equal work.
+
+| HugeLists maximum size | Phase 1 CPU s | Phase 2 CPU s | Phase 3 CPU s | Phase 4 CPU s | Actual terminal bucket |
+| --- | ---: | ---: | ---: | ---: | --- |
+| 5 | 5.86 | 0.82 | 29.92 | 864.80, interrupted | Phase 4, size 5 `[[Int]]` |
+| 6 | 9.72 | 1.52 | 890.28, interrupted | Not reached | Phase 3, size 6 `Int` |
+
+These CPU intervals include GC. The phase intervals do not overlap.
+Bucket intervals nest inside them and must not be added to phase totals.
+For maximum size 5, about 96% of observed CPU time is in phase 4.
+Its largest completed bucket is size 5 `[[B]]`, at 105.55 CPU seconds.
+That bucket starts after 588.88 elapsed seconds. The terminal `[[Int]]`
+bucket has 102.19 observed CPU seconds. Several earlier size-5 list buckets
+take 65 to 79 CPU seconds each.
+The cost is distributed over several type buckets. It is not one late
+operation whose removal would eliminate the whole phase.
+
+For maximum size 6, phases 1 and 2 finish in 11.240 CPU seconds. The
+phase-3 size-5 `Int` bucket completes in 20.674 CPU seconds. The later
+size-6 `Int` bucket uses 848.259 CPU seconds before interruption. Its
+sampled allocation is 5504.298 GiB. This is cumulative allocation, not RAM
+held at once. The requested phase 4 is never reached.
+
+The size-6 trace prints 223 complete laws. All 170 complete lines from the
+900-second size-6 phase-3 timing output match its ordered prefix. The timing
+output ends with a partial next line; the diagnostic uses line buffering.
+The extra visible laws do not establish more completed work. All started
+diagnostic intervals have end or abort markers. Neither trace has malformed
+events. Their actual terminal buckets differ, so one explanation cannot be
+assumed for both.
+
+The diagnostic also records sampled allocation and GC endpoints. These
+measure cumulative traffic, not retained memory. Phase boundaries alone
+do not separate enumeration, completion, schema assignments, or test values.
+Cost-centre observations must identify the window they actually reached.
+
+### Current profiling controls
+
+Early automatic cost centres changed the search cost substantially. A
+600-second profile did not reach the selected phase-4 `[[B]]` bucket.
+It recorded zero gated CPU samples. Its earlier phase-3 size-5 `Int` bucket
+took 345.59 elapsed seconds, versus 18.09 seconds in the native trace.
+Its allocation totals cover the prefix that ran. They do not attribute the
+unreached bucket. A brief second attempt was stopped and excluded.
+
+The replacement build uses GHC's
+[`-fprof-late`](https://downloads.haskell.org/ghc/9.14.1/docs/users_guide/profiling.html#ghc-flag-fprof-late).
+GHC inserts these cost centres after Core optimization. The build compiles
+all 20 reached CFTA modules, seven Specftacular modules, and the driver at
+O2. It disables early automatic and manual cost centres. It reuses the
+audited external O2 profiling libraries. It links no archived CFTA or
+Specftacular library in place of these source modules.
+
+A completed HugeLists5P3 control prints the exact retained 197 laws in
+order. It takes 135.58 seconds, versus the retained native 37.33 seconds.
+This 3.63-fold ratio measures distortion on that one control. It is not a
+correction factor for later profiles. The phase and bucket logging also
+remains enabled in these diagnostics.
+
+The selected windows are phase 4, size 5, `Int` for maximum size 5, and
+phase 3, size 6, `Int` for maximum size 6. Each window has a 180-second
+limit. A 900-second whole-run guard also includes the prefix. Only timer
+samples inside the reached window describe its CPU costs. Allocation and
+entry counts cover the whole process. Each raw cost-centre self cost is
+counted once. Inherited totals overlap and are not added. Source locations
+and stack context support the category assignments. Inlining can move
+costs to a caller or a compiler worker. Unclassified costs remain explicit.
+
+The maximum-size-5 window completes its phase-4 size-5 `Int` bucket. It
+records 156,508 samples and preserves the first 234 complete laws from the
+native trace. This completes one bucket, not the HugeLists5P4 search.
+The maximum-size-6 window reaches its 180-second limit inside phase 3,
+size 6, `Int`. It records 181,902 samples. It preserves the native trace's
+223 complete laws and prints no further law during this window. Its
+whole-run guard does not interrupt the selected window.
+
+After excluding GC, PROFILING, SYSTEM, and IDLE, the size-5 window has
+135,525 application samples. The size-6 window has 129,097:
+
+| Work | Size-5 samples | Share | Size-6 samples | Share |
+| --- | ---: | ---: | ---: | ---: |
+| Enumeration and template pruning | 128317 | 94.68% | 127335 | 98.64% |
+| Typed eligibility and known proofs | 4173 | 3.08% | 50 | 0.04% |
+| Generated inputs | 1197 | 0.88% | 0 | 0.00% |
+| Evaluation | 326 | 0.24% | 0 | 0.00% |
+| Equality | 78 | 0.06% | 0 | 0.00% |
+| Decision-tree navigation | 134 | 0.10% | 0 | 0.00% |
+| Completion | 20 | 0.01% | 0 | 0.00% |
+| Other | 1280 | 0.94% | 1712 | 1.33% |
+
+GC accounts for 2.66% and 20.02% of all samples, respectively. PROFILING
+accounts for 10.01% and 8.37%. SYSTEM accounts for 0.74% and 0.64%.
+These shares describe instrumented windows, not native GC costs.
+The named `matchPartial` function alone accounts for 24.43% and 24.61%
+of application samples. Other hot centres are CFTA enumeration workers,
+UVar updates, partial-term expansion, and intersection. These observations
+support earlier template rejection and less repeated matching. They do
+not support completion or QuickCheck optimization as the first change for
+these two windows. Zero samples do not prove zero execution time.
+
 ## Profiling that guided the selected changes
 
 The first two profiles measure `9be187a0`, before the orientation and
@@ -1022,6 +1220,8 @@ retroactively repair the historical cross-tool comparison.
 Phases 2 to 4 remain experimental. `ftacularSpec` runs phase 1. This report
 calls `experimentalPhases` for later phases. The type-depth budget can omit
 completion consequences. The output is not proved minimal or complete.
+The five counterexamples from the longer HugeLists7P2 run remain open
+correctness problems. Finishing more configurations does not resolve them.
 
 Validated generalization supports at most five independent type binders
 and keeps the original result type and equality function. Missing
