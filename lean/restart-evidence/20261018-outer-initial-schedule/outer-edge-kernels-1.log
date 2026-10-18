@@ -1,0 +1,69 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-initial-schedule/outer-edge-kernels-1.source.lean:280:82: error: don't know how to synthesize placeholder for argument `width`
+context:
+result : EdgeValue Symbol Guard
+middle✝ : SourceCurrentAllocatedPartialState.State (widthBits + 2)
+body : SourceCurrentAllocatedPartialGraph.EdgeBody 0 request running result middle✝
+⊢ Nat
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-initial-schedule/outer-edge-kernels-1.source.lean:307:4: error: Type mismatch: After simplification, term
+  reserved
+ has type
+  @SourceCurrentParentForecast.residentReserved (widthBits + 2) widthBits 0 request (caller (widthBits + 2)).checked
+    profile
+but is expected to have type
+  @SourceCurrentParentForecast.residentReserved (widthBits + 2) widthBits 0 request running.checked profile
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-initial-schedule/outer-edge-kernels-1.source.lean:324:19: error(lean.unknownIdentifier): Unknown identifier `InternedEdgeResidency.resident_grows`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-initial-schedule/outer-edge-kernels-1.source.lean:301:111: error: unsolved goals
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ SourceCurrentConjunctionGuardUniverse.guards heap) heap
+reserved : SourceCurrentParentForecast.residentReserved widthBits 0 request (caller (widthBits + 2)).checked profile
+callReserved : SourceCurrentEdgeCallNumeric.Reserved widthBits 0 request (caller (widthBits + 2)) profile
+result : EdgeValue Symbol Guard
+after : SourceCurrentAllocatedPartialState.State (widthBits + 2)
+next : SourceCurrentAllocatedNativeInventoryState.Inventory
+final : EndpointMemoGateTrace.Memos
+computed :
+  SourceCurrentEdgeCallNumeric.Receipt formulas solver next profile 0 request (caller (widthBits + 2))
+    EndpointMemoGateTrace.empty result after final
+cell : after.edgeResults.cells 0 = some { request := request, status := FlatMemoThunk.Status.returned result }
+bound : Nat := SourceCurrentEdgeCallNumeric.fuel 0 request (caller (widthBits + 2)) profile
+done :
+  SourceCurrentAllocatedPartialWorker.edgeCall 0 bound bound bound bound bound bound bound bound bound 0 request
+      (caller (widthBits + 2)) =
+    SourceCurrentAllocatedPartialWorker.Outcome.done result after
+current : SourceCurrentAllocatedNativeInventoryState.Inventory
+currentMemos : EndpointMemoGateTrace.Memos
+cold :
+  SourceCurrentEdgeCallNumeric.Receipt formulas solver current profile 0 request (caller (widthBits + 2))
+    EndpointMemoGateTrace.empty result after currentMemos
+numeric : Fits (SourceCurrentParentUniformEnvelope.profile 0 alphabet profile) after.checked
+carrier :
+  SourceEqualityAnnotationHeap.Heap
+    (fun guard => guard ∈ SourceCurrentParentUniformGuardAlphabet.forecast 0 alphabet profile)
+    after.checked.native.machine.heap
+table : after.edgeResults.table request.key = some 0
+hit : SourceCurrentAllocatedPartialState.beginEdge request after = (0, FlatMemoThunk.Observation.ready result, after)
+warmDone :
+  SourceCurrentAllocatedPartialWorker.edgeCall 0 0 0 0 0 0 0 0 0 0 0 request after =
+    SourceCurrentAllocatedPartialWorker.Outcome.done result after
+inherited :
+  SourceEqualityConstraintAllocation.Ready
+    (SourceCurrentAllocatedNativeEffects.physical after.checked).equality.constraints emptyField
+⊢ (∀ (depth : Nat), ¬Cap depth recursive) ∧
+    built = InternedNestedConstruction.Outcome.done value heap ∧
+      ∃ result after next final warmNext warmFinal,
+        SourceCurrentEdgeCallNumeric.Receipt formulas solver next profile 0 request (caller (widthBits + 2))
+            EndpointMemoGateTrace.empty result after final ∧
+          Fits nextProfile after.checked ∧
+            SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ nextAlphabet) after.checked.native.machine.heap ∧
+              after.edgeResults.cells 0 = some { request := request, status := FlatMemoThunk.Status.returned result } ∧
+                after.edgeResults.table request.key = some 0 ∧
+                  SourceCurrentEdgeCallNumeric.Receipt formulas solver warmNext nextProfile 0 request after final result
+                      after warmFinal ∧
+                    Fits (SourceCurrentParentUniformEnvelope.profile 0 nextAlphabet nextProfile) after.checked ∧
+                      SourceEqualityAnnotationHeap.Heap
+                          (fun guard =>
+                            guard ∈ SourceCurrentParentUniformGuardAlphabet.forecast 0 nextAlphabet nextProfile)
+                          after.checked.native.machine.heap ∧
+                        SourceCurrentAllocatedPartialWorker.edgeCall 0 0 0 0 0 0 0 0 0 0 0 request after =
+                          SourceCurrentAllocatedPartialWorker.Outcome.done result after

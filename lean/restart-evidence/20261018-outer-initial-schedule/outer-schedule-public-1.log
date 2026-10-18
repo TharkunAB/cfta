@@ -1,0 +1,1600 @@
+MicroCFTA.SourceCurrentOuterInitialSchedule.parent : Nat →
+  Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+def MicroCFTA.SourceCurrentOuterInitialSchedule.parent : Nat →
+  Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile :=
+fun budget seed =>
+  @Prod.mk.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+    (MicroCFTA.SourceCurrentParentUniformGuardAlphabet.forecast budget
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed))
+    (MicroCFTA.SourceCurrentParentUniformEnvelope.profile budget
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed))
+'MicroCFTA.SourceCurrentOuterInitialSchedule.parent' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+MicroCFTA.SourceCurrentOuterInitialSchedule.rebuild : Prod.{0, 0}
+    (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+  Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+def MicroCFTA.SourceCurrentOuterInitialSchedule.rebuild : Prod.{0, 0}
+    (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+  Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile :=
+fun seed =>
+  @Prod.mk.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+    (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+    (MicroCFTA.SourceCurrentOuterConstructorBounds.profile
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed))
+'MicroCFTA.SourceCurrentOuterInitialSchedule.rebuild' does not depend on any axioms
+MicroCFTA.SourceCurrentOuterInitialSchedule.parent_ge : ∀ (budget : Nat)
+  (seed :
+    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  And
+    (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.parent budget seed)))
+    (@HasSubset.Subset.{0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (@List.instHasSubset.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.parent budget seed)))
+theorem MicroCFTA.SourceCurrentOuterInitialSchedule.parent_ge : ∀ (budget : Nat)
+  (seed :
+    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  And
+    (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.parent budget seed)))
+    (@HasSubset.Subset.{0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (@List.instHasSubset.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.parent budget seed))) :=
+fun budget seed =>
+  @And.intro
+    (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.parent budget seed)))
+    (@HasSubset.Subset.{0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (@List.instHasSubset.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.parent budget seed)))
+    (@MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le.trans
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (MicroCFTA.SourceCurrentInitialSelectionForecast.cover
+        (@List.flatMap.{0, 0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+          (fun records =>
+            @List.flatMap.{0, 0} Nat MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+              (fun count =>
+                @List.map.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                  (fun ambient =>
+                    MicroCFTA.SourceCurrentClassesForecast.finalProfile budget count records ambient
+                      (@Prod.snd.{0, 0}
+                        (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed))
+                  (MicroCFTA.SourceCurrentParentAlphabetReservation.wordsThrough
+                    (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+                    (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed).edges))
+              (List.range
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed).mass
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+          (MicroCFTA.SourceCurrentParentAlphabetReservation.ownRecordImage
+            (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)))
+        (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed))
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.parent budget seed))
+      (MicroCFTA.SourceCurrentInitialSelectionForecast.cover_ge
+        (@List.flatMap.{0, 0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+          (fun records =>
+            @List.flatMap.{0, 0} Nat MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+              (fun count =>
+                @List.map.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                  (fun ambient =>
+                    MicroCFTA.SourceCurrentClassesForecast.finalProfile budget count records ambient
+                      (@Prod.snd.{0, 0}
+                        (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed))
+                  (MicroCFTA.SourceCurrentParentAlphabetReservation.wordsThrough
+                    (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+                    (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed).edges))
+              (List.range
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed).mass
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+          (MicroCFTA.SourceCurrentParentAlphabetReservation.ownRecordImage
+            (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)))
+        (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed))
+      (MicroCFTA.SourceCurrentMkEdgeNumeric.finalProfile_ge
+        (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed).mass
+        (MicroCFTA.SourceCurrentParentUniformEnvelope.classesProfile budget
+          (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+          (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed))))
+    fun x member =>
+    @MicroCFTA.SourceCurrentParentUniformGuardAlphabet.initial_mem budget
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      x member
+'MicroCFTA.SourceCurrentOuterInitialSchedule.parent_ge' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentOuterInitialSchedule.rebuild_ge : ∀
+  (seed :
+    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  And
+    (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.rebuild seed)))
+    (@HasSubset.Subset.{0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (@List.instHasSubset.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.rebuild seed)))
+theorem MicroCFTA.SourceCurrentOuterInitialSchedule.rebuild_ge : ∀
+  (seed :
+    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  And
+    (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.rebuild seed)))
+    (@HasSubset.Subset.{0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (@List.instHasSubset.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.rebuild seed))) :=
+fun seed =>
+  @And.intro
+    (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.rebuild seed)))
+    (@HasSubset.Subset.{0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (@List.instHasSubset.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.rebuild seed)))
+    (MicroCFTA.SourceCurrentOuterConstructorBounds.profile_ge
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed))
+    fun x member => member
+'MicroCFTA.SourceCurrentOuterInitialSchedule.rebuild_ge' depends on axioms: [propext, Quot.sound.{u}]
+MicroCFTA.SourceCurrentOuterInitialSchedule.node : Nat →
+  Nat →
+    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+      Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+@[irreducible] def MicroCFTA.SourceCurrentOuterInitialSchedule.node : Nat →
+  Nat →
+    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+      Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile :=
+fun fuel budget seed =>
+  MicroCFTA.SourceCurrentOuterInitialSchedule.node._mutual budget
+    (@PSum.inl.{1, 1}
+      (@PSigma.{1, 1} Nat fun fuel =>
+        Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+      (PSum.{1, 1}
+        (@PSigma.{1, 1} Nat fun fuel =>
+          Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+        (PSum.{1, 1}
+          (@PSigma.{1, 1} Nat fun fuel =>
+            Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+          (PSum.{1, 1}
+            (@PSigma.{1, 1} Nat fun fuel =>
+              Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+            (PSum.{1, 1}
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)))))
+      (@PSigma.mk.{1, 1} Nat
+        (fun fuel =>
+          Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+        fuel seed))
+'MicroCFTA.SourceCurrentOuterInitialSchedule.node' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+MicroCFTA.SourceCurrentOuterInitialSchedule.body : Nat →
+  Nat →
+    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+      Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+@[irreducible] def MicroCFTA.SourceCurrentOuterInitialSchedule.body : Nat →
+  Nat →
+    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+      Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile :=
+fun fuel budget seed =>
+  MicroCFTA.SourceCurrentOuterInitialSchedule.node._mutual budget
+    (@PSum.inr.{1, 1}
+      (@PSigma.{1, 1} Nat fun fuel =>
+        Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+      (PSum.{1, 1}
+        (@PSigma.{1, 1} Nat fun fuel =>
+          Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+        (PSum.{1, 1}
+          (@PSigma.{1, 1} Nat fun fuel =>
+            Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+          (PSum.{1, 1}
+            (@PSigma.{1, 1} Nat fun fuel =>
+              Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+            (PSum.{1, 1}
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)))))
+      (@PSum.inl.{1, 1}
+        (@PSigma.{1, 1} Nat fun fuel =>
+          Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+        (PSum.{1, 1}
+          (@PSigma.{1, 1} Nat fun fuel =>
+            Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+          (PSum.{1, 1}
+            (@PSigma.{1, 1} Nat fun fuel =>
+              Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+            (PSum.{1, 1}
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))))
+        (@PSigma.mk.{1, 1} Nat
+          (fun fuel =>
+            Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+          fuel seed)))
+'MicroCFTA.SourceCurrentOuterInitialSchedule.body' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+MicroCFTA.SourceCurrentOuterInitialSchedule.rows : Nat →
+  Nat →
+    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+      Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+@[irreducible] def MicroCFTA.SourceCurrentOuterInitialSchedule.rows : Nat →
+  Nat →
+    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+      Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile :=
+fun fuel budget seed =>
+  MicroCFTA.SourceCurrentOuterInitialSchedule.node._mutual budget
+    (@PSum.inr.{1, 1}
+      (@PSigma.{1, 1} Nat fun fuel =>
+        Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+      (PSum.{1, 1}
+        (@PSigma.{1, 1} Nat fun fuel =>
+          Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+        (PSum.{1, 1}
+          (@PSigma.{1, 1} Nat fun fuel =>
+            Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+          (PSum.{1, 1}
+            (@PSigma.{1, 1} Nat fun fuel =>
+              Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+            (PSum.{1, 1}
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)))))
+      (@PSum.inr.{1, 1}
+        (@PSigma.{1, 1} Nat fun fuel =>
+          Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+        (PSum.{1, 1}
+          (@PSigma.{1, 1} Nat fun fuel =>
+            Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+          (PSum.{1, 1}
+            (@PSigma.{1, 1} Nat fun fuel =>
+              Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+            (PSum.{1, 1}
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))))
+        (@PSum.inl.{1, 1}
+          (@PSigma.{1, 1} Nat fun fuel =>
+            Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+          (PSum.{1, 1}
+            (@PSigma.{1, 1} Nat fun fuel =>
+              Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+            (PSum.{1, 1}
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)))
+          (@PSigma.mk.{1, 1} Nat
+            (fun fuel =>
+              Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+            fuel seed))))
+'MicroCFTA.SourceCurrentOuterInitialSchedule.rows' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+MicroCFTA.SourceCurrentOuterInitialSchedule.descendants : Nat →
+  Nat →
+    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+      Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+@[irreducible] def MicroCFTA.SourceCurrentOuterInitialSchedule.descendants : Nat →
+  Nat →
+    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+      Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile :=
+fun fuel budget seed =>
+  MicroCFTA.SourceCurrentOuterInitialSchedule.node._mutual budget
+    (@PSum.inr.{1, 1}
+      (@PSigma.{1, 1} Nat fun fuel =>
+        Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+      (PSum.{1, 1}
+        (@PSigma.{1, 1} Nat fun fuel =>
+          Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+        (PSum.{1, 1}
+          (@PSigma.{1, 1} Nat fun fuel =>
+            Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+          (PSum.{1, 1}
+            (@PSigma.{1, 1} Nat fun fuel =>
+              Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+            (PSum.{1, 1}
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)))))
+      (@PSum.inr.{1, 1}
+        (@PSigma.{1, 1} Nat fun fuel =>
+          Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+        (PSum.{1, 1}
+          (@PSigma.{1, 1} Nat fun fuel =>
+            Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+          (PSum.{1, 1}
+            (@PSigma.{1, 1} Nat fun fuel =>
+              Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+            (PSum.{1, 1}
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))))
+        (@PSum.inr.{1, 1}
+          (@PSigma.{1, 1} Nat fun fuel =>
+            Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+          (PSum.{1, 1}
+            (@PSigma.{1, 1} Nat fun fuel =>
+              Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+            (PSum.{1, 1}
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)))
+          (@PSum.inl.{1, 1}
+            (@PSigma.{1, 1} Nat fun fuel =>
+              Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+            (PSum.{1, 1}
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+            (@PSigma.mk.{1, 1} Nat
+              (fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+              fuel seed)))))
+'MicroCFTA.SourceCurrentOuterInitialSchedule.descendants' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentOuterInitialSchedule.children : Nat →
+  Nat →
+    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+      Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+@[irreducible] def MicroCFTA.SourceCurrentOuterInitialSchedule.children : Nat →
+  Nat →
+    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+      Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile :=
+fun fuel budget seed =>
+  MicroCFTA.SourceCurrentOuterInitialSchedule.node._mutual budget
+    (@PSum.inr.{1, 1}
+      (@PSigma.{1, 1} Nat fun fuel =>
+        Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+      (PSum.{1, 1}
+        (@PSigma.{1, 1} Nat fun fuel =>
+          Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+        (PSum.{1, 1}
+          (@PSigma.{1, 1} Nat fun fuel =>
+            Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+          (PSum.{1, 1}
+            (@PSigma.{1, 1} Nat fun fuel =>
+              Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+            (PSum.{1, 1}
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)))))
+      (@PSum.inr.{1, 1}
+        (@PSigma.{1, 1} Nat fun fuel =>
+          Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+        (PSum.{1, 1}
+          (@PSigma.{1, 1} Nat fun fuel =>
+            Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+          (PSum.{1, 1}
+            (@PSigma.{1, 1} Nat fun fuel =>
+              Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+            (PSum.{1, 1}
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))))
+        (@PSum.inr.{1, 1}
+          (@PSigma.{1, 1} Nat fun fuel =>
+            Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+          (PSum.{1, 1}
+            (@PSigma.{1, 1} Nat fun fuel =>
+              Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+            (PSum.{1, 1}
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)))
+          (@PSum.inr.{1, 1}
+            (@PSigma.{1, 1} Nat fun fuel =>
+              Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+            (PSum.{1, 1}
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+            (@PSum.inl.{1, 1}
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+              (@PSigma.mk.{1, 1} Nat
+                (fun fuel =>
+                  Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+                fuel seed))))))
+'MicroCFTA.SourceCurrentOuterInitialSchedule.children' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentOuterInitialSchedule.walk : Nat →
+  Nat →
+    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+      Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+@[irreducible] def MicroCFTA.SourceCurrentOuterInitialSchedule.walk : Nat →
+  Nat →
+    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile →
+      Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile :=
+fun fuel budget seed =>
+  MicroCFTA.SourceCurrentOuterInitialSchedule.node._mutual budget
+    (@PSum.inr.{1, 1}
+      (@PSigma.{1, 1} Nat fun fuel =>
+        Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+      (PSum.{1, 1}
+        (@PSigma.{1, 1} Nat fun fuel =>
+          Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+        (PSum.{1, 1}
+          (@PSigma.{1, 1} Nat fun fuel =>
+            Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+          (PSum.{1, 1}
+            (@PSigma.{1, 1} Nat fun fuel =>
+              Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+            (PSum.{1, 1}
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)))))
+      (@PSum.inr.{1, 1}
+        (@PSigma.{1, 1} Nat fun fuel =>
+          Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+        (PSum.{1, 1}
+          (@PSigma.{1, 1} Nat fun fuel =>
+            Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+          (PSum.{1, 1}
+            (@PSigma.{1, 1} Nat fun fuel =>
+              Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+            (PSum.{1, 1}
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))))
+        (@PSum.inr.{1, 1}
+          (@PSigma.{1, 1} Nat fun fuel =>
+            Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+          (PSum.{1, 1}
+            (@PSigma.{1, 1} Nat fun fuel =>
+              Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+            (PSum.{1, 1}
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)))
+          (@PSum.inr.{1, 1}
+            (@PSigma.{1, 1} Nat fun fuel =>
+              Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+            (PSum.{1, 1}
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+            (@PSum.inr.{1, 1}
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+              (@PSigma.{1, 1} Nat fun fuel =>
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+              (@PSigma.mk.{1, 1} Nat
+                (fun fuel =>
+                  Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+                fuel seed))))))
+'MicroCFTA.SourceCurrentOuterInitialSchedule.walk' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+MicroCFTA.SourceCurrentOuterInitialSchedule.node_ge : ∀ (fuel budget : Nat)
+  (seed :
+    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  And
+    (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.node fuel budget seed)))
+    (@HasSubset.Subset.{0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (@List.instHasSubset.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.node fuel budget seed)))
+theorem MicroCFTA.SourceCurrentOuterInitialSchedule.node_ge : ∀ (fuel budget : Nat)
+  (seed :
+    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  And
+    (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.node fuel budget seed)))
+    (@HasSubset.Subset.{0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (@List.instHasSubset.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.node fuel budget seed))) :=
+fun fuel budget seed =>
+  @And.left
+    (∀
+      (seed :
+        Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+      MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.node fuel budget seed))
+    (And
+      (∀
+        (seed :
+          Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+        MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+          (MicroCFTA.SourceCurrentOuterInitialSchedule.body fuel budget seed))
+      (And
+        (∀
+          (seed :
+            Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+          MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+            (MicroCFTA.SourceCurrentOuterInitialSchedule.rows fuel budget seed))
+        (And
+          (∀
+            (seed :
+              Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+            MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+              (MicroCFTA.SourceCurrentOuterInitialSchedule.descendants fuel budget seed))
+          (And
+            (∀
+              (seed :
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+              MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                (MicroCFTA.SourceCurrentOuterInitialSchedule.children fuel budget seed))
+            (∀
+              (seed :
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+              MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                (MicroCFTA.SourceCurrentOuterInitialSchedule.walk fuel budget seed))))))
+    (MicroCFTA.SourceCurrentOuterInitialSchedule.all_ge✝ fuel budget) seed
+'MicroCFTA.SourceCurrentOuterInitialSchedule.node_ge' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+MicroCFTA.SourceCurrentOuterInitialSchedule.body_ge : ∀ (fuel budget : Nat)
+  (seed :
+    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  And
+    (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.body fuel budget seed)))
+    (@HasSubset.Subset.{0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (@List.instHasSubset.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.body fuel budget seed)))
+theorem MicroCFTA.SourceCurrentOuterInitialSchedule.body_ge : ∀ (fuel budget : Nat)
+  (seed :
+    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  And
+    (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.body fuel budget seed)))
+    (@HasSubset.Subset.{0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (@List.instHasSubset.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.body fuel budget seed))) :=
+fun fuel budget seed =>
+  @And.left
+    (∀
+      (seed :
+        Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+      MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.body fuel budget seed))
+    (And
+      (∀
+        (seed :
+          Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+        MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+          (MicroCFTA.SourceCurrentOuterInitialSchedule.rows fuel budget seed))
+      (And
+        (∀
+          (seed :
+            Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+          MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+            (MicroCFTA.SourceCurrentOuterInitialSchedule.descendants fuel budget seed))
+        (And
+          (∀
+            (seed :
+              Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+            MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+              (MicroCFTA.SourceCurrentOuterInitialSchedule.children fuel budget seed))
+          (∀
+            (seed :
+              Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+            MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+              (MicroCFTA.SourceCurrentOuterInitialSchedule.walk fuel budget seed)))))
+    (@And.right
+      (∀
+        (seed :
+          Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+        MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+          (MicroCFTA.SourceCurrentOuterInitialSchedule.node fuel budget seed))
+      (And
+        (∀
+          (seed :
+            Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+          MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+            (MicroCFTA.SourceCurrentOuterInitialSchedule.body fuel budget seed))
+        (And
+          (∀
+            (seed :
+              Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+            MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+              (MicroCFTA.SourceCurrentOuterInitialSchedule.rows fuel budget seed))
+          (And
+            (∀
+              (seed :
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+              MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                (MicroCFTA.SourceCurrentOuterInitialSchedule.descendants fuel budget seed))
+            (And
+              (∀
+                (seed :
+                  Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+                MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                  (MicroCFTA.SourceCurrentOuterInitialSchedule.children fuel budget seed))
+              (∀
+                (seed :
+                  Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+                MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                  (MicroCFTA.SourceCurrentOuterInitialSchedule.walk fuel budget seed))))))
+      (MicroCFTA.SourceCurrentOuterInitialSchedule.all_ge✝ fuel budget))
+    seed
+'MicroCFTA.SourceCurrentOuterInitialSchedule.body_ge' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+MicroCFTA.SourceCurrentOuterInitialSchedule.rows_ge : ∀ (fuel budget : Nat)
+  (seed :
+    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  And
+    (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.rows fuel budget seed)))
+    (@HasSubset.Subset.{0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (@List.instHasSubset.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.rows fuel budget seed)))
+theorem MicroCFTA.SourceCurrentOuterInitialSchedule.rows_ge : ∀ (fuel budget : Nat)
+  (seed :
+    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  And
+    (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.rows fuel budget seed)))
+    (@HasSubset.Subset.{0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (@List.instHasSubset.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.rows fuel budget seed))) :=
+fun fuel budget seed =>
+  @And.left
+    (∀
+      (seed :
+        Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+      MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.rows fuel budget seed))
+    (And
+      (∀
+        (seed :
+          Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+        MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+          (MicroCFTA.SourceCurrentOuterInitialSchedule.descendants fuel budget seed))
+      (And
+        (∀
+          (seed :
+            Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+          MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+            (MicroCFTA.SourceCurrentOuterInitialSchedule.children fuel budget seed))
+        (∀
+          (seed :
+            Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+          MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+            (MicroCFTA.SourceCurrentOuterInitialSchedule.walk fuel budget seed))))
+    (@And.right
+      (∀
+        (seed :
+          Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+        MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+          (MicroCFTA.SourceCurrentOuterInitialSchedule.body fuel budget seed))
+      (And
+        (∀
+          (seed :
+            Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+          MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+            (MicroCFTA.SourceCurrentOuterInitialSchedule.rows fuel budget seed))
+        (And
+          (∀
+            (seed :
+              Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+            MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+              (MicroCFTA.SourceCurrentOuterInitialSchedule.descendants fuel budget seed))
+          (And
+            (∀
+              (seed :
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+              MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                (MicroCFTA.SourceCurrentOuterInitialSchedule.children fuel budget seed))
+            (∀
+              (seed :
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+              MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                (MicroCFTA.SourceCurrentOuterInitialSchedule.walk fuel budget seed)))))
+      (@And.right
+        (∀
+          (seed :
+            Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+          MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+            (MicroCFTA.SourceCurrentOuterInitialSchedule.node fuel budget seed))
+        (And
+          (∀
+            (seed :
+              Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+            MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+              (MicroCFTA.SourceCurrentOuterInitialSchedule.body fuel budget seed))
+          (And
+            (∀
+              (seed :
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+              MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                (MicroCFTA.SourceCurrentOuterInitialSchedule.rows fuel budget seed))
+            (And
+              (∀
+                (seed :
+                  Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+                MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                  (MicroCFTA.SourceCurrentOuterInitialSchedule.descendants fuel budget seed))
+              (And
+                (∀
+                  (seed :
+                    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+                  MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                    (MicroCFTA.SourceCurrentOuterInitialSchedule.children fuel budget seed))
+                (∀
+                  (seed :
+                    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+                  MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                    (MicroCFTA.SourceCurrentOuterInitialSchedule.walk fuel budget seed))))))
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.all_ge✝ fuel budget)))
+    seed
+'MicroCFTA.SourceCurrentOuterInitialSchedule.rows_ge' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+MicroCFTA.SourceCurrentOuterInitialSchedule.descendants_ge : ∀ (fuel budget : Nat)
+  (seed :
+    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  And
+    (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.descendants fuel budget seed)))
+    (@HasSubset.Subset.{0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (@List.instHasSubset.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.descendants fuel budget seed)))
+theorem MicroCFTA.SourceCurrentOuterInitialSchedule.descendants_ge : ∀ (fuel budget : Nat)
+  (seed :
+    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  And
+    (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.descendants fuel budget seed)))
+    (@HasSubset.Subset.{0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (@List.instHasSubset.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.descendants fuel budget seed))) :=
+fun fuel budget seed =>
+  @And.left
+    (∀
+      (seed :
+        Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+      MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.descendants fuel budget seed))
+    (And
+      (∀
+        (seed :
+          Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+        MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+          (MicroCFTA.SourceCurrentOuterInitialSchedule.children fuel budget seed))
+      (∀
+        (seed :
+          Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+        MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+          (MicroCFTA.SourceCurrentOuterInitialSchedule.walk fuel budget seed)))
+    (@And.right
+      (∀
+        (seed :
+          Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+        MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+          (MicroCFTA.SourceCurrentOuterInitialSchedule.rows fuel budget seed))
+      (And
+        (∀
+          (seed :
+            Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+          MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+            (MicroCFTA.SourceCurrentOuterInitialSchedule.descendants fuel budget seed))
+        (And
+          (∀
+            (seed :
+              Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+            MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+              (MicroCFTA.SourceCurrentOuterInitialSchedule.children fuel budget seed))
+          (∀
+            (seed :
+              Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+            MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+              (MicroCFTA.SourceCurrentOuterInitialSchedule.walk fuel budget seed))))
+      (@And.right
+        (∀
+          (seed :
+            Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+          MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+            (MicroCFTA.SourceCurrentOuterInitialSchedule.body fuel budget seed))
+        (And
+          (∀
+            (seed :
+              Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+            MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+              (MicroCFTA.SourceCurrentOuterInitialSchedule.rows fuel budget seed))
+          (And
+            (∀
+              (seed :
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+              MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                (MicroCFTA.SourceCurrentOuterInitialSchedule.descendants fuel budget seed))
+            (And
+              (∀
+                (seed :
+                  Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+                MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                  (MicroCFTA.SourceCurrentOuterInitialSchedule.children fuel budget seed))
+              (∀
+                (seed :
+                  Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+                MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                  (MicroCFTA.SourceCurrentOuterInitialSchedule.walk fuel budget seed)))))
+        (@And.right
+          (∀
+            (seed :
+              Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+            MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+              (MicroCFTA.SourceCurrentOuterInitialSchedule.node fuel budget seed))
+          (And
+            (∀
+              (seed :
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+              MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                (MicroCFTA.SourceCurrentOuterInitialSchedule.body fuel budget seed))
+            (And
+              (∀
+                (seed :
+                  Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+                MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                  (MicroCFTA.SourceCurrentOuterInitialSchedule.rows fuel budget seed))
+              (And
+                (∀
+                  (seed :
+                    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+                  MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                    (MicroCFTA.SourceCurrentOuterInitialSchedule.descendants fuel budget seed))
+                (And
+                  (∀
+                    (seed :
+                      Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+                    MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                      (MicroCFTA.SourceCurrentOuterInitialSchedule.children fuel budget seed))
+                  (∀
+                    (seed :
+                      Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+                    MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                      (MicroCFTA.SourceCurrentOuterInitialSchedule.walk fuel budget seed))))))
+          (MicroCFTA.SourceCurrentOuterInitialSchedule.all_ge✝ fuel budget))))
+    seed
+'MicroCFTA.SourceCurrentOuterInitialSchedule.descendants_ge' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentOuterInitialSchedule.children_ge : ∀ (fuel budget : Nat)
+  (seed :
+    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  And
+    (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.children fuel budget seed)))
+    (@HasSubset.Subset.{0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (@List.instHasSubset.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.children fuel budget seed)))
+theorem MicroCFTA.SourceCurrentOuterInitialSchedule.children_ge : ∀ (fuel budget : Nat)
+  (seed :
+    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  And
+    (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.children fuel budget seed)))
+    (@HasSubset.Subset.{0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (@List.instHasSubset.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.children fuel budget seed))) :=
+fun fuel budget seed =>
+  @And.left
+    (∀
+      (seed :
+        Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+      MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.children fuel budget seed))
+    (∀
+      (seed :
+        Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+      MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.walk fuel budget seed))
+    (@And.right
+      (∀
+        (seed :
+          Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+        MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+          (MicroCFTA.SourceCurrentOuterInitialSchedule.descendants fuel budget seed))
+      (And
+        (∀
+          (seed :
+            Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+          MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+            (MicroCFTA.SourceCurrentOuterInitialSchedule.children fuel budget seed))
+        (∀
+          (seed :
+            Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+          MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+            (MicroCFTA.SourceCurrentOuterInitialSchedule.walk fuel budget seed)))
+      (@And.right
+        (∀
+          (seed :
+            Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+          MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+            (MicroCFTA.SourceCurrentOuterInitialSchedule.rows fuel budget seed))
+        (And
+          (∀
+            (seed :
+              Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+            MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+              (MicroCFTA.SourceCurrentOuterInitialSchedule.descendants fuel budget seed))
+          (And
+            (∀
+              (seed :
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+              MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                (MicroCFTA.SourceCurrentOuterInitialSchedule.children fuel budget seed))
+            (∀
+              (seed :
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+              MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                (MicroCFTA.SourceCurrentOuterInitialSchedule.walk fuel budget seed))))
+        (@And.right
+          (∀
+            (seed :
+              Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+            MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+              (MicroCFTA.SourceCurrentOuterInitialSchedule.body fuel budget seed))
+          (And
+            (∀
+              (seed :
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+              MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                (MicroCFTA.SourceCurrentOuterInitialSchedule.rows fuel budget seed))
+            (And
+              (∀
+                (seed :
+                  Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+                MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                  (MicroCFTA.SourceCurrentOuterInitialSchedule.descendants fuel budget seed))
+              (And
+                (∀
+                  (seed :
+                    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+                  MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                    (MicroCFTA.SourceCurrentOuterInitialSchedule.children fuel budget seed))
+                (∀
+                  (seed :
+                    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+                  MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                    (MicroCFTA.SourceCurrentOuterInitialSchedule.walk fuel budget seed)))))
+          (@And.right
+            (∀
+              (seed :
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+              MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                (MicroCFTA.SourceCurrentOuterInitialSchedule.node fuel budget seed))
+            (And
+              (∀
+                (seed :
+                  Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+                MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                  (MicroCFTA.SourceCurrentOuterInitialSchedule.body fuel budget seed))
+              (And
+                (∀
+                  (seed :
+                    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+                  MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                    (MicroCFTA.SourceCurrentOuterInitialSchedule.rows fuel budget seed))
+                (And
+                  (∀
+                    (seed :
+                      Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+                    MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                      (MicroCFTA.SourceCurrentOuterInitialSchedule.descendants fuel budget seed))
+                  (And
+                    (∀
+                      (seed :
+                        Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+                      MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                        (MicroCFTA.SourceCurrentOuterInitialSchedule.children fuel budget seed))
+                    (∀
+                      (seed :
+                        Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+                      MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                        (MicroCFTA.SourceCurrentOuterInitialSchedule.walk fuel budget seed))))))
+            (MicroCFTA.SourceCurrentOuterInitialSchedule.all_ge✝ fuel budget)))))
+    seed
+'MicroCFTA.SourceCurrentOuterInitialSchedule.children_ge' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentOuterInitialSchedule.walk_ge : ∀ (fuel budget : Nat)
+  (seed :
+    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  And
+    (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.walk fuel budget seed)))
+    (@HasSubset.Subset.{0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (@List.instHasSubset.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.walk fuel budget seed)))
+theorem MicroCFTA.SourceCurrentOuterInitialSchedule.walk_ge : ∀ (fuel budget : Nat)
+  (seed :
+    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  And
+    (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.walk fuel budget seed)))
+    (@HasSubset.Subset.{0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (@List.instHasSubset.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.walk fuel budget seed))) :=
+fun fuel budget seed =>
+  @And.right
+    (∀
+      (seed :
+        Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+      MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.children fuel budget seed))
+    (∀
+      (seed :
+        Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+      MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.walk fuel budget seed))
+    (@And.right
+      (∀
+        (seed :
+          Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+        MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+          (MicroCFTA.SourceCurrentOuterInitialSchedule.descendants fuel budget seed))
+      (And
+        (∀
+          (seed :
+            Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+          MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+            (MicroCFTA.SourceCurrentOuterInitialSchedule.children fuel budget seed))
+        (∀
+          (seed :
+            Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+          MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+            (MicroCFTA.SourceCurrentOuterInitialSchedule.walk fuel budget seed)))
+      (@And.right
+        (∀
+          (seed :
+            Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+          MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+            (MicroCFTA.SourceCurrentOuterInitialSchedule.rows fuel budget seed))
+        (And
+          (∀
+            (seed :
+              Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+            MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+              (MicroCFTA.SourceCurrentOuterInitialSchedule.descendants fuel budget seed))
+          (And
+            (∀
+              (seed :
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+              MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                (MicroCFTA.SourceCurrentOuterInitialSchedule.children fuel budget seed))
+            (∀
+              (seed :
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+              MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                (MicroCFTA.SourceCurrentOuterInitialSchedule.walk fuel budget seed))))
+        (@And.right
+          (∀
+            (seed :
+              Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+            MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+              (MicroCFTA.SourceCurrentOuterInitialSchedule.body fuel budget seed))
+          (And
+            (∀
+              (seed :
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+              MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                (MicroCFTA.SourceCurrentOuterInitialSchedule.rows fuel budget seed))
+            (And
+              (∀
+                (seed :
+                  Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+                MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                  (MicroCFTA.SourceCurrentOuterInitialSchedule.descendants fuel budget seed))
+              (And
+                (∀
+                  (seed :
+                    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+                  MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                    (MicroCFTA.SourceCurrentOuterInitialSchedule.children fuel budget seed))
+                (∀
+                  (seed :
+                    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+                  MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                    (MicroCFTA.SourceCurrentOuterInitialSchedule.walk fuel budget seed)))))
+          (@And.right
+            (∀
+              (seed :
+                Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+              MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                (MicroCFTA.SourceCurrentOuterInitialSchedule.node fuel budget seed))
+            (And
+              (∀
+                (seed :
+                  Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+                MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                  (MicroCFTA.SourceCurrentOuterInitialSchedule.body fuel budget seed))
+              (And
+                (∀
+                  (seed :
+                    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+                  MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                    (MicroCFTA.SourceCurrentOuterInitialSchedule.rows fuel budget seed))
+                (And
+                  (∀
+                    (seed :
+                      Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+                    MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                      (MicroCFTA.SourceCurrentOuterInitialSchedule.descendants fuel budget seed))
+                  (And
+                    (∀
+                      (seed :
+                        Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+                      MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                        (MicroCFTA.SourceCurrentOuterInitialSchedule.children fuel budget seed))
+                    (∀
+                      (seed :
+                        Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+                      MicroCFTA.SourceCurrentOuterInitialSchedule.Retains✝ seed
+                        (MicroCFTA.SourceCurrentOuterInitialSchedule.walk fuel budget seed))))))
+            (MicroCFTA.SourceCurrentOuterInitialSchedule.all_ge✝ fuel budget)))))
+    seed
+'MicroCFTA.SourceCurrentOuterInitialSchedule.walk_ge' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+MicroCFTA.SourceCurrentOuterInitialSchedule.parent_reserved : ∀ (bits budget : Nat)
+  (seed :
+    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.parent budget seed)) →
+    MicroCFTA.SourceCurrentParentAlphabetReservation.UniformReserved bits budget
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+theorem MicroCFTA.SourceCurrentOuterInitialSchedule.parent_reserved : ∀ (bits budget : Nat)
+  (seed :
+    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.parent budget seed)) →
+    MicroCFTA.SourceCurrentParentAlphabetReservation.UniformReserved bits budget
+      (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed) :=
+fun bits budget seed room =>
+  MicroCFTA.SourceCurrentParentInitialRoom.uniform_of_room bits budget
+    (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+    (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+    (@MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room.mono bits
+      (MicroCFTA.SourceCurrentParentUniformEnvelope.classesProfile budget
+        (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+        (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed))
+      (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.parent budget seed))
+      room
+      (MicroCFTA.SourceCurrentMkEdgeNumeric.finalProfile_ge
+        (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed).mass
+        (MicroCFTA.SourceCurrentParentUniformEnvelope.classesProfile budget
+          (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+          (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed))))
+'MicroCFTA.SourceCurrentOuterInitialSchedule.parent_reserved' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]

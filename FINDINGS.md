@@ -2,6 +2,21 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 07:24 CEST. Proof checkpoint is `fdd5c553`.
+Successful recursive outer runs now derive full semantic Reads, Post,
+Frame, physical Fits and finite raw guard carriers from initial facts.
+One initial scheduled Room condition covers the reached Parent calls.
+Empty inherited constraints give exact language equality. Internal calls
+preserve membership for terms that satisfy their inherited constraints
+and never add accepted terms. General successful termination stays open.
+The physical Profile does not bound equality-operation tables or host Int
+identities. This is a refinement obligation, not a new executable defect.
+Full Audit passes 3256 jobs and 71215 checks.
+No Haskell patch is added. Field-pool repair `b9219b9e` remains fixed in
+`c0cc8a05`. Read `lean/notes-current-outer-initial-schedule.md`.
+Keep this registry first. Record each later repair with failure, executable
+reproducer, paths, commit, checks and upstream status. Preserve all earlier entries.
+
 Current proof update: 2026-10-18 06:59 CEST. Proof checkpoint is `651cb065`.
 Complete Classes, Local and Parent now construct finite raw guard carriers
 with their original full receipts and exact returned states. A finite

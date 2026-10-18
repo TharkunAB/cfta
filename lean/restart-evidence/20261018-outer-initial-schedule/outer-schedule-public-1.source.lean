@@ -1,0 +1,81 @@
+import MicroCFTA.SourceCurrentOuterInitialSchedule
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+set_option maxHeartbeats 5000000
+
+#check @MicroCFTA.SourceCurrentOuterInitialSchedule.parent
+#print MicroCFTA.SourceCurrentOuterInitialSchedule.parent
+#print axioms MicroCFTA.SourceCurrentOuterInitialSchedule.parent
+
+#check @MicroCFTA.SourceCurrentOuterInitialSchedule.rebuild
+#print MicroCFTA.SourceCurrentOuterInitialSchedule.rebuild
+#print axioms MicroCFTA.SourceCurrentOuterInitialSchedule.rebuild
+
+#check @MicroCFTA.SourceCurrentOuterInitialSchedule.parent_ge
+#print MicroCFTA.SourceCurrentOuterInitialSchedule.parent_ge
+#print axioms MicroCFTA.SourceCurrentOuterInitialSchedule.parent_ge
+
+#check @MicroCFTA.SourceCurrentOuterInitialSchedule.rebuild_ge
+#print MicroCFTA.SourceCurrentOuterInitialSchedule.rebuild_ge
+#print axioms MicroCFTA.SourceCurrentOuterInitialSchedule.rebuild_ge
+
+#check @MicroCFTA.SourceCurrentOuterInitialSchedule.node
+#print MicroCFTA.SourceCurrentOuterInitialSchedule.node
+#print axioms MicroCFTA.SourceCurrentOuterInitialSchedule.node
+
+#check @MicroCFTA.SourceCurrentOuterInitialSchedule.body
+#print MicroCFTA.SourceCurrentOuterInitialSchedule.body
+#print axioms MicroCFTA.SourceCurrentOuterInitialSchedule.body
+
+#check @MicroCFTA.SourceCurrentOuterInitialSchedule.rows
+#print MicroCFTA.SourceCurrentOuterInitialSchedule.rows
+#print axioms MicroCFTA.SourceCurrentOuterInitialSchedule.rows
+
+#check @MicroCFTA.SourceCurrentOuterInitialSchedule.descendants
+#print MicroCFTA.SourceCurrentOuterInitialSchedule.descendants
+#print axioms MicroCFTA.SourceCurrentOuterInitialSchedule.descendants
+
+#check @MicroCFTA.SourceCurrentOuterInitialSchedule.children
+#print MicroCFTA.SourceCurrentOuterInitialSchedule.children
+#print axioms MicroCFTA.SourceCurrentOuterInitialSchedule.children
+
+#check @MicroCFTA.SourceCurrentOuterInitialSchedule.walk
+#print MicroCFTA.SourceCurrentOuterInitialSchedule.walk
+#print axioms MicroCFTA.SourceCurrentOuterInitialSchedule.walk
+
+#check @MicroCFTA.SourceCurrentOuterInitialSchedule.node_ge
+#print MicroCFTA.SourceCurrentOuterInitialSchedule.node_ge
+#print axioms MicroCFTA.SourceCurrentOuterInitialSchedule.node_ge
+
+#check @MicroCFTA.SourceCurrentOuterInitialSchedule.body_ge
+#print MicroCFTA.SourceCurrentOuterInitialSchedule.body_ge
+#print axioms MicroCFTA.SourceCurrentOuterInitialSchedule.body_ge
+
+#check @MicroCFTA.SourceCurrentOuterInitialSchedule.rows_ge
+#print MicroCFTA.SourceCurrentOuterInitialSchedule.rows_ge
+#print axioms MicroCFTA.SourceCurrentOuterInitialSchedule.rows_ge
+
+#check @MicroCFTA.SourceCurrentOuterInitialSchedule.descendants_ge
+#print MicroCFTA.SourceCurrentOuterInitialSchedule.descendants_ge
+#print axioms MicroCFTA.SourceCurrentOuterInitialSchedule.descendants_ge
+
+#check @MicroCFTA.SourceCurrentOuterInitialSchedule.children_ge
+#print MicroCFTA.SourceCurrentOuterInitialSchedule.children_ge
+#print axioms MicroCFTA.SourceCurrentOuterInitialSchedule.children_ge
+
+#check @MicroCFTA.SourceCurrentOuterInitialSchedule.walk_ge
+#print MicroCFTA.SourceCurrentOuterInitialSchedule.walk_ge
+#print axioms MicroCFTA.SourceCurrentOuterInitialSchedule.walk_ge
+
+#check @MicroCFTA.SourceCurrentOuterInitialSchedule.parent_reserved
+#print MicroCFTA.SourceCurrentOuterInitialSchedule.parent_reserved
+#print axioms MicroCFTA.SourceCurrentOuterInitialSchedule.parent_reserved
+

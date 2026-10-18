@@ -1,0 +1,88 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-initial-schedule/outer-schedule-direct-1.source.lean:96:13: error: Application type mismatch: The argument
+  refl
+has type
+  ∀ (seed : List Guard × Profile), Retains seed seed
+but is expected to have type
+  ∀ (seed : List Guard × Profile), Retains seed (node 0 budget seed)
+in the application
+  And.intro refl
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-initial-schedule/outer-schedule-direct-1.source.lean:96:19: error: Application type mismatch: The argument
+  refl
+has type
+  ∀ (seed : List Guard × Profile), Retains seed seed
+but is expected to have type
+  ∀ (seed : List Guard × Profile), Retains seed (body 0 budget seed)
+in the application
+  And.intro refl
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-initial-schedule/outer-schedule-direct-1.source.lean:96:25: error: Application type mismatch: The argument
+  refl
+has type
+  ∀ (seed : List Guard × Profile), Retains seed seed
+but is expected to have type
+  ∀ (seed : List Guard × Profile), Retains seed (rows 0 budget seed)
+in the application
+  And.intro refl
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-initial-schedule/outer-schedule-direct-1.source.lean:96:31: error: Application type mismatch: The argument
+  rebuild_ge
+has type
+  ∀ (seed : List Guard × Profile), Le seed.snd (rebuild seed).snd ∧ seed.fst ⊆ (rebuild seed).fst
+but is expected to have type
+  ∀ (seed : List Guard × Profile), Retains seed (descendants 0 budget seed)
+in the application
+  And.intro rebuild_ge
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-initial-schedule/outer-schedule-direct-1.source.lean:96:43: error: Application type mismatch: The argument
+  refl
+has type
+  ∀ (seed : List Guard × Profile), Retains seed seed
+but is expected to have type
+  ∀ (seed : List Guard × Profile), Retains seed (children 0 budget seed)
+in the application
+  And.intro refl
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-initial-schedule/outer-schedule-direct-1.source.lean:100:32: error: Application type mismatch: The argument
+  ih.right.right.right.right.right (node fuel budget seed)
+has type
+  Retains (node fuel budget seed) (walk fuel budget (node fuel budget seed))
+but is expected to have type
+  Retains (node fuel budget seed) (walk (fuel + 1) budget seed)
+in the application
+  trans (ih.left seed) (ih.right.right.right.right.right (node fuel budget seed))
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-initial-schedule/outer-schedule-direct-1.source.lean:101:80: error: Type mismatch
+  walkKeeps
+has type
+  ∀ (seed : List Guard × Profile), Retains seed (walk (fuel + 1) budget seed)
+but is expected to have type
+  ∀ (seed : List Guard × Profile), Retains seed (children (fuel + 1) budget seed)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-initial-schedule/outer-schedule-direct-1.source.lean:104:38: error: Application type mismatch: The argument
+  rebuild_ge ?m.89
+has type
+  Le (Prod.snd ?m.89) (rebuild ?m.89).snd ∧ Prod.fst ?m.89 ⊆ (rebuild ?m.89).fst
+but is expected to have type
+  Retains (children (fuel + 1) budget seed) (descendants (fuel + 1) budget seed)
+in the application
+  trans (childKeeps seed) (rebuild_ge ?m.89)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-initial-schedule/outer-schedule-direct-1.source.lean:109:12: error: Application type mismatch: The argument
+  ih.right.right.left (descendants fuel budget (parent budget seed))
+has type
+  Retains (descendants fuel budget (parent budget seed))
+    (rows fuel budget (descendants fuel budget (parent budget seed)))
+but is expected to have type
+  Retains (descendants fuel budget (parent budget seed)) (rows (fuel + 1) budget seed)
+in the application
+  trans (ih.right.right.right.left (parent budget seed))
+    (ih.right.right.left (descendants fuel budget (parent budget seed)))
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-initial-schedule/outer-schedule-direct-1.source.lean:112:36: error: Application type mismatch: The argument
+  rebuild_ge ?m.145
+has type
+  Le (Prod.snd ?m.145) (rebuild ?m.145).snd ∧ Prod.fst ?m.145 ⊆ (rebuild ?m.145).fst
+but is expected to have type
+  Retains (rows fuel budget seed) (body (fuel + 1) budget seed)
+in the application
+  trans (ih.right.right.left seed) (rebuild_ge ?m.145)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261018-outer-initial-schedule/outer-schedule-direct-1.source.lean:113:13: error: Application type mismatch: The argument
+  bodyKeeps
+has type
+  ∀ (seed : List Guard × Profile), Retains seed (body (fuel + 1) budget seed)
+but is expected to have type
+  ∀ (seed : List Guard × Profile), Retains seed (node (fuel + 1) budget seed)
+in the application
+  And.intro bodyKeeps

@@ -1,6 +1,6 @@
 # Proof status at 2026-10-18
 
-Checked at proof checkpoint `651cb065`. Source main is `c0cc8a05`,
+Checked at proof checkpoint `fdd5c553`. Source main is `c0cc8a05`,
 merged into `formalize` at `896b0a1c`. This note reports the current theorem
 boundaries. It adds no theorem and no Haskell behavior change.
 
@@ -160,7 +160,16 @@ bridge must derive semantic Context, Frame, scheduled Fits and carriers
 through rows_tail and walk_tail. Equality-operation resources need a
 separate account from the physical Profile. General recursive completion
 and the strongest complete outer domain are unchanged. Read
-[the current checkpoint](notes-current-parent-full-guard-carrier.md).
+[the earlier checkpoint](notes-current-parent-full-guard-carrier.md).
+
+The complete mutual outer traversal now derives semantic Reads, Post,
+Frame, scheduled physical Fits and a finite raw guard carrier at every
+supported successful return. One initial final-profile Room condition
+covers reached Parent reservations. Each row and child suffix receives
+the actual returned context. No future-result or reached-check oracle is
+supplied. Initial semantic and physical facts and literal bounded success
+remain explicit. General recursive completion stays open. Read
+[the current checkpoint](notes-current-outer-initial-schedule.md).
 
 ## Strongest current claim in plain technical English
 
@@ -178,6 +187,15 @@ for closed resident Original operands. Initial resource bounds construct
 supported physical executions. The complete finite ordinary constrained
 outer pass preserves the full guarded language. That outer-pass domain
 excludes Mu, references, and explicit unions in every descendant.
+
+For the general supported recursive outer traversal, successful runs now
+derive language preservation from initial semantic and physical facts.
+An internal result accepts no new terms and preserves membership for
+terms that satisfy its inherited constraints. With empty inherited
+constraints, the returned and input languages are exactly equal. The
+proof also derives the semantic state invariant and scheduled physical
+allocation bounds at that same return. It does not assume a future callee
+result or semantic trace. It still assumes that this bounded run succeeds.
 
 These are separate checked results for the implementation model. They do
 not establish that every valid public Haskell call terminates and satisfies

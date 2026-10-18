@@ -1,0 +1,13 @@
+# Raw outer rebuild endpoint review
+
+The two endpoints combine the existing raw receipts with a uniform initial numeric bound and the unchanged flat guard carrier. The original resident edge or available ordinary node bounds the old list length by stored mass. The same-length premise transfers this bound to the replacement list. The existing numeric producer supplies the exact literal raw result, full receipt, and Frame. Profile monotonicity raises its count-sensitive bound to `OuterConstructorBounds.profile`. The edge keeps the original complete raw guard. Node reconstruction adds no guard on either ordered-identity branch.
+
+The premises describe the constructor entry. They do not require a future Frame, worker return, semantic callback, finite Cap, closed input, or completed recursive child. The endpoints do not derive same-length traversals or a caller Post. The outer induction supplies length from its actual graph or observed return and uses the existing raw StepEffects for Post and forest language. No separate Mu adapter is added. Existing terminal completion already gives its semantic law and unchanged complete caller.
+
+The selected integration builds an ordinary root with two raw Mu children from empty source storage. Covered Top allocation history derives readiness. Causal original construction derives the guard heap. These facts derive its initial Frame and Fits. An actual children worker cleans both Mu values. The literal raw edge allocates one new edge. The changed ordinary node then allocates one new node. Both new endpoint producers return their exact old receipt, full Frame, uniform Fits, and original finite guard carrier. The fixture does not assume future Reads, output laws, or future histories.
+
+Selected source checks are direct-1 and kernels-3. Both logs contain zero bytes. Canonical-1 completes 1789 jobs. It replays the existing `InternedFreshOrdinaryClosedCompletion` unused-input warning. The new source strict check has no warning. Public-1 prints both complete signatures and proofs. Kernels-public-1 prints the constructed theorem signature and proof alias. Both groups use all eight explicit printer/linter options and only the standard three permitted axioms.
+
+Failed fixture attempts 1 and 2 remain immutable. They contain fixture elaboration errors for a Top alias, a fallback NodeKey constructor, and a physical-state projection. They are excluded from selected evidence. The production module passes on its first strict and canonical attempt.
+
+This component supports the fixed-fuel outer induction. It proves no general outer completion, ancestor exclusion, termination, or Haskell runtime correspondence.
