@@ -60,6 +60,7 @@ import qualified Data.CFTA.Template as Template
 | Check membership | `FTA.accepts`, `Common.acceptsWith` | Whether a supplied tree belongs. The interned API takes a constraint interpreter. |
 | List accepted terms | `FTA.terms`, `Enumeration.terms`, `Enumeration.plainTerms`, `Enumeration.plainTermsAtMost` | Every term. `FTA.terms`, `plainTerms`, and `plainTermsAtMost` list by depth. `FTA.terms` and `plainTerms` ignore constraints and give an infinite list for a recursive grammar, and `plainTermsAtMost` stops at a depth. `terms` solves constraints and stops at recursion. For an automaton with constraints or recursion, it lists in the order of the runs, each term once. |
 | Edit a language | `Language.update`, `Language.define`, `Language.require`, `Language.relax`, `Language.without`, `Language.restore` | A new language value with its source productions, named facts, and named exclusions. `Language.compileGraph` gives the graph to query. |
+| Translate to an earlier language | `Lowering.lower`, `Lowering.lift`, `Lowering.checkLowering` | A lowered term; the automaton of the terms whose lowering an automaton accepts; the productions that do not lower. |
 | Restrict to a pattern | `Template.restrictFTA`, `Template.restrict` | A grammar for the terms that match a `Template`. |
 | List terms a check accepts | `FTA.termsUpToM` | The terms up to a depth, each checked once by a monadic predicate that sees its transition. |
 | Bound tree depth | `FTA.boundDepth` | Another grammar, restricted to trees within the bound. |
