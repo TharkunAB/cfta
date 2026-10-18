@@ -1015,6 +1015,61 @@ blocked hints, so zero fallbacks does not show that all earlier hints were
 ready. The priority change took effect but did not prevent the frontier
 limit.
 
+### Current HugeLists bucket statistics
+
+A separate all-`-O2` diagnostic uses `d2e91fdf` at actual phase 3,
+program-leaf size 5, and result type `Int`. It preserves the earlier search.
+The 133-law entry prefix matches the fresh matrix. The hook runs after
+reduction and refold, before the full KBO sort. It tests no term and admits
+no law in that bucket.
+
+After graph observation, the diagnostic inspects 512 unpruned accepting
+runs. It keeps rigid Given names and declared types in each program shape.
+It preserves separate constant occurrences, raw annotations, and residual
+obligations. This traversal sample is not a KBO prefix.
+
+| Observed sample metric | Count |
+| --- | ---: |
+| Entry templates | 173 |
+| Raw accepting runs | 512 |
+| Distinct annotated terms | 512 |
+| Distinct program shapes with rigid Givens | 512 |
+| Invalid typed terms or residual obligations | 0 |
+| Runs matched by at least one entry template | 290 |
+| Templates matched in the sample | 23 |
+| Template/run match incidences, including overlaps | 434 |
+| Uncovered runs and uncovered shapes | 222 |
+| Expanded program nodes | 4608 |
+| Expanded canonical annotation nodes | 18412 |
+
+There are 43 raw records with the `Mu` recursion marker. The current
+annotation parser maps a raw `Mu` leaf to carrier `A` before canonical type
+checking. These observations retain that cutoff policy. They do not prove
+correspondence with an unrestricted recursive language. The probe does not
+compile or evaluate the records.
+
+Each observed program shape has one canonical annotation witness. This
+sample does not establish repeated complete witnesses for a fixed program.
+Annotations account for 79.98% of its expanded term nodes. This is a
+structural count, not a CPU share. The graph observation exhausts 266
+references and 683 reference edges. Its 267 role visits comprise 47 program,
+219 annotation, and one marker visit. A reference can have more than one
+role. These counts do not measure enumeration-state visits.
+
+A control uses the same phase grammar at leaf size 2 and the size-5 entry
+templates. It exhausts all 18 raw runs. Direct template filtering and the
+actual pruner keep the same 16 annotated runs with the same multiplicities.
+Their canonical KBO streams also match. Every control run has no residual
+obligation. This verifies the local measurement method on that finite
+language.
+
+The large sample does not exhaust the size-5 language. The existing oracle
+already uses its entry templates. The 290 matches therefore do not measure
+additional pruning that a compiled recognizer could provide. The sample
+also omits `seen` and complete-candidate reducibility checks. A full
+optimization decision needs counts of failed partial type choices and
+annotation-state work. Successful-run counts alone cannot supply them.
+
 ### Alternatives supported by these diagnostics
 
 1. **Share type witnesses for each program shape.** Join fresh constant type
