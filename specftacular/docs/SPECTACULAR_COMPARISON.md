@@ -1118,6 +1118,58 @@ wildcard can then omit child reads. Repeated reads across templates can offset
 that saving. Exact pending IDs, finite languages, residuals, and the full
 197-law sequence must agree before any speed claim.
 
+### Completed pruning controls
+
+Two local candidates preserve the exact current 197-law HugeLists size 5,
+phase 3 output. All stdout bytes match the selected `d2e91fdf` reference.
+The root-view candidate reads fragments during monadic template matching.
+The lazy snapshot candidate keeps the old pure matcher and captures immutable
+union-find and value maps.
+
+| Measurement | Current pruning | Root view | Lazy snapshot |
+| --- | ---: | ---: | ---: |
+| Allocated bytes | 229,664,980,896 | 253,776,344,696 | 221,111,957,160 |
+| Allocation change | reference | +10.4985% | −3.7241% |
+| RTS total CPU time, s | 36.237 | 39.201 | 39.718 |
+| Observed CPU change | reference | +8.1795% | +9.6062% |
+| Wall time, s | 36.248 | 39.233 | 39.708 |
+| Peak RSS, KiB | 533,840 | 533,572 | 528,692 |
+
+Each variant runs once. The snapshot comparison reuses the completed baseline.
+Both comparisons use the same eleven HOME modules and audited dependencies at
+`-O2`, the full 1,064-case schedule, and `-N1 -M6G`. Compiler flags match.
+Neither native control uses counters or profiling. Each scope has a 16 GiB
+limit and no swap. These observations do not estimate timing noise or
+statistical significance. No original Spectacular run is repeated.
+
+Both candidates pass nine finite grammars with 36 template sets each. These
+controls compare pending IDs and order, template selection, annotated term
+sequences, multiplicities, and residual multisets. The snapshot also preserves
+saved trees across later value writes and unions, including implicit singleton
+roots and repeated original hole IDs. These checks do not prove equivalence
+for every recursive state or establish a residency bound.
+
+The root view increases allocation. The snapshot saves modest allocation but
+has higher observed CPU time. Neither fragment-view API is selected. The
+production runtime and current matrix remain unchanged.
+
+A whole-run late-SCC profile of the rejected root view also reproduces the
+full 197-law stdout. Its 29 HOME modules use `-O2`. Matcher self costs total
+15,916 of 108,008 application ticks (14.7359%). The denominator excludes GC,
+profiling, system, and idle ticks. Sampling includes testing and completion;
+it does not isolate the earlier enumeration bucket.
+
+The fragment-view subtree has 22,687 ticks (21.0049%). It includes all matcher
+self costs through enumeration's continuations. It is not removable lookup
+cost. Inclusive families overlap. Program discovery, index, spine, and resume
+helpers have no separate surviving labels; this does not establish zero cost.
+Profiler entries are not independently validated UVar-read counts.
+
+Profile wall time is 132.883 seconds, versus 39.233 seconds for the native
+candidate, or 3.387 times as long. Profiling also changes allocation and RSS.
+Without a matched baseline profile, these percentages do not attribute the
+native regression or predict a speedup from another implementation.
+
 ### Alternatives supported by these diagnostics
 
 1. **Share type witnesses for each program shape.** Join fresh constant type
