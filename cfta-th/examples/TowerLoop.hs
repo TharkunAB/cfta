@@ -5,9 +5,10 @@
 {- | A language tower in one loop.
 
 1. The base language L0: sums of digits. Each digit is a leaf with an exact value.
-2. The tests: every term of L0 up to size 3, in rank order.
-3. The model, a black box: it accepts a sum when the sum is even and every digit is at most 4.
-4. The loop finds the predicates that the model depends on, and a spec as a table.
+2. The model, a black box: it accepts a sum when the sum is even and every digit is at most 4.
+3. The outer loop: it tests a few concretizations of each abstract term up to a growing size
+   bound, and finds the predicates that the model depends on, and a spec as a table.
+4. Every concrete test up to the bound checks the spec; the loop asked only some of them.
 5. The abstraction step from L0 to L1 is a language update, stored as text.
 6. A short spec in L1, written with the automaton quote, agrees with every test.
 7. A definitional step from L1 to L2 adds double(x), which lowers to add(x, x).
@@ -17,6 +18,7 @@
 module Main (main) where
 
 import Control.Monad (forM_, when)
+import Data.Functor.Identity (Identity (..))
 import Data.List (intercalate)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (mapMaybe)
@@ -26,9 +28,9 @@ import qualified Data.Text.IO as TextIO
 import qualified Data.CFTA as FTA
 import qualified Data.CFTA.Document as Document
 import Data.CFTA.Formula (renderFormula)
-import Data.CFTA.Gen.Tower (Observation (..), Outcome (..), Result (..), Step (..))
+import Data.CFTA.Gen.Tower (Exploration (..), Outcome (..))
 import qualified Data.CFTA.Gen.Tower as Tower
-import Data.CFTA.Index (Cardinality (..), ClassRank (..))
+import Data.CFTA.Index (Cardinality (..), ClassRank (..), Size)
 import Data.CFTA.Language (Language)
 import qualified Data.CFTA.Language as Language
 import Data.CFTA.Lowering (Expansion (..))
@@ -76,28 +78,28 @@ model term = even (sum values) && all (<= 4) values
     leaves (Node symbol []) = [symbol]
     leaves (Node _ children) = concatMap leaves children
 
--- | Every term of L0 up to size 3, in rank order, with the response of the model.
-observations :: [Observation Bool]
-observations =
-    [ Observation test (model test)
-    | size <- [1 .. 3]
-    , test <- Sized.termsOfSize (must show $ Sized.sized $ Language.compileGraph base) size
-    ]
+-- | The size bound of the loop.
+bound :: Size
+bound = 7
+
+-- | Every concrete test of L0 up to the bound, in rank order.
+concreteTests :: [Term Symbol]
+concreteTests = concatMap (Sized.termsOfSize $ must show $ Sized.sized $ Language.compileGraph base) [1 .. bound]
 
 -- | The qualifier templates: @v > k@ and @v mod k == 0@.
 templates :: [Integer -> Formula]
 templates =
-    [ \bound -> refinementFormula (.> fromInteger bound)
+    [ \threshold -> refinementFormula (.> fromInteger threshold)
     , \divisor -> refinementFormula $ \v -> modulo v (fromInteger divisor) .== 0
     ]
 
--- | The loop: start with no predicates and a spec that rejects every term.
-result :: Result Bool
-result = Tower.refine templates False [] Map.empty observations
+-- | The outer loop: two concretizations of each abstract term, a spec that rejects by default.
+exploration :: Exploration Bool
+exploration = runIdentity $ Tower.explore templates False bound 2 (Language.compileGraph base) (Identity . model)
 
 -- | The abstraction of a digit in the vocabulary that the loop found.
 cubeOf :: Integer -> Symbol
-cubeOf value = case Tower.abstract (resultVocabulary result) (Node (digit value) []) of
+cubeOf value = case Tower.abstract (exploredVocabulary exploration) (Node (digit value) []) of
     Just (Node symbol []) -> symbol
     _ -> error "a digit has no abstraction"
 
@@ -125,20 +127,30 @@ main = do
     heading "1. L0, the base language"
     TextIO.putStr $ Serialization.printLanguage base
 
-    heading "2 and 3. The tests and the model"
+    heading "2 and 3. The model and the outer loop"
+    forM_ (exploredChanges exploration) $ \(size, vocabulary) ->
+        putStrLn $ "at size bound " <> show size <> ", the vocabulary is: " <> intercalate ", " (map formula vocabulary)
+    check "the loop ends in agreement" $ exploredOutcome exploration == Agreed
     putStrLn $
-        show (length observations) <> " tests, " <> show (length $ filter observedResponse observations) <> " accepted"
+        "model calls: "
+            <> show (exploredCalls exploration)
+            <> ", for "
+            <> show (length concreteTests)
+            <> " concrete tests up to size "
+            <> show bound
 
-    heading "4. The loop"
-    forM_ [predicate | Extend predicate <- resultSteps result] $ \predicate -> putStrLn $ "extend: " <> formula predicate
-    putStrLn $ "updates of the spec: " <> show (length [() | Update _ _ <- resultSteps result])
-    check "the spec agrees with every test" $ resultOutcome result == Agreed
+    heading "4. Every concrete test up to the bound checks the spec"
+    let predicted test =
+            maybe False (\term -> Map.findWithDefault False term $ exploredSpec exploration) $
+                Tower.abstract (exploredVocabulary exploration) test
+    check "the spec of the loop agrees with the model on every concrete test" $
+        all (\test -> predicted test == model test) concreteTests
     putStrLn $
         "description length: "
-            <> show (Tower.descriptionLength (resultVocabulary result) (resultSpec result))
+            <> show (Tower.descriptionLength (exploredVocabulary exploration) (exploredSpec exploration))
             <> " nodes, against "
             <> show (Tower.descriptionLength [] concreteTable)
-            <> " for the table of the accepted tests"
+            <> " for the table of the accepted concrete tests"
 
     heading "5. The abstraction step from L0 to L1, as text"
     let abstraction =
@@ -156,10 +168,8 @@ main = do
     TextIO.putStr $ Serialization.printLanguage abstracted
 
     heading "6. A short spec in L1, from the automaton quote"
-    let agrees observation =
-            maybe False (FTA.accepts spec) (Tower.abstract (resultVocabulary result) $ observedTest observation)
-                == observedResponse observation
-    check "the spec agrees with every test" $ all agrees observations
+    let agrees test = maybe False (FTA.accepts spec) (Tower.abstract (exploredVocabulary exploration) test) == model test
+    check "the spec agrees with the model on every concrete test" $ all agrees concreteTests
 
     heading "7. The definitional step from L1 to L2: double(x) lowers to add(x, x)"
     let lowering = must show $ Lowering.mkLowering [("double", 1, Apply "add" [Child 0, Child 0])]
@@ -200,7 +210,7 @@ main = do
     check "the composite is the two lowerings" $
         Lowering.lower composite example == (Lowering.lower quad example >>= Lowering.lower lowering)
   where
-    concreteTable = Map.fromList [(observedTest observation, True) | observation <- observations, observedResponse observation]
+    concreteTable = Map.fromList [(test, True) | test <- concreteTests, model test]
 
 -- | The production names of L1: each cube is named by the digits that it holds.
 cubeNames :: Map.Map Symbol Text.Text
