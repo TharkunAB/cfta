@@ -799,7 +799,10 @@ testSchedule n =
            ]
 
 {- | Generate one valuation from its descriptor. Repeated calls agree.
-Other list generators use size zero in inactive boundary slots.
+Keep the original random, validation, and 32 boundary inputs.
+Use generator size zero for unsupported types in the added predicate and
+boundary cases. Their directed values and seeds stay unchanged.
+Other list generators use size zero in inactive original boundary slots.
 -}
 testCaseValues :: Sig -> TestCase -> VarVals
 testCaseValues sig testcase =
@@ -811,14 +814,16 @@ testCaseValues sig testcase =
     value v i (Generator g) t
         | PredicateCase active target <- testcase =
             fromMaybe
-                (g (hash ("validation" :: String, 8 + 2 * active + target, v)) 100)
+                (g (hash ("validation" :: String, 8 + 2 * active + target, v)) 0)
                 (lookup t (predicateValues target (i `mod` 8 == active)))
     value v i (Generator g) t
         | BoundaryCase k boundary active <- testcase =
             let selected = i `mod` 4 == active
-                size = case t of
-                    TCons "[]" [_] | not selected -> 0
-                    _ -> 100
+                size
+                    | k >= 8 = 0
+                    | otherwise = case t of
+                        TCons "[]" [_] | not selected -> 0
+                        _ -> 100
              in fromMaybe
                     (g (hash ("boundary" :: String, k, active, v)) size)
                     (lookup t (boundaryValues boundary selected))
