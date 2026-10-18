@@ -1,5 +1,11 @@
 # Selected target row provenance and the remaining renewal proof
 
+The later `notes-current-writer-history.md` closes the whole-outer causal
+writer producer for successful calls and actual unfinished phase prefixes.
+It derives initial Raw from the logical empty Merge memo and initial physical
+facts. Strict source-origin renewal and general completion remain open.
+
+
 Checked on 2026-10-18. Starting checkpoint: `e11607d4`.
 Proof checkpoint: `3739234c6`. Source main remains `c0cc8a05`.
 The full-library goal remains active. No Haskell bytes change.

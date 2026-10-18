@@ -2,6 +2,18 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 23:38 CEST. Proof checkpoint: `5f5565efd`.
+Actual target, class, Parent and outer calls now derive causal Merge writer
+history. Unfinished outer phase prefixes need no future whole-call return.
+Logical empty Merge initialization derives the initial history. Initial
+physical Good, probe and request-readiness facts remain explicit. Renewed
+source-origin progress, general completion and Haskell refinement remain
+open. No Haskell defect or repair request is added. No Haskell bytes change.
+Field-pool repair `b9219b9e` remains fixed in main `c0cc8a05`.
+Read `lean/notes-current-writer-history.md`. Keep this registry first.
+Record repairs with failure, executable reproducer, paths, commit, checks
+and upstream status. Preserve every earlier entry.
+
 Current proof update: 2026-10-18 23:17 CEST. Proof checkpoint is `3739234c6`.
 Actual target operand rows now retain indexed projection sources and actual
 historical cold/warm Merge writers with ordered child requests. Whole-caller
