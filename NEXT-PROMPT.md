@@ -13,6 +13,48 @@ Do not bypass that decision. Continue independent local proof work.
 Read `lean/notes-current-publication-status.md`. The full-library goal stays
 active. The proof and evidence are committed, locally verified and preserved.
 
+## Current causal union schedules and conditional literal clauses
+
+Updated: 2026-10-18 21:35 CEST. Proof checkpoint is `fff568a7`.
+Earlier proof commit is `79478547`. Starting checkpoint is `67497f9f`.
+Source main remains `c0cc8a05`.
+Read `lean/notes-current-causal-union-local.md` and
+`lean/notes-current-system-claim.md`.
+
+Actual two-sided union preparation constructs complete ordered member
+schedules at one produced causal reader. It retains both original parent
+results. Indexed literal fragments preserve the original member occurrence
+and the exact bare-self retention rule. The literal local calculus retains
+full guards, ordered mutual children and actual Mu epsilon successors.
+Genuine one-way literal inclusion supplies normalization fragments.
+
+A conditional union theorem now derives the parent literal clauses from
+explicit strict member laws. Its conclusion is one direction at the
+produced reader. It does not prove the source Law at the original reader,
+the Law for all syntax, or a global Directed instance. No observation is
+transported backwards through mere table growth or Keeps.
+
+A checked actual closed construction refutes arbitrary weak simulation
+up to transitive closure. All witness values are nonempty and available
+in one Ready reader with an actual history. Each relation step preserves
+physical Empty flags and has the literal/local clauses into its closure.
+The closure still fails Directed. This is a proof-contract obstruction.
+It is not a counterexample to actual Generated or a Haskell defect.
+
+Full Audit passes 3400 jobs and 73046 dependency checks. Five modules pass
+empty-log strict checks and clean canonical builds. All 14 public heads
+and two constructed heads pass complete proof and standard-axiom checks.
+Evidence is in `lean/restart-evidence/20261018-causal-union-local/`.
+
+Next establish a genuine fixed-reader source law and the used-Mu clause
+with a justified progress argument. Variable cases need the mutual
+Generated/Inputs induction hypothesis. A larger reader is not the original
+reader. General completion, repeated convergence and Haskell correspondence
+remain open. The broad reduction and size-query guarantees are unchanged.
+No Haskell bytes change. FINDINGS retains every repair first. Field-pool
+repair `b9219b9e` remains fixed in `c0cc8a05`. No push is retried.
+The full-library goal remains active.
+
 ## Current causal Empty agreement and guarded node clauses
 
 Updated: 2026-10-18 21:06 CEST. Proof checkpoint is `20cd2d78`.

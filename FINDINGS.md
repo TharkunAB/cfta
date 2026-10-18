@@ -2,6 +2,20 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 21:35 CEST. Proof checkpoint is `fff568a7`.
+Actual causal union preparation retains both parent results at one
+produced reader. Indexed fragments and strict member literal laws derive
+one-way parent clauses there. The original-reader all-source Law and
+used-Mu progress argument remain open. A source-built counterexample
+refutes arbitrary weak simulation up to transitive closure, even with
+causal Ready and Empty agreement. It does not refute actual Generated
+and establishes no Haskell defect. No repair request is added.
+Full Audit passes 3400 jobs and 73046 checks. No Haskell bytes change.
+Field-pool repair `b9219b9e` remains fixed in `c0cc8a05`.
+Read `lean/notes-current-causal-union-local.md`. Keep this registry first.
+Record later repairs with failure, executable reproducer, paths, commit,
+checks and upstream status. Preserve every earlier entry.
+
 Current proof update: 2026-10-18 21:06 CEST. Proof checkpoint is `20cd2d78`.
 Causal filtered Empty fusion is proved for all syntax. Actual recursive
 Generated pairs have equal Empty flags. Selected Mu readback constructs

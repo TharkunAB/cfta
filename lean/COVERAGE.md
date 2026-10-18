@@ -1,5 +1,27 @@
 # Full formalization coverage
 
+## Current causal union schedules and conditional literal clauses
+
+Checked on 2026-10-18 at proof checkpoint `fff568a7`.
+Actual union preparation derives two ordered schedules with causal history
+at one produced common reader. Both original parent results remain exact.
+Indexed literal fragments retain original member indices and the exact
+bare-self rule. Strict member literal laws give a conditional one-way
+parent clause at that reader. This does not prove the source Law at the
+original reader or for all syntax. Actual Mu successors, full guards and
+ordered mutual child relations remain explicit.
+
+A checked source-built counterexample rules out arbitrary weak simulation
+up to transitive closure, even with causal Ready, available nonempty
+values and physical Empty agreement. It does not refute actual Generated
+or establish a Haskell defect. A justified progress argument is required.
+Full Audit passes 3400 jobs and 73046 checks. Five strict module logs and
+two strict construction logs are empty. All 14 public and two constructed
+heads pass complete proof and standard-axiom checks. General fixed-reader
+simulation, recursive completion, convergence and Haskell correspondence
+remain open. The broad reduction law is unchanged. No Haskell bytes change.
+Read `notes-current-causal-union-local.md` for exact scope and evidence.
+
 ## Current causal Empty agreement and node simulation
 
 Checked on 2026-10-18 at proof checkpoint `20cd2d78`.
