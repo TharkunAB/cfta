@@ -1,5 +1,48 @@
 # Public API and source correspondence
 
+## Current generated-body source rows at actual native Mu writers
+
+Updated: 2026-10-18 09:47 CEST. Proof checkpoint is `68d6afe7`.
+Starting checkpoint is `ef76edaa`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-native-mu-source-anchors.md` for exact boundaries.
+
+An actual completed closed native query now derives an indexed ordinary
+transition in its terminal Mu writer's generated input body. The same
+witness retains the actual body callback, entered domain, fuel, optional
+binder execution, stored winner and earlier row readback. The anchor keeps
+the full symbol, guard, arity and either identity or actual ordered lexical
+child calls. Initial publication history moves forward through the actual
+query trace. The self, ordinary join and union cases remain available.
+
+This body can be a generated child result. Initial query-operand ancestry
+is still open. Its ordinary case must retain both operand rows, actual
+guard conjunction and ordered child pair traces. Open Mu body requests
+also need domain-aware reference provenance. Interned references can have
+memo keys; other placeholders can bypass memoization. General retained
+used-Mu alignment still needs a relation between the actual earlier stored
+body and the current callback. Literal rows keep retained Mu opaque.
+
+The strongest recursive outer claim remains partial correctness: under
+the stated initial semantic and resource conditions, a successful run
+preserves exactly the accepted terms when inherited constraints are empty.
+All-owner node-key exclusion, fresh-call bounds, general recursive outer
+completion, repeated convergence, equality-operation resources, host Int
+adequacy and public Haskell correspondence remain open.
+
+Full Audit passes 3281 jobs and 71406 checks. All seven production public
+pairs pass complete statements, proofs and axioms. Both production strict
+logs are empty. Two complete closed query examples and one auxiliary
+private Claim pass the same full checks in four groups. The Mu example
+uses the pair-absent branch. Its integration strict log is empty.
+Canonical builds and Audit retain only the existing ClosedCompletion
+warning. Independent review finds no material issue.
+Evidence is in `lean/restart-evidence/20261018-native-mu-source-anchors/`.
+
+No Haskell patch or new executable defect is added. FINDINGS retains the
+external repair registry first. Field-pool repair b9219b9e remains fixed
+in c0cc8a05. Publication awaits the existing direct approval. No push is
+retried. The full-library goal stays active.
+
 ## Current original stored transitions from actual result rows
 
 Updated: 2026-10-18 09:31 CEST. Proof checkpoint is `83199114`.

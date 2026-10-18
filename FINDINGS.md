@@ -2,6 +2,20 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-18 09:47 CEST. Proof checkpoint is `68d6afe7`.
+Actual closed query Mu writers now retain a transition anchor in the same
+writer's generated input body, with full fields and actual lexical child
+calls or identity. Initial publication history and the actual body trace
+supply the required entry and final reader. Original query-operand ancestry,
+open-body reference provenance and retained used-Mu alignment remain open.
+Full Audit passes 3281 jobs and 71406 checks. The strongest general outer
+claim remains language preservation at supported successful returns.
+No Haskell patch or new executable defect is added. Field-pool repair
+`b9219b9e` remains fixed in `c0cc8a05`. Read
+`lean/notes-current-native-mu-source-anchors.md`. Keep this registry first.
+Record each later repair with failure, executable reproducer, paths, commit,
+checks and upstream status. Preserve every earlier entry below.
+
 Current proof update: 2026-10-18 09:31 CEST. Proof checkpoint is `83199114`.
 Actual stored substitution now derives original indexed transition anchors
 or explicit replacement origins for literal ordinary result rows. Anchors
