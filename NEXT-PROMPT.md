@@ -1,5 +1,18 @@
 Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
+## Publication awaits direct approval
+
+Updated: 2026-10-18 03:22 CEST. The local verified checkpoint is `30cd81ae`.
+Its proof commit is `1324bb38`. The remote `formalize` was read back at
+`a1270b81`; remote `main` was read back at `c0cc8a05`.
+Automatic approval review rejected both direct checkpoint push attempts.
+It requires direct user approval to upload repository contents and update
+`formalize`. It did not accept the active goal or repository authorization
+notes as trusted permission. A direct approval request is pending.
+Do not bypass that decision. Continue independent local proof work.
+Read `lean/notes-current-publication-status.md`. The full-library goal stays
+active. The proof and evidence are committed, locally verified and preserved.
+
 ## Current actual outer row fields and initial path domains
 
 Updated: 2026-10-18 03:20 CEST. Starting checkpoint is `a1270b81`.
