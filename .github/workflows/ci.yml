@@ -30,6 +30,8 @@ jobs:
             cfta-generator/**/*.hs
             cfta-ghc/**/*.hs
             decision-model/**/*.hs
+            specftacular/**/*.hs
+            specftacular-ghc/**/*.hs
 
       - name: Set up hlint
         uses: haskell-actions/hlint-setup@v2
@@ -39,7 +41,7 @@ jobs:
       - name: Run hlint
         uses: haskell-actions/hlint-run@v2
         with:
-          path: '["cfta", "cfta-generator", "cfta-ghc", "decision-model"]'
+          path: '["cfta", "cfta-generator", "cfta-ghc", "decision-model", "specftacular", "specftacular-ghc"]'
           fail-on: warning
 
   build-test-bench:
@@ -93,6 +95,8 @@ jobs:
           (cd cfta-generator && cabal check)
           (cd cfta-ghc && cabal check)
           (cd decision-model && cabal check)
+          (cd specftacular && cabal check)
+          (cd specftacular-ghc && cabal check)
 
       - name: Build with strict warnings
         run: cabal v2-build all --enable-tests --enable-benchmarks --ghc-options=-Werror
@@ -132,15 +136,16 @@ jobs:
           cabal v2-run cfta-typed-values
           cabal v2-run cfta-automaton-interop
 
-      # The release check builds every dependency again, with documentation,
-      # and takes about 30 minutes. It runs after a merge into main, and on
-      # request (Actions, "Run workflow", on any branch), not on each pull
-      # request.
+      # The release checks rebuild the packages and dependencies with documentation.
+      # They run after a merge into main and on request.
+      # To run them on a branch, use Actions, "Run workflow".
       - name: Validate release artifacts
         if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
         run: |
           scripts/release.sh cfta --check-only
           scripts/release.sh cfta-generator --check-only
+          scripts/release.sh specftacular --check-only
+          scripts/release.sh specftacular-ghc --check-only
 
       - name: Benchmark
         run: cabal v2-bench all --enable-optimization=2

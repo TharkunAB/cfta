@@ -8,8 +8,7 @@ existing `TcM` context, so that a typed-hole plugin can call it.
 
 **Scope: GHC 9.14 only.** The package uses GHC's typechecker API (the `ghc`
 library), which changes between major versions; the bound is
-`ghc >=9.14 && <9.15`. It is the only package of the repository that
-depends on `ghc`.
+`ghc >=9.14 && <9.15`.
 
 | Module | Purpose |
 | --- | --- |

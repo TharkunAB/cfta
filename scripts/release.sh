@@ -5,7 +5,7 @@ usage() {
   cat <<EOF
 Usage: $0 PACKAGE [--publish | --check-only]
 
-PACKAGE must be cfta or cfta-generator.
+PACKAGE must be cfta, cfta-generator, specftacular, or specftacular-ghc.
 Without an option, validates and uploads a package candidate.
 --publish validates and publishes the release.
 --check-only validates the exact artifacts without uploading them.
@@ -21,9 +21,16 @@ esac
 package="$1"
 shift
 
+validation_command=test
 case "$package" in
   cfta) dependencies=() ;;
   cfta-generator) dependencies=(cfta) ;;
+  specftacular) dependencies=(cfta) ;;
+  specftacular-ghc)
+    dependencies=(cfta cfta-generator decision-model cfta-ghc specftacular)
+    # This package has no test suite. Build its executables from the archive.
+    validation_command=build
+    ;;
   *) echo "Error: unknown package '$package'" >&2; usage 1 ;;
 esac
 
@@ -57,7 +64,7 @@ if [[ "$check_only" == false ]] && ! git diff --cached --quiet --exit-code; then
 fi
 
 version="$(awk '/^version:/ {print $2; exit}' "$package/$package.cabal")"
-if [[ "$publish" == true ]] && grep -q "^## $version - Unreleased$" "$package/CHANGELOG.md"; then
+if [[ "$publish" == true && -f "$package/CHANGELOG.md" ]] && grep -q "^## $version - Unreleased$" "$package/CHANGELOG.md"; then
   echo "Error: date the $version changelog entry before publishing." >&2
   exit 1
 fi
@@ -72,7 +79,7 @@ echo "=== Checking $package-$version ==="
   cd "$package"
   cabal check
 )
-cabal test --builddir="$release_build_dir" "$package" --enable-tests -O2 --ghc-options=-Werror --test-show-details=direct
+cabal "$validation_command" --builddir="$release_build_dir" "$package" --enable-tests -O2 --ghc-options=-Werror --test-show-details=direct
 if [[ ${#dependencies[@]} -gt 0 ]]; then
   documentation_dependencies=()
   for dependency in "${dependencies[@]}"; do
@@ -126,12 +133,12 @@ if [[ ${#dependencies[@]} -gt 0 ]]; then
 
   (
     cd "$release_tmp"
-    cabal test "$package" --enable-tests -O2 --ghc-options=-Werror --test-show-details=direct
+    cabal "$validation_command" "$package" --enable-tests -O2 --ghc-options=-Werror --test-show-details=direct
   )
 else
   (
     cd "$release_tmp/$package-$version"
-    cabal test all --with-compiler=ghc-9.14.1 --enable-tests -O2 --ghc-options=-Werror --test-show-details=direct
+    cabal "$validation_command" all --with-compiler=ghc-9.14.1 --enable-tests -O2 --ghc-options=-Werror --test-show-details=direct
   )
 fi
 
