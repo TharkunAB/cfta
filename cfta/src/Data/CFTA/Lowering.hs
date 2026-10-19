@@ -41,10 +41,14 @@ data Expansion symbol
 newtype Lowering symbol = Lowering (Map symbol (Int, Expansion symbol))
     deriving (Eq, Show)
 
--- | A second expansion for a constructor, or an expansion that uses a child that the constructor does not have.
+{- | A second expansion for a constructor, or an expansion that uses a child that the constructor does not have.
+In 'compose': an expansion that applies a constructor of the earlier lowering to a number of children
+that is not its arity.
+-}
 data ExpansionError symbol
     = DuplicateExpansion !symbol
     | ChildOutOfRange !symbol !Int
+    | WrongArity !symbol !Int !Int
     deriving (Eq, Show)
 
 -- | An automaton that 'lift' does not handle, or a production that does not lower.
@@ -77,16 +81,23 @@ identity = Lowering Map.empty
 first @later@, then @earlier@. An expansion of @later@ has the constructors of
 @earlier@ in it replaced by their expansions. A constructor that only
 @earlier@ lowers keeps its expansion. Lowering with the result is lowering with
-@later@ and then with @earlier@.
+@later@ and then with @earlier@. 'WrongArity' if an expansion of @later@
+applies a constructor of @earlier@ to a number of children that is not its
+arity. Then lowering twice gives 'Nothing' for each term with that expansion.
 -}
-compose :: (Ord symbol) => Lowering symbol -> Lowering symbol -> Lowering symbol
-compose (Lowering later) (Lowering earlier) =
-    Lowering $ Map.union (Map.map (fmap substitute) later) earlier
+compose :: (Ord symbol) => Lowering symbol -> Lowering symbol -> Either (ExpansionError symbol) (Lowering symbol)
+compose (Lowering later) (Lowering earlier) = do
+    composed <- traverse (traverse substitute) later
+    Right $ Lowering $ Map.union composed earlier
   where
-    substitute (Child index) = Child index
-    substitute (Apply symbol parts) = case Map.lookup symbol earlier of
-        Nothing -> Apply symbol (map substitute parts)
-        Just (_, expansion) -> instantiate (map substitute parts) expansion
+    substitute (Child index) = Right $ Child index
+    substitute (Apply symbol parts) = do
+        arguments <- traverse substitute parts
+        case Map.lookup symbol earlier of
+            Nothing -> Right $ Apply symbol arguments
+            Just (arity, expansion)
+                | length arguments == arity -> Right $ instantiate arguments expansion
+                | otherwise -> Left $ WrongArity symbol arity (length arguments)
     instantiate arguments (Child index) = arguments !! index
     instantiate arguments (Apply symbol parts) = Apply symbol (map (instantiate arguments) parts)
 
