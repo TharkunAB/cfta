@@ -904,6 +904,20 @@ testSchedule n =
            , active <- [0 .. 3]
            ]
 
+{- | A test case with the values of the variables of a signature on it. Each
+value is generated when an evaluation first needs it, and then shared, so
+the decision trees do not generate the inputs of a test case again.
+-}
+data Case = Case
+    { caseTest :: !TestCase
+    , caseValues :: VarVals
+    }
+    deriving (Show)
+
+-- | The test cases of a schedule, with the values of the variables of a signature.
+withValues :: Sig -> [TestCase] -> [Case]
+withValues sig = map (\testcase -> Case testcase (testCaseValues sig testcase))
+
 {- | Generate one valuation from its descriptor. Repeated calls agree.
 Keep the original random, validation, and 32 boundary inputs.
 Use generator size zero for unsupported types in the added predicate and

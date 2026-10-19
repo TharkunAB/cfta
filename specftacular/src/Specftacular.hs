@@ -66,8 +66,8 @@ data StEcta = StEcta
     {- ^ The variables of each type, from the variable with
     the index 0 of the type.
     -}
-    , test_cases :: [TestCase]
-    -- ^ The test cases that all terms of the phase share.
+    , test_cases :: [Case]
+    -- ^ The test cases that all terms of the phase share, with the values of the variables.
     }
     deriving (Show)
 
@@ -359,7 +359,7 @@ mkStecta size numTests instances sig givenTrans skelTrans =
         , schema_vars = Map.fromList [(Symbol x, map (Symbol . fst) vs) | (x, vs) <- moreVars]
         , sig_ty_cons = Map.keys eq_insts
         , eq_insts = eq_insts
-        , test_cases = testSchedule numTests
+        , test_cases = withValues inst_sig (testSchedule numTests)
         , arb_insts = arbs
         }
   where
@@ -684,7 +684,7 @@ consider env@Settings{..} StEcta{..} lvl full_term s0
                             hPutStrLn stderr ("\r\ESC[Kfollows from the laws: " ++ ppNpTerm (lawOf w))
                         return (Knew, s)
                     | otherwise -> do
-                        (lawSig, law) <- generalizeLaw resolveInstance test_cases inst_sig (eq_type, eq_inst) (lawOf w)
+                        (lawSig, law) <- generalizeLaw resolveInstance (map caseTest test_cases) inst_sig (eq_type, eq_inst) (lawOf w)
                         let n = law_count s + 1
                             law_str = show n <> ". " <> ppNpTerm (canonicalLaw lawSig law)
                         when progress $ hPutStr stderr "\r\ESC[K"

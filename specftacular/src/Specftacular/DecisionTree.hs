@@ -17,10 +17,11 @@ module Specftacular.DecisionTree (
 ) where
 
 import qualified Data.Map.Strict as Map
-import Specftacular.Types (Sig, Term, TestCase, Value, VarVals, testCaseValues)
+import Specftacular.Types (Case (..), Sig, Term, TestCase, Value, VarVals, testCaseValues)
 
-{- | A term evaluator and the generators of its variables. Evaluators must
-use the same generator for each shared variable name.
+{- | A term evaluator and the generators of its variables, or an evaluator
+on the test case. A representative from an earlier phase can have
+variables that the test cases of the current phase do not have.
 -}
 data Evaluator
     = Evaluator Sig (VarVals -> Value)
@@ -33,7 +34,7 @@ data DecisionTree
     | -- | A representative and its evaluator.
       Leaf Term Evaluator
     | -- | A test case and the children for its distinct values.
-      Branch TestCase [(Value, DecisionTree)]
+      Branch Case [(Value, DecisionTree)]
 
 -- | The result of an insertion.
 data Inserted
@@ -69,7 +70,7 @@ The equality gives Nothing when a comparison throws.
 -}
 insert ::
     (Value -> Value -> IO (Maybe Bool)) ->
-    [TestCase] ->
+    [Case] ->
     Term ->
     (TestCase -> Value) ->
     DecisionTree ->
@@ -83,7 +84,7 @@ representative. New equalities still use the complete test schedule.
 insertWith ::
     (Term -> Term -> Bool) ->
     (Value -> Value -> IO (Maybe Bool)) ->
-    [TestCase] ->
+    [Case] ->
     Term ->
     Evaluator ->
     DecisionTree ->
@@ -93,7 +94,7 @@ insertWith known equal cases t eval = go
     go Empty = return (Distinct (Leaf t eval))
     go (Branch tc children) = find [] children
       where
-        v = evaluateWith eval tc (testCaseValues (requiredVariables eval) tc)
+        v = evaluateWith eval tc
         find before [] = return $ Distinct $ Branch tc $ reverse before ++ [(v, Leaf t eval)]
         find before (child@(w, sub) : after) = do
             e <- equal w v
@@ -107,27 +108,31 @@ insertWith known equal cases t eval = go
         | known t y = return (EqualTo y)
         | otherwise = compareCases cases
       where
-        required = requiredVariables eval <> requiredVariables evalY
         compareCases [] = return (EqualTo y)
         compareCases (tc : rest) = do
-            let inputs = testCaseValues required tc
-                w = evaluateWith evalY tc inputs
-                v = evaluateWith eval tc inputs
+            let w = evaluateWith evalY tc
+                v = evaluateWith eval tc
             e <- equal w v
             case e of
                 Nothing -> return Untested
                 Just False -> return $ Distinct $ Branch tc [(w, Leaf y evalY), (v, Leaf t eval)]
                 Just True -> compareCases rest
 
--- | The generators needed by an evaluator with explicit variables.
-requiredVariables :: Evaluator -> Sig
-requiredVariables (Evaluator required _) = required
-requiredVariables (PerCase _) = Map.empty
+-- | Evaluate on the values of a test case, or with a caller's case evaluator.
+evaluateWith :: Evaluator -> Case -> Value
+evaluateWith (Evaluator required eval) testcase = eval (inputs required testcase)
+evaluateWith (PerCase eval) testcase = eval (caseTest testcase)
 
--- | Evaluate with shared inputs, or use a caller's case evaluator.
-evaluateWith :: Evaluator -> TestCase -> VarVals -> Value
-evaluateWith (Evaluator _ eval) _ inputs = eval inputs
-evaluateWith (PerCase eval) tc _ = eval tc
+{- | The values of the variables of an evaluator on a test case: the shared
+values of the case, and the values that the generators of the evaluator
+give for the variables that the case does not have.
+-}
+inputs :: Sig -> Case -> VarVals
+inputs required testcase
+    | Map.null missing = caseValues testcase
+    | otherwise = caseValues testcase `Map.union` testCaseValues missing (caseTest testcase)
+  where
+    missing = required `Map.difference` caseValues testcase
 
 -- | Put the tree of a new representative in its place in the parent.
 below :: (DecisionTree -> DecisionTree) -> Inserted -> Inserted
