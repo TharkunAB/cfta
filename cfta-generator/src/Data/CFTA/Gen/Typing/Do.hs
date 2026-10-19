@@ -35,14 +35,28 @@ fractionRules = Typing.do
 A block is a list of rules, so blocks and other rules combine with '<>'. The
 rules are built when the language is built: a block gives the same
 automaton, counts, and ranks as the same rules in a list.
+
+'draw' gives a value field from a refinement generator. It gives one premise
+without listing the generator's values. Use 'Data.CFTA.Gen.Typing.typingLTA'
+or 'Data.CFTA.Gen.Typing.typingLTAFrom' to build a language with these fields:
+
+@
+numberRules = Typing.do
+    number <- Typing.draw numbers
+    Typing.yields (NumNode number) TInt
+@
 -}
 module Data.CFTA.Gen.Typing.Do (
     -- * Statements
     each,
     sub,
     under,
+    draw,
     guard,
     yields,
+
+    -- * Value fields
+    drawn,
 
     -- * The notation
     (>>=),
@@ -59,7 +73,10 @@ import Prelude (Bool, String, const, id)
 import qualified Prelude
 
 import qualified Control.Monad as Monad
-import Data.CFTA.Gen.Typing (Child, Rule, rule, subterm)
+import Data.CFTA.Gen.Refinement (LTAGen)
+import Data.CFTA.Gen.Typing (Child, Rule, drawn, rule, subterm)
+import Data.CFTA.Generic (HasFTA)
+import Data.CFTA.Refinement.Expression (Literal)
 
 -- | A choice of one element of the list: the block gives one rule for each element.
 each :: [a] -> [a]
@@ -75,6 +92,10 @@ variable with the index 0 in the subterm.
 -}
 under :: [ty] -> ty -> [Child ty]
 under binds typ = [subterm binds typ]
+
+-- | A premise whose values come from a refinement generator, without listing them.
+draw :: (HasFTA v, Literal v) => LTAGen v -> [Child ty]
+draw generator = [drawn generator]
 
 -- | Keep the combinations of the choices before it for which the condition holds.
 guard :: Bool -> [()]
