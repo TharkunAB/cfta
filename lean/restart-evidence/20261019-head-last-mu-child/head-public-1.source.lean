@@ -1,0 +1,24 @@
+import MicroCFTA.SourceCurrentRecursiveHeadMuChildContexts
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+#check @MicroCFTA.SourceCurrentRecursiveHeadMuChildContexts.Suffix
+#print MicroCFTA.SourceCurrentRecursiveHeadMuChildContexts.Suffix
+#print axioms MicroCFTA.SourceCurrentRecursiveHeadMuChildContexts.Suffix
+#check @MicroCFTA.SourceCurrentRecursiveHeadMuChildContexts.Suffix.keeps
+#print MicroCFTA.SourceCurrentRecursiveHeadMuChildContexts.Suffix.keeps
+#print axioms MicroCFTA.SourceCurrentRecursiveHeadMuChildContexts.Suffix.keeps
+#check @MicroCFTA.SourceCurrentRecursiveHeadMuChildContexts.Suffix.literal
+#print MicroCFTA.SourceCurrentRecursiveHeadMuChildContexts.Suffix.literal
+#print axioms MicroCFTA.SourceCurrentRecursiveHeadMuChildContexts.Suffix.literal
+#check @MicroCFTA.SourceCurrentRecursiveHeadMuChildContexts.chain
+#print MicroCFTA.SourceCurrentRecursiveHeadMuChildContexts.chain
+#print axioms MicroCFTA.SourceCurrentRecursiveHeadMuChildContexts.chain
+#check @MicroCFTA.SourceCurrentRecursiveHeadMuChildContexts.head_child
+#print MicroCFTA.SourceCurrentRecursiveHeadMuChildContexts.head_child
+#print axioms MicroCFTA.SourceCurrentRecursiveHeadMuChildContexts.head_child

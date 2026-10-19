@@ -2,6 +2,18 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-19 14:40 CEST. Proof checkpoint: `b9ced29b0`.
+Actual completed Head rows now retain the last explicit Mu on their selected
+branch, its exact stored call, a suffix without further explicit Mu calls,
+and supported child context. Other branches can allocate Mu during suffix
+effects. Empty-start publication History stays explicit. Original binding
+ancestry, global renewal, termination, convergence and Haskell correspondence
+remain open. No Haskell defect or repair request is added. All 268 Haskell
+files and all 207 active package files retain their bytes. Full default
+build passes 3473 jobs; Audit checks 73958 axiom dependencies. Read
+`lean/notes-current-head-last-mu-child.md`. Preserve every repair entry,
+reproducer, path, commit and validation result below.
+
 Current proof update: 2026-10-19 14:24 CEST. Proof checkpoint: `8a62bd5e7`.
 Actual selected recursive observations now retain their publication prefix,
 execution Site, exact full-row path origin and same captured event receipt.
