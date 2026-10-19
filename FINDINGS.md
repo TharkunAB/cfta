@@ -2,6 +2,17 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-19 14:54 CEST. Proof checkpoint: `5930f0fe0`.
+Actual unfolding, row collection, row reads and Head now derive issued-name
+Path through their actual heaps. A supplied empty-to-entry Path then gives
+the stronger writer for the same selected stored Mu and child context.
+Original binding ancestry, global renewal, general termination, convergence
+and Haskell correspondence remain open. No Haskell defect or repair request
+is added. All 268 Haskell files and all 207 active package files retain their
+bytes. Full default build passes 3474 jobs; Audit checks 73966 axiom
+dependencies. Read `lean/notes-current-head-issued-paths.md`. Preserve every
+repair entry, reproducer, path, commit and validation result below.
+
 Current proof update: 2026-10-19 14:40 CEST. Proof checkpoint: `b9ced29b0`.
 Actual completed Head rows now retain the last explicit Mu on their selected
 branch, its exact stored call, a suffix without further explicit Mu calls,

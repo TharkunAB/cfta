@@ -1,7 +1,7 @@
 # Current system claim
 
 Checked against the live theorem statements on 2026-10-19.
-Read `notes-current-head-last-mu-child.md` for the latest checkpoint.
+Read `notes-current-head-issued-paths.md` for the latest checkpoint.
 
 In simple technical English: fresh construction always finishes in the
 Lean model. Under the stated guard conditions, its result represents
@@ -34,6 +34,12 @@ context. Other branches can allocate Mu during suffix cache effects.
 Empty-start publication History remains explicit. The selected stored body
 can itself be generated, so original binding ancestry and a global renewal
 bound remain open. No Haskell refinement or general completion is proved.
+
+Actual Head evaluation now derives an issued-name Path through its actual
+heap interval. With an explicit empty-to-entry Path, the same chosen stored
+Mu and selected child retain the stronger issued-name writer. This makes
+supported raw-context recovery available at that final reader. It supplies
+no original binding ancestry, global renewal bound or general completion.
 
 ## Constructed root guarantee
 
