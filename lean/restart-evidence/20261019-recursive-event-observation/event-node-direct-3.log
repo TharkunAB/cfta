@@ -1,0 +1,421 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-observation/event-node-direct-3.source.lean:173:4: error: Too many variable names provided at alternative `ordinary`: 25 provided, but 23 expected
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-observation/event-node-direct-3.source.lean:174:45: error: Application type mismatch: The argument
+  otherActual
+has type
+  Memos
+of sort `Type` but is expected to have type
+  EditRows record originals entries edges before ?m.1311 ?m.1312
+of sort `Prop` in the application
+  rows_unique actual otherActual
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-observation/event-node-direct-3.source.lean:174:14: error: Tactic `subst` failed: 'rebuilt' occurs at
+  ?m.1311
+
+case refine_3.ordinary
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+base : InternedConstructorTemplates.State Symbol Guard
+record✝ : SourceEqualityClassOrder.Record
+originals✝ : List Node
+edits : Edits EqualityNormalize.Path
+input : Node
+before✝ : SharedState width
+result : Node
+after : SharedState width
+memos✝ final : Memos
+actual✝¹ : EditNode record✝ originals✝ edits input before✝ result after
+reads : NodeReads formulas solver base actual✝¹ memos✝ final
+record : SourceEqualityClassOrder.Record
+originals : List Node
+memos saved : Memos
+entries : List (Int × Edits EqualityNormalize.Path)
+edges : List Row
+before : SharedState width
+rebuilt : List Row
+middle : SharedState width
+value : Node
+heap : InternedConstructorTemplates.State Symbol Guard
+entry : Interned InternedBinderProtocol.NodeKey
+depth : Nat
+free : List InternedBinderProtocol.Reference
+actual : EditRows record originals entries edges before rebuilt middle
+built : run (makeNode rebuilt) middle.checked.native.machine.heap = (value, heap)
+read : RowsReads formulas solver base actual memos saved
+ih : RowsLaw formulas solver base actual memos
+inventory : Inventory
+populated : Populated (Edits.editBelow entries)
+nonempty : HasLeaf (Edits.editBelow entries)
+allowed : Allowed record (Edits.editBelow entries)
+ready : SharedReady formulas solver inventory record originals base before
+available : Available before.checked.native.machine.heap (Value.node entry edges depth free)
+safe : Safe (Edits.editBelow entries) (Value.node entry edges depth free)
+valid : EndpointMemoGateTrace.Valid before.checked.native.machine.heap memos
+history : History before.checked
+event : Node
+rebuilt✝ : List Row
+middle✝ : SharedState width
+otherMiddle : InternedConstructorTemplates.State Symbol Guard
+otherActual otherBuilt : Memos
+outputIndex✝ eventRead outputIndex : Nat
+rawIndex : Row
+parent : rebuilt✝[eventRead]? = some rawIndex
+actual✝ : EditRows record originals entries edges before rebuilt✝ middle✝
+read✝ : RowsReads formulas solver base actual✝ otherActual otherBuilt
+built✝ : run (makeNode rebuilt✝) middle✝.checked.native.machine.heap = (value, otherMiddle)
+childIndex : (nodeEdges value)[outputIndex✝]? = some rawIndex
+output : RowEvent formulas solver base actual✝ eventRead outputIndex event
+left✝ : rebuilt = ?m.1311
+right✝ : middle = ?m.1312
+⊢ Source formulas solver event (advanceHeap middle heap).checked.native.machine.heap
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-observation/event-node-direct-3.source.lean:194:4: error: Too many variable names provided at alternative `head`: 18 provided, but 16 expected
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-observation/event-node-direct-3.source.lean:195:38: error: Application type mismatch: The argument
+  otherHead
+has type
+  SourceCurrentRequiredQueryMemos.HeadReads head✝ memos✝ current✝
+but is expected to have type
+  SourceEqualityRequiredHead.Head original before.checked.native.machine.heap ?m.1841 ?m.1844
+in the application
+  SourceEqualityRequiredHead.Head.unique head otherHead
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-observation/event-node-direct-3.source.lean:195:14: error: Tactic `subst` failed: 'exposed' occurs at
+  ?m.1841
+
+case refine_4.head
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+base : InternedConstructorTemplates.State Symbol Guard
+record✝ : SourceEqualityClassOrder.Record
+originals✝ : List Node
+edits : Edits EqualityNormalize.Path
+input : Node
+before✝ : SharedState width
+result : Node
+after✝ : SharedState width
+memos✝¹ final : Memos
+actual : EditNode record✝ originals✝ edits input before✝ result after✝
+reads : NodeReads formulas solver base actual memos✝¹ final
+record : SourceEqualityClassOrder.Record
+originals : List Node
+memos current saved : Memos
+entries : List (Int × Edits EqualityNormalize.Path)
+original : Node
+before : SharedState width
+exposed : Node
+heap : InternedConstructorTemplates.State Symbol Guard
+value : Node
+after : SharedState width
+recursive : SourceEqualityRequiredGraph.Recursive original
+head : SourceEqualityRequiredHead.Head original before.checked.native.machine.heap exposed heap
+body : EditNode record originals (Edits.editBelow entries) exposed (advanceHeap before heap) value after
+headRead : SourceCurrentRequiredQueryMemos.HeadReads head memos current
+headGlobal : SourceCurrentSubsumesQueryMemos.Effect before.checked.native.machine.heap heap memos current
+bodyRead : NodeReads formulas solver base body current saved
+ih : NodeLaw formulas solver base body current
+inventory : Inventory
+populated : Populated (Edits.editBelow entries)
+nonempty : HasLeaf (Edits.editBelow entries)
+allowed : Allowed record (Edits.editBelow entries)
+ready : SharedReady formulas solver inventory record originals base before
+available : Available before.checked.native.machine.heap original
+safe : Safe (Edits.editBelow entries) original
+valid : EndpointMemoGateTrace.Valid before.checked.native.machine.heap memos
+history : History before.checked
+otherAfter : SharedState width
+event : Node
+closed : original.free = []
+first :
+  SharedReady formulas solver inventory record originals base (advanceHeap before heap) ∧
+    SourceCurrentConjunctionRowsAllocation.Effects (SourceCurrentAllocatedNativeEffects.physical before.checked)
+        (SourceCurrentAllocatedNativeEffects.physical (advanceHeap before heap).checked) ∧
+      Available heap exposed
+checked :
+  Keeps before.checked.native.machine.heap heap ∧
+    Available heap exposed ∧ exposed.free = [] ∧ SourceEqualityRequiredCache.Ordinary exposed
+next : Inventory
+receipt :
+  NodeReceipt formulas solver next record originals base exposed (advanceHeap before heap) value after current saved
+heap✝ : InternedConstructorTemplates.State Symbol Guard
+memos✝ current✝ final✝ : Memos
+recursive✝ : SourceEqualityRequiredGraph.Recursive original
+eventRead : History before.checked
+head✝ : SourceEqualityRequiredHead.Head original before.checked.native.machine.heap event heap✝
+otherHead : SourceCurrentRequiredQueryMemos.HeadReads head✝ memos✝ current✝
+body✝ : EditNode record originals (Edits.editBelow entries) event (advanceHeap before heap✝) value otherAfter
+otherBody : NodeReads formulas solver base body✝ current✝ final✝
+left✝ : exposed = ?m.1841
+right✝ : heap = ?m.1844
+⊢ Source formulas solver event after.checked.native.machine.heap
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-observation/event-node-direct-3.source.lean:199:4: error: Too many variable names provided at alternative `recursive`: 14 provided, but 12 expected
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-observation/event-node-direct-3.source.lean:200:38: error: Application type mismatch: The argument
+  otherHead
+has type
+  Event formulas solver base body✝ event
+but is expected to have type
+  SourceEqualityRequiredHead.Head original before.checked.native.machine.heap ?m.1955 ?m.1958
+in the application
+  SourceEqualityRequiredHead.Head.unique head otherHead
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-observation/event-node-direct-3.source.lean:200:14: error: Tactic `subst` failed: 'exposed' occurs at
+  ?m.1955
+
+case refine_4.recursive
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+base : InternedConstructorTemplates.State Symbol Guard
+record✝ : SourceEqualityClassOrder.Record
+originals✝ : List Node
+edits : Edits EqualityNormalize.Path
+input : Node
+before✝ : SharedState width
+result : Node
+after✝ : SharedState width
+memos✝ final : Memos
+actual : EditNode record✝ originals✝ edits input before✝ result after✝
+reads : NodeReads formulas solver base actual memos✝ final
+record : SourceEqualityClassOrder.Record
+originals : List Node
+memos current saved : Memos
+entries : List (Int × Edits EqualityNormalize.Path)
+original : Node
+before : SharedState width
+exposed : Node
+heap : InternedConstructorTemplates.State Symbol Guard
+value : Node
+after : SharedState width
+recursive : SourceEqualityRequiredGraph.Recursive original
+head : SourceEqualityRequiredHead.Head original before.checked.native.machine.heap exposed heap
+body : EditNode record originals (Edits.editBelow entries) exposed (advanceHeap before heap) value after
+headRead : SourceCurrentRequiredQueryMemos.HeadReads head memos current
+headGlobal : SourceCurrentSubsumesQueryMemos.Effect before.checked.native.machine.heap heap memos current
+bodyRead : NodeReads formulas solver base body current saved
+ih : NodeLaw formulas solver base body current
+inventory : Inventory
+populated : Populated (Edits.editBelow entries)
+nonempty : HasLeaf (Edits.editBelow entries)
+allowed : Allowed record (Edits.editBelow entries)
+ready : SharedReady formulas solver inventory record originals base before
+available : Available before.checked.native.machine.heap original
+safe : Safe (Edits.editBelow entries) original
+valid : EndpointMemoGateTrace.Valid before.checked.native.machine.heap memos
+history : History before.checked
+otherAfter : SharedState width
+event : Node
+closed : original.free = []
+first :
+  SharedReady formulas solver inventory record originals base (advanceHeap before heap) ∧
+    SourceCurrentConjunctionRowsAllocation.Effects (SourceCurrentAllocatedNativeEffects.physical before.checked)
+        (SourceCurrentAllocatedNativeEffects.physical (advanceHeap before heap).checked) ∧
+      Available heap exposed
+checked :
+  Keeps before.checked.native.machine.heap heap ∧
+    Available heap exposed ∧ exposed.free = [] ∧ SourceEqualityRequiredCache.Ordinary exposed
+next : Inventory
+receipt :
+  NodeReceipt formulas solver next record originals base exposed (advanceHeap before heap) value after current saved
+exposed✝ : Node
+heap✝ : InternedConstructorTemplates.State Symbol Guard
+recursive✝ : SourceEqualityRequiredGraph.Recursive original
+head✝ : SourceEqualityRequiredHead.Head original before.checked.native.machine.heap exposed✝ heap✝
+body✝ : EditNode record originals (Edits.editBelow entries) exposed✝ (advanceHeap before heap✝) value otherAfter
+otherHead : Event formulas solver base body✝ event
+left✝ : exposed = ?m.1955
+right✝ : heap = ?m.1958
+⊢ Source formulas solver event after.checked.native.machine.heap
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-observation/event-node-direct-3.source.lean:230:4: error: Too many variable names provided at alternative `here`: 17 provided, but 15 expected
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-observation/event-node-direct-3.source.lean:231:23: error(lean.unknownIdentifier): Unknown identifier `otherEdits`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-observation/event-node-direct-3.source.lean:231:73: error(lean.invalidField): Invalid field `symm`: The environment does not contain `MicroCFTA.SourceCurrentAllocatedSharedEditGraph.EditChildren.symm`, so it is not possible to project the field `symm` from an expression
+  otherFound
+of type
+  EditChildren record originals entries (offset + 1) values middle✝ results otherAfter
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-observation/event-node-direct-3.source.lean:232:12: error(lean.unknownIdentifier): Unknown identifier `otherEdits`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-observation/event-node-direct-3.source.lean:236:4: error: Too many variable names provided at alternative `selected`: 18 provided, but 16 expected
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-observation/event-node-direct-3.source.lean:237:23: error(lean.unknownIdentifier): Unknown identifier `otherEdits`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-observation/event-node-direct-3.source.lean:237:73: error(lean.invalidField): Invalid field `symm`: The environment does not contain `MicroCFTA.SourceCurrentAllocatedSharedEditGraph.EditChildren.symm`, so it is not possible to project the field `symm` from an expression
+  otherFound
+of type
+  EditChildren record originals entries (offset + 1) values middle✝ results otherAfter
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-observation/event-node-direct-3.source.lean:238:12: error(lean.unknownIdentifier): Unknown identifier `otherEdits`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-observation/event-node-direct-3.source.lean:261:4: error: Too many variable names provided at alternative `here`: 24 provided, but 22 expected
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-observation/event-node-direct-3.source.lean:262:51: error: Application type mismatch: The argument
+  otherChildren
+has type
+  EditRows record originals entries edges (advanceHeap middle✝ otherMiddle) results otherAfter
+but is expected to have type
+  EditChildren record originals entries 0 edge.children before ?m.4221 ?m.4222
+in the application
+  children_unique children otherChildren
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-observation/event-node-direct-3.source.lean:262:14: error: Tactic `subst` failed: 'values' occurs at
+  ?m.4221
+
+case refine_9.here
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+base : InternedConstructorTemplates.State Symbol Guard
+record✝ : SourceEqualityClassOrder.Record
+originals✝ : List Node
+edits : Edits EqualityNormalize.Path
+input : Node
+before✝ : SharedState width
+result✝ : Node
+after✝ : SharedState width
+memos✝ final : Memos
+actual : EditNode record✝ originals✝ edits input before✝ result✝ after✝
+reads : NodeReads formulas solver base actual memos✝ final
+record : SourceEqualityClassOrder.Record
+originals : List Node
+memos current saved : Memos
+entries : List (Int × Edits EqualityNormalize.Path)
+before : SharedState width
+values : List Node
+middle : SharedState width
+result : Row
+heap : InternedConstructorTemplates.State Symbol Guard
+edges results : List Row
+after : SharedState width
+edge : Row
+children : EditChildren record originals entries 0 edge.children before values middle
+built :
+  run (makeEdge edge.entry.key.symbol edge.entry.key.constraint values) middle.checked.native.machine.heap =
+    (result, heap)
+rest : EditRows record originals entries edges (advanceHeap middle heap) results after
+firstRead : ChildrenReads formulas solver base children memos current
+restRead : RowsReads formulas solver base rest current saved
+firstIH : ChildrenLaw formulas solver base children memos
+restIH : RowsLaw formulas solver base rest current
+inventory : Inventory
+populated : Populated (Edits.editBelow entries)
+allowed : Allowed record (Edits.editBelow entries)
+ready : SharedReady formulas solver inventory record originals base before
+resident : Edges before.checked.native.machine.heap (edge :: edges)
+safe : RowsSafe entries (edge :: edges)
+valid : EndpointMemoGateTrace.Valid before.checked.native.machine.heap memos
+history : History before.checked
+otherAfter : SharedState width
+childIndex : Nat
+event : Node
+facts : InternedNestedFacts.Facts before.checked.native.machine.heap
+childAvailable : ∀ (child : Node), child ∈ edge.children → Available before.checked.native.machine.heap child
+middleInventory : Inventory
+childrenReceipt :
+  ChildrenReceipt formulas solver middleInventory record originals base edge.children before values middle memos current
+oneRead : RowsReads formulas solver base ⋯ memos current
+next : Inventory
+firstReceipt :
+  RowsReceipt formulas solver next record originals base [edge] before [result] (advanceHeap middle heap) memos current
+last : Inventory
+later :
+  RowsReceipt formulas solver last record originals base edges (advanceHeap middle heap) results after current saved
+values✝ : List Node
+middle✝ : SharedState width
+otherMiddle : InternedConstructorTemplates.State Symbol Guard
+otherBuilt otherRest : Memos
+eventRead : Node
+children✝ : EditChildren record originals entries 0 edge.children before values✝ middle✝
+read✝ : ChildrenReads formulas solver base children✝ otherBuilt otherRest
+built✝ :
+  run (makeEdge edge.entry.key.symbol edge.entry.key.constraint values✝) middle✝.checked.native.machine.heap =
+    (result, otherMiddle)
+otherChildren : EditRows record originals entries edges (advanceHeap middle✝ otherMiddle) results otherAfter
+index : values✝[childIndex]? = some eventRead
+child :
+  SourceCurrentSharedEditChildLineage.Slice formulas solver base record originals entries 0 edge.children before values✝
+    middle✝ otherBuilt otherRest childIndex eventRead
+selected : ChildEvent formulas solver base children✝ childIndex event
+left✝ : values = ?m.4221
+right✝ : middle = ?m.4222
+⊢ Source formulas solver event after.checked.native.machine.heap
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-observation/event-node-direct-3.source.lean:274:4: error: Too many variable names provided at alternative `later`: 19 provided, but 17 expected
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-observation/event-node-direct-3.source.lean:275:51: error: Application type mismatch: The argument
+  otherChildren
+has type
+  EditRows record originals entries edges (advanceHeap middle✝ otherMiddle) results otherAfter
+but is expected to have type
+  EditChildren record originals entries 0 edge.children before ?m.4395 ?m.4396
+in the application
+  children_unique children otherChildren
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-observation/event-node-direct-3.source.lean:275:14: error: Tactic `subst` failed: 'values' occurs at
+  ?m.4395
+
+case refine_9.later
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+base : InternedConstructorTemplates.State Symbol Guard
+record✝ : SourceEqualityClassOrder.Record
+originals✝ : List Node
+edits : Edits EqualityNormalize.Path
+input : Node
+before✝ : SharedState width
+result✝ : Node
+after✝ : SharedState width
+memos✝ final : Memos
+actual : EditNode record✝ originals✝ edits input before✝ result✝ after✝
+reads : NodeReads formulas solver base actual memos✝ final
+record : SourceEqualityClassOrder.Record
+originals : List Node
+memos current saved : Memos
+entries : List (Int × Edits EqualityNormalize.Path)
+before : SharedState width
+values : List Node
+middle : SharedState width
+result : Row
+heap : InternedConstructorTemplates.State Symbol Guard
+edges results : List Row
+after : SharedState width
+edge : Row
+children : EditChildren record originals entries 0 edge.children before values middle
+built :
+  run (makeEdge edge.entry.key.symbol edge.entry.key.constraint values) middle.checked.native.machine.heap =
+    (result, heap)
+rest : EditRows record originals entries edges (advanceHeap middle heap) results after
+firstRead : ChildrenReads formulas solver base children memos current
+restRead : RowsReads formulas solver base rest current saved
+firstIH : ChildrenLaw formulas solver base children memos
+restIH : RowsLaw formulas solver base rest current
+inventory : Inventory
+populated : Populated (Edits.editBelow entries)
+allowed : Allowed record (Edits.editBelow entries)
+ready : SharedReady formulas solver inventory record originals base before
+resident : Edges before.checked.native.machine.heap (edge :: edges)
+safe : RowsSafe entries (edge :: edges)
+valid : EndpointMemoGateTrace.Valid before.checked.native.machine.heap memos
+history : History before.checked
+otherAfter : SharedState width
+childIndex : Nat
+event : Node
+facts : InternedNestedFacts.Facts before.checked.native.machine.heap
+childAvailable : ∀ (child : Node), child ∈ edge.children → Available before.checked.native.machine.heap child
+middleInventory : Inventory
+childrenReceipt :
+  ChildrenReceipt formulas solver middleInventory record originals base edge.children before values middle memos current
+oneRead : RowsReads formulas solver base ⋯ memos current
+next : Inventory
+firstReceipt :
+  RowsReceipt formulas solver next record originals base [edge] before [result] (advanceHeap middle heap) memos current
+last : Inventory
+later :
+  RowsReceipt formulas solver last record originals base edges (advanceHeap middle heap) results after current saved
+values✝ : List Node
+middle✝ : SharedState width
+otherMiddle : InternedConstructorTemplates.State Symbol Guard
+rowIndex✝ : Nat
+children✝ : EditChildren record originals entries 0 edge.children before values✝ middle✝
+built✝ :
+  run (makeEdge edge.entry.key.symbol edge.entry.key.constraint values✝) middle✝.checked.native.machine.heap =
+    (result, otherMiddle)
+otherChildren : EditRows record originals entries edges (advanceHeap middle✝ otherMiddle) results otherAfter
+otherBuilt : RowEvent formulas solver base otherChildren rowIndex✝ childIndex event
+left✝ : values = ?m.4395
+right✝ : middle = ?m.4396
+⊢ Source formulas solver event after.checked.native.machine.heap

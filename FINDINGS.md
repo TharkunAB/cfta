@@ -2,6 +2,23 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-19 12:25 CEST. Proof checkpoint: `d153d37d7`.
+Under the stated preparation, original false-gate, fold and reader support,
+a nonplain selected row has an ordinary Route or the recursive event
+alternative. That alternative retains its supported remaining Project/Read
+and actual earlier event execution. Captured native cells
+and writer receipts remain at the exact query return. Later heap retention
+supplies no native memo history. The Head source row can differ from the
+selected deep row. Whole-event projection, renewal bounds and general
+termination remain open. No Haskell defect or local repair is added.
+All 242 earlier Haskell files retain their bytes. Upstream main `b45051e3e`
+adds 25 Haskell files in Specftacular packages. No Haskell build or test
+result is claimed for that import. Full default build passes 3456 jobs;
+Audit checks 73793 axiom dependencies. Read
+`lean/notes-current-recursive-event-observation.md`. Keep this registry
+first. Record each repair with failure, reproducer, paths, commit, checks
+and upstream status. Preserve every earlier entry.
+
 Upstream refresh: 2026-10-19 12:07 CEST. Main: `b45051e3e`.
 Merge: `fec741514`. PR #66 imports `specftacular` and `specftacular-ghc`.
 It adds 48 files, including 25 Haskell files. All 242 earlier Haskell

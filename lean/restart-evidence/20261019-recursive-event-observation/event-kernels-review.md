@@ -1,0 +1,21 @@
+# Actual fold-event execution source
+
+The component owns one constructed theorem, `MicroCFTA.NativeEventAncestryKernels.native_event_sources`, and no production declarations. It copies the frozen `20261019-recursive-value-ancestry/recursive-kernels.lean` into a fresh namespace. The new conclusion consumes the actual fold-event execution producer. It does not merely repeat the old event existence result. The expanded public statement is identical to the private checked witness statement.
+
+The source constructs two ordinary wrappers from an empty heap. Their children are distinct used Mu operands. Their inner arity-three rows have equality guards A = `[[0],[1]]` and B = `[[0],[2]]`. A literal coherent active record has paths `[[0,0],[1,0]]`; the literal record list is `[record]`. The fixture asserts no unique scan-generated schedule.
+
+Source construction and equality allocation derive initial Ready, Frame, Fits, Values, native History and finite initial Room. The mathematical reserved width is derived from the initial profile. It is not a host capacity claim. The actual class worker uses fuels `4 8 8 64 16 256`. Its singleton fold has the same complete returned checked state and memo. A new explicit computed equation proves that the original allocated primary gate is TRUE and returns its original state. This fixture does not apply a false-primary driver.
+
+The actual native work returns a new used Mu at ordinary-child path `[0,0]` below an ordinary AB row. The Mu has no physical nodeEdges. It occurs at no ordinary-child path in either original wrapper. This excludes the initial-source alternatives and derives an actual node Event and actual FoldEvent from completed semantic Reads.
+
+For the SAME selected FoldEvent and residual Occurs witness, the proof invokes `ClassFoldEventExecutions.fold` with the derived initial facts. It obtains `ClassEventExecutions.Source` at the exact final fold machine heap. It destructures that Source's eventHeap, semantic support, event availability and Keeps. The new `ClassEventExecutions.occurrence` derives the exact needle's availability at that eventHeap. The actual Keeps interval then derives needle availability at the final fold heap. No Source, native Trace, future receipt or needle-availability law is an input hypothesis.
+
+Source retains its typed actual native-or-Head execution payload and full event-heap interval. The constructed statement does not separately assert which disjunct this existential payload uses. It does not assert a native captured cell at the later heap-only reader. The literal fixture is native class work; the general Source alternative remains explicit. Event residual paths remain existential. No fixed residual or nonempty residual is asserted.
+
+This result concerns actual execution provenance and physical availability. It does not project an unchanged whole event, convert RowAt to an observational Origin, identify an initial source occurrence of the new Mu, or prove observation equivalence, an outer rank, finite productivity, general completion or Haskell correspondence.
+
+The first strict job `event-kernels-direct-1` terminates successfully and has a literal zero-byte log. The working source and immutable snapshot match. The first full probe `event-kernels-public-1` checks one explicit type, complete public proof and axioms with all eight printer/linter settings. The 158672-byte log has no omissions and only standard axioms. The full private proof remains in the kernel-checked source. Both owned jobs pass; there are no failed or unselected owned attempts.
+
+Both jobs record effective memory.max = memory.high = 4294967296 and memory.swap.max = 0 under the 4 GiB / 5 minute cap. The two reused canonical receipts terminate successfully and replay only the existing `InternedFreshOrdinaryClosedCompletion.lean:24:5` warning. Selected strict and public outputs have no warning. No production pair or canonical job is counted as owned.
+
+The manifest pins explicit stable sources, all owned runs and a dedicated immutable two-row peaks snapshot. It excludes mutable peaks, shared runners and selections, current root packaging files and frozen reader-kernels components. The copied base source is pinned as provenance only. No earlier source or evidence file is changed.

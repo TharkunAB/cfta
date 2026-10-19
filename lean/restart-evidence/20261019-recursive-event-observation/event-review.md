@@ -1,0 +1,19 @@
+# Supported chronological native and Head events
+
+Checked at 2026-10-19 12:25 CEST.
+
+The new `ClassEventExecutions.Source` retains an actual event heap, `SemanticReady`, cost-heap support, availability of the exact event value, and `Keeps` into the chosen final heap. Its native arm retains the class record and original captured forest, actual force and checked-query receipts, complete request trace, native histories at force entry/query entry/query return, and the exact returned node cell and captured writer at that query return. Physical `Good` at query entry and return follows from the retained receipts. The native direct branch is excluded here by derived closure: `Safe(editAt)` gives closed input and the force receipt gives closed target. No codec, writer, or future success law is supplied by the caller.
+
+The Head arm retains the literal Head, its `HeadReads`, and the actual subsequent body `NodeReads`. It also retains captured readiness, input availability, input closure and native history. The event is the exposed input to that body call. The result is not replaced by a projection or read of unchanged exposed input.
+
+`Source.later` composes actual heap `Keeps`. It does not transport native tables into an arbitrary later heap-only reader. `occurrence` derives availability of the exact literal value in `Occurs event residual needle` through ordinary rows at the same event heap. It works without closedness and does not enter a Mu body, union member or observational epsilon edge.
+
+The node and ordered child producers derive all intermediate support from actual reads and the initial physical/memo assumptions. An internal elimination generalizes the event graph's return heap. Actual node/children/rows worker uniqueness and `Head.unique` then align the hidden intermediate values and complete states. The proof does not use injectivity of Prop-valued graph proofs. This matters because event constructors and the supplied read graph can have separately packaged intermediate witnesses.
+
+`ClassFoldEventExecutions.fold` derives actual phase forests, inventories, supported memo tables, domains and histories from the same initial support as the earlier structural fold theorem. Actual list and fold worker uniqueness align each event's captured forest, full Checked state, and Merge memo. A native or Head event from an earlier completed tail retains the later actual class interval into the final fold heap. It needs no supplied child schedule, intermediate phase readiness, or desired source-origin law.
+
+The six public heads are `Source`, `Source.later`, `occurrence`, `node`, `children`, and `fold`. Selected strict checks are node direct6 and fold direct4, both terminal zero with literal zero-byte logs. Canonical1 for each source is terminal zero and replays only the unchanged `InternedFreshOrdinaryClosedCompletion.lean:24:5` warning. Public groups node public1/full5 and fold public1/full1 pass all eight printer flags, full proof output, `#check @`, and standard-three axiom checks. All fourteen owned Lean attempts retain effective 4 GiB memory/high, zero swap and five-minute wrapper receipts. Seven elaboration failures and the superseded clean node direct5 remain unselected and preserved.
+
+No constructed declaration belongs to this component. Arity owns the separate actual used-Mu fold event fixture. Its files and all mutable shared metadata are excluded from this manifest.
+
+The bridge pairs an actual causal event call and literal value availability with a later heap interval. The selected remaining observation is supplied separately by root's exact Entry extraction at the same needle and row. A nonempty residual `Occurs` path does not imply a complete epsilon `Origin` of the whole event. NativeOriginExposure requires that additional actual origin before it can expose an unfold; this theorem does not fabricate it. No global renewal bound, termination, or Haskell correspondence is claimed.
