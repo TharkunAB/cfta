@@ -2,6 +2,26 @@
 
 ## Haskell fix handoff for external work
 
+Upstream refresh: 2026-10-19 12:42 CEST. Main: `184bba662`.
+Merge: `a3cf692cb`. PRs #68, #87 and #88 add Typing.draw, ordered
+enumeration and template/subsumption optimizations. Twelve paths change.
+Six earlier Haskell files change exactly as upstream. OrderedFrontier is
+one new Haskell file. The other 261 earlier Haskell files retain their
+bytes. The merge retains the existing constructor-probe repair note.
+No local Haskell repair or demonstrated new defect is added. No Haskell
+build or test was run for this refresh.
+
+The optional ordered cursor uses a new shallow-expansion/frontier path.
+Admissible bounds and monotone deterministic observers remain caller
+obligations. Constrained cyclic truncation equivalence is explicitly open.
+Template pruning preserves finite-term language under its finite/total
+input contract; run multiplicity and cyclic cutoff equality are separate.
+Subsumption shares mandatory child pairs and restarts the original search
+with fresh assumptions on ambiguity. Existing Lean reference models do
+not prove these new implementation paths. Earlier unchanged-core claims
+below are historical. Read
+`lean/notes-current-upstream-ordered-enumeration.md`. Keep all repair entries.
+
 Current proof update: 2026-10-19 12:25 CEST. Proof checkpoint: `d153d37d7`.
 Under the stated preparation, original false-gate, fold and reader support,
 a nonplain selected row has an ordinary Route or the recursive event
