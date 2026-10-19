@@ -13,6 +13,15 @@ Do not bypass that decision. Continue independent local proof work.
 Read `lean/notes-current-publication-status.md`. The full-library goal stays
 active. The proof and evidence are committed, locally verified and preserved.
 
+## Current upstream import
+
+Updated: 2026-10-19 12:07 CEST. Main is now `b45051e3e`.
+Merge `fec741514` retains checkpoint `60403eced` and all older proof work.
+PR #66 adds Specftacular and its GHC adapter. All 242 earlier Haskell files
+retain their bytes. The optimized cfta core is unchanged. These packages
+have no Lean refinement proof. Read `lean/notes-current-upstream-specftacular.md`.
+No new Haskell failure, local repair or Haskell validation result is claimed.
+
 ## Current original-source exclusion in recursive observations
 
 Updated: 2026-10-19 11:54 CEST. Proof checkpoint: `e619dc99a`.

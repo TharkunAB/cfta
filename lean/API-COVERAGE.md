@@ -1,5 +1,14 @@
 # Public API and source correspondence
 
+## Imported Specftacular coverage
+
+Upstream main `b45051e3e` imports `specftacular` and `specftacular-ghc`.
+The optimized cfta core and all earlier Haskell sources are unchanged.
+The new law-discovery, rewriting, signature and GHC interfaces have no
+Lean refinement proof. Finite randomized candidate validation is not a
+universal equational proof. These are additional coverage obligations.
+Read `lean/notes-current-upstream-specftacular.md`.
+
 ## Current original-source exclusion in recursive observations
 
 Updated: 2026-10-19 11:54 CEST. Proof checkpoint: `e619dc99a`.
