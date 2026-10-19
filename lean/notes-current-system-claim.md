@@ -232,7 +232,11 @@ heap growth or arbitrary source-pair closure is justified.
 No Haskell bytes change in this checkpoint. Root `FINDINGS.md` retains all
 external repair entries first. The full-library goal remains active.
 
-Current source main is `b45051e3e`, merged at `fec741514`. It adds
-Specftacular law discovery, rewriting and GHC execution interfaces. Their
-test-based candidate equations are not formal theorems. These interfaces
-have no Lean refinement proof. Read `notes-current-upstream-specftacular.md`.
+Current source main is `184bba662`, merged at `a3cf692cb`. It adds an ordered
+enumeration cursor, prepared-template exclusion and a shared mandatory-pair
+subsumption worklist. Existing reference models need implementation proofs
+for these paths. Read `notes-current-upstream-ordered-enumeration.md`.
+The earlier Specftacular import adds law discovery, rewriting and GHC
+execution interfaces. Its test-based equations are not formal theorems.
+These interfaces have no Lean refinement proof. Read
+`notes-current-upstream-specftacular.md`.

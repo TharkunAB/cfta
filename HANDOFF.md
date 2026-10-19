@@ -13,6 +13,19 @@ Do not bypass that decision. Continue independent local proof work.
 Read `lean/notes-current-publication-status.md`. The full-library goal stays
 active. The proof and evidence are committed, locally verified and preserved.
 
+## Current upstream ordered enumeration and optimization changes
+
+Updated: 2026-10-19 12:42 CEST. Main is `184bba662`.
+Merge `a3cf692cb` retains verified checkpoint `8282cca55` and all older work.
+Upstream changes 12 paths. It adds OrderedFrontier and changes six earlier
+Haskell files. The constructor-probe repair note and new changelog entries
+are both retained. No local Haskell behavior patch is added.
+Ordered enumeration, prepared-template exclusion and the mandatory-pair
+subsumption worklist need additional implementation proofs. The existing
+Lean models remain reference components. Read
+`lean/notes-current-upstream-ordered-enumeration.md`. No Haskell test or
+build result is claimed. FINDINGS records the coverage change first.
+
 ## Current upstream import
 
 Updated: 2026-10-19 12:07 CEST. Main is now `b45051e3e`.
