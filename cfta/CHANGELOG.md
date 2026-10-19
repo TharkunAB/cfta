@@ -16,6 +16,10 @@ Before release, the package was called `microcfta`.
   that applies an earlier constructor to the wrong number of children.
 - `Data.CFTA.Refinement.Expression.modulo`: the remainder of a term, as the
   `mod` of SMT-LIB.
+- `Data.CFTA.replaceRows` applies row replacements and deletions to an
+  existing explicit automaton. It shares unchanged rows and validates the
+  complete result after the batch. The original automaton stays unchanged.
+  The operation works for ordinary, equality, and liquid annotations.
 - Template exclusion removes incompatible positive requirements and choices
   that require the same child pattern to both match and fail. It preserves
   the order and obligation lists of the surviving split choices.

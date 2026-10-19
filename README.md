@@ -101,6 +101,8 @@ refinement generator counts without a pool, and
 See [`docs/automata-syntax.md`](docs/automata-syntax.md) for the side-by-side
 FTA, ECTA, and LTA construction forms and the rationale for the guard-lambda
 syntax.
+See [the representation levels](docs/language-levels.md) for persistence,
+editing, inspection, and resumption, including the current API boundaries.
 
 The optional [cfta-serialization](cfta-serialization/README.md) package prints
 and parses complete graphs, source documents, and languages as readable text.
