@@ -1,0 +1,76 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-value-ancestry/recursive-kernels-direct-4.source.lean:297:15: error: unsolved goals
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : List (String × String) → FullSyntax.Formula → FullSyntax.Formula → Guards.Verdict
+classFinal : EndpointMemoGateTrace.Memos
+classGraph :
+  SourceCurrentAllocatedClassEdits.Class record inputs (before (bits + 2)) SourceCurrentMemoMergeGraph.empty outputs
+    classed.state classed.memo
+reads : SourceCurrentAllocatedClassEdits.ClassReads formulas solver classGraph EndpointMemoGateTrace.empty classFinal
+found :
+  ∀ (entries : List (Int × SourceEqualityEdits.Edits (List Nat))),
+    SourceCurrentAllocatedClassEditPlan.compiled record = SourceEqualityEdits.Edits.editBelow entries →
+      SourceEqualityNeededMap.lookup 0 entries =
+        some (SourceEqualityEdits.Edits.editBelow [(0, SourceEqualityEdits.Edits.editAt [0, 0])])
+entries : List (Int × SourceEqualityEdits.Edits (List Nat))
+shared finish : SourceCurrentAllocatedSharedTargetState.State (bits + 2)
+returned : EndpointMemoGateTrace.Memos
+startInventory _finishInventory : SourceCurrentAllocatedNativeInventoryState.Inventory
+_later :
+  SourceCurrentAllocatedSharedEditGraph.EditChildren record inputs entries (0 + 0 + 1) (List.drop (0 + 1) inputs) finish
+    (List.drop (0 + 1) outputs) shared
+_built : SourceCurrentAllocatedClassEditPlan.compiled record = SourceEqualityEdits.Edits.editBelow entries
+_sameState : shared.checked = classed.state
+_sameMemo : shared.memo = classed.memo
+_output : outputs[0]? = some result
+_found :
+  SourceEqualityNeededMap.lookup (↑0) entries =
+    some (SourceEqualityEdits.Edits.editBelow [(0, SourceEqualityEdits.Edits.editAt [0, 0])])
+_suffixRead :
+  SourceCurrentAllocatedSharedEditGraph.ChildrenReads formulas solver (before (bits + 2)).native.machine.heap _later
+    returned classFinal
+_finishReady :
+  SourceCurrentAllocatedSharedTargetState.Ready formulas solver _finishInventory record inputs
+    (before (bits + 2)).native.machine.heap finish
+_finishHistory : SourceCurrentNativeEdgeWriterGrowth.History finish.checked
+_last : Grows finish.checked.native.machine.heap classed.state.native.machine.heap
+_readerGrowth : Grows classed.state.native.machine.heap classed.state.native.machine.heap
+input : inputs[0]? = some first
+safe :
+  SourceCurrentEditDomains.Safe (SourceEqualityEdits.Edits.editBelow [(0, SourceEqualityEdits.Edits.editAt [0, 0])])
+    first
+startReady :
+  SourceCurrentAllocatedSharedTargetState.Ready formulas solver startInventory record inputs
+    (before (bits + 2)).native.machine.heap
+    (SourceCurrentAllocatedSharedTargetState.initial (before (bits + 2)) SourceCurrentMemoMergeGraph.empty)
+startHistory :
+  SourceCurrentNativeEdgeWriterGrowth.History
+    (SourceCurrentAllocatedSharedTargetState.initial (before (bits + 2)) SourceCurrentMemoMergeGraph.empty).checked
+_first :
+  Grows (before (bits + 2)).native.machine.heap
+    (SourceCurrentAllocatedSharedTargetState.initial (before (bits + 2))
+              SourceCurrentMemoMergeGraph.empty).checked.native.machine.heap
+_middle :
+  Grows
+    (SourceCurrentAllocatedSharedTargetState.initial (before (bits + 2))
+              SourceCurrentMemoMergeGraph.empty).checked.native.machine.heap
+    finish.checked.native.machine.heap
+call :
+  SourceCurrentAllocatedSharedEditGraph.EditNode record inputs
+    (SourceEqualityEdits.Edits.editBelow [(0, SourceEqualityEdits.Edits.editAt [0, 0])]) first
+    (SourceCurrentAllocatedSharedTargetState.initial (before (bits + 2)) SourceCurrentMemoMergeGraph.empty) result
+    finish
+callRead :
+  SourceCurrentAllocatedSharedEditGraph.NodeReads formulas solver (before (bits + 2)).native.machine.heap call
+    EndpointMemoGateTrace.empty returned
+annotatedInput : Available heap first
+⊢ List.Mem ([0], [0, 0]) [([0], [0, 0])]
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-value-ancestry/recursive-kernels-direct-4.source.lean:309:2: error: Type mismatch: After simplification, term
+  class_done
+ has type
+  @Eq (SourceCurrentAllocatedClassWorker.Outcome (bits + 2)) classed
+    (SourceCurrentAllocatedClassWorker.Outcome.done outputs classed.state classed.memo)
+but is expected to have type
+  @Eq (SourceCurrentAllocatedClassWorker.Outcome (bits + 2))
+    (SourceCurrentAllocatedClassWorker.runClass 4 8 8 64 16 256 record inputs (before (bits + 2))
+      SourceCurrentMemoMergeGraph.empty)
+    (SourceCurrentAllocatedClassWorker.Outcome.done outputs classed.state classed.memo)

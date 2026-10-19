@@ -1,5 +1,40 @@
 # Public API and source correspondence
 
+## Current exact recursive reader ancestry
+
+Updated: 2026-10-19 11:32 CEST. Proof checkpoint: `300c7b37`.
+Start: `ffe380d3`. Source main remains `c0cc8a05`.
+Read `lean/notes-current-recursive-value-ancestry.md` and the current system claim.
+A recursive value below literal ordinary children now retains its exact
+identity and child path in the original input, or an actual native/Head
+event contains that same value. This composes through the chronological
+class fold at the same forest slot. It needs no false gate or Required
+Origin on changed forests. Existing indexed event receipts are reused.
+
+The actual selected Project and complete row Read now derive their first
+Mu or union entry, its exact ordinary prefix and remaining read history.
+An initial observation path domain passes through the fold. Actual fold
+effects derive projection support and the selected Spine. The composed
+producer traces this reader's exact recursive value to the initial input
+or an earlier event. Its ordinary alternative is a Route in the FINAL
+fold value. It does not assert an initial source row for that alternative
+or a completed projection of an unchanged whole event value.
+
+Full default library build passes 3447 jobs. Audit checks 73728 axiom
+dependencies. Ten public declarations pass full proof checks: two relation
+types and eight theorems. All three production strict logs are empty.
+One constructed used-Mu example forces the actual node and fold event
+arms and excludes every initial ordinary-child source of that exact Mu.
+It asserts no outer-driver gate selection or finite-tree productivity.
+Native residual handoff, renewal bounds, active-owner exclusion, general
+outer completion, convergence and Haskell refinement remain open.
+Fresh modeled construction already always finishes. The conditional
+root-language claim is unchanged. No Haskell bytes change or repair
+request is added. FINDINGS retains every repair first. Field-pool fix
+`b9219b9e` remains in main `c0cc8a05`. Publication awaits direct approval.
+No push or board write is attempted. The full-library objective remains
+active.
+
 ## Current selected observations through class node edits
 
 Updated: 2026-10-19 01:59 CEST. Proof checkpoint: `e8235cd6`.

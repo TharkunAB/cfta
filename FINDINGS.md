@@ -2,6 +2,21 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-19 11:32 CEST. Proof checkpoint: `300c7b37`.
+Exact recursive values now retain their initial child path and forest slot,
+or an actual chronological native/Head event source. An actual selected
+projection/read derives its first recursive entry and this exact-value
+ancestry from initial fold support. Whole-event residual projection,
+renewal bounds and general termination remain open. The constructed
+used-Mu example forces node and fold event arms. It establishes no
+outer-driver selection, finite productivity, language failure or Haskell
+defect. No Haskell defect or repair request is added. No Haskell bytes
+change. Full default build passes 3447 jobs; Audit checks 73728 axiom
+dependencies. Field-pool fix `b9219b9e` remains fixed in main `c0cc8a05`.
+Read `lean/notes-current-recursive-value-ancestry.md`. Keep this registry
+first. Record every repair with failure, executable reproducer, paths,
+commit, checks and upstream status. Preserve every earlier entry.
+
 Current proof update: 2026-10-19 01:59 CEST. Proof checkpoint: `e8235cd6`.
 Actual projection and complete row reads now retain exact recursive read
 history, including Mu unfolding. A completed node edit derives original

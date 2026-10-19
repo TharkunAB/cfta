@@ -1,7 +1,7 @@
 # Current system claim
 
 Checked against the live theorem statements on 2026-10-19.
-Read `notes-current-class-observation-spines.md` for the latest checkpoint.
+Read `notes-current-recursive-value-ancestry.md` for the latest checkpoint.
 
 In simple technical English: fresh construction always finishes in the
 Lean model. Under the stated guard conditions, its result represents
@@ -170,8 +170,20 @@ effects derive projection support at the returned heap. Reader semantic
 support, forward Keeps and the reader guard heap remain explicit.
 Ordinary lifts retain the exact signed child position and captured
 edit/read intervals. Head cuts observe the body edit's returned value.
-This result covers one node edit. Observations still need composition
-through the actual chronological class fold.
+The node observation result covers one node edit. Exact recursive-value
+ancestry now composes through the chronological class fold. A recursive
+value below literal ordinary children retains the same complete value,
+child path and initial forest slot, or an actual earlier event contains
+that value. This classification requires no false gate on changed forests.
+An actual selected projection/read now derives its first Mu or union,
+the exact ordinary prefix, the remaining read history and this initial
+or event ancestry. Actual fold effects derive support from initial data.
+The initial observation path domain passes through the fold. The ordinary
+alternative remains a Route in the selected FINAL fold value. It does
+not by itself assert an original row in the initial forest. The recursive
+alternative still needs the original gate/Required exclusion and the
+native residual handoff through later edits. It does not assert a complete
+projection of an unchanged whole event value.
 Earlier class phases can change their forests. Their native joins do not
 satisfy the Required Origin grammar in general. No Haskell defect is
 established.

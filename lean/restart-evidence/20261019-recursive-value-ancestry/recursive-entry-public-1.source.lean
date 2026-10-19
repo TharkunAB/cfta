@@ -1,0 +1,23 @@
+import MicroCFTA.SourceCurrentProjectionRecursiveEntry
+set_option maxRecDepth 30000
+set_option maxHeartbeats 5000000
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+#check @MicroCFTA.SourceCurrentProjectionRecursiveEntry.Entry
+#print MicroCFTA.SourceCurrentProjectionRecursiveEntry.Entry
+#print axioms MicroCFTA.SourceCurrentProjectionRecursiveEntry.Entry
+#check @MicroCFTA.SourceCurrentProjectionRecursiveEntry.occurs
+#print MicroCFTA.SourceCurrentProjectionRecursiveEntry.occurs
+#print axioms MicroCFTA.SourceCurrentProjectionRecursiveEntry.occurs
+#check @MicroCFTA.SourceCurrentProjectionRecursiveEntry.first
+#print MicroCFTA.SourceCurrentProjectionRecursiveEntry.first
+#print axioms MicroCFTA.SourceCurrentProjectionRecursiveEntry.first
+#check @MicroCFTA.SourceCurrentProjectionRecursiveEntry.fold_first
+#print MicroCFTA.SourceCurrentProjectionRecursiveEntry.fold_first
+#print axioms MicroCFTA.SourceCurrentProjectionRecursiveEntry.fold_first
