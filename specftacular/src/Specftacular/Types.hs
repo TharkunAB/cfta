@@ -25,7 +25,7 @@ import GHC.Generics (Generic)
 import Control.Exception (Exception, SomeAsyncException, SomeException, evaluate, fromException, throw, throwIO, try)
 import Data.CFTA.Symbol (Symbol (Symbol))
 import qualified Data.CFTA.Term as CT
-import Data.Maybe (fromMaybe, mapMaybe)
+import Data.Maybe (fromMaybe, listToMaybe, mapMaybe)
 import Data.Proxy
 import qualified Data.Text as T
 import Data.Typeable
@@ -638,6 +638,111 @@ canonicalTypes :: Term -> Term
 canonicalTypes (Term "app" [ty, f, x]) = Term "app" [canonicalType ty, canonicalTypes f, canonicalTypes x]
 canonicalTypes (Term s [ty]) = Term s [canonicalType ty]
 canonicalTypes t = t
+
+{- | The most general carrier typings of a schema, one for each result type.
+
+Each occurrence of a generated variable gets a fresh type variable at each
+carrier of its type. Each occurrence of a constant gets a fresh instance of
+its type scheme. Each application unifies the type of its function with the
+type of its argument and its result. The given annotations are not used.
+'Nothing' if a symbol is not in the signature or the typing does not unify.
+
+The function gives the schema with a result type: the principal result type
+is unified with it, and the other type variables become carriers. The
+variables are taken in the order of their first occurrence, the annotation
+of an application before its function and its argument. The namings with
+distinct carriers that the result type does not use come first, then the
+namings with distinct carriers, then all namings. The first naming is used
+for which the map has a variable of each new variable type. 'Nothing' if
+the result type does not unify or no naming fits.
+-}
+generalizeCarriers :: Sig -> Map TypeSkeleton Symbol -> Term -> Maybe (TypeSkeleton -> Maybe Term)
+generalizeCarriers sig variableOfType term = do
+    (typed, equations) <- annotate "r" term
+    substitution <- foldM (\s (a, b) -> unifyTypes a b s) Map.empty equations
+    let resolved = mapTypes (applyTypes substitution) typed
+    pure $ \resultType -> do
+        fixed <- unifyTypes (nodeType resolved) resultType Map.empty
+        let instantiated = mapTypes (applyTypes fixed) resolved
+            free = nubOrd (concatMap typeVariablesOf (nodeTypes instantiated))
+            unused = filter (`notElem` carriersIn resultType) (map fst carriers)
+            candidates =
+                namings free unused
+                    ++ namings free (map fst carriers)
+                    ++ traverse (\v -> [(v, c) | c <- map fst carriers]) free
+        listToMaybe
+            [schema | naming <- candidates, Just schema <- [rebuild (mapTypes (applyTypes (Map.fromList naming)) instantiated)]]
+  where
+    carriersIn ty
+        | ty `elem` map fst carriers = [ty]
+        | otherwise = case ty of
+            TCons _ args -> concatMap carriersIn args
+            TFun arg result -> carriersIn arg ++ carriersIn result
+            TVar _ -> []
+    annotate path (Term "app" [_, f, x]) = do
+        (f', fs) <- annotate (path <> "f") f
+        (x', xs) <- annotate (path <> "x") x
+        let result = TVar ("g:" <> path)
+        pure (CT.Node ("app", result) [f', x'], (nodeType f', TFun (nodeType x') result) : fs ++ xs)
+    annotate path (Term symbol@(Symbol name) [_]) = do
+        fun <- Map.lookup name sig
+        let ty = case fun of
+                GivenFun{given_info = GivenVar{}} -> snd (carrierPositions path 0 (sfTypeRep fun))
+                _ -> freshInstance path (generalizeType (sfTypeRep fun))
+        pure (CT.Node (symbol, ty) [], [])
+    annotate _ _ = Nothing
+    -- Each carrier of a variable type gets its own fresh type variable.
+    carrierPositions path index ty
+        | ty `elem` map fst carriers = (index + 1, TVar ("v:" <> path <> ":" <> T.pack (show index)))
+        | otherwise = case ty of
+            TCons name args -> TCons name <$> foldList (carrierPositions path) index args
+            TFun arg result ->
+                let (afterArg, arg') = carrierPositions path index arg
+                    (afterResult, result') = carrierPositions path afterArg result
+                 in (afterResult, TFun arg' result')
+            TVar _ -> (index, ty)
+    foldList _ index [] = (index, [])
+    foldList step index (ty : rest) =
+        let (next, ty') = step index ty
+            (final, rest') = foldList step next rest
+         in (final, ty' : rest')
+    freshInstance path ty = case ty of
+        TVar name -> TVar ("c:" <> path <> ":" <> name)
+        TCons name args -> TCons name (map (freshInstance path) args)
+        TFun arg result -> TFun (freshInstance path arg) (freshInstance path result)
+    unifyTypes a b s = case (applyTypes s a, applyTypes s b) of
+        (a', b') | a' == b' -> Just s
+        (TVar v, b') | not (occursIn v b') -> Just (Map.insert v b' s)
+        (a', TVar v) | not (occursIn v a') -> Just (Map.insert v a' s)
+        (TFun a1 r1, TFun a2 r2) -> unifyTypes a1 a2 s >>= unifyTypes r1 r2
+        (TCons c1 as1, TCons c2 as2)
+            | c1 == c2 && length as1 == length as2 -> foldM (\m (x, y) -> unifyTypes x y m) s (zip as1 as2)
+        _ -> Nothing
+    applyTypes s ty = case ty of
+        TVar v | Just bound <- Map.lookup v s -> applyTypes s bound
+        TCons name args -> TCons name (map (applyTypes s) args)
+        TFun arg result -> TFun (applyTypes s arg) (applyTypes s result)
+        TVar _ -> ty
+    occursIn v ty = case ty of
+        TVar w -> v == w
+        TCons _ args -> any (occursIn v) args
+        TFun arg result -> occursIn v arg || occursIn v result
+    typeVariablesOf ty = case ty of
+        TVar v -> [v]
+        TCons _ args -> concatMap typeVariablesOf args
+        TFun arg result -> typeVariablesOf arg ++ typeVariablesOf result
+    nodeType (CT.Node (_, ty) _) = ty
+    nodeTypes (CT.Node (_, ty) children) = ty : concatMap nodeTypes children
+    mapTypes f (CT.Node (symbol, ty) children) = CT.Node (symbol, f ty) (map (mapTypes f) children)
+    -- Injective namings of the type variables, in the order of the carriers.
+    namings [] _ = [[]]
+    namings (v : vs) available = [(v, c) : rest | c <- available, rest <- namings vs (filter (/= c) available)]
+    rebuild (CT.Node (symbol@(Symbol name), ty) children) = case children of
+        [f, x] -> (\f' x' -> Term "app" [typeSkeletonToTerm ty, f', x']) <$> rebuild f <*> rebuild x
+        [] -> case Map.lookup name sig of
+            Just GivenFun{given_info = GivenVar{}} -> (\variable -> Term variable [typeSkeletonToTerm ty]) <$> Map.lookup ty variableOfType
+            _ -> Just (Term symbol [typeSkeletonToTerm ty])
+        _ -> Nothing
 
 -- | Resolve an annotation without changing the program symbols.
 canonicalType :: Term -> Term

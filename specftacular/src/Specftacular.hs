@@ -34,9 +34,10 @@ import Data.CFTA.Equality (
     withoutRedundantEdges,
  )
 import Data.CFTA.Symbol (Symbol (Symbol))
+import Data.CFTA.Template (Template (..))
 import Data.Char (isAlphaNum)
 import Data.List hiding (union)
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromMaybe, mapMaybe)
 import qualified Data.Text as T
 import GHC.Clock (getMonotonicTimeNSec)
 import GHC.Stats (RTSStats (allocated_bytes, gc_cpu_ns, gcs), getRTSStats, getRTSStatsEnabled)
@@ -55,6 +56,8 @@ data StEcta = StEcta
     , sig_ty_cons :: [TypeSkeleton]
     , compl_sig :: Sig
     , given_sig :: Sig
+    , phase_variables :: Map TypeSkeleton Symbol
+    -- ^ The generated variable of each type of the phase.
     , inst_sig :: Sig
     {- ^ The complete signature with more variables of each
     type, for the instances of the schemas.
@@ -150,6 +153,17 @@ termSize (Term s args) = 1 + sum (map termSize args)
 -- for all things of that type! i.e. if x == x ++ [],
 -- then we can rewrite all instances of (_ :: [A] ++ []) to (_::[A])
 -- best would probably be to apply this in the node.
+
+{- | Whether a pruning template leaves each type annotation open. Such a
+template comes from a rule that rewrites each typing of a program, so it can
+prune a skeleton before its typing is known.
+-}
+annotationFree :: Template Symbol -> Bool
+annotationFree template = case template of
+    Hole -> True
+    TemplateNode "app" [Hole, _, f, x] -> annotationFree f && annotationFree x
+    TemplateNode _ [Hole] -> True
+    _ -> False
 
 -- | Whether a symbol is a generated variable of the signature.
 isGivenVar :: Sig -> Symbol -> Bool
@@ -340,6 +354,7 @@ mkStecta size numTests instances sig givenTrans skelTrans =
         { any_arg = ag
         , compl_sig = compl_sig
         , given_sig = givenSig
+        , phase_variables = Map.fromList [(sfTypeRep f, Symbol name) | (name, f) <- Map.assocs givenSig]
         , inst_sig = inst_sig
         , schema_vars = Map.fromList [(Symbol x, map (Symbol . fst) vs) | (x, vs) <- moreVars]
         , sig_ty_cons = Map.keys eq_insts
@@ -374,20 +389,27 @@ mkStecta size numTests instances sig givenTrans skelTrans =
     gnodes = addSyms id (generalize sc)
 
 {- | The phases: the message at the end of the phase, the message at the
-start of the phase, and the changes of the types of the generated
-variables and of the functions.
+start of the phase, the changes of the types of the generated variables and
+of the functions, and the change of the types of the variables of a
+skeleton grammar. A phase with a skeleton grammar does not enumerate its own
+grammar. It tests the most general carrier typing of each schema of the
+skeleton grammar instead (see 'generalizeCarriers'). Phase 4 enumerates
+with its functions and with variables at A, so the constants keep
+independent type variables and the variables of a skeleton are fewer.
 -}
-phases :: [(String, String, TypeSkeleton -> TypeSkeleton, TypeSkeleton -> TypeSkeleton)]
+phases ::
+    [(String, String, TypeSkeleton -> TypeSkeleton, TypeSkeleton -> TypeSkeleton, Maybe (TypeSkeleton -> TypeSkeleton))]
 phases =
-    [ ("Fully monomorphic phase finished..", "", monomorphiseType, monomorphiseType)
-    , ("Monomorphic phases finished..", "Starting phase with more types....", id, id)
+    [ ("Fully monomorphic phase finished..", "", monomorphiseType, monomorphiseType, Nothing)
+    , ("Monomorphic phases finished..", "Starting phase with more types....", id, id, Nothing)
     ,
         ( "Mono-polymorphic phase done! "
         , "Starting mono-polymorphic phase...."
         , monomorphiseType
         , generalizeType . monomorphiseType
+        , Nothing
         )
-    , ("Done! ", "Starting fully-polymorphic phase....", id, generalizeType)
+    , ("Done! ", "Starting fully-polymorphic phase....", id, generalizeType, Just monomorphiseType)
     ]
 
 {- | Run the phases from 1 to the given phase. The search state goes from
@@ -407,12 +429,13 @@ runPhases env size lastPhase instances sig =
             , law_count = 0
             }
   where
-    go ((pn, (finished, starting, givenTrans, skelTrans)) : rest) s
+    go ((pn, (finished, starting, givenTrans, skelTrans, skeletonTrans)) : rest) s
         | pn <= lastPhase = do
             when (pn > 1) $ putStrLn starting
             let phaseEnv = env{diagnosticPhase = pn}
+                stectaWith variableTrans = mkStecta size (numTests env) instances sig variableTrans skelTrans
             (laws, s') <- diagnose phaseEnv 0 "" "phase" s $ do
-                result@(_, finishedState) <- runPhase phaseEnv size (mkStecta size (numTests env) instances sig givenTrans skelTrans) s
+                result@(_, finishedState) <- runPhase phaseEnv size (stectaWith <$> skeletonTrans) (stectaWith givenTrans) s
                 diagnosticEvent phaseEnv "checkpoint" 0 "" "phase" finishedState
                 return result
             putStrLn $ finished ++ show (so_far s') ++ " terms examined."
@@ -421,42 +444,63 @@ runPhases env size lastPhase instances sig =
     go _ _ = return []
 
 {- | Run one phase: the sizes from 1 to the given size, and for each size
-each type to test.
+each type to test. With a skeleton grammar, the candidates of a size are the
+most general carrier typings of its schemas of that size, by result type.
 -}
-runPhase :: Settings -> Int -> StEcta -> Search -> IO ([String], Search)
-runPhase env@Settings{..} size stecta@StEcta{..} = go [(lvl, tc) | lvl <- [1 .. size], tc <- sortOn (\t -> (typeSize t, concreteTypeLeaves t, t)) sig_ty_cons]
+runPhase :: Settings -> Int -> Maybe StEcta -> StEcta -> Search -> IO ([String], Search)
+runPhase env@Settings{..} size skeletons stecta@StEcta{..} = goSizes [1 .. size]
   where
+    bucketTypes = sortOn (\t -> (typeSize t, concreteTypeLeaves t, t)) sig_ty_cons
+    goSizes [] s = return ([], s)
+    goSizes (lvl : rest) s = do
+        -- The rules at the start of a size prune its skeletons.
+        let candidates = generalizedOfSize lvl (rewrite_rules s) <$> skeletons
+        (laws, s') <- goBuckets lvl candidates bucketTypes s
+        (more, s'') <- goSizes rest s'
+        return (laws ++ more, s'')
+    goBuckets _ _ [] s = return ([], s)
+    goBuckets lvl candidates (tc : rest) s = do
+        (laws, s') <- diagnose env lvl (show tc) "bucket" s $ do
+            result@(_, finishedState) <- bucket lvl candidates tc s
+            diagnosticEvent env "checkpoint" lvl (show tc) "bucket" finishedState
+            return result
+        (more, s'') <- goBuckets lvl candidates rest s'
+        return (laws ++ more, s'')
+    -- The most general carrier typings of the skeletons of a size, by
+    -- result type. Only templates without annotations prune a skeleton,
+    -- because they match each typing of it.
+    generalizedOfSize lvl rules skeleton@StEcta{compl_sig = skeletonSig, sig_ty_cons = skeletonTypes} =
+        let templates
+                | canPrune = filter annotationFree (pruningTemplates skeletonSig lvl rules)
+                | otherwise = []
+            skeletonTerms =
+                [ t
+                | skeletonType <- skeletonTypes
+                , let (pruningRoot, oracleTemplates) = Compile.preparePruning templates (refold (searchSpace skeleton lvl skeletonType))
+                , t <- prunedTerms oracleTemplates pruningRoot
+                ]
+            typings = mapMaybe (generalizeCarriers skeletonSig phase_variables . npTerm') skeletonTerms
+         in Map.fromList [(tc, nubOrd (mapMaybe ($ tc) typings)) | tc <- sig_ty_cons]
     -- Only program applications have this shape. Do not exclude matching
     -- type constructors in a custom signature.
     canPrune = ("app", 4) `notElem` allConstructors (Map.assocs (sfTypeRep <$> compl_sig))
-    go [] s = return ([], s)
-    go ((lvl, tc) : rest) s = do
-        (laws, s') <- diagnose env lvl (show tc) "bucket" s $ do
-            result@(_, finishedState) <- bucket lvl tc s
-            diagnosticEvent env "checkpoint" lvl (show tc) "bucket" finishedState
-            return result
-        (more, s'') <- go rest s'
-        return (laws ++ more, s'')
-    bucket lvl tc s = do
-        refreshCount progress "Reducing  ECTA" (" for " ++ show tc) "" lvl (so_far s)
-        reduced <- diagnose env lvl (show tc) "reduce_whnf" s $ evaluate (searchSpace stecta lvl tc)
-        let templates
-                | canPrune = pruningTemplates compl_sig lvl (rewrite_rules s)
-                | otherwise = []
-        refreshCount progress "Refolding ecta" (" for " ++ show tc) "" lvl (so_far s)
-        folded <- diagnose env lvl (show tc) "refold_whnf" s $ evaluate (refold reduced)
-        -- The oracle rejects partial branches before their remaining type
-        -- choices expand. The bucket has one program size. KBO orders its
-        -- ties before testing; smaller sizes have already supplied rules.
-        let (pruningRoot, oracleTemplates) = Compile.preparePruning templates folded
-            terms =
-                sortBy
-                    (kboCompare (isGivenVar compl_sig))
-                    [ candidate
-                    | t <- prunedTerms oracleTemplates pruningRoot
-                    , let candidate = canonicalTypes (npTerm' t)
-                    , eligible candidate
-                    ]
+    bucket lvl candidates tc s = do
+        produced <- case candidates of
+            Just byType -> pure $ Map.findWithDefault [] tc byType
+            Nothing -> do
+                refreshCount progress "Reducing  ECTA" (" for " ++ show tc) "" lvl (so_far s)
+                reduced <- diagnose env lvl (show tc) "reduce_whnf" s $ evaluate (searchSpace stecta lvl tc)
+                let templates
+                        | canPrune = pruningTemplates compl_sig lvl (rewrite_rules s)
+                        | otherwise = []
+                refreshCount progress "Refolding ecta" (" for " ++ show tc) "" lvl (so_far s)
+                folded <- diagnose env lvl (show tc) "refold_whnf" s $ evaluate (refold reduced)
+                -- The oracle rejects partial branches before their remaining type
+                -- choices expand. The bucket has one program size. KBO orders its
+                -- ties before testing; smaller sizes have already supplied rules.
+                let (pruningRoot, oracleTemplates) = Compile.preparePruning templates folded
+                pure [canonicalTypes (npTerm' t) | t <- prunedTerms oracleTemplates pruningRoot]
+        let terms = sortBy (kboCompare (isGivenVar compl_sig)) (filter eligible produced)
             -- Apply the checks that are already known before retaining the
             -- sort bucket. The search checks new rules again as it runs.
             eligible t =
