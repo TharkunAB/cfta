@@ -68,6 +68,20 @@ literals of one type follow the order of their labels. For numbers that are
 not negative and have at most nine digits, that is the numeric order.
 'Data.CFTA.Gen.fromDatatype' orders literals as their domain lists them.
 
+To visit smaller terms first, apply 'Data.CFTA.Gen.upToSize' to the result
+of 'fromTypingRules'. It gives size-major ranks even with a 'Nesting' bound.
+The size counts all term nodes, including literal fields: @Number 6@ has size
+two. The size bound keeps only terms at or below that size. A bound at least
+as large as every term keeps the complete language. Use the resulting generator
+to compute ranks with 'Data.CFTA.Gen.rankOfValue' and decode them with
+'Data.CFTA.Gen.unrank'. The old finite ranks do not apply to it.
+'Binders' generators already have size-major ranks.
+
+This uses the generator's size classes. An acyclic import that needs the
+symbolic counting fallback treats each term as one atom. Use
+"Data.CFTA.Sized" on the explicit automaton for exact structural size classes
+in that case.
+
 Limits:
 
 * A field that holds a subterm has the type of the datatype. A field of
