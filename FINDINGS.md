@@ -2,6 +2,18 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-19 13:07 CEST. Proof checkpoint: `904d230ff`.
+Actual causal edge History now retains the same earlier writer's native
+cells into the captured reader. Actual child suffixes derive the selected
+surviving child's returned node cell and writer there. The ordinary
+adapter retains both strict original input-child mass bounds. General
+renewal bounds, active-owner exclusion, termination, convergence and
+Haskell correspondence remain open. No Haskell defect or repair request
+is added. All 268 Haskell files retain their bytes. Full default build
+passes 3462 jobs; Audit checks 73854 axiom dependencies. Read
+`lean/notes-current-native-edge-child-retention.md`. Preserve every repair
+entry, reproducer, path, commit and validation result below.
+
 Current proof update: 2026-10-19 12:52 CEST. Proof checkpoint: `776875701`.
 Under the stated original false gate and actual preparation/fold support,
 the recursive event alternative now retains full row origins along its
