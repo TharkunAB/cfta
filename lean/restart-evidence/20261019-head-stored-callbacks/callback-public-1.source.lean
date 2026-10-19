@@ -1,0 +1,21 @@
+import MicroCFTA.SourceCurrentStoredCallbackChildContexts
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+#check @MicroCFTA.SourceCurrentStoredCallbackChildContexts.filter_row
+#print MicroCFTA.SourceCurrentStoredCallbackChildContexts.filter_row
+#print axioms MicroCFTA.SourceCurrentStoredCallbackChildContexts.filter_row
+#check @MicroCFTA.SourceCurrentStoredCallbackChildContexts.filter_child
+#print MicroCFTA.SourceCurrentStoredCallbackChildContexts.filter_child
+#print axioms MicroCFTA.SourceCurrentStoredCallbackChildContexts.filter_child
+#check @MicroCFTA.SourceCurrentStoredCallbackChildContexts.written_child
+#print MicroCFTA.SourceCurrentStoredCallbackChildContexts.written_child
+#print axioms MicroCFTA.SourceCurrentStoredCallbackChildContexts.written_child
+#check @MicroCFTA.SourceCurrentStoredCallbackChildContexts.head_child
+#print MicroCFTA.SourceCurrentStoredCallbackChildContexts.head_child
+#print axioms MicroCFTA.SourceCurrentStoredCallbackChildContexts.head_child
