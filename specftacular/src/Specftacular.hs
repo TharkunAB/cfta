@@ -455,8 +455,25 @@ most general carrier typings with that result type of the skeletons of its
 monomorphic type.
 -}
 runPhase :: Settings -> Int -> Maybe StEcta -> StEcta -> Search -> IO ([String], Search)
-runPhase env@Settings{..} size skeletons stecta@StEcta{..} = go Map.empty [(lvl, tc) | lvl <- [1 .. size], tc <- sortOn (\t -> (typeSize t, concreteTypeLeaves t, t)) sig_ty_cons]
+runPhase env@Settings{..} size skeletons stecta@StEcta{..} =
+    go
+        Map.empty
+        [(lvl, tc) | lvl <- [1 .. size], tc <- sortOn (\t -> (typeSize t, concreteTypeLeaves t, t)) (filter tested sig_ty_cons)]
   where
+    -- With a skeleton grammar, the variable types are closed under carrier
+    -- renaming (see 'mkStecta'). Then the schemas of a type are the
+    -- renamings of the schemas of its canonical type (see
+    -- 'generalizeCarriers'), and the canonical type finds their laws up to
+    -- renaming. This needs variables whose carriers are the first carriers
+    -- of 'carriers'.
+    tested tc = case skeletons of
+        Just _
+            | firstCarriers ->
+                canonicalCarrierType tc == tc || canonicalCarrierType tc `notElem` sig_ty_cons
+        _ -> True
+    firstCarriers =
+        let used = nubOrd (concatMap carriersOf (Map.keys phase_variables))
+         in sort used == sort (take (length used) (map fst carriers))
     -- Only program applications have this shape. Do not exclude matching
     -- type constructors in a custom signature.
     canPrune = ("app", 4) `notElem` allConstructors (Map.assocs (sfTypeRep <$> compl_sig))

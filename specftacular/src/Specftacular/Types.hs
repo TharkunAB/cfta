@@ -329,16 +329,27 @@ sigGivens closed typeMod sigs instances =
 that the types use.
 -}
 carrierRenamings :: [TypeSkeleton] -> Set TypeSkeleton
-carrierRenamings types = Set.fromList [renameType (Map.fromList renaming) t | t <- types, renaming <- renamings (nubOrd (carriersOf t)) used]
+carrierRenamings types =
+    Set.fromList
+        [renameCarrierType (Map.fromList renaming) t | t <- types, renaming <- renamings (nubOrd (carriersOf t)) used]
   where
     used = nubOrd (concatMap carriersOf types)
     renamings [] _ = [[]]
     renamings (c : cs) available = [(c, c') : rest | c' <- available, rest <- renamings cs (filter (/= c') available)]
-    renameType renaming ty = case ty of
-        _ | Just renamedCarrier <- Map.lookup ty renaming -> renamedCarrier
-        TCons name args -> TCons name (map (renameType renaming) args)
-        TFun arg result -> TFun (renameType renaming arg) (renameType renaming result)
-        TVar _ -> ty
+
+{- | The type with its carriers renamed to the carriers of 'carriers', in
+the order of their first occurrence.
+-}
+canonicalCarrierType :: TypeSkeleton -> TypeSkeleton
+canonicalCarrierType ty = renameCarrierType (Map.fromList (zip (nubOrd (carriersOf ty)) (map fst carriers))) ty
+
+-- | The type with its carriers renamed by a map.
+renameCarrierType :: Map TypeSkeleton TypeSkeleton -> TypeSkeleton -> TypeSkeleton
+renameCarrierType renaming ty = case ty of
+    _ | Just renamed <- Map.lookup ty renaming -> renamed
+    TCons name args -> TCons name (map (renameCarrierType renaming) args)
+    TFun arg result -> TFun (renameCarrierType renaming arg) (renameCarrierType renaming result)
+    TVar _ -> ty
 
 -- | The carriers of a type, in the order of their occurrences.
 carriersOf :: TypeSkeleton -> [TypeSkeleton]
