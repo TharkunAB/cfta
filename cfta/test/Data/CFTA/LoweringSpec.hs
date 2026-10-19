@@ -36,18 +36,29 @@ spec = describe "template lowerings" $ do
     it "compose: lowering with a composite is lowering twice" $ do
         -- quad(x) lowers to double(double(x)), which lowers to sums.
         let upper = either (error . show) id $ Lowering.mkLowering [("quad", 1, Apply "double" [Apply "double" [Child 0]])]
-            composite = Lowering.compose upper lowering
+            compose second first = either (error . show) id $ Lowering.compose second first
+            composite = compose upper lowering
             terms = FTA.terms $ FTA.boundDepth 3 $ grammar [("double", 1), ("succ", 1), ("quad", 1)]
         length terms `shouldSatisfy` (> 10)
         map (Lowering.lower composite) terms
             `shouldBe` map (Lowering.lower upper >=> Lowering.lower lowering) terms
-        map (Lowering.lower (Lowering.compose Lowering.identity lowering)) terms `shouldBe` map (Lowering.lower lowering) terms
-        map (Lowering.lower (Lowering.compose lowering Lowering.identity)) terms `shouldBe` map (Lowering.lower lowering) terms
+        map (Lowering.lower (compose Lowering.identity lowering)) terms `shouldBe` map (Lowering.lower lowering) terms
+        map (Lowering.lower (compose lowering Lowering.identity)) terms `shouldBe` map (Lowering.lower lowering) terms
         let top = grammar [("double", 1), ("succ", 1), ("quad", 1)]
             within lifted = Set.fromList $ FTA.terms $ FTA.boundDepth 3 $ either (error . show) FTA.dropConstraints $ FTA.intersect top lifted
             once = either (error . show) id $ Lowering.lift composite evenValue
             twice = either (error . show) id $ Lowering.lift lowering evenValue >>= Lowering.lift upper
         within once `shouldBe` within twice
+
+    it "compose: reject an expansion that applies an earlier constructor to the wrong number of children" $ do
+        -- Lowering twice gives Nothing for these terms, so no composite agrees with it.
+        let upper arity expansion = either (error . show) id $ Lowering.mkLowering [("quad", arity, expansion)]
+            fewer = upper 1 $ Apply "double" []
+            more = upper 2 $ Apply "double" [Child 0, Child 1]
+        Lowering.compose fewer lowering `shouldBe` Left (WrongArity "double" 1 0)
+        Lowering.compose more lowering `shouldBe` Left (WrongArity "double" 1 2)
+        (Lowering.lower fewer >=> Lowering.lower lowering) (Node "quad" [one]) `shouldBe` Nothing
+        (Lowering.lower more >=> Lowering.lower lowering) (Node "quad" [one, zero]) `shouldBe` Nothing
 
     it "accept a later grammar whose productions lower into the earlier grammar" $
         Lowering.checkLowering lowering earlier later `shouldBe` []

@@ -24,7 +24,8 @@ Before release, the package was called `microcfta`.
 - Add `Data.CFTA.Lowering`: template lowerings, which translate the terms of
   a language version to the version before it. `lift` gives the inverse image
   of an automaton, and `checkLowering` checks a later grammar against an
-  earlier one.
+  earlier one. `compose` makes one lowering of two. It reports an expansion
+  that applies an earlier constructor to the wrong number of children.
 - `Data.CFTA.Refinement.Expression.modulo`: the remainder of a term, as the
   `mod` of SMT-LIB.
 - `refoldEdges` is `refold` with the edge of the result that each edge of
