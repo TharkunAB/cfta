@@ -37,6 +37,16 @@ module Data.CFTA.Enumeration (
     -- * Pruning oracles
     termsPrune,
     termsPruneWith,
+    OrderedConfig (..),
+    OrderedCursor,
+    OrderedNext (..),
+    OrderedPauseReason (..),
+    OrderedStatistics,
+    startOrdered,
+    strengthenOrdered,
+    nextOrdered,
+    orderedStatistics,
+    getUnexpandedNode,
     ExpansionOrder,
     noExpansionPreference,
     expandPartialTermFrag,
@@ -77,6 +87,7 @@ import Data.CFTA.Equality.Constraint (
     unsafeGetEclasses,
  )
 import Data.CFTA.Index (Depth (..))
+import qualified Data.CFTA.Internal.OrderedFrontier as Frontier
 import Data.CFTA.Internal.Tree (termLevelsBy)
 import Data.CFTA.Internal.UnionFind (UVar, UVarGen, UnionFind, intToUVar, uvarToInt)
 import qualified Data.CFTA.Internal.UnionFind as UnionFind
@@ -738,7 +749,15 @@ enumerateNode scs n =
 enumerateEdge ::
     (Hashable symbol, Typeable symbol) =>
     Seq SuspendedConstraint -> Edge symbol -> EnumerateM symbol (TermFragment symbol)
-enumerateEdge scs e = do
+enumerateEdge = enumerateEdgeWith enumerateNode
+
+-- | Prepare the children of one selected edge with the supplied function.
+enumerateEdgeWith ::
+    (Seq SuspendedConstraint -> Node symbol -> EnumerateM symbol (TermFragment symbol)) ->
+    Seq SuspendedConstraint ->
+    Edge symbol ->
+    EnumerateM symbol (TermFragment symbol)
+enumerateEdgeWith prepareChild scs e = do
     let inherited = descendScs IntMap.empty scs
     -- The inherited obligations must fit the edge. Its own classes fit it.
     guard $ maybe True (\(highest, _) -> compareLength (edgeChildren e) highest == GT) (IntMap.lookupMax inherited)
@@ -747,11 +766,38 @@ enumerateEdge scs e = do
     let children = descendScs inherited newScs
     fragment <-
         TermFragmentNode (edgeSymbol e)
-            <$> zipWithM (\i n -> enumerateNode (IntMap.findWithDefault Sequence.Empty i children) n) [0 ..] (edgeChildren e)
+            <$> zipWithM (\i n -> prepareChild (IntMap.findWithDefault Sequence.Empty i children) n) [0 ..] (edgeChildren e)
     when (residual (edgeConstraint e)) $
         modify' $
             \s -> s{_obligations = (edgeConstraint e, fragment) : _obligations s}
     return fragment
+
+{- | Expand one ordinary node and defer its eligible children.
+Keep the existing preparation of terminal equality endpoints and recursive
+boundaries. A selected root must not defer itself into another fresh slot.
+-}
+enumerateShallowHere ::
+    (Hashable symbol, Typeable symbol) =>
+    Seq SuspendedConstraint -> Node symbol -> EnumerateM symbol (TermFragment symbol)
+enumerateShallowHere scs n@(Node _)
+    | not (any (isTerminalPathTrie . scGetPathTrie) scs) = do
+        edgesOf <- gets _edgesOf
+        enumerateEdgeWith prepareShallowChild scs =<< branches (edgesOf n)
+enumerateShallowHere scs n = enumerateNode scs n
+
+{- | Keep an ordinary child in a slot until the ready-hole loop selects it.
+Install its full suspended constraints through the existing waiting counter.
+Terminal endpoints still merge through the existing node-preparation path.
+-}
+prepareShallowChild ::
+    (Hashable symbol, Typeable symbol) =>
+    Seq SuspendedConstraint -> Node symbol -> EnumerateM symbol (TermFragment symbol)
+prepareShallowChild scs n@(Node _)
+    | not (any (isTerminalPathTrie . scGetPathTrie) scs) = do
+        uv <- addUVarValue (Just n)
+        setUVarValue uv (UVarUnenumerated (Just n) scs)
+        pure (TermFragmentUVar uv)
+prepareShallowChild scs n = enumerateNode scs n
 
 ---------------------
 -------- Enumeration-loop control
@@ -831,7 +877,15 @@ UVar from 'nextExpandableUVar' and so only offers expandable UVars.
 -}
 enumerateOutUVar ::
     (Hashable symbol, Typeable symbol) => UVar -> EnumerateM symbol (TermFragment symbol)
-enumerateOutUVar uv =
+enumerateOutUVar = enumerateOutUVarWith enumerateNode
+
+-- | Expand one selected slot with the supplied node-expansion function.
+enumerateOutUVarWith ::
+    (Hashable symbol, Typeable symbol) =>
+    (Seq SuspendedConstraint -> Node symbol -> EnumerateM symbol (TermFragment symbol)) ->
+    UVar ->
+    EnumerateM symbol (TermFragment symbol)
+enumerateOutUVarWith expandNode uv =
     do
         UVarUnenumerated (Just n) scs <- getUVarValue uv
         uv' <- getUVarRepresentative uv
@@ -842,9 +896,9 @@ enumerateOutUVar uv =
                 }
 
         t <- case n of
-            Mu _ -> enumerateNode scs (unfoldOuterRec n)
-            InternedUnion _ -> enumerateNode scs (Node $ nodeEdges n)
-            _ -> enumerateNode scs n
+            Mu _ -> expandNode scs (unfoldOuterRec n)
+            InternedUnion _ -> expandNode scs (Node $ nodeEdges n)
+            _ -> expandNode scs n
 
         modify' $ \s -> s{_expansionAncestry = HashSet.empty}
         setUVarValue uv' (UVarEnumerated t)
@@ -1202,3 +1256,266 @@ plainTermLevels root =
         | (ident, edges) <- IntMap.toList (canonicalOrder root)
         ]
         (nodeIdentity root)
+
+{- | Callbacks for ordered pruning with a fixed term key.
+
+All callbacks must be pure and deterministic. They may read partial terms and
+compress aliases. They must not allocate UVars, merge classes, enumerate
+choices, or restore an earlier equality state. They may update local oracle
+state. A rejected branch must stay rejected under every later completion and
+shared-state update. Saved UVar references must be resolved in the current
+child state before a pending check uses them.
+
+* 'orderedKey' gives the exact key of a complete term. Its meaning must stay
+  fixed. The key does not decide residual obligations.
+* 'orderedBound' bounds every complete key below the partial root, including
+  all remaining raw siblings. 'Nothing' means unknown and retains the work.
+  The caller must justify admissibility. A detected invalid bound can occur
+  after an earlier output; detection does not establish correct ordering.
+* 'orderedRefresh' receives the latest shared state on every queue pop and
+  a suspended partial-root action. An unchanged epoch can avoid that action.
+  Refresh must install all new checks on prepared sibling sources and queued
+  complete runs. Right callbacks are not replayed for a prepared source.
+* 'orderedOracle' receives Right before expansion and Left after expansion.
+  A true result rejects the branch. A pending Left uses the latest shared
+  state and the refreshed parent local state.
+* 'orderedOrder' can select only an offered ready UVar. It cannot make a
+  blocked UVar ready. The dependency and recursion rules remain in effect.
+
+Shared-state changes may only remove completions. Do not retract an earlier
+check when a rewrite-rule basis changes. Keys, the raw automaton, and callback
+meaning must stay fixed. Finite raw languages with admissible bounds yield
+nondecreasing keys. Equal keys use deterministic queue serials; their order
+can differ from eager enumeration. Terms and residual obligations retain
+their multiplicities. The caller must decide those obligations.
+
+The cursor uses shallow ordinary-child expansion with the existing equality
+state. It keeps recursive ancestry and truncation markers. Equivalence of
+every constrained cyclic truncation under a changed expansion order remains
+a separate proof obligation. Unknown or weak bounds can require most of a
+language before its first certified minimum. No progress or speed bound is
+given for an infinite lower-key search.
+-}
+data OrderedConfig key global local symbol = OrderedConfig
+    { orderedBound :: Term (PartialSymbol symbol) -> EnumerateM symbol (Maybe key)
+    , orderedKey :: Term symbol -> key
+    , orderedRefresh :: global -> local -> EnumerateM symbol (Term (PartialSymbol symbol)) -> EnumerateM symbol (Bool, local)
+    , orderedOracle ::
+        global -> local -> UVar -> Either (TermFragment symbol) (Node symbol) -> EnumerateM symbol (Bool, local)
+    , orderedOrder :: ExpansionOrder local
+    }
+
+-- | Callback state for one branch. A raw expansion records its Left event.
+data OrderedPhase symbol
+    = OrderedAwait
+    | OrderedPrepared UVar
+    | OrderedLeft UVar (TermFragment symbol)
+    | OrderedComplete (Term symbol, [(Constraint, Term symbol)])
+
+-- | One opaque branch from the existing equality enumerator.
+data OrderedBranch local symbol = OrderedBranch (EnumerationState symbol) local (OrderedPhase symbol)
+
+{- | Ordered work over immutable branch states and lazy raw sibling sources.
+Raw sibling tails retain equality-enumeration state. They do not capture old
+shared state or local oracle state. Caller keys and local checks can still
+retain data. Queue capacity is not a bound on closure bytes or process RSS.
+-}
+data OrderedCursor key global local symbol
+    = OrderedCursor
+        symbol
+        (OrderedConfig key global local symbol)
+        (Frontier.Cursor key global (OrderedBranch local symbol) (Term symbol, [(Constraint, Term symbol)]))
+
+{- | Committed popped jobs, rejected jobs, pulled siblings, active queue
+entries, and maximum queue entries. These counts do not measure closure bytes.
+-}
+type OrderedStatistics = (Integer, Integer, Integer, Int, Int)
+
+-- | The caller must replenish work or increase frontier capacity.
+data OrderedPauseReason = FuelLimit | FrontierLimit
+    deriving (Eq, Show)
+
+-- | One complete run, exhaustion, a resumable limit, or an invalid bound.
+data OrderedNext key global local symbol
+    = OrderedYield (Term symbol, [(Constraint, Term symbol)]) (OrderedCursor key global local symbol)
+    | OrderedDone OrderedStatistics
+    | OrderedLimit OrderedPauseReason (OrderedCursor key global local symbol)
+    | OrderedBadBound key (Maybe key) (OrderedCursor key global local symbol)
+
+-- | Read a hole without enumeration. The read compresses its representative.
+getUnexpandedNode :: UVar -> EnumerateM symbol (Maybe (Node symbol))
+getUnexpandedNode uv = do
+    value <- getUVarValue uv
+    pure $ case value of
+        UVarUnenumerated node _ -> node
+        _ -> Nothing
+
+-- | Start an optional ordered cursor. Keep the eager entry points unchanged.
+startOrdered ::
+    (Hashable symbol, Ord symbol, Typeable symbol) =>
+    symbol ->
+    OrderedConfig key global local symbol ->
+    global ->
+    local ->
+    Node symbol ->
+    OrderedCursor key global local symbol
+startOrdered marker config global local root =
+    let enumState = initEnumerationState (canonicalEdgesOf Nothing root) root
+        branch = OrderedBranch enumState local OrderedAwait
+     in OrderedCursor marker config (Frontier.start (orderedPolicy marker config) global branch)
+
+-- | Install a stronger shared pruning state. Do not retract old templates.
+strengthenOrdered :: global -> OrderedCursor key global local symbol -> OrderedCursor key global local symbol
+strengthenOrdered global (OrderedCursor marker config cursor) =
+    OrderedCursor marker config (Frontier.strengthen global cursor)
+
+-- | Read logical queue counters. Measure process RSS and residency separately.
+orderedStatistics :: OrderedCursor key global local symbol -> OrderedStatistics
+orderedStatistics (OrderedCursor _ _ cursor) = orderedCounts (Map.size (Frontier.queue cursor)) (Frontier.counts cursor)
+
+-- | Convert scheduler counters without exposing its private module.
+orderedCounts :: Int -> Frontier.Counts -> OrderedStatistics
+orderedCounts active current =
+    ( Frontier.poppedJobs current
+    , Frontier.rejectedJobs current
+    , Frontier.pulledSiblings current
+    , active
+    , Frontier.maximumQueueEntries current
+    )
+
+{- | Return the next certified minimum within a work and frontier limit.
+'FuelLimit' preserves the cursor. Supply more work to resume. 'FrontierLimit'
+also preserves all work. Increase capacity or stop; an unchanged call can
+return the same limit. Never treat a limit as exhaustion. Each limit bounds
+scheduler entries or steps, not the cost of one raw expansion or observer.
+-}
+nextOrdered ::
+    (Ord key, Hashable symbol, Typeable symbol) =>
+    Int -> Int -> OrderedCursor key global local symbol -> OrderedNext key global local symbol
+nextOrdered fuel limit (OrderedCursor marker config cursor) =
+    let wrap = OrderedCursor marker config
+     in case Frontier.next (orderedPolicy marker config) fuel limit cursor of
+            Frontier.Yield run remaining -> OrderedYield run (wrap remaining)
+            Frontier.Exhausted current -> OrderedDone (orderedCounts 0 current)
+            Frontier.Paused reason remaining ->
+                OrderedLimit (case reason of Frontier.FuelLimit -> FuelLimit; Frontier.FrontierLimit -> FrontierLimit) (wrap remaining)
+            Frontier.InvalidBound key bound remaining ->
+                OrderedBadBound key (case bound of Frontier.Unknown -> Nothing; Frontier.Bound value -> Just value) (wrap remaining)
+
+-- | Require a deterministic observer. No result means failure or rejection.
+orderedObserve :: EnumerateM symbol a -> EnumerationState symbol -> Maybe (a, EnumerationState symbol)
+orderedObserve action enumState = case allBranches action enumState of
+    [] -> Nothing
+    [result] -> Just result
+    _ -> error "ordered enumeration: observer must be deterministic"
+
+-- | Read the partial root without expanding an unresolved node.
+orderedPartialRoot :: EnumerateM symbol (Term (PartialSymbol symbol))
+orderedPartialRoot = rootTermFrag >>= expandPartialTermFrag
+
+{- | Recheck shared pruning before any callback, expansion, or yield.
+Deliver a pending Left event with the current global and refreshed local state.
+Keep a prepared source prepared; its original Right callback ran before it
+was created. Refresh must install all later global changes for that source.
+-}
+orderedActivate ::
+    symbol ->
+    OrderedConfig key global local symbol ->
+    global ->
+    local ->
+    OrderedPhase symbol ->
+    EnumerateM symbol (local, OrderedPhase symbol)
+orderedActivate marker config global local phase = do
+    (reject, updated) <- orderedRefresh config global local orderedPartialRoot
+    guard (not reject)
+    case phase of
+        OrderedLeft uv fragment -> do
+            (rejectLeft, after) <- orderedOracle config global updated uv (Left fragment)
+            guard (not rejectLeft)
+            orderedPrepare marker config global after
+        OrderedAwait -> orderedPrepare marker config global updated
+        _ -> pure (updated, phase)
+
+{- | Select a ready hole and run its Right callback deterministically.
+Keep the existing recursion-key test and completion of residual obligations.
+No global callback is put in a raw CPS alternative source.
+-}
+orderedPrepare ::
+    symbol ->
+    OrderedConfig key global local symbol ->
+    global ->
+    local ->
+    EnumerateM symbol (local, OrderedPhase symbol)
+orderedPrepare marker config global local = do
+    choice <- nextExpandableUVar (orderedOrder config local)
+    case choice of
+        ExpansionStuck -> mzero
+        ExpansionDone -> do
+            term <- expandUVarWith marker (intToUVar 0)
+            obligations <- gets _obligations
+            pending <- mapM (\(constraint, fragment) -> (constraint,) <$> expandTermFragWith marker fragment) obligations
+            pure (local, OrderedComplete (term, pending))
+        ExpansionNext uv -> do
+            UVarUnenumerated (Just node) scs <- getUVarValue uv
+            let prepare = do
+                    (reject, updated) <- orderedOracle config global local uv (Right node)
+                    guard (not reject)
+                    pure (updated, OrderedPrepared uv)
+            if recursiveBoundary node
+                then do
+                    representative <- getUVarRepresentative uv
+                    ancestry <- gets $ IntMap.findWithDefault HashSet.empty (uvarToInt representative) . _recursionAncestry
+                    if HashSet.member (recursionKey node scs) ancestry
+                        then do
+                            setUVarValue representative (UVarUnenumerated (Just node) Sequence.Empty)
+                            orderedPrepare marker config global local
+                        else prepare
+                else prepare
+
+{- | Expand one prepared hole. This action takes no global, config, or local
+state argument. Its raw CPS tail retains only equality-enumeration state.
+-}
+orderedRawStep ::
+    (Hashable symbol, Typeable symbol) => UVar -> EnumerateM symbol (TermFragment symbol)
+orderedRawStep = enumerateOutUVarWith enumerateShallowHere
+
+{- | Pull one raw sibling with the parent's refreshed local state.
+This source takes no global or config argument. Its child has a pending Left
+event, which is delivered only when the child is activated.
+-}
+orderedSiblings ::
+    Frontier.Estimate key ->
+    UVar ->
+    [(TermFragment symbol, EnumerationState symbol)] ->
+    Frontier.Siblings key (OrderedBranch local symbol)
+orderedSiblings _ _ [] = Frontier.End
+orderedSiblings lower uv ((fragment, enumState) : rest) =
+    Frontier.More lower $ \(OrderedBranch _ local _) ->
+        (OrderedBranch enumState local (OrderedLeft uv fragment), orderedSiblings lower uv rest)
+
+-- | Connect shared callbacks to the scheduler outside the raw alternative tail.
+orderedPolicy ::
+    (Hashable symbol, Typeable symbol) =>
+    symbol ->
+    OrderedConfig key global local symbol ->
+    Frontier.Policy key global (OrderedBranch local symbol) (Term symbol, [(Constraint, Term symbol)])
+orderedPolicy marker config =
+    Frontier.Policy
+        { Frontier.refresh = \global (OrderedBranch enumState local phase) ->
+            case orderedObserve (orderedActivate marker config global local phase) enumState of
+                Just ((updated, phase'), enumState') -> Just (OrderedBranch enumState' updated phase')
+                Nothing -> Nothing
+        , Frontier.lowerBound = bound
+        , Frontier.advance = \branch@(OrderedBranch enumState _ phase) -> case phase of
+            OrderedComplete run -> Frontier.Finished run
+            OrderedPrepared uv ->
+                Frontier.Children (orderedSiblings (bound branch) uv (allBranches (orderedRawStep uv) enumState))
+            _ -> error "ordered enumeration: branch was not prepared"
+        , Frontier.exactKey = orderedKey config . fst
+        }
+  where
+    bound (OrderedBranch enumState _ phase) = case phase of
+        OrderedComplete (term, _) -> Frontier.Bound (orderedKey config term)
+        _ -> case orderedObserve (orderedPartialRoot >>= orderedBound config) enumState of
+            Just (Just key, _) -> Frontier.Bound key
+            _ -> Frontier.Unknown

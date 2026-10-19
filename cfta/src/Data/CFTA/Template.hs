@@ -30,14 +30,18 @@ module Data.CFTA.Template (
     preorderPrefix,
 ) where
 
+import Control.Monad (foldM, zipWithM)
 import Control.Monad.State.Strict (evalState, gets, modify', runState)
 import Data.Containers.ListUtils (nubOrd)
 import Data.Either (fromRight)
+import Data.Foldable (toList)
 import Data.Hashable (Hashable)
 import qualified Data.IntMap.Strict as IntMap
+import qualified Data.IntSet as IntSet
 import Data.List (partition, sort)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (isJust, isNothing, mapMaybe)
+import qualified Data.Sequence as Seq
 import qualified Data.Set as Set
 import Data.Typeable (Typeable)
 
@@ -168,34 +172,100 @@ child only when its part, with the other parts that the child must match,
 can match the root of an edge of the child, so a copy that no term of the
 child can fill is not made. Many templates whose parts at a child share a
 root that the child has can still give @2^m@ copies.
+
+Templates must be finite and total, and symbol Eq and Ord must agree.
+Exclusion prepares their subtrees once. This can evaluate a template part
+before the input graph reaches its position.
 -}
 exclude ::
     (Ord symbol, Hashable symbol, Typeable symbol) =>
     [Template symbol] -> Node symbol -> Node symbol
-exclude = refine []
+exclude templates = walk
+  where
+    (hole, prepared) = prepareTemplates templates
+    walk node
+        | any trivial templates = EmptyNode
+        | null templates = node
+        | EmptyNode <- node = EmptyNode
+        | otherwise = refine originalTemplate (preparedChildren hole) [] prepared node
+
+{- | A structural template with its catalog identifier and prepared children.
+Identifiers preserve structural template order within one catalog. Parts from
+different catalogs must not be mixed.
+-}
+data PreparedTemplate symbol = PreparedTemplate !Int !(Template symbol) [PreparedTemplate symbol]
+
+instance Eq (PreparedTemplate symbol) where
+    PreparedTemplate left _ _ == PreparedTemplate right _ _ = left == right
+
+instance Ord (PreparedTemplate symbol) where
+    compare (PreparedTemplate left _ _) (PreparedTemplate right _ _) = compare left right
+
+-- | The original template of a prepared part.
+originalTemplate :: PreparedTemplate symbol -> Template symbol
+originalTemplate (PreparedTemplate _ template _) = template
+
+{- | Prepare the finite subtree catalog, including Hole, for one exclusion.
+Templates must be finite and total, and symbol Eq and Ord must agree. The
+catalog must fit in Int. Catalog construction can force otherwise unused
+parts earlier. It does not inspect the input graph or combine obligations.
+-}
+prepareTemplates :: (Ord symbol) => [Template symbol] -> (PreparedTemplate symbol, [PreparedTemplate symbol])
+prepareTemplates templates = (catalog Map.! Hole, map (catalog Map.!) templates)
+  where
+    catalog =
+        Map.fromList
+            [ (template, PreparedTemplate identifier template (map (catalog Map.!) (children template)))
+            | (identifier, template) <- zip [0 ..] (Set.toAscList (Set.fromList (Hole : concatMap subtrees templates)))
+            ]
+    subtrees template = template : concatMap subtrees (children template)
+    children Hole = []
+    children (AnyNode parts) = parts
+    children (TemplateNode _ parts) = parts
+    children (AnyPrefix parts) = parts
+    children (TemplatePrefix _ parts) = parts
+
+{- | Select already prepared children with the original shape check. Only
+prefix padding and Hole introduce parts outside the stored child list.
+-}
+preparedChildren ::
+    (Eq symbol) => PreparedTemplate symbol -> PreparedTemplate symbol -> symbol -> Arity -> Maybe [PreparedTemplate symbol]
+preparedChildren hole (PreparedTemplate _ template children) symbol arity@(Arity count) =
+    case childTemplates template symbol arity of
+        Nothing -> Nothing
+        Just _ -> Just (take count (children <> repeat hole))
 
 {- | The terms of a node that match every template of the first list and none
-of the second.
+of the second. Parts keep their original templates and child projections.
+Their Ord instance must agree with structural template order.
 -}
 refine ::
-    (Ord symbol, Hashable symbol, Typeable symbol) =>
-    [Template symbol] -> [Template symbol] -> Node symbol -> Node symbol
-refine wanted unwanted node
-    | any trivial unwanted = EmptyNode
-    | null wanted' && null unwanted = node
-    | otherwise = case node of
-        EmptyNode -> EmptyNode
-        Mu _ -> refine wanted' unwanted (Node $ nodeEdges node)
-        InternedUnion _ -> refine wanted' unwanted (Node $ nodeEdges node)
-        Node edges ->
-            Node
-                [ setChildren edge (zipWith (\(wanted'', unwanted') child -> refine wanted'' unwanted' child) parts (edgeChildren edge))
-                | edge <- edges
-                , parts <- edgeCopies wanted' (nubOrd unwanted) (edgeSymbol edge) (map shapesOf (edgeChildren edge))
-                ]
-        Rec _ -> error "exclude: unexpected free recursive reference"
+    (Ord part, Ord symbol, Hashable symbol, Typeable symbol) =>
+    (part -> Template symbol) ->
+    (part -> symbol -> Arity -> Maybe [part]) ->
+    [part] ->
+    [part] ->
+    Node symbol ->
+    Node symbol
+refine original childrenOf = walk
   where
-    wanted' = nubOrd (filter (not . trivial) wanted)
+    walk wanted unwanted node
+        | any (trivial . original) unwanted = EmptyNode
+        | null wanted' && null unwanted = node
+        | otherwise = case node of
+            EmptyNode -> EmptyNode
+            Mu _ -> walk wanted' unwanted (Node $ nodeEdges node)
+            InternedUnion _ -> walk wanted' unwanted (Node $ nodeEdges node)
+            Node edges ->
+                Node
+                    [ setChildren edge (zipWith (\(wanted'', unwanted') child -> walk wanted'' unwanted' child) parts (edgeChildren edge))
+                    | edge <- edges
+                    , parts <-
+                        edgeCopiesWith original childrenOf wanted' (nubOrd unwanted) (edgeSymbol edge) (map shapesOf (edgeChildren edge))
+                    ]
+            Rec _ -> error "exclude: unexpected free recursive reference"
+      where
+        wanted' = nubOrd (filter (not . trivial . original) wanted)
     shapesOf child = [(edgeSymbol edge, length (edgeChildren edge)) | edge <- nodeEdges child]
 
 {- | What the terms of a state of 'excludeFTA' must match: every template of
@@ -439,13 +509,35 @@ edgeCopies ::
     symbol ->
     [[(symbol, Int)]] ->
     [[([Template symbol], [Template symbol])]]
-edgeCopies wanted unwanted symbol shapes = case traverse childrenOf wanted of
+edgeCopies = edgeCopiesWith id childTemplates
+
+{- | Split an edge with one representation of structural template parts.
+The projection must preserve childTemplates and structural template order.
+The result keeps the original obligation lists and their order.
+-}
+edgeCopiesWith ::
+    (Ord part, Ord symbol) =>
+    (part -> Template symbol) ->
+    (part -> symbol -> Arity -> Maybe [part]) ->
+    [part] ->
+    [part] ->
+    symbol ->
+    [[(symbol, Int)]] ->
+    [[([part], [part])]]
+edgeCopiesWith original childParts wanted unwanted symbol shapes = case traverse childrenOf wanted of
     Nothing -> []
-    Just wantedChildren -> copies (zip3 [0 ..] (transposed wantedChildren) shapes) (mapMaybe childrenOf unwanted)
+    Just wantedChildren -> copies (zip3 [0 ..] (transposed wantedChildren) shapes) unwantedChildren
   where
     count = length shapes
-    childrenOf template = childTemplates template symbol (Arity count)
+    childrenOf template = childParts template symbol (Arity count)
     transposed rows = [[row !! index | row <- rows] | index <- [0 .. count - 1]]
+    unwantedChildren = mapMaybe childrenOf unwanted
+    -- For finite templates and lawful symbol Ord, IDs agree if and only if
+    -- the child parts are equal. Each map is demanded only when needed.
+    partIdentifiers =
+        [ Map.fromList [(parts !! index, identifier) | (identifier, parts) <- zip [0 ..] unwantedChildren]
+        | index <- [0 .. count - 1]
+        ]
     copies [] alive = [[] | null alive]
     copies ((index, wantedHere, shapesHere) : rest) alive =
         [ (wantedHere <> map (!! index) kept, filter (\part -> not (null (fits shapesHere [part]))) (map (!! index) killed))
@@ -454,41 +546,104 @@ edgeCopies wanted unwanted symbol shapes = case traverse childrenOf wanted of
         , later <- copies rest kept
         ]
       where
-        (forced, free) = partition (\parts -> trivial (parts !! index)) alive
-        (mustDie, mayLive) = partition (all trivial . drop (index + 1)) free
+        (forced, free) = partition (\parts -> trivial (original (parts !! index))) alive
+        (mustDie, mayLive) = partition (all (trivial . original) . drop (index + 1)) free
         -- The child equals at most one ground part. If it equals one, the
         -- templates of that part stay alive, and the other ground parts
         -- cannot match it, so they need not die here. A part that a
         -- template which must die has too cannot stay alive.
-        (fixed, open) = partition (ground . (!! index)) mayLive
-        (groundDying, openDying) = partition (ground . (!! index)) mustDie
-        groups = Map.fromListWith (flip (<>)) [(parts !! index, [parts]) | parts <- fixed]
+        (fixed, open) = partition (ground . original . (!! index)) mayLive
+        (groundDying, openDying) = partition (ground . original . (!! index)) mustDie
+        -- ID sets track the unchanged chosen/notChosen lists. They replace
+        -- only membership checks. Keep the original templates and order.
+        identifiedOpen = [(parts, (partIdentifiers !! index) Map.! (parts !! index)) | parts <- open]
+        -- Append singleton rows without copying each accumulated prefix.
+        -- Convert each used group to a list once. For finite total input,
+        -- each group must fit in Int. Its order and duplicates are unchanged.
+        -- Keep conversion lazy
+        -- so a rejected group does not need its obligation list.
+        groups = Map.fromListWith (flip (<>)) [(parts !! index, Seq.singleton parts) | parts <- fixed]
         dying = Set.fromList (map (!! index) groundDying)
         -- The shapes that the parts which the child must match all fit.
         base = fits shapesHere (wantedHere <> map (!! index) forced)
         choices
             | null base = []
-            | otherwise =
-                [(forced <> chosen, mustDie <> fixed <> notChosen) | ((chosen, notChosen), _) <- splits base open]
-                    <> [ (forced <> group <> chosen, openDying <> notChosen)
-                       | (part, group) <- Map.toList groups
-                       , Set.notMember part dying
-                       , let narrowed = fits base [part]
-                       , not (null narrowed)
-                       , ((chosen, notChosen), _) <- splits narrowed open
-                       ]
-        -- The subsets of the templates that the child can match together
-        -- within the given shapes, each with the other templates and the
-        -- shapes that the subset fits, in the order of the subset split.
-        splits fitting [] = [(([], []), fitting)]
-        splits fitting (parts : others) =
+            | otherwise = case foldM meetTemplate Hole (map original (wantedHere <> map (!! index) forced)) of
+                Nothing -> []
+                Just required ->
+                    [ (forced <> chosen, mustDie <> fixed <> notChosen)
+                    | ((chosen, notChosen), _, _, _, _) <- splits base required identifiedOpen
+                    ]
+                        <> [ (forced <> group <> chosen, openDying <> notChosen)
+                           | (part, rows) <- Map.toList groups
+                           , Set.notMember part dying
+                           , let group = toList rows
+                           , Just combined <- [meetTemplate required (original part)]
+                           , let narrowed = fits base [part]
+                           , not (null narrowed)
+                           , ((chosen, notChosen), _, _, _, _) <- splits narrowed combined identifiedOpen
+                           ]
+        -- Carry the positive conjunction through the same tail-first split.
+        -- A failed meet removes only the impossible kept alternative.
+        -- A child cannot match and fail the same part. Remove only such
+        -- choices. Keep the order and obligation lists of the other choices.
+        -- This preserves the complete finite-term language. It does not prove
+        -- that every recursive cutoff stream remains equal.
+        splits fitting required [] = [(([], []), fitting, required, IntSet.empty, IntSet.empty)]
+        splits fitting required ((parts, identifier) : others) =
             concat
-                [ [((parts : chosen, notChosen), narrowed) | let narrowed = fits remaining [parts !! index], not (null narrowed)]
-                    <> [((chosen, parts : notChosen), remaining)]
-                | ((chosen, notChosen), remaining) <- splits fitting others
+                [ [ ((parts : chosen, notChosen), narrowed, combined, IntSet.insert identifier chosenIds, notChosenIds)
+                  | IntSet.null notChosenIds || IntSet.notMember identifier notChosenIds
+                  , Just combined <- [meetTemplate remainingRequired (original (parts !! index))]
+                  , let narrowed = fits remaining [parts !! index]
+                  , not (null narrowed)
+                  ]
+                    <> [ ((chosen, parts : notChosen), remaining, remainingRequired, chosenIds, IntSet.insert identifier notChosenIds)
+                       | IntSet.null chosenIds || IntSet.notMember identifier chosenIds
+                       ]
+                | ((chosen, notChosen), remaining, remainingRequired, chosenIds, notChosenIds) <- splits fitting required others
                 ]
     -- The shapes whose root each of the parts fits.
-    fits candidates parts = [(root, arity) | (root, arity) <- candidates, all (\part -> isJust (childTemplates part root (Arity arity))) parts]
+    fits candidates parts = [(root, arity) | (root, arity) <- candidates, all (\part -> isJust (childParts part root (Arity arity))) parts]
+
+{- | Intersect two finite structural templates. Nothing means that no term
+matches both. A successful result matches exactly their conjunction.
+Holes are independent wildcards. This check does not read an automaton or
+interpret equality constraints or residual guards.
+-}
+meetTemplate :: (Eq symbol) => Template symbol -> Template symbol -> Maybe (Template symbol)
+meetTemplate Hole right = Just right
+meetTemplate left Hole = Just left
+meetTemplate left right = do
+    root <- case (leftRoot, rightRoot) of
+        (Just first, Just second)
+            | first /= second -> Nothing
+        (Just first, _) -> Just (Just first)
+        (_, other) -> Just other
+    if (leftExact && leftCount < rightCount) || (rightExact && rightCount < leftCount)
+        then Nothing
+        else do
+            children <-
+                zipWithM
+                    meetTemplate
+                    (leftChildren <> replicate (count - leftCount) Hole)
+                    (rightChildren <> replicate (count - rightCount) Hole)
+            pure $ case (root, leftExact || rightExact) of
+                (Nothing, True) -> AnyNode children
+                (Just symbol, True) -> TemplateNode symbol children
+                (Nothing, False) -> AnyPrefix children
+                (Just symbol, False) -> TemplatePrefix symbol children
+  where
+    (leftRoot, leftExact, leftChildren) = parts left
+    (rightRoot, rightExact, rightChildren) = parts right
+    leftCount = length leftChildren
+    rightCount = length rightChildren
+    count = max leftCount rightCount
+    parts Hole = (Nothing, False, [])
+    parts (AnyNode children) = (Nothing, True, children)
+    parts (TemplateNode symbol children) = (Just symbol, True, children)
+    parts (AnyPrefix children) = (Nothing, False, children)
+    parts (TemplatePrefix symbol children) = (Just symbol, False, children)
 
 -- | Whether a template has no holes, so that it matches one term only.
 ground :: Template symbol -> Bool

@@ -8,6 +8,14 @@ Before release, the package was called `microcfta`.
   references. Reuse that same probe choice when matching a Mu. This avoids
   a pending interning lookup in a closed nested constructor expression.
 
+- Template exclusion removes incompatible positive requirements and choices
+  that require the same child pattern to both match and fail. It preserves
+  the order and obligation lists of the surviving split choices.
+- `Data.CFTA.Enumeration` adds an optional ordered cursor with caller-defined
+  keys and admissible partial bounds. It supports monotone shared pruning,
+  explicit resumable work and frontier limits, and queue statistics. Existing
+  enumeration entry points keep their defaults. The callback contracts state
+  the remaining proof obligation for constrained cyclic truncation.
 - `refoldEdges` is `refold` with the edge of the result that each edge of
   the input becomes, so that a caller can carry data about the edges of a
   graph through `refold`, whose new edges have new identities.

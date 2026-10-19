@@ -241,11 +241,13 @@ tree automata of `cfta`, with QuickCheck integration.
   (`NodeViewMismatch`), a rule that does not fit the fields of its
   constructor (`FieldMismatch`), and a negative bound (`NegativeBound`).
   `Data.CFTA.Gen.Typing.Do` writes the rules of a constructor in qualified
-  do-notation, as premises (`sub`, `under`), choices from lists (`each`,
+  do-notation, as premises (`sub`, `under`, `draw`), choices from lists (`each`,
   which can read earlier choices), conditions (`guard`), and a conclusion
   (`yields`); a block gives one rule for each combination of its choices.
   `drawn` makes a value field draw its values from a refinement generator,
   such as `every` with a condition, in place of one rule for each value.
+  `Typing.Do` re-exports `drawn`; its `draw` statement gives the same field
+  as a premise without listing the generator's values.
   `typingLTA` and `typingLTAFrom` (with an invariant) build the refinement
   generator of a typed language, and `compile` counts its drawn fields
   without listing their values; the plain builders report a drawn field as

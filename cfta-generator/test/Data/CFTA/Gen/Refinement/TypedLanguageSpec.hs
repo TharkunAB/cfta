@@ -1,6 +1,7 @@
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE DerivingStrategies #-}
+{-# LANGUAGE QualifiedDo #-}
 {-# LANGUAGE TypeApplications #-}
 
 {- | Refinement generators over the automaton of a typed language: the
@@ -24,7 +25,6 @@ import Data.CFTA.Gen.Typing (
     Rule,
     Typing (Typing),
     TypingError (..),
-    drawn,
     fromTypingRules,
     rule,
     typingAutomaton,
@@ -32,6 +32,7 @@ import Data.CFTA.Gen.Typing (
     typingLTAFrom,
     value,
  )
+import qualified Data.CFTA.Gen.Typing.Do as Typing
 import Data.CFTA.Generic (Constructor (..), HasFTA (..))
 import Data.CFTA.Index (Cardinality (..))
 import Data.CFTA.Path (path)
@@ -106,7 +107,9 @@ drawnArith numbers bound = Typing (Nesting (fromIntegral bound)) [] [IntType, Bo
 
 -- | The rule of the numbers, drawn from the generator.
 drawnNumbers :: LTAGen.LTAGen Int -> [Rule ArithNode ArithType]
-drawnNumbers numbers = [rule (NumNode (drawn numbers)) IntType]
+drawnNumbers numbers = Typing.do
+    number <- Typing.draw numbers
+    Typing.yields (NumNode number) IntType
 
 -- | The integers from 0 to the bound, as a refinement generator without a list.
 upTo :: Int -> LTAGen.LTAGen Int
@@ -140,9 +143,14 @@ spec = describe "refinement generators over a typed language" $ do
     it "draw a field from every with a condition, and count the language without listing the numbers" $ do
         compiled <- either (fail . show) LTAGen.compile (typingLTA @Arith (drawnArith (upTo 1000000) 2) atoms)
         LTAGen.cardinality compiled `shouldBe` Right (Cardinality (arithCountWith 1000001 2))
-    it "draw a field from a finite generator as the same rules with fixed values do" $
+    it "draw a field from a finite generator as the same rules with fixed values do" $ do
         typedLTAMembers (typingLTA @Arith (drawnArith (LTAGen.elements [0, 1]) 2) atoms)
             >>= (`shouldBe` typedMembers (arithLanguage 2))
+        let numbers = LTAGen.elements [0, 1 :: Int]
+            explicit = Typing (Nesting 2) [] [IntType, BoolType] ([rule (NumNode (Typing.drawn numbers)) IntType] <> arithOperatorRules)
+        fromDo <- either (fail . show) LTAGen.compile (typingLTA @Arith (drawnArith numbers 2) atoms)
+        fromExplicit <- either (fail . show) LTAGen.compile (typingLTA @Arith explicit atoms)
+        LTAGen.values fromDo `shouldBe` LTAGen.values fromExplicit
     it "keep the terms with drawn fields on which an invariant holds" $ do
         typedLTAMembers (typingLTAFrom @Arith (drawnArith (LTAGen.elements [0, 1]) 2) atoms smallSums)
             >>= (`shouldBe` filter (holds atoms smallSums) (typedMembers (arithLanguage 2)))

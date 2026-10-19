@@ -761,6 +761,29 @@ spec = do
                 relaxed = HashSet.fromList $ terms $ dropConstraints constrained
             terms constrained `shouldSatisfy` all (`HashSet.member` relaxed)
 
+    describe "ordered cursor" $ do
+        it "yields every term in key order, as often as eager enumeration" $ do
+            let yielded = map fst $ drainOrdered (startOrdered "Mu" bySize () () sizesNode)
+            map termNodes yielded `shouldSatisfy` nondecreasing
+            yielded `shouldMatchList` terms sizesNode
+
+        it "keeps the equality constraints" $
+            map fst (drainOrdered (startOrdered "Mu" bySize () () twoHoleNode)) `shouldMatchList` terms twoHoleNode
+
+        it "removes the same terms as termsPrune with a monotone oracle" $ do
+            let oracle _ local _ (Left fragment) = do
+                    partial <- expandPartialTermFrag fragment
+                    return (holdsX partial, local)
+                oracle _ local _ (Right _) = return (False, local)
+                holdsX (Term.Node (ConcreteSymbol symbol) children) = symbol == "x" || any holdsX children
+                holdsX (Term.Node _ children) = any holdsX children
+            map fst (drainOrdered (startOrdered "Mu" bySize{orderedOracle = oracle} () () twoHoleNode))
+                `shouldMatchList` filter (notElem "x" . Term.flatten) (terms twoHoleNode)
+
+        it "resumes after a fuel limit with the same runs" $ do
+            let cursor = startOrdered "Mu" bySize () () sizesNode
+            drainWithFuel 1 cursor `shouldBe` drainOrdered cursor
+
     describe "pruning" $ do
         it "an oracle that never prunes enumerates the whole language" $
             HashSet.fromList (termsPrune () keepEverything searchNode)
@@ -1127,6 +1150,47 @@ sharedFilterNode =
         ]
   where
     alternatives = Node [Edge "f" [anyType], Edge "g" [anyType]]
+
+-- | Terms of sizes 1 to 4, so that an ordered cursor has an order to keep.
+sizesNode :: Node Symbol
+sizesNode =
+    Node
+        [ Edge "h" [anyType, Node [Edge "c" [], Edge "k" [anyType]]]
+        , Edge "f" [Node [Edge "b" [], Edge "g" [anyType]]]
+        , Edge "a" []
+        ]
+
+-- | An ordered cursor keyed by term size, with the size of a partial term as its bound.
+bySize :: OrderedConfig Int () () Symbol
+bySize =
+    OrderedConfig
+        { orderedBound = \partial -> return (Just (termNodes partial))
+        , orderedKey = termNodes
+        , orderedRefresh = \_ local _ -> return (False, local)
+        , orderedOracle = \_ local _ _ -> return (False, local)
+        , orderedOrder = noExpansionPreference
+        }
+
+-- | The nodes of a term. A hole counts once, so the count of a partial term bounds every completion.
+termNodes :: Term symbol -> Int
+termNodes (Term.Node _ children) = 1 + sum (map termNodes children)
+
+-- | Whether a list never decreases.
+nondecreasing :: [Int] -> Bool
+nondecreasing values = and (zipWith (<=) values (drop 1 values))
+
+-- | Every run of an ordered cursor, with no limit in the way.
+drainOrdered :: OrderedCursor Int () () Symbol -> [(Term Symbol, [(Constraint, Term Symbol)])]
+drainOrdered = drainWithFuel 1000000
+
+-- | Every run of an ordered cursor, resuming after each fuel limit.
+drainWithFuel :: Int -> OrderedCursor Int () () Symbol -> [(Term Symbol, [(Constraint, Term Symbol)])]
+drainWithFuel fuel cursor = case nextOrdered fuel 1000000 cursor of
+    OrderedYield run rest -> run : drainWithFuel fuel rest
+    OrderedDone _ -> []
+    OrderedLimit FuelLimit rest -> drainWithFuel fuel rest
+    OrderedLimit FrontierLimit _ -> error "ordered cursor: frontier limit"
+    OrderedBadBound _ _ _ -> error "ordered cursor: invalid bound"
 
 -- | The holes of a fragment.
 holesOf :: TermFragment Symbol -> [UVar]
