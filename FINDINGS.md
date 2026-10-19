@@ -2,6 +2,17 @@
 
 ## Haskell fix handoff for external work
 
+Upstream refresh: 2026-10-19 12:07 CEST. Main: `b45051e3e`.
+Merge: `fec741514`. PR #66 imports `specftacular` and `specftacular-ghc`.
+It adds 48 files, including 25 Haskell files. All 242 earlier Haskell
+files retain their bytes. The optimized cfta core is unchanged. These are
+upstream package additions, not a local repair. No Haskell failure or fix
+is established in this refresh. Source inspection is not a build result.
+The Specftacular law-discovery, rewriting, signatures and GHC execution
+interfaces have no Lean refinement proof. Their test-based candidate laws
+are not formal theorems. Read `lean/notes-current-upstream-specftacular.md`.
+Keep every earlier Haskell repair entry below.
+
 Current proof update: 2026-10-19 11:54 CEST. Proof checkpoint: `e619dc99a`.
 Actual Required preparation, an original false gate, a completed class
 fold and an actual nonplain selected observation now derive an ordinary
