@@ -22,6 +22,7 @@ module Data.CFTA.Lowering (
 
 import Control.Monad (forM_, replicateM, unless)
 import Data.Bifunctor (first)
+import Data.List ((!?))
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
 import qualified Data.Set as Set
@@ -96,10 +97,10 @@ compose (Lowering later) (Lowering earlier) = do
         case Map.lookup symbol earlier of
             Nothing -> Right $ Apply symbol arguments
             Just (arity, expansion)
-                | length arguments == arity -> Right $ instantiate arguments expansion
+                | length arguments == arity -> instantiate symbol arguments expansion
                 | otherwise -> Left $ WrongArity symbol arity (length arguments)
-    instantiate arguments (Child index) = arguments !! index
-    instantiate arguments (Apply symbol parts) = Apply symbol (map (instantiate arguments) parts)
+    instantiate symbol arguments (Child index) = maybe (Left $ ChildOutOfRange symbol index) Right $ arguments !? index
+    instantiate symbol arguments (Apply inner parts) = Apply inner <$> traverse (instantiate symbol arguments) parts
 
 {- | Lower a term: lower the children, then put them in the expansion of a new
 constructor. 'Nothing' if a new constructor has a different number of children
@@ -111,11 +112,11 @@ lower lowering@(Lowering expansions) (Term.Node symbol children) = do
     case Map.lookup symbol expansions of
         Nothing -> Just $ Term.Node symbol lowered
         Just (arity, expansion)
-            | length lowered == arity -> Just $ expand lowered expansion
+            | length lowered == arity -> expand lowered expansion
             | otherwise -> Nothing
   where
-    expand arguments (Child index) = arguments !! index
-    expand arguments (Apply inner parts) = Term.Node inner $ map (expand arguments) parts
+    expand arguments (Child index) = arguments !? index
+    expand arguments (Apply inner parts) = Term.Node inner <$> traverse (expand arguments) parts
 
 {- | The terms whose lowering the automaton accepts. The states stay the same.
 A transition of a new constructor goes from a state @q@ to children
@@ -136,15 +137,18 @@ lift (Lowering expansions) automaton = do
     first InvalidLift $ FTA.mkFTA (FTA.initialState automaton) $ Map.toList $ Map.unionWith (<>) kept added
   where
     table = FTA.transitionTable automaton
+    known = reverseTable table
     kept = Map.map (filter $ \transition -> Map.notMember (FTA.transitionSymbol transition) expansions) table
+    -- Each new transition goes to the front of its row, and the reverse restores their order.
     added =
-        Map.fromListWith
-            (flip (<>))
-            [ (state, [FTA.Transition symbol children noConstraint])
-            | (symbol, (arity, expansion)) <- Map.toList expansions
-            , children <- replicateM arity $ FTA.states automaton
-            , state <- Set.toList $ runs (reverseTable table) children expansion
-            ]
+        Map.map reverse $
+            Map.fromListWith
+                (<>)
+                [ (state, [FTA.Transition symbol children noConstraint])
+                | (symbol, (arity, expansion)) <- Map.toList expansions
+                , children <- replicateM arity $ FTA.states automaton
+                , state <- Set.toList $ runs known children expansion
+                ]
 
 {- | Check, for each production of the later grammar, that its terms lower to
 terms of the earlier grammar at the same state. A production of a new
@@ -192,7 +196,7 @@ reverseTable table =
 runs :: (Ord state, Ord symbol) => Map (symbol, [state]) (Set.Set state) -> [state] -> Expansion symbol -> Set.Set state
 runs known children = go
   where
-    go (Child index) = Set.singleton $ children !! index
+    go (Child index) = maybe Set.empty Set.singleton $ children !? index
     go (Apply symbol parts) =
         Set.unions
             [ Map.findWithDefault Set.empty (symbol, states) known
