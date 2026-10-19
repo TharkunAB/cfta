@@ -724,10 +724,13 @@ is unified with it, and the other type variables become carriers. The
 variables are taken in the order of their first occurrence, the annotation
 of an application before its function and its argument. Each naming gives
 the type variables distinct carriers. The namings with carriers that the
-result type does not use come first, then the namings with any carriers.
-The first naming is used for which the map has a variable of each new
-variable type. 'Nothing' if the result type does not unify or no naming
-fits.
+result type does not use come first. Then come the namings with any
+carriers: the carriers of the result type in the order of their first
+occurrence, then the other carriers. Thus the namings of a result type
+and of the result type with its carriers renamed in the order of
+'carriers' correspond. The first naming is used for which the map has a
+variable of each new variable type. 'Nothing' if the result type does not
+unify or no naming fits.
 -}
 generalizeCarriers :: Sig -> Map TypeSkeleton Symbol -> Term -> Maybe (TypeSkeleton -> Maybe Term)
 generalizeCarriers sig variableOfType term = do
@@ -738,8 +741,9 @@ generalizeCarriers sig variableOfType term = do
         fixed <- unifyTypes (nodeType resolved) resultType Map.empty
         let instantiated = mapTypes (applyTypes fixed) resolved
             free = nubOrd (concatMap typeVariablesOf (nodeTypes instantiated))
-            unused = filter (`notElem` carriersOf resultType) (map fst carriers)
-            candidates = namings free unused ++ namings free (map fst carriers)
+            used = nubOrd (carriersOf resultType)
+            unused = filter (`notElem` used) (map fst carriers)
+            candidates = namings free unused ++ namings free (used ++ unused)
         listToMaybe
             [schema | naming <- candidates, Just schema <- [rebuild (mapTypes (applyTypes (Map.fromList naming)) instantiated)]]
   where
