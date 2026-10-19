@@ -4,6 +4,9 @@
 
 Before release, the package was called `microcfta`.
 
+- Template exclusion removes incompatible positive requirements and choices
+  that require the same child pattern to both match and fail. It preserves
+  the order and obligation lists of the surviving split choices.
 - `Data.CFTA.Enumeration` adds an optional ordered cursor with caller-defined
   keys and admissible partial bounds. It supports monotone shared pruning,
   explicit resumable work and frontier limits, and queue statistics. Existing
