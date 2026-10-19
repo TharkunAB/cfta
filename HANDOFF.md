@@ -1,5 +1,139 @@
 # cfta formalization restart handoff
 
+## Detailed pause handoff on 2026-10-19
+
+The user requested this handoff and a pause because usage is low. The request
+arrived at 15:03 CEST. No further proof task is authorized during the pause.
+Resume only after a new user instruction. The full-library objective remains
+unchanged. No goal completion or general termination is claimed.
+
+### Objective and current state
+
+Continue the complete cfta formalization in this checkout. Preserve the
+optimized interned core, all older constructor and equality work, proofs,
+counterexamples, repairs, marked drafts, stashes and other worktrees.
+Refresh upstream before work. Record each Haskell repair first in FINDINGS
+for an external agent. Do not edit Haskell manually in this proof workflow.
+
+Branch: `formalize`. Main: `184bba662`. The latest pull completed successfully
+and imported no change. Backup branch:
+`codex/backup-stored-callbacks-20261019-1457`.
+The latest production proof commit is `88dd8902c`. The metadata commit that
+contains this handoff saves the current evidence. The preceding fully
+verified clean checkpoint is `b0a7954c3`. Its final closure report is
+`/tmp/mcfta-head-issued-paths-closure-2.json`.
+
+### Strongest proved system statements
+
+Fresh construction always finishes in the Lean model. Under the stated
+guard conditions, it represents exactly the finite trees in the independent
+syntax semantics. The general completed reduction law is
+`L(input) intersect Sat(inherited) <= L(result) <= L(input)`.
+It does not assert that every output satisfies arbitrary inherited constraints.
+
+The top root-language theorem is
+`SourceCurrentConstructedRootCall.root_call`. Start with actual closed fresh
+construction and original-field allocation that covers every expression
+guard. The equality interner must be valid. Logical caller and memo startup
+are empty. Inheritance is the actual empty value. If the supported bounded
+root call returns and Fits, carrier and scheduled Room hold, then its result
+is available and, for every ambient interpretation,
+`L(result) = evaluate(original expression)`.
+The theorem derives the logical initialization and guard context. It does
+not prove general root completion, concrete Haskell startup or integer bounds.
+
+The modeled reference and optimized Sized paths complete with the same result
+and cache, including errors, under their construction and annotation premises.
+If they return a query API, its size classes, counts, rank/unrank and enumeration
+prefixes are exact. Not every input is proved to return an API. Read
+`lean/notes-current-system-claim.md` for the complete current contracts.
+
+### New proof and verification
+
+`SourceCurrentStoredCallbackChildContexts` adds four public declarations:
+`filter_row`, `filter_child`, `written_child` and `head_child`.
+Structural RowAt survives actual root self filtering, including beneath opaque
+Mu bodies. The exact original row and child index move into the actual raw
+callback result. Their supported child-call interval stays the original
+stored-body unfold interval. The original child is smaller than raw; the
+returned child has no new size bound.
+
+The same selected Mu's issued-name writer supplies its actual historical raw
+Syntax build and root filter. It also supplies the final-reader lexical
+Context, raw availability, Keeps interval and exact warm build/filter replay.
+The proof derives final readiness from actual completed Head effects. It does
+not infer raw availability or an overall execute raw call at the earlier
+stored-child entry. Initial issued Path and semantic/cost support stay explicit.
+
+The full default Lean build passes 3475 jobs and 73974 axiom checks. Root
+personally observed Audit handle64970 terminal0. The sole warning is the
+existing ClosedCompletion unused-input warning. Production strict3 has a
+literally empty log. Full4 checks complete statements, proofs and axiom sets
+with all eight printer options and only standard axioms.
+
+One constructed theorem derives actual two-Mu construction and completed Head,
+the same chosen payload, historical raw callback and supported Child. A second
+case in that theorem crosses two opaque Mu bodies under a pass-through filter.
+It does not test union removal. Fixture strict3 is empty; Full1 passes. All
+failed strict attempts, source snapshots and exact logs remain preserved.
+No Haskell build, test or behavior repair is claimed here.
+
+### Biggest gap and exact next action
+
+Original source ancestry is the immediate gap. A structural row in raw can
+come from a captured value or retained stored Mu. It need not come from a
+strict subexpression of the current callback. Recover those explicit capture
+origins and original binding paths. Then connect them to the initial source
+expression before attempting a finite global renewal bound.
+
+Start with the actual historical Syntax build and Context returned by
+`SourceCurrentStoredCallbackChildContexts.head_child`. Search existing source
+lineage and source-call producers. `SourceCurrentNativeMuSourceHandoff`
+already separates literal and opaque structural origins for captured native
+writers. `SourceCurrentNativeConstructSourceRows` anchors native generated
+bodies. Their source is not automatically this historical Syntax build.
+Keep their scopes exact. Do not repeat the completed Head issued-path,
+last-Mu split or structural-filter proofs.
+
+General active-owner exclusion, outer completion, convergence and concrete
+Haskell refinement remain open. Ordered enumeration, prepared-template
+exclusion, mandatory-pair subsumption and the Specftacular/GHC adapters also
+need implementation proofs. The system has substantial proved components,
+but the full end-to-end Haskell theorem is incomplete. No reliable completion
+percentage or schedule follows from theorem totals.
+
+### Restart and preservation rules
+
+Read NEXT-PROMPT.md, this HANDOFF.md and FINDINGS.md first. Then read
+`lean/notes-current-head-stored-callbacks.md` and the evidence directory's
+`next-binding-ancestry-handoff.md`. Inspect live branch, dirt, upstream and
+process state before work. Treat the repository files as authoritative.
+
+Run heavy checks with `/home/tritlo/Code/heavy-management/bin/capped --mem 4G
+--time 5m`, the pinned Lean4.34.1 toolchain, memory.max/high4294967296 and zero
+swap. The wrapper needs XDG_RUNTIME_DIR=/run/user/1000 and the user bus address
+unix:path=/run/user/1000/bus. Do not change queue concurrency. Keep unique raw
+attempt logs and snapshots. Personally observe the exact default Audit handle
+and final closure handle reach terminal0. Keep frozen evidence unchanged.
+
+Before new work, run `python3 /tmp/mcfta-weekly-usage.py`. A fresh remaining
+allowance above1percent is required. Stop all work at1percent or less. A stale
+sample does not authorize continuation. The last checked allowance was2percent.
+All workers stopped after their assigned proof/review checks completed.
+
+All268Haskell and207active-package files retain their bytes. Both stashes and
+three other worktrees are preserved. Every external Haskell repair remains
+first in FINDINGS, with its reproducer and validation history.
+
+Publication still awaits direct approval. Automatic approval review rejected
+the earlier upload because it required explicit permission to upload repository
+contents and update formalize. Do not retry or bypass that rejection. No push
+or board write occurs in this checkpoint. Read-only board search found no
+mcfta thread. The final checkpoint closure compares filesystem, index, HEAD,
+all current evidence checksums and the retained preservation report. Its report
+is stored outside frozen evidence at
+`/tmp/mcfta-head-stored-callbacks-closure.json`.
+
 ## Publication awaits direct approval
 
 Updated: 2026-10-18 03:22 CEST. The earlier local verified checkpoint is `30cd81ae`.
@@ -34,6 +168,41 @@ PR #66 adds Specftacular and its GHC adapter. All 242 earlier Haskell files
 retain their bytes. The optimized cfta core is unchanged. These packages
 have no Lean refinement proof. Read `lean/notes-current-upstream-specftacular.md`.
 No new Haskell failure, local repair or Haskell validation result is claimed.
+
+## Current stored callback child contexts
+
+Updated: 2026-10-19 15:01 CEST. Proof checkpoint: `88dd8902c`.
+Verified start: `b0a7954c3`. Source main remains `184bba662`.
+Read `lean/notes-current-head-stored-callbacks.md`.
+Actual self filtering now preserves structural RowAt, including rows beneath
+opaque stored Mu bodies. The proof retains the exact original full row.
+A supported child keeps that row, original child index and actual lexical
+call interval when its source anchor moves to the raw callback value.
+Its original child is strictly smaller than that raw value.
+
+The selected issued-name writer supplies the actual historical raw build
+and root filter for the same stored Mu payload. At the final Head reader,
+it supplies the original lexical Context, available raw result, actual
+heap retention and exact warm build/filter replay. Completed Head derives
+reader readiness. Its empty-to-entry Path and initial semantic, cost and
+availability assumptions remain explicit. No raw execution or raw-value
+availability is inferred at the earlier stored-unfold call entry.
+
+Four public declarations pass complete proof and standard-axiom checks.
+Strict production elaboration has an empty log. The full default build
+passes 3475 jobs and 73974 axiom checks. The only warning is the earlier
+ClosedCompletion unused-input warning.
+
+This links the selected stored child to a genuine raw source callback.
+That raw value can contain captures or stored Mu bodies. Their ancestry
+back to the initial source expression and a global renewal bound remain
+open. No generated-child size bound or current-callback identity is added.
+General active-owner exclusion, outer completion, convergence and Haskell
+refinement remain open. The conditional root-language law is unchanged.
+All 268 Haskell files and all 207 active package files retain their bytes.
+FINDINGS retains every external repair first. No new Haskell repair is
+added. Publication awaits direct approval. No push or board write occurs.
+The user requested a pause after this handoff. The full-library scope remains.
 
 ## Current issued-name paths through Head evaluation
 

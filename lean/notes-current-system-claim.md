@@ -1,7 +1,7 @@
 # Current system claim
 
 Checked against the live theorem statements on 2026-10-19.
-Read `notes-current-head-issued-paths.md` for the latest checkpoint.
+Read `notes-current-head-stored-callbacks.md` for the latest checkpoint.
 
 In simple technical English: fresh construction always finishes in the
 Lean model. Under the stated guard conditions, its result represents
@@ -40,6 +40,12 @@ heap interval. With an explicit empty-to-entry Path, the same chosen stored
 Mu and selected child retain the stronger issued-name writer. This makes
 supported raw-context recovery available at that final reader. It supplies
 no original binding ancestry, global renewal bound or general completion.
+
+The selected stored child now retains its original structural row and index
+in the actual raw source callback result, including rows beneath Mu bodies.
+Its writer supplies the historical build/filter and final-reader lexical
+Context and replay. Captures and retained Mu bodies can still prevent direct
+descent in the callback syntax. Original source ancestry remains open.
 
 ## Constructed root guarantee
 

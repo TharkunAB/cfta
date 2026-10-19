@@ -2,6 +2,18 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-19 15:01 CEST. Proof checkpoint: `88dd8902c`.
+Selected stored children now retain their exact original row and child index
+in the actual raw source callback. Structural rows beneath Mu survive root
+self filtering. The same stored writer supplies its historical build/filter
+and final-reader lexical context and replay. Raw-call ancestry to the initial
+expression, global renewal, general termination, convergence and Haskell
+correspondence remain open. No Haskell defect or repair request is added.
+All 268 Haskell files and all 207 active package files retain their bytes.
+Full default build passes 3475 jobs; Audit checks 73974 axiom dependencies.
+Read `lean/notes-current-head-stored-callbacks.md`. Preserve every repair
+entry, reproducer, path, commit and validation result below.
+
 Current proof update: 2026-10-19 14:54 CEST. Proof checkpoint: `5930f0fe0`.
 Actual unfolding, row collection, row reads and Head now derive issued-name
 Path through their actual heaps. A supplied empty-to-entry Path then gives
