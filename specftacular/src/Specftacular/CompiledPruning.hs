@@ -150,6 +150,7 @@ compileTemplates templates root
                     then Left "UNKNOWN output graph cap"
                     else Right result
   where
+    excludeHere = exclude templates
     build ::
         Map.Map NodeId (Node Symbol, [Edge Symbol]) -> Node Symbol -> State.State (Map.Map NodeId (Node Symbol)) (Node Symbol)
     build _ EmptyNode = pure EmptyNode
@@ -160,7 +161,7 @@ compileTemplates templates root
             Nothing -> do
                 let (_, edges) = source Map.! nodeIdentity node
                 changed <- traverse (edge source) edges
-                let result = exclude templates (Node changed)
+                let result = excludeHere (Node changed)
                 State.modify' (Map.insert (nodeIdentity node) result)
                 pure result
     edge ::
