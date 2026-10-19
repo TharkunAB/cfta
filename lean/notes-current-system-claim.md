@@ -1,7 +1,7 @@
 # Current system claim
 
 Checked against the live theorem statements on 2026-10-19.
-Read `notes-current-recursive-event-publications.md` for the latest checkpoint.
+Read `notes-current-head-last-mu-child.md` for the latest checkpoint.
 
 In simple technical English: fresh construction always finishes in the
 Lean model. Under the stated guard conditions, its result represents
@@ -26,6 +26,14 @@ and stated preparation and fold support. Literal stored-Mu unfold rows
 retain supported calls for their indexed original children. Further epsilon
 Mu observations and lexical backedges remain outside that child theorem.
 These are ancestry prerequisites. They do not prove a global renewal bound.
+
+Actual completed Head rows now retain an initial literal row or the last
+explicit Mu call on their selected branch. That call retains a suffix with
+no further explicit Mu on the branch, its stored writer and supported child
+context. Other branches can allocate Mu during suffix cache effects.
+Empty-start publication History remains explicit. The selected stored body
+can itself be generated, so original binding ancestry and a global renewal
+bound remain open. No Haskell refinement or general completion is proved.
 
 ## Constructed root guarantee
 
