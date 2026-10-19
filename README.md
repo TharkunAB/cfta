@@ -14,12 +14,16 @@ flowchart BT
 
 [`cfta-ghc`](cfta-ghc/README.md), for GHC 9.14 only, fills typed
 holes with programs that Hectare's automaton proposes and GHC's typechecker
-checks, also as a typed-hole plugin (`-fplugin=Data.CFTA.GHC.HoleFits`); it
-is the only package that depends on the `ghc` library.
+checks, also as a typed-hole plugin (`-fplugin=Data.CFTA.GHC.HoleFits`). It
+depends on the `ghc` library.
 
 [`decision-model`](decision-model/README.md) asks a decision model on a
 server, such as Nimble v3 on Ollama, for a score for each option of a
 question. It does not depend on the other packages.
+
+[`specftacular`](specftacular/README.md) discovers equational laws with ECTAs.
+[`specftacular-ghc`](specftacular-ghc/README.md) builds its signatures from a
+GHC session. Both packages use the other packages in this workspace.
 
 The original ECTA line, `microecta` and `microecta-generator`, lives in
 [Tritlo/microecta](https://github.com/Tritlo/microecta). `microecta` remains on
@@ -174,7 +178,7 @@ pinned `fourmolu.yaml` and `.hlint.yaml`:
 
 ```sh
 fourmolu --mode check $(git ls-files '*.hs')
-hlint --ignore-suggestions cfta cfta-generator
+hlint --ignore-suggestions cfta cfta-generator cfta-ghc decision-model specftacular specftacular-ghc
 cabal-gild --mode check */*.cabal
 ```
 
@@ -188,8 +192,9 @@ cabal repl --with-repl=doctest lib:cfta-generator
 ```
 
 `scripts/release.sh PACKAGE --check-only` validates one package and the local
-source archive of its workspace dependency. Publish `cfta` first, then
-`cfta-generator`.
+source archives of its workspace dependencies. It supports `cfta`,
+`cfta-generator`, `specftacular`, and `specftacular-ghc`. Publish each package
+after its workspace dependencies.
 
 Code that imports `Data.CFTA.*` must declare `cfta`, and code that imports
 `Data.CFTA.Gen.*` or `Data.CFTA.Ranked.*` must declare `cfta-generator`.
