@@ -1,7 +1,7 @@
 # Current system claim
 
 Checked against the live theorem statements on 2026-10-19.
-Read `notes-current-recursive-value-ancestry.md` for the latest checkpoint.
+Read `notes-current-recursive-source-plain.md` for the latest checkpoint.
 
 In simple technical English: fresh construction always finishes in the
 Lean model. Under the stated guard conditions, its result represents
@@ -181,9 +181,18 @@ or event ancestry. Actual fold effects derive support from initial data.
 The initial observation path domain passes through the fold. The ordinary
 alternative remains a Route in the selected FINAL fold value. It does
 not by itself assert an original row in the initial forest. The recursive
-alternative still needs the original gate/Required exclusion and the
-native residual handoff through later edits. It does not assert a complete
-projection of an unchanged whole event value.
+alternative now excludes an initial recursive source of a nonplain
+selected row. Actual Required preparation derives ordered origins from
+the original forest. Its original false gate makes the exact recursive
+prefix plain. Actual open projection and later reads preserve that
+annotation. The first Entry derives all selected intermediate support.
+The composed endpoint retains an ordinary Route in the FINAL value or
+the exact first recursive value inside an actual earlier event. Required
+exposure safety, fold support, final causal guard heaps, reader semantics
+and forward Keeps remain explicit. Preparation and fold graphs share
+the same returned forest. This does not prove their complete outer
+execution sequence. Native residual handoff through later edits remains
+open. No completed projection of an unchanged whole event is asserted.
 Earlier class phases can change their forests. Their native joins do not
 satisfy the Required Origin grammar in general. No Haskell defect is
 established.

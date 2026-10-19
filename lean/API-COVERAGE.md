@@ -1,5 +1,41 @@
 # Public API and source correspondence
 
+## Current original-source exclusion in recursive observations
+
+Updated: 2026-10-19 11:54 CEST. Proof checkpoint: `e619dc99a`.
+Start: `cec4415b`. Source main remains `c0cc8a05`.
+Read `lean/notes-current-recursive-source-plain.md` and the current system claim.
+Required origins retain an exact recursive value at the same ordinary
+child path or make that value plain. The original false gate makes every
+such recursive prefix plain. Actual signed projection and later complete
+row reads preserve its annotation, including Mu unfolding. The exact
+first Entry derives all selected ordinary prefix and suffix support.
+No false gate on the prepared or edited value is assumed.
+
+The composed endpoint takes actual Required preparation, actual FoldReads,
+and the literal Project and selected Read. It derives Required origins
+and fold effects. A nonplain selected row has an ordinary Route in the
+FINAL fold value, or an actual earlier native/Head event contains its
+exact first recursive value. Preparation safety, initial fold support,
+final causal guard heaps, reader semantics and forward Keeps remain
+explicit. The graphs share the same returned forest. This is not a
+proof of a complete chronological outer execution or a projection of
+the unchanged whole event value through later edits.
+
+Full default build passes 3451 jobs. Audit checks 73748 axiom dependencies.
+All eight new public theorem heads pass complete proof and standard-axiom
+checks. All four production strict logs are empty. Two constructed checks
+exercise original false-gate Required exposure and actual used-Mu root
+and Head observations. They assert no outer-driver selection or finite
+productivity. Native residual handoff, renewal bounds, active-owner
+exclusion, general outer completion, convergence and Haskell refinement
+remain open. Fresh modeled construction already always finishes. The
+conditional root-language claim is unchanged. No Haskell bytes change or
+repair request is added. FINDINGS retains every repair first. Field-pool
+fix `b9219b9e` remains in main `c0cc8a05`. Publication awaits direct
+approval. No push or board write is attempted. The full-library objective
+remains active.
+
 ## Current exact recursive reader ancestry
 
 Updated: 2026-10-19 11:32 CEST. Proof checkpoint: `300c7b37`.
