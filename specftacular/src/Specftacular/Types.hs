@@ -148,6 +148,7 @@ frontInstances extraReps t = case genRep t of
     genRep t | Just g <- extraReps t = Just g
     genRep t | Just g <- lookup t builtinReps = Just g
     genRep (TCons "[]" [ts]) = g_li_i <$> genRep ts
+    genRep (TCons "(,)" [a, b]) = pairInstance <$> genRep a <*> genRep b
     genRep (TFun a b) = do
         CoarbitraryType (Proxy :: Proxy x) <- coarbitraryType a
         result <- genRep b
@@ -189,6 +190,34 @@ coarbitraryType t = lookup t types
         ]
     entry :: (Typeable a, QC.CoArbitrary a) => Proxy a -> (TypeSkeleton, CoarbitraryType)
     entry p = (typeSkeletonOf p, CoarbitraryType p)
+
+{- | The instance of a pair from the instances of its components: the
+generator of QuickCheck for pairs, and the equality of both components, if
+both have one. A pair that 'builtinReps' lists keeps its listed instance.
+-}
+pairInstance :: GeneratedInstance -> GeneratedInstance -> GeneratedInstance
+pairInstance left right = case (g_arb left, g_arb right) of
+    (DynGen (generateFirst :: Gen a), DynGen (generateSecond :: Gen b)) ->
+        generatedWith (DynGen ((,) <$> generateFirst <*> generateSecond)) $ do
+            equalFirst <- g_eq left >>= fromDynamic :: Maybe (a -> a -> Bool)
+            equalSecond <- g_eq right >>= fromDynamic :: Maybe (b -> b -> Bool)
+            pure (toDyn (\(x1, y1) (x2, y2) -> equalFirst x1 x2 && equalSecond y1 y2))
+
+{- | A generator with its type, its equality, if it has one, and its list
+generator. Two lists are equal when they have the same length and equal
+elements.
+-}
+generatedWith :: DynGen -> Maybe Dynamic -> GeneratedInstance
+generatedWith dg@(DynGen (g :: Gen a)) equality =
+    Gend
+        { g_tr = typeRep (Proxy :: Proxy a)
+        , g_arb = dg
+        , g_eq = equality
+        , g_li_i = generatedWith (DynGen (QC.listOf g)) (listEquality <$> (equality >>= fromDynamic))
+        }
+  where
+    listEquality :: (a -> a -> Bool) -> Dynamic
+    listEquality equal = toDyn (\xs ys -> length xs == length ys && and (zipWith equal xs ys))
 
 -- | A generator with its type and list generator, without function equality.
 generatedNoEq :: DynGen -> GeneratedInstance
