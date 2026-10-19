@@ -1,0 +1,39 @@
+{
+  "toolchain": "leanprover/lean4:v4.34.1",
+  "files": [
+    {
+      "path": "/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/src/lean/Lean/CoreM.lean",
+      "sha256": "0e94919972c60e8f2bdc73ecc9845a745c9a3373fce4069b9e27ae52560c0a7a",
+      "excerpts": [
+        {
+          "first": 580,
+          "last": 584,
+          "text": "/-- Option for capturing output to stderr during elaboration. -/\nregister_builtin_option stderrAsMessages : Bool := {\n  defValue := true\n  descr    := \"(server) capture output to the Lean stderr channel (such as from `dbg_trace`) during elaboration of a command as a diagnostic message\"\n}"
+        }
+      ]
+    },
+    {
+      "path": "/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/src/lean/Lean/Language/Lean.lean",
+      "sha256": "f2bca1a2f1d2e435dd9996417245be987368a6e3465cf48fc6cbd1ce938d10cc",
+      "excerpts": [
+        {
+          "first": 764,
+          "last": 768,
+          "text": "      cancelTk?    := some cancelTk\n    }\n    let (output, _) \u2190\n      IO.FS.withIsolatedStreams (isolateStderr := Core.stderrAsMessages.get scope.opts) do\n        EIO.toBaseIO do"
+        }
+      ]
+    },
+    {
+      "path": "/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/src/lean/Lean/Elab/Command.lean",
+      "sha256": "37613bb7ab7b2206e9c850c85373286f668a165103f4aacff66e90b0753fb709",
+      "excerpts": [
+        {
+          "first": 466,
+          "last": 469,
+          "text": "    CommandElabM (\u03b1 \u2192 BaseIO SnapshotTree) := do\n  let f \u2190 wrapAsync (cancelTk? := cancelTk?) fun a => do\n    IO.FS.withIsolatedStreams (isolateStderr := Core.stderrAsMessages.get (\u2190 getOptions)) do\n      let tid \u2190 IO.getTID"
+        }
+      ]
+    }
+  ],
+  "finding": "stderrAsMessages defaults to true and commands isolate stderr. The run_cmd attempts also require import Lean.Elab.Command; diagnostic-3 records that error. Final selected files contain no diagnostic IO."
+}

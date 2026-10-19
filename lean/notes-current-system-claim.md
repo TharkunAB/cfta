@@ -1,7 +1,7 @@
 # Current system claim
 
 Checked against the live theorem statements on 2026-10-19.
-Read `notes-current-event-publication-history.md` for the latest checkpoint.
+Read `notes-current-recursive-event-publications.md` for the latest checkpoint.
 
 In simple technical English: fresh construction always finishes in the
 Lean model. Under the stated guard conditions, its result represents
@@ -19,6 +19,13 @@ Actual Required, projection, Merge and parent operations derive the later
 intervals. Heap growth and native memo history supply no such history.
 This is a provenance prerequisite. Selected stored-body readback, binding
 ancestry and a general renewal bound remain open.
+
+Selected recursive event observations now retain their actual entry Site,
+publication prefix and exact row/path origin under the original false gate
+and stated preparation and fold support. Literal stored-Mu unfold rows
+retain supported calls for their indexed original children. Further epsilon
+Mu observations and lexical backedges remain outside that child theorem.
+These are ancestry prerequisites. They do not prove a global renewal bound.
 
 ## Constructed root guarantee
 

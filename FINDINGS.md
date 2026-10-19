@@ -2,6 +2,19 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-19 14:24 CEST. Proof checkpoint: `8a62bd5e7`.
+Actual selected recursive observations now retain their publication prefix,
+execution Site, exact full-row path origin and same captured event receipt.
+Actual stored Mu unfolding derives supported lexical child calls for
+selected literal rows, with strict ORIGINAL child size and actual entry
+contexts. It places no bound on the generated child. Further epsilon Mu
+observations, lexical backedges, general renewal, termination, convergence
+and Haskell correspondence remain open. No Haskell defect or repair request
+is added. All 268 Haskell files retain their bytes. Full default build passes
+3472 jobs; Audit checks 73953 axiom dependencies. Read
+`lean/notes-current-recursive-event-publications.md`. Preserve every repair
+entry, reproducer, path, commit and validation result below.
+
 Current proof update: 2026-10-19 13:31 CEST. Proof checkpoint: `bf90e5e3e`.
 Actual Required, projection, comparison Merge, parent edit and class-fold
 operations now derive physical Mu publication intervals. The same captured
