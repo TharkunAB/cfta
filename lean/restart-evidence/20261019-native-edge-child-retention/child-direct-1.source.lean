@@ -1,0 +1,237 @@
+import MicroCFTA.SourceCurrentNativeEdgeWriterRetention
+import MicroCFTA.SourceCurrentNativeRowKeyable
+
+/-!
+# Native retention through an actual row writer
+
+The same captured row writer retains its native cells into the reader.
+Actual child suffixes retain each selected child return into that reader.
+The proof uses no history at an internal active child call.
+-/
+namespace MicroCFTA.SourceCurrentNativeWriterChildRetention
+open Cache Language InternedConstructorTemplates InternedProbeProvenance InternedEdgeResidency
+open InternedNestedProvenance (Values)
+open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionThunks SourceRecursiveIntersectionCode
+open SourceEqualityNativeDemand
+open SourceCurrentAllocatedNativePhysicalTraceCompletion (Trace)
+open SourceCurrentAllocatedNativeSemanticTraceReadback (Walk bind_inverse effects)
+open SourceCurrentAllocatedNativePhysicalCompletion (Good)
+open SourceCurrentAllocatedNativeFieldClosure (Fields)
+open SourceCurrentNativeEdgeWriterRetention (Written)
+open SourceEqualityNativeDemandMemo (Retained)
+open SourceCurrentNativeWriterReadyRetention (trace_retained)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "Heap" => InternedConstructorTemplates.State Symbol Guard
+local notation "Native" => SourceRecursiveIntersectionThunks.State
+variable {width : Nat}
+local instance : DecidableEq (SourceGuards.Guard FullSyntax.Formula) := SourceEqualityPCSNativeEdge.guardDecidableEq
+
+private theorem body_choice (request : EdgeRequest Symbol Guard) (before current : Checked width)
+    (resume : Control (EdgeValue Symbol Guard))
+    (one : body request .pure before = .yielded resume current) :
+    resume = .code (SourceEqualityNativeCheckedCode.sentinel request.left) ∨
+      ∃ first second combined,
+        request.left.children.length = request.right.children.length ∧
+        SourceEqualityConstraintFieldLookup.load request.left.entry.key.constraint before.operations.constraints = .ok (some first) ∧
+        SourceEqualityConstraintFieldLookup.load request.right.entry.key.constraint before.operations.constraints = .ok (some second) ∧
+        (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second
+          request.left.children.length request.right.children.length before.operations).1 = .ok (.ready combined) ∧
+        resume = .code (SourceEqualityNativeCheckedCode.children request.domain request.left request.right combined) ∧
+        current = {before with operations := (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second
+          request.left.children.length request.right.children.length before.operations).2} := by
+  by_cases arity : request.left.children.length = request.right.children.length
+  · simp only [SourceEqualityNativeDemand.body,ite_eq_right (not_not_intro arity)] at one
+    cases left : SourceEqualityConstraintFieldLookup.load request.left.entry.key.constraint before.operations.constraints with
+    | error message => simp only [left] at one; cases one
+    | ok first =>
+      cases first with
+      | none => simp only [left] at one; cases one
+      | some first =>
+        simp only [left] at one
+        cases right : SourceEqualityConstraintFieldLookup.load request.right.entry.key.constraint before.operations.constraints with
+        | error message => simp only [right] at one; cases one
+        | ok second =>
+          cases second with
+          | none => simp only [right] at one; cases one
+          | some second =>
+            simp only [right] at one
+            cases checked : (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second
+                request.left.children.length request.right.children.length before.operations).1 with
+            | error message => simp only [checked] at one; cases one
+            | ok branch =>
+              cases branch with
+              | mismatch | rejected =>
+                  simp only [checked,sentinel,code_bind_pure] at one
+                  exact .inl (Outcome.yielded.inj one).1.symm
+              | ready combined =>
+                  simp only [checked,code_bind_pure] at one
+                  exact .inr ⟨first,second,combined,arity,rfl,rfl,checked,
+                    (Outcome.yielded.inj one).1.symm,(Outcome.yielded.inj one).2.symm⟩
+  · simp only [SourceEqualityNativeDemand.body,ite_eq_left arity,sentinel,code_bind_pure] at one
+    exact .inl (Outcome.yielded.inj one).1.symm
+
+private def EdgeArguments {A : Type} (state : InternedConstructorTemplates.State Symbol Guard)
+    (job : Work Symbol Guard A) : Prop :=
+  match job with
+  | .edge key identify _ => Values state (identify ⟨0,key⟩).children
+  | _ => True
+
+private theorem edge_arguments_checked {A : Type} (state : InternedConstructorTemplates.State Symbol Guard)
+    (job : Work Symbol Guard A) (inputs : SourceEqualityNativeDemandHeapPrimitives.WorkInputs state job) :
+    EdgeArguments state job := by
+  cases inputs with
+  | pure => trivial
+  | edge _ _ _ available => exact available
+  | node rows resident =>
+      cases kept : canonicalEdges (surviving rows) <;> simp only [makeNode,kept,EdgeArguments]
+  | union values available =>
+      cases members : distinctNodes (values.flatMap unionMembers) with
+      | nil => simp only [makeUnion,members,EdgeArguments]
+      | cons first rest =>
+          cases rest with
+          | nil => simp only [makeUnion,members,EdgeArguments]
+          | cons second rest =>
+              cases ordinary : ordinaryEdges (first :: second :: rest) with
+              | none => simp only [makeUnion,members,ordinary,EdgeArguments]
+              | some rows =>
+                  cases kept : canonicalEdges (surviving rows) <;>
+                    simp only [makeUnion,members,ordinary,makeNode,kept,EdgeArguments]
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+
+/-- A surviving row retains its actual child walk and native cells into the same reader. -/
+theorem live {handle : Nat} {request : EdgeRequest Symbol Guard} {result : EdgeValue Symbol Guard}
+    {reader : Native width Symbol Guard} (written : Written (width := width) handle request result reader)
+    (survives : Value.empty ∉ result.children) :
+    ∃ (before first last : Checked width) (count : Nat),
+      Good before ∧ EdgeReady before.native.machine request ∧
+      before.native.edges.cells handle = some ⟨request,.evaluating⟩ ∧
+      Grows before.native.machine.heap reader.machine.heap ∧
+      Good first ∧ Good last ∧ Grows first.native.machine.heap reader.machine.heap ∧ Grows last.native.machine.heap reader.machine.heap ∧
+      Walk (fun pair => requestNode request.domain pair.1 pair.2)
+        (request.left.children.zip request.right.children) first result.children last count ∧
+      result.entry.key.symbol = request.left.entry.key.symbol ∧
+      result.entry.key.constraint = SourceEqualityPCSNativeEdge.conjoin
+        request.left.entry.key.constraint request.right.entry.key.constraint ∧
+      Retained last.native reader := by
+  obtain ⟨before,after,fuel,good,ready,owner,actual,_,_,growth,finalGrowth,cells⟩ := written
+  cases actual with
+  | cons _ _ resume current _ _ rest inputs one tail =>
+    have fields : Fields (.edgeBody request .pure) before := ⟨ready,fun _ => trivial⟩
+    have checked := SourceCurrentAllocatedNativePhysicalCompletion.step_invariants _ before good inputs fields
+    have currentGood : Good current := by simpa only [one,Outcome.state] using checked.1
+    change body request .pure before = .yielded resume current at one
+    rcases body_choice request before current resume one with sentinelCase | accepted
+    · subst resume
+      obtain ⟨_,equal,_,_⟩ := SourceCurrentAllocatedNativeSemanticTraceReadback.work_readback
+        (makeEdge request.left.entry.key.symbol SourceEqualityConstraintConstructors.top [.empty]) rest current after result tail
+      have available : Values current.native.machine.heap ([.empty] : List (Value Symbol Guard)) := by
+        intro value member
+        have same := List.mem_singleton.mp member
+        subst value
+        exact empty_available _
+      have childFields := (MergedPhysicalGroupEdges.makeEdge_fields current.native.machine.heap
+        currentGood.heap.semantic.1.normal.facts request.left.entry.key.symbol
+        SourceEqualityConstraintConstructors.top [.empty] available).2.2
+      apply False.elim
+      apply survives
+      rw [equal,childFields]
+      exact List.mem_cons_self
+    · obtain ⟨left,right,combined,arity,leftLoad,rightLoad,accepted,rfl,currentEq⟩ := accepted
+      obtain ⟨inner,outer,values,middle,_,walked,made⟩ := bind_inverse rest
+        (.code (SourceRecursiveIntersectionCode.walk
+          (fun pair : Value Symbol Guard × Value Symbol Guard => requestNode request.domain pair.1 pair.2)
+          (request.left.children.zip request.right.children)))
+        (fun values => .work (makeEdge request.left.entry.key.symbol
+          (SourceEqualityConjoinAllocation.readback combined) values) .pure) current after result tail
+      have walkFields := SourceCurrentAllocatedNativeCodeFields.fields_walk current.operations
+        (fun pair : Value Symbol Guard × Value Symbol Guard => requestNode request.domain pair.1 pair.2)
+        (request.left.children.zip request.right.children) (by intro pair member value; trivial)
+      have middleFacts := effects walked currentGood walkFields
+      obtain ⟨_,equal,_,workInputs⟩ := SourceCurrentAllocatedNativeSemanticTraceReadback.work_readback _ outer middle after result made
+      have available : Values middle.native.machine.heap values := edge_arguments_checked _ _ workInputs
+      have resultFields := MergedPhysicalGroupEdges.makeEdge_fields middle.native.machine.heap
+        middleFacts.1.heap.semantic.1.normal.facts request.left.entry.key.symbol
+        (SourceEqualityConjoinAllocation.readback combined) values available
+      have madeFields : Fields (.code (.work (makeEdge request.left.entry.key.symbol
+          (SourceEqualityConjoinAllocation.readback combined) values) .pure)) middle :=
+        (effects (walked.bind (fun values => .work (makeEdge request.left.entry.key.symbol
+          (SourceEqualityConjoinAllocation.readback combined) values) .pure)) currentGood (by
+          simpa only [step,one,SourceCurrentAllocatedNativeFieldClosure.OutcomeFields,
+            SourceEqualityNativeCheckedCode.children,Control.bind] using checked.2.2.2.2.2)).2.2.2.2
+      have later := effects made middleFacts.1 madeFields
+      have middleGrowth := grows_trans later.2.2.1.growth finalGrowth
+      have currentGrowth : Grows current.native.machine.heap reader.machine.heap := by rw [currentEq]; exact growth
+      have symbol : result.entry.key.symbol = request.left.entry.key.symbol := equal ▸ resultFields.1
+      have guard : result.entry.key.constraint = SourceEqualityPCSNativeEdge.conjoin
+          request.left.entry.key.constraint request.right.entry.key.constraint := by
+        have literal := SourceEqualityNativeDemandAcceptedLanguage.ready_readback request before left right combined
+          good.operations (good.fields _ _ ready.2.1).1 (good.fields _ _ ready.2.2).1 arity leftLoad rightLoad accepted
+        exact (equal ▸ resultFields.2.1).trans literal
+      have children : result.children = values := equal ▸ resultFields.2.2
+      exact ⟨before,current,middle,inner,good,ready,owner,growth,currentGood,middleFacts.1,
+        currentGrowth,middleGrowth,children ▸ SourceCurrentAllocatedNativeSemanticTraceReadback.walk_readback _ _ inner _ _ _ walked,
+        symbol,guard,(trace_retained made middleFacts.1.native.shape).trans cells⟩
+
+/-- The same input child index retains its actual call return into the native reader. -/
+theorem child {handle : Nat} {request : EdgeRequest Symbol Guard} {result : EdgeValue Symbol Guard}
+    {reader : Native width Symbol Guard} (written : Written (width := width) handle request result reader)
+    (survives : Value.empty ∉ result.children) (index : Nat) (value : Value Symbol Guard)
+    (selected : result.children[index]? = some value) :
+    ∃ (left right : Value Symbol Guard) (before after : Checked width) (fuel : Nat),
+      request.left.children[index]? = some left ∧ request.right.children[index]? = some right ∧
+      Good before ∧ Good after ∧ Grows before.native.machine.heap reader.machine.heap ∧ Grows after.native.machine.heap reader.machine.heap ∧
+      Trace fuel (.code (requestNode request.domain left right)) before (.code (.pure value)) after ∧
+      Retained after.native reader := by
+  obtain ⟨_,first,last,_,_,_,_,_,good,_,_,growth,walked,_,_,retained⟩ := live written survives
+  obtain ⟨pair,current,next,prefixFuel,childFuel,suffixFuel,input,_,initialCalls,called,suffix⟩ :=
+    SourceCurrentNativeRowOrigins.indexed walked index value selected
+  have firstFields := SourceCurrentAllocatedNativeCodeFields.fields_walk first.operations
+    (fun pair : Value Symbol Guard × Value Symbol Guard => requestNode request.domain pair.1 pair.2)
+    ((request.left.children.zip request.right.children).take index) (by intro pair member value; trivial)
+  have currentFacts := effects initialCalls.trace good firstFields
+  have nextFacts := effects called currentFacts.1 (by intro value; trivial)
+  have lastFields := SourceCurrentAllocatedNativeCodeFields.fields_walk next.operations
+    (fun pair : Value Symbol Guard × Value Symbol Guard => requestNode request.domain pair.1 pair.2)
+    ((request.left.children.zip request.right.children).drop (index + 1)) (by intro pair member value; trivial)
+  have suffixFacts := effects suffix.trace nextFacts.1 lastFields
+  have nextGrowth := grows_trans suffixFacts.2.2.1.growth growth
+  have currentGrowth := grows_trans nextFacts.2.2.1.growth nextGrowth
+  have paired := List.getElem?_zip_eq_some.mp input
+  exact ⟨pair.1,pair.2,current,next,childFuel,paired.1,paired.2,currentFacts.1,nextFacts.1,
+    currentGrowth,nextGrowth,called,(trace_retained suffix.trace nextFacts.1.native.shape).trans retained⟩
+
+/-- A surviving child retains its exact returned node cell and writer at the checked reader. -/
+theorem returned {reader : Checked width} (history : SourceCurrentNativeEdgeWriterGrowth.History reader)
+    {handle : Nat} {request : EdgeRequest Symbol Guard} {result : EdgeValue Symbol Guard}
+    (written : Written (width := width) handle request result reader.native)
+    (survives : Value.empty ∉ result.children) (index : Nat) (value : Value Symbol Guard)
+    (selected : result.children[index]? = some value) :
+    ∃ (left right : Value Symbol Guard) (before after : Checked width) (fuel childHandle : Nat),
+      request.left.children[index]? = some left ∧ request.right.children[index]? = some right ∧
+      Good before ∧ Good after ∧
+      Grows before.native.machine.heap reader.native.machine.heap ∧
+      Grows after.native.machine.heap reader.native.machine.heap ∧
+      Trace fuel (.code (requestNode request.domain left right)) before (.code (.pure value)) after ∧
+      Retained after.native reader.native ∧
+      SourceCurrentNativeForwardLineage.Forwarded reader ⟨request.domain,left,right⟩ before after value ∧
+      reader.native.nodes.cells childHandle = some ⟨⟨request.domain,left,right⟩,.returned value⟩ ∧
+      SourceCurrentNativeWriterReadyRetention.Written (width := width)
+        childHandle ⟨request.domain,left,right⟩ value reader.native := by
+  obtain ⟨left,right,before,after,fuel,first,second,good,final,firstGrowth,lastGrowth,called,retained⟩ :=
+    child written survives index value selected
+  have forwarded := SourceCurrentNativeReferenceOrigins.forwarded history
+    ⟨request.domain,left,right⟩ fuel value good called retained
+  rcases forwarded.2 with direct | ⟨childHandle,cell,writer⟩
+  · have empty := SourceCurrentNativeRowKeyable.unkeyed_empty
+      ⟨request.domain,left,right⟩ fuel value direct.1 called
+    apply False.elim
+    apply survives
+    rw [←empty]
+    exact List.mem_of_getElem? selected
+  · exact ⟨left,right,before,after,fuel,childHandle,first,second,good,final,
+      firstGrowth,lastGrowth,called,retained,forwarded,cell,writer⟩
+
+end MicroCFTA.SourceCurrentNativeWriterChildRetention

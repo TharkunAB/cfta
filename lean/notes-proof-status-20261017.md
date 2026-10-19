@@ -1,5 +1,39 @@
 # Proof status at 2026-10-18
 
+## Current native child writers through historical edge calls
+
+Updated: 2026-10-19 13:07 CEST. Proof checkpoint: `904d230ff`.
+Verified start: `1862b2fc6`. Source main remains `184bba662`.
+Read `lean/notes-current-native-edge-child-retention.md`.
+Actual causal History now derives the same earlier edge writer with
+native returned-cell retention from its captured body return into the
+checked reader. Its actual makeEdge and child-Walk suffixes retain the
+selected child return into that same reader. Surviving children cannot
+be Empty. Their actual Forwarded receipts therefore derive exact returned
+node cells and writers without History at internal active child entries.
+
+The ordinary-origin adapter keeps both original input row indices,
+the selected child index, full row fields and paired child call. It
+retains both strict original input-child mass bounds. It places no such
+bound on the generated output child and needs no positivity premise.
+All native receipts stay at the captured checked reader. The physical
+Origin view remains separate. Stored Mu winners and current callbacks
+are not identified. No native History is assigned to the physical view.
+
+The default full build passes 3462 jobs. Audit checks 73854 axiom
+dependencies. Eight public declarations and one constructed check pass
+complete proof and standard-axiom checks. All three production strict
+logs and the constructed strict log are empty. The check exercises an
+actual warm edge hit and its surviving child's returned writer. It makes
+no recursive-child or changed-child claim. General source renewal,
+active-owner exclusion, outer completion, convergence and Haskell
+correspondence remain open. The root-language guarantee is unchanged.
+All 268 Haskell files retain their bytes in this proof checkpoint.
+The current upstream ordered, template and subsumption paths still need
+implementation proofs. FINDINGS retains every repair first. Publication
+awaits direct approval. No push or board write is attempted. The
+full-library objective remains active.
+
 ## Current event path origins and separate native views
 
 Updated: 2026-10-19 12:52 CEST. Proof checkpoint: `776875701`.

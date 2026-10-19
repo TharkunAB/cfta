@@ -1,0 +1,60 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-native-edge-child-retention/edge-direct-1.source.lean:219:24: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  running.machine
+in the target expression
+  Written handle original result running
+
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+A : Type
+before after : Checked width
+value : A
+good : Good before
+known : Recorded before.native
+resume : Control A
+middle : Checked width
+rest : Nat
+ih : ∀ (m : Nat), m < rest + 1 → Preserves m
+tail : Trace rest resume middle (Control.code (Code.pure value)) after
+next : Good middle ∧ Fields resume middle ∧ Grows before.native.machine.heap middle.native.machine.heap
+nextCells : Retained before.native middle.native
+request : NodeRequest Symbol Guard
+continuation : Value Symbol Guard → Code Symbol Guard A
+clean : Clean (Control.code (Code.node request continuation))
+fields : Fields (Control.code (Code.node request continuation)) before
+inputs : SourceCurrentAllocatedNativePhysicalExecution.Inputs (Control.code (Code.node request continuation)) before
+one : step (Control.code (Code.node request continuation)) before = Outcome.yielded resume middle
+chosen : Native width Symbol Guard
+chosenEdges : chosen.edges = before.native.edges
+chosenMachine : chosen.machine = before.native.machine
+chosenKnown : Recorded chosen
+handle✝ : Nat
+selected : lookupNode width request before.native = (NodeSelection.memoized handle✝, chosen)
+observation : FlatMemoThunk.Observation (NodeRequest Symbol Guard) (Value Symbol Guard)
+running : Native width Symbol Guard
+demanded : demandNode handle✝ chosen = (observation, running)
+runningEdges : running.edges = chosen.edges
+runningMachine : running.machine = chosen.machine
+handle : Nat
+original : EdgeRequest Symbol Guard
+result : EdgeValue Symbol Guard
+stored : running.edges.cells handle = some { request := original, status := FlatMemoThunk.Status.returned result }
+⊢ Written handle original result running
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-native-edge-child-retention/edge-direct-1.source.lean:297:34: error: Application type mismatch: The argument
+  ih
+has type
+  before✝.native.edges.cells handle = some { request := request, status := FlatMemoThunk.Status.returned result } →
+    Recorded before✝.native
+but is expected to have type
+  Recorded ?m.83
+in the application
+  recorded_change ?m.83 (SourceCurrentAllocatedQueryMemo.advancePhysical before✝ after).native ih
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-native-edge-child-retention/edge-direct-1.source.lean:299:65: error: Application type mismatch: The argument
+  ih
+has type
+  before✝.native.edges.cells handle = some { request := request, status := FlatMemoThunk.Status.returned result } →
+    Recorded before✝.native
+but is expected to have type
+  Recorded before✝.native
+in the application
+  preserves fuel control before✝ after✝ value clean good fields ih

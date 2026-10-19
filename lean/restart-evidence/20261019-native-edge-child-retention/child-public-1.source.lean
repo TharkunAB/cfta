@@ -1,0 +1,19 @@
+import MicroCFTA.SourceCurrentNativeWriterChildRetention
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentNativeWriterChildRetention.live
+#print MicroCFTA.SourceCurrentNativeWriterChildRetention.live
+#print axioms MicroCFTA.SourceCurrentNativeWriterChildRetention.live
+#check @MicroCFTA.SourceCurrentNativeWriterChildRetention.child
+#print MicroCFTA.SourceCurrentNativeWriterChildRetention.child
+#print axioms MicroCFTA.SourceCurrentNativeWriterChildRetention.child
+#check @MicroCFTA.SourceCurrentNativeWriterChildRetention.returned
+#print MicroCFTA.SourceCurrentNativeWriterChildRetention.returned
+#print axioms MicroCFTA.SourceCurrentNativeWriterChildRetention.returned

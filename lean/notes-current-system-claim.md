@@ -1,7 +1,7 @@
 # Current system claim
 
 Checked against the live theorem statements on 2026-10-19.
-Read `notes-current-recursive-event-source-read.md` for the latest checkpoint.
+Read `notes-current-native-edge-child-retention.md` for the latest checkpoint.
 
 In simple technical English: fresh construction always finishes in the
 Lean model. Under the stated guard conditions, its result represents
@@ -215,9 +215,19 @@ input-child mass bounds. Union and reference branches retain actual calls
 and the same-view full row. Mu body execution belongs to the captured
 writer; its observational unfolding belongs to the physical view. They
 are not identified. No native memo history is assigned to that view.
-The ordinary child result still needs its retained native memo provenance
-before repeated child-writer normalization. Whole-event projection and
-the global renewal bound remain separate open obligations.
+Actual causal edge History now retains native cells from the same earlier
+edge-body return into the captured checked reader. Its actual makeEdge
+and child-Walk suffixes retain the selected surviving child return.
+Forwarded excludes the unresolved direct arm because that child is not
+Empty. The child's exact returned node cell and writer therefore belong
+to the same reader, with no History at an internal active child entry.
+The ordinary-origin adapter retains both original input row indices,
+the selected child index, full row fields and strict original input-child
+mass bounds. It bounds no generated output child. This closes the
+ordinary child native-provenance gap for these contracts. Composition with
+the remaining PathOrigin and source ancestry through reference bindings
+and Mu publications still need proof. Whole-event projection and the
+global renewal bound remain separate open obligations.
 
 Earlier class phases can change their forests. Their native joins do not
 satisfy the Required Origin grammar in general. No Haskell defect is
