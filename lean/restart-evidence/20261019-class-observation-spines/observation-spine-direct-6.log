@@ -1,0 +1,305 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-class-observation-spines/observation-spine-direct-6.source.lean:686:8: warning: automatically included section variable(s) unused in theorem `_private.«restart-evidence».«20261019-class-observation-spines».«observation-spine-direct-6.source».0.MicroCFTA.SourceCurrentClassObservationSpines.guards_before`:
+  [DecidableEq (EdgeKey Symbol Guard)]
+  [DecidableEq Symbol]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Symbol] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-class-observation-spines/observation-spine-direct-6.source.lean:686:0: warning: `guards_before` does not use the following hypotheses in its type:
+  • [DecidableEq (EdgeKey Symbol Guard)] (#1)
+  • [DecidableEq Symbol] (#2)
+
+Consider removing these hypotheses and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-class-observation-spines/observation-spine-direct-6.source.lean:719:0: warning: `omit` should be avoided in favor of restructuring your `variable` declarations
+
+Note: This linter can be disabled with `set_option linter.omit false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-class-observation-spines/observation-spine-direct-6.source.lean:727:0: warning: `omit` should be avoided in favor of restructuring your `variable` declarations
+
+Note: This linter can be disabled with `set_option linter.omit false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-class-observation-spines/observation-spine-direct-6.source.lean:736:0: warning: `omit` should be avoided in favor of restructuring your `variable` declarations
+
+Note: This linter can be disabled with `set_option linter.omit false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-class-observation-spines/observation-spine-direct-6.source.lean:771:24: error: don't know how to synthesize placeholder for argument `built`
+context:
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq Symbol
+index : Int
+path : List Int
+edges : List Row
+entry : Interned InternedBinderProtocol.NodeKey
+depth : Nat
+free : List InternedBinderProtocol.Reference
+before : InternedConstructorTemplates.State Symbol Guard
+result : Node
+after reader : InternedConstructorTemplates.State Symbol Guard
+observed : List Row
+readAfter : InternedConstructorTemplates.State Symbol Guard
+read : Read result reader observed readAfter
+position : Nat
+row : Row
+middle✝ : InternedConstructorTemplates.State Symbol Guard
+values✝ : List Node
+allRows✝ : List Row
+unionMiddle✝ : InternedConstructorTemplates.State Symbol Guard
+reads✝ : ReadAll values✝ middle✝ allRows✝ unionMiddle✝
+rawIndex operandIndex : Nat
+operand : Node
+operandSelected : values✝[operandIndex]? = some operand
+earlierRows selectedRows laterRows : List Row
+readStart readFinish : InternedConstructorTemplates.State Symbol Guard
+readPrefix : ReadAll (List.take operandIndex values✝) middle✝ earlierRows readStart
+operandRead : Read operand readStart selectedRows readFinish
+readSuffix : ReadAll (List.drop (operandIndex + 1) values✝) readFinish laterRows unionMiddle✝
+parts : allRows✝ = earlierRows ++ selectedRows ++ laterRows
+readIndex sourceIndex : Nat
+sourceRow : Row
+child : Node
+start finish : InternedConstructorTemplates.State Symbol Guard
+childSelected : select sourceRow.children index = some child
+call : Project path child start operand finish
+sourceSelected : edges[sourceIndex]? = some sourceRow
+projectSuffix :
+  ProjectRows path index (List.drop (sourceIndex + 1) edges) finish (List.drop (operandIndex + 1) values✝) middle✝
+projects✝ : ProjectRows path index edges before values✝ middle✝
+projectPrefix : ProjectRows path index (List.take sourceIndex edges) before (List.take operandIndex values✝) start
+built✝ : run (makeNode allRows✝) unionMiddle✝ = (result, after)
+raw : allRows✝[rawIndex]? = some row
+readSelected : selectedRows[readIndex]? = some row
+rest : SourceCurrentProjectionReadSpine.Spine call operandRead readIndex row
+canonical : (nodeEdges result)[position]? = some row
+selected : observed[position]? = some row
+⊢ run (makeNode allRows✝) unionMiddle✝ = (result, after)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-class-observation-spines/observation-spine-direct-6.source.lean:771:22: error: don't know how to synthesize placeholder for argument `reads`
+context:
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq Symbol
+index : Int
+path : List Int
+edges : List Row
+entry : Interned InternedBinderProtocol.NodeKey
+depth : Nat
+free : List InternedBinderProtocol.Reference
+before : InternedConstructorTemplates.State Symbol Guard
+result : Node
+after reader : InternedConstructorTemplates.State Symbol Guard
+observed : List Row
+readAfter : InternedConstructorTemplates.State Symbol Guard
+read : Read result reader observed readAfter
+position : Nat
+row : Row
+middle✝ : InternedConstructorTemplates.State Symbol Guard
+values✝ : List Node
+allRows✝ : List Row
+unionMiddle✝ : InternedConstructorTemplates.State Symbol Guard
+reads✝ : ReadAll values✝ middle✝ allRows✝ unionMiddle✝
+rawIndex operandIndex : Nat
+operand : Node
+operandSelected : values✝[operandIndex]? = some operand
+earlierRows selectedRows laterRows : List Row
+readStart readFinish : InternedConstructorTemplates.State Symbol Guard
+readPrefix : ReadAll (List.take operandIndex values✝) middle✝ earlierRows readStart
+operandRead : Read operand readStart selectedRows readFinish
+readSuffix : ReadAll (List.drop (operandIndex + 1) values✝) readFinish laterRows unionMiddle✝
+parts : allRows✝ = earlierRows ++ selectedRows ++ laterRows
+readIndex sourceIndex : Nat
+sourceRow : Row
+child : Node
+start finish : InternedConstructorTemplates.State Symbol Guard
+childSelected : select sourceRow.children index = some child
+call : Project path child start operand finish
+sourceSelected : edges[sourceIndex]? = some sourceRow
+projectSuffix :
+  ProjectRows path index (List.drop (sourceIndex + 1) edges) finish (List.drop (operandIndex + 1) values✝) middle✝
+projects✝ : ProjectRows path index edges before values✝ middle✝
+projectPrefix : ProjectRows path index (List.take sourceIndex edges) before (List.take operandIndex values✝) start
+built✝ : run (makeNode allRows✝) unionMiddle✝ = (result, after)
+raw : allRows✝[rawIndex]? = some row
+readSelected : selectedRows[readIndex]? = some row
+rest : SourceCurrentProjectionReadSpine.Spine call operandRead readIndex row
+canonical : (nodeEdges result)[position]? = some row
+selected : observed[position]? = some row
+⊢ ReadAll values✝ middle✝ allRows✝ unionMiddle✝
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-class-observation-spines/observation-spine-direct-6.source.lean:771:20: error: don't know how to synthesize placeholder for argument `projects`
+context:
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq Symbol
+index : Int
+path : List Int
+edges : List Row
+entry : Interned InternedBinderProtocol.NodeKey
+depth : Nat
+free : List InternedBinderProtocol.Reference
+before : InternedConstructorTemplates.State Symbol Guard
+result : Node
+after reader : InternedConstructorTemplates.State Symbol Guard
+observed : List Row
+readAfter : InternedConstructorTemplates.State Symbol Guard
+read : Read result reader observed readAfter
+position : Nat
+row : Row
+middle✝ : InternedConstructorTemplates.State Symbol Guard
+values✝ : List Node
+allRows✝ : List Row
+unionMiddle✝ : InternedConstructorTemplates.State Symbol Guard
+reads✝ : ReadAll values✝ middle✝ allRows✝ unionMiddle✝
+rawIndex operandIndex : Nat
+operand : Node
+operandSelected : values✝[operandIndex]? = some operand
+earlierRows selectedRows laterRows : List Row
+readStart readFinish : InternedConstructorTemplates.State Symbol Guard
+readPrefix : ReadAll (List.take operandIndex values✝) middle✝ earlierRows readStart
+operandRead : Read operand readStart selectedRows readFinish
+readSuffix : ReadAll (List.drop (operandIndex + 1) values✝) readFinish laterRows unionMiddle✝
+parts : allRows✝ = earlierRows ++ selectedRows ++ laterRows
+readIndex sourceIndex : Nat
+sourceRow : Row
+child : Node
+start finish : InternedConstructorTemplates.State Symbol Guard
+childSelected : select sourceRow.children index = some child
+call : Project path child start operand finish
+sourceSelected : edges[sourceIndex]? = some sourceRow
+projectSuffix :
+  ProjectRows path index (List.drop (sourceIndex + 1) edges) finish (List.drop (operandIndex + 1) values✝) middle✝
+projects✝ : ProjectRows path index edges before values✝ middle✝
+projectPrefix : ProjectRows path index (List.take sourceIndex edges) before (List.take operandIndex values✝) start
+built✝ : run (makeNode allRows✝) unionMiddle✝ = (result, after)
+raw : allRows✝[rawIndex]? = some row
+readSelected : selectedRows[readIndex]? = some row
+rest : SourceCurrentProjectionReadSpine.Spine call operandRead readIndex row
+canonical : (nodeEdges result)[position]? = some row
+selected : observed[position]? = some row
+⊢ ProjectRows path index edges before values✝ middle✝
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-class-observation-spines/observation-spine-direct-6.source.lean:798:22: error: overloaded, errors 
+  798:31 Unknown identifier `value`
+  
+  798:31 Unknown identifier `value`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-class-observation-spines/observation-spine-direct-6.source.lean:801:34: error(lean.unknownIdentifier): Unknown identifier `value`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-class-observation-spines/observation-spine-direct-6.source.lean:820:12: error: unsolved goals
+case cons.empty.recursive
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq Symbol
+width : Nat
+index : Int
+path : List Int
+ih : NodeLaw path
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+base : InternedConstructorTemplates.State Symbol Guard
+record : SourceEqualityClassOrder.Record
+originals : List Node
+before : SharedState width
+memos : Memos
+inventory : Inventory
+ready : SharedReady formulas solver inventory record originals base before
+valid : EndpointMemoGateTrace.Valid before.checked.native.machine.heap memos
+history : History before.checked
+accept : Row → Prop
+projectBefore : InternedConstructorTemplates.State Symbol Guard
+projected : Node
+projectAfter : InternedConstructorTemplates.State Symbol Guard
+semantic : SemanticReady projectBefore
+costs : CostHeap projectBefore
+reader : InternedConstructorTemplates.State Symbol Guard
+observed : List Row
+readAfter : InternedConstructorTemplates.State Symbol Guard
+read : Read projected reader observed readAfter
+readerSemantic : SemanticReady reader
+later : Keeps projectAfter reader
+guards : SourceCurrentConstrainedCapGuardHeap.Heap (fun guard => SourceMemoGate.plain guard = true) reader
+position : Nat
+row : Row
+selected : observed[position]? = some row
+positive : ¬(fun guard => SourceMemoGate.plain guard = true) row.entry.key.constraint
+x✝ : List (Int × Edits EqualityNormalize.Path)
+populated : Populated (Edits.editBelow x✝)
+nonempty : HasLeaf (Edits.editBelow x✝)
+allowed : Allowed record (Edits.editBelow x✝)
+available : Available before.checked.native.machine.heap Value.empty
+safe : Safe accept (index :: path) Value.empty
+editSafe : SourceCurrentEditDomains.Safe (Edits.editBelow x✝) Value.empty
+resident : Available projectBefore Value.empty
+afterGrowth : Grows before.checked.native.machine.heap projectBefore
+exposed✝ : Node
+middle✝ : InternedConstructorTemplates.State Symbol Guard
+recursive✝ : SourceEqualityRequiredGraph.Recursive Value.empty
+head✝ : SourceEqualityRequiredHead.Head Value.empty projectBefore exposed✝ middle✝
+body✝ : Project (index :: path) exposed✝ middle✝ projected projectAfter
+remaining : SourceCurrentProjectionReadSpine.Spine ⋯ read position row
+⊢ ∃ cut, Spine formulas solver base ⋯ ⋯ read position row cut ∧ (cut = false → Fields accept row)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-class-observation-spines/observation-spine-direct-6.source.lean:828:22: error: overloaded, errors 
+  828:31 Unknown identifier `value`
+  
+  828:31 Unknown identifier `value`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-class-observation-spines/observation-spine-direct-6.source.lean:831:12: error(lean.unknownIdentifier): Unknown identifier `value`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-class-observation-spines/observation-spine-direct-6.source.lean:831:6: error: Tactic `cases` failed: major premise type is not an inductive type
+  ?m.2055
+
+Explanation: the `cases` tactic is for constructor-based reasoning as well as for applying custom cases principles with a 'using' clause or a registered '@[cases_eliminator]' theorem. The above type neither is an inductive type nor has a registered theorem.
+
+case cons.ordinary
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq Symbol
+width : Nat
+index : Int
+path : List Int
+ih : NodeLaw path
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+base : InternedConstructorTemplates.State Symbol Guard
+record : SourceEqualityClassOrder.Record
+originals : List Node
+before : SharedState width
+result : Node
+memos final : Memos
+inventory : Inventory
+ready : SharedReady formulas solver inventory record originals base before
+valid : EndpointMemoGateTrace.Valid before.checked.native.machine.heap memos
+history : History before.checked
+accept : Row → Prop
+projectBefore : InternedConstructorTemplates.State Symbol Guard
+projected : Node
+projectAfter : InternedConstructorTemplates.State Symbol Guard
+project : Project (index :: path) result projectBefore projected projectAfter
+semantic : SemanticReady projectBefore
+costs : CostHeap projectBefore
+resident : Available projectBefore result
+reader : InternedConstructorTemplates.State Symbol Guard
+observed : List Row
+readAfter : InternedConstructorTemplates.State Symbol Guard
+read : Read projected reader observed readAfter
+readerSemantic : SemanticReady reader
+later : Keeps projectAfter reader
+guards : SourceCurrentConstrainedCapGuardHeap.Heap (fun guard => SourceMemoGate.plain guard = true) reader
+position : Nat
+row : Row
+selected : observed[position]? = some row
+positive : ¬(fun guard => SourceMemoGate.plain guard = true) row.entry.key.constraint
+remaining : SourceCurrentProjectionReadSpine.Spine project read position row
+entries : List (Int × Edits EqualityNormalize.Path)
+edges rebuilt : List Row
+middle : SharedState width
+heap : InternedConstructorTemplates.State Symbol Guard
+entry : Interned InternedBinderProtocol.NodeKey
+depth : Nat
+free : List InternedBinderProtocol.Reference
+populated : Populated (Edits.editBelow entries)
+nonempty : HasLeaf (Edits.editBelow entries)
+allowed : Allowed record (Edits.editBelow entries)
+available : Available before.checked.native.machine.heap (Value.node entry edges depth free)
+safe : Safe accept (index :: path) (Value.node entry edges depth free)
+editSafe : SourceCurrentEditDomains.Safe (Edits.editBelow entries) (Value.node entry edges depth free)
+actual : EditRows record originals entries edges before rebuilt middle
+built : run (makeNode rebuilt) middle.checked.native.machine.heap = (result, heap)
+afterGrowth : Grows (advanceHeap middle heap).checked.native.machine.heap projectBefore
+readRows : RowsReads formulas solver base actual memos final
+initialFacts : InternedNestedFacts.Facts before.checked.native.machine.heap
+initialEdges :
+  ∀ (edge : Row),
+    edge ∈ nodeEdges (Value.node entry edges depth free) → EdgeResident before.checked.native.machine.heap edge
+next : Inventory
+effects : RowsReceipt formulas solver next record originals base edges before rebuilt middle memos final
+ordinary : sorry
+x✝ : ?m.2055
+⊢ ∃ cut, Spine formulas solver base ⋯ project read position row cut ∧ (cut = false → Fields accept row)

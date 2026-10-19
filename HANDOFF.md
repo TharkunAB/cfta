@@ -13,6 +13,40 @@ Do not bypass that decision. Continue independent local proof work.
 Read `lean/notes-current-publication-status.md`. The full-library goal stays
 active. The proof and evidence are committed, locally verified and preserved.
 
+## Current selected observations through class node edits
+
+Updated: 2026-10-19 01:59 CEST. Proof checkpoint: `e8235cd6`.
+Start: `2a6783571`. Source main remains `c0cc8a05`.
+Read `lean/notes-current-class-observation-spines.md` and the current system claim.
+An actual projection and selected complete row read now retain the same
+recursive read history. This includes Mu unfolding. A completed class
+node edit derives either an ordinary source at the same path in the
+original input, with the same symbol, full guard and arity, or an actual
+native/Head cut with its remaining projection and read. Ordinary steps
+retain the exact signed child position and actual edit/read intervals.
+Head cuts observe the body edit's returned value.
+
+The producer constructs path safety from the original false gate and
+Required Origin. It derives projection support from the actual edit
+return. It does not assume source ancestry or a false prepared gate.
+Initial shared readiness, edit safety, memo validity, native history,
+reader semantic support, forward Keeps and the reader guard heap remain
+explicit. This result covers one node edit. It does not yet compose
+observations across an entire class fold or bound renewed recursive calls.
+
+Full default library build passes 3444 jobs. Audit checks 73712 axiom
+dependencies. Six public declarations pass full proof checks. Four are
+receipt types; two are theorems. Both production strict logs are empty.
+One constructed Mu example passes strict and complete proof checks.
+Its original primary gate is true; it tests the leaf continuation directly.
+General outer completion, empty-owner exclusion, convergence and Haskell
+refinement remain open. Fresh modeled construction already always
+finishes. The conditional root-language claim is unchanged. No Haskell
+bytes change or repair request is added. FINDINGS retains every repair
+first. Field-pool fix `b9219b9e` remains in main `c0cc8a05`. Publication
+awaits direct approval. No push or board write is attempted. The
+full-library objective remains active.
+
 ## Current structural class fold and actual worker sources
 
 Updated: 2026-10-19 01:14 CEST. Proof checkpoint: `55873f7f9`.

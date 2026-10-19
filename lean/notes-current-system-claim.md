@@ -1,7 +1,7 @@
 # Current system claim
 
 Checked against the live theorem statements on 2026-10-19.
-Read `notes-current-class-fold-structural.md` for the latest checkpoint.
+Read `notes-current-class-observation-spines.md` for the latest checkpoint.
 
 In simple technical English: fresh construction always finishes in the
 Lean model. Under the stated guard conditions, its result represents
@@ -160,8 +160,18 @@ support and writer history from its actual completed tail. A literal
 bounded-worker return derives this graph from initial Frame, Fits and
 numeric reservations. Its support and memo premises remain explicit.
 The earlier root-only FoldFlow cannot consume arbitrary descendant RowAt.
-The new structural result does not yet explain observational Mu reads or
-the actual remaining edit/projection/read continuation after an event.
+Actual projection and complete row reads now retain indexed recursive
+read histories, including Mu unfolding. A completed node edit derives an
+ordinary source at the same path in the original input, with the same
+symbol, full guard and arity, or an actual native/Head cut with its exact
+remaining projection and selected read. The producer constructs path
+safety from the original false gate and Required Origin. Actual edit
+effects derive projection support at the returned heap. Reader semantic
+support, forward Keeps and the reader guard heap remain explicit.
+Ordinary lifts retain the exact signed child position and captured
+edit/read intervals. Head cuts observe the body edit's returned value.
+This result covers one node edit. Observations still need composition
+through the actual chronological class fold.
 Earlier class phases can change their forests. Their native joins do not
 satisfy the Required Origin grammar in general. No Haskell defect is
 established.

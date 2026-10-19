@@ -1,0 +1,305 @@
+@MicroCFTA.SourceCurrentProjectionReadSpine.Spine : {Symbol Guard : Type} →
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    {path : List.{0} Int} →
+      {value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard} →
+        {before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} →
+          {result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard} →
+            {after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} →
+              @MicroCFTA.SourceEqualityProjectionGraph.Project Symbol Guard inst path value before result after →
+                {reader : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} →
+                  {rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)} →
+                    {readAfter : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} →
+                      @MicroCFTA.SourceEqualityProjectionRead.Read Symbol Guard inst result reader rows readAfter →
+                        Nat → MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard → Prop
+inductive MicroCFTA.SourceCurrentProjectionReadSpine.Spine : {Symbol Guard : Type} →
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    {path : List.{0} Int} →
+      {value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard} →
+        {before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} →
+          {result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard} →
+            {after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} →
+              @MicroCFTA.SourceEqualityProjectionGraph.Project Symbol Guard inst path value before result after →
+                {reader : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} →
+                  {rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)} →
+                    {readAfter : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} →
+                      @MicroCFTA.SourceEqualityProjectionRead.Read Symbol Guard inst result reader rows readAfter →
+                        Nat → MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard → Prop
+number of parameters: 3
+constructors:
+MicroCFTA.SourceCurrentProjectionReadSpine.Spine.root : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {state reader readAfter : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  (read : @MicroCFTA.SourceEqualityProjectionRead.Read Symbol Guard inst value reader rows readAfter) (position : Nat)
+  (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+  @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+      (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) Nat
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+        (fun as i =>
+          @LT.lt.{0} Nat instLTNat i
+            (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) as))
+        (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) rows
+        position)
+      (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) row) →
+    @MicroCFTA.SourceCurrentProjectionReadSpine.Spine Symbol Guard inst (@List.nil.{0} Int) value state value state
+      (@MicroCFTA.SourceEqualityProjectionGraph.Project.root Symbol Guard inst value state) reader rows readAfter read
+      position row
+MicroCFTA.SourceCurrentProjectionReadSpine.Spine.ordinary : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {path : List.{0} Int}
+  {index : Int} {edges : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  {before middle : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {allRows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  {unionMiddle : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey} {depth : Nat}
+  {free : List.{0} MicroCFTA.InternedBinderProtocol.Reference}
+  {projects :
+    @MicroCFTA.SourceEqualityProjectionGraph.ProjectRows Symbol Guard inst path index edges before values middle}
+  {reads : @MicroCFTA.SourceEqualityProjectionUnion.ReadAll Symbol Guard inst values middle allRows unionMiddle}
+  {built :
+    @Eq.{1}
+      (Prod.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (MicroCFTA.InternedConstructorTemplates.State Symbol Guard))
+      (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+        (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard allRows) unionMiddle)
+      (@Prod.mk.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) result after)}
+  {reader : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {observed : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  {readAfter : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  (read : @MicroCFTA.SourceEqualityProjectionRead.Read Symbol Guard inst result reader observed readAfter)
+  (position : Nat) (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+  @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+      (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) Nat
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+        (fun as i =>
+          @LT.lt.{0} Nat instLTNat i
+            (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) as))
+        (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) observed
+        position)
+      (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) row) →
+    @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+        (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) Nat
+          (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+          (fun as i =>
+            @LT.lt.{0} Nat instLTNat i
+              (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) as))
+          (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+          (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard result) position)
+        (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) row) →
+      ∀ (rawIndex : Nat),
+        @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+            (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) Nat
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+              (fun as i =>
+                @LT.lt.{0} Nat instLTNat i
+                  (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) as))
+              (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+              allRows rawIndex)
+            (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) row) →
+          ∀ (operandIndex : Nat) (operand : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+            @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Nat
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (fun as i =>
+                    @LT.lt.{0} Nat instLTNat i
+                      (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+                  (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) values
+                  operandIndex)
+                (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) operand) →
+              ∀
+                (earlierRows selectedRows laterRows :
+                  List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                (readStart readFinish : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                @MicroCFTA.SourceEqualityProjectionUnion.ReadAll Symbol Guard inst
+                    (@List.take.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) operandIndex values)
+                    middle earlierRows readStart →
+                  ∀
+                    (operandRead :
+                      @MicroCFTA.SourceEqualityProjectionRead.Read Symbol Guard inst operand readStart selectedRows
+                        readFinish),
+                    @MicroCFTA.SourceEqualityProjectionUnion.ReadAll Symbol Guard inst
+                        (@List.drop.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) operandIndex
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          values)
+                        readFinish laterRows unionMiddle →
+                      @Eq.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) allRows
+                          (@HAppend.hAppend.{0, 0, 0}
+                            (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                            (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                            (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                            (@instHAppendOfAppend.{0}
+                              (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                              (@List.instAppend.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+                            (@HAppend.hAppend.{0, 0, 0}
+                              (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                              (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                              (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                              (@instHAppendOfAppend.{0}
+                                (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                                (@List.instAppend.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+                              earlierRows selectedRows)
+                            laterRows) →
+                        ∀ (readIndex : Nat),
+                          @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                              (@GetElem?.getElem?.{0, 0, 0}
+                                (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) Nat
+                                (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                                (fun as i =>
+                                  @LT.lt.{0} Nat instLTNat i
+                                    (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                                      as))
+                                (@List.instGetElem?NatLtLength.{0}
+                                  (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                                selectedRows readIndex)
+                              (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) row) →
+                            ∀ (sourceIndex : Nat)
+                              (source : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                              (child : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                              (start finish : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                              @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                                  (@GetElem?.getElem?.{0, 0, 0}
+                                    (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) Nat
+                                    (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                                    (fun as i =>
+                                      @LT.lt.{0} Nat instLTNat i
+                                        (@List.length.{0}
+                                          (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) as))
+                                    (@List.instGetElem?NatLtLength.{0}
+                                      (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                                    edges sourceIndex)
+                                  (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                                    source) →
+                                @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                    (@MicroCFTA.SourceEqualityProjectionGraph.select.{0}
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard source)
+                                      index)
+                                    (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                      child) →
+                                  @MicroCFTA.SourceEqualityProjectionGraph.ProjectRows Symbol Guard inst path index
+                                      (@List.take.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                                        sourceIndex edges)
+                                      before
+                                      (@List.take.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                        operandIndex values)
+                                      start →
+                                    ∀
+                                      (call :
+                                        @MicroCFTA.SourceEqualityProjectionGraph.Project Symbol Guard inst path child
+                                          start operand finish),
+                                      @MicroCFTA.SourceEqualityProjectionGraph.ProjectRows Symbol Guard inst path index
+                                          (@List.drop.{0}
+                                            (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) sourceIndex
+                                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                            edges)
+                                          finish
+                                          (@List.drop.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                              operandIndex
+                                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                            values)
+                                          middle →
+                                        @MicroCFTA.SourceCurrentProjectionReadSpine.Spine Symbol Guard inst path child
+                                            start operand finish call readStart selectedRows readFinish operandRead
+                                            readIndex row →
+                                          @MicroCFTA.SourceCurrentProjectionReadSpine.Spine Symbol Guard inst
+                                            (@List.cons.{0} Int index path)
+                                            (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges
+                                              depth free)
+                                            before result after
+                                            (@MicroCFTA.SourceEqualityProjectionGraph.Project.ordinary Symbol Guard inst
+                                              path index edges before values middle result after entry depth free
+                                              projects
+                                              (@MicroCFTA.SourceEqualityProjectionUnion.Union.node Symbol Guard inst
+                                                values middle allRows unionMiddle result after reads built))
+                                            reader observed readAfter read position row
+MicroCFTA.SourceCurrentProjectionReadSpine.Spine.recursive : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {original : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {exposed : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {middle : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} {index : Int} {path : List.{0} Int}
+  {recursive : @MicroCFTA.SourceEqualityRequiredGraph.Recursive Symbol Guard original}
+  {head : @MicroCFTA.SourceEqualityRequiredHead.Head Symbol Guard inst original before exposed middle}
+  {body :
+    @MicroCFTA.SourceEqualityProjectionGraph.Project Symbol Guard inst (@List.cons.{0} Int index path) exposed middle
+      result after}
+  {reader : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  {readAfter : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {read : @MicroCFTA.SourceEqualityProjectionRead.Read Symbol Guard inst result reader rows readAfter} {position : Nat}
+  {row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard},
+  @MicroCFTA.SourceCurrentProjectionReadSpine.Spine Symbol Guard inst (@List.cons.{0} Int index path) exposed middle
+      result after body reader rows readAfter read position row →
+    @MicroCFTA.SourceCurrentProjectionReadSpine.Spine Symbol Guard inst (@List.cons.{0} Int index path) original before
+      result after
+      (@MicroCFTA.SourceEqualityProjectionGraph.Project.recursive Symbol Guard inst original before exposed middle index
+        path result after recursive head body)
+      reader rows readAfter read position row
+'MicroCFTA.SourceCurrentProjectionReadSpine.Spine' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentProjectionReadSpine.project : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {path : List.{0} Int}
+  {value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  (actual : @MicroCFTA.SourceEqualityProjectionGraph.Project Symbol Guard inst path value before result after),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+        ∀ {reader : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+          {rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+          {readAfter : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+          (read : @MicroCFTA.SourceEqualityProjectionRead.Read Symbol Guard inst result reader rows readAfter)
+          (position : Nat) (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+          @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+              (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                Nat (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                (fun as i =>
+                  @LT.lt.{0} Nat instLTNat i
+                    (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) as))
+                (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) rows
+                position)
+              (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) row) →
+            @MicroCFTA.SourceCurrentProjectionReadSpine.Spine Symbol Guard inst path value before result after actual
+              reader rows readAfter read position row
+theorem MicroCFTA.SourceCurrentProjectionReadSpine.project : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {path : List.{0} Int}
+  {value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  (actual : @MicroCFTA.SourceEqualityProjectionGraph.Project Symbol Guard inst path value before result after),
+  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+    @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+      @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+        ∀ {reader : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+          {rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+          {readAfter : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+          (read : @MicroCFTA.SourceEqualityProjectionRead.Read Symbol Guard inst result reader rows readAfter)
+          (position : Nat) (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+          @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+              (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                Nat (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                (fun as i =>
+                  @LT.lt.{0} Nat instLTNat i
+                    (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) as))
+                (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) rows
+                position)
+              (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) row) →
+            @MicroCFTA.SourceCurrentProjectionReadSpine.Spine Symbol Guard inst path value before result after actual
+              reader rows readAfter read position row :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {path} {value}
+    {before} {result} {after} actual semantic costs available {reader} {rows} {readAfter} read position row selected =>
+  @MicroCFTA.SourceCurrentProjectionReadSpine.project_law✝ Symbol Guard inst path value before result after actual
+    semantic costs available reader rows readAfter read position row selected
+'MicroCFTA.SourceCurrentProjectionReadSpine.project' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]

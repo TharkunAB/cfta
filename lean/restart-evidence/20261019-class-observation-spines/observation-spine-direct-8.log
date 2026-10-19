@@ -1,0 +1,55 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-class-observation-spines/observation-spine-direct-8.source.lean:761:8: warning: automatically included section variable(s) unused in theorem `_private.«restart-evidence».«20261019-class-observation-spines».«observation-spine-direct-8.source».0.MicroCFTA.SourceCurrentClassObservationSpines.projection_frame`:
+  [DecidableEq Symbol]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Symbol] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-class-observation-spines/observation-spine-direct-8.source.lean:761:0: warning: `projection_frame` does not use the following hypothesis in its type:
+  • [DecidableEq Symbol] (#2)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-class-observation-spines/observation-spine-direct-8.source.lean:789:26: error: Tactic `contradiction` failed
+
+case nil.empty.root
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq Symbol
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+base : InternedConstructorTemplates.State Symbol Guard
+record : SourceEqualityClassOrder.Record
+originals : List Node
+before : SharedState width
+memos : Memos
+inventory : Inventory
+ready : SharedReady formulas solver inventory record originals base before
+valid : EndpointMemoGateTrace.Valid before.checked.native.machine.heap memos
+history : History before.checked
+accept : Row → Prop
+projectBefore : InternedConstructorTemplates.State Symbol Guard
+semantic : SemanticReady projectBefore
+costs : CostHeap projectBefore
+reader : InternedConstructorTemplates.State Symbol Guard
+observed : List Row
+readAfter : InternedConstructorTemplates.State Symbol Guard
+readerSemantic : SemanticReady reader
+guards : SourceCurrentConstrainedCapGuardHeap.Heap (fun guard => SourceMemoGate.plain guard = true) reader
+position : Nat
+row : Row
+selected : observed[position]? = some row
+positive : ¬(fun guard => SourceMemoGate.plain guard = true) row.entry.key.constraint
+x✝ : List (Int × Edits EqualityNormalize.Path)
+populated : Populated (Edits.editBelow x✝)
+nonempty : HasLeaf (Edits.editBelow x✝)
+allowed : Allowed record (Edits.editBelow x✝)
+available : Available before.checked.native.machine.heap Value.empty
+safe : Safe accept [] Value.empty
+editSafe : SourceCurrentEditDomains.Safe (Edits.editBelow x✝) Value.empty
+resident : Available projectBefore Value.empty
+afterGrowth : Grows before.checked.native.machine.heap projectBefore
+read : Read Value.empty reader observed readAfter
+later : Keeps projectBefore reader
+selected✝ : observed[position]? = some row
+⊢ ∃ cut, Spine formulas solver base ⋯ ⋯ read position row cut ∧ (cut = false → Fields accept row)

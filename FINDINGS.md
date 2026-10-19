@@ -2,6 +2,21 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-19 01:59 CEST. Proof checkpoint: `e8235cd6`.
+Actual projection and complete row reads now retain exact recursive read
+history, including Mu unfolding. A completed node edit derives original
+full row fields or an actual native/Head cut with the selected remaining
+execution. Whole-fold observation composition, renewal bounds and
+termination remain open. A checked native Mu example has a true original
+primary gate. It tests the leaf continuation directly; it establishes no
+false-primary driver execution, language failure or Haskell defect.
+No Haskell defect or repair request is added. No Haskell bytes change.
+Full default library build passes 3444 jobs; Audit checks 73712 axiom
+dependencies. Field-pool repair `b9219b9e` remains fixed in main `c0cc8a05`.
+Read `lean/notes-current-class-observation-spines.md`. Keep this registry
+first. Record every repair with failure, executable reproducer, paths,
+commit, checks and upstream status. Preserve every earlier entry.
+
 Current proof update: 2026-10-19 01:14 CEST. Proof checkpoint: `55873f7f9`.
 Completed class folds now retain descendant structural sources or actual
 native/Head events across their exact chronological phases. Literal

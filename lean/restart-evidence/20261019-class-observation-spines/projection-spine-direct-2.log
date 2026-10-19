@@ -1,0 +1,244 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-class-observation-spines/projection-spine-direct-2.source.lean:90:34: error: Application type mismatch: The argument
+  earlier
+has type
+  ReadAll (List.take position values) middle earlier✝ start
+of sort `Prop` but is expected to have type
+  List Row
+of sort `Type` in the application
+  own ++ earlier
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-class-observation-spines/projection-spine-direct-2.source.lean:152:12: error: don't know how to synthesize implicit argument `built`
+  @Spine.ordinary Symbol Guard inst✝ index path edges before middle values edges✝ middle✝ result after entry depth free
+    ?m.693 ?m.694 ?m.695 reader observed readAfter read position row selected canonical rawIndex raw operandIndex
+    operand operandSelected earlierRows selectedRows laterRows readStart readFinish readPrefix operandRead readSuffix
+    parts readIndex readSelected sourceIndex source child start finish sourceSelected childSelected earlier call suffix
+    rest
+context:
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+path✝ : List Int
+value : Node
+before✝ : InternedConstructorTemplates.State Symbol Guard
+result✝ : Node
+after✝ : InternedConstructorTemplates.State Symbol Guard
+actual : Project path✝ value before✝ result✝ after✝
+index : List Int
+path : Int
+edges : List Row
+before : InternedConstructorTemplates.State Symbol Guard
+values : List Node
+middle : InternedConstructorTemplates.State Symbol Guard
+result : Node
+after : InternedConstructorTemplates.State Symbol Guard
+entry : Interned InternedBinderProtocol.NodeKey
+depth : Nat
+free : List InternedBinderProtocol.Reference
+projects : ProjectRows index path edges before values middle
+ih : RowsLaw projects
+semantic : SemanticReady before
+costs : CostHeap before
+available : Available before (Value.node entry edges depth free)
+reader : InternedConstructorTemplates.State Symbol Guard
+observed : List Row
+readAfter : InternedConstructorTemplates.State Symbol Guard
+read : Read result reader observed readAfter
+position : Nat
+row : Row
+selected : observed[position]? = some row
+resident : ∀ (edge : Row), edge ∈ nodeEdges (Value.node entry edges depth free) → EdgeResident before edge
+phase : Keeps before middle ∧ SemanticReady middle ∧ CostHeap middle ∧ Values middle values
+edges✝ : List Row
+middle✝ : InternedConstructorTemplates.State Symbol Guard
+reads : ReadAll values middle edges✝ middle✝
+built : run (makeNode edges✝) middle✝ = (result, after)
+exposed : Keeps middle middle✝ ∧ SemanticReady middle✝ ∧ CostHeap middle✝ ∧ Edges middle✝ edges✝
+physical : nodeEdges (result, after).fst = canonicalEdges (surviving edges✝)
+ordinary : SourceEqualityRequiredCache.Ordinary result
+canonical : (nodeEdges result)[position]? = some row
+member : row ∈ nodeEdges result
+kept : row ∈ edges✝ ∧ EqualityLeafProjectionPhysical.dead row = false
+rawIndex : Nat
+raw : edges✝[rawIndex]? = some row
+operandIndex : Nat
+operand : Node
+earlierRows selectedRows laterRows : List Row
+readStart readFinish : InternedConstructorTemplates.State Symbol Guard
+operandSelected : values[operandIndex]? = some operand
+readPrefix : ReadAll (List.take operandIndex values) middle earlierRows readStart
+operandRead : Read operand readStart selectedRows readFinish
+readSuffix : ReadAll (List.drop (operandIndex + 1) values) readFinish laterRows middle✝
+parts : edges✝ = earlierRows ++ selectedRows ++ laterRows
+readMember : row ∈ selectedRows
+readIndex : Nat
+readSelected : selectedRows[readIndex]? = some row
+sourceIndex : Nat
+source : Row
+child : Node
+start finish : InternedConstructorTemplates.State Symbol Guard
+call : Project index child start operand finish
+sourceSelected : edges[sourceIndex]? = some source
+childSelected : select source.children path = some child
+earlier : ProjectRows index path (List.take sourceIndex edges) before (List.take operandIndex values) start
+suffix : ProjectRows index path (List.drop (sourceIndex + 1) edges) finish (List.drop (operandIndex + 1) values) middle
+rest : Spine call operandRead readIndex row
+⊢ run (makeNode edges✝) middle✝ = (result, after)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-class-observation-spines/projection-spine-direct-2.source.lean:152:12: error: don't know how to synthesize implicit argument `reads`
+  @Spine.ordinary Symbol Guard inst✝ index path edges before middle values edges✝ middle✝ result after entry depth free
+    ?m.693 ?m.694 ?m.695 reader observed readAfter read position row selected canonical rawIndex raw operandIndex
+    operand operandSelected earlierRows selectedRows laterRows readStart readFinish readPrefix operandRead readSuffix
+    parts readIndex readSelected sourceIndex source child start finish sourceSelected childSelected earlier call suffix
+    rest
+context:
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+path✝ : List Int
+value : Node
+before✝ : InternedConstructorTemplates.State Symbol Guard
+result✝ : Node
+after✝ : InternedConstructorTemplates.State Symbol Guard
+actual : Project path✝ value before✝ result✝ after✝
+index : List Int
+path : Int
+edges : List Row
+before : InternedConstructorTemplates.State Symbol Guard
+values : List Node
+middle : InternedConstructorTemplates.State Symbol Guard
+result : Node
+after : InternedConstructorTemplates.State Symbol Guard
+entry : Interned InternedBinderProtocol.NodeKey
+depth : Nat
+free : List InternedBinderProtocol.Reference
+projects : ProjectRows index path edges before values middle
+ih : RowsLaw projects
+semantic : SemanticReady before
+costs : CostHeap before
+available : Available before (Value.node entry edges depth free)
+reader : InternedConstructorTemplates.State Symbol Guard
+observed : List Row
+readAfter : InternedConstructorTemplates.State Symbol Guard
+read : Read result reader observed readAfter
+position : Nat
+row : Row
+selected : observed[position]? = some row
+resident : ∀ (edge : Row), edge ∈ nodeEdges (Value.node entry edges depth free) → EdgeResident before edge
+phase : Keeps before middle ∧ SemanticReady middle ∧ CostHeap middle ∧ Values middle values
+edges✝ : List Row
+middle✝ : InternedConstructorTemplates.State Symbol Guard
+reads : ReadAll values middle edges✝ middle✝
+built : run (makeNode edges✝) middle✝ = (result, after)
+exposed : Keeps middle middle✝ ∧ SemanticReady middle✝ ∧ CostHeap middle✝ ∧ Edges middle✝ edges✝
+physical : nodeEdges (result, after).fst = canonicalEdges (surviving edges✝)
+ordinary : SourceEqualityRequiredCache.Ordinary result
+canonical : (nodeEdges result)[position]? = some row
+member : row ∈ nodeEdges result
+kept : row ∈ edges✝ ∧ EqualityLeafProjectionPhysical.dead row = false
+rawIndex : Nat
+raw : edges✝[rawIndex]? = some row
+operandIndex : Nat
+operand : Node
+earlierRows selectedRows laterRows : List Row
+readStart readFinish : InternedConstructorTemplates.State Symbol Guard
+operandSelected : values[operandIndex]? = some operand
+readPrefix : ReadAll (List.take operandIndex values) middle earlierRows readStart
+operandRead : Read operand readStart selectedRows readFinish
+readSuffix : ReadAll (List.drop (operandIndex + 1) values) readFinish laterRows middle✝
+parts : edges✝ = earlierRows ++ selectedRows ++ laterRows
+readMember : row ∈ selectedRows
+readIndex : Nat
+readSelected : selectedRows[readIndex]? = some row
+sourceIndex : Nat
+source : Row
+child : Node
+start finish : InternedConstructorTemplates.State Symbol Guard
+call : Project index child start operand finish
+sourceSelected : edges[sourceIndex]? = some source
+childSelected : select source.children path = some child
+earlier : ProjectRows index path (List.take sourceIndex edges) before (List.take operandIndex values) start
+suffix : ProjectRows index path (List.drop (sourceIndex + 1) edges) finish (List.drop (operandIndex + 1) values) middle
+rest : Spine call operandRead readIndex row
+⊢ ReadAll values middle edges✝ middle✝
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-class-observation-spines/projection-spine-direct-2.source.lean:152:12: error: don't know how to synthesize implicit argument `projects`
+  @Spine.ordinary Symbol Guard inst✝ index path edges before middle values edges✝ middle✝ result after entry depth free
+    ?m.693 ?m.694 ?m.695 reader observed readAfter read position row selected canonical rawIndex raw operandIndex
+    operand operandSelected earlierRows selectedRows laterRows readStart readFinish readPrefix operandRead readSuffix
+    parts readIndex readSelected sourceIndex source child start finish sourceSelected childSelected earlier call suffix
+    rest
+context:
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+path✝ : List Int
+value : Node
+before✝ : InternedConstructorTemplates.State Symbol Guard
+result✝ : Node
+after✝ : InternedConstructorTemplates.State Symbol Guard
+actual : Project path✝ value before✝ result✝ after✝
+index : List Int
+path : Int
+edges : List Row
+before : InternedConstructorTemplates.State Symbol Guard
+values : List Node
+middle : InternedConstructorTemplates.State Symbol Guard
+result : Node
+after : InternedConstructorTemplates.State Symbol Guard
+entry : Interned InternedBinderProtocol.NodeKey
+depth : Nat
+free : List InternedBinderProtocol.Reference
+projects : ProjectRows index path edges before values middle
+ih : RowsLaw projects
+semantic : SemanticReady before
+costs : CostHeap before
+available : Available before (Value.node entry edges depth free)
+reader : InternedConstructorTemplates.State Symbol Guard
+observed : List Row
+readAfter : InternedConstructorTemplates.State Symbol Guard
+read : Read result reader observed readAfter
+position : Nat
+row : Row
+selected : observed[position]? = some row
+resident : ∀ (edge : Row), edge ∈ nodeEdges (Value.node entry edges depth free) → EdgeResident before edge
+phase : Keeps before middle ∧ SemanticReady middle ∧ CostHeap middle ∧ Values middle values
+edges✝ : List Row
+middle✝ : InternedConstructorTemplates.State Symbol Guard
+reads : ReadAll values middle edges✝ middle✝
+built : run (makeNode edges✝) middle✝ = (result, after)
+exposed : Keeps middle middle✝ ∧ SemanticReady middle✝ ∧ CostHeap middle✝ ∧ Edges middle✝ edges✝
+physical : nodeEdges (result, after).fst = canonicalEdges (surviving edges✝)
+ordinary : SourceEqualityRequiredCache.Ordinary result
+canonical : (nodeEdges result)[position]? = some row
+member : row ∈ nodeEdges result
+kept : row ∈ edges✝ ∧ EqualityLeafProjectionPhysical.dead row = false
+rawIndex : Nat
+raw : edges✝[rawIndex]? = some row
+operandIndex : Nat
+operand : Node
+earlierRows selectedRows laterRows : List Row
+readStart readFinish : InternedConstructorTemplates.State Symbol Guard
+operandSelected : values[operandIndex]? = some operand
+readPrefix : ReadAll (List.take operandIndex values) middle earlierRows readStart
+operandRead : Read operand readStart selectedRows readFinish
+readSuffix : ReadAll (List.drop (operandIndex + 1) values) readFinish laterRows middle✝
+parts : edges✝ = earlierRows ++ selectedRows ++ laterRows
+readMember : row ∈ selectedRows
+readIndex : Nat
+readSelected : selectedRows[readIndex]? = some row
+sourceIndex : Nat
+source : Row
+child : Node
+start finish : InternedConstructorTemplates.State Symbol Guard
+call : Project index child start operand finish
+sourceSelected : edges[sourceIndex]? = some source
+childSelected : select source.children path = some child
+earlier : ProjectRows index path (List.take sourceIndex edges) before (List.take operandIndex values) start
+suffix : ProjectRows index path (List.drop (sourceIndex + 1) edges) finish (List.drop (operandIndex + 1) values) middle
+rest : Spine call operandRead readIndex row
+⊢ ProjectRows index path edges before values middle
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-class-observation-spines/projection-spine-direct-2.source.lean:172:84: error(lean.invalidField): Invalid field `entry`: The environment does not contain `Int.entry`, so it is not possible to project the field `entry` from an expression
+  edge
+of type `Int`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-class-observation-spines/projection-spine-direct-2.source.lean:173:16: error: Application type mismatch: The argument
+  edge
+has type
+  Int
+but is expected to have type
+  Row
+in the application
+  resident edge

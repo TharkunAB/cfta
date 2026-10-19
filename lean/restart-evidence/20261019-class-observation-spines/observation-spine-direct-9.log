@@ -1,0 +1,60 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-class-observation-spines/observation-spine-direct-9.source.lean:810:18: error: don't know how to synthesize implicit argument `recursive`
+  @Spine.head inst✝¹ inst✝ width formulas solver base record originals entries✝ input before exposed✝ heap✝ result after
+    memos middle✝ final ?m.1214 head✝ body✝ headRead headGlobal bodyRead history [] projectBefore projected projectAfter
+    project reader observed readAfter read position row remaining
+context:
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq Symbol
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+base : InternedConstructorTemplates.State Symbol Guard
+record : SourceEqualityClassOrder.Record
+originals : List Node
+input : Node
+before : SharedState width
+result : Node
+after : SharedState width
+memos final : Memos
+inventory : Inventory
+ready : SharedReady formulas solver inventory record originals base before
+available : Available before.checked.native.machine.heap input
+valid : EndpointMemoGateTrace.Valid before.checked.native.machine.heap memos
+history : History before.checked
+accept : Row → Prop
+safe : Safe accept [] input
+projectBefore : InternedConstructorTemplates.State Symbol Guard
+projected : Node
+projectAfter : InternedConstructorTemplates.State Symbol Guard
+project : Project [] result projectBefore projected projectAfter
+semantic : SemanticReady projectBefore
+costs : CostHeap projectBefore
+resident : Available projectBefore result
+afterGrowth : Grows after.checked.native.machine.heap projectBefore
+reader : InternedConstructorTemplates.State Symbol Guard
+observed : List Row
+readAfter : InternedConstructorTemplates.State Symbol Guard
+read : Read projected reader observed readAfter
+readerSemantic : SemanticReady reader
+later : Keeps projectAfter reader
+guards : SourceCurrentConstrainedCapGuardHeap.Heap (fun guard => SourceMemoGate.plain guard = true) reader
+position : Nat
+row : Row
+selected : observed[position]? = some row
+positive : ¬(fun guard => SourceMemoGate.plain guard = true) row.entry.key.constraint
+remaining : SourceCurrentProjectionReadSpine.Spine project read position row
+middle✝ : Memos
+entries✝ : List (Int × Edits EqualityNormalize.Path)
+exposed✝ : Node
+heap✝ : InternedConstructorTemplates.State Symbol Guard
+populated : Populated (Edits.editBelow entries✝)
+nonempty : HasLeaf (Edits.editBelow entries✝)
+allowed : Allowed record (Edits.editBelow entries✝)
+editSafe : SourceCurrentEditDomains.Safe (Edits.editBelow entries✝) input
+recursive✝ : SourceEqualityRequiredGraph.Recursive input
+head✝ : SourceEqualityRequiredHead.Head input before.checked.native.machine.heap exposed✝ heap✝
+body✝ : EditNode record originals (Edits.editBelow entries✝) exposed✝ (advanceHeap before heap✝) result after
+headGlobal : SourceCurrentSubsumesQueryMemos.Effect before.checked.native.machine.heap heap✝ memos middle✝
+headRead : SourceCurrentRequiredQueryMemos.HeadReads head✝ memos middle✝
+bodyRead : NodeReads formulas solver base body✝ middle✝ final
+⊢ SourceEqualityRequiredGraph.Recursive input
