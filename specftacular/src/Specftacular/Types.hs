@@ -25,7 +25,8 @@ import GHC.Generics (Generic)
 import Control.Exception (Exception, SomeAsyncException, SomeException, evaluate, fromException, throw, throwIO, try)
 import Data.CFTA.Symbol (Symbol (Symbol))
 import qualified Data.CFTA.Term as CT
-import Data.Maybe (fromMaybe, isJust, listToMaybe, mapMaybe)
+import Data.List (sortOn)
+import Data.Maybe (fromMaybe, isJust, isNothing, listToMaybe, mapMaybe)
 import Data.Proxy
 import qualified Data.Text as T
 import Data.Typeable
@@ -731,8 +732,12 @@ type of its argument and its result. The given annotations are not used.
 'Nothing' if a symbol is not in the signature or the typing does not unify.
 
 The function gives the schema with a result type: the principal result type
-is unified with it, and the other type variables become carriers. The
-variables are taken in the order of their first occurrence, the annotation
+is unified with it, and the other type variables become carriers. A type
+variable at a carrier position of a generated variable has the key of the
+smallest such pair of the variable and the position. The type variables
+with a key come first, in the order of their keys, so that two schemas
+that share a variable tend to name its carriers alike. The other type
+variables follow in the order of their first occurrence, the annotation
 of an application before its function and its argument. Each naming gives
 the type variables distinct carriers. The namings with carriers that the
 result type does not use come first. Then come the namings with any
@@ -751,7 +756,16 @@ generalizeCarriers sig variableOfType term = do
     pure $ \resultType -> do
         fixed <- unifyTypes (nodeType resolved) resultType Map.empty
         let instantiated = mapTypes (applyTypes fixed) resolved
-            free = nubOrd (concatMap typeVariablesOf (nodeTypes instantiated))
+            keys =
+                Map.fromListWith
+                    min
+                    [ (free', (symbol, index))
+                    | (symbol, positions) <- variablePositions typed
+                    , (index, position) <- zip [0 :: Int ..] positions
+                    , TVar free' <- [applyTypes fixed (applyTypes substitution (TVar position))]
+                    ]
+            occurrences = nubOrd (concatMap typeVariablesOf (nodeTypes instantiated))
+            free = sortOn (\v -> (isNothing (Map.lookup v keys), Map.lookup v keys)) occurrences
             used = nubOrd (carriersOf resultType)
             unused = filter (`notElem` used) (map fst carriers)
             candidates = namings free unused ++ namings free (used ++ unused)
@@ -811,6 +825,12 @@ generalizeCarriers sig variableOfType term = do
         TCons _ args -> concatMap typeVariablesOf args
         TFun arg result -> typeVariablesOf arg ++ typeVariablesOf result
     nodeType (CT.Node (_, ty) _) = ty
+    -- The generated variables of the typed schema, each with the type
+    -- variables of its carrier positions in order.
+    variablePositions (CT.Node (symbol@(Symbol name), ty) []) = case Map.lookup name sig of
+        Just GivenFun{given_info = GivenVar{}} -> [(symbol, typeVariablesOf ty)]
+        _ -> []
+    variablePositions (CT.Node _ children) = concatMap variablePositions children
     nodeTypes (CT.Node (_, ty) children) = ty : concatMap nodeTypes children
     mapTypes f (CT.Node (symbol, ty) children) = CT.Node (symbol, f ty) (map (mapTypes f) children)
     -- Injective namings of the type variables, in the order of the carriers.
