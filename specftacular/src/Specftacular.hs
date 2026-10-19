@@ -449,38 +449,42 @@ most general carrier typings with that result type of the skeletons of its
 monomorphic type.
 -}
 runPhase :: Settings -> Int -> Maybe StEcta -> StEcta -> Search -> IO ([String], Search)
-runPhase env@Settings{..} size skeletons stecta@StEcta{..} = go [(lvl, tc) | lvl <- [1 .. size], tc <- sortOn (\t -> (typeSize t, concreteTypeLeaves t, t)) sig_ty_cons]
+runPhase env@Settings{..} size skeletons stecta@StEcta{..} = go Map.empty [(lvl, tc) | lvl <- [1 .. size], tc <- sortOn (\t -> (typeSize t, concreteTypeLeaves t, t)) sig_ty_cons]
   where
     -- Only program applications have this shape. Do not exclude matching
     -- type constructors in a custom signature.
     canPrune = ("app", 4) `notElem` allConstructors (Map.assocs (sfTypeRep <$> compl_sig))
-    go [] s = return ([], s)
-    go ((lvl, tc) : rest) s = do
+    go _ [] s = return ([], s)
+    go cache ((lvl, tc) : rest) s = do
+        -- A typing of a skeleton with the result type has the monomorphic
+        -- result type in the skeleton grammar. The first bucket of a size and
+        -- a monomorphic type finds the typings of its skeletons. The later
+        -- buckets of the size with that monomorphic type use them again, and
+        -- 'eligible' applies the rules that the buckets between them add.
+        let key = monomorphiseType tc
+            current = Map.filterWithKey (\(size', _) _ -> size' == lvl) cache
+            cache' = case skeletons of
+                Just skeleton
+                    | Map.notMember (lvl, key) current -> Map.insert (lvl, key) (skeletonTypings skeleton lvl key (rewrite_rules s)) current
+                _ -> current
         (laws, s') <- diagnose env lvl (show tc) "bucket" s $ do
-            result@(_, finishedState) <- bucket lvl tc s
+            result@(_, finishedState) <- bucket lvl (Map.lookup (lvl, key) cache') tc s
             diagnosticEvent env "checkpoint" lvl (show tc) "bucket" finishedState
             return result
-        (more, s'') <- go rest s'
+        (more, s'') <- go cache' rest s'
         return (laws ++ more, s'')
-    bucket lvl tc s = do
-        produced <- case skeletons of
-            -- A typing of a skeleton with the result type has the
-            -- monomorphic result type in the skeleton grammar. Only templates
-            -- without annotations prune a skeleton, because they match each
-            -- typing of it.
-            Just skeleton@StEcta{compl_sig = skeletonSig} -> do
-                let templates
-                        | canPrune = filter annotationFree (pruningTemplates skeletonSig lvl (rewrite_rules s))
-                        | otherwise = []
-                    (pruningRoot, oracleTemplates) =
-                        Compile.preparePruning templates (refold (searchSpace skeleton lvl (monomorphiseType tc)))
-                pure $
-                    nubOrd
-                        [ schema
-                        | t <- prunedTerms oracleTemplates pruningRoot
-                        , Just typing <- [generalizeCarriers skeletonSig phase_variables (npTerm' t)]
-                        , Just schema <- [typing tc]
-                        ]
+    -- The principal typings of the skeletons of a size and a monomorphic type
+    -- (see 'generalizeCarriers'). Only templates without annotations prune a
+    -- skeleton, because they match each typing of it.
+    skeletonTypings skeleton@StEcta{compl_sig = skeletonSig} lvl monomorphic rules =
+        let templates
+                | canPrune = filter annotationFree (pruningTemplates skeletonSig lvl rules)
+                | otherwise = []
+            (pruningRoot, oracleTemplates) = Compile.preparePruning templates (refold (searchSpace skeleton lvl monomorphic))
+         in mapMaybe (generalizeCarriers skeletonSig phase_variables . npTerm') (prunedTerms oracleTemplates pruningRoot)
+    bucket lvl typings tc s = do
+        produced <- case typings of
+            Just typingsOfType -> pure $ nubOrd (mapMaybe ($ tc) typingsOfType)
             Nothing -> do
                 refreshCount progress "Reducing  ECTA" (" for " ++ show tc) "" lvl (so_far s)
                 reduced <- diagnose env lvl (show tc) "reduce_whnf" s $ evaluate (searchSpace stecta lvl tc)
