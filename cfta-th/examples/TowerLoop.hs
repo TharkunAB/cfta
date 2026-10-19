@@ -204,7 +204,7 @@ main = do
 
     heading "9. quad(x) lowers to double(double(x)); the composite lowers L3 to L1 at once"
     let quad = must show $ Lowering.mkLowering [("quad", 1, Apply "double" [Apply "double" [Child 0]])]
-        composite = Lowering.compose quad lowering
+        composite = must show $ Lowering.compose quad lowering
         example = Node "quad" [Node smallOdd []]
     putStrLn $ render example <> " lowers to " <> maybe "none" render (Lowering.lower composite example)
     check "the composite is the two lowerings" $
