@@ -1,0 +1,140 @@
+@MicroCFTA.SourceCurrentRecursivePlainRead.project : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (annotation : Guard → Prop)
+  {path : List.{0} Int} {value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceEqualityProjectionGraph.Project Symbol Guard inst path value before result after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+        @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+          @MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard annotation before →
+            @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard annotation Symbol value →
+              @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard annotation Symbol result
+theorem MicroCFTA.SourceCurrentRecursivePlainRead.project : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (annotation : Guard → Prop)
+  {path : List.{0} Int} {value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceEqualityProjectionGraph.Project Symbol Guard inst path value before result after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+        @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+          @MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard annotation before →
+            @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard annotation Symbol value →
+              @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard annotation Symbol result :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] annotation
+    {path} {value} {before} {result} {after} actual semantic costs available guards annotated =>
+  @And.left
+    (∀ (path : List.{0} Int) (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+      (result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+      @MicroCFTA.SourceEqualityProjectionGraph.Project Symbol Guard inst path value before result after →
+        @MicroCFTA.SourceCurrentRecursivePlainRead.NodeLaw✝ Symbol Guard annotation value before result)
+    (∀ (path : List.{0} Int) (index : Int)
+      (rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+      (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+      (values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+      (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+      @MicroCFTA.SourceEqualityProjectionGraph.ProjectRows Symbol Guard inst path index rows before values after →
+        @MicroCFTA.SourceCurrentRecursivePlainRead.RowsLaw✝ Symbol Guard annotation rows before values)
+    (@MicroCFTA.SourceCurrentRecursivePlainRead.projection✝ Symbol Guard inst annotation) path value before result after
+    actual semantic costs available guards annotated
+'MicroCFTA.SourceCurrentRecursivePlainRead.project' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentRecursivePlainRead.project_read : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (annotation : Guard → Prop)
+  {path : List.{0} Int} {value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceEqualityProjectionGraph.Project Symbol Guard inst path value before result after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+        @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+          @MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard annotation before →
+            @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard annotation Symbol value →
+              ∀ {reader : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+                {rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+                {readAfter : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+                @MicroCFTA.SourceEqualityProjectionRead.Read Symbol Guard inst result reader rows readAfter →
+                  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard reader →
+                    @MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard after reader →
+                      @MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard annotation reader →
+                        ∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                          @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                              (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                              rows row →
+                            annotation
+                              (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint Symbol Guard
+                                (@MicroCFTA.Cache.Interned.key
+                                  (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard row)))
+theorem MicroCFTA.SourceCurrentRecursivePlainRead.project_read : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (annotation : Guard → Prop)
+  {path : List.{0} Int} {value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceEqualityProjectionGraph.Project Symbol Guard inst path value before result after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+        @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+          @MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard annotation before →
+            @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard annotation Symbol value →
+              ∀ {reader : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+                {rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+                {readAfter : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+                @MicroCFTA.SourceEqualityProjectionRead.Read Symbol Guard inst result reader rows readAfter →
+                  @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard reader →
+                    @MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard after reader →
+                      @MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap Symbol Guard annotation reader →
+                        ∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                          @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                              (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                              rows row →
+                            annotation
+                              (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint Symbol Guard
+                                (@MicroCFTA.Cache.Interned.key
+                                  (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+                                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard row))) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] annotation
+    {path} {value} {before} {result} {after} actual semantic costs available guards annotated {reader} {rows}
+    {readAfter} read readerSemantic later readerGuards row selected =>
+  have resultAnnotated :=
+    @MicroCFTA.SourceCurrentRecursivePlainRead.project Symbol Guard inst annotation path value before result after
+      actual semantic costs available guards annotated;
+  have effects :=
+    @MicroCFTA.SourceEqualityProjectionCosts.project_effects Symbol Guard inst path value result before after actual
+      semantic costs available;
+  @And.left
+    (annotation
+      (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint Symbol Guard
+        (@MicroCFTA.Cache.Interned.key (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry Symbol Guard row))))
+    (∀ (child : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard row) child →
+        @MicroCFTA.SourceEqualityAnnotationLanguage.Annotated Guard annotation Symbol child)
+    (@MicroCFTA.SourceCurrentRecursivePlainRead.read_rows✝ Symbol Guard inst annotation result reader rows readAfter
+      read readerSemantic
+      (@MicroCFTA.SourceEqualityRequiredCache.Keeps.available Symbol Guard after reader later result
+        (@And.right (@MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard after)
+          (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after result)
+          (@And.right (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard after)
+            (And (@MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard after)
+              (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after result))
+            (@And.right (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before after)
+              (And (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard after)
+                (And (@MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard after)
+                  (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard after result)))
+              effects))))
+      readerGuards resultAnnotated row selected)
+'MicroCFTA.SourceCurrentRecursivePlainRead.project_read' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]

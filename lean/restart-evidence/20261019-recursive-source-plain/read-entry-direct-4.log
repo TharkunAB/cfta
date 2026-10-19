@@ -1,0 +1,74 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-source-plain/read-entry-direct-4.source.lean:73:42: error: don't know how to synthesize placeholder for argument `edges`
+context:
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+annotation : Guard → Prop
+path : List Int
+value : Node
+before : InternedConstructorTemplates.State Symbol Guard
+result : Node
+after : InternedConstructorTemplates.State Symbol Guard
+project : Project path value before result after
+reader : InternedConstructorTemplates.State Symbol Guard
+rows : List Row
+readAfter : InternedConstructorTemplates.State Symbol Guard
+position : Nat
+row : Row
+read : Read result reader rows readAfter
+initialPath : List Nat
+needle : Node
+index✝ : Int
+path✝ : List Int
+entry✝ : Interned InternedBinderProtocol.NodeKey
+edges✝ : List Row
+depth✝ : Nat
+free✝ : List InternedBinderProtocol.Reference
+before✝ : InternedConstructorTemplates.State Symbol Guard
+result✝ : Node
+after✝ : InternedConstructorTemplates.State Symbol Guard
+project✝ : Project (index✝ :: path✝) (Value.node entry✝ edges✝ depth✝ free✝) before✝ result✝ after✝
+reader✝ : InternedConstructorTemplates.State Symbol Guard
+rows✝ : List Row
+readAfter✝ : InternedConstructorTemplates.State Symbol Guard
+position✝ : Nat
+row✝ : Row
+read✝ : Read result✝ reader✝ rows✝ readAfter✝
+frame : SourceCurrentClassObservationSpines.ProjectionFrame project✝ read✝ position✝ row✝
+childIndex : Nat
+signed : index✝ = Int.ofNat childIndex
+chosen : frame.sourceRow.children[childIndex]? = some frame.child
+initialPath✝ : List Nat
+needle✝ : Node
+rest : Entry ⋯ ⋯ frame.readIndex row✝ initialPath✝ needle✝
+ih :
+  Annotated annotation needle✝ →
+    SemanticReady frame.start →
+      CostHeap frame.start →
+        Available frame.start frame.child →
+          Guards annotation frame.start →
+            SemanticReady frame.readStart →
+              Keeps frame.finish frame.readStart →
+                Guards annotation frame.readStart → annotation row✝.entry.key.constraint
+annotated : Annotated annotation needle✝
+semantic : SemanticReady before✝
+costs : CostHeap before✝
+available : Available before✝ (Value.node entry✝ edges✝ depth✝ free✝)
+guards : Guards annotation before✝
+readerSemantic : SemanticReady reader✝
+later : Keeps after✝ reader✝
+readerGuards : Guards annotation reader✝
+edges : ∀ (edge : Row), edge ∈ nodeEdges (Value.node entry✝ edges✝ depth✝ free✝) → EdgeResident before✝ edge
+projectPrefix :
+  Keeps before✝ frame.start ∧
+    SemanticReady frame.start ∧
+      CostHeap frame.start ∧ InternedNestedProvenance.Values frame.start (List.take frame.operandIndex frame.values)
+projected :
+  Keeps before✝ frame.middle ∧
+    SemanticReady frame.middle ∧ CostHeap frame.middle ∧ InternedNestedProvenance.Values frame.middle frame.values
+readPrefix :
+  Keeps frame.middle frame.readStart ∧
+    SemanticReady frame.readStart ∧ CostHeap frame.readStart ∧ Edges frame.readStart frame.earlierRows
+childAvailable : Available frame.start frame.child
+call :
+  Keeps frame.start frame.finish ∧
+    SemanticReady frame.finish ∧ CostHeap frame.finish ∧ Available frame.finish frame.operand
+⊢ List Row
