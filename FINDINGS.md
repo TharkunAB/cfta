@@ -2,6 +2,22 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-19 11:54 CEST. Proof checkpoint: `e619dc99a`.
+Actual Required preparation, an original false gate, a completed class
+fold and an actual nonplain selected observation now derive an ordinary
+route in the FINAL value or the exact first recursive value inside an
+earlier native/Head event. No false prepared gate is assumed. Initial
+preparation safety, fold support and final causal reader guard heaps
+remain explicit. The graphs share the same returned forest; this does
+not prove the complete outer execution sequence. Whole-event residual
+projection, renewal bounds and general termination remain open.
+No Haskell defect or repair request is added. No Haskell bytes change.
+Full default build passes 3451 jobs; Audit checks 73748 axiom dependencies.
+Field-pool fix `b9219b9e` remains fixed in main `c0cc8a05`.
+Read `lean/notes-current-recursive-source-plain.md`. Keep this registry
+first. Record every repair with failure, executable reproducer, paths,
+commit, checks and upstream status. Preserve every earlier entry.
+
 Current proof update: 2026-10-19 11:32 CEST. Proof checkpoint: `300c7b37`.
 Exact recursive values now retain their initial child path and forest slot,
 or an actual chronological native/Head event source. An actual selected
