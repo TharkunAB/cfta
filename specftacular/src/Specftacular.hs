@@ -444,49 +444,43 @@ runPhases env size lastPhase instances sig =
     go _ _ = return []
 
 {- | Run one phase: the sizes from 1 to the given size, and for each size
-each type to test. With a skeleton grammar, the candidates of a size are the
-most general carrier typings of its schemas of that size, by result type.
+each type to test. With a skeleton grammar, the candidates of a type are the
+most general carrier typings with that result type of the skeletons of its
+monomorphic type.
 -}
 runPhase :: Settings -> Int -> Maybe StEcta -> StEcta -> Search -> IO ([String], Search)
-runPhase env@Settings{..} size skeletons stecta@StEcta{..} = goSizes [1 .. size]
+runPhase env@Settings{..} size skeletons stecta@StEcta{..} = go [(lvl, tc) | lvl <- [1 .. size], tc <- sortOn (\t -> (typeSize t, concreteTypeLeaves t, t)) sig_ty_cons]
   where
-    bucketTypes = sortOn (\t -> (typeSize t, concreteTypeLeaves t, t)) sig_ty_cons
-    goSizes [] s = return ([], s)
-    goSizes (lvl : rest) s = do
-        -- The rules at the start of a size prune its skeletons.
-        let candidates = generalizedOfSize lvl (rewrite_rules s) <$> skeletons
-        (laws, s') <- goBuckets lvl candidates bucketTypes s
-        (more, s'') <- goSizes rest s'
-        return (laws ++ more, s'')
-    goBuckets _ _ [] s = return ([], s)
-    goBuckets lvl candidates (tc : rest) s = do
-        (laws, s') <- diagnose env lvl (show tc) "bucket" s $ do
-            result@(_, finishedState) <- bucket lvl candidates tc s
-            diagnosticEvent env "checkpoint" lvl (show tc) "bucket" finishedState
-            return result
-        (more, s'') <- goBuckets lvl candidates rest s'
-        return (laws ++ more, s'')
-    -- The most general carrier typings of the skeletons of a size, by
-    -- result type. Only templates without annotations prune a skeleton,
-    -- because they match each typing of it.
-    generalizedOfSize lvl rules skeleton@StEcta{compl_sig = skeletonSig, sig_ty_cons = skeletonTypes} =
-        let templates
-                | canPrune = filter annotationFree (pruningTemplates skeletonSig lvl rules)
-                | otherwise = []
-            skeletonTerms =
-                [ t
-                | skeletonType <- skeletonTypes
-                , let (pruningRoot, oracleTemplates) = Compile.preparePruning templates (refold (searchSpace skeleton lvl skeletonType))
-                , t <- prunedTerms oracleTemplates pruningRoot
-                ]
-            typings = mapMaybe (generalizeCarriers skeletonSig phase_variables . npTerm') skeletonTerms
-         in Map.fromList [(tc, nubOrd (mapMaybe ($ tc) typings)) | tc <- sig_ty_cons]
     -- Only program applications have this shape. Do not exclude matching
     -- type constructors in a custom signature.
     canPrune = ("app", 4) `notElem` allConstructors (Map.assocs (sfTypeRep <$> compl_sig))
-    bucket lvl candidates tc s = do
-        produced <- case candidates of
-            Just byType -> pure $ Map.findWithDefault [] tc byType
+    go [] s = return ([], s)
+    go ((lvl, tc) : rest) s = do
+        (laws, s') <- diagnose env lvl (show tc) "bucket" s $ do
+            result@(_, finishedState) <- bucket lvl tc s
+            diagnosticEvent env "checkpoint" lvl (show tc) "bucket" finishedState
+            return result
+        (more, s'') <- go rest s'
+        return (laws ++ more, s'')
+    bucket lvl tc s = do
+        produced <- case skeletons of
+            -- A typing of a skeleton with the result type has the
+            -- monomorphic result type in the skeleton grammar. Only templates
+            -- without annotations prune a skeleton, because they match each
+            -- typing of it.
+            Just skeleton@StEcta{compl_sig = skeletonSig} -> do
+                let templates
+                        | canPrune = filter annotationFree (pruningTemplates skeletonSig lvl (rewrite_rules s))
+                        | otherwise = []
+                    (pruningRoot, oracleTemplates) =
+                        Compile.preparePruning templates (refold (searchSpace skeleton lvl (monomorphiseType tc)))
+                pure $
+                    nubOrd
+                        [ schema
+                        | t <- prunedTerms oracleTemplates pruningRoot
+                        , Just typing <- [generalizeCarriers skeletonSig phase_variables (npTerm' t)]
+                        , Just schema <- [typing tc]
+                        ]
             Nothing -> do
                 refreshCount progress "Reducing  ECTA" (" for " ++ show tc) "" lvl (so_far s)
                 reduced <- diagnose env lvl (show tc) "reduce_whnf" s $ evaluate (searchSpace stecta lvl tc)
