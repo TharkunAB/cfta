@@ -25,7 +25,7 @@ import GHC.Generics (Generic)
 import Control.Exception (Exception, SomeAsyncException, SomeException, evaluate, fromException, throw, throwIO, try)
 import Data.CFTA.Symbol (Symbol (Symbol))
 import qualified Data.CFTA.Term as CT
-import Data.Maybe (fromMaybe, listToMaybe, mapMaybe)
+import Data.Maybe (fromMaybe, isJust, listToMaybe, mapMaybe)
 import Data.Proxy
 import qualified Data.Text as T
 import Data.Typeable
@@ -253,12 +253,18 @@ instanceTypes typeMod sigs = nubOrd $ concatMap addLi $ Set.toList $ Set.unions 
           where
             t' = TCons "[]" [t]
 
+{- | The generated variables, the equalities, and the generators of the
+types of a signature. With 'True', the types also have each renaming of
+their carriers (see 'carrierRenamings'). A renamed type must have an
+instance when its type in the signature has one.
+-}
 sigGivens ::
+    Bool ->
     (TypeSkeleton -> TypeSkeleton) ->
     Sig ->
     (TypeSkeleton -> Maybe Instance) ->
     (Sig, Map TypeSkeleton (Text, Value), Map TypeSkeleton (Text, Func))
-sigGivens typeMod sigs instances =
+sigGivens closed typeMod sigs instances =
     ( Map.fromList (mapMaybe consName allCons)
     , eq_insts
     , arbs
@@ -286,9 +292,22 @@ sigGivens typeMod sigs instances =
 
     isCon (TCons _ _) = True
     isCon _ = False
-    allCons = instanceTypes typeMod sigs
+    declared = instanceTypes typeMod sigs
+    renamed
+        | closed = carrierRenamings (filter (\t -> isJust (instances t)) declared) `Set.difference` Set.fromList declared
+        | otherwise = Set.empty
+    allCons = declared ++ Set.toList renamed
+    instanceOf t = case instances t of
+        Nothing
+            | t `Set.member` renamed ->
+                error
+                    ( "Phase 4 closes its variable types under carrier renaming, but the type '"
+                        ++ show t
+                        ++ "' has no instance. It is a renaming of a type of the signature that has one."
+                    )
+        found -> found
     toEqInst e
-        | Just inst <- instances e
+        | Just inst <- instanceOf e
         , Just eqf <- inst_eq inst =
             g inst eqf
       where
@@ -301,10 +320,34 @@ sigGivens typeMod sigs instances =
     toEqInst _ = Nothing
 
     consName :: TypeSkeleton -> Maybe (Text, Func)
-    consName t = g <$> instances t
+    consName t = g <$> instanceOf t
       where
         g inst = toTup (GivenFun (GivenVar (inst_prefix inst) (inst_text inst) 0 (inst_gen inst)) t)
         toTup gf@(GivenFun gv _) = (gvToName gv, gf)
+
+{- | The types with each renaming of their carriers to distinct carriers
+that the types use.
+-}
+carrierRenamings :: [TypeSkeleton] -> Set TypeSkeleton
+carrierRenamings types = Set.fromList [renameType (Map.fromList renaming) t | t <- types, renaming <- renamings (nubOrd (carriersOf t)) used]
+  where
+    used = nubOrd (concatMap carriersOf types)
+    renamings [] _ = [[]]
+    renamings (c : cs) available = [(c, c') : rest | c' <- available, rest <- renamings cs (filter (/= c') available)]
+    renameType renaming ty = case ty of
+        _ | Just renamedCarrier <- Map.lookup ty renaming -> renamedCarrier
+        TCons name args -> TCons name (map (renameType renaming) args)
+        TFun arg result -> TFun (renameType renaming arg) (renameType renaming result)
+        TVar _ -> ty
+
+-- | The carriers of a type, in the order of their occurrences.
+carriersOf :: TypeSkeleton -> [TypeSkeleton]
+carriersOf ty
+    | ty `elem` map fst carriers = [ty]
+    | otherwise = case ty of
+        TCons _ args -> concatMap carriersOf args
+        TFun arg result -> carriersOf arg ++ carriersOf result
+        TVar _ -> []
 
 addExplicitEquality :: (Typeable a) => (a -> a -> Bool) -> Sig
 addExplicitEquality (fun :: a -> a -> Bool) = Map.singleton key val
@@ -695,17 +738,11 @@ generalizeCarriers sig variableOfType term = do
         fixed <- unifyTypes (nodeType resolved) resultType Map.empty
         let instantiated = mapTypes (applyTypes fixed) resolved
             free = nubOrd (concatMap typeVariablesOf (nodeTypes instantiated))
-            unused = filter (`notElem` carriersIn resultType) (map fst carriers)
+            unused = filter (`notElem` carriersOf resultType) (map fst carriers)
             candidates = namings free unused ++ namings free (map fst carriers)
         listToMaybe
             [schema | naming <- candidates, Just schema <- [rebuild (mapTypes (applyTypes (Map.fromList naming)) instantiated)]]
   where
-    carriersIn ty
-        | ty `elem` map fst carriers = [ty]
-        | otherwise = case ty of
-            TCons _ args -> concatMap carriersIn args
-            TFun arg result -> carriersIn arg ++ carriersIn result
-            TVar _ -> []
     annotate path (Term "app" [_, f, x]) = do
         (f', fs) <- annotate (path <> "f") f
         (x', xs) <- annotate (path <> "x") x
