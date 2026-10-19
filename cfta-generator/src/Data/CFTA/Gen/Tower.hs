@@ -217,9 +217,11 @@ misclassified vocabulary observations = do
 -- | The tests of the log by abstract term, in log order. Tests outside the fragment are left out.
 classes :: [F.Formula] -> [Observation response] -> Map.Map (Term Symbol) [Observation response]
 classes vocabulary observations =
-    Map.fromListWith
-        (flip (<>))
-        [(term, [observation]) | observation <- observations, Just term <- [abstract vocabulary $ observedTest observation]]
+    -- Each test goes to the front of its class, and the reverse restores the log order.
+    Map.map reverse $
+        Map.fromListWith
+            (<>)
+            [(term, [observation]) | observation <- observations, Just term <- [abstract vocabulary $ observedTest observation]]
 
 -- | One step of 'refine': a new predicate, or a new response for one abstract term.
 data Step response
@@ -260,22 +262,24 @@ refine ::
     Map.Map (Term Symbol) response ->
     [Observation response] ->
     Result response
-refine templates fallback = go []
+refine templates fallback initial start observations = go [] initial (classes initial observations) start
   where
-    go steps vocabulary spec observations = case mispredictions of
+    -- The classes change only when the vocabulary changes, so an update keeps them.
+    go steps vocabulary grouped spec = case mispredictions of
         [] -> Result vocabulary spec (reverse steps) Agreed
         (term, mispredicted) : _ ->
             let others = filter (/= mispredicted) $ Map.findWithDefault [] term grouped
                 coarse = any ((== TooCoarse) . classify mispredicted) others
              in if coarse
                     then case separate templates fallback vocabulary observations of
-                        Just predicates -> go (reverse (map Extend predicates) <> steps) (vocabulary <> predicates) Map.empty observations
+                        Just predicates ->
+                            let extended = vocabulary <> predicates
+                             in go (reverse (map Extend predicates) <> steps) extended (classes extended observations) Map.empty
                         Nothing -> Result vocabulary spec (reverse steps) $ Stuck term $ Map.findWithDefault [] term grouped
                     else
                         let response = observedResponse mispredicted
-                         in go (Update term response : steps) vocabulary (Map.insert term response spec) observations
+                         in go (Update term response : steps) vocabulary grouped (Map.insert term response spec)
       where
-        grouped = classes vocabulary observations
         predicted term = fromMaybe fallback $ Map.lookup term spec
         mispredictions =
             [ (term, observation)
