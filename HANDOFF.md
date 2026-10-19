@@ -35,6 +35,45 @@ retain their bytes. The optimized cfta core is unchanged. These packages
 have no Lean refinement proof. Read `lean/notes-current-upstream-specftacular.md`.
 No new Haskell failure, local repair or Haskell validation result is claimed.
 
+## Current event path origins and separate native views
+
+Updated: 2026-10-19 12:52 CEST. Proof checkpoint: `776875701`.
+Start: `8282cca55`. Source main is `184bba662`, merged at `a3cf692cb`.
+Read `lean/notes-current-recursive-event-source-read.md` and the current system claim.
+Actual Project, selected Read and Spine now derive full row PathOrigin
+at the completed read heap or an actual later view. Each step retains an
+epsilon-origin row and its exact child index. Literal event occurrences
+prepend their residual path. The class-fold producer derives this same
+path ancestry for its recursive event alternative. It keeps the original
+false gate, actual Required/Fold support and captured event execution.
+No whole-event Project or complete outer chronology is inferred.
+
+Native row origins now use a separate physical view. Actual native
+cells, history and writers stay at their captured checked reader.
+Ordinary origins derive paired child calls and both strict input-child
+mass bounds without a positivity premise. Union and reference branches
+retain their exact calls and the same-view complete row. Mu exposure
+retains its chosen captured body and its separate physical unfolding.
+These two Mu executions are not identified. No native history is assigned
+to the physical view. Ordinary internal child memo provenance remains a
+further step before repeated writer normalization.
+
+Full default build passes 3459 jobs. Audit checks 73817 axiom dependencies.
+Nine public declarations and two constructed checks pass complete proof
+and standard-axiom checks. All three production strict logs are empty.
+One check retains exact event path [0,0] while excluding a root Origin
+for the deep row. Another derives a captured native writer and an actual
+row origin at a distinct later heap. Neither asserts the complete
+false-gate outer execution or finite productivity. Source-origin renewal,
+active-owner exclusion, general outer completion, convergence and Haskell
+refinement remain open. The conditional root-language guarantee is
+unchanged. Upstream changes six earlier Haskell files and adds one;
+the other 261 earlier files retain their bytes. Its new ordered cursor,
+template and subsumption paths still need implementation proofs. No local
+Haskell repair is added. FINDINGS retains every repair first. Publication
+awaits direct approval. No push or board write is attempted. The
+full-library objective remains active.
+
 ## Current captured event executions at recursive observations
 
 Updated: 2026-10-19 12:25 CEST. Proof checkpoint: `d153d37d7`.

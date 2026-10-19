@@ -2,6 +2,21 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-19 12:52 CEST. Proof checkpoint: `776875701`.
+Under the stated original false gate and actual preparation/fold support,
+the recursive event alternative now retains full row origins along its
+exact residual observation path at the completed read heap. Native
+handoffs keep their captured checked reader separate from that physical
+view. Ordinary paired calls retain both strict input-child mass bounds.
+Their internal child memo provenance is not yet exported. No positivity
+of an earlier Head or parent row is inferred from a deep nonplain row.
+Renewal bounds, active-owner exclusion, general termination, convergence
+and Haskell refinement remain open. No local Haskell defect or repair
+request is added. Full default build passes 3459 jobs; Audit checks 73817
+axiom dependencies. The upstream implementation changes are recorded below.
+Read `lean/notes-current-recursive-event-source-read.md`. Preserve all
+repair entries and their reproducers, paths, commits and validation.
+
 Upstream refresh: 2026-10-19 12:42 CEST. Main: `184bba662`.
 Merge: `a3cf692cb`. PRs #68, #87 and #88 add Typing.draw, ordered
 enumeration and template/subsumption optimizations. Twelve paths change.
@@ -14,8 +29,8 @@ build or test was run for this refresh.
 The optional ordered cursor uses a new shallow-expansion/frontier path.
 Admissible bounds and monotone deterministic observers remain caller
 obligations. Constrained cyclic truncation equivalence is explicitly open.
-Template pruning preserves finite-term language under its finite/total
-input contract; run multiplicity and cyclic cutoff equality are separate.
+The template contract states finite-term language preservation for finite
+total inputs; run multiplicity and cyclic cutoff equality are separate.
 Subsumption shares mandatory child pairs and restarts the original search
 with fresh assumptions on ambiguity. Existing Lean reference models do
 not prove these new implementation paths. Earlier unchanged-core claims

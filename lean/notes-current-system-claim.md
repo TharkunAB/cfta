@@ -1,7 +1,7 @@
 # Current system claim
 
 Checked against the live theorem statements on 2026-10-19.
-Read `notes-current-recursive-event-observation.md` for the latest checkpoint.
+Read `notes-current-recursive-event-source-read.md` for the latest checkpoint.
 
 In simple technical English: fresh construction always finishes in the
 Lean model. Under the stated guard conditions, its result represents
@@ -203,6 +203,22 @@ memo history. The read adapter retains an epsilon Origin, or the actual
 Head source row and selected child continuation. That Head row can differ
 from the final deep row. Whole-event residual projection remains open.
 No completed projection of an unchanged whole event is asserted.
+Actual selected projection and read calls now derive path-indexed full-row
+origins at their completed read heap or an actual later view. Every step
+retains an epsilon-origin row and exact child index. Literal event
+occurrences prepend their residual child path. The composed fold derives
+this exact PathOrigin in its recursive event alternative. It retains the
+captured Source and actual forward interval to the completed read heap.
+The native handoff keeps its checked reader separate from this physical
+view. Ordinary branches retain paired child calls and both strict source
+input-child mass bounds. Union and reference branches retain actual calls
+and the same-view full row. Mu body execution belongs to the captured
+writer; its observational unfolding belongs to the physical view. They
+are not identified. No native memo history is assigned to that view.
+The ordinary child result still needs its retained native memo provenance
+before repeated child-writer normalization. Whole-event projection and
+the global renewal bound remain separate open obligations.
+
 Earlier class phases can change their forests. Their native joins do not
 satisfy the Required Origin grammar in general. No Haskell defect is
 established.
@@ -229,7 +245,7 @@ useful checked components of that route. Semantic lexical induction and
 the used-Mu local clause remain open. No backward transport through mere
 heap growth or arbitrary source-pair closure is justified.
 
-No Haskell bytes change in this checkpoint. Root `FINDINGS.md` retains all
+No local Haskell behavior patch is added in this checkpoint. Root `FINDINGS.md` retains all
 external repair entries first. The full-library goal remains active.
 
 Current source main is `184bba662`, merged at `a3cf692cb`. It adds an ordered

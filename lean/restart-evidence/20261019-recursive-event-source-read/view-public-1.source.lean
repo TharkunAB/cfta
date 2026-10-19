@@ -1,0 +1,33 @@
+import MicroCFTA.SourceCurrentNativeOriginViewBranches
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+set_option maxHeartbeats 5000000
+
+#check @MicroCFTA.SourceCurrentNativeOriginViewBranches.returned
+#print MicroCFTA.SourceCurrentNativeOriginViewBranches.returned
+#print axioms MicroCFTA.SourceCurrentNativeOriginViewBranches.returned
+
+#check @MicroCFTA.SourceCurrentNativeOriginViewBranches.request
+#print MicroCFTA.SourceCurrentNativeOriginViewBranches.request
+#print axioms MicroCFTA.SourceCurrentNativeOriginViewBranches.request
+
+#check @MicroCFTA.SourceCurrentNativeOriginViewBranches.ordinary
+#print MicroCFTA.SourceCurrentNativeOriginViewBranches.ordinary
+#print axioms MicroCFTA.SourceCurrentNativeOriginViewBranches.ordinary
+
+#check @MicroCFTA.SourceCurrentNativeOriginViewBranches.union
+#print MicroCFTA.SourceCurrentNativeOriginViewBranches.union
+#print axioms MicroCFTA.SourceCurrentNativeOriginViewBranches.union
+
+#check @MicroCFTA.SourceCurrentNativeOriginViewBranches.reference
+#print MicroCFTA.SourceCurrentNativeOriginViewBranches.reference
+#print axioms MicroCFTA.SourceCurrentNativeOriginViewBranches.reference
+

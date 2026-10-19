@@ -1,0 +1,1170 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-source-read/view-direct-3.source.lean:130:4: error: Invalid target: Index in target's type is not a variable (consider using the `cases` tactic instead)
+  pairs left right
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-source-read/view-direct-3.source.lean:155:8: warning: automatically included section variable(s) unused in theorem `_private.«restart-evidence».«20261019-recursive-event-source-read».«view-direct-3.source».0.MicroCFTA.SourceCurrentNativeOriginViewBranches.ordinary_origin`:
+  [DecidableEq Symbol]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Symbol] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-source-read/view-direct-3.source.lean:155:0: warning: `ordinary_origin` does not use the following hypothesis in its type:
+  • [DecidableEq Symbol] (#1)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-source-read/view-direct-3.source.lean:214:13: error: Application type mismatch: The argument
+  firstFound
+has type
+  (nodeEdges request.left)[firstIndex]? = some firstRow
+but is expected to have type
+  (nodeEdges (Value.node leftEntry leftRows leftDepth leftFree))[firstIndex]? = some firstRow
+in the application
+  And.intro firstFound
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-source-read/view-direct-3.source.lean:214:24: error: Application type mismatch: The argument
+  secondFound
+has type
+  (nodeEdges request.right)[secondIndex]? = some secondRow
+but is expected to have type
+  (nodeEdges (Value.node rightEntry rightRows rightDepth rightFree))[secondIndex]? = some secondRow
+in the application
+  And.intro secondFound
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-source-read/view-direct-3.source.lean:215:4: error: Application type mismatch: The argument
+  firstMass
+has type
+  InternedValueMass.value firstChild < InternedValueMass.value request.left
+but is expected to have type
+  InternedValueMass.value firstChild < InternedValueMass.value (Value.node leftEntry leftRows leftDepth leftFree)
+in the application
+  And.intro firstMass
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-source-read/view-direct-3.source.lean:215:14: error: Application type mismatch: The argument
+  secondMass
+has type
+  InternedValueMass.value secondChild < InternedValueMass.value request.right
+but is expected to have type
+  InternedValueMass.value secondChild < InternedValueMass.value (Value.node rightEntry rightRows rightDepth rightFree)
+in the application
+  And.intro secondMass
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-source-read/view-direct-3.source.lean:290:25: error: invalid `▸` notation, expected result type of cast is 
+  Trace fuel
+    ((Control.code
+          (SourceRecursiveIntersectionCode.walk
+            (fun member =>
+              if side = true then requestNode request.domain member request.right
+              else requestNode request.domain request.left member)
+            members)).bind
+      fun values => Code.work (makeUnion values) Code.pure)
+    before (Control.code (Code.pure result)) after
+however, the equality 
+  compiled
+of type 
+  compileNode request =
+    (SourceRecursiveIntersectionCode.walk
+          (fun member =>
+            if side = true then requestNode request.domain member request.right
+            else requestNode request.domain request.left member)
+          members).bind
+      fun values => Code.work (makeUnion values) Code.pure
+does not contain the expected result type on either the left or the right hand side
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-source-read/view-direct-3.source.lean:293:131: error: Type mismatch
+  Trace.steps (Walk.trace walked)
+has type
+  SourceEqualityNativeDemand.Steps count
+    (Control.code
+      (SourceRecursiveIntersectionCode.walk
+        (fun member =>
+          if true = true then requestNode request.domain member (if true = true then request.right else request.left)
+          else requestNode request.domain (if true = true then request.right else request.left) member)
+        members))
+    before (Control.code (Code.pure values)) middle
+but is expected to have type
+  SourceEqualityNativeDemand.Steps count
+    (Control.code
+      (SourceRecursiveIntersectionCode.walk
+        (fun member =>
+          if false = true then requestNode request.domain member (if false = true then request.right else request.left)
+          else requestNode request.domain (if false = true then request.right else request.left) member)
+        members))
+    before (Control.code (Code.pure values)) middle
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-source-read/view-direct-3.source.lean:295:43: error: Application type mismatch: The argument
+  two
+has type
+  SourceEqualityNativeDemand.execute (inner + 1 + (count + 1))
+      (Control.code
+        (SourceRecursiveIntersectionCode.walk
+          (fun member =>
+            if false = true then
+              requestNode request.domain member (if false = true then request.right else request.left)
+            else requestNode request.domain (if false = true then request.right else request.left) member)
+          members))
+      before =
+    Outcome.done values middle
+but is expected to have type
+  SourceEqualityNativeDemand.execute (inner + 1 + (count + 1))
+      (Control.code
+        (SourceRecursiveIntersectionCode.walk
+          (fun member =>
+            if side = true then requestNode request.domain member request.right
+            else requestNode request.domain request.left member)
+          members))
+      before =
+    Outcome.done values middle
+in the application
+  Eq.trans (Eq.symm one) two
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-source-read/view-direct-3.source.lean:314:89: error(lean.unknownIdentifier): Unknown identifier `values`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-source-read/view-direct-3.source.lean:314:96: error(lean.unknownIdentifier): Unknown identifier `middle`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-source-read/view-direct-3.source.lean:316:96: error: Tactic `assumption` failed
+
+case refine_1.false
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+reader : Checked width
+history : History reader
+handle : Nat
+request : NodeRequest Symbol Guard
+result : Value Symbol Guard
+present : reader.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.returned result }
+view : Heap
+row : EdgeValue Symbol Guard
+origin : Origin view [result] row
+before after : Checked width
+fuel : Nat
+good : Good before
+left✝⁴ : NodeReady before.native.machine request
+left✝³ : before.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+body : Trace fuel (Control.code (compileNode request)) before (Control.code (Code.pure result)) after
+left✝² : after.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+left✝¹ :
+  Trace 1 (Control.code (Code.finishNode handle result (Code.pure result))) after (Control.code (Code.pure result))
+    { native := finishNode handle result after.native, operations := after.operations }
+first : Grows before.native.machine.heap reader.native.machine.heap
+last : Grows after.native.machine.heap reader.native.machine.heap
+retained : Retained after.native reader.native
+entry : Interned InternedBinderProtocol.NodeKey
+members : List (Value Symbol Guard)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+count index : Nat
+member value : Value Symbol Guard
+current next : Checked width
+prefixFuel childFuel suffixFuel : Nat
+memberFound : members[index]? = some member
+total : prefixFuel + childFuel + suffixFuel = count
+childOrigin : Origin view [value] row
+inner outer : Nat
+rawValues : List (Value Symbol Guard)
+rawMiddle : Checked width
+left✝ : inner + outer = fuel
+made :
+  Trace outer (Control.code (Code.work (makeUnion rawValues) Code.pure)) rawMiddle (Control.code (Code.pure result))
+    after
+valueFound : rawValues[index]? = some value
+middleFacts :
+  Good rawMiddle ∧
+    Extension before.native.machine rawMiddle.native.machine ∧
+      SourceEqualityRequiredCache.Keeps before.native.machine.heap rawMiddle.native.machine.heap ∧
+        SourceEqualityConstraintMemoAllocation.Grows before.operations rawMiddle.operations ∧
+          SourceCurrentAllocatedNativeFieldClosure.Fields (Control.code (Code.pure rawValues)) rawMiddle
+finalRetained : Retained rawMiddle.native after.native
+currentFacts :
+  Good current ∧
+    Extension before.native.machine current.native.machine ∧
+      SourceEqualityRequiredCache.Keeps before.native.machine.heap current.native.machine.heap ∧
+        SourceEqualityConstraintMemoAllocation.Grows before.operations current.operations ∧
+          SourceCurrentAllocatedNativeFieldClosure.Fields (Control.code (Code.pure (List.take index rawValues))) current
+nextFacts :
+  Good next ∧
+    Extension current.native.machine next.native.machine ∧
+      SourceEqualityRequiredCache.Keeps current.native.machine.heap next.native.machine.heap ∧
+        SourceEqualityConstraintMemoAllocation.Grows current.operations next.operations ∧
+          SourceCurrentAllocatedNativeFieldClosure.Fields (Control.code (Code.pure value)) next
+suffixRetained : Retained next.native rawMiddle.native
+childRetained : Retained next.native reader.native
+branch :
+  SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right =
+    if false = true then SourceRecursiveIntersectionControl.Branch.leftUnion
+    else SourceRecursiveIntersectionControl.Branch.rightUnion
+shape : (if false = true then request.left else request.right) = Value.union entry members depth free
+compiled :
+  compileNode request =
+    (SourceRecursiveIntersectionCode.walk
+          (fun member =>
+            if false = true then requestNode request.domain member request.right
+            else requestNode request.domain request.left member)
+          members).bind
+      fun values => Code.work (makeUnion values) Code.pure
+child :
+  Trace childFuel
+    (Control.code
+      (if false = true then requestNode request.domain member (if false = true then request.right else request.left)
+      else requestNode request.domain (if false = true then request.right else request.left) member))
+    current (Control.code (Code.pure value)) next
+walkFields :
+  SourceCurrentAllocatedNativeCodeFields.Fields before.operations
+    (SourceRecursiveIntersectionCode.walk
+      (fun member =>
+        if false = true then requestNode request.domain member (if false = true then request.right else request.left)
+        else requestNode request.domain (if false = true then request.right else request.left) member)
+      members)
+walkTrace :
+  Trace inner
+    (Control.code
+      (SourceRecursiveIntersectionCode.walk
+        (fun member =>
+          if false = true then requestNode request.domain member request.right
+          else requestNode request.domain request.left member)
+        members))
+    before (Control.code (Code.pure rawValues)) rawMiddle
+prefixTrace :
+  Walk
+    (fun member =>
+      if false = true then requestNode request.domain member (if false = true then request.right else request.left)
+      else requestNode request.domain (if false = true then request.right else request.left) member)
+    (List.take index members) before (List.take index rawValues) current prefixFuel
+walked :
+  Walk
+    (fun member =>
+      if false = true then requestNode request.domain member (if false = true then request.right else request.left)
+      else requestNode request.domain (if false = true then request.right else request.left) member)
+    members before rawValues rawMiddle count
+indexed :
+  ∀ (view : Heap) (row : EdgeValue Symbol Guard),
+    Origin view [result] row →
+      ∃ index member value current next prefixFuel childFuel suffixFuel,
+        members[index]? = some member ∧
+          rawValues[index]? = some value ∧
+            prefixFuel + childFuel + suffixFuel = count ∧
+              Walk
+                  (fun member =>
+                    if false = true then
+                      requestNode request.domain member (if false = true then request.right else request.left)
+                    else requestNode request.domain (if false = true then request.right else request.left) member)
+                  (List.take index members) before (List.take index rawValues) current prefixFuel ∧
+                Trace childFuel
+                    (Control.code
+                      (if false = true then
+                        requestNode request.domain member (if false = true then request.right else request.left)
+                      else requestNode request.domain (if false = true then request.right else request.left) member))
+                    current (Control.code (Code.pure value)) next ∧
+                  Walk
+                      (fun member =>
+                        if false = true then
+                          requestNode request.domain member (if false = true then request.right else request.left)
+                        else requestNode request.domain (if false = true then request.right else request.left) member)
+                      (List.drop (index + 1) members) next (List.drop (index + 1) rawValues) rawMiddle suffixFuel ∧
+                    Origin view [value] row
+suffix :
+  Walk
+    (fun member =>
+      if false = true then requestNode request.domain member (if false = true then request.right else request.left)
+      else requestNode request.domain (if false = true then request.right else request.left) member)
+    (List.drop (index + 1) members) next (List.drop (index + 1) rawValues) rawMiddle suffixFuel
+prefixFields :
+  SourceCurrentAllocatedNativeCodeFields.Fields before.operations
+    (SourceRecursiveIntersectionCode.walk
+      (fun member =>
+        if false = true then requestNode request.domain member (if false = true then request.right else request.left)
+        else requestNode request.domain (if false = true then request.right else request.left) member)
+      (List.take index members))
+actualChild :
+  Trace childFuel
+    (Control.code
+      (requestNode
+        (if false = true then { domain := request.domain, left := member, right := request.right }
+          else { domain := request.domain, left := request.left, right := member }).domain
+        (if false = true then { domain := request.domain, left := member, right := request.right }
+          else { domain := request.domain, left := request.left, right := member }).left
+        (if false = true then { domain := request.domain, left := member, right := request.right }
+          else { domain := request.domain, left := request.left, right := member }).right))
+    current (Control.code (Code.pure value)) next
+forwarded :
+  Forwarded reader
+    (if false = true then { domain := request.domain, left := member, right := request.right }
+    else { domain := request.domain, left := request.left, right := member })
+    current next value
+small : InternedValueMass.value member < InternedValueMass.value (if false = true then request.left else request.right)
+⊢ Walk
+    (fun member =>
+      if false = true then requestNode request.domain member request.right
+      else requestNode request.domain request.left member)
+    members before sorry sorry count
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-source-read/view-direct-3.source.lean:316:96: error: Tactic `assumption` failed
+
+case refine_1.true
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+reader : Checked width
+history : History reader
+handle : Nat
+request : NodeRequest Symbol Guard
+result : Value Symbol Guard
+present : reader.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.returned result }
+view : Heap
+row : EdgeValue Symbol Guard
+origin : Origin view [result] row
+before after : Checked width
+fuel : Nat
+good : Good before
+left✝⁴ : NodeReady before.native.machine request
+left✝³ : before.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+body : Trace fuel (Control.code (compileNode request)) before (Control.code (Code.pure result)) after
+left✝² : after.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+left✝¹ :
+  Trace 1 (Control.code (Code.finishNode handle result (Code.pure result))) after (Control.code (Code.pure result))
+    { native := finishNode handle result after.native, operations := after.operations }
+first : Grows before.native.machine.heap reader.native.machine.heap
+last : Grows after.native.machine.heap reader.native.machine.heap
+retained : Retained after.native reader.native
+entry : Interned InternedBinderProtocol.NodeKey
+members : List (Value Symbol Guard)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+count index : Nat
+member value : Value Symbol Guard
+current next : Checked width
+prefixFuel childFuel suffixFuel : Nat
+memberFound : members[index]? = some member
+total : prefixFuel + childFuel + suffixFuel = count
+childOrigin : Origin view [value] row
+inner outer : Nat
+rawValues : List (Value Symbol Guard)
+rawMiddle : Checked width
+left✝ : inner + outer = fuel
+made :
+  Trace outer (Control.code (Code.work (makeUnion rawValues) Code.pure)) rawMiddle (Control.code (Code.pure result))
+    after
+valueFound : rawValues[index]? = some value
+middleFacts :
+  Good rawMiddle ∧
+    Extension before.native.machine rawMiddle.native.machine ∧
+      SourceEqualityRequiredCache.Keeps before.native.machine.heap rawMiddle.native.machine.heap ∧
+        SourceEqualityConstraintMemoAllocation.Grows before.operations rawMiddle.operations ∧
+          SourceCurrentAllocatedNativeFieldClosure.Fields (Control.code (Code.pure rawValues)) rawMiddle
+finalRetained : Retained rawMiddle.native after.native
+currentFacts :
+  Good current ∧
+    Extension before.native.machine current.native.machine ∧
+      SourceEqualityRequiredCache.Keeps before.native.machine.heap current.native.machine.heap ∧
+        SourceEqualityConstraintMemoAllocation.Grows before.operations current.operations ∧
+          SourceCurrentAllocatedNativeFieldClosure.Fields (Control.code (Code.pure (List.take index rawValues))) current
+nextFacts :
+  Good next ∧
+    Extension current.native.machine next.native.machine ∧
+      SourceEqualityRequiredCache.Keeps current.native.machine.heap next.native.machine.heap ∧
+        SourceEqualityConstraintMemoAllocation.Grows current.operations next.operations ∧
+          SourceCurrentAllocatedNativeFieldClosure.Fields (Control.code (Code.pure value)) next
+suffixRetained : Retained next.native rawMiddle.native
+childRetained : Retained next.native reader.native
+branch :
+  SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right =
+    if true = true then SourceRecursiveIntersectionControl.Branch.leftUnion
+    else SourceRecursiveIntersectionControl.Branch.rightUnion
+shape : (if true = true then request.left else request.right) = Value.union entry members depth free
+compiled :
+  compileNode request =
+    (SourceRecursiveIntersectionCode.walk
+          (fun member =>
+            if true = true then requestNode request.domain member request.right
+            else requestNode request.domain request.left member)
+          members).bind
+      fun values => Code.work (makeUnion values) Code.pure
+child :
+  Trace childFuel
+    (Control.code
+      (if true = true then requestNode request.domain member (if true = true then request.right else request.left)
+      else requestNode request.domain (if true = true then request.right else request.left) member))
+    current (Control.code (Code.pure value)) next
+walkFields :
+  SourceCurrentAllocatedNativeCodeFields.Fields before.operations
+    (SourceRecursiveIntersectionCode.walk
+      (fun member =>
+        if true = true then requestNode request.domain member (if true = true then request.right else request.left)
+        else requestNode request.domain (if true = true then request.right else request.left) member)
+      members)
+walkTrace :
+  Trace inner
+    (Control.code
+      (SourceRecursiveIntersectionCode.walk
+        (fun member =>
+          if true = true then requestNode request.domain member request.right
+          else requestNode request.domain request.left member)
+        members))
+    before (Control.code (Code.pure rawValues)) rawMiddle
+prefixTrace :
+  Walk
+    (fun member =>
+      if true = true then requestNode request.domain member (if true = true then request.right else request.left)
+      else requestNode request.domain (if true = true then request.right else request.left) member)
+    (List.take index members) before (List.take index rawValues) current prefixFuel
+walked :
+  Walk
+    (fun member =>
+      if true = true then requestNode request.domain member (if true = true then request.right else request.left)
+      else requestNode request.domain (if true = true then request.right else request.left) member)
+    members before rawValues rawMiddle count
+indexed :
+  ∀ (view : Heap) (row : EdgeValue Symbol Guard),
+    Origin view [result] row →
+      ∃ index member value current next prefixFuel childFuel suffixFuel,
+        members[index]? = some member ∧
+          rawValues[index]? = some value ∧
+            prefixFuel + childFuel + suffixFuel = count ∧
+              Walk
+                  (fun member =>
+                    if true = true then
+                      requestNode request.domain member (if true = true then request.right else request.left)
+                    else requestNode request.domain (if true = true then request.right else request.left) member)
+                  (List.take index members) before (List.take index rawValues) current prefixFuel ∧
+                Trace childFuel
+                    (Control.code
+                      (if true = true then
+                        requestNode request.domain member (if true = true then request.right else request.left)
+                      else requestNode request.domain (if true = true then request.right else request.left) member))
+                    current (Control.code (Code.pure value)) next ∧
+                  Walk
+                      (fun member =>
+                        if true = true then
+                          requestNode request.domain member (if true = true then request.right else request.left)
+                        else requestNode request.domain (if true = true then request.right else request.left) member)
+                      (List.drop (index + 1) members) next (List.drop (index + 1) rawValues) rawMiddle suffixFuel ∧
+                    Origin view [value] row
+suffix :
+  Walk
+    (fun member =>
+      if true = true then requestNode request.domain member (if true = true then request.right else request.left)
+      else requestNode request.domain (if true = true then request.right else request.left) member)
+    (List.drop (index + 1) members) next (List.drop (index + 1) rawValues) rawMiddle suffixFuel
+prefixFields :
+  SourceCurrentAllocatedNativeCodeFields.Fields before.operations
+    (SourceRecursiveIntersectionCode.walk
+      (fun member =>
+        if true = true then requestNode request.domain member (if true = true then request.right else request.left)
+        else requestNode request.domain (if true = true then request.right else request.left) member)
+      (List.take index members))
+actualChild :
+  Trace childFuel
+    (Control.code
+      (requestNode
+        (if true = true then { domain := request.domain, left := member, right := request.right }
+          else { domain := request.domain, left := request.left, right := member }).domain
+        (if true = true then { domain := request.domain, left := member, right := request.right }
+          else { domain := request.domain, left := request.left, right := member }).left
+        (if true = true then { domain := request.domain, left := member, right := request.right }
+          else { domain := request.domain, left := request.left, right := member }).right))
+    current (Control.code (Code.pure value)) next
+forwarded :
+  Forwarded reader
+    (if true = true then { domain := request.domain, left := member, right := request.right }
+    else { domain := request.domain, left := request.left, right := member })
+    current next value
+small : InternedValueMass.value member < InternedValueMass.value (if true = true then request.left else request.right)
+⊢ Walk
+    (fun member =>
+      if true = true then requestNode request.domain member request.right
+      else requestNode request.domain request.left member)
+    members before sorry sorry count
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-source-read/view-direct-3.source.lean:316:96: error: Tactic `assumption` failed
+
+case refine_2.false
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+reader : Checked width
+history : History reader
+handle : Nat
+request : NodeRequest Symbol Guard
+result : Value Symbol Guard
+present : reader.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.returned result }
+view : Heap
+row : EdgeValue Symbol Guard
+origin : Origin view [result] row
+before after : Checked width
+fuel : Nat
+good : Good before
+left✝⁴ : NodeReady before.native.machine request
+left✝³ : before.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+body : Trace fuel (Control.code (compileNode request)) before (Control.code (Code.pure result)) after
+left✝² : after.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+left✝¹ :
+  Trace 1 (Control.code (Code.finishNode handle result (Code.pure result))) after (Control.code (Code.pure result))
+    { native := finishNode handle result after.native, operations := after.operations }
+first : Grows before.native.machine.heap reader.native.machine.heap
+last : Grows after.native.machine.heap reader.native.machine.heap
+retained : Retained after.native reader.native
+entry : Interned InternedBinderProtocol.NodeKey
+members : List (Value Symbol Guard)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+count index : Nat
+member value : Value Symbol Guard
+current next : Checked width
+prefixFuel childFuel suffixFuel : Nat
+memberFound : members[index]? = some member
+total : prefixFuel + childFuel + suffixFuel = count
+childOrigin : Origin view [value] row
+inner outer : Nat
+rawValues : List (Value Symbol Guard)
+rawMiddle : Checked width
+left✝ : inner + outer = fuel
+made :
+  Trace outer (Control.code (Code.work (makeUnion rawValues) Code.pure)) rawMiddle (Control.code (Code.pure result))
+    after
+valueFound : rawValues[index]? = some value
+middleFacts :
+  Good rawMiddle ∧
+    Extension before.native.machine rawMiddle.native.machine ∧
+      SourceEqualityRequiredCache.Keeps before.native.machine.heap rawMiddle.native.machine.heap ∧
+        SourceEqualityConstraintMemoAllocation.Grows before.operations rawMiddle.operations ∧
+          SourceCurrentAllocatedNativeFieldClosure.Fields (Control.code (Code.pure rawValues)) rawMiddle
+finalRetained : Retained rawMiddle.native after.native
+currentFacts :
+  Good current ∧
+    Extension before.native.machine current.native.machine ∧
+      SourceEqualityRequiredCache.Keeps before.native.machine.heap current.native.machine.heap ∧
+        SourceEqualityConstraintMemoAllocation.Grows before.operations current.operations ∧
+          SourceCurrentAllocatedNativeFieldClosure.Fields (Control.code (Code.pure (List.take index rawValues))) current
+nextFacts :
+  Good next ∧
+    Extension current.native.machine next.native.machine ∧
+      SourceEqualityRequiredCache.Keeps current.native.machine.heap next.native.machine.heap ∧
+        SourceEqualityConstraintMemoAllocation.Grows current.operations next.operations ∧
+          SourceCurrentAllocatedNativeFieldClosure.Fields (Control.code (Code.pure value)) next
+suffixRetained : Retained next.native rawMiddle.native
+childRetained : Retained next.native reader.native
+branch :
+  SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right =
+    if false = true then SourceRecursiveIntersectionControl.Branch.leftUnion
+    else SourceRecursiveIntersectionControl.Branch.rightUnion
+shape : (if false = true then request.left else request.right) = Value.union entry members depth free
+compiled :
+  compileNode request =
+    (SourceRecursiveIntersectionCode.walk
+          (fun member =>
+            if false = true then requestNode request.domain member request.right
+            else requestNode request.domain request.left member)
+          members).bind
+      fun values => Code.work (makeUnion values) Code.pure
+child :
+  Trace childFuel
+    (Control.code
+      (if false = true then requestNode request.domain member (if false = true then request.right else request.left)
+      else requestNode request.domain (if false = true then request.right else request.left) member))
+    current (Control.code (Code.pure value)) next
+walkFields :
+  SourceCurrentAllocatedNativeCodeFields.Fields before.operations
+    (SourceRecursiveIntersectionCode.walk
+      (fun member =>
+        if false = true then requestNode request.domain member (if false = true then request.right else request.left)
+        else requestNode request.domain (if false = true then request.right else request.left) member)
+      members)
+walkTrace :
+  Trace inner
+    (Control.code
+      (SourceRecursiveIntersectionCode.walk
+        (fun member =>
+          if false = true then requestNode request.domain member request.right
+          else requestNode request.domain request.left member)
+        members))
+    before (Control.code (Code.pure rawValues)) rawMiddle
+prefixTrace :
+  Walk
+    (fun member =>
+      if false = true then requestNode request.domain member (if false = true then request.right else request.left)
+      else requestNode request.domain (if false = true then request.right else request.left) member)
+    (List.take index members) before (List.take index rawValues) current prefixFuel
+walked :
+  Walk
+    (fun member =>
+      if false = true then requestNode request.domain member (if false = true then request.right else request.left)
+      else requestNode request.domain (if false = true then request.right else request.left) member)
+    members before rawValues rawMiddle count
+indexed :
+  ∀ (view : Heap) (row : EdgeValue Symbol Guard),
+    Origin view [result] row →
+      ∃ index member value current next prefixFuel childFuel suffixFuel,
+        members[index]? = some member ∧
+          rawValues[index]? = some value ∧
+            prefixFuel + childFuel + suffixFuel = count ∧
+              Walk
+                  (fun member =>
+                    if false = true then
+                      requestNode request.domain member (if false = true then request.right else request.left)
+                    else requestNode request.domain (if false = true then request.right else request.left) member)
+                  (List.take index members) before (List.take index rawValues) current prefixFuel ∧
+                Trace childFuel
+                    (Control.code
+                      (if false = true then
+                        requestNode request.domain member (if false = true then request.right else request.left)
+                      else requestNode request.domain (if false = true then request.right else request.left) member))
+                    current (Control.code (Code.pure value)) next ∧
+                  Walk
+                      (fun member =>
+                        if false = true then
+                          requestNode request.domain member (if false = true then request.right else request.left)
+                        else requestNode request.domain (if false = true then request.right else request.left) member)
+                      (List.drop (index + 1) members) next (List.drop (index + 1) rawValues) rawMiddle suffixFuel ∧
+                    Origin view [value] row
+suffix :
+  Walk
+    (fun member =>
+      if false = true then requestNode request.domain member (if false = true then request.right else request.left)
+      else requestNode request.domain (if false = true then request.right else request.left) member)
+    (List.drop (index + 1) members) next (List.drop (index + 1) rawValues) rawMiddle suffixFuel
+prefixFields :
+  SourceCurrentAllocatedNativeCodeFields.Fields before.operations
+    (SourceRecursiveIntersectionCode.walk
+      (fun member =>
+        if false = true then requestNode request.domain member (if false = true then request.right else request.left)
+        else requestNode request.domain (if false = true then request.right else request.left) member)
+      (List.take index members))
+actualChild :
+  Trace childFuel
+    (Control.code
+      (requestNode
+        (if false = true then { domain := request.domain, left := member, right := request.right }
+          else { domain := request.domain, left := request.left, right := member }).domain
+        (if false = true then { domain := request.domain, left := member, right := request.right }
+          else { domain := request.domain, left := request.left, right := member }).left
+        (if false = true then { domain := request.domain, left := member, right := request.right }
+          else { domain := request.domain, left := request.left, right := member }).right))
+    current (Control.code (Code.pure value)) next
+forwarded :
+  Forwarded reader
+    (if false = true then { domain := request.domain, left := member, right := request.right }
+    else { domain := request.domain, left := request.left, right := member })
+    current next value
+small : InternedValueMass.value member < InternedValueMass.value (if false = true then request.left else request.right)
+⊢ Walk
+    (fun member =>
+      if false = true then requestNode request.domain member request.right
+      else requestNode request.domain request.left member)
+    (List.take index members) before (List.take index sorry) current prefixFuel
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-source-read/view-direct-3.source.lean:316:96: error: Tactic `assumption` failed
+
+case refine_2.true
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+reader : Checked width
+history : History reader
+handle : Nat
+request : NodeRequest Symbol Guard
+result : Value Symbol Guard
+present : reader.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.returned result }
+view : Heap
+row : EdgeValue Symbol Guard
+origin : Origin view [result] row
+before after : Checked width
+fuel : Nat
+good : Good before
+left✝⁴ : NodeReady before.native.machine request
+left✝³ : before.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+body : Trace fuel (Control.code (compileNode request)) before (Control.code (Code.pure result)) after
+left✝² : after.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+left✝¹ :
+  Trace 1 (Control.code (Code.finishNode handle result (Code.pure result))) after (Control.code (Code.pure result))
+    { native := finishNode handle result after.native, operations := after.operations }
+first : Grows before.native.machine.heap reader.native.machine.heap
+last : Grows after.native.machine.heap reader.native.machine.heap
+retained : Retained after.native reader.native
+entry : Interned InternedBinderProtocol.NodeKey
+members : List (Value Symbol Guard)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+count index : Nat
+member value : Value Symbol Guard
+current next : Checked width
+prefixFuel childFuel suffixFuel : Nat
+memberFound : members[index]? = some member
+total : prefixFuel + childFuel + suffixFuel = count
+childOrigin : Origin view [value] row
+inner outer : Nat
+rawValues : List (Value Symbol Guard)
+rawMiddle : Checked width
+left✝ : inner + outer = fuel
+made :
+  Trace outer (Control.code (Code.work (makeUnion rawValues) Code.pure)) rawMiddle (Control.code (Code.pure result))
+    after
+valueFound : rawValues[index]? = some value
+middleFacts :
+  Good rawMiddle ∧
+    Extension before.native.machine rawMiddle.native.machine ∧
+      SourceEqualityRequiredCache.Keeps before.native.machine.heap rawMiddle.native.machine.heap ∧
+        SourceEqualityConstraintMemoAllocation.Grows before.operations rawMiddle.operations ∧
+          SourceCurrentAllocatedNativeFieldClosure.Fields (Control.code (Code.pure rawValues)) rawMiddle
+finalRetained : Retained rawMiddle.native after.native
+currentFacts :
+  Good current ∧
+    Extension before.native.machine current.native.machine ∧
+      SourceEqualityRequiredCache.Keeps before.native.machine.heap current.native.machine.heap ∧
+        SourceEqualityConstraintMemoAllocation.Grows before.operations current.operations ∧
+          SourceCurrentAllocatedNativeFieldClosure.Fields (Control.code (Code.pure (List.take index rawValues))) current
+nextFacts :
+  Good next ∧
+    Extension current.native.machine next.native.machine ∧
+      SourceEqualityRequiredCache.Keeps current.native.machine.heap next.native.machine.heap ∧
+        SourceEqualityConstraintMemoAllocation.Grows current.operations next.operations ∧
+          SourceCurrentAllocatedNativeFieldClosure.Fields (Control.code (Code.pure value)) next
+suffixRetained : Retained next.native rawMiddle.native
+childRetained : Retained next.native reader.native
+branch :
+  SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right =
+    if true = true then SourceRecursiveIntersectionControl.Branch.leftUnion
+    else SourceRecursiveIntersectionControl.Branch.rightUnion
+shape : (if true = true then request.left else request.right) = Value.union entry members depth free
+compiled :
+  compileNode request =
+    (SourceRecursiveIntersectionCode.walk
+          (fun member =>
+            if true = true then requestNode request.domain member request.right
+            else requestNode request.domain request.left member)
+          members).bind
+      fun values => Code.work (makeUnion values) Code.pure
+child :
+  Trace childFuel
+    (Control.code
+      (if true = true then requestNode request.domain member (if true = true then request.right else request.left)
+      else requestNode request.domain (if true = true then request.right else request.left) member))
+    current (Control.code (Code.pure value)) next
+walkFields :
+  SourceCurrentAllocatedNativeCodeFields.Fields before.operations
+    (SourceRecursiveIntersectionCode.walk
+      (fun member =>
+        if true = true then requestNode request.domain member (if true = true then request.right else request.left)
+        else requestNode request.domain (if true = true then request.right else request.left) member)
+      members)
+walkTrace :
+  Trace inner
+    (Control.code
+      (SourceRecursiveIntersectionCode.walk
+        (fun member =>
+          if true = true then requestNode request.domain member request.right
+          else requestNode request.domain request.left member)
+        members))
+    before (Control.code (Code.pure rawValues)) rawMiddle
+prefixTrace :
+  Walk
+    (fun member =>
+      if true = true then requestNode request.domain member (if true = true then request.right else request.left)
+      else requestNode request.domain (if true = true then request.right else request.left) member)
+    (List.take index members) before (List.take index rawValues) current prefixFuel
+walked :
+  Walk
+    (fun member =>
+      if true = true then requestNode request.domain member (if true = true then request.right else request.left)
+      else requestNode request.domain (if true = true then request.right else request.left) member)
+    members before rawValues rawMiddle count
+indexed :
+  ∀ (view : Heap) (row : EdgeValue Symbol Guard),
+    Origin view [result] row →
+      ∃ index member value current next prefixFuel childFuel suffixFuel,
+        members[index]? = some member ∧
+          rawValues[index]? = some value ∧
+            prefixFuel + childFuel + suffixFuel = count ∧
+              Walk
+                  (fun member =>
+                    if true = true then
+                      requestNode request.domain member (if true = true then request.right else request.left)
+                    else requestNode request.domain (if true = true then request.right else request.left) member)
+                  (List.take index members) before (List.take index rawValues) current prefixFuel ∧
+                Trace childFuel
+                    (Control.code
+                      (if true = true then
+                        requestNode request.domain member (if true = true then request.right else request.left)
+                      else requestNode request.domain (if true = true then request.right else request.left) member))
+                    current (Control.code (Code.pure value)) next ∧
+                  Walk
+                      (fun member =>
+                        if true = true then
+                          requestNode request.domain member (if true = true then request.right else request.left)
+                        else requestNode request.domain (if true = true then request.right else request.left) member)
+                      (List.drop (index + 1) members) next (List.drop (index + 1) rawValues) rawMiddle suffixFuel ∧
+                    Origin view [value] row
+suffix :
+  Walk
+    (fun member =>
+      if true = true then requestNode request.domain member (if true = true then request.right else request.left)
+      else requestNode request.domain (if true = true then request.right else request.left) member)
+    (List.drop (index + 1) members) next (List.drop (index + 1) rawValues) rawMiddle suffixFuel
+prefixFields :
+  SourceCurrentAllocatedNativeCodeFields.Fields before.operations
+    (SourceRecursiveIntersectionCode.walk
+      (fun member =>
+        if true = true then requestNode request.domain member (if true = true then request.right else request.left)
+        else requestNode request.domain (if true = true then request.right else request.left) member)
+      (List.take index members))
+actualChild :
+  Trace childFuel
+    (Control.code
+      (requestNode
+        (if true = true then { domain := request.domain, left := member, right := request.right }
+          else { domain := request.domain, left := request.left, right := member }).domain
+        (if true = true then { domain := request.domain, left := member, right := request.right }
+          else { domain := request.domain, left := request.left, right := member }).left
+        (if true = true then { domain := request.domain, left := member, right := request.right }
+          else { domain := request.domain, left := request.left, right := member }).right))
+    current (Control.code (Code.pure value)) next
+forwarded :
+  Forwarded reader
+    (if true = true then { domain := request.domain, left := member, right := request.right }
+    else { domain := request.domain, left := request.left, right := member })
+    current next value
+small : InternedValueMass.value member < InternedValueMass.value (if true = true then request.left else request.right)
+⊢ Walk
+    (fun member =>
+      if true = true then requestNode request.domain member request.right
+      else requestNode request.domain request.left member)
+    (List.take index members) before (List.take index sorry) current prefixFuel
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-source-read/view-direct-3.source.lean:316:96: error: Tactic `assumption` failed
+
+case refine_4.false
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+reader : Checked width
+history : History reader
+handle : Nat
+request : NodeRequest Symbol Guard
+result : Value Symbol Guard
+present : reader.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.returned result }
+view : Heap
+row : EdgeValue Symbol Guard
+origin : Origin view [result] row
+before after : Checked width
+fuel : Nat
+good : Good before
+left✝⁴ : NodeReady before.native.machine request
+left✝³ : before.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+body : Trace fuel (Control.code (compileNode request)) before (Control.code (Code.pure result)) after
+left✝² : after.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+left✝¹ :
+  Trace 1 (Control.code (Code.finishNode handle result (Code.pure result))) after (Control.code (Code.pure result))
+    { native := finishNode handle result after.native, operations := after.operations }
+first : Grows before.native.machine.heap reader.native.machine.heap
+last : Grows after.native.machine.heap reader.native.machine.heap
+retained : Retained after.native reader.native
+entry : Interned InternedBinderProtocol.NodeKey
+members : List (Value Symbol Guard)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+count index : Nat
+member value : Value Symbol Guard
+current next : Checked width
+prefixFuel childFuel suffixFuel : Nat
+memberFound : members[index]? = some member
+total : prefixFuel + childFuel + suffixFuel = count
+childOrigin : Origin view [value] row
+inner outer : Nat
+rawValues : List (Value Symbol Guard)
+rawMiddle : Checked width
+left✝ : inner + outer = fuel
+made :
+  Trace outer (Control.code (Code.work (makeUnion rawValues) Code.pure)) rawMiddle (Control.code (Code.pure result))
+    after
+valueFound : rawValues[index]? = some value
+middleFacts :
+  Good rawMiddle ∧
+    Extension before.native.machine rawMiddle.native.machine ∧
+      SourceEqualityRequiredCache.Keeps before.native.machine.heap rawMiddle.native.machine.heap ∧
+        SourceEqualityConstraintMemoAllocation.Grows before.operations rawMiddle.operations ∧
+          SourceCurrentAllocatedNativeFieldClosure.Fields (Control.code (Code.pure rawValues)) rawMiddle
+finalRetained : Retained rawMiddle.native after.native
+currentFacts :
+  Good current ∧
+    Extension before.native.machine current.native.machine ∧
+      SourceEqualityRequiredCache.Keeps before.native.machine.heap current.native.machine.heap ∧
+        SourceEqualityConstraintMemoAllocation.Grows before.operations current.operations ∧
+          SourceCurrentAllocatedNativeFieldClosure.Fields (Control.code (Code.pure (List.take index rawValues))) current
+nextFacts :
+  Good next ∧
+    Extension current.native.machine next.native.machine ∧
+      SourceEqualityRequiredCache.Keeps current.native.machine.heap next.native.machine.heap ∧
+        SourceEqualityConstraintMemoAllocation.Grows current.operations next.operations ∧
+          SourceCurrentAllocatedNativeFieldClosure.Fields (Control.code (Code.pure value)) next
+suffixRetained : Retained next.native rawMiddle.native
+childRetained : Retained next.native reader.native
+branch :
+  SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right =
+    if false = true then SourceRecursiveIntersectionControl.Branch.leftUnion
+    else SourceRecursiveIntersectionControl.Branch.rightUnion
+shape : (if false = true then request.left else request.right) = Value.union entry members depth free
+compiled :
+  compileNode request =
+    (SourceRecursiveIntersectionCode.walk
+          (fun member =>
+            if false = true then requestNode request.domain member request.right
+            else requestNode request.domain request.left member)
+          members).bind
+      fun values => Code.work (makeUnion values) Code.pure
+child :
+  Trace childFuel
+    (Control.code
+      (if false = true then requestNode request.domain member (if false = true then request.right else request.left)
+      else requestNode request.domain (if false = true then request.right else request.left) member))
+    current (Control.code (Code.pure value)) next
+walkFields :
+  SourceCurrentAllocatedNativeCodeFields.Fields before.operations
+    (SourceRecursiveIntersectionCode.walk
+      (fun member =>
+        if false = true then requestNode request.domain member (if false = true then request.right else request.left)
+        else requestNode request.domain (if false = true then request.right else request.left) member)
+      members)
+walkTrace :
+  Trace inner
+    (Control.code
+      (SourceRecursiveIntersectionCode.walk
+        (fun member =>
+          if false = true then requestNode request.domain member request.right
+          else requestNode request.domain request.left member)
+        members))
+    before (Control.code (Code.pure rawValues)) rawMiddle
+prefixTrace :
+  Walk
+    (fun member =>
+      if false = true then requestNode request.domain member (if false = true then request.right else request.left)
+      else requestNode request.domain (if false = true then request.right else request.left) member)
+    (List.take index members) before (List.take index rawValues) current prefixFuel
+walked :
+  Walk
+    (fun member =>
+      if false = true then requestNode request.domain member (if false = true then request.right else request.left)
+      else requestNode request.domain (if false = true then request.right else request.left) member)
+    members before rawValues rawMiddle count
+indexed :
+  ∀ (view : Heap) (row : EdgeValue Symbol Guard),
+    Origin view [result] row →
+      ∃ index member value current next prefixFuel childFuel suffixFuel,
+        members[index]? = some member ∧
+          rawValues[index]? = some value ∧
+            prefixFuel + childFuel + suffixFuel = count ∧
+              Walk
+                  (fun member =>
+                    if false = true then
+                      requestNode request.domain member (if false = true then request.right else request.left)
+                    else requestNode request.domain (if false = true then request.right else request.left) member)
+                  (List.take index members) before (List.take index rawValues) current prefixFuel ∧
+                Trace childFuel
+                    (Control.code
+                      (if false = true then
+                        requestNode request.domain member (if false = true then request.right else request.left)
+                      else requestNode request.domain (if false = true then request.right else request.left) member))
+                    current (Control.code (Code.pure value)) next ∧
+                  Walk
+                      (fun member =>
+                        if false = true then
+                          requestNode request.domain member (if false = true then request.right else request.left)
+                        else requestNode request.domain (if false = true then request.right else request.left) member)
+                      (List.drop (index + 1) members) next (List.drop (index + 1) rawValues) rawMiddle suffixFuel ∧
+                    Origin view [value] row
+suffix :
+  Walk
+    (fun member =>
+      if false = true then requestNode request.domain member (if false = true then request.right else request.left)
+      else requestNode request.domain (if false = true then request.right else request.left) member)
+    (List.drop (index + 1) members) next (List.drop (index + 1) rawValues) rawMiddle suffixFuel
+prefixFields :
+  SourceCurrentAllocatedNativeCodeFields.Fields before.operations
+    (SourceRecursiveIntersectionCode.walk
+      (fun member =>
+        if false = true then requestNode request.domain member (if false = true then request.right else request.left)
+        else requestNode request.domain (if false = true then request.right else request.left) member)
+      (List.take index members))
+actualChild :
+  Trace childFuel
+    (Control.code
+      (requestNode
+        (if false = true then { domain := request.domain, left := member, right := request.right }
+          else { domain := request.domain, left := request.left, right := member }).domain
+        (if false = true then { domain := request.domain, left := member, right := request.right }
+          else { domain := request.domain, left := request.left, right := member }).left
+        (if false = true then { domain := request.domain, left := member, right := request.right }
+          else { domain := request.domain, left := request.left, right := member }).right))
+    current (Control.code (Code.pure value)) next
+forwarded :
+  Forwarded reader
+    (if false = true then { domain := request.domain, left := member, right := request.right }
+    else { domain := request.domain, left := request.left, right := member })
+    current next value
+small : InternedValueMass.value member < InternedValueMass.value (if false = true then request.left else request.right)
+⊢ Walk
+    (fun member =>
+      if false = true then requestNode request.domain member request.right
+      else requestNode request.domain request.left member)
+    (List.drop (index + 1) members) next (List.drop (index + 1) sorry) sorry suffixFuel
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-source-read/view-direct-3.source.lean:316:96: error: Tactic `assumption` failed
+
+case refine_4.true
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+reader : Checked width
+history : History reader
+handle : Nat
+request : NodeRequest Symbol Guard
+result : Value Symbol Guard
+present : reader.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.returned result }
+view : Heap
+row : EdgeValue Symbol Guard
+origin : Origin view [result] row
+before after : Checked width
+fuel : Nat
+good : Good before
+left✝⁴ : NodeReady before.native.machine request
+left✝³ : before.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+body : Trace fuel (Control.code (compileNode request)) before (Control.code (Code.pure result)) after
+left✝² : after.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+left✝¹ :
+  Trace 1 (Control.code (Code.finishNode handle result (Code.pure result))) after (Control.code (Code.pure result))
+    { native := finishNode handle result after.native, operations := after.operations }
+first : Grows before.native.machine.heap reader.native.machine.heap
+last : Grows after.native.machine.heap reader.native.machine.heap
+retained : Retained after.native reader.native
+entry : Interned InternedBinderProtocol.NodeKey
+members : List (Value Symbol Guard)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+count index : Nat
+member value : Value Symbol Guard
+current next : Checked width
+prefixFuel childFuel suffixFuel : Nat
+memberFound : members[index]? = some member
+total : prefixFuel + childFuel + suffixFuel = count
+childOrigin : Origin view [value] row
+inner outer : Nat
+rawValues : List (Value Symbol Guard)
+rawMiddle : Checked width
+left✝ : inner + outer = fuel
+made :
+  Trace outer (Control.code (Code.work (makeUnion rawValues) Code.pure)) rawMiddle (Control.code (Code.pure result))
+    after
+valueFound : rawValues[index]? = some value
+middleFacts :
+  Good rawMiddle ∧
+    Extension before.native.machine rawMiddle.native.machine ∧
+      SourceEqualityRequiredCache.Keeps before.native.machine.heap rawMiddle.native.machine.heap ∧
+        SourceEqualityConstraintMemoAllocation.Grows before.operations rawMiddle.operations ∧
+          SourceCurrentAllocatedNativeFieldClosure.Fields (Control.code (Code.pure rawValues)) rawMiddle
+finalRetained : Retained rawMiddle.native after.native
+currentFacts :
+  Good current ∧
+    Extension before.native.machine current.native.machine ∧
+      SourceEqualityRequiredCache.Keeps before.native.machine.heap current.native.machine.heap ∧
+        SourceEqualityConstraintMemoAllocation.Grows before.operations current.operations ∧
+          SourceCurrentAllocatedNativeFieldClosure.Fields (Control.code (Code.pure (List.take index rawValues))) current
+nextFacts :
+  Good next ∧
+    Extension current.native.machine next.native.machine ∧
+      SourceEqualityRequiredCache.Keeps current.native.machine.heap next.native.machine.heap ∧
+        SourceEqualityConstraintMemoAllocation.Grows current.operations next.operations ∧
+          SourceCurrentAllocatedNativeFieldClosure.Fields (Control.code (Code.pure value)) next
+suffixRetained : Retained next.native rawMiddle.native
+childRetained : Retained next.native reader.native
+branch :
+  SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right =
+    if true = true then SourceRecursiveIntersectionControl.Branch.leftUnion
+    else SourceRecursiveIntersectionControl.Branch.rightUnion
+shape : (if true = true then request.left else request.right) = Value.union entry members depth free
+compiled :
+  compileNode request =
+    (SourceRecursiveIntersectionCode.walk
+          (fun member =>
+            if true = true then requestNode request.domain member request.right
+            else requestNode request.domain request.left member)
+          members).bind
+      fun values => Code.work (makeUnion values) Code.pure
+child :
+  Trace childFuel
+    (Control.code
+      (if true = true then requestNode request.domain member (if true = true then request.right else request.left)
+      else requestNode request.domain (if true = true then request.right else request.left) member))
+    current (Control.code (Code.pure value)) next
+walkFields :
+  SourceCurrentAllocatedNativeCodeFields.Fields before.operations
+    (SourceRecursiveIntersectionCode.walk
+      (fun member =>
+        if true = true then requestNode request.domain member (if true = true then request.right else request.left)
+        else requestNode request.domain (if true = true then request.right else request.left) member)
+      members)
+walkTrace :
+  Trace inner
+    (Control.code
+      (SourceRecursiveIntersectionCode.walk
+        (fun member =>
+          if true = true then requestNode request.domain member request.right
+          else requestNode request.domain request.left member)
+        members))
+    before (Control.code (Code.pure rawValues)) rawMiddle
+prefixTrace :
+  Walk
+    (fun member =>
+      if true = true then requestNode request.domain member (if true = true then request.right else request.left)
+      else requestNode request.domain (if true = true then request.right else request.left) member)
+    (List.take index members) before (List.take index rawValues) current prefixFuel
+walked :
+  Walk
+    (fun member =>
+      if true = true then requestNode request.domain member (if true = true then request.right else request.left)
+      else requestNode request.domain (if true = true then request.right else request.left) member)
+    members before rawValues rawMiddle count
+indexed :
+  ∀ (view : Heap) (row : EdgeValue Symbol Guard),
+    Origin view [result] row →
+      ∃ index member value current next prefixFuel childFuel suffixFuel,
+        members[index]? = some member ∧
+          rawValues[index]? = some value ∧
+            prefixFuel + childFuel + suffixFuel = count ∧
+              Walk
+                  (fun member =>
+                    if true = true then
+                      requestNode request.domain member (if true = true then request.right else request.left)
+                    else requestNode request.domain (if true = true then request.right else request.left) member)
+                  (List.take index members) before (List.take index rawValues) current prefixFuel ∧
+                Trace childFuel
+                    (Control.code
+                      (if true = true then
+                        requestNode request.domain member (if true = true then request.right else request.left)
+                      else requestNode request.domain (if true = true then request.right else request.left) member))
+                    current (Control.code (Code.pure value)) next ∧
+                  Walk
+                      (fun member =>
+                        if true = true then
+                          requestNode request.domain member (if true = true then request.right else request.left)
+                        else requestNode request.domain (if true = true then request.right else request.left) member)
+                      (List.drop (index + 1) members) next (List.drop (index + 1) rawValues) rawMiddle suffixFuel ∧
+                    Origin view [value] row
+suffix :
+  Walk
+    (fun member =>
+      if true = true then requestNode request.domain member (if true = true then request.right else request.left)
+      else requestNode request.domain (if true = true then request.right else request.left) member)
+    (List.drop (index + 1) members) next (List.drop (index + 1) rawValues) rawMiddle suffixFuel
+prefixFields :
+  SourceCurrentAllocatedNativeCodeFields.Fields before.operations
+    (SourceRecursiveIntersectionCode.walk
+      (fun member =>
+        if true = true then requestNode request.domain member (if true = true then request.right else request.left)
+        else requestNode request.domain (if true = true then request.right else request.left) member)
+      (List.take index members))
+actualChild :
+  Trace childFuel
+    (Control.code
+      (requestNode
+        (if true = true then { domain := request.domain, left := member, right := request.right }
+          else { domain := request.domain, left := request.left, right := member }).domain
+        (if true = true then { domain := request.domain, left := member, right := request.right }
+          else { domain := request.domain, left := request.left, right := member }).left
+        (if true = true then { domain := request.domain, left := member, right := request.right }
+          else { domain := request.domain, left := request.left, right := member }).right))
+    current (Control.code (Code.pure value)) next
+forwarded :
+  Forwarded reader
+    (if true = true then { domain := request.domain, left := member, right := request.right }
+    else { domain := request.domain, left := request.left, right := member })
+    current next value
+small : InternedValueMass.value member < InternedValueMass.value (if true = true then request.left else request.right)
+⊢ Walk
+    (fun member =>
+      if true = true then requestNode request.domain member request.right
+      else requestNode request.domain request.left member)
+    (List.drop (index + 1) members) next (List.drop (index + 1) sorry) sorry suffixFuel

@@ -1,0 +1,22 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-recursive-event-source-read/path-kernels-direct-4.source.lean:151:74: error: Tactic `decide` failed for proposition
+  row.entry.key.symbol ≠ eventRow.entry.key.symbol
+because its `Decidable` instance
+  instDecidableNot
+did not reduce to `isTrue` or `isFalse`.
+
+Reduction got stuck at the `Decidable` instance
+  match row.entry.key.1.1.1.1.toList with
+  | [] =>
+    match eventRow.entry.key.1.1.1.1.toList with
+    | [] => isTrue ⋯
+    | head :: tail => isFalse ⋯
+  | a :: as =>
+    match eventRow.entry.key.1.1.1.1.toList with
+    | [] => isFalse ⋯
+    | b :: bs =>
+      match decEq a b with
+      | isTrue hab =>
+        match as.hasDecEq bs with
+        | isTrue habs => isTrue ⋯
+        | isFalse nabs => isFalse ⋯
+      | isFalse nab => isFalse ⋯

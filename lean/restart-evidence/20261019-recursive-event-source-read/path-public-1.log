@@ -1,0 +1,478 @@
+@MicroCFTA.SourceCurrentProjectionPathOrigins.PathOrigin : {Symbol Guard : Type} →
+  [DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+      List.{0} Int →
+        MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+          MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard → Prop
+inductive MicroCFTA.SourceCurrentProjectionPathOrigins.PathOrigin : {Symbol Guard : Type} →
+  [DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+      List.{0} Int →
+        MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+          MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard → Prop
+number of parameters: 4
+constructors:
+MicroCFTA.SourceCurrentProjectionPathOrigins.PathOrigin.root : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {view : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard},
+  @MicroCFTA.MergedFreshOrdinaryGraph.Origin Symbol Guard inst view
+      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value
+        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+      row →
+    @MicroCFTA.SourceCurrentProjectionPathOrigins.PathOrigin Symbol Guard inst view (@List.nil.{0} Int) value row
+MicroCFTA.SourceCurrentProjectionPathOrigins.PathOrigin.child : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {view : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {parent : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard}
+  {child : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard} {path : List.{0} Int}
+  {row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard},
+  @MicroCFTA.MergedFreshOrdinaryGraph.Origin Symbol Guard inst view
+      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value
+        (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+      parent →
+    ∀ (index : Nat),
+      @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Nat
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (fun as i =>
+              @LT.lt.{0} Nat instLTNat i
+                (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+            (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard parent) index)
+          (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) child) →
+        @MicroCFTA.SourceCurrentProjectionPathOrigins.PathOrigin Symbol Guard inst view path child row →
+          @MicroCFTA.SourceCurrentProjectionPathOrigins.PathOrigin Symbol Guard inst view
+            (@List.cons.{0} Int (Int.ofNat index) path) value row
+'MicroCFTA.SourceCurrentProjectionPathOrigins.PathOrigin' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentProjectionPathOrigins.project_read : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {path : List.{0} Int}
+  {value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  (project : @MicroCFTA.SourceEqualityProjectionGraph.Project Symbol Guard inst path value before result after)
+  {reader : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  {readAfter : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  (read : @MicroCFTA.SourceEqualityProjectionRead.Read Symbol Guard inst result reader rows readAfter) (position : Nat)
+  (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+  @MicroCFTA.SourceCurrentProjectionReadSpine.Spine Symbol Guard inst path value before result after project reader rows
+      readAfter read position row →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+        @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+          @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard reader →
+            @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard reader →
+              @MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard after reader →
+                ∀ (view : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                  @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard readAfter view →
+                    @MicroCFTA.SourceCurrentProjectionPathOrigins.PathOrigin Symbol Guard inst view path value row
+theorem MicroCFTA.SourceCurrentProjectionPathOrigins.project_read : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {path : List.{0} Int}
+  {value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  (project : @MicroCFTA.SourceEqualityProjectionGraph.Project Symbol Guard inst path value before result after)
+  {reader : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  {readAfter : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  (read : @MicroCFTA.SourceEqualityProjectionRead.Read Symbol Guard inst result reader rows readAfter) (position : Nat)
+  (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+  @MicroCFTA.SourceCurrentProjectionReadSpine.Spine Symbol Guard inst path value before result after project reader rows
+      readAfter read position row →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+        @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+          @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard reader →
+            @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard reader →
+              @MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard after reader →
+                ∀ (view : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+                  @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard readAfter view →
+                    @MicroCFTA.SourceCurrentProjectionPathOrigins.PathOrigin Symbol Guard inst view path value row :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {path} {value}
+    {before} {result} {after} project {reader} {rows} {readAfter} read position row spine semantic costs available
+    readerSemantic readerCosts later view growth =>
+  @MicroCFTA.SourceCurrentProjectionPathOrigins.spine_law✝ Symbol Guard inst path value before result after project
+    reader rows readAfter read position row spine semantic costs available readerSemantic readerCosts later view growth
+'MicroCFTA.SourceCurrentProjectionPathOrigins.project_read' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentProjectionPathOrigins.occurs : ∀
+  [inst :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {event needle :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {positions : List.{0} Nat},
+  MicroCFTA.SourceCurrentClassRecursiveValueOrigins.Occurs event positions needle →
+    ∀
+      {view :
+        MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+      {path : List.{0} Int}
+      {row :
+        MicroCFTA.InternedConstructorTemplates.EdgeValue
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)},
+      @MicroCFTA.SourceCurrentProjectionPathOrigins.PathOrigin
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst view path needle row →
+        @MicroCFTA.SourceCurrentProjectionPathOrigins.PathOrigin
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst view
+          (@HAppend.hAppend.{0, 0, 0} (List.{0} Int) (List.{0} Int) (List.{0} Int)
+            (@instHAppendOfAppend.{0} (List.{0} Int) (@List.instAppend.{0} Int))
+            (@List.map.{0, 0} Nat Int Int.ofNat positions) path)
+          event row
+theorem MicroCFTA.SourceCurrentProjectionPathOrigins.occurs : ∀
+  [inst :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {event needle :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {positions : List.{0} Nat},
+  MicroCFTA.SourceCurrentClassRecursiveValueOrigins.Occurs event positions needle →
+    ∀
+      {view :
+        MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+      {path : List.{0} Int}
+      {row :
+        MicroCFTA.InternedConstructorTemplates.EdgeValue
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)},
+      @MicroCFTA.SourceCurrentProjectionPathOrigins.PathOrigin
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst view path needle row →
+        @MicroCFTA.SourceCurrentProjectionPathOrigins.PathOrigin
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst view
+          (@HAppend.hAppend.{0, 0, 0} (List.{0} Int) (List.{0} Int) (List.{0} Int)
+            (@instHAppendOfAppend.{0} (List.{0} Int) (@List.instAppend.{0} Int))
+            (@List.map.{0, 0} Nat Int Int.ofNat positions) path)
+          event row :=
+fun
+    [inst :
+      DecidableEq.{1}
+        (MicroCFTA.InternedConstructorTemplates.EdgeKey
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    {event needle} {positions} occurrence {view} {path} {row} continuation =>
+  @MicroCFTA.SourceCurrentClassRecursiveValueOrigins.Occurs.rec
+    (fun {event} {positions} {needle} occurrence =>
+      @MicroCFTA.SourceCurrentProjectionPathOrigins.PathOrigin
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst view path needle row →
+        @MicroCFTA.SourceCurrentProjectionPathOrigins.PathOrigin
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst view
+          (@HAppend.hAppend.{0, 0, 0} (List.{0} Int) (List.{0} Int) (List.{0} Int)
+            (@instHAppendOfAppend.{0} (List.{0} Int) (@List.instAppend.{0} Int))
+            (@List.map.{0, 0} Nat Int Int.ofNat positions) path)
+          event row)
+    (fun value continuation =>
+      @Eq.mpr.{0}
+        (@MicroCFTA.SourceCurrentProjectionPathOrigins.PathOrigin
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst view
+          (@HAppend.hAppend.{0, 0, 0} (List.{0} Int) (List.{0} Int) (List.{0} Int)
+            (@instHAppendOfAppend.{0} (List.{0} Int) (@List.instAppend.{0} Int))
+            (@List.map.{0, 0} Nat Int Int.ofNat (@List.nil.{0} Nat)) path)
+          value row)
+        (@MicroCFTA.SourceCurrentProjectionPathOrigins.PathOrigin
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst view path value row)
+        (@id.{0}
+          (@Eq.{1} Prop
+            (@MicroCFTA.SourceCurrentProjectionPathOrigins.PathOrigin
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst view
+              (@HAppend.hAppend.{0, 0, 0} (List.{0} Int) (List.{0} Int) (List.{0} Int)
+                (@instHAppendOfAppend.{0} (List.{0} Int) (@List.instAppend.{0} Int))
+                (@List.map.{0, 0} Nat Int Int.ofNat (@List.nil.{0} Nat)) path)
+              value row)
+            (@MicroCFTA.SourceCurrentProjectionPathOrigins.PathOrigin
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst view path value row))
+          (@MicroCFTA.SourceCurrentProjectionPathOrigins.PathOrigin.congr_simp
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst inst view view
+            (@Eq.refl.{1}
+              (MicroCFTA.InternedConstructorTemplates.State
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              view)
+            (@HAppend.hAppend.{0, 0, 0} (List.{0} Int) (List.{0} Int) (List.{0} Int)
+              (@instHAppendOfAppend.{0} (List.{0} Int) (@List.instAppend.{0} Int))
+              (@List.map.{0, 0} Nat Int Int.ofNat (@List.nil.{0} Nat)) path)
+            path
+            (@congrFun'.{1, 1} (List.{0} Int) (List.{0} Int)
+              (@HAppend.hAppend.{0, 0, 0} (List.{0} Int) (List.{0} Int) (List.{0} Int)
+                (@instHAppendOfAppend.{0} (List.{0} Int) (@List.instAppend.{0} Int))
+                (@List.map.{0, 0} Nat Int Int.ofNat (@List.nil.{0} Nat)))
+              (@HAppend.hAppend.{0, 0, 0} (List.{0} Int) (List.{0} Int) (List.{0} Int)
+                (@instHAppendOfAppend.{0} (List.{0} Int) (@List.instAppend.{0} Int)) (@List.nil.{0} Int))
+              (@congrArg.{1, 1} (List.{0} Int) (List.{0} Int → List.{0} Int)
+                (@List.map.{0, 0} Nat Int Int.ofNat (@List.nil.{0} Nat)) (@List.nil.{0} Int)
+                (@HAppend.hAppend.{0, 0, 0} (List.{0} Int) (List.{0} Int) (List.{0} Int)
+                  (@instHAppendOfAppend.{0} (List.{0} Int) (@List.instAppend.{0} Int)))
+                (@List.map_nil.{0, 0} Nat Int Int.ofNat))
+              path)
+            value value
+            (@Eq.refl.{1}
+              (MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              value)
+            row row
+            (@Eq.refl.{1}
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              row)))
+        continuation)
+    (fun {entry} {edges} {depth} {free} rowIndex childIndex parent child selected chosen {path_1} {needle} rest ih
+        continuation =>
+      @Eq.mpr.{0}
+        (@MicroCFTA.SourceCurrentProjectionPathOrigins.PathOrigin
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst view
+          (@HAppend.hAppend.{0, 0, 0} (List.{0} Int) (List.{0} Int) (List.{0} Int)
+            (@instHAppendOfAppend.{0} (List.{0} Int) (@List.instAppend.{0} Int))
+            (@List.map.{0, 0} Nat Int Int.ofNat (@List.cons.{0} Nat childIndex path_1)) path)
+          (@MicroCFTA.InternedConstructorTemplates.Value.node
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry edges depth free)
+          row)
+        (@MicroCFTA.SourceCurrentProjectionPathOrigins.PathOrigin
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst view
+          (@List.cons.{0} Int (Int.ofNat childIndex)
+            (@HAppend.hAppend.{0, 0, 0} (List.{0} Int) (List.{0} Int) (List.{0} Int)
+              (@instHAppendOfAppend.{0} (List.{0} Int) (@List.instAppend.{0} Int))
+              (@List.map.{0, 0} Nat Int Int.ofNat path_1) path))
+          (@MicroCFTA.InternedConstructorTemplates.Value.node
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry edges depth free)
+          row)
+        (@id.{0}
+          (@Eq.{1} Prop
+            (@MicroCFTA.SourceCurrentProjectionPathOrigins.PathOrigin
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst view
+              (@HAppend.hAppend.{0, 0, 0} (List.{0} Int) (List.{0} Int) (List.{0} Int)
+                (@instHAppendOfAppend.{0} (List.{0} Int) (@List.instAppend.{0} Int))
+                (@List.map.{0, 0} Nat Int Int.ofNat (@List.cons.{0} Nat childIndex path_1)) path)
+              (@MicroCFTA.InternedConstructorTemplates.Value.node
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry edges depth free)
+              row)
+            (@MicroCFTA.SourceCurrentProjectionPathOrigins.PathOrigin
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst view
+              (@List.cons.{0} Int (Int.ofNat childIndex)
+                (@HAppend.hAppend.{0, 0, 0} (List.{0} Int) (List.{0} Int) (List.{0} Int)
+                  (@instHAppendOfAppend.{0} (List.{0} Int) (@List.instAppend.{0} Int))
+                  (@List.map.{0, 0} Nat Int Int.ofNat path_1) path))
+              (@MicroCFTA.InternedConstructorTemplates.Value.node
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry edges depth free)
+              row))
+          (@MicroCFTA.SourceCurrentProjectionPathOrigins.PathOrigin.congr_simp
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst inst view view
+            (@Eq.refl.{1}
+              (MicroCFTA.InternedConstructorTemplates.State
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              view)
+            (@HAppend.hAppend.{0, 0, 0} (List.{0} Int) (List.{0} Int) (List.{0} Int)
+              (@instHAppendOfAppend.{0} (List.{0} Int) (@List.instAppend.{0} Int))
+              (@List.map.{0, 0} Nat Int Int.ofNat (@List.cons.{0} Nat childIndex path_1)) path)
+            (@List.cons.{0} Int (Int.ofNat childIndex)
+              (@HAppend.hAppend.{0, 0, 0} (List.{0} Int) (List.{0} Int) (List.{0} Int)
+                (@instHAppendOfAppend.{0} (List.{0} Int) (@List.instAppend.{0} Int))
+                (@List.map.{0, 0} Nat Int Int.ofNat path_1) path))
+            (@congrFun'.{1, 1} (List.{0} Int) (List.{0} Int)
+              (@HAppend.hAppend.{0, 0, 0} (List.{0} Int) (List.{0} Int) (List.{0} Int)
+                (@instHAppendOfAppend.{0} (List.{0} Int) (@List.instAppend.{0} Int))
+                (@List.map.{0, 0} Nat Int Int.ofNat (@List.cons.{0} Nat childIndex path_1)))
+              (@HAppend.hAppend.{0, 0, 0} (List.{0} Int) (List.{0} Int) (List.{0} Int)
+                (@instHAppendOfAppend.{0} (List.{0} Int) (@List.instAppend.{0} Int))
+                (@List.cons.{0} Int (Int.ofNat childIndex) (@List.map.{0, 0} Nat Int Int.ofNat path_1)))
+              (@congrArg.{1, 1} (List.{0} Int) (List.{0} Int → List.{0} Int)
+                (@List.map.{0, 0} Nat Int Int.ofNat (@List.cons.{0} Nat childIndex path_1))
+                (@List.cons.{0} Int (Int.ofNat childIndex) (@List.map.{0, 0} Nat Int Int.ofNat path_1))
+                (@HAppend.hAppend.{0, 0, 0} (List.{0} Int) (List.{0} Int) (List.{0} Int)
+                  (@instHAppendOfAppend.{0} (List.{0} Int) (@List.instAppend.{0} Int)))
+                (@List.map_cons.{0, 0} Nat Int Int.ofNat childIndex path_1))
+              path)
+            (@MicroCFTA.InternedConstructorTemplates.Value.node
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry edges depth free)
+            (@MicroCFTA.InternedConstructorTemplates.Value.node
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry edges depth free)
+            (@Eq.refl.{1}
+              (MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (@MicroCFTA.InternedConstructorTemplates.Value.node
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry edges depth free))
+            row row
+            (@Eq.refl.{1}
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              row)))
+        (@MicroCFTA.SourceCurrentProjectionPathOrigins.PathOrigin.child
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst view
+          (@MicroCFTA.InternedConstructorTemplates.Value.node
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry edges depth free)
+          parent child
+          (@HAppend.hAppend.{0, 0, 0} (List.{0} Int) (List.{0} Int) (List.{0} Int)
+            (@instHAppendOfAppend.{0} (List.{0} Int) (@List.instAppend.{0} Int))
+            (@List.map.{0, 0} Nat Int Int.ofNat path_1) path)
+          row
+          (@Exists.intro.{1}
+            (MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            (fun value =>
+              And
+                (@MicroCFTA.Productivity.Reachable.{0}
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (@MicroCFTA.MergedFreshOrdinaryGraph.successors
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst view)
+                  (@List.cons.{0}
+                    (MicroCFTA.InternedConstructorTemplates.Value
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    (@MicroCFTA.InternedConstructorTemplates.Value.node
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry edges depth free)
+                    (@List.nil.{0}
+                      (MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))
+                  value)
+                (@Membership.mem.{0, 0}
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (List.{0}
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                  (@List.instMembership.{0}
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                  (@MicroCFTA.InternedEdgeResidency.nodeEdges
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) value)
+                  parent))
+            (@MicroCFTA.InternedConstructorTemplates.Value.node
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry edges depth free)
+            (@And.intro
+              (@MicroCFTA.Productivity.Reachable.{0}
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (@MicroCFTA.MergedFreshOrdinaryGraph.successors
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst view)
+                (@List.cons.{0}
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (@MicroCFTA.InternedConstructorTemplates.Value.node
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry edges depth free)
+                  (@List.nil.{0}
+                    (MicroCFTA.InternedConstructorTemplates.Value
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))
+                (@MicroCFTA.InternedConstructorTemplates.Value.node
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry edges depth free))
+              (@Membership.mem.{0, 0}
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (List.{0}
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                (@List.instMembership.{0}
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                (@MicroCFTA.InternedEdgeResidency.nodeEdges
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.node
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry edges depth free))
+                parent)
+              (@MicroCFTA.Productivity.Reachable.seed.{0}
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (@MicroCFTA.MergedFreshOrdinaryGraph.successors
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst view)
+                (@List.cons.{0}
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (@MicroCFTA.InternedConstructorTemplates.Value.node
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry edges depth free)
+                  (@List.nil.{0}
+                    (MicroCFTA.InternedConstructorTemplates.Value
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))
+                (@MicroCFTA.InternedConstructorTemplates.Value.node
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry edges depth free)
+                (@List.mem_cons_self.{0}
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (@MicroCFTA.InternedConstructorTemplates.Value.node
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry edges depth free)
+                  (@List.nil.{0}
+                    (MicroCFTA.InternedConstructorTemplates.Value
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))))
+              (@List.mem_of_getElem?.{0}
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (@MicroCFTA.InternedEdgeResidency.nodeEdges
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.node
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry edges depth free))
+                rowIndex parent selected)))
+          childIndex chosen (ih continuation)))
+    event positions needle occurrence continuation
+'MicroCFTA.SourceCurrentProjectionPathOrigins.occurs' depends on axioms: [propext, Quot.sound.{u}]
