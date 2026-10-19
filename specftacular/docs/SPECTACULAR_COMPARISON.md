@@ -688,6 +688,17 @@ load, so their timings do not estimate variance. The current runtime has no
 Grammar module or persistent-bank flag. Finite controls do not prove equal
 raw multiplicity or recursive cutoff behavior for every input.
 
+Three later controls use HugeLists size 5, phase 3 at `2b8275c4`. Each
+variant prints the same 197 laws and the same stdout bytes. A repeated
+baseline run allocates the same number of bytes.
+
+| Experiment | Allocation comparison | Decision |
+| --- | --- | --- |
+| A missing variable raises `IllTyped`, with `case` on `Map.lookup` | +0.2728% vs `2b8275c4` | Selected. A missing value no longer becomes `Untested`. |
+| The same check with `Map.findWithDefault` | +0.6819% vs `2b8275c4` | Not selected. |
+| Two-list completion queue | -0.0003% vs the `findWithDefault` check | Selected. An append no longer walks the queue. |
+| Tables of the boundary and predicate values | -0.0746% vs the `findWithDefault` check | Not selected. The gain is too small for the extra code. |
+
 The remaining ordered-frontier alternative is described under
 [Further algorithmic work](#further-algorithmic-work).
 

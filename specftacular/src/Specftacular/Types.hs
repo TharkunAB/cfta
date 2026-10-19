@@ -486,7 +486,7 @@ data Value = Typed Dynamic | Untyped Any
 instance Show Value where
     show _ = "<value>"
 
--- | An application of a typed function to a typed argument of another type.
+-- | An application of a typed function to a typed argument of another type, or a term that cannot be evaluated.
 newtype IllTyped = IllTyped String
     deriving (Show)
 
@@ -692,7 +692,10 @@ compileTerm sig term = termType sig term >> go term
         arg <- go x
         Right (\tc -> apply (fun tc) (arg tc))
     go (Term (Symbol sym) annotations) = case sig Map.!? sym of
-        Just (GivenFun{given_info = GivenVar{}}) -> Right (Map.! sym)
+        -- A missing value raises 'IllTyped', which 'valuesEqual' does not catch.
+        Just (GivenFun{given_info = GivenVar{}}) -> Right $ \values -> case Map.lookup sym values of
+            Just value -> value
+            Nothing -> throw (IllTyped ("no value for variable " ++ T.unpack sym))
         Just (GivenFun{given_info = GivenInst _ inst}) -> Right (const inst)
         Just fun -> do
             ty <- case annotations of

@@ -811,7 +811,7 @@ follows from the earlier laws is not found again.
 -}
 addLaw :: Int -> Sig -> Term -> Rules -> Rules
 addLaw maxSize gsig (Term "(==)" [_, l, r]) rules0 =
-    complete HashMap.empty rules1 (concatMap (criticalPairsWith rules1) new)
+    complete HashMap.empty rules1 (concatMap (criticalPairsWith rules1) new) []
   where
     (new, rules1) = addEquation (toTemplate gsig l, toTemplate gsig r) rules0
     -- Program size does not bound type depth. This explicit budget depends
@@ -825,18 +825,22 @@ addLaw maxSize gsig (Term "(==)" [_, l, r]) rules0 =
     -- \| The maximum constructor depth of an annotation.
     depth :: Term -> Int
     depth (Term _ ts) = 1 + maximum (0 : map depth ts)
-    complete _ rules [] = rules
-    complete !cache rules ((s, t) : queue)
+    -- The queue is the current list of critical pairs, then the later lists,
+    -- newest first. A new list goes on the front of the later lists, so the
+    -- queue is not walked again. Each list stays lazy. The order is FIFO.
+    complete _ rules [] [] = rules
+    complete cache rules [] later = complete cache rules (concat (reverse later)) []
+    complete !cache rules ((s, t) : queue) later
         -- The right normal form cannot change this rejection. Keep cache1
         -- because cache2 would force the right normal form.
-        | leaves s' > maxSize = complete cache1 rules queue
+        | leaves s' > maxSize = complete cache1 rules queue later
         | s' == t'
             || leaves t' > maxSize
             || not (withinDepth s' && withinDepth t')
             || subsumed rules (s', t')
             || groundJoinable rules (s', t') =
-            complete cache2 rules queue
-        | otherwise = complete HashMap.empty rules' (queue ++ concatMap (criticalPairsWith rules') new')
+            complete cache2 rules queue later
+        | otherwise = complete HashMap.empty rules' queue (concatMap (criticalPairsWith rules') new' : later)
       where
         -- Normalize a critical pair only with decreases that hold for every
         -- type instance. Otherwise normalization can erase a general rule
