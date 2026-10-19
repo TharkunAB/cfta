@@ -1,0 +1,57 @@
+import MicroCFTA.SourceCurrentRequiredPublicationHistory
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+set_option maxRecDepth 30000
+set_option maxHeartbeats 5000000
+
+#check @MicroCFTA.SourceCurrentRequiredPublicationHistory.unfold
+#print MicroCFTA.SourceCurrentRequiredPublicationHistory.unfold
+#print axioms MicroCFTA.SourceCurrentRequiredPublicationHistory.unfold
+
+#check @MicroCFTA.SourceCurrentRequiredPublicationHistory.read
+#print MicroCFTA.SourceCurrentRequiredPublicationHistory.read
+#print axioms MicroCFTA.SourceCurrentRequiredPublicationHistory.read
+
+#check @MicroCFTA.SourceCurrentRequiredPublicationHistory.head
+#print MicroCFTA.SourceCurrentRequiredPublicationHistory.head
+#print axioms MicroCFTA.SourceCurrentRequiredPublicationHistory.head
+
+#check @MicroCFTA.SourceCurrentRequiredPublicationHistory.readAll
+#print MicroCFTA.SourceCurrentRequiredPublicationHistory.readAll
+#print axioms MicroCFTA.SourceCurrentRequiredPublicationHistory.readAll
+
+#check @MicroCFTA.SourceCurrentRequiredPublicationHistory.union
+#print MicroCFTA.SourceCurrentRequiredPublicationHistory.union
+#print axioms MicroCFTA.SourceCurrentRequiredPublicationHistory.union
+
+#check @MicroCFTA.SourceCurrentRequiredPublicationHistory.project
+#print MicroCFTA.SourceCurrentRequiredPublicationHistory.project
+#print axioms MicroCFTA.SourceCurrentRequiredPublicationHistory.project
+
+#check @MicroCFTA.SourceCurrentRequiredPublicationHistory.projectRows
+#print MicroCFTA.SourceCurrentRequiredPublicationHistory.projectRows
+#print axioms MicroCFTA.SourceCurrentRequiredPublicationHistory.projectRows
+
+#check @MicroCFTA.SourceCurrentRequiredPublicationHistory.forest
+#print MicroCFTA.SourceCurrentRequiredPublicationHistory.forest
+#print axioms MicroCFTA.SourceCurrentRequiredPublicationHistory.forest
+
+#check @MicroCFTA.SourceCurrentRequiredPublicationHistory.required
+#print MicroCFTA.SourceCurrentRequiredPublicationHistory.required
+#print axioms MicroCFTA.SourceCurrentRequiredPublicationHistory.required
+
+#check @MicroCFTA.SourceCurrentRequiredPublicationHistory.children
+#print MicroCFTA.SourceCurrentRequiredPublicationHistory.children
+#print axioms MicroCFTA.SourceCurrentRequiredPublicationHistory.children
+
+#check @MicroCFTA.SourceCurrentRequiredPublicationHistory.rows
+#print MicroCFTA.SourceCurrentRequiredPublicationHistory.rows
+#print axioms MicroCFTA.SourceCurrentRequiredPublicationHistory.rows
+

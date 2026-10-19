@@ -1,0 +1,99 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-event-publication-history/merge-direct-2.source.lean:25:26: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  DecidableEq (EdgeKey Symbol Guard)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-event-publication-history/merge-direct-2.source.lean:27:16: warning: declaration uses `sorry`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-event-publication-history/merge-direct-2.source.lean:34:16: warning: declaration uses `sorry`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-event-publication-history/merge-direct-2.source.lean:40:16: warning: declaration uses `sorry`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-event-publication-history/merge-direct-2.source.lean:172:16: warning: declaration uses `sorry`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-event-publication-history/merge-direct-2.source.lean:216:59: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  DecidableEq (EdgeKey Symbol Guard)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-event-publication-history/merge-direct-2.source.lean:226:16: warning: declaration uses `sorry`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-event-publication-history/merge-direct-2.source.lean:241:16: warning: declaration uses `sorry`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-event-publication-history/merge-direct-2.source.lean:244:16: warning: declaration uses `sorry`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-event-publication-history/merge-direct-2.source.lean:246:26: warning: Variable name `values` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _values
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-event-publication-history/merge-direct-2.source.lean:264:12: error: Invalid `⟨...⟩` notation: The expected type
+  Safe
+    (if free✝ = [] then root top (MergedSourceGrouping.groups edges✝)
+    else Code.pure (Value.node entry edges depth free))
+is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-event-publication-history/merge-direct-2.source.lean:265:6: error: Tactic `assumption` failed
+
+case h_2
+Symbol Guard : Type
+inst✝ : DecidableEq Symbol
+top : Guard
+entry : Interned InternedBinderProtocol.NodeKey
+edges : List (EdgeValue Symbol Guard)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+input✝ : Value Symbol Guard
+x✝ :
+  ∀ (entry_1 : Interned InternedBinderProtocol.NodeKey) (edges_1 : List (EdgeValue Symbol Guard)) (depth_1 : Nat)
+    (free_1 : List InternedBinderProtocol.Reference),
+    Value.node entry edges depth free = Value.node entry_1 edges_1 depth_1 free_1 → False
+⊢ Safe
+    (if free = [] then root top (MergedSourceGrouping.groups edges) else Code.pure (Value.node entry edges depth free))
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-event-publication-history/merge-direct-2.source.lean:297:10: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case miss
+Symbol Guard Output : Type
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+clear : Guard → Bool
+top : Guard
+code : Code Symbol Guard Output
+before after : InternedConstructorTemplates.State Symbol Guard
+memo saved : Memo Symbol Guard
+output : Output
+memo✝ : Memo Symbol Guard
+input✝ : Value Symbol Guard
+before✝ : InternedConstructorTemplates.State Symbol Guard
+candidate✝ : Value Symbol Guard
+after✝ : InternedConstructorTemplates.State Symbol Guard
+current✝ : Memo Symbol Guard
+absent : memo✝ input✝.referenceOf = none
+actual : Run clear top (body top input✝) before✝ memo✝ candidate✝ after✝ current✝
+ih :
+  ∀ (post : InternedConstructorTemplates.State Symbol Guard → Value Symbol Guard → Prop),
+    SemanticReady before✝ →
+      CostHeap before✝ →
+        Stored before✝ memo✝ →
+          Certified Contract clear (body top input✝) before✝ post →
+            Safe (body top input✝) → Nonempty (History before✝ after✝)
+a✝³ : SemanticReady before✝
+a✝² : CostHeap before✝
+a✝¹ : Stored before✝ memo✝
+a✝ : Available before✝ input✝
+⊢ Nonempty (History before✝ after✝)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261019-event-publication-history/merge-direct-2.source.lean:274:2: error: Tactic `introN` failed: The metavariable below has already been assigned
+
+Note: This likely indicates an internal error in this tactic or a prior one
+
+case x_7
+Symbol Guard Output : Type
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+clear : Guard → Bool
+top : Guard
+code : Code Symbol Guard Output
+before after : InternedConstructorTemplates.State Symbol Guard
+memo saved : Memo Symbol Guard
+output : Output
+actual : Run clear top code before memo output after saved
+⊢ (input : Value Symbol Guard) →
+    (before : InternedConstructorTemplates.State Symbol Guard) →
+      (memo : Memo Symbol Guard) →
+        (output : Value Symbol Guard) →
+          (after : InternedConstructorTemplates.State Symbol Guard) →
+            (saved : Memo Symbol Guard) →
+              Call clear top input before memo output after saved → DecidableEq (EdgeKey Symbol Guard)

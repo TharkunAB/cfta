@@ -2,6 +2,19 @@
 
 ## Haskell fix handoff for external work
 
+Current proof update: 2026-10-19 13:31 CEST. Proof checkpoint: `bf90e5e3e`.
+Actual Required, projection, comparison Merge, parent edit and class-fold
+operations now derive physical Mu publication intervals. The same captured
+event heap retains its supplied initial prefix and actual later suffix.
+Original capture availability and supported completed reads stay explicit.
+Heap growth supplies no publication history. Selected stored-Mu/current-body
+readback, binding ancestry, renewal bounds, active-owner exclusion,
+termination, convergence and Haskell refinement remain open. No new Haskell
+defect or repair request is added. All 268 Haskell files retain their bytes.
+Full default build passes 3468 jobs; Audit checks 73931 axiom dependencies.
+Read `lean/notes-current-event-publication-history.md`. Preserve every repair
+entry, reproducer, path, commit and validation result below.
+
 Current proof update: 2026-10-19 13:07 CEST. Proof checkpoint: `904d230ff`.
 Actual causal edge History now retains the same earlier writer's native
 cells into the captured reader. Actual child suffixes derive the selected

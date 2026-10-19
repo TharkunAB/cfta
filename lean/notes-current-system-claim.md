@@ -1,7 +1,7 @@
 # Current system claim
 
 Checked against the live theorem statements on 2026-10-19.
-Read `notes-current-native-edge-child-retention.md` for the latest checkpoint.
+Read `notes-current-event-publication-history.md` for the latest checkpoint.
 
 In simple technical English: fresh construction always finishes in the
 Lean model. Under the stated guard conditions, its result represents
@@ -11,6 +11,14 @@ exact language.
 The root theorem derives the logical startup cache and guard facts.
 Field allocation, validity, guard coverage and numeric resources remain
 explicit. General termination and Haskell correspondence remain open.
+
+Actual class-fold event receipts now retain physical Mu publication histories
+on both sides of the same captured event heap. The caller supplies the
+initial publication prefix and the stated original capture availability.
+Actual Required, projection, Merge and parent operations derive the later
+intervals. Heap growth and native memo history supply no such history.
+This is a provenance prerequisite. Selected stored-body readback, binding
+ancestry and a general renewal bound remain open.
 
 ## Constructed root guarantee
 

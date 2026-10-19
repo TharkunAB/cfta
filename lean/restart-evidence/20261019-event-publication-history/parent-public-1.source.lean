@@ -1,0 +1,34 @@
+import MicroCFTA.SourceCurrentParentPublicationHistory
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+
+#check @MicroCFTA.SourceCurrentParentPublicationHistory.operand
+#print MicroCFTA.SourceCurrentParentPublicationHistory.operand
+#print axioms MicroCFTA.SourceCurrentParentPublicationHistory.operand
+#check @MicroCFTA.SourceCurrentParentPublicationHistory.target
+#print MicroCFTA.SourceCurrentParentPublicationHistory.target
+#print axioms MicroCFTA.SourceCurrentParentPublicationHistory.target
+#check @MicroCFTA.SourceCurrentParentPublicationHistory.force
+#print MicroCFTA.SourceCurrentParentPublicationHistory.force
+#print axioms MicroCFTA.SourceCurrentParentPublicationHistory.force
+#check @MicroCFTA.SourceCurrentParentPublicationHistory.leaf
+#print MicroCFTA.SourceCurrentParentPublicationHistory.leaf
+#print axioms MicroCFTA.SourceCurrentParentPublicationHistory.leaf
+#check @MicroCFTA.SourceCurrentParentPublicationHistory.node
+#print MicroCFTA.SourceCurrentParentPublicationHistory.node
+#print axioms MicroCFTA.SourceCurrentParentPublicationHistory.node
+#check @MicroCFTA.SourceCurrentParentPublicationHistory.children
+#print MicroCFTA.SourceCurrentParentPublicationHistory.children
+#print axioms MicroCFTA.SourceCurrentParentPublicationHistory.children
+#check @MicroCFTA.SourceCurrentParentPublicationHistory.rows
+#print MicroCFTA.SourceCurrentParentPublicationHistory.rows
+#print axioms MicroCFTA.SourceCurrentParentPublicationHistory.rows
+#check @MicroCFTA.SourceCurrentParentPublicationHistory.list
+#print MicroCFTA.SourceCurrentParentPublicationHistory.list
+#print axioms MicroCFTA.SourceCurrentParentPublicationHistory.list
