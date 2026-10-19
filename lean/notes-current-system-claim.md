@@ -1,7 +1,7 @@
 # Current system claim
 
 Checked against the live theorem statements on 2026-10-19.
-Read `notes-current-recursive-source-plain.md` for the latest checkpoint.
+Read `notes-current-recursive-event-observation.md` for the latest checkpoint.
 
 In simple technical English: fresh construction always finishes in the
 Lean model. Under the stated guard conditions, its result represents
@@ -191,8 +191,18 @@ the exact first recursive value inside an actual earlier event. Required
 exposure safety, fold support, final causal guard heaps, reader semantics
 and forward Keeps remain explicit. Preparation and fold graphs share
 the same returned forest. This does not prove their complete outer
-execution sequence. Native residual handoff through later edits remains
-open. No completed projection of an unchanged whole event is asserted.
+execution sequence. The exact recursive Entry now derives a supported
+remaining Project and selected complete row Read, with actual surrounding
+heap intervals. Its internal row index can differ from the outer index.
+Actual node, child and chronological fold events derive the captured native
+Force/query receipts and returned cell with its writer, or an actual Head
+and body edit. These receipts connect the same event value to the remaining
+observation through physical retention. The native cell and history stay
+at the captured query return. Later heap retention alone supplies no native
+memo history. The read adapter retains an epsilon Origin, or the actual
+Head source row and selected child continuation. That Head row can differ
+from the final deep row. Whole-event residual projection remains open.
+No completed projection of an unchanged whole event is asserted.
 Earlier class phases can change their forests. Their native joins do not
 satisfy the Required Origin grammar in general. No Haskell defect is
 established.
@@ -221,3 +231,8 @@ heap growth or arbitrary source-pair closure is justified.
 
 No Haskell bytes change in this checkpoint. Root `FINDINGS.md` retains all
 external repair entries first. The full-library goal remains active.
+
+Current source main is `b45051e3e`, merged at `fec741514`. It adds
+Specftacular law discovery, rewriting and GHC execution interfaces. Their
+test-based candidate equations are not formal theorems. These interfaces
+have no Lean refinement proof. Read `notes-current-upstream-specftacular.md`.

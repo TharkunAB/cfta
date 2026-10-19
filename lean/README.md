@@ -1,5 +1,47 @@
 # cfta formal model
 
+## Current captured event executions at recursive observations
+
+Updated: 2026-10-19 12:25 CEST. Proof checkpoint: `d153d37d7`.
+Start: `60403eced`. Source main is `b45051e3e`, merged at `fec741514`.
+Read `lean/notes-current-recursive-event-observation.md` and the current system claim.
+An actual selected recursive Entry now derives its completed remaining
+projection and selected full row read. Actual ordinary prefixes and
+suffixes derive support and both surrounding heap intervals. Its internal
+row index can differ from the outer selected index.
+
+Actual node, child and chronological class-fold events now derive their
+captured native or Head execution. Native events retain the exact Force,
+query, checked trace and returned native cell with its writer receipt.
+That cell and native history belong to the captured query return. Later
+heap retention alone does not transfer native memo history.
+
+The composed endpoint takes actual Required preparation, the original
+false gate, actual FoldReads and the selected Project/Read. A nonplain row
+has an ordinary Route in the FINAL value, or an earlier actual event
+contains its exact first recursive value with the supported remaining
+observation. Actual heap intervals connect that event to the observation.
+The separate read adapter derives an epsilon row Origin, or an actual
+Head source row with its selected child continuation. That Head row can
+differ from the final selected row. No deep-row Origin is invented.
+Preparation and fold share a returned forest, with separate heap support.
+No complete outer execution or whole-event projection is proved.
+
+Full default build passes 3456 jobs. Audit checks 73793 axiom dependencies.
+Ten public declarations and two constructed checks pass complete proof
+and standard-axiom checks. All five production strict logs are empty.
+The checks exercise distinct outer/internal row indices and an actual
+edit event with its original true gate. They assert no false-gate
+outer-driver execution or finite productivity. Whole-event residual
+handoff, renewal bounds, active-owner exclusion, general outer completion,
+convergence and Haskell refinement remain open. The conditional root
+language guarantee is unchanged. All 242 earlier Haskell files retain
+their bytes. Upstream adds 25 Haskell files in Specftacular packages;
+their public interfaces have no refinement proof. No local Haskell repair
+is added. FINDINGS retains every repair first. Publication awaits direct
+approval. No push or board write is attempted. The full-library objective
+remains active.
+
 ## Current original-source exclusion in recursive observations
 
 Updated: 2026-10-19 11:54 CEST. Proof checkpoint: `e619dc99a`.
