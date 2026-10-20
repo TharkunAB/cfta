@@ -1,0 +1,27 @@
+    ∃ prefixFuel suffixFuel priorPair parent next siteBefore siteAfter result heap,
+      fuel = prefixFuel + 1 + suffixFuel ∧ prefixFuel < fuel ∧
+      Trace prefixFuel (.code (requestNode request.domain request.left request.right)) before
+        (.code (.optionalBinder priorPair parent next)) siteBefore ∧
+      SemanticHeap siteBefore.native.machine.heap ∧ Available siteBefore.native.machine.heap parent ∧
+      SourceRecursiveIntersectionMaybeMu.maybeMu priorPair parent siteBefore.native.machine.heap = .done result heap ∧
+      siteAfter = ⟨advance siteBefore.native {siteBefore.native.machine with heap := heap},siteBefore.operations⟩ ∧
+      step (.code (.optionalBinder priorPair parent next)) siteBefore = .yielded (.code (next result)) siteAfter ∧
+      Trace suffixFuel (.code (next result)) siteAfter (.code (.optionalBinder pair siteBody siteNext)) current ∧
+      siteBefore.native.machine.heap.nodeRecords entry.key = none ∧
+      heap.nodeRecords entry.key = some (.mu entry body depth ordinary) ∧
+      Grows before.native.machine.heap siteBefore.native.machine.heap ∧
+      Extends before.native.machine.heap.nodes.issued siteBefore.native.machine.heap.nodes.issued ∧
+      Grows heap current.native.machine.heap ∧ Extends heap.nodes.issued current.native.machine.heap.nodes.issued ∧
+      Reference.intersection priorPair.1 priorPair.2 ∈ parent.free ∧
+      Context siteBefore.native.machine.heap (leaves parent) ∧
+      InternedFreshOrdinaryConstruction.build
+        (.binder true (encode (leaves parent) [.intersection priorPair.1 priorPair.2] parent)) (leaves parent)
+        siteBefore.native.machine.heap = .done result heap ∧
+      Written (.binder true (encode (leaves parent) [.intersection priorPair.1 priorPair.2] parent)) (leaves parent)
+        siteBefore.native.machine.heap heap entry.key (.mu entry body depth ordinary) ∧
+      SourceCurrentNativeOptionalRowProduction.Origin request prefixFuel before siteBefore priorPair parent next ∧
+      Stored (.binder true (encode (leaves parent) [.intersection priorPair.1 priorPair.2] parent))
+        (leaves parent) siteBefore.native.machine.heap heap entry.key entry body depth ordinary ∧
+      Observed (.binder true (encode (leaves parent) [.intersection priorPair.1 priorPair.2] parent))
+        (leaves parent) siteBefore.native.machine.heap heap entry.key entry body depth ordinary
+        current.native.machine.heap

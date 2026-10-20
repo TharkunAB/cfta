@@ -1,0 +1,10 @@
+open Lean Meta Elab Term in
+/-- Retain a weak-head value and its definitional equality without normalizing its fields. -/
+elab "checked_whnf% " value:term : term => do
+  let original ← instantiateMVars (← elabTerm value none)
+  let normalized ← withTransparency .all (whnf original)
+  let equality ← mkEqRefl original
+  let valueType ← inferType original
+  let predicate ← withLocalDeclD `checkpoint valueType fun value => do
+    mkLambdaFVars #[value] (← mkEq original value)
+  mkAppOptM ``Subtype.mk #[some valueType, some predicate, some normalized, some equality]

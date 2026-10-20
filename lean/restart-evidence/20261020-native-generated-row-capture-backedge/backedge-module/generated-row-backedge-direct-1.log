@@ -1,0 +1,246 @@
+/tmp/mcfta-native-generated-row-capture-backedge/generated-row-backedge-direct-1.source.lean:47:65: error: Ambiguous term
+  work
+Possible interpretations:
+  InternedNestedConstruction.work : Work ?m.183 ?m.184 ?m.185 →
+    InternedConstructorTemplates.State ?m.183 ?m.184 → InternedNestedConstruction.Outcome ?m.183 ?m.184 ?m.185
+  
+  SourceRecursiveIntersectionKernel.work : Work ?m.183 ?m.184 ?m.185 →
+    Machine ?m.183 ?m.184 → Result ?m.183 ?m.184 ?m.185
+/tmp/mcfta-native-generated-row-capture-backedge/generated-row-backedge-direct-1.source.lean:47:26: error: unsolved goals
+case node
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+inputs : List (Value Symbol Guard)
+before : InternedConstructorTemplates.State Symbol Guard
+raw : Value Symbol Guard
+after : InternedConstructorTemplates.State Symbol Guard
+row : EdgeValue Symbol Guard
+expressions✝ : List (InternedNestedConstruction.EdgeSyntax Symbol Guard)
+rows✝ : List (EdgeValue Symbol Guard)
+middle✝ : InternedConstructorTemplates.State Symbol Guard
+symbol✝ : Symbol
+guard✝ : Guard
+children✝ : List (Syntax Symbol Guard)
+sourceIndex✝ outputIndex✝ : Nat
+built : buildEdges expressions✝ inputs before = InternedNestedConstruction.Outcome.done rows✝ middle✝
+call✝ : RowCall expressions✝ inputs before rows✝ middle✝ after sourceIndex✝ symbol✝ guard✝ children✝
+made : run (makeNode rows✝) middle✝ = (raw, after)
+selected✝ : (nodeEdges raw)[outputIndex✝]? = some row
+same✝ : call✝.output = row
+⊢ InternedNestedConstruction.work (makeNode rows✝) middle✝ = InternedNestedConstruction.Outcome.done raw after
+/tmp/mcfta-native-generated-row-capture-backedge/generated-row-backedge-direct-1.source.lean:48:74: error: Ambiguous term
+  work
+Possible interpretations:
+  InternedNestedConstruction.work : Work ?m.257 ?m.258 ?m.259 →
+    InternedConstructorTemplates.State ?m.257 ?m.258 → InternedNestedConstruction.Outcome ?m.257 ?m.258 ?m.259
+  
+  SourceRecursiveIntersectionKernel.work : Work ?m.257 ?m.258 ?m.259 →
+    Machine ?m.257 ?m.258 → Result ?m.257 ?m.258 ?m.259
+/tmp/mcfta-native-generated-row-capture-backedge/generated-row-backedge-direct-1.source.lean:48:35: error: unsolved goals
+case union
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+inputs : List (Value Symbol Guard)
+before : InternedConstructorTemplates.State Symbol Guard
+raw : Value Symbol Guard
+after : InternedConstructorTemplates.State Symbol Guard
+row : EdgeValue Symbol Guard
+expressions✝ : List (Syntax Symbol Guard)
+values✝ : List (Value Symbol Guard)
+middle✝ : InternedConstructorTemplates.State Symbol Guard
+expression✝ : Syntax Symbol Guard
+value✝ : Value Symbol Guard
+current✝ next✝ : InternedConstructorTemplates.State Symbol Guard
+index✝ : Nat
+source✝ : expressions✝[index✝]? = some expression✝
+selected✝ : values✝[index✝]? = some value✝
+context✝ : Context current✝ inputs
+called✝ : build expression✝ inputs current✝ = InternedNestedConstruction.Outcome.done value✝ next✝
+suffix✝ :
+  InternedFreshOrdinaryConstruction.buildMany (List.drop (index✝ + 1) expressions✝) inputs next✝ =
+    InternedNestedConstruction.Outcome.done (List.drop (index✝ + 1) values✝) middle✝
+built :
+  InternedFreshOrdinaryConstruction.buildMany expressions✝ inputs before =
+    InternedNestedConstruction.Outcome.done values✝ middle✝
+earlier✝ :
+  InternedFreshOrdinaryConstruction.buildMany (List.take index✝ expressions✝) inputs before =
+    InternedNestedConstruction.Outcome.done (List.take index✝ values✝) current✝
+made : run (makeUnion values✝) middle✝ = (raw, after)
+nested✝ : SourceRow expression✝ inputs current✝ value✝ next✝ row
+⊢ InternedNestedConstruction.work (makeUnion values✝) middle✝ = InternedNestedConstruction.Outcome.done raw after
+/tmp/mcfta-native-generated-row-capture-backedge/generated-row-backedge-direct-1.source.lean:47:70: warning: This simp argument is unused:
+  made
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [build, built, Outcome.bind, work]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-native-generated-row-capture-backedge/generated-row-backedge-direct-1.source.lean:48:79: warning: This simp argument is unused:
+  made
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [build, built, Outcome.bind, work]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-native-generated-row-capture-backedge/generated-row-backedge-direct-1.source.lean:401:16: error: Function expected at
+  maybeMu
+but this term has type
+  ?m.1
+
+Note: Expected a function because this term is being applied to the argument
+  pair
+
+Hint: The identifier `maybeMu` is unknown, and Lean's `autoImplicit` option causes an unknown identifier to be treated as an implicitly bound variable with an unknown type. However, the unknown type cannot be a function, and a function is what Lean expects here. This is often the result of a typo or a missing `import` or `open` statement.
+/tmp/mcfta-native-generated-row-capture-backedge/generated-row-backedge-direct-1.source.lean:401:68: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.done` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `ForInStep.done`
+  [apply] `SourceEqualityNativeLeaf.done`
+  [apply] `Std.CancellationContext.done`
+  [apply] `Std.IterStep.done`
+  [apply] `Std.PlausibleIterStep.done`
+  [apply] `ByteArray.utf8DecodeChar?.FirstByte.done`
+  [apply] `Lean.Parser.Tactic.done`
+  [apply] `DelayedEmptinessExplore.Trace.done`
+  [apply] `EnumerationState.Next.done`
+  [apply] `InternedNestedConstruction.Outcome.done`
+  [apply] `MergedSourceComparison.Result.done`
+  [apply] `MergedSourceExposure.Result.done`
+  [apply] `SourceColdSharedRows.Result.done`
+  [apply] `SourceCurrentAllocatedClassPass.Pass.done`
+  [apply] `SourceCurrentAllocatedClassPass.PassReads.done`
+  [apply] `SourceCurrentAllocatedMerge.Merge.done`
+  [apply] `SourceCurrentAllocatedNativeContextualCompletion.Receipt.done`
+  [apply] `SourceCurrentAllocatedNativePhysicalTraceCompletion.Receipt.done`
+  [apply] `SourceCurrentAllocatedNativeScopeCompletion.Receipt.done`
+  [apply] `SourceCurrentAllocatedNativeWarmQuery.Receipt.done`
+  [apply] `SourceCurrentAllocatedQueryMemo.Call.done`
+  [apply] `SourceCurrentAllocatedTargetQuery.Step.done`
+  [apply] `SourceCurrentConjunctionGlobalMemos.RunReads.done`
+  [apply] `SourceCurrentConjunctionWorklist.Run.done`
+  [apply] `SourceCurrentMemoMergeNative.Merge.done`
+  [apply] `SourceCurrentMemoMergeNative.Reads.done`
+  [apply] `SourceCurrentSubsumesQueryMemos.Reads.done`
+  [apply] `SourceEqualityClassFoldGraph.Pass.done`
+  [apply] `SourceEqualityClassFoldWorker.Result.done`
+  [apply] `SourceEqualityClosedMemoReads.EdgeReads.done`
+  [apply] `SourceEqualityDemandTargetWorker.Result.done`
+  [apply] `SourceEqualityGuardedEdgeGraph.Graph.done`
+  [apply] `SourceEqualityGuardedEdgeSource.MemoReads.done`
+  [apply] `SourceEqualityGuardedEdgeWorker.Result.done`
+  [apply] `SourceEqualityInheritedChildren.Result.done`
+  [apply] `SourceEqualityInheritedEdge.Execution.done`
+  [apply] `SourceEqualityInheritedEdge.Graph.done`
+  [apply] `SourceEqualityInheritedEdgeWorker.Result.done`
+  [apply] `SourceEqualityInheritedRows.Result.done`
+  [apply] `SourceEqualityNativeDemand.Outcome.done`
+  [apply] `SourceEqualityNativeMerge.Merge.done`
+  [apply] `SourceEqualityNativeScoped.Step.done`
+  [apply] `SourceEqualityOnePassWorker.Result.done`
+  [apply] `SourceEqualityPartialMemoWorker.Result.done`
+  [apply] `SourceEqualityProjectionMemos.ReadReads.done`
+  [apply] `SourceEqualityProjectionRead.Read.done`
+  [apply] `SourceEqualityRequiredWorker.Result.done`
+  [apply] `SourceEqualitySharedTargetWorker.Result.done`
+  [apply] `SourceGlobalUnfold.Outcome.done`
+  [apply] `Result.done`
+  [apply] `SourceRecursiveIntersectionNative.Evaluation.done`
+  [apply] `SourceRecursiveIntersectionNative.Outcome.done`
+  [apply] `SourceRecursiveIntersectionNative.ReturnsOrPending.done`
+  [apply] `SourceRecursiveIntersectionNative.Terminal.done`
+  [apply] `SourceTaskQueryGlobalMemos.RunReads.done`
+  [apply] `Std.IterM.IsPlausibleNthOutputStep.done`
+  [apply] `Lean.Parser.Tactic.Grind.done`
+  [apply] `DelayedEmptinessExplore.Trace.below.done`
+  [apply] `SourceCurrentConjunctionGlobalMemos.RunReads.below.done`
+  [apply] `SourceCurrentConjunctionWorklist.Run.below.done`
+  [apply] `SourceTaskQueryGlobalMemos.RunReads.below.done`
+  [apply] `Std.DTreeMap.Internal.Zipper.done`
+  [apply] `Std.IterM.IsPlausibleNthOutputStep.below.done`
+  [apply] `Std.Http.Protocol.H1.RedirectOutcome.done`
+  [apply] `Std.Iterators.Types.Drop.PlausibleStep.done`
+  [apply] `Std.Iterators.Types.DropWhile.PlausibleStep.done`
+  [apply] `Std.Iterators.Types.FilterMap.PlausibleStep.done`
+  [apply] `Std.Iterators.Types.Take.PlausibleStep.done`
+  [apply] `Std.Iterators.Types.TakeWhile.PlausibleStep.done`
+/tmp/mcfta-native-generated-row-capture-backedge/generated-row-backedge-direct-1.source.lean:413:4: error: Function expected at
+  maybeMu
+but this term has type
+  ?m.1
+
+Note: Expected a function because this term is being applied to the argument
+  pair
+
+Hint: The identifier `maybeMu` is unknown, and Lean's `autoImplicit` option causes an unknown identifier to be treated as an implicitly bound variable with an unknown type. However, the unknown type cannot be a function, and a function is what Lean expects here. This is often the result of a typo or a missing `import` or `open` statement.
+/tmp/mcfta-native-generated-row-capture-backedge/generated-row-backedge-direct-1.source.lean:413:56: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.done` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `ForInStep.done`
+  [apply] `SourceEqualityNativeLeaf.done`
+  [apply] `Std.CancellationContext.done`
+  [apply] `Std.IterStep.done`
+  [apply] `Std.PlausibleIterStep.done`
+  [apply] `ByteArray.utf8DecodeChar?.FirstByte.done`
+  [apply] `Lean.Parser.Tactic.done`
+  [apply] `DelayedEmptinessExplore.Trace.done`
+  [apply] `EnumerationState.Next.done`
+  [apply] `InternedNestedConstruction.Outcome.done`
+  [apply] `MergedSourceComparison.Result.done`
+  [apply] `MergedSourceExposure.Result.done`
+  [apply] `SourceColdSharedRows.Result.done`
+  [apply] `SourceCurrentAllocatedClassPass.Pass.done`
+  [apply] `SourceCurrentAllocatedClassPass.PassReads.done`
+  [apply] `SourceCurrentAllocatedMerge.Merge.done`
+  [apply] `SourceCurrentAllocatedNativeContextualCompletion.Receipt.done`
+  [apply] `SourceCurrentAllocatedNativePhysicalTraceCompletion.Receipt.done`
+  [apply] `SourceCurrentAllocatedNativeScopeCompletion.Receipt.done`
+  [apply] `SourceCurrentAllocatedNativeWarmQuery.Receipt.done`
+  [apply] `SourceCurrentAllocatedQueryMemo.Call.done`
+  [apply] `SourceCurrentAllocatedTargetQuery.Step.done`
+  [apply] `SourceCurrentConjunctionGlobalMemos.RunReads.done`
+  [apply] `SourceCurrentConjunctionWorklist.Run.done`
+  [apply] `SourceCurrentMemoMergeNative.Merge.done`
+  [apply] `SourceCurrentMemoMergeNative.Reads.done`
+  [apply] `SourceCurrentSubsumesQueryMemos.Reads.done`
+  [apply] `SourceEqualityClassFoldGraph.Pass.done`
+  [apply] `SourceEqualityClassFoldWorker.Result.done`
+  [apply] `SourceEqualityClosedMemoReads.EdgeReads.done`
+  [apply] `SourceEqualityDemandTargetWorker.Result.done`
+  [apply] `SourceEqualityGuardedEdgeGraph.Graph.done`
+  [apply] `SourceEqualityGuardedEdgeSource.MemoReads.done`
+  [apply] `SourceEqualityGuardedEdgeWorker.Result.done`
+  [apply] `SourceEqualityInheritedChildren.Result.done`
+  [apply] `SourceEqualityInheritedEdge.Execution.done`
+  [apply] `SourceEqualityInheritedEdge.Graph.done`
+  [apply] `SourceEqualityInheritedEdgeWorker.Result.done`
+  [apply] `SourceEqualityInheritedRows.Result.done`
+  [apply] `SourceEqualityNativeDemand.Outcome.done`
+  [apply] `SourceEqualityNativeMerge.Merge.done`
+  [apply] `SourceEqualityNativeScoped.Step.done`
+  [apply] `SourceEqualityOnePassWorker.Result.done`
+  [apply] `SourceEqualityPartialMemoWorker.Result.done`
+  [apply] `SourceEqualityProjectionMemos.ReadReads.done`
+  [apply] `SourceEqualityProjectionRead.Read.done`
+  [apply] `SourceEqualityRequiredWorker.Result.done`
+  [apply] `SourceEqualitySharedTargetWorker.Result.done`
+  [apply] `SourceGlobalUnfold.Outcome.done`
+  [apply] `Result.done`
+  [apply] `SourceRecursiveIntersectionNative.Evaluation.done`
+  [apply] `SourceRecursiveIntersectionNative.Outcome.done`
+  [apply] `SourceRecursiveIntersectionNative.ReturnsOrPending.done`
+  [apply] `SourceRecursiveIntersectionNative.Terminal.done`
+  [apply] `SourceTaskQueryGlobalMemos.RunReads.done`
+  [apply] `Std.IterM.IsPlausibleNthOutputStep.done`
+  [apply] `Lean.Parser.Tactic.Grind.done`
+  [apply] `DelayedEmptinessExplore.Trace.below.done`
+  [apply] `SourceCurrentConjunctionGlobalMemos.RunReads.below.done`
+  [apply] `SourceCurrentConjunctionWorklist.Run.below.done`
+  [apply] `SourceTaskQueryGlobalMemos.RunReads.below.done`
+  [apply] `Std.DTreeMap.Internal.Zipper.done`
+  [apply] `Std.IterM.IsPlausibleNthOutputStep.below.done`
+  [apply] `Std.Http.Protocol.H1.RedirectOutcome.done`
+  [apply] `Std.Iterators.Types.Drop.PlausibleStep.done`
+  [apply] `Std.Iterators.Types.DropWhile.PlausibleStep.done`
+  [apply] `Std.Iterators.Types.FilterMap.PlausibleStep.done`
+  [apply] `Std.Iterators.Types.Take.PlausibleStep.done`
+  [apply] `Std.Iterators.Types.TakeWhile.PlausibleStep.done`

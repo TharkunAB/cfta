@@ -1,0 +1,437 @@
+build expression [] empty = .done root heap ∧
+    children root = [left,right] ∧ left.free = [] ∧ right.free = [] ∧ left ≠ right ∧
+    SourceCurrentAllocatedNativePhysicalCompletion.Good before ∧
+    SourceCurrentNativeEdgeWriterGrowth.History before ∧
+    locate 256 0 control before = 60 ∧ fuel = 60 ∧
+    execute fuel control before = .yielded (.code (.optionalBinder outerPair siteBody siteNext)) current ∧
+    Trace fuel control before (.code (.optionalBinder outerPair siteBody siteNext)) current ∧
+    Available current.native.machine.heap siteBody ∧
+    generatedInputs[1]? = some (.mu entry stored depth ordinary) ∧
+    heap.nodeRecords entry.key = some (.mu entry stored depth ordinary) ∧
+    Reference.interned entry.identity ∈ stored.free ∧
+    Reference.interned generatedEntry.identity ∈ generatedBody.free ∧
+    storedRow.entry.key.symbol = ("tag17",.top) ∧ storedRow.entry.key.constraint = top ∧ storedRow.children = [] ∧
+    RowAt generatedBody storedRow ∧
+    SourceRecursiveIntersectionMaybeMu.maybeMu outerPair siteBody current.native.machine.heap = .done generated generatedHeap ∧
+    build (.binder true (encode (leaves siteBody) [.intersection outerPair.1 outerPair.2] siteBody))
+      (leaves siteBody) current.native.machine.heap = .done generated generatedHeap ∧
+    current.native.machine.heap.nodeRecords generatedEntry.key = none ∧
+    generatedHeap.nodeRecords generatedEntry.key = some (.mu generatedEntry generatedBody generatedDepth generatedOrdinary) ∧
+    ∃ event : @Publication Symbol Guard _,
+      Reached (.binder true (encode (leaves siteBody) [.intersection outerPair.1 outerPair.2] siteBody))
+        (leaves siteBody) (.binder event.smart event.expression) event.environment event.before ∧
+      generatedEntry.key = event.key ∧ generatedEntry = event.entry ∧ generatedBody = event.body ∧
+      generatedDepth = event.depth ∧ generatedOrdinary = event.ordinary ∧
+      event.afterBody.nodeRecords event.key = none ∧
+      Nonempty (Path current.native.machine.heap event.before) ∧
+      Nonempty (Path event.before event.afterDepth) ∧
+      Nonempty (Path event.afterDepth event.cut) ∧
+      Nonempty (Path event.allocated event.afterBody) ∧
+      Grows event.after generatedHeap ∧ Extends event.after.nodes.issued generatedHeap.nodes.issued ∧
+      ∃ raw rawAfter,
+        build event.expression (.reference (.interned event.entry.identity) :: event.environment)
+          event.allocated = .done raw rawAfter ∧
+        run (withoutSelfReference (.interned event.entry.identity) raw) rawAfter = (event.body,event.afterBody) ∧
+        Context event.allocated (.reference (.interned event.entry.identity) :: event.environment) ∧
+        Reached (.binder true (encode (leaves siteBody) [.intersection outerPair.1 outerPair.2] siteBody))
+          (leaves siteBody) event.expression (.reference (.interned event.entry.identity) :: event.environment)
+          event.allocated ∧
+        (∀ storedRow, RowAt generatedBody storedRow → RowAt raw storedRow ∧
+          SourceRow event.expression (.reference (.interned event.entry.identity) :: event.environment)
+            event.allocated raw rawAfter storedRow ∧
+    ∃ terminalExpression terminalInputs terminalBefore terminalRaw terminalAfter,
+      SourceRow terminalExpression terminalInputs terminalBefore terminalRaw terminalAfter storedRow ∧
+      build terminalExpression terminalInputs terminalBefore = .done terminalRaw terminalAfter ∧
+      (∀ members, terminalExpression ≠ Syntax.union members) ∧
+      Context terminalBefore terminalInputs ∧
+      Reached (.binder true (encode (leaves siteBody) [.intersection outerPair.1 outerPair.2] siteBody)) (leaves siteBody) terminalExpression terminalInputs terminalBefore ∧
+      SyntaxBound terminalExpression event.expression ∧
+      Grows terminalAfter rawAfter ∧ Extends terminalAfter.nodes.issued rawAfter.nodes.issued ∧
+      ((∃ edges, terminalExpression = Syntax.node edges) ∨
+       (∃ smart body, terminalExpression = Syntax.binder smart body) ∨
+       ∃ (slot : Nat) (captured : Node) (crossings : List (InternedFreshOrdinaryActiveOrigins.Crossing Symbol Guard))
+         (originalSlot : Nat),
+         terminalExpression = Syntax.var slot ∧
+         terminalInputs[slot]? = some captured ∧ RowAt captured storedRow ∧
+         InternedFreshOrdinaryActiveOrigins.Path (.binder true (encode (leaves siteBody) [.intersection outerPair.1 outerPair.2] siteBody)) (leaves siteBody)
+           (Syntax.var slot) terminalInputs crossings ∧
+         slot = crossings.length + originalSlot ∧
+         (leaves siteBody)[originalSlot]? = some captured ∧ captured.free = [] ∧
+         ∀ (entry : Interned NodeKey) (body depth ordinary : Node),
+           captured = .mu entry body depth ordinary → RowAt body storedRow ∧
+           Available current.native.machine.heap (.mu entry body depth ordinary) ∧
+           current.native.machine.heap.nodeRecords entry.key = some (.mu entry body depth ordinary) ∧
+           entry.key ≠ generatedEntry.key ∧
+             ((before.native.machine.heap.nodeRecords entry.key = some (.mu entry body depth ordinary) ∧
+      ∃ path : Path empty before.native.machine.heap,
+        (∀ (index : Nat) event, (events path)[index]? = some event →
+          Reached expression [] (.binder event.smart event.expression) event.environment event.before) ∧
+        (∀ key selectedEntry selectedBody selectedDepth selectedOrdinary,
+          before.native.machine.heap.nodeRecords key = some (.mu selectedEntry selectedBody selectedDepth selectedOrdinary) →
+          ∃ index : Nat, ∃ event, (events path)[index]? = some event ∧
+            Reached expression [] (.binder event.smart event.expression) event.environment event.before ∧
+            key = event.key ∧ Value.mu selectedEntry selectedBody selectedDepth selectedOrdinary = event.candidate ∧
+            event.afterBody.nodeRecords event.key = none ∧
+            Nonempty (Path empty event.before) ∧
+            Nonempty (Path event.before event.afterDepth) ∧
+            Nonempty (Path event.afterDepth event.cut) ∧
+            Nonempty (Path event.allocated event.afterBody) ∧
+            Grows event.after before.native.machine.heap ∧
+            Extends event.after.nodes.issued before.native.machine.heap.nodes.issued) ∧
+        ∃ outerIndex : Nat, ∃ outer : @Publication Symbol Guard _,
+          (events path)[outerIndex]? = some outer ∧
+          Reached expression [] (.binder outer.smart outer.expression) outer.environment outer.before ∧
+          entry.key = outer.key ∧ Value.mu entry body depth ordinary = outer.candidate ∧
+          entry = outer.entry ∧ body = outer.body ∧ depth = outer.depth ∧ ordinary = outer.ordinary ∧
+          outer.afterBody.nodeRecords outer.key = none ∧
+          Nonempty (Path empty outer.before) ∧
+          Nonempty (Path outer.before outer.afterDepth) ∧
+          Nonempty (Path outer.afterDepth outer.cut) ∧
+          Nonempty (Path outer.allocated outer.afterBody) ∧
+          Grows outer.after before.native.machine.heap ∧
+          Extends outer.after.nodes.issued before.native.machine.heap.nodes.issued ∧
+          (∀ storedRow, RowAt body storedRow →
+            ∃ producerIndex : Nat, ∃ producer : @Publication Symbol Guard _,
+        ∃ expressions inputs before raw after rows middle,
+        ∃ sourceIndex outputIndex : Nat, ∃ symbol guard children,
+          producerIndex ≤ outerIndex ∧ (events path)[producerIndex]? = some producer ∧
+          SyntaxBound (Syntax.node expressions) producer.expression ∧
+          UnionDescent producer.expression (Syntax.node expressions) ∧
+          Context before inputs ∧ Reached expression [] (Syntax.node expressions) inputs before ∧
+          SourceRow (Syntax.node expressions) inputs before raw after storedRow ∧
+          build (Syntax.node expressions) inputs before = .done raw after ∧
+          buildEdges expressions inputs before = .done rows middle ∧
+          run (makeNode rows) middle = (raw,after) ∧
+          (nodeEdges raw)[outputIndex]? = some storedRow ∧
+          ∃ call : RowCall expressions inputs before rows middle after sourceIndex symbol guard children,
+            call.output = storedRow ∧ Grows after outer.afterBody ∧
+            Extends after.nodes.issued outer.afterBody.nodes.issued) ∧
+      (∃ producerIndex : Nat, ∃ producer : @Publication Symbol Guard _,
+        ∃ expressions inputs before raw after rows middle,
+        ∃ sourceIndex outputIndex : Nat, ∃ symbol guard children,
+          producerIndex ≤ outerIndex ∧ (events path)[producerIndex]? = some producer ∧
+          SyntaxBound (Syntax.node expressions) producer.expression ∧
+          UnionDescent producer.expression (Syntax.node expressions) ∧
+          Context before inputs ∧ Reached expression [] (Syntax.node expressions) inputs before ∧
+          SourceRow (Syntax.node expressions) inputs before raw after storedRow ∧
+          build (Syntax.node expressions) inputs before = .done raw after ∧
+          buildEdges expressions inputs before = .done rows middle ∧
+          run (makeNode rows) middle = (raw,after) ∧
+          (nodeEdges raw)[outputIndex]? = some storedRow ∧
+          ∃ call : RowCall expressions inputs before rows middle after sourceIndex symbol guard children,
+            call.output = storedRow ∧ Grows after outer.afterBody ∧
+            Extends after.nodes.issued outer.afterBody.nodes.issued) ∧
+    SemanticHeap current.native.machine.heap ∧
+      Available current.native.machine.heap (.mu entry body depth ordinary) ∧
+      Nonempty (SourceCurrentNativeMuPublication.History empty current.native.machine.heap) ∧
+      ∀ value after,
+        InternedFreshOrdinaryStoredSubstitution.unfold (.mu entry body depth ordinary)
+          current.native.machine.heap = .done value after →
+        SemanticHeap after ∧ Grows current.native.machine.heap after ∧
+          Extends current.native.machine.heap.nodes.issued after.nodes.issued ∧
+          Available after value ∧ Nonempty (SourceCurrentNativeMuPublication.History empty after) ∧
+          ∀ row, Row value row →
+            ∃ storedRow, RowAt body storedRow ∧
+              row.entry.key.symbol = storedRow.entry.key.symbol ∧
+              row.entry.key.constraint = storedRow.entry.key.constraint ∧
+              row.children.length = storedRow.children.length ∧
+              (row = storedRow ∨ ∃ lexical start finish, Calls lexical storedRow.children start row.children finish) ∧
+              ∃ producerIndex : Nat, ∃ producer : @Publication Symbol Guard _,
+        ∃ expressions inputs before raw after rows middle,
+        ∃ sourceIndex outputIndex : Nat, ∃ symbol guard children,
+          producerIndex ≤ outerIndex ∧ (events path)[producerIndex]? = some producer ∧
+          SyntaxBound (Syntax.node expressions) producer.expression ∧
+          UnionDescent producer.expression (Syntax.node expressions) ∧
+          Context before inputs ∧ Reached expression [] (Syntax.node expressions) inputs before ∧
+          SourceRow (Syntax.node expressions) inputs before raw after storedRow ∧
+          build (Syntax.node expressions) inputs before = .done raw after ∧
+          buildEdges expressions inputs before = .done rows middle ∧
+          run (makeNode rows) middle = (raw,after) ∧
+          (nodeEdges raw)[outputIndex]? = some storedRow ∧
+          ∃ call : RowCall expressions inputs before rows middle after sourceIndex symbol guard children,
+            call.output = storedRow ∧ Grows after outer.afterBody ∧
+            Extends after.nodes.issued outer.afterBody.nodes.issued) ∨
+    ∃ prefixFuel suffixFuel priorPair parent next siteBefore siteAfter generated heap,
+      fuel = prefixFuel + 1 + suffixFuel ∧ prefixFuel < fuel ∧
+      Trace prefixFuel (.code (requestNode request.domain request.left request.right)) before
+        (.code (.optionalBinder priorPair parent next)) siteBefore ∧
+      SemanticHeap siteBefore.native.machine.heap ∧ Available siteBefore.native.machine.heap parent ∧
+      SourceRecursiveIntersectionMaybeMu.maybeMu priorPair parent siteBefore.native.machine.heap = .done generated heap ∧
+      siteAfter = ⟨advance siteBefore.native {siteBefore.native.machine with heap := heap},siteBefore.operations⟩ ∧
+      step (.code (.optionalBinder priorPair parent next)) siteBefore = .yielded (.code (next generated)) siteAfter ∧
+      Trace suffixFuel (.code (next generated)) siteAfter (.code (.optionalBinder outerPair siteBody siteNext)) current ∧
+      siteBefore.native.machine.heap.nodeRecords entry.key = none ∧
+      heap.nodeRecords entry.key = some (.mu entry body depth ordinary) ∧
+      Grows before.native.machine.heap siteBefore.native.machine.heap ∧
+      Extends before.native.machine.heap.nodes.issued siteBefore.native.machine.heap.nodes.issued ∧
+      Grows heap current.native.machine.heap ∧ Extends heap.nodes.issued current.native.machine.heap.nodes.issued ∧
+      Reference.intersection priorPair.1 priorPair.2 ∈ parent.free ∧
+      Context siteBefore.native.machine.heap (leaves parent) ∧
+      InternedFreshOrdinaryConstruction.build
+        (.binder true (encode (leaves parent) [.intersection priorPair.1 priorPair.2] parent)) (leaves parent)
+        siteBefore.native.machine.heap = .done generated heap ∧
+      Written (.binder true (encode (leaves parent) [.intersection priorPair.1 priorPair.2] parent)) (leaves parent)
+        siteBefore.native.machine.heap heap entry.key (.mu entry body depth ordinary) ∧
+      SourceCurrentNativeOptionalRowProduction.Origin request prefixFuel before siteBefore priorPair parent next ∧
+      Stored (.binder true (encode (leaves parent) [.intersection priorPair.1 priorPair.2] parent))
+        (leaves parent) siteBefore.native.machine.heap heap entry.key entry body depth ordinary ∧
+      Observed (.binder true (encode (leaves parent) [.intersection priorPair.1 priorPair.2] parent))
+        (leaves parent) siteBefore.native.machine.heap heap entry.key entry body depth ordinary
+        current.native.machine.heap))) ∧
+        (∃ terminalInputs terminalBefore terminalRaw terminalAfter
+          (crossings : List (InternedFreshOrdinaryActiveOrigins.Crossing Symbol Guard)),
+          SourceRow (.var 2) terminalInputs terminalBefore terminalRaw terminalAfter storedRow ∧
+          build (.var 2) terminalInputs terminalBefore = .done terminalRaw terminalAfter ∧
+          Context terminalBefore terminalInputs ∧
+          Reached generatedExpression generatedInputs (.var 2) terminalInputs terminalBefore ∧
+          SyntaxBound (.var 2) event.expression ∧
+          Grows terminalAfter rawAfter ∧ Extends terminalAfter.nodes.issued rawAfter.nodes.issued ∧
+          terminalInputs[2]? = some (.mu entry stored depth ordinary) ∧
+          InternedFreshOrdinaryActiveOrigins.Path generatedExpression generatedInputs
+            (.var 2) terminalInputs crossings ∧ crossings.length = 1 ∧
+          generatedInputs[1]? = some (.mu entry stored depth ordinary) ∧
+          RowAt stored storedRow ∧ Available current.native.machine.heap (.mu entry stored depth ordinary) ∧
+          current.native.machine.heap.nodeRecords entry.key = some (.mu entry stored depth ordinary) ∧
+          entry.key ≠ generatedEntry.key ∧
+before.native.machine.heap.nodeRecords entry.key = some (.mu entry stored depth ordinary) ∧
+      ∃ path : Path empty before.native.machine.heap,
+        (∀ (index : Nat) event, (events path)[index]? = some event →
+          Reached expression [] (.binder event.smart event.expression) event.environment event.before) ∧
+        (∀ key selectedEntry selectedBody selectedDepth selectedOrdinary,
+          before.native.machine.heap.nodeRecords key = some (.mu selectedEntry selectedBody selectedDepth selectedOrdinary) →
+          ∃ index : Nat, ∃ event, (events path)[index]? = some event ∧
+            Reached expression [] (.binder event.smart event.expression) event.environment event.before ∧
+            key = event.key ∧ Value.mu selectedEntry selectedBody selectedDepth selectedOrdinary = event.candidate ∧
+            event.afterBody.nodeRecords event.key = none ∧
+            Nonempty (Path empty event.before) ∧
+            Nonempty (Path event.before event.afterDepth) ∧
+            Nonempty (Path event.afterDepth event.cut) ∧
+            Nonempty (Path event.allocated event.afterBody) ∧
+            Grows event.after before.native.machine.heap ∧
+            Extends event.after.nodes.issued before.native.machine.heap.nodes.issued) ∧
+        ∃ outerIndex : Nat, ∃ outer : @Publication Symbol Guard _,
+          (events path)[outerIndex]? = some outer ∧
+          Reached expression [] (.binder outer.smart outer.expression) outer.environment outer.before ∧
+          entry.key = outer.key ∧ Value.mu entry stored depth ordinary = outer.candidate ∧
+          entry = outer.entry ∧ stored = outer.body ∧ depth = outer.depth ∧ ordinary = outer.ordinary ∧
+          outer.afterBody.nodeRecords outer.key = none ∧
+          Nonempty (Path empty outer.before) ∧
+          Nonempty (Path outer.before outer.afterDepth) ∧
+          Nonempty (Path outer.afterDepth outer.cut) ∧
+          Nonempty (Path outer.allocated outer.afterBody) ∧
+          Grows outer.after before.native.machine.heap ∧
+          Extends outer.after.nodes.issued before.native.machine.heap.nodes.issued ∧
+          (∀ storedRow, RowAt stored storedRow →
+            ∃ producerIndex : Nat, ∃ producer : @Publication Symbol Guard _,
+        ∃ expressions inputs before raw after rows middle,
+        ∃ sourceIndex outputIndex : Nat, ∃ symbol guard children,
+          producerIndex ≤ outerIndex ∧ (events path)[producerIndex]? = some producer ∧
+          SyntaxBound (Syntax.node expressions) producer.expression ∧
+          UnionDescent producer.expression (Syntax.node expressions) ∧
+          Context before inputs ∧ Reached expression [] (Syntax.node expressions) inputs before ∧
+          SourceRow (Syntax.node expressions) inputs before raw after storedRow ∧
+          build (Syntax.node expressions) inputs before = .done raw after ∧
+          buildEdges expressions inputs before = .done rows middle ∧
+          run (makeNode rows) middle = (raw,after) ∧
+          (nodeEdges raw)[outputIndex]? = some storedRow ∧
+          ∃ call : RowCall expressions inputs before rows middle after sourceIndex symbol guard children,
+            call.output = storedRow ∧ Grows after outer.afterBody ∧
+            Extends after.nodes.issued outer.afterBody.nodes.issued) ∧
+      (∃ producerIndex : Nat, ∃ producer : @Publication Symbol Guard _,
+        ∃ expressions inputs before raw after rows middle,
+        ∃ sourceIndex outputIndex : Nat, ∃ symbol guard children,
+          producerIndex ≤ outerIndex ∧ (events path)[producerIndex]? = some producer ∧
+          SyntaxBound (Syntax.node expressions) producer.expression ∧
+          UnionDescent producer.expression (Syntax.node expressions) ∧
+          Context before inputs ∧ Reached expression [] (Syntax.node expressions) inputs before ∧
+          SourceRow (Syntax.node expressions) inputs before raw after storedRow ∧
+          build (Syntax.node expressions) inputs before = .done raw after ∧
+          buildEdges expressions inputs before = .done rows middle ∧
+          run (makeNode rows) middle = (raw,after) ∧
+          (nodeEdges raw)[outputIndex]? = some storedRow ∧
+          ∃ call : RowCall expressions inputs before rows middle after sourceIndex symbol guard children,
+            call.output = storedRow ∧ Grows after outer.afterBody ∧
+            Extends after.nodes.issued outer.afterBody.nodes.issued) ∧
+    SemanticHeap current.native.machine.heap ∧
+      Available current.native.machine.heap (.mu entry stored depth ordinary) ∧
+      Nonempty (SourceCurrentNativeMuPublication.History empty current.native.machine.heap) ∧
+      ∀ value after,
+        InternedFreshOrdinaryStoredSubstitution.unfold (.mu entry stored depth ordinary)
+          current.native.machine.heap = .done value after →
+        SemanticHeap after ∧ Grows current.native.machine.heap after ∧
+          Extends current.native.machine.heap.nodes.issued after.nodes.issued ∧
+          Available after value ∧ Nonempty (SourceCurrentNativeMuPublication.History empty after) ∧
+          ∀ row, Row value row →
+            ∃ storedRow, RowAt stored storedRow ∧
+              row.entry.key.symbol = storedRow.entry.key.symbol ∧
+              row.entry.key.constraint = storedRow.entry.key.constraint ∧
+              row.children.length = storedRow.children.length ∧
+              (row = storedRow ∨ ∃ lexical start finish, Calls lexical storedRow.children start row.children finish) ∧
+              ∃ producerIndex : Nat, ∃ producer : @Publication Symbol Guard _,
+        ∃ expressions inputs before raw after rows middle,
+        ∃ sourceIndex outputIndex : Nat, ∃ symbol guard children,
+          producerIndex ≤ outerIndex ∧ (events path)[producerIndex]? = some producer ∧
+          SyntaxBound (Syntax.node expressions) producer.expression ∧
+          UnionDescent producer.expression (Syntax.node expressions) ∧
+          Context before inputs ∧ Reached expression [] (Syntax.node expressions) inputs before ∧
+          SourceRow (Syntax.node expressions) inputs before raw after storedRow ∧
+          build (Syntax.node expressions) inputs before = .done raw after ∧
+          buildEdges expressions inputs before = .done rows middle ∧
+          run (makeNode rows) middle = (raw,after) ∧
+          (nodeEdges raw)[outputIndex]? = some storedRow ∧
+          ∃ call : RowCall expressions inputs before rows middle after sourceIndex symbol guard children,
+            call.output = storedRow ∧ Grows after outer.afterBody ∧
+            Extends after.nodes.issued outer.afterBody.nodes.issued) ∧
+        ∀ value after,
+          InternedFreshOrdinaryStoredSubstitution.unfold (.mu generatedEntry generatedBody generatedDepth generatedOrdinary)
+            generatedHeap = .done value after →
+          SemanticHeap after ∧ Grows generatedHeap after ∧ Extends generatedHeap.nodes.issued after.nodes.issued ∧
+          Available after value ∧ Nonempty (SourceCurrentNativeMuPublication.History empty after) ∧
+          ∀ row, Row value row →
+          ∃ originalRow, RowAt generatedBody originalRow ∧
+            row.entry.key.symbol = originalRow.entry.key.symbol ∧
+            row.entry.key.constraint = originalRow.entry.key.constraint ∧
+            row.children.length = originalRow.children.length ∧
+            (row = originalRow ∨ ∃ lexical current next, Calls lexical originalRow.children current row.children next) ∧
+            RowAt raw originalRow ∧
+            SourceRow event.expression (.reference (.interned event.entry.identity) :: event.environment)
+              event.allocated raw rawAfter originalRow ∧
+    ∃ terminalExpression terminalInputs terminalBefore terminalRaw terminalAfter,
+      SourceRow terminalExpression terminalInputs terminalBefore terminalRaw terminalAfter originalRow ∧
+      build terminalExpression terminalInputs terminalBefore = .done terminalRaw terminalAfter ∧
+      (∀ members, terminalExpression ≠ Syntax.union members) ∧
+      Context terminalBefore terminalInputs ∧
+      Reached (.binder true (encode (leaves siteBody) [.intersection outerPair.1 outerPair.2] siteBody)) (leaves siteBody) terminalExpression terminalInputs terminalBefore ∧
+      SyntaxBound terminalExpression event.expression ∧
+      Grows terminalAfter rawAfter ∧ Extends terminalAfter.nodes.issued rawAfter.nodes.issued ∧
+      ((∃ edges, terminalExpression = Syntax.node edges) ∨
+       (∃ smart body, terminalExpression = Syntax.binder smart body) ∨
+       ∃ (slot : Nat) (captured : Node) (crossings : List (InternedFreshOrdinaryActiveOrigins.Crossing Symbol Guard))
+         (originalSlot : Nat),
+         terminalExpression = Syntax.var slot ∧
+         terminalInputs[slot]? = some captured ∧ RowAt captured originalRow ∧
+         InternedFreshOrdinaryActiveOrigins.Path (.binder true (encode (leaves siteBody) [.intersection outerPair.1 outerPair.2] siteBody)) (leaves siteBody)
+           (Syntax.var slot) terminalInputs crossings ∧
+         slot = crossings.length + originalSlot ∧
+         (leaves siteBody)[originalSlot]? = some captured ∧ captured.free = [] ∧
+         ∀ (entry : Interned NodeKey) (body depth ordinary : Node),
+           captured = .mu entry body depth ordinary → RowAt body originalRow ∧
+           Available current.native.machine.heap (.mu entry body depth ordinary) ∧
+           current.native.machine.heap.nodeRecords entry.key = some (.mu entry body depth ordinary) ∧
+           entry.key ≠ generatedEntry.key ∧
+             ((before.native.machine.heap.nodeRecords entry.key = some (.mu entry body depth ordinary) ∧
+      ∃ path : Path empty before.native.machine.heap,
+        (∀ (index : Nat) event, (events path)[index]? = some event →
+          Reached expression [] (.binder event.smart event.expression) event.environment event.before) ∧
+        (∀ key selectedEntry selectedBody selectedDepth selectedOrdinary,
+          before.native.machine.heap.nodeRecords key = some (.mu selectedEntry selectedBody selectedDepth selectedOrdinary) →
+          ∃ index : Nat, ∃ event, (events path)[index]? = some event ∧
+            Reached expression [] (.binder event.smart event.expression) event.environment event.before ∧
+            key = event.key ∧ Value.mu selectedEntry selectedBody selectedDepth selectedOrdinary = event.candidate ∧
+            event.afterBody.nodeRecords event.key = none ∧
+            Nonempty (Path empty event.before) ∧
+            Nonempty (Path event.before event.afterDepth) ∧
+            Nonempty (Path event.afterDepth event.cut) ∧
+            Nonempty (Path event.allocated event.afterBody) ∧
+            Grows event.after before.native.machine.heap ∧
+            Extends event.after.nodes.issued before.native.machine.heap.nodes.issued) ∧
+        ∃ outerIndex : Nat, ∃ outer : @Publication Symbol Guard _,
+          (events path)[outerIndex]? = some outer ∧
+          Reached expression [] (.binder outer.smart outer.expression) outer.environment outer.before ∧
+          entry.key = outer.key ∧ Value.mu entry body depth ordinary = outer.candidate ∧
+          entry = outer.entry ∧ body = outer.body ∧ depth = outer.depth ∧ ordinary = outer.ordinary ∧
+          outer.afterBody.nodeRecords outer.key = none ∧
+          Nonempty (Path empty outer.before) ∧
+          Nonempty (Path outer.before outer.afterDepth) ∧
+          Nonempty (Path outer.afterDepth outer.cut) ∧
+          Nonempty (Path outer.allocated outer.afterBody) ∧
+          Grows outer.after before.native.machine.heap ∧
+          Extends outer.after.nodes.issued before.native.machine.heap.nodes.issued ∧
+          (∀ storedRow, RowAt body storedRow →
+            ∃ producerIndex : Nat, ∃ producer : @Publication Symbol Guard _,
+        ∃ expressions inputs before raw after rows middle,
+        ∃ sourceIndex outputIndex : Nat, ∃ symbol guard children,
+          producerIndex ≤ outerIndex ∧ (events path)[producerIndex]? = some producer ∧
+          SyntaxBound (Syntax.node expressions) producer.expression ∧
+          UnionDescent producer.expression (Syntax.node expressions) ∧
+          Context before inputs ∧ Reached expression [] (Syntax.node expressions) inputs before ∧
+          SourceRow (Syntax.node expressions) inputs before raw after storedRow ∧
+          build (Syntax.node expressions) inputs before = .done raw after ∧
+          buildEdges expressions inputs before = .done rows middle ∧
+          run (makeNode rows) middle = (raw,after) ∧
+          (nodeEdges raw)[outputIndex]? = some storedRow ∧
+          ∃ call : RowCall expressions inputs before rows middle after sourceIndex symbol guard children,
+            call.output = storedRow ∧ Grows after outer.afterBody ∧
+            Extends after.nodes.issued outer.afterBody.nodes.issued) ∧
+      (∃ producerIndex : Nat, ∃ producer : @Publication Symbol Guard _,
+        ∃ expressions inputs before raw after rows middle,
+        ∃ sourceIndex outputIndex : Nat, ∃ symbol guard children,
+          producerIndex ≤ outerIndex ∧ (events path)[producerIndex]? = some producer ∧
+          SyntaxBound (Syntax.node expressions) producer.expression ∧
+          UnionDescent producer.expression (Syntax.node expressions) ∧
+          Context before inputs ∧ Reached expression [] (Syntax.node expressions) inputs before ∧
+          SourceRow (Syntax.node expressions) inputs before raw after originalRow ∧
+          build (Syntax.node expressions) inputs before = .done raw after ∧
+          buildEdges expressions inputs before = .done rows middle ∧
+          run (makeNode rows) middle = (raw,after) ∧
+          (nodeEdges raw)[outputIndex]? = some originalRow ∧
+          ∃ call : RowCall expressions inputs before rows middle after sourceIndex symbol guard children,
+            call.output = originalRow ∧ Grows after outer.afterBody ∧
+            Extends after.nodes.issued outer.afterBody.nodes.issued) ∧
+    SemanticHeap current.native.machine.heap ∧
+      Available current.native.machine.heap (.mu entry body depth ordinary) ∧
+      Nonempty (SourceCurrentNativeMuPublication.History empty current.native.machine.heap) ∧
+      ∀ value after,
+        InternedFreshOrdinaryStoredSubstitution.unfold (.mu entry body depth ordinary)
+          current.native.machine.heap = .done value after →
+        SemanticHeap after ∧ Grows current.native.machine.heap after ∧
+          Extends current.native.machine.heap.nodes.issued after.nodes.issued ∧
+          Available after value ∧ Nonempty (SourceCurrentNativeMuPublication.History empty after) ∧
+          ∀ row, Row value row →
+            ∃ storedRow, RowAt body storedRow ∧
+              row.entry.key.symbol = storedRow.entry.key.symbol ∧
+              row.entry.key.constraint = storedRow.entry.key.constraint ∧
+              row.children.length = storedRow.children.length ∧
+              (row = storedRow ∨ ∃ lexical start finish, Calls lexical storedRow.children start row.children finish) ∧
+              ∃ producerIndex : Nat, ∃ producer : @Publication Symbol Guard _,
+        ∃ expressions inputs before raw after rows middle,
+        ∃ sourceIndex outputIndex : Nat, ∃ symbol guard children,
+          producerIndex ≤ outerIndex ∧ (events path)[producerIndex]? = some producer ∧
+          SyntaxBound (Syntax.node expressions) producer.expression ∧
+          UnionDescent producer.expression (Syntax.node expressions) ∧
+          Context before inputs ∧ Reached expression [] (Syntax.node expressions) inputs before ∧
+          SourceRow (Syntax.node expressions) inputs before raw after storedRow ∧
+          build (Syntax.node expressions) inputs before = .done raw after ∧
+          buildEdges expressions inputs before = .done rows middle ∧
+          run (makeNode rows) middle = (raw,after) ∧
+          (nodeEdges raw)[outputIndex]? = some storedRow ∧
+          ∃ call : RowCall expressions inputs before rows middle after sourceIndex symbol guard children,
+            call.output = storedRow ∧ Grows after outer.afterBody ∧
+            Extends after.nodes.issued outer.afterBody.nodes.issued) ∨
+    ∃ prefixFuel suffixFuel priorPair parent next siteBefore siteAfter generated heap,
+      fuel = prefixFuel + 1 + suffixFuel ∧ prefixFuel < fuel ∧
+      Trace prefixFuel (.code (requestNode request.domain request.left request.right)) before
+        (.code (.optionalBinder priorPair parent next)) siteBefore ∧
+      SemanticHeap siteBefore.native.machine.heap ∧ Available siteBefore.native.machine.heap parent ∧
+      SourceRecursiveIntersectionMaybeMu.maybeMu priorPair parent siteBefore.native.machine.heap = .done generated heap ∧
+      siteAfter = ⟨advance siteBefore.native {siteBefore.native.machine with heap := heap},siteBefore.operations⟩ ∧
+      step (.code (.optionalBinder priorPair parent next)) siteBefore = .yielded (.code (next generated)) siteAfter ∧
+      Trace suffixFuel (.code (next generated)) siteAfter (.code (.optionalBinder outerPair siteBody siteNext)) current ∧
+      siteBefore.native.machine.heap.nodeRecords entry.key = none ∧
+      heap.nodeRecords entry.key = some (.mu entry body depth ordinary) ∧
+      Grows before.native.machine.heap siteBefore.native.machine.heap ∧
+      Extends before.native.machine.heap.nodes.issued siteBefore.native.machine.heap.nodes.issued ∧
+      Grows heap current.native.machine.heap ∧ Extends heap.nodes.issued current.native.machine.heap.nodes.issued ∧
+      Reference.intersection priorPair.1 priorPair.2 ∈ parent.free ∧
+      Context siteBefore.native.machine.heap (leaves parent) ∧
+      InternedFreshOrdinaryConstruction.build
+        (.binder true (encode (leaves parent) [.intersection priorPair.1 priorPair.2] parent)) (leaves parent)
+        siteBefore.native.machine.heap = .done generated heap ∧
+      Written (.binder true (encode (leaves parent) [.intersection priorPair.1 priorPair.2] parent)) (leaves parent)
+        siteBefore.native.machine.heap heap entry.key (.mu entry body depth ordinary) ∧
+      SourceCurrentNativeOptionalRowProduction.Origin request prefixFuel before siteBefore priorPair parent next ∧
+      Stored (.binder true (encode (leaves parent) [.intersection priorPair.1 priorPair.2] parent))
+        (leaves parent) siteBefore.native.machine.heap heap entry.key entry body depth ordinary ∧
+      Observed (.binder true (encode (leaves parent) [.intersection priorPair.1 priorPair.2] parent))
+        (leaves parent) siteBefore.native.machine.heap heap entry.key entry body depth ordinary
+        current.native.machine.heap))

@@ -1,5 +1,61 @@
 # Constrained languages, indexing, and distributions
 
+## Current generated-row full-Mu capture ancestry
+
+Updated: 2026-10-21 00:42 CEST. Proof checkpoint: `57fe78e0e`.
+Verified start: `0dab9a59d`. Imported main remains `794903b3f`.
+Read `lean/notes-current-native-generated-row-capture-backedge.md`.
+
+An actual native optional execution and its generated Observed receipt
+now fix one publication event and raw callback before all stored rows
+and actual successful unfold anchors. Each same complete row has an
+actual nonunion terminal build. Its node, binder and capture alternatives
+retain Context, Reached, a syntax bound and both callback suffixes.
+A capture retains its exact terminal lookup, active source Path, original
+slot offset and exact leaves occurrence. A row-bearing capture is closed.
+
+For a full-Mu capture, actual body availability supplies the same full
+resident cell before this optional operation. Its key differs from the
+new target key. One lower capture proof gives the same complete row an
+original indexed node SourceRow/build/RowCall or an actual generated
+producer at a strictly earlier native prefix. Both arms retain their
+complete receipts. The initial arm fixes the same indexed original path
+before all generic rows. The earlier generated arm stays unchanged.
+No input-pool nonemptiness, writer identity or decreasing rank is assumed.
+
+An actual successful unfold keeps its stored-row anchor, symbol,
+constraint and arity, plus identity or actual ordered child Calls.
+The new ancestry result applies to that stored anchor. Changed returned
+children need not equal the stored children or original node output.
+
+The new union-body example runs an actual admitted native prefix of
+60 steps. Its actual optional operation creates a new used outer Mu.
+The same returned callback row forces variable slot two, original pool
+slot one and one binder crossing. The captured full Mu was in the
+original heap. Its same returned earlier-generation arm contradicts
+actual prefix growth and its missing-cell receipt. The initial arm
+retains the same original indexed path and ultimate node RowCall for
+the complete tag17/Top/nullary stored row. All generic clauses remain.
+No actual unfold is run by this example.
+
+One public and one constructed full readback pass with standard axioms.
+Selected root strict logs are empty. Canonical and default Audit pass:
+3541 jobs and 74341 theorem dependency checks. Only the existing
+ClosedCompletion warning remains. All 51 actual capped Lean/Lake commands
+and 34 failed commands remain. One zero-exit incomplete public
+printer is rejected. Successful predecessor checks remain unselected.
+Counts do not measure completion. Exact large logs use verified lossless
+archives. Every earlier proof, draft, repair and counterexample remains.
+
+Generated node and non-Mu capture ancestry, warm binder reuse, self
+replacement and residual observations remain open. Global owner renewal,
+active-owner exclusion, final retention, general outer completion,
+convergence and production Haskell refinement also remain open.
+All 268 Haskell and 207 active package files keep their bytes.
+FINDINGS retains the external repair registry first. No new Haskell fix
+or runtime result is claimed. The full goal stays active. Pushes to
+formalize remain authorized.
+
 ## Current actual native capture to original node rows
 
 Updated: 2026-10-20 23:40 CEST. Proof checkpoint: `de1791f45`.

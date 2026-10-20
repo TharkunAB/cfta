@@ -1,0 +1,11 @@
+open Lean Meta Elab Term in
+/-- Retain a normalized value and the kernel-checked equality from its reduction. -/
+elab "checked_cbv% " value:term : term => do
+  let original ← instantiateMVars (← elabTerm value none)
+  let (normalized, equality) ← match ← Lean.Meta.Tactic.Cbv.cbvEntry original with
+    | .rfl .. => pure (original, ← mkEqRefl original)
+    | .step normalized equality .. => pure (normalized, equality)
+  let valueType ← inferType original
+  let predicate ← withLocalDeclD `checkpoint valueType fun value => do
+    mkLambdaFVars #[value] (← mkEq original value)
+  mkAppOptM ``Subtype.mk #[some valueType, some predicate, some normalized, some equality]

@@ -1,0 +1,16 @@
+private theorem source_done [DecidableEq (EdgeKey Symbol Guard)]
+    {expression : Syntax Symbol Guard} {inputs : List (Value Symbol Guard)}
+    {before : State Symbol Guard} {raw : Value Symbol Guard} {after : State Symbol Guard}
+    {row : EdgeValue Symbol Guard} (source : SourceRow expression inputs before raw after row) :
+    build expression inputs before = .done raw after := by
+  cases source with
+  | capture found _ => simp only [build,found,Option.getD_some]
+  | node built made _ _ _ => simp only [build,built,Outcome.bind,work,made]
+  | union built made _ _ _ _ _ _ _ => simp only [build,built,Outcome.bind,work,made]
+  | @binder smart expression inputs before raw after depth afterDepth ordinary cut entry body row
+      depthDone ordinaryDone requested _ _ _ =>
+    simp only [build]
+    change ((callback expression inputs .depth before).bind fun depth afterDepth =>
+      (callback expression inputs (.uninterned (ordinaryLevel depth)) afterDepth).bind
+        fun ordinary cut => request smart depth ordinary (callback expression inputs) cut) = .done raw after
+    simpa only [depthDone,ordinaryDone,Outcome.bind] using requested
