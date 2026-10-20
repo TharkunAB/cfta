@@ -115,22 +115,73 @@ Replacing native functions with uninterpreted SMT symbols would be an
 approximation. A countermodel could violate their definitions. This spike
 refuses that translation instead of returning a false `No`.
 
+## Save and reload a language
+
+`Data.CFTA.Lean.Serialization` stores a `Snapshot` with two parts:
+
+- `snapshotLanguage`: the editable language, including ordered productions,
+  named facts, and exclusions from `cfta-serialization`.
+- `snapshotContext`: the theory, value declarations, and ambient assumptions.
+
+`printSnapshot` writes a `lean-language 1;` envelope. The context uses derived
+`Show` and `Read`; the language uses the standard readable language format.
+The format preserves named sorts and predicate applications. `parseSnapshot`
+checks the language structure without contacting a solver. Native definitions
+remain trusted Lean code when the loaded language is queried.
+
+Use the same Lean and Mathlib deployment for replay. Native definitions refer
+to that environment. Standard Kimina does not expose its complete identity.
+The snapshot does not contain libraries, Haskell functions, solver caches, or
+proof results. Server options remain a runtime choice.
+
 ## Running example
 
-`refinement-logic-spike` builds 35 programs from five list chunks, reverse, and
-append. An LTA guard requires the result to be a sorted permutation of `[1,2]`.
-The example checks the accepted programs against a separate Haskell evaluator.
-It also checks every rank inverse and replays seeded samples.
+Find every program in this finite grammar whose result is a sorted permutation
+of `[1,2]`:
 
-```sh
-~/Code/heavy-management/bin/heavy --mem 8G --time 20m \
-  nix-shell --run 'z3_bin=$(dirname "$(command -v z3)"); export PATH="$z3_bin:/usr/bin:$PATH"; cabal run refinement-logic-spike -- +RTS -M1G -RTS'
+```text
+chunk   ::= [] | [1] | [2] | [1,2] | [2,1]
+program ::= chunk | reverse chunk | append chunk chunk
 ```
 
+There are 35 candidate programs. The saved `Language` gives each production
+its exact list value as a refinement. Its `answer` production has two named
+facts: `sorted` and `permutation`. The theory interprets these predicates as
+Lean's `List.Pairwise (· ≤ ·)` and `List.Perm [1,2]`.
+
+`refinement-logic-spike dump FILE` writes the source and context, reads them
+back, and checks exact equality before solving. `reload FILE` queries only
+the source and context from the file. It does not rebuild the source from the
+Haskell definitions. Both commands use `Language.compileGraph` followed by
+`Sized.sizedUpTo`, which keeps the source graph's rank order.
+
+Run from the repository root with a Kimina server on port 8000:
+
+```sh
+export XDG_RUNTIME_DIR=/run/user/1000
+export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
+~/Code/heavy-management/bin/heavy --mem 8G --time 20m \
+  nix-shell --run 'z3_bin=$(dirname "$(command -v z3)"); export PATH="$z3_bin:/usr/bin:$PATH"; cabal run refinement-logic-spike -- dump /tmp/list-programs.language +RTS -M2G -RTS'
+~/Code/heavy-management/bin/heavy --mem 8G --time 20m \
+  nix-shell --run 'z3_bin=$(dirname "$(command -v z3)"); export PATH="$z3_bin:/usr/bin:$PATH"; cabal run refinement-logic-spike -- reload /tmp/list-programs.language +RTS -M2G -RTS'
+```
+
+The example checks the five accepted programs against a separate Haskell
+interpreter. It checks every `(size, class rank)` inverse and 32 uniform
+samples with a fixed seed. A small explicit decoder reconstructs programs
+from their constructor labels. The decoder and independent checks are part
+of the executable; they are not serialized.
+
+The loaded theory also supplies `between`, which lowers to integer comparisons
+and runs through Z3 in a separate scalar context. Native list queries use
+Kimina. The example checks that `[2,1]` is not sorted and that reversing an
+arbitrary list twice returns the original list. Unresolved obligations remain
+`Unknown`, and exact enumeration reports an error.
+
 The example uses one observed value type, `List Int`. Mixed observed value
-sorts remain outside this spike. The scalar `between` predicate demonstrates
-exact Z3 lowering. Native list queries demonstrate Kimina proof checking and
-explicit refusal to lower. An unresolved obligation remains `Unknown`.
+sorts remain outside this spike. See the
+[complete snapshot](../docs/lean-spike/list-programs.language) and
+[results](../docs/lean-spike-generalized.md).
 
 ## Formula subset
 

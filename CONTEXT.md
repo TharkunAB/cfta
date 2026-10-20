@@ -38,6 +38,10 @@ Wilf, and Feat (ranking).
 
 ## Constraints
 
+- **Theory**: the fixed signatures and interpretations of named types,
+  functions, and predicates used by refinements.
+- **Logical context**: a theory, value declarations, and ambient assumptions
+  under which refinement obligations are interpreted.
 - **Equality class**: a set of paths that must hold equal subterms (ECTA:
   *path equivalence class*, PEC; type `PathEClass`).
 - **Equality constraints**: the equality classes of a transition (ECTA:

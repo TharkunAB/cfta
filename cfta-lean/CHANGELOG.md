@@ -4,7 +4,9 @@
 
 - Add typed theories for named data sorts, functions, and predicates.
 - Add shared predicate definitions and exact partial lowering to Z3.
-- Add a list-program example with LTA guards, enumeration, ranking, and samples.
+- Add readable snapshots of a language, theory, declarations, and assumptions.
+- Add a list-program example with dump/reload, LTA guards, enumeration,
+  ranking, and samples.
 
 - Replace the local synthesis oracle with an LTA `Entailment` solver that
   sends proof obligations to Kimina's HTTP API.

@@ -29,4 +29,4 @@ data Definition
       Predicate [Sort] Text
     | -- | Formal parameters and a predicate body in the shared language.
       Defined [(Name, Sort)] Formula
-    deriving (Eq, Show)
+    deriving (Eq, Show, Read)

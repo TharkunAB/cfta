@@ -1,0 +1,70 @@
+lean-language 1;
+Context {contextTheory = [("List",TypeConstructor 1 "List"),("nil",Function [] (NamedSort "List" [IntSort]) "([] : List Int)"),("cons",Function [IntSort,NamedSort "List" [IntSort]] (NamedSort "List" [IntSort]) "List.cons"),("append",Function [NamedSort "List" [IntSort],NamedSort "List" [IntSort]] (NamedSort "List" [IntSort]) "List.append"),("reverse",Function [NamedSort "List" [IntSort]] (NamedSort "List" [IntSort]) "List.reverse"),("sorted",Predicate [NamedSort "List" [IntSort]] "(fun xs : List Int => xs.Pairwise (\183 \8804 \183))"),("permutation",Predicate [NamedSort "List" [IntSort]] "(fun xs : List Int => xs.Perm [1,2])"),("between",Defined [("x",IntSort),("low",IntSort),("high",IntSort)] (And [Atom Ge (Var "x") (Var "low"),Atom Le (Var "x") (Var "high")]))], contextDeclarations = [("__cfta_value",NamedSort "List" [IntSort])], contextAssumptions = []}
+language 1;
+start ResultState;
+
+state ResultState {
+  answer = answer(CandidateState) {
+    permutation = satisfies([0], predicate(permutation, [v]));
+    sorted = satisfies([0], predicate(sorted, [v]));
+  };
+}
+
+state CandidateState {
+  "chunk []" = "chunk []" @{ eq(v, app(nil, [])) };
+  "chunk [1]" = "chunk [1]" @{ eq(v, app(cons, [1, app(nil, [])])) };
+  "chunk [2]" = "chunk [2]" @{ eq(v, app(cons, [2, app(nil, [])])) };
+  "chunk [1,2]" = "chunk [1,2]" @{ eq(v, app(cons, [1, app(cons, [2, app(nil, [])])])) };
+  "chunk [2,1]" = "chunk [2,1]" @{ eq(v, app(cons, [2, app(cons, [1, app(nil, [])])])) };
+  "reverse 0" = reverse @{ eq(v, app(reverse, [app(nil, [])])) }("ChunkState []");
+  "reverse 1" = reverse @{ eq(v, app(reverse, [app(cons, [1, app(nil, [])])])) }("ChunkState [1]");
+  "reverse 2" = reverse @{ eq(v, app(reverse, [app(cons, [2, app(nil, [])])])) }("ChunkState [2]");
+  "reverse 3" = reverse @{ eq(v, app(reverse, [app(cons, [1, app(cons, [2, app(nil, [])])])])) }("ChunkState [1,2]");
+  "reverse 4" = reverse @{ eq(v, app(reverse, [app(cons, [2, app(cons, [1, app(nil, [])])])])) }("ChunkState [2,1]");
+  "append 0 0" = append @{ eq(v, app(append, [app(nil, []), app(nil, [])])) }("ChunkState []", "ChunkState []");
+  "append 0 1" = append @{ eq(v, app(append, [app(nil, []), app(cons, [1, app(nil, [])])])) }("ChunkState []", "ChunkState [1]");
+  "append 0 2" = append @{ eq(v, app(append, [app(nil, []), app(cons, [2, app(nil, [])])])) }("ChunkState []", "ChunkState [2]");
+  "append 0 3" = append @{ eq(v, app(append, [app(nil, []), app(cons, [1, app(cons, [2, app(nil, [])])])])) }("ChunkState []", "ChunkState [1,2]");
+  "append 0 4" = append @{ eq(v, app(append, [app(nil, []), app(cons, [2, app(cons, [1, app(nil, [])])])])) }("ChunkState []", "ChunkState [2,1]");
+  "append 1 0" = append @{ eq(v, app(append, [app(cons, [1, app(nil, [])]), app(nil, [])])) }("ChunkState [1]", "ChunkState []");
+  "append 1 1" = append @{ eq(v, app(append, [app(cons, [1, app(nil, [])]), app(cons, [1, app(nil, [])])])) }("ChunkState [1]", "ChunkState [1]");
+  "append 1 2" = append @{ eq(v, app(append, [app(cons, [1, app(nil, [])]), app(cons, [2, app(nil, [])])])) }("ChunkState [1]", "ChunkState [2]");
+  "append 1 3" = append @{ eq(v, app(append, [app(cons, [1, app(nil, [])]), app(cons, [1, app(cons, [2, app(nil, [])])])])) }("ChunkState [1]", "ChunkState [1,2]");
+  "append 1 4" = append @{ eq(v, app(append, [app(cons, [1, app(nil, [])]), app(cons, [2, app(cons, [1, app(nil, [])])])])) }("ChunkState [1]", "ChunkState [2,1]");
+  "append 2 0" = append @{ eq(v, app(append, [app(cons, [2, app(nil, [])]), app(nil, [])])) }("ChunkState [2]", "ChunkState []");
+  "append 2 1" = append @{ eq(v, app(append, [app(cons, [2, app(nil, [])]), app(cons, [1, app(nil, [])])])) }("ChunkState [2]", "ChunkState [1]");
+  "append 2 2" = append @{ eq(v, app(append, [app(cons, [2, app(nil, [])]), app(cons, [2, app(nil, [])])])) }("ChunkState [2]", "ChunkState [2]");
+  "append 2 3" = append @{ eq(v, app(append, [app(cons, [2, app(nil, [])]), app(cons, [1, app(cons, [2, app(nil, [])])])])) }("ChunkState [2]", "ChunkState [1,2]");
+  "append 2 4" = append @{ eq(v, app(append, [app(cons, [2, app(nil, [])]), app(cons, [2, app(cons, [1, app(nil, [])])])])) }("ChunkState [2]", "ChunkState [2,1]");
+  "append 3 0" = append @{ eq(v, app(append, [app(cons, [1, app(cons, [2, app(nil, [])])]), app(nil, [])])) }("ChunkState [1,2]", "ChunkState []");
+  "append 3 1" = append @{ eq(v, app(append, [app(cons, [1, app(cons, [2, app(nil, [])])]), app(cons, [1, app(nil, [])])])) }("ChunkState [1,2]", "ChunkState [1]");
+  "append 3 2" = append @{ eq(v, app(append, [app(cons, [1, app(cons, [2, app(nil, [])])]), app(cons, [2, app(nil, [])])])) }("ChunkState [1,2]", "ChunkState [2]");
+  "append 3 3" = append @{ eq(v, app(append, [app(cons, [1, app(cons, [2, app(nil, [])])]), app(cons, [1, app(cons, [2, app(nil, [])])])])) }("ChunkState [1,2]", "ChunkState [1,2]");
+  "append 3 4" = append @{ eq(v, app(append, [app(cons, [1, app(cons, [2, app(nil, [])])]), app(cons, [2, app(cons, [1, app(nil, [])])])])) }("ChunkState [1,2]", "ChunkState [2,1]");
+  "append 4 0" = append @{ eq(v, app(append, [app(cons, [2, app(cons, [1, app(nil, [])])]), app(nil, [])])) }("ChunkState [2,1]", "ChunkState []");
+  "append 4 1" = append @{ eq(v, app(append, [app(cons, [2, app(cons, [1, app(nil, [])])]), app(cons, [1, app(nil, [])])])) }("ChunkState [2,1]", "ChunkState [1]");
+  "append 4 2" = append @{ eq(v, app(append, [app(cons, [2, app(cons, [1, app(nil, [])])]), app(cons, [2, app(nil, [])])])) }("ChunkState [2,1]", "ChunkState [2]");
+  "append 4 3" = append @{ eq(v, app(append, [app(cons, [2, app(cons, [1, app(nil, [])])]), app(cons, [1, app(cons, [2, app(nil, [])])])])) }("ChunkState [2,1]", "ChunkState [1,2]");
+  "append 4 4" = append @{ eq(v, app(append, [app(cons, [2, app(cons, [1, app(nil, [])])]), app(cons, [2, app(cons, [1, app(nil, [])])])])) }("ChunkState [2,1]", "ChunkState [2,1]");
+}
+
+state "ChunkState []" {
+  "chunk []" = "chunk []" @{ eq(v, app(nil, [])) };
+}
+
+state "ChunkState [1]" {
+  "chunk [1]" = "chunk [1]" @{ eq(v, app(cons, [1, app(nil, [])])) };
+}
+
+state "ChunkState [1,2]" {
+  "chunk [1,2]" = "chunk [1,2]" @{ eq(v, app(cons, [1, app(cons, [2, app(nil, [])])])) };
+}
+
+state "ChunkState [2]" {
+  "chunk [2]" = "chunk [2]" @{ eq(v, app(cons, [2, app(nil, [])])) };
+}
+
+state "ChunkState [2,1]" {
+  "chunk [2,1]" = "chunk [2,1]" @{ eq(v, app(cons, [2, app(cons, [1, app(nil, [])])])) };
+}
+

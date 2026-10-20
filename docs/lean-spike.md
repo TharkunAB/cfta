@@ -5,7 +5,8 @@
 The current branch is `spike/refinement-logic` in
 `~/Code/microecta/lean-kimina`. The [generalized refinement spike](lean-spike-generalized.md)
 extends the Kimina checkpoint with named types, interpreted functions and
-predicates, and exact partial solver lowering. Read that document first.
+predicates, and exact partial solver lowering. It now builds on PR #89 and
+stores the language and its logical context for replay. Read that document first.
 The sections below record earlier checkpoints.
 
 ## Restart with Kimina, 2026-10-20
