@@ -1,5 +1,48 @@
 # cfta formal model
 
+## Current indexed source-row binder resumption
+
+Updated: 2026-10-20 23:15 CEST. Proof checkpoint: `65dc7bbf5`.
+Verified start: `1c613eabe`. Imported main remains `794903b3f`.
+Read `lean/notes-current-native-original-indexed-resumption.md`.
+
+One actual completed original build from empty fixes one publication path.
+Each indexed outer writer fixes its actual raw callback before all stored
+rows. A joint source-row induction keeps the same terminal call and
+original union descent. A node terminal retains its actual RowCall.
+A binder terminal keeps its probes, request, complete selected payload,
+smart finish and selected stored row. That same full cell reaches only
+the enclosing outer.afterBody. The same path then supplies an earlier
+writer at index i < j. Its exact event, complete payload, prefix, three
+callback paths, physical and issued suffixes remain together. Its actual
+raw callback stays fixed before all rows of the selected stored body.
+No independent Stored or Observed event is selected or equated.
+
+The same warm source example consumes this producer once. Its own source
+route and actual filter force the already-returned terminal to nested.
+It removes only that terminal's node alternative. It retains the complete
+earlier indexed binder receipt and actual tag17 raw SourceRow. The public
+example also retains all generic clauses. It runs no unfold or native
+execution prefix and adds no independent source family.
+
+One public and one constructed full readback pass with standard axioms.
+Root strict logs are empty. Canonical and default Audit pass: 3538 jobs
+and 74334 theorem dependency checks. Only the older ClosedCompletion
+warning remains. All 10 actual capped Lean/Lake commands and
+1 failed attempts remain. Counts do not measure completion.
+Every earlier proof, draft, repair and counterexample remains.
+
+The next proof must iterate the same indexed row transition to an actual
+original node RowCall. Strong induction on its same publication index is
+the proposed route. That endpoint theorem remains unproved here.
+Source chronology does not give global native owner-renewal progress.
+Generated-capture ancestry, residual observations, active-owner exclusion,
+final retention, general outer completion, convergence and production
+Haskell refinement remain open. All 268 Haskell and 207 active package
+files keep their bytes. FINDINGS retains the external repair registry
+first. No new Haskell fix or runtime result is claimed. The full goal
+stays active. Pushes to formalize remain authorized.
+
 ## Current common original-build publication trace
 
 Updated: 2026-10-20 23:03 CEST. Proof checkpoint: `def05b051`.
