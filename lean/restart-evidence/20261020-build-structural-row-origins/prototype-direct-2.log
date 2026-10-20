@@ -1,0 +1,103 @@
+/tmp/mcfta-build-structural-row-origins/prototype-direct-2.source.lean:41:18: error: typeclass instance problem is stuck
+  GetElem? (List (EdgeValue Symbol Guard)) ?m.37 (EdgeValue Symbol Guard) ?m.67
+
+Note: Lean will not try to resolve this typeclass instance problem because the second type argument to `GetElem?` is a metavariable. This argument must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+/tmp/mcfta-build-structural-row-origins/prototype-direct-2.source.lean:233:4: error: Function expected at
+  SourceRow
+but this term has type
+  ?m.3
+
+Note: Expected a function because this term is being applied to the argument
+  expression
+
+Hint: The identifier `SourceRow` is unknown, and Lean's `autoImplicit` option causes an unknown identifier to be treated as an implicitly bound variable with an unknown type. However, the unknown type cannot be a function, and a function is what Lean expects here. This is often the result of a typo or a missing `import` or `open` statement.
+/tmp/mcfta-build-structural-row-origins/prototype-direct-2.source.lean:294:19: error(nested.lean.propRecLargeElim): Tactic `cases` failed with a nested error:
+Tactic `induction` failed: recursor `Exists.casesOn` can only eliminate into `Prop`
+
+case ind.union.done
+Symbol Guard : Type
+x✝¹ : Sort u_1
+SourceRow : x✝¹
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+row : EdgeValue Symbol Guard
+bound : Nat
+ih :
+  (m : Nat) →
+    m < bound →
+      (expression : Syntax Symbol Guard) →
+        (inputs : List (Value Symbol Guard)) →
+          (before : InternedConstructorTemplates.State Symbol Guard) →
+            (raw : Value Symbol Guard) →
+              (after : InternedConstructorTemplates.State Symbol Guard) →
+                Context before inputs →
+                  build expression inputs before = Outcome.done raw after →
+                    RowAt raw row → sizeOf expression = m → sorry
+inputs : List (Value Symbol Guard)
+before : InternedConstructorTemplates.State Symbol Guard
+raw : Value Symbol Guard
+after : InternedConstructorTemplates.State Symbol Guard
+context : Context before inputs
+part : RowAt raw row
+expressions : List (Syntax Symbol Guard)
+actual : build (Syntax.union expressions) inputs before = Outcome.done raw after
+measure : sizeOf (Syntax.union expressions) = bound
+values : List (Value Symbol Guard)
+middle : InternedConstructorTemplates.State Symbol Guard
+built : buildMany expressions inputs before = Outcome.done values middle
+made : run (makeUnion values) middle = (raw, after)
+middleContext : Context middle inputs
+checked : InternedNestedFacts.Verified before (buildMany expressions inputs before) Values
+available : Values middle values
+initial : RowAt (run (makeUnion values) middle).fst row
+x✝ : ∃ value, value ∈ values ∧ RowAt value row
+⊢ sorry
+/tmp/mcfta-build-structural-row-origins/prototype-direct-2.source.lean:305:15: error(nested.lean.propRecLargeElim): Tactic `cases` failed with a nested error:
+Tactic `induction` failed: recursor `Exists.casesOn` can only eliminate into `Prop`
+
+case ind.binder
+Symbol Guard : Type
+x✝¹ : Sort u_1
+SourceRow : x✝¹
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+row : EdgeValue Symbol Guard
+bound : Nat
+ih :
+  (m : Nat) →
+    m < bound →
+      (expression : Syntax Symbol Guard) →
+        (inputs : List (Value Symbol Guard)) →
+          (before : InternedConstructorTemplates.State Symbol Guard) →
+            (raw : Value Symbol Guard) →
+              (after : InternedConstructorTemplates.State Symbol Guard) →
+                Context before inputs →
+                  build expression inputs before = Outcome.done raw after →
+                    RowAt raw row → sizeOf expression = m → sorry
+inputs : List (Value Symbol Guard)
+before : InternedConstructorTemplates.State Symbol Guard
+raw : Value Symbol Guard
+after : InternedConstructorTemplates.State Symbol Guard
+context : Context before inputs
+part : RowAt raw row
+smart : Bool
+body : Syntax Symbol Guard
+actual : build (Syntax.binder smart body) inputs before = Outcome.done raw after
+measure : sizeOf (Syntax.binder smart body) = bound
+x✝ :
+  ∃ depth afterDepth ordinary cut rawOrdinary afterRawOrdinary,
+    callback body inputs Reference.depth before = Outcome.done depth afterDepth ∧
+      callback body inputs (Reference.uninterned (ordinaryLevel depth)) afterDepth = Outcome.done ordinary cut ∧
+        request smart depth ordinary (callback body inputs) cut = Outcome.done raw after ∧
+          Context afterDepth inputs ∧
+            Context cut inputs ∧
+              Context after inputs ∧
+                build body (Value.reference (Reference.uninterned (ordinaryLevel depth)) :: inputs) afterDepth =
+                    Outcome.done rawOrdinary afterRawOrdinary ∧
+                  run (withoutSelfReference (Reference.uninterned (ordinaryLevel depth)) rawOrdinary) afterRawOrdinary =
+                      (ordinary, cut) ∧
+                    Context afterRawOrdinary (Value.reference (Reference.uninterned (ordinaryLevel depth)) :: inputs) ∧
+                      Grows afterRawOrdinary after ∧
+                        Extends afterRawOrdinary.nodes.issued after.nodes.issued ∧
+                          Available after depth ∧ Available after ordinary
+⊢ sorry

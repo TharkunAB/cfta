@@ -21,6 +21,17 @@ by the actual cyclic route and retain the upToSize advice for acyclic imports.
 No production Haskell file is changed locally. Keep this follow-up separate
 from confirmed runtime defects and from the older repair registry below.
 
+Current proof update: 2026-10-20 15:14 CEST. Proof checkpoint: `330e6fd55`.
+Actual completed builds now derive exact structural row source alternatives:
+original node child calls, indexed union members, captured slots and the
+actual selected stored binder body. Capture binding provenance and causal
+winner ancestry remain open. Global renewal, general termination,
+convergence and Haskell refinement remain open. No Haskell defect, repair
+or validation result is added. All 268 Haskell files and all 207 active
+package files retain their bytes. The default build passes 3476 jobs and
+73986 axiom checks. Read `lean/notes-current-build-structural-row-origins.md`.
+Preserve every external repair, reproducer and validation result below.
+
 Upstream import: 2026-10-20 14:53 CEST. Merge: `7ac4534cb`.
 Main: `9769fe3e9`. The import retains the published proof checkpoint and
 all earlier Lean work. Both changelog entries survive the sole conflict.
