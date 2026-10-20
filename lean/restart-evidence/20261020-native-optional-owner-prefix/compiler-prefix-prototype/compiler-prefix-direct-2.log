@@ -1,0 +1,54 @@
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-2.source.lean:123:84: error: unsolved goals
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+domain : Interned IntersectionFlatMemoKeyDomain.DomainKey
+name : Nat
+other : Node
+left : Bool
+fuel : Nat
+before after : Checked width
+pair : Nat × Nat
+body : Node
+siteNext : Node → Code Symbol Guard Node
+actual :
+  Trace fuel (Control.code (compileReference domain name other left)) before
+    (Control.code (Code.optionalBinder pair body siteNext)) after
+scope : name ∈ SourceRecursiveIntersectionDomain.names domain.key
+readNext : Option Node → Code Symbol Guard Node :=
+  fun found =>
+    match found with
+    | some bound => if left = true then requestNode domain bound other else requestNode domain other bound
+    | none => Code.fail (Failure.missingPayload name)
+⊢ (Code.read name fun found =>
+      match found with
+      | some bound => if left = true then requestNode domain bound other else requestNode domain other bound
+      | none => Code.fail (Failure.missingPayload name)) =
+    Code.read name fun found =>
+      match found with
+      | some bound => if left = true then requestNode domain bound other else requestNode domain other bound
+      | none => Code.fail (Failure.missingPayload name)
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-2.source.lean:185:17: error: unexpected token '⟨'; expected ')', ',' or ':'
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-2.source.lean:184:25: error: Type mismatch: After simplification, term
+  single_node
+ has type
+  ∀ (child : NodeRequest Symbol Guard) (fuel : Nat) (before after : Checked ?m.279) (pair : Nat × Nat) (body : Node)
+    (siteNext : Node → Code Symbol Guard Node),
+    Trace fuel (Control.code (requestNode child.domain child.left child.right)) before
+        (Control.code (Code.optionalBinder pair body siteNext)) after →
+      NodeCut fuel (Control.code (requestNode child.domain child.left child.right)) before after pair body siteNext
+but is expected to have type
+  NodeCut fuel (Control.code (requestNode IntersectionEmptyDomain.emptyDomain request.left request.right)) before after
+    pair body siteNext
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-2.source.lean:179:2: error: Alternative `self` has not been provided
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-2.source.lean:179:2: error: Alternative `swap` has not been provided
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-2.source.lean:179:2: error: Alternative `repeated` has not been provided
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-2.source.lean:179:2: error: Alternative `bothMu` has not been provided
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-2.source.lean:179:2: error: Alternative `leftMu` has not been provided
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-2.source.lean:179:2: error: Alternative `rightMu` has not been provided
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-2.source.lean:179:2: error: Alternative `leftUnion` has not been provided
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-2.source.lean:179:2: error: Alternative `rightUnion` has not been provided
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-2.source.lean:179:2: error: Alternative `leftReference` has not been provided
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-2.source.lean:179:2: error: Alternative `rightReference` has not been provided
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-2.source.lean:179:2: error: Alternative `ordinary` has not been provided
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-2.source.lean:179:2: error: Alternative `unsupported` has not been provided

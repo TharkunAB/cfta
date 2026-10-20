@@ -1,0 +1,1762 @@
+/tmp/mcfta-native-compiled-owner-fixture/owner-kernels-direct-2.source.lean:65:24: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.47 = ?m.47
+but is expected to have type
+  left = Value.mu ?m.36 ?m.39 ?m.42 ?m.45
+in the application
+  Exists.intro ?m.45 rfl
+/tmp/mcfta-native-compiled-owner-fixture/owner-kernels-direct-2.source.lean:67:24: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.67 = ?m.67
+but is expected to have type
+  right = Value.mu ?m.56 ?m.59 ?m.62 ?m.65
+in the application
+  Exists.intro ?m.65 rfl
+/tmp/mcfta-native-compiled-owner-fixture/owner-kernels-direct-2.source.lean:70:4: error: 'change' tactic failed, pattern
+  some 0 = some 2
+is not definitionally equal to target
+  SourceRecursiveIntersectionControl.identity left = SourceRecursiveIntersectionControl.identity right
+/tmp/mcfta-native-compiled-owner-fixture/owner-kernels-direct-2.source.lean:95:52: error: failed to synthesize
+  Decidable (IntersectionFlatMemoKey.Safe 8 (IntersectSchedule.Input.mu 0))
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/mcfta-native-compiled-owner-fixture/owner-kernels-direct-2.source.lean:95:62: error: failed to synthesize
+  Decidable (IntersectionFlatMemoKey.Safe 8 (IntersectSchedule.Input.mu 2))
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/mcfta-native-compiled-owner-fixture/owner-kernels-direct-2.source.lean:95:45: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.47 = ?m.47
+but is expected to have type
+  IntersectionFlatMemoKey.input { domain := request.domain, left := left, right := right }.right.referenceOf =
+    some (IntersectSchedule.Input.mu 2)
+in the application
+  And.intro rfl
+/tmp/mcfta-native-compiled-owner-fixture/owner-kernels-direct-2.source.lean:98:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  SourceRecursiveIntersectionControl.decision request.domain.key left right
+in the target expression
+  SourceCurrentAllocatedNativePhysicalExecution.Inputs
+    (Control.code
+      ((match SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right with
+          | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+          | SourceRecursiveIntersectionControl.Branch.reset =>
+            requestNode IntersectionEmptyDomain.emptyDomain request.left request.right
+          | SourceRecursiveIntersectionControl.Branch.self => Code.pure request.left
+          | SourceRecursiveIntersectionControl.Branch.swap => requestNode request.domain request.right request.left
+          | SourceRecursiveIntersectionControl.Branch.repeated key =>
+            Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+          | SourceRecursiveIntersectionControl.Branch.bothMu => compileMu request.domain request.left request.right
+          | SourceRecursiveIntersectionControl.Branch.leftMu => compileMu request.domain request.left request.right
+          | SourceRecursiveIntersectionControl.Branch.rightMu => compileMu request.domain request.left request.right
+          | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+            match request.left with
+            | Value.union entry members depth free =>
+              (SourceRecursiveIntersectionCode.walk (fun member => requestNode request.domain member request.right)
+                    members).bind
+                fun values => Code.work (makeUnion values) Code.pure
+            | x => SourceRecursiveIntersectionCode.unsupported request.left request.right
+          | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+            match request.right with
+            | Value.union entry members depth free =>
+              (SourceRecursiveIntersectionCode.walk (fun member => requestNode request.domain request.left member)
+                    members).bind
+                fun values => Code.work (makeUnion values) Code.pure
+            | x => SourceRecursiveIntersectionCode.unsupported request.left request.right
+          | SourceRecursiveIntersectionControl.Branch.leftReference =>
+            match request.left with
+            | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+              compileReference request.domain name request.right true
+            | x => SourceRecursiveIntersectionCode.unsupported request.left request.right
+          | SourceRecursiveIntersectionControl.Branch.rightReference =>
+            match request.right with
+            | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+              compileReference request.domain name request.left false
+            | x => SourceRecursiveIntersectionCode.unsupported request.left request.right
+          | SourceRecursiveIntersectionControl.Branch.ordinary =>
+            match request.left, request.right with
+            | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 =>
+              compileRows request.domain first second
+            | x, x_1 => SourceRecursiveIntersectionCode.unsupported request.left request.right
+          | SourceRecursiveIntersectionControl.Branch.unsupported =>
+            SourceRecursiveIntersectionCode.unsupported request.left request.right).bind
+        finish))
+    compilerBefore
+
+⊢ SourceCurrentAllocatedNativePhysicalExecution.Inputs
+    (Control.code
+      ((match SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right with
+          | SourceRecursiveIntersectionControl.Branch.empty => Code.pure Value.empty
+          | SourceRecursiveIntersectionControl.Branch.reset =>
+            requestNode IntersectionEmptyDomain.emptyDomain request.left request.right
+          | SourceRecursiveIntersectionControl.Branch.self => Code.pure request.left
+          | SourceRecursiveIntersectionControl.Branch.swap => requestNode request.domain request.right request.left
+          | SourceRecursiveIntersectionControl.Branch.repeated key =>
+            Code.pure (SourceRecursiveIntersectionControl.repeatedValue key)
+          | SourceRecursiveIntersectionControl.Branch.bothMu => compileMu request.domain request.left request.right
+          | SourceRecursiveIntersectionControl.Branch.leftMu => compileMu request.domain request.left request.right
+          | SourceRecursiveIntersectionControl.Branch.rightMu => compileMu request.domain request.left request.right
+          | SourceRecursiveIntersectionControl.Branch.leftUnion =>
+            match request.left with
+            | Value.union entry members depth free =>
+              (SourceRecursiveIntersectionCode.walk (fun member => requestNode request.domain member request.right)
+                    members).bind
+                fun values => Code.work (makeUnion values) Code.pure
+            | x => SourceRecursiveIntersectionCode.unsupported request.left request.right
+          | SourceRecursiveIntersectionControl.Branch.rightUnion =>
+            match request.right with
+            | Value.union entry members depth free =>
+              (SourceRecursiveIntersectionCode.walk (fun member => requestNode request.domain request.left member)
+                    members).bind
+                fun values => Code.work (makeUnion values) Code.pure
+            | x => SourceRecursiveIntersectionCode.unsupported request.left request.right
+          | SourceRecursiveIntersectionControl.Branch.leftReference =>
+            match request.left with
+            | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+              compileReference request.domain name request.right true
+            | x => SourceRecursiveIntersectionCode.unsupported request.left request.right
+          | SourceRecursiveIntersectionControl.Branch.rightReference =>
+            match request.right with
+            | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+              compileReference request.domain name request.left false
+            | x => SourceRecursiveIntersectionCode.unsupported request.left request.right
+          | SourceRecursiveIntersectionControl.Branch.ordinary =>
+            match request.left, request.right with
+            | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 =>
+              compileRows request.domain first second
+            | x, x_1 => SourceRecursiveIntersectionCode.unsupported request.left request.right
+          | SourceRecursiveIntersectionControl.Branch.unsupported =>
+            SourceRecursiveIntersectionCode.unsupported request.left request.right).bind
+        finish))
+    compilerBefore
+/tmp/mcfta-native-compiled-owner-fixture/owner-kernels-direct-2.source.lean:104:5: error: Application type mismatch: The argument
+  (InternedFreshOrdinaryFacts.build_verified secondSource [] firstHeap first_facts ?m.22).facts
+has type
+  InternedNestedFacts.Facts (InternedFreshOrdinaryConstruction.build secondSource [] firstHeap).state
+but is expected to have type
+  InternedNestedFacts.Facts compilerBefore.native.machine.heap
+in the application
+  And.intro (InternedFreshOrdinaryFacts.build_verified secondSource [] firstHeap first_facts ?m.22).facts
+/tmp/mcfta-native-compiled-owner-fixture/owner-kernels-direct-2.source.lean:107:4: error: Application type mismatch: The argument
+  left_available
+has type
+  Available heap left
+but is expected to have type
+  Available compilerBefore.native.machine.heap left
+in the application
+  SourceRecursiveIntersectionKernel.entered compilerBefore.native.machine valid request.domain
+    (empty_domain compilerBefore.native.machine) left right left_available
+/tmp/mcfta-native-compiled-owner-fixture/owner-kernels-direct-2.source.lean:109:4: error: 'change' tactic failed, pattern
+  Available heap Value.empty
+is not definitionally equal to target
+  Available childBefore.native.machine.heap child.left
+/tmp/mcfta-native-compiled-owner-fixture/owner-kernels-direct-2.source.lean:111:4: error: 'change' tactic failed, pattern
+  Available heap (SourceRecursiveIntersectionKernel.body right)
+is not definitionally equal to target
+  Available childBefore.native.machine.heap child.right
+/tmp/mcfta-native-compiled-owner-fixture/owner-kernels-direct-2.source.lean:114:24: error: Tactic `decide` failed for proposition
+  child.domain.identity < 2 ^ (8 - 1)
+because its `Decidable` instance
+  child.domain.identity.decLt (2 ^ (8 - 1))
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `instDecidableEqList`, `Bool.decEq`, `Nat.decLe`, `Nat.decLt`, `IntersectionFlatMemoKeyDomain.instDecidableEqDomainKey`, and `IntersectionFlatMemoKeyDomain.instDecidableEqDomainKey.decEq`, reduction got stuck at the `Decidable` instance
+  match child.domain.identity.succ.ble (2 ^ (8 - 1)), true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
+/tmp/mcfta-native-compiled-owner-fixture/owner-kernels-direct-2.source.lean:114:68: error: failed to synthesize
+  Decidable (IntersectionFlatMemoKey.Safe 8 (IntersectSchedule.Input.node 1))
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/mcfta-native-compiled-owner-fixture/owner-kernels-direct-2.source.lean:114:50: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.117 = ?m.117
+but is expected to have type
+  IntersectionFlatMemoKey.input child.right.referenceOf = some (IntersectSchedule.Input.node 1)
+in the application
+  And.intro rfl
+/tmp/mcfta-native-compiled-owner-fixture/owner-kernels-direct-2.source.lean:118:68: error: Tactic `rfl` failed: The left-hand side
+  Outcome.yielded
+    (Control.code
+      (Code.node
+        {
+          domain :=
+            { identity := 1,
+              key :=
+                { free := [(0, InternedBinderProtocol.NodeRef.mu 0), (2, InternedBinderProtocol.NodeRef.mu 2)],
+                  seen := [(0, 2)] } },
+          left := Value.empty,
+          right :=
+            Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+              [EdgeValue.mk
+                  { identity := 0,
+                    key :=
+                      { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                        constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                  []]
+              0 [] }
+        fun value => (Code.optionalBinder (SourceRecursiveIntersectionControl.pair 0 2) value Code.pure).bind finish))
+    {
+      native :=
+        {
+          machine :=
+            {
+              heap :=
+                {
+                  edges :=
+                    { next := 1,
+                      issued := fun ident =>
+                        if ident = { next := 0, issued := fun x => none, table := fun x => none }.next then
+                          some
+                            { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                              constraint := { equalities := some [], guard := SourceGuards.Guard.top } }
+                        else { next := 0, issued := fun x => none, table := fun x => none }.issued ident,
+                      table :=
+                        put (fun x => none)
+                          { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                            constraint := { equalities := some [], guard := SourceGuards.Guard.top } }
+                          { identity := 0,
+                            key :=
+                              { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                constraint := { equalities := some [], guard := SourceGuards.Guard.top } } } },
+                  nodes :=
+                    { next := 3,
+                      issued := fun ident =>
+                        if
+                            ident =
+                              { next := 2,
+                                  issued := fun ident =>
+                                    if
+                                        ident =
+                                          { next := 1,
+                                              issued := fun ident =>
+                                                if
+                                                    ident =
+                                                      { next := 0, issued := fun x => none,
+                                                          table := fun x => none }.next then
+                                                  some
+                                                    (InternedBinderProtocol.NodeKey.mu
+                                                      { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                        ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                                else
+                                                  { next := 0, issued := fun x => none, table := fun x => none }.issued
+                                                    ident,
+                                              table :=
+                                                put (fun x => none)
+                                                  (InternedBinderProtocol.NodeKey.mu
+                                                    { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                      ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                                  { identity := 0,
+                                                    key :=
+                                                      InternedBinderProtocol.NodeKey.mu
+                                                        { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                          ordinaryShape :=
+                                                            InternedBinderProtocol.NodeRef.empty } } }.next then
+                                      some (InternedBinderProtocol.NodeKey.node [0])
+                                    else
+                                      { next := 1,
+                                            issued := fun ident =>
+                                              if
+                                                  ident =
+                                                    { next := 0, issued := fun x => none,
+                                                        table := fun x => none }.next then
+                                                some
+                                                  (InternedBinderProtocol.NodeKey.mu
+                                                    { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                      ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                              else
+                                                { next := 0, issued := fun x => none, table := fun x => none }.issued
+                                                  ident,
+                                            table :=
+                                              put (fun x => none)
+                                                (InternedBinderProtocol.NodeKey.mu
+                                                  { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                    ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                                { identity := 0,
+                                                  key :=
+                                                    InternedBinderProtocol.NodeKey.mu
+                                                      { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                        ordinaryShape :=
+                                                          InternedBinderProtocol.NodeRef.empty } } }.issued
+                                        ident,
+                                  table :=
+                                    put
+                                      (put (fun x => none)
+                                        (InternedBinderProtocol.NodeKey.mu
+                                          { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                            ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                        { identity := 0,
+                                          key :=
+                                            InternedBinderProtocol.NodeKey.mu
+                                              { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                ordinaryShape := InternedBinderProtocol.NodeRef.empty } })
+                                      (InternedBinderProtocol.NodeKey.node [0])
+                                      { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] } }.next then
+                          some
+                            (InternedBinderProtocol.NodeKey.mu
+                              { depthShape := InternedBinderProtocol.NodeRef.node 1,
+                                ordinaryShape := InternedBinderProtocol.NodeRef.node 1 })
+                        else
+                          { next := 2,
+                                issued := fun ident =>
+                                  if
+                                      ident =
+                                        { next := 1,
+                                            issued := fun ident =>
+                                              if
+                                                  ident =
+                                                    { next := 0, issued := fun x => none,
+                                                        table := fun x => none }.next then
+                                                some
+                                                  (InternedBinderProtocol.NodeKey.mu
+                                                    { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                      ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                              else
+                                                { next := 0, issued := fun x => none, table := fun x => none }.issued
+                                                  ident,
+                                            table :=
+                                              put (fun x => none)
+                                                (InternedBinderProtocol.NodeKey.mu
+                                                  { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                    ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                                { identity := 0,
+                                                  key :=
+                                                    InternedBinderProtocol.NodeKey.mu
+                                                      { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                        ordinaryShape :=
+                                                          InternedBinderProtocol.NodeRef.empty } } }.next then
+                                    some (InternedBinderProtocol.NodeKey.node [0])
+                                  else
+                                    { next := 1,
+                                          issued := fun ident =>
+                                            if
+                                                ident =
+                                                  { next := 0, issued := fun x => none,
+                                                      table := fun x => none }.next then
+                                              some
+                                                (InternedBinderProtocol.NodeKey.mu
+                                                  { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                    ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                            else
+                                              { next := 0, issued := fun x => none, table := fun x => none }.issued
+                                                ident,
+                                          table :=
+                                            put (fun x => none)
+                                              (InternedBinderProtocol.NodeKey.mu
+                                                { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                  ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                              { identity := 0,
+                                                key :=
+                                                  InternedBinderProtocol.NodeKey.mu
+                                                    { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                      ordinaryShape := InternedBinderProtocol.NodeRef.empty } } }.issued
+                                      ident,
+                                table :=
+                                  put
+                                    (put (fun x => none)
+                                      (InternedBinderProtocol.NodeKey.mu
+                                        { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                          ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                      { identity := 0,
+                                        key :=
+                                          InternedBinderProtocol.NodeKey.mu
+                                            { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                              ordinaryShape := InternedBinderProtocol.NodeRef.empty } })
+                                    (InternedBinderProtocol.NodeKey.node [0])
+                                    { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] } }.issued
+                            ident,
+                      table :=
+                        put
+                          (put
+                            (put (fun x => none)
+                              (InternedBinderProtocol.NodeKey.mu
+                                { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                  ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                              { identity := 0,
+                                key :=
+                                  InternedBinderProtocol.NodeKey.mu
+                                    { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                      ordinaryShape := InternedBinderProtocol.NodeRef.empty } })
+                            (InternedBinderProtocol.NodeKey.node [0])
+                            { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] })
+                          (InternedBinderProtocol.NodeKey.mu
+                            { depthShape := InternedBinderProtocol.NodeRef.node 1,
+                              ordinaryShape := InternedBinderProtocol.NodeRef.node 1 })
+                          { identity := 2,
+                            key :=
+                              InternedBinderProtocol.NodeKey.mu
+                                { depthShape := InternedBinderProtocol.NodeRef.node 1,
+                                  ordinaryShape := InternedBinderProtocol.NodeRef.node 1 } } },
+                  edgeRecords :=
+                    put (fun x => none)
+                      { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                        constraint := { equalities := some [], guard := SourceGuards.Guard.top } }
+                      (EdgeValue.mk
+                        { identity := 0,
+                          key :=
+                            { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                              constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                        []),
+                  nodeRecords :=
+                    put
+                      (put
+                        (put (fun x => none)
+                          (InternedBinderProtocol.NodeKey.mu
+                            { depthShape := InternedBinderProtocol.NodeRef.empty,
+                              ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                          (Value.mu
+                            { identity := 0,
+                              key :=
+                                InternedBinderProtocol.NodeKey.mu
+                                  { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                    ordinaryShape := InternedBinderProtocol.NodeRef.empty } }
+                            Value.empty Value.empty Value.empty))
+                        (InternedBinderProtocol.NodeKey.node [0])
+                        (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                          [EdgeValue.mk
+                              { identity := 0,
+                                key :=
+                                  { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                    constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                              []]
+                          0 []))
+                      (InternedBinderProtocol.NodeKey.mu
+                        { depthShape := InternedBinderProtocol.NodeRef.node 1,
+                          ordinaryShape := InternedBinderProtocol.NodeRef.node 1 })
+                      (Value.mu
+                        { identity := 2,
+                          key :=
+                            InternedBinderProtocol.NodeKey.mu
+                              { depthShape := InternedBinderProtocol.NodeRef.node 1,
+                                ordinaryShape := InternedBinderProtocol.NodeRef.node 1 } }
+                        (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                          [EdgeValue.mk
+                              { identity := 0,
+                                key :=
+                                  { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                    constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                              []]
+                          0 [])
+                        (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                          [EdgeValue.mk
+                              { identity := 0,
+                                key :=
+                                  { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                    constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                              []]
+                          0 [])
+                        (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                          [EdgeValue.mk
+                              { identity := 0,
+                                key :=
+                                  { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                    constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                              []]
+                          0 [])) },
+              domains :=
+                { next := 1,
+                  issued := fun ident =>
+                    if ident = { next := 0, issued := fun x => none, table := fun x => none }.next then
+                      some
+                        { free := [(0, InternedBinderProtocol.NodeRef.mu 0), (2, InternedBinderProtocol.NodeRef.mu 2)],
+                          seen := [(0, 2)] }
+                    else { next := 0, issued := fun x => none, table := fun x => none }.issued ident,
+                  table :=
+                    put (fun x => none)
+                      { free := [(0, InternedBinderProtocol.NodeRef.mu 0), (2, InternedBinderProtocol.NodeRef.mu 2)],
+                        seen := [(0, 2)] }
+                      { identity := 0,
+                        key :=
+                          {
+                            free :=
+                              [(0, InternedBinderProtocol.NodeRef.mu 0), (2, InternedBinderProtocol.NodeRef.mu 2)],
+                            seen := [(0, 2)] } } } },
+          nodes :=
+            { table := put (fun x => none) ({ toFin := ⟨0, ⋯⟩ }, { toFin := ⟨1, ⋯⟩ }, { toFin := ⟨9, ⋯⟩ }) 0,
+              cells :=
+                put
+                  (put (fun x => none) 0
+                    {
+                      request :=
+                        { domain := { identity := 0, key := { free := [], seen := [] } },
+                          left :=
+                            Value.mu
+                              { identity := 0,
+                                key :=
+                                  InternedBinderProtocol.NodeKey.mu
+                                    { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                      ordinaryShape := InternedBinderProtocol.NodeRef.empty } }
+                              Value.empty Value.empty Value.empty,
+                          right :=
+                            Value.mu
+                              { identity := 2,
+                                key :=
+                                  InternedBinderProtocol.NodeKey.mu
+                                    { depthShape := InternedBinderProtocol.NodeRef.node 1,
+                                      ordinaryShape := InternedBinderProtocol.NodeRef.node 1 } }
+                              (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                                [EdgeValue.mk
+                                    { identity := 0,
+                                      key :=
+                                        { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                          constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                                    []]
+                                0 [])
+                              (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                                [EdgeValue.mk
+                                    { identity := 0,
+                                      key :=
+                                        { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                          constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                                    []]
+                                0 [])
+                              (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                                [EdgeValue.mk
+                                    { identity := 0,
+                                      key :=
+                                        { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                          constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                                    []]
+                                0 []) },
+                      status := FlatMemoThunk.Status.suspended })
+                  0
+                  {
+                    request :=
+                      { domain := { identity := 0, key := { free := [], seen := [] } },
+                        left :=
+                          Value.mu
+                            { identity := 0,
+                              key :=
+                                InternedBinderProtocol.NodeKey.mu
+                                  { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                    ordinaryShape := InternedBinderProtocol.NodeRef.empty } }
+                            Value.empty Value.empty Value.empty,
+                        right :=
+                          Value.mu
+                            { identity := 2,
+                              key :=
+                                InternedBinderProtocol.NodeKey.mu
+                                  { depthShape := InternedBinderProtocol.NodeRef.node 1,
+                                    ordinaryShape := InternedBinderProtocol.NodeRef.node 1 } }
+                            (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                              [EdgeValue.mk
+                                  { identity := 0,
+                                    key :=
+                                      { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                        constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                                  []]
+                              0 [])
+                            (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                              [EdgeValue.mk
+                                  { identity := 0,
+                                    key :=
+                                      { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                        constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                                  []]
+                              0 [])
+                            (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                              [EdgeValue.mk
+                                  { identity := 0,
+                                    key :=
+                                      { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                        constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                                  []]
+                              0 []) },
+                    status := FlatMemoThunk.Status.evaluating },
+              next := 1 },
+          edges := { table := fun x => none, cells := fun x => none, next := 0 } },
+      operations :=
+        { constraints := { next := 0, issued := fun x => none, table := fun x => none }, combinations := fun x => none,
+          descents := fun x => none } }
+is not definitionally equal to the right-hand side
+  Outcome.yielded
+    (Control.code
+      (Code.node
+        {
+          domain :=
+            { identity := 1,
+              key :=
+                { free := [(0, InternedBinderProtocol.NodeRef.mu 0), (2, InternedBinderProtocol.NodeRef.mu 2)],
+                  seen := [(0, 2)] } },
+          left := Value.empty,
+          right :=
+            Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+              [EdgeValue.mk
+                  { identity := 0,
+                    key :=
+                      { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                        constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                  []]
+              0 [] }
+        childNext))
+    {
+      native :=
+        {
+          machine :=
+            {
+              heap :=
+                {
+                  edges :=
+                    { next := 1,
+                      issued := fun ident =>
+                        if ident = { next := 0, issued := fun x => none, table := fun x => none }.next then
+                          some
+                            { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                              constraint := { equalities := some [], guard := SourceGuards.Guard.top } }
+                        else { next := 0, issued := fun x => none, table := fun x => none }.issued ident,
+                      table :=
+                        put (fun x => none)
+                          { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                            constraint := { equalities := some [], guard := SourceGuards.Guard.top } }
+                          { identity := 0,
+                            key :=
+                              { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                constraint := { equalities := some [], guard := SourceGuards.Guard.top } } } },
+                  nodes :=
+                    { next := 3,
+                      issued := fun ident =>
+                        if
+                            ident =
+                              { next := 2,
+                                  issued := fun ident =>
+                                    if
+                                        ident =
+                                          { next := 1,
+                                              issued := fun ident =>
+                                                if
+                                                    ident =
+                                                      { next := 0, issued := fun x => none,
+                                                          table := fun x => none }.next then
+                                                  some
+                                                    (InternedBinderProtocol.NodeKey.mu
+                                                      { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                        ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                                else
+                                                  { next := 0, issued := fun x => none, table := fun x => none }.issued
+                                                    ident,
+                                              table :=
+                                                put (fun x => none)
+                                                  (InternedBinderProtocol.NodeKey.mu
+                                                    { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                      ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                                  { identity := 0,
+                                                    key :=
+                                                      InternedBinderProtocol.NodeKey.mu
+                                                        { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                          ordinaryShape :=
+                                                            InternedBinderProtocol.NodeRef.empty } } }.next then
+                                      some (InternedBinderProtocol.NodeKey.node [0])
+                                    else
+                                      { next := 1,
+                                            issued := fun ident =>
+                                              if
+                                                  ident =
+                                                    { next := 0, issued := fun x => none,
+                                                        table := fun x => none }.next then
+                                                some
+                                                  (InternedBinderProtocol.NodeKey.mu
+                                                    { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                      ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                              else
+                                                { next := 0, issued := fun x => none, table := fun x => none }.issued
+                                                  ident,
+                                            table :=
+                                              put (fun x => none)
+                                                (InternedBinderProtocol.NodeKey.mu
+                                                  { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                    ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                                { identity := 0,
+                                                  key :=
+                                                    InternedBinderProtocol.NodeKey.mu
+                                                      { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                        ordinaryShape :=
+                                                          InternedBinderProtocol.NodeRef.empty } } }.issued
+                                        ident,
+                                  table :=
+                                    put
+                                      (put (fun x => none)
+                                        (InternedBinderProtocol.NodeKey.mu
+                                          { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                            ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                        { identity := 0,
+                                          key :=
+                                            InternedBinderProtocol.NodeKey.mu
+                                              { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                ordinaryShape := InternedBinderProtocol.NodeRef.empty } })
+                                      (InternedBinderProtocol.NodeKey.node [0])
+                                      { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] } }.next then
+                          some
+                            (InternedBinderProtocol.NodeKey.mu
+                              { depthShape := InternedBinderProtocol.NodeRef.node 1,
+                                ordinaryShape := InternedBinderProtocol.NodeRef.node 1 })
+                        else
+                          { next := 2,
+                                issued := fun ident =>
+                                  if
+                                      ident =
+                                        { next := 1,
+                                            issued := fun ident =>
+                                              if
+                                                  ident =
+                                                    { next := 0, issued := fun x => none,
+                                                        table := fun x => none }.next then
+                                                some
+                                                  (InternedBinderProtocol.NodeKey.mu
+                                                    { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                      ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                              else
+                                                { next := 0, issued := fun x => none, table := fun x => none }.issued
+                                                  ident,
+                                            table :=
+                                              put (fun x => none)
+                                                (InternedBinderProtocol.NodeKey.mu
+                                                  { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                    ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                                { identity := 0,
+                                                  key :=
+                                                    InternedBinderProtocol.NodeKey.mu
+                                                      { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                        ordinaryShape :=
+                                                          InternedBinderProtocol.NodeRef.empty } } }.next then
+                                    some (InternedBinderProtocol.NodeKey.node [0])
+                                  else
+                                    { next := 1,
+                                          issued := fun ident =>
+                                            if
+                                                ident =
+                                                  { next := 0, issued := fun x => none,
+                                                      table := fun x => none }.next then
+                                              some
+                                                (InternedBinderProtocol.NodeKey.mu
+                                                  { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                    ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                            else
+                                              { next := 0, issued := fun x => none, table := fun x => none }.issued
+                                                ident,
+                                          table :=
+                                            put (fun x => none)
+                                              (InternedBinderProtocol.NodeKey.mu
+                                                { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                  ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                              { identity := 0,
+                                                key :=
+                                                  InternedBinderProtocol.NodeKey.mu
+                                                    { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                      ordinaryShape := InternedBinderProtocol.NodeRef.empty } } }.issued
+                                      ident,
+                                table :=
+                                  put
+                                    (put (fun x => none)
+                                      (InternedBinderProtocol.NodeKey.mu
+                                        { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                          ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                      { identity := 0,
+                                        key :=
+                                          InternedBinderProtocol.NodeKey.mu
+                                            { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                              ordinaryShape := InternedBinderProtocol.NodeRef.empty } })
+                                    (InternedBinderProtocol.NodeKey.node [0])
+                                    { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] } }.issued
+                            ident,
+                      table :=
+                        put
+                          (put
+                            (put (fun x => none)
+                              (InternedBinderProtocol.NodeKey.mu
+                                { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                  ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                              { identity := 0,
+                                key :=
+                                  InternedBinderProtocol.NodeKey.mu
+                                    { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                      ordinaryShape := InternedBinderProtocol.NodeRef.empty } })
+                            (InternedBinderProtocol.NodeKey.node [0])
+                            { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] })
+                          (InternedBinderProtocol.NodeKey.mu
+                            { depthShape := InternedBinderProtocol.NodeRef.node 1,
+                              ordinaryShape := InternedBinderProtocol.NodeRef.node 1 })
+                          { identity := 2,
+                            key :=
+                              InternedBinderProtocol.NodeKey.mu
+                                { depthShape := InternedBinderProtocol.NodeRef.node 1,
+                                  ordinaryShape := InternedBinderProtocol.NodeRef.node 1 } } },
+                  edgeRecords :=
+                    put (fun x => none)
+                      { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                        constraint := { equalities := some [], guard := SourceGuards.Guard.top } }
+                      (EdgeValue.mk
+                        { identity := 0,
+                          key :=
+                            { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                              constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                        []),
+                  nodeRecords :=
+                    put
+                      (put
+                        (put (fun x => none)
+                          (InternedBinderProtocol.NodeKey.mu
+                            { depthShape := InternedBinderProtocol.NodeRef.empty,
+                              ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                          (Value.mu
+                            { identity := 0,
+                              key :=
+                                InternedBinderProtocol.NodeKey.mu
+                                  { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                    ordinaryShape := InternedBinderProtocol.NodeRef.empty } }
+                            Value.empty Value.empty Value.empty))
+                        (InternedBinderProtocol.NodeKey.node [0])
+                        (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                          [EdgeValue.mk
+                              { identity := 0,
+                                key :=
+                                  { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                    constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                              []]
+                          0 []))
+                      (InternedBinderProtocol.NodeKey.mu
+                        { depthShape := InternedBinderProtocol.NodeRef.node 1,
+                          ordinaryShape := InternedBinderProtocol.NodeRef.node 1 })
+                      (Value.mu
+                        { identity := 2,
+                          key :=
+                            InternedBinderProtocol.NodeKey.mu
+                              { depthShape := InternedBinderProtocol.NodeRef.node 1,
+                                ordinaryShape := InternedBinderProtocol.NodeRef.node 1 } }
+                        (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                          [EdgeValue.mk
+                              { identity := 0,
+                                key :=
+                                  { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                    constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                              []]
+                          0 [])
+                        (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                          [EdgeValue.mk
+                              { identity := 0,
+                                key :=
+                                  { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                    constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                              []]
+                          0 [])
+                        (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                          [EdgeValue.mk
+                              { identity := 0,
+                                key :=
+                                  { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                    constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                              []]
+                          0 [])) },
+              domains :=
+                { next := 1,
+                  issued := fun ident =>
+                    if ident = { next := 0, issued := fun x => none, table := fun x => none }.next then
+                      some
+                        { free := [(0, InternedBinderProtocol.NodeRef.mu 0), (2, InternedBinderProtocol.NodeRef.mu 2)],
+                          seen := [(0, 2)] }
+                    else { next := 0, issued := fun x => none, table := fun x => none }.issued ident,
+                  table :=
+                    put (fun x => none)
+                      { free := [(0, InternedBinderProtocol.NodeRef.mu 0), (2, InternedBinderProtocol.NodeRef.mu 2)],
+                        seen := [(0, 2)] }
+                      { identity := 0,
+                        key :=
+                          {
+                            free :=
+                              [(0, InternedBinderProtocol.NodeRef.mu 0), (2, InternedBinderProtocol.NodeRef.mu 2)],
+                            seen := [(0, 2)] } } } },
+          nodes :=
+            { table := put (fun x => none) ({ toFin := ⟨0, ⋯⟩ }, { toFin := ⟨1, ⋯⟩ }, { toFin := ⟨9, ⋯⟩ }) 0,
+              cells :=
+                put
+                  (put (fun x => none) 0
+                    {
+                      request :=
+                        { domain := { identity := 0, key := { free := [], seen := [] } },
+                          left :=
+                            Value.mu
+                              { identity := 0,
+                                key :=
+                                  InternedBinderProtocol.NodeKey.mu
+                                    { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                      ordinaryShape := InternedBinderProtocol.NodeRef.empty } }
+                              Value.empty Value.empty Value.empty,
+                          right :=
+                            Value.mu
+                              { identity := 2,
+                                key :=
+                                  InternedBinderProtocol.NodeKey.mu
+                                    { depthShape := InternedBinderProtocol.NodeRef.node 1,
+                                      ordinaryShape := InternedBinderProtocol.NodeRef.node 1 } }
+                              (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                                [EdgeValue.mk
+                                    { identity := 0,
+                                      key :=
+                                        { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                          constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                                    []]
+                                0 [])
+                              (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                                [EdgeValue.mk
+                                    { identity := 0,
+                                      key :=
+                                        { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                          constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                                    []]
+                                0 [])
+                              (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                                [EdgeValue.mk
+                                    { identity := 0,
+                                      key :=
+                                        { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                          constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                                    []]
+                                0 []) },
+                      status := FlatMemoThunk.Status.suspended })
+                  0
+                  {
+                    request :=
+                      { domain := { identity := 0, key := { free := [], seen := [] } },
+                        left :=
+                          Value.mu
+                            { identity := 0,
+                              key :=
+                                InternedBinderProtocol.NodeKey.mu
+                                  { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                    ordinaryShape := InternedBinderProtocol.NodeRef.empty } }
+                            Value.empty Value.empty Value.empty,
+                        right :=
+                          Value.mu
+                            { identity := 2,
+                              key :=
+                                InternedBinderProtocol.NodeKey.mu
+                                  { depthShape := InternedBinderProtocol.NodeRef.node 1,
+                                    ordinaryShape := InternedBinderProtocol.NodeRef.node 1 } }
+                            (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                              [EdgeValue.mk
+                                  { identity := 0,
+                                    key :=
+                                      { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                        constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                                  []]
+                              0 [])
+                            (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                              [EdgeValue.mk
+                                  { identity := 0,
+                                    key :=
+                                      { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                        constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                                  []]
+                              0 [])
+                            (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                              [EdgeValue.mk
+                                  { identity := 0,
+                                    key :=
+                                      { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                        constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                                  []]
+                              0 []) },
+                    status := FlatMemoThunk.Status.evaluating },
+              next := 1 },
+          edges := { table := fun x => none, cells := fun x => none, next := 0 } },
+      operations :=
+        { constraints := { next := 0, issued := fun x => none, table := fun x => none }, combinations := fun x => none,
+          descents := fun x => none } }
+
+⊢ Outcome.yielded
+      (Control.code
+        (Code.node
+          {
+            domain :=
+              { identity := 1,
+                key :=
+                  { free := [(0, InternedBinderProtocol.NodeRef.mu 0), (2, InternedBinderProtocol.NodeRef.mu 2)],
+                    seen := [(0, 2)] } },
+            left := Value.empty,
+            right :=
+              Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                [EdgeValue.mk
+                    { identity := 0,
+                      key :=
+                        { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                          constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                    []]
+                0 [] }
+          fun value => (Code.optionalBinder (SourceRecursiveIntersectionControl.pair 0 2) value Code.pure).bind finish))
+      {
+        native :=
+          {
+            machine :=
+              {
+                heap :=
+                  {
+                    edges :=
+                      { next := 1,
+                        issued := fun ident =>
+                          if ident = { next := 0, issued := fun x => none, table := fun x => none }.next then
+                            some
+                              { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                constraint := { equalities := some [], guard := SourceGuards.Guard.top } }
+                          else { next := 0, issued := fun x => none, table := fun x => none }.issued ident,
+                        table :=
+                          put (fun x => none)
+                            { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                              constraint := { equalities := some [], guard := SourceGuards.Guard.top } }
+                            { identity := 0,
+                              key :=
+                                { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                  constraint := { equalities := some [], guard := SourceGuards.Guard.top } } } },
+                    nodes :=
+                      { next := 3,
+                        issued := fun ident =>
+                          if
+                              ident =
+                                { next := 2,
+                                    issued := fun ident =>
+                                      if
+                                          ident =
+                                            { next := 1,
+                                                issued := fun ident =>
+                                                  if
+                                                      ident =
+                                                        { next := 0, issued := fun x => none,
+                                                            table := fun x => none }.next then
+                                                    some
+                                                      (InternedBinderProtocol.NodeKey.mu
+                                                        { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                          ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                                  else
+                                                    { next := 0, issued := fun x => none,
+                                                          table := fun x => none }.issued
+                                                      ident,
+                                                table :=
+                                                  put (fun x => none)
+                                                    (InternedBinderProtocol.NodeKey.mu
+                                                      { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                        ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                                    { identity := 0,
+                                                      key :=
+                                                        InternedBinderProtocol.NodeKey.mu
+                                                          { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                            ordinaryShape :=
+                                                              InternedBinderProtocol.NodeRef.empty } } }.next then
+                                        some (InternedBinderProtocol.NodeKey.node [0])
+                                      else
+                                        { next := 1,
+                                              issued := fun ident =>
+                                                if
+                                                    ident =
+                                                      { next := 0, issued := fun x => none,
+                                                          table := fun x => none }.next then
+                                                  some
+                                                    (InternedBinderProtocol.NodeKey.mu
+                                                      { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                        ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                                else
+                                                  { next := 0, issued := fun x => none, table := fun x => none }.issued
+                                                    ident,
+                                              table :=
+                                                put (fun x => none)
+                                                  (InternedBinderProtocol.NodeKey.mu
+                                                    { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                      ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                                  { identity := 0,
+                                                    key :=
+                                                      InternedBinderProtocol.NodeKey.mu
+                                                        { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                          ordinaryShape :=
+                                                            InternedBinderProtocol.NodeRef.empty } } }.issued
+                                          ident,
+                                    table :=
+                                      put
+                                        (put (fun x => none)
+                                          (InternedBinderProtocol.NodeKey.mu
+                                            { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                              ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                          { identity := 0,
+                                            key :=
+                                              InternedBinderProtocol.NodeKey.mu
+                                                { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                  ordinaryShape := InternedBinderProtocol.NodeRef.empty } })
+                                        (InternedBinderProtocol.NodeKey.node [0])
+                                        { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] } }.next then
+                            some
+                              (InternedBinderProtocol.NodeKey.mu
+                                { depthShape := InternedBinderProtocol.NodeRef.node 1,
+                                  ordinaryShape := InternedBinderProtocol.NodeRef.node 1 })
+                          else
+                            { next := 2,
+                                  issued := fun ident =>
+                                    if
+                                        ident =
+                                          { next := 1,
+                                              issued := fun ident =>
+                                                if
+                                                    ident =
+                                                      { next := 0, issued := fun x => none,
+                                                          table := fun x => none }.next then
+                                                  some
+                                                    (InternedBinderProtocol.NodeKey.mu
+                                                      { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                        ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                                else
+                                                  { next := 0, issued := fun x => none, table := fun x => none }.issued
+                                                    ident,
+                                              table :=
+                                                put (fun x => none)
+                                                  (InternedBinderProtocol.NodeKey.mu
+                                                    { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                      ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                                  { identity := 0,
+                                                    key :=
+                                                      InternedBinderProtocol.NodeKey.mu
+                                                        { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                          ordinaryShape :=
+                                                            InternedBinderProtocol.NodeRef.empty } } }.next then
+                                      some (InternedBinderProtocol.NodeKey.node [0])
+                                    else
+                                      { next := 1,
+                                            issued := fun ident =>
+                                              if
+                                                  ident =
+                                                    { next := 0, issued := fun x => none,
+                                                        table := fun x => none }.next then
+                                                some
+                                                  (InternedBinderProtocol.NodeKey.mu
+                                                    { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                      ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                              else
+                                                { next := 0, issued := fun x => none, table := fun x => none }.issued
+                                                  ident,
+                                            table :=
+                                              put (fun x => none)
+                                                (InternedBinderProtocol.NodeKey.mu
+                                                  { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                    ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                                { identity := 0,
+                                                  key :=
+                                                    InternedBinderProtocol.NodeKey.mu
+                                                      { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                        ordinaryShape :=
+                                                          InternedBinderProtocol.NodeRef.empty } } }.issued
+                                        ident,
+                                  table :=
+                                    put
+                                      (put (fun x => none)
+                                        (InternedBinderProtocol.NodeKey.mu
+                                          { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                            ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                        { identity := 0,
+                                          key :=
+                                            InternedBinderProtocol.NodeKey.mu
+                                              { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                ordinaryShape := InternedBinderProtocol.NodeRef.empty } })
+                                      (InternedBinderProtocol.NodeKey.node [0])
+                                      { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] } }.issued
+                              ident,
+                        table :=
+                          put
+                            (put
+                              (put (fun x => none)
+                                (InternedBinderProtocol.NodeKey.mu
+                                  { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                    ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                { identity := 0,
+                                  key :=
+                                    InternedBinderProtocol.NodeKey.mu
+                                      { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                        ordinaryShape := InternedBinderProtocol.NodeRef.empty } })
+                              (InternedBinderProtocol.NodeKey.node [0])
+                              { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] })
+                            (InternedBinderProtocol.NodeKey.mu
+                              { depthShape := InternedBinderProtocol.NodeRef.node 1,
+                                ordinaryShape := InternedBinderProtocol.NodeRef.node 1 })
+                            { identity := 2,
+                              key :=
+                                InternedBinderProtocol.NodeKey.mu
+                                  { depthShape := InternedBinderProtocol.NodeRef.node 1,
+                                    ordinaryShape := InternedBinderProtocol.NodeRef.node 1 } } },
+                    edgeRecords :=
+                      put (fun x => none)
+                        { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                          constraint := { equalities := some [], guard := SourceGuards.Guard.top } }
+                        (EdgeValue.mk
+                          { identity := 0,
+                            key :=
+                              { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                          []),
+                    nodeRecords :=
+                      put
+                        (put
+                          (put (fun x => none)
+                            (InternedBinderProtocol.NodeKey.mu
+                              { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                            (Value.mu
+                              { identity := 0,
+                                key :=
+                                  InternedBinderProtocol.NodeKey.mu
+                                    { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                      ordinaryShape := InternedBinderProtocol.NodeRef.empty } }
+                              Value.empty Value.empty Value.empty))
+                          (InternedBinderProtocol.NodeKey.node [0])
+                          (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                            [EdgeValue.mk
+                                { identity := 0,
+                                  key :=
+                                    { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                      constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                                []]
+                            0 []))
+                        (InternedBinderProtocol.NodeKey.mu
+                          { depthShape := InternedBinderProtocol.NodeRef.node 1,
+                            ordinaryShape := InternedBinderProtocol.NodeRef.node 1 })
+                        (Value.mu
+                          { identity := 2,
+                            key :=
+                              InternedBinderProtocol.NodeKey.mu
+                                { depthShape := InternedBinderProtocol.NodeRef.node 1,
+                                  ordinaryShape := InternedBinderProtocol.NodeRef.node 1 } }
+                          (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                            [EdgeValue.mk
+                                { identity := 0,
+                                  key :=
+                                    { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                      constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                                []]
+                            0 [])
+                          (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                            [EdgeValue.mk
+                                { identity := 0,
+                                  key :=
+                                    { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                      constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                                []]
+                            0 [])
+                          (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                            [EdgeValue.mk
+                                { identity := 0,
+                                  key :=
+                                    { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                      constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                                []]
+                            0 [])) },
+                domains :=
+                  { next := 1,
+                    issued := fun ident =>
+                      if ident = { next := 0, issued := fun x => none, table := fun x => none }.next then
+                        some
+                          {
+                            free :=
+                              [(0, InternedBinderProtocol.NodeRef.mu 0), (2, InternedBinderProtocol.NodeRef.mu 2)],
+                            seen := [(0, 2)] }
+                      else { next := 0, issued := fun x => none, table := fun x => none }.issued ident,
+                    table :=
+                      put (fun x => none)
+                        { free := [(0, InternedBinderProtocol.NodeRef.mu 0), (2, InternedBinderProtocol.NodeRef.mu 2)],
+                          seen := [(0, 2)] }
+                        { identity := 0,
+                          key :=
+                            {
+                              free :=
+                                [(0, InternedBinderProtocol.NodeRef.mu 0), (2, InternedBinderProtocol.NodeRef.mu 2)],
+                              seen := [(0, 2)] } } } },
+            nodes :=
+              { table := put (fun x => none) ({ toFin := ⟨0, ⋯⟩ }, { toFin := ⟨1, ⋯⟩ }, { toFin := ⟨9, ⋯⟩ }) 0,
+                cells :=
+                  put
+                    (put (fun x => none) 0
+                      {
+                        request :=
+                          { domain := { identity := 0, key := { free := [], seen := [] } },
+                            left :=
+                              Value.mu
+                                { identity := 0,
+                                  key :=
+                                    InternedBinderProtocol.NodeKey.mu
+                                      { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                        ordinaryShape := InternedBinderProtocol.NodeRef.empty } }
+                                Value.empty Value.empty Value.empty,
+                            right :=
+                              Value.mu
+                                { identity := 2,
+                                  key :=
+                                    InternedBinderProtocol.NodeKey.mu
+                                      { depthShape := InternedBinderProtocol.NodeRef.node 1,
+                                        ordinaryShape := InternedBinderProtocol.NodeRef.node 1 } }
+                                (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                                  [EdgeValue.mk
+                                      { identity := 0,
+                                        key :=
+                                          { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                            constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                                      []]
+                                  0 [])
+                                (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                                  [EdgeValue.mk
+                                      { identity := 0,
+                                        key :=
+                                          { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                            constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                                      []]
+                                  0 [])
+                                (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                                  [EdgeValue.mk
+                                      { identity := 0,
+                                        key :=
+                                          { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                            constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                                      []]
+                                  0 []) },
+                        status := FlatMemoThunk.Status.suspended })
+                    0
+                    {
+                      request :=
+                        { domain := { identity := 0, key := { free := [], seen := [] } },
+                          left :=
+                            Value.mu
+                              { identity := 0,
+                                key :=
+                                  InternedBinderProtocol.NodeKey.mu
+                                    { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                      ordinaryShape := InternedBinderProtocol.NodeRef.empty } }
+                              Value.empty Value.empty Value.empty,
+                          right :=
+                            Value.mu
+                              { identity := 2,
+                                key :=
+                                  InternedBinderProtocol.NodeKey.mu
+                                    { depthShape := InternedBinderProtocol.NodeRef.node 1,
+                                      ordinaryShape := InternedBinderProtocol.NodeRef.node 1 } }
+                              (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                                [EdgeValue.mk
+                                    { identity := 0,
+                                      key :=
+                                        { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                          constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                                    []]
+                                0 [])
+                              (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                                [EdgeValue.mk
+                                    { identity := 0,
+                                      key :=
+                                        { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                          constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                                    []]
+                                0 [])
+                              (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                                [EdgeValue.mk
+                                    { identity := 0,
+                                      key :=
+                                        { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                          constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                                    []]
+                                0 []) },
+                      status := FlatMemoThunk.Status.evaluating },
+                next := 1 },
+            edges := { table := fun x => none, cells := fun x => none, next := 0 } },
+        operations :=
+          { constraints := { next := 0, issued := fun x => none, table := fun x => none },
+            combinations := fun x => none, descents := fun x => none } } =
+    Outcome.yielded
+      (Control.code
+        (Code.node
+          {
+            domain :=
+              { identity := 1,
+                key :=
+                  { free := [(0, InternedBinderProtocol.NodeRef.mu 0), (2, InternedBinderProtocol.NodeRef.mu 2)],
+                    seen := [(0, 2)] } },
+            left := Value.empty,
+            right :=
+              Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                [EdgeValue.mk
+                    { identity := 0,
+                      key :=
+                        { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                          constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                    []]
+                0 [] }
+          childNext))
+      {
+        native :=
+          {
+            machine :=
+              {
+                heap :=
+                  {
+                    edges :=
+                      { next := 1,
+                        issued := fun ident =>
+                          if ident = { next := 0, issued := fun x => none, table := fun x => none }.next then
+                            some
+                              { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                constraint := { equalities := some [], guard := SourceGuards.Guard.top } }
+                          else { next := 0, issued := fun x => none, table := fun x => none }.issued ident,
+                        table :=
+                          put (fun x => none)
+                            { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                              constraint := { equalities := some [], guard := SourceGuards.Guard.top } }
+                            { identity := 0,
+                              key :=
+                                { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                  constraint := { equalities := some [], guard := SourceGuards.Guard.top } } } },
+                    nodes :=
+                      { next := 3,
+                        issued := fun ident =>
+                          if
+                              ident =
+                                { next := 2,
+                                    issued := fun ident =>
+                                      if
+                                          ident =
+                                            { next := 1,
+                                                issued := fun ident =>
+                                                  if
+                                                      ident =
+                                                        { next := 0, issued := fun x => none,
+                                                            table := fun x => none }.next then
+                                                    some
+                                                      (InternedBinderProtocol.NodeKey.mu
+                                                        { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                          ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                                  else
+                                                    { next := 0, issued := fun x => none,
+                                                          table := fun x => none }.issued
+                                                      ident,
+                                                table :=
+                                                  put (fun x => none)
+                                                    (InternedBinderProtocol.NodeKey.mu
+                                                      { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                        ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                                    { identity := 0,
+                                                      key :=
+                                                        InternedBinderProtocol.NodeKey.mu
+                                                          { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                            ordinaryShape :=
+                                                              InternedBinderProtocol.NodeRef.empty } } }.next then
+                                        some (InternedBinderProtocol.NodeKey.node [0])
+                                      else
+                                        { next := 1,
+                                              issued := fun ident =>
+                                                if
+                                                    ident =
+                                                      { next := 0, issued := fun x => none,
+                                                          table := fun x => none }.next then
+                                                  some
+                                                    (InternedBinderProtocol.NodeKey.mu
+                                                      { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                        ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                                else
+                                                  { next := 0, issued := fun x => none, table := fun x => none }.issued
+                                                    ident,
+                                              table :=
+                                                put (fun x => none)
+                                                  (InternedBinderProtocol.NodeKey.mu
+                                                    { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                      ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                                  { identity := 0,
+                                                    key :=
+                                                      InternedBinderProtocol.NodeKey.mu
+                                                        { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                          ordinaryShape :=
+                                                            InternedBinderProtocol.NodeRef.empty } } }.issued
+                                          ident,
+                                    table :=
+                                      put
+                                        (put (fun x => none)
+                                          (InternedBinderProtocol.NodeKey.mu
+                                            { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                              ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                          { identity := 0,
+                                            key :=
+                                              InternedBinderProtocol.NodeKey.mu
+                                                { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                  ordinaryShape := InternedBinderProtocol.NodeRef.empty } })
+                                        (InternedBinderProtocol.NodeKey.node [0])
+                                        { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] } }.next then
+                            some
+                              (InternedBinderProtocol.NodeKey.mu
+                                { depthShape := InternedBinderProtocol.NodeRef.node 1,
+                                  ordinaryShape := InternedBinderProtocol.NodeRef.node 1 })
+                          else
+                            { next := 2,
+                                  issued := fun ident =>
+                                    if
+                                        ident =
+                                          { next := 1,
+                                              issued := fun ident =>
+                                                if
+                                                    ident =
+                                                      { next := 0, issued := fun x => none,
+                                                          table := fun x => none }.next then
+                                                  some
+                                                    (InternedBinderProtocol.NodeKey.mu
+                                                      { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                        ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                                else
+                                                  { next := 0, issued := fun x => none, table := fun x => none }.issued
+                                                    ident,
+                                              table :=
+                                                put (fun x => none)
+                                                  (InternedBinderProtocol.NodeKey.mu
+                                                    { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                      ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                                  { identity := 0,
+                                                    key :=
+                                                      InternedBinderProtocol.NodeKey.mu
+                                                        { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                          ordinaryShape :=
+                                                            InternedBinderProtocol.NodeRef.empty } } }.next then
+                                      some (InternedBinderProtocol.NodeKey.node [0])
+                                    else
+                                      { next := 1,
+                                            issued := fun ident =>
+                                              if
+                                                  ident =
+                                                    { next := 0, issued := fun x => none,
+                                                        table := fun x => none }.next then
+                                                some
+                                                  (InternedBinderProtocol.NodeKey.mu
+                                                    { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                      ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                              else
+                                                { next := 0, issued := fun x => none, table := fun x => none }.issued
+                                                  ident,
+                                            table :=
+                                              put (fun x => none)
+                                                (InternedBinderProtocol.NodeKey.mu
+                                                  { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                    ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                                { identity := 0,
+                                                  key :=
+                                                    InternedBinderProtocol.NodeKey.mu
+                                                      { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                        ordinaryShape :=
+                                                          InternedBinderProtocol.NodeRef.empty } } }.issued
+                                        ident,
+                                  table :=
+                                    put
+                                      (put (fun x => none)
+                                        (InternedBinderProtocol.NodeKey.mu
+                                          { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                            ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                        { identity := 0,
+                                          key :=
+                                            InternedBinderProtocol.NodeKey.mu
+                                              { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                                ordinaryShape := InternedBinderProtocol.NodeRef.empty } })
+                                      (InternedBinderProtocol.NodeKey.node [0])
+                                      { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] } }.issued
+                              ident,
+                        table :=
+                          put
+                            (put
+                              (put (fun x => none)
+                                (InternedBinderProtocol.NodeKey.mu
+                                  { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                    ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                                { identity := 0,
+                                  key :=
+                                    InternedBinderProtocol.NodeKey.mu
+                                      { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                        ordinaryShape := InternedBinderProtocol.NodeRef.empty } })
+                              (InternedBinderProtocol.NodeKey.node [0])
+                              { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] })
+                            (InternedBinderProtocol.NodeKey.mu
+                              { depthShape := InternedBinderProtocol.NodeRef.node 1,
+                                ordinaryShape := InternedBinderProtocol.NodeRef.node 1 })
+                            { identity := 2,
+                              key :=
+                                InternedBinderProtocol.NodeKey.mu
+                                  { depthShape := InternedBinderProtocol.NodeRef.node 1,
+                                    ordinaryShape := InternedBinderProtocol.NodeRef.node 1 } } },
+                    edgeRecords :=
+                      put (fun x => none)
+                        { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                          constraint := { equalities := some [], guard := SourceGuards.Guard.top } }
+                        (EdgeValue.mk
+                          { identity := 0,
+                            key :=
+                              { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                          []),
+                    nodeRecords :=
+                      put
+                        (put
+                          (put (fun x => none)
+                            (InternedBinderProtocol.NodeKey.mu
+                              { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                ordinaryShape := InternedBinderProtocol.NodeRef.empty })
+                            (Value.mu
+                              { identity := 0,
+                                key :=
+                                  InternedBinderProtocol.NodeKey.mu
+                                    { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                      ordinaryShape := InternedBinderProtocol.NodeRef.empty } }
+                              Value.empty Value.empty Value.empty))
+                          (InternedBinderProtocol.NodeKey.node [0])
+                          (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                            [EdgeValue.mk
+                                { identity := 0,
+                                  key :=
+                                    { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                      constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                                []]
+                            0 []))
+                        (InternedBinderProtocol.NodeKey.mu
+                          { depthShape := InternedBinderProtocol.NodeRef.node 1,
+                            ordinaryShape := InternedBinderProtocol.NodeRef.node 1 })
+                        (Value.mu
+                          { identity := 2,
+                            key :=
+                              InternedBinderProtocol.NodeKey.mu
+                                { depthShape := InternedBinderProtocol.NodeRef.node 1,
+                                  ordinaryShape := InternedBinderProtocol.NodeRef.node 1 } }
+                          (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                            [EdgeValue.mk
+                                { identity := 0,
+                                  key :=
+                                    { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                      constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                                []]
+                            0 [])
+                          (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                            [EdgeValue.mk
+                                { identity := 0,
+                                  key :=
+                                    { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                      constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                                []]
+                            0 [])
+                          (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                            [EdgeValue.mk
+                                { identity := 0,
+                                  key :=
+                                    { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                      constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                                []]
+                            0 [])) },
+                domains :=
+                  { next := 1,
+                    issued := fun ident =>
+                      if ident = { next := 0, issued := fun x => none, table := fun x => none }.next then
+                        some
+                          {
+                            free :=
+                              [(0, InternedBinderProtocol.NodeRef.mu 0), (2, InternedBinderProtocol.NodeRef.mu 2)],
+                            seen := [(0, 2)] }
+                      else { next := 0, issued := fun x => none, table := fun x => none }.issued ident,
+                    table :=
+                      put (fun x => none)
+                        { free := [(0, InternedBinderProtocol.NodeRef.mu 0), (2, InternedBinderProtocol.NodeRef.mu 2)],
+                          seen := [(0, 2)] }
+                        { identity := 0,
+                          key :=
+                            {
+                              free :=
+                                [(0, InternedBinderProtocol.NodeRef.mu 0), (2, InternedBinderProtocol.NodeRef.mu 2)],
+                              seen := [(0, 2)] } } } },
+            nodes :=
+              { table := put (fun x => none) ({ toFin := ⟨0, ⋯⟩ }, { toFin := ⟨1, ⋯⟩ }, { toFin := ⟨9, ⋯⟩ }) 0,
+                cells :=
+                  put
+                    (put (fun x => none) 0
+                      {
+                        request :=
+                          { domain := { identity := 0, key := { free := [], seen := [] } },
+                            left :=
+                              Value.mu
+                                { identity := 0,
+                                  key :=
+                                    InternedBinderProtocol.NodeKey.mu
+                                      { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                        ordinaryShape := InternedBinderProtocol.NodeRef.empty } }
+                                Value.empty Value.empty Value.empty,
+                            right :=
+                              Value.mu
+                                { identity := 2,
+                                  key :=
+                                    InternedBinderProtocol.NodeKey.mu
+                                      { depthShape := InternedBinderProtocol.NodeRef.node 1,
+                                        ordinaryShape := InternedBinderProtocol.NodeRef.node 1 } }
+                                (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                                  [EdgeValue.mk
+                                      { identity := 0,
+                                        key :=
+                                          { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                            constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                                      []]
+                                  0 [])
+                                (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                                  [EdgeValue.mk
+                                      { identity := 0,
+                                        key :=
+                                          { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                            constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                                      []]
+                                  0 [])
+                                (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                                  [EdgeValue.mk
+                                      { identity := 0,
+                                        key :=
+                                          { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                            constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                                      []]
+                                  0 []) },
+                        status := FlatMemoThunk.Status.suspended })
+                    0
+                    {
+                      request :=
+                        { domain := { identity := 0, key := { free := [], seen := [] } },
+                          left :=
+                            Value.mu
+                              { identity := 0,
+                                key :=
+                                  InternedBinderProtocol.NodeKey.mu
+                                    { depthShape := InternedBinderProtocol.NodeRef.empty,
+                                      ordinaryShape := InternedBinderProtocol.NodeRef.empty } }
+                              Value.empty Value.empty Value.empty,
+                          right :=
+                            Value.mu
+                              { identity := 2,
+                                key :=
+                                  InternedBinderProtocol.NodeKey.mu
+                                    { depthShape := InternedBinderProtocol.NodeRef.node 1,
+                                      ordinaryShape := InternedBinderProtocol.NodeRef.node 1 } }
+                              (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                                [EdgeValue.mk
+                                    { identity := 0,
+                                      key :=
+                                        { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                          constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                                    []]
+                                0 [])
+                              (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                                [EdgeValue.mk
+                                    { identity := 0,
+                                      key :=
+                                        { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                          constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                                    []]
+                                0 [])
+                              (Value.node { identity := 1, key := InternedBinderProtocol.NodeKey.node [0] }
+                                [EdgeValue.mk
+                                    { identity := 0,
+                                      key :=
+                                        { symbol := ("leaf", FullSyntax.Formula.top), children := [],
+                                          constraint := { equalities := some [], guard := SourceGuards.Guard.top } } }
+                                    []]
+                                0 []) },
+                      status := FlatMemoThunk.Status.evaluating },
+                next := 1 },
+            edges := { table := fun x => none, cells := fun x => none, next := 0 } },
+        operations :=
+          { constraints := { next := 0, issued := fun x => none, table := fun x => none },
+            combinations := fun x => none, descents := fun x => none } }
+/tmp/mcfta-native-compiled-owner-fixture/owner-kernels-direct-2.source.lean:120:103: error: No goals to be solved

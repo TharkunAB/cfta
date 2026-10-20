@@ -1,0 +1,12 @@
+/tmp/mcfta-native-compiled-owner-fixture/owner-kernels-direct-3.source.lean:117:24: error: Tactic `decide` failed for proposition
+  child.domain.identity < 2 ^ (8 - 1)
+because its `Decidable` instance
+  child.domain.identity.decLt (2 ^ (8 - 1))
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `instDecidableEqList`, `Bool.decEq`, `Nat.decLe`, `Nat.decLt`, `IntersectionFlatMemoKeyDomain.instDecidableEqDomainKey`, and `IntersectionFlatMemoKeyDomain.instDecidableEqDomainKey.decEq`, reduction got stuck at the `Decidable` instance
+  match child.domain.identity.succ.ble (2 ^ (8 - 1)), true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯

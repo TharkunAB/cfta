@@ -1,0 +1,267 @@
+@MicroCFTA.NativeOwnerKeyExclusion.no_identity_pair : ∀ {Symbol Guard : Type} (width : Nat)
+  (request : MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard),
+  @Eq.{1} (Option.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width))
+      (@MicroCFTA.SourceRecursiveIntersectionMemo.requestKey Symbol Guard width
+        (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request)
+        (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request)
+        (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request))
+      (@Option.none.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)) →
+    ∀ (first second : Nat),
+      @Eq.{1} (Option.{0} Nat)
+          (@MicroCFTA.SourceRecursiveIntersectionControl.identity Symbol Guard
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request))
+          (@Option.some.{0} Nat first) →
+        @Eq.{1} (Option.{0} Nat)
+            (@MicroCFTA.SourceRecursiveIntersectionControl.identity Symbol Guard
+              (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request))
+            (@Option.some.{0} Nat second) →
+          False
+theorem MicroCFTA.NativeOwnerKeyExclusion.no_identity_pair : ∀ {Symbol Guard : Type} (width : Nat)
+  (request : MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard),
+  @Eq.{1} (Option.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width))
+      (@MicroCFTA.SourceRecursiveIntersectionMemo.requestKey Symbol Guard width
+        (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request)
+        (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request)
+        (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request))
+      (@Option.none.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)) →
+    ∀ (first second : Nat),
+      @Eq.{1} (Option.{0} Nat)
+          (@MicroCFTA.SourceRecursiveIntersectionControl.identity Symbol Guard
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request))
+          (@Option.some.{0} Nat first) →
+        @Eq.{1} (Option.{0} Nat)
+            (@MicroCFTA.SourceRecursiveIntersectionControl.identity Symbol Guard
+              (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request))
+            (@Option.some.{0} Nat second) →
+          False :=
+fun {Symbol Guard} width request missing first second left right =>
+  @Exists.casesOn.{1} MicroCFTA.IntersectSchedule.Input
+    (fun input =>
+      @Eq.{1} (Option.{0} MicroCFTA.IntersectSchedule.Input)
+        (MicroCFTA.IntersectionFlatMemoKey.input
+          (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request)))
+        (@Option.some.{0} MicroCFTA.IntersectSchedule.Input input))
+    (fun x => False)
+    (@MicroCFTA.NativeOwnerKeyExclusion.identity_input Symbol Guard
+      (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request) first left)
+    fun leftInput leftCodec =>
+    @Exists.casesOn.{1} MicroCFTA.IntersectSchedule.Input
+      (fun input =>
+        @Eq.{1} (Option.{0} MicroCFTA.IntersectSchedule.Input)
+          (MicroCFTA.IntersectionFlatMemoKey.input
+            (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+              (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request)))
+          (@Option.some.{0} MicroCFTA.IntersectSchedule.Input input))
+      (fun x => False)
+      (@MicroCFTA.NativeOwnerKeyExclusion.identity_input Symbol Guard
+        (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request) second right)
+      fun rightInput rightCodec =>
+      have complete :=
+        MicroCFTA.IntersectionFlatMemoKeyDomain.sourceKey_complete width
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request)
+          (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request))
+          (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request))
+          leftInput rightInput leftCodec rightCodec;
+      @id.{0}
+        (@Eq.{1} (Option.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width))
+            (@MicroCFTA.SourceRecursiveIntersectionMemo.requestKey Symbol Guard width
+              (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request)
+              (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request)
+              (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request))
+            (@Option.none.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)) →
+          False)
+        (fun missing =>
+          @Eq.casesOn.{0, 1} (Option.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width))
+            (@Option.some.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+              (MicroCFTA.IntersectionFlatMemoKeyDomain.flatKey width
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request) leftInput
+                rightInput))
+            (fun a t =>
+              @Eq.{1} (Option.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width))
+                  (@Option.none.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)) a →
+                @HEq.{0}
+                    (@Eq.{1} (Option.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width))
+                      (@Option.some.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                        (MicroCFTA.IntersectionFlatMemoKeyDomain.flatKey width
+                          (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request)
+                          leftInput rightInput))
+                      (@Option.none.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)))
+                    (@Eq.mp.{0}
+                      (@Eq.{1} (Option.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width))
+                        (MicroCFTA.IntersectionFlatMemoKeyDomain.sourceKey width
+                          (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request))
+                          (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request)))
+                        (@Option.none.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)))
+                      (@Eq.{1} (Option.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width))
+                        (@Option.some.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                          (MicroCFTA.IntersectionFlatMemoKeyDomain.flatKey width
+                            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request)
+                            leftInput rightInput))
+                        (@Option.none.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)))
+                      (@congrArg.{1, 1} (Option.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)) Prop
+                        (MicroCFTA.IntersectionFlatMemoKeyDomain.sourceKey width
+                          (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request))
+                          (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request)))
+                        (@Option.some.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                          (MicroCFTA.IntersectionFlatMemoKeyDomain.flatKey width
+                            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request)
+                            leftInput rightInput))
+                        (fun _a =>
+                          @Eq.{1} (Option.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)) _a
+                            (@Option.none.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)))
+                        complete)
+                      missing)
+                    (@Eq.{1} (Option.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width))
+                      (@Option.some.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                        (MicroCFTA.IntersectionFlatMemoKeyDomain.flatKey width
+                          (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request)
+                          leftInput rightInput))
+                      a)
+                    t →
+                  False)
+            (@Option.none.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width))
+            (@Eq.mp.{0}
+              (@Eq.{1} (Option.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width))
+                (MicroCFTA.IntersectionFlatMemoKeyDomain.sourceKey width
+                  (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                    (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request))
+                  (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                    (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request)))
+                (@Option.none.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)))
+              (@Eq.{1} (Option.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width))
+                (@Option.some.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                  (MicroCFTA.IntersectionFlatMemoKeyDomain.flatKey width
+                    (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request) leftInput
+                    rightInput))
+                (@Option.none.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)))
+              (@congrArg.{1, 1} (Option.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)) Prop
+                (MicroCFTA.IntersectionFlatMemoKeyDomain.sourceKey width
+                  (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                    (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request))
+                  (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                    (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request)))
+                (@Option.some.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                  (MicroCFTA.IntersectionFlatMemoKeyDomain.flatKey width
+                    (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request) leftInput
+                    rightInput))
+                (fun _a =>
+                  @Eq.{1} (Option.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)) _a
+                    (@Option.none.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)))
+                complete)
+              missing)
+            (fun h =>
+              @False.elim.{0}
+                (@HEq.{0}
+                    (@Eq.{1} (Option.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width))
+                      (@Option.some.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                        (MicroCFTA.IntersectionFlatMemoKeyDomain.flatKey width
+                          (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request)
+                          leftInput rightInput))
+                      (@Option.none.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)))
+                    (@Eq.mp.{0}
+                      (@Eq.{1} (Option.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width))
+                        (MicroCFTA.IntersectionFlatMemoKeyDomain.sourceKey width
+                          (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request))
+                          (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request)))
+                        (@Option.none.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)))
+                      (@Eq.{1} (Option.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width))
+                        (@Option.some.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                          (MicroCFTA.IntersectionFlatMemoKeyDomain.flatKey width
+                            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request)
+                            leftInput rightInput))
+                        (@Option.none.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)))
+                      (@congrArg.{1, 1} (Option.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)) Prop
+                        (MicroCFTA.IntersectionFlatMemoKeyDomain.sourceKey width
+                          (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request))
+                          (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request)))
+                        (@Option.some.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                          (MicroCFTA.IntersectionFlatMemoKeyDomain.flatKey width
+                            (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request)
+                            leftInput rightInput))
+                        (fun _a =>
+                          @Eq.{1} (Option.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)) _a
+                            (@Option.none.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)))
+                        complete)
+                      missing)
+                    (@Eq.{1} (Option.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width))
+                      (@Option.some.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                        (MicroCFTA.IntersectionFlatMemoKeyDomain.flatKey width
+                          (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request)
+                          leftInput rightInput))
+                      (@Option.some.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                        (MicroCFTA.IntersectionFlatMemoKeyDomain.flatKey width
+                          (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request)
+                          leftInput rightInput)))
+                    (@Eq.refl.{1} (Option.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width))
+                      (@Option.some.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                        (MicroCFTA.IntersectionFlatMemoKeyDomain.flatKey width
+                          (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request)
+                          leftInput rightInput))) →
+                  False)
+                (@noConfusion_of_Nat.{1} (Option.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width))
+                  (@Option.ctorIdx.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width))
+                  (@Option.none.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width))
+                  (@Option.some.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                    (MicroCFTA.IntersectionFlatMemoKeyDomain.flatKey width
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request) leftInput
+                      rightInput))
+                  h))
+            (@Eq.refl.{1} (Option.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width))
+              (@Option.none.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)))
+            (@HEq.refl.{0}
+              (@Eq.{1} (Option.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width))
+                (@Option.some.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                  (MicroCFTA.IntersectionFlatMemoKeyDomain.flatKey width
+                    (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request) leftInput
+                    rightInput))
+                (@Option.none.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)))
+              (@Eq.mp.{0}
+                (@Eq.{1} (Option.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width))
+                  (MicroCFTA.IntersectionFlatMemoKeyDomain.sourceKey width
+                    (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request))
+                    (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request)))
+                  (@Option.none.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)))
+                (@Eq.{1} (Option.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width))
+                  (@Option.some.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                    (MicroCFTA.IntersectionFlatMemoKeyDomain.flatKey width
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request) leftInput
+                      rightInput))
+                  (@Option.none.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)))
+                (@congrArg.{1, 1} (Option.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)) Prop
+                  (MicroCFTA.IntersectionFlatMemoKeyDomain.sourceKey width
+                    (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.left Symbol Guard request))
+                    (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.right Symbol Guard request)))
+                  (@Option.some.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)
+                    (MicroCFTA.IntersectionFlatMemoKeyDomain.flatKey width
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest.domain Symbol Guard request) leftInput
+                      rightInput))
+                  (fun _a =>
+                    @Eq.{1} (Option.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)) _a
+                      (@Option.none.{0} (MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width)))
+                  complete)
+                missing)))
+        missing
+'MicroCFTA.NativeOwnerKeyExclusion.no_identity_pair' depends on axioms: [propext, Quot.sound.{u}]

@@ -1,0 +1,1995 @@
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:125:6: error: Tactic `rfl` failed: The left-hand side
+  Code.read name fun found =>
+    match found with
+    | some bound => if left = true then requestNode domain bound other else requestNode domain other bound
+    | none => Code.fail (Failure.missingPayload name)
+is not definitionally equal to the right-hand side
+  Code.read name fun found =>
+    match found with
+    | some bound => if left = true then requestNode domain bound other else requestNode domain other bound
+    | none => Code.fail (Failure.missingPayload name)
+
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+domain : Interned IntersectionFlatMemoKeyDomain.DomainKey
+name : Nat
+other : Node
+left : Bool
+fuel : Nat
+before after : Checked width
+pair : Nat × Nat
+body : Node
+siteNext : Node → Code Symbol Guard Node
+actual :
+  Trace fuel (Control.code (compileReference domain name other left)) before
+    (Control.code (Code.optionalBinder pair body siteNext)) after
+scope : name ∈ SourceRecursiveIntersectionDomain.names domain.key
+readNext : Option Node → Code Symbol Guard Node :=
+  fun found =>
+    match found with
+    | some bound => if left = true then requestNode domain bound other else requestNode domain other bound
+    | none => Code.fail (Failure.missingPayload name)
+⊢ (Code.read name fun found =>
+      match found with
+      | some bound => if left = true then requestNode domain bound other else requestNode domain other bound
+      | none => Code.fail (Failure.missingPayload name)) =
+    Code.read name fun found =>
+      match found with
+      | some bound => if left = true then requestNode domain bound other else requestNode domain other bound
+      | none => Code.fail (Failure.missingPayload name)
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:198:31: error: Application type mismatch: The argument
+  selected
+has type
+  decision request.domain.key request.left request.right = Branch.bothMu
+but is expected to have type
+  Branch.bothMu = Branch.bothMu
+in the application
+  Or.inl selected
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:199:37: error: Application type mismatch: The argument
+  selected
+has type
+  decision request.domain.key request.left request.right = Branch.leftMu
+but is expected to have type
+  Branch.leftMu = Branch.leftMu
+in the application
+  Or.inl selected
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:200:38: error: Application type mismatch: The argument
+  selected
+has type
+  decision request.domain.key request.left request.right = Branch.rightMu
+but is expected to have type
+  Branch.rightMu = Branch.rightMu
+in the application
+  Or.inr selected
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:206:14: error: Type mismatch: After simplification, term
+  actual
+ has type
+  Trace fuel
+    (Control.code
+      (match decision request.domain.key (Value.union entry members depth free) request.right with
+      | Branch.empty => Code.pure Value.empty
+      | Branch.reset =>
+        requestNode IntersectionEmptyDomain.emptyDomain (Value.union entry members depth free) request.right
+      | Branch.self => Code.pure (Value.union entry members depth free)
+      | Branch.swap => requestNode request.domain request.right (Value.union entry members depth free)
+      | Branch.repeated key => Code.pure (repeatedValue key)
+      | Branch.bothMu => compileMu request.domain (Value.union entry members depth free) request.right
+      | Branch.leftMu => compileMu request.domain (Value.union entry members depth free) request.right
+      | Branch.rightMu => compileMu request.domain (Value.union entry members depth free) request.right
+      | Branch.leftUnion =>
+        (SourceRecursiveIntersectionCode.walk (fun member => requestNode request.domain member request.right)
+              members).bind
+          fun values => Code.work (makeUnion values) Code.pure
+      | Branch.rightUnion =>
+        match request.right with
+        | Value.union entry_1 members_1 depth_1 free_1 =>
+          (SourceRecursiveIntersectionCode.walk
+                (fun member => requestNode request.domain (Value.union entry members depth free) member) members_1).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported (Value.union entry members depth free) request.right
+      | Branch.leftReference =>
+        SourceRecursiveIntersectionCode.unsupported (Value.union entry members depth free) request.right
+      | Branch.rightReference =>
+        match request.right with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name (Value.union entry members depth free) false
+        | x => SourceRecursiveIntersectionCode.unsupported (Value.union entry members depth free) request.right
+      | Branch.ordinary =>
+        SourceRecursiveIntersectionCode.unsupported (Value.union entry members depth free) request.right
+      | Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported (Value.union entry members depth free) request.right))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+but is expected to have type
+  Trace fuel
+    (Control.code
+      ((SourceRecursiveIntersectionCode.walk (fun input => requestNode request.domain input request.right) members).bind
+        fun values => Code.work (makeUnion values) Code.pure))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:208:51: error: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.586 ?m.587 →
+    Value ?m.586 ?m.587 → Machine ?m.586 ?m.587 → Result ?m.586 ?m.587 ?m.588
+  
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.586 ?m.587 → Value ?m.586 ?m.587 → Code ?m.586 ?m.587 ?m.588
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:208:12: error: Type mismatch: After simplification, term
+  actual
+ has type
+  Trace fuel
+    (Control.code
+      (match decision request.domain.key Value.empty request.right with
+      | Branch.empty => Code.pure Value.empty
+      | Branch.reset => requestNode IntersectionEmptyDomain.emptyDomain Value.empty request.right
+      | Branch.self => Code.pure Value.empty
+      | Branch.swap => requestNode request.domain request.right Value.empty
+      | Branch.repeated key => Code.pure (repeatedValue key)
+      | Branch.bothMu => compileMu request.domain Value.empty request.right
+      | Branch.leftMu => compileMu request.domain Value.empty request.right
+      | Branch.rightMu => compileMu request.domain Value.empty request.right
+      | Branch.leftUnion => SourceRecursiveIntersectionCode.unsupported Value.empty request.right
+      | Branch.rightUnion =>
+        match request.right with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk (fun member => requestNode request.domain Value.empty member)
+                members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported Value.empty request.right
+      | Branch.leftReference => SourceRecursiveIntersectionCode.unsupported Value.empty request.right
+      | Branch.rightReference =>
+        match request.right with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name Value.empty false
+        | x => SourceRecursiveIntersectionCode.unsupported Value.empty request.right
+      | Branch.ordinary => SourceRecursiveIntersectionCode.unsupported Value.empty request.right
+      | Branch.unsupported => SourceRecursiveIntersectionCode.unsupported Value.empty request.right))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.584)) before (Control.code (Code.optionalBinder pair body siteNext)) after
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:208:51: error: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.614 ?m.615 →
+    Value ?m.614 ?m.615 → Machine ?m.614 ?m.615 → Result ?m.614 ?m.615 ?m.616
+  
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.614 ?m.615 → Value ?m.614 ?m.615 → Code ?m.614 ?m.615 ?m.616
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:208:12: error: Type mismatch: After simplification, term
+  actual
+ has type
+  Trace fuel
+    (Control.code
+      (match decision request.domain.key (Value.reference name✝) request.right with
+      | Branch.empty => Code.pure Value.empty
+      | Branch.reset => requestNode IntersectionEmptyDomain.emptyDomain (Value.reference name✝) request.right
+      | Branch.self => Code.pure (Value.reference name✝)
+      | Branch.swap => requestNode request.domain request.right (Value.reference name✝)
+      | Branch.repeated key => Code.pure (repeatedValue key)
+      | Branch.bothMu => compileMu request.domain (Value.reference name✝) request.right
+      | Branch.leftMu => compileMu request.domain (Value.reference name✝) request.right
+      | Branch.rightMu => compileMu request.domain (Value.reference name✝) request.right
+      | Branch.leftUnion => SourceRecursiveIntersectionCode.unsupported (Value.reference name✝) request.right
+      | Branch.rightUnion =>
+        match request.right with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk
+                (fun member => requestNode request.domain (Value.reference name✝) member) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported (Value.reference name✝) request.right
+      | Branch.leftReference =>
+        match Value.reference name✝ with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name request.right true
+        | x => SourceRecursiveIntersectionCode.unsupported (Value.reference name✝) request.right
+      | Branch.rightReference =>
+        match request.right with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name (Value.reference name✝) false
+        | x => SourceRecursiveIntersectionCode.unsupported (Value.reference name✝) request.right
+      | Branch.ordinary => SourceRecursiveIntersectionCode.unsupported (Value.reference name✝) request.right
+      | Branch.unsupported => SourceRecursiveIntersectionCode.unsupported (Value.reference name✝) request.right))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.612)) before (Control.code (Code.optionalBinder pair body siteNext)) after
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:208:51: error: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.642 ?m.643 →
+    Value ?m.642 ?m.643 → Machine ?m.642 ?m.643 → Result ?m.642 ?m.643 ?m.644
+  
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.642 ?m.643 → Value ?m.642 ?m.643 → Code ?m.642 ?m.643 ?m.644
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:208:12: error: Type mismatch: After simplification, term
+  actual
+ has type
+  Trace fuel
+    (Control.code
+      (match decision request.domain.key (Value.node entry✝ edges✝ depth✝ free✝) request.right with
+      | Branch.empty => Code.pure Value.empty
+      | Branch.reset =>
+        requestNode IntersectionEmptyDomain.emptyDomain (Value.node entry✝ edges✝ depth✝ free✝) request.right
+      | Branch.self => Code.pure (Value.node entry✝ edges✝ depth✝ free✝)
+      | Branch.swap => requestNode request.domain request.right (Value.node entry✝ edges✝ depth✝ free✝)
+      | Branch.repeated key => Code.pure (repeatedValue key)
+      | Branch.bothMu => compileMu request.domain (Value.node entry✝ edges✝ depth✝ free✝) request.right
+      | Branch.leftMu => compileMu request.domain (Value.node entry✝ edges✝ depth✝ free✝) request.right
+      | Branch.rightMu => compileMu request.domain (Value.node entry✝ edges✝ depth✝ free✝) request.right
+      | Branch.leftUnion =>
+        SourceRecursiveIntersectionCode.unsupported (Value.node entry✝ edges✝ depth✝ free✝) request.right
+      | Branch.rightUnion =>
+        match request.right with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk
+                (fun member => requestNode request.domain (Value.node entry✝ edges✝ depth✝ free✝) member) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported (Value.node entry✝ edges✝ depth✝ free✝) request.right
+      | Branch.leftReference =>
+        SourceRecursiveIntersectionCode.unsupported (Value.node entry✝ edges✝ depth✝ free✝) request.right
+      | Branch.rightReference =>
+        match request.right with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name (Value.node entry✝ edges✝ depth✝ free✝) false
+        | x => SourceRecursiveIntersectionCode.unsupported (Value.node entry✝ edges✝ depth✝ free✝) request.right
+      | Branch.ordinary =>
+        match Value.node entry✝ edges✝ depth✝ free✝, request.right with
+        | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 =>
+          compileRows request.domain first second
+        | x, x_1 => SourceRecursiveIntersectionCode.unsupported (Value.node entry✝ edges✝ depth✝ free✝) request.right
+      | Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported (Value.node entry✝ edges✝ depth✝ free✝) request.right))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.640)) before (Control.code (Code.optionalBinder pair body siteNext)) after
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:208:51: error: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.670 ?m.671 →
+    Value ?m.670 ?m.671 → Machine ?m.670 ?m.671 → Result ?m.670 ?m.671 ?m.672
+  
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.670 ?m.671 → Value ?m.670 ?m.671 → Code ?m.670 ?m.671 ?m.672
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:208:12: error: Type mismatch: After simplification, term
+  actual
+ has type
+  Trace fuel
+    (Control.code
+      (match decision request.domain.key (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right with
+      | Branch.empty => Code.pure Value.empty
+      | Branch.reset =>
+        requestNode IntersectionEmptyDomain.emptyDomain (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right
+      | Branch.self => Code.pure (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | Branch.swap => requestNode request.domain request.right (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | Branch.repeated key => Code.pure (repeatedValue key)
+      | Branch.bothMu => compileMu request.domain (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right
+      | Branch.leftMu => compileMu request.domain (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right
+      | Branch.rightMu => compileMu request.domain (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right
+      | Branch.leftUnion =>
+        SourceRecursiveIntersectionCode.unsupported (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right
+      | Branch.rightUnion =>
+        match request.right with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk
+                (fun member => requestNode request.domain (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) member)
+                members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x =>
+          SourceRecursiveIntersectionCode.unsupported (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right
+      | Branch.leftReference =>
+        SourceRecursiveIntersectionCode.unsupported (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right
+      | Branch.rightReference =>
+        match request.right with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) false
+        | x =>
+          SourceRecursiveIntersectionCode.unsupported (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right
+      | Branch.ordinary =>
+        SourceRecursiveIntersectionCode.unsupported (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right
+      | Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.668)) before (Control.code (Code.optionalBinder pair body siteNext)) after
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:214:14: error: Type mismatch: After simplification, term
+  actual
+ has type
+  Trace fuel
+    (Control.code
+      (match decision request.domain.key request.left (Value.union entry members depth free) with
+      | Branch.empty => Code.pure Value.empty
+      | Branch.reset =>
+        requestNode IntersectionEmptyDomain.emptyDomain request.left (Value.union entry members depth free)
+      | Branch.self => Code.pure request.left
+      | Branch.swap => requestNode request.domain (Value.union entry members depth free) request.left
+      | Branch.repeated key => Code.pure (repeatedValue key)
+      | Branch.bothMu => compileMu request.domain request.left (Value.union entry members depth free)
+      | Branch.leftMu => compileMu request.domain request.left (Value.union entry members depth free)
+      | Branch.rightMu => compileMu request.domain request.left (Value.union entry members depth free)
+      | Branch.leftUnion =>
+        match request.left with
+        | Value.union entry_1 members_1 depth_1 free_1 =>
+          (SourceRecursiveIntersectionCode.walk
+                (fun member => requestNode request.domain member (Value.union entry members depth free)) members_1).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported request.left (Value.union entry members depth free)
+      | Branch.rightUnion =>
+        (SourceRecursiveIntersectionCode.walk (fun member => requestNode request.domain request.left member)
+              members).bind
+          fun values => Code.work (makeUnion values) Code.pure
+      | Branch.leftReference =>
+        match request.left with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name (Value.union entry members depth free) true
+        | x => SourceRecursiveIntersectionCode.unsupported request.left (Value.union entry members depth free)
+      | Branch.rightReference =>
+        SourceRecursiveIntersectionCode.unsupported request.left (Value.union entry members depth free)
+      | Branch.ordinary =>
+        match request.left, Value.union entry members depth free with
+        | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 =>
+          compileRows request.domain first second
+        | x, x_1 => SourceRecursiveIntersectionCode.unsupported request.left (Value.union entry members depth free)
+      | Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported request.left (Value.union entry members depth free)))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+but is expected to have type
+  Trace fuel
+    (Control.code
+      ((SourceRecursiveIntersectionCode.walk (fun input => requestNode request.domain request.left input) members).bind
+        fun values => Code.work (makeUnion values) Code.pure))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:216:51: error: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.778 ?m.779 →
+    Value ?m.778 ?m.779 → Machine ?m.778 ?m.779 → Result ?m.778 ?m.779 ?m.780
+  
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.778 ?m.779 → Value ?m.778 ?m.779 → Code ?m.778 ?m.779 ?m.780
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:216:12: error: Type mismatch: After simplification, term
+  actual
+ has type
+  Trace fuel
+    (Control.code
+      (match decision request.domain.key request.left Value.empty with
+      | Branch.empty => Code.pure Value.empty
+      | Branch.reset => requestNode IntersectionEmptyDomain.emptyDomain request.left Value.empty
+      | Branch.self => Code.pure request.left
+      | Branch.swap => requestNode request.domain Value.empty request.left
+      | Branch.repeated key => Code.pure (repeatedValue key)
+      | Branch.bothMu => compileMu request.domain request.left Value.empty
+      | Branch.leftMu => compileMu request.domain request.left Value.empty
+      | Branch.rightMu => compileMu request.domain request.left Value.empty
+      | Branch.leftUnion =>
+        match request.left with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk (fun member => requestNode request.domain member Value.empty)
+                members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported request.left Value.empty
+      | Branch.rightUnion => SourceRecursiveIntersectionCode.unsupported request.left Value.empty
+      | Branch.leftReference =>
+        match request.left with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name Value.empty true
+        | x => SourceRecursiveIntersectionCode.unsupported request.left Value.empty
+      | Branch.rightReference => SourceRecursiveIntersectionCode.unsupported request.left Value.empty
+      | Branch.ordinary =>
+        match request.left, Value.empty with
+        | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 =>
+          compileRows request.domain first second
+        | x, x_1 => SourceRecursiveIntersectionCode.unsupported request.left Value.empty
+      | Branch.unsupported => SourceRecursiveIntersectionCode.unsupported request.left Value.empty))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.776)) before (Control.code (Code.optionalBinder pair body siteNext)) after
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:216:51: error: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.806 ?m.807 →
+    Value ?m.806 ?m.807 → Machine ?m.806 ?m.807 → Result ?m.806 ?m.807 ?m.808
+  
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.806 ?m.807 → Value ?m.806 ?m.807 → Code ?m.806 ?m.807 ?m.808
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:216:12: error: Type mismatch: After simplification, term
+  actual
+ has type
+  Trace fuel
+    (Control.code
+      (match decision request.domain.key request.left (Value.reference name✝) with
+      | Branch.empty => Code.pure Value.empty
+      | Branch.reset => requestNode IntersectionEmptyDomain.emptyDomain request.left (Value.reference name✝)
+      | Branch.self => Code.pure request.left
+      | Branch.swap => requestNode request.domain (Value.reference name✝) request.left
+      | Branch.repeated key => Code.pure (repeatedValue key)
+      | Branch.bothMu => compileMu request.domain request.left (Value.reference name✝)
+      | Branch.leftMu => compileMu request.domain request.left (Value.reference name✝)
+      | Branch.rightMu => compileMu request.domain request.left (Value.reference name✝)
+      | Branch.leftUnion =>
+        match request.left with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk
+                (fun member => requestNode request.domain member (Value.reference name✝)) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported request.left (Value.reference name✝)
+      | Branch.rightUnion => SourceRecursiveIntersectionCode.unsupported request.left (Value.reference name✝)
+      | Branch.leftReference =>
+        match request.left with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name (Value.reference name✝) true
+        | x => SourceRecursiveIntersectionCode.unsupported request.left (Value.reference name✝)
+      | Branch.rightReference =>
+        match Value.reference name✝ with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name request.left false
+        | x => SourceRecursiveIntersectionCode.unsupported request.left (Value.reference name✝)
+      | Branch.ordinary =>
+        match request.left, Value.reference name✝ with
+        | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 =>
+          compileRows request.domain first second
+        | x, x_1 => SourceRecursiveIntersectionCode.unsupported request.left (Value.reference name✝)
+      | Branch.unsupported => SourceRecursiveIntersectionCode.unsupported request.left (Value.reference name✝)))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.804)) before (Control.code (Code.optionalBinder pair body siteNext)) after
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:216:51: error: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.834 ?m.835 →
+    Value ?m.834 ?m.835 → Machine ?m.834 ?m.835 → Result ?m.834 ?m.835 ?m.836
+  
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.834 ?m.835 → Value ?m.834 ?m.835 → Code ?m.834 ?m.835 ?m.836
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:216:12: error: Type mismatch: After simplification, term
+  actual
+ has type
+  Trace fuel
+    (Control.code
+      (match decision request.domain.key request.left (Value.node entry✝ edges✝ depth✝ free✝) with
+      | Branch.empty => Code.pure Value.empty
+      | Branch.reset =>
+        requestNode IntersectionEmptyDomain.emptyDomain request.left (Value.node entry✝ edges✝ depth✝ free✝)
+      | Branch.self => Code.pure request.left
+      | Branch.swap => requestNode request.domain (Value.node entry✝ edges✝ depth✝ free✝) request.left
+      | Branch.repeated key => Code.pure (repeatedValue key)
+      | Branch.bothMu => compileMu request.domain request.left (Value.node entry✝ edges✝ depth✝ free✝)
+      | Branch.leftMu => compileMu request.domain request.left (Value.node entry✝ edges✝ depth✝ free✝)
+      | Branch.rightMu => compileMu request.domain request.left (Value.node entry✝ edges✝ depth✝ free✝)
+      | Branch.leftUnion =>
+        match request.left with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk
+                (fun member => requestNode request.domain member (Value.node entry✝ edges✝ depth✝ free✝)) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported request.left (Value.node entry✝ edges✝ depth✝ free✝)
+      | Branch.rightUnion =>
+        SourceRecursiveIntersectionCode.unsupported request.left (Value.node entry✝ edges✝ depth✝ free✝)
+      | Branch.leftReference =>
+        match request.left with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name (Value.node entry✝ edges✝ depth✝ free✝) true
+        | x => SourceRecursiveIntersectionCode.unsupported request.left (Value.node entry✝ edges✝ depth✝ free✝)
+      | Branch.rightReference =>
+        SourceRecursiveIntersectionCode.unsupported request.left (Value.node entry✝ edges✝ depth✝ free✝)
+      | Branch.ordinary =>
+        match request.left, Value.node entry✝ edges✝ depth✝ free✝ with
+        | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 =>
+          compileRows request.domain first second
+        | x, x_1 => SourceRecursiveIntersectionCode.unsupported request.left (Value.node entry✝ edges✝ depth✝ free✝)
+      | Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported request.left (Value.node entry✝ edges✝ depth✝ free✝)))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.832)) before (Control.code (Code.optionalBinder pair body siteNext)) after
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:216:51: error: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.862 ?m.863 →
+    Value ?m.862 ?m.863 → Machine ?m.862 ?m.863 → Result ?m.862 ?m.863 ?m.864
+  
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.862 ?m.863 → Value ?m.862 ?m.863 → Code ?m.862 ?m.863 ?m.864
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:216:12: error: Type mismatch: After simplification, term
+  actual
+ has type
+  Trace fuel
+    (Control.code
+      (match decision request.domain.key request.left (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) with
+      | Branch.empty => Code.pure Value.empty
+      | Branch.reset =>
+        requestNode IntersectionEmptyDomain.emptyDomain request.left (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | Branch.self => Code.pure request.left
+      | Branch.swap => requestNode request.domain (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.left
+      | Branch.repeated key => Code.pure (repeatedValue key)
+      | Branch.bothMu => compileMu request.domain request.left (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | Branch.leftMu => compileMu request.domain request.left (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | Branch.rightMu => compileMu request.domain request.left (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | Branch.leftUnion =>
+        match request.left with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk
+                (fun member => requestNode request.domain member (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝))
+                members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x =>
+          SourceRecursiveIntersectionCode.unsupported request.left (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | Branch.rightUnion =>
+        SourceRecursiveIntersectionCode.unsupported request.left (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | Branch.leftReference =>
+        match request.left with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) true
+        | x =>
+          SourceRecursiveIntersectionCode.unsupported request.left (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | Branch.rightReference =>
+        SourceRecursiveIntersectionCode.unsupported request.left (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | Branch.ordinary =>
+        match request.left, Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝ with
+        | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 =>
+          compileRows request.domain first second
+        | x, x_1 =>
+          SourceRecursiveIntersectionCode.unsupported request.left (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported request.left (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.860)) before (Control.code (Code.optionalBinder pair body siteNext)) after
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:224:16: error: Type mismatch: After simplification, term
+  actual
+ has type
+  Trace fuel
+    (Control.code
+      (match
+        decision request.domain.key (Value.reference (InternedBinderProtocol.Reference.interned name))
+          request.right with
+      | Branch.empty => Code.pure Value.empty
+      | Branch.reset =>
+        requestNode IntersectionEmptyDomain.emptyDomain
+          (Value.reference (InternedBinderProtocol.Reference.interned name)) request.right
+      | Branch.self => Code.pure (Value.reference (InternedBinderProtocol.Reference.interned name))
+      | Branch.swap =>
+        requestNode request.domain request.right (Value.reference (InternedBinderProtocol.Reference.interned name))
+      | Branch.repeated key => Code.pure (repeatedValue key)
+      | Branch.bothMu =>
+        compileMu request.domain (Value.reference (InternedBinderProtocol.Reference.interned name)) request.right
+      | Branch.leftMu =>
+        compileMu request.domain (Value.reference (InternedBinderProtocol.Reference.interned name)) request.right
+      | Branch.rightMu =>
+        compileMu request.domain (Value.reference (InternedBinderProtocol.Reference.interned name)) request.right
+      | Branch.leftUnion =>
+        SourceRecursiveIntersectionCode.unsupported (Value.reference (InternedBinderProtocol.Reference.interned name))
+          request.right
+      | Branch.rightUnion =>
+        match request.right with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk
+                (fun member =>
+                  requestNode request.domain (Value.reference (InternedBinderProtocol.Reference.interned name)) member)
+                members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x =>
+          SourceRecursiveIntersectionCode.unsupported (Value.reference (InternedBinderProtocol.Reference.interned name))
+            request.right
+      | Branch.leftReference => compileReference request.domain name request.right true
+      | Branch.rightReference =>
+        match request.right with
+        | Value.reference (InternedBinderProtocol.Reference.interned name_1) =>
+          compileReference request.domain name_1 (Value.reference (InternedBinderProtocol.Reference.interned name))
+            false
+        | x =>
+          SourceRecursiveIntersectionCode.unsupported (Value.reference (InternedBinderProtocol.Reference.interned name))
+            request.right
+      | Branch.ordinary =>
+        SourceRecursiveIntersectionCode.unsupported (Value.reference (InternedBinderProtocol.Reference.interned name))
+          request.right
+      | Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported (Value.reference (InternedBinderProtocol.Reference.interned name))
+          request.right))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+but is expected to have type
+  Trace fuel (Control.code (compileReference request.domain name request.right true)) before
+    (Control.code (Code.optionalBinder pair body siteNext)) after
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:226:53: error: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.991 ?m.992 →
+    Value ?m.991 ?m.992 → Machine ?m.991 ?m.992 → Result ?m.991 ?m.992 ?m.993
+  
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.991 ?m.992 → Value ?m.991 ?m.992 → Code ?m.991 ?m.992 ?m.993
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:226:14: error: Type mismatch: After simplification, term
+  actual
+ has type
+  Trace fuel
+    (Control.code
+      (match
+        decision request.domain.key (Value.reference (InternedBinderProtocol.Reference.uninterned depth✝))
+          request.right with
+      | Branch.empty => Code.pure Value.empty
+      | Branch.reset =>
+        requestNode IntersectionEmptyDomain.emptyDomain
+          (Value.reference (InternedBinderProtocol.Reference.uninterned depth✝)) request.right
+      | Branch.self => Code.pure (Value.reference (InternedBinderProtocol.Reference.uninterned depth✝))
+      | Branch.swap =>
+        requestNode request.domain request.right (Value.reference (InternedBinderProtocol.Reference.uninterned depth✝))
+      | Branch.repeated key => Code.pure (repeatedValue key)
+      | Branch.bothMu =>
+        compileMu request.domain (Value.reference (InternedBinderProtocol.Reference.uninterned depth✝)) request.right
+      | Branch.leftMu =>
+        compileMu request.domain (Value.reference (InternedBinderProtocol.Reference.uninterned depth✝)) request.right
+      | Branch.rightMu =>
+        compileMu request.domain (Value.reference (InternedBinderProtocol.Reference.uninterned depth✝)) request.right
+      | Branch.leftUnion =>
+        SourceRecursiveIntersectionCode.unsupported
+          (Value.reference (InternedBinderProtocol.Reference.uninterned depth✝)) request.right
+      | Branch.rightUnion =>
+        match request.right with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk
+                (fun member =>
+                  requestNode request.domain (Value.reference (InternedBinderProtocol.Reference.uninterned depth✝))
+                    member)
+                members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x =>
+          SourceRecursiveIntersectionCode.unsupported
+            (Value.reference (InternedBinderProtocol.Reference.uninterned depth✝)) request.right
+      | Branch.leftReference =>
+        SourceRecursiveIntersectionCode.unsupported
+          (Value.reference (InternedBinderProtocol.Reference.uninterned depth✝)) request.right
+      | Branch.rightReference =>
+        match request.right with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name (Value.reference (InternedBinderProtocol.Reference.uninterned depth✝))
+            false
+        | x =>
+          SourceRecursiveIntersectionCode.unsupported
+            (Value.reference (InternedBinderProtocol.Reference.uninterned depth✝)) request.right
+      | Branch.ordinary =>
+        SourceRecursiveIntersectionCode.unsupported
+          (Value.reference (InternedBinderProtocol.Reference.uninterned depth✝)) request.right
+      | Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported
+          (Value.reference (InternedBinderProtocol.Reference.uninterned depth✝)) request.right))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.989)) before (Control.code (Code.optionalBinder pair body siteNext)) after
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:226:53: error: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.1017 ?m.1018 →
+    Value ?m.1017 ?m.1018 → Machine ?m.1017 ?m.1018 → Result ?m.1017 ?m.1018 ?m.1019
+  
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.1017 ?m.1018 →
+    Value ?m.1017 ?m.1018 → Code ?m.1017 ?m.1018 ?m.1019
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:226:14: error: Type mismatch: After simplification, term
+  actual
+ has type
+  Trace fuel
+    (Control.code
+      (match decision request.domain.key (Value.reference InternedBinderProtocol.Reference.depth) request.right with
+      | Branch.empty => Code.pure Value.empty
+      | Branch.reset =>
+        requestNode IntersectionEmptyDomain.emptyDomain (Value.reference InternedBinderProtocol.Reference.depth)
+          request.right
+      | Branch.self => Code.pure (Value.reference InternedBinderProtocol.Reference.depth)
+      | Branch.swap => requestNode request.domain request.right (Value.reference InternedBinderProtocol.Reference.depth)
+      | Branch.repeated key => Code.pure (repeatedValue key)
+      | Branch.bothMu => compileMu request.domain (Value.reference InternedBinderProtocol.Reference.depth) request.right
+      | Branch.leftMu => compileMu request.domain (Value.reference InternedBinderProtocol.Reference.depth) request.right
+      | Branch.rightMu =>
+        compileMu request.domain (Value.reference InternedBinderProtocol.Reference.depth) request.right
+      | Branch.leftUnion =>
+        SourceRecursiveIntersectionCode.unsupported (Value.reference InternedBinderProtocol.Reference.depth)
+          request.right
+      | Branch.rightUnion =>
+        match request.right with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk
+                (fun member =>
+                  requestNode request.domain (Value.reference InternedBinderProtocol.Reference.depth) member)
+                members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x =>
+          SourceRecursiveIntersectionCode.unsupported (Value.reference InternedBinderProtocol.Reference.depth)
+            request.right
+      | Branch.leftReference =>
+        SourceRecursiveIntersectionCode.unsupported (Value.reference InternedBinderProtocol.Reference.depth)
+          request.right
+      | Branch.rightReference =>
+        match request.right with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name (Value.reference InternedBinderProtocol.Reference.depth) false
+        | x =>
+          SourceRecursiveIntersectionCode.unsupported (Value.reference InternedBinderProtocol.Reference.depth)
+            request.right
+      | Branch.ordinary =>
+        SourceRecursiveIntersectionCode.unsupported (Value.reference InternedBinderProtocol.Reference.depth)
+          request.right
+      | Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported (Value.reference InternedBinderProtocol.Reference.depth)
+          request.right))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.1015)) before (Control.code (Code.optionalBinder pair body siteNext)) after
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:226:53: error: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.1045 ?m.1046 →
+    Value ?m.1045 ?m.1046 → Machine ?m.1045 ?m.1046 → Result ?m.1045 ?m.1046 ?m.1047
+  
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.1045 ?m.1046 →
+    Value ?m.1045 ?m.1046 → Code ?m.1045 ?m.1046 ?m.1047
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:226:14: error: Type mismatch: After simplification, term
+  actual
+ has type
+  Trace fuel
+    (Control.code
+      (match
+        decision request.domain.key (Value.reference (InternedBinderProtocol.Reference.intersection first✝ second✝))
+          request.right with
+      | Branch.empty => Code.pure Value.empty
+      | Branch.reset =>
+        requestNode IntersectionEmptyDomain.emptyDomain
+          (Value.reference (InternedBinderProtocol.Reference.intersection first✝ second✝)) request.right
+      | Branch.self => Code.pure (Value.reference (InternedBinderProtocol.Reference.intersection first✝ second✝))
+      | Branch.swap =>
+        requestNode request.domain request.right
+          (Value.reference (InternedBinderProtocol.Reference.intersection first✝ second✝))
+      | Branch.repeated key => Code.pure (repeatedValue key)
+      | Branch.bothMu =>
+        compileMu request.domain (Value.reference (InternedBinderProtocol.Reference.intersection first✝ second✝))
+          request.right
+      | Branch.leftMu =>
+        compileMu request.domain (Value.reference (InternedBinderProtocol.Reference.intersection first✝ second✝))
+          request.right
+      | Branch.rightMu =>
+        compileMu request.domain (Value.reference (InternedBinderProtocol.Reference.intersection first✝ second✝))
+          request.right
+      | Branch.leftUnion =>
+        SourceRecursiveIntersectionCode.unsupported
+          (Value.reference (InternedBinderProtocol.Reference.intersection first✝ second✝)) request.right
+      | Branch.rightUnion =>
+        match request.right with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk
+                (fun member =>
+                  requestNode request.domain
+                    (Value.reference (InternedBinderProtocol.Reference.intersection first✝ second✝)) member)
+                members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x =>
+          SourceRecursiveIntersectionCode.unsupported
+            (Value.reference (InternedBinderProtocol.Reference.intersection first✝ second✝)) request.right
+      | Branch.leftReference =>
+        SourceRecursiveIntersectionCode.unsupported
+          (Value.reference (InternedBinderProtocol.Reference.intersection first✝ second✝)) request.right
+      | Branch.rightReference =>
+        match request.right with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name
+            (Value.reference (InternedBinderProtocol.Reference.intersection first✝ second✝)) false
+        | x =>
+          SourceRecursiveIntersectionCode.unsupported
+            (Value.reference (InternedBinderProtocol.Reference.intersection first✝ second✝)) request.right
+      | Branch.ordinary =>
+        SourceRecursiveIntersectionCode.unsupported
+          (Value.reference (InternedBinderProtocol.Reference.intersection first✝ second✝)) request.right
+      | Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported
+          (Value.reference (InternedBinderProtocol.Reference.intersection first✝ second✝)) request.right))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.1043)) before (Control.code (Code.optionalBinder pair body siteNext)) after
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:226:53: error: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.1073 ?m.1074 →
+    Value ?m.1073 ?m.1074 → Machine ?m.1073 ?m.1074 → Result ?m.1073 ?m.1074 ?m.1075
+  
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.1073 ?m.1074 →
+    Value ?m.1073 ?m.1074 → Code ?m.1073 ?m.1074 ?m.1075
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:226:14: error: Type mismatch: After simplification, term
+  actual
+ has type
+  Trace fuel
+    (Control.code
+      (match
+        decision request.domain.key (Value.reference (InternedBinderProtocol.Reference.state position✝))
+          request.right with
+      | Branch.empty => Code.pure Value.empty
+      | Branch.reset =>
+        requestNode IntersectionEmptyDomain.emptyDomain
+          (Value.reference (InternedBinderProtocol.Reference.state position✝)) request.right
+      | Branch.self => Code.pure (Value.reference (InternedBinderProtocol.Reference.state position✝))
+      | Branch.swap =>
+        requestNode request.domain request.right (Value.reference (InternedBinderProtocol.Reference.state position✝))
+      | Branch.repeated key => Code.pure (repeatedValue key)
+      | Branch.bothMu =>
+        compileMu request.domain (Value.reference (InternedBinderProtocol.Reference.state position✝)) request.right
+      | Branch.leftMu =>
+        compileMu request.domain (Value.reference (InternedBinderProtocol.Reference.state position✝)) request.right
+      | Branch.rightMu =>
+        compileMu request.domain (Value.reference (InternedBinderProtocol.Reference.state position✝)) request.right
+      | Branch.leftUnion =>
+        SourceRecursiveIntersectionCode.unsupported (Value.reference (InternedBinderProtocol.Reference.state position✝))
+          request.right
+      | Branch.rightUnion =>
+        match request.right with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk
+                (fun member =>
+                  requestNode request.domain (Value.reference (InternedBinderProtocol.Reference.state position✝))
+                    member)
+                members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x =>
+          SourceRecursiveIntersectionCode.unsupported
+            (Value.reference (InternedBinderProtocol.Reference.state position✝)) request.right
+      | Branch.leftReference =>
+        SourceRecursiveIntersectionCode.unsupported (Value.reference (InternedBinderProtocol.Reference.state position✝))
+          request.right
+      | Branch.rightReference =>
+        match request.right with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name (Value.reference (InternedBinderProtocol.Reference.state position✝))
+            false
+        | x =>
+          SourceRecursiveIntersectionCode.unsupported
+            (Value.reference (InternedBinderProtocol.Reference.state position✝)) request.right
+      | Branch.ordinary =>
+        SourceRecursiveIntersectionCode.unsupported (Value.reference (InternedBinderProtocol.Reference.state position✝))
+          request.right
+      | Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported (Value.reference (InternedBinderProtocol.Reference.state position✝))
+          request.right))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.1071)) before (Control.code (Code.optionalBinder pair body siteNext)) after
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:228:51: error: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.1099 ?m.1100 →
+    Value ?m.1099 ?m.1100 → Machine ?m.1099 ?m.1100 → Result ?m.1099 ?m.1100 ?m.1101
+  
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.1099 ?m.1100 →
+    Value ?m.1099 ?m.1100 → Code ?m.1099 ?m.1100 ?m.1101
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:228:12: error: Type mismatch: After simplification, term
+  actual
+ has type
+  Trace fuel
+    (Control.code
+      (match decision request.domain.key Value.empty request.right with
+      | Branch.empty => Code.pure Value.empty
+      | Branch.reset => requestNode IntersectionEmptyDomain.emptyDomain Value.empty request.right
+      | Branch.self => Code.pure Value.empty
+      | Branch.swap => requestNode request.domain request.right Value.empty
+      | Branch.repeated key => Code.pure (repeatedValue key)
+      | Branch.bothMu => compileMu request.domain Value.empty request.right
+      | Branch.leftMu => compileMu request.domain Value.empty request.right
+      | Branch.rightMu => compileMu request.domain Value.empty request.right
+      | Branch.leftUnion => SourceRecursiveIntersectionCode.unsupported Value.empty request.right
+      | Branch.rightUnion =>
+        match request.right with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk (fun member => requestNode request.domain Value.empty member)
+                members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported Value.empty request.right
+      | Branch.leftReference => SourceRecursiveIntersectionCode.unsupported Value.empty request.right
+      | Branch.rightReference =>
+        match request.right with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name Value.empty false
+        | x => SourceRecursiveIntersectionCode.unsupported Value.empty request.right
+      | Branch.ordinary => SourceRecursiveIntersectionCode.unsupported Value.empty request.right
+      | Branch.unsupported => SourceRecursiveIntersectionCode.unsupported Value.empty request.right))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.1097)) before (Control.code (Code.optionalBinder pair body siteNext)) after
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:228:51: error: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.1127 ?m.1128 →
+    Value ?m.1127 ?m.1128 → Machine ?m.1127 ?m.1128 → Result ?m.1127 ?m.1128 ?m.1129
+  
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.1127 ?m.1128 →
+    Value ?m.1127 ?m.1128 → Code ?m.1127 ?m.1128 ?m.1129
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:228:12: error: Type mismatch: After simplification, term
+  actual
+ has type
+  Trace fuel
+    (Control.code
+      (match decision request.domain.key (Value.node entry✝ edges✝ depth✝ free✝) request.right with
+      | Branch.empty => Code.pure Value.empty
+      | Branch.reset =>
+        requestNode IntersectionEmptyDomain.emptyDomain (Value.node entry✝ edges✝ depth✝ free✝) request.right
+      | Branch.self => Code.pure (Value.node entry✝ edges✝ depth✝ free✝)
+      | Branch.swap => requestNode request.domain request.right (Value.node entry✝ edges✝ depth✝ free✝)
+      | Branch.repeated key => Code.pure (repeatedValue key)
+      | Branch.bothMu => compileMu request.domain (Value.node entry✝ edges✝ depth✝ free✝) request.right
+      | Branch.leftMu => compileMu request.domain (Value.node entry✝ edges✝ depth✝ free✝) request.right
+      | Branch.rightMu => compileMu request.domain (Value.node entry✝ edges✝ depth✝ free✝) request.right
+      | Branch.leftUnion =>
+        SourceRecursiveIntersectionCode.unsupported (Value.node entry✝ edges✝ depth✝ free✝) request.right
+      | Branch.rightUnion =>
+        match request.right with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk
+                (fun member => requestNode request.domain (Value.node entry✝ edges✝ depth✝ free✝) member) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported (Value.node entry✝ edges✝ depth✝ free✝) request.right
+      | Branch.leftReference =>
+        SourceRecursiveIntersectionCode.unsupported (Value.node entry✝ edges✝ depth✝ free✝) request.right
+      | Branch.rightReference =>
+        match request.right with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name (Value.node entry✝ edges✝ depth✝ free✝) false
+        | x => SourceRecursiveIntersectionCode.unsupported (Value.node entry✝ edges✝ depth✝ free✝) request.right
+      | Branch.ordinary =>
+        match Value.node entry✝ edges✝ depth✝ free✝, request.right with
+        | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 =>
+          compileRows request.domain first second
+        | x, x_1 => SourceRecursiveIntersectionCode.unsupported (Value.node entry✝ edges✝ depth✝ free✝) request.right
+      | Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported (Value.node entry✝ edges✝ depth✝ free✝) request.right))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.1125)) before (Control.code (Code.optionalBinder pair body siteNext)) after
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:228:51: error: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.1155 ?m.1156 →
+    Value ?m.1155 ?m.1156 → Machine ?m.1155 ?m.1156 → Result ?m.1155 ?m.1156 ?m.1157
+  
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.1155 ?m.1156 →
+    Value ?m.1155 ?m.1156 → Code ?m.1155 ?m.1156 ?m.1157
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:228:12: error: Type mismatch: After simplification, term
+  actual
+ has type
+  Trace fuel
+    (Control.code
+      (match decision request.domain.key (Value.union entry✝ members✝ depth✝ free✝) request.right with
+      | Branch.empty => Code.pure Value.empty
+      | Branch.reset =>
+        requestNode IntersectionEmptyDomain.emptyDomain (Value.union entry✝ members✝ depth✝ free✝) request.right
+      | Branch.self => Code.pure (Value.union entry✝ members✝ depth✝ free✝)
+      | Branch.swap => requestNode request.domain request.right (Value.union entry✝ members✝ depth✝ free✝)
+      | Branch.repeated key => Code.pure (repeatedValue key)
+      | Branch.bothMu => compileMu request.domain (Value.union entry✝ members✝ depth✝ free✝) request.right
+      | Branch.leftMu => compileMu request.domain (Value.union entry✝ members✝ depth✝ free✝) request.right
+      | Branch.rightMu => compileMu request.domain (Value.union entry✝ members✝ depth✝ free✝) request.right
+      | Branch.leftUnion =>
+        (SourceRecursiveIntersectionCode.walk (fun member => requestNode request.domain member request.right)
+              members✝).bind
+          fun values => Code.work (makeUnion values) Code.pure
+      | Branch.rightUnion =>
+        match request.right with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk
+                (fun member => requestNode request.domain (Value.union entry✝ members✝ depth✝ free✝) member)
+                members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported (Value.union entry✝ members✝ depth✝ free✝) request.right
+      | Branch.leftReference =>
+        SourceRecursiveIntersectionCode.unsupported (Value.union entry✝ members✝ depth✝ free✝) request.right
+      | Branch.rightReference =>
+        match request.right with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name (Value.union entry✝ members✝ depth✝ free✝) false
+        | x => SourceRecursiveIntersectionCode.unsupported (Value.union entry✝ members✝ depth✝ free✝) request.right
+      | Branch.ordinary =>
+        SourceRecursiveIntersectionCode.unsupported (Value.union entry✝ members✝ depth✝ free✝) request.right
+      | Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported (Value.union entry✝ members✝ depth✝ free✝) request.right))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.1153)) before (Control.code (Code.optionalBinder pair body siteNext)) after
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:228:51: error: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.1183 ?m.1184 →
+    Value ?m.1183 ?m.1184 → Machine ?m.1183 ?m.1184 → Result ?m.1183 ?m.1184 ?m.1185
+  
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.1183 ?m.1184 →
+    Value ?m.1183 ?m.1184 → Code ?m.1183 ?m.1184 ?m.1185
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:228:12: error: Type mismatch: After simplification, term
+  actual
+ has type
+  Trace fuel
+    (Control.code
+      (match decision request.domain.key (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right with
+      | Branch.empty => Code.pure Value.empty
+      | Branch.reset =>
+        requestNode IntersectionEmptyDomain.emptyDomain (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right
+      | Branch.self => Code.pure (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | Branch.swap => requestNode request.domain request.right (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | Branch.repeated key => Code.pure (repeatedValue key)
+      | Branch.bothMu => compileMu request.domain (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right
+      | Branch.leftMu => compileMu request.domain (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right
+      | Branch.rightMu => compileMu request.domain (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right
+      | Branch.leftUnion =>
+        SourceRecursiveIntersectionCode.unsupported (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right
+      | Branch.rightUnion =>
+        match request.right with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk
+                (fun member => requestNode request.domain (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) member)
+                members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x =>
+          SourceRecursiveIntersectionCode.unsupported (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right
+      | Branch.leftReference =>
+        SourceRecursiveIntersectionCode.unsupported (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right
+      | Branch.rightReference =>
+        match request.right with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) false
+        | x =>
+          SourceRecursiveIntersectionCode.unsupported (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right
+      | Branch.ordinary =>
+        SourceRecursiveIntersectionCode.unsupported (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right
+      | Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.1181)) before (Control.code (Code.optionalBinder pair body siteNext)) after
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:236:16: error: Type mismatch: After simplification, term
+  actual
+ has type
+  Trace fuel
+    (Control.code
+      (match
+        decision request.domain.key request.left (Value.reference (InternedBinderProtocol.Reference.interned name)) with
+      | Branch.empty => Code.pure Value.empty
+      | Branch.reset =>
+        requestNode IntersectionEmptyDomain.emptyDomain request.left
+          (Value.reference (InternedBinderProtocol.Reference.interned name))
+      | Branch.self => Code.pure request.left
+      | Branch.swap =>
+        requestNode request.domain (Value.reference (InternedBinderProtocol.Reference.interned name)) request.left
+      | Branch.repeated key => Code.pure (repeatedValue key)
+      | Branch.bothMu =>
+        compileMu request.domain request.left (Value.reference (InternedBinderProtocol.Reference.interned name))
+      | Branch.leftMu =>
+        compileMu request.domain request.left (Value.reference (InternedBinderProtocol.Reference.interned name))
+      | Branch.rightMu =>
+        compileMu request.domain request.left (Value.reference (InternedBinderProtocol.Reference.interned name))
+      | Branch.leftUnion =>
+        match request.left with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk
+                (fun member =>
+                  requestNode request.domain member (Value.reference (InternedBinderProtocol.Reference.interned name)))
+                members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x =>
+          SourceRecursiveIntersectionCode.unsupported request.left
+            (Value.reference (InternedBinderProtocol.Reference.interned name))
+      | Branch.rightUnion =>
+        SourceRecursiveIntersectionCode.unsupported request.left
+          (Value.reference (InternedBinderProtocol.Reference.interned name))
+      | Branch.leftReference =>
+        match request.left with
+        | Value.reference (InternedBinderProtocol.Reference.interned name_1) =>
+          compileReference request.domain name_1 (Value.reference (InternedBinderProtocol.Reference.interned name)) true
+        | x =>
+          SourceRecursiveIntersectionCode.unsupported request.left
+            (Value.reference (InternedBinderProtocol.Reference.interned name))
+      | Branch.rightReference => compileReference request.domain name request.left false
+      | Branch.ordinary =>
+        match request.left, Value.reference (InternedBinderProtocol.Reference.interned name) with
+        | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 =>
+          compileRows request.domain first second
+        | x, x_1 =>
+          SourceRecursiveIntersectionCode.unsupported request.left
+            (Value.reference (InternedBinderProtocol.Reference.interned name))
+      | Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported request.left
+          (Value.reference (InternedBinderProtocol.Reference.interned name))))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+but is expected to have type
+  Trace fuel (Control.code (compileReference request.domain name request.left false)) before
+    (Control.code (Code.optionalBinder pair body siteNext)) after
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:238:53: error: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.1312 ?m.1313 →
+    Value ?m.1312 ?m.1313 → Machine ?m.1312 ?m.1313 → Result ?m.1312 ?m.1313 ?m.1314
+  
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.1312 ?m.1313 →
+    Value ?m.1312 ?m.1313 → Code ?m.1312 ?m.1313 ?m.1314
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:238:14: error: Type mismatch: After simplification, term
+  actual
+ has type
+  Trace fuel
+    (Control.code
+      (match
+        decision request.domain.key request.left
+          (Value.reference (InternedBinderProtocol.Reference.uninterned depth✝)) with
+      | Branch.empty => Code.pure Value.empty
+      | Branch.reset =>
+        requestNode IntersectionEmptyDomain.emptyDomain request.left
+          (Value.reference (InternedBinderProtocol.Reference.uninterned depth✝))
+      | Branch.self => Code.pure request.left
+      | Branch.swap =>
+        requestNode request.domain (Value.reference (InternedBinderProtocol.Reference.uninterned depth✝)) request.left
+      | Branch.repeated key => Code.pure (repeatedValue key)
+      | Branch.bothMu =>
+        compileMu request.domain request.left (Value.reference (InternedBinderProtocol.Reference.uninterned depth✝))
+      | Branch.leftMu =>
+        compileMu request.domain request.left (Value.reference (InternedBinderProtocol.Reference.uninterned depth✝))
+      | Branch.rightMu =>
+        compileMu request.domain request.left (Value.reference (InternedBinderProtocol.Reference.uninterned depth✝))
+      | Branch.leftUnion =>
+        match request.left with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk
+                (fun member =>
+                  requestNode request.domain member
+                    (Value.reference (InternedBinderProtocol.Reference.uninterned depth✝)))
+                members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x =>
+          SourceRecursiveIntersectionCode.unsupported request.left
+            (Value.reference (InternedBinderProtocol.Reference.uninterned depth✝))
+      | Branch.rightUnion =>
+        SourceRecursiveIntersectionCode.unsupported request.left
+          (Value.reference (InternedBinderProtocol.Reference.uninterned depth✝))
+      | Branch.leftReference =>
+        match request.left with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name (Value.reference (InternedBinderProtocol.Reference.uninterned depth✝))
+            true
+        | x =>
+          SourceRecursiveIntersectionCode.unsupported request.left
+            (Value.reference (InternedBinderProtocol.Reference.uninterned depth✝))
+      | Branch.rightReference =>
+        SourceRecursiveIntersectionCode.unsupported request.left
+          (Value.reference (InternedBinderProtocol.Reference.uninterned depth✝))
+      | Branch.ordinary =>
+        match request.left, Value.reference (InternedBinderProtocol.Reference.uninterned depth✝) with
+        | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 =>
+          compileRows request.domain first second
+        | x, x_1 =>
+          SourceRecursiveIntersectionCode.unsupported request.left
+            (Value.reference (InternedBinderProtocol.Reference.uninterned depth✝))
+      | Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported request.left
+          (Value.reference (InternedBinderProtocol.Reference.uninterned depth✝))))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.1310)) before (Control.code (Code.optionalBinder pair body siteNext)) after
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:238:53: error: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.1338 ?m.1339 →
+    Value ?m.1338 ?m.1339 → Machine ?m.1338 ?m.1339 → Result ?m.1338 ?m.1339 ?m.1340
+  
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.1338 ?m.1339 →
+    Value ?m.1338 ?m.1339 → Code ?m.1338 ?m.1339 ?m.1340
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:238:14: error: Type mismatch: After simplification, term
+  actual
+ has type
+  Trace fuel
+    (Control.code
+      (match decision request.domain.key request.left (Value.reference InternedBinderProtocol.Reference.depth) with
+      | Branch.empty => Code.pure Value.empty
+      | Branch.reset =>
+        requestNode IntersectionEmptyDomain.emptyDomain request.left
+          (Value.reference InternedBinderProtocol.Reference.depth)
+      | Branch.self => Code.pure request.left
+      | Branch.swap => requestNode request.domain (Value.reference InternedBinderProtocol.Reference.depth) request.left
+      | Branch.repeated key => Code.pure (repeatedValue key)
+      | Branch.bothMu => compileMu request.domain request.left (Value.reference InternedBinderProtocol.Reference.depth)
+      | Branch.leftMu => compileMu request.domain request.left (Value.reference InternedBinderProtocol.Reference.depth)
+      | Branch.rightMu => compileMu request.domain request.left (Value.reference InternedBinderProtocol.Reference.depth)
+      | Branch.leftUnion =>
+        match request.left with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk
+                (fun member =>
+                  requestNode request.domain member (Value.reference InternedBinderProtocol.Reference.depth))
+                members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x =>
+          SourceRecursiveIntersectionCode.unsupported request.left
+            (Value.reference InternedBinderProtocol.Reference.depth)
+      | Branch.rightUnion =>
+        SourceRecursiveIntersectionCode.unsupported request.left
+          (Value.reference InternedBinderProtocol.Reference.depth)
+      | Branch.leftReference =>
+        match request.left with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name (Value.reference InternedBinderProtocol.Reference.depth) true
+        | x =>
+          SourceRecursiveIntersectionCode.unsupported request.left
+            (Value.reference InternedBinderProtocol.Reference.depth)
+      | Branch.rightReference =>
+        SourceRecursiveIntersectionCode.unsupported request.left
+          (Value.reference InternedBinderProtocol.Reference.depth)
+      | Branch.ordinary =>
+        match request.left, Value.reference InternedBinderProtocol.Reference.depth with
+        | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 =>
+          compileRows request.domain first second
+        | x, x_1 =>
+          SourceRecursiveIntersectionCode.unsupported request.left
+            (Value.reference InternedBinderProtocol.Reference.depth)
+      | Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported request.left
+          (Value.reference InternedBinderProtocol.Reference.depth)))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.1336)) before (Control.code (Code.optionalBinder pair body siteNext)) after
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:238:53: error: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.1366 ?m.1367 →
+    Value ?m.1366 ?m.1367 → Machine ?m.1366 ?m.1367 → Result ?m.1366 ?m.1367 ?m.1368
+  
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.1366 ?m.1367 →
+    Value ?m.1366 ?m.1367 → Code ?m.1366 ?m.1367 ?m.1368
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:238:14: error: Type mismatch: After simplification, term
+  actual
+ has type
+  Trace fuel
+    (Control.code
+      (match
+        decision request.domain.key request.left
+          (Value.reference (InternedBinderProtocol.Reference.intersection first✝ second✝)) with
+      | Branch.empty => Code.pure Value.empty
+      | Branch.reset =>
+        requestNode IntersectionEmptyDomain.emptyDomain request.left
+          (Value.reference (InternedBinderProtocol.Reference.intersection first✝ second✝))
+      | Branch.self => Code.pure request.left
+      | Branch.swap =>
+        requestNode request.domain (Value.reference (InternedBinderProtocol.Reference.intersection first✝ second✝))
+          request.left
+      | Branch.repeated key => Code.pure (repeatedValue key)
+      | Branch.bothMu =>
+        compileMu request.domain request.left
+          (Value.reference (InternedBinderProtocol.Reference.intersection first✝ second✝))
+      | Branch.leftMu =>
+        compileMu request.domain request.left
+          (Value.reference (InternedBinderProtocol.Reference.intersection first✝ second✝))
+      | Branch.rightMu =>
+        compileMu request.domain request.left
+          (Value.reference (InternedBinderProtocol.Reference.intersection first✝ second✝))
+      | Branch.leftUnion =>
+        match request.left with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk
+                (fun member =>
+                  requestNode request.domain member
+                    (Value.reference (InternedBinderProtocol.Reference.intersection first✝ second✝)))
+                members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x =>
+          SourceRecursiveIntersectionCode.unsupported request.left
+            (Value.reference (InternedBinderProtocol.Reference.intersection first✝ second✝))
+      | Branch.rightUnion =>
+        SourceRecursiveIntersectionCode.unsupported request.left
+          (Value.reference (InternedBinderProtocol.Reference.intersection first✝ second✝))
+      | Branch.leftReference =>
+        match request.left with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name
+            (Value.reference (InternedBinderProtocol.Reference.intersection first✝ second✝)) true
+        | x =>
+          SourceRecursiveIntersectionCode.unsupported request.left
+            (Value.reference (InternedBinderProtocol.Reference.intersection first✝ second✝))
+      | Branch.rightReference =>
+        SourceRecursiveIntersectionCode.unsupported request.left
+          (Value.reference (InternedBinderProtocol.Reference.intersection first✝ second✝))
+      | Branch.ordinary =>
+        match request.left, Value.reference (InternedBinderProtocol.Reference.intersection first✝ second✝) with
+        | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 =>
+          compileRows request.domain first second
+        | x, x_1 =>
+          SourceRecursiveIntersectionCode.unsupported request.left
+            (Value.reference (InternedBinderProtocol.Reference.intersection first✝ second✝))
+      | Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported request.left
+          (Value.reference (InternedBinderProtocol.Reference.intersection first✝ second✝))))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.1364)) before (Control.code (Code.optionalBinder pair body siteNext)) after
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:238:53: error: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.1394 ?m.1395 →
+    Value ?m.1394 ?m.1395 → Machine ?m.1394 ?m.1395 → Result ?m.1394 ?m.1395 ?m.1396
+  
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.1394 ?m.1395 →
+    Value ?m.1394 ?m.1395 → Code ?m.1394 ?m.1395 ?m.1396
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:238:14: error: Type mismatch: After simplification, term
+  actual
+ has type
+  Trace fuel
+    (Control.code
+      (match
+        decision request.domain.key request.left
+          (Value.reference (InternedBinderProtocol.Reference.state position✝)) with
+      | Branch.empty => Code.pure Value.empty
+      | Branch.reset =>
+        requestNode IntersectionEmptyDomain.emptyDomain request.left
+          (Value.reference (InternedBinderProtocol.Reference.state position✝))
+      | Branch.self => Code.pure request.left
+      | Branch.swap =>
+        requestNode request.domain (Value.reference (InternedBinderProtocol.Reference.state position✝)) request.left
+      | Branch.repeated key => Code.pure (repeatedValue key)
+      | Branch.bothMu =>
+        compileMu request.domain request.left (Value.reference (InternedBinderProtocol.Reference.state position✝))
+      | Branch.leftMu =>
+        compileMu request.domain request.left (Value.reference (InternedBinderProtocol.Reference.state position✝))
+      | Branch.rightMu =>
+        compileMu request.domain request.left (Value.reference (InternedBinderProtocol.Reference.state position✝))
+      | Branch.leftUnion =>
+        match request.left with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk
+                (fun member =>
+                  requestNode request.domain member
+                    (Value.reference (InternedBinderProtocol.Reference.state position✝)))
+                members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x =>
+          SourceRecursiveIntersectionCode.unsupported request.left
+            (Value.reference (InternedBinderProtocol.Reference.state position✝))
+      | Branch.rightUnion =>
+        SourceRecursiveIntersectionCode.unsupported request.left
+          (Value.reference (InternedBinderProtocol.Reference.state position✝))
+      | Branch.leftReference =>
+        match request.left with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name (Value.reference (InternedBinderProtocol.Reference.state position✝)) true
+        | x =>
+          SourceRecursiveIntersectionCode.unsupported request.left
+            (Value.reference (InternedBinderProtocol.Reference.state position✝))
+      | Branch.rightReference =>
+        SourceRecursiveIntersectionCode.unsupported request.left
+          (Value.reference (InternedBinderProtocol.Reference.state position✝))
+      | Branch.ordinary =>
+        match request.left, Value.reference (InternedBinderProtocol.Reference.state position✝) with
+        | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 =>
+          compileRows request.domain first second
+        | x, x_1 =>
+          SourceRecursiveIntersectionCode.unsupported request.left
+            (Value.reference (InternedBinderProtocol.Reference.state position✝))
+      | Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported request.left
+          (Value.reference (InternedBinderProtocol.Reference.state position✝))))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.1392)) before (Control.code (Code.optionalBinder pair body siteNext)) after
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:240:51: error: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.1420 ?m.1421 →
+    Value ?m.1420 ?m.1421 → Machine ?m.1420 ?m.1421 → Result ?m.1420 ?m.1421 ?m.1422
+  
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.1420 ?m.1421 →
+    Value ?m.1420 ?m.1421 → Code ?m.1420 ?m.1421 ?m.1422
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:240:12: error: Type mismatch: After simplification, term
+  actual
+ has type
+  Trace fuel
+    (Control.code
+      (match decision request.domain.key request.left Value.empty with
+      | Branch.empty => Code.pure Value.empty
+      | Branch.reset => requestNode IntersectionEmptyDomain.emptyDomain request.left Value.empty
+      | Branch.self => Code.pure request.left
+      | Branch.swap => requestNode request.domain Value.empty request.left
+      | Branch.repeated key => Code.pure (repeatedValue key)
+      | Branch.bothMu => compileMu request.domain request.left Value.empty
+      | Branch.leftMu => compileMu request.domain request.left Value.empty
+      | Branch.rightMu => compileMu request.domain request.left Value.empty
+      | Branch.leftUnion =>
+        match request.left with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk (fun member => requestNode request.domain member Value.empty)
+                members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported request.left Value.empty
+      | Branch.rightUnion => SourceRecursiveIntersectionCode.unsupported request.left Value.empty
+      | Branch.leftReference =>
+        match request.left with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name Value.empty true
+        | x => SourceRecursiveIntersectionCode.unsupported request.left Value.empty
+      | Branch.rightReference => SourceRecursiveIntersectionCode.unsupported request.left Value.empty
+      | Branch.ordinary =>
+        match request.left, Value.empty with
+        | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 =>
+          compileRows request.domain first second
+        | x, x_1 => SourceRecursiveIntersectionCode.unsupported request.left Value.empty
+      | Branch.unsupported => SourceRecursiveIntersectionCode.unsupported request.left Value.empty))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.1418)) before (Control.code (Code.optionalBinder pair body siteNext)) after
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:240:51: error: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.1448 ?m.1449 →
+    Value ?m.1448 ?m.1449 → Machine ?m.1448 ?m.1449 → Result ?m.1448 ?m.1449 ?m.1450
+  
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.1448 ?m.1449 →
+    Value ?m.1448 ?m.1449 → Code ?m.1448 ?m.1449 ?m.1450
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:240:12: error: Type mismatch: After simplification, term
+  actual
+ has type
+  Trace fuel
+    (Control.code
+      (match decision request.domain.key request.left (Value.node entry✝ edges✝ depth✝ free✝) with
+      | Branch.empty => Code.pure Value.empty
+      | Branch.reset =>
+        requestNode IntersectionEmptyDomain.emptyDomain request.left (Value.node entry✝ edges✝ depth✝ free✝)
+      | Branch.self => Code.pure request.left
+      | Branch.swap => requestNode request.domain (Value.node entry✝ edges✝ depth✝ free✝) request.left
+      | Branch.repeated key => Code.pure (repeatedValue key)
+      | Branch.bothMu => compileMu request.domain request.left (Value.node entry✝ edges✝ depth✝ free✝)
+      | Branch.leftMu => compileMu request.domain request.left (Value.node entry✝ edges✝ depth✝ free✝)
+      | Branch.rightMu => compileMu request.domain request.left (Value.node entry✝ edges✝ depth✝ free✝)
+      | Branch.leftUnion =>
+        match request.left with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk
+                (fun member => requestNode request.domain member (Value.node entry✝ edges✝ depth✝ free✝)) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported request.left (Value.node entry✝ edges✝ depth✝ free✝)
+      | Branch.rightUnion =>
+        SourceRecursiveIntersectionCode.unsupported request.left (Value.node entry✝ edges✝ depth✝ free✝)
+      | Branch.leftReference =>
+        match request.left with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name (Value.node entry✝ edges✝ depth✝ free✝) true
+        | x => SourceRecursiveIntersectionCode.unsupported request.left (Value.node entry✝ edges✝ depth✝ free✝)
+      | Branch.rightReference =>
+        SourceRecursiveIntersectionCode.unsupported request.left (Value.node entry✝ edges✝ depth✝ free✝)
+      | Branch.ordinary =>
+        match request.left, Value.node entry✝ edges✝ depth✝ free✝ with
+        | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 =>
+          compileRows request.domain first second
+        | x, x_1 => SourceRecursiveIntersectionCode.unsupported request.left (Value.node entry✝ edges✝ depth✝ free✝)
+      | Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported request.left (Value.node entry✝ edges✝ depth✝ free✝)))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.1446)) before (Control.code (Code.optionalBinder pair body siteNext)) after
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:240:51: error: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.1476 ?m.1477 →
+    Value ?m.1476 ?m.1477 → Machine ?m.1476 ?m.1477 → Result ?m.1476 ?m.1477 ?m.1478
+  
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.1476 ?m.1477 →
+    Value ?m.1476 ?m.1477 → Code ?m.1476 ?m.1477 ?m.1478
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:240:12: error: Type mismatch: After simplification, term
+  actual
+ has type
+  Trace fuel
+    (Control.code
+      (match decision request.domain.key request.left (Value.union entry✝ members✝ depth✝ free✝) with
+      | Branch.empty => Code.pure Value.empty
+      | Branch.reset =>
+        requestNode IntersectionEmptyDomain.emptyDomain request.left (Value.union entry✝ members✝ depth✝ free✝)
+      | Branch.self => Code.pure request.left
+      | Branch.swap => requestNode request.domain (Value.union entry✝ members✝ depth✝ free✝) request.left
+      | Branch.repeated key => Code.pure (repeatedValue key)
+      | Branch.bothMu => compileMu request.domain request.left (Value.union entry✝ members✝ depth✝ free✝)
+      | Branch.leftMu => compileMu request.domain request.left (Value.union entry✝ members✝ depth✝ free✝)
+      | Branch.rightMu => compileMu request.domain request.left (Value.union entry✝ members✝ depth✝ free✝)
+      | Branch.leftUnion =>
+        match request.left with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk
+                (fun member => requestNode request.domain member (Value.union entry✝ members✝ depth✝ free✝))
+                members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported request.left (Value.union entry✝ members✝ depth✝ free✝)
+      | Branch.rightUnion =>
+        (SourceRecursiveIntersectionCode.walk (fun member => requestNode request.domain request.left member)
+              members✝).bind
+          fun values => Code.work (makeUnion values) Code.pure
+      | Branch.leftReference =>
+        match request.left with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name (Value.union entry✝ members✝ depth✝ free✝) true
+        | x => SourceRecursiveIntersectionCode.unsupported request.left (Value.union entry✝ members✝ depth✝ free✝)
+      | Branch.rightReference =>
+        SourceRecursiveIntersectionCode.unsupported request.left (Value.union entry✝ members✝ depth✝ free✝)
+      | Branch.ordinary =>
+        match request.left, Value.union entry✝ members✝ depth✝ free✝ with
+        | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 =>
+          compileRows request.domain first second
+        | x, x_1 => SourceRecursiveIntersectionCode.unsupported request.left (Value.union entry✝ members✝ depth✝ free✝)
+      | Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported request.left (Value.union entry✝ members✝ depth✝ free✝)))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.1474)) before (Control.code (Code.optionalBinder pair body siteNext)) after
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:240:51: error: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.1504 ?m.1505 →
+    Value ?m.1504 ?m.1505 → Machine ?m.1504 ?m.1505 → Result ?m.1504 ?m.1505 ?m.1506
+  
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.1504 ?m.1505 →
+    Value ?m.1504 ?m.1505 → Code ?m.1504 ?m.1505 ?m.1506
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:240:12: error: Type mismatch: After simplification, term
+  actual
+ has type
+  Trace fuel
+    (Control.code
+      (match decision request.domain.key request.left (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) with
+      | Branch.empty => Code.pure Value.empty
+      | Branch.reset =>
+        requestNode IntersectionEmptyDomain.emptyDomain request.left (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | Branch.self => Code.pure request.left
+      | Branch.swap => requestNode request.domain (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.left
+      | Branch.repeated key => Code.pure (repeatedValue key)
+      | Branch.bothMu => compileMu request.domain request.left (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | Branch.leftMu => compileMu request.domain request.left (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | Branch.rightMu => compileMu request.domain request.left (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | Branch.leftUnion =>
+        match request.left with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk
+                (fun member => requestNode request.domain member (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝))
+                members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x =>
+          SourceRecursiveIntersectionCode.unsupported request.left (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | Branch.rightUnion =>
+        SourceRecursiveIntersectionCode.unsupported request.left (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | Branch.leftReference =>
+        match request.left with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) true
+        | x =>
+          SourceRecursiveIntersectionCode.unsupported request.left (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | Branch.rightReference =>
+        SourceRecursiveIntersectionCode.unsupported request.left (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | Branch.ordinary =>
+        match request.left, Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝ with
+        | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 =>
+          compileRows request.domain first second
+        | x, x_1 =>
+          SourceRecursiveIntersectionCode.unsupported request.left (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported request.left (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.1502)) before (Control.code (Code.optionalBinder pair body siteNext)) after
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:249:16: error: Type mismatch: After simplification, term
+  actual
+ has type
+  Trace fuel
+    (Control.code
+      (match
+        decision request.domain.key (Value.node firstEntry firstRows firstDepth firstFree)
+          (Value.node secondEntry secondRows secondDepth secondFree) with
+      | Branch.empty => Code.pure Value.empty
+      | Branch.reset =>
+        requestNode IntersectionEmptyDomain.emptyDomain (Value.node firstEntry firstRows firstDepth firstFree)
+          (Value.node secondEntry secondRows secondDepth secondFree)
+      | Branch.self => Code.pure (Value.node firstEntry firstRows firstDepth firstFree)
+      | Branch.swap =>
+        requestNode request.domain (Value.node secondEntry secondRows secondDepth secondFree)
+          (Value.node firstEntry firstRows firstDepth firstFree)
+      | Branch.repeated key => Code.pure (repeatedValue key)
+      | Branch.bothMu =>
+        compileMu request.domain (Value.node firstEntry firstRows firstDepth firstFree)
+          (Value.node secondEntry secondRows secondDepth secondFree)
+      | Branch.leftMu =>
+        compileMu request.domain (Value.node firstEntry firstRows firstDepth firstFree)
+          (Value.node secondEntry secondRows secondDepth secondFree)
+      | Branch.rightMu =>
+        compileMu request.domain (Value.node firstEntry firstRows firstDepth firstFree)
+          (Value.node secondEntry secondRows secondDepth secondFree)
+      | Branch.leftUnion =>
+        SourceRecursiveIntersectionCode.unsupported (Value.node firstEntry firstRows firstDepth firstFree)
+          (Value.node secondEntry secondRows secondDepth secondFree)
+      | Branch.rightUnion =>
+        SourceRecursiveIntersectionCode.unsupported (Value.node firstEntry firstRows firstDepth firstFree)
+          (Value.node secondEntry secondRows secondDepth secondFree)
+      | Branch.leftReference =>
+        SourceRecursiveIntersectionCode.unsupported (Value.node firstEntry firstRows firstDepth firstFree)
+          (Value.node secondEntry secondRows secondDepth secondFree)
+      | Branch.rightReference =>
+        SourceRecursiveIntersectionCode.unsupported (Value.node firstEntry firstRows firstDepth firstFree)
+          (Value.node secondEntry secondRows secondDepth secondFree)
+      | Branch.ordinary =>
+        (SourceRecursiveIntersectionCode.walk (fun rows => requestEdge request.domain rows.fst rows.snd)
+              (pairs firstRows secondRows)).bind
+          fun values => Code.work (makeNode values) Code.pure
+      | Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported (Value.node firstEntry firstRows firstDepth firstFree)
+          (Value.node secondEntry secondRows secondDepth secondFree)))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+but is expected to have type
+  Trace fuel
+    (Control.code
+      ((SourceRecursiveIntersectionCode.walk (fun input => requestEdge request.domain input.fst input.snd)
+            (pairs firstRows secondRows)).bind
+        fun values => Code.work (makeNode values) Code.pure))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:251:60: error: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.1657 ?m.1658 →
+    Value ?m.1657 ?m.1658 → Machine ?m.1657 ?m.1658 → Result ?m.1657 ?m.1658 ?m.1659
+  
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.1657 ?m.1658 →
+    Value ?m.1657 ?m.1658 → Code ?m.1657 ?m.1658 ?m.1659
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:251:14: error: Type mismatch: After simplification, term
+  actual
+ has type
+  Trace fuel
+    (Control.code
+      (match decision request.domain.key (Value.node firstEntry firstRows firstDepth firstFree) Value.empty with
+      | Branch.empty => Code.pure Value.empty
+      | Branch.reset =>
+        requestNode IntersectionEmptyDomain.emptyDomain (Value.node firstEntry firstRows firstDepth firstFree)
+          Value.empty
+      | Branch.self => Code.pure (Value.node firstEntry firstRows firstDepth firstFree)
+      | Branch.swap => requestNode request.domain Value.empty (Value.node firstEntry firstRows firstDepth firstFree)
+      | Branch.repeated key => Code.pure (repeatedValue key)
+      | Branch.bothMu => compileMu request.domain (Value.node firstEntry firstRows firstDepth firstFree) Value.empty
+      | Branch.leftMu => compileMu request.domain (Value.node firstEntry firstRows firstDepth firstFree) Value.empty
+      | Branch.rightMu => compileMu request.domain (Value.node firstEntry firstRows firstDepth firstFree) Value.empty
+      | Branch.leftUnion =>
+        SourceRecursiveIntersectionCode.unsupported (Value.node firstEntry firstRows firstDepth firstFree) Value.empty
+      | Branch.rightUnion =>
+        SourceRecursiveIntersectionCode.unsupported (Value.node firstEntry firstRows firstDepth firstFree) Value.empty
+      | Branch.leftReference =>
+        SourceRecursiveIntersectionCode.unsupported (Value.node firstEntry firstRows firstDepth firstFree) Value.empty
+      | Branch.rightReference =>
+        SourceRecursiveIntersectionCode.unsupported (Value.node firstEntry firstRows firstDepth firstFree) Value.empty
+      | Branch.ordinary =>
+        SourceRecursiveIntersectionCode.unsupported (Value.node firstEntry firstRows firstDepth firstFree) Value.empty
+      | Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported (Value.node firstEntry firstRows firstDepth firstFree) Value.empty))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.1655)) before (Control.code (Code.optionalBinder pair body siteNext)) after
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:251:60: error: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.1685 ?m.1686 →
+    Value ?m.1685 ?m.1686 → Machine ?m.1685 ?m.1686 → Result ?m.1685 ?m.1686 ?m.1687
+  
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.1685 ?m.1686 →
+    Value ?m.1685 ?m.1686 → Code ?m.1685 ?m.1686 ?m.1687
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:251:14: error: Type mismatch: After simplification, term
+  actual
+ has type
+  Trace fuel
+    (Control.code
+      (match
+        decision request.domain.key (Value.node firstEntry firstRows firstDepth firstFree) (Value.reference name✝) with
+      | Branch.empty => Code.pure Value.empty
+      | Branch.reset =>
+        requestNode IntersectionEmptyDomain.emptyDomain (Value.node firstEntry firstRows firstDepth firstFree)
+          (Value.reference name✝)
+      | Branch.self => Code.pure (Value.node firstEntry firstRows firstDepth firstFree)
+      | Branch.swap =>
+        requestNode request.domain (Value.reference name✝) (Value.node firstEntry firstRows firstDepth firstFree)
+      | Branch.repeated key => Code.pure (repeatedValue key)
+      | Branch.bothMu =>
+        compileMu request.domain (Value.node firstEntry firstRows firstDepth firstFree) (Value.reference name✝)
+      | Branch.leftMu =>
+        compileMu request.domain (Value.node firstEntry firstRows firstDepth firstFree) (Value.reference name✝)
+      | Branch.rightMu =>
+        compileMu request.domain (Value.node firstEntry firstRows firstDepth firstFree) (Value.reference name✝)
+      | Branch.leftUnion =>
+        SourceRecursiveIntersectionCode.unsupported (Value.node firstEntry firstRows firstDepth firstFree)
+          (Value.reference name✝)
+      | Branch.rightUnion =>
+        SourceRecursiveIntersectionCode.unsupported (Value.node firstEntry firstRows firstDepth firstFree)
+          (Value.reference name✝)
+      | Branch.leftReference =>
+        SourceRecursiveIntersectionCode.unsupported (Value.node firstEntry firstRows firstDepth firstFree)
+          (Value.reference name✝)
+      | Branch.rightReference =>
+        match Value.reference name✝ with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name (Value.node firstEntry firstRows firstDepth firstFree) false
+        | x =>
+          SourceRecursiveIntersectionCode.unsupported (Value.node firstEntry firstRows firstDepth firstFree)
+            (Value.reference name✝)
+      | Branch.ordinary =>
+        SourceRecursiveIntersectionCode.unsupported (Value.node firstEntry firstRows firstDepth firstFree)
+          (Value.reference name✝)
+      | Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported (Value.node firstEntry firstRows firstDepth firstFree)
+          (Value.reference name✝)))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.1683)) before (Control.code (Code.optionalBinder pair body siteNext)) after
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:251:60: error: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.1713 ?m.1714 →
+    Value ?m.1713 ?m.1714 → Machine ?m.1713 ?m.1714 → Result ?m.1713 ?m.1714 ?m.1715
+  
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.1713 ?m.1714 →
+    Value ?m.1713 ?m.1714 → Code ?m.1713 ?m.1714 ?m.1715
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:251:14: error: Type mismatch: After simplification, term
+  actual
+ has type
+  Trace fuel
+    (Control.code
+      (match
+        decision request.domain.key (Value.node firstEntry firstRows firstDepth firstFree)
+          (Value.union entry✝ members✝ depth✝ free✝) with
+      | Branch.empty => Code.pure Value.empty
+      | Branch.reset =>
+        requestNode IntersectionEmptyDomain.emptyDomain (Value.node firstEntry firstRows firstDepth firstFree)
+          (Value.union entry✝ members✝ depth✝ free✝)
+      | Branch.self => Code.pure (Value.node firstEntry firstRows firstDepth firstFree)
+      | Branch.swap =>
+        requestNode request.domain (Value.union entry✝ members✝ depth✝ free✝)
+          (Value.node firstEntry firstRows firstDepth firstFree)
+      | Branch.repeated key => Code.pure (repeatedValue key)
+      | Branch.bothMu =>
+        compileMu request.domain (Value.node firstEntry firstRows firstDepth firstFree)
+          (Value.union entry✝ members✝ depth✝ free✝)
+      | Branch.leftMu =>
+        compileMu request.domain (Value.node firstEntry firstRows firstDepth firstFree)
+          (Value.union entry✝ members✝ depth✝ free✝)
+      | Branch.rightMu =>
+        compileMu request.domain (Value.node firstEntry firstRows firstDepth firstFree)
+          (Value.union entry✝ members✝ depth✝ free✝)
+      | Branch.leftUnion =>
+        SourceRecursiveIntersectionCode.unsupported (Value.node firstEntry firstRows firstDepth firstFree)
+          (Value.union entry✝ members✝ depth✝ free✝)
+      | Branch.rightUnion =>
+        (SourceRecursiveIntersectionCode.walk
+              (fun member => requestNode request.domain (Value.node firstEntry firstRows firstDepth firstFree) member)
+              members✝).bind
+          fun values => Code.work (makeUnion values) Code.pure
+      | Branch.leftReference =>
+        SourceRecursiveIntersectionCode.unsupported (Value.node firstEntry firstRows firstDepth firstFree)
+          (Value.union entry✝ members✝ depth✝ free✝)
+      | Branch.rightReference =>
+        SourceRecursiveIntersectionCode.unsupported (Value.node firstEntry firstRows firstDepth firstFree)
+          (Value.union entry✝ members✝ depth✝ free✝)
+      | Branch.ordinary =>
+        SourceRecursiveIntersectionCode.unsupported (Value.node firstEntry firstRows firstDepth firstFree)
+          (Value.union entry✝ members✝ depth✝ free✝)
+      | Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported (Value.node firstEntry firstRows firstDepth firstFree)
+          (Value.union entry✝ members✝ depth✝ free✝)))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.1711)) before (Control.code (Code.optionalBinder pair body siteNext)) after
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:251:60: error: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.1741 ?m.1742 →
+    Value ?m.1741 ?m.1742 → Machine ?m.1741 ?m.1742 → Result ?m.1741 ?m.1742 ?m.1743
+  
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.1741 ?m.1742 →
+    Value ?m.1741 ?m.1742 → Code ?m.1741 ?m.1742 ?m.1743
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:251:14: error: Type mismatch: After simplification, term
+  actual
+ has type
+  Trace fuel
+    (Control.code
+      (match
+        decision request.domain.key (Value.node firstEntry firstRows firstDepth firstFree)
+          (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) with
+      | Branch.empty => Code.pure Value.empty
+      | Branch.reset =>
+        requestNode IntersectionEmptyDomain.emptyDomain (Value.node firstEntry firstRows firstDepth firstFree)
+          (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | Branch.self => Code.pure (Value.node firstEntry firstRows firstDepth firstFree)
+      | Branch.swap =>
+        requestNode request.domain (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+          (Value.node firstEntry firstRows firstDepth firstFree)
+      | Branch.repeated key => Code.pure (repeatedValue key)
+      | Branch.bothMu =>
+        compileMu request.domain (Value.node firstEntry firstRows firstDepth firstFree)
+          (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | Branch.leftMu =>
+        compileMu request.domain (Value.node firstEntry firstRows firstDepth firstFree)
+          (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | Branch.rightMu =>
+        compileMu request.domain (Value.node firstEntry firstRows firstDepth firstFree)
+          (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | Branch.leftUnion =>
+        SourceRecursiveIntersectionCode.unsupported (Value.node firstEntry firstRows firstDepth firstFree)
+          (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | Branch.rightUnion =>
+        SourceRecursiveIntersectionCode.unsupported (Value.node firstEntry firstRows firstDepth firstFree)
+          (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | Branch.leftReference =>
+        SourceRecursiveIntersectionCode.unsupported (Value.node firstEntry firstRows firstDepth firstFree)
+          (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | Branch.rightReference =>
+        SourceRecursiveIntersectionCode.unsupported (Value.node firstEntry firstRows firstDepth firstFree)
+          (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | Branch.ordinary =>
+        SourceRecursiveIntersectionCode.unsupported (Value.node firstEntry firstRows firstDepth firstFree)
+          (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported (Value.node firstEntry firstRows firstDepth firstFree)
+          (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.1739)) before (Control.code (Code.optionalBinder pair body siteNext)) after
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:253:51: error: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.1767 ?m.1768 →
+    Value ?m.1767 ?m.1768 → Machine ?m.1767 ?m.1768 → Result ?m.1767 ?m.1768 ?m.1769
+  
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.1767 ?m.1768 →
+    Value ?m.1767 ?m.1768 → Code ?m.1767 ?m.1768 ?m.1769
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:253:12: error: Type mismatch: After simplification, term
+  actual
+ has type
+  Trace fuel
+    (Control.code
+      (match decision request.domain.key Value.empty request.right with
+      | Branch.empty => Code.pure Value.empty
+      | Branch.reset => requestNode IntersectionEmptyDomain.emptyDomain Value.empty request.right
+      | Branch.self => Code.pure Value.empty
+      | Branch.swap => requestNode request.domain request.right Value.empty
+      | Branch.repeated key => Code.pure (repeatedValue key)
+      | Branch.bothMu => compileMu request.domain Value.empty request.right
+      | Branch.leftMu => compileMu request.domain Value.empty request.right
+      | Branch.rightMu => compileMu request.domain Value.empty request.right
+      | Branch.leftUnion => SourceRecursiveIntersectionCode.unsupported Value.empty request.right
+      | Branch.rightUnion =>
+        match request.right with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk (fun member => requestNode request.domain Value.empty member)
+                members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported Value.empty request.right
+      | Branch.leftReference => SourceRecursiveIntersectionCode.unsupported Value.empty request.right
+      | Branch.rightReference =>
+        match request.right with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name Value.empty false
+        | x => SourceRecursiveIntersectionCode.unsupported Value.empty request.right
+      | Branch.ordinary => SourceRecursiveIntersectionCode.unsupported Value.empty request.right
+      | Branch.unsupported => SourceRecursiveIntersectionCode.unsupported Value.empty request.right))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.1765)) before (Control.code (Code.optionalBinder pair body siteNext)) after
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:253:51: error: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.1795 ?m.1796 →
+    Value ?m.1795 ?m.1796 → Machine ?m.1795 ?m.1796 → Result ?m.1795 ?m.1796 ?m.1797
+  
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.1795 ?m.1796 →
+    Value ?m.1795 ?m.1796 → Code ?m.1795 ?m.1796 ?m.1797
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:253:12: error: Type mismatch: After simplification, term
+  actual
+ has type
+  Trace fuel
+    (Control.code
+      (match decision request.domain.key (Value.reference name✝) request.right with
+      | Branch.empty => Code.pure Value.empty
+      | Branch.reset => requestNode IntersectionEmptyDomain.emptyDomain (Value.reference name✝) request.right
+      | Branch.self => Code.pure (Value.reference name✝)
+      | Branch.swap => requestNode request.domain request.right (Value.reference name✝)
+      | Branch.repeated key => Code.pure (repeatedValue key)
+      | Branch.bothMu => compileMu request.domain (Value.reference name✝) request.right
+      | Branch.leftMu => compileMu request.domain (Value.reference name✝) request.right
+      | Branch.rightMu => compileMu request.domain (Value.reference name✝) request.right
+      | Branch.leftUnion => SourceRecursiveIntersectionCode.unsupported (Value.reference name✝) request.right
+      | Branch.rightUnion =>
+        match request.right with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk
+                (fun member => requestNode request.domain (Value.reference name✝) member) members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported (Value.reference name✝) request.right
+      | Branch.leftReference =>
+        match Value.reference name✝ with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name request.right true
+        | x => SourceRecursiveIntersectionCode.unsupported (Value.reference name✝) request.right
+      | Branch.rightReference =>
+        match request.right with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name (Value.reference name✝) false
+        | x => SourceRecursiveIntersectionCode.unsupported (Value.reference name✝) request.right
+      | Branch.ordinary => SourceRecursiveIntersectionCode.unsupported (Value.reference name✝) request.right
+      | Branch.unsupported => SourceRecursiveIntersectionCode.unsupported (Value.reference name✝) request.right))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.1793)) before (Control.code (Code.optionalBinder pair body siteNext)) after
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:253:51: error: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.1823 ?m.1824 →
+    Value ?m.1823 ?m.1824 → Machine ?m.1823 ?m.1824 → Result ?m.1823 ?m.1824 ?m.1825
+  
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.1823 ?m.1824 →
+    Value ?m.1823 ?m.1824 → Code ?m.1823 ?m.1824 ?m.1825
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:253:12: error: Type mismatch: After simplification, term
+  actual
+ has type
+  Trace fuel
+    (Control.code
+      (match decision request.domain.key (Value.union entry✝ members✝ depth✝ free✝) request.right with
+      | Branch.empty => Code.pure Value.empty
+      | Branch.reset =>
+        requestNode IntersectionEmptyDomain.emptyDomain (Value.union entry✝ members✝ depth✝ free✝) request.right
+      | Branch.self => Code.pure (Value.union entry✝ members✝ depth✝ free✝)
+      | Branch.swap => requestNode request.domain request.right (Value.union entry✝ members✝ depth✝ free✝)
+      | Branch.repeated key => Code.pure (repeatedValue key)
+      | Branch.bothMu => compileMu request.domain (Value.union entry✝ members✝ depth✝ free✝) request.right
+      | Branch.leftMu => compileMu request.domain (Value.union entry✝ members✝ depth✝ free✝) request.right
+      | Branch.rightMu => compileMu request.domain (Value.union entry✝ members✝ depth✝ free✝) request.right
+      | Branch.leftUnion =>
+        (SourceRecursiveIntersectionCode.walk (fun member => requestNode request.domain member request.right)
+              members✝).bind
+          fun values => Code.work (makeUnion values) Code.pure
+      | Branch.rightUnion =>
+        match request.right with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk
+                (fun member => requestNode request.domain (Value.union entry✝ members✝ depth✝ free✝) member)
+                members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x => SourceRecursiveIntersectionCode.unsupported (Value.union entry✝ members✝ depth✝ free✝) request.right
+      | Branch.leftReference =>
+        SourceRecursiveIntersectionCode.unsupported (Value.union entry✝ members✝ depth✝ free✝) request.right
+      | Branch.rightReference =>
+        match request.right with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name (Value.union entry✝ members✝ depth✝ free✝) false
+        | x => SourceRecursiveIntersectionCode.unsupported (Value.union entry✝ members✝ depth✝ free✝) request.right
+      | Branch.ordinary =>
+        SourceRecursiveIntersectionCode.unsupported (Value.union entry✝ members✝ depth✝ free✝) request.right
+      | Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported (Value.union entry✝ members✝ depth✝ free✝) request.right))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.1821)) before (Control.code (Code.optionalBinder pair body siteNext)) after
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:253:51: error: Ambiguous term
+  unsupported
+Possible interpretations:
+  SourceRecursiveIntersectionKernel.unsupported : Value ?m.1851 ?m.1852 →
+    Value ?m.1851 ?m.1852 → Machine ?m.1851 ?m.1852 → Result ?m.1851 ?m.1852 ?m.1853
+  
+  SourceRecursiveIntersectionCode.unsupported : Value ?m.1851 ?m.1852 →
+    Value ?m.1851 ?m.1852 → Code ?m.1851 ?m.1852 ?m.1853
+/tmp/mcfta-native-compiler-optional-prefix/compiler-prefix-direct-3.source.lean:253:12: error: Type mismatch: After simplification, term
+  actual
+ has type
+  Trace fuel
+    (Control.code
+      (match decision request.domain.key (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right with
+      | Branch.empty => Code.pure Value.empty
+      | Branch.reset =>
+        requestNode IntersectionEmptyDomain.emptyDomain (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right
+      | Branch.self => Code.pure (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | Branch.swap => requestNode request.domain request.right (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝)
+      | Branch.repeated key => Code.pure (repeatedValue key)
+      | Branch.bothMu => compileMu request.domain (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right
+      | Branch.leftMu => compileMu request.domain (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right
+      | Branch.rightMu => compileMu request.domain (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right
+      | Branch.leftUnion =>
+        SourceRecursiveIntersectionCode.unsupported (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right
+      | Branch.rightUnion =>
+        match request.right with
+        | Value.union entry members depth free =>
+          (SourceRecursiveIntersectionCode.walk
+                (fun member => requestNode request.domain (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) member)
+                members).bind
+            fun values => Code.work (makeUnion values) Code.pure
+        | x =>
+          SourceRecursiveIntersectionCode.unsupported (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right
+      | Branch.leftReference =>
+        SourceRecursiveIntersectionCode.unsupported (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right
+      | Branch.rightReference =>
+        match request.right with
+        | Value.reference (InternedBinderProtocol.Reference.interned name) =>
+          compileReference request.domain name (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) false
+        | x =>
+          SourceRecursiveIntersectionCode.unsupported (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right
+      | Branch.ordinary =>
+        SourceRecursiveIntersectionCode.unsupported (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right
+      | Branch.unsupported =>
+        SourceRecursiveIntersectionCode.unsupported (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) request.right))
+    before (Control.code (Code.optionalBinder pair body siteNext)) after
+but is expected to have type
+  Trace fuel (Control.code (Code.fail ?m.1849)) before (Control.code (Code.optionalBinder pair body siteNext)) after

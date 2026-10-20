@@ -1,0 +1,15 @@
+/tmp/mcfta-native-walk-optional-prefix/walk-optional-direct-1.source.lean:25:107: error: unsolved goals
+case cons
+A B : Type
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+call : A → Code Symbol Guard B
+rest : List A
+first : A
+tail✝ : List A
+tail_ih✝ :
+  walk call (tail✝ ++ rest) =
+    (walk call tail✝).bind fun values => (walk call rest).bind fun tail => Code.pure (values ++ tail)
+⊢ walk call (first :: tail✝ ++ rest) =
+    (walk call (first :: tail✝)).bind fun values => (walk call rest).bind fun tail => Code.pure (values ++ tail)
+/tmp/mcfta-native-walk-optional-prefix/walk-optional-direct-1.source.lean:28:21: error: unexpected identifier; expected ':'
