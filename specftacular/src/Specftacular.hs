@@ -218,10 +218,14 @@ data Settings = Settings
     , diagnosticPhase :: Int
     -- ^ The phase that is running, rather than the requested last phase.
     , stopAfter :: Maybe (Int, Int)
-    {- ^ The phase and the size after which the search stops, for a profile
-    of a part of a long run.
+    , onlyBucket :: Maybe String
+    {- ^ With 'stopAfter', the only bucket of the last size, by the 'show' of
+    its type; each of its schemas prints its time and its term (spike).
     -}
-    , splitEnumeration :: Int
+    , -- \^ The phase and the size after which the search stops, for a profile
+      --    of a part of a long run.
+      --
+      splitEnumeration :: Int
     , parallelBuckets :: Bool
     {- ^ Whether the buckets of a size run in parallel from the state at the
     start of the size (spike).
@@ -371,6 +375,9 @@ searchPhases SearchOptions{searchSize = size, searchPhase = phase, searchParalle
         -- SPECFTACULAR_STOP_AFTER=phase:size stops the search after that size
         -- of that phase, so that a profile of the run is written.
         stopSetting <- (>>= parseStop) <$> Env.lookupEnv "SPECFTACULAR_STOP_AFTER"
+        -- SPECFTACULAR_ONLY_BUCKET=type runs only that bucket at the last size
+        -- of SPECFTACULAR_STOP_AFTER, and times each of its schemas.
+        onlySetting <- Env.lookupEnv "SPECFTACULAR_ONLY_BUCKET"
         let diagnostics = diagnosticSetting `elem` [Just "1", Just "phases"]
             detailedDiagnostics = diagnosticSetting == Just "1"
         -- SPECFTACULAR_TESTS sets the number of test cases (1000 by default,
@@ -418,6 +425,7 @@ searchPhases SearchOptions{searchSize = size, searchPhase = phase, searchParalle
                     , parallelBuckets = parallelSetting
                     , deferLaws = parallelSetting
                     , stopAfter = stopSetting
+                    , onlyBucket = onlySetting
                     }
         runPhases env size (max 1 (min 4 phase)) instances sig
 
@@ -555,8 +563,11 @@ monomorphic type.
 runPhase :: Settings -> Int -> Maybe StEcta -> StEcta -> Search -> IO ([String], Search)
 runPhase env@Settings{..} size skeletons stecta@StEcta{..}
     | parallelBuckets = goSizes [1 .. size]
-    | otherwise = go Map.empty [(lvl, tc) | lvl <- [1 .. size], tc <- ordered]
+    | otherwise = go Map.empty [(lvl, tc) | lvl <- [1 .. size], tc <- ordered, kept lvl tc]
   where
+    kept lvl tc = case (onlyBucket, stopAfter) of
+        (Just only, Just (stopPhase, stopSize)) | stopPhase == diagnosticPhase && stopSize == lvl -> show tc == only
+        _ -> True
     ordered = sortOn (\t -> (typeSize t, concreteTypeLeaves t, t)) (filter tested sig_ty_cons)
     -- With 'parallelBuckets', the buckets of a size run in parallel from the
     -- state at the start of the size. A bucket changes only the trees of its
@@ -695,8 +706,22 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..}
         considerAll lvl tc first s
     considerAll _ _ [] s = return ([], s)
     considerAll lvl tc (t : ts) s = do
+        begin <- getMonotonicTimeNSec
         (laws, s') <-
             diagnose env lvl (show tc) "schema" s $ consider env stecta lvl (Term "filter" [typeSkeletonToTerm tc, t]) s
+        end <- getMonotonicTimeNSec
+        when (isJust onlyBucket && fmap snd stopAfter == Just lvl) $
+            hPutStrLn
+                stderr
+                ( intercalate
+                    "\t"
+                    [ "schematime"
+                    , show (fromIntegral (end - begin) / 1e9 :: Double)
+                    , show (length laws)
+                    , show (so_far s' - so_far s)
+                    , ppNpTerm t
+                    ]
+                )
         next <- diagnose env lvl (show tc) "candidate_list_demand" s' $ evaluate ts
         (more, s'') <- considerAll lvl tc next s'
         return (laws ++ more, s'')
