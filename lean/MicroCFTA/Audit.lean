@@ -3007,6 +3007,11 @@ import MicroCFTA.SourceCurrentActualLocalBranchCases
 import MicroCFTA.SourceCurrentActualParentBranchCases
 import MicroCFTA.SourceCurrentOuterPlainRowShapes
 import MicroCFTA.SourceCurrentOuterPlainOwnerProgress
+import MicroCFTA.SourceCurrentActualOwnerSelection
+import MicroCFTA.SourceCurrentDelayedOwnerProgress
+import MicroCFTA.SourceCurrentOuterParentHistory
+import MicroCFTA.SourceCurrentOuterOwnerSelection
+import MicroCFTA.SourceCurrentPhysicalMergeSupportBoundary
 /-!
 # Proof dependency audit
 
