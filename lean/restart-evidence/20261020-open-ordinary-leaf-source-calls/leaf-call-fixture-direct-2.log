@@ -1,0 +1,50 @@
+/tmp/mcfta-open-ordinary-leaf-source-calls-fixture/leaf-call-fixture-direct-2.source.lean:74:2: error: Type mismatch
+  SourceCurrentOpenOrdinaryLeafSourceCalls.node_leaf expressions inputs seedHeap raw after raw_context raw_done opened 1
+    leaf repeated_leaf
+has type
+  ∃ outputIndex row childIndex child inner sourceIndex symbol guard children rows middle call childSyntax current next,
+    (nodeEdges raw)[outputIndex]? = some row ∧
+      row.children[childIndex]? = some child ∧
+        (leaves child)[inner]? = some leaf ∧
+          1 =
+              (edgeLeaves (List.take outputIndex (nodeEdges raw))).length +
+                  (manyLeaves (List.take childIndex row.children)).length +
+                inner ∧
+            buildEdges expressions inputs seedHeap = Outcome.done rows middle ∧
+              run (makeNode rows) middle = (raw, after) ∧
+                call.output = row ∧
+                  children[childIndex]? = some childSyntax ∧
+                    call.values[childIndex]? = some child ∧
+                      buildMany (List.take childIndex children) inputs call.current =
+                          Outcome.done (List.take childIndex call.values) current ∧
+                        Context current inputs ∧
+                          build childSyntax inputs current = Outcome.done child next ∧
+                            buildMany (List.drop (childIndex + 1) children) inputs next =
+                                Outcome.done (List.drop (childIndex + 1) call.values) call.middle ∧
+                              @sizeOf (Syntax Nat Bool)
+                                  (@Syntax._sizeOf_inst Nat Bool (instSizeOfDefault Nat) (instSizeOfDefault Bool))
+                                  childSyntax <
+                                sizeOf (Syntax.node expressions)
+but is expected to have type
+  ∃ outputIndex row childIndex child inner sourceIndex symbol guard children rows middle call childSyntax current next,
+    (nodeEdges raw)[outputIndex]? = some row ∧
+      row.children[childIndex]? = some child ∧
+        (leaves child)[inner]? = some leaf ∧
+          1 =
+              (edgeLeaves (List.take outputIndex (nodeEdges raw))).length +
+                  (manyLeaves (List.take childIndex row.children)).length +
+                inner ∧
+            buildEdges expressions inputs seedHeap = Outcome.done rows middle ∧
+              run (makeNode rows) middle = (raw, after) ∧
+                call.output = row ∧
+                  children[childIndex]? = some childSyntax ∧
+                    call.values[childIndex]? = some child ∧
+                      buildMany (List.take childIndex children) inputs call.current =
+                          Outcome.done (List.take childIndex call.values) current ∧
+                        Context current inputs ∧
+                          build childSyntax inputs current = Outcome.done child next ∧
+                            buildMany (List.drop (childIndex + 1) children) inputs next =
+                                Outcome.done (List.drop (childIndex + 1) call.values) call.middle ∧
+                              @sizeOf (Syntax Nat Bool) (@Syntax._sizeOf_inst Nat Bool instSizeOfNat Bool._sizeOf_inst)
+                                  childSyntax <
+                                sizeOf (Syntax.node expressions)

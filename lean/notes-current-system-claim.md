@@ -1,7 +1,7 @@
 # Current system claim
 
 Checked against the live theorem statements on 2026-10-20.
-Read `notes-current-publication-native-capture.md` for the latest proof checkpoint.
+Read `notes-current-open-ordinary-leaf-source-calls.md` for the latest proof checkpoint.
 Read `notes-current-upstream-persistent-rows.md` for the current source scope.
 
 In simple technical English: fresh construction always finishes in the
@@ -74,6 +74,15 @@ its coherent heap and available-leaf premises. These laws do not trace
 closed leaves through ordinary children to their earlier source builds.
 Closed-root stopping, earlier warm writers and repeated leaf occurrences
 remain distinct cases. No general recursive decrease follows.
+
+For an actual completed open ordinary source node, an exact indexed leaf
+now retains its canonical row, ordered child, inner leaf and flattened
+offset. The same full row derives its original source RowCall and actual
+indexed child build with joint Context and exact prefix and suffix. The
+strict bound counts the supplied source syntax with default Symbol/Guard
+sizes. It supplies no generated-value decrease or original-program ancestry
+for generated encode syntax. Closed roots, union normalization, captures
+and selected historical Mu remain separate general ancestry obligations.
 
 ## Constructed root guarantee
 

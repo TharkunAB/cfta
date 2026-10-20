@@ -1,0 +1,49 @@
+/tmp/mcfta-open-ordinary-leaf-source-calls/leaf-call-direct-1.source.lean:133:4: error: unsolved goals
+case inr
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+expressions : List (EdgeSyntax Symbol Guard)
+inputs : List (Value Symbol Guard)
+before after : InternedConstructorTemplates.State Symbol Guard
+context : Context before inputs
+leafIndex : Nat
+leaf : Value Symbol Guard
+entry : Interned InternedBinderProtocol.NodeKey
+rows : List (EdgeValue Symbol Guard)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+actual : build (Syntax.node expressions) inputs before = Outcome.done (Value.node entry rows depth free) after
+opened : (Value.node entry rows depth free).free ≠ []
+found : (leaves (Value.node entry rows depth free))[leafIndex]? = some leaf
+⊢ (if free.isEmpty = true then [Value.node entry rows depth free] else edgeLeaves rows) = edgeLeaves rows
+/tmp/mcfta-open-ordinary-leaf-source-calls/leaf-call-direct-1.source.lean:150:8: error: Type mismatch: After simplification, term
+  Context.edges context (List.take ?m.1309 expressions)
+ has type
+  Context
+    (match buildEdges (List.take ?m.1309 expressions) inputs before with
+    | Outcome.done value state => state
+    | Outcome.pending key state => state)
+    inputs
+but is expected to have type
+  Context call.current inputs
+/tmp/mcfta-open-ordinary-leaf-source-calls/leaf-call-direct-1.source.lean:134:28: warning: This simp argument is unused:
+  List.isEmpty_eq_false_iff.mpr opened
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Value.free, Bool.false_eq_true, ↓reduceIte, nodeEdges]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-open-ordinary-leaf-source-calls/leaf-call-direct-1.source.lean:134:65: warning: This simp argument is unused:
+  Bool.false_eq_true
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Value.free, List.isEmpty_eq_false_iff.mpr opened, ↓reduceIte, nodeEdges]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-open-ordinary-leaf-source-calls/leaf-call-direct-1.source.lean:134:84: warning: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Value.free, List.isEmpty_eq_false_iff.mpr opened, Bool.false_eq_true, nodeEdges]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

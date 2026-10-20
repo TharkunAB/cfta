@@ -1,0 +1,21 @@
+# Actual open ordinary repeated-leaf source calls
+
+Checked 2026-10-20 16:17 CEST.
+
+The fixture first builds closed row3[leaf1,leaf1] from empty, where leaf1 is a closed nullary ordinary node. It then runs an actual Depth callback with source rows `[row9[Depth,leaf1], row3[leaf1,leaf1], row9[Depth,leaf1]]`. The actual raw node call and completed normalized callback are both retained. The rich input Context comes from the actual initial closed build and the available literal Depth argument. No desired source ancestor, Ready reader, replay, or child semantic law is supplied.
+
+Literal checked facts prove that source rows 0 and 2 are equal, source row 1 is row3, and the actual canonical result has row symbols `[3,9]`. Thus canonical ordering changes the source position and deduplicates the repeated source row. The result is open through Depth. The actual leaves at positions 0 and 1 are the SAME complete closed leaf. Its canonical encoder slot is 0. The selected occurrence is position 1, which is explicitly unequal to that slot.
+
+The fixture applies `SourceCurrentOpenOrdinaryLeafSourceCalls.node_leaf` exactly once at leaf occurrence 1. Its public theorem retains the full returned existential certificate. That certificate keeps the canonical row index, ordered child index, inner leaf index, original source row index, full original RowCall, and the exact prefix-length flatten equation. It retains the original source child syntax, the actual same-position child output, the actual completed child prefix, rich Context at the child entry, the actual completed child build, and the actual completed suffix. It also retains the strict bound from that child syntax to the supplied original node syntax. It does not equate canonical and source row indices or identify a leaf occurrence with a canonical encoder slot.
+
+The size bound uses the EXACT generic measure returned by node_leaf: Syntax._sizeOf_inst with instSizeOfDefault for Symbol and Guard. The generic structural measure ignores Symbol/Guard payload size. In this Nat/Bool fixture it is explicitly instantiated with default Nat and Bool measures. It is NOT the independently selected concrete Nat/Bool SizeOf instance. The explicit instance tree remains visible in the complete public statement. No replacement value-size or self decrease is claimed.
+
+The public witness is a complete explicit-statement alias of a private checked witness. Selected strict `leaf-call-fixture-direct-3` is personally terminal 0 with a zero-byte log. Selected full group `leaf-call-fixture-public-1` is personally terminal 0 and hardened FULL1/all-eight-print-options/standard-three-axiom PASS with no omissions. It prints the exact complete returned certificate.
+
+Both earlier failures are preserved. Direct-1 left the explicit nonempty-list contradiction unfinished and failed to elaborate the generic measure against a concrete Nat/Bool measure. Direct-2 resolved the nonempty-list case and exposed the exact SizeOf mismatch. Direct-3 states the production theorem's actual generic-default measure explicitly. No mathematical scenario or actual call was weakened. There are no incomplete attempts, cap exits, or memory failures.
+
+All four attempts use pinned Lean 4.34.1 with effective memory.max = memory.high = 4294967296, memory.swap.max = 0, and a five-minute wall cap. Recorded peaks are 208, 206, 207 and 210 MiB. Counts: 0 owned production public pairs, 1 constructed pair, 4 Lean runs, 2 failed elaboration attempts, and 0 canonical builds. Root-owned production checks are not counted here.
+
+The explicit portable manifest retains all source snapshots, logs, metadata, effective limits, distinct helper scripts, stable production input copies, and this report. The standalone verifier checks relative pins and selected receipts without repository or Lean artifact access. Input copies are evidence snapshots, not a complete Lean dependency distribution. No repository files or canonical artifacts were written.
+
+This is an integration of the open ordinary node endpoint. It does not prove a closed-root leaf law, union or Mu leaf ancestry, actual unfolding observation Origin, original binding ancestry for later native captures, global renewal, termination, or Haskell correspondence.

@@ -1,0 +1,45 @@
+/tmp/mcfta-open-ordinary-leaf-source-calls/leaf-call-direct-2.source.lean:151:63: error: don't know how to synthesize placeholder for argument `n`
+context:
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+expressions : List (EdgeSyntax Symbol Guard)
+inputs : List (Value Symbol Guard)
+before : InternedConstructorTemplates.State Symbol Guard
+raw : Value Symbol Guard
+after : InternedConstructorTemplates.State Symbol Guard
+context : Context before inputs
+actual : build (Syntax.node expressions) inputs before = Outcome.done raw after
+opened : raw.free ≠ []
+leafIndex : Nat
+leaf : Value Symbol Guard
+found : (List.flatMap (fun row => manyLeaves row.children) (nodeEdges raw))[leafIndex]? = some leaf
+ordinary : raw = Value.empty ∨ ∃ entry edges depth free, raw = Value.node entry edges depth free
+rawLeaves : leaves raw = edgeLeaves (nodeEdges raw)
+outputIndex : Nat
+row : EdgeValue Symbol Guard
+rowInner : Nat
+selected : (nodeEdges raw)[outputIndex]? = some row
+inside : (List.flatMap leaves row.children)[rowInner]? = some leaf
+rowOffset :
+  leafIndex =
+    (List.flatMap (fun edge => manyLeaves edge.children) (List.take outputIndex (nodeEdges raw))).length + rowInner
+childIndex : Nat
+child : Value Symbol Guard
+inner : Nat
+childSelected : row.children[childIndex]? = some child
+leafSelected : (leaves child)[inner]? = some leaf
+childOffset : rowInner = (List.flatMap leaves (List.take childIndex row.children)).length + inner
+part : RowAt raw row
+rows✝ : List (EdgeValue Symbol Guard)
+middle✝ : InternedConstructorTemplates.State Symbol Guard
+symbol✝ : Symbol
+guard✝ : Guard
+children✝ : List (Syntax Symbol Guard)
+sourceIndex✝ outputIndex✝ : Nat
+built : buildEdges expressions inputs before = Outcome.done rows✝ middle✝
+call : RowCall expressions inputs before rows✝ middle✝ after sourceIndex✝ symbol✝ guard✝ children✝
+made : run (makeNode rows✝) middle✝ = (raw, after)
+selected✝ : (nodeEdges raw)[outputIndex✝]? = some row
+same : call.output = row
+⊢ Nat
+/tmp/mcfta-open-ordinary-leaf-source-calls/leaf-call-direct-2.source.lean:151:13: error: failed to infer `have` declaration type

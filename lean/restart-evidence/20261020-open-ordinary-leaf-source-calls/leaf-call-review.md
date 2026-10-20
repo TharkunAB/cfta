@@ -1,0 +1,15 @@
+# Open ordinary leaf source-call prototype
+
+Reviewed 2026-10-20 16:06 CEST. This is an author reread. It is not an independent author review.
+
+The sole public theorem is `SourceCurrentOpenOrdinaryLeafSourceCalls.node_leaf`. It consumes joint Context, an actual completed Fresh node build, nonempty raw free names, and an exact indexed leaf lookup. It derives an actual canonical row and ordered child lookup. It retains the exact two-prefix flatten offset and the inner leaf lookup. It then derives the distinct original source RowCall, the original child syntax at the same child position, its actual ordered prefix and suffix, its completed Fresh build, and joint Context at its entry. The original child syntax is strictly smaller than the original node syntax.
+
+The source RowCall is derived by the established `build_row_origin` theorem. No caller supplies desired ancestry. The original source-row prefix establishes the joint row Context. The private Fresh indexed member extractor copies the existing private `member_call` proof. It preserves the actual build interval. It does not use stored reconstruction ChildTrace, which describes another interval.
+
+The canonical row index, original source-row index, leaf occurrence index, ordered child index, and inner leaf index remain separate. The exact offset uses `edgeLeaves` of earlier canonical rows and `manyLeaves` of earlier children. No occurrence index is identified with encoder `slot` or `findIdx`. Canonical deduplication can select an original row that differs in position from its canonical position. The theorem does not claim a unique original row or leaf occurrence.
+
+The raw root is explicitly open. At a closed root, `leaves raw = [raw]` stops the traversal. That case needs a separate closed-root handoff. A closed child can still occur in this theorem: its inner leaf can equal the entire child. No strict physical-value depth, value size, or recursive self decrease is claimed. Only original source-child syntax strictly decreases. Arbitrary nested source binders remain allowed in that syntax.
+
+The generic result is checked. No constructed fixture is included. An independent repeated-leaf and canonical-row-reordering fixture is a later task. No general union/Mu leaf ancestry, source-capture renewal, completion, observation equality, or Haskell correspondence is proved here.
+
+Seven capped Lean jobs are retained. The first pure helper check failed because mutual empty cases require their equation lemmas. Its second check passed. The first three complete checks failed on ordinary elaboration details: open-list simplification, an unresolved source index, and a dependent constructor pattern. The fourth complete check passed with a zero-byte strict log. Full public check 1 passed and printed the complete statement and proof without omissions. Its only axioms are propext, Classical.choice, and Quot.sound. Each job has a fresh usage receipt and exact 4 GiB maximum/high memory with zero swap and a five-minute cap. No canonical build was run. No repository file was changed.
