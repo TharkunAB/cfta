@@ -3003,6 +3003,10 @@ import MicroCFTA.SourceCurrentUnionNormalTargets
 import MicroCFTA.SourceCurrentUnionNormalEdits
 import MicroCFTA.SourceCurrentUnionNormalScan
 import MicroCFTA.SourceCurrentUnionNormalLocalParent
+import MicroCFTA.SourceCurrentActualLocalBranchCases
+import MicroCFTA.SourceCurrentActualParentBranchCases
+import MicroCFTA.SourceCurrentOuterPlainRowShapes
+import MicroCFTA.SourceCurrentOuterPlainOwnerProgress
 /-!
 # Proof dependency audit
 
