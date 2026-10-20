@@ -1,7 +1,7 @@
 # Current system claim
 
 Checked against the live theorem statements on 2026-10-20.
-Read `notes-current-rooted-indexed-source-children.md` for the latest proof checkpoint.
+Read `notes-current-selected-binder-source-suffix.md` for the latest proof checkpoint.
 Read `notes-current-upstream-persistent-rows.md` for the current source scope.
 
 In simple technical English: fresh construction always finishes in the
@@ -100,6 +100,15 @@ an exact capture, or a selected binder body stop. A binder stop does not
 identify the current callback with an earlier writer. Its local return
 heap still needs an actual suffix to the enclosing return heap. General
 original binding ancestry and a global recursive decrease remain open.
+
+An actual completed build now derives a selected complete Mu's same
+historical publication, raw callback/filter and rooted source-child Origin,
+or the exact initial full cell. SourceRow also derives a nonunion terminal
+source receipt with its Context, Reached, generic Syntax bound and actual
+physical/issued suffix to the supplied source return. Its terminal binder
+cell moves forward by nodeRecords retention. Native encoded roots with
+nonempty mapped captures still need an original-root ancestry certificate.
+No general renewal, outer completion or Haskell refinement is added.
 
 ## Constructed root guarantee
 
