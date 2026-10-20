@@ -10,7 +10,8 @@ import MicroCFTA.SourceCurrentNativeOriginalUnionDescent
 One completed build fixes one publication path. Each stored row reaches an
 actual node call, an exact original input, or a full Mu present at entry.
 New binder writers decrease their index in the same path. Bounds refer to
-the chosen producer's expression, not to a later requester.
+the chosen producer's expression, not to a later requester. The terminal
+keeps the actual callback prefix and its input environment.
 -/
 namespace MicroCFTA.SourceCurrentWarmBuildRowOrigins
 open Cache InternedConstructorTemplates InternedRecordCoherence InternedProbeProvenance
@@ -50,6 +51,8 @@ def RowOrigin (original : Syntax Symbol Guard) (initial : List (Value Symbol Gua
       SourceRow expression inputs start value stop row ∧
       build expression inputs start = .done value stop ∧ Context start inputs ∧
       Reached original initial expression inputs start ∧
+      Grows producer.allocated start ∧ Extends producer.allocated.nodes.issued start.nodes.issued ∧
+      inputs = (.reference (.interned producer.entry.identity) :: producer.environment) ∧
       sizeOf expression ≤ sizeOf producer.expression ∧ UnionDescent producer.expression expression ∧
       Grows stop rawAfter ∧ Extends stop.nodes.issued rawAfter.nodes.issued ∧
       Grows rawAfter producer.afterBody ∧ Extends rawAfter.nodes.issued producer.afterBody.nodes.issued ∧
@@ -86,6 +89,8 @@ private theorem terminal_suffix
       (∀ members, terminalExpression ≠ Syntax.union members) ∧
       Context terminalBefore terminalInputs ∧
       Reached root initial terminalExpression terminalInputs terminalBefore ∧
+      Grows before terminalBefore ∧ Extends before.nodes.issued terminalBefore.nodes.issued ∧
+      terminalInputs = inputs ∧
       sizeOf terminalExpression ≤ sizeOf expression ∧
       Grows terminalAfter after ∧ Extends terminalAfter.nodes.issued after.nodes.issued := by
   have descend {currentExpression : Syntax Symbol Guard} {currentInputs : List (Value Symbol Guard)}
@@ -99,20 +104,22 @@ private theorem terminal_suffix
         (∀ members, terminalExpression ≠ Syntax.union members) ∧
         Context terminalBefore terminalInputs ∧
         Reached root initial terminalExpression terminalInputs terminalBefore ∧
+        Grows start terminalBefore ∧ Extends start.nodes.issued terminalBefore.nodes.issued ∧
+        terminalInputs = currentInputs ∧
         sizeOf terminalExpression ≤ sizeOf currentExpression ∧
         Grows terminalAfter stop ∧ Extends terminalAfter.nodes.issued stop.nodes.issued := by
     induction part with
     | @capture currentInputs state value row slot found inside =>
       intro currentContext currentReached
       refine ⟨.var slot,currentInputs,state,value,state,.capture found inside,.refl _,?_,
-        currentContext,currentReached,Nat.le_refl _,grows_refl _,extends_refl _⟩
+        currentContext,currentReached,grows_refl _,extends_refl _,rfl,Nat.le_refl _,grows_refl _,extends_refl _⟩
       intro members impossible
       cases impossible
     | @node expressions currentInputs start value stop rows middle symbol guard children row
         sourceIndex outputIndex built made canonical call same =>
       intro currentContext currentReached
       refine ⟨.node expressions,currentInputs,start,value,stop,.node built made canonical call same,.refl _,?_,
-        currentContext,currentReached,Nat.le_refl _,grows_refl _,extends_refl _⟩
+        currentContext,currentReached,grows_refl _,extends_refl _,rfl,Nat.le_refl _,grows_refl _,extends_refl _⟩
       intro members impossible
       cases impossible
     | @union expressions currentInputs start value stop values middle member memberValue current next row
@@ -122,10 +129,12 @@ private theorem terminal_suffix
         currentContext.base.normal.facts currentContext.base.inputs
       have earlierGrowth : Grows start current := by
         simpa only [earlier,Outcome.state] using earlierFacts.growth
+      have earlierIssued : Extends start.nodes.issued current.nodes.issued := by
+        simpa only [earlier,Outcome.state] using earlierFacts.history
       have memberReached : Reached root initial member currentInputs current :=
         (currentReached.union (List.mem_of_getElem? syntaxSelected)).grows earlierGrowth
       obtain ⟨terminalExpression,terminalInputs,terminalBefore,terminalRaw,terminalAfter,
-        terminalSource,terminalDescent,nonunion,terminalContext,terminalReached,terminalBound,terminalGrowth,terminalIssued⟩ :=
+        terminalSource,terminalDescent,nonunion,terminalContext,terminalReached,terminalPrefix,terminalPrefixIssued,inputsSame,terminalBound,terminalGrowth,terminalIssued⟩ :=
         ih memberContext memberReached
       have returnContext : Context next currentInputs := by
         simpa only [called,Outcome.state] using memberContext.build member
@@ -146,7 +155,9 @@ private theorem terminal_suffix
         simp only [Syntax.union.sizeOf_spec]
         omega
       exact ⟨terminalExpression,terminalInputs,terminalBefore,terminalRaw,terminalAfter,
-        terminalSource,.member syntaxSelected terminalDescent,nonunion,terminalContext,terminalReached,Nat.le_trans terminalBound memberBound,
+        terminalSource,.member syntaxSelected terminalDescent,nonunion,terminalContext,terminalReached,
+        grows_trans earlierGrowth terminalPrefix,extends_trans earlierIssued terminalPrefixIssued,inputsSame,
+        Nat.le_trans terminalBound memberBound,
         grows_trans terminalGrowth (grows_trans suffixGrowth unionGrowth),
         extends_trans terminalIssued (extends_trans suffixIssued unionIssued)⟩
     | @binder smart body currentInputs start value stop depth afterDepth ordinary cut entry stored row
@@ -154,7 +165,7 @@ private theorem terminal_suffix
       intro currentContext currentReached
       refine ⟨.binder smart body,currentInputs,start,value,stop,
         .binder depthDone ordinaryDone requested present returned inside,.refl _,?_,currentContext,currentReached,
-        Nat.le_refl _,grows_refl _,extends_refl _⟩
+        grows_refl _,extends_refl _,rfl,Nat.le_refl _,grows_refl _,extends_refl _⟩
       intro members impossible
       cases impossible
   exact descend source context reached
@@ -184,10 +195,10 @@ private theorem later {original : Syntax Symbol Guard} {initial : List (Value Sy
     (issued : Extends outer.afterBody.nodes.issued next.afterBody.nodes.issued) :
     RowOrigin original initial before path nextIndex next row := by
   obtain ⟨k,producer,less,selected,raw,rawAfter,built,filtered,context,reached,rawRow,source,
-    expression,inputs,start,value,stop,terminal,done,terminalContext,terminalReached,small,descent,
+    expression,inputs,start,value,stop,terminal,done,terminalContext,terminalReached,entryGrowth,entryIssued,inputsSame,small,descent,
     suffix,suffixIssued,filterGrowth,filterIssued,tail,tailIssued,choice⟩ := origin
   exact ⟨k,producer,Nat.le_trans less bound,selected,raw,rawAfter,built,filtered,context,reached,
-    rawRow,source,expression,inputs,start,value,stop,terminal,done,terminalContext,terminalReached,small,descent,
+    rawRow,source,expression,inputs,start,value,stop,terminal,done,terminalContext,terminalReached,entryGrowth,entryIssued,inputsSame,small,descent,
     suffix,suffixIssued,filterGrowth,filterIssued,grows_trans tail growth,extends_trans tailIssued issued,choice⟩
 
 /-- One actual warm build derives indexed full-row origins without internal history premises. -/
@@ -238,7 +249,7 @@ theorem build_row_origins
       SourceCurrentPublicationBodySourceRows.publication_body_origin outer original initial
         (sites index outer selectedOuter) row inside
     obtain ⟨expression,inputs,start,value,stop,terminal,descent,nonunion,terminalContext,terminalReached,
-      small,suffix,suffixIssued⟩ :=
+      entryGrowth,entryIssued,inputsSame,small,suffix,suffixIssued⟩ :=
       terminal_suffix rawContext rawReached source
     have returnedContext : Context rawAfter
         (.reference (.interned outer.entry.identity) :: outer.environment) := by
@@ -253,7 +264,7 @@ theorem build_row_origins
     have keep (choice) : RowOrigin original initial before path index outer row :=
       ⟨index,outer,Nat.le_refl _,selectedOuter,raw,rawAfter,built,filtered,rawContext,rawReached,
         rawRow,source,expression,inputs,start,value,stop,terminal,source_done terminal,terminalContext,
-        terminalReached,small,descent,suffix,suffixIssued,filterGrowth,filterIssued,toOuter,issuedToOuter,choice⟩
+        terminalReached,entryGrowth,entryIssued,inputsSame,small,descent,suffix,suffixIssued,filterGrowth,filterIssued,toOuter,issuedToOuter,choice⟩
     cases terminal with
     | @capture inputs state captured row slot found capturedRow =>
       obtain ⟨crossings,activePath,_⟩ := terminalReached
