@@ -601,23 +601,21 @@ again here.
 -}
 forceInParallel :: Int -> TypeSkeleton -> [[a]] -> IO [[a]]
 forceInParallel lvl tc lists = do
-    results <- mapM start (zip [0 :: Int ..] lists)
-    mapM_ (\result -> takeMVar result >>= either (\e -> throwIO (e :: SomeException)) pure) results
+    results <- mapM start lists
+    timings <- mapM (\result -> takeMVar result >>= either (\e -> throwIO (e :: SomeException)) pure) results
+    mapM_
+        ( \(index, (seconds, n)) -> hPutStrLn stderr (intercalate "\t" ["parpart", show lvl, show tc, show index, show seconds, show n])
+        )
+        (zip [0 :: Int ..] timings)
     pure lists
   where
-    start (index, xs) = do
+    start xs = do
         result <- newEmptyMVar
         _ <- forkIO $ do
             begin <- getMonotonicTimeNSec
             outcome <- try (evaluate (length xs))
             end <- getMonotonicTimeNSec
-            case outcome of
-                Right n ->
-                    hPutStrLn
-                        stderr
-                        (intercalate "\t" ["parpart", show lvl, show tc, show index, show (fromIntegral (end - begin) / 1e9 :: Double), show n])
-                Left _ -> pure ()
-            putMVar result (() <$ outcome)
+            putMVar result ((\n -> (fromIntegral (end - begin) / 1e9 :: Double, n)) <$> outcome)
         pure result
 
 -- 3. The test of a candidate, and the laws that it gives.
