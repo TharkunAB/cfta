@@ -1,0 +1,11 @@
+# Indexed leaf source-row composition
+
+The sole new public theorem is source_cases. Its exact input is Context at the original source entry, the actual completed Fresh build, an indexed leaf lookup of that returned raw value, and RowAt of the selected leaf's complete row. The Context is supplied at that historical entry. No Context is inferred from growth.
+
+The direct alternative retains both RowAt raw row and SourceRow for the SAME original expression, inputs, entry heap, complete raw result and return heap. The second alternative retains the SAME indexed Cut and derives SourceRow of that cut's complete parent row. The selected leaf row and the parent row remain separate variables. The proof uses only the official pure split, the cut's derived parent RowAt, and existing build_row_origin on the same actual call.
+
+No desired source-ancestry relation is assumed. SourceRow can still stop at an initial capture or a selected stored binder winner. The theorem does not identify a warm winner with the current callback. Cut retains exact leaf occurrence offsets, closed-root stopping, full row and ordered child index. Source/canonical row indices and first matching encoded slots remain distinct. No heap transport, Ready, issued history, future call, global decrease, source-binding renewal, outer completion or Haskell correspondence follows.
+
+The official dependency SourceCurrentIndexedFirstOrdinaryCut was canonical-built by root before these checks. This component performed no canonical write. source-cases-direct-1 is the exact final source, exits zero and has a literal zero-byte log. source-cases-public-1 exits zero and prints the one complete explicit statement, proof term and axiom report with all eight settings. Its 20778-byte output has no omissions or warning/error/sorryAx and uses only propext, Classical.choice and Quot.sound.
+
+Both actual Lean jobs retain fresh usage receipts, effective memory.max and memory.high of 4294967296, memory.swap.max of 0, and a five-minute wall cap. There are two wrapper invocations and two Lean jobs, zero failed attempts, zero constructed examples and zero owned canonical builds. All writes stay under this /tmp directory. No repository, production, Audit, current documentation or Haskell file was changed.

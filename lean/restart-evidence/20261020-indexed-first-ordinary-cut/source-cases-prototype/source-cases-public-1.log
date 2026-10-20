@@ -1,0 +1,294 @@
+@MicroCFTA.SourceCurrentIndexedLeafSourceRows.source_cases : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+  (inputs : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (raw : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard before inputs →
+    @Eq.{1}
+        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression inputs before)
+        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) raw after) →
+      ∀ (index : Nat) (leaf : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Nat
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (fun as i =>
+                @LT.lt.{0} Nat instLTNat i
+                  (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+              (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard raw) index)
+            (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) leaf) →
+          ∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+            @MicroCFTA.SourceCurrentStoredLiteralRowLineage.RowAt Symbol Guard leaf row →
+              Or
+                (And (@MicroCFTA.SourceCurrentStoredLiteralRowLineage.RowAt Symbol Guard raw row)
+                  (@MicroCFTA.SourceCurrentBuildStructuralRowOrigins.SourceRow Symbol Guard inst expression inputs
+                    before raw after row))
+                (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun parentRow =>
+                  @Exists.{1} Nat fun childIndex =>
+                    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun child =>
+                      @Exists.{1} Nat fun inner =>
+                        And
+                          (@MicroCFTA.SourceCurrentIndexedFirstOrdinaryCut.Cut Symbol Guard raw index leaf parentRow
+                            childIndex child inner)
+                          (@MicroCFTA.SourceCurrentBuildStructuralRowOrigins.SourceRow Symbol Guard inst expression
+                            inputs before raw after parentRow))
+theorem MicroCFTA.SourceCurrentIndexedLeafSourceRows.source_cases : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+  (inputs : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (raw : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard before inputs →
+    @Eq.{1}
+        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst expression inputs before)
+        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) raw after) →
+      ∀ (index : Nat) (leaf : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Nat
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (fun as i =>
+                @LT.lt.{0} Nat instLTNat i
+                  (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+              (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard raw) index)
+            (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) leaf) →
+          ∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+            @MicroCFTA.SourceCurrentStoredLiteralRowLineage.RowAt Symbol Guard leaf row →
+              Or
+                (And (@MicroCFTA.SourceCurrentStoredLiteralRowLineage.RowAt Symbol Guard raw row)
+                  (@MicroCFTA.SourceCurrentBuildStructuralRowOrigins.SourceRow Symbol Guard inst expression inputs
+                    before raw after row))
+                (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun parentRow =>
+                  @Exists.{1} Nat fun childIndex =>
+                    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun child =>
+                      @Exists.{1} Nat fun inner =>
+                        And
+                          (@MicroCFTA.SourceCurrentIndexedFirstOrdinaryCut.Cut Symbol Guard raw index leaf parentRow
+                            childIndex child inner)
+                          (@MicroCFTA.SourceCurrentBuildStructuralRowOrigins.SourceRow Symbol Guard inst expression
+                            inputs before raw after parentRow)) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] expression
+    inputs before raw after context actual index leaf found row inside =>
+  @Or.casesOn (@MicroCFTA.SourceCurrentStoredLiteralRowLineage.RowAt Symbol Guard raw row)
+    (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun parentRow =>
+      @Exists.{1} Nat fun childIndex =>
+        @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun child =>
+          @Exists.{1} Nat fun inner =>
+            @MicroCFTA.SourceCurrentIndexedFirstOrdinaryCut.Cut Symbol Guard raw index leaf parentRow childIndex child
+              inner)
+    (fun x =>
+      Or
+        (And (@MicroCFTA.SourceCurrentStoredLiteralRowLineage.RowAt Symbol Guard raw row)
+          (@MicroCFTA.SourceCurrentBuildStructuralRowOrigins.SourceRow Symbol Guard inst expression inputs before raw
+            after row))
+        (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun parentRow =>
+          @Exists.{1} Nat fun childIndex =>
+            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun child =>
+              @Exists.{1} Nat fun inner =>
+                And
+                  (@MicroCFTA.SourceCurrentIndexedFirstOrdinaryCut.Cut Symbol Guard raw index leaf parentRow childIndex
+                    child inner)
+                  (@MicroCFTA.SourceCurrentBuildStructuralRowOrigins.SourceRow Symbol Guard inst expression inputs
+                    before raw after parentRow)))
+    (@MicroCFTA.SourceCurrentIndexedFirstOrdinaryCut.split Symbol Guard raw index leaf found row inside)
+    (fun direct =>
+      @Or.inl
+        (And (@MicroCFTA.SourceCurrentStoredLiteralRowLineage.RowAt Symbol Guard raw row)
+          (@MicroCFTA.SourceCurrentBuildStructuralRowOrigins.SourceRow Symbol Guard inst expression inputs before raw
+            after row))
+        (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun parentRow =>
+          @Exists.{1} Nat fun childIndex =>
+            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun child =>
+              @Exists.{1} Nat fun inner =>
+                And
+                  (@MicroCFTA.SourceCurrentIndexedFirstOrdinaryCut.Cut Symbol Guard raw index leaf parentRow childIndex
+                    child inner)
+                  (@MicroCFTA.SourceCurrentBuildStructuralRowOrigins.SourceRow Symbol Guard inst expression inputs
+                    before raw after parentRow))
+        (@And.intro (@MicroCFTA.SourceCurrentStoredLiteralRowLineage.RowAt Symbol Guard raw row)
+          (@MicroCFTA.SourceCurrentBuildStructuralRowOrigins.SourceRow Symbol Guard inst expression inputs before raw
+            after row)
+          direct
+          (@MicroCFTA.SourceCurrentBuildStructuralRowOrigins.build_row_origin Symbol Guard inst expression inputs before
+            raw after context actual row direct)))
+    fun h =>
+    @Exists.casesOn.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+      (fun parentRow =>
+        @Exists.{1} Nat fun childIndex =>
+          @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun child =>
+            @Exists.{1} Nat fun inner =>
+              @MicroCFTA.SourceCurrentIndexedFirstOrdinaryCut.Cut Symbol Guard raw index leaf parentRow childIndex child
+                inner)
+      (fun x =>
+        Or
+          (And (@MicroCFTA.SourceCurrentStoredLiteralRowLineage.RowAt Symbol Guard raw row)
+            (@MicroCFTA.SourceCurrentBuildStructuralRowOrigins.SourceRow Symbol Guard inst expression inputs before raw
+              after row))
+          (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun parentRow =>
+            @Exists.{1} Nat fun childIndex =>
+              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun child =>
+                @Exists.{1} Nat fun inner =>
+                  And
+                    (@MicroCFTA.SourceCurrentIndexedFirstOrdinaryCut.Cut Symbol Guard raw index leaf parentRow
+                      childIndex child inner)
+                    (@MicroCFTA.SourceCurrentBuildStructuralRowOrigins.SourceRow Symbol Guard inst expression inputs
+                      before raw after parentRow)))
+      h fun parentRow h =>
+      @Exists.casesOn.{1} Nat
+        (fun childIndex =>
+          @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun child =>
+            @Exists.{1} Nat fun inner =>
+              @MicroCFTA.SourceCurrentIndexedFirstOrdinaryCut.Cut Symbol Guard raw index leaf parentRow childIndex child
+                inner)
+        (fun x =>
+          Or
+            (And (@MicroCFTA.SourceCurrentStoredLiteralRowLineage.RowAt Symbol Guard raw row)
+              (@MicroCFTA.SourceCurrentBuildStructuralRowOrigins.SourceRow Symbol Guard inst expression inputs before
+                raw after row))
+            (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun parentRow =>
+              @Exists.{1} Nat fun childIndex =>
+                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun child =>
+                  @Exists.{1} Nat fun inner =>
+                    And
+                      (@MicroCFTA.SourceCurrentIndexedFirstOrdinaryCut.Cut Symbol Guard raw index leaf parentRow
+                        childIndex child inner)
+                      (@MicroCFTA.SourceCurrentBuildStructuralRowOrigins.SourceRow Symbol Guard inst expression inputs
+                        before raw after parentRow)))
+        h fun childIndex h =>
+        @Exists.casesOn.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (fun child =>
+            @Exists.{1} Nat fun inner =>
+              @MicroCFTA.SourceCurrentIndexedFirstOrdinaryCut.Cut Symbol Guard raw index leaf parentRow childIndex child
+                inner)
+          (fun x =>
+            Or
+              (And (@MicroCFTA.SourceCurrentStoredLiteralRowLineage.RowAt Symbol Guard raw row)
+                (@MicroCFTA.SourceCurrentBuildStructuralRowOrigins.SourceRow Symbol Guard inst expression inputs before
+                  raw after row))
+              (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun parentRow =>
+                @Exists.{1} Nat fun childIndex =>
+                  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun child =>
+                    @Exists.{1} Nat fun inner =>
+                      And
+                        (@MicroCFTA.SourceCurrentIndexedFirstOrdinaryCut.Cut Symbol Guard raw index leaf parentRow
+                          childIndex child inner)
+                        (@MicroCFTA.SourceCurrentBuildStructuralRowOrigins.SourceRow Symbol Guard inst expression inputs
+                          before raw after parentRow)))
+          h fun child h =>
+          @Exists.casesOn.{1} Nat
+            (fun inner =>
+              @MicroCFTA.SourceCurrentIndexedFirstOrdinaryCut.Cut Symbol Guard raw index leaf parentRow childIndex child
+                inner)
+            (fun x =>
+              Or
+                (And (@MicroCFTA.SourceCurrentStoredLiteralRowLineage.RowAt Symbol Guard raw row)
+                  (@MicroCFTA.SourceCurrentBuildStructuralRowOrigins.SourceRow Symbol Guard inst expression inputs
+                    before raw after row))
+                (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun parentRow =>
+                  @Exists.{1} Nat fun childIndex =>
+                    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun child =>
+                      @Exists.{1} Nat fun inner =>
+                        And
+                          (@MicroCFTA.SourceCurrentIndexedFirstOrdinaryCut.Cut Symbol Guard raw index leaf parentRow
+                            childIndex child inner)
+                          (@MicroCFTA.SourceCurrentBuildStructuralRowOrigins.SourceRow Symbol Guard inst expression
+                            inputs before raw after parentRow)))
+            h fun inner cut =>
+            @Or.inr
+              (And (@MicroCFTA.SourceCurrentStoredLiteralRowLineage.RowAt Symbol Guard raw row)
+                (@MicroCFTA.SourceCurrentBuildStructuralRowOrigins.SourceRow Symbol Guard inst expression inputs before
+                  raw after row))
+              (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun parentRow =>
+                @Exists.{1} Nat fun childIndex =>
+                  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun child =>
+                    @Exists.{1} Nat fun inner =>
+                      And
+                        (@MicroCFTA.SourceCurrentIndexedFirstOrdinaryCut.Cut Symbol Guard raw index leaf parentRow
+                          childIndex child inner)
+                        (@MicroCFTA.SourceCurrentBuildStructuralRowOrigins.SourceRow Symbol Guard inst expression inputs
+                          before raw after parentRow))
+              (@Exists.intro.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                (fun parentRow =>
+                  @Exists.{1} Nat fun childIndex =>
+                    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun child =>
+                      @Exists.{1} Nat fun inner =>
+                        And
+                          (@MicroCFTA.SourceCurrentIndexedFirstOrdinaryCut.Cut Symbol Guard raw index leaf parentRow
+                            childIndex child inner)
+                          (@MicroCFTA.SourceCurrentBuildStructuralRowOrigins.SourceRow Symbol Guard inst expression
+                            inputs before raw after parentRow))
+                parentRow
+                (@Exists.intro.{1} Nat
+                  (fun childIndex =>
+                    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun child =>
+                      @Exists.{1} Nat fun inner =>
+                        And
+                          (@MicroCFTA.SourceCurrentIndexedFirstOrdinaryCut.Cut Symbol Guard raw index leaf parentRow
+                            childIndex child inner)
+                          (@MicroCFTA.SourceCurrentBuildStructuralRowOrigins.SourceRow Symbol Guard inst expression
+                            inputs before raw after parentRow))
+                  childIndex
+                  (@Exists.intro.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (fun child =>
+                      @Exists.{1} Nat fun inner =>
+                        And
+                          (@MicroCFTA.SourceCurrentIndexedFirstOrdinaryCut.Cut Symbol Guard raw index leaf parentRow
+                            childIndex child inner)
+                          (@MicroCFTA.SourceCurrentBuildStructuralRowOrigins.SourceRow Symbol Guard inst expression
+                            inputs before raw after parentRow))
+                    child
+                    (@Exists.intro.{1} Nat
+                      (fun inner =>
+                        And
+                          (@MicroCFTA.SourceCurrentIndexedFirstOrdinaryCut.Cut Symbol Guard raw index leaf parentRow
+                            childIndex child inner)
+                          (@MicroCFTA.SourceCurrentBuildStructuralRowOrigins.SourceRow Symbol Guard inst expression
+                            inputs before raw after parentRow))
+                      inner
+                      (@And.intro
+                        (@MicroCFTA.SourceCurrentIndexedFirstOrdinaryCut.Cut Symbol Guard raw index leaf parentRow
+                          childIndex child inner)
+                        (@MicroCFTA.SourceCurrentBuildStructuralRowOrigins.SourceRow Symbol Guard inst expression inputs
+                          before raw after parentRow)
+                        cut
+                        (@MicroCFTA.SourceCurrentBuildStructuralRowOrigins.build_row_origin Symbol Guard inst expression
+                          inputs before raw after context actual parentRow
+                          (@And.left (@MicroCFTA.SourceCurrentStoredLiteralRowLineage.RowAt Symbol Guard raw parentRow)
+                            (And
+                              (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@GetElem?.getElem?.{0, 0, 0}
+                                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Nat
+                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                  (fun as i =>
+                                    @LT.lt.{0} Nat instLTNat i
+                                      (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+                                  (@List.instGetElem?NatLtLength.{0}
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard parentRow)
+                                  childIndex)
+                                (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) child))
+                              (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@GetElem?.getElem?.{0, 0, 0}
+                                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Nat
+                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                  (fun as i =>
+                                    @LT.lt.{0} Nat instLTNat i
+                                      (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+                                  (@List.instGetElem?NatLtLength.{0}
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                  (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard child) inner)
+                                (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) leaf)))
+                            (@MicroCFTA.SourceCurrentIndexedFirstOrdinaryCut.Cut.facts Symbol Guard raw index leaf
+                              parentRow childIndex child inner cut))))))))
+'MicroCFTA.SourceCurrentIndexedLeafSourceRows.source_cases' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]

@@ -1,7 +1,7 @@
 # Current system claim
 
 Checked against the live theorem statements on 2026-10-20.
-Read `notes-current-open-ordinary-leaf-source-calls.md` for the latest proof checkpoint.
+Read `notes-current-indexed-first-ordinary-cut.md` for the latest proof checkpoint.
 Read `notes-current-upstream-persistent-rows.md` for the current source scope.
 
 In simple technical English: fresh construction always finishes in the
@@ -83,6 +83,14 @@ strict bound counts the supplied source syntax with default Symbol/Guard
 sizes. It supplies no generated-value decrease or original-program ancestry
 for generated encode syntax. Closed roots, union normalization, captures
 and selected historical Mu remain separate general ancestry obligations.
+
+For an actual indexed row-bearing leaf, the first ordinary-child cut now
+retains the full parent row, exact child and inner indices, and stored
+union/Mu prefix offsets. A direct structural root row is a separate arm.
+The same completed source build derives SourceRow for the same selected
+row or cut parent row. Closed values stop at the whole value. This derives
+no original child call across captures or selected historical Mu writers.
+Stored union members remain distinct from original source-union calls.
 
 ## Constructed root guarantee
 
