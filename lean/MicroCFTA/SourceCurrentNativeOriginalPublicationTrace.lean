@@ -514,4 +514,120 @@ theorem build_trace_writers [DecidableEq (EdgeKey Symbol Guard)]
       exact ⟨earlierIndex,earlier,less,chosen,rooted_event path rooted earlier (List.mem_of_getElem? chosen),
         keySame,valueSame,missing,prefixPath,depthPath,ordinaryPath,bodyPath,growth,issued⟩
 
+/-- One actual warm build retains initial full cells or indexed writers in one rooted path. -/
+theorem build_trace_warm_writers [DecidableEq (EdgeKey Symbol Guard)]
+    (original : Syntax Symbol Guard) (initial : List (Value Symbol Guard))
+    (before : State Symbol Guard) (context : Context before initial)
+    (result : Value Symbol Guard) (after : State Symbol Guard)
+    (actual : build original initial before = .done result after) :
+    ∃ path : Path before after,
+      (∀ (index : Nat) event, (events path)[index]? = some event →
+        Reached original initial (.binder event.smart event.expression) event.environment event.before) ∧
+      (∀ key entry body depth ordinary,
+        after.nodeRecords key = some (.mu entry body depth ordinary) →
+        before.nodeRecords key = some (.mu entry body depth ordinary) ∨
+        ∃ index : Nat, ∃ event, (events path)[index]? = some event ∧
+          Reached original initial (.binder event.smart event.expression) event.environment event.before ∧
+          key = event.key ∧ Value.mu entry body depth ordinary = event.candidate ∧
+          event.afterBody.nodeRecords event.key = none ∧
+          Nonempty (Path before event.before) ∧
+          Nonempty (Path event.before event.afterDepth) ∧
+          Nonempty (Path event.afterDepth event.cut) ∧
+          Nonempty (Path event.allocated event.afterBody) ∧
+          Grows event.after after ∧ Extends event.after.nodes.issued after.nodes.issued) ∧
+      (∀ (index : Nat) outer, (events path)[index]? = some outer →
+        ∀ key entry body depth ordinary,
+          outer.afterBody.nodeRecords key = some (.mu entry body depth ordinary) →
+          before.nodeRecords key = some (.mu entry body depth ordinary) ∨
+          ∃ earlierIndex : Nat, ∃ earlier, earlierIndex < index ∧ (events path)[earlierIndex]? = some earlier ∧
+            Reached original initial (.binder earlier.smart earlier.expression) earlier.environment earlier.before ∧
+            key = earlier.key ∧ Value.mu entry body depth ordinary = earlier.candidate ∧
+            earlier.afterBody.nodeRecords earlier.key = none ∧
+            Nonempty (Path before earlier.before) ∧
+            Nonempty (Path earlier.before earlier.afterDepth) ∧
+            Nonempty (Path earlier.afterDepth earlier.cut) ∧
+            Nonempty (Path earlier.allocated earlier.afterBody) ∧
+            Grows earlier.after outer.afterBody ∧
+            Extends earlier.after.nodes.issued outer.afterBody.nodes.issued) := by
+  have supported := build_supported original initial original initial before context
+    (reached_initial original initial before)
+  rw [actual] at supported
+  obtain ⟨path,rooted⟩ := supported
+  refine ⟨path,?_,?_,?_⟩
+  · intro index event selected
+    exact rooted_event path rooted event (List.mem_of_getElem? selected)
+  · intro key entry body depth ordinary present
+    rcases indexed_writers path key entry body depth ordinary present with old | written
+    · exact .inl old
+    · obtain ⟨index,event,selected,keySame,valueSame,missing,prefixPath,depthPath,ordinaryPath,bodyPath,growth,issued⟩ := written
+      exact .inr ⟨index,event,selected,rooted_event path rooted event (List.mem_of_getElem? selected),
+        keySame,valueSame,missing,prefixPath,depthPath,ordinaryPath,bodyPath,growth,issued⟩
+  · intro index outer selected key entry body depth ordinary present
+    rcases precompletion_writers path index outer selected key entry body depth ordinary present with old | written
+    · exact .inl old
+    · obtain ⟨earlierIndex,earlier,less,chosen,keySame,valueSame,missing,prefixPath,
+        depthPath,ordinaryPath,bodyPath,growth,issued⟩ := written
+      exact .inr ⟨earlierIndex,earlier,less,chosen,rooted_event path rooted earlier (List.mem_of_getElem? chosen),
+        keySame,valueSame,missing,prefixPath,depthPath,ordinaryPath,bodyPath,growth,issued⟩
+
+/-- A full cell missing at warm entry has an indexed writer in that same actual path. -/
+theorem build_trace_warm_target [DecidableEq (EdgeKey Symbol Guard)]
+    (original : Syntax Symbol Guard) (initial : List (Value Symbol Guard))
+    (before : State Symbol Guard) (context : Context before initial)
+    (result : Value Symbol Guard) (after : State Symbol Guard)
+    (actual : build original initial before = .done result after)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (missing : before.nodeRecords key = none)
+    (present : after.nodeRecords key = some (.mu entry body depth ordinary)) :
+    ∃ path : Path before after,
+      (∀ (index : Nat) event, (events path)[index]? = some event →
+        Reached original initial (.binder event.smart event.expression) event.environment event.before) ∧
+      (∀ key entry body depth ordinary,
+        after.nodeRecords key = some (.mu entry body depth ordinary) →
+        before.nodeRecords key = some (.mu entry body depth ordinary) ∨
+        ∃ index : Nat, ∃ event, (events path)[index]? = some event ∧
+          Reached original initial (.binder event.smart event.expression) event.environment event.before ∧
+          key = event.key ∧ Value.mu entry body depth ordinary = event.candidate ∧
+          event.afterBody.nodeRecords event.key = none ∧
+          Nonempty (Path before event.before) ∧
+          Nonempty (Path event.before event.afterDepth) ∧
+          Nonempty (Path event.afterDepth event.cut) ∧
+          Nonempty (Path event.allocated event.afterBody) ∧
+          Grows event.after after ∧ Extends event.after.nodes.issued after.nodes.issued) ∧
+      (∀ (index : Nat) outer, (events path)[index]? = some outer →
+        ∀ key entry body depth ordinary,
+          outer.afterBody.nodeRecords key = some (.mu entry body depth ordinary) →
+          before.nodeRecords key = some (.mu entry body depth ordinary) ∨
+          ∃ earlierIndex : Nat, ∃ earlier, earlierIndex < index ∧ (events path)[earlierIndex]? = some earlier ∧
+            Reached original initial (.binder earlier.smart earlier.expression) earlier.environment earlier.before ∧
+            key = earlier.key ∧ Value.mu entry body depth ordinary = earlier.candidate ∧
+            earlier.afterBody.nodeRecords earlier.key = none ∧
+            Nonempty (Path before earlier.before) ∧
+            Nonempty (Path earlier.before earlier.afterDepth) ∧
+            Nonempty (Path earlier.afterDepth earlier.cut) ∧
+            Nonempty (Path earlier.allocated earlier.afterBody) ∧
+            Grows earlier.after outer.afterBody ∧
+            Extends earlier.after.nodes.issued outer.afterBody.nodes.issued) ∧
+      ∃ index : Nat, ∃ event, (events path)[index]? = some event ∧
+        Reached original initial (.binder event.smart event.expression) event.environment event.before ∧
+        key = event.key ∧ Value.mu entry body depth ordinary = event.candidate ∧
+        entry = event.entry ∧ body = event.body ∧ depth = event.depth ∧ ordinary = event.ordinary ∧
+        event.afterBody.nodeRecords event.key = none ∧
+        Nonempty (Path before event.before) ∧
+        Nonempty (Path event.before event.afterDepth) ∧
+        Nonempty (Path event.afterDepth event.cut) ∧
+        Nonempty (Path event.allocated event.afterBody) ∧
+        Grows event.after after ∧ Extends event.after.nodes.issued after.nodes.issued := by
+  obtain ⟨path,sites,writers,precompletion⟩ :=
+    build_trace_warm_writers original initial before context result after actual
+  rcases writers key entry body depth ordinary present with prior | written
+  · rw [missing] at prior
+    cases prior
+  · obtain ⟨index,event,selected,reached,keySame,valueSame,unrecorded,prefixPath,
+      depthPath,ordinaryPath,bodyPath,growth,issued⟩ := written
+    obtain ⟨entrySame,bodySame,depthSame,ordinarySame⟩ := Value.mu.inj valueSame
+    exact ⟨path,sites,writers,precompletion,index,event,selected,reached,keySame,valueSame,
+      entrySame,bodySame,depthSame,ordinarySame,unrecorded,prefixPath,depthPath,ordinaryPath,
+      bodyPath,growth,issued⟩
+
 end MicroCFTA.SourceCurrentNativeOriginalPublicationTrace
