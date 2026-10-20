@@ -1,0 +1,45 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261020-native-captured-stored-rows/root-captured-unfold-strict-1.source.lean:104:13: error: Ambiguous term
+  Outcome.state
+Possible interpretations:
+  SourceEqualityNativeDemand.Outcome.state : SourceEqualityNativeDemand.Outcome ?m.231 ?m.232 → Checked ?m.231
+  
+  InternedNestedConstruction.Outcome.state : InternedNestedConstruction.Outcome ?m.231 ?m.232 ?m.233 →
+    InternedConstructorTemplates.State ?m.231 ?m.232
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261020-native-captured-stored-rows/root-captured-unfold-strict-1.source.lean:84:48: error: unsolved goals
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+entry : Interned InternedBinderProtocol.NodeKey
+body depth ordinary : Node
+current : Heap
+semantic : SemanticHeap current
+available : Available current (Value.mu entry body depth ordinary)
+publications : SourceCurrentNativeMuPublication.History empty current
+value : Node
+after : Heap
+actual :
+  InternedFreshOrdinaryStoredSubstitution.unfold (Value.mu entry body depth ordinary) current =
+    InternedNestedConstruction.Outcome.done value after
+environment : InternedStoredSubstitution.Environment Symbol Guard :=
+  fun name => if name = Reference.interned entry.identity then some (Value.mu entry body depth ordinary) else none
+replacements : InternedStoredSubstitution.Replacements current environment
+bodyAvailable : Available current body
+called :
+  InternedFreshOrdinaryStoredSubstitution.execute body environment current =
+    InternedNestedConstruction.Outcome.done value after
+effects :
+  SemanticHeap after ∧
+    Grows current after ∧
+      Extends current.nodes.issued after.nodes.issued ∧
+        Available after value ∧ InternedStoredSubstitution.Replacements after environment
+inputs : List Node := List.map (InternedStoredSubstitution.input environment) (leaves body)
+inputsAvailable :
+  InternedNestedProvenance.Values current (List.map (InternedStoredSubstitution.input environment) (leaves body))
+context : Context current inputs
+interval :
+  Nonempty
+    (SourceCurrentNativeMuPublication.History current (InternedNestedConstruction.Outcome.done value after).state)
+⊢ SemanticHeap after ∧
+    Grows current after ∧
+      Extends current.nodes.issued after.nodes.issued ∧
+        Available after value ∧
+          Nonempty (SourceCurrentNativeMuPublication.History empty after) ∧
+            ∀ (row : EdgeValue Symbol Guard), Row value row → Anchor body row
