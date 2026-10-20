@@ -1,5 +1,32 @@
 Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
+## Current upstream documentation integration
+
+Updated: 2026-10-20 22:50 CEST. Merge checkpoint: `b7ba16ca3`.
+Main `794903b3f` and PR #97 are now imported into formalize.
+The latest proof checkpoint remains `0b533a718`.
+Read `lean/notes-current-upstream-binders-documentation.md`, then
+`lean/notes-current-native-original-union-descent.md` for the proof.
+
+The imported Typing.hs, README and CHANGELOG patch qualifies Binders
+size ordering by a subterm rule. It advises upToSize for finite acyclic
+languages. The Haskell code outside Haddock comments is unchanged.
+No fresh Haskell runtime validation is claimed. FINDINGS records the
+merged repair first and preserves the earlier unvalidated local example.
+
+Every Lean source and prior evidence file retains its bytes. The latest
+strict, full-printer and default Audit results remain valid for those
+same sources: 3536 jobs and 74283 theorem dependency checks. No Lean build
+is repeated for the imported comments. The preservation check reruns
+the existing selected-proof evidence verifier.
+
+The next proof must derive one rooted actual build trace with common
+publication indices. Earlier selected writers must occur at smaller
+indices within that same trace. This source chronology remains unproved.
+It is separate from global native renewal and active-owner exclusion,
+final retention, outer completion, convergence and Haskell refinement.
+The full goal stays active. Pushes to formalize remain authorized.
+
 ## Current correlated source-union descent
 
 Updated: 2026-10-20 22:37 CEST. Proof checkpoint: `0b533a718`.
