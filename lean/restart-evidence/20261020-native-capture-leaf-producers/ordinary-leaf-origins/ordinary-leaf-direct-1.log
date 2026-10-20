@@ -1,0 +1,60 @@
+/tmp/mcfta-native-ordinary-leaf-origins/ordinary-leaf-direct-1.source.lean:192:88: error: unsolved goals
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+A : Type
+control final : Control A
+initial reader : Checked width
+count : Nat
+clean : Clean control
+good : Good initial
+fields : Fields control initial
+history : History initial
+actual : Trace count control initial final reader
+request : NodeRequest Symbol Guard
+handle : Nat
+ordinary : decision request.domain.key request.left request.right = SourceRecursiveIntersectionControl.Branch.ordinary
+leafIndex : Nat
+selectedLeaf : Node
+maps :
+  (∀ (handle : Nat) (request : NodeRequest Symbol Guard) (result : Node),
+      reader.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.returned result } →
+        SourceCurrentNativeWriterReadyRetention.Written handle request result reader.native) ∧
+    (∀ (handle : Nat) (request : EdgeRequest Symbol Guard) (result : EdgeValue Symbol Guard),
+        reader.native.edges.cells handle = some { request := request, status := FlatMemoThunk.Status.returned result } →
+          SourceCurrentNativeEdgeWriterRetention.Written handle request result reader.native) ∧
+      Retained initial.native reader.native
+entry : Interned InternedBinderProtocol.NodeKey
+rows : List (EdgeValue Symbol Guard)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+cell :
+  reader.native.nodes.cells handle =
+    some { request := request, status := FlatMemoThunk.Status.returned (Value.node entry rows depth free) }
+found : (leaves (Value.node entry rows depth free))[leafIndex]? = some selectedLeaf
+written :
+  SourceCurrentNativeWriterReadyRetention.Written handle request (Value.node entry rows depth free) reader.native
+ordinaryResult : SourceEqualityRequiredCache.Ordinary (Value.node entry rows depth free)
+closed : ¬(Value.node entry rows depth free).free = []
+⊢ (if free.isEmpty = true then [Value.node entry rows depth free] else edgeLeaves rows) = edgeLeaves rows
+/tmp/mcfta-native-ordinary-leaf-origins/ordinary-leaf-direct-1.source.lean:194:30: warning: This simp argument is unused:
+  List.isEmpty_eq_false_iff.mpr closed
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Value.free, Bool.false_eq_true, ↓reduceIte]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-native-ordinary-leaf-origins/ordinary-leaf-direct-1.source.lean:194:67: warning: This simp argument is unused:
+  Bool.false_eq_true
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Value.free, List.isEmpty_eq_false_iff.mpr closed, ↓reduceIte]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-native-ordinary-leaf-origins/ordinary-leaf-direct-1.source.lean:194:86: warning: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Value.free, List.isEmpty_eq_false_iff.mpr closed, Bool.false_eq_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

@@ -1,0 +1,21 @@
+# Exhaustive active row production
+
+Source-only review on 2026-10-20 at 20:51 CEST.
+
+Verdict: no material issue found in the complete 232-line source, SHA256 2bd2013dc8f3f30e81eb0feae618b5e0f3f871e94e7b7f6833329d95fbb2a76f. The four public receipt definitions and three theorem heads were read. This component runs no Lean jobs and adds no public proof or constructed pair. The root strict1 receipt has exit zero, an empty raw log and verified 4 GiB maximum/high memory with zero swap.
+
+terminal preserves the supplied strong Written as chosen before it opens the same writer's actual compiler interval. Every branch producer consumes that chosen witness. It does not recover a second writer from a current matching cell. The indexed raw row in result is converted to a literal seed Origin at the same reader. This introduces no epsilon observation or desired parent relation.
+
+The self branch uses the actual pure-body result equality to preserve the exact selected index and full row in request.left. The ordinary branch passes the same selected row and index into ActivePairedRows.returned. Joined retains both input row indices, the same edge returned cell and strong writer, full output symbol and conjunction guard, and absence of Empty children. It does not require a selected child. Nullary rows therefore remain covered. Cases does not export the parent compiler interval inside Joined, but forwarded separately retains the same supplied terminal strong Written.
+
+The Mu receipt is the exact target of ActiveMuBodyOrigins.returned. Its Body retains both identities, actual entered domain and checked entry, ordered body request, Forwarded at the same reader, actual maybeMu result and exact final checked-state advance. The selected row remains a row of the writer result. No claim aligns that row with a stored body row, a source row or one particular optional-construction branch.
+
+The Union receipt matches ActiveUnionRowOrigins.returned field for field. True selects the left union and requests member then right operand. False selects the right union and requests left operand then member. The indexed original member, indexed returned value, actual whole Walk, exact earlier and later Walks, child fuel and same-row child Call remain correlated. The strict mass bound concerns the original member and selected original union operand. It does not bound a generated result. The child Call retains an Origin for the same complete row at the same reader, plus actual ordered request and returned strong writer. It does not assert whole-result identity with one union member.
+
+The Reference receipt matches ActiveReferenceOrigins.returned field for field. True and false retain the corresponding original reference operand and ordered resolved request. The actual domain membership and binding read occur at the same historical compiler entry. Good after, Forwarded at the same reader and childFuel strictly below that body fuel remain intact.
+
+The terminal decision match is exhaustive. The two already excluded swap/reset branches contradict their explicit premises. Empty and repeated are actual pure results with no raw node row. Unsupported has no successful Trace to a pure result. No closedness, future owner completion or internal reader History is added to exclude them.
+
+forwarded derives nonempty solely from the actual selected raw row. It invokes ActiveQueryForwarding.normalize once. The returned Route, exact terminal request, returned cell, strong writer, both input codecs and terminal decision exclusions are passed unchanged to terminal. The same normalized writer appears in the public result and in the branch proof. Route normalization is only finite swap/reset forwarding. It is not a general semantic rank or a global historical fuel decrease.
+
+prefix obtains node and edge writer maps from the actual clean physical prefix, initial Good, Fields and initial History. It applies forwarded to the explicitly supplied actual Forwarded call at that same reader. It does not prove that this call occurs inside the outer prefix, and its statement does not claim that extra linkage. It does not infer History at the reader. Original source ancestry, whole closed-leaf identity, Mu stored-body alignment, global active-owner exclusion and termination remain outside this theorem.

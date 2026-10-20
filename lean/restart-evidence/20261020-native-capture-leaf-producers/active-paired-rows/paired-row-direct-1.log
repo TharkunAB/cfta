@@ -1,0 +1,26 @@
+/tmp/mcfta-native-active-paired-rows/paired-row-direct-1.source.lean:72:4: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  DecidableEq (EdgeKey Symbol Guard)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/tmp/mcfta-native-active-paired-rows/paired-row-direct-1.source.lean:166:81: error: Application type mismatch: The argument
+  joined
+has type
+  ∃ leftIndex rightIndex leftRow rightRow handle,
+    (nodeEdges request.left)[leftIndex]? = some leftRow ∧
+      (nodeEdges request.right)[rightIndex]? = some rightRow ∧
+        leftRow.entry.key.symbol = rightRow.entry.key.symbol ∧
+          reader.native.edges.cells handle =
+              some
+                { request := { domain := request.domain, left := leftRow, right := rightRow },
+                  status := FlatMemoThunk.Status.returned row } ∧
+            SourceCurrentNativeEdgeWriterRetention.Written handle
+                { domain := request.domain, left := leftRow, right := rightRow } row reader.native ∧
+              row.entry.key.symbol = leftRow.entry.key.symbol ∧
+                row.entry.key.constraint =
+                    SourceEqualityPCSNativeEdge.conjoin leftRow.entry.key.constraint rightRow.entry.key.constraint ∧
+                  ¬Value.empty ∈ row.children
+but is expected to have type
+  Joined reader request row
+in the application
+  ⟨retained, joined⟩
+/tmp/mcfta-native-active-paired-rows/paired-row-direct-1.source.lean:169:7: error: unexpected token 'prefix'; expected identifier

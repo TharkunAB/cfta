@@ -1,5 +1,47 @@
 # cfta formal model
 
+## Current native leaf and captured Mu row producers
+
+Updated: 2026-10-20 21:02 CEST. Proof checkpoint: `fd7f9ab1f`.
+Verified start: `a35455762`. Main remains `9769fe3e9`.
+Read `lean/notes-current-native-capture-leaf-producers.md`.
+
+An indexed leaf of an ordinary returned node now retains the collector's
+closed-root stopping case or its actual flattened row and child origins.
+Paired row origins retain both source row indices and the exact returned
+edge cell and writer. Nullary rows require no child-existence premise.
+Active terminal row production covers self, ordinary, Mu, union and
+reference branches. It preserves the supplied historical writer and uses
+same-reader maps instead of History at the active reader.
+
+One actual optional owner and entered child retain that same terminal
+writer and a producer receipt for each selected raw nodeEdges row.
+An indexed captured full Mu retains its exact initial cell or its strictly
+earlier actual optional producer with those same row receipts. Row fragments
+do not identify a closed whole leaf with either original operand.
+Rows through a Mu's stored body and unfold still need causal readback.
+
+One actual nested source family reaches an outer optional instruction
+whose body contains a new used inner Mu at leaf occurrence one. Its cell
+is absent initially. One capture application recovers its earlier producer
+and expands the same owner, child, terminal writer and raw row receipts.
+The older and stronger proof versions are retained as one example.
+Eighteen public and one constructed full declaration readbacks pass.
+Seven module strict logs and the fixture strict log are empty. Default
+build: 3525 jobs and 74259 axiom checks. Only the earlier ClosedCompletion
+unused-input warning remains. All 39 capped Lean/Lake commands are retained,
+including six elaboration failures and one five-minute timeout. Receipt
+copies add no commands. All selected readbacks use only standard axioms.
+
+Original program binding ancestry, selected Mu stored-body row alignment,
+global renewal, global active-owner exclusion, final owner retention,
+outer completion, convergence and Haskell refinement remain open.
+Strict descent through past producers is not a future runtime rank.
+Conditional root-language and Sized laws are unchanged. All 268 Haskell
+files and 207 active package files retain their bytes. FINDINGS keeps
+external repairs first. No new Haskell repair or runtime validation is
+claimed. The full-library goal stays active. Pushes to formalize are authorized.
+
 ## Current terminal writers and earlier captured Mu producers
 
 Updated: 2026-10-20 20:33 CEST. Proof checkpoint: `1dfc025cc`.
