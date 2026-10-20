@@ -33,7 +33,9 @@ The environment variable `SPECFTACULAR_TESTS` sets the number of random cases
 (1000 by default). The search also uses eight separately seeded random cases
 and 32 integer-boundary and list cases. These reject the recorded overflow
 and list counterexamples. Testing does not prove a law. A false law can still
-affect the rules that prune later terms.
+affect the rules that prune later terms. `--recheck N` tests each new law
+again on N random cases of sizes 1 to 8 and drops a law that one of them
+refutes (0 by default).
 
 Use `A`, `B`, `C`, `D`, and `Acc` as abstract type parameters in a signature.
 Each constant must be parametric in these types. It must not inspect their

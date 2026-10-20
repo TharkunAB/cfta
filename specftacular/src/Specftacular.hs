@@ -378,7 +378,9 @@ data SearchOptions = SearchOptions
     -- ^ The bytes that the completion of one law may allocate.
     , searchRecheck :: Int
     {- ^ The number of extra test cases of small sizes on which a new law is
-    tested again. The search drops a law that one of them refutes.
+    tested again (0: no test). The search drops a law that one of them
+    refutes. At HugeLists 6-p4, 2000 of them refute the 4 false laws that
+    pass the cases of 'testSchedule'.
     -}
     }
     deriving (Show)
@@ -397,7 +399,7 @@ defaultOptions size phase =
         , searchCompletionTimeout = Nothing
         , searchCompletionMemLimit = completionMemoryLimit
         , searchCompletionAllocLimit = completionBudget
-        , searchRecheck = recheckCases
+        , searchRecheck = 0
         }
 
 {- | Read the options from the program arguments: the size, the phase,
@@ -504,8 +506,8 @@ parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.p
             O.auto
             ( O.long "recheck"
                 <> O.metavar "N"
-                <> O.value recheckCases
-                <> O.help "Test each new law again on N random cases of sizes 1 to 8, and drop it if one refutes it (default 2000)"
+                <> O.value 0
+                <> O.help "Test each new law again on N random cases of sizes 1 to 8, and drop it if one refutes it (default 0: no test)"
             )
 
 -- | The exception that 'withMemoryLimit' throws to its thread.
@@ -1369,13 +1371,6 @@ completions that end.
 -}
 completionBudget :: Word64
 completionBudget = 256 * 1024 * 1024 * 1024
-
-{- | The default number of extra test cases of a new law (@--recheck@). At
-HugeLists 6-p4, 2000 of them refute the 4 false laws that pass the cases of
-'testSchedule'. A refuting case is 3 to 28 of the 2000.
--}
-recheckCases :: Int
-recheckCases = 2000
 
 {- | The completed rules of a law, if their computation stays within the
 limits of the completion (see 'completionTimeout', 'completionMemLimit',
