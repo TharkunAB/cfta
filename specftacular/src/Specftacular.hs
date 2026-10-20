@@ -872,20 +872,30 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..}
              in mapMaybe (generalizeCarriers skeletonSig phase_variables . npTerm') (prunedTerms oracleTemplates pruningRoot)
     bucket lvl typings tc s = do
         bucketStart <- getMonotonicTimeNSec
+        let bucketTemplates
+                | canPrune = pruningTemplates compl_sig lvl (rewrite_rules s)
+                | otherwise = []
         produced <- case typings of
             Just typingsOfType -> pure $ nubOrd (mapMaybe ($ tc) typingsOfType)
+            Nothing
+                | splitEnumeration > 0 ->
+                    -- Each shape of the spine is reduced and enumerated on its own,
+                    -- as for the phase 4 skeletons (see 'spineParts').
+                    pure
+                        [ canonicalTypes (npTerm' t)
+                        | space <- searchSpaceParts splitEnumeration stecta lvl tc
+                        , let (pruningRoot, oracleTemplates) = Compile.preparePruning bucketTemplates (refold space)
+                        , t <- prunedTerms oracleTemplates pruningRoot
+                        ]
             Nothing -> do
                 refreshCount progress "Reducing  ECTA" (" for " ++ show tc) "" lvl (so_far s)
                 reduced <- diagnose env lvl (show tc) "reduce_whnf" s $ evaluate (searchSpace stecta lvl tc)
-                let templates
-                        | canPrune = pruningTemplates compl_sig lvl (rewrite_rules s)
-                        | otherwise = []
                 refreshCount progress "Refolding ecta" (" for " ++ show tc) "" lvl (so_far s)
                 folded <- diagnose env lvl (show tc) "refold_whnf" s $ evaluate (refold reduced)
                 -- The oracle rejects partial branches before their remaining type
                 -- choices expand. The bucket has one program size. KBO orders its
                 -- ties before testing; smaller sizes have already supplied rules.
-                let (pruningRoot, oracleTemplates) = Compile.preparePruning templates folded
+                let (pruningRoot, oracleTemplates) = Compile.preparePruning bucketTemplates folded
                 pure [canonicalTypes (npTerm' t) | t <- prunedTerms oracleTemplates pruningRoot]
         let terms = sortBy (kboCompare (isGivenVar compl_sig)) (filter eligible produced)
             -- Apply the checks that are already known before retaining the
