@@ -1,0 +1,166 @@
+/tmp/mcfta-completed-build-rooted-writers/rooted-direct-1.source.lean:100:30: error: Application type mismatch: The argument
+  second
+has type
+  Path afterDepth after
+but is expected to have type
+  Path afterDepth
+    ((Outcome.done depth afterDepth).bind fun depth afterDepth =>
+        (callback expression environment (Reference.uninterned (ordinaryLevel depth)) afterDepth).bind
+          fun ordinary cut => request smart depth ordinary (callback expression environment) cut).state
+in the application
+  first.trans second
+/tmp/mcfta-completed-build-rooted-writers/rooted-direct-1.source.lean:111:16: error: Type mismatch: After simplification, term
+  have this := Exists.intro (depthPath.trans ordinaryPath) ⟨depthRoot, ordinaryRoot⟩;
+  this
+ has type
+  Supported root initial state cut
+but is expected to have type
+  Supported root initial state
+    (match
+      (Outcome.done depth afterDepth).bind fun depth afterDepth =>
+        (callback expression environment (Reference.uninterned (ordinaryLevel depth)) afterDepth).bind
+          fun ordinary cut =>
+          match cut.nodes.table (muKey depth ordinary) with
+          | some val =>
+            match cut.nodeRecords (muKey depth ordinary) with
+            | some value => Outcome.done (InternedNestedConstruction.finish smart value) cut
+            | none => Outcome.pending (muKey depth ordinary) cut
+          | none =>
+            (callback expression environment (Reference.interned (intern cut.nodes (muKey depth ordinary)).fst.identity)
+                  { edges := cut.edges, nodes := (intern cut.nodes (muKey depth ordinary)).snd,
+                    edgeRecords := cut.edgeRecords, nodeRecords := cut.nodeRecords }).bind
+              fun bodyValue afterBody =>
+              Outcome.done
+                (InternedNestedConstruction.finish smart
+                  ((keepFirst afterBody.nodeRecords (muKey depth ordinary)
+                        (Value.mu (intern cut.nodes (muKey depth ordinary)).fst bodyValue depth ordinary)
+                        (muKey depth ordinary)).getD
+                    (Value.mu (intern cut.nodes (muKey depth ordinary)).fst bodyValue depth ordinary)))
+                { edges := afterBody.edges, nodes := afterBody.nodes, edgeRecords := afterBody.edgeRecords,
+                  nodeRecords :=
+                    keepFirst afterBody.nodeRecords (muKey depth ordinary)
+                      (Value.mu (intern cut.nodes (muKey depth ordinary)).fst bodyValue depth ordinary) } with
+    | Outcome.done value state => state
+    | Outcome.pending key state => state)
+/tmp/mcfta-completed-build-rooted-writers/rooted-direct-1.source.lean:111:16: error: Type mismatch: After simplification, term
+  have this := Exists.intro (depthPath.trans ordinaryPath) ⟨depthRoot, ordinaryRoot⟩;
+  this
+ has type
+  Supported root initial state cut
+but is expected to have type
+  Supported root initial state
+    (match
+      (Outcome.done depth afterDepth).bind fun depth afterDepth =>
+        (callback expression environment (Reference.uninterned (ordinaryLevel depth)) afterDepth).bind
+          fun ordinary cut =>
+          match cut.nodes.table (muKey depth ordinary) with
+          | some val =>
+            match cut.nodeRecords (muKey depth ordinary) with
+            | some value => Outcome.done (InternedNestedConstruction.finish smart value) cut
+            | none => Outcome.pending (muKey depth ordinary) cut
+          | none =>
+            (callback expression environment (Reference.interned (intern cut.nodes (muKey depth ordinary)).fst.identity)
+                  { edges := cut.edges, nodes := (intern cut.nodes (muKey depth ordinary)).snd,
+                    edgeRecords := cut.edgeRecords, nodeRecords := cut.nodeRecords }).bind
+              fun bodyValue afterBody =>
+              Outcome.done
+                (InternedNestedConstruction.finish smart
+                  ((keepFirst afterBody.nodeRecords (muKey depth ordinary)
+                        (Value.mu (intern cut.nodes (muKey depth ordinary)).fst bodyValue depth ordinary)
+                        (muKey depth ordinary)).getD
+                    (Value.mu (intern cut.nodes (muKey depth ordinary)).fst bodyValue depth ordinary)))
+                { edges := afterBody.edges, nodes := afterBody.nodes, edgeRecords := afterBody.edgeRecords,
+                  nodeRecords :=
+                    keepFirst afterBody.nodeRecords (muKey depth ordinary)
+                      (Value.mu (intern cut.nodes (muKey depth ordinary)).fst bodyValue depth ordinary) } with
+    | Outcome.done value state => state
+    | Outcome.pending key state => state)
+/tmp/mcfta-completed-build-rooted-writers/rooted-direct-1.source.lean:127:14: error: 'change' tactic failed, pattern
+  Supported root initial state
+    ((callback expression environment (Reference.interned entry.fst.identity) allocated).bind fun value after =>
+        InternedNestedRequestFacts.complete smart entry.fst value depth ordinary after).state
+is not definitionally equal to target
+  Supported root initial state
+    (match callback expression environment (Reference.uninterned (ordinaryLevel depth)) afterDepth with
+      | Outcome.done value state =>
+        match state.nodes.table (muKey depth value) with
+        | some val =>
+          match state.nodeRecords (muKey depth value) with
+          | some value => Outcome.done (InternedNestedConstruction.finish smart value) state
+          | none => Outcome.pending (muKey depth value) state
+        | none =>
+          match
+            callback expression environment (Reference.interned (intern state.nodes (muKey depth value)).fst.identity)
+              { edges := state.edges, nodes := (intern state.nodes (muKey depth value)).snd,
+                edgeRecords := state.edgeRecords, nodeRecords := state.nodeRecords } with
+          | Outcome.done value_1 state_1 =>
+            Outcome.done
+              (InternedNestedConstruction.finish smart
+                ((keepFirst state_1.nodeRecords (muKey depth value)
+                      (Value.mu (intern state.nodes (muKey depth value)).fst value_1 depth value)
+                      (muKey depth value)).getD
+                  (Value.mu (intern state.nodes (muKey depth value)).fst value_1 depth value)))
+              { edges := state_1.edges, nodes := state_1.nodes, edgeRecords := state_1.edgeRecords,
+                nodeRecords :=
+                  keepFirst state_1.nodeRecords (muKey depth value)
+                    (Value.mu (intern state.nodes (muKey depth value)).fst value_1 depth value) }
+          | Outcome.pending key state => Outcome.pending key state
+      | Outcome.pending key state => Outcome.pending key state).state
+/tmp/mcfta-completed-build-rooted-writers/rooted-direct-1.source.lean:126:46: warning: This simp argument is unused:
+  missing
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Outcome.bind, request]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-completed-build-rooted-writers/rooted-direct-1.source.lean:151:26: error: Application type mismatch: The argument
+  Path.refl state
+has type
+  Path state state
+but is expected to have type
+  Path state (build Syntax.empty environment state).state
+in the application
+  Exists.intro (Path.refl state)
+/tmp/mcfta-completed-build-rooted-writers/rooted-direct-1.source.lean:151:26: error: Application type mismatch: The argument
+  Path.refl state
+has type
+  Path state state
+but is expected to have type
+  Path state (build (Syntax.var index✝) environment state).state
+in the application
+  Exists.intro (Path.refl state)
+/tmp/mcfta-completed-build-rooted-writers/rooted-direct-1.source.lean:195:18: error: Application type mismatch: The argument
+  Path.refl state
+has type
+  Path state state
+but is expected to have type
+  Path state (buildMany [] environment state).state
+in the application
+  Exists.intro (Path.refl state)
+/tmp/mcfta-completed-build-rooted-writers/rooted-direct-1.source.lean:219:18: error: Application type mismatch: The argument
+  Path.refl state
+has type
+  Path state state
+but is expected to have type
+  Path state (buildEdges [] environment state).state
+in the application
+  Exists.intro (Path.refl state)
+/tmp/mcfta-completed-build-rooted-writers/rooted-direct-1.source.lean:241:52: error(lean.unknownIdentifier): Unknown identifier `first`
+/tmp/mcfta-completed-build-rooted-writers/rooted-direct-1.source.lean:243:16: error: Invalid `⟨...⟩` notation: The expected type
+  Rooted root initial (edgePath.trans (restPath.trans ?m.997))
+is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+/tmp/mcfta-completed-build-rooted-writers/rooted-direct-1.source.lean:243:50: error: Application type mismatch: The argument
+  Path.refl ?m.996
+has type
+  Path ?m.996 ?m.996
+but is expected to have type
+  Path (buildEdges rest environment result.snd).state
+    ((buildEdges rest environment result.snd).bind fun edges final =>
+        Outcome.done ((run (makeEdge symbol guard values) after).fst :: edges) final).state
+in the application
+  restPath.trans (Path.refl ?m.996)
+/tmp/mcfta-completed-build-rooted-writers/rooted-direct-1.source.lean:244:0: warning: unused `termination_by`, function is not recursive
+/tmp/mcfta-completed-build-rooted-writers/rooted-direct-1.source.lean:311:13: error(lean.unknownIdentifier): Unknown identifier `InternedConstructionProvenance.record_cases`
+/tmp/mcfta-completed-build-rooted-writers/rooted-direct-1.source.lean:312:53: error: Tactic `rcases` failed: `x✝ : ?m.463` is not an inductive datatype

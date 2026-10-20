@@ -1,0 +1,264 @@
+@MicroCFTA.SourceCurrentCompletedBuildRootedWriters.Written : {Symbol Guard : Type} →
+  [DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard →
+      List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) →
+        MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+          MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+            MicroCFTA.InternedBinderProtocol.NodeKey → MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Prop
+def MicroCFTA.SourceCurrentCompletedBuildRootedWriters.Written : {Symbol Guard : Type} →
+  [DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard →
+      List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) →
+        MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+          MicroCFTA.InternedConstructorTemplates.State Symbol Guard →
+            MicroCFTA.InternedBinderProtocol.NodeKey →
+              MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Prop :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] root initial
+    before after key value =>
+  @Exists.{1} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) fun event =>
+    And
+      (@MicroCFTA.InternedFreshOrdinarySourceHistory.Reached Symbol Guard inst root initial
+        (@MicroCFTA.InternedNestedConstruction.Syntax.binder Symbol Guard
+          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.smart Symbol Guard inst event)
+          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.expression Symbol Guard inst event))
+        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.environment Symbol Guard inst event)
+        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst event))
+      (And
+        (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeKey key
+          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst event))
+        (And
+          (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value
+            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.candidate Symbol Guard inst event))
+          (And
+            (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst event)
+                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst event))
+              (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+            (And
+              (Nonempty.{1}
+                (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before
+                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst event)))
+              (And
+                (Nonempty.{1}
+                  (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst event)
+                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard inst event)))
+                (And
+                  (Nonempty.{1}
+                    (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard inst event)
+                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.cut Symbol Guard inst event)))
+                  (And
+                    (Nonempty.{1}
+                      (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.allocated Symbol Guard inst event)
+                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst event)))
+                    (And
+                      (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard
+                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol Guard inst event) after)
+                      (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol Guard inst event)))
+                        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard after)))))))))))
+'MicroCFTA.SourceCurrentCompletedBuildRootedWriters.Written' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentCompletedBuildRootedWriters.build_writer_or_prior : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (root : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+  (initial : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard before initial →
+    ∀ (result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+      @Eq.{1}
+          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst root initial before)
+          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result after) →
+        ∀ (key : MicroCFTA.InternedBinderProtocol.NodeKey)
+          (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+          (body depth ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+          @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard after key)
+              (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)) →
+            Or
+              (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard before key)
+                (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+              (@MicroCFTA.SourceCurrentCompletedBuildRootedWriters.Written Symbol Guard inst root initial before after
+                key (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary))
+theorem MicroCFTA.SourceCurrentCompletedBuildRootedWriters.build_writer_or_prior : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (root : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+  (initial : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard before initial →
+    ∀ (result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+      @Eq.{1}
+          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst root initial before)
+          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result after) →
+        ∀ (key : MicroCFTA.InternedBinderProtocol.NodeKey)
+          (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+          (body depth ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+          @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard after key)
+              (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)) →
+            Or
+              (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard before key)
+                (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+              (@MicroCFTA.SourceCurrentCompletedBuildRootedWriters.Written Symbol Guard inst root initial before after
+                key (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] root initial
+    before context result after actual key entry body depth ordinary selected =>
+  have supported :=
+    @MicroCFTA.SourceCurrentCompletedBuildRootedWriters.build_supported✝ Symbol Guard inst root initial root initial
+      before context
+      (@MicroCFTA.InternedFreshOrdinarySourceHistory.reached_initial Symbol Guard inst root initial before);
+  @Exists.casesOn.{1}
+    (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before
+      (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result after)))
+    (fun path =>
+      @MicroCFTA.SourceCurrentCompletedBuildRootedWriters.Rooted✝ Symbol Guard inst root initial before
+        (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result after))
+        path)
+    (fun x =>
+      Or
+        (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard before key)
+          (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+        (@MicroCFTA.SourceCurrentCompletedBuildRootedWriters.Written Symbol Guard inst root initial before after key
+          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+    (@Eq.mp.{0}
+      (@MicroCFTA.SourceCurrentCompletedBuildRootedWriters.Supported✝ Symbol Guard inst root initial before
+        (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst root initial before)))
+      (@MicroCFTA.SourceCurrentCompletedBuildRootedWriters.Supported✝ Symbol Guard inst root initial before
+        (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result after)))
+      (@congrArg.{1, 1}
+        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        Prop (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst root initial before)
+        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result after)
+        (fun _a =>
+          @MicroCFTA.SourceCurrentCompletedBuildRootedWriters.Supported✝ Symbol Guard inst root initial before
+            (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) _a))
+        actual)
+      supported)
+    fun path rooted =>
+    @MicroCFTA.SourceCurrentCompletedBuildRootedWriters.writers✝ Symbol Guard inst root initial before
+      (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result after))
+      path rooted key entry body depth ordinary selected
+'MicroCFTA.SourceCurrentCompletedBuildRootedWriters.build_writer_or_prior' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentCompletedBuildRootedWriters.build_writer : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (root : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+  (initial : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard before initial →
+    (∀ (key : MicroCFTA.InternedBinderProtocol.NodeKey)
+        (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+        (body depth ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        @Ne.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard before key)
+          (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary))) →
+      ∀ (result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+        @Eq.{1}
+            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst root initial before)
+            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result after) →
+          ∀ (key : MicroCFTA.InternedBinderProtocol.NodeKey)
+            (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+            (body depth ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+            @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard after key)
+                (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)) →
+              @MicroCFTA.SourceCurrentCompletedBuildRootedWriters.Written Symbol Guard inst root initial before after
+                key (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)
+theorem MicroCFTA.SourceCurrentCompletedBuildRootedWriters.build_writer : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (root : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+  (initial : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard before initial →
+    (∀ (key : MicroCFTA.InternedBinderProtocol.NodeKey)
+        (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+        (body depth ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        @Ne.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard before key)
+          (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary))) →
+      ∀ (result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+        @Eq.{1}
+            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst root initial before)
+            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) result after) →
+          ∀ (key : MicroCFTA.InternedBinderProtocol.NodeKey)
+            (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+            (body depth ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+            @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard after key)
+                (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)) →
+              @MicroCFTA.SourceCurrentCompletedBuildRootedWriters.Written Symbol Guard inst root initial before after
+                key (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] root initial
+    before context initialMuFree result after actual key entry body depth ordinary selected =>
+  @Or.casesOn
+    (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+      (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard before key)
+      (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+    (@MicroCFTA.SourceCurrentCompletedBuildRootedWriters.Written Symbol Guard inst root initial before after key
+      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary))
+    (fun x =>
+      @MicroCFTA.SourceCurrentCompletedBuildRootedWriters.Written Symbol Guard inst root initial before after key
+        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary))
+    (@MicroCFTA.SourceCurrentCompletedBuildRootedWriters.build_writer_or_prior Symbol Guard inst root initial before
+      context result after actual key entry body depth ordinary selected)
+    (fun old =>
+      @False.elim.{0}
+        (@MicroCFTA.SourceCurrentCompletedBuildRootedWriters.Written Symbol Guard inst root initial before after key
+          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary))
+        (initialMuFree key entry body depth ordinary old))
+    fun written => written
+'MicroCFTA.SourceCurrentCompletedBuildRootedWriters.build_writer' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]

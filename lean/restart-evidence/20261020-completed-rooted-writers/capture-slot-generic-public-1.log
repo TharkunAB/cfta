@@ -1,0 +1,322 @@
+@MicroCFTA.SourceCurrentSourceCaptureOriginalSlots.original_slot : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {root expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard}
+  {initial inputs : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {crossings : List.{0} (@MicroCFTA.InternedFreshOrdinaryActiveOrigins.Crossing Symbol Guard inst)},
+  @MicroCFTA.InternedFreshOrdinaryActiveOrigins.Path Symbol Guard inst root initial expression inputs crossings →
+    ∀ (slot : Nat) (captured : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Nat
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (fun as i =>
+              @LT.lt.{0} Nat instLTNat i
+                (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+            (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) inputs slot)
+          (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) captured) →
+        ∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+          @MicroCFTA.SourceCurrentStoredLiteralRowLineage.RowAt Symbol Guard captured row →
+            @Exists.{1} Nat fun originalSlot =>
+              And
+                (@Eq.{1} Nat slot
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@List.length.{0} (@MicroCFTA.InternedFreshOrdinaryActiveOrigins.Crossing Symbol Guard inst)
+                      crossings)
+                    originalSlot))
+                (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    Nat (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (fun as i =>
+                      @LT.lt.{0} Nat instLTNat i
+                        (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+                    (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    initial originalSlot)
+                  (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) captured))
+theorem MicroCFTA.SourceCurrentSourceCaptureOriginalSlots.original_slot : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {root expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard}
+  {initial inputs : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {crossings : List.{0} (@MicroCFTA.InternedFreshOrdinaryActiveOrigins.Crossing Symbol Guard inst)},
+  @MicroCFTA.InternedFreshOrdinaryActiveOrigins.Path Symbol Guard inst root initial expression inputs crossings →
+    ∀ (slot : Nat) (captured : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Nat
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (fun as i =>
+              @LT.lt.{0} Nat instLTNat i
+                (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+            (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) inputs slot)
+          (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) captured) →
+        ∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+          @MicroCFTA.SourceCurrentStoredLiteralRowLineage.RowAt Symbol Guard captured row →
+            @Exists.{1} Nat fun originalSlot =>
+              And
+                (@Eq.{1} Nat slot
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@List.length.{0} (@MicroCFTA.InternedFreshOrdinaryActiveOrigins.Crossing Symbol Guard inst)
+                      crossings)
+                    originalSlot))
+                (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    Nat (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (fun as i =>
+                      @LT.lt.{0} Nat instLTNat i
+                        (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+                    (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    initial originalSlot)
+                  (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) captured)) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+    {root expression} {initial inputs} {crossings} path slot captured found row inside =>
+  @MicroCFTA.SourceCurrentSourceCaptureOriginalSlots.reference_prefix Symbol Guard inst crossings initial captured row
+    inside slot
+    (@Eq.mp.{0}
+      (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Nat
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (fun as i =>
+            @LT.lt.{0} Nat instLTNat i
+              (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+          (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) inputs slot)
+        (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) captured))
+      (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Nat
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (fun as i =>
+            @LT.lt.{0} Nat instLTNat i
+              (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+          (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@HAppend.hAppend.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@instHAppendOfAppend.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@List.instAppend.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+            (@List.map.{0, 0} (@MicroCFTA.InternedFreshOrdinaryActiveOrigins.Crossing Symbol Guard inst)
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (fun crossing =>
+                @MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard
+                  (@MicroCFTA.InternedFreshOrdinaryActiveOrigins.Crossing.name Symbol Guard inst crossing))
+              crossings)
+            initial)
+          slot)
+        (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) captured))
+      (@congrFun'.{1, 1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Prop
+        (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Nat
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (fun as i =>
+              @LT.lt.{0} Nat instLTNat i
+                (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+            (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) inputs
+            slot))
+        (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Nat
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (fun as i =>
+              @LT.lt.{0} Nat instLTNat i
+                (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+            (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@HAppend.hAppend.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@instHAppendOfAppend.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@List.instAppend.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+              (@List.map.{0, 0} (@MicroCFTA.InternedFreshOrdinaryActiveOrigins.Crossing Symbol Guard inst)
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (fun crossing =>
+                  @MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard
+                    (@MicroCFTA.InternedFreshOrdinaryActiveOrigins.Crossing.name Symbol Guard inst crossing))
+                crossings)
+              initial)
+            slot))
+        (@congrArg.{1, 1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) → Prop)
+          (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Nat
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (fun as i =>
+              @LT.lt.{0} Nat instLTNat i
+                (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+            (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) inputs slot)
+          (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Nat
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (fun as i =>
+              @LT.lt.{0} Nat instLTNat i
+                (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+            (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@HAppend.hAppend.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@instHAppendOfAppend.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@List.instAppend.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+              (@List.map.{0, 0} (@MicroCFTA.InternedFreshOrdinaryActiveOrigins.Crossing Symbol Guard inst)
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (fun crossing =>
+                  @MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard
+                    (@MicroCFTA.InternedFreshOrdinaryActiveOrigins.Crossing.name Symbol Guard inst crossing))
+                crossings)
+              initial)
+            slot)
+          (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+          (@congrFun'.{1, 1} Nat (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Nat
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (fun as i =>
+                @LT.lt.{0} Nat instLTNat i
+                  (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+              (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) inputs)
+            (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Nat
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (fun as i =>
+                @LT.lt.{0} Nat instLTNat i
+                  (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+              (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@HAppend.hAppend.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@instHAppendOfAppend.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@List.instAppend.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                (@List.map.{0, 0} (@MicroCFTA.InternedFreshOrdinaryActiveOrigins.Crossing Symbol Guard inst)
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (fun crossing =>
+                    @MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard
+                      (@MicroCFTA.InternedFreshOrdinaryActiveOrigins.Crossing.name Symbol Guard inst crossing))
+                  crossings)
+                initial))
+            (@congrArg.{1, 1} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (Nat → Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) inputs
+              (@HAppend.hAppend.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@instHAppendOfAppend.{0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@List.instAppend.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                (@List.map.{0, 0} (@MicroCFTA.InternedFreshOrdinaryActiveOrigins.Crossing Symbol Guard inst)
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (fun crossing =>
+                    @MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard
+                      (@MicroCFTA.InternedFreshOrdinaryActiveOrigins.Crossing.name Symbol Guard inst crossing))
+                  crossings)
+                initial)
+              (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Nat
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (fun as i =>
+                  @LT.lt.{0} Nat instLTNat i
+                    (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+                (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+              (@MicroCFTA.InternedFreshOrdinaryActiveOrigins.Path.inputs Symbol Guard inst root expression initial
+                inputs crossings path))
+            slot))
+        (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) captured))
+      found)
+'MicroCFTA.SourceCurrentSourceCaptureOriginalSlots.original_slot' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentSourceCaptureOriginalSlots.empty_initial : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {root expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard}
+  {inputs : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {crossings : List.{0} (@MicroCFTA.InternedFreshOrdinaryActiveOrigins.Crossing Symbol Guard inst)},
+  @MicroCFTA.InternedFreshOrdinaryActiveOrigins.Path Symbol Guard inst root
+      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) expression inputs crossings →
+    ∀ (slot : Nat) (captured : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Nat
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (fun as i =>
+              @LT.lt.{0} Nat instLTNat i
+                (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+            (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) inputs slot)
+          (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) captured) →
+        ∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+          Not (@MicroCFTA.SourceCurrentStoredLiteralRowLineage.RowAt Symbol Guard captured row)
+theorem MicroCFTA.SourceCurrentSourceCaptureOriginalSlots.empty_initial : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {root expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard}
+  {inputs : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {crossings : List.{0} (@MicroCFTA.InternedFreshOrdinaryActiveOrigins.Crossing Symbol Guard inst)},
+  @MicroCFTA.InternedFreshOrdinaryActiveOrigins.Path Symbol Guard inst root
+      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) expression inputs crossings →
+    ∀ (slot : Nat) (captured : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Nat
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (fun as i =>
+              @LT.lt.{0} Nat instLTNat i
+                (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+            (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) inputs slot)
+          (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) captured) →
+        ∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+          Not (@MicroCFTA.SourceCurrentStoredLiteralRowLineage.RowAt Symbol Guard captured row) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+    {root expression} {inputs} {crossings} path slot captured found row inside =>
+  @Exists.casesOn.{1} Nat
+    (fun originalSlot =>
+      And
+        (@Eq.{1} Nat slot
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (@List.length.{0} (@MicroCFTA.InternedFreshOrdinaryActiveOrigins.Crossing Symbol Guard inst) crossings)
+            originalSlot))
+        (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Nat
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (fun as i =>
+              @LT.lt.{0} Nat instLTNat i
+                (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+            (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) originalSlot)
+          (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) captured)))
+    (fun x => False)
+    (@MicroCFTA.SourceCurrentSourceCaptureOriginalSlots.original_slot Symbol Guard inst root expression
+      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) inputs crossings path slot captured
+      found row inside)
+    fun originalSlot h =>
+    @And.casesOn.{0}
+      (@Eq.{1} Nat slot
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@List.length.{0} (@MicroCFTA.InternedFreshOrdinaryActiveOrigins.Crossing Symbol Guard inst) crossings)
+          originalSlot))
+      (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Nat
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (fun as i =>
+            @LT.lt.{0} Nat instLTNat i
+              (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+          (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) originalSlot)
+        (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) captured))
+      (fun x => False) h fun _offset selected =>
+      @Eq.casesOn.{0, 1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        (fun a t =>
+          @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) captured) a →
+            @HEq.{0}
+                (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) captured))
+                selected
+                (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) a)
+                t →
+              False)
+        (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) captured) selected
+        (fun h =>
+          @False.elim.{0}
+            (@HEq.{0}
+                (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) captured))
+                selected
+                (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                (@Eq.refl.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))) →
+              False)
+            (@noConfusion_of_Nat.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@Option.ctorIdx.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) captured)
+              (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) h))
+        (@Eq.refl.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) captured))
+        (@HEq.refl.{0}
+          (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) captured))
+          selected)
+'MicroCFTA.SourceCurrentSourceCaptureOriginalSlots.empty_initial' depends on axioms: [propext, Quot.sound.{u}]

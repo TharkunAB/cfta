@@ -1,0 +1,15 @@
+import MicroCFTA.SourceCurrentSourceCaptureOriginalSlots
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+#check @MicroCFTA.SourceCurrentSourceCaptureOriginalSlots.original_slot
+#print MicroCFTA.SourceCurrentSourceCaptureOriginalSlots.original_slot
+#print axioms MicroCFTA.SourceCurrentSourceCaptureOriginalSlots.original_slot
+#check @MicroCFTA.SourceCurrentSourceCaptureOriginalSlots.empty_initial
+#print MicroCFTA.SourceCurrentSourceCaptureOriginalSlots.empty_initial
+#print axioms MicroCFTA.SourceCurrentSourceCaptureOriginalSlots.empty_initial

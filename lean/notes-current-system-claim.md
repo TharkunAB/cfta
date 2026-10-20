@@ -1,7 +1,7 @@
 # Current system claim
 
 Checked against the live theorem statements on 2026-10-20.
-Read `notes-current-build-structural-row-origins.md` for the latest proof checkpoint.
+Read `notes-current-completed-rooted-writers.md` for the latest proof checkpoint.
 Read `notes-current-upstream-persistent-rows.md` for the current source scope.
 
 In simple technical English: fresh construction always finishes in the
@@ -52,8 +52,18 @@ Completed source builds now derive the exact row alternative from actual
 calls. Ordinary rows retain original EdgeSyntax and ordered child builds.
 Unions retain an actual indexed member. Variables retain their exact input
 slot. Binders retain the selected stored Mu body and actual smart finish.
-No source-binding ancestry or global decrease is assumed or inferred for
-captured values or retained winners. These remain the next proof obligations.
+The row classifier alone supplies no source-binding ancestry or global
+decrease for captured values or retained winners.
+
+Actual completed construction now derives a new selected Mu writer's
+original Reached source route in the same publication as its full issued
+writer receipt. An exact initial cell remains a separate warm alternative.
+No supplied winner ancestry or arbitrary issued Path root is used. Along
+a rooted source Path, a row-bearing capture retains its exact original
+input slot after the literal-reference callback prefix. Empty original
+inputs exclude that capture. Later native encoded builds can have whole
+captured values and prior records. Their ancestry remains open, as do
+global renewal, outer completion, convergence and Haskell refinement.
 
 ## Constructed root guarantee
 
