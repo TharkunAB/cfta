@@ -160,7 +160,7 @@ Implementation is on `spike/refinement-logic`, based on `12273853`.
 The spike and optimized eight-cell cost comparison pass. All 762 existing
 cases and 18 temporary probes pass with both system Z3 4.8.12 and Nix Z3
 4.15.3. The rebuilt example gives the same ranks and samples with both.
-The tracked tests are unchanged. The work remains local; nothing is pushed.
+The tracked tests are unchanged by this extension. The spike is ready for review.
 
 ## Restart
 
