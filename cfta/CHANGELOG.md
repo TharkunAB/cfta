@@ -6,7 +6,8 @@ Before release, the package was called `microcfta`.
 
 - Add `Data.CFTA.Document`: editable source documents with named
   productions and named facts, and patches that check the document they
-  were prepared on.
+  were prepared on. `applyEdits` applies a batch without that check. Both
+  replace only the changed rows and share the others.
 - Add `Data.CFTA.Language`: updates that combine with `<>` over a source
   document, and named exclusions that `restore` removes again.
 - Add `Data.CFTA.Lowering`: template lowerings, which translate the terms of
