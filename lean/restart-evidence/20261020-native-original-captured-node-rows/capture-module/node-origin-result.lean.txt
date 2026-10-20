@@ -1,0 +1,15 @@
+∃ producerIndex : Nat, ∃ producer : @Publication Symbol Guard _,
+        ∃ expressions inputs before raw after rows middle,
+        ∃ sourceIndex outputIndex : Nat, ∃ symbol guard children,
+          producerIndex ≤ index ∧ (events path)[producerIndex]? = some producer ∧
+          SyntaxBound (Syntax.node expressions) producer.expression ∧
+          UnionDescent producer.expression (Syntax.node expressions) ∧
+          Context before inputs ∧ Reached original [] (Syntax.node expressions) inputs before ∧
+          SourceRow (Syntax.node expressions) inputs before raw after row ∧
+          build (Syntax.node expressions) inputs before = .done raw after ∧
+          buildEdges expressions inputs before = .done rows middle ∧
+          run (makeNode rows) middle = (raw,after) ∧
+          (nodeEdges raw)[outputIndex]? = some row ∧
+          ∃ call : RowCall expressions inputs before rows middle after sourceIndex symbol guard children,
+            call.output = row ∧ Grows after outer.afterBody ∧
+            Extends after.nodes.issued outer.afterBody.nodes.issued

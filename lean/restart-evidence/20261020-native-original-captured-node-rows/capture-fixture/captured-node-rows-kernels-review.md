@@ -1,0 +1,21 @@
+# Actual initial capture and original node-row fixture
+
+Reviewed at 2026-10-20 23:38 CEST.
+
+The source family is the prior native initial-capture family from fixture65157a03. Two distinct closed used outer Mu values share the same closed used inner Mu. Each inner body has a recursive unary row and a nullary shared tag. This family differs from the source-only warm box family. It adds no new source family here. This component adds one constructed theorem and no production theorem or canonical build.
+
+The exact closed build returns the heap in the initial native machine. The actual Top field allocation, source annotations, physical cache validity, and source facts derive initial Good. Empty native memo state derives native memo History. The admission certificate derives the checked requestNode Trace and site-body availability from the computed bounded execution to the outer optional. The leaf pool contains the initial inner full Mu at occurrence one. This is a leaves occurrence. No encode.slot equality is asserted.
+
+The proof calls capture_node_rows once. Its generated alternative requires the same key to be absent at an earlier optional site. The actual initial full cell and that branch's actual forward prefix growth contradict this absence. Thus the returned initial arm is nonvacuous. The proof retains its one source-derived path, indexed rooted sites, final writer selector, one chosen indexed outer writer and full payload alignments, all stored-row node origins, current semantic/availability/publication-history support, and all actual-unfold clauses. It does not call an old capture or an independent writer producer.
+
+The same captured full Mu actually unfolds at the SAME current heap. The selected literal rec/Top row has one full-Mu child. The original stored rec row has one own-reference child. The computed rows differ. The returned stored anchor is identified with that exact stored rec row by its unique symbol. The identity alternative is impossible, so the returned actual ordered substitution Calls remain in the public result. The original node RowCall equals that SAME stored row, including its stored reference child. It does not equal the changed unfolded row. Symbol, guard, arity, and actual Calls connect the two rows.
+
+The concrete node origin retains the SAME path and selected writer index as the generic initial arm. It includes producer k <= j and lookup, generic SyntaxBound/UnionDescent, rich Context, original Reached, SourceRow, actual node/buildEdges/makeNode equations, separate source and output indices, canonical stored-row lookup, full RowCall output equality, and physical/issued suffix to the chosen writer's afterBody. No event identity with an earlier independently selected receipt is assumed.
+
+The source, data, admission, and unfold helper block is byte-identical to the frozen predecessor65157a03. Only imports, header, namespace, and the final consumer proof change. The public theorem aliases a private checked witness with an identical expanded type.
+
+Two owned Lean jobs ran. Both passed on the first attempt. The selected strict raw log has zero bytes. The full public group prints check-at, full print, and axioms under all eight print/linter settings. Its 2,105,277-byte log has no omissions or printer failures. Its axioms are only propext, Classical.choice, and Quot.sound. Each job uses pinned Lean4.34.1, a fresh usage receipt, memory max/high4GiB, zero swap, and a five-minute cap. No jobs remain live. Mutable peaks are excluded; the final two-row snapshot is pinned.
+
+The actual native execution stops before the outer optional. The fixture does not show a new native generated capture or execute the outer optional. The successful unfold is an actual checked source operation at the current heap. It does not prove native runtime termination, productivity, arbitrary projection continuation, global renewal, or Haskell refinement. The unchanged generated branch is part of the production theorem, not the branch exercised by this example.
+
+The standalone verifier checks local source snapshots by default. Live mode with a root argument also checks repository bytes. Raw commands retain their original temporary paths. Earlier frozen source and evidence packages remain unchanged.
