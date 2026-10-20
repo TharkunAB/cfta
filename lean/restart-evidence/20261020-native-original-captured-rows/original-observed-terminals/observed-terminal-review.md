@@ -1,0 +1,19 @@
+# Same-event original source terminals after actual observation
+
+Reviewed on 2026-10-20 at 21:39 CEST.
+
+The two public heads are Terminal and of_observed. Final source SHA256: fbcc6c15146533be5f941f2bfcb8633782422c4d657c83884d42fbd2c5009185. The only input provenance receipt is the existing Observed original [] for the exact full Mu and fixed current heap. No desired terminal or source relation is added as an input.
+
+Terminal is the complete actual source terminal suffix type. It retains the terminal SourceRow for the same full row, actual completed terminal build, node-or-binder syntax, nonunion fact, terminal Context, Reached original [], generic syntax-size bound and physical plus issued suffix to the selected raw callback return. The type is generic in Symbol and Guard so its sizeOf instances match the established generic original-source terminal theorem. It introduces no stronger concrete size bound or global rank.
+
+of_observed unpacks the supplied Observed once. The selected publication, full payload equalities, missing-key fact, original Reached, all physical and issued intervals, actual raw callback build and filter, raw callback Context and raw callback Reached remain fixed outside both row quantifiers. It does not choose a second publication, another raw callback or a writer that merely shares the same payload.
+
+For each structural stored-body row, the proof retains the existing raw RowAt and SourceRow. It applies OriginalRowTerminals.terminal to that exact SourceRow and the same callback Context and Reached. The new terminal therefore belongs to the same selected full row and returns through a suffix to that same raw callback return heap.
+
+For every successful actual unfold at the fixed current heap, the proof retains the existing semantic result, physical growth, issued extension, output availability and derived causal publication history. Each selected literal unfolded row keeps the same original stored row, symbol, full constraint, arity and exact identity-or-ordered-child-Calls alternative. The same original row then keeps its raw RowAt, SourceRow and terminal. The actual unfolded row and its original stored row remain distinct variables. The terminal belongs to the original stored row, not to an unrelated deeper output row.
+
+The original input list is empty. The inherited original-source terminal producer therefore eliminates row-bearing variable captures by its actual original Path. The consumer does not re-prove that argument or the indexed source-union suffix induction. Binder terminals remain exact selected stored-winner stops. No current requester/writer identity, strict decrease across warm winners, complete original-program renewal or global termination is claimed.
+
+The stored row predicate is structural RowAt. It can include a row beneath another stored Mu. It does not itself prove an epsilon observation through that Mu. The unfold row predicate is the existing literal Row after one actual successful unfold at the fixed current heap. No further read, future completion or arbitrary later heap is introduced.
+
+All three Lean attempts are retained. Direct1 failed because a receipt defined at concrete Symbol and Guard selected different sizeOf instances from the generic established terminal theorem. Making Terminal generic preserved the exact old bound and fixed that type mismatch. Direct2 passed with a zero-byte raw log. Public1 prints both public declarations, complete proofs and axiom reports with all eight options. Mechanical verification rejects omitted output and nonstandard axioms. Every job used effective 4 GiB maximum/high memory, zero swap and a five-minute wrapper cap, with fresh usage above the stop threshold. Counts are two generic public heads, zero constructed pairs, three owned jobs, one elaboration failure and zero owned canonical jobs. Official installation and canonical validation remain with the parent.

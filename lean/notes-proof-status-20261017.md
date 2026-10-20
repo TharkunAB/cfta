@@ -1,5 +1,46 @@
 # Proof status at 2026-10-18
 
+## Current original captured Mu rows and source terminals
+
+Updated: 2026-10-20 21:46 CEST. Proof checkpoint: `99e0023e7`.
+Verified start: `ad8ee370b`. Main remains `9769fe3e9`.
+Read `lean/notes-current-native-original-captured-rows.md`.
+
+An initially captured full Mu now derives its original source publication
+from the actual closed build that returns exactly the native entry heap.
+The generated alternative retains its same earlier optional producer.
+One publication and raw callback stay fixed across all stored rows and
+all actual successful unfolds. Each original stored anchor row now retains
+an actual node or binder terminal, the same SourceRow and build, Context,
+original-root Reached and physical and issued suffix to that raw return.
+The empty original input pool excludes a row-bearing variable terminal.
+
+The actual example uses two distinct outer binders with the same used
+inner Mu. That initial full Mu occurs at outer optional leaf one. One
+capture application excludes the generated arm by its same-prefix absence.
+Actual unfold changes a bare self-reference child to the full Mu. The
+same original callback retains the changed row's ordered Calls and its
+stored anchor's terminal. Both proof versions are one example. The outer
+optional has not executed.
+
+Five public and one selected constructed full readbacks pass. Four root
+module strict logs and the independent final fixture strict log are empty.
+Default audit: 3532 jobs and 74272 theorem dependency checks. Only the old
+ClosedCompletion unused-input warning remains. All 24 actual capped
+Lean/Lake commands remain, including 4 failed elaboration attempts.
+Receipt copies add no commands. All selected axioms are standard.
+
+Warm binder winners still need forward transport of their selected full
+cell through the actual callback, filter and publication to the original
+build return. The next local plan is explicit and unproved. General
+generated-capture ancestry, residual Mu observation chains, global renewal,
+active-owner exclusion, final owner retention, outer completion, convergence
+and Haskell refinement remain open. Past-producer descent is not a future
+runtime rank. Conditional root-language and Sized laws are unchanged.
+All 268 Haskell and 207 active package files retain their bytes. FINDINGS
+keeps external repairs first. No new Haskell repair or runtime validation
+is claimed. The full-library goal stays active. Pushes remain authorized.
+
 ## Current captured Mu stored rows and actual unfold provenance
 
 Updated: 2026-10-20 21:23 CEST. Proof checkpoint: `e9d4bbcc4`.

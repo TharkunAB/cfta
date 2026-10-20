@@ -1,0 +1,19 @@
+# Actual original-source node or binder terminals
+
+Reviewed on 2026-10-20 at 21:33 CEST.
+
+The sole public head is terminal. It is generic in Symbol and Guard and requires only the same EdgeKey equality instance as the existing source execution. Final source SHA256: 3b8ab43e3e1cbda2beb0cd5fc5163c28264e1df686b1284e6caed71b6d0dbd76.
+
+The duplicate check found the existing generic SourceRowTerminalSuffix.terminal_source, which permits an exact variable terminal. RootedRowChildOrigins also retains an explicit variable-capture stop and requires a selected row child. Neither theorem excludes a row-bearing capture along an original empty-input Path or returns this complete node-or-binder terminal receipt. The new endpoint specializes the existing suffix producer and removes only that impossible variable case. It does not duplicate the indexed union induction.
+
+The inputs are the actual same SourceRow, its actual source Context and Reached original [] at the same expression, input list and entry heap. The Context remains a genuine premise. Reached alone does not entail it: reached_initial can start at an arbitrary heap and includes no Normal or input-availability facts.
+
+The proof invokes terminal_source once. That existing actual source-union induction supplies the terminal expression, inputs, start and return heaps, full row, SourceRow, nonunion test, Context, Reached, generic syntax bound and physical plus issued suffix. The new proof retains those same witnesses. It does not select another branch by matching a row or output value.
+
+Cases of that exact terminal SourceRow establish the terminal syntax. A node returns its node syntax. A binder returns its binder syntax. A union contradicts the existing nonunion field. A variable supplies its exact lexical slot and RowAt of the captured value. The same terminal Reached gives the original empty-input Path. SourceCaptureOriginalSlots.empty_initial excludes that exact row-bearing capture. No desired source relation, child observation, Ready or future successful call is used. Empty has no SourceRow constructor, so there is no missing empty terminal branch.
+
+A private source_done lemma derives the completed build equation from the exact SourceRow constructor fields. Node and union use their actual buildEdges/buildMany and makeNode/makeUnion equations. The capture case uses its exact lexical lookup. The binder uses its actual Depth callback, ordinary callback and request completion, after unfolding the outer build equation. This does not replay the terminal at a later heap or assume a new successful call.
+
+The public result keeps all old terminal_source fields and adds that actual completed terminal build and explicit node-or-binder syntax. The row is the same full record. Nullary rows need no selected child. A structural row beneath a retained Mu remains covered, but RowAt is not an observed epsilon read. The binder case retains the actual selected stored winner already present in SourceRow. It does not identify the historical writer with the current callback or prove a strict source-size decrease across warm winners. The syntax bound is non-strict terminal syntax size versus the original supplied expression. It is not a global rank or a termination proof.
+
+All three Lean attempts are retained under effective 4 GiB maximum/high memory, zero swap and five-minute wrapper caps, with fresh usage checks. Direct1 failed because the binder build equation had not been unfolded before change. Direct2 passed with a zero-byte raw log after that focused correction. Public1 checks the sole public head with all eight printer options, complete proof output and an axiom report. The verifier rejects omitted output and nonstandard axioms. Counts are one generic public head, zero constructed pairs, three owned jobs, one elaboration failure and zero owned canonical jobs. Official installation and canonical validation remain with the parent.
