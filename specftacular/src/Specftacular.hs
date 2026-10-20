@@ -207,6 +207,10 @@ data Settings = Settings
     -- ^ Resolve exact generators and equality for law generalization.
     , diagnosticPhase :: Int
     -- ^ The phase that is running, rather than the requested last phase.
+    , stopAfter :: Maybe (Int, Int)
+    {- ^ The phase and the size after which the search stops, for a profile
+    of a part of a long run.
+    -}
     , splitEnumeration :: Bool
     {- ^ Whether to enumerate the skeletons of a bucket in one thread for each
     shape of the left spine (spike).
@@ -296,6 +300,9 @@ searchPhases size phase givenInstances givenSig =
         diagnosticSetting <- Env.lookupEnv "SPECFTACULAR_DIAGNOSTICS"
         -- SPECFTACULAR_SPLIT=1 enumerates the phase 4 skeletons in parallel parts (spike).
         splitSetting <- (== Just "1") <$> Env.lookupEnv "SPECFTACULAR_SPLIT"
+        -- SPECFTACULAR_STOP_AFTER=phase:size stops the search after that size
+        -- of that phase, so that a profile of the run is written.
+        stopSetting <- (>>= parseStop) <$> Env.lookupEnv "SPECFTACULAR_STOP_AFTER"
         let diagnostics = diagnosticSetting `elem` [Just "1", Just "phases"]
             detailedDiagnostics = diagnosticSetting == Just "1"
         -- SPECFTACULAR_TESTS sets the number of test cases (1000 by default,
@@ -340,8 +347,15 @@ searchPhases size phase givenInstances givenSig =
                     , diagnosticPhase = 0
                     , resolveInstance = instances
                     , splitEnumeration = splitSetting
+                    , stopAfter = stopSetting
                     }
         runPhases env size (max 1 (min 4 phase)) instances sig
+
+-- | Read "phase:size".
+parseStop :: String -> Maybe (Int, Int)
+parseStop text = case break (== ':') text of
+    (phase, ':' : size) -> (,) <$> TR.readMaybe phase <*> TR.readMaybe size
+    _ -> Nothing
 
 -- 1. The runtime signature and the search space.
 
@@ -450,13 +464,16 @@ runPhases env size lastPhase instances sig =
                 -- skeleton has its variables.
                 stectaWith variableTrans = mkStecta size (numTests env) instances sig (isJust skeletonTrans) variableTrans skelTrans
             (laws, s') <- diagnose phaseEnv 0 "" "phase" s $ do
-                result@(_, finishedState) <- runPhase phaseEnv size (stectaWith <$> skeletonTrans) (stectaWith givenTrans) s
+                result@(_, finishedState) <- runPhase phaseEnv (phaseSize pn) (stectaWith <$> skeletonTrans) (stectaWith givenTrans) s
                 diagnosticEvent phaseEnv "checkpoint" 0 "" "phase" finishedState
                 return result
             putStrLn $ finished ++ show (so_far s') ++ " terms examined."
             putStrLn $ show (sum $ map DT.size $ Map.elems (trees s')) ++ " unique terms discovered."
-            (laws ++) <$> go rest s'
+            if fmap fst (stopAfter env) == Just pn then return laws else (laws ++) <$> go rest s'
     go _ _ = return []
+    phaseSize pn = case stopAfter env of
+        Just (stopPhase, stopSize) | stopPhase == pn -> min size stopSize
+        _ -> size
 
 {- | Run one phase: the sizes from 1 to the given size, and for each size
 each type to test. With a skeleton grammar, the candidates of a type are the
