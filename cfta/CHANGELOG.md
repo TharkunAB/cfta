@@ -4,6 +4,19 @@
 
 Before release, the package was called `microcfta`.
 
+- Add `Data.CFTA.Document`: editable source documents with named
+  productions and named facts, and patches that check the document they
+  were prepared on. `applyEdits` applies a batch without that check. Both
+  replace only the changed rows and share the others.
+- Add `Data.CFTA.Language`: updates that combine with `<>` over a source
+  document, and named exclusions that `restore` removes again.
+- Add `Data.CFTA.Lowering`: template lowerings, which translate the terms of
+  a language version to the version before it. `lift` gives the inverse image
+  of an automaton, and `checkLowering` checks a later grammar against an
+  earlier one. `compose` makes one lowering of two. It reports an expansion
+  that applies an earlier constructor to the wrong number of children.
+- `Data.CFTA.Refinement.Expression.modulo`: the remainder of a term, as the
+  `mod` of SMT-LIB.
 - `Data.CFTA.replaceRows` applies row replacements and deletions to an
   existing explicit automaton. It shares unchanged rows and validates the
   complete result after the batch. The original automaton stays unchanged.
@@ -16,18 +29,6 @@ Before release, the package was called `microcfta`.
   explicit resumable work and frontier limits, and queue statistics. Existing
   enumeration entry points keep their defaults. The callback contracts state
   the remaining proof obligation for constrained cyclic truncation.
-- Add `Data.CFTA.Document`: editable source documents with named
-  productions and named facts, and patches that check the document they
-  were prepared on.
-- Add `Data.CFTA.Language`: updates that combine with `<>` over a source
-  document, and named exclusions that `restore` removes again.
-- Add `Data.CFTA.Lowering`: template lowerings, which translate the terms of
-  a language version to the version before it. `lift` gives the inverse image
-  of an automaton, and `checkLowering` checks a later grammar against an
-  earlier one. `compose` makes one lowering of two. It reports an expansion
-  that applies an earlier constructor to the wrong number of children.
-- `Data.CFTA.Refinement.Expression.modulo`: the remainder of a term, as the
-  `mod` of SMT-LIB.
 - `refoldEdges` is `refold` with the edge of the result that each edge of
   the input becomes, so that a caller can carry data about the edges of a
   graph through `refold`, whose new edges have new identities.
