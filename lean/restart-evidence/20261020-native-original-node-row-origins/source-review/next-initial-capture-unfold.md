@@ -1,0 +1,21 @@
+# Next actual initial capture and unfold consumer
+
+Design only. Unproved. Written on 2026-10-20 at 23:21 CEST. Zero proof pairs and zero Lean jobs.
+
+The next useful endpoint strengthens the initial-cell arm of an ACTUAL indexed native Mu capture with ultimate original node production for every actual successful unfold at that reader. Keep the later-generated branch unchanged. No event identity between independent writers is required.
+
+Inputs can match NativeOriginalCapturedMuRows.capture_source39 onward: actual original[]/empty source build returning exactly before.native.machine.heap; initial Good and native memo History; actual checked node-request Trace to the current optional site; Available current.heap siteBody; exact `(leaves siteBody)[index]?=some(fullMu entry body depth ordinary)`. The index is a leaves occurrence, not encode.slot.
+
+Use the lower NativeCapturedMuUnfoldRows.capture148 onward ONCE. Derive its initial SemanticHeap and causal MuPublication.History from the actual source build, as the current original-capture producer already does. The generated arm already retains the same strictly earlier optional prefix, actual maybeMu/build/Context/Rooted Written/Origin/Stored/Observed tuple. Return that arm literally, without claiming its generated encode root is the original program.
+
+In the exact initial-cell arm, call build_node_row_origins ONCE on the SAME actual source build. Keep its p, final-cell selector and ultimate-node clause in scope. Feed the exact initial full cell to that selector. Choose j/outer ONCE before all rows and unfolds. Full candidate injectivity aligns entry/body/Depth/ordinary. Do not keep an independently opaque old Observed event and assert that it equals this indexed outer. This route deliberately avoids OriginalCapturedMuRows.capture_source's extra initial writer/Stored selection.
+
+The current selected full Mu is Available via leaves_available from the actual leaves lookup and current site-body availability. NativePublicationTrace.source_trace154–167 derives current SemanticHeap and causal MuPublication.History directly from the same actual checked Trace and actual source-build heap equality. This is a public convenience for from_history; it does not use native memo History as a physical publication history or infer history from Grows.
+
+For each actual successful unfold of THAT full Mu at THAT current.heap, use NativeCapturedMuUnfoldRows.unfold_rows79–121 with the derived current semantic/availability/causal history. Preserve all actual returned semantic/growth/issued/Available/history effects. For every literal returned row, it supplies an Anchor: original storedRow with RowAt body storedRow, exact symbol/guard/arity agreement, and identity OR actual ordered Calls from stored children to returned children.
+
+Apply the SAME p/j/outer ultimate-node clause to that original storedRow after the selected body equality. Return the actual original node SourceRow/build/RowCall, distinct source/canonical indices, full equality call.output=storedRow, producer k<=j and lookup, producer-relative SyntaxBound/UnionDescent, rich Context, original Reached, and actual node-return-to-outer.afterBody physical/issued suffix. Retain both rows explicitly: the source RowCall equals storedRow; the actual returned row may have changed children through Calls.
+
+The public result can therefore be initial exact full cell PLUS one fixed indexed original writer and a universal actual-unfold row-node consumer, OR the unchanged earlier-generated tuple. No desired provenance, given node producer, assumed child equality, old-event uniqueness, reverse history or future native completion is a premise. A narrow initial-only theorem taking an ACTUAL selected initial cell and current Trace is also sound, but the full capture split integrates the causal producer directly and preserves the real generated boundary.
+
+This is a proposed next integration. It does not prove renewal progress, an original-root theorem for later-generated encode captures, or a full arbitrary projection/read continuation through multiple Mu values. It does not equate leaves occurrence and encode.slot. It claims no Haskell defect, validation or refinement.
