@@ -1,7 +1,7 @@
 # Current system claim
 
 Checked against the live theorem statements on 2026-10-20.
-Read `notes-current-indexed-first-ordinary-cut.md` for the latest proof checkpoint.
+Read `notes-current-rooted-indexed-source-children.md` for the latest proof checkpoint.
 Read `notes-current-upstream-persistent-rows.md` for the current source scope.
 
 In simple technical English: fresh construction always finishes in the
@@ -91,6 +91,15 @@ The same completed source build derives SourceRow for the same selected
 row or cut parent row. Closed values stop at the whole value. This derives
 no original child call across captures or selected historical Mu writers.
 Stored union members remain distinct from original source-union calls.
+
+An actual indexed source RowCall now retains its ordered child interval,
+joint Context, separate forward physical and issued growth, and strict
+generic original Syntax bound. Its result can be closed. A rooted SourceRow
+follows actual source-union prefixes to that same child and rooted entry,
+an exact capture, or a selected binder body stop. A binder stop does not
+identify the current callback with an earlier writer. Its local return
+heap still needs an actual suffix to the enclosing return heap. General
+original binding ancestry and a global recursive decrease remain open.
 
 ## Constructed root guarantee
 
