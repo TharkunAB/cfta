@@ -1002,6 +1002,16 @@ data TestCase
     | PredicateCase Int Int
     deriving (Show)
 
+{- | The extra random cases on which a new law is tested again, at the sizes
+1 to 8. Their seeds are apart from those of 'testSchedule'. A false law can
+pass the random cases of all sizes: at HugeLists 6-p4,
+@foldr drop xs (concat xss) == foldr drop xs (usort (concat xss))@ passes
+them, but it needs a repeated small Int in @xss@ and a long enough @xs@,
+which small cases have more often.
+-}
+recheckSchedule :: Int -> [TestCase]
+recheckSchedule n = [RandomCase (-1 - k) (1 + k `mod` 8) | k <- [0 .. n - 1]]
+
 -- | Keep the random schedule and add independent and boundary cases.
 testSchedule :: Int -> [TestCase]
 testSchedule n =
