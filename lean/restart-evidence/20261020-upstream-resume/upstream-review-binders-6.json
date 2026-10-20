@@ -1,0 +1,33 @@
+{
+  "command": [
+    "/home/tritlo/.nix-profile/bin/nix-shell",
+    "--option",
+    "substituters",
+    "",
+    "--option",
+    "builders",
+    "",
+    "--option",
+    "max-jobs",
+    "0",
+    "/home/tritlo/Code/mcfta/shell.nix",
+    "--run",
+    "bash /tmp/mcfta-upstream-binders-20261020/run-6.sh"
+  ],
+  "wrapper": [
+    "/home/tritlo/Code/heavy-management/bin/capped",
+    "--mem",
+    "4G",
+    "--time",
+    "5m",
+    "python3",
+    "/home/tritlo/Code/mcfta/lean/restart-evidence/20261020-upstream-resume/upstream-review-capped-worker.py"
+  ],
+  "exit_code": 1,
+  "started_at": "2026-10-20T13:02:35.948830+00:00",
+  "observed_at": "2026-10-20T13:02:38.442342+00:00",
+  "log": "upstream-review-binders-6.log",
+  "limits": "upstream-review-binders-6.limits.json",
+  "source": "upstream-review-binders-repro.hs",
+  "source_sha256": "a03f049b036b67fe84cdd3afe83d526bf254dea1cc9cf86685640f2f2b60ae2d"
+}

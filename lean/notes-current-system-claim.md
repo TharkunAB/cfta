@@ -1,7 +1,8 @@
 # Current system claim
 
-Checked against the live theorem statements on 2026-10-19.
-Read `notes-current-head-stored-callbacks.md` for the latest checkpoint.
+Checked against the live theorem statements on 2026-10-20.
+Read `notes-current-head-stored-callbacks.md` for the latest proof checkpoint.
+Read `notes-current-upstream-persistent-rows.md` for the current source scope.
 
 In simple technical English: fresh construction always finishes in the
 Lean model. Under the stated guard conditions, its result represents

@@ -1,0 +1,49 @@
+{-# LANGUAGE DeriveAnyClass #-}
+{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE DerivingStrategies #-}
+{-# LANGUAGE TypeApplications #-}
+module Main where
+
+import Control.Monad (unless)
+import GHC.Generics (Generic)
+import qualified Data.CFTA.Gen as Gen
+import Data.CFTA.Gen.Refinement.Derive (NodeView)
+import Data.CFTA.Gen.Typing (Bound(..), Typing(..), fromTypingRules, rule, value)
+import Data.CFTA.Generic (HasFTA)
+
+data Payload = P Payload | Z
+  deriving stock (Eq, Show, Generic)
+  deriving anyclass (HasFTA)
+data T = A Payload | B Int
+  deriving stock (Eq, Show, Generic)
+  deriving anyclass (HasFTA)
+data TNode e = ANode e | BNode e
+  deriving stock (Generic)
+  deriving anyclass (NodeView)
+data Ty = Only deriving (Eq, Ord, Show)
+
+main :: IO ()
+main = do
+  generator <- either (fail . show) pure $ fromTypingRules @T $
+    Typing (Binders 0) [] [Only]
+      [rule (ANode (value (P (P Z)))) Only, rule (BNode (value (0 :: Int))) Only]
+  let large = A (P (P Z))
+      small = B 0
+      ordered = Gen.upToSize 4 generator
+  largeRank <- either (fail . show) pure $ Gen.rankOfValue generator large
+  smallRank <- either (fail . show) pure $ Gen.rankOfValue generator small
+  largeOrdered <- either (fail . show) pure $ Gen.rankOfValue ordered large
+  smallOrdered <- either (fail . show) pure $ Gen.rankOfValue ordered small
+  putStrLn $ "Binders 0 large rank: " <> show largeRank
+  putStrLn $ "Binders 0 small rank: " <> show smallRank
+  putStrLn $ "Original rank sizes: " <> show (Gen.sizeOfRank generator largeRank, Gen.sizeOfRank generator smallRank)
+  putStrLn $ "upToSize 4 large rank: " <> show largeOrdered
+  putStrLn $ "upToSize 4 small rank: " <> show smallOrdered
+  putStrLn $ "Ordered rank sizes: " <> show (Gen.sizeOfRank ordered largeOrdered, Gen.sizeOfRank ordered smallOrdered)
+  putStrLn $ "Cardinalities: " <> show (Gen.cardinality generator, Gen.cardinality ordered)
+  unless (largeRank < smallRank && smallOrdered < largeOrdered
+    && Gen.sizeOfRank ordered largeOrdered == Just 4
+    && Gen.sizeOfRank ordered smallOrdered == Just 2
+    && Gen.cardinality generator == Gen.cardinality ordered) $
+      fail "The proposed finite-Binders ordering counterexample was not reproduced."
+  putStrLn "REPRODUCED: Binders alone does not imply size-major ranks."

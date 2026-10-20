@@ -1,0 +1,44 @@
+diff --git a/CONTEXT.md b/CONTEXT.md
+index e4c5e4ed4..165b71911 100644
+--- a/CONTEXT.md
++++ b/CONTEXT.md
+@@ -93,6 +93,9 @@ Wilf, and Feat (ranking).
+   **size class** holds the members of one size.
+ - **Class rank**: the rank of a member inside its size class. A **sized
+   rank** is a size with a class rank.
++- **Unfolding rank**: a well-founded measure for repeated Mu unfolding.
++  `headRank` and the minimum free-occurrence `rank` are candidate measures.
++  An unfolding rank is separate from a term's enumeration rank.
+ - **Rank offset**: the first rank of a group of members in a larger
+   language.
+ - **Weight**: a relative frequency weight of an alternative or a value
+diff --git a/README.md b/README.md
+index f1cdaa8b2..7aa8d18a4 100644
+--- a/README.md
++++ b/README.md
+@@ -164,6 +164,10 @@ the repository root with:
+ 
+ ## Development
+ 
++The [Lean formalization spike](lean/README.md) proves core language and
++probability laws. It also records counterexamples and the remaining proof
++obligations for the Haskell implementation.
++
+ GHC 9.14 is the supported compiler series. The workspace selects GHC 9.14.1.
+ The packages require `base >=4.22 && <4.23` and `containers >=0.8 && <0.9`.
+ The test suites need `z3` on `PATH`; `nix-shell` provides it.
+diff --git a/cfta/CHANGELOG.md b/cfta/CHANGELOG.md
+index fa59868e5..85db0bae1 100644
+--- a/cfta/CHANGELOG.md
++++ b/cfta/CHANGELOG.md
+@@ -4,6 +4,10 @@
+ 
+ Before release, the package was called `microcfta`.
+ 
++- Keep recursive constructor probes fresh relative to captured ordinary
++  references. Reuse that same probe choice when matching a Mu. This avoids
++  a pending interning lookup in a closed nested constructor expression.
++
+ - `Data.CFTA.replaceRows` applies row replacements and deletions to an
+   existing explicit automaton. It shares unchanged rows and validates the
+   complete result after the batch. The original automaton stays unchanged.
