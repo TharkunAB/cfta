@@ -65,7 +65,7 @@ import Data.CFTA.Equality (
 import Data.CFTA.Symbol (Symbol (Symbol))
 import Data.CFTA.Template (Template (..))
 import Data.Char (isAlphaNum)
-import Data.IORef (IORef, modifyIORef', newIORef, readIORef, writeIORef)
+import Data.IORef (IORef, atomicModifyIORef', modifyIORef', newIORef, readIORef, writeIORef)
 import Data.Int (Int64)
 import Data.List hiding (union)
 import Data.Maybe (fromMaybe, isJust, mapMaybe)
@@ -836,8 +836,8 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..}
                             -- the start of the size prune them, and 'eligible'
                             -- applies the rules that the buckets add later.
                             let keys = nubOrd [monomorphiseType tc' | (lvl', tc') <- (lvl, tc) : rest, lvl' == lvl]
-                            started <- mapM (\k -> (,) (lvl, k) <$> enumerateInBackground (skeletonParts skeleton lvl k (rewrite_rules s))) keys
-                            pure (Map.union (Map.fromList started) current)
+                            started <- enumerateInBackground [skeletonParts skeleton lvl k (rewrite_rules s) | k <- keys]
+                            pure (Map.union (Map.fromList (zip [(lvl, k) | k <- keys] started)) current)
                         else do
                             typings <- skeletonTypings skeleton lvl key (rewrite_rules s)
                             pure (Map.insert (lvl, key) (pure (), typings) current)
@@ -1026,27 +1026,31 @@ forceInParallel report lvl tc lists = do
             putMVar result ((\n -> (fromIntegral (end - begin) / 1e9 :: Double, n)) <$> outcome)
         pure result
 
-{- | Evaluate the spine of each list in a background thread, and give an
-action that waits for all of them, and the lists joined in their order.
-With more than one capability, the threads run on the capabilities other
-than the first, so that the thread that tests keeps its own. A thread that
-fails leaves its list to the thread that reads it.
+{- | Evaluate the spines of the parts of each group in background threads,
+and give for each group an action that waits for its parts, and its parts
+joined in their order. The threads take the parts in order: the parts of
+the first group, then those of the second group, and so on. With more than
+one capability, one thread runs on each capability other than the first, so
+that the thread that tests keeps its own. A part that fails is left to the
+thread that reads it.
 -}
-enumerateInBackground :: [[a]] -> IO (IO (), [a])
-enumerateInBackground lists = do
+enumerateInBackground :: [[[a]]] -> IO [(IO (), [a])]
+enumerateInBackground groups = do
     capabilities <- getNumCapabilities
-    let fork i
-            | capabilities > 1 = forkOn (1 + i `mod` (capabilities - 1))
-            | otherwise = forkIO
-    dones <-
-        mapM
-            ( \(i, xs) -> do
-                done <- newEmptyMVar
-                _ <- fork i (void (evaluate (length xs)) `finally` putMVar done ())
-                pure done
-            )
-            (zip [0 :: Int ..] lists)
-    pure (mapM_ readMVar dones, concat lists)
+    tagged <- mapM (mapM (\xs -> (,) xs <$> newEmptyMVar)) groups
+    queue <- newIORef (concat tagged)
+    let worker = do
+            next <- atomicModifyIORef' queue (\parts -> case parts of [] -> ([], Nothing); part : rest -> (rest, Just part))
+            case next of
+                Nothing -> pure ()
+                Just (xs, done) -> do
+                    _ <- try (evaluate (length xs)) :: IO (Either SomeException Int)
+                    putMVar done ()
+                    worker
+    if capabilities > 1
+        then mapM_ (`forkOn` worker) [1 .. capabilities - 1]
+        else void (forkIO worker)
+    pure [(mapM_ (readMVar . snd) parts, concatMap fst parts) | parts <- tagged]
 
 -- 3. The test of a candidate, and the laws that it gives.
 
