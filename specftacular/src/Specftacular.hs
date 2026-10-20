@@ -25,7 +25,7 @@ import Specftacular.Utils
 import Control.Concurrent (forkIO)
 import Control.Concurrent.MVar (newEmptyMVar, putMVar, takeMVar)
 import Control.Exception (SomeException, evaluate, mask, onException, throwIO, try)
-import Control.Monad (when)
+import Control.Monad (foldM, unless, when)
 import Data.CFTA.Equality (
     Edge (Edge),
     Node (Node),
@@ -49,7 +49,7 @@ import qualified Text.Read as TR
 
 import Data.Containers.ListUtils (nubOrd)
 import qualified Data.HashSet as HS
-import System.IO (hFlush, hPutStr, hPutStrLn, stderr)
+import System.IO (BufferMode (LineBuffering), hFlush, hPutStr, hPutStrLn, hSetBuffering, stderr)
 
 data StEcta = StEcta
     { any_arg :: Node Symbol
@@ -189,6 +189,12 @@ data Search = Search
     -- ^ The number of terms that the search examined.
     , law_count :: !Int
     -- ^ The number of laws that the search found.
+    , pending_laws :: ![(Term, Term, Sig, Term)]
+    {- ^ With 'deferLaws', the laws of a bucket, newest first: the two terms
+    of the test, and the signature and the law that 'generalizeLaw' gives.
+    -}
+    , touched_reps :: !(HS.HashSet Term)
+    -- ^ The representatives whose instance trees a bucket changed.
     }
 
 -- | The settings of the search, which do not change.
@@ -212,10 +218,19 @@ data Settings = Settings
     of a part of a long run.
     -}
     , splitEnumeration :: Int
-    {- ^ Whether to enumerate the skeletons of a bucket in one thread for each
-    shape of the left spine (spike).
+    , parallelBuckets :: Bool
+    {- ^ Whether the buckets of a size run in parallel from the state at the
+    start of the size (spike).
+    -}
+    , deferLaws :: Bool
+    {- ^ Whether a bucket records its laws in 'pending_laws' instead of
+    printing them.
     -}
     }
+
+-- \^ Whether to enumerate the skeletons of a bucket in one thread for each
+--    shape of the left spine (spike).
+--
 
 {- | Emit one versioned TSV event. Allocation and GC counters are RTS
 samples. This function does not force a collection or inspect test values.
@@ -298,9 +313,13 @@ searchPhases size phase givenInstances givenSig =
         -- SPECFTACULAR_PROGRESS=1 shows the progress of the search on stderr.
         progress <- (== Just "1") <$> Env.lookupEnv "SPECFTACULAR_PROGRESS"
         diagnosticSetting <- Env.lookupEnv "SPECFTACULAR_DIAGNOSTICS"
-        -- SPECFTACULAR_SPLIT=d enumerates the phase 4 skeletons in parallel
-        -- parts, split by shape down to d applications (spike; 0 is off).
-        splitSetting <- fromMaybe 0 . (>>= TR.readMaybe) <$> Env.lookupEnv "SPECFTACULAR_SPLIT"
+        -- SPECFTACULAR_PARALLEL=1 runs the buckets of a size in parallel and
+        -- enumerates the phase 4 skeletons in parallel parts. It needs +RTS -N.
+        -- SPECFTACULAR_SPLIT=d sets the split of the skeletons by shape, down
+        -- to d applications (0 is off; 2 with SPECFTACULAR_PARALLEL=1).
+        parallelSetting <- (== Just "1") <$> Env.lookupEnv "SPECFTACULAR_PARALLEL"
+        splitSetting <- fromMaybe (if parallelSetting then 2 else 0) . (>>= TR.readMaybe) <$> Env.lookupEnv "SPECFTACULAR_SPLIT"
+        when parallelSetting $ hSetBuffering stderr LineBuffering
         -- SPECFTACULAR_STOP_AFTER=phase:size stops the search after that size
         -- of that phase, so that a profile of the run is written.
         stopSetting <- (>>= parseStop) <$> Env.lookupEnv "SPECFTACULAR_STOP_AFTER"
@@ -348,6 +367,8 @@ searchPhases size phase givenInstances givenSig =
                     , diagnosticPhase = 0
                     , resolveInstance = instances
                     , splitEnumeration = splitSetting
+                    , parallelBuckets = parallelSetting
+                    , deferLaws = parallelSetting
                     , stopAfter = stopSetting
                     }
         runPhases env size (max 1 (min 4 phase)) instances sig
@@ -454,6 +475,8 @@ runPhases env size lastPhase instances sig =
             , rewrite_rules = emptyRules
             , so_far = 0
             , law_count = 0
+            , pending_laws = []
+            , touched_reps = HS.empty
             }
   where
     go ((pn, (finished, starting, givenTrans, skelTrans, skeletonTrans)) : rest) s
@@ -482,11 +505,60 @@ most general carrier typings with that result type of the skeletons of its
 monomorphic type.
 -}
 runPhase :: Settings -> Int -> Maybe StEcta -> StEcta -> Search -> IO ([String], Search)
-runPhase env@Settings{..} size skeletons stecta@StEcta{..} =
-    go
-        Map.empty
-        [(lvl, tc) | lvl <- [1 .. size], tc <- sortOn (\t -> (typeSize t, concreteTypeLeaves t, t)) (filter tested sig_ty_cons)]
+runPhase env@Settings{..} size skeletons stecta@StEcta{..}
+    | parallelBuckets = goSizes [1 .. size]
+    | otherwise = go Map.empty [(lvl, tc) | lvl <- [1 .. size], tc <- ordered]
   where
+    ordered = sortOn (\t -> (typeSize t, concreteTypeLeaves t, t)) (filter tested sig_ty_cons)
+    -- With 'parallelBuckets', the buckets of a size run in parallel from the
+    -- state at the start of the size. A bucket changes only the trees of its
+    -- type and records its laws. The merge takes the trees of each bucket,
+    -- and adds its laws in the order of the buckets. It drops a law that the
+    -- laws before it prove. Each printed law passed its tests.
+    goSizes [] s = return ([], s)
+    goSizes (lvl : rest) s = do
+        typings <- case skeletons of
+            Just skeleton ->
+                Map.fromList
+                    <$> concurrently
+                        [ do
+                            found <- skeletonTypings skeleton lvl key (rewrite_rules s)
+                            _ <- evaluate (length found)
+                            pure (key, found)
+                        | key <- nubOrd (map monomorphiseType ordered)
+                        ]
+            Nothing -> pure Map.empty
+        results <-
+            concurrently
+                [ diagnose env lvl (show tc) "bucket" s $
+                    bucket lvl (Map.lookup (monomorphiseType tc) typings) tc s{pending_laws = [], touched_reps = HS.empty}
+                | tc <- ordered
+                ]
+        (laws, s') <- foldM (mergeBucket s) ([], s) (zip ordered results)
+        (more, s'') <- goSizes rest s'
+        return (laws ++ more, s'')
+    mergeBucket start (laws, merged) (tc, (_, done)) = do
+        let key = typeSkeletonToTerm tc
+            combined =
+                merged
+                    { seen = HS.union (seen done) (seen merged)
+                    , trees = maybe (trees merged) (\tree -> Map.insert key tree (trees merged)) (Map.lookup key (trees done))
+                    , instance_trees =
+                        foldl'
+                            (\m r -> maybe m (\tree -> Map.insert r tree m) (Map.lookup r (instance_trees done)))
+                            (instance_trees merged)
+                            (HS.toList (touched_reps done))
+                    , instantiated = HS.union (instantiated done) (instantiated merged)
+                    , so_far = so_far merged + so_far done - so_far start
+                    }
+        foldM replay (laws, combined) (reverse (pending_laws done))
+    replay (laws, s) (w, i, lawSig, law)
+        | joinable (isGivenVar inst_sig) (rewrite_rules s) w i = return (laws, s)
+        | otherwise = do
+            let n = law_count s + 1
+                lawText = show n <> ". " <> ppNpTerm (canonicalLaw lawSig law)
+            putStrLn lawText
+            return (laws ++ [lawText], s{law_count = n, rewrite_rules = addLaw maxSize lawSig law (rewrite_rules s)})
     -- With a skeleton grammar, the variable types are closed under carrier
     -- renaming (see 'mkStecta'). Then the schemas of a type are the
     -- renamings of the schemas of its canonical type (see
@@ -596,6 +668,19 @@ searchSpaceParts splitDepth StEcta{..} lvl tc =
     | part <- spineParts splitDepth any_arg lvl
     ]
 
+{- | Run each action in its own thread, and give the results in order. An
+exception in a thread is raised again here.
+-}
+concurrently :: [IO a] -> IO [a]
+concurrently actions = do
+    results <- mapM start actions
+    mapM (\result -> takeMVar result >>= either (\e -> throwIO (e :: SomeException)) pure) results
+  where
+    start action = do
+        result <- newEmptyMVar
+        _ <- forkIO (try action >>= putMVar result)
+        pure result
+
 {- | Evaluate the spine of each list in its own thread, and print the time and
 the length of each on stderr (spike). An exception in a thread is raised
 again here.
@@ -689,6 +774,7 @@ consider env@Settings{..} StEcta{..} lvl full_term s0
                                     np_term
                                     (DT.leafWith most_general (values most_general))
                                     (instance_trees s0)
+                            , touched_reps = HS.insert np_term (touched_reps s0)
                             }
                         )
               where
@@ -765,7 +851,8 @@ consider env@Settings{..} StEcta{..} lvl full_term s0
             case inserted of
                 DT.Untested -> return (Knew, s)
                 DT.Distinct table' ->
-                    return (Singleton, s{instance_trees = Map.insert rep table' (instance_trees s)})
+                    return
+                        (Singleton, s{instance_trees = Map.insert rep table' (instance_trees s), touched_reps = HS.insert rep (touched_reps s)})
                 DT.EqualTo w
                     | w == i -> return (Knew, s)
                     -- The known laws prove the law.
@@ -777,8 +864,9 @@ consider env@Settings{..} StEcta{..} lvl full_term s0
                         (lawSig, law) <- generalizeLaw resolveInstance (map caseTest test_cases) inst_sig (eq_type, eq_inst) (lawOf w)
                         let n = law_count s + 1
                             law_str = show n <> ". " <> ppNpTerm (canonicalLaw lawSig law)
-                        when progress $ hPutStr stderr "\r\ESC[K"
-                        putStrLn law_str
+                        unless deferLaws $ do
+                            when progress $ hPutStr stderr "\r\ESC[K"
+                            putStrLn law_str
                         rules <-
                             if detailedDiagnostics
                                 then diagnose env lvl (show current_ty) "completion" s $ evaluate (addLaw maxSize lawSig law (rewrite_rules s))
@@ -788,6 +876,7 @@ consider env@Settings{..} StEcta{..} lvl full_term s0
                             , s
                                 { law_count = n
                                 , rewrite_rules = rules
+                                , pending_laws = [(w, i, lawSig, law) | deferLaws] ++ pending_laws s
                                 }
                             )
       where
