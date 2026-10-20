@@ -781,6 +781,7 @@ criticalPairsWith rules (l, r) =
         [ criticalPairs incomingPlaces incomingRight (right oldL, right oldR)
             ++ criticalPairs (contexts (left oldL)) (left oldR) incomingReverse
         | (oldL, oldR) <- allRules rules
+        , overlaps oldL
         ]
   where
     apart prefix (Symbol x) = Symbol (prefix <> T.drop 3 x)
@@ -789,6 +790,12 @@ criticalPairsWith rules (l, r) =
     incomingPlaces = contexts (left l)
     incomingRight = left r
     incomingReverse = (right l, right r)
+    -- A rule whose left side fits no place of the incoming left side, and
+    -- none of whose places fits the incoming left side, gives no pair (see
+    -- 'unifiableShapes'). A renaming keeps the shapes, so the test reads the
+    -- rules before their renaming.
+    incomingShapes = map fst (contexts l)
+    overlaps oldL = any (`unifiableShapes` oldL) incomingShapes || any ((`unifiableShapes` l) . fst) (contexts oldL)
 
 {- | Whether an equation is an instance of a rule of the index, in the same
 context on the two sides, as in Twee. Then the equation follows from the
