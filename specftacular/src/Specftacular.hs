@@ -25,9 +25,23 @@ import Specftacular.Rewriting
 import Specftacular.Types
 import Specftacular.Utils
 
-import Control.Concurrent (forkIO)
+import Control.Concurrent (forkIO, forkIOWithUnmask, killThread, myThreadId, threadDelay, throwTo)
 import Control.Concurrent.MVar (newEmptyMVar, putMVar, takeMVar)
-import Control.Exception (AllocationLimitExceeded (..), SomeException, evaluate, mask, onException, throwIO, try)
+import Control.Exception (
+    AllocationLimitExceeded (..),
+    Exception (..),
+    SomeException,
+    asyncExceptionFromException,
+    asyncExceptionToException,
+    bracket,
+    evaluate,
+    handleJust,
+    mask,
+    onException,
+    throwIO,
+    try,
+    uninterruptibleMask_,
+ )
 import Control.Monad (foldM, unless, when)
 import Data.CFTA.Equality (
     Edge (Edge),
@@ -41,14 +55,21 @@ import Data.CFTA.Equality (
 import Data.CFTA.Symbol (Symbol (Symbol))
 import Data.CFTA.Template (Template (..))
 import Data.Char (isAlphaNum)
-import Data.IORef (IORef, modifyIORef', newIORef, readIORef)
+import Data.IORef (IORef, modifyIORef', newIORef, readIORef, writeIORef)
 import Data.Int (Int64)
 import Data.List hiding (union)
 import Data.Maybe (fromMaybe, isJust, mapMaybe)
 import qualified Data.Text as T
+import Data.Unique (Unique, newUnique)
+import Data.Word (Word64)
 import GHC.Clock (getMonotonicTimeNSec)
 import GHC.Conc (disableAllocationLimit, enableAllocationLimit, setAllocationCounter)
-import GHC.Stats (RTSStats (allocated_bytes, gc_cpu_ns, gcs), getRTSStats, getRTSStatsEnabled)
+import GHC.Stats (
+    GCDetails (gcdetails_live_bytes),
+    RTSStats (allocated_bytes, gc, gc_cpu_ns, gcs),
+    getRTSStats,
+    getRTSStatsEnabled,
+ )
 import qualified Options.Applicative as O
 import System.CPUTime (getCPUTime)
 import qualified System.Environment as Env
@@ -236,6 +257,8 @@ data Settings = Settings
     -}
     , bucketTimeout :: Maybe Double
     -- ^ The seconds after which a bucket stops testing its schemas.
+    , bucketMemLimit :: Maybe Word64
+    -- ^ The bytes by which a bucket may grow the live heap.
     , lawSink :: IORef [(Term, Term, Sig, Term)]
     {- ^ With 'deferLaws', the laws of the schema that runs, newest first, so
     that a schema that runs out of time keeps the laws that it found.
@@ -308,6 +331,10 @@ data SearchOptions = SearchOptions
     {- ^ The seconds after which a bucket stops testing its schemas. The
     search reports the bucket and goes on with the next one.
     -}
+    , searchBucketMemLimit :: Maybe Word64
+    {- ^ The bytes by which a bucket may grow the live heap. Over them, the
+    bucket stops testing its schemas, as after 'searchBucketTimeout'.
+    -}
     }
     deriving (Show)
 
@@ -320,6 +347,7 @@ defaultOptions size phase =
         , searchParallel = False
         , searchSplit = 0
         , searchBucketTimeout = Nothing
+        , searchBucketMemLimit = Nothing
         }
 
 {- | Read the options from the program arguments: the size, the phase,
@@ -329,14 +357,15 @@ with @--parallel@ and 0 without it, unless @--split@ gives it.
 parseOptions :: IO SearchOptions
 parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.progDesc "Find the laws of a signature."))
   where
-    options = build <$> size <*> phase <*> parallel <*> O.optional split <*> O.optional bucketTimeout
-    build size' phase' parallel' split' timeout' =
+    options = build <$> size <*> phase <*> parallel <*> O.optional split <*> O.optional bucketTimeout <*> O.optional bucketMemLimit
+    build size' phase' parallel' split' timeout' memLimit' =
         SearchOptions
             { searchSize = size'
             , searchPhase = phase'
             , searchParallel = parallel'
             , searchSplit = fromMaybe (if parallel' then 2 else 0) split'
             , searchBucketTimeout = timeout'
+            , searchBucketMemLimit = memLimit'
             }
     size = O.argument O.auto (O.metavar "SIZE" <> O.help "The largest size of the terms")
     phase = O.argument O.auto (O.metavar "PHASE" <> O.help "The last phase, from 1 to 4")
@@ -360,6 +389,60 @@ parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.p
                 <> O.help
                     "Stop testing the schemas of a bucket after SECONDS, report the bucket, and go on (the laws then depend on the speed of the machine)"
             )
+    bucketMemLimit =
+        O.option
+            (O.maybeReader parseBytes)
+            ( O.long "bucket-mem-limit"
+                <> O.metavar "SIZE"
+                <> O.help
+                    "Stop testing the schemas of a bucket when it grows the live heap by more than SIZE (such as 512M or 4G), report the bucket, and go on (needs RTS statistics, +RTS -T; the laws then depend on the times of the collections)"
+            )
+
+-- | The exception that 'withMemoryLimit' throws to its thread.
+newtype MemoryLimitHit = MemoryLimitHit Unique
+    deriving (Eq)
+
+instance Show MemoryLimitHit where
+    show _ = "<<bucket memory limit>>"
+
+instance Exception MemoryLimitHit where
+    toException = asyncExceptionToException
+    fromException = asyncExceptionFromException
+
+-- | The live bytes of the heap after the last collection.
+liveBytes :: IO Word64
+liveBytes = gcdetails_live_bytes . gc <$> getRTSStats
+
+{- | Run an action, and stop it when the live heap grows by more than a
+number of bytes over a base: 'Left' gives the growth. A thread reads the
+statistics of the collector every 100 ms, so the stop comes after the
+collection that sees the growth.
+-}
+withMemoryLimit :: Maybe (Word64, Word64) -> IO a -> IO (Either Word64 a)
+withMemoryLimit Nothing action = Right <$> action
+withMemoryLimit (Just (base, bytes)) action = do
+    me <- myThreadId
+    key <- newUnique
+    grown <- newIORef 0
+    let hit = MemoryLimitHit key
+        watch = do
+            threadDelay 100000
+            live <- liveBytes
+            if live > base + bytes
+                then writeIORef grown (live - base) >> throwTo me hit
+                else watch
+    handleJust
+        (\e -> if e == hit then Just () else Nothing)
+        (\_ -> Left <$> readIORef grown)
+        (bracket (forkIOWithUnmask (\unmask -> unmask watch)) (uninterruptibleMask_ . killThread) (\_ -> Right <$> action))
+
+-- | Read a number of bytes with an optional suffix K, M, G, or T (powers of 1024).
+parseBytes :: String -> Maybe Word64
+parseBytes text = case span (`elem` ['0' .. '9']) text of
+    (digits@(_ : _), suffix) -> (read digits *) <$> lookup suffix units
+    _ -> Nothing
+  where
+    units = [("", 1), ("K", 1024), ("M", 1024 ^ (2 :: Int)), ("G", 1024 ^ (3 :: Int)), ("T", 1024 ^ (4 :: Int))]
 
 {- | Print the laws of a signature, with terms up to the size that the first
 program argument gives (6 by default). The types are monomorphic, as in
@@ -402,6 +485,7 @@ searchPhases
         , searchParallel = parallelSetting
         , searchSplit = splitSetting
         , searchBucketTimeout = timeoutSetting
+        , searchBucketMemLimit = memLimitOption
         }
     givenInstances
     givenSig =
@@ -412,6 +496,10 @@ searchPhases
             -- Threads write whole diagnostic lines.
             when parallelSetting $ hSetBuffering stderr LineBuffering
             sink <- newIORef []
+            statsEnabled <- getRTSStatsEnabled
+            let memLimitSetting = if statsEnabled then memLimitOption else Nothing
+            when (isJust memLimitOption && not statsEnabled) $
+                hPutStrLn stderr "*** Warning: --bucket-mem-limit needs RTS statistics (+RTS -T); it has no effect."
             -- SPECFTACULAR_STOP_AFTER=phase:size stops the search after that size
             -- of that phase, so that a profile of the run is written.
             stopSetting <- (>>= parseStop) <$> Env.lookupEnv "SPECFTACULAR_STOP_AFTER"
@@ -463,7 +551,8 @@ searchPhases
                         , resolveInstance = instances
                         , splitEnumeration = splitSetting
                         , parallelBuckets = parallelSetting
-                        , deferLaws = parallelSetting || isJust timeoutSetting
+                        , deferLaws = parallelSetting || isJust timeoutSetting || isJust memLimitSetting
+                        , bucketMemLimit = memLimitSetting
                         , bucketTimeout = timeoutSetting
                         , lawSink = sink
                         , stopAfter = stopSetting
@@ -749,23 +838,25 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..}
             (_ : _) -> refreshCount progress "Folded, exploring " (" for " ++ show tc) "" lvl (so_far s)
             _ -> return ()
         let deadline = (\seconds -> bucketStart + round (seconds * 1e9)) <$> bucketTimeout
-        considerAll (deadline, bucketStart, s) lvl tc first s
+        memory <- case bucketMemLimit of
+            Just bytes -> (\live -> Just (live, bytes)) <$> liveBytes
+            Nothing -> return Nothing
+        considerAll (deadline, memory, bucketStart, s) lvl tc first s
     considerAll _ _ _ [] s = return ([], s)
-    considerAll limit@(deadline, bucketStart, start) lvl tc (t : ts) s = do
+    considerAll limit@(deadline, memory, bucketStart, start) lvl tc (t : ts) s = do
         begin <- getMonotonicTimeNSec
         schemaSink <- newIORef []
         let considerOne =
                 diagnose env lvl (show tc) "schema" s $
                     consider env{lawSink = schemaSink} stecta lvl (Term "filter" [typeSkeletonToTerm tc, t]) s
-        result <- case deadline of
+        result <- withMemoryLimit memory $ case deadline of
             Nothing -> Just <$> considerOne
             Just d
                 | begin >= d -> return Nothing
                 | otherwise -> timeout (fromIntegral ((d - begin) `div` 1000)) considerOne
-        case result of
-            Nothing -> do
-                -- The bucket ran out of time: keep the laws that the schema
-                -- found, drop the rest of the schema, and report.
+        let stopped reason = do
+                -- The bucket ran out of time or memory: keep the laws that the
+                -- schema found, drop the rest of the schema, and report.
                 found <- reverse <$> readIORef schemaSink
                 (kept, s1) <-
                     if parallelBuckets
@@ -774,7 +865,8 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..}
                 now <- getMonotonicTimeNSec
                 let tree = Map.findWithDefault DT.empty (typeSkeletonToTerm tc) (trees s)
                 putStrLn $
-                    "Bucket timeout: phase "
+                    reason
+                        ++ ": phase "
                         ++ show diagnosticPhase
                         ++ ", size "
                         ++ show lvl
@@ -790,9 +882,14 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..}
                         ++ show (DT.size tree)
                         ++ " representatives; interrupted at "
                         ++ ppNpTerm t
-                diagnosticEvent env "timeout" lvl (show tc) "bucket" s1
+                diagnosticEvent env "stopped" lvl (show tc) "bucket" s1
                 return (kept, s1)
-            Just (laws, s') -> considerRest limit lvl tc t ts begin s s' laws
+        case result of
+            Left grown ->
+                stopped
+                    ("Bucket memory limit (live heap grew by " ++ show (fromIntegral grown / (1024 ^ (3 :: Int)) :: Double) ++ " GiB)")
+            Right Nothing -> stopped "Bucket timeout"
+            Right (Just (laws, s')) -> considerRest limit lvl tc t ts begin s s' laws
     considerRest limit lvl tc t ts begin s s' laws = do
         end <- getMonotonicTimeNSec
         -- Without parallel buckets, deferred laws print when their schema ends.
