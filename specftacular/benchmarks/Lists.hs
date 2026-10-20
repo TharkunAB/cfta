@@ -6,10 +6,9 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 
 import Specftacular
-import System.Environment (getArgs)
 
 main = do
-    [s, p] <- map read <$> getArgs
+    [s, p] <- map read <$> programArguments
     -- ftacularSpec' 7 3 extraReps [
     res <-
         experimentalPhases

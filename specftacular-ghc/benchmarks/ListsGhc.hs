@@ -4,11 +4,10 @@
 -- names, with distinct abstract carriers.
 import Specftacular
 import Specftacular.GHC (withGhcSignature)
-import System.Environment (getArgs)
 
 main :: IO ()
 main = do
-    [s, p] <- map read <$> getArgs
+    [s, p] <- map read <$> programArguments
     withGhcSignature
         ["import Prelude", "import Data.List"]
         []

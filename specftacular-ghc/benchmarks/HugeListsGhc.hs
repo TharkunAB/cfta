@@ -6,11 +6,10 @@
 import qualified Data.Text as T
 import Specftacular
 import Specftacular.GHC (withGhcSignature)
-import System.Environment (getArgs)
 
 main :: IO ()
 main = do
-    [s, p] <- map read <$> getArgs
+    [s, p] <- map read <$> programArguments
     withGhcSignature
         ["import Prelude", "import Data.List", "import Control.Monad"]
         ["usort :: [Int] -> [Int]\nusort [] = []\nusort (a:as) = usort (filter (< a) as) ++ [a] ++ usort (filter (> a) as)"]

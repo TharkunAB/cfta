@@ -8,6 +8,7 @@ module Specftacular (
     ftacularSpec,
     discoverMonomorphic,
     experimentalPhases,
+    programArguments,
     searchPhases,
 ) where
 
@@ -274,6 +275,12 @@ diagnose env@Settings{..} level ty stage s action
         diagnosticEvent env "end" level ty stage s
         return result
 
+{- | The program arguments without the flags of the search, such as
+@--parallel@, which 'searchPhases' reads itself.
+-}
+programArguments :: IO [String]
+programArguments = filter (\argument -> take 2 argument /= "--") <$> Env.getArgs
+
 {- | Print the laws of a signature, with terms up to the size that the first
 program argument gives (6 by default). The types are monomorphic, as in
 'discoverMonomorphic'.
@@ -313,11 +320,11 @@ searchPhases size phase givenInstances givenSig =
         -- SPECFTACULAR_PROGRESS=1 shows the progress of the search on stderr.
         progress <- (== Just "1") <$> Env.lookupEnv "SPECFTACULAR_PROGRESS"
         diagnosticSetting <- Env.lookupEnv "SPECFTACULAR_DIAGNOSTICS"
-        -- SPECFTACULAR_PARALLEL=1 runs the buckets of a size in parallel and
+        -- The --parallel flag runs the buckets of a size in parallel and
         -- enumerates the phase 4 skeletons in parallel parts. It needs +RTS -N.
         -- SPECFTACULAR_SPLIT=d sets the split of the skeletons by shape, down
-        -- to d applications (0 is off; 2 with SPECFTACULAR_PARALLEL=1).
-        parallelSetting <- (== Just "1") <$> Env.lookupEnv "SPECFTACULAR_PARALLEL"
+        -- to d applications (0 is off; 2 with --parallel).
+        parallelSetting <- elem "--parallel" <$> Env.getArgs
         splitSetting <- fromMaybe (if parallelSetting then 2 else 0) . (>>= TR.readMaybe) <$> Env.lookupEnv "SPECFTACULAR_SPLIT"
         when parallelSetting $ hSetBuffering stderr LineBuffering
         -- SPECFTACULAR_STOP_AFTER=phase:size stops the search after that size

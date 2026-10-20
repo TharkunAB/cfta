@@ -15,7 +15,6 @@ import Data.Ord
 import Data.Typeable
 import Specftacular
 import Specftacular.Types (genRepFromProxy)
-import System.Environment (getArgs)
 import Test.QuickCheck
 import Test.QuickCheck.Gen
 import Test.QuickCheck.Random
@@ -154,7 +153,7 @@ extraReps _ = Nothing
 --   monoType (Proxy :: Proxy Sym) ]
 
 main = do
-    [s, p] <- map read <$> getArgs
+    [s, p] <- map read <$> programArguments
     putStrLn "Observation: acceptance on 100 fixed words; seed 12345; size 10."
     res <-
         experimentalPhases

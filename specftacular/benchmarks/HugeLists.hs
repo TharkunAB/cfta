@@ -9,7 +9,6 @@ import Control.Monad
 import Data.List
 
 import Specftacular
-import System.Environment (getArgs)
 
 -- | Sort a list and remove duplicate elements, as in QuickSpec 2.
 usort :: [Int] -> [Int]
@@ -20,7 +19,7 @@ usort (a : as) =
         ++ usort (filter (> a) as)
 
 main = do
-    [s, p] <- map read <$> getArgs
+    [s, p] <- map read <$> programArguments
     res <-
         experimentalPhases
             s

@@ -19,8 +19,6 @@ import qualified Data.Map as Map
 import Data.Proxy
 import Data.Typeable (Typeable)
 
-import System.Environment (getArgs)
-
 newtype SmallRational = SmallRational Rational
     deriving (Eq, Ord, Num, Typeable, Fractional, Conj, CoArbitrary, Show)
 instance Arbitrary SmallRational where
@@ -71,7 +69,7 @@ extraReps t | t == typeSkeletonOf (Proxy :: Proxy It) = Just $ genRepFromProxy (
 extraReps _ = Nothing
 
 main = do
-    [s, p] <- map read <$> getArgs
+    [s, p] <- map read <$> programArguments
     -- ftacularSpec' 7 3 extraReps [
     res <-
         experimentalPhases
