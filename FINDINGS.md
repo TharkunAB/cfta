@@ -2,6 +2,33 @@
 
 ## Haskell fix handoff for external work
 
+External Haskell documentation follow-up: 2026-10-20 14:55 CEST.
+Source inspection found a possible overclaim in the new Typing.hs size-order
+paragraph and cfta-generator README: "Binders generators already have
+size-major ranks". fromTypingRules uses fromConstructorAutomaton, whose
+route depends on actual graph cycles. An acyclic Binders grammar can use
+finite constructor order. Candidate: Payload = P Payload | Z and T = A Payload | B Int, with only
+rules A(value(P(P Z))) and B(value0), bound Binders0. Both roots have arity1.
+The larger A term can precede the B term by finite constructor order. This
+valid external-field candidate did not reach rank output in the isolated
+cached-dependency reproduction. Seven capped attempts retained compiler and
+linker failures; the final executable aborted with exit134 and
+"*** stack smashing detected ***". No fresh package build was run. This is
+a verification blocker, not evidence of a production runtime defect. Verify
+the candidate with a fresh matching toolchain before requesting a repair.
+If confirmed, qualify the statement
+by the actual cyclic route and retain the upToSize advice for acyclic imports.
+No production Haskell file is changed locally. Keep this follow-up separate
+from confirmed runtime defects and from the older repair registry below.
+
+Upstream import: 2026-10-20 14:53 CEST. Merge: `7ac4534cb`.
+Main: `9769fe3e9`. The import retains the published proof checkpoint and
+all earlier Lean work. Both changelog entries survive the sole conflict.
+Exactly three Haskell files change as upstream. No local Haskell behavior
+patch or new repair request is added. replaceRows needs a refinement proof.
+The user resumed proof work after the verified push of `2a90c2318`. Read
+`lean/notes-current-upstream-persistent-rows.md`. Preserve every repair below.
+
 Incoming upstream review: 2026-10-20 14:52 CEST. Main: `9769fe3e9`.
 The published checkpoint `2a90c2318` is preserved before import. Pull cannot
 fast-forward the divergent branches. A local merge will retain both histories.

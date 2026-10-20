@@ -1,5 +1,14 @@
 # Publication status
 
+Checked: 2026-10-20. The user explicitly authorized the push on 2026-10-19.
+Checkpoint2a90c23188af8dc78bbae55008d0791cb9ab80a1 was pushed to origin/formalize.
+The remote ref was read back at that exact commit. The user resumed proof work
+on 2026-10-20. The earlier rejection and pause do not remain current blockers.
+The existing full-library goal includes regular publication to formalize.
+Keep the same repository and branch destination. Verify remote writes.
+
+## Historical approval rejection
+
 Checked: 2026-10-18 03:22 CEST.
 
 The local proof is `1324bb38242efb07277622771c083833d41ee0ae`.
