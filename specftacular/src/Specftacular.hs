@@ -275,7 +275,14 @@ data Settings = Settings
     , bucketTimeout :: Maybe Double
     -- ^ The seconds after which a bucket stops testing its schemas.
     , bucketMemLimit :: Maybe Word64
-    -- ^ The bytes by which a bucket may grow the live heap.
+    , completionTimeout :: Maybe Double
+    -- ^ The seconds that the completion of one law may take.
+    , completionMemLimit :: Word64
+    -- ^ The bytes by which the completion of one law may grow the live heap.
+    , completionAllocLimit :: Word64
+    {- ^ The bytes that the completion of one law may allocate.
+    ^ The bytes by which a bucket may grow the live heap.
+    -}
     , lawSink :: IORef [(Term, Term, Sig, Term)]
     {- ^ With 'deferLaws', the laws of the schema that runs, newest first, so
     that a schema that runs out of time keeps the laws that it found.
@@ -357,6 +364,14 @@ data SearchOptions = SearchOptions
     {- ^ The bytes by which a bucket may grow the live heap. Over them, the
     bucket stops testing its schemas, as after 'searchBucketTimeout'.
     -}
+    , searchCompletionTimeout :: Maybe Double
+    {- ^ The seconds that the completion of one law may take. Over them, the
+    law keeps only its own rules (see 'boundedCompletion').
+    -}
+    , searchCompletionMemLimit :: Word64
+    -- ^ The bytes by which the completion of one law may grow the live heap.
+    , searchCompletionAllocLimit :: Word64
+    -- ^ The bytes that the completion of one law may allocate.
     }
     deriving (Show)
 
@@ -371,11 +386,17 @@ defaultOptions size phase =
         , searchSplit = 2
         , searchBucketTimeout = Nothing
         , searchBucketMemLimit = Nothing
+        , searchCompletionTimeout = Nothing
+        , searchCompletionMemLimit = completionMemoryLimit
+        , searchCompletionAllocLimit = completionBudget
         }
 
 {- | Read the options from the program arguments: the size, the phase,
-@--parallel@, @--split DEPTH@, and @--bucket-timeout SECONDS@. The split is 2,
-unless @--split@ gives it.
+@--parallel@, @--enumerate-ahead@, @--split DEPTH@, the limits of a bucket
+(@--bucket-timeout SECONDS@, @--bucket-mem-limit SIZE@), and the limits of the
+completion of one law (@--completion-timeout SECONDS@,
+@--completion-mem-limit SIZE@, @--completion-alloc-limit SIZE@). The split is
+2, unless @--split@ gives it.
 -}
 parseOptions :: IO SearchOptions
 parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.progDesc "Find the laws of a signature."))
@@ -389,7 +410,10 @@ parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.p
             <*> O.optional split
             <*> O.optional bucketTimeout
             <*> O.optional bucketMemLimit
-    build size' phase' parallel' ahead' split' timeout' memLimit' =
+            <*> O.optional completionTimeoutOption
+            <*> completionMemLimitOption
+            <*> completionAllocLimitOption
+    build size' phase' parallel' ahead' split' timeout' memLimit' completionTimeout' completionMemLimit' completionAllocLimit' =
         SearchOptions
             { searchSize = size'
             , searchPhase = phase'
@@ -398,6 +422,9 @@ parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.p
             , searchSplit = fromMaybe 2 split'
             , searchBucketTimeout = timeout'
             , searchBucketMemLimit = memLimit'
+            , searchCompletionTimeout = completionTimeout'
+            , searchCompletionMemLimit = completionMemLimit'
+            , searchCompletionAllocLimit = completionAllocLimit'
             }
     size = O.argument O.auto (O.metavar "SIZE" <> O.help "The largest size of the terms")
     phase = O.argument O.auto (O.metavar "PHASE" <> O.help "The last phase, from 1 to 4")
@@ -435,6 +462,31 @@ parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.p
                 <> O.metavar "SIZE"
                 <> O.help
                     "Stop testing the schemas of a bucket when it grows the live heap by more than SIZE (such as 512M or 4G), report the bucket, and go on (needs RTS statistics, +RTS -T; the laws then depend on the times of the collections)"
+            )
+    completionTimeoutOption =
+        O.option
+            O.auto
+            ( O.long "completion-timeout"
+                <> O.metavar "SECONDS"
+                <> O.help
+                    "Keep only the rules of a law whose completion takes more than SECONDS (no limit by default; the laws then depend on the speed of the machine)"
+            )
+    completionMemLimitOption =
+        O.option
+            (O.maybeReader parseBytes)
+            ( O.long "completion-mem-limit"
+                <> O.metavar "SIZE"
+                <> O.value completionMemoryLimit
+                <> O.help
+                    "Keep only the rules of a law whose completion grows the live heap by more than SIZE (default 4G; needs RTS statistics, +RTS -T; the laws then depend on the times of the collections)"
+            )
+    completionAllocLimitOption =
+        O.option
+            (O.maybeReader parseBytes)
+            ( O.long "completion-alloc-limit"
+                <> O.metavar "SIZE"
+                <> O.value completionBudget
+                <> O.help "Keep only the rules of a law whose completion allocates more than SIZE (default 256G)"
             )
 
 -- | The exception that 'withMemoryLimit' throws to its thread.
@@ -526,6 +578,9 @@ searchPhases
         , searchSplit = splitSetting
         , searchBucketTimeout = timeoutSetting
         , searchBucketMemLimit = memLimitOption
+        , searchCompletionTimeout = completionTimeoutSetting
+        , searchCompletionMemLimit = completionMemLimitSetting
+        , searchCompletionAllocLimit = completionAllocLimitSetting
         }
     givenInstances
     givenSig =
@@ -603,6 +658,9 @@ searchPhases
                         , deferLaws = parallelSetting || isJust timeoutSetting || isJust memLimitSetting
                         , bucketMemLimit = memLimitSetting
                         , bucketTimeout = timeoutSetting
+                        , completionTimeout = completionTimeoutSetting
+                        , completionMemLimit = completionMemLimitSetting
+                        , completionAllocLimit = completionAllocLimitSetting
                         , lawSink = sink
                         , stopAfter = stopSetting
                         , onlyBucket = onlySetting
@@ -798,7 +856,7 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..}
                 lawText = show n <> ". " <> ppNpTerm (canonicalLaw lawSig law)
             putStrLn lawText
             rules <-
-                boundedCompletion lawText (addLaw maxSize lawSig law (rewrite_rules s)) (addLawRules lawSig law (rewrite_rules s))
+                boundedCompletion env lawText (addLaw maxSize lawSig law (rewrite_rules s)) (addLawRules lawSig law (rewrite_rules s))
             return (laws ++ [lawText], s{law_count = n, rewrite_rules = rules})
     -- With a skeleton grammar, the variable types are closed under carrier
     -- renaming (see 'mkStecta'). Then the schemas of a type are the
@@ -1231,7 +1289,7 @@ consider env@Settings{..} StEcta{..} lvl full_term s0
                         let complete
                                 | parallelBuckets = return (addLawRules lawSig law (rewrite_rules s))
                                 | otherwise =
-                                    boundedCompletion law_str (addLaw maxSize lawSig law (rewrite_rules s)) (addLawRules lawSig law (rewrite_rules s))
+                                    boundedCompletion env law_str (addLaw maxSize lawSig law (rewrite_rules s)) (addLawRules lawSig law (rewrite_rules s))
                         rules <-
                             if detailedDiagnostics
                                 then diagnose env lvl (show current_ty) "completion" s complete
@@ -1247,52 +1305,51 @@ consider env@Settings{..} StEcta{..} lvl full_term s0
       where
         lawOf w = Term "(==)" [Term (Symbol eq_txt) [], w, i]
 
-{- | The number of bytes by which the completion of one law may grow the live
-heap. See 'boundedCompletion'. This limit keeps the machine safe.
+{- | The default number of bytes by which the completion of one law may grow
+the live heap (@--completion-mem-limit@). See 'boundedCompletion'. This
+limit keeps the machine safe.
 -}
 completionMemoryLimit :: Word64
 completionMemoryLimit = 4 * 1024 * 1024 * 1024
 
-{- | The number of bytes that the completion of one law may allocate. See
-'boundedCompletion'. This limit stops a completion that runs long within the
-memory limit: at 6-p4, one completion runs more than 25 minutes within 4 GiB
-of live heap. The most expensive completion of HugeLists 7-p3 up to phase 3
-size 5 that ends allocates 184 GiB. A law that keeps only its own rules can
-make the completions of the laws after it expensive too, so the budget is
-above the costs of the completions that end.
+{- | The default number of bytes that the completion of one law may allocate
+(@--completion-alloc-limit@). See 'boundedCompletion'. This limit stops a
+completion that runs long within the memory limit: at 6-p4, one completion
+runs more than 25 minutes within 4 GiB of live heap. The most expensive
+completion of HugeLists 7-p3 up to phase 3 size 5 that ends allocates
+184 GiB. A law that keeps only its own rules can make the completions of the
+laws after it expensive too, so the budget is above the costs of the
+completions that end.
 -}
-completionBudget :: Int64
+completionBudget :: Word64
 completionBudget = 256 * 1024 * 1024 * 1024
 
-{- | The completed rules of a law, if their computation grows the live heap by
-at most 'completionMemoryLimit' bytes and allocates at most
-'completionBudget' bytes, and else the rules of the law alone, with a report
+{- | The completed rules of a law, if their computation stays within the
+limits of the completion (see 'completionTimeout', 'completionMemLimit',
+'completionAllocLimit'), and else the rules of the law alone, with a report
 on stderr. Completion only adds rules that follow from the laws, so fewer
 rules prune less but stay sound. The allocation does not depend on the load.
-The live heap is read after the collections, so the memory limit depends on
-their times. Without RTS statistics (@+RTS -T@) there is no memory limit.
+The time does, and the memory limit depends on the times of the collections.
+Without RTS statistics (@+RTS -T@) there is no memory limit.
 -}
-boundedCompletion :: String -> Rules -> Rules -> IO Rules
-boundedCompletion label completed alone = do
-    -- SPECFTACULAR_COMPLETION_MEMORY=GiB and SPECFTACULAR_COMPLETION_BUDGET=GiB
-    -- change the limits (spike).
-    limit <-
-        maybe completionMemoryLimit (* (1024 * 1024 * 1024)) . (>>= TR.readMaybe)
-            <$> Env.lookupEnv "SPECFTACULAR_COMPLETION_MEMORY"
-    budget <-
-        maybe completionBudget (* (1024 * 1024 * 1024)) . (>>= TR.readMaybe)
-            <$> Env.lookupEnv "SPECFTACULAR_COMPLETION_BUDGET"
+boundedCompletion :: Settings -> String -> Rules -> Rules -> IO Rules
+boundedCompletion Settings{..} label completed alone = do
     statsEnabled <- getRTSStatsEnabled
     base <- if statsEnabled then Just <$> liveBytes else pure Nothing
     begin <- getMonotonicTimeNSec
-    setAllocationCounter budget
+    setAllocationCounter (fromIntegral completionAllocLimit)
     enableAllocationLimit
-    result <- try (withMemoryLimit ((\live -> (live, limit)) <$> base) (evaluate completed))
+    result <-
+        try $
+            withMemoryLimit ((\live -> (live, completionMemLimit)) <$> base) $
+                case completionTimeout of
+                    Nothing -> Just <$> evaluate completed
+                    Just seconds -> timeout (round (seconds * 1e6)) (evaluate completed)
     disableAllocationLimit
     left <- getAllocationCounter
     end <- getMonotonicTimeNSec
     -- A completion that allocates more than 1 GiB prints its cost on stderr.
-    let allocated = fromIntegral budget - fromIntegral left :: Double
+    let allocated = fromIntegral completionAllocLimit - fromIntegral left :: Double
     when (allocated > 1024 ^ (3 :: Int)) $
         hPutStrLn
             stderr
@@ -1301,7 +1358,10 @@ boundedCompletion label completed alone = do
                 ["completioncost", show (fromIntegral (end - begin) / 1e9 :: Double), show (allocated / 1024 ^ (3 :: Int)), label]
             )
     case result of
-        Right (Right rules) -> return rules
+        Right (Right (Just rules)) -> return rules
+        Right (Right Nothing) -> do
+            hPutStrLn stderr ("completion over its time limit, the law alone: " ++ label)
+            return alone
         Right (Left grown) -> do
             hPutStrLn
                 stderr
