@@ -1247,35 +1247,37 @@ consider env@Settings{..} StEcta{..} lvl full_term s0
       where
         lawOf w = Term "(==)" [Term (Symbol eq_txt) [], w, i]
 
-{- | The number of bytes that the completion of one law may allocate. See
-'boundedCompletion'. The most expensive completion of HugeLists 7-p3 up to
-phase 3 size 5 allocates 184 GiB. A law that keeps only its own rules can
-make the completions of the laws after it expensive too, so the budget is
-above the costs of the completions that end.
+{- | The number of bytes by which the completion of one law may grow the live
+heap. See 'boundedCompletion'. The limit is on resident memory, which keeps
+the machine safe: a long completion that stays small goes on. HugeLists
+7-p3 law 257 allocates 184 GiB in its completion, and a law that keeps only
+its own rules can make the completions of the laws after it expensive too.
 -}
-completionBudget :: Int64
-completionBudget = 256 * 1024 * 1024 * 1024
+completionMemoryLimit :: Word64
+completionMemoryLimit = 4 * 1024 * 1024 * 1024
 
-{- | The completed rules of a law, if their computation allocates at most
-'completionBudget' bytes, and else the rules of the law alone, with a report
-on stderr. Completion only adds rules that follow from the laws, so fewer
-rules prune less but stay sound. The allocation does not depend on the load,
-so the choice is the same in each run.
+{- | The completed rules of a law, if their computation grows the live heap by
+at most 'completionMemoryLimit' bytes, and else the rules of the law alone,
+with a report on stderr. Completion only adds rules that follow from the
+laws, so fewer rules prune less but stay sound. The live heap is read after
+the collections, so the choice depends on their times. Without RTS
+statistics (@+RTS -T@) there is no limit.
 -}
 boundedCompletion :: String -> Rules -> Rules -> IO Rules
 boundedCompletion label completed alone = do
-    -- SPECFTACULAR_COMPLETION_BUDGET=GiB changes the budget (spike).
-    budget <-
-        maybe completionBudget (* (1024 * 1024 * 1024)) . (>>= TR.readMaybe) <$> Env.lookupEnv "SPECFTACULAR_COMPLETION_BUDGET"
+    -- SPECFTACULAR_COMPLETION_MEMORY=GiB changes the limit (spike).
+    limit <-
+        maybe completionMemoryLimit (* (1024 * 1024 * 1024)) . (>>= TR.readMaybe)
+            <$> Env.lookupEnv "SPECFTACULAR_COMPLETION_MEMORY"
+    statsEnabled <- getRTSStatsEnabled
+    base <- if statsEnabled then Just <$> liveBytes else pure Nothing
     begin <- getMonotonicTimeNSec
-    setAllocationCounter budget
-    enableAllocationLimit
-    result <- try (evaluate completed)
-    disableAllocationLimit
-    left <- getAllocationCounter
+    counterBefore <- getAllocationCounter
+    result <- withMemoryLimit ((\live -> (live, limit)) <$> base) (evaluate completed)
+    counterAfter <- getAllocationCounter
     end <- getMonotonicTimeNSec
     -- A completion that allocates more than 1 GiB prints its cost on stderr.
-    let allocated = fromIntegral budget - fromIntegral left :: Double
+    let allocated = fromIntegral (counterBefore - counterAfter) :: Double
     when (allocated > 1024 ^ (3 :: Int)) $
         hPutStrLn
             stderr
@@ -1285,8 +1287,14 @@ boundedCompletion label completed alone = do
             )
     case result of
         Right rules -> return rules
-        Left AllocationLimitExceeded -> do
-            hPutStrLn stderr ("completion over its budget, the law alone: " ++ label)
+        Left grown -> do
+            hPutStrLn
+                stderr
+                ( "completion over its memory limit (live heap grew by "
+                    ++ show (grown `div` (1024 * 1024))
+                    ++ " MiB), the law alone: "
+                    ++ label
+                )
             return alone
 
 npTerm' :: Term -> Term
