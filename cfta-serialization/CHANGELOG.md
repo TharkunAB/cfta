@@ -2,6 +2,9 @@
 
 ## 0.1.0.0 - Unreleased
 
+- Retain global predicate applications and named sorts with `predicate` and
+  `named` syntax. Preserve empty argument lists and escaped names.
+
 - Add `Data.CFTA.Serialization.Text`: a readable text format, version 2, for
   graphs (`graph 2;`), source documents (`document 2;`), and languages
   (`language 2;`). A parsed value is equal to the printed value, and printing

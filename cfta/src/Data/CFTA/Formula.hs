@@ -52,9 +52,9 @@ import Data.Text (Text)
 import qualified Data.Text as Text
 import GHC.Generics (Generic)
 
--- | The name of a value or of a function. It shows as its text.
+-- | The name of a value or of a function. It shows and reads as its text.
 newtype Name = Name Text
-    deriving newtype (Eq, Ord, Show)
+    deriving newtype (Eq, Ord, Show, Read)
 
 {- | A name hashes as its text. The instance defines only 'hashWithSalt', so
 'hash' uses the default salt, as for the symbols of Liquid Fixpoint. A hash set
@@ -91,13 +91,13 @@ data Term
       Ite !Formula !Term !Term
     | -- | A term with a given sort.
       Cast !Term !Sort
-    deriving (Eq, Ord, Show, Generic)
+    deriving (Eq, Ord, Show, Read, Generic)
 
 instance Hashable Term
 
 -- | A comparison of two terms.
 data Relation = Eq | Ne | Gt | Ge | Lt | Le
-    deriving (Eq, Ord, Show, Enum, Generic)
+    deriving (Eq, Ord, Show, Read, Enum, Generic)
 
 instance Hashable Relation
 
@@ -123,7 +123,7 @@ data Formula
     | -- | The formula holds for some values of the bound names.
       Exists ![(Name, Sort)] !Formula
     | Predicate !Name ![Term]
-    deriving (Eq, Ord, Show, Generic)
+    deriving (Eq, Ord, Show, Read, Generic)
 
 instance Hashable Formula
 
@@ -135,7 +135,7 @@ data Sort
     | -- | A function from the argument sorts to the result sort.
       FunctionSort ![Sort] !Sort
     | NamedSort !Name ![Sort]
-    deriving (Eq, Ord, Show, Generic)
+    deriving (Eq, Ord, Show, Read, Generic)
 
 instance Hashable Sort
 
