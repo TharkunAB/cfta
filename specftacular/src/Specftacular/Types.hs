@@ -22,15 +22,27 @@ import qualified Data.Map as Map
 import Data.Text (Text)
 import GHC.Generics (Generic)
 
-import Control.Exception (Exception, SomeAsyncException, SomeException, evaluate, fromException, throw, throwIO, try)
+import Control.Exception (
+    AllocationLimitExceeded (..),
+    Exception,
+    SomeAsyncException,
+    SomeException,
+    evaluate,
+    fromException,
+    throw,
+    throwIO,
+    try,
+ )
 import Data.CFTA.Symbol (Symbol (Symbol))
 import qualified Data.CFTA.Term as CT
+import Data.Int (Int64)
 import Data.List (sortOn)
 import Data.Maybe (fromMaybe, isJust, isNothing, listToMaybe, mapMaybe)
 import Data.Proxy
 import qualified Data.Text as T
 import Data.Typeable
 import Debug.Trace (trace)
+import GHC.Conc (disableAllocationLimit, enableAllocationLimit, setAllocationCounter)
 
 import GHC.Exts (Any)
 import Specftacular.Polymorphic (applyType, functionType, specialiseDynamic)
@@ -1140,11 +1152,27 @@ equalBy eq a b = fromValue (apply (apply eq a) b)
 means that the tested function threw an exception. Cancellation and type
 errors propagate to the caller.
 -}
+
+{- | The number of bytes that one comparison of two values may allocate. A
+comparison that allocates more gives no answer, as a comparison that throws,
+so the search does not use the term. The bound stops the test of a term whose
+values grow much faster than the test case, such as a scan of the appends of
+nested lists, after one large case. The allocation of a comparison does not
+depend on the load or on the settings of the collector, so the bound gives
+the same laws in each run.
+-}
+comparisonBudget :: Int64
+comparisonBudget = 1024 * 1024 * 1024
+
 valuesEqual :: Value -> Value -> Value -> IO (Maybe Bool)
 valuesEqual eq a b = do
+    setAllocationCounter comparisonBudget
+    enableAllocationLimit
     r <- try (evaluate (equalBy eq a b))
+    disableAllocationLimit
     case r of
         Left (e :: SomeException)
+            | Just AllocationLimitExceeded <- fromException e -> return Nothing
             | Just (_ :: SomeAsyncException) <- fromException e -> throwIO e
             | Just (illTyped :: IllTyped) <- fromException e -> throwIO illTyped
             | otherwise -> return Nothing
