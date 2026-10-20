@@ -1,0 +1,93 @@
+    build nested [] (empty : Heap) = .done firstMu firstHeap ∧ Context firstHeap [] ∧
+    firstMu = .mu firstEntry firstBody firstDepth firstOrdinary ∧
+    firstHeap.nodeRecords (muKey firstDepth firstOrdinary) = some (.mu firstEntry firstBody firstDepth firstOrdinary) ∧
+    firstHeap.nodeRecords event.key = none ∧
+    build outer [] firstHeap = .done event.candidate event.after ∧
+    event.after.nodeRecords event.key = some event.candidate ∧
+    row.entry.key.symbol = ("tag17",.top) ∧ row.entry.key.constraint = top ∧ row.children = [] ∧
+    RowAt event.body row ∧
+    event.allocated.nodes.table (muKey firstDepth firstOrdinary) = some firstEntry ∧
+    event.allocated.nodeRecords (muKey firstDepth firstOrdinary) = some (.mu firstEntry firstBody firstDepth firstOrdinary) ∧
+    request false firstDepth firstOrdinary (callback nestedBody inputs) event.allocated = .done firstMu event.allocated ∧
+    (let original := outer
+     let initial : List Node := []
+     let before := firstHeap
+     let after := event.after
+    ∃ path : Path before after,
+      (∀ (index : Nat) event, (events path)[index]? = some event →
+        Reached original initial (.binder event.smart event.expression) event.environment event.before) ∧
+      (∀ key entry body depth ordinary,
+        after.nodeRecords key = some (.mu entry body depth ordinary) →
+        before.nodeRecords key = some (.mu entry body depth ordinary) ∨
+        ∃ index : Nat, ∃ event, (events path)[index]? = some event ∧
+          Reached original initial (.binder event.smart event.expression) event.environment event.before ∧
+          key = event.key ∧ Value.mu entry body depth ordinary = event.candidate ∧
+          event.afterBody.nodeRecords event.key = none ∧
+          Nonempty (Path before event.before) ∧
+          Nonempty (Path event.before event.afterDepth) ∧
+          Nonempty (Path event.afterDepth event.cut) ∧
+          Nonempty (Path event.allocated event.afterBody) ∧
+          Grows event.after after ∧ Extends event.after.nodes.issued after.nodes.issued) ∧
+      (∀ (index : Nat) outer, (events path)[index]? = some outer →
+        ∀ key entry body depth ordinary,
+          outer.afterBody.nodeRecords key = some (.mu entry body depth ordinary) →
+          before.nodeRecords key = some (.mu entry body depth ordinary) ∨
+          ∃ earlierIndex : Nat, ∃ earlier, earlierIndex < index ∧ (events path)[earlierIndex]? = some earlier ∧
+            Reached original initial (.binder earlier.smart earlier.expression) earlier.environment earlier.before ∧
+            key = earlier.key ∧ Value.mu entry body depth ordinary = earlier.candidate ∧
+            earlier.afterBody.nodeRecords earlier.key = none ∧
+            Nonempty (Path before earlier.before) ∧
+            Nonempty (Path earlier.before earlier.afterDepth) ∧
+            Nonempty (Path earlier.afterDepth earlier.cut) ∧
+            Nonempty (Path earlier.allocated earlier.afterBody) ∧
+            Grows earlier.after outer.afterBody ∧
+            Extends earlier.after.nodes.issued outer.afterBody.nodes.issued) ∧
+      (∀ (index : Nat) outer, (events path)[index]? = some outer →
+        ∀ row, RowAt outer.body row → RowOrigin original initial before path index outer row) ∧
+      ∃ targetIndex : Nat, ∃ selected : @Publication Symbol Guard _,
+        (events path)[targetIndex]? = some selected ∧
+        Reached original initial (.binder selected.smart selected.expression) selected.environment selected.before ∧
+        event.key = selected.key ∧ event.candidate = selected.candidate ∧
+        selected.afterBody.nodeRecords selected.key = none ∧
+        Nonempty (Path before selected.before) ∧ Nonempty (Path selected.before selected.afterDepth) ∧
+        Nonempty (Path selected.afterDepth selected.cut) ∧ Nonempty (Path selected.allocated selected.afterBody) ∧
+        Grows selected.after after ∧ Extends selected.after.nodes.issued after.nodes.issued ∧
+        ∃ producerIndex : Nat, ∃ producer : @Publication Symbol Guard _,
+          producerIndex ≤ targetIndex ∧ (events path)[producerIndex]? = some producer ∧
+          producer.expression = outerBody ∧
+          ∃ raw rawAfter,
+            build producer.expression (.reference (.interned producer.entry.identity) :: producer.environment)
+              producer.allocated = .done raw rawAfter ∧
+            run (withoutSelfReference (.interned producer.entry.identity) raw) rawAfter = (producer.body,producer.afterBody) ∧
+            Context producer.allocated (.reference (.interned producer.entry.identity) :: producer.environment) ∧
+            Reached original initial producer.expression (.reference (.interned producer.entry.identity) :: producer.environment)
+              producer.allocated ∧ RowAt raw row ∧
+            SourceRow producer.expression (.reference (.interned producer.entry.identity) :: producer.environment)
+              producer.allocated raw rawAfter row ∧
+          ∃ terminalExpression terminalInputs terminalStart terminalValue terminalStop,
+            SourceRow terminalExpression terminalInputs terminalStart terminalValue terminalStop row ∧
+            build terminalExpression terminalInputs terminalStart = .done terminalValue terminalStop ∧
+            Context terminalStart terminalInputs ∧ Reached original initial terminalExpression terminalInputs terminalStart ∧
+            Grows producer.allocated terminalStart ∧
+            Extends producer.allocated.nodes.issued terminalStart.nodes.issued ∧
+            terminalInputs = (.reference (.interned producer.entry.identity) :: producer.environment) ∧
+            sizeOf terminalExpression ≤ sizeOf producer.expression ∧
+            UnionDescent producer.expression terminalExpression ∧
+            Grows terminalStop rawAfter ∧ Extends terminalStop.nodes.issued rawAfter.nodes.issued ∧
+            Grows rawAfter producer.afterBody ∧ Extends rawAfter.nodes.issued producer.afterBody.nodes.issued ∧
+            Grows terminalStop selected.afterBody ∧ Extends terminalStop.nodes.issued selected.afterBody.nodes.issued ∧
+          ∃ smart body tDepth tAfterDepth tOrdinary tCut tEntry tBody,
+            terminalExpression = .binder smart body ∧ terminalExpression = nested ∧
+            smart = false ∧ body = nestedBody ∧
+            callback body terminalInputs .depth terminalStart = .done tDepth tAfterDepth ∧
+            callback body terminalInputs (.uninterned (ordinaryLevel tDepth)) tAfterDepth = .done tOrdinary tCut ∧
+            request smart tDepth tOrdinary (callback body terminalInputs) tCut = .done terminalValue terminalStop ∧
+            terminalStop.nodeRecords (muKey tDepth tOrdinary) = some (.mu tEntry tBody tDepth tOrdinary) ∧
+            terminalValue = finish smart (.mu tEntry tBody tDepth tOrdinary) ∧ RowAt tBody row ∧
+            before.nodeRecords (muKey tDepth tOrdinary) = some (.mu tEntry tBody tDepth tOrdinary) ∧
+            Value.mu tEntry tBody tDepth tOrdinary = firstMu ∧
+            Grows before tCut ∧
+            tCut.nodes.table (muKey tDepth tOrdinary) = some tEntry ∧
+            tCut.nodeRecords (muKey tDepth tOrdinary) = some (.mu tEntry tBody tDepth tOrdinary) ∧
+            terminalStop = tCut ∧ terminalValue = firstMu ∧
+            request smart tDepth tOrdinary (callback body terminalInputs) tCut = .done firstMu tCut)
