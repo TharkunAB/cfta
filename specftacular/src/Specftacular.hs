@@ -368,14 +368,14 @@ defaultOptions size phase =
         , searchPhase = phase
         , searchParallel = False
         , searchEnumerateAhead = False
-        , searchSplit = 0
+        , searchSplit = 2
         , searchBucketTimeout = Nothing
         , searchBucketMemLimit = Nothing
         }
 
 {- | Read the options from the program arguments: the size, the phase,
-@--parallel@, @--split DEPTH@, and @--bucket-timeout SECONDS@. The split is 2
-with @--parallel@ and 0 without it, unless @--split@ gives it.
+@--parallel@, @--split DEPTH@, and @--bucket-timeout SECONDS@. The split is 2,
+unless @--split@ gives it.
 -}
 parseOptions :: IO SearchOptions
 parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.progDesc "Find the laws of a signature."))
@@ -395,7 +395,7 @@ parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.p
             , searchPhase = phase'
             , searchParallel = parallel'
             , searchEnumerateAhead = ahead'
-            , searchSplit = fromMaybe (if parallel' || ahead' then 2 else 0) split'
+            , searchSplit = fromMaybe 2 split'
             , searchBucketTimeout = timeout'
             , searchBucketMemLimit = memLimit'
             }
@@ -418,7 +418,7 @@ parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.p
             ( O.long "split"
                 <> O.metavar "DEPTH"
                 <> O.help
-                    "Split the phase 4 skeletons by shape down to DEPTH levels of applications (default 2 with --parallel or --enumerate-ahead, else 0)"
+                    "Split the phase 4 skeletons by shape down to DEPTH levels of applications (default 2; 0 does not split)"
             )
     bucketTimeout =
         O.option
@@ -856,7 +856,8 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..}
     -- With 'splitEnumeration', each shape of the left spine is enumerated and
     -- typed in its own thread, and the parts are joined in their order.
     skeletonTypings skeleton lvl monomorphic rules
-        | splitEnumeration > 0 = concat <$> forceInParallel lvl monomorphic (skeletonParts skeleton lvl monomorphic rules)
+        | splitEnumeration > 0 =
+            concat <$> forceInParallel diagnostics lvl monomorphic (skeletonParts skeleton lvl monomorphic rules)
         | otherwise = pure (concat (skeletonParts skeleton lvl monomorphic rules))
     -- The typings of the parts of the skeletons, in their order.
     skeletonParts skeleton@StEcta{compl_sig = skeletonSig} lvl monomorphic rules
@@ -1001,18 +1002,19 @@ concurrently actions = do
         _ <- forkIO (try action >>= putMVar result)
         pure result
 
-{- | Evaluate the spine of each list in its own thread, and print the time and
-the length of each on stderr (spike). An exception in a thread is raised
+{- | Evaluate the spine of each list in its own thread. With 'True', print the
+time and the length of each on stderr. An exception in a thread is raised
 again here.
 -}
-forceInParallel :: Int -> TypeSkeleton -> [[a]] -> IO [[a]]
-forceInParallel lvl tc lists = do
+forceInParallel :: Bool -> Int -> TypeSkeleton -> [[a]] -> IO [[a]]
+forceInParallel report lvl tc lists = do
     results <- mapM start lists
     timings <- mapM (\result -> takeMVar result >>= either (\e -> throwIO (e :: SomeException)) pure) results
-    mapM_
-        ( \(index, (seconds, n)) -> hPutStrLn stderr (intercalate "\t" ["parpart", show lvl, show tc, show index, show seconds, show n])
-        )
-        (zip [0 :: Int ..] timings)
+    when report $
+        mapM_
+            ( \(index, (seconds, n)) -> hPutStrLn stderr (intercalate "\t" ["parpart", show lvl, show tc, show index, show seconds, show n])
+            )
+            (zip [0 :: Int ..] timings)
     pure lists
   where
     start xs = do
