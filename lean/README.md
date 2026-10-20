@@ -1,5 +1,48 @@
 # cfta formal model
 
+## Current ultimate original node-row provenance
+
+Updated: 2026-10-20 23:25 CEST. Proof checkpoint: `6489bddee`.
+Verified start: `d425c2942`. Imported main remains `794903b3f`.
+Read `lean/notes-current-native-original-node-row-origins.md`.
+
+Every full structural row stored in an indexed Mu publication of one
+actual original build from empty now has an actual original node call.
+One indexed-resumption producer fixes the same path for the whole proof.
+Strong induction on its publication index eliminates repeated binder
+stops. Each binder step carries the complete same row to an earlier
+body at i < j. The result retains an indexed producer k <= j, exact
+UnionDescent and generic SyntaxBound relative to that producer, original
+Context and Reached, actual node SourceRow/build/buildEdges/makeNode,
+distinct source/output indices and full RowCall output equality.
+Physical and issued suffixes end at the selected outer.afterBody.
+No child premise, writer identity or requester-size decrease is assumed.
+
+The same warm source example reaches its actual nullary tag17 node
+RowCall. It derives strict k < j in the same returned path. Equal indices
+would force equal events by their same list lookup. The actual outer
+callback and node UnionDescent exclude that case. No manually selected
+creator identity is assumed. All generic node-origin clauses remain.
+This example runs no unfold or native execution prefix.
+
+One public and one constructed full readback pass with standard axioms.
+Root strict logs are empty. Canonical and default Audit pass: 3539 jobs
+and 74335 theorem dependency checks. Only the older ClosedCompletion
+warning remains. All 9 actual capped Lean/Lake commands and
+1 failed attempts remain. Counts do not measure completion.
+Every earlier proof, draft, repair and counterexample remains.
+
+The next bridge must connect actual initial captures and successful
+unfolds to these original full rows. Preserve the generated-capture arm
+and the unfold's original stored-row anchor and actual child Calls.
+Changed output children need not equal original stored children.
+Global native renewal and active-owner exclusion, final retention,
+general outer completion, convergence, generated ancestry, residual
+observations and production Haskell refinement remain open.
+All 268 Haskell and 207 active package files keep their bytes. FINDINGS
+retains the external repair registry first. No new Haskell fix or runtime
+result is claimed. The full goal stays active. Pushes remain authorized.
+
 ## Current indexed source-row binder resumption
 
 Updated: 2026-10-20 23:15 CEST. Proof checkpoint: `65dc7bbf5`.
