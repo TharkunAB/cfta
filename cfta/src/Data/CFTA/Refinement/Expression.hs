@@ -25,6 +25,7 @@ module Data.CFTA.Refinement.Expression (
     Formula,
     true,
     false,
+    predicate,
     (.==),
     (./=),
     (.<),
@@ -53,7 +54,7 @@ import Data.CFTA.Formula (Formula (..), Name (..), Relation (..), Term (..), con
 import qualified Data.CFTA.Formula as Formula
 import Data.CFTA.Symbol (valueName)
 
--- | A term of the refinement logic: an integer.
+-- | A term of the refinement logic. Its sort is checked by the solver.
 newtype Expr = Expr Term
     deriving (Eq, Show)
 
@@ -180,6 +181,13 @@ fromExpr (Expr term) = term
 -- | Use a 'Term' as an expression.
 toExpr :: Term -> Expr
 toExpr = Expr
+
+{- | Apply a global predicate to terms. The solver must supply its definition.
+
+Value substitution changes the arguments and leaves the predicate name unchanged.
+-}
+predicate :: String -> [Expr] -> Formula
+predicate name arguments = Predicate (fromString name) [term | Expr term <- arguments]
 
 -- | The formula that every value satisfies.
 true :: Formula
