@@ -1,7 +1,7 @@
 # Current system claim
 
 Checked against the live theorem statements on 2026-10-20.
-Read `notes-current-head-mu-generation.md` for the latest proof checkpoint.
+Read `notes-current-native-mu-generation.md` for the latest proof checkpoint.
 Read `notes-current-upstream-persistent-rows.md` for the current source scope.
 
 In simple technical English: fresh construction always finishes in the
@@ -118,6 +118,15 @@ issued prefix plus physical/issued suffix. This recovers an operation from
 execution. Original program ancestry and native maybeMu generation,
 including its blocked-call nested publications, remain separate obligations.
 No general renewal, outer completion or Haskell refinement is added.
+
+Actual source build Outcome.state now derives the exact initial full cell
+or a rooted selected writer without a completion premise. Actual maybeMu stopping outcomes derive the
+exact initial full cell or the generated build and rooted writer. A checked yielded native trace recovers
+the exact generating optional instruction and retains that same source
+writer with its prefix, checked advance and suffix. Terminal blocked-step
+integration, captured compileMu ownership and original binding ancestry
+remain open. General renewal, outer completion and Haskell refinement
+are unchanged obligations.
 
 ## Constructed root guarantee
 
