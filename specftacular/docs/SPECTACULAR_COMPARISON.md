@@ -780,7 +780,7 @@ drop and Int addition. Each returns a false equality with the resolved
 logical `[B]` comparator. This fallback does not add runtime type checks.
 
 Session values have erased runtime types. Shared annotation checks apply.
-`SPECFTACULAR_CHECKED=1` does not add `Dynamic` application checks to those
+`--checked` does not add `Dynamic` application checks to those
 session values. Native checked execution and GHC session execution have
 different runtime checking boundaries.
 

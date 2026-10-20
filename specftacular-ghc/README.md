@@ -25,5 +25,5 @@ and types declared in the session. A missing generator produces a warning.
 
 The shared engine adds independent and integer-boundary cases to the random
 test schedule. Session values have erased runtime types. Their applications
-use the shared annotation checks. `SPECFTACULAR_CHECKED=1` does not add
+use the shared annotation checks. `--checked` does not add
 `Dynamic` checks to these session values.

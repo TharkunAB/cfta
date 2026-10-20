@@ -29,9 +29,9 @@ The golden test suite compares the discovered laws with `test/golden/`.
 The package was imported from
 [`TharkunAB/specftacular` at `948a246`](https://github.com/TharkunAB/specftacular/tree/948a24694256758e53925d3bd498efe05f668f51).
 
-The environment variable `SPECFTACULAR_TESTS` sets the number of random cases
-(1000 by default). The search also uses eight separately seeded random cases
-and 32 integer-boundary and list cases. These reject the recorded overflow
+The flag `--tests N` sets the number of random cases (1000 by default). The
+search also uses eight separately seeded random cases and 32 integer-boundary
+and list cases. These reject the recorded overflow
 and list counterexamples. Testing does not prove a law. A false law can still
 affect the rules that prune later terms. `--recheck N` tests each new law
 again on N random cases of sizes 1 to 8 and drops a law that one of them
@@ -41,11 +41,11 @@ Use `A`, `B`, `C`, `D`, and `Acc` as abstract type parameters in a signature.
 Each constant must be parametric in these types. It must not inspect their
 representation or capture class dictionaries for them. Use concrete types
 such as `Int` for arithmetic and ordering. Phases 3 and 4 instantiate each
-constant separately. `SPECFTACULAR_CHECKED=1` retains runtime type checks.
+constant separately. `--checked` retains runtime type checks.
 
-Set `SPECFTACULAR_DIAGNOSTICS=phases` to trace phase and size/type buckets.
-Set it to `1` to include candidate demands, schema and instance exploration,
-tree insertion, and completion. Events use versioned TSV on stderr. They
+Use `--diagnostics phases` to trace phase and size/type buckets. Use
+`--diagnostics detailed` to include candidate demands, schema and instance
+exploration, tree insertion, and completion. Events use versioned TSV on stderr. They
 include the actual phase, monotonic wall time, process CPU time, and sampled
 RTS counters. Add `+RTS -T -RTS` to enable the RTS counters.
 

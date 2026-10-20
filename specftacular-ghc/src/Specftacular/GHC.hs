@@ -16,7 +16,7 @@ The session is a session of cfta-ghc. It has the unit of QuickCheck of the
 program ('quickCheckUnit') and the package database of the store of cabal
 that has the unit ('storeDatabase'), so that the generators of the session
 give the values of the program. The values of the session are untyped (see
-'Value'), so SPECFTACULAR_CHECKED=1 does not test their applications.
+'Value'), so @--checked@ does not test their applications.
 
 The search runs inside the session, so that the compiled code stays loaded.
 

@@ -9,6 +9,7 @@ module Specftacular (
     discoverMonomorphic,
     experimentalPhases,
     SearchOptions (..),
+    Diagnostics (..),
     defaultOptions,
     parseOptions,
     searchPhases,
@@ -382,8 +383,36 @@ data SearchOptions = SearchOptions
     refutes. At HugeLists 6-p4, 2000 of them refute the 4 false laws that
     pass the cases of 'testSchedule'.
     -}
+    , searchTests :: Int
+    -- ^ The number of random test cases (1000, as in QuickSpec).
+    , searchChecked :: Bool
+    {- ^ Whether the values keep their types, so that each application tests
+    them (see 'Value').
+    -}
+    , searchProgress :: Bool
+    -- ^ Whether to show the progress of the search on stderr.
+    , searchDiagnostics :: Maybe Diagnostics
+    -- ^ The diagnostic events on stderr, if any (see 'diagnosticEvent').
+    , searchSkeletonTemplates :: Bool
+    -- ^ Whether the templates of the rules prune the phase 4 skeletons.
+    , searchStopAfter :: Maybe (Int, Int)
+    {- ^ The phase and the size after which the search stops, so that a
+    profile of the run is written.
+    -}
+    , searchOnlyBucket :: Maybe String
+    {- ^ With 'searchStopAfter', the only bucket of the last size, by the
+    'show' of its type. Each of its schemas prints its time and its term.
+    -}
     }
     deriving (Show)
+
+-- | The diagnostic events that a search writes on stderr, as versioned TSV.
+data Diagnostics
+    = -- | The phases and the buckets.
+      PhaseDiagnostics
+    | -- | The stages inside each bucket too.
+      DetailedDiagnostics
+    deriving (Eq, Show)
 
 -- | A sequential search with terms up to a size and the phases up to a phase.
 defaultOptions :: Int -> Int -> SearchOptions
@@ -400,6 +429,13 @@ defaultOptions size phase =
         , searchCompletionMemLimit = completionMemoryLimit
         , searchCompletionAllocLimit = completionBudget
         , searchRecheck = 0
+        , searchTests = 1000
+        , searchChecked = False
+        , searchProgress = False
+        , searchDiagnostics = Nothing
+        , searchSkeletonTemplates = True
+        , searchStopAfter = Nothing
+        , searchOnlyBucket = Nothing
         }
 
 {- | Read the options from the program arguments: the size, the phase,
@@ -412,33 +448,54 @@ completion of one law (@--completion-timeout SECONDS@,
 parseOptions :: IO SearchOptions
 parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.progDesc "Find the laws of a signature."))
   where
+    -- The parsers are in the order of the fields of 'SearchOptions'.
     options =
-        build
+        SearchOptions
             <$> size
             <*> phase
             <*> parallel
             <*> ahead
-            <*> O.optional split
+            <*> split
             <*> O.optional bucketTimeout
             <*> O.optional bucketMemLimit
             <*> O.optional completionTimeoutOption
             <*> completionMemLimitOption
             <*> completionAllocLimitOption
             <*> recheckOption
-    build size' phase' parallel' ahead' split' timeout' memLimit' completionTimeout' completionMemLimit' completionAllocLimit' recheck' =
-        SearchOptions
-            { searchSize = size'
-            , searchPhase = phase'
-            , searchParallel = parallel'
-            , searchEnumerateAhead = ahead'
-            , searchSplit = fromMaybe 2 split'
-            , searchBucketTimeout = timeout'
-            , searchBucketMemLimit = memLimit'
-            , searchCompletionTimeout = completionTimeout'
-            , searchCompletionMemLimit = completionMemLimit'
-            , searchCompletionAllocLimit = completionAllocLimit'
-            , searchRecheck = recheck'
-            }
+            <*> testsOption
+            <*> O.switch (O.long "checked" <> O.help "Keep the types of the values, and test them at each application")
+            <*> O.switch (O.long "progress" <> O.help "Show the progress of the search on stderr")
+            <*> O.optional diagnosticsOption
+            <*> ( not
+                    <$> O.switch (O.long "no-skeleton-templates" <> O.help "Enumerate the phase 4 skeletons without the templates of the rules")
+                )
+            <*> O.optional stopAfterOption
+            <*> O.optional
+                ( O.strOption
+                    ( O.long "only-bucket"
+                        <> O.metavar "TYPE"
+                        <> O.help "With --stop-after, run only this bucket at the last size, and time each of its schemas"
+                    )
+                )
+    testsOption =
+        O.option
+            O.auto
+            ( O.long "tests"
+                <> O.metavar "N"
+                <> O.value 1000
+                <> O.help "The number of random test cases (default 1000, as in QuickSpec)"
+            )
+    diagnosticsOption =
+        O.option
+            (O.maybeReader (`lookup` [("phases", PhaseDiagnostics), ("detailed", DetailedDiagnostics)]))
+            ( O.long "diagnostics"
+                <> O.metavar "phases|detailed"
+                <> O.help "Write the events of the phases and the buckets, or also of the stages inside each bucket, on stderr"
+            )
+    stopAfterOption =
+        O.option
+            (O.maybeReader parseStop)
+            (O.long "stop-after" <> O.metavar "PHASE:SIZE" <> O.help "Stop the search after this size of this phase")
     size = O.argument O.auto (O.metavar "SIZE" <> O.help "The largest size of the terms")
     phase = O.argument O.auto (O.metavar "PHASE" <> O.help "The last phase, from 1 to 4")
     parallel =
@@ -457,6 +514,7 @@ parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.p
             O.auto
             ( O.long "split"
                 <> O.metavar "DEPTH"
+                <> O.value 2
                 <> O.help
                     "Split the phase 4 skeletons by shape down to DEPTH levels of applications (default 2; 0 does not split)"
             )
@@ -603,19 +661,20 @@ searchPhases
         , searchCompletionMemLimit = completionMemLimitSetting
         , searchCompletionAllocLimit = completionAllocLimitSetting
         , searchRecheck = recheckSetting
+        , searchTests = numTests
+        , searchChecked = checked
+        , searchProgress = progress
+        , searchDiagnostics = diagnosticSetting
+        , searchSkeletonTemplates = skeletonTemplatesSetting
+        , searchStopAfter = stopSetting
+        , searchOnlyBucket = onlySetting
         }
     givenInstances
     givenSig =
         do
-            -- SPECFTACULAR_PROGRESS=1 shows the progress of the search on stderr.
-            progress <- (== Just "1") <$> Env.lookupEnv "SPECFTACULAR_PROGRESS"
-            diagnosticSetting <- Env.lookupEnv "SPECFTACULAR_DIAGNOSTICS"
             -- Threads write whole diagnostic lines.
             when parallelSetting $ hSetBuffering stderr LineBuffering
             sink <- newIORef []
-            -- SPECFTACULAR_SKELETON_TEMPLATES=0 enumerates the skeletons without
-            -- the templates of the rules (spike).
-            skeletonTemplatesSetting <- (/= Just "0") <$> Env.lookupEnv "SPECFTACULAR_SKELETON_TEMPLATES"
             statsEnabled <- getRTSStatsEnabled
             let memLimitSetting = if statsEnabled then memLimitOption else Nothing
             when (isJust memLimitOption && not statsEnabled) $
@@ -624,21 +683,9 @@ searchPhases
                 hPutStrLn
                     stderr
                     "*** Warning: with --enumerate-ahead, --bucket-mem-limit also counts the heap of the background enumeration."
-            -- SPECFTACULAR_STOP_AFTER=phase:size stops the search after that size
-            -- of that phase, so that a profile of the run is written.
-            stopSetting <- (>>= parseStop) <$> Env.lookupEnv "SPECFTACULAR_STOP_AFTER"
-            -- SPECFTACULAR_ONLY_BUCKET=type runs only that bucket at the last size
-            -- of SPECFTACULAR_STOP_AFTER, and times each of its schemas.
-            onlySetting <- Env.lookupEnv "SPECFTACULAR_ONLY_BUCKET"
-            let diagnostics = diagnosticSetting `elem` [Just "1", Just "phases"]
-                detailedDiagnostics = diagnosticSetting == Just "1"
-            -- SPECFTACULAR_TESTS sets the number of test cases (1000 by default,
-            -- as in QuickSpec).
-            numTests <- fromMaybe 1000 . (>>= TR.readMaybe) <$> Env.lookupEnv "SPECFTACULAR_TESTS"
-            -- SPECFTACULAR_CHECKED=1 keeps the types of the values, and tests
-            -- them at each application (see 'Value').
-            checked <- (== Just "1") <$> Env.lookupEnv "SPECFTACULAR_CHECKED"
-            let sig
+            let diagnostics = isJust diagnosticSetting
+                detailedDiagnostics = diagnosticSetting == Just DetailedDiagnostics
+                sig
                     | checked = givenSig
                     | otherwise = untypedSig givenSig
                 instances
