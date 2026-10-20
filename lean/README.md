@@ -1,5 +1,44 @@
 # cfta formal model
 
+## Current captured Mu stored rows and actual unfold provenance
+
+Updated: 2026-10-20 21:23 CEST. Proof checkpoint: `e9d4bbcc4`.
+Verified start: `64b5195e0`. Main remains `9769fe3e9`.
+Read `lean/notes-current-native-captured-stored-rows.md`.
+
+An indexed captured full Mu now retains its exact initial cell or its same
+earlier optional producer with one fixed publication and raw body callback.
+Every structural stored-body row retains that callback's actual source
+route. Literal rows of each successful unfold at the current reader keep
+an original stored row, full fields, arity and actual ordered child calls.
+One publication and raw callback are fixed before all these observations.
+Initial causal publication history and the actual prefix derive history
+at the active reader. The actual unfold derives history at its own return.
+
+The actual nested capture example now executes an unfold. Its rec/Top row
+has a full Mu child. The stored row has a bare self reference. Row inequality
+forces the actual child-call alternative. The same historical callback's
+SourceRow is retained. No desired writer or row ancestry is supplied.
+The initial-cell arm still needs connection to its original program.
+Generated rows are rooted in the actual encoded parent program.
+
+Nine public and one constructed full declaration readbacks pass. Three
+module strict logs and the independent fixture strict log are empty.
+Default build: 3528 jobs and 74267 axiom checks. Only the earlier
+ClosedCompletion unused-input warning remains. All 19 capped Lean/Lake
+commands are retained, including three elaboration failures, one successful
+unselected warning attempt and one weaker successful unselected draft.
+Duplicate receipt copies add no commands. All selected axioms are standard.
+
+Original user-program binding ancestry, residual Mu observation chains,
+global renewal, global active-owner exclusion, final owner retention,
+outer completion, convergence and Haskell refinement remain open.
+Past-producer fuel descent is not a future runtime rank. Conditional
+root-language and Sized laws are unchanged. All 268 Haskell files and
+207 active package files retain their bytes. FINDINGS keeps external
+repairs first. No new Haskell repair or runtime validation is claimed.
+The full-library goal stays active. Pushes to formalize are authorized.
+
 ## Current native leaf and captured Mu row producers
 
 Updated: 2026-10-20 21:02 CEST. Proof checkpoint: `fd7f9ab1f`.
