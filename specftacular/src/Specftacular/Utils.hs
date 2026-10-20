@@ -60,6 +60,16 @@ tk anyArg k = map constructApp [1 .. (k - 1)]
             (union $ tk anyArg i)
             (union $ tk anyArg (k - i))
 
+{- | The nodes of the terms with k leaves, one node for each shape of the
+left spine: the atoms, or the applications of a spine shape with i leaves
+to the terms with k - i leaves. Their union is the union of 'tk', and no
+two of them share a term.
+-}
+spineParts :: Node Symbol -> Int -> [Node Symbol]
+spineParts _ 0 = []
+spineParts anyArg 1 = [anyArg]
+spineParts anyArg k = [mapp function (union $ tk anyArg (k - i)) | i <- [1 .. k - 1], function <- spineParts anyArg i]
+
 mapp :: Node Symbol -> Node Symbol -> Node Symbol
 mapp n1 n2 =
     Node

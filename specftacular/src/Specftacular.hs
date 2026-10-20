@@ -22,7 +22,9 @@ import Specftacular.Rewriting
 import Specftacular.Types
 import Specftacular.Utils
 
-import Control.Exception (evaluate, mask, onException)
+import Control.Concurrent (forkIO)
+import Control.Concurrent.MVar (newEmptyMVar, putMVar, takeMVar)
+import Control.Exception (SomeException, evaluate, mask, onException, throwIO, try)
 import Control.Monad (when)
 import Data.CFTA.Equality (
     Edge (Edge),
@@ -205,6 +207,10 @@ data Settings = Settings
     -- ^ Resolve exact generators and equality for law generalization.
     , diagnosticPhase :: Int
     -- ^ The phase that is running, rather than the requested last phase.
+    , splitEnumeration :: Bool
+    {- ^ Whether to enumerate the skeletons of a bucket in one thread for each
+    shape of the left spine (spike).
+    -}
     }
 
 {- | Emit one versioned TSV event. Allocation and GC counters are RTS
@@ -288,6 +294,8 @@ searchPhases size phase givenInstances givenSig =
         -- SPECFTACULAR_PROGRESS=1 shows the progress of the search on stderr.
         progress <- (== Just "1") <$> Env.lookupEnv "SPECFTACULAR_PROGRESS"
         diagnosticSetting <- Env.lookupEnv "SPECFTACULAR_DIAGNOSTICS"
+        -- SPECFTACULAR_SPLIT=1 enumerates the phase 4 skeletons in parallel parts (spike).
+        splitSetting <- (== Just "1") <$> Env.lookupEnv "SPECFTACULAR_SPLIT"
         let diagnostics = diagnosticSetting `elem` [Just "1", Just "phases"]
             detailedDiagnostics = diagnosticSetting == Just "1"
         -- SPECFTACULAR_TESTS sets the number of test cases (1000 by default,
@@ -331,6 +339,7 @@ searchPhases size phase givenInstances givenSig =
                     , detailedDiagnostics = detailedDiagnostics
                     , diagnosticPhase = 0
                     , resolveInstance = instances
+                    , splitEnumeration = splitSetting
                     }
         runPhases env size (max 1 (min 4 phase)) instances sig
 
@@ -486,10 +495,12 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..} =
         -- 'eligible' applies the rules that the buckets between them add.
         let key = monomorphiseType tc
             current = Map.filterWithKey (\(size', _) _ -> size' == lvl) cache
-            cache' = case skeletons of
-                Just skeleton
-                    | Map.notMember (lvl, key) current -> Map.insert (lvl, key) (skeletonTypings skeleton lvl key (rewrite_rules s)) current
-                _ -> current
+        cache' <- case skeletons of
+            Just skeleton
+                | Map.notMember (lvl, key) current -> do
+                    typings <- skeletonTypings skeleton lvl key (rewrite_rules s)
+                    pure (Map.insert (lvl, key) typings current)
+            _ -> pure current
         (laws, s') <- diagnose env lvl (show tc) "bucket" s $ do
             result@(_, finishedState) <- bucket lvl (Map.lookup (lvl, key) cache') tc s
             diagnosticEvent env "checkpoint" lvl (show tc) "bucket" finishedState
@@ -499,12 +510,20 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..} =
     -- The principal typings of the skeletons of a size and a monomorphic type
     -- (see 'generalizeCarriers'). Only templates without annotations prune a
     -- skeleton, because they match each typing of it.
-    skeletonTypings skeleton@StEcta{compl_sig = skeletonSig} lvl monomorphic rules =
-        let templates
-                | canPrune = filter annotationFree (pruningTemplates skeletonSig lvl rules)
-                | otherwise = []
-            (pruningRoot, oracleTemplates) = Compile.preparePruning templates (refold (searchSpace skeleton lvl monomorphic))
-         in mapMaybe (generalizeCarriers skeletonSig phase_variables . npTerm') (prunedTerms oracleTemplates pruningRoot)
+    -- With 'splitEnumeration', each shape of the left spine is enumerated and
+    -- typed in its own thread, and the parts are joined in their order.
+    skeletonTypings skeleton@StEcta{compl_sig = skeletonSig} lvl monomorphic rules
+        | splitEnumeration = do
+            parts <- forceInParallel lvl monomorphic (map typingsOf (searchSpaceParts skeleton lvl monomorphic))
+            pure (concat parts)
+        | otherwise = pure (typingsOf (searchSpace skeleton lvl monomorphic))
+      where
+        templates
+            | canPrune = filter annotationFree (pruningTemplates skeletonSig lvl rules)
+            | otherwise = []
+        typingsOf space =
+            let (pruningRoot, oracleTemplates) = Compile.preparePruning templates (refold space)
+             in mapMaybe (generalizeCarriers skeletonSig phase_variables . npTerm') (prunedTerms oracleTemplates pruningRoot)
     bucket lvl typings tc s = do
         produced <- case typings of
             Just typingsOfType -> pure $ nubOrd (mapMaybe ($ tc) typingsOfType)
@@ -551,6 +570,38 @@ searchSpace :: StEcta -> Int -> TypeSkeleton -> Node Symbol
 searchSpace StEcta{..} lvl tc =
     let !ecta = filterType (union $ tk any_arg lvl) $ typeToFta tc
      in fixWithin 100 (withoutRedundantEdges . reducePartially) ecta
+
+-- | 'searchSpace' in disjoint parts, one for each shape of the left spine (see 'spineParts').
+searchSpaceParts :: StEcta -> Int -> TypeSkeleton -> [Node Symbol]
+searchSpaceParts StEcta{..} lvl tc =
+    [ fixWithin 100 (withoutRedundantEdges . reducePartially) (filterType part (typeToFta tc))
+    | part <- spineParts any_arg lvl
+    ]
+
+{- | Evaluate the spine of each list in its own thread, and print the time and
+the length of each on stderr (spike). An exception in a thread is raised
+again here.
+-}
+forceInParallel :: Int -> TypeSkeleton -> [[a]] -> IO [[a]]
+forceInParallel lvl tc lists = do
+    results <- mapM start (zip [0 :: Int ..] lists)
+    mapM_ (\result -> takeMVar result >>= either (\e -> throwIO (e :: SomeException)) pure) results
+    pure lists
+  where
+    start (index, xs) = do
+        result <- newEmptyMVar
+        _ <- forkIO $ do
+            begin <- getMonotonicTimeNSec
+            outcome <- try (evaluate (length xs))
+            end <- getMonotonicTimeNSec
+            case outcome of
+                Right n ->
+                    hPutStrLn
+                        stderr
+                        (intercalate "\t" ["parpart", show lvl, show tc, show index, show (fromIntegral (end - begin) / 1e9 :: Double), show n])
+                Left _ -> pure ()
+            putMVar result (() <$ outcome)
+        pure result
 
 -- 3. The test of a candidate, and the laws that it gives.
 
