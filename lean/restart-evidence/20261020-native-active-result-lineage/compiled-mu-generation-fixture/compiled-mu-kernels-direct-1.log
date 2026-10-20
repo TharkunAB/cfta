@@ -1,0 +1,110 @@
+/tmp/mcfta-native-compiled-mu-generation-fixture/compiled-mu-kernels-direct-1.source.lean:112:2: error: 'change' tactic failed, pattern
+  some 2 = some 6
+is not definitionally equal to target
+  SourceRecursiveIntersectionControl.identity left = SourceRecursiveIntersectionControl.identity right
+/tmp/mcfta-native-compiled-mu-generation-fixture/compiled-mu-kernels-direct-1.source.lean:121:2: error: Tactic `apply` failed: could not unify the conclusion of `SourceEqualityAnnotationConstruction.build ?m.14 expression
+  ?m.8 [] empty (SourceEqualityAnnotationHeap.empty_heap ?m.14)`
+  ?m.14 (EdgeKey.constraint ?key)
+with the goal
+  SourceCurrentConjunctionEquality.Fields allocatedOps heap
+
+Note: The full type of `SourceEqualityAnnotationConstruction.build ?m.14 expression ?m.8 [] empty
+  (SourceEqualityAnnotationHeap.empty_heap ?m.14)` is
+  SourceEqualityAnnotationHeap.Heap ?m.14 (InternedFreshOrdinaryConstruction.build expression [] empty).state
+
+⊢ SourceCurrentConjunctionEquality.Fields allocatedOps heap
+/tmp/mcfta-native-compiled-mu-generation-fixture/compiled-mu-kernels-direct-1.source.lean:208:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  heap.nodeRecords entry.key
+in the target expression
+  before.native.machine.heap.nodeRecords entry.key = some (Value.mu entry stored depth ordinary)
+
+case inl
+steps : Nat
+bounded : steps < 64
+rawTrace : SourceEqualityNativeDemand.Steps steps control before (Control.code (Code.pure value)) after
+initial : SourceCurrentAllocatedRecursivePrefixState.Current heap inventory before.native.machine.domains before
+checked :
+  SourceCurrentAllocatedRecursivePrefixReceipt.Receipt heap inventory machine.domains steps control before
+    (Control.code (Code.pure value)) after fun final output => Available final.heap output
+plan : SourceCurrentAllocatedNativePhysicalExecution.InputsThrough (steps + 1) control before
+completed : SourceEqualityNativeDemand.execute (steps + 1) control before = Outcome.done value after
+selected :
+  (SourceEqualityNativeDemand.execute (steps + 1) control before).state.native.machine.heap.nodeRecords entry.key =
+    some (Value.mu entry stored depth ordinary)
+prior : before.native.machine.heap.nodeRecords entry.key = some (Value.mu entry stored depth ordinary)
+⊢ InternedFreshOrdinaryConstruction.build expression [] empty = InternedNestedConstruction.Outcome.done root heap ∧
+    children root = [left, right] ∧
+      left.free = [] ∧
+        right.free = [] ∧
+          left ≠ right ∧
+            (match left with
+              | Value.mu selected bodyValue depthShape ordinaryShape =>
+                Reference.interned selected.identity ∈ bodyValue.free
+              | x => False) ∧
+              (match right with
+                | Value.mu selected bodyValue depthShape ordinaryShape =>
+                  Reference.interned selected.identity ∈ bodyValue.free
+                | x => False) ∧
+                SourceCurrentAllocatedNativePhysicalCompletion.Good before ∧
+                  SourceCurrentNativeEdgeWriterGrowth.History before ∧
+                    SourceEqualityNativeDemand.execute 64 control before = Outcome.done value after ∧
+                      value = Value.mu entry stored depth ordinary ∧
+                        heap.nodeRecords entry.key = none ∧
+                          after.native.machine.heap.nodeRecords entry.key =
+                              some (Value.mu entry stored depth ordinary) ∧
+                            Reference.interned entry.identity ∈ stored.free ∧
+                              ∃ count,
+                                count ≤ 64 ∧
+                                  SourceCurrentAllocatedNativePhysicalExecution.InputsThrough count control before ∧
+                                    SourceEqualityNativeDemand.execute count control before = Outcome.done value after ∧
+                                      ∃ prefixFuel remainingFuel pair siteBody next siteBefore call siteStep,
+                                        count = prefixFuel + 1 + remainingFuel ∧
+                                          Trace prefixFuel
+                                              (Control.code (requestNode request.domain request.left request.right))
+                                              before (Control.code (Code.optionalBinder pair siteBody next))
+                                              siteBefore ∧
+                                            SourceCurrentAllocatedNativePhysicalExecution.Inputs
+                                                (Control.code (Code.optionalBinder pair siteBody next)) siteBefore ∧
+                                              SemanticHeap siteBefore.native.machine.heap ∧
+                                                Available siteBefore.native.machine.heap siteBody ∧
+                                                  SourceRecursiveIntersectionMaybeMu.maybeMu pair siteBody
+                                                        siteBefore.native.machine.heap =
+                                                      call ∧
+                                                    (siteStep =
+                                                        match call with
+                                                        | InternedNestedConstruction.Outcome.done result heap =>
+                                                          Outcome.yielded (Control.code (next result))
+                                                            {
+                                                              native :=
+                                                                advance siteBefore.native
+                                                                  (let __src := siteBefore.native.machine;
+                                                                  { heap := heap, domains := __src.domains }),
+                                                              operations := siteBefore.operations }
+                                                        | InternedNestedConstruction.Outcome.pending pending heap =>
+                                                          Outcome.blocked
+                                                            (Blocked.native
+                                                              (SourceRecursiveIntersectionNative.Blocked.constructor
+                                                                pending))
+                                                            (Control.code (Code.optionalBinder pair siteBody next))
+                                                            {
+                                                              native :=
+                                                                advance siteBefore.native
+                                                                  (let __src := siteBefore.native.machine;
+                                                                  { heap := heap, domains := __src.domains }),
+                                                              operations := siteBefore.operations }) ∧
+                                                      step (Control.code (Code.optionalBinder pair siteBody next))
+                                                            siteBefore =
+                                                          siteStep ∧
+                                                        SourceEqualityNativeDemand.execute count
+                                                              (Control.code
+                                                                (requestNode request.domain request.left request.right))
+                                                              before =
+                                                            resume remainingFuel siteStep ∧
+                                                          siteBefore.native.machine.heap.nodeRecords entry.key = none ∧
+                                                            call.state.nodeRecords entry.key =
+                                                                some (Value.mu entry stored depth ordinary) ∧
+                                                              Grows before.native.machine.heap
+                                                                  siteBefore.native.machine.heap ∧
+                                                                Extends before.native.machine.heap.nodes.issued
+                                                                    siteBefore.native.machine.heap.nodes.issued ∧
+                                                                  Grows call.state ⋯ ∧ ⋯ ∧ ⋯

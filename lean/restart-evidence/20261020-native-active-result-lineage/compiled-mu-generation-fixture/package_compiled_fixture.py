@@ -1,0 +1,30 @@
+from pathlib import Path
+import json,hashlib,shutil
+h=Path('/tmp/mcfta-native-compiled-mu-generation-fixture');r=Path('/home/tritlo/Code/mcfta')
+def write(name,obj):(h/name).write_text(json.dumps(obj,indent=2)+'\n')
+write('compiled-mu-kernels-selection.json',dict(finalized=True,public_heads=['MicroCFTA.CompiledMuGenerationFixture.actual_compiled_generation'],strict='compiled-mu-kernels-direct-2',groups=[dict(name='compiled-mu-kernels-public-1',pairs=1,kind='constructed',full_proof=True)],attempts=['compiled-mu-calculation-1','compiled-mu-calculation-2','compiled-mu-calculation-3','compiled-mu-kernels-direct-1','compiled-mu-kernels-direct-2','compiled-mu-kernels-public-1'],lean_jobs=6,failed_attempts=3,production_pairs=0,constructed_pairs=1,canonical=None,canonical_jobs=0,source_sha256='44397aa3536fc9f2e4cbfd679935f05d5357fc93fff4eb3d461618f52ec46f99'))
+(h/'compiled-mu-kernels-review.md').write_text('''# Actual compiled generation of a new used Mu
+
+One completed closed source build constructs an ordinary wrapper. Its two children are distinct used raw Mu values. Their bodies each have `rec[self]` and one distinct nullary row. Every source field is Top. The fixture allocates the Top equality field with the actual `emptyField empty` operation. Source construction derives the exact physical heap, availability, closedness, semantic readiness, and field coverage. These facts derive initial `Good`. Empty native tables derive `History.initial`.
+
+The literal native request executes from that initial state. `execute 64` completes and returns a full Mu. Its exact key has no record initially and has that full record finally. The selected body's free names contain its own interned entry. Both original operands are also used and distinct. The selected Mu is therefore a new physical recursive record, rather than either original operand or the Empty shortcut.
+
+The actual completed run supplies its exact raw trace. Existing initial source inventory and resource theorems derive the physical trace checks. The inventory length is proved symbolically; the fixture does not enumerate the power-set inventory. The resulting checked trace supplies `InputsThrough` at a bound no greater than 64. All evidence concerns the same initial state, final state, result, and selected cell.
+
+The fixture calls `OriginGeneration.execute` once. The computed absent initial record excludes its initial-cell alternative. The same returned existential retains the generating optional site, its used intersection placeholder, actual maybeMu outcome, exact source build, rooted writer, and owner/child `Origin`. It also retains actual physical and issued prefixes and suffixes. The public statement retains the complete raw generation tuple. It does not replace that tuple with an independently constructed site or writer.
+
+The result is a successful actual compiled-root generation example. The statement does not prove universal uniqueness of the site, identify every existential owner field with a chosen literal constant, establish productivity, derive original-root binding ancestry, prove outer termination, or establish Haskell refinement. The fixture assumes no desired owner, generation, writer, or outcome law.
+
+The first two calculation attempts failed during elaboration. The first had an ambiguous pattern and computation-depth failures. The second had an unfinished singleton-membership proof and exponent-threshold warnings. Calculation 3 passed with a literal-empty log. Main strict 1 failed on three definitional elaboration points. Main strict 2 passed with a literal-empty log. Full public 1 passed with all eight settings, complete statement/proof, standard three axioms, and no omissions. All six commands and their exact snapshots, logs, limits, and fresh usage receipts are preserved. No canonical job is owned. No native evaluation axiom is used.
+
+`prepare_compiled_fixture.py` is an unselected draft generator. The final checked source is `compiled-mu-kernels.lean`. A proved small-word readback equation accelerates actual BitVec evaluation. Its proof remains kernel-checked. The mutable peaks file is excluded. The final six-row peaks snapshot is pinned. The portable verifier executes no Lean jobs.
+''')
+shutil.copyfile(h/'compiled-mu-kernels-peaks.txt',h/'compiled-mu-kernels-peaks-final.txt')
+modules=['SourceCurrentNativeOriginGeneration','SourceCurrentNativeMuStoppingGeneration','SourceCurrentNativeOptionalChildOrigin','SourceCurrentNativeConsistentOptionalOwner','SourceCurrentNativeOwnerSiteRetention','SourceCurrentNativePrefixWriterMaps','SourceCurrentConjunctionFieldAllocation','SourceEqualityAnnotationConstruction','SourceEqualityRequiredSemanticCache','SourceRecursiveIntersectionSemanticHeap','SourceCurrentAllocatedRecursivePrefixAdmission','SourceCurrentAllocatedRecursivePrefixState','SourceCurrentAllocatedRecursivePrefixControl','SourceCurrentAllocatedRecursivePrefixCode','SourceCurrentAllocatedRecursivePrefixReceipt','SourceCurrentAllocatedRecursivePrefixInduction','SourceRecursiveIntersectionOriginalOutput','SourceRecursiveIntersectionRequestScope','SourceRecursiveIntersectionSourceInventory','SourceRecursiveIntersectionMaybeMu','SourceCurrentAllocatedNativePhysicalTraceCompletion','SourceEqualityNativeDemandTrace','SourceEqualityNativeDemand','SourceRecursiveIntersectionCode','SourceRecursiveIntersectionNative','SourceEqualityNativeCheckedCode','SourceEqualityIntersectionEdgeAllocation','SourceEqualityNormalizationReceipt']
+(h/'inputs').mkdir(exist_ok=True);sources=[]
+for name in modules:
+ path='lean/MicroCFTA/'+name+'.lean';data=(r/path).read_bytes();snap='inputs/'+name+'.lean';(h/snap).write_bytes(data)
+ sources.append(dict(path=path,snapshot=snap,bytes=len(data),sha256=hashlib.sha256(data).hexdigest()))
+data=(r/'lean/lean-toolchain').read_bytes();(h/'inputs/lean-toolchain').write_bytes(data)
+sources.append(dict(path='lean/lean-toolchain',snapshot='inputs/lean-toolchain',bytes=len(data),sha256=hashlib.sha256(data).hexdigest()))
+write('compiled-mu-kernels-source-pins.json',dict(sources=sources))

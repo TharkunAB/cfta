@@ -1,0 +1,149 @@
+/tmp/mcfta-native-original-request-scope/original-scope-direct-1.source.lean:69:109: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.extra.unnecessarySeqFocus false`
+/tmp/mcfta-native-original-request-scope/original-scope-direct-1.source.lean:113:2: error: unsolved goals
+case refine_2
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq Symbol
+original : Syntax Symbol Guard
+root : Node
+bits : Nat
+before siteBefore : Checked (bits + 2)
+built : build original [] empty = InternedNestedConstruction.Outcome.done root before.native.machine.heap
+good : Good before
+history : SourceCurrentNativeEdgeWriterGrowth.History before
+left right : Node
+leftAvailable : Available before.native.machine.heap left
+rightAvailable : Available before.native.machine.heap right
+leftClosed : left.free = []
+rightClosed : right.free = []
+nodes : before.native.machine.heap.nodes.next < 2 ^ bits
+edges : before.native.machine.heap.edges.next ≤ 2 ^ (bits + 2)
+room :
+  before.native.machine.domains.next +
+      2 ^
+        (before.native.machine.heap.nodes.next +
+          before.native.machine.heap.nodes.next * before.native.machine.heap.nodes.next) <
+    2 ^ (bits + 1)
+fuel : Nat
+pair : Nat × Nat
+siteBody : Node
+siteNext : Node → Code Symbol Guard Node
+actual :
+  SourceEqualityNativeDemand.Steps fuel (Control.code (requestNode emptyDomain left right)) before
+    (Control.code (Code.optionalBinder pair siteBody siteNext)) siteBefore
+semantic : SourceEqualityRequiredSemanticCache.SemanticReady before.native.machine.heap
+queryFuel childFuel : Nat
+queried : NodeRequest Symbol Guard
+callerNext : Node → Code Symbol Guard Node
+queryBefore : Checked (bits + 2)
+handle : Nat
+chosen running : SourceRecursiveIntersectionThunks.State (bits + 2) Symbol Guard
+first second : Nat
+total : fuel = queryFuel + 2 + childFuel
+earlier :
+  Trace queryFuel
+    (Control.code
+      (requestNode { domain := emptyDomain, left := left, right := right }.domain
+        { domain := emptyDomain, left := left, right := right }.left
+        { domain := emptyDomain, left := left, right := right }.right))
+    before (Control.code (Code.node queried callerNext)) queryBefore
+inputs : SourceCurrentAllocatedNativePhysicalExecution.Inputs (Control.code (Code.node queried callerNext)) queryBefore
+selected : lookupNode (bits + 2) queried queryBefore.native = (NodeSelection.memoized handle, chosen)
+demanded : demandNode handle chosen = (FlatMemoThunk.Observation.evaluate queried, running)
+suspended : chosen.nodes.cells handle = some { request := queried, status := FlatMemoThunk.Status.suspended }
+evaluating : running.nodes.cells handle = some { request := queried, status := FlatMemoThunk.Status.evaluating }
+machine : running.machine = queryBefore.native.machine
+queryStep :
+  step (Control.code (Code.node queried callerNext)) queryBefore =
+    Outcome.yielded
+      (Control.code ((compileNode queried).bind fun value => Code.finishNode handle value (callerNext value)))
+      { native := running, operations := queryBefore.operations }
+recursive :
+  SourceRecursiveIntersectionControl.decision queried.domain.key queried.left queried.right =
+      SourceRecursiveIntersectionControl.Branch.bothMu ∨
+    SourceRecursiveIntersectionControl.decision queried.domain.key queried.left queried.right =
+        SourceRecursiveIntersectionControl.Branch.leftMu ∨
+      SourceRecursiveIntersectionControl.decision queried.domain.key queried.left queried.right =
+        SourceRecursiveIntersectionControl.Branch.rightMu
+leftId : SourceRecursiveIntersectionControl.identity queried.left = some first
+rightId : SourceRecursiveIntersectionControl.identity queried.right = some second
+pairEq : pair = SourceRecursiveIntersectionControl.pair first second
+enterInputs :
+  SourceCurrentAllocatedNativePhysicalExecution.Inputs
+    (Control.code (compileMu queried.domain queried.left queried.right))
+    { native := running, operations := queryBefore.operations }
+enterStep :
+  step (Control.code (compileMu queried.domain queried.left queried.right))
+      { native := running, operations := queryBefore.operations } =
+    Outcome.yielded
+      (Control.code
+        ((requestNode
+              (SourceRecursiveIntersectionEnvironment.enter
+                  { native := running, operations := queryBefore.operations }.native.machine.domains queried.domain.key
+                  queried.left queried.right first second).fst
+              (SourceRecursiveIntersectionKernel.body queried.left)
+              (SourceRecursiveIntersectionKernel.body queried.right)).bind
+          fun value => Code.optionalBinder (SourceRecursiveIntersectionControl.pair first second) value Code.pure))
+      {
+        native :=
+          advance { native := running, operations := queryBefore.operations }.native
+            (have __src := { native := running, operations := queryBefore.operations }.native.machine;
+            { heap := __src.heap,
+              domains :=
+                (SourceRecursiveIntersectionEnvironment.enter
+                    { native := running, operations := queryBefore.operations }.native.machine.domains
+                    queried.domain.key queried.left queried.right first second).snd }),
+        operations := { native := running, operations := queryBefore.operations }.operations }
+child :
+  Trace childFuel
+    (Control.code
+      (requestNode
+        (SourceRecursiveIntersectionEnvironment.enter
+            { native := running, operations := queryBefore.operations }.native.machine.domains queried.domain.key
+            queried.left queried.right first second).fst
+        (SourceRecursiveIntersectionKernel.body queried.left) (SourceRecursiveIntersectionKernel.body queried.right)))
+    {
+      native :=
+        advance { native := running, operations := queryBefore.operations }.native
+          (have __src := { native := running, operations := queryBefore.operations }.native.machine;
+          { heap := __src.heap,
+            domains :=
+              (SourceRecursiveIntersectionEnvironment.enter
+                  { native := running, operations := queryBefore.operations }.native.machine.domains queried.domain.key
+                  queried.left queried.right first second).snd }),
+      operations := { native := running, operations := queryBefore.operations }.operations }
+    (Control.code (Code.pure siteBody)) siteBefore
+continuation : siteNext = fun value => Code.finishNode handle value (callerNext value)
+retained : siteBefore.native.nodes.cells handle = some { request := queried, status := FlatMemoThunk.Status.evaluating }
+forwarded :
+  SourceCurrentNativeForwardLineage.Forwarded siteBefore
+    {
+      domain :=
+        (SourceRecursiveIntersectionEnvironment.enter
+            { native := running, operations := queryBefore.operations }.native.machine.domains queried.domain.key
+            queried.left queried.right first second).fst,
+      left := SourceRecursiveIntersectionKernel.body queried.left,
+      right := SourceRecursiveIntersectionKernel.body queried.right }
+    {
+      native :=
+        advance { native := running, operations := queryBefore.operations }.native
+          (have __src := { native := running, operations := queryBefore.operations }.native.machine;
+          { heap := __src.heap,
+            domains :=
+              (SourceRecursiveIntersectionEnvironment.enter
+                  { native := running, operations := queryBefore.operations }.native.machine.domains queried.domain.key
+                  queried.left queried.right first second).snd }),
+      operations := { native := running, operations := queryBefore.operations }.operations }
+    siteBefore siteBody
+_scope : NodeScope before.native.machine.heap queried
+_member : queried.domain.key ∈ SourceRecursiveIntersectionSourceInventory.domains before.native.machine.heap
+count : Nat
+current : NodeRequest Symbol Guard
+next : Node → Code Symbol Guard Node
+entry : Checked (bits + 2)
+⊢ Trace count (Control.code (requestNode emptyDomain left right)) before (Control.code (Code.node current next)) entry →
+    NodeScope before.native.machine.heap current ∧
+      current.domain.key ∈ SourceRecursiveIntersectionSourceInventory.domains before.native.machine.heap ∧
+        RootedScope original before.native.machine.heap current
+/tmp/mcfta-native-original-request-scope/original-scope-direct-1.source.lean:113:41: error: unexpected identifier; expected ':'

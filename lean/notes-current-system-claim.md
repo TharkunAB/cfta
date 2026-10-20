@@ -1,5 +1,51 @@
 # Current system claim
 
+## Current terminal writers and earlier captured Mu producers
+
+Updated: 2026-10-20 20:33 CEST. Proof checkpoint: `1dfc025cc`.
+Verified start: `eb13a888d`. Main remains `9769fe3e9`.
+Read `lean/notes-current-native-active-result-lineage.md`.
+
+A new full Mu in bounded checked node execution now retains its same
+optional instruction, queried evaluating owner and actual entered child.
+That child's nonempty result retains a terminal returned cell and strong
+historical writer at the same site. The terminal handle differs from that
+owner's evaluating handle. Blocked nested construction remains covered.
+The terminal writer produces the child result, not the generated stored body.
+
+Actual prefix writer maps now support active row and Mu body origins
+without History at the active reader. The row theorem preserves actual
+source row and child indices. The Mu theorem preserves its supplied
+historical writer. Warm forwarding can use historical compiler traces.
+It does not assert that all forwarding hops ran in the current child call.
+
+An indexed full Mu in the actual captured leaf pool is present at entry
+or has a strictly earlier generating optional instruction in the same
+prefix. That earlier instruction retains its generated source writer and
+terminal child origin. The index is a leaf occurrence, not encode.slot.
+The original-source interpretation of the initial arm requires the actual
+closed build to return exactly the native entry heap. A separate source-scope
+theorem retains original execution writers under that exact equality.
+
+One compiled example derives its source construction, guard allocation,
+Good, History and checked schedule. Two distinct recursive operands produce
+a new used Mu. One generation application retains the same full owner,
+child, terminal cell and writer tuple. Eleven public and one constructed
+full declaration readbacks pass. Seven selected module strict logs and
+the fixture strict log are empty. Default build: 3518 jobs and 74224 axiom
+checks. Only the earlier ClosedCompletion unused-input warning remains.
+All 42 capped Lean/Lake commands and 5 failed attempts are retained.
+Two successful warning attempts remain unselected. Receipt copies add no jobs.
+
+Closed NODE capture producers and original program ancestry remain open.
+The strict decrease orders actual past producers. It is not an outer runtime
+rank. Global renewal, global active-owner exclusion, final owner retention,
+general completion, convergence and Haskell refinement remain open.
+Conditional root-language and Sized laws are unchanged. All 268 Haskell
+files and all 207 active package files retain their bytes. FINDINGS keeps
+external repairs first. No new Haskell repair or runtime validation is claimed.
+The full-library goal stays active. Publication to formalize is authorized.
+
 ## Current queried owners, child writers and fixed-input scope
 
 Updated: 2026-10-20 20:05 CEST. Proof checkpoint: `9e4646d02`.
