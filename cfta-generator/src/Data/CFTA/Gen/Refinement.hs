@@ -216,11 +216,12 @@ namedPool entries = oneof [leaf member symbol refinement | Refined member symbol
 
 {- | One refined atom: a Haskell value, a symbol, and a refinement.
 
-The refinement is about the integer @v@ of the atom, not about the Haskell
-value. Every node of a term of a liquid tree automaton has one such integer,
-and the contracts and measures of a parent read only these integers. The
-author chooses what the integer means: @leaf Leaf "leaf" (.== 0)@ gives the
-leaf the integer 0, which 'measured' then reads as a black height.
+The refinement is about the logical value @v@ of the atom. It does not check
+the Haskell value. The solver's declaration gives the sort of @v@. The
+contracts and measures of a parent read this logical value. With the default
+integer sort, the author chooses what the integer means. For example,
+@leaf Leaf "leaf" (.== 0)@ gives the leaf the integer 0, which 'measured'
+then reads as a black height.
 -}
 leaf :: a -> Symbol -> Refinement -> LTAGen a
 leaf member symbol refinement = Gen.node (RefinedSymbol symbol $ refinementFormula refinement) $ pure member
@@ -369,7 +370,7 @@ guarded symbol builder child
 {- | Close a child description with a constructor that has a contract and a
 measure.
 
-A measure gives each generated term one integer that refinements can read,
+A measure gives each generated term one logical value that refinements can read,
 defined constructor by constructor. Liquid Haskell calls such a function a
 measure. The black height of a red-black tree is one:
 
@@ -383,11 +384,11 @@ black child =
         (Black \<$\> child \<*\> child)
 @
 
-Every node of a term of a liquid tree automaton has one integer, the @v@ of
-its refinement. The solver reads only these integers, never the Haskell value.
-A leaf gets its integer from its refinement: @(.== 0)@ above says that the
-integer of a leaf is 0. A constructor from 'measured' gets its integer from its
-measure. What the integer means is the author's choice. Here the leaf, the
+Every node of a term of a liquid tree automaton has one logical value, the @v@
+of its refinement. The solver reads this value, not the Haskell value. The
+default sort is integer. A leaf gets its value from its refinement: @(.== 0)@
+above gives it 0. A constructor from 'measured' gets its value from its
+measure. The author supplies the interpretation. Here the leaf, the
 @black@ node, and a @red@ node that keeps the height of its subtrees agree that
 it is the black height, so the integer of every tree is its black height.
 Nothing checks that meaning.
@@ -405,7 +406,7 @@ contract of a parent and a condition from 'satisfying' read the measure. A
 measure does not change the generated value.
 
 Each child that the measure names must have a measure of its own: a
-refinement that fixes one integer, as 'elements' gives, or a 'leaf' or 'pool'
+refinement that fixes one value, as 'elements' gives, or a 'leaf' or 'pool'
 entry whose refinement is an equality such as @(.== 0)@; an integer from
 'every'; or a constructor from 'measured' or 'measuredNode'. The measure
 of children from 'every' stays a term of their integers, so a parent's
@@ -536,6 +537,7 @@ measuredBy symbol builder measures child
             Formula.Or parts -> Formula.Or <$> traverse goFormula parts
             Formula.Not inner -> Formula.Not <$> goFormula inner
             Formula.Atom relation left right -> Formula.Atom relation <$> go left <*> go right
+            Formula.Predicate name arguments -> Formula.Predicate name <$> traverse go arguments
             _ -> Nothing
     -- The positions of the children that the term reads without a term.
     missingChildren known childValues term =
@@ -678,6 +680,7 @@ foldConditionals formula = case formula of
     Formula.Or parts -> Formula.Or (map foldConditionals parts)
     Formula.Not inner -> Formula.Not (foldConditionals inner)
     Formula.Atom relation left right -> Formula.Atom relation (foldTerm left) (foldTerm right)
+    Formula.Predicate name arguments -> Formula.Predicate name (map foldTerm arguments)
     _ -> formula
   where
     foldTerm term = case term of
@@ -715,6 +718,7 @@ childReads position term = case term of
         Formula.Atom _ left right -> childReads position left <> childReads position right
         Formula.Forall _ inner -> formulaReads inner
         Formula.Exists _ inner -> formulaReads inner
+        Formula.Predicate _ arguments -> concatMap (childReads position) arguments
         _ -> []
 
 {- | Close a child description with a constructor whose refinement is computed

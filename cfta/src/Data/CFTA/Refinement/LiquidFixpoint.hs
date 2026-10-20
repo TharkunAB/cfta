@@ -1,7 +1,8 @@
 {- | A Z3-backed 'Entailment' implemented with Liquid Fixpoint's SMT API.
 
-The entailment translates each 'Formula' to a Liquid Fixpoint expression. A
-name is an integer unless a declaration gives it another 'Sort'.
+The entailment translates supported formulas to Liquid Fixpoint expressions.
+Named sorts and global predicates give 'Unknown'. A name is an integer unless
+a declaration gives it another 'Sort'.
 -}
 module Data.CFTA.Refinement.LiquidFixpoint (
     withZ3,
@@ -79,16 +80,30 @@ withZ3Timeout ::
     (Entailment -> IO a) ->
     IO a
 withZ3Timeout milliseconds sorted assumptions action =
+    case (traverse declaration sorted, traverse toFixpoint assumptions) of
+        (Just given, Just solverAssumptions) ->
+            withTranslatedZ3 milliseconds given assumptions solverAssumptions action
+        _ -> action $ entailmentWithBindings $ \_ _ _ -> pure Unknown
+  where
+    declaration (name, sort) = (,) (nameSymbol name) <$> sortToFixpoint sort
+
+-- | Run Z3 with declarations and assumptions that have a supported translation.
+withTranslatedZ3 ::
+    Int ->
+    [(Fixpoint.Symbol, Fixpoint.Sort)] ->
+    [Formula] ->
+    [Fixpoint.Expr] ->
+    (Entailment -> IO a) ->
+    IO a
+withTranslatedZ3 milliseconds given assumptions solverAssumptions action =
     bracket acquire release $ \contextVar ->
         action (entailmentWithBindings $ query contextVar)
   where
     valueSymbol = nameSymbol (Name $ Text.pack valueName)
-    given = [(nameSymbol name, sortToFixpoint sort) | (name, sort) <- sorted]
     declarations
         | valueSymbol `elem` map fst given = given
         | otherwise = (valueSymbol, Fixpoint.FInt) : given
     known = HashSet.fromList $ map fst declarations
-    solverAssumptions = map toFixpoint assumptions
     reserved = HashSet.union known $ foldMap Fixpoint.exprSymbolsSet solverAssumptions
 
     config = defConfig{solver = Z3, smtTimeout = Just milliseconds}
@@ -102,9 +117,8 @@ withZ3Timeout milliseconds sorted assumptions action =
     release contextVar = withMVar contextVar SMT.cleanupContext
 
     query contextVar bindings antecedentFormula consequentFormula =
-        case traverse freshDeclaration bindings of
-            Nothing -> pure Unknown
-            Just freshDeclarations -> do
+        case (traverse freshDeclaration bindings, toFixpoint antecedentFormula, toFixpoint consequentFormula) of
+            (Just freshDeclarations, Just antecedent, Just consequent) -> do
                 outcome <- modifyMVar contextVar $ \context -> do
                     let mentioned = foldMap Fixpoint.exprSymbolsSet (antecedent : consequent : solverAssumptions)
                         declared = HashSet.union known $ HashSet.fromList $ map fst freshDeclarations
@@ -114,11 +128,11 @@ withZ3Timeout milliseconds sorted assumptions action =
                             HashMap.fromList
                                 [(nameSymbol name, arity) | (name, arity) <- foldMap applications (antecedentFormula : consequentFormula : assumptions)]
                         sortOf name =
-                            maybe Fixpoint.FInt (\arity -> sortToFixpoint $ FunctionSort (replicate arity IntSort) IntSort) $
+                            maybe Fixpoint.FInt (\arity -> Fixpoint.mkFFunc 0 $ replicate (arity + 1) Fixpoint.FInt) $
                                 HashMap.lookup name arities
                         undeclared =
                             [(name, sortOf name) | name <- HashSet.toList $ HashSet.difference mentioned declared]
-                    attempt <- try $ runStateT (check (freshDeclarations <> undeclared)) context
+                    attempt <- try $ runStateT (check antecedent consequent (freshDeclarations <> undeclared)) context
                     case attempt of
                         -- An exception during the query, such as a time limit
                         -- of the caller, can leave an open scope and an unread
@@ -140,11 +154,9 @@ withZ3Timeout milliseconds sorted assumptions action =
                                 pure (fresh, Right answer)
                             _ -> pure (nextContext, Right answer)
                 either throwIO responseVerdict outcome
+            _ -> pure Unknown
       where
-        antecedent = toFixpoint antecedentFormula
-        consequent = toFixpoint consequentFormula
-
-        check freshDeclarations = SMT.smtBracket "cfta entailment" $ do
+        check antecedent consequent freshDeclarations = SMT.smtBracket "cfta entailment" $ do
             SMT.smtDecls freshDeclarations
             SMT.smtAssertDecl $
                 Fixpoint.pAnd (solverAssumptions <> [antecedent, Fixpoint.PNot consequent])
@@ -183,6 +195,7 @@ applications formula = case formula of
     Atom _ left right -> termApplications left <> termApplications right
     Forall _ inner -> applications inner
     Exists _ inner -> applications inner
+    Predicate _ arguments -> foldMap termApplications arguments
   where
     termApplications term = case term of
         Lit _ -> []
@@ -197,19 +210,20 @@ applications formula = case formula of
         Ite condition yes no -> applications condition <> termApplications yes <> termApplications no
         Cast inner _ -> termApplications inner
 
--- | The Liquid Fixpoint expression of a formula.
-toFixpoint :: Formula -> Fixpoint.Expr
+-- | Translate a formula, or reject a form without a Z3 interpretation.
+toFixpoint :: Formula -> Maybe Fixpoint.Expr
 toFixpoint formula = case formula of
-    Top -> Fixpoint.PTrue
-    And parts -> Fixpoint.PAnd $ map toFixpoint parts
-    Bottom -> Fixpoint.PFalse
-    Or parts -> Fixpoint.POr $ map toFixpoint parts
-    Not inner -> Fixpoint.PNot $ toFixpoint inner
-    Atom relation left right -> Fixpoint.PAtom (brel relation) (termToFixpoint left) (termToFixpoint right)
-    Forall bound inner -> Fixpoint.PAll (map binder bound) (toFixpoint inner)
-    Exists bound inner -> Fixpoint.PExist (map binder bound) (toFixpoint inner)
+    Top -> Just Fixpoint.PTrue
+    And parts -> Fixpoint.PAnd <$> traverse toFixpoint parts
+    Bottom -> Just Fixpoint.PFalse
+    Or parts -> Fixpoint.POr <$> traverse toFixpoint parts
+    Not inner -> Fixpoint.PNot <$> toFixpoint inner
+    Atom relation left right -> Fixpoint.PAtom (brel relation) <$> termToFixpoint left <*> termToFixpoint right
+    Forall bound inner -> Fixpoint.PAll <$> traverse binder bound <*> toFixpoint inner
+    Exists bound inner -> Fixpoint.PExist <$> traverse binder bound <*> toFixpoint inner
+    Predicate{} -> Nothing
   where
-    binder (name, sort) = (nameSymbol name, sortToFixpoint sort)
+    binder (name, sort) = (,) (nameSymbol name) <$> sortToFixpoint sort
     brel relation = case relation of
         Eq -> Fixpoint.Eq
         Ne -> Fixpoint.Ne
@@ -218,28 +232,29 @@ toFixpoint formula = case formula of
         Lt -> Fixpoint.Lt
         Le -> Fixpoint.Le
 
--- | The Liquid Fixpoint expression of a term.
-termToFixpoint :: Term -> Fixpoint.Expr
+-- | Translate a term when its conditionals and casts have supported forms.
+termToFixpoint :: Term -> Maybe Fixpoint.Expr
 termToFixpoint term = case term of
-    Lit value -> Fixpoint.ECon $ Fixpoint.I value
-    Var name -> Fixpoint.EVar $ nameSymbol name
-    Neg inner -> Fixpoint.ENeg $ termToFixpoint inner
-    Add left right -> Fixpoint.EBin Fixpoint.Plus (termToFixpoint left) (termToFixpoint right)
-    Sub left right -> Fixpoint.EBin Fixpoint.Minus (termToFixpoint left) (termToFixpoint right)
-    Mul left right -> Fixpoint.EBin Fixpoint.Times (termToFixpoint left) (termToFixpoint right)
-    Div left right -> Fixpoint.EBin Fixpoint.Div (termToFixpoint left) (termToFixpoint right)
-    Mod left right -> Fixpoint.EBin Fixpoint.Mod (termToFixpoint left) (termToFixpoint right)
-    App function arguments -> Fixpoint.eApps (Fixpoint.EVar $ nameSymbol function) (map termToFixpoint arguments)
-    Ite condition yes no -> Fixpoint.EIte (toFixpoint condition) (termToFixpoint yes) (termToFixpoint no)
-    Cast inner sort -> Fixpoint.ECst (termToFixpoint inner) (sortToFixpoint sort)
+    Lit value -> Just $ Fixpoint.ECon $ Fixpoint.I value
+    Var name -> Just $ Fixpoint.EVar $ nameSymbol name
+    Neg inner -> Fixpoint.ENeg <$> termToFixpoint inner
+    Add left right -> Fixpoint.EBin Fixpoint.Plus <$> termToFixpoint left <*> termToFixpoint right
+    Sub left right -> Fixpoint.EBin Fixpoint.Minus <$> termToFixpoint left <*> termToFixpoint right
+    Mul left right -> Fixpoint.EBin Fixpoint.Times <$> termToFixpoint left <*> termToFixpoint right
+    Div left right -> Fixpoint.EBin Fixpoint.Div <$> termToFixpoint left <*> termToFixpoint right
+    Mod left right -> Fixpoint.EBin Fixpoint.Mod <$> termToFixpoint left <*> termToFixpoint right
+    App function arguments -> Fixpoint.eApps (Fixpoint.EVar $ nameSymbol function) <$> traverse termToFixpoint arguments
+    Ite condition yes no -> Fixpoint.EIte <$> toFixpoint condition <*> termToFixpoint yes <*> termToFixpoint no
+    Cast inner sort -> Fixpoint.ECst <$> termToFixpoint inner <*> sortToFixpoint sort
 
--- | The Liquid Fixpoint sort of a sort.
-sortToFixpoint :: Sort -> Fixpoint.Sort
+-- | Translate scalar and function sorts. Named sorts need another backend.
+sortToFixpoint :: Sort -> Maybe Fixpoint.Sort
 sortToFixpoint sort = case sort of
-    IntSort -> Fixpoint.FInt
-    RealSort -> Fixpoint.FReal
-    BoolSort -> Fixpoint.boolSort
-    FunctionSort arguments result -> Fixpoint.mkFFunc 0 $ map sortToFixpoint arguments <> [sortToFixpoint result]
+    IntSort -> Just Fixpoint.FInt
+    RealSort -> Just Fixpoint.FReal
+    BoolSort -> Just Fixpoint.boolSort
+    FunctionSort arguments result -> Fixpoint.mkFFunc 0 <$> traverse sortToFixpoint (arguments <> [result])
+    NamedSort{} -> Nothing
 
 {- | The Liquid Fixpoint symbol of a name.
 

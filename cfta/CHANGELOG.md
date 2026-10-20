@@ -2,6 +2,9 @@
 
 ## 0.1.0.0 - Unreleased
 
+- Generalize refinement formulas with global predicate applications and named
+  data sorts. Unsupported Z3 interpretations return `Unknown`.
+
 Before release, the package was called `microcfta`.
 
 - `Data.CFTA.replaceRows` applies row replacements and deletions to an
