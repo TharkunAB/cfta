@@ -1315,11 +1315,15 @@ consider env@Settings{..} StEcta{..} lvl full_term s0
                             Nothing -> discover w
       where
         lawOf w = Term "(==)" [Term (Symbol eq_txt) [], w, i]
-        -- The first extra test case on which the instance and w differ.
-        refutingCase _ [] = return Nothing
-        refutingCase w (c : cs) = do
-            equal <- valuesEqual eq_inst (evalTerm inst_sig (caseValues c) w) (evalTerm inst_sig (caseValues c) i)
-            if equal == Just False then return (Just c) else refutingCase w cs
+        -- The first extra test case on which the instance and w differ. Each
+        -- side is compiled once.
+        refutingCase w cases = case (compileTerm inst_sig w, compileTerm inst_sig i) of
+            (Right left, Right right) -> firstRefuting left right cases
+            _ -> return Nothing
+        firstRefuting _ _ [] = return Nothing
+        firstRefuting left right (c : cs) = do
+            equal <- valuesEqual eq_inst (left (caseValues c)) (right (caseValues c))
+            if equal == Just False then return (Just c) else firstRefuting left right cs
         discover w = do
             (lawSig, law) <- generalizeLaw resolveInstance (map caseTest test_cases) inst_sig (eq_type, eq_inst) (lawOf w)
             let n = law_count s + 1
