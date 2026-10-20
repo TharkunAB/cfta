@@ -1,5 +1,54 @@
 # cfta formal model
 
+## Current actual native capture to original node rows
+
+Updated: 2026-10-20 23:40 CEST. Proof checkpoint: `de1791f45`.
+Verified start: `499357bf4`. Imported main remains `794903b3f`.
+Read `lean/notes-current-native-original-captured-node-rows.md`.
+
+An actual checked native prefix now connects an initial captured Mu to
+the original node calls for its stored rows and successful unfold rows.
+The exact initial full cell selects one indexed publication in one
+original build path. That path and publication stay fixed before all
+stored rows and all actual successful unfolds. The result retains the
+full payload, original Reached, missing cell, prefix and three callback
+paths, physical and issued suffixes, and all generic stored-row origins.
+Current semantic support and causal publication history follow from
+the actual source build, checked Trace and exact leaves occurrence.
+
+Each literal row of an actual successful unfold keeps its stored-row
+anchor, symbol, constraint and arity. It keeps row identity or actual
+ordered Calls from stored children to returned children. The same path
+supplies an ultimate original node SourceRow/build/RowCall for that
+stored anchor. Its producer index is at most the selected outer index.
+The result retains producer-relative SyntaxBound/UnionDescent, original
+Context/Reached, buildEdges/makeNode and the complete stored RowCall.
+Changed returned children need not equal the original stored children.
+The later-generated capture arm retains its complete existing receipt.
+
+The existing shared-inner source family runs an actual native prefix
+to an outer optional site. Leaf occurrence one selects the initial Mu.
+Its actual unfold returns a rec/Top/arity1 row with a full Mu child.
+The stored row has a reference child. Their inequality forces actual
+child Calls. The same stored anchor keeps its original node RowCall.
+All generic clauses remain. No independent source family is added.
+
+One public and one constructed full readback pass with standard axioms.
+Root strict logs are empty. Canonical and default Audit pass: 3540 jobs
+and 74337 theorem dependency checks. Only the older ClosedCompletion
+warning remains. All 10 actual capped Lean/Lake commands and
+1 failed attempt remain. Counts do not measure completion.
+Every earlier proof, draft, repair and counterexample remains.
+
+Original ancestry for later-generated nonempty captures and complete
+residual Mu observations remain open. These are inputs to the remaining
+global renewal and active-owner exclusion, final retention, general
+outer completion and convergence proofs. Production Haskell refinement
+also remains open. All 268 Haskell and 207 active package files keep
+their bytes. FINDINGS retains the external repair registry first.
+No new Haskell fix or runtime result is claimed. The full goal stays
+active. Pushes to formalize remain authorized.
+
 ## Current ultimate original node-row provenance
 
 Updated: 2026-10-20 23:25 CEST. Proof checkpoint: `6489bddee`.
