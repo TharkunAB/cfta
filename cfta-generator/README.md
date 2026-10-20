@@ -117,8 +117,9 @@ language. A lower bound can remove terms.
 
 After checking the construction error, use `rankOfValue` and `unrank` on the
 resulting generator to encode and replay its ranks. The original ranks can
-differ. A `Binders` language already has size-major
-ranks. Size ordering does not order literals by their magnitude: zero can
+differ. A `Binders` language whose rules have a `subterm` already has
+size-major ranks. Without a `subterm` rule, its automaton is acyclic and its
+ranks follow the constructor order, so apply `upToSize` to it too. Size ordering does not order literals by their magnitude: zero can
 still precede six within one size class. `upToSize` also applies its documented
 sampling policy to the bounded language.
 
