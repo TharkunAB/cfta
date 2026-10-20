@@ -1,0 +1,29 @@
+import MicroCFTA.SourceCurrentCompletedBuildRootedWriters
+
+/-!
+# Original source writers in one actual publication trace
+
+One completed source build supplies one rooted issued path.
+Its postorder events retain indexed final and earlier callback writers.
+-/
+namespace MicroCFTA.SourceCurrentNativeOriginalPublicationTrace
+open Cache InternedConstructorTemplates InternedRecordCoherence InternedProbeProvenance
+open InternedNestedConstruction (Syntax EdgeSyntax Outcome work request)
+open InternedFreshOrdinaryConstruction (build buildMany buildEdges ordinaryLevel)
+open InternedFreshOrdinaryFacts (callback buildMany_verified)
+open InternedNestedProvenance (depth_available ordinary_available)
+open InternedBinderProtocol (NodeKey Reference)
+open SourceCurrentConstrainedCapSourceHistory (Context)
+open SourceCurrentNativeMuPublication (Publication)
+open SourceCurrentNativeMuIssuedHistory (Path)
+open SourceCurrentNativeMuGrowthHistory (reserve_growth publication_growth)
+open InternedFreshOrdinaryActiveOrigins (Crossing Entered)
+open InternedFreshOrdinarySourceHistory (Reached reached_initial)
+
+/-- This list follows the actual callback and publication completion order. -/
+def events {Symbol Guard : Type} [DecidableEq (EdgeKey Symbol Guard)]
+    {before after : State Symbol Guard} : Path before after → List (Publication (Symbol := Symbol) (Guard := Guard))
+  | .refl _ | .retain _ _ _ _ _ => []
+  | .trans first next => events first ++ events next
+  | .publication event depth ordinary body => events depth ++ events ordinary ++ events body ++ [event]
+

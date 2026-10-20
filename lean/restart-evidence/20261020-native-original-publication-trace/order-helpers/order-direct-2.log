@@ -1,0 +1,94 @@
+/tmp/mcfta-native-publication-order-helpers/order-direct-2.source.lean:91:25: error: Type mismatch: After simplification, term
+  joined
+ has type
+  @WrittenIn Symbol Guard inst✝
+    (events depthPath ++ (events ordinaryPath ++ (events (reserve_path event) ++ (events bodyPath ++ [event]))))
+    event.before event.after key (Value.mu entry body depth ordinary)
+but is expected to have type
+  @WrittenIn Symbol Guard inst✝ (events depthPath ++ (events ordinaryPath ++ (events bodyPath ++ [event]))) event.before
+    event.after key (Value.mu entry body depth ordinary)
+/tmp/mcfta-native-publication-order-helpers/order-direct-2.source.lean:133:78: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 0
+  c - d ≥ 1
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 0
+where
+ a := ↑j
+ b := ↑(events first).length
+ c := ↑(List.length ?m.220)
+ d := ↑?m.222
+/tmp/mcfta-native-publication-order-helpers/order-direct-2.source.lean:133:10: error: Type mismatch: After simplification, term
+  found
+ has type
+  (events first ++ events next)[j]? = some outer
+but is expected to have type
+  (events next)[j - (events first).length]? = some outer
+/tmp/mcfta-native-publication-order-helpers/order-direct-2.source.lean:147:78: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 0
+  c - d ≥ 1
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 0
+where
+ a := ↑j
+ b := ↑(events depthPath).length
+ c := ↑(List.length ?m.413)
+ d := ↑?m.415
+/tmp/mcfta-native-publication-order-helpers/order-direct-2.source.lean:147:10: error: Type mismatch: After simplification, term
+  found
+ has type
+  (events depthPath ++ (events ordinaryPath ++ (events bodyPath ++ [event])))[j]? = some outer
+but is expected to have type
+  (events ordinaryPath ++ (events bodyPath ++ [event]))[j - (events depthPath).length]? = some outer
+/tmp/mcfta-native-publication-order-helpers/order-direct-2.source.lean:157:73: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  d ≥ 0
+  d - e ≥ 1
+  c ≥ 0
+  b ≥ 0
+  b - c ≥ 0
+  a ≥ 0
+  a + b ≥ 0
+where
+ a := ↑(events depthPath).length
+ b := ↑(j - (events depthPath).length)
+ c := ↑(events ordinaryPath).length
+ d := ↑(List.length ?m.586)
+ e := ↑?m.588
+/tmp/mcfta-native-publication-order-helpers/order-direct-2.source.lean:157:12: error: Type mismatch: After simplification, term
+  afterDepth
+ has type
+  (events ordinaryPath ++ (events bodyPath ++ [event]))[j - (events depthPath).length]? = some outer
+but is expected to have type
+  (events bodyPath ++ [event])[j - (events depthPath).length - (events ordinaryPath).length]? = some outer
+/tmp/mcfta-native-publication-order-helpers/order-direct-2.source.lean:168:59: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  e ≥ 0
+  e - f ≥ 1
+  d ≥ 0
+  c ≥ 0
+  c - d ≥ 0
+  b ≥ 0
+  b + c ≥ 0
+  a ≥ 0
+  a + b + c ≥ 0
+where
+ a := ↑(events depthPath).length
+ b := ↑(events ordinaryPath).length
+ c := ↑(j - ((events depthPath).length + (events ordinaryPath).length))
+ d := ↑(events bodyPath).length
+ e := ↑(List.length ?m.786)
+ f := ↑?m.788
+/tmp/mcfta-native-publication-order-helpers/order-direct-2.source.lean:168:16: error: Type mismatch: After simplification, term
+  afterOrdinary
+ has type
+  (events bodyPath ++ [event])[j - (events depthPath).length - (events ordinaryPath).length]? = some outer
+but is expected to have type
+  [event][j - (events depthPath).length - (events ordinaryPath).length - (events bodyPath).length]? = some outer

@@ -1,0 +1,55 @@
+/-- One actual rooted path orders every final writer and every writer present before another completion. -/
+theorem build_trace_writers [DecidableEq (EdgeKey Symbol Guard)]
+    (original : Syntax Symbol Guard) (initial : List (Value Symbol Guard))
+    (before : State Symbol Guard) (context : Context before initial)
+    (initialMuFree : ∀ key entry body depth ordinary,
+      before.nodeRecords key ≠ some (.mu entry body depth ordinary))
+    (result : Value Symbol Guard) (after : State Symbol Guard)
+    (actual : build original initial before = .done result after) :
+    ∃ path : Path before after,
+      (∀ (index : Nat) event, (events path)[index]? = some event →
+        Reached original initial (.binder event.smart event.expression) event.environment event.before) ∧
+      (∀ key entry body depth ordinary,
+        after.nodeRecords key = some (.mu entry body depth ordinary) →
+        ∃ index : Nat, ∃ event, (events path)[index]? = some event ∧
+          Reached original initial (.binder event.smart event.expression) event.environment event.before ∧
+          key = event.key ∧ Value.mu entry body depth ordinary = event.candidate ∧
+          event.afterBody.nodeRecords event.key = none ∧
+          Nonempty (Path before event.before) ∧
+          Nonempty (Path event.before event.afterDepth) ∧
+          Nonempty (Path event.afterDepth event.cut) ∧
+          Nonempty (Path event.allocated event.afterBody) ∧
+          Grows event.after after ∧ Extends event.after.nodes.issued after.nodes.issued) ∧
+      ∀ (index : Nat) outer, (events path)[index]? = some outer →
+        ∀ key entry body depth ordinary,
+          outer.afterBody.nodeRecords key = some (.mu entry body depth ordinary) →
+          ∃ earlierIndex : Nat, ∃ earlier, earlierIndex < index ∧ (events path)[earlierIndex]? = some earlier ∧
+            Reached original initial (.binder earlier.smart earlier.expression) earlier.environment earlier.before ∧
+            key = earlier.key ∧ Value.mu entry body depth ordinary = earlier.candidate ∧
+            earlier.afterBody.nodeRecords earlier.key = none ∧
+            Nonempty (Path before earlier.before) ∧
+            Nonempty (Path earlier.before earlier.afterDepth) ∧
+            Nonempty (Path earlier.afterDepth earlier.cut) ∧
+            Nonempty (Path earlier.allocated earlier.afterBody) ∧
+            Grows earlier.after outer.afterBody ∧
+            Extends earlier.after.nodes.issued outer.afterBody.nodes.issued := by
+  have supported := build_supported original initial original initial before context
+    (reached_initial original initial before)
+  rw [actual] at supported
+  obtain ⟨path,rooted⟩ := supported
+  refine ⟨path,?_,?_,?_⟩
+  · intro index event selected
+    exact rooted_event path rooted event (List.mem_of_getElem? selected)
+  · intro key entry body depth ordinary present
+    rcases indexed_writers path key entry body depth ordinary present with old | written
+    · exact (initialMuFree key entry body depth ordinary old).elim
+    · obtain ⟨index,event,selected,keySame,valueSame,missing,prefixPath,depthPath,ordinaryPath,bodyPath,growth,issued⟩ := written
+      exact ⟨index,event,selected,rooted_event path rooted event (List.mem_of_getElem? selected),
+        keySame,valueSame,missing,prefixPath,depthPath,ordinaryPath,bodyPath,growth,issued⟩
+  · intro index outer selected key entry body depth ordinary present
+    rcases precompletion_writers path index outer selected key entry body depth ordinary present with old | written
+    · exact (initialMuFree key entry body depth ordinary old).elim
+    · obtain ⟨earlierIndex,earlier,less,chosen,keySame,valueSame,missing,prefixPath,
+        depthPath,ordinaryPath,bodyPath,growth,issued⟩ := written
+      exact ⟨earlierIndex,earlier,less,chosen,rooted_event path rooted earlier (List.mem_of_getElem? chosen),
+        keySame,valueSame,missing,prefixPath,depthPath,ordinaryPath,bodyPath,growth,issued⟩

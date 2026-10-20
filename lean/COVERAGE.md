@@ -1,5 +1,48 @@
 # Full formalization coverage
 
+## Current common original-build publication trace
+
+Updated: 2026-10-20 23:03 CEST. Proof checkpoint: `def05b051`.
+Verified start: `cf36913f0`. Imported main remains `794903b3f`.
+Read `lean/notes-current-native-original-publication-trace.md`.
+
+An actual completed source build now supplies one rooted issued path.
+Its postorder publication list is shared by all returned clauses.
+Every final full Mu cell has an indexed writer in that same list.
+Every full Mu cell present before an indexed outer publication has a
+writer at a strictly smaller index. Both clauses keep the exact key and
+full payload, original Reached, missing cell, actual prefix and three
+callback paths, plus physical and issued suffixes to their exact readers.
+The theorem requires genuine entry Context and no initial full Mu cells.
+The closed empty-heap example derives both conditions from initial data.
+
+The existing warm source family now derives two strict indexed events
+in that same returned trace. It selects the outer writer from a computed
+final full cell. Actual callback availability puts the inner full cell
+at that same recovered outer.afterBody. The precompletion clause then
+derives the earlier writer. It assumes no event identity or desired order.
+This example runs no unfold or native execution prefix.
+
+Two public and one constructed full readbacks pass. Independent root
+strict checks have empty logs. Canonical and default Audit pass: 3537
+jobs and 74326 theorem dependency checks. Only the older ClosedCompletion
+warning remains. All 14 actual capped Lean/Lake commands and
+4 failed attempts remain. Auxiliary helper readbacks add no official
+public pairs. Counts do not measure completion. All older work remains.
+
+The next proof must select its enclosing writer from this same trace
+before it derives source rows and binder resumption. An independently
+recovered existential writer cannot be assigned an index by assumption.
+This source chronology is not a global native owner-renewal rank.
+Generated-capture ancestry, residual observations, global renewal and
+active-owner exclusion, final retention, general outer completion,
+convergence and production Haskell refinement remain open.
+FINDINGS retains all external Haskell repairs first. The imported
+Typing.hs documentation repair passes fourmolu and cabal-gild checks.
+No new Haskell runtime result is claimed. All 268 Haskell and 207 active
+package files keep their bytes. The full goal stays active. Pushes to
+formalize remain authorized.
+
 ## Current upstream documentation integration
 
 Updated: 2026-10-20 22:50 CEST. Merge checkpoint: `b7ba16ca3`.

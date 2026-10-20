@@ -1,0 +1,2168 @@
+@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events : {Symbol Guard : Type} →
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} →
+      @MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before after →
+        List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+def MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events : {Symbol Guard : Type} →
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} →
+      @MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before after →
+        List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {before after}
+    x =>
+  @MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path.brecOn.{1} Symbol Guard inst
+    (fun {before after} x => List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+    before after x (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events._f Symbol Guard inst)
+'MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.indexed_writers : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  (path : @MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before after)
+  (key : MicroCFTA.InternedBinderProtocol.NodeKey)
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (body depth ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+      (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard after key)
+      (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)) →
+    Or
+      (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard before key)
+        (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+      (@Exists.{1} Nat fun i =>
+        @Exists.{1} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) fun event =>
+          And
+            (@Eq.{1} (Option.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+              (@GetElem?.getElem?.{0, 0, 0}
+                (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)) Nat
+                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                (fun as i =>
+                  @LT.lt.{0} Nat instLTNat i
+                    (@List.length.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) as))
+                (@List.instGetElem?NatLtLength.{0}
+                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst before after path) i)
+              (@Option.some.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) event))
+            (And
+              (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeKey key
+                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst event))
+              (And
+                (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)
+                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.candidate Symbol Guard inst event))
+                (And
+                  (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst event)
+                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst event))
+                    (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                  (And
+                    (Nonempty.{1}
+                      (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before
+                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst event)))
+                    (And
+                      (Nonempty.{1}
+                        (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst event)
+                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard inst event)))
+                      (And
+                        (Nonempty.{1}
+                          (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard inst event)
+                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.cut Symbol Guard inst event)))
+                        (And
+                          (Nonempty.{1}
+                            (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.allocated Symbol Guard inst
+                                event)
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst
+                                event)))
+                          (And
+                            (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol Guard inst event)
+                              after)
+                            (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                              (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol Guard inst
+                                    event)))
+                              (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard after))))))))))))
+private theorem MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.indexed_writers : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  (path : @MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before after)
+  (key : MicroCFTA.InternedBinderProtocol.NodeKey)
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (body depth ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+  @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+      (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard after key)
+      (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)) →
+    Or
+      (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard before key)
+        (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+      (@Exists.{1} Nat fun i =>
+        @Exists.{1} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) fun event =>
+          And
+            (@Eq.{1} (Option.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+              (@GetElem?.getElem?.{0, 0, 0}
+                (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)) Nat
+                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                (fun as i =>
+                  @LT.lt.{0} Nat instLTNat i
+                    (@List.length.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) as))
+                (@List.instGetElem?NatLtLength.{0}
+                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst before after path) i)
+              (@Option.some.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) event))
+            (And
+              (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeKey key
+                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst event))
+              (And
+                (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)
+                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.candidate Symbol Guard inst event))
+                (And
+                  (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst event)
+                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst event))
+                    (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                  (And
+                    (Nonempty.{1}
+                      (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before
+                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst event)))
+                    (And
+                      (Nonempty.{1}
+                        (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst event)
+                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard inst event)))
+                      (And
+                        (Nonempty.{1}
+                          (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard inst event)
+                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.cut Symbol Guard inst event)))
+                        (And
+                          (Nonempty.{1}
+                            (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.allocated Symbol Guard inst
+                                event)
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst
+                                event)))
+                          (And
+                            (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol Guard inst event)
+                              after)
+                            (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                              (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol Guard inst
+                                    event)))
+                              (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard after)))))))))))) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {before after}
+    path key entry body depth ordinary present =>
+  @MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.writers_in Symbol Guard inst before after path key entry body
+    depth ordinary present
+'_private._stdin.0.MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.indexed_writers' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.precompletion_writers : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  (path : @MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before after) (j : Nat)
+  (outer : @MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst),
+  @Eq.{1} (Option.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+      (@GetElem?.getElem?.{0, 0, 0}
+        (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)) Nat
+        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+        (fun as i =>
+          @LT.lt.{0} Nat instLTNat i
+            (@List.length.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) as))
+        (@List.instGetElem?NatLtLength.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+        (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst before after path) j)
+      (@Option.some.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) outer) →
+    ∀ (key : MicroCFTA.InternedBinderProtocol.NodeKey)
+      (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+      (body depth ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst outer) key)
+          (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)) →
+        Or
+          (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard before key)
+            (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+          (@Exists.{1} Nat fun i =>
+            @Exists.{1} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) fun earlier =>
+              And (@LT.lt.{0} Nat instLTNat i j)
+                (And
+                  (@Eq.{1} (Option.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                    (@GetElem?.getElem?.{0, 0, 0}
+                      (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)) Nat
+                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                      (fun as i =>
+                        @LT.lt.{0} Nat instLTNat i
+                          (@List.length.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                            as))
+                      (@List.instGetElem?NatLtLength.{0}
+                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                      (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst before after
+                        path)
+                      i)
+                    (@Option.some.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                      earlier))
+                  (And
+                    (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeKey key
+                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst earlier))
+                    (And
+                      (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)
+                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.candidate Symbol Guard inst earlier))
+                      (And
+                        (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst
+                              earlier)
+                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst earlier))
+                          (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                        (And
+                          (Nonempty.{1}
+                            (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst
+                                earlier)))
+                          (And
+                            (Nonempty.{1}
+                              (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst
+                                  earlier)
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard inst
+                                  earlier)))
+                            (And
+                              (Nonempty.{1}
+                                (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard inst
+                                    earlier)
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.cut Symbol Guard inst
+                                    earlier)))
+                              (And
+                                (Nonempty.{1}
+                                  (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.allocated Symbol Guard inst
+                                      earlier)
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst
+                                      earlier)))
+                                (And
+                                  (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol Guard inst
+                                      earlier)
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst
+                                      outer))
+                                  (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                    (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                      (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol Guard inst
+                                          earlier)))
+                                    (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                      (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard
+                                          inst outer))))))))))))))
+private theorem MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.precompletion_writers : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  (path : @MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before after) (j : Nat)
+  (outer : @MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst),
+  @Eq.{1} (Option.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+      (@GetElem?.getElem?.{0, 0, 0}
+        (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)) Nat
+        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+        (fun as i =>
+          @LT.lt.{0} Nat instLTNat i
+            (@List.length.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) as))
+        (@List.instGetElem?NatLtLength.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+        (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst before after path) j)
+      (@Option.some.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) outer) →
+    ∀ (key : MicroCFTA.InternedBinderProtocol.NodeKey)
+      (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+      (body depth ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst outer) key)
+          (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)) →
+        Or
+          (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard before key)
+            (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+          (@Exists.{1} Nat fun i =>
+            @Exists.{1} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) fun earlier =>
+              And (@LT.lt.{0} Nat instLTNat i j)
+                (And
+                  (@Eq.{1} (Option.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                    (@GetElem?.getElem?.{0, 0, 0}
+                      (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)) Nat
+                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                      (fun as i =>
+                        @LT.lt.{0} Nat instLTNat i
+                          (@List.length.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                            as))
+                      (@List.instGetElem?NatLtLength.{0}
+                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                      (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst before after
+                        path)
+                      i)
+                    (@Option.some.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                      earlier))
+                  (And
+                    (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeKey key
+                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst earlier))
+                    (And
+                      (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)
+                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.candidate Symbol Guard inst earlier))
+                      (And
+                        (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst
+                              earlier)
+                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst earlier))
+                          (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                        (And
+                          (Nonempty.{1}
+                            (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst
+                                earlier)))
+                          (And
+                            (Nonempty.{1}
+                              (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst
+                                  earlier)
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard inst
+                                  earlier)))
+                            (And
+                              (Nonempty.{1}
+                                (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard inst
+                                    earlier)
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.cut Symbol Guard inst
+                                    earlier)))
+                              (And
+                                (Nonempty.{1}
+                                  (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.allocated Symbol Guard inst
+                                      earlier)
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst
+                                      earlier)))
+                                (And
+                                  (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol Guard inst
+                                      earlier)
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst
+                                      outer))
+                                  (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                    (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                      (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol Guard inst
+                                          earlier)))
+                                    (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                      (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard
+                                          inst outer)))))))))))))) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {before after}
+    path j outer found key entry body depth ordinary present =>
+  @Exists.casesOn.{1}
+    (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before
+      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst outer))
+    (fun earlierPath =>
+      @Exists.{1} (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)) fun tail =>
+        And
+          (@Eq.{1} (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+            (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst before after path)
+            (@HAppend.hAppend.{0, 0, 0}
+              (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+              (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+              (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+              (@instHAppendOfAppend.{0}
+                (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                (@List.instAppend.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)))
+              (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst before
+                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst outer) earlierPath)
+              tail))
+          (@Eq.{1} Nat
+            (@List.length.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+              (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst before
+                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst outer)
+                earlierPath))
+            j))
+    (fun x =>
+      Or
+        (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard before key)
+          (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+        (@Exists.{1} Nat fun i =>
+          @Exists.{1} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) fun earlier =>
+            And (@LT.lt.{0} Nat instLTNat i j)
+              (And
+                (@Eq.{1} (Option.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                  (@GetElem?.getElem?.{0, 0, 0}
+                    (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)) Nat
+                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                    (fun as i =>
+                      @LT.lt.{0} Nat instLTNat i
+                        (@List.length.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                          as))
+                    (@List.instGetElem?NatLtLength.{0}
+                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                    (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst before after path)
+                    i)
+                  (@Option.some.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                    earlier))
+                (And
+                  (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeKey key
+                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst earlier))
+                  (And
+                    (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)
+                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.candidate Symbol Guard inst earlier))
+                    (And
+                      (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst earlier)
+                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst earlier))
+                        (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                      (And
+                        (Nonempty.{1}
+                          (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before
+                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst earlier)))
+                        (And
+                          (Nonempty.{1}
+                            (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst earlier)
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard inst
+                                earlier)))
+                          (And
+                            (Nonempty.{1}
+                              (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard inst
+                                  earlier)
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.cut Symbol Guard inst
+                                  earlier)))
+                            (And
+                              (Nonempty.{1}
+                                (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.allocated Symbol Guard inst
+                                    earlier)
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst
+                                    earlier)))
+                              (And
+                                (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol Guard inst
+                                    earlier)
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst
+                                    outer))
+                                (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                  (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                    (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol Guard inst
+                                        earlier)))
+                                  (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                    (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard
+                                        inst outer)))))))))))))))
+    (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.before_publication Symbol Guard inst before after path j
+      outer found)
+    fun earlierPath h =>
+    @Exists.casesOn.{1} (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+      (fun tail =>
+        And
+          (@Eq.{1} (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+            (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst before after path)
+            (@HAppend.hAppend.{0, 0, 0}
+              (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+              (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+              (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+              (@instHAppendOfAppend.{0}
+                (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                (@List.instAppend.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)))
+              (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst before
+                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst outer) earlierPath)
+              tail))
+          (@Eq.{1} Nat
+            (@List.length.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+              (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst before
+                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst outer)
+                earlierPath))
+            j))
+      (fun x =>
+        Or
+          (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard before key)
+            (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+          (@Exists.{1} Nat fun i =>
+            @Exists.{1} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) fun earlier =>
+              And (@LT.lt.{0} Nat instLTNat i j)
+                (And
+                  (@Eq.{1} (Option.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                    (@GetElem?.getElem?.{0, 0, 0}
+                      (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)) Nat
+                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                      (fun as i =>
+                        @LT.lt.{0} Nat instLTNat i
+                          (@List.length.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                            as))
+                      (@List.instGetElem?NatLtLength.{0}
+                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                      (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst before after
+                        path)
+                      i)
+                    (@Option.some.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                      earlier))
+                  (And
+                    (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeKey key
+                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst earlier))
+                    (And
+                      (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)
+                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.candidate Symbol Guard inst earlier))
+                      (And
+                        (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst
+                              earlier)
+                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst earlier))
+                          (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                        (And
+                          (Nonempty.{1}
+                            (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst
+                                earlier)))
+                          (And
+                            (Nonempty.{1}
+                              (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst
+                                  earlier)
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard inst
+                                  earlier)))
+                            (And
+                              (Nonempty.{1}
+                                (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard inst
+                                    earlier)
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.cut Symbol Guard inst
+                                    earlier)))
+                              (And
+                                (Nonempty.{1}
+                                  (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.allocated Symbol Guard inst
+                                      earlier)
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst
+                                      earlier)))
+                                (And
+                                  (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol Guard inst
+                                      earlier)
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst
+                                      outer))
+                                  (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                    (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                      (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol Guard inst
+                                          earlier)))
+                                    (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                      (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard
+                                          inst outer)))))))))))))))
+      h fun tail h =>
+      @And.casesOn.{0}
+        (@Eq.{1} (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+          (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst before after path)
+          (@HAppend.hAppend.{0, 0, 0}
+            (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+            (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+            (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+            (@instHAppendOfAppend.{0}
+              (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+              (@List.instAppend.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)))
+            (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst before
+              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst outer) earlierPath)
+            tail))
+        (@Eq.{1} Nat
+          (@List.length.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+            (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst before
+              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst outer) earlierPath))
+          j)
+        (fun x =>
+          Or
+            (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard before key)
+              (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+            (@Exists.{1} Nat fun i =>
+              @Exists.{1} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) fun earlier =>
+                And (@LT.lt.{0} Nat instLTNat i j)
+                  (And
+                    (@Eq.{1} (Option.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                      (@GetElem?.getElem?.{0, 0, 0}
+                        (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)) Nat
+                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                        (fun as i =>
+                          @LT.lt.{0} Nat instLTNat i
+                            (@List.length.{0}
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) as))
+                        (@List.instGetElem?NatLtLength.{0}
+                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                        (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst before after
+                          path)
+                        i)
+                      (@Option.some.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                        earlier))
+                    (And
+                      (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeKey key
+                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst earlier))
+                      (And
+                        (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)
+                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.candidate Symbol Guard inst earlier))
+                        (And
+                          (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst
+                                earlier)
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst earlier))
+                            (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                          (And
+                            (Nonempty.{1}
+                              (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst
+                                  earlier)))
+                            (And
+                              (Nonempty.{1}
+                                (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst
+                                    earlier)
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard inst
+                                    earlier)))
+                              (And
+                                (Nonempty.{1}
+                                  (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard
+                                      inst earlier)
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.cut Symbol Guard inst
+                                      earlier)))
+                                (And
+                                  (Nonempty.{1}
+                                    (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.allocated Symbol Guard
+                                        inst earlier)
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard
+                                        inst earlier)))
+                                  (And
+                                    (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol Guard inst
+                                        earlier)
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard
+                                        inst outer))
+                                    (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                      (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                        (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol Guard
+                                            inst earlier)))
+                                      (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                        (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol
+                                            Guard inst outer)))))))))))))))
+        h fun same length =>
+        @Or.casesOn
+          (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard before key)
+            (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+          (@Exists.{1} Nat fun i =>
+            @Exists.{1} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) fun event =>
+              And
+                (@Eq.{1} (Option.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                  (@GetElem?.getElem?.{0, 0, 0}
+                    (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)) Nat
+                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                    (fun as i =>
+                      @LT.lt.{0} Nat instLTNat i
+                        (@List.length.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                          as))
+                    (@List.instGetElem?NatLtLength.{0}
+                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                    (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst before
+                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst outer)
+                      earlierPath)
+                    i)
+                  (@Option.some.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) event))
+                (And
+                  (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeKey key
+                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst event))
+                  (And
+                    (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)
+                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.candidate Symbol Guard inst event))
+                    (And
+                      (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst event)
+                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst event))
+                        (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                      (And
+                        (Nonempty.{1}
+                          (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before
+                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst event)))
+                        (And
+                          (Nonempty.{1}
+                            (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst event)
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard inst
+                                event)))
+                          (And
+                            (Nonempty.{1}
+                              (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard inst
+                                  event)
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.cut Symbol Guard inst event)))
+                            (And
+                              (Nonempty.{1}
+                                (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.allocated Symbol Guard inst
+                                    event)
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst
+                                    event)))
+                              (And
+                                (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol Guard inst
+                                    event)
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst
+                                    outer))
+                                (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                  (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                    (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol Guard inst
+                                        event)))
+                                  (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                    (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard
+                                        inst outer)))))))))))))
+          (fun x =>
+            Or
+              (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard before key)
+                (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+              (@Exists.{1} Nat fun i =>
+                @Exists.{1} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) fun earlier =>
+                  And (@LT.lt.{0} Nat instLTNat i j)
+                    (And
+                      (@Eq.{1} (Option.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                        (@GetElem?.getElem?.{0, 0, 0}
+                          (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)) Nat
+                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                          (fun as i =>
+                            @LT.lt.{0} Nat instLTNat i
+                              (@List.length.{0}
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) as))
+                          (@List.instGetElem?NatLtLength.{0}
+                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                          (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst before after
+                            path)
+                          i)
+                        (@Option.some.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                          earlier))
+                      (And
+                        (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeKey key
+                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst earlier))
+                        (And
+                          (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)
+                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.candidate Symbol Guard inst
+                              earlier))
+                          (And
+                            (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                              (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst
+                                  earlier)
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst earlier))
+                              (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                            (And
+                              (Nonempty.{1}
+                                (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst
+                                    earlier)))
+                              (And
+                                (Nonempty.{1}
+                                  (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst
+                                      earlier)
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard
+                                      inst earlier)))
+                                (And
+                                  (Nonempty.{1}
+                                    (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard
+                                        inst earlier)
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.cut Symbol Guard inst
+                                        earlier)))
+                                  (And
+                                    (Nonempty.{1}
+                                      (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.allocated Symbol Guard
+                                          inst earlier)
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard
+                                          inst earlier)))
+                                    (And
+                                      (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol Guard inst
+                                          earlier)
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard
+                                          inst outer))
+                                      (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol Guard
+                                              inst earlier)))
+                                        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol
+                                              Guard inst outer)))))))))))))))
+          (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.indexed_writers Symbol Guard inst before
+            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst outer) earlierPath key
+            entry body depth ordinary present)
+          (fun initial =>
+            @Or.inl
+              (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard before key)
+                (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+              (@Exists.{1} Nat fun i =>
+                @Exists.{1} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) fun earlier =>
+                  And (@LT.lt.{0} Nat instLTNat i j)
+                    (And
+                      (@Eq.{1} (Option.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                        (@GetElem?.getElem?.{0, 0, 0}
+                          (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)) Nat
+                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                          (fun as i =>
+                            @LT.lt.{0} Nat instLTNat i
+                              (@List.length.{0}
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) as))
+                          (@List.instGetElem?NatLtLength.{0}
+                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                          (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst before after
+                            path)
+                          i)
+                        (@Option.some.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                          earlier))
+                      (And
+                        (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeKey key
+                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst earlier))
+                        (And
+                          (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)
+                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.candidate Symbol Guard inst
+                              earlier))
+                          (And
+                            (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                              (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst
+                                  earlier)
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst earlier))
+                              (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                            (And
+                              (Nonempty.{1}
+                                (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst
+                                    earlier)))
+                              (And
+                                (Nonempty.{1}
+                                  (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst
+                                      earlier)
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard
+                                      inst earlier)))
+                                (And
+                                  (Nonempty.{1}
+                                    (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard
+                                        inst earlier)
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.cut Symbol Guard inst
+                                        earlier)))
+                                  (And
+                                    (Nonempty.{1}
+                                      (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.allocated Symbol Guard
+                                          inst earlier)
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard
+                                          inst earlier)))
+                                    (And
+                                      (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol Guard inst
+                                          earlier)
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard
+                                          inst outer))
+                                      (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol Guard
+                                              inst earlier)))
+                                        (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                          (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol
+                                              Guard inst outer))))))))))))))
+              initial)
+          fun written =>
+          @Exists.casesOn.{1} Nat
+            (fun i =>
+              @Exists.{1} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) fun event =>
+                And
+                  (@Eq.{1} (Option.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                    (@GetElem?.getElem?.{0, 0, 0}
+                      (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)) Nat
+                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                      (fun as i =>
+                        @LT.lt.{0} Nat instLTNat i
+                          (@List.length.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                            as))
+                      (@List.instGetElem?NatLtLength.{0}
+                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                      (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst before
+                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst outer)
+                        earlierPath)
+                      i)
+                    (@Option.some.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                      event))
+                  (And
+                    (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeKey key
+                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst event))
+                    (And
+                      (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)
+                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.candidate Symbol Guard inst event))
+                      (And
+                        (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst event)
+                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst event))
+                          (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                        (And
+                          (Nonempty.{1}
+                            (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst event)))
+                          (And
+                            (Nonempty.{1}
+                              (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst event)
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard inst
+                                  event)))
+                            (And
+                              (Nonempty.{1}
+                                (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard inst
+                                    event)
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.cut Symbol Guard inst
+                                    event)))
+                              (And
+                                (Nonempty.{1}
+                                  (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.allocated Symbol Guard inst
+                                      event)
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst
+                                      event)))
+                                (And
+                                  (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol Guard inst
+                                      event)
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst
+                                      outer))
+                                  (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                    (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                      (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol Guard inst
+                                          event)))
+                                    (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                      (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard
+                                          inst outer)))))))))))))
+            (fun x =>
+              Or
+                (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard before key)
+                  (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+                (@Exists.{1} Nat fun i =>
+                  @Exists.{1} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) fun earlier =>
+                    And (@LT.lt.{0} Nat instLTNat i j)
+                      (And
+                        (@Eq.{1}
+                          (Option.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                          (@GetElem?.getElem?.{0, 0, 0}
+                            (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)) Nat
+                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                            (fun as i =>
+                              @LT.lt.{0} Nat instLTNat i
+                                (@List.length.{0}
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) as))
+                            (@List.instGetElem?NatLtLength.{0}
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                            (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst before
+                              after path)
+                            i)
+                          (@Option.some.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                            earlier))
+                        (And
+                          (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeKey key
+                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst earlier))
+                          (And
+                            (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.candidate Symbol Guard inst
+                                earlier))
+                            (And
+                              (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst
+                                    earlier)
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst
+                                    earlier))
+                                (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                              (And
+                                (Nonempty.{1}
+                                  (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst
+                                      earlier)))
+                                (And
+                                  (Nonempty.{1}
+                                    (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst
+                                        earlier)
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard
+                                        inst earlier)))
+                                  (And
+                                    (Nonempty.{1}
+                                      (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard
+                                          inst earlier)
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.cut Symbol Guard inst
+                                          earlier)))
+                                    (And
+                                      (Nonempty.{1}
+                                        (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.allocated Symbol
+                                            Guard inst earlier)
+                                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol
+                                            Guard inst earlier)))
+                                      (And
+                                        (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard
+                                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol Guard
+                                            inst earlier)
+                                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol
+                                            Guard inst outer))
+                                        (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                          (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol
+                                                Guard inst earlier)))
+                                          (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol
+                                                Guard inst outer)))))))))))))))
+            written fun i h =>
+            @Exists.casesOn.{1} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+              (fun event =>
+                And
+                  (@Eq.{1} (Option.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                    (@GetElem?.getElem?.{0, 0, 0}
+                      (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)) Nat
+                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                      (fun as i =>
+                        @LT.lt.{0} Nat instLTNat i
+                          (@List.length.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                            as))
+                      (@List.instGetElem?NatLtLength.{0}
+                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                      (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst before
+                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst outer)
+                        earlierPath)
+                      i)
+                    (@Option.some.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                      event))
+                  (And
+                    (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeKey key
+                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst event))
+                    (And
+                      (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)
+                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.candidate Symbol Guard inst event))
+                      (And
+                        (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst event)
+                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst event))
+                          (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                        (And
+                          (Nonempty.{1}
+                            (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst event)))
+                          (And
+                            (Nonempty.{1}
+                              (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst event)
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard inst
+                                  event)))
+                            (And
+                              (Nonempty.{1}
+                                (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard inst
+                                    event)
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.cut Symbol Guard inst
+                                    event)))
+                              (And
+                                (Nonempty.{1}
+                                  (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.allocated Symbol Guard inst
+                                      event)
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst
+                                      event)))
+                                (And
+                                  (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol Guard inst
+                                      event)
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst
+                                      outer))
+                                  (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                    (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                      (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol Guard inst
+                                          event)))
+                                    (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                      (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard
+                                          inst outer)))))))))))))
+              (fun x =>
+                Or
+                  (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard before key)
+                    (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+                  (@Exists.{1} Nat fun i =>
+                    @Exists.{1} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                      fun earlier =>
+                      And (@LT.lt.{0} Nat instLTNat i j)
+                        (And
+                          (@Eq.{1}
+                            (Option.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                            (@GetElem?.getElem?.{0, 0, 0}
+                              (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)) Nat
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                              (fun as i =>
+                                @LT.lt.{0} Nat instLTNat i
+                                  (@List.length.{0}
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) as))
+                              (@List.instGetElem?NatLtLength.{0}
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                              (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst before
+                                after path)
+                              i)
+                            (@Option.some.{0}
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) earlier))
+                          (And
+                            (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeKey key
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst earlier))
+                            (And
+                              (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth
+                                  ordinary)
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.candidate Symbol Guard inst
+                                  earlier))
+                              (And
+                                (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                  (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst
+                                      earlier)
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst
+                                      earlier))
+                                  (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                                (And
+                                  (Nonempty.{1}
+                                    (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst
+                                        earlier)))
+                                  (And
+                                    (Nonempty.{1}
+                                      (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard
+                                          inst earlier)
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard
+                                          inst earlier)))
+                                    (And
+                                      (Nonempty.{1}
+                                        (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol
+                                            Guard inst earlier)
+                                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.cut Symbol Guard inst
+                                            earlier)))
+                                      (And
+                                        (Nonempty.{1}
+                                          (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.allocated Symbol
+                                              Guard inst earlier)
+                                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol
+                                              Guard inst earlier)))
+                                        (And
+                                          (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard
+                                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol Guard
+                                              inst earlier)
+                                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol
+                                              Guard inst outer))
+                                          (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                            (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol
+                                                  Guard inst earlier)))
+                                            (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody
+                                                  Symbol Guard inst outer)))))))))))))))
+              h fun earlier h =>
+              @And.casesOn.{0}
+                (@Eq.{1} (Option.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                  (@GetElem?.getElem?.{0, 0, 0}
+                    (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)) Nat
+                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                    (fun as i =>
+                      @LT.lt.{0} Nat instLTNat i
+                        (@List.length.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                          as))
+                    (@List.instGetElem?NatLtLength.{0}
+                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                    (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst before
+                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst outer)
+                      earlierPath)
+                    i)
+                  (@Option.some.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                    earlier))
+                (And
+                  (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeKey key
+                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst earlier))
+                  (And
+                    (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)
+                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.candidate Symbol Guard inst earlier))
+                    (And
+                      (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst earlier)
+                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst earlier))
+                        (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                      (And
+                        (Nonempty.{1}
+                          (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before
+                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst earlier)))
+                        (And
+                          (Nonempty.{1}
+                            (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst earlier)
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard inst
+                                earlier)))
+                          (And
+                            (Nonempty.{1}
+                              (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard inst
+                                  earlier)
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.cut Symbol Guard inst
+                                  earlier)))
+                            (And
+                              (Nonempty.{1}
+                                (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.allocated Symbol Guard inst
+                                    earlier)
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst
+                                    earlier)))
+                              (And
+                                (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol Guard inst
+                                    earlier)
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst
+                                    outer))
+                                (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                  (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                    (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol Guard inst
+                                        earlier)))
+                                  (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                    (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard
+                                        inst outer))))))))))))
+                (fun x =>
+                  Or
+                    (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard before key)
+                      (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+                    (@Exists.{1} Nat fun i =>
+                      @Exists.{1} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                        fun earlier =>
+                        And (@LT.lt.{0} Nat instLTNat i j)
+                          (And
+                            (@Eq.{1}
+                              (Option.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                              (@GetElem?.getElem?.{0, 0, 0}
+                                (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                Nat (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                                (fun as i =>
+                                  @LT.lt.{0} Nat instLTNat i
+                                    (@List.length.{0}
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) as))
+                                (@List.instGetElem?NatLtLength.{0}
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst before
+                                  after path)
+                                i)
+                              (@Option.some.{0}
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) earlier))
+                            (And
+                              (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeKey key
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst earlier))
+                              (And
+                                (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth
+                                    ordinary)
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.candidate Symbol Guard inst
+                                    earlier))
+                                (And
+                                  (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                    (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard
+                                        inst earlier)
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst
+                                        earlier))
+                                    (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                                  (And
+                                    (Nonempty.{1}
+                                      (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard
+                                          inst earlier)))
+                                    (And
+                                      (Nonempty.{1}
+                                        (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard
+                                            inst earlier)
+                                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol
+                                            Guard inst earlier)))
+                                      (And
+                                        (Nonempty.{1}
+                                          (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol
+                                              Guard inst earlier)
+                                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.cut Symbol Guard
+                                              inst earlier)))
+                                        (And
+                                          (Nonempty.{1}
+                                            (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.allocated Symbol
+                                                Guard inst earlier)
+                                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol
+                                                Guard inst earlier)))
+                                          (And
+                                            (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard
+                                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol
+                                                Guard inst earlier)
+                                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol
+                                                Guard inst outer))
+                                            (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                              (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol
+                                                    Guard inst earlier)))
+                                              (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody
+                                                    Symbol Guard inst outer)))))))))))))))
+                h fun chosen rest =>
+                have bounded :=
+                  (@Iff.mp
+                      (@Eq.{1} (Option.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                        (@GetElem?.getElem?.{0, 0, 0}
+                          (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)) Nat
+                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                          (fun as i =>
+                            @LT.lt.{0} Nat instLTNat i
+                              (@List.length.{0}
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) as))
+                          (@List.instGetElem?NatLtLength.{0}
+                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                          (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst before
+                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst outer)
+                            earlierPath)
+                          i)
+                        (@Option.some.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                          earlier))
+                      (@Exists.{0}
+                        (@LT.lt.{0} Nat instLTNat i
+                          (@List.length.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                            (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst before
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst
+                                outer)
+                              earlierPath)))
+                        fun h =>
+                        @Eq.{1} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                          (@GetElem.getElem.{0, 0, 0}
+                            (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)) Nat
+                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                            (fun as i =>
+                              @LT.lt.{0} Nat instLTNat i
+                                (@List.length.{0}
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) as))
+                            (@List.instGetElemNatLtLength.{0}
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                            (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst before
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst
+                                outer)
+                              earlierPath)
+                            i h)
+                          earlier)
+                      (@List.getElem?_eq_some_iff.{0}
+                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) i earlier
+                        (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst before
+                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst outer)
+                          earlierPath))
+                      chosen).1;
+                @Or.inr
+                  (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard before key)
+                    (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+                  (@Exists.{1} Nat fun i =>
+                    @Exists.{1} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                      fun earlier =>
+                      And (@LT.lt.{0} Nat instLTNat i j)
+                        (And
+                          (@Eq.{1}
+                            (Option.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                            (@GetElem?.getElem?.{0, 0, 0}
+                              (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)) Nat
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                              (fun as i =>
+                                @LT.lt.{0} Nat instLTNat i
+                                  (@List.length.{0}
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) as))
+                              (@List.instGetElem?NatLtLength.{0}
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                              (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst before
+                                after path)
+                              i)
+                            (@Option.some.{0}
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) earlier))
+                          (And
+                            (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeKey key
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst earlier))
+                            (And
+                              (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth
+                                  ordinary)
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.candidate Symbol Guard inst
+                                  earlier))
+                              (And
+                                (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                  (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst
+                                      earlier)
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst
+                                      earlier))
+                                  (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                                (And
+                                  (Nonempty.{1}
+                                    (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst
+                                        earlier)))
+                                  (And
+                                    (Nonempty.{1}
+                                      (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard
+                                          inst earlier)
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard
+                                          inst earlier)))
+                                    (And
+                                      (Nonempty.{1}
+                                        (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol
+                                            Guard inst earlier)
+                                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.cut Symbol Guard inst
+                                            earlier)))
+                                      (And
+                                        (Nonempty.{1}
+                                          (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.allocated Symbol
+                                              Guard inst earlier)
+                                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol
+                                              Guard inst earlier)))
+                                        (And
+                                          (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard
+                                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol Guard
+                                              inst earlier)
+                                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol
+                                              Guard inst outer))
+                                          (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                            (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol
+                                                  Guard inst earlier)))
+                                            (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody
+                                                  Symbol Guard inst outer))))))))))))))
+                  (@Exists.intro.{1} Nat
+                    (fun i =>
+                      @Exists.{1} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                        fun earlier =>
+                        And (@LT.lt.{0} Nat instLTNat i j)
+                          (And
+                            (@Eq.{1}
+                              (Option.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                              (@GetElem?.getElem?.{0, 0, 0}
+                                (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                Nat (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                                (fun as i =>
+                                  @LT.lt.{0} Nat instLTNat i
+                                    (@List.length.{0}
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) as))
+                                (@List.instGetElem?NatLtLength.{0}
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst before
+                                  after path)
+                                i)
+                              (@Option.some.{0}
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) earlier))
+                            (And
+                              (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeKey key
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst earlier))
+                              (And
+                                (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth
+                                    ordinary)
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.candidate Symbol Guard inst
+                                    earlier))
+                                (And
+                                  (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                    (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard
+                                        inst earlier)
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst
+                                        earlier))
+                                    (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                                  (And
+                                    (Nonempty.{1}
+                                      (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard
+                                          inst earlier)))
+                                    (And
+                                      (Nonempty.{1}
+                                        (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard
+                                            inst earlier)
+                                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol
+                                            Guard inst earlier)))
+                                      (And
+                                        (Nonempty.{1}
+                                          (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol
+                                              Guard inst earlier)
+                                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.cut Symbol Guard
+                                              inst earlier)))
+                                        (And
+                                          (Nonempty.{1}
+                                            (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.allocated Symbol
+                                                Guard inst earlier)
+                                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol
+                                                Guard inst earlier)))
+                                          (And
+                                            (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard
+                                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol
+                                                Guard inst earlier)
+                                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol
+                                                Guard inst outer))
+                                            (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                              (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol
+                                                    Guard inst earlier)))
+                                              (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody
+                                                    Symbol Guard inst outer))))))))))))))
+                    i
+                    (@Exists.intro.{1} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                      (fun earlier =>
+                        And (@LT.lt.{0} Nat instLTNat i j)
+                          (And
+                            (@Eq.{1}
+                              (Option.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                              (@GetElem?.getElem?.{0, 0, 0}
+                                (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                Nat (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                                (fun as i =>
+                                  @LT.lt.{0} Nat instLTNat i
+                                    (@List.length.{0}
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) as))
+                                (@List.instGetElem?NatLtLength.{0}
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst before
+                                  after path)
+                                i)
+                              (@Option.some.{0}
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) earlier))
+                            (And
+                              (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeKey key
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst earlier))
+                              (And
+                                (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth
+                                    ordinary)
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.candidate Symbol Guard inst
+                                    earlier))
+                                (And
+                                  (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                    (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard
+                                        inst earlier)
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst
+                                        earlier))
+                                    (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                                  (And
+                                    (Nonempty.{1}
+                                      (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard
+                                          inst earlier)))
+                                    (And
+                                      (Nonempty.{1}
+                                        (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard
+                                            inst earlier)
+                                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol
+                                            Guard inst earlier)))
+                                      (And
+                                        (Nonempty.{1}
+                                          (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol
+                                              Guard inst earlier)
+                                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.cut Symbol Guard
+                                              inst earlier)))
+                                        (And
+                                          (Nonempty.{1}
+                                            (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.allocated Symbol
+                                                Guard inst earlier)
+                                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol
+                                                Guard inst earlier)))
+                                          (And
+                                            (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard
+                                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol
+                                                Guard inst earlier)
+                                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol
+                                                Guard inst outer))
+                                            (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                              (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol
+                                                    Guard inst earlier)))
+                                              (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody
+                                                    Symbol Guard inst outer))))))))))))))
+                      earlier
+                      (@And.intro (@LT.lt.{0} Nat instLTNat i j)
+                        (And
+                          (@Eq.{1}
+                            (Option.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                            (@GetElem?.getElem?.{0, 0, 0}
+                              (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)) Nat
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                              (fun as i =>
+                                @LT.lt.{0} Nat instLTNat i
+                                  (@List.length.{0}
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) as))
+                              (@List.instGetElem?NatLtLength.{0}
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                              (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst before
+                                after path)
+                              i)
+                            (@Option.some.{0}
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) earlier))
+                          (And
+                            (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeKey key
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst earlier))
+                            (And
+                              (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth
+                                  ordinary)
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.candidate Symbol Guard inst
+                                  earlier))
+                              (And
+                                (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                  (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst
+                                      earlier)
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst
+                                      earlier))
+                                  (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                                (And
+                                  (Nonempty.{1}
+                                    (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst
+                                        earlier)))
+                                  (And
+                                    (Nonempty.{1}
+                                      (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard
+                                          inst earlier)
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard
+                                          inst earlier)))
+                                    (And
+                                      (Nonempty.{1}
+                                        (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol
+                                            Guard inst earlier)
+                                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.cut Symbol Guard inst
+                                            earlier)))
+                                      (And
+                                        (Nonempty.{1}
+                                          (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.allocated Symbol
+                                              Guard inst earlier)
+                                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol
+                                              Guard inst earlier)))
+                                        (And
+                                          (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard
+                                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol Guard
+                                              inst earlier)
+                                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol
+                                              Guard inst outer))
+                                          (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                            (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol
+                                                  Guard inst earlier)))
+                                            (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody
+                                                  Symbol Guard inst outer)))))))))))))
+                        (@Decidable.byContradiction (@LT.lt.{0} Nat instLTNat i j) (i.decLt j) fun a =>
+                          @MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.precompletion_writers._proof_1_1 Symbol
+                            Guard inst before j outer earlierPath length i bounded a)
+                        (@And.intro
+                          (@Eq.{1}
+                            (Option.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                            (@GetElem?.getElem?.{0, 0, 0}
+                              (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)) Nat
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                              (fun as i =>
+                                @LT.lt.{0} Nat instLTNat i
+                                  (@List.length.{0}
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) as))
+                              (@List.instGetElem?NatLtLength.{0}
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                              (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst before
+                                after path)
+                              i)
+                            (@Option.some.{0}
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) earlier))
+                          (And
+                            (@Eq.{1} MicroCFTA.InternedBinderProtocol.NodeKey key
+                              (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst earlier))
+                            (And
+                              (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth
+                                  ordinary)
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.candidate Symbol Guard inst
+                                  earlier))
+                              (And
+                                (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                  (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst
+                                      earlier)
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.key Symbol Guard inst
+                                      earlier))
+                                  (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                                (And
+                                  (Nonempty.{1}
+                                    (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard inst
+                                        earlier)))
+                                  (And
+                                    (Nonempty.{1}
+                                      (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.before Symbol Guard
+                                          inst earlier)
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol Guard
+                                          inst earlier)))
+                                    (And
+                                      (Nonempty.{1}
+                                        (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterDepth Symbol
+                                            Guard inst earlier)
+                                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.cut Symbol Guard inst
+                                            earlier)))
+                                      (And
+                                        (Nonempty.{1}
+                                          (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.allocated Symbol
+                                              Guard inst earlier)
+                                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol
+                                              Guard inst earlier)))
+                                        (And
+                                          (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard
+                                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol Guard
+                                              inst earlier)
+                                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol
+                                              Guard inst outer))
+                                          (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                            (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.after Symbol
+                                                  Guard inst earlier)))
+                                            (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody
+                                                  Symbol Guard inst outer))))))))))))
+                          (@Eq.mpr.{0}
+                            (@Eq.{1}
+                              (Option.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                              (@GetElem?.getElem?.{0, 0, 0}
+                                (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                Nat (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                                (fun as i =>
+                                  @LT.lt.{0} Nat instLTNat i
+                                    (@List.length.{0}
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) as))
+                                (@List.instGetElem?NatLtLength.{0}
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst before
+                                  after path)
+                                i)
+                              (@Option.some.{0}
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) earlier))
+                            (@Eq.{1}
+                              (Option.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                              (@GetElem?.getElem?.{0, 0, 0}
+                                (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                Nat (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                                (fun as i =>
+                                  @LT.lt.{0} Nat instLTNat i
+                                    (@List.length.{0}
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) as))
+                                (@List.instGetElem?NatLtLength.{0}
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                (@HAppend.hAppend.{0, 0, 0}
+                                  (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                  (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                  (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                  (@instHAppendOfAppend.{0}
+                                    (List.{0}
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                    (@List.instAppend.{0}
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)))
+                                  (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst
+                                    before
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst
+                                      outer)
+                                    earlierPath)
+                                  tail)
+                                i)
+                              (@Option.some.{0}
+                                (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) earlier))
+                            (@id.{0}
+                              (@Eq.{1} Prop
+                                (@Eq.{1}
+                                  (Option.{0}
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                  (@GetElem?.getElem?.{0, 0, 0}
+                                    (List.{0}
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                    Nat (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                                    (fun as i =>
+                                      @LT.lt.{0} Nat instLTNat i
+                                        (@List.length.{0}
+                                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                                          as))
+                                    (@List.instGetElem?NatLtLength.{0}
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                    (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst
+                                      before after path)
+                                    i)
+                                  (@Option.some.{0}
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                                    earlier))
+                                (@Eq.{1}
+                                  (Option.{0}
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                  (@GetElem?.getElem?.{0, 0, 0}
+                                    (List.{0}
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                    Nat (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                                    (fun as i =>
+                                      @LT.lt.{0} Nat instLTNat i
+                                        (@List.length.{0}
+                                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                                          as))
+                                    (@List.instGetElem?NatLtLength.{0}
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                    (@HAppend.hAppend.{0, 0, 0}
+                                      (List.{0}
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                      (List.{0}
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                      (List.{0}
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                      (@instHAppendOfAppend.{0}
+                                        (List.{0}
+                                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                        (@List.instAppend.{0}
+                                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)))
+                                      (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst
+                                        before
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard
+                                          inst outer)
+                                        earlierPath)
+                                      tail)
+                                    i)
+                                  (@Option.some.{0}
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                                    earlier)))
+                              (@congrArg.{1, 1}
+                                (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                Prop
+                                (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst before
+                                  after path)
+                                (@HAppend.hAppend.{0, 0, 0}
+                                  (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                  (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                  (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                  (@instHAppendOfAppend.{0}
+                                    (List.{0}
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                    (@List.instAppend.{0}
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)))
+                                  (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst
+                                    before
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst
+                                      outer)
+                                    earlierPath)
+                                  tail)
+                                (fun _a =>
+                                  @Eq.{1}
+                                    (Option.{0}
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                    (@GetElem?.getElem?.{0, 0, 0}
+                                      (List.{0}
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                      Nat (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                                      (fun as i =>
+                                        @LT.lt.{0} Nat instLTNat i
+                                          (@List.length.{0}
+                                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                                            as))
+                                      (@List.instGetElem?NatLtLength.{0}
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                      _a i)
+                                    (@Option.some.{0}
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                                      earlier))
+                                same))
+                            (@Eq.mpr.{0}
+                              (@Eq.{1}
+                                (Option.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                (@GetElem?.getElem?.{0, 0, 0}
+                                  (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                  Nat (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                                  (fun as i =>
+                                    @LT.lt.{0} Nat instLTNat i
+                                      (@List.length.{0}
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) as))
+                                  (@List.instGetElem?NatLtLength.{0}
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                  (@HAppend.hAppend.{0, 0, 0}
+                                    (List.{0}
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                    (List.{0}
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                    (List.{0}
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                    (@instHAppendOfAppend.{0}
+                                      (List.{0}
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                      (@List.instAppend.{0}
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)))
+                                    (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst
+                                      before
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard
+                                        inst outer)
+                                      earlierPath)
+                                    tail)
+                                  i)
+                                (@Option.some.{0}
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) earlier))
+                              (@Eq.{1}
+                                (Option.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                (@GetElem?.getElem?.{0, 0, 0}
+                                  (List.{0} (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                  Nat (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                                  (fun as i =>
+                                    @LT.lt.{0} Nat instLTNat i
+                                      (@List.length.{0}
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) as))
+                                  (@List.instGetElem?NatLtLength.{0}
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                  (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst
+                                    before
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard inst
+                                      outer)
+                                    earlierPath)
+                                  i)
+                                (@Option.some.{0}
+                                  (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst) earlier))
+                              (@id.{0}
+                                (@Eq.{1} Prop
+                                  (@Eq.{1}
+                                    (Option.{0}
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                    (@GetElem?.getElem?.{0, 0, 0}
+                                      (List.{0}
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                      Nat (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                                      (fun as i =>
+                                        @LT.lt.{0} Nat instLTNat i
+                                          (@List.length.{0}
+                                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                                            as))
+                                      (@List.instGetElem?NatLtLength.{0}
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                      (@HAppend.hAppend.{0, 0, 0}
+                                        (List.{0}
+                                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                        (List.{0}
+                                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                        (List.{0}
+                                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                        (@instHAppendOfAppend.{0}
+                                          (List.{0}
+                                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                          (@List.instAppend.{0}
+                                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard
+                                              inst)))
+                                        (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst
+                                          before
+                                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol
+                                            Guard inst outer)
+                                          earlierPath)
+                                        tail)
+                                      i)
+                                    (@Option.some.{0}
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                                      earlier))
+                                  (@Eq.{1}
+                                    (Option.{0}
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                    (@GetElem?.getElem?.{0, 0, 0}
+                                      (List.{0}
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                      Nat (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                                      (fun as i =>
+                                        @LT.lt.{0} Nat instLTNat i
+                                          (@List.length.{0}
+                                            (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                                            as))
+                                      (@List.instGetElem?NatLtLength.{0}
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                      (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst
+                                        before
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard
+                                          inst outer)
+                                        earlierPath)
+                                      i)
+                                    (@Option.some.{0}
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                                      earlier)))
+                                (@congrArg.{1, 1}
+                                  (Option.{0}
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                  Prop
+                                  (@GetElem?.getElem?.{0, 0, 0}
+                                    (List.{0}
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                    Nat (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                                    (fun as i =>
+                                      @LT.lt.{0} Nat instLTNat i
+                                        (@List.length.{0}
+                                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                                          as))
+                                    (@List.instGetElem?NatLtLength.{0}
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                    (@HAppend.hAppend.{0, 0, 0}
+                                      (List.{0}
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                      (List.{0}
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                      (List.{0}
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                      (@instHAppendOfAppend.{0}
+                                        (List.{0}
+                                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                        (@List.instAppend.{0}
+                                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)))
+                                      (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst
+                                        before
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard
+                                          inst outer)
+                                        earlierPath)
+                                      tail)
+                                    i)
+                                  (@GetElem?.getElem?.{0, 0, 0}
+                                    (List.{0}
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                    Nat (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                                    (fun as i =>
+                                      @LT.lt.{0} Nat instLTNat i
+                                        (@List.length.{0}
+                                          (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                                          as))
+                                    (@List.instGetElem?NatLtLength.{0}
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                    (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst
+                                      before
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard
+                                        inst outer)
+                                      earlierPath)
+                                    i)
+                                  (fun _a =>
+                                    @Eq.{1}
+                                      (Option.{0}
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst))
+                                      _a
+                                      (@Option.some.{0}
+                                        (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                                        earlier))
+                                  (@List.getElem?_append_left.{0}
+                                    (@MicroCFTA.SourceCurrentNativeMuPublication.Publication Symbol Guard inst)
+                                    (@MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.events Symbol Guard inst
+                                      before
+                                      (@MicroCFTA.SourceCurrentNativeMuPublication.Publication.afterBody Symbol Guard
+                                        inst outer)
+                                      earlierPath)
+                                    tail i bounded)))
+                              chosen))
+                          rest))))
+'_private._stdin.0.MicroCFTA.SourceCurrentNativeOriginalPublicationTrace.precompletion_writers' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
