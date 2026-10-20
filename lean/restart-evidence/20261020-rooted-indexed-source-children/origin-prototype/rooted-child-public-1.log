@@ -1,0 +1,1317 @@
+@MicroCFTA.SourceCurrentRootedRowChildOrigins.Origin : {Symbol Guard : Type} →
+  [DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard →
+      List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) →
+        MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard →
+          MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard →
+            Nat → MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Prop
+inductive MicroCFTA.SourceCurrentRootedRowChildOrigins.Origin : {Symbol Guard : Type} →
+  [DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] →
+    MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard →
+      List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) →
+        MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard →
+          MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard →
+            Nat → MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Prop
+number of parameters: 9
+constructors:
+MicroCFTA.SourceCurrentRootedRowChildOrigins.Origin.node : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {root : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard}
+  {initial : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {original : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard}
+  {parentRow : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard} {childIndex : Nat}
+  {child : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {expressions : List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard)}
+  {inputs : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {raw : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {rows : List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  {middle : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} {symbol : Symbol} {guard : Guard}
+  {children : List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)} {sourceIndex outputIndex : Nat},
+  @Eq.{1}
+      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+        (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+      (@MicroCFTA.InternedFreshOrdinaryConstruction.buildEdges Symbol Guard inst expressions inputs before)
+      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+        (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) rows middle) →
+    @Eq.{1}
+        (Prod.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (MicroCFTA.InternedConstructorTemplates.State Symbol Guard))
+        (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+          (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard rows) middle)
+        (@Prod.mk.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) raw after) →
+      @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+          (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) Nat
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+            (fun as i =>
+              @LT.lt.{0} Nat instLTNat i
+                (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) as))
+            (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+            (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard raw) outputIndex)
+          (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) parentRow) →
+        ∀
+          (call :
+            @MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall Symbol Guard inst expressions inputs before rows
+              middle after sourceIndex symbol guard children),
+          @Eq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+              (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.output Symbol Guard inst expressions inputs
+                before rows middle after sourceIndex symbol guard children call)
+              parentRow →
+            ∀ (childSyntax : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+              (current next : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+              @Eq.{1} (Option.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard))
+                  (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard))
+                    Nat (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                    (fun as i =>
+                      @LT.lt.{0} Nat instLTNat i
+                        (@List.length.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) as))
+                    (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard))
+                    children childIndex)
+                  (@Option.some.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) childSyntax) →
+                @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      Nat (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (fun as i =>
+                        @LT.lt.{0} Nat instLTNat i
+                          (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+                      (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.values Symbol Guard inst expressions
+                        inputs before rows middle after sourceIndex symbol guard children call)
+                      childIndex)
+                    (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) child) →
+                  @Eq.{1}
+                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                      (@MicroCFTA.InternedFreshOrdinaryConstruction.buildMany Symbol Guard inst
+                        (@List.take.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) childIndex children)
+                        inputs
+                        (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.current Symbol Guard inst expressions
+                          inputs before rows middle after sourceIndex symbol guard children call))
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@List.take.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) childIndex
+                          (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.values Symbol Guard inst
+                            expressions inputs before rows middle after sourceIndex symbol guard children call))
+                        current) →
+                    @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard current inputs →
+                      @Eq.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst childSyntax inputs
+                            current)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) child next) →
+                        @Eq.{1}
+                            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                            (@MicroCFTA.InternedFreshOrdinaryConstruction.buildMany Symbol Guard inst
+                              (@List.drop.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) childIndex
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                children)
+                              inputs next)
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                              (@List.drop.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) childIndex
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.values Symbol Guard inst
+                                  expressions inputs before rows middle after sourceIndex symbol guard children call))
+                              (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.middle Symbol Guard inst
+                                expressions inputs before rows middle after sourceIndex symbol guard children call)) →
+                          @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard before current →
+                            @MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard before))
+                                (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard current)) →
+                              @MicroCFTA.InternedFreshOrdinarySourceHistory.Reached Symbol Guard inst root initial
+                                  childSyntax inputs current →
+                                @LT.lt.{0} Nat instLTNat
+                                    (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                      (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                        (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                                      childSyntax)
+                                    (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                      (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                        (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                                      original) →
+                                  @MicroCFTA.SourceCurrentRootedRowChildOrigins.Origin Symbol Guard inst root initial
+                                    original parentRow childIndex child
+MicroCFTA.SourceCurrentRootedRowChildOrigins.Origin.capture : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {root : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard}
+  {initial : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {original : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard}
+  {parentRow : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard} {childIndex : Nat}
+  {child : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {inputs : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard} {slot : Nat},
+  @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+      (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Nat
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (fun as i =>
+          @LT.lt.{0} Nat instLTNat i (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+        (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) inputs slot)
+      (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value) →
+    @MicroCFTA.SourceCurrentStoredLiteralRowLineage.RowAt Symbol Guard value parentRow →
+      @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Nat
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (fun as i =>
+              @LT.lt.{0} Nat instLTNat i
+                (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+            (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard parentRow) childIndex)
+          (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) child) →
+        @MicroCFTA.InternedFreshOrdinarySourceHistory.Reached Symbol Guard inst root initial
+            (@MicroCFTA.InternedNestedConstruction.Syntax.var Symbol Guard slot) inputs state →
+          @MicroCFTA.SourceCurrentRootedRowChildOrigins.Origin Symbol Guard inst root initial original parentRow
+            childIndex child
+MicroCFTA.SourceCurrentRootedRowChildOrigins.Origin.binder : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {root : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard}
+  {initial : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {original : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard}
+  {parentRow : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard} {childIndex : Nat}
+  {child : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard} {smart : Bool}
+  {expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard}
+  {inputs : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {raw : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {depth : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {afterDepth : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {cut : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey}
+  {body : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard},
+  @Eq.{1}
+      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+      (@MicroCFTA.InternedFreshOrdinaryFacts.callback Symbol Guard inst expression inputs
+        MicroCFTA.InternedBinderProtocol.Reference.depth before)
+      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) depth afterDepth) →
+    @Eq.{1}
+        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+        (@MicroCFTA.InternedFreshOrdinaryFacts.callback Symbol Guard inst expression inputs
+          (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+            (@MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel Symbol Guard depth))
+          afterDepth)
+        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) ordinary cut) →
+      @Eq.{1}
+          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.InternedNestedConstruction.request Symbol Guard inst smart depth ordinary
+            (@MicroCFTA.InternedFreshOrdinaryFacts.callback Symbol Guard inst expression inputs) cut)
+          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) raw after) →
+        @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard after
+              (@MicroCFTA.InternedConstructorTemplates.muKey Symbol Guard depth ordinary))
+            (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)) →
+          @Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) raw
+              (@MicroCFTA.InternedNestedConstruction.finish Symbol Guard smart
+                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)) →
+            @MicroCFTA.SourceCurrentStoredLiteralRowLineage.RowAt Symbol Guard body parentRow →
+              @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    Nat (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (fun as i =>
+                      @LT.lt.{0} Nat instLTNat i
+                        (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+                    (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard parentRow) childIndex)
+                  (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) child) →
+                @MicroCFTA.InternedFreshOrdinarySourceHistory.Reached Symbol Guard inst root initial
+                    (@MicroCFTA.InternedNestedConstruction.Syntax.binder Symbol Guard smart expression) inputs before →
+                  @MicroCFTA.SourceCurrentRootedRowChildOrigins.Origin Symbol Guard inst root initial original parentRow
+                    childIndex child
+'MicroCFTA.SourceCurrentRootedRowChildOrigins.Origin' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentRootedRowChildOrigins.from_source_row : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {root expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard}
+  {initial inputs : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {raw : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {parentRow : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard},
+  @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard before inputs →
+    @MicroCFTA.InternedFreshOrdinarySourceHistory.Reached Symbol Guard inst root initial expression inputs before →
+      @MicroCFTA.SourceCurrentBuildStructuralRowOrigins.SourceRow Symbol Guard inst expression inputs before raw after
+          parentRow →
+        ∀ (childIndex : Nat) (child : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+          @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Nat
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (fun as i =>
+                  @LT.lt.{0} Nat instLTNat i
+                    (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+                (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard parentRow) childIndex)
+              (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) child) →
+            @MicroCFTA.SourceCurrentRootedRowChildOrigins.Origin Symbol Guard inst root initial expression parentRow
+              childIndex child
+theorem MicroCFTA.SourceCurrentRootedRowChildOrigins.from_source_row : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {root expression : MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard}
+  {initial inputs : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {raw : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {parentRow : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard},
+  @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard before inputs →
+    @MicroCFTA.InternedFreshOrdinarySourceHistory.Reached Symbol Guard inst root initial expression inputs before →
+      @MicroCFTA.SourceCurrentBuildStructuralRowOrigins.SourceRow Symbol Guard inst expression inputs before raw after
+          parentRow →
+        ∀ (childIndex : Nat) (child : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+          @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Nat
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (fun as i =>
+                  @LT.lt.{0} Nat instLTNat i
+                    (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+                (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard parentRow) childIndex)
+              (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) child) →
+            @MicroCFTA.SourceCurrentRootedRowChildOrigins.Origin Symbol Guard inst root initial expression parentRow
+              childIndex child :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+    {root expression} {initial inputs} {before} {raw} {after} {parentRow} context reached source childIndex child
+    selected =>
+  have descend := fun {currentExpression} {currentInputs} {start} {value} {stop} {row} part =>
+    @MicroCFTA.SourceCurrentBuildStructuralRowOrigins.SourceRow.rec Symbol Guard inst
+      (fun {currentExpression} {currentInputs} {start} {value} {stop} {row} part =>
+        @MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard start currentInputs →
+          @MicroCFTA.InternedFreshOrdinarySourceHistory.Reached Symbol Guard inst root initial currentExpression
+              currentInputs start →
+            @LE.le.{0} Nat instLENat
+                (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                  (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard (instSizeOfDefault.{1} Symbol)
+                    (instSizeOfDefault.{1} Guard))
+                  currentExpression)
+                (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                  (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard (instSizeOfDefault.{1} Symbol)
+                    (instSizeOfDefault.{1} Guard))
+                  expression) →
+              @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    Nat (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (fun as i =>
+                      @LT.lt.{0} Nat instLTNat i
+                        (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+                    (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard row) childIndex)
+                  (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) child) →
+                @MicroCFTA.SourceCurrentRootedRowChildOrigins.Origin Symbol Guard inst root initial expression row
+                  childIndex child)
+      (fun {currentInputs} {state} {value} {row} {slot} found inside a currentReached a_1 childFound =>
+        @MicroCFTA.SourceCurrentRootedRowChildOrigins.Origin.capture Symbol Guard inst root initial expression row
+          childIndex child currentInputs state value slot found inside childFound currentReached)
+      (fun {expressions} {currentInputs} {start} {value} {stop} {rows} {middle} {symbol} {guard} {children} {row}
+          {sourceIndex outputIndex} built made canonical call same currentContext currentReached bound childFound =>
+        have actualSelected :=
+          @Eq.mpr.{0}
+            (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Nat
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (fun as i =>
+                  @LT.lt.{0} Nat instLTNat i
+                    (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+                (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard
+                  (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.output Symbol Guard inst expressions
+                    currentInputs start rows middle stop sourceIndex symbol guard children call))
+                childIndex)
+              (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) child))
+            (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Nat
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (fun as i =>
+                  @LT.lt.{0} Nat instLTNat i
+                    (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+                (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard row) childIndex)
+              (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) child))
+            (@id.{0}
+              (@Eq.{1} Prop
+                (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    Nat (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (fun as i =>
+                      @LT.lt.{0} Nat instLTNat i
+                        (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+                    (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard
+                      (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.output Symbol Guard inst expressions
+                        currentInputs start rows middle stop sourceIndex symbol guard children call))
+                    childIndex)
+                  (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) child))
+                (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    Nat (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (fun as i =>
+                      @LT.lt.{0} Nat instLTNat i
+                        (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+                    (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard row) childIndex)
+                  (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) child)))
+              (@congrArg.{1, 1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) Prop
+                (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.output Symbol Guard inst expressions
+                  currentInputs start rows middle stop sourceIndex symbol guard children call)
+                row
+                (fun _a =>
+                  @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      Nat (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (fun as i =>
+                        @LT.lt.{0} Nat instLTNat i
+                          (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+                      (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children Symbol Guard _a) childIndex)
+                    (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) child))
+                same))
+            childFound;
+        @Exists.casesOn.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+          (fun childSyntax =>
+            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun current =>
+              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun next =>
+                And
+                  (@Eq.{1} (Option.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard))
+                    (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard))
+                      Nat (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                      (fun as i =>
+                        @LT.lt.{0} Nat instLTNat i
+                          (@List.length.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) as))
+                      (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard))
+                      children childIndex)
+                    (@Option.some.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) childSyntax))
+                  (And
+                    (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@GetElem?.getElem?.{0, 0, 0}
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Nat
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (fun as i =>
+                          @LT.lt.{0} Nat instLTNat i
+                            (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+                        (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.values Symbol Guard inst expressions
+                          currentInputs start rows middle stop sourceIndex symbol guard children call)
+                        childIndex)
+                      (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) child))
+                    (And
+                      (@Eq.{1}
+                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                        (@MicroCFTA.InternedFreshOrdinaryConstruction.buildMany Symbol Guard inst
+                          (@List.take.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) childIndex
+                            children)
+                          currentInputs
+                          (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.current Symbol Guard inst
+                            expressions currentInputs start rows middle stop sourceIndex symbol guard children call))
+                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@List.take.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) childIndex
+                            (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.values Symbol Guard inst
+                              expressions currentInputs start rows middle stop sourceIndex symbol guard children call))
+                          current))
+                      (And
+                        (@MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard current currentInputs)
+                        (And
+                          (@Eq.{1}
+                            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst childSyntax
+                              currentInputs current)
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) child next))
+                          (And
+                            (@Eq.{1}
+                              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                              (@MicroCFTA.InternedFreshOrdinaryConstruction.buildMany Symbol Guard inst
+                                (@List.drop.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) childIndex
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                  children)
+                                currentInputs next)
+                              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.drop.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) childIndex
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                  (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.values Symbol Guard inst
+                                    expressions currentInputs start rows middle stop sourceIndex symbol guard children
+                                    call))
+                                (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.middle Symbol Guard inst
+                                  expressions currentInputs start rows middle stop sourceIndex symbol guard children
+                                  call)))
+                            (And (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard start current)
+                              (And
+                                (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                  (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                    (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard start))
+                                  (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                    (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard current)))
+                                (@LT.lt.{0} Nat instLTNat
+                                  (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                    (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                      (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                                    childSyntax)
+                                  (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                    (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                      (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                                    (@MicroCFTA.InternedNestedConstruction.Syntax.node Symbol Guard
+                                      expressions)))))))))))
+          (fun x =>
+            @MicroCFTA.SourceCurrentRootedRowChildOrigins.Origin Symbol Guard inst root initial expression row
+              childIndex child)
+          (@MicroCFTA.SourceCurrentIndexedRowCallChildren.indexed_child Symbol Guard inst expressions currentInputs
+            start rows middle stop currentContext sourceIndex symbol guard children call childIndex child
+            actualSelected)
+          fun childSyntax h =>
+          @Exists.casesOn.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+            (fun current =>
+              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun next =>
+                And
+                  (@Eq.{1} (Option.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard))
+                    (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard))
+                      Nat (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                      (fun as i =>
+                        @LT.lt.{0} Nat instLTNat i
+                          (@List.length.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) as))
+                      (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard))
+                      children childIndex)
+                    (@Option.some.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) childSyntax))
+                  (And
+                    (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@GetElem?.getElem?.{0, 0, 0}
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Nat
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (fun as i =>
+                          @LT.lt.{0} Nat instLTNat i
+                            (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+                        (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.values Symbol Guard inst expressions
+                          currentInputs start rows middle stop sourceIndex symbol guard children call)
+                        childIndex)
+                      (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) child))
+                    (And
+                      (@Eq.{1}
+                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                        (@MicroCFTA.InternedFreshOrdinaryConstruction.buildMany Symbol Guard inst
+                          (@List.take.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) childIndex
+                            children)
+                          currentInputs
+                          (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.current Symbol Guard inst
+                            expressions currentInputs start rows middle stop sourceIndex symbol guard children call))
+                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@List.take.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) childIndex
+                            (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.values Symbol Guard inst
+                              expressions currentInputs start rows middle stop sourceIndex symbol guard children call))
+                          current))
+                      (And
+                        (@MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard current currentInputs)
+                        (And
+                          (@Eq.{1}
+                            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst childSyntax
+                              currentInputs current)
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) child next))
+                          (And
+                            (@Eq.{1}
+                              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                              (@MicroCFTA.InternedFreshOrdinaryConstruction.buildMany Symbol Guard inst
+                                (@List.drop.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) childIndex
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                  children)
+                                currentInputs next)
+                              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.drop.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) childIndex
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                  (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.values Symbol Guard inst
+                                    expressions currentInputs start rows middle stop sourceIndex symbol guard children
+                                    call))
+                                (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.middle Symbol Guard inst
+                                  expressions currentInputs start rows middle stop sourceIndex symbol guard children
+                                  call)))
+                            (And (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard start current)
+                              (And
+                                (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                  (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                    (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard start))
+                                  (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                    (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard current)))
+                                (@LT.lt.{0} Nat instLTNat
+                                  (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                    (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                      (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                                    childSyntax)
+                                  (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                    (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                      (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                                    (@MicroCFTA.InternedNestedConstruction.Syntax.node Symbol Guard
+                                      expressions)))))))))))
+            (fun x =>
+              @MicroCFTA.SourceCurrentRootedRowChildOrigins.Origin Symbol Guard inst root initial expression row
+                childIndex child)
+            h fun current h =>
+            @Exists.casesOn.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+              (fun next =>
+                And
+                  (@Eq.{1} (Option.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard))
+                    (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard))
+                      Nat (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                      (fun as i =>
+                        @LT.lt.{0} Nat instLTNat i
+                          (@List.length.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) as))
+                      (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard))
+                      children childIndex)
+                    (@Option.some.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) childSyntax))
+                  (And
+                    (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@GetElem?.getElem?.{0, 0, 0}
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Nat
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (fun as i =>
+                          @LT.lt.{0} Nat instLTNat i
+                            (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+                        (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.values Symbol Guard inst expressions
+                          currentInputs start rows middle stop sourceIndex symbol guard children call)
+                        childIndex)
+                      (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) child))
+                    (And
+                      (@Eq.{1}
+                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                        (@MicroCFTA.InternedFreshOrdinaryConstruction.buildMany Symbol Guard inst
+                          (@List.take.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) childIndex
+                            children)
+                          currentInputs
+                          (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.current Symbol Guard inst
+                            expressions currentInputs start rows middle stop sourceIndex symbol guard children call))
+                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@List.take.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) childIndex
+                            (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.values Symbol Guard inst
+                              expressions currentInputs start rows middle stop sourceIndex symbol guard children call))
+                          current))
+                      (And
+                        (@MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard current currentInputs)
+                        (And
+                          (@Eq.{1}
+                            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                            (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst childSyntax
+                              currentInputs current)
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) child next))
+                          (And
+                            (@Eq.{1}
+                              (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                              (@MicroCFTA.InternedFreshOrdinaryConstruction.buildMany Symbol Guard inst
+                                (@List.drop.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) childIndex
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                  children)
+                                currentInputs next)
+                              (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                (@List.drop.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) childIndex
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                  (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.values Symbol Guard inst
+                                    expressions currentInputs start rows middle stop sourceIndex symbol guard children
+                                    call))
+                                (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.middle Symbol Guard inst
+                                  expressions currentInputs start rows middle stop sourceIndex symbol guard children
+                                  call)))
+                            (And (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard start current)
+                              (And
+                                (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                  (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                    (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard start))
+                                  (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                    (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard current)))
+                                (@LT.lt.{0} Nat instLTNat
+                                  (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                    (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                      (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                                    childSyntax)
+                                  (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                    (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                      (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                                    (@MicroCFTA.InternedNestedConstruction.Syntax.node Symbol Guard
+                                      expressions)))))))))))
+              (fun x =>
+                @MicroCFTA.SourceCurrentRootedRowChildOrigins.Origin Symbol Guard inst root initial expression row
+                  childIndex child)
+              h fun next h =>
+              @And.casesOn.{0}
+                (@Eq.{1} (Option.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard))
+                  (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard))
+                    Nat (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                    (fun as i =>
+                      @LT.lt.{0} Nat instLTNat i
+                        (@List.length.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) as))
+                    (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard))
+                    children childIndex)
+                  (@Option.some.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) childSyntax))
+                (And
+                  (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      Nat (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (fun as i =>
+                        @LT.lt.{0} Nat instLTNat i
+                          (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+                      (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.values Symbol Guard inst expressions
+                        currentInputs start rows middle stop sourceIndex symbol guard children call)
+                      childIndex)
+                    (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) child))
+                  (And
+                    (@Eq.{1}
+                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                      (@MicroCFTA.InternedFreshOrdinaryConstruction.buildMany Symbol Guard inst
+                        (@List.take.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) childIndex children)
+                        currentInputs
+                        (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.current Symbol Guard inst expressions
+                          currentInputs start rows middle stop sourceIndex symbol guard children call))
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@List.take.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) childIndex
+                          (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.values Symbol Guard inst
+                            expressions currentInputs start rows middle stop sourceIndex symbol guard children call))
+                        current))
+                    (And
+                      (@MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard current currentInputs)
+                      (And
+                        (@Eq.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst childSyntax
+                            currentInputs current)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) child next))
+                        (And
+                          (@Eq.{1}
+                            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                            (@MicroCFTA.InternedFreshOrdinaryConstruction.buildMany Symbol Guard inst
+                              (@List.drop.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) childIndex
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                children)
+                              currentInputs next)
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                              (@List.drop.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) childIndex
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.values Symbol Guard inst
+                                  expressions currentInputs start rows middle stop sourceIndex symbol guard children
+                                  call))
+                              (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.middle Symbol Guard inst
+                                expressions currentInputs start rows middle stop sourceIndex symbol guard children
+                                call)))
+                          (And (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard start current)
+                            (And
+                              (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard start))
+                                (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard current)))
+                              (@LT.lt.{0} Nat instLTNat
+                                (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                  (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                    (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                                  childSyntax)
+                                (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                  (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                    (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                                  (@MicroCFTA.InternedNestedConstruction.Syntax.node Symbol Guard expressions))))))))))
+                (fun x =>
+                  @MicroCFTA.SourceCurrentRootedRowChildOrigins.Origin Symbol Guard inst root initial expression row
+                    childIndex child)
+                h fun syntaxSelected right =>
+                @And.casesOn.{0}
+                  (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@GetElem?.getElem?.{0, 0, 0} (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      Nat (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (fun as i =>
+                        @LT.lt.{0} Nat instLTNat i
+                          (@List.length.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) as))
+                      (@List.instGetElem?NatLtLength.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.values Symbol Guard inst expressions
+                        currentInputs start rows middle stop sourceIndex symbol guard children call)
+                      childIndex)
+                    (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) child))
+                  (And
+                    (@Eq.{1}
+                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                      (@MicroCFTA.InternedFreshOrdinaryConstruction.buildMany Symbol Guard inst
+                        (@List.take.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) childIndex children)
+                        currentInputs
+                        (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.current Symbol Guard inst expressions
+                          currentInputs start rows middle stop sourceIndex symbol guard children call))
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@List.take.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) childIndex
+                          (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.values Symbol Guard inst
+                            expressions currentInputs start rows middle stop sourceIndex symbol guard children call))
+                        current))
+                    (And
+                      (@MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard current currentInputs)
+                      (And
+                        (@Eq.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst childSyntax
+                            currentInputs current)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) child next))
+                        (And
+                          (@Eq.{1}
+                            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                            (@MicroCFTA.InternedFreshOrdinaryConstruction.buildMany Symbol Guard inst
+                              (@List.drop.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) childIndex
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                children)
+                              currentInputs next)
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                              (@List.drop.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) childIndex
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.values Symbol Guard inst
+                                  expressions currentInputs start rows middle stop sourceIndex symbol guard children
+                                  call))
+                              (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.middle Symbol Guard inst
+                                expressions currentInputs start rows middle stop sourceIndex symbol guard children
+                                call)))
+                          (And (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard start current)
+                            (And
+                              (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard start))
+                                (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard current)))
+                              (@LT.lt.{0} Nat instLTNat
+                                (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                  (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                    (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                                  childSyntax)
+                                (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                  (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                    (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                                  (@MicroCFTA.InternedNestedConstruction.Syntax.node Symbol Guard expressions)))))))))
+                  (fun x =>
+                    @MicroCFTA.SourceCurrentRootedRowChildOrigins.Origin Symbol Guard inst root initial expression row
+                      childIndex child)
+                  right fun valueSelected right =>
+                  @And.casesOn.{0}
+                    (@Eq.{1}
+                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                      (@MicroCFTA.InternedFreshOrdinaryConstruction.buildMany Symbol Guard inst
+                        (@List.take.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) childIndex children)
+                        currentInputs
+                        (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.current Symbol Guard inst expressions
+                          currentInputs start rows middle stop sourceIndex symbol guard children call))
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@List.take.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) childIndex
+                          (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.values Symbol Guard inst
+                            expressions currentInputs start rows middle stop sourceIndex symbol guard children call))
+                        current))
+                    (And
+                      (@MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard current currentInputs)
+                      (And
+                        (@Eq.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst childSyntax
+                            currentInputs current)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) child next))
+                        (And
+                          (@Eq.{1}
+                            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                            (@MicroCFTA.InternedFreshOrdinaryConstruction.buildMany Symbol Guard inst
+                              (@List.drop.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) childIndex
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                children)
+                              currentInputs next)
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                              (@List.drop.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) childIndex
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.values Symbol Guard inst
+                                  expressions currentInputs start rows middle stop sourceIndex symbol guard children
+                                  call))
+                              (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.middle Symbol Guard inst
+                                expressions currentInputs start rows middle stop sourceIndex symbol guard children
+                                call)))
+                          (And (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard start current)
+                            (And
+                              (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard start))
+                                (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard current)))
+                              (@LT.lt.{0} Nat instLTNat
+                                (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                  (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                    (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                                  childSyntax)
+                                (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                  (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                    (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                                  (@MicroCFTA.InternedNestedConstruction.Syntax.node Symbol Guard expressions))))))))
+                    (fun x =>
+                      @MicroCFTA.SourceCurrentRootedRowChildOrigins.Origin Symbol Guard inst root initial expression row
+                        childIndex child)
+                    right fun earlier right =>
+                    @And.casesOn.{0}
+                      (@MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard current currentInputs)
+                      (And
+                        (@Eq.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst childSyntax
+                            currentInputs current)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) child next))
+                        (And
+                          (@Eq.{1}
+                            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                            (@MicroCFTA.InternedFreshOrdinaryConstruction.buildMany Symbol Guard inst
+                              (@List.drop.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) childIndex
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                children)
+                              currentInputs next)
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                              (@List.drop.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) childIndex
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.values Symbol Guard inst
+                                  expressions currentInputs start rows middle stop sourceIndex symbol guard children
+                                  call))
+                              (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.middle Symbol Guard inst
+                                expressions currentInputs start rows middle stop sourceIndex symbol guard children
+                                call)))
+                          (And (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard start current)
+                            (And
+                              (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard start))
+                                (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard current)))
+                              (@LT.lt.{0} Nat instLTNat
+                                (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                  (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                    (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                                  childSyntax)
+                                (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                  (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                    (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                                  (@MicroCFTA.InternedNestedConstruction.Syntax.node Symbol Guard expressions)))))))
+                      (fun x =>
+                        @MicroCFTA.SourceCurrentRootedRowChildOrigins.Origin Symbol Guard inst root initial expression
+                          row childIndex child)
+                      right fun childContext right =>
+                      @And.casesOn.{0}
+                        (@Eq.{1}
+                          (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                          (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst childSyntax
+                            currentInputs current)
+                          (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) child next))
+                        (And
+                          (@Eq.{1}
+                            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                            (@MicroCFTA.InternedFreshOrdinaryConstruction.buildMany Symbol Guard inst
+                              (@List.drop.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) childIndex
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                children)
+                              currentInputs next)
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                              (@List.drop.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) childIndex
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.values Symbol Guard inst
+                                  expressions currentInputs start rows middle stop sourceIndex symbol guard children
+                                  call))
+                              (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.middle Symbol Guard inst
+                                expressions currentInputs start rows middle stop sourceIndex symbol guard children
+                                call)))
+                          (And (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard start current)
+                            (And
+                              (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard start))
+                                (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard current)))
+                              (@LT.lt.{0} Nat instLTNat
+                                (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                  (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                    (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                                  childSyntax)
+                                (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                  (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                    (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                                  (@MicroCFTA.InternedNestedConstruction.Syntax.node Symbol Guard expressions))))))
+                        (fun x =>
+                          @MicroCFTA.SourceCurrentRootedRowChildOrigins.Origin Symbol Guard inst root initial expression
+                            row childIndex child)
+                        right fun called right =>
+                        @And.casesOn.{0}
+                          (@Eq.{1}
+                            (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                            (@MicroCFTA.InternedFreshOrdinaryConstruction.buildMany Symbol Guard inst
+                              (@List.drop.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) childIndex
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                children)
+                              currentInputs next)
+                            (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                              (@List.drop.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) childIndex
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.values Symbol Guard inst
+                                  expressions currentInputs start rows middle stop sourceIndex symbol guard children
+                                  call))
+                              (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.middle Symbol Guard inst
+                                expressions currentInputs start rows middle stop sourceIndex symbol guard children
+                                call)))
+                          (And (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard start current)
+                            (And
+                              (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard start))
+                                (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard current)))
+                              (@LT.lt.{0} Nat instLTNat
+                                (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                  (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                    (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                                  childSyntax)
+                                (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                  (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                    (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                                  (@MicroCFTA.InternedNestedConstruction.Syntax.node Symbol Guard expressions)))))
+                          (fun x =>
+                            @MicroCFTA.SourceCurrentRootedRowChildOrigins.Origin Symbol Guard inst root initial
+                              expression row childIndex child)
+                          right fun suffix right =>
+                          @And.casesOn.{0} (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard start current)
+                            (And
+                              (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard start))
+                                (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard current)))
+                              (@LT.lt.{0} Nat instLTNat
+                                (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                  (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                    (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                                  childSyntax)
+                                (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                  (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                    (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                                  (@MicroCFTA.InternedNestedConstruction.Syntax.node Symbol Guard expressions))))
+                            (fun x =>
+                              @MicroCFTA.SourceCurrentRootedRowChildOrigins.Origin Symbol Guard inst root initial
+                                expression row childIndex child)
+                            right fun growth right =>
+                            @And.casesOn.{0}
+                              (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard start))
+                                (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard current)))
+                              (@LT.lt.{0} Nat instLTNat
+                                (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                  (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                    (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                                  childSyntax)
+                                (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                  (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                    (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                                  (@MicroCFTA.InternedNestedConstruction.Syntax.node Symbol Guard expressions)))
+                              (fun x =>
+                                @MicroCFTA.SourceCurrentRootedRowChildOrigins.Origin Symbol Guard inst root initial
+                                  expression row childIndex child)
+                              right fun issued small =>
+                              have childReached :=
+                                @MicroCFTA.InternedFreshOrdinarySourceHistory.Reached.grows Symbol Guard inst root
+                                  childSyntax initial currentInputs start current
+                                  (@MicroCFTA.InternedFreshOrdinarySourceHistory.Reached.node Symbol Guard inst root
+                                    expressions symbol guard children childSyntax initial currentInputs start
+                                    currentReached
+                                    (@List.mem_of_getElem?.{0}
+                                      (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard) expressions
+                                      sourceIndex
+                                      (@MicroCFTA.InternedNestedConstruction.EdgeSyntax.mk Symbol Guard symbol guard
+                                        children)
+                                      (@MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.source Symbol Guard
+                                        inst expressions currentInputs start rows middle stop sourceIndex symbol guard
+                                        children call))
+                                    (@List.mem_of_getElem?.{0}
+                                      (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) children childIndex
+                                      childSyntax syntaxSelected))
+                                  growth;
+                              @MicroCFTA.SourceCurrentRootedRowChildOrigins.Origin.node Symbol Guard inst root initial
+                                expression row childIndex child expressions currentInputs start value stop rows middle
+                                symbol guard children sourceIndex outputIndex built made canonical call same childSyntax
+                                current next syntaxSelected valueSelected earlier childContext called suffix growth
+                                issued childReached
+                                (@Nat.lt_of_lt_of_le
+                                  (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                    (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                      (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                                    childSyntax)
+                                  (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                    (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                      (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                                    (@MicroCFTA.InternedNestedConstruction.Syntax.node Symbol Guard expressions))
+                                  (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                                    (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                                      (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                                    expression)
+                                  small bound))
+      (fun {expressions} {currentInputs} {start} {value} {stop} {values} {middle} {member} {memberValue} {current next}
+          {row} {index} built made syntaxSelected valueSelected earlier memberContext called suffix nested ih
+          currentContext currentReached bound childFound =>
+        have checked :=
+          @MicroCFTA.InternedFreshOrdinaryFacts.buildMany_verified Symbol Guard inst
+            (@List.take.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) index expressions) currentInputs
+            start
+            (@MicroCFTA.InternedStoredMuOrigins.Normal.facts Symbol Guard start
+              (@MicroCFTA.InternedFreshOrdinaryContext.Context.normal Symbol Guard start currentInputs
+                (@MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context.base Symbol Guard start currentInputs
+                  currentContext)))
+            (@MicroCFTA.InternedFreshOrdinaryContext.Context.inputs Symbol Guard start currentInputs
+              (@MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context.base Symbol Guard start currentInputs
+                currentContext));
+        have growth :=
+          @Eq.mp.{0}
+            (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard start
+              (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedFreshOrdinaryConstruction.buildMany Symbol Guard inst
+                  (@List.take.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) index expressions)
+                  currentInputs start)))
+            (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard start current)
+            (@congrArg.{1, 1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) Prop
+              (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedFreshOrdinaryConstruction.buildMany Symbol Guard inst
+                  (@List.take.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) index expressions)
+                  currentInputs start))
+              current (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard start)
+              (@congrArg.{1, 1}
+                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                (@MicroCFTA.InternedFreshOrdinaryConstruction.buildMany Symbol Guard inst
+                  (@List.take.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) index expressions)
+                  currentInputs start)
+                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                  (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@List.take.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) index values) current)
+                (fun x =>
+                  @MicroCFTA.InternedNestedConstruction.Outcome.state.match_1.{1} Symbol Guard
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (fun x => MicroCFTA.InternedConstructorTemplates.State Symbol Guard) x (fun value state => state)
+                    fun key state => state)
+                earlier))
+            (@MicroCFTA.InternedNestedFacts.Verified.growth Symbol Guard
+              (List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) start
+              (@MicroCFTA.InternedFreshOrdinaryConstruction.buildMany Symbol Guard inst
+                (@List.take.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) index expressions)
+                currentInputs start)
+              (@MicroCFTA.InternedNestedProvenance.Values Symbol Guard) checked);
+        have memberReached :=
+          @MicroCFTA.InternedFreshOrdinarySourceHistory.Reached.grows Symbol Guard inst root member initial
+            currentInputs start current
+            (@MicroCFTA.InternedFreshOrdinarySourceHistory.Reached.union Symbol Guard inst root expressions member
+              initial currentInputs start currentReached
+              (@List.mem_of_getElem?.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) expressions index
+                member syntaxSelected))
+            growth;
+        have smaller :=
+          have small :=
+            @List.sizeOf_lt_of_mem.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) member
+              (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard (instSizeOfDefault.{1} Symbol)
+                (instSizeOfDefault.{1} Guard))
+              expressions
+              (@List.mem_of_getElem?.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard) expressions index
+                member syntaxSelected);
+          @Eq.mpr.{0}
+            (@LT.lt.{0} Nat instLTNat
+              (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard (instSizeOfDefault.{1} Symbol)
+                  (instSizeOfDefault.{1} Guard))
+                member)
+              (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard (instSizeOfDefault.{1} Symbol)
+                  (instSizeOfDefault.{1} Guard))
+                (@MicroCFTA.InternedNestedConstruction.Syntax.union Symbol Guard expressions)))
+            (@LT.lt.{0} Nat instLTNat
+              (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard (instSizeOfDefault.{1} Symbol)
+                  (instSizeOfDefault.{1} Guard))
+                member)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                (@SizeOf.sizeOf.{1} (List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard))
+                  (@List._sizeOf_inst.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                    (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                      (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard)))
+                  expressions)))
+            (@id.{0}
+              (@Eq.{1} Prop
+                (@LT.lt.{0} Nat instLTNat
+                  (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                    (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                      (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                    member)
+                  (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                    (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                      (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                    (@MicroCFTA.InternedNestedConstruction.Syntax.union Symbol Guard expressions)))
+                (@LT.lt.{0} Nat instLTNat
+                  (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                    (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                      (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                    member)
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                    (@SizeOf.sizeOf.{1} (List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard))
+                      (@List._sizeOf_inst.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                        (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                          (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard)))
+                      expressions))))
+              (@congrArg.{1, 1} Nat Prop
+                (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                  (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard (instSizeOfDefault.{1} Symbol)
+                    (instSizeOfDefault.{1} Guard))
+                  (@MicroCFTA.InternedNestedConstruction.Syntax.union Symbol Guard expressions))
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                  (@SizeOf.sizeOf.{1} (List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard))
+                    (@List._sizeOf_inst.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                      (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                        (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard)))
+                    expressions))
+                (@LT.lt.{0} Nat instLTNat
+                  (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                    (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                      (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                    member))
+                (@MicroCFTA.InternedNestedConstruction.Syntax.union.sizeOf_spec Symbol Guard
+                  (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard) expressions)))
+            (@Decidable.byContradiction
+              (@LT.lt.{0} Nat instLTNat
+                (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                  (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard (instSizeOfDefault.{1} Symbol)
+                    (instSizeOfDefault.{1} Guard))
+                  member)
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                  (@SizeOf.sizeOf.{1} (List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard))
+                    (@List._sizeOf_inst.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                      (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                        (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard)))
+                    expressions)))
+              ((@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                    (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                      (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard))
+                    member).decLt
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                  (@SizeOf.sizeOf.{1} (List.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard))
+                    (@List._sizeOf_inst.{0} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                      (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard
+                        (instSizeOfDefault.{1} Symbol) (instSizeOfDefault.{1} Guard)))
+                    expressions)))
+              fun a =>
+              @MicroCFTA.SourceCurrentRootedRowChildOrigins.from_source_row._proof_1_1 Symbol Guard expression
+                expressions member small a);
+        ih memberContext memberReached
+          (@Nat.le_trans
+            (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+              (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard (instSizeOfDefault.{1} Symbol)
+                (instSizeOfDefault.{1} Guard))
+              member)
+            (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+              (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard (instSizeOfDefault.{1} Symbol)
+                (instSizeOfDefault.{1} Guard))
+              (@MicroCFTA.InternedNestedConstruction.Syntax.union Symbol Guard expressions))
+            (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+              (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard (instSizeOfDefault.{1} Symbol)
+                (instSizeOfDefault.{1} Guard))
+              expression)
+            (@Nat.le_of_lt
+              (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard (instSizeOfDefault.{1} Symbol)
+                  (instSizeOfDefault.{1} Guard))
+                member)
+              (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+                (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard (instSizeOfDefault.{1} Symbol)
+                  (instSizeOfDefault.{1} Guard))
+                (@MicroCFTA.InternedNestedConstruction.Syntax.union Symbol Guard expressions))
+              smaller)
+            bound)
+          childFound)
+      (fun {smart} {body} {currentInputs} {start} {value} {stop} {depth} {afterDepth} {ordinary} {cut} {entry} {stored}
+          {row} depthDone ordinaryDone requested present returned inside a currentReached a_1 childFound =>
+        @MicroCFTA.SourceCurrentRootedRowChildOrigins.Origin.binder Symbol Guard inst root initial expression row
+          childIndex child smart body currentInputs start value stop depth afterDepth ordinary cut entry stored
+          depthDone ordinaryDone requested present returned inside childFound currentReached)
+      currentExpression currentInputs start value stop row part;
+  @descend expression inputs before raw after parentRow source context reached
+    (Nat.le_refl
+      (@SizeOf.sizeOf.{1} (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)
+        (@MicroCFTA.InternedNestedConstruction.Syntax._sizeOf_inst Symbol Guard (instSizeOfDefault.{1} Symbol)
+          (instSizeOfDefault.{1} Guard))
+        expression))
+    selected
+'MicroCFTA.SourceCurrentRootedRowChildOrigins.from_source_row' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]

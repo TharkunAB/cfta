@@ -1,0 +1,18 @@
+/tmp/mcfta-indexed-row-call-children/row-child-direct-2.source.lean:96:64: error: unexpected token 'prefix'; expected '⟩'
+/tmp/mcfta-indexed-row-call-children/row-child-direct-2.source.lean:96:49: error: Application type mismatch: The argument
+  valuesSelected
+has type
+  call.values[childIndex]? = some child
+but is expected to have type
+  call.values[childIndex]? = some child ∧
+    buildMany (List.take childIndex children) inputs call.current =
+        Outcome.done (List.take childIndex call.values) current ∧
+      Context current inputs ∧
+        build childSyntax inputs current = Outcome.done child next ∧
+          buildMany (List.drop (childIndex + 1) children) inputs next =
+              Outcome.done (List.drop (childIndex + 1) call.values) call.middle ∧
+            Grows before current ∧
+              Extends before.nodes.issued current.nodes.issued ∧ sizeOf childSyntax < sizeOf (Syntax.node expressions)
+in the application
+  ⟨syntaxSelected, valuesSelected⟩
+/tmp/mcfta-indexed-row-call-children/row-child-direct-2.source.lean:96:70: error: unexpected token ','; expected ':'
