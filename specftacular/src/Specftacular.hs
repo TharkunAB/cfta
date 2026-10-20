@@ -211,7 +211,7 @@ data Settings = Settings
     {- ^ The phase and the size after which the search stops, for a profile
     of a part of a long run.
     -}
-    , splitEnumeration :: Bool
+    , splitEnumeration :: Int
     {- ^ Whether to enumerate the skeletons of a bucket in one thread for each
     shape of the left spine (spike).
     -}
@@ -298,8 +298,9 @@ searchPhases size phase givenInstances givenSig =
         -- SPECFTACULAR_PROGRESS=1 shows the progress of the search on stderr.
         progress <- (== Just "1") <$> Env.lookupEnv "SPECFTACULAR_PROGRESS"
         diagnosticSetting <- Env.lookupEnv "SPECFTACULAR_DIAGNOSTICS"
-        -- SPECFTACULAR_SPLIT=1 enumerates the phase 4 skeletons in parallel parts (spike).
-        splitSetting <- (== Just "1") <$> Env.lookupEnv "SPECFTACULAR_SPLIT"
+        -- SPECFTACULAR_SPLIT=d enumerates the phase 4 skeletons in parallel
+        -- parts, split by shape down to d applications (spike; 0 is off).
+        splitSetting <- fromMaybe 0 . (>>= TR.readMaybe) <$> Env.lookupEnv "SPECFTACULAR_SPLIT"
         -- SPECFTACULAR_STOP_AFTER=phase:size stops the search after that size
         -- of that phase, so that a profile of the run is written.
         stopSetting <- (>>= parseStop) <$> Env.lookupEnv "SPECFTACULAR_STOP_AFTER"
@@ -530,8 +531,8 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..} =
     -- With 'splitEnumeration', each shape of the left spine is enumerated and
     -- typed in its own thread, and the parts are joined in their order.
     skeletonTypings skeleton@StEcta{compl_sig = skeletonSig} lvl monomorphic rules
-        | splitEnumeration = do
-            parts <- forceInParallel lvl monomorphic (map typingsOf (searchSpaceParts skeleton lvl monomorphic))
+        | splitEnumeration > 0 = do
+            parts <- forceInParallel lvl monomorphic (map typingsOf (searchSpaceParts splitEnumeration skeleton lvl monomorphic))
             pure (concat parts)
         | otherwise = pure (typingsOf (searchSpace skeleton lvl monomorphic))
       where
@@ -589,10 +590,10 @@ searchSpace StEcta{..} lvl tc =
      in fixWithin 100 (withoutRedundantEdges . reducePartially) ecta
 
 -- | 'searchSpace' in disjoint parts, one for each shape of the left spine (see 'spineParts').
-searchSpaceParts :: StEcta -> Int -> TypeSkeleton -> [Node Symbol]
-searchSpaceParts StEcta{..} lvl tc =
+searchSpaceParts :: Int -> StEcta -> Int -> TypeSkeleton -> [Node Symbol]
+searchSpaceParts splitDepth StEcta{..} lvl tc =
     [ fixWithin 100 (withoutRedundantEdges . reducePartially) (filterType part (typeToFta tc))
-    | part <- spineParts any_arg lvl
+    | part <- spineParts splitDepth any_arg lvl
     ]
 
 {- | Evaluate the spine of each list in its own thread, and print the time and
