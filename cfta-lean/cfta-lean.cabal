@@ -1,0 +1,66 @@
+cabal-version: 3.0
+name: cfta-lean
+version: 0.1.0.0
+synopsis: LTA entailment checked by Lean through Kimina
+description:
+  An Entailment solver for cfta. The Kimina Lean server checks a closed
+  implication and its negation. Checked proofs give Yes or No; unsupported
+  formulas, failed proofs, and server failures give Unknown.
+
+homepage: https://github.com/TharkunAB/cfta/tree/main/cfta-lean#readme
+bug-reports: https://github.com/TharkunAB/cfta/issues
+category: Development
+author: Matthias Pall Gissurarson
+maintainer: mpg@mpg.is
+copyright: 2026 Matthias Pall Gissurarson
+license: BSD-3-Clause
+license-file: LICENSE
+build-type: Simple
+tested-with: ghc ==9.14.1
+extra-doc-files:
+  CHANGELOG.md
+  README.md
+
+source-repository head
+  type: git
+  location: https://github.com/TharkunAB/cfta.git
+  subdir: cfta-lean
+
+common warnings
+  ghc-options:
+    -Wall
+    -Wcompat
+    -Widentities
+    -Wincomplete-record-updates
+    -Wincomplete-uni-patterns
+    -Wpartial-fields
+    -Wredundant-constraints
+
+library
+  import: warnings
+  default-language: Haskell2010
+  hs-source-dirs: src
+  exposed-modules: Data.CFTA.Lean
+  other-modules: Data.CFTA.Lean.Formula
+  build-depends:
+    aeson >=2.2 && <2.4,
+    base >=4.22 && <4.23,
+    cfta >=0.1.0.0 && <0.2,
+    containers >=0.8 && <0.9,
+    http-client >=0.7.17 && <0.8,
+    http-types >=0.12 && <0.13,
+    text >=2.1 && <2.2,
+
+test-suite lean-tests
+  import: warnings
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: LeanSpec.hs
+  hs-source-dirs: test
+  ghc-options: -rtsopts
+  build-depends:
+    base >=4.22 && <4.23,
+    cfta,
+    cfta-lean,
+    hspec >=2.11 && <2.12,
+    text >=2.1 && <2.2,

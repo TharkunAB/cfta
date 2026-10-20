@@ -30,6 +30,7 @@ jobs:
             cfta-generator/**/*.hs
             cfta-ghc/**/*.hs
             cfta-th/**/*.hs
+            cfta-lean/**/*.hs
             decision-model/**/*.hs
             cfta-serialization/**/*.hs
             specftacular/**/*.hs
@@ -43,7 +44,7 @@ jobs:
       - name: Run hlint
         uses: haskell-actions/hlint-run@v2
         with:
-          path: '["cfta", "cfta-generator", "cfta-ghc", "cfta-th", "decision-model", "cfta-serialization", "specftacular", "specftacular-ghc"]'
+          path: '["cfta", "cfta-generator", "cfta-ghc", "cfta-th", "cfta-lean", "decision-model", "cfta-serialization", "specftacular", "specftacular-ghc"]'
           fail-on: warning
 
   build-test-bench:
@@ -97,6 +98,7 @@ jobs:
           (cd cfta-generator && cabal check)
           (cd cfta-ghc && cabal check)
           (cd cfta-th && cabal check)
+          (cd cfta-lean && cabal check)
           (cd decision-model && cabal check)
           (cd cfta-serialization && cabal check)
           (cd specftacular && cabal check)

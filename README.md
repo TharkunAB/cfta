@@ -21,6 +21,10 @@ depends on the `ghc` library.
 refinement invariants, and quotes explicit automata in the text format of
 `cfta-serialization`. It keeps Template Haskell out of the core packages.
 
+[`cfta-lean`](cfta-lean/README.md) implements an LTA entailment solver through
+the Kimina HTTP API. It checks complete Lean proof obligations and can follow
+Z3 when Z3 cannot decide a query.
+
 [`decision-model`](decision-model/README.md) asks a decision model on a
 server, such as Nimble v3 on Ollama, for a score for each option of a
 question. It does not depend on the other packages.
