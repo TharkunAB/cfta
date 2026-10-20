@@ -887,7 +887,7 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..}
         case result of
             Left grown ->
                 stopped
-                    ("Bucket memory limit (live heap grew by " ++ show (fromIntegral grown / (1024 ^ (3 :: Int)) :: Double) ++ " GiB)")
+                    ("Bucket memory limit (live heap grew by " ++ show (grown `div` (1024 * 1024)) ++ " MiB)")
             Right Nothing -> stopped "Bucket timeout"
             Right (Just (laws, s')) -> considerRest limit lvl tc t ts begin s s' laws
     considerRest limit lvl tc t ts begin s s' laws = do
