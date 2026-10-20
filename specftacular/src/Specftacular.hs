@@ -27,7 +27,7 @@ import Specftacular.Utils
 
 import Control.Concurrent (forkIO)
 import Control.Concurrent.MVar (newEmptyMVar, putMVar, takeMVar)
-import Control.Exception (SomeException, evaluate, mask, onException, throwIO, try)
+import Control.Exception (AllocationLimitExceeded (..), SomeException, evaluate, mask, onException, throwIO, try)
 import Control.Monad (foldM, unless, when)
 import Data.CFTA.Equality (
     Edge (Edge),
@@ -42,10 +42,12 @@ import Data.CFTA.Symbol (Symbol (Symbol))
 import Data.CFTA.Template (Template (..))
 import Data.Char (isAlphaNum)
 import Data.IORef (IORef, modifyIORef', newIORef, readIORef)
+import Data.Int (Int64)
 import Data.List hiding (union)
 import Data.Maybe (fromMaybe, isJust, mapMaybe)
 import qualified Data.Text as T
 import GHC.Clock (getMonotonicTimeNSec)
+import GHC.Conc (disableAllocationLimit, enableAllocationLimit, setAllocationCounter)
 import GHC.Stats (RTSStats (allocated_bytes, gc_cpu_ns, gcs), getRTSStats, getRTSStatsEnabled)
 import qualified Options.Applicative as O
 import System.CPUTime (getCPUTime)
@@ -657,7 +659,9 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..}
             let n = law_count s + 1
                 lawText = show n <> ". " <> ppNpTerm (canonicalLaw lawSig law)
             putStrLn lawText
-            return (laws ++ [lawText], s{law_count = n, rewrite_rules = addLaw maxSize lawSig law (rewrite_rules s)})
+            rules <-
+                boundedCompletion lawText (addLaw maxSize lawSig law (rewrite_rules s)) (addLawRules lawSig law (rewrite_rules s))
+            return (laws ++ [lawText], s{law_count = n, rewrite_rules = rules})
     -- With a skeleton grammar, the variable types are closed under carrier
     -- renaming (see 'mkStecta'). Then the schemas of a type are the
     -- renamings of the schemas of its canonical type (see
@@ -1024,10 +1028,11 @@ consider env@Settings{..} StEcta{..} lvl full_term s0
                             when progress $ hPutStr stderr "\r\ESC[K"
                             putStrLn law_str
                         when deferLaws $ modifyIORef' lawSink ((w, i, lawSig, law) :)
+                        let complete = boundedCompletion law_str (addLaw maxSize lawSig law (rewrite_rules s)) (addLawRules lawSig law (rewrite_rules s))
                         rules <-
                             if detailedDiagnostics
-                                then diagnose env lvl (show current_ty) "completion" s $ evaluate (addLaw maxSize lawSig law (rewrite_rules s))
-                                else return (addLaw maxSize lawSig law (rewrite_rules s))
+                                then diagnose env lvl (show current_ty) "completion" s complete
+                                else complete
                         return
                             ( Discovered law_str
                             , s
@@ -1038,6 +1043,30 @@ consider env@Settings{..} StEcta{..} lvl full_term s0
                             )
       where
         lawOf w = Term "(==)" [Term (Symbol eq_txt) [], w, i]
+
+{- | The number of bytes that the completion of one law may allocate. See
+'boundedCompletion'.
+-}
+completionBudget :: Int64
+completionBudget = 64 * 1024 * 1024 * 1024
+
+{- | The completed rules of a law, if their computation allocates at most
+'completionBudget' bytes, and else the rules of the law alone, with a report
+on stderr. Completion only adds rules that follow from the laws, so fewer
+rules prune less but stay sound. The allocation does not depend on the load,
+so the choice is the same in each run.
+-}
+boundedCompletion :: String -> Rules -> Rules -> IO Rules
+boundedCompletion label completed alone = do
+    setAllocationCounter completionBudget
+    enableAllocationLimit
+    result <- try (evaluate completed)
+    disableAllocationLimit
+    case result of
+        Right rules -> return rules
+        Left AllocationLimitExceeded -> do
+            hPutStrLn stderr ("completion over its budget, the law alone: " ++ label)
+            return alone
 
 npTerm' :: Term -> Term
 npTerm' (Term "filter" [_, term]) = npTerm' term

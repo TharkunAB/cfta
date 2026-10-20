@@ -15,6 +15,7 @@ module Specftacular.Rewriting (
     joinable,
     kboCompare,
     addLaw,
+    addLawRules,
     generalizeLaw,
 ) where
 
@@ -945,6 +946,11 @@ addLaw maxSize gsig (Term "(==)" [_, l, r]) rules0 =
         (t', cache2) = cachedNormalForm nf cache1 t
         (new', rules') = addEquation (canonical (s', t')) rules
 addLaw _ _ _ rules = rules
+
+-- | The rules of a law alone, without the rules of its critical pairs.
+addLawRules :: Sig -> Term -> Rules -> Rules
+addLawRules gsig (Term "(==)" [_, l, r]) rules = snd (addEquation (toTemplate gsig l, toTemplate gsig r) rules)
+addLawRules _ _ rules = rules
 
 {- | Give term and type binders stable names in their first-occurrence
 order. Alpha-equivalent critical pairs then have the same names. Keep the
