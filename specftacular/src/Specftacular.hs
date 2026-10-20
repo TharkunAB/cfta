@@ -37,7 +37,7 @@ import Data.CFTA.Symbol (Symbol (Symbol))
 import Data.CFTA.Template (Template (..))
 import Data.Char (isAlphaNum)
 import Data.List hiding (union)
-import Data.Maybe (fromMaybe, mapMaybe)
+import Data.Maybe (fromMaybe, isJust, mapMaybe)
 import qualified Data.Text as T
 import GHC.Clock (getMonotonicTimeNSec)
 import GHC.Stats (RTSStats (allocated_bytes, gc_cpu_ns, gcs), getRTSStats, getRTSStatsEnabled)
@@ -306,7 +306,7 @@ searchPhases size phase givenInstances givenSig =
                 { compl_sig = compl_sig
                 , arb_insts = arb_insts
                 , sig_ty_cons = sig_ty_cons
-                } = mkStecta size numTests instances sig id id
+                } = mkStecta size numTests instances sig False id id
         putStrLn $ "In Scope (" ++ show (Map.size compl_sig) ++ " functions/constants):"
         putStrLn "---------------------------------"
         mapM_ (putStrLn . T.unpack) $ Map.keys compl_sig
@@ -338,18 +338,21 @@ searchPhases size phase givenInstances givenSig =
 
 {- | The runtime signature and the search space of one phase: the signature
 with the generated variables and the equalities, the node of the atoms,
-and the types to test. The first function changes the types of the
-generated variables, and the second the types of the functions.
+and the types to test. With 'True', the generated variables also have
+each renaming of the carriers of their types (see 'sigGivens'). The first
+function changes the types of the generated variables, and the second the
+types of the functions.
 -}
 mkStecta ::
     Int ->
     Int ->
     (TypeSkeleton -> Maybe Instance) ->
     Sig ->
+    Bool ->
     (TypeSkeleton -> TypeSkeleton) ->
     (TypeSkeleton -> TypeSkeleton) ->
     StEcta
-mkStecta size numTests instances sig givenTrans skelTrans =
+mkStecta size numTests instances sig closed givenTrans skelTrans =
     StEcta
         { any_arg = ag
         , compl_sig = compl_sig
@@ -371,7 +374,7 @@ mkStecta size numTests instances sig givenTrans skelTrans =
         | (x, f@(GivenFun{given_info = GivenVar{}})) <- Map.assocs compl_sig
         ]
     inst_sig = Map.fromList (concatMap snd moreVars) <> compl_sig
-    (givenSig, eq_insts, arbs) = sigGivens givenTrans sig instances
+    (givenSig, eq_insts, arbs) = sigGivens closed givenTrans sig instances
     givens = Map.assocs $ givenTrans . sfTypeRep <$> givenSig
     compl_sig = sig <> givenSig
     sc = skels ++ givens
@@ -433,7 +436,10 @@ runPhases env size lastPhase instances sig =
         | pn <= lastPhase = do
             when (pn > 1) $ putStrLn starting
             let phaseEnv = env{diagnosticPhase = pn}
-                stectaWith variableTrans = mkStecta size (numTests env) instances sig variableTrans skelTrans
+                -- A phase with a skeleton grammar closes its variable types
+                -- under carrier renaming, so each renaming of a typing of a
+                -- skeleton has its variables.
+                stectaWith variableTrans = mkStecta size (numTests env) instances sig (isJust skeletonTrans) variableTrans skelTrans
             (laws, s') <- diagnose phaseEnv 0 "" "phase" s $ do
                 result@(_, finishedState) <- runPhase phaseEnv size (stectaWith <$> skeletonTrans) (stectaWith givenTrans) s
                 diagnosticEvent phaseEnv "checkpoint" 0 "" "phase" finishedState
@@ -449,8 +455,25 @@ most general carrier typings with that result type of the skeletons of its
 monomorphic type.
 -}
 runPhase :: Settings -> Int -> Maybe StEcta -> StEcta -> Search -> IO ([String], Search)
-runPhase env@Settings{..} size skeletons stecta@StEcta{..} = go Map.empty [(lvl, tc) | lvl <- [1 .. size], tc <- sortOn (\t -> (typeSize t, concreteTypeLeaves t, t)) sig_ty_cons]
+runPhase env@Settings{..} size skeletons stecta@StEcta{..} =
+    go
+        Map.empty
+        [(lvl, tc) | lvl <- [1 .. size], tc <- sortOn (\t -> (typeSize t, concreteTypeLeaves t, t)) (filter tested sig_ty_cons)]
   where
+    -- With a skeleton grammar, the variable types are closed under carrier
+    -- renaming (see 'mkStecta'). Then the schemas of a type are the
+    -- renamings of the schemas of its canonical type (see
+    -- 'generalizeCarriers'), and the canonical type finds their laws up to
+    -- renaming. This needs variables whose carriers are the first carriers
+    -- of 'carriers'.
+    tested tc = case skeletons of
+        Just _
+            | firstCarriers ->
+                canonicalCarrierType tc == tc || canonicalCarrierType tc `notElem` sig_ty_cons
+        _ -> True
+    firstCarriers =
+        let used = nubOrd (concatMap carriersOf (Map.keys phase_variables))
+         in sort used == sort (take (length used) (map fst carriers))
     -- Only program applications have this shape. Do not exclude matching
     -- type constructors in a custom signature.
     canPrune = ("app", 4) `notElem` allConstructors (Map.assocs (sfTypeRep <$> compl_sig))

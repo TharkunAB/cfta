@@ -25,7 +25,8 @@ import GHC.Generics (Generic)
 import Control.Exception (Exception, SomeAsyncException, SomeException, evaluate, fromException, throw, throwIO, try)
 import Data.CFTA.Symbol (Symbol (Symbol))
 import qualified Data.CFTA.Term as CT
-import Data.Maybe (fromMaybe, listToMaybe, mapMaybe)
+import Data.List (sortOn)
+import Data.Maybe (fromMaybe, isJust, isNothing, listToMaybe, mapMaybe)
 import Data.Proxy
 import qualified Data.Text as T
 import Data.Typeable
@@ -148,6 +149,7 @@ frontInstances extraReps t = case genRep t of
     genRep t | Just g <- extraReps t = Just g
     genRep t | Just g <- lookup t builtinReps = Just g
     genRep (TCons "[]" [ts]) = g_li_i <$> genRep ts
+    genRep (TCons "(,)" [a, b]) = pairInstance <$> genRep a <*> genRep b
     genRep (TFun a b) = do
         CoarbitraryType (Proxy :: Proxy x) <- coarbitraryType a
         result <- genRep b
@@ -190,6 +192,34 @@ coarbitraryType t = lookup t types
     entry :: (Typeable a, QC.CoArbitrary a) => Proxy a -> (TypeSkeleton, CoarbitraryType)
     entry p = (typeSkeletonOf p, CoarbitraryType p)
 
+{- | The instance of a pair from the instances of its components: the
+generator of QuickCheck for pairs, and the equality of both components, if
+both have one. A pair that 'builtinReps' lists keeps its listed instance.
+-}
+pairInstance :: GeneratedInstance -> GeneratedInstance -> GeneratedInstance
+pairInstance left right = case (g_arb left, g_arb right) of
+    (DynGen (generateFirst :: Gen a), DynGen (generateSecond :: Gen b)) ->
+        generatedWith (DynGen ((,) <$> generateFirst <*> generateSecond)) $ do
+            equalFirst <- g_eq left >>= fromDynamic :: Maybe (a -> a -> Bool)
+            equalSecond <- g_eq right >>= fromDynamic :: Maybe (b -> b -> Bool)
+            pure (toDyn (\(x1, y1) (x2, y2) -> equalFirst x1 x2 && equalSecond y1 y2))
+
+{- | A generator with its type, its equality, if it has one, and its list
+generator. Two lists are equal when they have the same length and equal
+elements.
+-}
+generatedWith :: DynGen -> Maybe Dynamic -> GeneratedInstance
+generatedWith dg@(DynGen (g :: Gen a)) equality =
+    Gend
+        { g_tr = typeRep (Proxy :: Proxy a)
+        , g_arb = dg
+        , g_eq = equality
+        , g_li_i = generatedWith (DynGen (QC.listOf g)) (listEquality <$> (equality >>= fromDynamic))
+        }
+  where
+    listEquality :: (a -> a -> Bool) -> Dynamic
+    listEquality equal = toDyn (\xs ys -> length xs == length ys && and (zipWith equal xs ys))
+
 -- | A generator with its type and list generator, without function equality.
 generatedNoEq :: DynGen -> GeneratedInstance
 generatedNoEq dg@(DynGen (g :: Gen a)) =
@@ -224,12 +254,18 @@ instanceTypes typeMod sigs = nubOrd $ concatMap addLi $ Set.toList $ Set.unions 
           where
             t' = TCons "[]" [t]
 
+{- | The generated variables, the equalities, and the generators of the
+types of a signature. With 'True', the types also have each renaming of
+their carriers (see 'carrierRenamings'). A renamed type must have an
+instance when its type in the signature has one.
+-}
 sigGivens ::
+    Bool ->
     (TypeSkeleton -> TypeSkeleton) ->
     Sig ->
     (TypeSkeleton -> Maybe Instance) ->
     (Sig, Map TypeSkeleton (Text, Value), Map TypeSkeleton (Text, Func))
-sigGivens typeMod sigs instances =
+sigGivens closed typeMod sigs instances =
     ( Map.fromList (mapMaybe consName allCons)
     , eq_insts
     , arbs
@@ -257,9 +293,22 @@ sigGivens typeMod sigs instances =
 
     isCon (TCons _ _) = True
     isCon _ = False
-    allCons = instanceTypes typeMod sigs
+    declared = instanceTypes typeMod sigs
+    renamed
+        | closed = carrierRenamings (filter (\t -> isJust (instances t)) declared) `Set.difference` Set.fromList declared
+        | otherwise = Set.empty
+    allCons = declared ++ Set.toList renamed
+    instanceOf t = case instances t of
+        Nothing
+            | t `Set.member` renamed ->
+                error
+                    ( "Phase 4 closes its variable types under carrier renaming, but the type '"
+                        ++ show t
+                        ++ "' has no instance. It is a renaming of a type of the signature that has one."
+                    )
+        found -> found
     toEqInst e
-        | Just inst <- instances e
+        | Just inst <- instanceOf e
         , Just eqf <- inst_eq inst =
             g inst eqf
       where
@@ -272,10 +321,45 @@ sigGivens typeMod sigs instances =
     toEqInst _ = Nothing
 
     consName :: TypeSkeleton -> Maybe (Text, Func)
-    consName t = g <$> instances t
+    consName t = g <$> instanceOf t
       where
         g inst = toTup (GivenFun (GivenVar (inst_prefix inst) (inst_text inst) 0 (inst_gen inst)) t)
         toTup gf@(GivenFun gv _) = (gvToName gv, gf)
+
+{- | The types with each renaming of their carriers to distinct carriers
+that the types use.
+-}
+carrierRenamings :: [TypeSkeleton] -> Set TypeSkeleton
+carrierRenamings types =
+    Set.fromList
+        [renameCarrierType (Map.fromList renaming) t | t <- types, renaming <- renamings (nubOrd (carriersOf t)) used]
+  where
+    used = nubOrd (concatMap carriersOf types)
+    renamings [] _ = [[]]
+    renamings (c : cs) available = [(c, c') : rest | c' <- available, rest <- renamings cs (filter (/= c') available)]
+
+{- | The type with its carriers renamed to the carriers of 'carriers', in
+the order of their first occurrence.
+-}
+canonicalCarrierType :: TypeSkeleton -> TypeSkeleton
+canonicalCarrierType ty = renameCarrierType (Map.fromList (zip (nubOrd (carriersOf ty)) (map fst carriers))) ty
+
+-- | The type with its carriers renamed by a map.
+renameCarrierType :: Map TypeSkeleton TypeSkeleton -> TypeSkeleton -> TypeSkeleton
+renameCarrierType renaming ty = case ty of
+    _ | Just renamed <- Map.lookup ty renaming -> renamed
+    TCons name args -> TCons name (map (renameCarrierType renaming) args)
+    TFun arg result -> TFun (renameCarrierType renaming arg) (renameCarrierType renaming result)
+    TVar _ -> ty
+
+-- | The carriers of a type, in the order of their occurrences.
+carriersOf :: TypeSkeleton -> [TypeSkeleton]
+carriersOf ty
+    | ty `elem` map fst carriers = [ty]
+    | otherwise = case ty of
+        TCons _ args -> concatMap carriersOf args
+        TFun arg result -> carriersOf arg ++ carriersOf result
+        TVar _ -> []
 
 addExplicitEquality :: (Typeable a) => (a -> a -> Bool) -> Sig
 addExplicitEquality (fun :: a -> a -> Bool) = Map.singleton key val
@@ -648,14 +732,21 @@ type of its argument and its result. The given annotations are not used.
 'Nothing' if a symbol is not in the signature or the typing does not unify.
 
 The function gives the schema with a result type: the principal result type
-is unified with it, and the other type variables become carriers. The
-variables are taken in the order of their first occurrence, the annotation
+is unified with it, and the other type variables become carriers. A type
+variable at a carrier position of a generated variable has the key of the
+smallest such pair of the variable and the position. The type variables
+with a key come first, in the order of their keys, so that two schemas
+that share a variable tend to name its carriers alike. The other type
+variables follow in the order of their first occurrence, the annotation
 of an application before its function and its argument. Each naming gives
 the type variables distinct carriers. The namings with carriers that the
-result type does not use come first, then the namings with any carriers.
-The first naming is used for which the map has a variable of each new
-variable type. 'Nothing' if the result type does not unify or no naming
-fits.
+result type does not use come first. Then come the namings with any
+carriers: the carriers of the result type in the order of their first
+occurrence, then the other carriers. Thus the namings of a result type
+and of the result type with its carriers renamed in the order of
+'carriers' correspond. The first naming is used for which the map has a
+variable of each new variable type. 'Nothing' if the result type does not
+unify or no naming fits.
 -}
 generalizeCarriers :: Sig -> Map TypeSkeleton Symbol -> Term -> Maybe (TypeSkeleton -> Maybe Term)
 generalizeCarriers sig variableOfType term = do
@@ -665,18 +756,22 @@ generalizeCarriers sig variableOfType term = do
     pure $ \resultType -> do
         fixed <- unifyTypes (nodeType resolved) resultType Map.empty
         let instantiated = mapTypes (applyTypes fixed) resolved
-            free = nubOrd (concatMap typeVariablesOf (nodeTypes instantiated))
-            unused = filter (`notElem` carriersIn resultType) (map fst carriers)
-            candidates = namings free unused ++ namings free (map fst carriers)
+            keys =
+                Map.fromListWith
+                    min
+                    [ (free', (symbol, index))
+                    | (symbol, positions) <- variablePositions typed
+                    , (index, position) <- zip [0 :: Int ..] positions
+                    , TVar free' <- [applyTypes fixed (applyTypes substitution (TVar position))]
+                    ]
+            occurrences = nubOrd (concatMap typeVariablesOf (nodeTypes instantiated))
+            free = sortOn (\v -> (isNothing (Map.lookup v keys), Map.lookup v keys)) occurrences
+            used = nubOrd (carriersOf resultType)
+            unused = filter (`notElem` used) (map fst carriers)
+            candidates = namings free unused ++ namings free (used ++ unused)
         listToMaybe
             [schema | naming <- candidates, Just schema <- [rebuild (mapTypes (applyTypes (Map.fromList naming)) instantiated)]]
   where
-    carriersIn ty
-        | ty `elem` map fst carriers = [ty]
-        | otherwise = case ty of
-            TCons _ args -> concatMap carriersIn args
-            TFun arg result -> carriersIn arg ++ carriersIn result
-            TVar _ -> []
     annotate path (Term "app" [_, f, x]) = do
         (f', fs) <- annotate (path <> "f") f
         (x', xs) <- annotate (path <> "x") x
@@ -730,6 +825,12 @@ generalizeCarriers sig variableOfType term = do
         TCons _ args -> concatMap typeVariablesOf args
         TFun arg result -> typeVariablesOf arg ++ typeVariablesOf result
     nodeType (CT.Node (_, ty) _) = ty
+    -- The generated variables of the typed schema, each with the type
+    -- variables of its carrier positions in order.
+    variablePositions (CT.Node (symbol@(Symbol name), ty) []) = case Map.lookup name sig of
+        Just GivenFun{given_info = GivenVar{}} -> [(symbol, typeVariablesOf ty)]
+        _ -> []
+    variablePositions (CT.Node _ children) = concatMap variablePositions children
     nodeTypes (CT.Node (_, ty) children) = ty : concatMap nodeTypes children
     mapTypes f (CT.Node (symbol, ty) children) = CT.Node (symbol, f ty) (map (mapTypes f) children)
     -- Injective namings of the type variables, in the order of the carriers.
