@@ -11,6 +11,7 @@ module Data.CFTA.Document (
     compileGraph,
     patch,
     applyPatch,
+    applyEdits,
     explainDocumentError,
 ) where
 
@@ -77,8 +78,12 @@ mkDocument initial rows = do
     distinctState seen (state, _)
         | Set.member state seen = Left $ DuplicateState state
         | otherwise = Right $ Set.insert state seen
-    distinctTransitions (state, transitions) = foldM_ (distinct state) Set.empty transitions
-    distinct state seen transition
+
+-- | Check that the transitions of one row have distinct names.
+distinctTransitions :: (state, [FTA.Transition state Symbol Annotation]) -> Either (DocumentError state) ()
+distinctTransitions (state, transitions) = foldM_ distinct Set.empty transitions
+  where
+    distinct seen transition
         | Set.member name seen = Left $ DuplicateTransition state name
         | otherwise = Right $ Set.insert name seen
       where
@@ -122,8 +127,17 @@ compileGraph = FTA.mapConstraints combine . sourceGraph
 patch :: Document state -> [Edit state] -> Patch state
 patch = Patch
 
-{- | Apply a batch only to its starting document. A stale snapshot or an invalid
-edit returns an error. SetFact adds or replaces a named fact; RemoveFact and
+{- | Apply a batch only to its starting document. A stale snapshot returns an
+error. Otherwise the result is that of 'applyEdits'. The check compares the
+complete starting document.
+-}
+applyPatch :: (Ord state) => Patch state -> Document state -> Either (DocumentError state) (Document state)
+applyPatch (Patch expected edits) current
+    | expected /= current = Left StalePatch
+    | otherwise = applyEdits edits current
+
+{- | Apply an ordered batch of edits. An invalid edit returns an error.
+SetFact adds or replaces a named fact; RemoveFact and
 DeleteRow require their targets to exist. PutTransition replaces a named
 production in place or appends a new one. DeleteTransition requires an existing
 name and leaves the state row. DefineTransition changes the symbol and children
@@ -133,17 +147,27 @@ production name. They resolve their targets at that step
 in the sequence. Validate graph references and arities after the complete batch.
 The initial state stays fixed. The old document is unchanged.
 
-This first path compares the complete starting document and rebuilds the checked
-graph. It does not reuse count tables or provide a compact serialized patch.
+The result replaces the rows that the edits change and shares the other rows
+(see 'FTA.replaceRows'). Transition names are checked again only in the changed
+rows. It does not reuse count tables or provide a compact serialized patch.
 -}
-applyPatch :: (Ord state) => Patch state -> Document state -> Either (DocumentError state) (Document state)
-applyPatch (Patch expected edits) current
-    | expected /= current = Left StalePatch
-    | otherwise = do
-        rows <- foldM apply (FTA.transitionTable graph) edits
-        mkDocument (FTA.initialState graph) $ Map.toAscList rows
+applyEdits :: (Ord state) => [Edit state] -> Document state -> Either (DocumentError state) (Document state)
+applyEdits edits current = do
+    rows <- foldM apply (FTA.transitionTable graph) edits
+    let changed = Map.fromSet (`Map.lookup` rows) $ Set.fromList $ map editState edits
+    graph' <- first InvalidGraph $ FTA.replaceRows changed graph
+    mapM_ distinctTransitions [(state, transitions) | (state, Just transitions) <- Map.toList changed]
+    pure $ Document graph'
   where
     graph = sourceGraph current
+    editState edit = case edit of
+        PutRow state _ -> state
+        DeleteRow state -> state
+        PutTransition state _ -> state
+        DefineTransition state _ _ _ -> state
+        DeleteTransition state _ -> state
+        SetFact state _ _ _ -> state
+        RemoveFact state _ _ -> state
     apply rows edit = case edit of
         PutRow state transitions -> Right $ Map.insert state transitions rows
         DeleteRow state
