@@ -754,8 +754,22 @@ criticalPairs :: [(Term, Term -> Term)] -> Term -> (Term, Term) -> [(Term, Term)
 criticalPairs places r1 (l2, r2) =
     [ (substitute s r1, substitute s (put r2))
     | (u, put) <- places
+    , unifiableShapes u l2
     , Just s <- [unify u l2]
     ]
+
+{- | Whether the program shapes of two terms can unify: a template variable
+fits any annotated subterm, applications fit each other part by part, and
+two other terms fit if they have the same symbol. The types are not part of
+a shape, and a repeated variable is not checked. 'unify' fails on terms whose
+shapes do not fit, so this check is a cheap first test.
+-}
+unifiableShapes :: Term -> Term -> Bool
+unifiableShapes (Term x [_]) (Term _ (_ : _)) | isTemplateVar x = True
+unifiableShapes (Term _ (_ : _)) (Term y [_]) | isTemplateVar y = True
+unifiableShapes (Term "app" [_, f, v]) (Term "app" [_, g, u]) = unifiableShapes f g && unifiableShapes v u
+unifiableShapes (Term c [_]) (Term d [_]) = c == d
+unifiableShapes _ _ = False
 
 {- | The critical pairs of a rule with each rule of the index, in the two
 orders. Share the incoming rule's renamed terms and left contexts within
