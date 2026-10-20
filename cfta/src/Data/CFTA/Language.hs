@@ -151,7 +151,7 @@ update before (Update changes) = do
     changedSource <-
         if null edits
             then Right document
-            else first InvalidSource $ Document.applyPatch (Document.patch document edits) document
+            else first InvalidSource $ Document.applyEdits edits document
     changedExclusions <- foldM apply (exclusions before) changes
     pure $ Language changedSource changedExclusions
   where
