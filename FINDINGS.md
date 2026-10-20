@@ -2,6 +2,17 @@
 
 ## Haskell fix handoff for external work
 
+Incoming upstream review: 2026-10-20 14:52 CEST. Main: `9769fe3e9`.
+The published checkpoint `2a90c2318` is preserved before import. Pull cannot
+fast-forward the divergent branches. A local merge will retain both histories.
+Ten upstream paths change. Three earlier Haskell files change: Data.CFTA,
+the Typing documentation and its tests. replaceRows adds persistent batch
+row replacement/deletion with complete final validation. mkFTA delegates to
+that validator. No Lean refinement for replaceRows is present. Typed size-order
+and language-tower documents extend the stated public contracts. No local
+Haskell defect, repair request, Haskell build or test result is claimed.
+Keep every repair entry, reproducer, path and validation result below.
+
 Current proof update: 2026-10-19 15:01 CEST. Proof checkpoint: `88dd8902c`.
 Selected stored children now retain their exact original row and child index
 in the actual raw source callback. Structural rows beneath Mu survive root
