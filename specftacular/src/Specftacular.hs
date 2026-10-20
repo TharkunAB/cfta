@@ -251,6 +251,8 @@ data Settings = Settings
       --    of a part of a long run.
       --
       splitEnumeration :: Int
+    , skeletonTemplates :: Bool
+    -- ^ Whether the templates of the rules prune the skeletons (spike).
     , parallelBuckets :: Bool
     {- ^ Whether the buckets of a size run in parallel from the state at the
     start of the size (spike).
@@ -496,6 +498,9 @@ searchPhases
             -- Threads write whole diagnostic lines.
             when parallelSetting $ hSetBuffering stderr LineBuffering
             sink <- newIORef []
+            -- SPECFTACULAR_SKELETON_TEMPLATES=0 enumerates the skeletons without
+            -- the templates of the rules (spike).
+            skeletonTemplatesSetting <- (/= Just "0") <$> Env.lookupEnv "SPECFTACULAR_SKELETON_TEMPLATES"
             statsEnabled <- getRTSStatsEnabled
             let memLimitSetting = if statsEnabled then memLimitOption else Nothing
             when (isJust memLimitOption && not statsEnabled) $
@@ -550,6 +555,7 @@ searchPhases
                         , diagnosticPhase = 0
                         , resolveInstance = instances
                         , splitEnumeration = splitSetting
+                        , skeletonTemplates = skeletonTemplatesSetting
                         , parallelBuckets = parallelSetting
                         , deferLaws = parallelSetting || isJust timeoutSetting || isJust memLimitSetting
                         , bucketMemLimit = memLimitSetting
@@ -801,7 +807,7 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..}
         | otherwise = pure (typingsOf (searchSpace skeleton lvl monomorphic))
       where
         templates
-            | canPrune = filter annotationFree (pruningTemplates skeletonSig lvl rules)
+            | canPrune && skeletonTemplates = filter annotationFree (pruningTemplates skeletonSig lvl rules)
             | otherwise = []
         typingsOf space =
             let (pruningRoot, oracleTemplates) = Compile.preparePruning templates (refold space)
