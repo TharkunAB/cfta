@@ -253,8 +253,9 @@ tree automata of `cfta`, with QuickCheck integration.
   without listing their values; the plain builders report a drawn field as
   `DrawnField`. `deriveLTAOnPools`, in the internal derive module, derives
   over an automaton with the generators of some states given.
-  With `Binders`, a bound on the binders around each position, the
-  automaton is cyclic and the generator is counted by size. A field
+  With `Binders`, a bound on the binders around each position, and a rule
+  with a `subterm`, the automaton is cyclic and the generator is counted by
+  size; without a `subterm` rule it is acyclic and finite. A field
   that holds a subterm has the type of the datatype, so a family of mutually
   recursive types is not a language here.
   A fixed value in a field of the datatype gives `FieldMismatch`.
