@@ -10,8 +10,14 @@ module Data.CFTA.Lean (
     Options (..),
     defaultOptions,
     withKimina,
+    withTheory,
+    withLowering,
+    Theory,
+    Definition (..),
+    lower,
     fallback,
     entailmentProposition,
+    renderEntailment,
 ) where
 
 import Control.Exception (catch)
@@ -19,6 +25,7 @@ import Control.Monad (unless)
 import Data.Aeson (Value (..), eitherDecode, encode, object, withObject, (.!=), (.:), (.:?), (.=))
 import Data.Aeson.Types (Parser, parseEither)
 import Data.Either (fromRight)
+import Data.Maybe (fromMaybe)
 import Data.Text (Text)
 import qualified Data.Text as Text
 import Network.HTTP.Client (
@@ -35,9 +42,11 @@ import Network.HTTP.Client (
  )
 import Network.HTTP.Types (statusIsSuccessful)
 
-import Data.CFTA.Formula (Formula, Name, Sort (..))
-import Data.CFTA.Lean.Formula (entailmentProposition)
-import Data.CFTA.Refinement.LiquidFixpoint (TimeLimitReached)
+import Data.CFTA.Formula (Formula (..), Name, Sort (..))
+import Data.CFTA.Lean.Formula (entailmentProposition, renderEntailment)
+import Data.CFTA.Lean.Lower (lower)
+import Data.CFTA.Lean.Theory (Definition (..), Theory)
+import Data.CFTA.Refinement.LiquidFixpoint (TimeLimitReached, withZ3)
 import Data.CFTA.Refinement.Verdict (
     Entailment,
     Verdict (..),
@@ -69,19 +78,23 @@ proofs, unfinished proofs, and timeouts give 'Unknown'. Configuration errors
 raise an exception. Cancellation is not caught.
 -}
 withKimina :: Options -> [(Name, Sort)] -> [Formula] -> (Entailment -> IO a) -> IO a
-withKimina options declarations assumptions action = do
+withKimina options = withTheory options []
+
+-- | Use a fixed typed theory through Kimina. Native interpretations are trusted Lean code.
+withTheory :: Options -> Theory -> [(Name, Sort)] -> [Formula] -> (Entailment -> IO a) -> IO a
+withTheory options theory declarations assumptions action = do
     let seconds = optionTimeoutSeconds options
     unless (seconds > 0 && seconds <= 3600) $
         fail "cfta-lean: optionTimeoutSeconds must be between 1 and 3600"
     request <- parseRequest (reverse (dropWhile (== '/') (reverse (optionUrl options))) <> "/api/check")
     manager <- newManager defaultManagerSettings
     let query bindings antecedent consequent =
-            case entailmentProposition declarations assumptions bindings antecedent consequent of
+            case renderEntailment theory declarations assumptions bindings antecedent consequent of
                 Left _ -> pure Unknown
-                Right proposition -> do
+                Right (definitions, proposition) -> do
                     let snippets =
-                            [ object ["id" .= ("yes" :: Text), "code" .= proof proposition]
-                            , object ["id" .= ("no" :: Text), "code" .= proof ("¬ (" <> proposition <> ")")]
+                            [ object ["id" .= ("yes" :: Text), "code" .= proof definitions proposition]
+                            , object ["id" .= ("no" :: Text), "code" .= proof definitions ("¬ (" <> proposition <> ")")]
                             ]
                         body = object ["snippets" .= snippets, "timeout" .= seconds, "reuse" .= True]
                         check = do
@@ -104,6 +117,24 @@ withKimina options declarations assumptions action = do
                     check `catch` transportFailure
     action (entailmentWithBindings query)
 
+{- | Use Z3 only when the complete obligation has an exact solver lowering.
+Unsupported types or definitions return 'Unknown'. One Z3 process serves the
+scalar fragment. Combine this solver with 'withTheory' through 'fallback'.
+-}
+withLowering :: Theory -> [(Name, Sort)] -> [Formula] -> (Entailment -> IO a) -> IO a
+withLowering theory declarations assumptions action =
+    withZ3 declarations $ \z3 ->
+        action $ entailmentWithBindings $ \bindings antecedent consequent ->
+            let fresh = [(name, fromMaybe IntSort (lookup original declarations)) | (name, original) <- bindings]
+                lowered = do
+                    _ <- renderEntailment theory declarations assumptions bindings antecedent consequent
+                    premise <- lower theory (fresh <> declarations) (And (assumptions <> [antecedent]))
+                    conclusion <- lower theory (fresh <> declarations) consequent
+                    pure (premise, conclusion)
+             in case lowered of
+                    Left _ -> pure Unknown
+                    Right (premise, conclusion) -> entailsWithBindings z3 bindings premise conclusion
+
 {- | Use the second solver only when the first returns 'Unknown' or reaches
 the Z3 time limit. Pass the same fresh bindings to both solvers.
 -}
@@ -125,13 +156,15 @@ z3Timeout :: TimeLimitReached -> IO Verdict
 z3Timeout _ = pure Unknown
 
 -- | Check a closed proposition with a bounded, fixed tactic portfolio.
-proof :: Text -> Text
-proof proposition =
+proof :: Text -> Text -> Text
+proof definitions proposition =
     Text.unlines
         [ "import Mathlib"
+        , definitions
         , "set_option maxHeartbeats 400000"
         , "example : " <> proposition <> " := by"
         , "  solve"
+        , "  | simp_all <;> decide"
         , "  | omega"
         , "  | norm_num"
         , "  | decide"

@@ -1,5 +1,13 @@
 # The Lean spike: directions and work in progress
 
+## Generalized refinements, 2026-10-20
+
+The current branch is `spike/refinement-logic` in
+`~/Code/microecta/lean-kimina`. The [generalized refinement spike](lean-spike-generalized.md)
+extends the Kimina checkpoint with named types, interpreted functions and
+predicates, and exact partial solver lowering. Read that document first.
+The sections below record earlier checkpoints.
+
 ## Restart with Kimina, 2026-10-20
 
 This section supersedes the runtime plan below. The earlier notes and

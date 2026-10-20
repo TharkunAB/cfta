@@ -4,24 +4,24 @@
 {- | The formulas of the refinement logic.
 
 A 'Formula' states a fact about named values. A 'Term' gives a value from
-names, literals, arithmetic, and applications of uninterpreted functions. An
-atom compares two terms, the connectives combine formulas, and a quantifier
-binds names of a 'Sort'. 'substitute' renames a bound name that a
-replacement would capture.
+names, literals, arithmetic, and applications of named functions. An atom
+compares two terms, and a predicate applies a named proposition to terms. The
+connectives combine formulas, and a quantifier binds names of a 'Sort'.
+'substitute' renames a bound name that a replacement would capture.
 
-The liquid tree automata build only integer terms without quantifiers.
-'Data.CFTA.Refinement.Lattice' decides only those. The Z3 entailment
-translates every form.
+'Data.CFTA.Refinement.Lattice' decides linear integer formulas without
+quantifiers. The Z3 entailment translates its supported forms and returns
+@Unknown@ for other forms.
 
 'conjunction' and 'disjunction' simplify their result as the functions
 @pAnd@ and @pOr@ of Liquid Fixpoint do. Formula equality decides the interning
 of symbols and the hits of solver caches, so the simplification must not
 change.
 
-The constructor order of each type is the order of the matching constructors
-of Liquid Fixpoint. The derived 'Ord' instances therefore order formulas as
-Liquid Fixpoint does. 'conjunction' sorts its parts by this order, and symbols
-with the same text sort by it.
+The original constructors retain the order of the matching Liquid Fixpoint
+constructors. Additional forms follow them, so the derived 'Ord' instances
+keep the order of existing formulas. 'conjunction' sorts its parts by this
+order, and symbols with the same text sort by it.
 -}
 module Data.CFTA.Formula (
     Name (..),
@@ -73,7 +73,7 @@ data Term
       Lit !Integer
     | -- | A named value.
       Var !Name
-    | -- | An uninterpreted function applied to its arguments.
+    | -- | A named function applied to its arguments. The solver supplies its meaning.
       App !Name ![Term]
     | -- | The negation of a term.
       Neg !Term
@@ -122,17 +122,19 @@ data Formula
       Forall ![(Name, Sort)] !Formula
     | -- | The formula holds for some values of the bound names.
       Exists ![(Name, Sort)] !Formula
+    | Predicate !Name ![Term]
     deriving (Eq, Ord, Show, Generic)
 
 instance Hashable Formula
 
--- | The sort of a name: integers, reals, booleans, or a function.
+-- | The sort of a value or a function. A named sort gets its meaning from the solver.
 data Sort
     = IntSort
     | RealSort
     | BoolSort
     | -- | A function from the argument sorts to the result sort.
       FunctionSort ![Sort] !Sort
+    | NamedSort !Name ![Sort]
     deriving (Eq, Ord, Show, Generic)
 
 instance Hashable Sort
@@ -217,7 +219,8 @@ iff :: Formula -> Formula -> Formula
 iff left right = Or [And [left, right], And [Not left, Not right]]
 
 {- | The free names in a formula, each once: the names of values and of
-applied functions, without the names that a quantifier binds.
+applied functions, without the names that a quantifier binds. Global predicate
+names and named sorts are not value names and are not included.
 
 The order is the order of a hash set of the names, as for @syms@ of Liquid
 Fixpoint. It is the same in each process.
@@ -236,6 +239,7 @@ namesIn formula = case formula of
     Atom _ left right -> termNames left <> termNames right
     Forall bound inner -> HashSet.difference (namesIn inner) (HashSet.fromList $ map fst bound)
     Exists bound inner -> HashSet.difference (namesIn inner) (HashSet.fromList $ map fst bound)
+    Predicate _ arguments -> foldMap termNames arguments
 
 -- | The free names of a term as a set.
 termNames :: Term -> HashSet.HashSet Name
@@ -265,8 +269,9 @@ gets a fresh name, so that the replacement is not captured. A nullary
 application is a named value. A non-nullary function name can be replaced
 only by a 'Var', because 'App' requires a name as its head. A replacement of
 a function name by another term leaves the applications of that name as they
-are; use 'substituteChecked' to find such a replacement. The result is not
-simplified.
+are; use 'substituteChecked' to find such a replacement. Predicate arguments
+are substituted, but global predicate names stay unchanged, including in
+nullary predicates. The result is not simplified.
 -}
 substitute :: [(Name, Term)] -> Formula -> Formula
 substitute replacements = runIdentity . substituteWith (\function _ arguments -> Identity (App function arguments)) replacements
@@ -294,6 +299,7 @@ substituteWith unsupported replacements = inFormula (filter (\(name, term) -> te
         Atom relation left right -> Atom relation <$> inTerm active left <*> inTerm active right
         Forall bound inner -> uncurry Forall <$> underBinders active bound inner
         Exists bound inner -> uncurry Exists <$> underBinders active bound inner
+        Predicate predicate arguments -> Predicate predicate <$> traverse (inTerm active) arguments
         _ -> pure formula
     inTerm active term = case term of
         Var name -> pure $ fromMaybe term $ lookup name active
@@ -350,6 +356,7 @@ renderFormula = go (0 :: Int)
         Or parts -> parenthesize (context >= 1) $ intercalate " || " $ map (go 1) parts
         Forall bound inner -> parenthesize (context >= 1) $ "forall " <> binders bound <> ". " <> go 0 inner
         Exists bound inner -> parenthesize (context >= 1) $ "exists " <> binders bound <> ". " <> go 0 inner
+        Predicate (Name predicate) arguments -> Text.unpack predicate <> "(" <> intercalate ", " (map renderTerm arguments) <> ")"
     binders bound = unwords ["(" <> Text.unpack name <> " : " <> renderSort sort <> ")" | (Name name, sort) <- bound]
     operator relation = case relation of
         Eq -> "=="
@@ -387,8 +394,10 @@ renderSort sort = case sort of
     RealSort -> "Real"
     BoolSort -> "Bool"
     FunctionSort arguments result -> intercalate " -> " $ map argument arguments <> [renderSort result]
+    NamedSort (Name name) arguments -> unwords $ Text.unpack name : map argument arguments
   where
     argument function@FunctionSort{} = "(" <> renderSort function <> ")"
+    argument named@(NamedSort _ (_ : _)) = "(" <> renderSort named <> ")"
     argument other = renderSort other
 
 -- | The text in parentheses when the condition holds.

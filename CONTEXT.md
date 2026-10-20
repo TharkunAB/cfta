@@ -50,8 +50,8 @@ Wilf, and Feat (ranking).
   a guard.
 - **Contract**: a guard about the children of a constructor, written as a
   function with one term for each child, in order.
-- **Measure**: the integer of each term of a constructor, written as a term
-  of the measures of its children (`measured`). The refinement of a constructed
+- **Measure**: the logical value of each term of a constructor, written as a
+  term of the measures of its children (`measured`). The refinement of a constructed
   term is `v == measure`, so the contract of a parent reads it. Liquid Haskell
   says measure; the LTA paper calls a constructor's refinement its *result
   refinement*.
@@ -81,6 +81,9 @@ Wilf, and Feat (ranking).
   from which its compiled constraints were made.
 
 ## Transformations
+
+- **Solver lowering**: a meaning-preserving translation of a logical
+  obligation to a solver's supported representation. It can be partial.
 
 - **Exact transformation**: an operation on an automaton that keeps its
   language, the set of terms it accepts. Equality reduction

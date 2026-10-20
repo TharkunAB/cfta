@@ -2,8 +2,8 @@
 
 {- | Translate refinement entailment to a closed Lean proposition.
 
-The supported values are integers and booleans. Uninterpreted functions
-take these values and return one such value. Functions must be fully applied.
+The supported values are integers, booleans, and named types from a theory.
+Functions must be fully applied. Predicates denote propositions.
 All formula connectives and quantifiers are supported. Terms can use integer
 literals, negation, addition, subtraction, multiplication, and conditionals.
 Division and remainder require a positive integer literal as the divisor.
@@ -15,6 +15,7 @@ integers and returns an integer. Inconsistent uses are rejected.
 -}
 module Data.CFTA.Lean.Formula (
     entailmentProposition,
+    renderEntailment,
 ) where
 
 import Control.Monad (foldM, unless)
@@ -26,6 +27,8 @@ import Data.Text (Text)
 import qualified Data.Text as Text
 
 import Data.CFTA.Formula (Formula (..), Name (..), Relation (..), Sort (..), Term (..), freeNames)
+import Data.CFTA.Lean.Theory (Theory)
+import qualified Data.CFTA.Lean.Theory as Theory
 import Data.CFTA.Symbol (valueName)
 
 {- | Universally close the implication from the ambient assumptions and the
@@ -49,24 +52,50 @@ entailmentProposition ::
     Formula ->
     Formula ->
     Either String Text
-entailmentProposition declarations assumptions bindings antecedent consequent = do
-    supplied <- checkedBindings declarations
+entailmentProposition declarations assumptions bindings antecedent consequent =
+    snd <$> renderEntailment [] declarations assumptions bindings antecedent consequent
+
+{- | Type check an entailment and render its definitions and closed proposition.
+Keep every declared value in the closure. A declared type can be empty, so
+removing an unused value would change the meaning of the closed proposition.
+-}
+renderEntailment ::
+    Theory ->
+    [(Name, Sort)] ->
+    [Formula] ->
+    [(Name, Name)] ->
+    Formula ->
+    Formula ->
+    Either String (Text, Text)
+renderEntailment theory declarations assumptions bindings antecedent consequent = do
+    unless (length theory == Set.size (Set.fromList (map fst theory))) (Left "Duplicate theory name")
+    supplied <- checkedBindings theory declarations
+    unless
+        (all (`Map.notMember` supplied) (Map.keys (functionEnvironment theory)))
+        (Left "A declaration conflicts with a theory name")
+    definitions <- theoryText theory
     let declared = supplied <> Map.singleton (Name (Text.pack valueName)) IntSort
-        reserved = Map.keysSet declared <> Set.fromList (concatMap freeNames assumptions)
+        reserved = Map.keysSet declared <> Map.keysSet (functionEnvironment theory) <> Set.fromList (concatMap freeNames assumptions)
         freshBinding fresh (name, original) = do
             unless (name `Set.notMember` reserved) (Left "A fresh binding conflicts with the ambient scope")
             insertSort fresh (name, Map.findWithDefault IntSort original declared)
     fresh <- foldM freshBinding Map.empty bindings
-    let known = fresh <> declared
+    let globals = functionEnvironment theory
+        known = fresh <> declared <> Map.map fst globals
         uses = concatMap (freeUses Set.empty) (assumptions <> [antecedent, consequent])
     inferred <- foldM insertSort Map.empty [(name, sort) | (name, sort) <- uses, Map.notMember name known]
-    let used = Map.restrictKeys (known <> inferred) (Set.fromList (map fst uses))
-        environment =
+    let used = fresh <> declared <> Map.restrictKeys inferred (Set.fromList (map fst uses))
+        variables =
             Map.fromList
-                [(name, (sort, "cfta_f" <> decimal index)) | (index, (name, sort)) <- zip [0 :: Int ..] (Map.toAscList used)]
-    premise <- formulaText 0 environment (And (assumptions <> [antecedent]))
-    conclusion <- formulaText 0 environment consequent
-    quantify "∀" (Map.elems environment) (binary "→" premise conclusion)
+                [ (name, (sort, "cfta_f" <> decimal index))
+                | (index, (name, sort)) <- zip [0 :: Int ..] (Map.toAscList used)
+                , Map.notMember name globals
+                ]
+        environment = variables <> globals
+    premise <- formulaText theory 0 environment (And (assumptions <> [antecedent]))
+    conclusion <- formulaText theory 0 environment consequent
+    proposition <- quantify theory "∀" (Map.elems variables) (binary "→" premise conclusion)
+    pure (definitions, proposition)
 
 -- | Insert a sort, and reject a different sort for an existing name.
 insertSort :: Map Name Sort -> (Name, Sort) -> Either String (Map Name Sort)
@@ -75,24 +104,29 @@ insertSort sorts (name, sort) = case Map.lookup name sorts of
     _ -> Right (Map.insert name sort sorts)
 
 -- | Validate declarations. A nullary function has its result sort.
-checkedBindings :: [(Name, Sort)] -> Either String (Map Name Sort)
-checkedBindings = foldM add Map.empty
+checkedBindings :: Theory -> [(Name, Sort)] -> Either String (Map Name Sort)
+checkedBindings theory = foldM add Map.empty
   where
     add sorts (name, sort) = do
-        checked <- supportedSort sort
+        checked <- supportedSort theory sort
         insertSort sorts (name, checked)
 
 -- | Accept scalar values and first-order functions over scalar values.
-supportedSort :: Sort -> Either String Sort
-supportedSort sort = case sort of
+supportedSort :: Theory -> Sort -> Either String Sort
+supportedSort theory sort = case sort of
     IntSort -> Right IntSort
     BoolSort -> Right BoolSort
     FunctionSort [] result -> scalar result
     FunctionSort arguments result -> FunctionSort <$> traverse scalar arguments <*> scalar result
     RealSort -> Left "Real sorts are not supported"
+    NamedSort name arguments -> case lookup name theory of
+        Just (Theory.TypeConstructor arity _)
+            | arity == length arguments && arity >= 0 -> NamedSort name <$> traverse scalar arguments
+        _ -> Left "Unknown named type or incorrect type arity"
   where
     scalar IntSort = Right IntSort
     scalar BoolSort = Right BoolSort
+    scalar named@NamedSort{} = supportedSort theory named
     scalar RealSort = Left "Real sorts are not supported"
     scalar FunctionSort{} = Left "Higher-order sorts are not supported"
 
@@ -105,6 +139,7 @@ freeUses bound formula = case formula of
     Or parts -> foldMap (freeUses bound) parts
     Not inner -> freeUses bound inner
     Atom _ left right -> termUses left <> termUses right
+    Predicate _ arguments -> foldMap termUses arguments
     Forall names inner -> under names inner
     Exists names inner -> under names inner
   where
@@ -126,36 +161,42 @@ freeUses bound formula = case formula of
         Cast inner _ -> termUses inner
 
 -- | Render a formula in its lexical environment.
-formulaText :: Int -> Map Name (Sort, Text) -> Formula -> Either String Text
-formulaText depth environment formula = case formula of
+formulaText :: Theory -> Int -> Map Name (Sort, Text) -> Formula -> Either String Text
+formulaText theory depth environment formula = case formula of
     Top -> Right "True"
     Bottom -> Right "False"
     And parts -> connective "True" "∧" <$> traverse recurse parts
     Or parts -> connective "False" "∨" <$> traverse recurse parts
     Not inner -> ("(¬ " <>) . (<> ")") <$> recurse inner
     Atom relation left right -> do
-        (leftSort, leftText) <- termText depth environment left
-        (rightSort, rightText) <- termText depth environment right
+        (leftSort, leftText) <- termText theory depth environment left
+        (rightSort, rightText) <- termText theory depth environment right
         unless (leftSort == rightSort) (Left "A comparison has different operand sorts")
         unless (relation `elem` [Eq, Ne] || leftSort == IntSort) (Left "An ordered comparison requires integers")
         pure (binary (relationText relation) leftText rightText)
+    Predicate name arguments -> do
+        (expected, identifier) <- predicateSignature theory name
+        actual <- traverse (termText theory depth environment) arguments
+        unless (map fst actual == expected) (Left "A predicate has incorrect argument sorts or arity")
+        pure ("(" <> Text.unwords (identifier : map snd actual) <> ")")
     Forall names inner -> boundFormula "∀" names inner
     Exists names inner -> boundFormula "∃" names inner
   where
-    recurse = formulaText depth environment
+    recurse = formulaText theory depth environment
     boundFormula quantifier names inner = do
-        checked <- checkedBindings names
+        checked <- checkedBindings theory names
+        unless (all ((`Map.notMember` functionEnvironment theory) . fst) names) (Left "A binder conflicts with a theory name")
         let entries =
                 [ (name, (checked Map.! name, "cfta_b" <> decimal depth <> "_" <> decimal index))
                 | (index, (name, _)) <- zip [0 :: Int ..] names
                 ]
             nested = Map.fromList entries <> environment
-        body <- formulaText (depth + 1) nested inner
-        quantify quantifier (map snd entries) body
+        body <- formulaText theory (depth + 1) nested inner
+        quantify theory quantifier (map snd entries) body
 
 -- | Check and render a scalar term.
-termText :: Int -> Map Name (Sort, Text) -> Term -> Either String (Sort, Text)
-termText depth environment term = case term of
+termText :: Theory -> Int -> Map Name (Sort, Text) -> Term -> Either String (Sort, Text)
+termText theory depth environment term = case term of
     Lit literal -> Right (IntSort, "(" <> decimal literal <> " : Int)")
     Var name -> value =<< named name
     App name arguments -> do
@@ -176,11 +217,11 @@ termText depth environment term = case term of
     Div left right -> quotient "Int.ediv" left right
     Mod left right -> quotient "Int.emod" left right
     Ite condition yes no -> do
-        predicate <- formulaText depth environment condition
+        predicate <- formulaText theory depth environment condition
         (yesSort, yesText) <- recurse yes
         (noSort, noText) <- recurse no
         unless (yesSort == noSort) (Left "A conditional has different branch sorts")
-        typ <- sortText yesSort
+        typ <- sortText theory yesSort
         pure
             ( yesSort
             , "(@ite "
@@ -197,11 +238,12 @@ termText depth environment term = case term of
             )
     Cast _ _ -> Left "Casts are not supported"
   where
-    recurse = termText depth environment
+    recurse = termText theory depth environment
     named name = maybe (Left "A name has no sort") Right (Map.lookup name environment)
     value pair@(sort, _) = case sort of
         IntSort -> Right pair
         BoolSort -> Right pair
+        NamedSort{} -> Right pair
         _ -> Left "Function-valued terms are not supported"
     integer operand = do
         (sort, text) <- recurse operand
@@ -219,23 +261,85 @@ termText depth environment term = case term of
         _ -> Left "Division and remainder require a positive integer literal divisor"
 
 -- | Render a quantifier. An empty binding list leaves the body unchanged.
-quantify :: Text -> [(Sort, Text)] -> Text -> Either String Text
-quantify _ [] body = Right body
-quantify quantifier names body = do
+quantify :: Theory -> Text -> [(Sort, Text)] -> Text -> Either String Text
+quantify _ _ [] body = Right body
+quantify theory quantifier names body = do
     binders <- traverse binder names
     pure ("(" <> quantifier <> " " <> Text.unwords binders <> ", " <> body <> ")")
   where
-    binder (sort, name) = (\typ -> "(" <> name <> " : " <> typ <> ")") <$> sortText sort
+    binder (sort, name) = (\typ -> "(" <> name <> " : " <> typ <> ")") <$> sortText theory sort
 
 -- | Render a supported Lean type.
-sortText :: Sort -> Either String Text
-sortText sort = case sort of
+sortText :: Theory -> Sort -> Either String Text
+sortText theory sort = case sort of
     IntSort -> Right "Int"
     BoolSort -> Right "Bool"
     FunctionSort arguments result -> do
-        sorts <- traverse sortText (arguments <> [result])
+        sorts <- traverse (sortText theory) (arguments <> [result])
         pure ("(" <> Text.intercalate " → " sorts <> ")")
     RealSort -> Left "Real sorts are not supported"
+    NamedSort name arguments -> do
+        _ <- supportedSort theory sort
+        case lookup name theory of
+            Just (Theory.TypeConstructor _ expression) -> do
+                rendered <- traverse (sortText theory) arguments
+                pure ("(" <> Text.unwords (("(" <> expression <> ")") : rendered) <> ")")
+            _ -> Left "Unknown named type"
+
+-- | Generate a distinct Lean name for a theory entry.
+definitionName :: Int -> Text
+definitionName index = "cfta_d" <> decimal index
+
+-- | The types and generated names of interpreted functions.
+functionEnvironment :: Theory -> Map Name (Sort, Text)
+functionEnvironment theory =
+    Map.fromList
+        [ (name, (if null arguments then result else FunctionSort arguments result, definitionName index))
+        | (index, (name, Theory.Function arguments result _)) <- zip [0 :: Int ..] theory
+        ]
+
+-- | The signature and generated name of a global predicate.
+predicateSignature :: Theory -> Name -> Either String ([Sort], Text)
+predicateSignature theory name =
+    case [(definition, definitionName index) | (index, (key, definition)) <- zip [0 :: Int ..] theory, key == name] of
+        [(Theory.Predicate arguments _, identifier)] -> (,) <$> traverse (supportedSort theory) arguments <*> pure identifier
+        [(Theory.Defined parameters _, identifier)] -> (,) <$> traverse (supportedSort theory . snd) parameters <*> pure identifier
+        _ -> Left "Unknown predicate"
+
+{- | Render typed definitions in dependency order.
+Shared definitions can refer only to earlier entries and their parameters.
+-}
+theoryText :: Theory -> Either String Text
+theoryText theory = Text.unlines . snd <$> foldM define ([], []) (zip [0 :: Int ..] theory)
+  where
+    define (earlier, lines') (index, (name, definition)) = do
+        line <- case definition of
+            Theory.TypeConstructor arity _ -> do
+                unless (arity >= 0) (Left "Negative type constructor arity")
+                pure ""
+            Theory.Function arguments result expression -> do
+                _ <- supportedSort theory (FunctionSort arguments result)
+                typ <- sortText theory (FunctionSort arguments result)
+                pure ("@[simp] def " <> definitionName index <> " : " <> typ <> " := " <> expression)
+            Theory.Predicate arguments expression -> do
+                types <- traverse (fmap (<> " → ") . sortText theory) arguments
+                pure ("@[simp] def " <> definitionName index <> " : " <> Text.concat types <> "Prop := " <> expression)
+            Theory.Defined parameters body -> do
+                unless (length parameters == Set.size (Set.fromList (map fst parameters))) (Left "Duplicate definition parameter")
+                checked <- checkedBindings theory parameters
+                unless
+                    (all ((`Map.notMember` functionEnvironment theory) . fst) parameters)
+                    (Left "A parameter conflicts with a theory name")
+                let variables = Map.fromList [(key, (checked Map.! key, "cfta_p" <> decimal i)) | (i, (key, _)) <- zip [0 :: Int ..] parameters]
+                    globals = functionEnvironment earlier
+                unless (all (`Map.member` (variables <> globals)) (freeNames body)) (Left "A shared definition has an unbound name")
+                rendered <- formulaText earlier 0 (variables <> globals) body
+                binders <-
+                    traverse
+                        (\(sort, identifier) -> (\typ -> "(" <> identifier <> " : " <> typ <> ")") <$> sortText theory sort)
+                        [variables Map.! key | (key, _) <- parameters]
+                pure ("@[simp] def " <> definitionName index <> " " <> Text.unwords binders <> " : Prop := " <> rendered)
+        pure (earlier <> [(name, definition)], lines' <> [line | not (Text.null line)])
 
 -- | Render a comparison operator.
 relationText :: Relation -> Text

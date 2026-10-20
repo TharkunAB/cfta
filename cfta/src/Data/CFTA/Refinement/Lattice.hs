@@ -333,6 +333,7 @@ signed variableOf = go True
             Right $ atom (if positive then relation else oppositeRelation relation) difference
         Forall{} -> Left $ UnsupportedFormula formula
         Exists{} -> Left $ UnsupportedFormula formula
+        Predicate{} -> Left $ UnsupportedFormula formula
       where
         {- The relation that holds exactly when the given relation does not.
 
