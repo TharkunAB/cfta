@@ -9,6 +9,7 @@ module Specftacular (
     discoverMonomorphic,
     experimentalPhases,
     SearchOptions (..),
+    Diagnostics (..),
     defaultOptions,
     parseOptions,
     searchPhases,
@@ -109,6 +110,8 @@ data StEcta = StEcta
     -}
     , test_cases :: [Case]
     -- ^ The test cases that all terms of the phase share, with the values of the variables.
+    , recheck_cases :: [Case]
+    -- ^ The extra test cases of a new law (see 'recheckSchedule').
     }
     deriving (Show)
 
@@ -279,6 +282,8 @@ data Settings = Settings
     -- ^ The seconds that the completion of one law may take.
     , completionMemLimit :: Word64
     -- ^ The bytes by which the completion of one law may grow the live heap.
+    , recheckCount :: Int
+    -- ^ The number of extra test cases of a new law (see 'recheckSchedule').
     , completionAllocLimit :: Word64
     {- ^ The bytes that the completion of one law may allocate.
     ^ The bytes by which a bucket may grow the live heap.
@@ -372,8 +377,42 @@ data SearchOptions = SearchOptions
     -- ^ The bytes by which the completion of one law may grow the live heap.
     , searchCompletionAllocLimit :: Word64
     -- ^ The bytes that the completion of one law may allocate.
+    , searchRecheck :: Int
+    {- ^ The number of extra test cases of small sizes on which a new law is
+    tested again (0: no test). The search drops a law that one of them
+    refutes. At HugeLists 6-p4, 2000 of them refute the 4 false laws that
+    pass the cases of 'testSchedule'.
+    -}
+    , searchTests :: Int
+    -- ^ The number of random test cases (1000, as in QuickSpec).
+    , searchChecked :: Bool
+    {- ^ Whether the values keep their types, so that each application tests
+    them (see 'Value').
+    -}
+    , searchProgress :: Bool
+    -- ^ Whether to show the progress of the search on stderr.
+    , searchDiagnostics :: Maybe Diagnostics
+    -- ^ The diagnostic events on stderr, if any (see 'diagnosticEvent').
+    , searchSkeletonTemplates :: Bool
+    -- ^ Whether the templates of the rules prune the phase 4 skeletons.
+    , searchStopAfter :: Maybe (Int, Int)
+    {- ^ The phase and the size after which the search stops, so that a
+    profile of the run is written.
+    -}
+    , searchOnlyBucket :: Maybe String
+    {- ^ With 'searchStopAfter', the only bucket of the last size, by the
+    'show' of its type. Each of its schemas prints its time and its term.
+    -}
     }
     deriving (Show)
+
+-- | The diagnostic events that a search writes on stderr, as versioned TSV.
+data Diagnostics
+    = -- | The phases and the buckets.
+      PhaseDiagnostics
+    | -- | The stages inside each bucket too.
+      DetailedDiagnostics
+    deriving (Eq, Show)
 
 -- | A sequential search with terms up to a size and the phases up to a phase.
 defaultOptions :: Int -> Int -> SearchOptions
@@ -389,6 +428,14 @@ defaultOptions size phase =
         , searchCompletionTimeout = Nothing
         , searchCompletionMemLimit = completionMemoryLimit
         , searchCompletionAllocLimit = completionBudget
+        , searchRecheck = 0
+        , searchTests = 1000
+        , searchChecked = False
+        , searchProgress = False
+        , searchDiagnostics = Nothing
+        , searchSkeletonTemplates = True
+        , searchStopAfter = Nothing
+        , searchOnlyBucket = Nothing
         }
 
 {- | Read the options from the program arguments: the size, the phase,
@@ -401,31 +448,54 @@ completion of one law (@--completion-timeout SECONDS@,
 parseOptions :: IO SearchOptions
 parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.progDesc "Find the laws of a signature."))
   where
+    -- The parsers are in the order of the fields of 'SearchOptions'.
     options =
-        build
+        SearchOptions
             <$> size
             <*> phase
             <*> parallel
             <*> ahead
-            <*> O.optional split
+            <*> split
             <*> O.optional bucketTimeout
             <*> O.optional bucketMemLimit
             <*> O.optional completionTimeoutOption
             <*> completionMemLimitOption
             <*> completionAllocLimitOption
-    build size' phase' parallel' ahead' split' timeout' memLimit' completionTimeout' completionMemLimit' completionAllocLimit' =
-        SearchOptions
-            { searchSize = size'
-            , searchPhase = phase'
-            , searchParallel = parallel'
-            , searchEnumerateAhead = ahead'
-            , searchSplit = fromMaybe 2 split'
-            , searchBucketTimeout = timeout'
-            , searchBucketMemLimit = memLimit'
-            , searchCompletionTimeout = completionTimeout'
-            , searchCompletionMemLimit = completionMemLimit'
-            , searchCompletionAllocLimit = completionAllocLimit'
-            }
+            <*> recheckOption
+            <*> testsOption
+            <*> O.switch (O.long "checked" <> O.help "Keep the types of the values, and test them at each application")
+            <*> O.switch (O.long "progress" <> O.help "Show the progress of the search on stderr")
+            <*> O.optional diagnosticsOption
+            <*> ( not
+                    <$> O.switch (O.long "no-skeleton-templates" <> O.help "Enumerate the phase 4 skeletons without the templates of the rules")
+                )
+            <*> O.optional stopAfterOption
+            <*> O.optional
+                ( O.strOption
+                    ( O.long "only-bucket"
+                        <> O.metavar "TYPE"
+                        <> O.help "With --stop-after, run only this bucket at the last size, and time each of its schemas"
+                    )
+                )
+    testsOption =
+        O.option
+            O.auto
+            ( O.long "tests"
+                <> O.metavar "N"
+                <> O.value 1000
+                <> O.help "The number of random test cases (default 1000, as in QuickSpec)"
+            )
+    diagnosticsOption =
+        O.option
+            (O.maybeReader (`lookup` [("phases", PhaseDiagnostics), ("detailed", DetailedDiagnostics)]))
+            ( O.long "diagnostics"
+                <> O.metavar "phases|detailed"
+                <> O.help "Write the events of the phases and the buckets, or also of the stages inside each bucket, on stderr"
+            )
+    stopAfterOption =
+        O.option
+            (O.maybeReader parseStop)
+            (O.long "stop-after" <> O.metavar "PHASE:SIZE" <> O.help "Stop the search after this size of this phase")
     size = O.argument O.auto (O.metavar "SIZE" <> O.help "The largest size of the terms")
     phase = O.argument O.auto (O.metavar "PHASE" <> O.help "The last phase, from 1 to 4")
     parallel =
@@ -444,6 +514,7 @@ parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.p
             O.auto
             ( O.long "split"
                 <> O.metavar "DEPTH"
+                <> O.value 2
                 <> O.help
                     "Split the phase 4 skeletons by shape down to DEPTH levels of applications (default 2; 0 does not split)"
             )
@@ -487,6 +558,14 @@ parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.p
                 <> O.metavar "SIZE"
                 <> O.value completionBudget
                 <> O.help "Keep only the rules of a law whose completion allocates more than SIZE (default 256G)"
+            )
+    recheckOption =
+        O.option
+            O.auto
+            ( O.long "recheck"
+                <> O.metavar "N"
+                <> O.value 0
+                <> O.help "Test each new law again on N random cases of sizes 1 to 8, and drop it if one refutes it (default 0: no test)"
             )
 
 -- | The exception that 'withMemoryLimit' throws to its thread.
@@ -581,19 +660,21 @@ searchPhases
         , searchCompletionTimeout = completionTimeoutSetting
         , searchCompletionMemLimit = completionMemLimitSetting
         , searchCompletionAllocLimit = completionAllocLimitSetting
+        , searchRecheck = recheckSetting
+        , searchTests = numTests
+        , searchChecked = checked
+        , searchProgress = progress
+        , searchDiagnostics = diagnosticSetting
+        , searchSkeletonTemplates = skeletonTemplatesSetting
+        , searchStopAfter = stopSetting
+        , searchOnlyBucket = onlySetting
         }
     givenInstances
     givenSig =
         do
-            -- SPECFTACULAR_PROGRESS=1 shows the progress of the search on stderr.
-            progress <- (== Just "1") <$> Env.lookupEnv "SPECFTACULAR_PROGRESS"
-            diagnosticSetting <- Env.lookupEnv "SPECFTACULAR_DIAGNOSTICS"
             -- Threads write whole diagnostic lines.
             when parallelSetting $ hSetBuffering stderr LineBuffering
             sink <- newIORef []
-            -- SPECFTACULAR_SKELETON_TEMPLATES=0 enumerates the skeletons without
-            -- the templates of the rules (spike).
-            skeletonTemplatesSetting <- (/= Just "0") <$> Env.lookupEnv "SPECFTACULAR_SKELETON_TEMPLATES"
             statsEnabled <- getRTSStatsEnabled
             let memLimitSetting = if statsEnabled then memLimitOption else Nothing
             when (isJust memLimitOption && not statsEnabled) $
@@ -602,21 +683,9 @@ searchPhases
                 hPutStrLn
                     stderr
                     "*** Warning: with --enumerate-ahead, --bucket-mem-limit also counts the heap of the background enumeration."
-            -- SPECFTACULAR_STOP_AFTER=phase:size stops the search after that size
-            -- of that phase, so that a profile of the run is written.
-            stopSetting <- (>>= parseStop) <$> Env.lookupEnv "SPECFTACULAR_STOP_AFTER"
-            -- SPECFTACULAR_ONLY_BUCKET=type runs only that bucket at the last size
-            -- of SPECFTACULAR_STOP_AFTER, and times each of its schemas.
-            onlySetting <- Env.lookupEnv "SPECFTACULAR_ONLY_BUCKET"
-            let diagnostics = diagnosticSetting `elem` [Just "1", Just "phases"]
-                detailedDiagnostics = diagnosticSetting == Just "1"
-            -- SPECFTACULAR_TESTS sets the number of test cases (1000 by default,
-            -- as in QuickSpec).
-            numTests <- fromMaybe 1000 . (>>= TR.readMaybe) <$> Env.lookupEnv "SPECFTACULAR_TESTS"
-            -- SPECFTACULAR_CHECKED=1 keeps the types of the values, and tests
-            -- them at each application (see 'Value').
-            checked <- (== Just "1") <$> Env.lookupEnv "SPECFTACULAR_CHECKED"
-            let sig
+            let diagnostics = isJust diagnosticSetting
+                detailedDiagnostics = diagnosticSetting == Just DetailedDiagnostics
+                sig
                     | checked = givenSig
                     | otherwise = untypedSig givenSig
                 instances
@@ -626,7 +695,7 @@ searchPhases
                     { compl_sig = compl_sig
                     , arb_insts = arb_insts
                     , sig_ty_cons = sig_ty_cons
-                    } = mkStecta size numTests instances sig False id id
+                    } = mkStecta size numTests 0 instances sig False id id
             putStrLn $ "In Scope (" ++ show (Map.size compl_sig) ++ " functions/constants):"
             putStrLn "---------------------------------"
             mapM_ (putStrLn . T.unpack) $ Map.keys compl_sig
@@ -661,6 +730,7 @@ searchPhases
                         , completionTimeout = completionTimeoutSetting
                         , completionMemLimit = completionMemLimitSetting
                         , completionAllocLimit = completionAllocLimitSetting
+                        , recheckCount = recheckSetting
                         , lawSink = sink
                         , stopAfter = stopSetting
                         , onlyBucket = onlySetting
@@ -685,13 +755,14 @@ types of the functions.
 mkStecta ::
     Int ->
     Int ->
+    Int ->
     (TypeSkeleton -> Maybe Instance) ->
     Sig ->
     Bool ->
     (TypeSkeleton -> TypeSkeleton) ->
     (TypeSkeleton -> TypeSkeleton) ->
     StEcta
-mkStecta size numTests instances sig closed givenTrans skelTrans =
+mkStecta size numTests recheckCount instances sig closed givenTrans skelTrans =
     StEcta
         { any_arg = ag
         , compl_sig = compl_sig
@@ -702,6 +773,7 @@ mkStecta size numTests instances sig closed givenTrans skelTrans =
         , sig_ty_cons = Map.keys eq_insts
         , eq_insts = eq_insts
         , test_cases = withValues inst_sig (testSchedule numTests)
+        , recheck_cases = withValues inst_sig (recheckSchedule recheckCount)
         , arb_insts = arbs
         }
   where
@@ -780,7 +852,7 @@ runPhases env size lastPhase instances sig =
                 -- A phase with a skeleton grammar closes its variable types
                 -- under carrier renaming, so each renaming of a typing of a
                 -- skeleton has its variables.
-                stectaWith variableTrans = mkStecta size (numTests env) instances sig (isJust skeletonTrans) variableTrans skelTrans
+                stectaWith variableTrans = mkStecta size (numTests env) (recheckCount env) instances sig (isJust skeletonTrans) variableTrans skelTrans
             (laws, s') <- diagnose phaseEnv 0 "" "phase" s $ do
                 result@(_, finishedState) <- runPhase phaseEnv (phaseSize pn) (stectaWith <$> skeletonTrans) (stectaWith givenTrans) s
                 diagnosticEvent phaseEnv "checkpoint" 0 "" "phase" finishedState
@@ -1277,33 +1349,56 @@ consider env@Settings{..} StEcta{..} lvl full_term s0
                             hPutStrLn stderr ("\r\ESC[Kfollows from the laws: " ++ ppNpTerm (lawOf w))
                         return (Knew, s)
                     | otherwise -> do
-                        (lawSig, law) <- generalizeLaw resolveInstance (map caseTest test_cases) inst_sig (eq_type, eq_inst) (lawOf w)
-                        let n = law_count s + 1
-                            law_str = show n <> ". " <> ppNpTerm (canonicalLaw lawSig law)
-                        unless deferLaws $ do
-                            when progress $ hPutStr stderr "\r\ESC[K"
-                            putStrLn law_str
-                        when deferLaws $ modifyIORef' lawSink ((w, i, lawSig, law) :)
-                        -- With parallel buckets, the merge completes the law, so the
-                        -- bucket adds the rules of the law alone.
-                        let complete
-                                | parallelBuckets = return (addLawRules lawSig law (rewrite_rules s))
-                                | otherwise =
-                                    boundedCompletion env law_str (addLaw maxSize lawSig law (rewrite_rules s)) (addLawRules lawSig law (rewrite_rules s))
-                        rules <-
-                            if detailedDiagnostics
-                                then diagnose env lvl (show current_ty) "completion" s complete
-                                else complete
-                        return
-                            ( Discovered law_str
-                            , s
-                                { law_count = n
-                                , rewrite_rules = rules
-                                , pending_laws = [(w, i, lawSig, law) | deferLaws] ++ pending_laws s
-                                }
-                            )
+                        refuting <- refutingCase w recheck_cases
+                        case refuting of
+                            Just c -> do
+                                hPutStrLn
+                                    stderr
+                                    ( "*** A small test case refutes a law, which the search drops: "
+                                        ++ ppNpTerm (lawOf w)
+                                        ++ " ("
+                                        ++ show (caseTest c)
+                                        ++ ")"
+                                    )
+                                return (Knew, s)
+                            Nothing -> discover w
       where
         lawOf w = Term "(==)" [Term (Symbol eq_txt) [], w, i]
+        -- The first extra test case on which the instance and w differ. Each
+        -- side is compiled once.
+        refutingCase w cases = case (compileTerm inst_sig w, compileTerm inst_sig i) of
+            (Right left, Right right) -> firstRefuting left right cases
+            _ -> return Nothing
+        firstRefuting _ _ [] = return Nothing
+        firstRefuting left right (c : cs) = do
+            equal <- valuesEqual eq_inst (left (caseValues c)) (right (caseValues c))
+            if equal == Just False then return (Just c) else firstRefuting left right cs
+        discover w = do
+            (lawSig, law) <- generalizeLaw resolveInstance (map caseTest test_cases) inst_sig (eq_type, eq_inst) (lawOf w)
+            let n = law_count s + 1
+                law_str = show n <> ". " <> ppNpTerm (canonicalLaw lawSig law)
+            unless deferLaws $ do
+                when progress $ hPutStr stderr "\r\ESC[K"
+                putStrLn law_str
+            when deferLaws $ modifyIORef' lawSink ((w, i, lawSig, law) :)
+            -- With parallel buckets, the merge completes the law, so the
+            -- bucket adds the rules of the law alone.
+            let complete
+                    | parallelBuckets = return (addLawRules lawSig law (rewrite_rules s))
+                    | otherwise =
+                        boundedCompletion env law_str (addLaw maxSize lawSig law (rewrite_rules s)) (addLawRules lawSig law (rewrite_rules s))
+            rules <-
+                if detailedDiagnostics
+                    then diagnose env lvl (show current_ty) "completion" s complete
+                    else complete
+            return
+                ( Discovered law_str
+                , s
+                    { law_count = n
+                    , rewrite_rules = rules
+                    , pending_laws = [(w, i, lawSig, law) | deferLaws] ++ pending_laws s
+                    }
+                )
 
 {- | The default number of bytes by which the completion of one law may grow
 the live heap (@--completion-mem-limit@). See 'boundedCompletion'. This

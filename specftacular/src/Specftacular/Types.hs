@@ -571,7 +571,7 @@ runs a term only when each application fits its argument (see
 'termType'), and the values of A, B, C, D, and Acc have the representation
 of Int. Thus an application of untyped values needs no test of the types.
 
-With SPECFTACULAR_CHECKED=1, the values stay typed, and an application of
+With @--checked@, the values stay typed, and an application of
 two typed values tests the types: a function takes an argument of its
 type, or of another of A to Acc, and any other application raises
 'IllTyped'. The golden test runs in this mode too, so that a wrong
@@ -601,7 +601,7 @@ fromValue (Untyped x) = unsafeCoerce x
 Acc have the representation of Int, so a function can take an argument of
 another of them, and any other difference raises 'IllTyped'. When one of
 them is untyped, the application has no test. Two untyped values come
-first, as in the search without SPECFTACULAR_CHECKED.
+first, as in the search without @--checked@.
 -}
 apply :: Value -> Value -> Value
 apply (Untyped f) (Untyped x) = Untyped ((unsafeCoerce f :: Any -> Any) x)
@@ -1001,6 +1001,16 @@ data TestCase
     | BoundaryCase Int Int Int
     | PredicateCase Int Int
     deriving (Show)
+
+{- | The extra random cases on which a new law is tested again, at the sizes
+1 to 8. Their seeds are apart from those of 'testSchedule'. A false law can
+pass the random cases of all sizes: at HugeLists 6-p4,
+@foldr drop xs (concat xss) == foldr drop xs (usort (concat xss))@ passes
+them, but it needs a repeated small Int in @xss@ and a long enough @xs@,
+which small cases have more often.
+-}
+recheckSchedule :: Int -> [TestCase]
+recheckSchedule n = [RandomCase (-1 - k) (1 + k `mod` 8) | k <- [0 .. n - 1]]
 
 -- | Keep the random schedule and add independent and boundary cases.
 testSchedule :: Int -> [TestCase]
