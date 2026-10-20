@@ -1,0 +1,87 @@
+/tmp/mcfta-recursive-prefix-node-scope/node-scope-direct-1.source.lean:218:70: error: Application type mismatch: The argument
+  nextCertificate.right.right.right
+has type
+  SourceCurrentAllocatedRecursivePrefixCode.Certified source inventory (next (run job before.native.machine.heap).fst)
+    { heap := (run job before.native.machine.heap).snd, domains := before.native.machine.domains } post
+but is expected to have type
+  Certified source inventory ?m.635
+    {
+          native :=
+            advance before.native
+              (have __src := before.native.machine;
+              { heap := (run job before.native.machine.heap).snd, domains := __src.domains }),
+          operations := before.operations }.native.machine
+    post
+in the application
+  ih fuel ?m.633 ?m.635
+    {
+      native :=
+        advance before.native
+          (have __src := before.native.machine;
+          { heap := (run job before.native.machine.heap).snd, domains := __src.domains }),
+      operations := before.operations }
+    remaining after post effects.left nextCertificate.right.right.right
+/tmp/mcfta-recursive-prefix-node-scope/node-scope-direct-1.source.lean:223:70: error: Application type mismatch: The argument
+  nextCertificate.right.right.right
+has type
+  SourceCurrentAllocatedRecursivePrefixCode.Certified source inventory
+    (next
+      (SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains domain.key left right first
+          second).fst)
+    { heap := before.native.machine.heap,
+      domains :=
+        (SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains domain.key left right first
+            second).snd }
+    post
+but is expected to have type
+  Certified source inventory ?m.719
+    {
+          native :=
+            advance before.native
+              (have __src := before.native.machine;
+              { heap := __src.heap,
+                domains :=
+                  (SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains domain.key left right
+                      first second).snd }),
+          operations := before.operations }.native.machine
+    post
+in the application
+  ih fuel ?m.717 ?m.719
+    {
+      native :=
+        advance before.native
+          (have __src := before.native.machine;
+          { heap := __src.heap,
+            domains :=
+              (SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains domain.key left right first
+                  second).snd }),
+      operations := before.operations }
+    remaining after post effects.left nextCertificate.right.right.right
+/tmp/mcfta-recursive-prefix-node-scope/node-scope-direct-1.source.lean:227:12: error: Application type mismatch: The argument
+  SourceCurrentAllocatedRecursivePrefixCode.read_next source inventory name next before.native.machine post certificate
+has type
+  SourceCurrentAllocatedRecursivePrefixCode.Certified source inventory
+    (next (SourcePreparedSharedRows.read before.native.machine.heap name)) before.native.machine post
+but is expected to have type
+  Certified source inventory ?m.789 { native := before.native, operations := before.operations }.native.machine post
+in the application
+  ih fuel ?m.787 ?m.789 { native := before.native, operations := before.operations } remaining after post effects.left
+    (SourceCurrentAllocatedRecursivePrefixCode.read_next source inventory name next before.native.machine post
+      certificate)
+/tmp/mcfta-recursive-prefix-node-scope/node-scope-direct-1.source.lean:241:72: error: Application type mismatch: The argument
+  nextCertificate.right.right.right
+has type
+  SourceCurrentAllocatedRecursivePrefixCode.Certified source inventory (next result)
+    (let __src := before.native.machine;
+    { heap := heap, domains := __src.domains })
+    post
+but is expected to have type
+  Certified source inventory ?m.981
+    { native := advance before.native { heap := heap, domains := before.native.machine.domains },
+          operations := before.operations }.native.machine
+    post
+in the application
+  ih fuel ?m.979 ?m.981
+    { native := advance before.native { heap := heap, domains := before.native.machine.domains },
+      operations := before.operations }
+    remaining after post effects.left nextCertificate.right.right.right

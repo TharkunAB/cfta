@@ -1,0 +1,19 @@
+# Optional-site owner retention proposal
+
+Source inspection: 2026-10-20 19:42 CEST. This is a proposed proof contract. No new Lean code or check has run.
+
+The exact optional-prefix endpoint can retain its recovered owner from initial native Shape alone. Good, semantic heap, Fields, History, desired active status, final optional Inputs and future owner completion are not needed for this retention argument. Shape supplies the real native table links and fresh allocation bounds. It is weaker than the physical cache validity available in a supported initial state.
+
+Proposed public head: SourceCurrentNativeOwnerSiteRetention.request. It takes the existing root request, fuel, initial and optional-site checked states, pair, siteBody, siteNext and actual physical Trace. It adds Shape before.native. Its conclusion copies the exact existing Owner existential fields and appends siteBefore.native.nodes.cells handle = some (captured, evaluating) for the SAME returned handle and capture. The public type exposes the full receipt. No new public predicate or caller-supplied Owner is needed.
+
+Call NativeOptionalOwner.request exactly once. Preserve all its actual query, chosen/running capture, enter and child-return witnesses. Use DemandMemo.execute_preserves and the actual earlier prefix's Steps.execute equation to derive Shape at queryBefore. The shape theorem preserves native structure for any actual finite control observation; it does not require that the prefix is clean or completed. Apply Native.lookupNode_shape and demandNode_shape with the SAME lookup/demand equations. This yields Shape at the captured compiler entry.
+
+The actual enter step changes the domain machine through advance. It leaves both native memo tables and cells unchanged by definition. The captured evaluating cell and Shape therefore hold at childBefore. The recovered child is an unbound requestNode with a pure continuation. This code is Clean by the BodyCode definition. Apply DemandRunning.trace_retains to the SAME completed entered-child Steps trace and that childBefore Shape. Its running-cell relation retains every previously evaluating cell, including this exact handle/capture, at the returned siteBefore.
+
+The key completion premise is already an output of the actual owner producer: the entered child has returned siteBody at the selected optional state. The proof does not assume that child return independently or request a future owner return. It does not use ProtectedPrefix.node_body_owner on compileNode captured, because the selected interval is the entered child request and can differ from that owner's compiler body. The general completed-clean retention theorem is the appropriate existing foundation.
+
+Initial Shape is a meaningful structural premise. Its bounded-cell invariant prevents a cache miss from allocating over an existing evaluating handle. This audit does not claim a checked counterexample without Shape, nor prove that no weaker one-family invariant can suffice. Shape is the smallest existing public invariant that directly supports the completed-clean retention theorem.
+
+The endpoint is the final state of the selected optional prefix, immediately before the optional instruction executes. An arbitrary later root-execution state need not keep this cell evaluating: the real owner finish step changes it to returned. Site retention does not prove query/capture equality, original binding ancestry, global renewal, active-owner exclusion or outer completion. It supplies an actual running owner at the precise state needed by those later proofs.
+
+Exact source foundations: NativeOptionalOwner.request; NativeOptionalOwnerReceipt.Owner; DemandMemo.execute_preserves (182); DemandRunning.trace_retains (41); NativeShape.lookupNode_shape (54) and demandNode_shape (68); BodyCode; ThunkEffects.advance; physical Trace.steps; Steps.execute. Source pins accompany this audit. No existing source or frozen package changed.

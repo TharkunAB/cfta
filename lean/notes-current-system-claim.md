@@ -1,7 +1,48 @@
 # Current system claim
 
+## Current queried owners, child writers and fixed-input scope
+
+Updated: 2026-10-20 20:05 CEST. Proof checkpoint: `9e4646d02`.
+Verified start: `5be668e2e`. Main remains `9769fe3e9`.
+Read `lean/notes-current-native-owner-source-scope.md`.
+
+Initial physical cache validity and an actual checked optional prefix now
+derive the queried owner itself. The same handle remains evaluating at the
+exact optional state. Initial Good and History also derive the actual
+completed child's direct compiler trace or returned cell and historical
+writer at that state. No History at the active site is assumed.
+
+Actual raw prefixes retain reached request scope in the fixed input heap.
+For closed empty-domain inputs, the combined optional theorem attaches that
+scope to the same recovered owner tuple. Initial validity, loaded fields,
+semantic readiness, history and explicit capacity bounds remain premises.
+The scope applies to owner operands and bindings. It does not identify the
+returned body's captures with paths in the original program.
+
+Bounded node execution now retains the queried owner and child origin with
+the same new Mu generation tuple, including blocked construction. The exact
+initial-full-cell alternative remains. An actual source-built example
+allocates its Top field and derives startup Good and History. Its four
+checked steps retain the same evaluating owner and keyed child writer.
+Its optional instruction has not executed and creates no new Mu in this example.
+
+Nine public declaration readbacks and one constructed readback pass.
+Seven selected module strict logs and the selected fixture strict log are
+empty. Default build: 3511 jobs and 74198 axiom checks. The sole warning is
+the earlier ClosedCompletion unused input. The checkpoint retains 40 capped
+Lean/Lake commands and ten elaboration failures. Reused receipt copies do
+not add commands. One successful first-head-only draft remains unselected.
+
+Original program ancestry of generated bodies and captures, global renewal,
+active-owner exclusion, final owner retention, general outer completion,
+convergence and Haskell refinement remain open. Conditional root-language
+and Sized laws are unchanged. All 268 Haskell files and all 207 active
+package files retain their bytes. FINDINGS keeps external repairs first.
+No new Haskell repair or runtime validation is claimed. The full-library
+goal stays active. Publication to formalize is authorized.
+
 Checked against the live theorem statements on 2026-10-20.
-Read `notes-current-native-optional-owner.md` for the latest proof checkpoint.
+Read `notes-current-native-owner-source-scope.md` for the latest proof checkpoint.
 Read `notes-current-upstream-persistent-rows.md` for the current source scope.
 
 In simple technical English: fresh construction always finishes in the
@@ -13,17 +54,25 @@ The root theorem derives the logical startup cache and guard facts.
 Field allocation, validity, guard coverage and numeric resources remain
 explicit. General termination and Haskell correspondence remain open.
 
-Actual checked node-request prefixes now derive the captured compiler
-owner of each reached optional instruction. The same receipt retains its
-actual query and demand, captured cells, entered domain, exact child return
-and full finish continuation. Bounded execution attaches that owner to the
-same selected new Mu operation and rooted source writer, including pending
-blocked construction. The receipt supplies no future owner return.
-Selected full cells already present at entry retain the exact initial-cell
-alternative.
-The evaluating owner cell is established at compiler entry. Its final
-retention and original-program binding ancestry remain open, as do global
-renewal, outer completion, convergence and Haskell refinement.
+Actual checked node-request prefixes now derive the queried compiler owner
+at each reached optional instruction. Initial physical cache validity
+identifies the captured request with that query. The same handle remains
+evaluating at the exact optional state. With initial Good and History,
+the completed entered child retains its direct compiler trace or its
+returned cell and historical writer at that same state.
+
+Actual raw prefixes also retain the reached request's operand and binding
+scope in the fixed input heap. The closed empty-domain optional theorem
+attaches that scope to the same recovered owner tuple. Initial semantic
+readiness and explicit numeric bounds remain premises. This source scope
+does not identify original program paths for generated result captures.
+
+Bounded node execution retains the queried owner and child origin with the
+same generating optional operation, exact count/resume equation, done or
+pending source build and rooted writer. Selected full cells already at
+entry retain the exact initial-cell alternative. No future owner return
+is assumed. Final owner retention, original program ancestry, global
+renewal, outer completion, convergence and Haskell refinement remain open.
 
 Actual class-fold event receipts now retain physical Mu publication histories
 on both sides of the same captured event heap. The caller supplies the

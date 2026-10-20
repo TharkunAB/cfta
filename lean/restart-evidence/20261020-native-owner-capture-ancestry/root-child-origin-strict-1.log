@@ -1,0 +1,112 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261020-native-owner-capture-ancestry/root-child-origin-strict-1.source.lean:143:73: error: Tactic `assumption` failed
+
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+request : NodeRequest Symbol Guard
+fuel : Nat
+before siteBefore : Checked width
+pair : Nat × Nat
+siteBody : Node
+siteNext : Node → Code Symbol Guard Node
+good : Good before
+history : History before
+actual :
+  Trace fuel (Control.code (requestNode request.domain request.left request.right)) before
+    (Control.code (Code.optionalBinder pair siteBody siteNext)) siteBefore
+queryFuel childFuel : Nat
+queried : NodeRequest Symbol Guard
+callerNext : Node → Code Symbol Guard Node
+queryBefore : Checked width
+handle : Nat
+chosen running : SourceRecursiveIntersectionThunks.State width Symbol Guard
+first second : Nat
+total : fuel = queryFuel + 2 + childFuel
+earlier :
+  Trace queryFuel (Control.code (requestNode request.domain request.left request.right)) before
+    (Control.code (Code.node queried callerNext)) queryBefore
+inputs : Inputs (Control.code (Code.node queried callerNext)) queryBefore
+selected : lookupNode width queried queryBefore.native = (NodeSelection.memoized handle, chosen)
+demanded : demandNode handle chosen = (FlatMemoThunk.Observation.evaluate queried, running)
+suspended : chosen.nodes.cells handle = some { request := queried, status := FlatMemoThunk.Status.suspended }
+evaluating : running.nodes.cells handle = some { request := queried, status := FlatMemoThunk.Status.evaluating }
+machine : running.machine = queryBefore.native.machine
+queryStep :
+  step (Control.code (Code.node queried callerNext)) queryBefore =
+    Outcome.yielded
+      (Control.code ((compileNode queried).bind fun value => Code.finishNode handle value (callerNext value)))
+      { native := running, operations := queryBefore.operations }
+recursive :
+  SourceRecursiveIntersectionControl.decision queried.domain.key queried.left queried.right =
+      SourceRecursiveIntersectionControl.Branch.bothMu ∨
+    SourceRecursiveIntersectionControl.decision queried.domain.key queried.left queried.right =
+        SourceRecursiveIntersectionControl.Branch.leftMu ∨
+      SourceRecursiveIntersectionControl.decision queried.domain.key queried.left queried.right =
+        SourceRecursiveIntersectionControl.Branch.rightMu
+left : SourceRecursiveIntersectionControl.identity queried.left = some first
+right : SourceRecursiveIntersectionControl.identity queried.right = some second
+pairEq : pair = SourceRecursiveIntersectionControl.pair first second
+enterInputs :
+  Inputs (Control.code (compileMu queried.domain queried.left queried.right))
+    { native := running, operations := queryBefore.operations }
+enterStep :
+  step (Control.code (compileMu queried.domain queried.left queried.right))
+      { native := running, operations := queryBefore.operations } =
+    Outcome.yielded
+      (Control.code
+        ((requestNode
+              (SourceRecursiveIntersectionEnvironment.enter
+                  { native := running, operations := queryBefore.operations }.native.machine.domains queried.domain.key
+                  queried.left queried.right first second).fst
+              (SourceRecursiveIntersectionKernel.body queried.left)
+              (SourceRecursiveIntersectionKernel.body queried.right)).bind
+          fun value => Code.optionalBinder (SourceRecursiveIntersectionControl.pair first second) value Code.pure))
+      {
+        native :=
+          advance { native := running, operations := queryBefore.operations }.native
+            (have __src := { native := running, operations := queryBefore.operations }.native.machine;
+            { heap := __src.heap,
+              domains :=
+                (SourceRecursiveIntersectionEnvironment.enter
+                    { native := running, operations := queryBefore.operations }.native.machine.domains
+                    queried.domain.key queried.left queried.right first second).snd }),
+        operations := { native := running, operations := queryBefore.operations }.operations }
+child :
+  Trace childFuel
+    (Control.code
+      (requestNode
+        (SourceRecursiveIntersectionEnvironment.enter
+            { native := running, operations := queryBefore.operations }.native.machine.domains queried.domain.key
+            queried.left queried.right first second).fst
+        (SourceRecursiveIntersectionKernel.body queried.left) (SourceRecursiveIntersectionKernel.body queried.right)))
+    {
+      native :=
+        advance { native := running, operations := queryBefore.operations }.native
+          (have __src := { native := running, operations := queryBefore.operations }.native.machine;
+          { heap := __src.heap,
+            domains :=
+              (SourceRecursiveIntersectionEnvironment.enter
+                  { native := running, operations := queryBefore.operations }.native.machine.domains queried.domain.key
+                  queried.left queried.right first second).snd }),
+      operations := { native := running, operations := queryBefore.operations }.operations }
+    (Control.code (Code.pure siteBody)) siteBefore
+continuation : siteNext = fun value => Code.finishNode handle value (callerNext value)
+retained : siteBefore.native.nodes.cells handle = some { request := queried, status := FlatMemoThunk.Status.evaluating }
+compilerBefore : Checked width := { native := running, operations := queryBefore.operations }
+entered : Interned IntersectionFlatMemoKeyDomain.DomainKey × Cache.State IntersectionFlatMemoKeyDomain.DomainKey :=
+  SourceRecursiveIntersectionEnvironment.enter compilerBefore.native.machine.domains queried.domain.key queried.left
+    queried.right first second
+childBefore : Checked width :=
+  {
+    native :=
+      advance compilerBefore.native
+        (let __src := compilerBefore.native.machine;
+        { heap := __src.heap, domains := entered.snd }),
+    operations := compilerBefore.operations }
+queryGood : Good queryBefore
+compilerTrace :
+  Trace 1 (Control.code (Code.node queried callerNext)) queryBefore
+    (Control.code ((compileNode queried).bind fun value => Code.finishNode handle value (callerNext value)))
+    compilerBefore
+value : Node
+⊢ SourceCurrentAllocatedNativeCodeFields.Fields queryBefore.operations (callerNext value)

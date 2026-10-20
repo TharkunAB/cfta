@@ -1,0 +1,21 @@
+# Actual captured owner retention at the optional site
+
+Reviewed and frozen on 2026-10-20 19:47 CEST. One public request theorem is checked. No constructed theorem or canonical job belongs to this prototype. No repository source or old frozen package changes.
+
+The theorem takes an actual physical prefix from an unbound requestNode to one selected optional instruction and initial native Shape. It derives the complete existing Owner tuple with the evaluating-cell equation at siteBefore appended for the SAME handle and capture. The public type expands every original receipt field. The verifier compares that type with the frozen old Owner definition after the exact root-control specialization and appended cell fact. No desired Owner, active status, Good, Fields, semantic heap, final optional Inputs or future completion is a public premise.
+
+The proof calls the existing owner request producer once and unpacks its tuple once. Shape at queryBefore follows from the SAME actual earlier prefix through DemandMemo.execute_preserves and Steps.execute. The actual lookup and demand equations derive Shape in the same chosen/running states. Enter and advance leave the native memo families unchanged. The captured evaluating cell therefore holds at the exact entered-child start.
+
+The recovered child request has a pure continuation and is Clean. DemandRunning.trace_retains follows its SAME already-completed trace to siteBefore. It retains all original running cells, including this exact handle and capture. The producer returns the unchanged query, full captured cells, compiler and domain entry, child return, pair, full continuation and fuel sum, with that site cell. It supplies neither a second owner nor a new child schedule. The child's successful return was already derived by the actual owner theorem. No future owner return is assumed.
+
+Shape is the weakest existing public structural invariant used here. It supplies the allocation bounds needed by lookup retention and the completed-clean trace theorem. The proof needs no semantic completed-value invariant or physical cache validity. It does not prove that no weaker one-family invariant is possible. Initial cache validity or stronger supported Good can provide Shape in a caller.
+
+The endpoint is the selected optional-prefix state, before the optional instruction executes. This theorem does not retain evaluating status at an arbitrary later execution stop. A real owner finish can change its cell to returned. The result does not identify queried and captured requests, prove original binding ancestry, global renewal, active-owner exclusion, general outer completion, convergence or Haskell refinement. It supplies the actual site liveness needed for later proofs.
+
+Selected owner-site-direct-2 has terminal exit zero and a literal empty log. Its source bytes equal the final prototype SHA256 0d9f68075df1acaee27349212adfeff70262f28fbe9a6b3404b38de16abd0894. Selected owner-site-public-1 has terminal exit zero and an 8,729,400-byte full output. All eight printer options, full statement and proof, and standard-only axiom checks pass. Only propext, Classical.choice and Quot.sound occur. The verifier rejects warnings, errors, omission marks and printer failures.
+
+Three Lean jobs ran. The first strict attempt failed because a lambda equality needed parentheses before the new final conjunction. The exact failed source and log remain unchanged. The second strict and first full check pass. Every attempt records pinned Lean 4.34.1, effective memory.max/high 4 GiB, zero swap, the five-minute cap and fresh usage above the stop threshold. All jobs are terminal. The root owns any official canonical build.
+
+The manifest retains all attempts, scripts, report, selection, printer and an immutable three-row peak snapshot. Mutable peaks are excluded. Thirteen ROOT foundations have local source snapshots. The initial source audit remains separate historical design evidence. Ordinary and --live verification run from cwd=/ with a ROOT override. No extra fixture, test family or Lean check is added after the selected checks.
+
+One non-Lean verifier syntax diagnostic is preserved separately. A Python bytes literal could not contain a Unicode tuple character. The corrected verifier uses a decoded source string. This changes no Lean source, statement, proof, attempt or count.

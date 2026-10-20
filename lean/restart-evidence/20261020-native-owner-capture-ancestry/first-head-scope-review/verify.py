@@ -1,0 +1,10 @@
+import argparse,hashlib,json
+from pathlib import Path
+h=Path(__file__).resolve().parent
+p=argparse.ArgumentParser();p.add_argument('--root',type=Path,default=Path('/home/tritlo/Code/mcfta'));a=p.parse_args()
+m=json.loads((h/'manifest.json').read_text())
+for base,items in [(h,m['files']),(a.root,m['sources'])]:
+ for e in items:
+  b=(base/e['path']).read_bytes();assert len(b)==e['bytes'] and hashlib.sha256(b).hexdigest()==e['sha256'],e['path']
+assert hashlib.sha256((h/'reviewed-source.lean').read_bytes()).hexdigest()=='8c3a4a931442dcb8771f11891123e2db0402010ed634a7cd405a03c982bb83f3'
+print(json.dumps({'status':'PASS','pins':len(m['files'])+len(m['sources']),'lean_jobs':0,'public_pairs':0,'constructed_pairs':0}))
