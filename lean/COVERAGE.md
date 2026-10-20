@@ -1,5 +1,44 @@
 # Full formalization coverage
 
+## Current observed source node and binder returns
+
+Updated: 2026-10-20 22:24 CEST. Proof checkpoint: `9cff855cf`.
+Verified start: `296d6f99c`. Main remains `9769fe3e9`.
+Read `lean/notes-current-native-original-observed-resume.md`.
+
+One observed original writer now retains an actual indexed node call or
+an exact selected binder payload for each stored row and actual unfold
+anchor. Its publication and raw callback stay fixed before all rows and
+all successful unfold calls. Each same terminal keeps its source build,
+Context, original-root Reached, generic syntax bound and both suffixes.
+The node arm retains source and canonical output indices and RowCall.
+The binder arm derives original-root Written and Stored for the same full
+selected Mu. Its resumed writer can differ from the enclosing writer.
+Separate Written and Stored Props do not equate their hidden events.
+
+The same actual warm source family now derives the outer full record,
+Written, Stored and Observed from its completed original build. The
+consumer retains every stored-row and conditional unfold clause, plus a
+concrete nullary tag row at that same callback. It keeps the node-or-binder
+disjunction. It does not identify an opaque terminal with the manually
+selected union member. No unfold or native execution prefix is run here.
+
+Two public and one constructed full readbacks pass. The root module and
+independent fixture strict logs are empty. Canonical build and default
+audit pass: 3535 jobs and 74276 theorem dependency checks. Only the older
+ClosedCompletion warning remains. All 10 actual capped Lean/Lake
+commands remain, including 2 failed elaboration attempts.
+
+The next local step must retain union-only syntax descent inside the same
+terminal existential. Global Reached and a size bound do not expose that
+route. The proposed plan is unproved. Global renewal and active-owner
+exclusion, final retention, outer completion, convergence, general
+generated-capture ancestry, residual observations and Haskell refinement
+remain open. The largest gap is still general outer completion. Counts
+do not measure completion. All 268 Haskell and 207 active package files
+keep their bytes. FINDINGS keeps external repairs first. The full goal
+stays active. Pushes to formalize remain authorized.
+
 ## Current original binder payload resumption
 
 Updated: 2026-10-20 22:09 CEST. Proof checkpoint: `d3fa19c6a`.
