@@ -1,0 +1,109 @@
+/-- One actual source trace fixes all stored-row terminals and their strictly earlier binder writers. -/
+theorem build_row_resumptions (original : Syntax Symbol Guard) (sourceRoot : Node) (sourceHeap : Heap)
+    (sourceBuilt : build original [] empty = .done sourceRoot sourceHeap) :
+    ∃ path : Path empty sourceHeap,
+      (∀ (index : Nat) event, (events path)[index]? = some event →
+        Reached original [] (.binder event.smart event.expression) event.environment event.before) ∧
+      (∀ key entry body depth ordinary,
+        sourceHeap.nodeRecords key = some (.mu entry body depth ordinary) →
+        ∃ index : Nat, ∃ event, (events path)[index]? = some event ∧
+          Reached original [] (.binder event.smart event.expression) event.environment event.before ∧
+          key = event.key ∧ Value.mu entry body depth ordinary = event.candidate ∧
+          event.afterBody.nodeRecords event.key = none ∧
+          Nonempty (Path empty event.before) ∧
+          Nonempty (Path event.before event.afterDepth) ∧
+          Nonempty (Path event.afterDepth event.cut) ∧
+          Nonempty (Path event.allocated event.afterBody) ∧
+          Grows event.after sourceHeap ∧ Extends event.after.nodes.issued sourceHeap.nodes.issued) ∧
+      (∀ (index : Nat) outer, (events path)[index]? = some outer →
+      ∀ key entry body depth ordinary,
+        outer.afterBody.nodeRecords key = some (.mu entry body depth ordinary) →
+        ∃ earlierIndex : Nat, ∃ earlier, earlierIndex < index ∧ (events path)[earlierIndex]? = some earlier ∧
+          Reached original [] (.binder earlier.smart earlier.expression) earlier.environment earlier.before ∧
+          key = earlier.key ∧ Value.mu entry body depth ordinary = earlier.candidate ∧
+          earlier.afterBody.nodeRecords earlier.key = none ∧
+          Nonempty (Path empty earlier.before) ∧
+          Nonempty (Path earlier.before earlier.afterDepth) ∧
+          Nonempty (Path earlier.afterDepth earlier.cut) ∧
+          Nonempty (Path earlier.allocated earlier.afterBody) ∧
+          Grows earlier.after outer.afterBody ∧
+          Extends earlier.after.nodes.issued outer.afterBody.nodes.issued) ∧
+      ∀ (index : Nat) outer, (events path)[index]? = some outer →
+        ∃ raw rawAfter,
+          build outer.expression (.reference (.interned outer.entry.identity) :: outer.environment)
+            outer.allocated = .done raw rawAfter ∧
+          run (withoutSelfReference (.interned outer.entry.identity) raw) rawAfter = (outer.body,outer.afterBody) ∧
+          Context outer.allocated (.reference (.interned outer.entry.identity) :: outer.environment) ∧
+          Reached original [] outer.expression (.reference (.interned outer.entry.identity) :: outer.environment)
+            outer.allocated ∧
+          ∀ row, RowAt outer.body row → RowAt raw row ∧
+            SourceRow outer.expression (.reference (.interned outer.entry.identity) :: outer.environment)
+              outer.allocated raw rawAfter row ∧
+            ∃ terminalExpression terminalInputs terminalBefore terminalRaw terminalAfter,
+      SourceRow terminalExpression terminalInputs terminalBefore terminalRaw terminalAfter row ∧
+      build terminalExpression terminalInputs terminalBefore = .done terminalRaw terminalAfter ∧
+      ((∃ expressions, terminalExpression = Syntax.node expressions) ∨
+        ∃ smart terminalBody, terminalExpression = Syntax.binder smart terminalBody) ∧
+      (∀ members, terminalExpression ≠ Syntax.union members) ∧
+      Context terminalBefore terminalInputs ∧
+      Reached original [] terminalExpression terminalInputs terminalBefore ∧
+      SyntaxBound terminalExpression outer.expression ∧
+      UnionDescent outer.expression terminalExpression ∧
+      Grows terminalAfter rawAfter ∧ Extends terminalAfter.nodes.issued rawAfter.nodes.issued ∧
+      ((∃ expressions rows middle, ∃ sourceIndex outputIndex : Nat, ∃ symbol guard children,
+          terminalExpression = Syntax.node expressions ∧
+          buildEdges expressions terminalInputs terminalBefore = .done rows middle ∧
+          run (makeNode rows) middle = (terminalRaw,terminalAfter) ∧
+          (nodeEdges terminalRaw)[outputIndex]? = some row ∧
+          ∃ call : RowCall expressions terminalInputs terminalBefore rows middle terminalAfter sourceIndex symbol guard children,
+            call.output = row) ∨
+        (∃ smart terminalBody,
+          terminalExpression = Syntax.binder smart terminalBody ∧
+    ∃ depth afterDepth ordinary cut entry storedBody,
+      callback terminalBody terminalInputs .depth terminalBefore = .done depth afterDepth ∧
+      callback terminalBody terminalInputs (.uninterned (ordinaryLevel depth)) afterDepth = .done ordinary cut ∧
+      request smart depth ordinary (callback terminalBody terminalInputs) cut = .done terminalRaw terminalAfter ∧
+      terminalAfter.nodeRecords (muKey depth ordinary) = some (.mu entry storedBody depth ordinary) ∧
+      outer.afterBody.nodeRecords (muKey depth ordinary) = some (.mu entry storedBody depth ordinary) ∧
+      terminalRaw = finish smart (.mu entry storedBody depth ordinary) ∧ RowAt storedBody row ∧
+      Grows terminalAfter outer.afterBody ∧ Extends terminalAfter.nodes.issued outer.afterBody.nodes.issued ∧
+      ∃ earlierIndex : Nat, ∃ earlier : @Publication Symbol Guard _, earlierIndex < index ∧
+        (events path)[earlierIndex]? = some earlier ∧
+        Reached original [] (.binder earlier.smart earlier.expression) earlier.environment earlier.before ∧
+        muKey depth ordinary = earlier.key ∧ Value.mu entry storedBody depth ordinary = earlier.candidate ∧
+        earlier.afterBody.nodeRecords earlier.key = none ∧
+        Nonempty (Path empty earlier.before) ∧
+        Nonempty (Path earlier.before earlier.afterDepth) ∧
+        Nonempty (Path earlier.afterDepth earlier.cut) ∧
+        Nonempty (Path earlier.allocated earlier.afterBody) ∧
+        Grows earlier.after outer.afterBody ∧
+        Extends earlier.after.nodes.issued outer.afterBody.nodes.issued ∧
+        ∃ earlierRaw earlierRawAfter,
+          build earlier.expression (.reference (.interned earlier.entry.identity) :: earlier.environment)
+            earlier.allocated = .done earlierRaw earlierRawAfter ∧
+          run (withoutSelfReference (.interned earlier.entry.identity) earlierRaw) earlierRawAfter =
+            (earlier.body,earlier.afterBody) ∧
+          Context earlier.allocated (.reference (.interned earlier.entry.identity) :: earlier.environment) ∧
+          Reached original [] earlier.expression (.reference (.interned earlier.entry.identity) :: earlier.environment)
+            earlier.allocated ∧
+          RowAt earlierRaw row ∧
+          SourceRow earlier.expression (.reference (.interned earlier.entry.identity) :: earlier.environment)
+            earlier.allocated earlierRaw earlierRawAfter row ∧
+          ∀ storedRow, RowAt storedBody storedRow → RowAt earlierRaw storedRow ∧
+            SourceRow earlier.expression (.reference (.interned earlier.entry.identity) :: earlier.environment)
+              earlier.allocated earlierRaw earlierRawAfter storedRow)) := by
+  obtain ⟨path,sites,finalWriters,precompletion⟩ :=
+    SourceCurrentNativeOriginalPublicationTrace.build_trace_writers original [] empty
+      SourceCurrentConstrainedCapSourceHistory.empty_context
+      (by intro key entry body depth ordinary impossible; cases impossible) sourceRoot sourceHeap sourceBuilt
+  refine ⟨path,sites,finalWriters,precompletion,?_⟩
+  intro index outer selectedOuter
+  obtain ⟨raw,rawAfter,built,filtered,context,callbackReached,rows⟩ :=
+    callback_rows outer original (sites index outer selectedOuter)
+  refine ⟨raw,rawAfter,built,filtered,context,callbackReached,?_⟩
+  intro row inside
+  obtain ⟨rawRow,source⟩ := rows row inside
+  exact ⟨rawRow,source,terminal_resume original sourceHeap path precompletion index outer selectedOuter
+    raw rawAfter context built filtered callbackReached row source⟩
+
+end MicroCFTA.SourceCurrentNativeOriginalIndexedResumption

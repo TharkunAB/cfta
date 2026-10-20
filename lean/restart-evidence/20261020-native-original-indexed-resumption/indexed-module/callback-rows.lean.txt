@@ -1,0 +1,36 @@
+private theorem callback_rows [DecidableEq (EdgeKey Symbol Guard)]
+    (event : Publication (Symbol := Symbol) (Guard := Guard))
+    (original : Syntax Symbol Guard)
+    (reached : Reached original [] (.binder event.smart event.expression) event.environment event.before) :
+    ∃ raw rawAfter,
+      build event.expression (.reference (.interned event.entry.identity) :: event.environment)
+        event.allocated = .done raw rawAfter ∧
+      run (withoutSelfReference (.interned event.entry.identity) raw) rawAfter = (event.body,event.afterBody) ∧
+      Context event.allocated (.reference (.interned event.entry.identity) :: event.environment) ∧
+      Reached original [] event.expression (.reference (.interned event.entry.identity) :: event.environment)
+        event.allocated ∧
+      ∀ row, RowAt event.body row → RowAt raw row ∧
+        SourceRow event.expression (.reference (.interned event.entry.identity) :: event.environment)
+          event.allocated raw rawAfter row := by
+  obtain ⟨raw,rawAfter,built,filtered⟩ := SourceCurrentNativeMuPublicationCallbacks.callback_raw
+    event.expression event.environment (.interned event.entry.identity) event.allocated
+    event.body event.afterBody event.bodyDone
+  let crossing : InternedFreshOrdinaryActiveOrigins.Crossing Symbol Guard :=
+    ⟨event.smart,event.expression,event.environment,event.before,.interned event.entry.identity,
+      event.allocated,event.context.base,
+      .fresh event.depth event.ordinary event.afterDepth event.cut
+        event.depthDone event.ordinaryDone event.missing⟩
+  have callbackReached : Reached original [] event.expression
+      (.reference (.interned event.entry.identity) :: event.environment) event.allocated := reached.enter crossing
+  obtain ⟨_,cutContext,allocatedContext⟩ := SourceCurrentNativeMuPublicationCallbacks.contexts event
+  have argument : Available event.allocated (.reference (.interned event.entry.identity)) :=
+    (InternedConstructionProvenance.reserve_available event.key event.cut
+      cutContext.base.normal.facts.coherent cutContext.base.normal.facts.cached).2
+  have context := allocatedContext.local (.interned event.entry.identity) argument
+  refine ⟨raw,rawAfter,built,filtered,context,callbackReached,?_⟩
+  intro row inside
+  obtain ⟨other,otherAfter,otherBuilt,_,_,_,rawRow,source⟩ :=
+    SourceCurrentPublicationBodySourceRows.publication_body_origin event original [] reached row inside
+  obtain ⟨rfl,rfl⟩ := Outcome.done.inj (built.symm.trans otherBuilt)
+  exact ⟨rawRow,source⟩
+
