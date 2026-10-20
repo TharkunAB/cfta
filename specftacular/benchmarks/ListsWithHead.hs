@@ -5,8 +5,7 @@ import Specftacular
 
 main =
     experimentalPhases
-        7
-        3
+        (defaultOptions 7 3)
         (const Nothing)
         [ con "head" (head :: [A] -> A)
         , con "cons" ((:) :: A -> [A] -> [A])

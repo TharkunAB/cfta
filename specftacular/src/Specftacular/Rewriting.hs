@@ -15,6 +15,7 @@ module Specftacular.Rewriting (
     joinable,
     kboCompare,
     addLaw,
+    addLawRules,
     generalizeLaw,
 ) where
 
@@ -24,19 +25,86 @@ import Data.CFTA.Symbol (Symbol (Symbol))
 import Data.CFTA.Template (Template (..))
 import Data.Containers.ListUtils (nubOrd)
 import qualified Data.HashMap.Strict as HashMap
-import Data.List (permutations)
+import Data.List (permutations, sortOn)
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
-import Data.Maybe (fromMaybe, isJust)
+import Data.Maybe (fromMaybe, isJust, isNothing)
+import Data.Ord (Down (..))
 import qualified Data.Text as T
 
 import Specftacular.Types
 
-{- | Rules by the head of their left sides (see 'spineHead'). A rule whose
-head is a template variable has the key Nothing, because it can match a
-term with any head.
+{- | Rules by the head of their left sides (see 'spineHead'), and by the
+program shape of their left sides (see 'Shapes'). A rule whose head is a
+template variable has the key Nothing, because it can match a term with any
+head.
 -}
-type Index = Map (Maybe (Symbol, Int)) [(Term, Term)]
+data Index = Index
+    { byHead :: !(Map (Maybe (Symbol, Int)) [(Term, Term)])
+    -- ^ The rules of each head, the newest first.
+    , shapes :: !Shapes
+    -- ^ The rules by the program shapes of their left sides.
+    , added :: !Int
+    -- ^ The number of rules, which orders the rules of 'candidates'.
+    }
+
+{- | A trie of the program shapes of the left sides of rules, in preorder:
+an application, a symbol, or a template variable. A template variable
+matches any annotated subterm. The type annotations are not part of a
+shape. A rule is at the end of its shape, with the place that it has in
+the order of 'candidates'.
+-}
+data Shapes = Shapes
+    { shapeRules :: ![((Bool, Int), (Term, Term))]
+    , shapeApp :: !(Maybe Shapes)
+    , shapeSymbols :: !(Map Symbol Shapes)
+    , shapeVariable :: !(Maybe Shapes)
+    }
+
+-- | One step of a shape: an application, a symbol, or a template variable.
+data ShapeStep = AppStep | SymbolStep !Symbol | VariableStep
+
+-- | An index without rules.
+emptyIndex :: Index
+emptyIndex = Index Map.empty emptyShapes 0
+
+-- | A trie without shapes.
+emptyShapes :: Shapes
+emptyShapes = Shapes [] Nothing Map.empty Nothing
+
+{- | The shape of a left side in preorder, as 'matchesShape' reads it.
+'Nothing' for a term that 'matchesShape' does not accept as a template.
+-}
+shapeOf :: Term -> Maybe [ShapeStep]
+shapeOf (Term h [_]) | isTemplateVar h = Just [VariableStep]
+shapeOf (Term "app" [_, f, v]) = (\fs vs -> AppStep : fs ++ vs) <$> shapeOf f <*> shapeOf v
+shapeOf (Term a [_]) = Just [SymbolStep a]
+shapeOf _ = Nothing
+
+-- | Add a rule at the end of its shape.
+insertShape :: [ShapeStep] -> ((Bool, Int), (Term, Term)) -> Shapes -> Shapes
+insertShape [] rule node = node{shapeRules = rule : shapeRules node}
+insertShape (step : rest) rule node = case step of
+    AppStep -> node{shapeApp = Just (insertShape rest rule (fromMaybe emptyShapes (shapeApp node)))}
+    SymbolStep a -> node{shapeSymbols = Map.alter (Just . insertShape rest rule . fromMaybe emptyShapes) a (shapeSymbols node)}
+    VariableStep -> node{shapeVariable = Just (insertShape rest rule (fromMaybe emptyShapes (shapeVariable node)))}
+
+{- | The rules whose left sides have the shape of a term, as 'matchesShape'
+decides it, with their places in the order of 'candidates'.
+-}
+lookupShapes :: Shapes -> Term -> [((Bool, Int), (Term, Term))]
+lookupShapes root t = go root [t]
+  where
+    go node [] = shapeRules node
+    go node (u : us) = viaVariable ++ viaShape
+      where
+        viaVariable = case (shapeVariable node, u) of
+            (Just next, Term _ (_ : _)) -> go next us
+            _ -> []
+        viaShape = case u of
+            Term "app" [_, f, v] -> maybe [] (\next -> go next (f : v : us)) (shapeApp node)
+            Term a [_] -> maybe [] (\next -> go next us) (Map.lookup a (shapeSymbols node))
+            _ -> []
 
 {- | The rules of the laws. One-way orientation is independent of type annotations.
 Each rewrite checks the order after type instantiation. A rule
@@ -56,7 +124,7 @@ data Rules = Rules
 
 -- | No rules.
 emptyRules :: Rules
-emptyRules = Rules Map.empty Map.empty Map.empty
+emptyRules = Rules emptyIndex emptyIndex emptyIndex
 
 {- | Add the rules of an equation, and give the new rules too. Keep one
 orientation only when its decrease is independent of type annotations.
@@ -72,14 +140,20 @@ addEquation (l, r) rules
     addUnoriented rule@(a, b) rs
         | all (`elem` templateVars a) (templateVars b) = rs{unoriented = insert rule (unoriented rs)}
         | otherwise = rs{nonRewriting = insert rule (nonRewriting rs)}
-    insert rule@(a, _) = Map.insertWith (++) (key a) [rule]
+    insert rule@(a, _) index =
+        Index
+            { byHead = Map.insertWith (++) (key a) [rule] (byHead index)
+            , shapes =
+                maybe (shapes index) (\shape -> insertShape shape ((isNothing (key a), added index), rule) (shapes index)) (shapeOf a)
+            , added = added index + 1
+            }
     key a = case spineHead a of
         (h, _) | isTemplateVar h -> Nothing
         k -> Just k
 
 -- | All the rules.
 allRules :: Rules -> [(Term, Term)]
-allRules rules = concatMap (concat . Map.elems) [oriented rules, unoriented rules, nonRewriting rules]
+allRules rules = concatMap (concat . Map.elems . byHead) [oriented rules, unoriented rules, nonRewriting rules]
 
 {- | The head of a term: the symbol of the function of its application
 spine, and the number of the arguments of the spine. A template whose
@@ -89,11 +163,12 @@ spineHead :: Term -> (Symbol, Int)
 spineHead (Term "app" [_, f, _]) = fmap (+ 1) (spineHead f)
 spineHead (Term s _) = (s, 0)
 
-{- | The rules that can match a term: the rules with the head of the term,
-and the rules with a template variable as head.
+{- | The rules whose left sides have the program shape of a term (see
+'matchesShape'): the rules with the head of the term, the newest first, and
+then the rules with a template variable as head, the newest first.
 -}
 candidates :: Index -> Term -> [(Term, Term)]
-candidates rules t = Map.findWithDefault [] (Just (spineHead t)) rules ++ Map.findWithDefault [] Nothing rules
+candidates index t = map snd (sortOn (\((variableHead, place), _) -> (variableHead, Down place)) (lookupShapes (shapes index) t))
 
 -- | Whether a symbol is a template variable.
 isTemplateVar :: Symbol -> Bool
@@ -108,13 +183,13 @@ rewriteStep :: (Term -> Term -> Bool) -> Rules -> Term -> Maybe Term
 rewriteStep greater rules t =
     case [ r'
          | (l, r) <- candidates (oriented rules) t
-         , Just s <- [matchTemplate l t Map.empty]
+         , Just s <- [matchTyped l t Map.empty]
          , Just r' <- [instantiate s r]
          , greater t r'
          ]
         ++ [ r'
            | (l, r) <- candidates (unoriented rules) t
-           , Just s <- [matchTemplate l t Map.empty]
+           , Just s <- [matchTyped l t Map.empty]
            , Just r' <- [instantiate s r]
            , greater t r'
            ] of
@@ -680,8 +755,22 @@ criticalPairs :: [(Term, Term -> Term)] -> Term -> (Term, Term) -> [(Term, Term)
 criticalPairs places r1 (l2, r2) =
     [ (substitute s r1, substitute s (put r2))
     | (u, put) <- places
+    , unifiableShapes u l2
     , Just s <- [unify u l2]
     ]
+
+{- | Whether the program shapes of two terms can unify: a template variable
+fits any annotated subterm, applications fit each other part by part, and
+two other terms fit if they have the same symbol. The types are not part of
+a shape, and a repeated variable is not checked. 'unify' fails on terms whose
+shapes do not fit, so this check is a cheap first test.
+-}
+unifiableShapes :: Term -> Term -> Bool
+unifiableShapes (Term x [_]) (Term _ (_ : _)) | isTemplateVar x = True
+unifiableShapes (Term _ (_ : _)) (Term y [_]) | isTemplateVar y = True
+unifiableShapes (Term "app" [_, f, v]) (Term "app" [_, g, u]) = unifiableShapes f g && unifiableShapes v u
+unifiableShapes (Term c [_]) (Term d [_]) = c == d
+unifiableShapes _ _ = False
 
 {- | The critical pairs of a rule with each rule of the index, in the two
 orders. Share the incoming rule's renamed terms and left contexts within
@@ -693,6 +782,7 @@ criticalPairsWith rules (l, r) =
         [ criticalPairs incomingPlaces incomingRight (right oldL, right oldR)
             ++ criticalPairs (contexts (left oldL)) (left oldR) incomingReverse
         | (oldL, oldR) <- allRules rules
+        , overlaps oldL
         ]
   where
     apart prefix (Symbol x) = Symbol (prefix <> T.drop 3 x)
@@ -701,6 +791,12 @@ criticalPairsWith rules (l, r) =
     incomingPlaces = contexts (left l)
     incomingRight = left r
     incomingReverse = (right l, right r)
+    -- A rule whose left side fits no place of the incoming left side, and
+    -- none of whose places fits the incoming left side, gives no pair (see
+    -- 'unifiableShapes'). A renaming keeps the shapes, so the test reads the
+    -- rules before their renaming.
+    incomingShapes = map fst (contexts l)
+    overlaps oldL = any (`unifiableShapes` oldL) incomingShapes || any ((`unifiableShapes` l) . fst) (contexts oldL)
 
 {- | Whether an equation is an instance of a rule of the index, in the same
 context on the two sides, as in Twee. Then the equation follows from the
@@ -715,7 +811,7 @@ subsumed rules (s, t) =
     or
         [ True
         | (l, r) <- concatMap (`candidates` s) [oriented rules, unoriented rules, nonRewriting rules]
-        , Just m <- [matchTemplate l s Map.empty]
+        , Just m <- [matchTyped l s Map.empty]
         , Just _ <- [matchTemplate r t m]
         ]
         || case (s, t) of
@@ -850,6 +946,11 @@ addLaw maxSize gsig (Term "(==)" [_, l, r]) rules0 =
         (t', cache2) = cachedNormalForm nf cache1 t
         (new', rules') = addEquation (canonical (s', t')) rules
 addLaw _ _ _ rules = rules
+
+-- | The rules of a law alone, without the rules of its critical pairs.
+addLawRules :: Sig -> Term -> Rules -> Rules
+addLawRules gsig (Term "(==)" [_, l, r]) rules = snd (addEquation (toTemplate gsig l, toTemplate gsig r) rules)
+addLawRules _ _ rules = rules
 
 {- | Give term and type binders stable names in their first-occurrence
 order. Alpha-equivalent critical pairs then have the same names. Keep the
