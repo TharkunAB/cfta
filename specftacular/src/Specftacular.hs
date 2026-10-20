@@ -25,8 +25,17 @@ import Specftacular.Rewriting
 import Specftacular.Types
 import Specftacular.Utils
 
-import Control.Concurrent (forkIO, forkIOWithUnmask, killThread, myThreadId, threadDelay, throwTo)
-import Control.Concurrent.MVar (newEmptyMVar, putMVar, takeMVar)
+import Control.Concurrent (
+    forkIO,
+    forkIOWithUnmask,
+    forkOn,
+    getNumCapabilities,
+    killThread,
+    myThreadId,
+    threadDelay,
+    throwTo,
+ )
+import Control.Concurrent.MVar (newEmptyMVar, putMVar, readMVar, takeMVar)
 import Control.Exception (
     AllocationLimitExceeded (..),
     Exception (..),
@@ -35,6 +44,7 @@ import Control.Exception (
     asyncExceptionToException,
     bracket,
     evaluate,
+    finally,
     handleJust,
     mask,
     onException,
@@ -42,7 +52,7 @@ import Control.Exception (
     try,
     uninterruptibleMask_,
  )
-import Control.Monad (foldM, unless, when)
+import Control.Monad (foldM, unless, void, when)
 import Data.CFTA.Equality (
     Edge (Edge),
     Node (Node),
@@ -257,6 +267,11 @@ data Settings = Settings
     {- ^ Whether the buckets of a size run in parallel from the state at the
     start of the size (spike).
     -}
+    , enumerateAhead :: Bool
+    {- ^ Whether phase 4 enumerates the skeletons of all the types of a size
+    in background threads at the start of the size, while the buckets test
+    in order (spike).
+    -}
     , bucketTimeout :: Maybe Double
     -- ^ The seconds after which a bucket stops testing its schemas.
     , bucketMemLimit :: Maybe Word64
@@ -325,6 +340,11 @@ data SearchOptions = SearchOptions
     -- ^ The last phase, from 1 to 4.
     , searchParallel :: Bool
     -- ^ Whether the buckets of a size run in parallel. This needs @+RTS -N@.
+    , searchEnumerateAhead :: Bool
+    {- ^ Whether phase 4 enumerates the skeletons of the types of a size in
+    background threads, while the buckets test in order. This needs
+    @+RTS -N@.
+    -}
     , searchSplit :: Int
     {- ^ The number of levels of applications by which phase 4 splits the
     enumeration of its skeletons into parts of one shape (0: no split).
@@ -347,6 +367,7 @@ defaultOptions size phase =
         { searchSize = size
         , searchPhase = phase
         , searchParallel = False
+        , searchEnumerateAhead = False
         , searchSplit = 0
         , searchBucketTimeout = Nothing
         , searchBucketMemLimit = Nothing
@@ -359,13 +380,22 @@ with @--parallel@ and 0 without it, unless @--split@ gives it.
 parseOptions :: IO SearchOptions
 parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.progDesc "Find the laws of a signature."))
   where
-    options = build <$> size <*> phase <*> parallel <*> O.optional split <*> O.optional bucketTimeout <*> O.optional bucketMemLimit
-    build size' phase' parallel' split' timeout' memLimit' =
+    options =
+        build
+            <$> size
+            <*> phase
+            <*> parallel
+            <*> ahead
+            <*> O.optional split
+            <*> O.optional bucketTimeout
+            <*> O.optional bucketMemLimit
+    build size' phase' parallel' ahead' split' timeout' memLimit' =
         SearchOptions
             { searchSize = size'
             , searchPhase = phase'
             , searchParallel = parallel'
-            , searchSplit = fromMaybe (if parallel' then 2 else 0) split'
+            , searchEnumerateAhead = ahead'
+            , searchSplit = fromMaybe (if parallel' || ahead' then 2 else 0) split'
             , searchBucketTimeout = timeout'
             , searchBucketMemLimit = memLimit'
             }
@@ -376,12 +406,19 @@ parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.p
             ( O.long "parallel"
                 <> O.help "Run the buckets of a size in parallel, and enumerate the phase 4 skeletons in parallel parts (needs +RTS -N)"
             )
+    ahead =
+        O.switch
+            ( O.long "enumerate-ahead"
+                <> O.help
+                    "Enumerate the phase 4 skeletons of all the types of a size in background threads, and test the buckets in order (needs +RTS -N)"
+            )
     split =
         O.option
             O.auto
             ( O.long "split"
                 <> O.metavar "DEPTH"
-                <> O.help "Split the phase 4 skeletons by shape down to DEPTH levels of applications (default 2 with --parallel, else 0)"
+                <> O.help
+                    "Split the phase 4 skeletons by shape down to DEPTH levels of applications (default 2 with --parallel or --enumerate-ahead, else 0)"
             )
     bucketTimeout =
         O.option
@@ -485,6 +522,7 @@ searchPhases
         { searchSize = size
         , searchPhase = phase
         , searchParallel = parallelSetting
+        , searchEnumerateAhead = aheadSetting
         , searchSplit = splitSetting
         , searchBucketTimeout = timeoutSetting
         , searchBucketMemLimit = memLimitOption
@@ -505,6 +543,10 @@ searchPhases
             let memLimitSetting = if statsEnabled then memLimitOption else Nothing
             when (isJust memLimitOption && not statsEnabled) $
                 hPutStrLn stderr "*** Warning: --bucket-mem-limit needs RTS statistics (+RTS -T); it has no effect."
+            when (isJust memLimitSetting && aheadSetting) $
+                hPutStrLn
+                    stderr
+                    "*** Warning: with --enumerate-ahead, --bucket-mem-limit also counts the heap of the background enumeration."
             -- SPECFTACULAR_STOP_AFTER=phase:size stops the search after that size
             -- of that phase, so that a profile of the run is written.
             stopSetting <- (>>= parseStop) <$> Env.lookupEnv "SPECFTACULAR_STOP_AFTER"
@@ -557,6 +599,7 @@ searchPhases
                         , splitEnumeration = splitSetting
                         , skeletonTemplates = skeletonTemplatesSetting
                         , parallelBuckets = parallelSetting
+                        , enumerateAhead = aheadSetting
                         , deferLaws = parallelSetting || isJust timeoutSetting || isJust memLimitSetting
                         , bucketMemLimit = memLimitSetting
                         , bucketTimeout = timeoutSetting
@@ -785,12 +828,24 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..}
             current = Map.filterWithKey (\(size', _) _ -> size' == lvl) cache
         cache' <- case skeletons of
             Just skeleton
-                | Map.notMember (lvl, key) current -> do
-                    typings <- skeletonTypings skeleton lvl key (rewrite_rules s)
-                    pure (Map.insert (lvl, key) typings current)
+                | Map.notMember (lvl, key) current ->
+                    if enumerateAhead
+                        then do
+                            -- The first bucket of a size starts the enumeration of
+                            -- the skeletons of each type of the size. The rules at
+                            -- the start of the size prune them, and 'eligible'
+                            -- applies the rules that the buckets add later.
+                            let keys = nubOrd [monomorphiseType tc' | (lvl', tc') <- (lvl, tc) : rest, lvl' == lvl]
+                            started <- mapM (\k -> (,) (lvl, k) <$> enumerateInBackground (skeletonParts skeleton lvl k (rewrite_rules s))) keys
+                            pure (Map.union (Map.fromList started) current)
+                        else do
+                            typings <- skeletonTypings skeleton lvl key (rewrite_rules s)
+                            pure (Map.insert (lvl, key) (pure (), typings) current)
             _ -> pure current
+        let entry = Map.lookup (lvl, key) cache'
+        mapM_ fst entry
         (laws, s') <- diagnose env lvl (show tc) "bucket" s $ do
-            result@(_, finishedState) <- bucket lvl (Map.lookup (lvl, key) cache') tc s
+            result@(_, finishedState) <- bucket lvl (snd <$> entry) tc s
             diagnosticEvent env "checkpoint" lvl (show tc) "bucket" finishedState
             return result
         (more, s'') <- go cache' rest s'
@@ -800,11 +855,13 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..}
     -- skeleton, because they match each typing of it.
     -- With 'splitEnumeration', each shape of the left spine is enumerated and
     -- typed in its own thread, and the parts are joined in their order.
-    skeletonTypings skeleton@StEcta{compl_sig = skeletonSig} lvl monomorphic rules
-        | splitEnumeration > 0 = do
-            parts <- forceInParallel lvl monomorphic (map typingsOf (searchSpaceParts splitEnumeration skeleton lvl monomorphic))
-            pure (concat parts)
-        | otherwise = pure (typingsOf (searchSpace skeleton lvl monomorphic))
+    skeletonTypings skeleton lvl monomorphic rules
+        | splitEnumeration > 0 = concat <$> forceInParallel lvl monomorphic (skeletonParts skeleton lvl monomorphic rules)
+        | otherwise = pure (concat (skeletonParts skeleton lvl monomorphic rules))
+    -- The typings of the parts of the skeletons, in their order.
+    skeletonParts skeleton@StEcta{compl_sig = skeletonSig} lvl monomorphic rules
+        | splitEnumeration > 0 = map typingsOf (searchSpaceParts splitEnumeration skeleton lvl monomorphic)
+        | otherwise = [typingsOf (searchSpace skeleton lvl monomorphic)]
       where
         templates
             | canPrune && skeletonTemplates = filter annotationFree (pruningTemplates skeletonSig lvl rules)
@@ -966,6 +1023,28 @@ forceInParallel lvl tc lists = do
             end <- getMonotonicTimeNSec
             putMVar result ((\n -> (fromIntegral (end - begin) / 1e9 :: Double, n)) <$> outcome)
         pure result
+
+{- | Evaluate the spine of each list in a background thread, and give an
+action that waits for all of them, and the lists joined in their order.
+With more than one capability, the threads run on the capabilities other
+than the first, so that the thread that tests keeps its own. A thread that
+fails leaves its list to the thread that reads it.
+-}
+enumerateInBackground :: [[a]] -> IO (IO (), [a])
+enumerateInBackground lists = do
+    capabilities <- getNumCapabilities
+    let fork i
+            | capabilities > 1 = forkOn (1 + i `mod` (capabilities - 1))
+            | otherwise = forkIO
+    dones <-
+        mapM
+            ( \(i, xs) -> do
+                done <- newEmptyMVar
+                _ <- fork i (void (evaluate (length xs)) `finally` putMVar done ())
+                pure done
+            )
+            (zip [0 :: Int ..] lists)
+    pure (mapM_ readMVar dones, concat lists)
 
 -- 3. The test of a candidate, and the laws that it gives.
 
