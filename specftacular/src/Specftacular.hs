@@ -41,6 +41,7 @@ import Data.CFTA.Equality (
 import Data.CFTA.Symbol (Symbol (Symbol))
 import Data.CFTA.Template (Template (..))
 import Data.Char (isAlphaNum)
+import Data.IORef (IORef, modifyIORef', newIORef, readIORef)
 import Data.List hiding (union)
 import Data.Maybe (fromMaybe, isJust, mapMaybe)
 import qualified Data.Text as T
@@ -49,6 +50,7 @@ import GHC.Stats (RTSStats (allocated_bytes, gc_cpu_ns, gcs), getRTSStats, getRT
 import qualified Options.Applicative as O
 import System.CPUTime (getCPUTime)
 import qualified System.Environment as Env
+import System.Timeout (timeout)
 import qualified Text.Read as TR
 
 import Data.Containers.ListUtils (nubOrd)
@@ -230,6 +232,12 @@ data Settings = Settings
     {- ^ Whether the buckets of a size run in parallel from the state at the
     start of the size (spike).
     -}
+    , bucketTimeout :: Maybe Double
+    -- ^ The seconds after which a bucket stops testing its schemas.
+    , lawSink :: IORef [(Term, Term, Sig, Term)]
+    {- ^ With 'deferLaws', the laws of the schema that runs, newest first, so
+    that a schema that runs out of time keeps the laws that it found.
+    -}
     , deferLaws :: Bool
     {- ^ Whether a bucket records its laws in 'pending_laws' instead of
     printing them.
@@ -294,27 +302,39 @@ data SearchOptions = SearchOptions
     {- ^ The number of levels of applications by which phase 4 splits the
     enumeration of its skeletons into parts of one shape (0: no split).
     -}
+    , searchBucketTimeout :: Maybe Double
+    {- ^ The seconds after which a bucket stops testing its schemas. The
+    search reports the bucket and goes on with the next one.
+    -}
     }
     deriving (Show)
 
 -- | A sequential search with terms up to a size and the phases up to a phase.
 defaultOptions :: Int -> Int -> SearchOptions
-defaultOptions size phase = SearchOptions{searchSize = size, searchPhase = phase, searchParallel = False, searchSplit = 0}
+defaultOptions size phase =
+    SearchOptions
+        { searchSize = size
+        , searchPhase = phase
+        , searchParallel = False
+        , searchSplit = 0
+        , searchBucketTimeout = Nothing
+        }
 
 {- | Read the options from the program arguments: the size, the phase,
-@--parallel@, and @--split DEPTH@. The split is 2 with @--parallel@ and 0
-without it, unless @--split@ gives it.
+@--parallel@, @--split DEPTH@, and @--bucket-timeout SECONDS@. The split is 2
+with @--parallel@ and 0 without it, unless @--split@ gives it.
 -}
 parseOptions :: IO SearchOptions
 parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.progDesc "Find the laws of a signature."))
   where
-    options = build <$> size <*> phase <*> parallel <*> O.optional split
-    build size' phase' parallel' split' =
+    options = build <$> size <*> phase <*> parallel <*> O.optional split <*> O.optional bucketTimeout
+    build size' phase' parallel' split' timeout' =
         SearchOptions
             { searchSize = size'
             , searchPhase = phase'
             , searchParallel = parallel'
             , searchSplit = fromMaybe (if parallel' then 2 else 0) split'
+            , searchBucketTimeout = timeout'
             }
     size = O.argument O.auto (O.metavar "SIZE" <> O.help "The largest size of the terms")
     phase = O.argument O.auto (O.metavar "PHASE" <> O.help "The last phase, from 1 to 4")
@@ -329,6 +349,14 @@ parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.p
             ( O.long "split"
                 <> O.metavar "DEPTH"
                 <> O.help "Split the phase 4 skeletons by shape down to DEPTH levels of applications (default 2 with --parallel, else 0)"
+            )
+    bucketTimeout =
+        O.option
+            O.auto
+            ( O.long "bucket-timeout"
+                <> O.metavar "SECONDS"
+                <> O.help
+                    "Stop testing the schemas of a bucket after SECONDS, report the bucket, and go on (the laws then depend on the speed of the machine)"
             )
 
 {- | Print the laws of a signature, with terms up to the size that the first
@@ -365,69 +393,81 @@ for a front end that does not give the types of the values to Haskell,
 such as a GHC session.
 -}
 searchPhases :: SearchOptions -> (TypeSkeleton -> Maybe Instance) -> Sig -> IO [String]
-searchPhases SearchOptions{searchSize = size, searchPhase = phase, searchParallel = parallelSetting, searchSplit = splitSetting} givenInstances givenSig =
-    do
-        -- SPECFTACULAR_PROGRESS=1 shows the progress of the search on stderr.
-        progress <- (== Just "1") <$> Env.lookupEnv "SPECFTACULAR_PROGRESS"
-        diagnosticSetting <- Env.lookupEnv "SPECFTACULAR_DIAGNOSTICS"
-        -- Threads write whole diagnostic lines.
-        when parallelSetting $ hSetBuffering stderr LineBuffering
-        -- SPECFTACULAR_STOP_AFTER=phase:size stops the search after that size
-        -- of that phase, so that a profile of the run is written.
-        stopSetting <- (>>= parseStop) <$> Env.lookupEnv "SPECFTACULAR_STOP_AFTER"
-        -- SPECFTACULAR_ONLY_BUCKET=type runs only that bucket at the last size
-        -- of SPECFTACULAR_STOP_AFTER, and times each of its schemas.
-        onlySetting <- Env.lookupEnv "SPECFTACULAR_ONLY_BUCKET"
-        let diagnostics = diagnosticSetting `elem` [Just "1", Just "phases"]
-            detailedDiagnostics = diagnosticSetting == Just "1"
-        -- SPECFTACULAR_TESTS sets the number of test cases (1000 by default,
-        -- as in QuickSpec).
-        numTests <- fromMaybe 1000 . (>>= TR.readMaybe) <$> Env.lookupEnv "SPECFTACULAR_TESTS"
-        -- SPECFTACULAR_CHECKED=1 keeps the types of the values, and tests
-        -- them at each application (see 'Value').
-        checked <- (== Just "1") <$> Env.lookupEnv "SPECFTACULAR_CHECKED"
-        let sig
-                | checked = givenSig
-                | otherwise = untypedSig givenSig
-            instances
-                | checked = givenInstances
-                | otherwise = fmap untypedInstance . givenInstances
-        let StEcta
-                { compl_sig = compl_sig
-                , arb_insts = arb_insts
-                , sig_ty_cons = sig_ty_cons
-                } = mkStecta size numTests instances sig False id id
-        putStrLn $ "In Scope (" ++ show (Map.size compl_sig) ++ " functions/constants):"
-        putStrLn "---------------------------------"
-        mapM_ (putStrLn . T.unpack) $ Map.keys compl_sig
-        putStrLn ""
-        putStrLn "Type constructors (and derived) in the signature:"
-        putStrLn "---------------------------------"
-        mapM_ print sig_ty_cons
-        putStrLn ""
-        putStrLn "Variable generators"
-        putStrLn "---------------------------------"
-        mapM_ print (Map.assocs arb_insts)
-        putStrLn ""
+searchPhases
+    SearchOptions
+        { searchSize = size
+        , searchPhase = phase
+        , searchParallel = parallelSetting
+        , searchSplit = splitSetting
+        , searchBucketTimeout = timeoutSetting
+        }
+    givenInstances
+    givenSig =
+        do
+            -- SPECFTACULAR_PROGRESS=1 shows the progress of the search on stderr.
+            progress <- (== Just "1") <$> Env.lookupEnv "SPECFTACULAR_PROGRESS"
+            diagnosticSetting <- Env.lookupEnv "SPECFTACULAR_DIAGNOSTICS"
+            -- Threads write whole diagnostic lines.
+            when parallelSetting $ hSetBuffering stderr LineBuffering
+            sink <- newIORef []
+            -- SPECFTACULAR_STOP_AFTER=phase:size stops the search after that size
+            -- of that phase, so that a profile of the run is written.
+            stopSetting <- (>>= parseStop) <$> Env.lookupEnv "SPECFTACULAR_STOP_AFTER"
+            -- SPECFTACULAR_ONLY_BUCKET=type runs only that bucket at the last size
+            -- of SPECFTACULAR_STOP_AFTER, and times each of its schemas.
+            onlySetting <- Env.lookupEnv "SPECFTACULAR_ONLY_BUCKET"
+            let diagnostics = diagnosticSetting `elem` [Just "1", Just "phases"]
+                detailedDiagnostics = diagnosticSetting == Just "1"
+            -- SPECFTACULAR_TESTS sets the number of test cases (1000 by default,
+            -- as in QuickSpec).
+            numTests <- fromMaybe 1000 . (>>= TR.readMaybe) <$> Env.lookupEnv "SPECFTACULAR_TESTS"
+            -- SPECFTACULAR_CHECKED=1 keeps the types of the values, and tests
+            -- them at each application (see 'Value').
+            checked <- (== Just "1") <$> Env.lookupEnv "SPECFTACULAR_CHECKED"
+            let sig
+                    | checked = givenSig
+                    | otherwise = untypedSig givenSig
+                instances
+                    | checked = givenInstances
+                    | otherwise = fmap untypedInstance . givenInstances
+            let StEcta
+                    { compl_sig = compl_sig
+                    , arb_insts = arb_insts
+                    , sig_ty_cons = sig_ty_cons
+                    } = mkStecta size numTests instances sig False id id
+            putStrLn $ "In Scope (" ++ show (Map.size compl_sig) ++ " functions/constants):"
+            putStrLn "---------------------------------"
+            mapM_ (putStrLn . T.unpack) $ Map.keys compl_sig
+            putStrLn ""
+            putStrLn "Type constructors (and derived) in the signature:"
+            putStrLn "---------------------------------"
+            mapM_ print sig_ty_cons
+            putStrLn ""
+            putStrLn "Variable generators"
+            putStrLn "---------------------------------"
+            mapM_ print (Map.assocs arb_insts)
+            putStrLn ""
 
-        putStrLn "Laws according to Haskell's (==):"
-        putStrLn "---------------------------------"
-        let env =
-                Settings
-                    { progress = progress
-                    , numTests = numTests
-                    , maxSize = size
-                    , diagnostics = diagnostics
-                    , detailedDiagnostics = detailedDiagnostics
-                    , diagnosticPhase = 0
-                    , resolveInstance = instances
-                    , splitEnumeration = splitSetting
-                    , parallelBuckets = parallelSetting
-                    , deferLaws = parallelSetting
-                    , stopAfter = stopSetting
-                    , onlyBucket = onlySetting
-                    }
-        runPhases env size (max 1 (min 4 phase)) instances sig
+            putStrLn "Laws according to Haskell's (==):"
+            putStrLn "---------------------------------"
+            let env =
+                    Settings
+                        { progress = progress
+                        , numTests = numTests
+                        , maxSize = size
+                        , diagnostics = diagnostics
+                        , detailedDiagnostics = detailedDiagnostics
+                        , diagnosticPhase = 0
+                        , resolveInstance = instances
+                        , splitEnumeration = splitSetting
+                        , parallelBuckets = parallelSetting
+                        , deferLaws = parallelSetting || isJust timeoutSetting
+                        , bucketTimeout = timeoutSetting
+                        , lawSink = sink
+                        , stopAfter = stopSetting
+                        , onlyBucket = onlySetting
+                        }
+            runPhases env size (max 1 (min 4 phase)) instances sig
 
 -- | Read "phase:size".
 parseStop :: String -> Maybe (Int, Int)
@@ -674,6 +714,7 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..}
             let (pruningRoot, oracleTemplates) = Compile.preparePruning templates (refold space)
              in mapMaybe (generalizeCarriers skeletonSig phase_variables . npTerm') (prunedTerms oracleTemplates pruningRoot)
     bucket lvl typings tc s = do
+        bucketStart <- getMonotonicTimeNSec
         produced <- case typings of
             Just typingsOfType -> pure $ nubOrd (mapMaybe ($ tc) typingsOfType)
             Nothing -> do
@@ -703,13 +744,55 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..}
         case first of
             (_ : _) -> refreshCount progress "Folded, exploring " (" for " ++ show tc) "" lvl (so_far s)
             _ -> return ()
-        considerAll lvl tc first s
-    considerAll _ _ [] s = return ([], s)
-    considerAll lvl tc (t : ts) s = do
+        let deadline = (\seconds -> bucketStart + round (seconds * 1e9)) <$> bucketTimeout
+        considerAll (deadline, bucketStart, s) lvl tc first s
+    considerAll _ _ _ [] s = return ([], s)
+    considerAll limit@(deadline, bucketStart, start) lvl tc (t : ts) s = do
         begin <- getMonotonicTimeNSec
-        (laws, s') <-
-            diagnose env lvl (show tc) "schema" s $ consider env stecta lvl (Term "filter" [typeSkeletonToTerm tc, t]) s
+        schemaSink <- newIORef []
+        let considerOne =
+                diagnose env lvl (show tc) "schema" s $
+                    consider env{lawSink = schemaSink} stecta lvl (Term "filter" [typeSkeletonToTerm tc, t]) s
+        result <- case deadline of
+            Nothing -> Just <$> considerOne
+            Just d
+                | begin >= d -> return Nothing
+                | otherwise -> timeout (fromIntegral ((d - begin) `div` 1000)) considerOne
+        case result of
+            Nothing -> do
+                -- The bucket ran out of time: keep the laws that the schema
+                -- found, drop the rest of the schema, and report.
+                found <- reverse <$> readIORef schemaSink
+                (kept, s1) <-
+                    if parallelBuckets
+                        then return ([], s{pending_laws = reverse found ++ pending_laws s})
+                        else foldM replay ([], s) found
+                now <- getMonotonicTimeNSec
+                let tree = Map.findWithDefault DT.empty (typeSkeletonToTerm tc) (trees s)
+                putStrLn $
+                    "Bucket timeout: phase "
+                        ++ show diagnosticPhase
+                        ++ ", size "
+                        ++ show lvl
+                        ++ ", type "
+                        ++ show tc
+                        ++ ", after "
+                        ++ show (fromIntegral (now - bucketStart) / 1e9 :: Double)
+                        ++ " s: "
+                        ++ show (so_far s - so_far start)
+                        ++ " schemas tested, "
+                        ++ show (law_count s - law_count start)
+                        ++ " laws, "
+                        ++ show (DT.size tree)
+                        ++ " representatives; interrupted at "
+                        ++ ppNpTerm t
+                diagnosticEvent env "timeout" lvl (show tc) "bucket" s1
+                return (kept, s1)
+            Just (laws, s') -> considerRest limit lvl tc t ts begin s s' laws
+    considerRest limit lvl tc t ts begin s s' laws = do
         end <- getMonotonicTimeNSec
+        -- Without parallel buckets, deferred laws print when their schema ends.
+        when (deferLaws && not parallelBuckets) $ mapM_ putStrLn laws
         when (isJust onlyBucket && stopAfter == Just (diagnosticPhase, lvl)) $
             hPutStrLn
                 stderr
@@ -723,7 +806,7 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..}
                     ]
                 )
         next <- diagnose env lvl (show tc) "candidate_list_demand" s' $ evaluate ts
-        (more, s'') <- considerAll lvl tc next s'
+        (more, s'') <- considerAll limit lvl tc next (if parallelBuckets then s' else s'{pending_laws = []})
         return (laws ++ more, s'')
 
 -- 2. The candidate terms.
@@ -940,6 +1023,7 @@ consider env@Settings{..} StEcta{..} lvl full_term s0
                         unless deferLaws $ do
                             when progress $ hPutStr stderr "\r\ESC[K"
                             putStrLn law_str
+                        when deferLaws $ modifyIORef' lawSink ((w, i, lawSig, law) :)
                         rules <-
                             if detailedDiagnostics
                                 then diagnose env lvl (show current_ty) "completion" s $ evaluate (addLaw maxSize lawSig law (rewrite_rules s))
