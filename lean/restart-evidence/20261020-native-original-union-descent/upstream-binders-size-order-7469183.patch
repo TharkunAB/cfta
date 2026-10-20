@@ -1,0 +1,90 @@
+commit 7469183231da3a9c7aefc115c9cc818f4867bd9d
+Author:     Matthias Pall Gissurarson <mpg@mpg.is>
+AuthorDate: Tue Oct 20 15:12:15 2026 +0200
+Commit:     Matthias Pall Gissurarson <mpg@mpg.is>
+CommitDate: Tue Oct 20 15:12:15 2026 +0200
+
+    docs(cfta-generator): a Binders language is cyclic only with a subterm rule
+    
+    The README, the Typing module and the changelog said that a Binders bound
+    makes the automaton cyclic, so its ranks are size-major. A Binders language
+    whose rules have no subterm is finite. Its automaton is acyclic, and its
+    ranks follow the constructor order: with only the rules
+    FixA (value (PayP (PayP PayZ))) and FixB (value 0) under Binders 0,
+    values gives the size-4 FixA term before the size-2 FixB term. The docs now
+    qualify the claim and advise upToSize for that case too.
+
+diff --git a/cfta-generator/CHANGELOG.md b/cfta-generator/CHANGELOG.md
+index 897025a50..5db92b3f5 100644
+--- a/cfta-generator/CHANGELOG.md
++++ b/cfta-generator/CHANGELOG.md
+@@ -253,8 +253,9 @@ tree automata of `cfta`, with QuickCheck integration.
+   without listing their values; the plain builders report a drawn field as
+   `DrawnField`. `deriveLTAOnPools`, in the internal derive module, derives
+   over an automaton with the generators of some states given.
+-  With `Binders`, a bound on the binders around each position, the
+-  automaton is cyclic and the generator is counted by size. A field
++  With `Binders`, a bound on the binders around each position, and a rule
++  with a `subterm`, the automaton is cyclic and the generator is counted by
++  size; without a `subterm` rule it is acyclic and finite. A field
+   that holds a subterm has the type of the datatype, so a family of mutually
+   recursive types is not a language here.
+   A fixed value in a field of the datatype gives `FieldMismatch`.
+diff --git a/cfta-generator/README.md b/cfta-generator/README.md
+index bb031fa3c..01fb7f105 100644
+--- a/cfta-generator/README.md
++++ b/cfta-generator/README.md
+@@ -117,8 +117,9 @@ language. A lower bound can remove terms.
+ 
+ After checking the construction error, use `rankOfValue` and `unrank` on the
+ resulting generator to encode and replay its ranks. The original ranks can
+-differ. A `Binders` language already has size-major
+-ranks. Size ordering does not order literals by their magnitude: zero can
++differ. A `Binders` language whose rules have a `subterm` already has
++size-major ranks. Without a `subterm` rule, its automaton is acyclic and its
++ranks follow the constructor order, so apply `upToSize` to it too. Size ordering does not order literals by their magnitude: zero can
+ still precede six within one size class. `upToSize` also applies its documented
+ sampling policy to the bounded language.
+ 
+diff --git a/cfta-generator/src/Data/CFTA/Gen/Typing.hs b/cfta-generator/src/Data/CFTA/Gen/Typing.hs
+index 285076e4f..bd2410be5 100644
+--- a/cfta-generator/src/Data/CFTA/Gen/Typing.hs
++++ b/cfta-generator/src/Data/CFTA/Gen/Typing.hs
+@@ -75,7 +75,9 @@ two. The size bound keeps only terms at or below that size. A bound at least
+ as large as every term keeps the complete language. Use the resulting generator
+ to compute ranks with 'Data.CFTA.Gen.rankOfValue' and decode them with
+ 'Data.CFTA.Gen.unrank'. The old finite ranks do not apply to it.
+-'Binders' generators already have size-major ranks.
++A 'Binders' generator whose rules have a 'subterm' already has size-major
++ranks. Without a 'subterm' rule, its automaton is acyclic and its ranks follow
++the constructor order, so apply 'Data.CFTA.Gen.upToSize' to it too.
+ 
+ This uses the generator's size classes. An acyclic import that needs the
+ symbolic counting fallback treats each term as one atom. Use
+@@ -91,8 +93,8 @@ Limits:
+   several binders, so an environment has at most B * D binders for the bound
+   D and at most B binders in one field, and the automaton has up to about
+   T^(B * D + 1) environments for T types. With a bound on
+-  the binders ('Binders'), the automaton is cyclic and the generator is
+-  counted by size. It must give each term one typing: an automaton with two
++  the binders ('Binders') and a rule with a 'subterm', the automaton is cyclic
++  and the generator is counted by size. It must give each term one typing: an automaton with two
+   runs for one term gives 'Data.CFTA.Gen.AmbiguousAutomaton'.
+ 
+ An input is a variable, so a binder above its use moves its index up by one.
+@@ -241,10 +243,11 @@ data Bound
+       -}
+       Nesting !Depth
+     | {- | The number of binders around each position; the inputs are not
+-      binders. The terms can be of any size, so the automaton is cyclic, and
+-      'fromConstructorAutomaton' gives a generator counted by size, which
+-      'Data.CFTA.Gen.upToSize' bounds. A negative bound is the error
+-      'NegativeBound'.
++      binders. When a rule has a 'subterm', the terms can be of any size, so
++      the automaton is cyclic, and 'fromConstructorAutomaton' gives a generator
++      counted by size, which 'Data.CFTA.Gen.upToSize' bounds. Without a
++      'subterm' rule, the automaton is acyclic and the generator is finite. A
++      negative bound is the error 'NegativeBound'.
+       -}
+       Binders !Int
+     deriving (Eq, Show)

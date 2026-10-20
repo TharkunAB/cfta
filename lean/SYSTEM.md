@@ -1,5 +1,45 @@
 # Constrained languages, indexing, and distributions
 
+## Current correlated source-union descent
+
+Updated: 2026-10-20 22:37 CEST. Proof checkpoint: `0b533a718`.
+Verified start: `533db5d24`. Main remains `9769fe3e9`.
+Read `lean/notes-current-native-original-union-descent.md`.
+
+One original observed writer now retains union-only syntax descent to
+the same actual terminal call. A joint SourceRow induction constructs
+the descent and all five terminal witnesses together. It uses the same
+original union indices and actual prefix, member and suffix effects.
+One base Observed supplies a fixed publication and raw callback before
+all stored rows and all successful unfold calls. The actual node RowCall
+or selected binder payload resumption remains under that same tuple.
+Unfolds retain their original stored anchor when output children change.
+
+The same warm source family now forces the returned nested binder arm.
+Finite original Reached paths classify every possible enclosing writer.
+Its same raw SourceRow and actual filter exclude the wrong node callback.
+Its returned union descent and kind then force that same terminal to the
+nested binder. The proof excludes only its node alternative and keeps
+its full binder receipt. It assumes no writer identity or desired origin.
+This source-only example executes no unfold or native prefix.
+
+Two public and one constructed full readbacks pass. Root module and
+independent fixture strict logs are empty. Canonical and default Audit
+pass: 3536 jobs and 74283 theorem dependency checks. The sole warning is
+the older ClosedCompletion input. All 9 actual capped Lean/Lake commands
+remain, including 1 failed elaboration attempts. Counts do not measure
+completion. Every earlier proof, repair, counterexample and draft remains.
+
+Global renewal and active-owner exclusion, final retention, general outer
+completion, convergence, generated-capture original ancestry, residual
+observations and Haskell refinement remain open. Source descent is not a
+runtime rank across historical winners. The proposed next plan inspects
+causal publication order and states its missing links explicitly.
+FINDINGS records external documentation repair 7469183 first. Its branch
+is not imported here; the local runtime reproduction stays unvalidated.
+All 268 Haskell and 207 active package files retain their bytes. The full
+goal stays active. Pushes to formalize remain authorized.
+
 ## Current observed source node and binder returns
 
 Updated: 2026-10-20 22:24 CEST. Proof checkpoint: `9cff855cf`.

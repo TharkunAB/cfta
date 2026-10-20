@@ -1,0 +1,19 @@
+# Actual observed source row forces its returned binder terminal
+
+Reviewed at 2026-10-20 22:35 CEST.
+
+This is one stronger proof version of the same warm-binder source family. It adds no new source example. The actual original program remains `box[nested, outer]`. The first raw binder stores the nullary tag17 row. The second raw binder has body `union[var0, nested]`. Both flags are false. The data, source builds, callback receipts, actual member1 SourceRow and suffix helpers are byte-identical to the prior observed-resume fixture. Earlier packages remain unchanged.
+
+The actual closed original build supplies the semantic heap and publication history. The actual outer build and its enclosing constructor suffix supply full outer-Mu availability. Its computed full cell supplies the rooted Written receipt, public Stored conversion, and base Observed receipt. The proof calls the new `SourceCurrentNativeOriginalUnionDescent.of_observed` once. It retains the same selected publication and raw callback before all stored-row and all actual-unfold row clauses.
+
+The concrete tag17 row uses that returned stored-row clause once. The proof then classifies the selected publication's original source Path. Any reached binder in this finite source has body nestedBody or outerBody. This classification uses actual Path constructors. It does not identify a hidden event or heap by proof equality.
+
+If the recovered publication had nestedBody, its same returned SourceRow would be a node receipt. Its canonical row lookup forces the raw value to be an ordinary node. The actual root self-filter is the identity on that constructor. The same filtered equation would then make the selected stored body an ordinary node. Its payload equality instead makes it the full inner Mu. Constructor disjointness excludes this case. The recovered expression is therefore the original outer union.
+
+The UnionDescent conjunct belongs to the same five returned terminal witnesses. Its exact union member index leaves var0 or the nested binder. The node-or-binder kind excludes var0. The nonunion condition excludes reflexive stopping at the union. Therefore the same returned terminalExpression equals the nested false binder. The proof eliminates only that tuple's node alternative. It retains the full binder probes, request, selected local and whole-source full cells, finish equation, structural row, suffixes, Written, and Stored from the returned right alternative. It does not construct a parallel terminal or assume a desired binder arm.
+
+The public statement retains all generic stored-row and actual-unfold clauses with complete node-or-binder alternatives and correlated UnionDescent. It separately exposes the concrete stored row's same returned terminal tuple with its binder equality and full binder result. This version does not instantiate an actual unfold that returns a literal ordinary row. It does not identify the returned terminal heap or hidden writer with the manually constructed warm member1 receipt. It does not assert event uniqueness, a returned warm-key identity, a strict requester-to-winner measure, native execution, original binding ancestry, or outer completion.
+
+The public and private checked statements have identical complete type text. Selected strict2 has a literal empty log. Public1 prints the explicit declaration, full proof and axiom report with all eight options. Only propext, Classical.choice and Quot.sound occur. The complete log has no omissions or printer failures.
+
+Three capped Lean commands are retained. Direct1 has fixture elaboration errors in dependent Path elimination and finite-list/raw-constructor simplification. Direct2 and public1 pass. Every command records a fresh usage gate above 1 percent and effective 4 GiB maximum, 4 GiB high, zero swap, and a five-minute cap. This component owns zero production declarations, one constructed declaration, zero new source examples, and zero canonical builds.
