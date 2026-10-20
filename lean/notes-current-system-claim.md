@@ -1,7 +1,7 @@
 # Current system claim
 
 Checked against the live theorem statements on 2026-10-20.
-Read `notes-current-completed-rooted-writers.md` for the latest proof checkpoint.
+Read `notes-current-publication-native-capture.md` for the latest proof checkpoint.
 Read `notes-current-upstream-persistent-rows.md` for the current source scope.
 
 In simple technical English: fresh construction always finishes in the
@@ -64,6 +64,16 @@ input slot after the literal-reference callback prefix. Empty original
 inputs exclude that capture. Later native encoded builds can have whole
 captured values and prior records. Their ancestry remains open, as do
 global renewal, outer completion, convergence and Haskell refinement.
+
+For that same selected rooted publication, the actual historical raw body
+build and filter now yield the allocated lexical Context, original Reached
+callback route and exact structural SourceRow. A row-bearing native mapped
+capture at an exact leaf slot is either that unchanged closed leaf or the
+complete selected Mu at its own reference slot. Canonical slot use retains
+its coherent heap and available-leaf premises. These laws do not trace
+closed leaves through ordinary children to their earlier source builds.
+Closed-root stopping, earlier warm writers and repeated leaf occurrences
+remain distinct cases. No general recursive decrease follows.
 
 ## Constructed root guarantee
 
