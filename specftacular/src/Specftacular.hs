@@ -1125,7 +1125,12 @@ consider env@Settings{..} StEcta{..} lvl full_term s0
                             when progress $ hPutStr stderr "\r\ESC[K"
                             putStrLn law_str
                         when deferLaws $ modifyIORef' lawSink ((w, i, lawSig, law) :)
-                        let complete = boundedCompletion law_str (addLaw maxSize lawSig law (rewrite_rules s)) (addLawRules lawSig law (rewrite_rules s))
+                        -- With parallel buckets, the merge completes the law, so the
+                        -- bucket adds the rules of the law alone.
+                        let complete
+                                | parallelBuckets = return (addLawRules lawSig law (rewrite_rules s))
+                                | otherwise =
+                                    boundedCompletion law_str (addLaw maxSize lawSig law (rewrite_rules s)) (addLawRules lawSig law (rewrite_rules s))
                         rules <-
                             if detailedDiagnostics
                                 then diagnose env lvl (show current_ty) "completion" s complete
