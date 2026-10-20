@@ -21,6 +21,20 @@ by the actual cyclic route and retain the upToSize advice for acyclic imports.
 No production Haskell file is changed locally. Keep this follow-up separate
 from confirmed runtime defects and from the older repair registry below.
 
+Current proof update: 2026-10-20 19:22 CEST. Proof checkpoint: `db94389dc`.
+Every actual checked optional prefix from a node request now derives its
+same captured compiler owner, entered domain and exact child return.
+Bounded node-request execution keeps that owner with the same generating
+operation, done or pending call, generated source build and rooted writer.
+The exact initial-full-cell alternative remains. Twelve public readbacks
+and nine empty strict module logs pass. Default build: 3504 jobs and
+74153 axiom checks. Original binding ancestry, final owner retention,
+renewal, outer completion, convergence and Haskell refinement remain open.
+No new Haskell repair or runtime validation is claimed. All 268 Haskell
+files and all 207 active package files retain their bytes.
+Read `lean/notes-current-native-optional-owner.md`.
+Preserve every external repair, reproducer and validation result below.
+
 Current proof update: 2026-10-20 18:38 CEST. Proof checkpoint: `5c75cab54`.
 Every physically checked bounded native stopping outcome derives the
 exact initial full Mu cell or the same generating optional instruction,

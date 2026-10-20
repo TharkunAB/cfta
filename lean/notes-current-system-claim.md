@@ -1,7 +1,7 @@
 # Current system claim
 
 Checked against the live theorem statements on 2026-10-20.
-Read `notes-current-native-stopping-generation.md` for the latest proof checkpoint.
+Read `notes-current-native-optional-owner.md` for the latest proof checkpoint.
 Read `notes-current-upstream-persistent-rows.md` for the current source scope.
 
 In simple technical English: fresh construction always finishes in the
@@ -12,6 +12,18 @@ exact language.
 The root theorem derives the logical startup cache and guard facts.
 Field allocation, validity, guard coverage and numeric resources remain
 explicit. General termination and Haskell correspondence remain open.
+
+Actual checked node-request prefixes now derive the captured compiler
+owner of each reached optional instruction. The same receipt retains its
+actual query and demand, captured cells, entered domain, exact child return
+and full finish continuation. Bounded execution attaches that owner to the
+same selected new Mu operation and rooted source writer, including pending
+blocked construction. The receipt supplies no future owner return.
+Selected full cells already present at entry retain the exact initial-cell
+alternative.
+The evaluating owner cell is established at compiler entry. Its final
+retention and original-program binding ancestry remain open, as do global
+renewal, outer completion, convergence and Haskell refinement.
 
 Actual class-fold event receipts now retain physical Mu publication histories
 on both sides of the same captured event heap. The caller supplies the
@@ -115,17 +127,15 @@ for an arbitrary selected complete Mu, or its exact initial full cell.
 That same operation supplies its generated encoded build, mapped inputs,
 rich Context, rooted writer, selected-key absence/presence and actual
 issued prefix plus physical/issued suffix. This recovers an operation from
-execution. Original program ancestry and native maybeMu generation,
-including its blocked-call nested publications, remain separate obligations.
+execution. Original program ancestry remains a separate obligation.
 No general renewal, outer completion or Haskell refinement is added.
 
 Actual source build Outcome.state now derives the exact initial full cell
 or a rooted selected writer without a completion premise. Actual maybeMu stopping outcomes derive the
 exact initial full cell or the generated build and rooted writer. A checked yielded native trace recovers
 the exact generating optional instruction and retains that same source
-writer with its prefix, checked advance and suffix. Terminal blocked-step
-integration, captured compileMu ownership and original binding ancestry
-remain open. General renewal, outer completion and Haskell refinement
+writer with its prefix, checked advance and suffix. Original binding ancestry
+remains open. General renewal, outer completion and Haskell refinement
 are unchanged obligations.
 
 Actual bounded native execution now retains the generating optional
@@ -133,8 +143,8 @@ instruction and generated rooted source writer for every selected full
 Mu at its stopping heap, or the exact initial full cell. This includes
 nested cells installed before a terminal blocked return. Physical bind
 and indexed walk prefixes now retain the same unfinished call or actual
-return, checks, state and ordered continuation. Captured compiler owner
-and original binding ancestry remain unproved. General renewal, outer
+return, checks, state and ordered continuation. Original binding ancestry
+remains unproved. General renewal, outer
 completion and Haskell refinement remain open.
 
 ## Constructed root guarantee

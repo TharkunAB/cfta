@@ -1,0 +1,18 @@
+import MicroCFTA.SourceCurrentNativeOptionalOwnerReceipt
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+#check @MicroCFTA.SourceCurrentNativeOptionalOwnerReceipt.Owner
+#print MicroCFTA.SourceCurrentNativeOptionalOwnerReceipt.Owner
+#print axioms MicroCFTA.SourceCurrentNativeOptionalOwnerReceipt.Owner
+#check @MicroCFTA.SourceCurrentNativeOptionalOwnerReceipt.bind
+#print MicroCFTA.SourceCurrentNativeOptionalOwnerReceipt.bind
+#print axioms MicroCFTA.SourceCurrentNativeOptionalOwnerReceipt.bind
+#check @MicroCFTA.SourceCurrentNativeOptionalOwnerReceipt.prepend
+#print MicroCFTA.SourceCurrentNativeOptionalOwnerReceipt.prepend
+#print axioms MicroCFTA.SourceCurrentNativeOptionalOwnerReceipt.prepend
