@@ -710,7 +710,7 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..}
         (laws, s') <-
             diagnose env lvl (show tc) "schema" s $ consider env stecta lvl (Term "filter" [typeSkeletonToTerm tc, t]) s
         end <- getMonotonicTimeNSec
-        when (isJust onlyBucket && fmap snd stopAfter == Just lvl) $
+        when (isJust onlyBucket && stopAfter == Just (diagnosticPhase, lvl)) $
             hPutStrLn
                 stderr
                 ( intercalate
