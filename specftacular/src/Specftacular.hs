@@ -1238,10 +1238,13 @@ consider env@Settings{..} StEcta{..} lvl full_term s0
         lawOf w = Term "(==)" [Term (Symbol eq_txt) [], w, i]
 
 {- | The number of bytes that the completion of one law may allocate. See
-'boundedCompletion'.
+'boundedCompletion'. The most expensive completion of HugeLists 7-p3 up to
+phase 3 size 5 allocates 184 GiB. A law that keeps only its own rules can
+make the completions of the laws after it expensive too, so the budget is
+above the costs of the completions that end.
 -}
 completionBudget :: Int64
-completionBudget = 64 * 1024 * 1024 * 1024
+completionBudget = 256 * 1024 * 1024 * 1024
 
 {- | The completed rules of a law, if their computation allocates at most
 'completionBudget' bytes, and else the rules of the law alone, with a report
