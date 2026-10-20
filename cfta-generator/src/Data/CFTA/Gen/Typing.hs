@@ -75,7 +75,9 @@ two. The size bound keeps only terms at or below that size. A bound at least
 as large as every term keeps the complete language. Use the resulting generator
 to compute ranks with 'Data.CFTA.Gen.rankOfValue' and decode them with
 'Data.CFTA.Gen.unrank'. The old finite ranks do not apply to it.
-'Binders' generators already have size-major ranks.
+A 'Binders' generator whose rules have a 'subterm' already has size-major
+ranks. Without a 'subterm' rule, its automaton is acyclic and its ranks follow
+the constructor order, so apply 'Data.CFTA.Gen.upToSize' to it too.
 
 This uses the generator's size classes. An acyclic import that needs the
 symbolic counting fallback treats each term as one atom. Use
@@ -91,8 +93,8 @@ Limits:
   several binders, so an environment has at most B * D binders for the bound
   D and at most B binders in one field, and the automaton has up to about
   T^(B * D + 1) environments for T types. With a bound on
-  the binders ('Binders'), the automaton is cyclic and the generator is
-  counted by size. It must give each term one typing: an automaton with two
+  the binders ('Binders') and a rule with a 'subterm', the automaton is cyclic
+  and the generator is counted by size. It must give each term one typing: an automaton with two
   runs for one term gives 'Data.CFTA.Gen.AmbiguousAutomaton'.
 
 An input is a variable, so a binder above its use moves its index up by one.
@@ -241,10 +243,11 @@ data Bound
       -}
       Nesting !Depth
     | {- | The number of binders around each position; the inputs are not
-      binders. The terms can be of any size, so the automaton is cyclic, and
-      'fromConstructorAutomaton' gives a generator counted by size, which
-      'Data.CFTA.Gen.upToSize' bounds. A negative bound is the error
-      'NegativeBound'.
+      binders. When a rule has a 'subterm', the terms can be of any size, so
+      the automaton is cyclic, and 'fromConstructorAutomaton' gives a generator
+      counted by size, which 'Data.CFTA.Gen.upToSize' bounds. Without a
+      'subterm' rule, the automaton is acyclic and the generator is finite. A
+      negative bound is the error 'NegativeBound'.
       -}
       Binders !Int
     deriving (Eq, Show)
