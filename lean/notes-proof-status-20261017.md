@@ -1,5 +1,44 @@
 # Proof status at 2026-10-18
 
+## Current original binder payload resumption
+
+Updated: 2026-10-20 22:09 CEST. Proof checkpoint: `d3fa19c6a`.
+Verified start: `936a67774`. Main remains `9769fe3e9`.
+Read `lean/notes-current-native-original-binder-resume.md`.
+
+An actual binder terminal now derives an original-source writer for its
+same selected full Mu. The proof moves its complete record forward through
+the actual raw filter and publication to the exact original build return.
+It retains the terminal probes, request, selected stored body, smart finish,
+full row and both physical and issued suffixes. Stored fixes one resumed
+publication and raw callback before all rows of that same selected body.
+The resumed writer can differ from the requesting or enclosing binder.
+Written and Stored are separate existential receipts. Their public
+conjunction does not equate their hidden publication witnesses.
+
+An actual original box first publishes a nullary tagged nested Mu. A later
+outer binder's union callback requests it again. Its actual key and full
+record force the warm branch. The same union member call and terminal row
+supply one resume application. Its recovered callback retains every
+stored row and the concrete nullary tag row. No child premise is needed.
+This example uses source construction. It has no native execution prefix.
+
+Two public and one constructed full readbacks pass. Two root module
+strict logs and the independent fixture strict log are empty. Default
+audit: 3534 jobs and 74274 theorem dependency checks. Only the older
+ClosedCompletion warning remains. All 17 actual capped Lean/Lake
+commands remain, including 5 failed elaboration attempts.
+
+The next step is to compose this resumption with the same actual terminal
+witnesses of the original Observed row producer. Keep its event and raw
+callback fixed before all observations. Keep the generic syntax-size
+bound. Its reader must be the original source heap or retain the exact
+suffix to that heap. Global progress across historical writers remains
+open. Generated-capture ancestry, residual observations, active-owner
+exclusion, final retention, outer completion, convergence and Haskell
+refinement remain open. All 268 Haskell and 207 active package files keep
+their bytes. FINDINGS retains external fixes first. The full goal is active.
+
 ## Current original captured Mu rows and source terminals
 
 Updated: 2026-10-20 21:46 CEST. Proof checkpoint: `99e0023e7`.
