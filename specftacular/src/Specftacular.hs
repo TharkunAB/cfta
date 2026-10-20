@@ -63,7 +63,7 @@ import qualified Data.Text as T
 import Data.Unique (Unique, newUnique)
 import Data.Word (Word64)
 import GHC.Clock (getMonotonicTimeNSec)
-import GHC.Conc (disableAllocationLimit, enableAllocationLimit, setAllocationCounter)
+import GHC.Conc (disableAllocationLimit, enableAllocationLimit, getAllocationCounter, setAllocationCounter)
 import GHC.Stats (
     GCDetails (gcdetails_live_bytes),
     RTSStats (allocated_bytes, gc, gc_cpu_ns, gcs),
@@ -1155,10 +1155,22 @@ so the choice is the same in each run.
 -}
 boundedCompletion :: String -> Rules -> Rules -> IO Rules
 boundedCompletion label completed alone = do
+    begin <- getMonotonicTimeNSec
     setAllocationCounter completionBudget
     enableAllocationLimit
     result <- try (evaluate completed)
     disableAllocationLimit
+    left <- getAllocationCounter
+    end <- getMonotonicTimeNSec
+    -- A completion that allocates more than 1 GiB prints its cost on stderr.
+    let allocated = fromIntegral completionBudget - fromIntegral left :: Double
+    when (allocated > 1024 ^ (3 :: Int)) $
+        hPutStrLn
+            stderr
+            ( intercalate
+                "\t"
+                ["completioncost", show (fromIntegral (end - begin) / 1e9 :: Double), show (allocated / 1024 ^ (3 :: Int)), label]
+            )
     case result of
         Right rules -> return rules
         Left AllocationLimitExceeded -> do
