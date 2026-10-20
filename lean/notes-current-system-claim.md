@@ -1,7 +1,7 @@
 # Current system claim
 
 Checked against the live theorem statements on 2026-10-20.
-Read `notes-current-selected-binder-source-suffix.md` for the latest proof checkpoint.
+Read `notes-current-head-mu-generation.md` for the latest proof checkpoint.
 Read `notes-current-upstream-persistent-rows.md` for the current source scope.
 
 In simple technical English: fresh construction always finishes in the
@@ -108,6 +108,15 @@ source receipt with its Context, Reached, generic Syntax bound and actual
 physical/issued suffix to the supplied source return. Its terminal binder
 cell moves forward by nodeRecords retention. Native encoded roots with
 nonempty mapped captures still need an original-root ancestry certificate.
+No general renewal, outer completion or Haskell refinement is added.
+
+Actual completed Head now derives one generating stored-unfold operation
+for an arbitrary selected complete Mu, or its exact initial full cell.
+That same operation supplies its generated encoded build, mapped inputs,
+rich Context, rooted writer, selected-key absence/presence and actual
+issued prefix plus physical/issued suffix. This recovers an operation from
+execution. Original program ancestry and native maybeMu generation,
+including its blocked-call nested publications, remain separate obligations.
 No general renewal, outer completion or Haskell refinement is added.
 
 ## Constructed root guarantee

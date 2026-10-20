@@ -1,0 +1,13 @@
+# Selected Mu generation through actual Head exposure
+
+The sole public theorem `head` starts with an actual completed Head, initial SemanticReady, CostHeap and Available input, and an arbitrary exact full Mu cell at the actual return. It derives the same full initial cell or recovers a stored unfold that installs that cell.
+
+The recovered tuple keeps one complete parent owner and its operation entry. That entry has SemanticReady, CostHeap and Available parent Mu. The actual unfold has its exact result and return. The selected key is absent at that operation entry and contains the same full selected payload at its return. An issued Path runs from the Head entry to the operation entry. Physical and issued growth run from the operation return to the Head return.
+
+The same tuple contains the generated source Context, completed build and Rooted Written. Its syntax is `encode (leaves parentBody) [] parentBody`. Its inputs are the exact stored leaf pool with the complete parent Mu substituted for its own reference. The rooted publication is derived from that actual completed encoded call. It is not supplied by the caller and is not assigned the current program syntax.
+
+The private collect proof follows the actual ordered worklist. It respects visited union and Mu identities. At each unvisited Mu it inspects the selected cell returned by the recursive remainder. A cell present after that unfold is either the exact prior entry cell or has a literally absent entry key. The latter branch derives its rooted writer from that unfold. A later generator retains the earlier actual unfold as its prefix. The direct nodeEdges unfold and the fallback visit of the original Mu are separate sequential operations. The final Head makeNode adds no Mu, so it forwards the exact selected cell to the exposure return.
+
+No empty initial history, closedness, caller generation receipt, desired source ancestry, native memo history or future completion is assumed. The key remains separate from the selected entry key. The result does not prove unique operation occurrence, original-program ancestry, native maybeMu generation or global termination.
+
+Selected strict attempt 2 has a literal zero-byte log. Full printer attempt 1 has one complete public statement, proof and axiom report with all eight printer settings, no omissions, and only standard axioms. Three capped Lean jobs ran. Initial attempt 1 failed on two local equality goals after cases rewrote a cache lookup. That failure remains in the package. Both selected jobs completed with exit 0. Every job recorded 4 GiB memory.max and memory.high, zero swap, a five-minute cap and fresh usage above the stop threshold. No canonical job, constructed theorem or repository edit belongs to this prototype.

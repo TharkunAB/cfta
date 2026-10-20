@@ -1,0 +1,1267 @@
+@MicroCFTA.SourceCurrentHeadMuGeneration.head : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {value result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceEqualityRequiredHead.Head Symbol Guard inst value before result after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+        @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+          ∀ (key : MicroCFTA.InternedBinderProtocol.NodeKey)
+            (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+            (body depth ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+            @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard after key)
+                (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)) →
+              Or
+                (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard before key)
+                  (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+                (@Exists.{1} (MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey) fun parentEntry =>
+                  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun parentBody =>
+                    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun parentDepth =>
+                      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun parentOrdinary =>
+                        @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun operationBefore =>
+                          @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun operationResult =>
+                            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                              fun operationAfter =>
+                              And
+                                (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard
+                                  operationBefore)
+                                (And (@MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard operationBefore)
+                                  (And
+                                    (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard operationBefore
+                                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard parentEntry
+                                        parentBody parentDepth parentOrdinary))
+                                    (And
+                                      (@Eq.{1}
+                                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.unfold Symbol Guard inst
+                                          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard parentEntry
+                                            parentBody parentDepth parentOrdinary)
+                                          operationBefore)
+                                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) operationResult
+                                          operationAfter))
+                                      (And
+                                        (@Eq.{1}
+                                          (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                          (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                                            operationBefore key)
+                                          (@Option.none.{0}
+                                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                                        (And
+                                          (@Eq.{1}
+                                            (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                            (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                                              operationAfter key)
+                                            (@Option.some.{0}
+                                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body
+                                                depth ordinary)))
+                                          (And
+                                            (Nonempty.{1}
+                                              (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                                before operationBefore))
+                                            (And
+                                              (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard operationAfter
+                                                after)
+                                              (And
+                                                (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                                  (@MicroCFTA.Cache.State.issued
+                                                    MicroCFTA.InternedBinderProtocol.NodeKey
+                                                    (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                                      operationAfter))
+                                                  (@MicroCFTA.Cache.State.issued
+                                                    MicroCFTA.InternedBinderProtocol.NodeKey
+                                                    (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                                      after)))
+                                                (And
+                                                  (@MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol
+                                                    Guard operationBefore
+                                                    (@List.map.{0, 0}
+                                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                      (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard
+                                                        fun name =>
+                                                        @ite.{1}
+                                                          (Option.{0}
+                                                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                                          (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference name
+                                                            (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                                              (@MicroCFTA.Cache.Interned.identity
+                                                                MicroCFTA.InternedBinderProtocol.NodeKey parentEntry)))
+                                                          (MicroCFTA.InternedBinderProtocol.instDecidableEqReference
+                                                            name
+                                                            (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                                              (@MicroCFTA.Cache.Interned.identity
+                                                                MicroCFTA.InternedBinderProtocol.NodeKey parentEntry)))
+                                                          (@Option.some.{0}
+                                                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol
+                                                              Guard parentEntry parentBody parentDepth parentOrdinary))
+                                                          (@Option.none.{0}
+                                                            (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                                                              Guard)))
+                                                      (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard
+                                                        parentBody)))
+                                                  (And
+                                                    (@Eq.{1}
+                                                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                                      (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard
+                                                        inst
+                                                        (@MicroCFTA.InternedStoredSubstitution.encode Symbol Guard
+                                                          (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard
+                                                            parentBody)
+                                                          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                                          parentBody)
+                                                        (@List.map.{0, 0}
+                                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                          (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard
+                                                            fun name =>
+                                                            @ite.{1}
+                                                              (Option.{0}
+                                                                (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                                                                  Guard))
+                                                              (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference name
+                                                                (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                                                  (@MicroCFTA.Cache.Interned.identity
+                                                                    MicroCFTA.InternedBinderProtocol.NodeKey
+                                                                    parentEntry)))
+                                                              (MicroCFTA.InternedBinderProtocol.instDecidableEqReference
+                                                                name
+                                                                (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                                                  (@MicroCFTA.Cache.Interned.identity
+                                                                    MicroCFTA.InternedBinderProtocol.NodeKey
+                                                                    parentEntry)))
+                                                              (@Option.some.{0}
+                                                                (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                                                                  Guard)
+                                                                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol
+                                                                  Guard parentEntry parentBody parentDepth
+                                                                  parentOrdinary))
+                                                              (@Option.none.{0}
+                                                                (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                                                                  Guard)))
+                                                          (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard
+                                                            parentBody))
+                                                        operationBefore)
+                                                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                        operationResult operationAfter))
+                                                    (@MicroCFTA.SourceCurrentCompletedBuildRootedWriters.Written Symbol
+                                                      Guard inst
+                                                      (@MicroCFTA.InternedStoredSubstitution.encode Symbol Guard
+                                                        (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard
+                                                          parentBody)
+                                                        (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                                        parentBody)
+                                                      (@List.map.{0, 0}
+                                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                        (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard
+                                                          fun name =>
+                                                          @ite.{1}
+                                                            (Option.{0}
+                                                              (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                                                                Guard))
+                                                            (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference name
+                                                              (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                                                (@MicroCFTA.Cache.Interned.identity
+                                                                  MicroCFTA.InternedBinderProtocol.NodeKey
+                                                                  parentEntry)))
+                                                            (MicroCFTA.InternedBinderProtocol.instDecidableEqReference
+                                                              name
+                                                              (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                                                (@MicroCFTA.Cache.Interned.identity
+                                                                  MicroCFTA.InternedBinderProtocol.NodeKey
+                                                                  parentEntry)))
+                                                            (@Option.some.{0}
+                                                              (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                                                                Guard)
+                                                              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol
+                                                                Guard parentEntry parentBody parentDepth
+                                                                parentOrdinary))
+                                                            (@Option.none.{0}
+                                                              (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                                                                Guard)))
+                                                        (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard
+                                                          parentBody))
+                                                      operationBefore operationAfter key
+                                                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard
+                                                        entry body depth ordinary)))))))))))))
+theorem MicroCFTA.SourceCurrentHeadMuGeneration.head : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {value result : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard},
+  @MicroCFTA.SourceEqualityRequiredHead.Head Symbol Guard inst value before result after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+        @MicroCFTA.InternedProbeProvenance.Available Symbol Guard before value →
+          ∀ (key : MicroCFTA.InternedBinderProtocol.NodeKey)
+            (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+            (body depth ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+            @Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard after key)
+                (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)) →
+              Or
+                (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard before key)
+                  (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+                (@Exists.{1} (MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey) fun parentEntry =>
+                  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun parentBody =>
+                    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun parentDepth =>
+                      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun parentOrdinary =>
+                        @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun operationBefore =>
+                          @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun operationResult =>
+                            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                              fun operationAfter =>
+                              And
+                                (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard
+                                  operationBefore)
+                                (And (@MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard operationBefore)
+                                  (And
+                                    (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard operationBefore
+                                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard parentEntry
+                                        parentBody parentDepth parentOrdinary))
+                                    (And
+                                      (@Eq.{1}
+                                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                        (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.unfold Symbol Guard inst
+                                          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard parentEntry
+                                            parentBody parentDepth parentOrdinary)
+                                          operationBefore)
+                                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) operationResult
+                                          operationAfter))
+                                      (And
+                                        (@Eq.{1}
+                                          (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                          (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                                            operationBefore key)
+                                          (@Option.none.{0}
+                                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                                        (And
+                                          (@Eq.{1}
+                                            (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                            (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                                              operationAfter key)
+                                            (@Option.some.{0}
+                                              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body
+                                                depth ordinary)))
+                                          (And
+                                            (Nonempty.{1}
+                                              (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst
+                                                before operationBefore))
+                                            (And
+                                              (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard operationAfter
+                                                after)
+                                              (And
+                                                (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                                  (@MicroCFTA.Cache.State.issued
+                                                    MicroCFTA.InternedBinderProtocol.NodeKey
+                                                    (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                                      operationAfter))
+                                                  (@MicroCFTA.Cache.State.issued
+                                                    MicroCFTA.InternedBinderProtocol.NodeKey
+                                                    (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                                      after)))
+                                                (And
+                                                  (@MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol
+                                                    Guard operationBefore
+                                                    (@List.map.{0, 0}
+                                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                      (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard
+                                                        fun name =>
+                                                        @ite.{1}
+                                                          (Option.{0}
+                                                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                                          (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference name
+                                                            (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                                              (@MicroCFTA.Cache.Interned.identity
+                                                                MicroCFTA.InternedBinderProtocol.NodeKey parentEntry)))
+                                                          (MicroCFTA.InternedBinderProtocol.instDecidableEqReference
+                                                            name
+                                                            (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                                              (@MicroCFTA.Cache.Interned.identity
+                                                                MicroCFTA.InternedBinderProtocol.NodeKey parentEntry)))
+                                                          (@Option.some.{0}
+                                                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol
+                                                              Guard parentEntry parentBody parentDepth parentOrdinary))
+                                                          (@Option.none.{0}
+                                                            (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                                                              Guard)))
+                                                      (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard
+                                                        parentBody)))
+                                                  (And
+                                                    (@Eq.{1}
+                                                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                                      (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard
+                                                        inst
+                                                        (@MicroCFTA.InternedStoredSubstitution.encode Symbol Guard
+                                                          (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard
+                                                            parentBody)
+                                                          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                                          parentBody)
+                                                        (@List.map.{0, 0}
+                                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                          (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard
+                                                            fun name =>
+                                                            @ite.{1}
+                                                              (Option.{0}
+                                                                (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                                                                  Guard))
+                                                              (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference name
+                                                                (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                                                  (@MicroCFTA.Cache.Interned.identity
+                                                                    MicroCFTA.InternedBinderProtocol.NodeKey
+                                                                    parentEntry)))
+                                                              (MicroCFTA.InternedBinderProtocol.instDecidableEqReference
+                                                                name
+                                                                (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                                                  (@MicroCFTA.Cache.Interned.identity
+                                                                    MicroCFTA.InternedBinderProtocol.NodeKey
+                                                                    parentEntry)))
+                                                              (@Option.some.{0}
+                                                                (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                                                                  Guard)
+                                                                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol
+                                                                  Guard parentEntry parentBody parentDepth
+                                                                  parentOrdinary))
+                                                              (@Option.none.{0}
+                                                                (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                                                                  Guard)))
+                                                          (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard
+                                                            parentBody))
+                                                        operationBefore)
+                                                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                        operationResult operationAfter))
+                                                    (@MicroCFTA.SourceCurrentCompletedBuildRootedWriters.Written Symbol
+                                                      Guard inst
+                                                      (@MicroCFTA.InternedStoredSubstitution.encode Symbol Guard
+                                                        (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard
+                                                          parentBody)
+                                                        (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                                        parentBody)
+                                                      (@List.map.{0, 0}
+                                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                        (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard
+                                                          fun name =>
+                                                          @ite.{1}
+                                                            (Option.{0}
+                                                              (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                                                                Guard))
+                                                            (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference name
+                                                              (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                                                (@MicroCFTA.Cache.Interned.identity
+                                                                  MicroCFTA.InternedBinderProtocol.NodeKey
+                                                                  parentEntry)))
+                                                            (MicroCFTA.InternedBinderProtocol.instDecidableEqReference
+                                                              name
+                                                              (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                                                (@MicroCFTA.Cache.Interned.identity
+                                                                  MicroCFTA.InternedBinderProtocol.NodeKey
+                                                                  parentEntry)))
+                                                            (@Option.some.{0}
+                                                              (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                                                                Guard)
+                                                              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol
+                                                                Guard parentEntry parentBody parentDepth
+                                                                parentOrdinary))
+                                                            (@Option.none.{0}
+                                                              (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                                                                Guard)))
+                                                        (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard
+                                                          parentBody))
+                                                      operationBefore operationAfter key
+                                                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard
+                                                        entry body depth ordinary))))))))))))) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {value result}
+    {before after} actual semantic costs available key entry body depth ordinary selected =>
+  @MicroCFTA.SourceEqualityRequiredHead.Head.casesOn Symbol Guard inst value before result after
+    (fun t =>
+      @Eq.{0} (@MicroCFTA.SourceEqualityRequiredHead.Head Symbol Guard inst value before result after) actual t →
+        Or
+          (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard before key)
+            (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+          (@Exists.{1} (MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey) fun parentEntry =>
+            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun parentBody =>
+              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun parentDepth =>
+                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun parentOrdinary =>
+                  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun operationBefore =>
+                    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun operationResult =>
+                      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun operationAfter =>
+                        And (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard operationBefore)
+                          (And (@MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard operationBefore)
+                            (And
+                              (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard operationBefore
+                                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard parentEntry parentBody
+                                  parentDepth parentOrdinary))
+                              (And
+                                (@Eq.{1}
+                                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.unfold Symbol Guard inst
+                                    (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard parentEntry
+                                      parentBody parentDepth parentOrdinary)
+                                    operationBefore)
+                                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) operationResult
+                                    operationAfter))
+                                (And
+                                  (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                    (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                                      operationBefore key)
+                                    (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                                  (And
+                                    (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                      (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                                        operationAfter key)
+                                      (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth
+                                          ordinary)))
+                                    (And
+                                      (Nonempty.{1}
+                                        (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before
+                                          operationBefore))
+                                      (And
+                                        (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard operationAfter
+                                          after)
+                                        (And
+                                          (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                            (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                                operationAfter))
+                                            (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard after)))
+                                          (And
+                                            (@MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard
+                                              operationBefore
+                                              (@List.map.{0, 0}
+                                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard fun name =>
+                                                  @ite.{1}
+                                                    (Option.{0}
+                                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                                    (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference name
+                                                      (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                                        (@MicroCFTA.Cache.Interned.identity
+                                                          MicroCFTA.InternedBinderProtocol.NodeKey parentEntry)))
+                                                    (MicroCFTA.InternedBinderProtocol.instDecidableEqReference name
+                                                      (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                                        (@MicroCFTA.Cache.Interned.identity
+                                                          MicroCFTA.InternedBinderProtocol.NodeKey parentEntry)))
+                                                    (@Option.some.{0}
+                                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard
+                                                        parentEntry parentBody parentDepth parentOrdinary))
+                                                    (@Option.none.{0}
+                                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                                                (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard parentBody)))
+                                            (And
+                                              (@Eq.{1}
+                                                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                                (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst
+                                                  (@MicroCFTA.InternedStoredSubstitution.encode Symbol Guard
+                                                    (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard
+                                                      parentBody)
+                                                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                                    parentBody)
+                                                  (@List.map.{0, 0}
+                                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                    (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard
+                                                      fun name =>
+                                                      @ite.{1}
+                                                        (Option.{0}
+                                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                                        (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference name
+                                                          (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                                            (@MicroCFTA.Cache.Interned.identity
+                                                              MicroCFTA.InternedBinderProtocol.NodeKey parentEntry)))
+                                                        (MicroCFTA.InternedBinderProtocol.instDecidableEqReference name
+                                                          (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                                            (@MicroCFTA.Cache.Interned.identity
+                                                              MicroCFTA.InternedBinderProtocol.NodeKey parentEntry)))
+                                                        (@Option.some.{0}
+                                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard
+                                                            parentEntry parentBody parentDepth parentOrdinary))
+                                                        (@Option.none.{0}
+                                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                                                    (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard
+                                                      parentBody))
+                                                  operationBefore)
+                                                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                  operationResult operationAfter))
+                                              (@MicroCFTA.SourceCurrentCompletedBuildRootedWriters.Written Symbol Guard
+                                                inst
+                                                (@MicroCFTA.InternedStoredSubstitution.encode Symbol Guard
+                                                  (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard parentBody)
+                                                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) parentBody)
+                                                (@List.map.{0, 0}
+                                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                  (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard fun name =>
+                                                    @ite.{1}
+                                                      (Option.{0}
+                                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                                      (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference name
+                                                        (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                                          (@MicroCFTA.Cache.Interned.identity
+                                                            MicroCFTA.InternedBinderProtocol.NodeKey parentEntry)))
+                                                      (MicroCFTA.InternedBinderProtocol.instDecidableEqReference name
+                                                        (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                                          (@MicroCFTA.Cache.Interned.identity
+                                                            MicroCFTA.InternedBinderProtocol.NodeKey parentEntry)))
+                                                      (@Option.some.{0}
+                                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard
+                                                          parentEntry parentBody parentDepth parentOrdinary))
+                                                      (@Option.none.{0}
+                                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                                                  (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard
+                                                    parentBody))
+                                                operationBefore operationAfter key
+                                                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry
+                                                  body depth ordinary))))))))))))))
+    actual
+    (fun fuel edges middle exposed rebuilt h =>
+      have old := @MicroCFTA.InternedShallowHeap.makeNode_noNewMu Symbol Guard inst edges middle;
+      have present :=
+        @Eq.mp.{0}
+          (@MicroCFTA.InternedShallowHeap.NoNewMu Symbol Guard middle
+            (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard edges) middle)))
+          (@MicroCFTA.InternedShallowHeap.NoNewMu Symbol Guard middle
+            (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+              (@Prod.mk.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) result after)))
+          (@congrArg.{1, 1}
+            (Prod.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.State Symbol Guard))
+            Prop
+            (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+              (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard edges) middle)
+            (@Prod.mk.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) result after)
+            (fun _a =>
+              @MicroCFTA.InternedShallowHeap.NoNewMu Symbol Guard middle
+                (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) _a))
+            rebuilt)
+          old key entry body depth ordinary selected;
+      have found :=
+        @MicroCFTA.SourceCurrentHeadMuGeneration.nodeEdges Symbol Guard inst fuel value before semantic costs available
+          key entry body depth ordinary
+          (@Eq.mpr.{0}
+            (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                (@MicroCFTA.MergedSourceExposure.Result.state Symbol Guard
+                  (@MicroCFTA.MergedFreshOrdinaryExposure.nodeEdges Symbol Guard inst fuel value before))
+                key)
+              (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+            (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard middle key)
+              (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+            (@id.{0}
+              (@Eq.{1} Prop
+                (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                    (@MicroCFTA.MergedSourceExposure.Result.state Symbol Guard
+                      (@MicroCFTA.MergedFreshOrdinaryExposure.nodeEdges Symbol Guard inst fuel value before))
+                    key)
+                  (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+                (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard middle key)
+                  (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary))))
+              (@congrFun'.{1, 1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)) Prop
+                (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                    (@MicroCFTA.MergedSourceExposure.Result.state Symbol Guard
+                      (@MicroCFTA.MergedFreshOrdinaryExposure.nodeEdges Symbol Guard inst fuel value before))
+                    key))
+                (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard middle key))
+                (@congrArg.{1, 1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) → Prop)
+                  (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                    (@MicroCFTA.MergedSourceExposure.Result.state Symbol Guard
+                      (@MicroCFTA.MergedFreshOrdinaryExposure.nodeEdges Symbol Guard inst fuel value before))
+                    key)
+                  (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard middle key)
+                  (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                  (@congrFun'.{1, 1} MicroCFTA.InternedBinderProtocol.NodeKey
+                    (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                      (@MicroCFTA.MergedSourceExposure.Result.state Symbol Guard
+                        (@MicroCFTA.MergedFreshOrdinaryExposure.nodeEdges Symbol Guard inst fuel value before)))
+                    (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard middle)
+                    (@congrArg.{1, 1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                      (MicroCFTA.Cache.Table MicroCFTA.InternedBinderProtocol.NodeKey
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.MergedSourceExposure.Result.state Symbol Guard
+                        (@MicroCFTA.MergedFreshOrdinaryExposure.nodeEdges Symbol Guard inst fuel value before))
+                      middle (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard)
+                      (@congrArg.{1, 1} (MicroCFTA.MergedSourceExposure.Result Symbol Guard)
+                        (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                        (@MicroCFTA.MergedFreshOrdinaryExposure.nodeEdges Symbol Guard inst fuel value before)
+                        (@MicroCFTA.MergedSourceExposure.Result.done Symbol Guard edges middle)
+                        (fun x =>
+                          @MicroCFTA.MergedSourceExposure.Result.state.match_1.{1} Symbol Guard
+                            (fun x => MicroCFTA.InternedConstructorTemplates.State Symbol Guard) x
+                            (fun edges state => state) (fun name state => state) (fun key state => state) fun state =>
+                            state)
+                        exposed))
+                    key))
+                (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary))))
+            present);
+      @Or.casesOn
+        (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+          (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard before key)
+          (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+        (@MicroCFTA.SourceCurrentHeadMuGeneration.Generated Symbol Guard inst before
+          (@MicroCFTA.MergedSourceExposure.Result.state Symbol Guard
+            (@MicroCFTA.MergedFreshOrdinaryExposure.nodeEdges Symbol Guard inst fuel value before))
+          key (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary))
+        (fun x =>
+          Or
+            (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard before key)
+              (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+            (@Exists.{1} (MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey) fun parentEntry =>
+              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun parentBody =>
+                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun parentDepth =>
+                  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun parentOrdinary =>
+                    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun operationBefore =>
+                      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun operationResult =>
+                        @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun operationAfter =>
+                          And
+                            (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard operationBefore)
+                            (And (@MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard operationBefore)
+                              (And
+                                (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard operationBefore
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard parentEntry parentBody
+                                    parentDepth parentOrdinary))
+                                (And
+                                  (@Eq.{1}
+                                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                    (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.unfold Symbol Guard inst
+                                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard parentEntry
+                                        parentBody parentDepth parentOrdinary)
+                                      operationBefore)
+                                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) operationResult
+                                      operationAfter))
+                                  (And
+                                    (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                      (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                                        operationBefore key)
+                                      (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                                    (And
+                                      (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                        (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                                          operationAfter key)
+                                        (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body
+                                            depth ordinary)))
+                                      (And
+                                        (Nonempty.{1}
+                                          (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before
+                                            operationBefore))
+                                        (And
+                                          (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard operationAfter
+                                            after)
+                                          (And
+                                            (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                              (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                                  operationAfter))
+                                              (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                                  after)))
+                                            (And
+                                              (@MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard
+                                                operationBefore
+                                                (@List.map.{0, 0}
+                                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                  (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard fun name =>
+                                                    @ite.{1}
+                                                      (Option.{0}
+                                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                                      (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference name
+                                                        (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                                          (@MicroCFTA.Cache.Interned.identity
+                                                            MicroCFTA.InternedBinderProtocol.NodeKey parentEntry)))
+                                                      (MicroCFTA.InternedBinderProtocol.instDecidableEqReference name
+                                                        (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                                          (@MicroCFTA.Cache.Interned.identity
+                                                            MicroCFTA.InternedBinderProtocol.NodeKey parentEntry)))
+                                                      (@Option.some.{0}
+                                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard
+                                                          parentEntry parentBody parentDepth parentOrdinary))
+                                                      (@Option.none.{0}
+                                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                                                  (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard
+                                                    parentBody)))
+                                              (And
+                                                (@Eq.{1}
+                                                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                                  (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst
+                                                    (@MicroCFTA.InternedStoredSubstitution.encode Symbol Guard
+                                                      (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard
+                                                        parentBody)
+                                                      (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                                      parentBody)
+                                                    (@List.map.{0, 0}
+                                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                      (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard
+                                                        fun name =>
+                                                        @ite.{1}
+                                                          (Option.{0}
+                                                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                                          (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference name
+                                                            (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                                              (@MicroCFTA.Cache.Interned.identity
+                                                                MicroCFTA.InternedBinderProtocol.NodeKey parentEntry)))
+                                                          (MicroCFTA.InternedBinderProtocol.instDecidableEqReference
+                                                            name
+                                                            (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                                              (@MicroCFTA.Cache.Interned.identity
+                                                                MicroCFTA.InternedBinderProtocol.NodeKey parentEntry)))
+                                                          (@Option.some.{0}
+                                                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol
+                                                              Guard parentEntry parentBody parentDepth parentOrdinary))
+                                                          (@Option.none.{0}
+                                                            (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                                                              Guard)))
+                                                      (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard
+                                                        parentBody))
+                                                    operationBefore)
+                                                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                    operationResult operationAfter))
+                                                (@MicroCFTA.SourceCurrentCompletedBuildRootedWriters.Written Symbol
+                                                  Guard inst
+                                                  (@MicroCFTA.InternedStoredSubstitution.encode Symbol Guard
+                                                    (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard
+                                                      parentBody)
+                                                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                                    parentBody)
+                                                  (@List.map.{0, 0}
+                                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                    (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard
+                                                      fun name =>
+                                                      @ite.{1}
+                                                        (Option.{0}
+                                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                                        (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference name
+                                                          (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                                            (@MicroCFTA.Cache.Interned.identity
+                                                              MicroCFTA.InternedBinderProtocol.NodeKey parentEntry)))
+                                                        (MicroCFTA.InternedBinderProtocol.instDecidableEqReference name
+                                                          (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                                            (@MicroCFTA.Cache.Interned.identity
+                                                              MicroCFTA.InternedBinderProtocol.NodeKey parentEntry)))
+                                                        (@Option.some.{0}
+                                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard
+                                                            parentEntry parentBody parentDepth parentOrdinary))
+                                                        (@Option.none.{0}
+                                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                                                    (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard
+                                                      parentBody))
+                                                  operationBefore operationAfter key
+                                                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry
+                                                    body depth ordinary))))))))))))))
+        found
+        (fun prior =>
+          @Or.inl
+            (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard before key)
+              (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+            (@Exists.{1} (MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey) fun parentEntry =>
+              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun parentBody =>
+                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun parentDepth =>
+                  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun parentOrdinary =>
+                    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun operationBefore =>
+                      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun operationResult =>
+                        @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun operationAfter =>
+                          And
+                            (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard operationBefore)
+                            (And (@MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard operationBefore)
+                              (And
+                                (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard operationBefore
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard parentEntry parentBody
+                                    parentDepth parentOrdinary))
+                                (And
+                                  (@Eq.{1}
+                                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                    (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.unfold Symbol Guard inst
+                                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard parentEntry
+                                        parentBody parentDepth parentOrdinary)
+                                      operationBefore)
+                                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) operationResult
+                                      operationAfter))
+                                  (And
+                                    (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                      (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                                        operationBefore key)
+                                      (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                                    (And
+                                      (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                        (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                                          operationAfter key)
+                                        (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body
+                                            depth ordinary)))
+                                      (And
+                                        (Nonempty.{1}
+                                          (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before
+                                            operationBefore))
+                                        (And
+                                          (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard operationAfter
+                                            after)
+                                          (And
+                                            (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                              (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                                  operationAfter))
+                                              (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                                  after)))
+                                            (And
+                                              (@MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard
+                                                operationBefore
+                                                (@List.map.{0, 0}
+                                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                  (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard fun name =>
+                                                    @ite.{1}
+                                                      (Option.{0}
+                                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                                      (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference name
+                                                        (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                                          (@MicroCFTA.Cache.Interned.identity
+                                                            MicroCFTA.InternedBinderProtocol.NodeKey parentEntry)))
+                                                      (MicroCFTA.InternedBinderProtocol.instDecidableEqReference name
+                                                        (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                                          (@MicroCFTA.Cache.Interned.identity
+                                                            MicroCFTA.InternedBinderProtocol.NodeKey parentEntry)))
+                                                      (@Option.some.{0}
+                                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard
+                                                          parentEntry parentBody parentDepth parentOrdinary))
+                                                      (@Option.none.{0}
+                                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                                                  (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard
+                                                    parentBody)))
+                                              (And
+                                                (@Eq.{1}
+                                                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                                  (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst
+                                                    (@MicroCFTA.InternedStoredSubstitution.encode Symbol Guard
+                                                      (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard
+                                                        parentBody)
+                                                      (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                                      parentBody)
+                                                    (@List.map.{0, 0}
+                                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                      (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard
+                                                        fun name =>
+                                                        @ite.{1}
+                                                          (Option.{0}
+                                                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                                          (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference name
+                                                            (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                                              (@MicroCFTA.Cache.Interned.identity
+                                                                MicroCFTA.InternedBinderProtocol.NodeKey parentEntry)))
+                                                          (MicroCFTA.InternedBinderProtocol.instDecidableEqReference
+                                                            name
+                                                            (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                                              (@MicroCFTA.Cache.Interned.identity
+                                                                MicroCFTA.InternedBinderProtocol.NodeKey parentEntry)))
+                                                          (@Option.some.{0}
+                                                            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol
+                                                              Guard parentEntry parentBody parentDepth parentOrdinary))
+                                                          (@Option.none.{0}
+                                                            (MicroCFTA.InternedConstructorTemplates.Value Symbol
+                                                              Guard)))
+                                                      (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard
+                                                        parentBody))
+                                                    operationBefore)
+                                                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                    operationResult operationAfter))
+                                                (@MicroCFTA.SourceCurrentCompletedBuildRootedWriters.Written Symbol
+                                                  Guard inst
+                                                  (@MicroCFTA.InternedStoredSubstitution.encode Symbol Guard
+                                                    (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard
+                                                      parentBody)
+                                                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                                    parentBody)
+                                                  (@List.map.{0, 0}
+                                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                    (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard
+                                                      fun name =>
+                                                      @ite.{1}
+                                                        (Option.{0}
+                                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                                        (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference name
+                                                          (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                                            (@MicroCFTA.Cache.Interned.identity
+                                                              MicroCFTA.InternedBinderProtocol.NodeKey parentEntry)))
+                                                        (MicroCFTA.InternedBinderProtocol.instDecidableEqReference name
+                                                          (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                                            (@MicroCFTA.Cache.Interned.identity
+                                                              MicroCFTA.InternedBinderProtocol.NodeKey parentEntry)))
+                                                        (@Option.some.{0}
+                                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard
+                                                            parentEntry parentBody parentDepth parentOrdinary))
+                                                        (@Option.none.{0}
+                                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                                                    (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard
+                                                      parentBody))
+                                                  operationBefore operationAfter key
+                                                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry
+                                                    body depth ordinary)))))))))))))
+            prior)
+        fun generated =>
+        have effects :=
+          @MicroCFTA.SourceEqualityProjectionCosts.read_effects Symbol Guard inst value before middle edges
+            (@MicroCFTA.SourceEqualityProjectionRead.Read.done Symbol Guard inst value before edges middle fuel exposed)
+            semantic costs available;
+        have valid :=
+          @MicroCFTA.InternedRecordCoherence.Coherent.valid Symbol Guard middle
+            (@MicroCFTA.InternedNestedFacts.Facts.coherent Symbol Guard middle
+              (@MicroCFTA.InternedStoredMuOrigins.Normal.facts Symbol Guard middle
+                (@MicroCFTA.InternedFreshOrdinaryContext.Context.normal Symbol Guard middle
+                  (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@And.left
+                    (@MicroCFTA.InternedFreshOrdinaryContext.Context Symbol Guard middle
+                      (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                    (@MicroCFTA.InternedFreshOrdinaryDepthHeap.Heap Symbol Guard middle)
+                    (@MicroCFTA.SourceEqualityRequiredCache.Ready.semantic Symbol Guard middle
+                      (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady.ready Symbol Guard middle
+                        (@And.left (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard middle)
+                          (And (@MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard middle)
+                            (@MicroCFTA.InternedNestedProvenance.Edges Symbol Guard middle edges))
+                          (@And.right (@MicroCFTA.SourceEqualityRequiredCache.Keeps Symbol Guard before middle)
+                            (And (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard middle)
+                              (And (@MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard middle)
+                                (@MicroCFTA.InternedNestedProvenance.Edges Symbol Guard middle edges)))
+                            effects))))))));
+        have growth :=
+          @And.right
+            (@MicroCFTA.InternedConstructorTemplates.Valid Symbol Guard
+              (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                  (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard edges) middle)))
+            (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard middle
+              (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                  (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard edges) middle)))
+            (@MicroCFTA.InternedConstructorTemplates.run_correct Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+              (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard edges) middle valid);
+        have issued :=
+          @MicroCFTA.InternedProbeProvenance.run_issued_extends Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+            (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard edges) middle valid;
+        have actualGenerated :=
+          @Eq.mp.{0}
+            (@MicroCFTA.SourceCurrentHeadMuGeneration.Generated Symbol Guard inst before
+              (@MicroCFTA.MergedSourceExposure.Result.state Symbol Guard
+                (@MicroCFTA.MergedFreshOrdinaryExposure.nodeEdges Symbol Guard inst fuel value before))
+              key (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary))
+            (@MicroCFTA.SourceCurrentHeadMuGeneration.Generated Symbol Guard inst before middle key
+              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary))
+            (@MicroCFTA.SourceCurrentHeadMuGeneration.Generated.congr_simp Symbol Guard inst inst before before
+              (@Eq.refl.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) before)
+              (@MicroCFTA.MergedSourceExposure.Result.state Symbol Guard
+                (@MicroCFTA.MergedFreshOrdinaryExposure.nodeEdges Symbol Guard inst fuel value before))
+              middle
+              (@congrArg.{1, 1} (MicroCFTA.MergedSourceExposure.Result Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                (@MicroCFTA.MergedFreshOrdinaryExposure.nodeEdges Symbol Guard inst fuel value before)
+                (@MicroCFTA.MergedSourceExposure.Result.done Symbol Guard edges middle)
+                (fun x =>
+                  @MicroCFTA.MergedSourceExposure.Result.state.match_1.{1} Symbol Guard
+                    (fun x => MicroCFTA.InternedConstructorTemplates.State Symbol Guard) x (fun edges state => state)
+                    (fun name state => state) (fun key state => state) fun state => state)
+                exposed)
+              key key (@Eq.refl.{1} MicroCFTA.InternedBinderProtocol.NodeKey key)
+              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)
+              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)
+              (@Eq.refl.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+            generated;
+        @Or.inr
+          (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+            (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard before key)
+            (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)))
+          (@Exists.{1} (MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey) fun parentEntry =>
+            @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun parentBody =>
+              @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun parentDepth =>
+                @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun parentOrdinary =>
+                  @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun operationBefore =>
+                    @Exists.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) fun operationResult =>
+                      @Exists.{1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) fun operationAfter =>
+                        And (@MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard operationBefore)
+                          (And (@MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard operationBefore)
+                            (And
+                              (@MicroCFTA.InternedProbeProvenance.Available Symbol Guard operationBefore
+                                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard parentEntry parentBody
+                                  parentDepth parentOrdinary))
+                              (And
+                                (@Eq.{1}
+                                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.unfold Symbol Guard inst
+                                    (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard parentEntry
+                                      parentBody parentDepth parentOrdinary)
+                                    operationBefore)
+                                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) operationResult
+                                    operationAfter))
+                                (And
+                                  (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                    (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                                      operationBefore key)
+                                    (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                                  (And
+                                    (@Eq.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                      (@MicroCFTA.InternedConstructorTemplates.State.nodeRecords Symbol Guard
+                                        operationAfter key)
+                                      (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth
+                                          ordinary)))
+                                    (And
+                                      (Nonempty.{1}
+                                        (@MicroCFTA.SourceCurrentNativeMuIssuedHistory.Path Symbol Guard inst before
+                                          operationBefore))
+                                      (And
+                                        (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard operationAfter
+                                          after)
+                                        (And
+                                          (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                                            (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                                                operationAfter))
+                                            (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                                              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard after)))
+                                          (And
+                                            (@MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context Symbol Guard
+                                              operationBefore
+                                              (@List.map.{0, 0}
+                                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard fun name =>
+                                                  @ite.{1}
+                                                    (Option.{0}
+                                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                                    (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference name
+                                                      (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                                        (@MicroCFTA.Cache.Interned.identity
+                                                          MicroCFTA.InternedBinderProtocol.NodeKey parentEntry)))
+                                                    (MicroCFTA.InternedBinderProtocol.instDecidableEqReference name
+                                                      (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                                        (@MicroCFTA.Cache.Interned.identity
+                                                          MicroCFTA.InternedBinderProtocol.NodeKey parentEntry)))
+                                                    (@Option.some.{0}
+                                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard
+                                                        parentEntry parentBody parentDepth parentOrdinary))
+                                                    (@Option.none.{0}
+                                                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                                                (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard parentBody)))
+                                            (And
+                                              (@Eq.{1}
+                                                (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                                (@MicroCFTA.InternedFreshOrdinaryConstruction.build Symbol Guard inst
+                                                  (@MicroCFTA.InternedStoredSubstitution.encode Symbol Guard
+                                                    (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard
+                                                      parentBody)
+                                                    (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                                    parentBody)
+                                                  (@List.map.{0, 0}
+                                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                    (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard
+                                                      fun name =>
+                                                      @ite.{1}
+                                                        (Option.{0}
+                                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                                        (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference name
+                                                          (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                                            (@MicroCFTA.Cache.Interned.identity
+                                                              MicroCFTA.InternedBinderProtocol.NodeKey parentEntry)))
+                                                        (MicroCFTA.InternedBinderProtocol.instDecidableEqReference name
+                                                          (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                                            (@MicroCFTA.Cache.Interned.identity
+                                                              MicroCFTA.InternedBinderProtocol.NodeKey parentEntry)))
+                                                        (@Option.some.{0}
+                                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard
+                                                            parentEntry parentBody parentDepth parentOrdinary))
+                                                        (@Option.none.{0}
+                                                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                                                    (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard
+                                                      parentBody))
+                                                  operationBefore)
+                                                (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                  operationResult operationAfter))
+                                              (@MicroCFTA.SourceCurrentCompletedBuildRootedWriters.Written Symbol Guard
+                                                inst
+                                                (@MicroCFTA.InternedStoredSubstitution.encode Symbol Guard
+                                                  (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard parentBody)
+                                                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) parentBody)
+                                                (@List.map.{0, 0}
+                                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                  (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard fun name =>
+                                                    @ite.{1}
+                                                      (Option.{0}
+                                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                                                      (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference name
+                                                        (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                                          (@MicroCFTA.Cache.Interned.identity
+                                                            MicroCFTA.InternedBinderProtocol.NodeKey parentEntry)))
+                                                      (MicroCFTA.InternedBinderProtocol.instDecidableEqReference name
+                                                        (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                                          (@MicroCFTA.Cache.Interned.identity
+                                                            MicroCFTA.InternedBinderProtocol.NodeKey parentEntry)))
+                                                      (@Option.some.{0}
+                                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                                                        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard
+                                                          parentEntry parentBody parentDepth parentOrdinary))
+                                                      (@Option.none.{0}
+                                                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+                                                  (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard
+                                                    parentBody))
+                                                operationBefore operationAfter key
+                                                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry
+                                                  body depth ordinary)))))))))))))
+          (@MicroCFTA.SourceCurrentHeadMuGeneration.generated_later Symbol Guard inst before middle after key
+            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary) actualGenerated
+            (@Eq.mp.{0}
+              (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard middle
+                (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                  (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                    (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard edges) middle)))
+              (@MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard middle
+                (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                  (@Prod.mk.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) result after)))
+              (@congrArg.{1, 1}
+                (Prod.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (MicroCFTA.InternedConstructorTemplates.State Symbol Guard))
+                Prop
+                (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                  (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard edges) middle)
+                (@Prod.mk.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) result after)
+                (fun _a =>
+                  @MicroCFTA.InternedConstructorTemplates.Grows Symbol Guard middle
+                    (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) _a))
+                rebuilt)
+              growth)
+            (@Eq.mp.{0}
+              (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard middle))
+                (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                    (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                        (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard edges) middle)))))
+              (@MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard middle))
+                (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                    (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                      (@Prod.mk.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) result after)))))
+              (@congrArg.{1, 1}
+                (Prod.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (MicroCFTA.InternedConstructorTemplates.State Symbol Guard))
+                Prop
+                (@MicroCFTA.InternedConstructorTemplates.run Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) inst
+                  (@MicroCFTA.InternedConstructorTemplates.makeNode Symbol Guard edges) middle)
+                (@Prod.mk.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) result after)
+                (fun _a =>
+                  @MicroCFTA.Cache.Extends Nat MicroCFTA.InternedBinderProtocol.NodeKey
+                    (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                      (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard middle))
+                    (@MicroCFTA.Cache.State.issued MicroCFTA.InternedBinderProtocol.NodeKey
+                      (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                        (@Prod.snd.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                          (MicroCFTA.InternedConstructorTemplates.State Symbol Guard) _a))))
+                rebuilt)
+              issued)))
+    (@Eq.refl.{0} (@MicroCFTA.SourceEqualityRequiredHead.Head Symbol Guard inst value before result after) actual)
+'MicroCFTA.SourceCurrentHeadMuGeneration.head' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
