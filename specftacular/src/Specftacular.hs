@@ -8,7 +8,9 @@ module Specftacular (
     ftacularSpec,
     discoverMonomorphic,
     experimentalPhases,
-    programArguments,
+    SearchOptions (..),
+    defaultOptions,
+    parseOptions,
     searchPhases,
 ) where
 
@@ -44,6 +46,7 @@ import Data.Maybe (fromMaybe, isJust, mapMaybe)
 import qualified Data.Text as T
 import GHC.Clock (getMonotonicTimeNSec)
 import GHC.Stats (RTSStats (allocated_bytes, gc_cpu_ns, gcs), getRTSStats, getRTSStatsEnabled)
+import qualified Options.Applicative as O
 import System.CPUTime (getCPUTime)
 import qualified System.Environment as Env
 import qualified Text.Read as TR
@@ -275,11 +278,54 @@ diagnose env@Settings{..} level ty stage s action
         diagnosticEvent env "end" level ty stage s
         return result
 
-{- | The program arguments without the flags of the search, such as
-@--parallel@, which 'searchPhases' reads itself.
+-- | The options of a search.
+data SearchOptions = SearchOptions
+    { searchSize :: Int
+    -- ^ The largest size of the terms.
+    , searchPhase :: Int
+    -- ^ The last phase, from 1 to 4.
+    , searchParallel :: Bool
+    -- ^ Whether the buckets of a size run in parallel. This needs @+RTS -N@.
+    , searchSplit :: Int
+    {- ^ The number of levels of applications by which phase 4 splits the
+    enumeration of its skeletons into parts of one shape (0: no split).
+    -}
+    }
+    deriving (Show)
+
+-- | A sequential search with terms up to a size and the phases up to a phase.
+defaultOptions :: Int -> Int -> SearchOptions
+defaultOptions size phase = SearchOptions{searchSize = size, searchPhase = phase, searchParallel = False, searchSplit = 0}
+
+{- | Read the options from the program arguments: the size, the phase,
+@--parallel@, and @--split DEPTH@. The split is 2 with @--parallel@ and 0
+without it, unless @--split@ gives it.
 -}
-programArguments :: IO [String]
-programArguments = filter (\argument -> take 2 argument /= "--") <$> Env.getArgs
+parseOptions :: IO SearchOptions
+parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.progDesc "Find the laws of a signature."))
+  where
+    options = build <$> size <*> phase <*> parallel <*> O.optional split
+    build size' phase' parallel' split' =
+        SearchOptions
+            { searchSize = size'
+            , searchPhase = phase'
+            , searchParallel = parallel'
+            , searchSplit = fromMaybe (if parallel' then 2 else 0) split'
+            }
+    size = O.argument O.auto (O.metavar "SIZE" <> O.help "The largest size of the terms")
+    phase = O.argument O.auto (O.metavar "PHASE" <> O.help "The last phase, from 1 to 4")
+    parallel =
+        O.switch
+            ( O.long "parallel"
+                <> O.help "Run the buckets of a size in parallel, and enumerate the phase 4 skeletons in parallel parts (needs +RTS -N)"
+            )
+    split =
+        O.option
+            O.auto
+            ( O.long "split"
+                <> O.metavar "DEPTH"
+                <> O.help "Split the phase 4 skeletons by shape down to DEPTH levels of applications (default 2 with --parallel, else 0)"
+            )
 
 {- | Print the laws of a signature, with terms up to the size that the first
 program argument gives (6 by default). The types are monomorphic, as in
@@ -300,32 +346,27 @@ monomorphic: A, B, C, D, and Acc all become A (phase 1). The function
 gives the generators and the equalities of other types.
 -}
 discoverMonomorphic :: Int -> (TypeSkeleton -> Maybe GeneratedInstance) -> [Sig] -> IO [String]
-discoverMonomorphic size = experimentalPhases size 1
+discoverMonomorphic size = experimentalPhases (defaultOptions size 1)
 
 {- | The laws of a signature, with the phases from 1 to the given phase.
 Phases 2 to 4 are experimental. Phase 2 keeps A, B, C, D, and Acc apart.
 Phases 3 and 4 instantiate the abstract carrier types of each constant.
 The search checks every instance before evaluation (see 'termType').
 -}
-experimentalPhases :: Int -> Int -> (TypeSkeleton -> Maybe GeneratedInstance) -> [Sig] -> IO [String]
-experimentalPhases size phase extraReps sigs = searchPhases size phase (frontInstances extraReps) (mconcat sigs)
+experimentalPhases :: SearchOptions -> (TypeSkeleton -> Maybe GeneratedInstance) -> [Sig] -> IO [String]
+experimentalPhases options extraReps sigs = searchPhases options (frontInstances extraReps) (mconcat sigs)
 
 {- | 'experimentalPhases' with the instances of the types for the search,
 for a front end that does not give the types of the values to Haskell,
 such as a GHC session.
 -}
-searchPhases :: Int -> Int -> (TypeSkeleton -> Maybe Instance) -> Sig -> IO [String]
-searchPhases size phase givenInstances givenSig =
+searchPhases :: SearchOptions -> (TypeSkeleton -> Maybe Instance) -> Sig -> IO [String]
+searchPhases SearchOptions{searchSize = size, searchPhase = phase, searchParallel = parallelSetting, searchSplit = splitSetting} givenInstances givenSig =
     do
         -- SPECFTACULAR_PROGRESS=1 shows the progress of the search on stderr.
         progress <- (== Just "1") <$> Env.lookupEnv "SPECFTACULAR_PROGRESS"
         diagnosticSetting <- Env.lookupEnv "SPECFTACULAR_DIAGNOSTICS"
-        -- The --parallel flag runs the buckets of a size in parallel and
-        -- enumerates the phase 4 skeletons in parallel parts. It needs +RTS -N.
-        -- SPECFTACULAR_SPLIT=d sets the split of the skeletons by shape, down
-        -- to d applications (0 is off; 2 with --parallel).
-        parallelSetting <- elem "--parallel" <$> Env.getArgs
-        splitSetting <- fromMaybe (if parallelSetting then 2 else 0) . (>>= TR.readMaybe) <$> Env.lookupEnv "SPECFTACULAR_SPLIT"
+        -- Threads write whole diagnostic lines.
         when parallelSetting $ hSetBuffering stderr LineBuffering
         -- SPECFTACULAR_STOP_AFTER=phase:size stops the search after that size
         -- of that phase, so that a profile of the run is written.

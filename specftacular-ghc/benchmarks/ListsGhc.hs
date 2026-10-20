@@ -7,7 +7,7 @@ import Specftacular.GHC (withGhcSignature)
 
 main :: IO ()
 main = do
-    [s, p] <- map read <$> programArguments
+    options <- parseOptions
     withGhcSignature
         ["import Prelude", "import Data.List"]
         []
@@ -20,6 +20,6 @@ main = do
         ]
         [("0", "0 :: Int"), ("1", "1 :: Int")]
         $ \sig instances -> do
-            res <- searchPhases s p instances sig
+            res <- searchPhases options instances sig
             mapM_ print res
             print (length res)

@@ -8,12 +8,11 @@
 import Specftacular
 
 main = do
-    [s, p] <- map read <$> programArguments
+    options <- parseOptions
     -- ftacularSpec' 7 3 extraReps [
     res <-
         experimentalPhases
-            s
-            p
+            options
             (const Nothing)
             [ con "reverse" (reverse :: [A] -> [A])
             , con "++" ((++) :: [A] -> [A] -> [A])

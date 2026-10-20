@@ -153,12 +153,11 @@ extraReps _ = Nothing
 --   monoType (Proxy :: Proxy Sym) ]
 
 main = do
-    [s, p] <- map read <$> programArguments
+    options <- parseOptions
     putStrLn "Observation: acceptance on 100 fixed words; seed 12345; size 10."
     res <-
         experimentalPhases
-            s
-            p
+            options
             extraReps
             [ con "char" (Char :: Sym -> Regex Sym)
             , con "any" (AnyChar :: Regex Sym)

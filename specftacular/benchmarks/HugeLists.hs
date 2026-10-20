@@ -19,11 +19,10 @@ usort (a : as) =
         ++ usort (filter (> a) as)
 
 main = do
-    [s, p] <- map read <$> programArguments
+    options <- parseOptions
     res <-
         experimentalPhases
-            s
-            p
+            options
             (const Nothing)
             [ con "length" (length :: [A] -> Int)
             , con "sort" (sort :: [Int] -> [Int])

@@ -9,14 +9,14 @@ import Specftacular.GHC (withGhcSignature)
 
 main :: IO ()
 main = do
-    [s, p] <- map read <$> programArguments
+    options <- parseOptions
     withGhcSignature
         ["import Prelude", "import Data.List", "import Control.Monad"]
         ["usort :: [Int] -> [Int]\nusort [] = []\nusort (a:as) = usort (filter (< a) as) ++ [a] ++ usort (filter (> a) as)"]
         [(name, if name `elem` operators then "(" <> T.unpack name <> ")" else T.unpack name) | name <- names]
         []
         $ \sig instances -> do
-            res <- searchPhases s p instances sig
+            res <- searchPhases options instances sig
             mapM_ print res
             print (length res)
   where

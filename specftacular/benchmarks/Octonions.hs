@@ -69,12 +69,11 @@ extraReps t | t == typeSkeletonOf (Proxy :: Proxy It) = Just $ genRepFromProxy (
 extraReps _ = Nothing
 
 main = do
-    [s, p] <- map read <$> programArguments
+    options <- parseOptions
     -- ftacularSpec' 7 3 extraReps [
     res <-
         experimentalPhases
-            s
-            p
+            options
             extraReps
             [ con "*" ((*) :: It -> It -> It)
             , (con "inv" (recip :: It -> It))
