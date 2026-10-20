@@ -1,0 +1,53 @@
+/tmp/mcfta-stopping-rooted-writers-fixture/stopping-fixture-direct-1.source.lean:77:61: error: Tactic `decide` failed for proposition
+  blockedKey ≠ targetKey
+because its `Decidable` instance
+  instDecidableNot
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableNot`, `InternedBinderProtocol.instDecidableEqMuKey`, `InternedBinderProtocol.instDecidableEqNodeKey`, `InternedBinderProtocol.instDecidableEqNodeRef`, `InternedBinderProtocol.instDecidableEqMuKey.decEq`, `InternedBinderProtocol.instDecidableEqNodeKey.decEq`, and `InternedBinderProtocol.instDecidableEqNodeRef.decEq`, reduction got stuck at the `Decidable` instance
+  match preparedDepth.referenceOf, depth.referenceOf with
+  | InternedBinderProtocol.NodeRef.empty, InternedBinderProtocol.NodeRef.empty => isTrue ⋯
+  | InternedBinderProtocol.NodeRef.empty, InternedBinderProtocol.NodeRef.node identity => isFalse ⋯
+  | InternedBinderProtocol.NodeRef.empty, InternedBinderProtocol.NodeRef.mu identity => isFalse ⋯
+  | InternedBinderProtocol.NodeRef.empty, InternedBinderProtocol.NodeRef.union identity => isFalse ⋯
+  | InternedBinderProtocol.NodeRef.empty, InternedBinderProtocol.NodeRef.ref reference => isFalse ⋯
+  | InternedBinderProtocol.NodeRef.node identity, InternedBinderProtocol.NodeRef.empty => isFalse ⋯
+  | InternedBinderProtocol.NodeRef.node a, InternedBinderProtocol.NodeRef.node b =>
+    if h : a = b then h ▸ isTrue ⋯ else isFalse ⋯
+  | InternedBinderProtocol.NodeRef.node identity, InternedBinderProtocol.NodeRef.mu identity_1 => isFalse ⋯
+  | InternedBinderProtocol.NodeRef.node identity, InternedBinderProtocol.NodeRef.union identity_1 => isFalse ⋯
+  | InternedBinderProtocol.NodeRef.node identity, InternedBinderProtocol.NodeRef.ref reference => isFalse ⋯
+  | InternedBinderProtocol.NodeRef.mu identity, InternedBinderProtocol.NodeRef.empty => isFalse ⋯
+  | InternedBinderProtocol.NodeRef.mu identity, InternedBinderProtocol.NodeRef.node identity_1 => isFalse ⋯
+  | InternedBinderProtocol.NodeRef.mu a, InternedBinderProtocol.NodeRef.mu b =>
+    if h : a = b then h ▸ isTrue ⋯ else isFalse ⋯
+  | InternedBinderProtocol.NodeRef.mu identity, InternedBinderProtocol.NodeRef.union identity_1 => isFalse ⋯
+  | InternedBinderProtocol.NodeRef.mu identity, InternedBinderProtocol.NodeRef.ref reference => isFalse ⋯
+  | InternedBinderProtocol.NodeRef.union identity, InternedBinderProtocol.NodeRef.empty => isFalse ⋯
+  | InternedBinderProtocol.NodeRef.union identity, InternedBinderProtocol.NodeRef.node identity_1 => isFalse ⋯
+  | InternedBinderProtocol.NodeRef.union identity, InternedBinderProtocol.NodeRef.mu identity_1 => isFalse ⋯
+  | InternedBinderProtocol.NodeRef.union a, InternedBinderProtocol.NodeRef.union b =>
+    if h : a = b then h ▸ isTrue ⋯ else isFalse ⋯
+  | InternedBinderProtocol.NodeRef.union identity, InternedBinderProtocol.NodeRef.ref reference => isFalse ⋯
+  | InternedBinderProtocol.NodeRef.ref reference, InternedBinderProtocol.NodeRef.empty => isFalse ⋯
+  | InternedBinderProtocol.NodeRef.ref reference, InternedBinderProtocol.NodeRef.node identity => isFalse ⋯
+  | InternedBinderProtocol.NodeRef.ref reference, InternedBinderProtocol.NodeRef.mu identity => isFalse ⋯
+  | InternedBinderProtocol.NodeRef.ref reference, InternedBinderProtocol.NodeRef.union identity => isFalse ⋯
+  | InternedBinderProtocol.NodeRef.ref a, InternedBinderProtocol.NodeRef.ref b =>
+    if h : a = b then h ▸ isTrue ⋯ else isFalse ⋯
+/tmp/mcfta-stopping-rooted-writers-fixture/stopping-fixture-direct-1.source.lean:98:4: error: Type mismatch: After simplification, term
+  written
+ has type
+  SourceCurrentCompletedBuildRootedWriters.Written source [] reserved afterTarget targetKey
+    (Value.mu entry body depth ordinary)
+but is expected to have type
+  ∃ event,
+    Reached source [] (Syntax.binder event.smart event.expression) event.environment event.before ∧
+      targetKey = event.key ∧
+        Value.mu entry body depth ordinary = event.candidate ∧
+          event.afterBody.nodeRecords event.key = none ∧
+            Nonempty (Path reserved event.before) ∧
+              Nonempty (Path event.before event.afterDepth) ∧
+                Nonempty (Path event.afterDepth event.cut) ∧
+                  Nonempty (Path event.allocated event.afterBody) ∧
+                    Grows event.after afterTarget ∧ Extends event.after.nodes.issued afterTarget.nodes.issued

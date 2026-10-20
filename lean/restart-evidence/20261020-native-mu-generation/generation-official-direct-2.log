@@ -1,0 +1,78 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261020-native-mu-generation/generation-official-direct-2.source.lean:95:4: error: No goals to be solved
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261020-native-mu-generation/generation-official-direct-2.source.lean:92:83: error: unsolved goals
+case inr
+A : Type
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+fuel : Nat
+control rest : Control A
+before after : Checked width
+actual : Trace fuel control before rest after
+semantic : SemanticHeap before.native.machine.heap
+key : InternedBinderProtocol.NodeKey
+entry : Interned InternedBinderProtocol.NodeKey
+body depth ordinary : Value Symbol Guard
+selected : after.native.machine.heap.nodeRecords key = some (Value.mu entry body depth ordinary)
+site :
+  ∃ prefixFuel suffixFuel pair siteBody next siteBefore siteAfter result heap,
+    fuel = prefixFuel + 1 + suffixFuel ∧
+      Trace prefixFuel control before (Control.code (Code.optionalBinder pair siteBody next)) siteBefore ∧
+        SemanticHeap siteBefore.native.machine.heap ∧
+          Available siteBefore.native.machine.heap siteBody ∧
+            SourceRecursiveIntersectionMaybeMu.maybeMu pair siteBody siteBefore.native.machine.heap =
+                InternedNestedConstruction.Outcome.done result heap ∧
+              siteAfter =
+                  {
+                    native :=
+                      advance siteBefore.native
+                        (have __src := siteBefore.native.machine;
+                        { heap := heap, domains := __src.domains }),
+                    operations := siteBefore.operations } ∧
+                step (Control.code (Code.optionalBinder pair siteBody next)) siteBefore =
+                    Outcome.yielded (Control.code (next result)) siteAfter ∧
+                  Trace suffixFuel (Control.code (next result)) siteAfter rest after ∧
+                    siteBefore.native.machine.heap.nodeRecords key = none ∧
+                      heap.nodeRecords key = some (Value.mu entry body depth ordinary) ∧
+                        Grows before.native.machine.heap siteBefore.native.machine.heap ∧
+                          Extends before.native.machine.heap.nodes.issued siteBefore.native.machine.heap.nodes.issued ∧
+                            Grows heap after.native.machine.heap ∧
+                              Extends heap.nodes.issued after.native.machine.heap.nodes.issued
+⊢ before.native.machine.heap.nodeRecords key = some (Value.mu entry body depth ordinary) ∨
+    ∃ prefixFuel suffixFuel pair parent next siteBefore siteAfter result heap,
+      fuel = prefixFuel + 1 + suffixFuel ∧
+        Trace prefixFuel control before (Control.code (Code.optionalBinder pair parent next)) siteBefore ∧
+          SemanticHeap siteBefore.native.machine.heap ∧
+            Available siteBefore.native.machine.heap parent ∧
+              SourceRecursiveIntersectionMaybeMu.maybeMu pair parent siteBefore.native.machine.heap =
+                  InternedNestedConstruction.Outcome.done result heap ∧
+                siteAfter =
+                    {
+                      native :=
+                        advance siteBefore.native
+                          (let __src := siteBefore.native.machine;
+                          { heap := heap, domains := __src.domains }),
+                      operations := siteBefore.operations } ∧
+                  step (Control.code (Code.optionalBinder pair parent next)) siteBefore =
+                      Outcome.yielded (Control.code (next result)) siteAfter ∧
+                    Trace suffixFuel (Control.code (next result)) siteAfter rest after ∧
+                      siteBefore.native.machine.heap.nodeRecords key = none ∧
+                        heap.nodeRecords key = some (Value.mu entry body depth ordinary) ∧
+                          Grows before.native.machine.heap siteBefore.native.machine.heap ∧
+                            Extends before.native.machine.heap.nodes.issued
+                                siteBefore.native.machine.heap.nodes.issued ∧
+                              Grows heap after.native.machine.heap ∧
+                                Extends heap.nodes.issued after.native.machine.heap.nodes.issued ∧
+                                  Reference.intersection pair.fst pair.snd ∈ parent.free ∧
+                                    Context siteBefore.native.machine.heap (leaves parent) ∧
+                                      InternedFreshOrdinaryConstruction.build
+                                            (InternedNestedConstruction.Syntax.binder true
+                                              (encode (leaves parent) [Reference.intersection pair.fst pair.snd]
+                                                parent))
+                                            (leaves parent) siteBefore.native.machine.heap =
+                                          InternedNestedConstruction.Outcome.done result heap ∧
+                                        Written
+                                          (InternedNestedConstruction.Syntax.binder true
+                                            (encode (leaves parent) [Reference.intersection pair.fst pair.snd] parent))
+                                          (leaves parent) siteBefore.native.machine.heap heap key
+                                          (Value.mu entry body depth ordinary)
