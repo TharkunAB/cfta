@@ -1245,15 +1245,18 @@ so the choice is the same in each run.
 -}
 boundedCompletion :: String -> Rules -> Rules -> IO Rules
 boundedCompletion label completed alone = do
+    -- SPECFTACULAR_COMPLETION_BUDGET=GiB changes the budget (spike).
+    budget <-
+        maybe completionBudget (* (1024 * 1024 * 1024)) . (>>= TR.readMaybe) <$> Env.lookupEnv "SPECFTACULAR_COMPLETION_BUDGET"
     begin <- getMonotonicTimeNSec
-    setAllocationCounter completionBudget
+    setAllocationCounter budget
     enableAllocationLimit
     result <- try (evaluate completed)
     disableAllocationLimit
     left <- getAllocationCounter
     end <- getMonotonicTimeNSec
     -- A completion that allocates more than 1 GiB prints its cost on stderr.
-    let allocated = fromIntegral completionBudget - fromIntegral left :: Double
+    let allocated = fromIntegral budget - fromIntegral left :: Double
     when (allocated > 1024 ^ (3 :: Int)) $
         hPutStrLn
             stderr
