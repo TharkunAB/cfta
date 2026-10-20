@@ -1,0 +1,1741 @@
+@MicroCFTA.SourceCurrentOuterPlainOwnerProgress.dispatch : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width g s r e p h m c n budget ownerFuel fuel slot handle : Nat}
+  {owner : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest}
+  {entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey}
+  {rows :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {depth : Nat} {free : List.{0} MicroCFTA.InternedBinderProtocol.Reference}
+  {running before afterParent start : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {original parented :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {rest :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {combined : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+  {earlier :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)},
+  @Eq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      owner.value
+      (@MicroCFTA.InternedConstructorTemplates.Value.node
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry rows depth free) →
+    @MicroCFTA.SourceCurrentOuterPrefixInvariants.Good width running →
+      @MicroCFTA.SourceCurrentOuterPrefixInvariants.NodeReady width running owner →
+        @Eq.{1}
+            (Option.{0}
+              (MicroCFTA.FlatMemoThunk.Cell MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))
+            (@MicroCFTA.FlatMemoThunk.State.cells MicroCFTA.SourceCurrentAllocatedPartialState.NodeKey
+              MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest
+              (MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (@MicroCFTA.SourceCurrentAllocatedPartialState.State.nodeResults width running) handle)
+            (@Option.some.{0}
+              (MicroCFTA.FlatMemoThunk.Cell MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+              (@MicroCFTA.FlatMemoThunk.Cell.mk MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                owner
+                (@MicroCFTA.FlatMemoThunk.Status.evaluating
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))) →
+          @MicroCFTA.SourceCurrentOuterPlainRowShapes.Origins width running →
+            @MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached inst inst_1 inst_2 width g s r e p h m c n budget
+                (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.body width ownerFuel owner running)
+                (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.rows width
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel slot)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                  owner.inherited
+                  (@List.cons.{0}
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    original rest)
+                  before) →
+              @Membership.mem.{0, 0}
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (List.{0}
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                  (@List.instMembership.{0}
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                  rows original →
+                @Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+                    (@MicroCFTA.SourceCompactGuards.sourceEqualities MicroCFTA.FullSyntax.Formula
+                      (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                        (@MicroCFTA.Cache.Interned.key
+                          (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) original))))
+                    (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                      (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path))) →
+                  @Eq.{2}
+                      (MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome
+                        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        width)
+                      (@MicroCFTA.SourceCurrentAllocatedPartialWorker.edgeCall inst inst_1 inst_2 width
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel slot)
+                          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                        g s r e p h m c n budget { inherited := owner.inherited, value := original } before)
+                      (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.done
+                        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        width parented afterParent) →
+                    @Eq.{1} (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                        (@Prod.fst.{0, 0}
+                          (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                          MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                          (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run
+                            (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                              (@MicroCFTA.Cache.Interned.key
+                                (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) parented)))
+                            owner.inherited
+                            (@MicroCFTA.SourceEqualityNativeDemand.State.operations width
+                              (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width afterParent))))
+                        (@Except.ok.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value)
+                          (@Option.some.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value combined)) →
+                      @Ne.{1} MicroCFTA.SourceEqualityConstraintAllocation.Value combined
+                          MicroCFTA.SourceEqualityConstraintAllocation.Value.contradiction →
+                        @Eq.{2}
+                            (MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome
+                              (List.{0}
+                                (MicroCFTA.InternedConstructorTemplates.Value
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                              width)
+                            (@MicroCFTA.SourceCurrentAllocatedPartialWorker.walk inst inst_1 inst_2 width
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel slot)
+                                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                              g s r e p h m c n budget combined
+                              (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                              (@List.take.{0}
+                                (MicroCFTA.InternedConstructorTemplates.Value
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                slot
+                                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) parented))
+                              (@MicroCFTA.SourceCurrentAllocatedPartialGraph.prefixState width afterParent parented
+                                owner.inherited))
+                            (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.done
+                              (List.{0}
+                                (MicroCFTA.InternedConstructorTemplates.Value
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                              width earlier start) →
+                          @Eq.{1}
+                              (Option.{0}
+                                (MicroCFTA.InternedConstructorTemplates.Value
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                              (@GetElem?.getElem?.{0, 0, 0}
+                                (List.{0}
+                                  (MicroCFTA.InternedConstructorTemplates.Value
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                                Nat
+                                (MicroCFTA.InternedConstructorTemplates.Value
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                (fun as i =>
+                                  @LT.lt.{0} Nat instLTNat i
+                                    (@List.length.{0}
+                                      (MicroCFTA.InternedConstructorTemplates.Value
+                                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                      as))
+                                (@List.instGetElem?NatLtLength.{0}
+                                  (MicroCFTA.InternedConstructorTemplates.Value
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) parented)
+                                slot)
+                              (@Option.some.{0}
+                                (MicroCFTA.InternedConstructorTemplates.Value
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                value) →
+                            And
+                              (@MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached inst inst_1 inst_2 width g s r e p
+                                h m c n budget
+                                (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.body width ownerFuel owner running)
+                                (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node width fuel
+                                  {
+                                    inherited :=
+                                      @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                        (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                                        (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined
+                                          slot),
+                                    value := value }
+                                  (@Prod.snd.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                    (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                                    (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot))))
+                              (And
+                                (@Ne.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) value)
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                    owner.value))
+                                (@Ne.{1} MicroCFTA.SourceCurrentAllocatedPartialState.NodeKey
+                                  {
+                                      inherited :=
+                                        @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                          (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                                          (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined
+                                            slot),
+                                      value := value }.key
+                                  owner.key))
+theorem MicroCFTA.SourceCurrentOuterPlainOwnerProgress.dispatch : ∀
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width g s r e p h m c n budget ownerFuel fuel slot handle : Nat}
+  {owner : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest}
+  {entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey}
+  {rows :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {depth : Nat} {free : List.{0} MicroCFTA.InternedBinderProtocol.Reference}
+  {running before afterParent start : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {original parented :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {rest :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {combined : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+  {earlier :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)},
+  @Eq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      owner.value
+      (@MicroCFTA.InternedConstructorTemplates.Value.node
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry rows depth free) →
+    @MicroCFTA.SourceCurrentOuterPrefixInvariants.Good width running →
+      @MicroCFTA.SourceCurrentOuterPrefixInvariants.NodeReady width running owner →
+        @Eq.{1}
+            (Option.{0}
+              (MicroCFTA.FlatMemoThunk.Cell MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))
+            (@MicroCFTA.FlatMemoThunk.State.cells MicroCFTA.SourceCurrentAllocatedPartialState.NodeKey
+              MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest
+              (MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (@MicroCFTA.SourceCurrentAllocatedPartialState.State.nodeResults width running) handle)
+            (@Option.some.{0}
+              (MicroCFTA.FlatMemoThunk.Cell MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+              (@MicroCFTA.FlatMemoThunk.Cell.mk MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                owner
+                (@MicroCFTA.FlatMemoThunk.Status.evaluating
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))) →
+          @MicroCFTA.SourceCurrentOuterPlainRowShapes.Origins width running →
+            @MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached inst inst_1 inst_2 width g s r e p h m c n budget
+                (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.body width ownerFuel owner running)
+                (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.rows width
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel slot)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                  owner.inherited
+                  (@List.cons.{0}
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    original rest)
+                  before) →
+              @Membership.mem.{0, 0}
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (List.{0}
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                  (@List.instMembership.{0}
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                  rows original →
+                @Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+                    (@MicroCFTA.SourceCompactGuards.sourceEqualities MicroCFTA.FullSyntax.Formula
+                      (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                        (@MicroCFTA.Cache.Interned.key
+                          (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) original))))
+                    (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                      (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path))) →
+                  @Eq.{2}
+                      (MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome
+                        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        width)
+                      (@MicroCFTA.SourceCurrentAllocatedPartialWorker.edgeCall inst inst_1 inst_2 width
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel slot)
+                          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                        g s r e p h m c n budget { inherited := owner.inherited, value := original } before)
+                      (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.done
+                        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        width parented afterParent) →
+                    @Eq.{1} (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                        (@Prod.fst.{0, 0}
+                          (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                          MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                          (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run
+                            (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                              (@MicroCFTA.Cache.Interned.key
+                                (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) parented)))
+                            owner.inherited
+                            (@MicroCFTA.SourceEqualityNativeDemand.State.operations width
+                              (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width afterParent))))
+                        (@Except.ok.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value)
+                          (@Option.some.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value combined)) →
+                      @Ne.{1} MicroCFTA.SourceEqualityConstraintAllocation.Value combined
+                          MicroCFTA.SourceEqualityConstraintAllocation.Value.contradiction →
+                        @Eq.{2}
+                            (MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome
+                              (List.{0}
+                                (MicroCFTA.InternedConstructorTemplates.Value
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                              width)
+                            (@MicroCFTA.SourceCurrentAllocatedPartialWorker.walk inst inst_1 inst_2 width
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel slot)
+                                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                              g s r e p h m c n budget combined
+                              (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                              (@List.take.{0}
+                                (MicroCFTA.InternedConstructorTemplates.Value
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                slot
+                                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) parented))
+                              (@MicroCFTA.SourceCurrentAllocatedPartialGraph.prefixState width afterParent parented
+                                owner.inherited))
+                            (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.done
+                              (List.{0}
+                                (MicroCFTA.InternedConstructorTemplates.Value
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                              width earlier start) →
+                          @Eq.{1}
+                              (Option.{0}
+                                (MicroCFTA.InternedConstructorTemplates.Value
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                              (@GetElem?.getElem?.{0, 0, 0}
+                                (List.{0}
+                                  (MicroCFTA.InternedConstructorTemplates.Value
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                                Nat
+                                (MicroCFTA.InternedConstructorTemplates.Value
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                (fun as i =>
+                                  @LT.lt.{0} Nat instLTNat i
+                                    (@List.length.{0}
+                                      (MicroCFTA.InternedConstructorTemplates.Value
+                                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                      as))
+                                (@List.instGetElem?NatLtLength.{0}
+                                  (MicroCFTA.InternedConstructorTemplates.Value
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) parented)
+                                slot)
+                              (@Option.some.{0}
+                                (MicroCFTA.InternedConstructorTemplates.Value
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                value) →
+                            And
+                              (@MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached inst inst_1 inst_2 width g s r e p
+                                h m c n budget
+                                (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.body width ownerFuel owner running)
+                                (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node width fuel
+                                  {
+                                    inherited :=
+                                      @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                        (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                                        (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined
+                                          slot),
+                                    value := value }
+                                  (@Prod.snd.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                    (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                                    (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot))))
+                              (And
+                                (@Ne.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) value)
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                    owner.value))
+                                (@Ne.{1} MicroCFTA.SourceCurrentAllocatedPartialState.NodeKey
+                                  {
+                                      inherited :=
+                                        @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                          (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                                          (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined
+                                            slot),
+                                      value := value }.key
+                                  owner.key)) :=
+fun [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+    [inst_1 :
+      DecidableEq.{1}
+        (MicroCFTA.InternedConstructorTemplates.EdgeKey
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    [inst_2 :
+      DecidableEq.{1}
+        (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    {width g s r e p h m c n budget ownerFuel fuel slot handle} {owner} {entry} {rows} {depth} {free}
+    {running before afterParent start} {original parented} {rest} {combined} {earlier} {value} ordinary good ready
+    active origins past member plain parent combinedAt live earlierCalls selected =>
+  have current :=
+    @MicroCFTA.SourceCurrentOuterPrefixInvariants.reached width inst inst_1 inst_2 g s r e p h m c n budget
+      (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.body width ownerFuel owner running)
+      (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.rows width
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel slot)
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+        owner.inherited
+        (@List.cons.{0}
+          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          original rest)
+        before)
+      past good ready;
+  have retained :=
+    @MicroCFTA.SourceCurrentOuterPlainRowShapes.reached inst inst_1 inst_2 g s r e p h m c n budget width
+      (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.body width ownerFuel owner running)
+      (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.rows width
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel slot)
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+        owner.inherited
+        (@List.cons.{0}
+          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          original rest)
+        before)
+      past good ready origins;
+  have shape :=
+    @And.right (@MicroCFTA.SourceCurrentOuterPlainRowShapes.Origins width afterParent)
+      (@Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+          (@MicroCFTA.SourceCompactGuards.sourceEqualities MicroCFTA.FullSyntax.Formula
+            (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.Cache.Interned.key
+                (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  { inherited := owner.inherited, value := original }.value))))
+          (@Option.some.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+            (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path))) →
+        MicroCFTA.SourceCurrentAllocatedPartialReturnedDomain.Shape
+          { inherited := owner.inherited, value := original }.value parented)
+      (@MicroCFTA.SourceCurrentOuterPlainRowShapes.edge_call width inst inst_1 inst_2
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel slot)
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+        g s r e p h m c n budget { inherited := owner.inherited, value := original } before parented afterParent parent
+        (@And.left
+          (@MicroCFTA.SourceCurrentOuterPrefixInvariants.Good width
+            (@MicroCFTA.SourceCurrentOuterActiveAncestry.caller width
+              (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.rows width
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel slot)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                owner.inherited
+                (@List.cons.{0}
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  original rest)
+                before)))
+          (@MicroCFTA.SourceCurrentOuterPrefixInvariants.Inputs width
+            (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.rows width
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel slot)
+                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+              owner.inherited
+              (@List.cons.{0}
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                original rest)
+              before))
+          current)
+        (@And.intro
+          (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+            (@MicroCFTA.SourceEqualityNativeDemand.State.operations width
+                (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)).constraints
+            { inherited := owner.inherited, value := original }.inherited)
+          (@MicroCFTA.InternedEdgeResidency.EdgeResident
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.SourceEqualityNativeDemand.State.native width
+                  (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before))))
+            { inherited := owner.inherited, value := original }.value)
+          (@And.left
+            (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+              (@MicroCFTA.SourceEqualityNativeDemand.State.operations width
+                  (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)).constraints
+              owner.inherited)
+            (@MicroCFTA.InternedNestedProvenance.Edges (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.SourceEqualityNativeDemand.State.native width
+                    (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before))))
+              (@List.cons.{0}
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                original rest))
+            (@And.right
+              (@MicroCFTA.SourceCurrentOuterPrefixInvariants.Good width
+                (@MicroCFTA.SourceCurrentOuterActiveAncestry.caller width
+                  (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.rows width
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel slot)
+                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                    owner.inherited
+                    (@List.cons.{0}
+                      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      original rest)
+                    before)))
+              (@MicroCFTA.SourceCurrentOuterPrefixInvariants.Inputs width
+                (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.rows width
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel slot)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                  owner.inherited
+                  (@List.cons.{0}
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    original rest)
+                  before))
+              current))
+          (@And.right
+            (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+              (@MicroCFTA.SourceEqualityNativeDemand.State.operations width
+                  (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before)).constraints
+              owner.inherited)
+            (@MicroCFTA.InternedNestedProvenance.Edges (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.SourceEqualityNativeDemand.State.native width
+                    (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width before))))
+              (@List.cons.{0}
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                original rest))
+            (@And.right
+              (@MicroCFTA.SourceCurrentOuterPrefixInvariants.Good width
+                (@MicroCFTA.SourceCurrentOuterActiveAncestry.caller width
+                  (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.rows width
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel slot)
+                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                    owner.inherited
+                    (@List.cons.{0}
+                      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      original rest)
+                    before)))
+              (@MicroCFTA.SourceCurrentOuterPrefixInvariants.Inputs width
+                (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.rows width
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel slot)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                  owner.inherited
+                  (@List.cons.{0}
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    original rest)
+                  before))
+              current)
+            { inherited := owner.inherited, value := original }.value
+            (@List.mem_cons_self.{0}
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              original rest)))
+        retained)
+      plain;
+  have different :=
+    @Eq.mpr.{0}
+      (@Ne.{1}
+        (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        value owner.value)
+      (@Ne.{1}
+        (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        value
+        (@MicroCFTA.InternedConstructorTemplates.Value.node
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry rows depth free))
+      (@id.{0}
+        (@Eq.{1} Prop
+          (@Ne.{1}
+            (MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            value owner.value)
+          (@Ne.{1}
+            (MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            value
+            (@MicroCFTA.InternedConstructorTemplates.Value.node
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry rows depth free)))
+        (@congrArg.{1, 1}
+          (MicroCFTA.InternedConstructorTemplates.Value
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          Prop owner.value
+          (@MicroCFTA.InternedConstructorTemplates.Value.node
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry rows depth free)
+          (fun _a =>
+            @Ne.{1}
+              (MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              value _a)
+          ordinary))
+      (@MicroCFTA.SourceCurrentOuterPlainOwnerProgress.shape_child_ne✝ entry rows depth free original parented value
+        member shape
+        (@List.mem_of_getElem?.{0}
+          (MicroCFTA.InternedConstructorTemplates.Value
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) parented)
+          slot value selected));
+  have rowStep :=
+    @MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached.snoc inst inst_1 inst_2 width g s r e p h m c n budget
+      (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.rows width
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel slot)
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+        owner.inherited
+        (@List.cons.{0}
+          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          original rest)
+        before)
+      (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.rows width
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel slot)
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+        owner.inherited
+        (@List.cons.{0}
+          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          original rest)
+        before)
+      (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.descendants width
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel slot)
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+        owner.inherited parented afterParent)
+      (@MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached.refl inst inst_1 inst_2 width g s r e p h m c n budget
+        (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.rows width
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel slot)
+            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+          owner.inherited
+          (@List.cons.{0}
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            original rest)
+          before))
+      (@MicroCFTA.SourceCurrentOuterExecutionAncestry.Step.rows_edge inst inst_1 inst_2 width g s r e p h m c n budget
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel slot)
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+        owner.inherited original before parented afterParent rest parent);
+  have walkStep :=
+    @MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached.snoc inst inst_1 inst_2 width g s r e p h m c n budget
+      (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.body width ownerFuel owner running)
+      (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.children width
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel slot)
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+        combined
+        (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) parented)
+        (@MicroCFTA.SourceCurrentAllocatedPartialGraph.prefixState width afterParent parented owner.inherited))
+      (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.walk width
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel slot)
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+        combined (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+        (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) parented)
+        (@MicroCFTA.SourceCurrentAllocatedPartialGraph.prefixState width afterParent parented owner.inherited))
+      (@MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached.snoc inst inst_1 inst_2 width g s r e p h m c n budget
+        (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.body width ownerFuel owner running)
+        (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.descendants width
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel slot)
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+          owner.inherited parented afterParent)
+        (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.children width
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel slot)
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+          combined
+          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) parented)
+          (@MicroCFTA.SourceCurrentAllocatedPartialGraph.prefixState width afterParent parented owner.inherited))
+        (@MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached.trans inst inst_1 inst_2 g s r e p h m c n budget width
+          (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.body width ownerFuel owner running)
+          (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.rows width
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel slot)
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+            owner.inherited
+            (@List.cons.{0}
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              original rest)
+            before)
+          (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.descendants width
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel slot)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+            owner.inherited parented afterParent)
+          past rowStep)
+        (@MicroCFTA.SourceCurrentOuterExecutionAncestry.Step.descendants_children inst inst_1 inst_2 width g s r e p h m
+          c n budget owner.inherited combined
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel slot)
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+          afterParent parented combinedAt))
+      (@MicroCFTA.SourceCurrentOuterExecutionAncestry.Step.children_walk inst inst_1 inst_2 width g s r e p h m c n
+        budget combined
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel slot)
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+        (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) parented)
+        (@MicroCFTA.SourceCurrentAllocatedPartialGraph.prefixState width afterParent parented owner.inherited) live);
+  have entered :=
+    @MicroCFTA.SourceCurrentOuterUntouchedProgress.walk_prefix inst inst_1 inst_2 width fuel g s r e p h m c n budget
+      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) slot combined
+      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) parented)
+      earlier value
+      (@MicroCFTA.SourceCurrentAllocatedPartialGraph.prefixState width afterParent parented owner.inherited) start
+      earlierCalls selected;
+  have reached :=
+    @MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached.trans inst inst_1 inst_2 g s r e p h m c n budget width
+      (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.body width ownerFuel owner running)
+      (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.walk width
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel slot)
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+        combined (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+        (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) parented)
+        (@MicroCFTA.SourceCurrentAllocatedPartialGraph.prefixState width afterParent parented owner.inherited))
+      (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node width fuel
+        {
+          inherited :=
+            @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+              (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+              (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot),
+          value := value }
+        (@Prod.snd.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+          (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+          (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot)))
+      walkStep
+      (@Eq.mp.{0}
+        (@MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached inst inst_1 inst_2 width g s r e p h m c n budget
+          (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.walk width
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel slot)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+            combined (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+            (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) parented)
+            (@MicroCFTA.SourceCurrentAllocatedPartialGraph.prefixState width afterParent parented owner.inherited))
+          (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node width fuel
+            {
+              inherited :=
+                @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                  (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                  (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) slot)),
+              value := value }
+            (@Prod.snd.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+              (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+              (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) slot)))))
+        (@MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached inst inst_1 inst_2 width g s r e p h m c n budget
+          (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.walk width
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel slot)
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+            combined (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+            (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) parented)
+            (@MicroCFTA.SourceCurrentAllocatedPartialGraph.prefixState width afterParent parented owner.inherited))
+          (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node width fuel
+            {
+              inherited :=
+                @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                  (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                  (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot),
+              value := value }
+            (@Prod.snd.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+              (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+              (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot))))
+        (@congrArg.{2, 1} (MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase width) Prop
+          (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node width fuel
+            {
+              inherited :=
+                @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                  (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                  (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) slot)),
+              value := value }
+            (@Prod.snd.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+              (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+              (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) slot))))
+          (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node width fuel
+            {
+              inherited :=
+                @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                  (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                  (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot),
+              value := value }
+            (@Prod.snd.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+              (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+              (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot)))
+          (@MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached inst inst_1 inst_2 width g s r e p h m c n budget
+            (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.walk width
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel slot)
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+              combined (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+              (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) parented)
+              (@MicroCFTA.SourceCurrentAllocatedPartialGraph.prefixState width afterParent parented owner.inherited)))
+          (@congr.{2, 2} (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+            (MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase width)
+            (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node width fuel
+              {
+                inherited :=
+                  @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                    (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                    (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                        (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) slot)),
+                value := value })
+            (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node width fuel
+              {
+                inherited :=
+                  @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                    (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                    (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot),
+                value := value })
+            (@Prod.snd.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+              (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+              (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) slot)))
+            (@Prod.snd.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+              (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+              (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot))
+            (@congrArg.{1, 2} MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest
+              (MicroCFTA.SourceCurrentAllocatedPartialState.State width →
+                MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase width)
+              {
+                inherited :=
+                  @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                    (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                    (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                        (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) slot)),
+                value := value }
+              {
+                inherited :=
+                  @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                    (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                    (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot),
+                value := value }
+              (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node width fuel)
+              (@congrFun'.{1, 1}
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest
+                (MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest.mk
+                  (@Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                    (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                    (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                        (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) slot))))
+                (MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest.mk
+                  (@Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                    (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                    (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot)))
+                (@congrArg.{1, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+                    MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest)
+                  (@Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                    (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                    (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                        (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) slot)))
+                  (@Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                    (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                    (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot))
+                  MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest.mk
+                  (@congrArg.{2, 1}
+                    (Prod.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                      (MicroCFTA.SourceCurrentAllocatedPartialState.State width))
+                    MicroCFTA.SourceEqualityConstraintAllocation.Value
+                    (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                        (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) slot))
+                    (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot)
+                    (@Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                      (MicroCFTA.SourceCurrentAllocatedPartialState.State width))
+                    (@congrArg.{1, 2} Nat
+                      (Prod.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                        (MicroCFTA.SourceCurrentAllocatedPartialState.State width))
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                        (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) slot)
+                      slot (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined)
+                      (Nat.zero_add slot))))
+                value))
+            (@congrArg.{2, 2}
+              (Prod.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                (MicroCFTA.SourceCurrentAllocatedPartialState.State width))
+              (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+              (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) slot))
+              (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot)
+              (@Prod.snd.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                (MicroCFTA.SourceCurrentAllocatedPartialState.State width))
+              (@congrArg.{1, 2} Nat
+                (Prod.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                  (MicroCFTA.SourceCurrentAllocatedPartialState.State width))
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) slot)
+                slot (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined)
+                (Nat.zero_add slot)))))
+        entered);
+  have final :=
+    @MicroCFTA.SourceCurrentOuterPrefixInvariants.reached width inst inst_1 inst_2 g s r e p h m c n budget
+      (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.body width ownerFuel owner running)
+      (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node width fuel
+        {
+          inherited :=
+            @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+              (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+              (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot),
+          value := value }
+        (@Prod.snd.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+          (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+          (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot)))
+      reached good ready;
+  have valid :=
+    @MicroCFTA.FlatMemoThunk.Valid.map MicroCFTA.SourceCurrentAllocatedPartialState.NodeKey
+      MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (@MicroCFTA.SourceCurrentAllocatedPartialState.State.nodeResults width running)
+      (fun request key => @Eq.{1} MicroCFTA.SourceCurrentAllocatedPartialState.NodeKey request.key key)
+      (@MicroCFTA.SourceCurrentOuterPrefixInvariants.NodeCell✝ width running) (fun x => True)
+      (@MicroCFTA.SourceCurrentOuterPrefixInvariants.Good.nodes width running good) fun x x_1 => trivial;
+  have ownerCell :=
+    @MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached.running inst inst_1 inst_2 g s r e p h m c n budget width
+      (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.body width ownerFuel owner running)
+      (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node width fuel
+        {
+          inherited :=
+            @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+              (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+              (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot),
+          value := value }
+        (@Prod.snd.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+          (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+          (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot)))
+      reached valid handle owner active;
+  have ownerReady :=
+    @And.left
+      (@MicroCFTA.SourceCurrentOuterPrefixInvariants.NodeReady width
+        (@MicroCFTA.SourceCurrentOuterActiveAncestry.caller width
+          (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node width fuel
+            {
+              inherited :=
+                @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                  (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                  (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot),
+              value := value }
+            (@Prod.snd.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+              (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+              (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot))))
+        (@MicroCFTA.FlatMemoThunk.Cell.request MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest
+          (MicroCFTA.InternedConstructorTemplates.Value
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          (@MicroCFTA.FlatMemoThunk.Cell.mk MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest
+            (MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            owner
+            (@MicroCFTA.FlatMemoThunk.Status.evaluating
+              (MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))))
+      (∀
+        (value_1 :
+          MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+        @Eq.{1}
+            (MicroCFTA.FlatMemoThunk.Status
+              (MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+            (@MicroCFTA.FlatMemoThunk.Cell.status MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest
+              (MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (@MicroCFTA.FlatMemoThunk.Cell.mk MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                owner
+                (@MicroCFTA.FlatMemoThunk.Status.evaluating
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))))
+            (@MicroCFTA.FlatMemoThunk.Status.returned
+              (MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              value_1) →
+          @MicroCFTA.InternedProbeProvenance.Available (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.SourceEqualityNativeDemand.State.native width
+                  (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width
+                    (@MicroCFTA.SourceCurrentOuterActiveAncestry.caller width
+                      (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node width fuel
+                        {
+                          inherited :=
+                            @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                              (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                              (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot),
+                          value := value }
+                        (@Prod.snd.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                          (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                          (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot))))))))
+            value_1)
+      (@MicroCFTA.FlatMemoThunk.Valid.checked MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest
+        MicroCFTA.SourceCurrentAllocatedPartialState.NodeKey
+        (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        (fun request key => @Eq.{1} MicroCFTA.SourceCurrentAllocatedPartialState.NodeKey request.key key)
+        (@MicroCFTA.SourceCurrentOuterPrefixInvariants.NodeCell✝ width
+          (@MicroCFTA.SourceCurrentOuterActiveAncestry.caller width
+            (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node width fuel
+              {
+                inherited :=
+                  @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                    (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                    (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot),
+                value := value }
+              (@Prod.snd.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot)))))
+        (@MicroCFTA.SourceCurrentAllocatedPartialState.State.nodeResults width
+          (@MicroCFTA.SourceCurrentOuterActiveAncestry.caller width
+            (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node width fuel
+              {
+                inherited :=
+                  @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                    (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                    (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot),
+                value := value }
+              (@Prod.snd.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot)))))
+        (@MicroCFTA.SourceCurrentOuterPrefixInvariants.Good.nodes width
+          (@MicroCFTA.SourceCurrentOuterActiveAncestry.caller width
+            (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node width fuel
+              {
+                inherited :=
+                  @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                    (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                    (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot),
+                value := value }
+              (@Prod.snd.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot))))
+          (@And.left
+            (@MicroCFTA.SourceCurrentOuterPrefixInvariants.Good width
+              (@MicroCFTA.SourceCurrentOuterActiveAncestry.caller width
+                (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node width fuel
+                  {
+                    inherited :=
+                      @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                        (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                        (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot),
+                    value := value }
+                  (@Prod.snd.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                    (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                    (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot)))))
+            (@MicroCFTA.SourceCurrentOuterPrefixInvariants.Inputs width
+              (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node width fuel
+                {
+                  inherited :=
+                    @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                      (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                      (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot),
+                  value := value }
+                (@Prod.snd.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                  (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                  (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot))))
+            final))
+        handle
+        (@MicroCFTA.FlatMemoThunk.Cell.mk MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest
+          (MicroCFTA.InternedConstructorTemplates.Value
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          owner
+          (@MicroCFTA.FlatMemoThunk.Status.evaluating
+            (MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))
+        ownerCell);
+  have references := fun same =>
+    different
+      (@MicroCFTA.InternedFreshProbeKeys.resident_reference_injective
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceEqualityNativeDemand.State.native width
+              (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width
+                (@MicroCFTA.SourceCurrentOuterActiveAncestry.caller width
+                  (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node width fuel
+                    {
+                      inherited :=
+                        @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                          (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                          (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot),
+                      value := value }
+                    (@Prod.snd.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                      (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                      (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot))))))))
+        (@MicroCFTA.InternedNestedFacts.Facts.coherent (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceEqualityNativeDemand.State.native width
+                (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width
+                  (@MicroCFTA.SourceCurrentOuterActiveAncestry.caller width
+                    (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node width fuel
+                      {
+                        inherited :=
+                          @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                            (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                            (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot),
+                        value := value }
+                      (@Prod.snd.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                        (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                        (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot))))))))
+          (@MicroCFTA.InternedStoredMuOrigins.Normal.facts
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.SourceEqualityNativeDemand.State.native width
+                  (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width
+                    (@MicroCFTA.SourceCurrentOuterActiveAncestry.caller width
+                      (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node width fuel
+                        {
+                          inherited :=
+                            @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                              (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                              (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot),
+                          value := value }
+                        (@Prod.snd.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                          (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                          (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot))))))))
+            (@MicroCFTA.InternedFreshOrdinaryContext.Context.normal
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.SourceEqualityNativeDemand.State.native width
+                    (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width
+                      (@MicroCFTA.SourceCurrentOuterActiveAncestry.caller width
+                        (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node width fuel
+                          {
+                            inherited :=
+                              @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                                (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot),
+                            value := value }
+                          (@Prod.snd.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                            (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                            (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot))))))))
+              (@List.nil.{0}
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+              (@And.left
+                (@MicroCFTA.InternedFreshOrdinaryContext.Context
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                    (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                      (@MicroCFTA.SourceEqualityNativeDemand.State.native width
+                        (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width
+                          (@MicroCFTA.SourceCurrentOuterActiveAncestry.caller width
+                            (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node width fuel
+                              {
+                                inherited :=
+                                  @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                    (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                                    (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot),
+                                value := value }
+                              (@Prod.snd.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                                (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot))))))))
+                  (@List.nil.{0}
+                    (MicroCFTA.InternedConstructorTemplates.Value
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))
+                (@MicroCFTA.InternedFreshOrdinaryDepthHeap.Heap
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                    (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                      (@MicroCFTA.SourceEqualityNativeDemand.State.native width
+                        (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width
+                          (@MicroCFTA.SourceCurrentOuterActiveAncestry.caller width
+                            (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node width fuel
+                              {
+                                inherited :=
+                                  @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                    (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                                    (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot),
+                                value := value }
+                              (@Prod.snd.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                                (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined
+                                  slot)))))))))
+                (@MicroCFTA.SourceEqualityRequiredCache.Ready.semantic
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                    (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                      (@MicroCFTA.SourceEqualityNativeDemand.State.native width
+                        (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width
+                          (@MicroCFTA.SourceCurrentOuterActiveAncestry.caller width
+                            (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node width fuel
+                              {
+                                inherited :=
+                                  @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                    (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                                    (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot),
+                                value := value }
+                              (@Prod.snd.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                                (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot))))))))
+                  (@MicroCFTA.SourceCurrentNativeOperationHeap.Good.heap width
+                    (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width
+                      (@MicroCFTA.SourceCurrentOuterActiveAncestry.caller width
+                        (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node width fuel
+                          {
+                            inherited :=
+                              @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                                (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot),
+                            value := value }
+                          (@Prod.snd.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                            (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                            (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot)))))
+                    (@MicroCFTA.SourceCurrentOuterPrefixInvariants.Good.checked width
+                      (@MicroCFTA.SourceCurrentOuterActiveAncestry.caller width
+                        (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node width fuel
+                          {
+                            inherited :=
+                              @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                                (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot),
+                            value := value }
+                          (@Prod.snd.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                            (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                            (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot))))
+                      (@And.left
+                        (@MicroCFTA.SourceCurrentOuterPrefixInvariants.Good width
+                          (@MicroCFTA.SourceCurrentOuterActiveAncestry.caller width
+                            (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node width fuel
+                              {
+                                inherited :=
+                                  @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                    (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                                    (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot),
+                                value := value }
+                              (@Prod.snd.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                                (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot)))))
+                        (@MicroCFTA.SourceCurrentOuterPrefixInvariants.Inputs width
+                          (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node width fuel
+                            {
+                              inherited :=
+                                @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                  (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                                  (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot),
+                              value := value }
+                            (@Prod.snd.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                              (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                              (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot))))
+                        final))))))))
+        value owner.value
+        (@MicroCFTA.InternedProbeProvenance.Available.resident
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceEqualityNativeDemand.State.native width
+                (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width
+                  (@Prod.snd.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                    (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                    (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot))))))
+          {
+              inherited :=
+                @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                  (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                  (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot),
+              value := value }.value
+          (@And.right
+            (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+              (@MicroCFTA.SourceEqualityNativeDemand.State.operations width
+                  (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width
+                    (@Prod.snd.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                      (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                      (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot)))).constraints
+              {
+                  inherited :=
+                    @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                      (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                      (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot),
+                  value := value }.inherited)
+            (@MicroCFTA.InternedProbeProvenance.Available
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.SourceEqualityNativeDemand.State.native width
+                    (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width
+                      (@Prod.snd.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                        (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                        (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot))))))
+              {
+                  inherited :=
+                    @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                      (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                      (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot),
+                  value := value }.value)
+            (@And.right
+              (@MicroCFTA.SourceCurrentOuterPrefixInvariants.Good width
+                (@MicroCFTA.SourceCurrentOuterActiveAncestry.caller width
+                  (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node width fuel
+                    {
+                      inherited :=
+                        @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                          (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                          (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot),
+                      value := value }
+                    (@Prod.snd.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                      (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                      (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot)))))
+              (@MicroCFTA.SourceCurrentOuterPrefixInvariants.Inputs width
+                (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node width fuel
+                  {
+                    inherited :=
+                      @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                        (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                        (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot),
+                    value := value }
+                  (@Prod.snd.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                    (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                    (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot))))
+              final)))
+        (@MicroCFTA.InternedProbeProvenance.Available.resident
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceEqualityNativeDemand.State.native width
+                (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width
+                  (@MicroCFTA.SourceCurrentOuterActiveAncestry.caller width
+                    (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node width fuel
+                      {
+                        inherited :=
+                          @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                            (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                            (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot),
+                        value := value }
+                      (@Prod.snd.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                        (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                        (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot))))))))
+          (@MicroCFTA.FlatMemoThunk.Cell.request MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest
+              (MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (@MicroCFTA.FlatMemoThunk.Cell.mk MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                owner
+                (@MicroCFTA.FlatMemoThunk.Status.evaluating
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))).value
+          (@And.right
+            (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+              (@MicroCFTA.SourceEqualityNativeDemand.State.operations width
+                  (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width
+                    (@MicroCFTA.SourceCurrentOuterActiveAncestry.caller width
+                      (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node width fuel
+                        {
+                          inherited :=
+                            @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                              (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                              (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot),
+                          value := value }
+                        (@Prod.snd.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                          (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                          (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined
+                            slot)))))).constraints
+              (@MicroCFTA.FlatMemoThunk.Cell.request MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (@MicroCFTA.FlatMemoThunk.Cell.mk MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest
+                    (MicroCFTA.InternedConstructorTemplates.Value
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    owner
+                    (@MicroCFTA.FlatMemoThunk.Status.evaluating
+                      (MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))).inherited)
+            (@MicroCFTA.InternedProbeProvenance.Available
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.SourceEqualityNativeDemand.State.native width
+                    (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked width
+                      (@MicroCFTA.SourceCurrentOuterActiveAncestry.caller width
+                        (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node width fuel
+                          {
+                            inherited :=
+                              @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                                (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot),
+                            value := value }
+                          (@Prod.snd.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                            (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                            (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot))))))))
+              (@MicroCFTA.FlatMemoThunk.Cell.request MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (@MicroCFTA.FlatMemoThunk.Cell.mk MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest
+                    (MicroCFTA.InternedConstructorTemplates.Value
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    owner
+                    (@MicroCFTA.FlatMemoThunk.Status.evaluating
+                      (MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))).value)
+            ownerReady))
+        same);
+  @And.intro
+    (@MicroCFTA.SourceCurrentOuterExecutionAncestry.Reached inst inst_1 inst_2 width g s r e p h m c n budget
+      (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.body width ownerFuel owner running)
+      (@MicroCFTA.SourceCurrentOuterCopiedWarmHit.Phase.node width fuel
+        {
+          inherited :=
+            @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+              (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+              (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot),
+          value := value }
+        (@Prod.snd.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+          (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+          (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot))))
+    (And
+      (@Ne.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) value)
+        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) owner.value))
+      (@Ne.{1} MicroCFTA.SourceCurrentAllocatedPartialState.NodeKey
+        {
+            inherited :=
+              @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot),
+            value := value }.key
+        owner.key))
+    reached
+    (@And.intro
+      (@Ne.{1} MicroCFTA.InternedBinderProtocol.NodeRef
+        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) value)
+        (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) owner.value))
+      (@Ne.{1} MicroCFTA.SourceCurrentAllocatedPartialState.NodeKey
+        {
+            inherited :=
+              @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot),
+            value := value }.key
+        owner.key)
+      references fun same =>
+      references
+        (@congrArg.{1, 1} (Prod.{0, 0} (Option.{0} Nat) MicroCFTA.InternedBinderProtocol.NodeRef)
+          MicroCFTA.InternedBinderProtocol.NodeRef
+          {
+              inherited :=
+                @Prod.fst.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                  (MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                  (@MicroCFTA.SourceCurrentAllocatedPartialGraph.descend width start combined slot),
+              value := value }.key
+          owner.key (@Prod.snd.{0, 0} (Option.{0} Nat) MicroCFTA.InternedBinderProtocol.NodeRef) same))
+'MicroCFTA.SourceCurrentOuterPlainOwnerProgress.dispatch' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]

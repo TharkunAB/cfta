@@ -1,0 +1,1585 @@
+MicroCFTA.SourceCurrentDelayedOwnerProgress.selected_split : ∀
+  (original : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+  (inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value)
+  (before : MicroCFTA.SourceEqualityConstraintMemoAllocation.State),
+  MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid before →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready before.constraints inherited →
+      @MicroCFTA.SourceCurrentConjunctionEquality.FieldAvailable MicroCFTA.FullSyntax.Formula before original →
+        ∀ (combined : MicroCFTA.SourceEqualityConstraintAllocation.Value),
+          @Eq.{1} (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+              (@Prod.fst.{0, 0} (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before))
+              (@Except.ok.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value)
+                (@Option.some.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value combined)) →
+            ∀ (later : MicroCFTA.SourceEqualityConstraintMemoAllocation.State),
+              MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid later →
+                MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows
+                    (@Prod.snd.{0, 0}
+                      (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                      (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before))
+                    later →
+                  ∀ (paths : MicroCFTA.EqualityNormalize.Class),
+                    @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Class
+                        (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                        (@List.instMembership.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                        (@Option.getD.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                          (@MicroCFTA.SourceCompactGuards.sourceEqualities MicroCFTA.FullSyntax.Formula original)
+                          (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+                        paths →
+                      ∀ (index : Nat) (left right : MicroCFTA.EqualityNormalize.Path),
+                        @Membership.mem.{0, 0} (List.{0} Nat) MicroCFTA.EqualityNormalize.Class
+                            (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths
+                            (@List.cons.{0} Nat index left) →
+                          @Membership.mem.{0, 0} (List.{0} Nat) MicroCFTA.EqualityNormalize.Class
+                              (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths
+                              (@List.cons.{0} Nat index right) →
+                            @Ne.{1} MicroCFTA.EqualityNormalize.Path left right →
+                              have child :=
+                                MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later;
+                              And
+                                (MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid
+                                  (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                                (And
+                                  (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+                                    (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                        MicroCFTA.SourceEqualityConstraintMemoAllocation.State child).constraints
+                                    (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                                  (And
+                                    (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows later
+                                      (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                        MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                                    (And
+                                      (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows before
+                                        (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                          MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                                      (@Ne.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                                        (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                            MicroCFTA.SourceEqualityConstraintMemoAllocation.State child).payload
+                                        (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                                          (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record))))))
+theorem MicroCFTA.SourceCurrentDelayedOwnerProgress.selected_split : ∀
+  (original : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+  (inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value)
+  (before : MicroCFTA.SourceEqualityConstraintMemoAllocation.State),
+  MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid before →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready before.constraints inherited →
+      @MicroCFTA.SourceCurrentConjunctionEquality.FieldAvailable MicroCFTA.FullSyntax.Formula before original →
+        ∀ (combined : MicroCFTA.SourceEqualityConstraintAllocation.Value),
+          @Eq.{1} (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+              (@Prod.fst.{0, 0} (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before))
+              (@Except.ok.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value)
+                (@Option.some.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value combined)) →
+            ∀ (later : MicroCFTA.SourceEqualityConstraintMemoAllocation.State),
+              MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid later →
+                MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows
+                    (@Prod.snd.{0, 0}
+                      (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                      (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before))
+                    later →
+                  ∀ (paths : MicroCFTA.EqualityNormalize.Class),
+                    @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Class
+                        (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                        (@List.instMembership.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                        (@Option.getD.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                          (@MicroCFTA.SourceCompactGuards.sourceEqualities MicroCFTA.FullSyntax.Formula original)
+                          (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+                        paths →
+                      ∀ (index : Nat) (left right : MicroCFTA.EqualityNormalize.Path),
+                        @Membership.mem.{0, 0} (List.{0} Nat) MicroCFTA.EqualityNormalize.Class
+                            (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths
+                            (@List.cons.{0} Nat index left) →
+                          @Membership.mem.{0, 0} (List.{0} Nat) MicroCFTA.EqualityNormalize.Class
+                              (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths
+                              (@List.cons.{0} Nat index right) →
+                            @Ne.{1} MicroCFTA.EqualityNormalize.Path left right →
+                              have child :=
+                                MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later;
+                              And
+                                (MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid
+                                  (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                                (And
+                                  (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+                                    (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                        MicroCFTA.SourceEqualityConstraintMemoAllocation.State child).constraints
+                                    (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                                  (And
+                                    (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows later
+                                      (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                        MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                                    (And
+                                      (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows before
+                                        (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                          MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                                      (@Ne.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                                        (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                            MicroCFTA.SourceEqualityConstraintMemoAllocation.State child).payload
+                                        (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                                          (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record)))))) :=
+fun original inherited before valid ready field combined actual later laterValid laterGrowth paths selected index left
+    right first second different =>
+  @Exists.casesOn.{1} MicroCFTA.SourceEqualityConstraintAllocation.Value
+    (fun combined =>
+      And
+        (@Eq.{1} (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+          (@Prod.fst.{0, 0} (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+            MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+            (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before))
+          (@Except.ok.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value)
+            (@Option.some.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value combined)))
+        (have middle :=
+          @Prod.snd.{0, 0} (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+            MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+            (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before);
+        And (MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid middle)
+          (And (MicroCFTA.SourceEqualityConstraintAllocation.Ready middle.constraints combined)
+            (And (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows before middle)
+              (have child := MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index middle;
+              And
+                (MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid
+                  (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                (And
+                  (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+                    (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                        MicroCFTA.SourceEqualityConstraintMemoAllocation.State child).constraints
+                    (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                  (And
+                    (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows middle
+                      (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                        MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                    (@Ne.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                      (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                          MicroCFTA.SourceEqualityConstraintMemoAllocation.State child).payload
+                      (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                        (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record))))))))))
+    (fun x =>
+      let child := MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later;
+      And
+        (MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid
+          (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+            MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+        (And
+          (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+            (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                MicroCFTA.SourceEqualityConstraintMemoAllocation.State child).constraints
+            (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+              MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+          (And
+            (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows later
+              (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+            (And
+              (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows before
+                (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+              (@Ne.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State child).payload
+                (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                  (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record)))))))
+    (MicroCFTA.SourceCurrentInheritedOwnerProgress.selected_split original inherited before valid ready field paths
+      selected index left right first second different)
+    fun chosen h =>
+    @And.casesOn.{0}
+      (@Eq.{1} (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+        (@Prod.fst.{0, 0} (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+          MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+          (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before))
+        (@Except.ok.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value)
+          (@Option.some.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value chosen)))
+      (have middle :=
+        @Prod.snd.{0, 0} (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+          MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+          (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before);
+      And (MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid middle)
+        (And (MicroCFTA.SourceEqualityConstraintAllocation.Ready middle.constraints chosen)
+          (And (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows before middle)
+            (have child := MicroCFTA.SourceEqualityConstraintMemoAllocation.descend chosen index middle;
+            And
+              (MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid
+                (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+              (And
+                (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+                  (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State child).constraints
+                  (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                (And
+                  (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows middle
+                    (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                  (@Ne.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                    (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                        MicroCFTA.SourceEqualityConstraintMemoAllocation.State child).payload
+                    (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                      (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record)))))))))
+      (fun x =>
+        let child := MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later;
+        And
+          (MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid
+            (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+              MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+          (And
+            (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+              (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State child).constraints
+              (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+            (And
+              (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows later
+                (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+              (And
+                (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows before
+                  (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                (@Ne.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                  (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State child).payload
+                  (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                    (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record)))))))
+      h fun computed right =>
+      @And.casesOn.{0}
+        (MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid
+          (@Prod.snd.{0, 0} (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+            MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+            (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before)))
+        (And
+          (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+            (@Prod.snd.{0, 0} (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before)).constraints
+            chosen)
+          (And
+            (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows before
+              (@Prod.snd.{0, 0} (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before)))
+            (have child :=
+              MicroCFTA.SourceEqualityConstraintMemoAllocation.descend chosen index
+                (@Prod.snd.{0, 0} (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                  (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before));
+            And
+              (MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid
+                (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+              (And
+                (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+                  (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State child).constraints
+                  (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                (And
+                  (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows
+                    (@Prod.snd.{0, 0}
+                      (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                      (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before))
+                    (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                  (@Ne.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                    (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                        MicroCFTA.SourceEqualityConstraintMemoAllocation.State child).payload
+                    (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                      (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record))))))))
+        (fun x =>
+          let child := MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later;
+          And
+            (MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid
+              (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+            (And
+              (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+                (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State child).constraints
+                (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+              (And
+                (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows later
+                  (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                (And
+                  (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows before
+                    (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                  (@Ne.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                    (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                        MicroCFTA.SourceEqualityConstraintMemoAllocation.State child).payload
+                    (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                      (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record)))))))
+        right fun middleValid right =>
+        @And.casesOn.{0}
+          (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+            (@Prod.snd.{0, 0} (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before)).constraints
+            chosen)
+          (And
+            (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows before
+              (@Prod.snd.{0, 0} (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before)))
+            (have child :=
+              MicroCFTA.SourceEqualityConstraintMemoAllocation.descend chosen index
+                (@Prod.snd.{0, 0} (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                  (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before));
+            And
+              (MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid
+                (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+              (And
+                (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+                  (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State child).constraints
+                  (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                (And
+                  (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows
+                    (@Prod.snd.{0, 0}
+                      (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                      (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before))
+                    (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                  (@Ne.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                    (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                        MicroCFTA.SourceEqualityConstraintMemoAllocation.State child).payload
+                    (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                      (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record)))))))
+          (fun x =>
+            let child := MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later;
+            And
+              (MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid
+                (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+              (And
+                (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+                  (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State child).constraints
+                  (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                (And
+                  (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows later
+                    (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                  (And
+                    (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows before
+                      (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                        MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                    (@Ne.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                      (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                          MicroCFTA.SourceEqualityConstraintMemoAllocation.State child).payload
+                      (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                        (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record)))))))
+          right fun combinedReady right =>
+          @And.casesOn.{0}
+            (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows before
+              (@Prod.snd.{0, 0} (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before)))
+            (have child :=
+              MicroCFTA.SourceEqualityConstraintMemoAllocation.descend chosen index
+                (@Prod.snd.{0, 0} (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                  (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before));
+            And
+              (MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid
+                (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+              (And
+                (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+                  (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State child).constraints
+                  (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                (And
+                  (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows
+                    (@Prod.snd.{0, 0}
+                      (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                      (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before))
+                    (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                  (@Ne.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                    (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                        MicroCFTA.SourceEqualityConstraintMemoAllocation.State child).payload
+                    (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                      (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record))))))
+            (fun x =>
+              let child := MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later;
+              And
+                (MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid
+                  (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                (And
+                  (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+                    (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                        MicroCFTA.SourceEqualityConstraintMemoAllocation.State child).constraints
+                    (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                  (And
+                    (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows later
+                      (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                        MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                    (And
+                      (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows before
+                        (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                          MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                      (@Ne.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                        (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                            MicroCFTA.SourceEqualityConstraintMemoAllocation.State child).payload
+                        (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                          (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record)))))))
+            right fun prefixGrowth right =>
+            @And.casesOn.{0}
+              (MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid
+                (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                  (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend chosen index
+                    (@Prod.snd.{0, 0}
+                      (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                      (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before)))))
+              (And
+                (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+                  (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                      (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend chosen index
+                        (@Prod.snd.{0, 0}
+                          (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                          MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                          (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before)))).constraints
+                  (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                    (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend chosen index
+                      (@Prod.snd.{0, 0}
+                        (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                        MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                        (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before)))))
+                (And
+                  (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows
+                    (@Prod.snd.{0, 0}
+                      (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                      (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before))
+                    (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                      (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend chosen index
+                        (@Prod.snd.{0, 0}
+                          (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                          MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                          (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before)))))
+                  (@Ne.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                    (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                        MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                        (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend chosen index
+                          (@Prod.snd.{0, 0}
+                            (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                            MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                            (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before)))).payload
+                    (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                      (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record)))))
+              (fun x =>
+                let child := MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later;
+                And
+                  (MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid
+                    (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                  (And
+                    (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+                      (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                          MicroCFTA.SourceEqualityConstraintMemoAllocation.State child).constraints
+                      (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                        MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                    (And
+                      (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows later
+                        (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                          MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                      (And
+                        (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows before
+                          (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                            MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                        (@Ne.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                          (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                              MicroCFTA.SourceEqualityConstraintMemoAllocation.State child).payload
+                          (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                            (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record)))))))
+              right fun left right =>
+              @And.casesOn.{0}
+                (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+                  (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                      (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend chosen index
+                        (@Prod.snd.{0, 0}
+                          (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                          MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                          (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before)))).constraints
+                  (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                    (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend chosen index
+                      (@Prod.snd.{0, 0}
+                        (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                        MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                        (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before)))))
+                (And
+                  (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows
+                    (@Prod.snd.{0, 0}
+                      (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                      (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before))
+                    (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                      (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend chosen index
+                        (@Prod.snd.{0, 0}
+                          (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                          MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                          (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before)))))
+                  (@Ne.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                    (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                        MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                        (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend chosen index
+                          (@Prod.snd.{0, 0}
+                            (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                            MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                            (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before)))).payload
+                    (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                      (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record))))
+                (fun x =>
+                  let child := MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later;
+                  And
+                    (MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid
+                      (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                        MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                    (And
+                      (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+                        (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                            MicroCFTA.SourceEqualityConstraintMemoAllocation.State child).constraints
+                        (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                          MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                      (And
+                        (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows later
+                          (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                            MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                        (And
+                          (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows before
+                            (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                              MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                          (@Ne.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                            (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                MicroCFTA.SourceEqualityConstraintMemoAllocation.State child).payload
+                            (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                              (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record)))))))
+                right fun left_1 right =>
+                @And.casesOn.{0}
+                  (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows
+                    (@Prod.snd.{0, 0}
+                      (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                      (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before))
+                    (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                      (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend chosen index
+                        (@Prod.snd.{0, 0}
+                          (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                          MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                          (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before)))))
+                  (@Ne.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                    (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                        MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                        (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend chosen index
+                          (@Prod.snd.{0, 0}
+                            (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                            MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                            (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before)))).payload
+                    (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                      (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record)))
+                  (fun x =>
+                    let child := MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later;
+                    And
+                      (MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid
+                        (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                          MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                      (And
+                        (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+                          (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                              MicroCFTA.SourceEqualityConstraintMemoAllocation.State child).constraints
+                          (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                            MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                        (And
+                          (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows later
+                            (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                              MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                          (And
+                            (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows before
+                              (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                            (@Ne.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                              (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State child).payload
+                              (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                                (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record)))))))
+                  right fun left_2 nonempty =>
+                  have same :=
+                    @Option.some.inj.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value chosen combined
+                      (@Except.ok.inj.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value)
+                        (@Option.some.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value chosen)
+                        (@Option.some.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value combined)
+                        (@Eq.trans.{1}
+                          (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                          (@Except.ok.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value)
+                            (@Option.some.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value chosen))
+                          (@Prod.fst.{0, 0}
+                            (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                            MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                            (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before))
+                          (@Except.ok.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value)
+                            (@Option.some.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value combined))
+                          (@Eq.symm.{1}
+                            (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                            (@Prod.fst.{0, 0}
+                              (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                              MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                              (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before))
+                            (@Except.ok.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value)
+                              (@Option.some.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value chosen))
+                            computed)
+                          actual));
+                  @Eq.ndrec.{0, 1} MicroCFTA.SourceEqualityConstraintAllocation.Value combined
+                    (fun chosen =>
+                      @Eq.{1} (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                          (@Prod.fst.{0, 0}
+                            (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                            MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                            (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before))
+                          (@Except.ok.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value)
+                            (@Option.some.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value chosen)) →
+                        MicroCFTA.SourceEqualityConstraintAllocation.Ready
+                            (@Prod.snd.{0, 0}
+                                (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited
+                                  before)).constraints
+                            chosen →
+                          MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid
+                              (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend chosen index
+                                  (@Prod.snd.{0, 0}
+                                    (Except.{0, 0} String
+                                      (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                    (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before)))) →
+                            MicroCFTA.SourceEqualityConstraintAllocation.Ready
+                                (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                    (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend chosen index
+                                      (@Prod.snd.{0, 0}
+                                        (Except.{0, 0} String
+                                          (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                                        MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                        (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited
+                                          before)))).constraints
+                                (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                  (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend chosen index
+                                    (@Prod.snd.{0, 0}
+                                      (Except.{0, 0} String
+                                        (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                      (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited
+                                        before)))) →
+                              MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows
+                                  (@Prod.snd.{0, 0}
+                                    (Except.{0, 0} String
+                                      (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                    (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before))
+                                  (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                    (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend chosen index
+                                      (@Prod.snd.{0, 0}
+                                        (Except.{0, 0} String
+                                          (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                                        MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                        (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited
+                                          before)))) →
+                                @Ne.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                                    (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                        MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                        (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend chosen index
+                                          (@Prod.snd.{0, 0}
+                                            (Except.{0, 0} String
+                                              (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                                            MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                            (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited
+                                              before)))).payload
+                                    (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                                      (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record)) →
+                                  let child :=
+                                    MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later;
+                                  And
+                                    (MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid
+                                      (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                        MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                                    (And
+                                      (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+                                        (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                            MicroCFTA.SourceEqualityConstraintMemoAllocation.State child).constraints
+                                        (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                          MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                                      (And
+                                        (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows later
+                                          (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                            MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                                        (And
+                                          (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows before
+                                            (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                              MicroCFTA.SourceEqualityConstraintMemoAllocation.State child))
+                                          (@Ne.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                                            (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                                MicroCFTA.SourceEqualityConstraintMemoAllocation.State child).payload
+                                            (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                                              (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record)))))))
+                    (fun computed combinedReady left left_3 left_4 nonempty =>
+                      have immediate :=
+                        MicroCFTA.SourceEqualityConstraintMemoAllocation.descend_correct combined index
+                          (@Prod.snd.{0, 0}
+                            (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                            MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                            (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before))
+                          middleValid combinedReady;
+                      have current :=
+                        MicroCFTA.SourceEqualityConstraintMemoAllocation.descend_correct combined index later laterValid
+                          (@MicroCFTA.SourceEqualityConstraintAllocation.Ready.grows
+                            (@Prod.snd.{0, 0}
+                                (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited
+                                  before)).constraints
+                            combined later.constraints combinedReady
+                            (@MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows.constraint_growth
+                              (@Prod.snd.{0, 0}
+                                (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before))
+                              later laterGrowth));
+                      @And.intro
+                        (MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid
+                          (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                            MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                            (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later)))
+                        (And
+                          (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+                            (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                  later)).constraints
+                            (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                              MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                              (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later)))
+                          (And
+                            (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows later
+                              (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later)))
+                            (And
+                              (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows before
+                                (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                  (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later)))
+                              (@Ne.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                                (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                    (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                      later)).payload
+                                (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                                  (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record))))))
+                        (@And.left
+                          (MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid
+                            (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                              MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                              (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later)))
+                          (And
+                            (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+                              (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                  (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                    later)).constraints
+                              (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later)))
+                            (And
+                              (@Eq.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                                (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                    (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                      later)).payload
+                                (MicroCFTA.SourceEqualityDescend.descend combined.payload index))
+                              (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows later
+                                (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                  (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later)))))
+                          current)
+                        (@And.intro
+                          (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+                            (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                  later)).constraints
+                            (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                              MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                              (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later)))
+                          (And
+                            (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows later
+                              (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later)))
+                            (And
+                              (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows before
+                                (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                  (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later)))
+                              (@Ne.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                                (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                    (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                      later)).payload
+                                (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                                  (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record)))))
+                          (@And.left
+                            (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+                              (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                  (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                    later)).constraints
+                              (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later)))
+                            (And
+                              (@Eq.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                                (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                    (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                      later)).payload
+                                (MicroCFTA.SourceEqualityDescend.descend combined.payload index))
+                              (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows later
+                                (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                  (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later))))
+                            (@And.right
+                              (MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid
+                                (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                  (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later)))
+                              (And
+                                (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+                                  (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                      (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                        later)).constraints
+                                  (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                    (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later)))
+                                (And
+                                  (@Eq.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                                    (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                        MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                        (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                          later)).payload
+                                    (MicroCFTA.SourceEqualityDescend.descend combined.payload index))
+                                  (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows later
+                                    (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                      (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                        later)))))
+                              current))
+                          (@And.intro
+                            (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows later
+                              (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later)))
+                            (And
+                              (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows before
+                                (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                  (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later)))
+                              (@Ne.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                                (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                    (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                      later)).payload
+                                (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                                  (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record))))
+                            (@And.right
+                              (@Eq.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                                (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                    (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                      later)).payload
+                                (MicroCFTA.SourceEqualityDescend.descend combined.payload index))
+                              (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows later
+                                (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                  (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later)))
+                              (@And.right
+                                (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+                                  (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                      (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                        later)).constraints
+                                  (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                    (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later)))
+                                (And
+                                  (@Eq.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                                    (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                        MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                        (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                          later)).payload
+                                    (MicroCFTA.SourceEqualityDescend.descend combined.payload index))
+                                  (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows later
+                                    (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                      (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later))))
+                                (@And.right
+                                  (MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid
+                                    (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                      (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later)))
+                                  (And
+                                    (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+                                      (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                          MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                          (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                            later)).constraints
+                                      (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                        MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                        (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                          later)))
+                                    (And
+                                      (@Eq.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                                        (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                            MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                            (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                              later)).payload
+                                        (MicroCFTA.SourceEqualityDescend.descend combined.payload index))
+                                      (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows later
+                                        (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                          MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                          (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                            later)))))
+                                  current)))
+                            (@And.intro
+                              (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows before
+                                (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                  (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later)))
+                              (@Ne.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                                (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                    (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                      later)).payload
+                                (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                                  (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record)))
+                              (@MicroCFTA.SourceCurrentConjunctionEquality.grows_trans before
+                                (@Prod.snd.{0, 0}
+                                  (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                  (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before))
+                                (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                  (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later))
+                                prefixGrowth
+                                (@MicroCFTA.SourceCurrentConjunctionEquality.grows_trans
+                                  (@Prod.snd.{0, 0}
+                                    (Except.{0, 0} String
+                                      (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                    (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before))
+                                  later
+                                  (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                    (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later))
+                                  laterGrowth
+                                  (@And.right
+                                    (@Eq.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                                      (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                          MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                          (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                            later)).payload
+                                      (MicroCFTA.SourceEqualityDescend.descend combined.payload index))
+                                    (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows later
+                                      (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                        MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                        (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                          later)))
+                                    (@And.right
+                                      (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+                                        (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                            MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                            (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                              later)).constraints
+                                        (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                          MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                          (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                            later)))
+                                      (And
+                                        (@Eq.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                                          (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                              MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                              (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                                later)).payload
+                                          (MicroCFTA.SourceEqualityDescend.descend combined.payload index))
+                                        (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows later
+                                          (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                            MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                            (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                              later))))
+                                      (@And.right
+                                        (MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid
+                                          (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                            MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                            (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                              later)))
+                                        (And
+                                          (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+                                            (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                                (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                                  later)).constraints
+                                            (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                              MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                              (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                                later)))
+                                          (And
+                                            (@Eq.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                                              (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                                  (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined
+                                                    index later)).payload
+                                              (MicroCFTA.SourceEqualityDescend.descend combined.payload index))
+                                            (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows later
+                                              (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                                (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                                  later)))))
+                                        current)))))
+                              fun empty =>
+                              nonempty
+                                (@Eq.trans.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                                  (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                      (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                        (@Prod.snd.{0, 0}
+                                          (Except.{0, 0} String
+                                            (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                                          MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                          (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited
+                                            before)))).payload
+                                  (MicroCFTA.SourceEqualityDescend.descend combined.payload index)
+                                  (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                                    (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record))
+                                  (@And.left
+                                    (@Eq.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                                      (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                          MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                          (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                            (@Prod.snd.{0, 0}
+                                              (Except.{0, 0} String
+                                                (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                                              MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                              (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited
+                                                before)))).payload
+                                      (MicroCFTA.SourceEqualityDescend.descend combined.payload index))
+                                    (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows
+                                      (@Prod.snd.{0, 0}
+                                        (Except.{0, 0} String
+                                          (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                                        MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                        (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before))
+                                      (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                        MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                        (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                          (@Prod.snd.{0, 0}
+                                            (Except.{0, 0} String
+                                              (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                                            MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                            (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited
+                                              before)))))
+                                    (@And.right
+                                      (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+                                        (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                            MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                            (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                              (@Prod.snd.{0, 0}
+                                                (Except.{0, 0} String
+                                                  (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                                                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                                (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited
+                                                  before)))).constraints
+                                        (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                          MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                          (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                            (@Prod.snd.{0, 0}
+                                              (Except.{0, 0} String
+                                                (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                                              MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                              (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited
+                                                before)))))
+                                      (And
+                                        (@Eq.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                                          (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                              MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                              (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                                (@Prod.snd.{0, 0}
+                                                  (Except.{0, 0} String
+                                                    (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                                                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                                  (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original
+                                                    inherited before)))).payload
+                                          (MicroCFTA.SourceEqualityDescend.descend combined.payload index))
+                                        (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows
+                                          (@Prod.snd.{0, 0}
+                                            (Except.{0, 0} String
+                                              (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                                            MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                            (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited
+                                              before))
+                                          (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                            MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                            (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                              (@Prod.snd.{0, 0}
+                                                (Except.{0, 0} String
+                                                  (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                                                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                                (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited
+                                                  before))))))
+                                      (@And.right
+                                        (MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid
+                                          (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                            MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                            (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                              (@Prod.snd.{0, 0}
+                                                (Except.{0, 0} String
+                                                  (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                                                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                                (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited
+                                                  before)))))
+                                        (And
+                                          (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+                                            (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                                (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                                  (@Prod.snd.{0, 0}
+                                                    (Except.{0, 0} String
+                                                      (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                                                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                                    (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original
+                                                      inherited before)))).constraints
+                                            (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                              MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                              (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                                (@Prod.snd.{0, 0}
+                                                  (Except.{0, 0} String
+                                                    (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                                                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                                  (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original
+                                                    inherited before)))))
+                                          (And
+                                            (@Eq.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                                              (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                                  (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined
+                                                    index
+                                                    (@Prod.snd.{0, 0}
+                                                      (Except.{0, 0} String
+                                                        (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                                                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                                      (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original
+                                                        inherited before)))).payload
+                                              (MicroCFTA.SourceEqualityDescend.descend combined.payload index))
+                                            (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows
+                                              (@Prod.snd.{0, 0}
+                                                (Except.{0, 0} String
+                                                  (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                                                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                                (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited
+                                                  before))
+                                              (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                                (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                                  (@Prod.snd.{0, 0}
+                                                    (Except.{0, 0} String
+                                                      (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                                                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                                    (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original
+                                                      inherited before)))))))
+                                        immediate)))
+                                  (@Eq.trans.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                                    (MicroCFTA.SourceEqualityDescend.descend combined.payload index)
+                                    (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                        MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                        (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                          later)).payload
+                                    (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+                                      (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record))
+                                    (@Eq.symm.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                                      (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                          MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                          (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                            later)).payload
+                                      (MicroCFTA.SourceEqualityDescend.descend combined.payload index)
+                                      (@And.left
+                                        (@Eq.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                                          (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                              MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                              (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                                later)).payload
+                                          (MicroCFTA.SourceEqualityDescend.descend combined.payload index))
+                                        (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows later
+                                          (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                            MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                            (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                              later)))
+                                        (@And.right
+                                          (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+                                            (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                                (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                                  later)).constraints
+                                            (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                              MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                              (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                                later)))
+                                          (And
+                                            (@Eq.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                                              (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                                  (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined
+                                                    index later)).payload
+                                              (MicroCFTA.SourceEqualityDescend.descend combined.payload index))
+                                            (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows later
+                                              (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                                (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                                  later))))
+                                          (@And.right
+                                            (MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid
+                                              (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                                (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index
+                                                  later)))
+                                            (And
+                                              (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+                                                (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                                    (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined
+                                                      index later)).constraints
+                                                (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                                  (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined
+                                                    index later)))
+                                              (And
+                                                (@Eq.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+                                                  (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                                      (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined
+                                                        index later)).payload
+                                                  (MicroCFTA.SourceEqualityDescend.descend combined.payload index))
+                                                (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows later
+                                                  (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                                                    (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined
+                                                      index later)))))
+                                            current))))
+                                    empty))))))
+                    chosen (@Eq.symm.{1} MicroCFTA.SourceEqualityConstraintAllocation.Value chosen combined same)
+                    computed combinedReady left left_1 left_2 nonempty
+'MicroCFTA.SourceCurrentDelayedOwnerProgress.selected_split' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentDelayedOwnerProgress.key_ne_top : ∀
+  (original : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+  (inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value)
+  (before : MicroCFTA.SourceEqualityConstraintMemoAllocation.State),
+  MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid before →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready before.constraints inherited →
+      @MicroCFTA.SourceCurrentConjunctionEquality.FieldAvailable MicroCFTA.FullSyntax.Formula before original →
+        ∀ (combined : MicroCFTA.SourceEqualityConstraintAllocation.Value),
+          @Eq.{1} (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+              (@Prod.fst.{0, 0} (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before))
+              (@Except.ok.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value)
+                (@Option.some.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value combined)) →
+            ∀ (later : MicroCFTA.SourceEqualityConstraintMemoAllocation.State),
+              MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid later →
+                MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows
+                    (@Prod.snd.{0, 0}
+                      (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                      (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before))
+                    later →
+                  ∀ (paths : MicroCFTA.EqualityNormalize.Class),
+                    @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Class
+                        (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                        (@List.instMembership.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                        (@Option.getD.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                          (@MicroCFTA.SourceCompactGuards.sourceEqualities MicroCFTA.FullSyntax.Formula original)
+                          (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+                        paths →
+                      ∀ (index : Nat) (left right : MicroCFTA.EqualityNormalize.Path),
+                        @Membership.mem.{0, 0} (List.{0} Nat) MicroCFTA.EqualityNormalize.Class
+                            (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths
+                            (@List.cons.{0} Nat index left) →
+                          @Membership.mem.{0, 0} (List.{0} Nat) MicroCFTA.EqualityNormalize.Class
+                              (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths
+                              (@List.cons.{0} Nat index right) →
+                            @Ne.{1} MicroCFTA.EqualityNormalize.Path left right →
+                              ∀ (identity : Nat),
+                                MicroCFTA.SourceEqualityConstraintAllocation.Ready before.constraints
+                                    (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity
+                                      (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record)) →
+                                  ∀
+                                    (value owner :
+                                      MicroCFTA.InternedConstructorTemplates.Value
+                                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                                    have child :=
+                                      MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later;
+                                    @Ne.{1} MicroCFTA.SourceCurrentAllocatedPartialState.NodeKey
+                                      {
+                                          inherited :=
+                                            @Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                              MicroCFTA.SourceEqualityConstraintMemoAllocation.State child,
+                                          value := value }.key
+                                      {
+                                          inherited :=
+                                            MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity
+                                              (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record),
+                                          value := owner }.key
+theorem MicroCFTA.SourceCurrentDelayedOwnerProgress.key_ne_top : ∀
+  (original : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+  (inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value)
+  (before : MicroCFTA.SourceEqualityConstraintMemoAllocation.State),
+  MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid before →
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready before.constraints inherited →
+      @MicroCFTA.SourceCurrentConjunctionEquality.FieldAvailable MicroCFTA.FullSyntax.Formula before original →
+        ∀ (combined : MicroCFTA.SourceEqualityConstraintAllocation.Value),
+          @Eq.{1} (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+              (@Prod.fst.{0, 0} (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before))
+              (@Except.ok.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value)
+                (@Option.some.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value combined)) →
+            ∀ (later : MicroCFTA.SourceEqualityConstraintMemoAllocation.State),
+              MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid later →
+                MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows
+                    (@Prod.snd.{0, 0}
+                      (Except.{0, 0} String (Option.{0} MicroCFTA.SourceEqualityConstraintAllocation.Value))
+                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                      (MicroCFTA.SourceCurrentAllocatedInheritedPrefix.run original inherited before))
+                    later →
+                  ∀ (paths : MicroCFTA.EqualityNormalize.Class),
+                    @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Class
+                        (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                        (@List.instMembership.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                        (@Option.getD.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                          (@MicroCFTA.SourceCompactGuards.sourceEqualities MicroCFTA.FullSyntax.Formula original)
+                          (@List.nil.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+                        paths →
+                      ∀ (index : Nat) (left right : MicroCFTA.EqualityNormalize.Path),
+                        @Membership.mem.{0, 0} (List.{0} Nat) MicroCFTA.EqualityNormalize.Class
+                            (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths
+                            (@List.cons.{0} Nat index left) →
+                          @Membership.mem.{0, 0} (List.{0} Nat) MicroCFTA.EqualityNormalize.Class
+                              (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths
+                              (@List.cons.{0} Nat index right) →
+                            @Ne.{1} MicroCFTA.EqualityNormalize.Path left right →
+                              ∀ (identity : Nat),
+                                MicroCFTA.SourceEqualityConstraintAllocation.Ready before.constraints
+                                    (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity
+                                      (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record)) →
+                                  ∀
+                                    (value owner :
+                                      MicroCFTA.InternedConstructorTemplates.Value
+                                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                                    have child :=
+                                      MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later;
+                                    @Ne.{1} MicroCFTA.SourceCurrentAllocatedPartialState.NodeKey
+                                      {
+                                          inherited :=
+                                            @Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                                              MicroCFTA.SourceEqualityConstraintMemoAllocation.State child,
+                                          value := value }.key
+                                      {
+                                          inherited :=
+                                            MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity
+                                              (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record),
+                                          value := owner }.key :=
+fun original inherited before valid ready field combined actual later laterValid laterGrowth paths selected index left
+    right first second different identity top value owner =>
+  @And.casesOn.{0}
+    (MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid
+      (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+        MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+        (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later)))
+    (And
+      (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+        (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+            MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+            (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later)).constraints
+        (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+          MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+          (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later)))
+      (And
+        (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows later
+          (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+            MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+            (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later)))
+        (And
+          (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows before
+            (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+              MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+              (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later)))
+          (@Ne.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+            (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later)).payload
+            (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+              (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record))))))
+    (fun x =>
+      let child := MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later;
+      @Ne.{1} MicroCFTA.SourceCurrentAllocatedPartialState.NodeKey
+        {
+            inherited :=
+              @Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                MicroCFTA.SourceEqualityConstraintMemoAllocation.State child,
+            value := value }.key
+        {
+            inherited :=
+              MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity
+                (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record),
+            value := owner }.key)
+    (MicroCFTA.SourceCurrentDelayedOwnerProgress.selected_split original inherited before valid ready field combined
+      actual later laterValid laterGrowth paths selected index left right first second different)
+    fun childValid right =>
+    @And.casesOn.{0}
+      (MicroCFTA.SourceEqualityConstraintAllocation.Ready
+        (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+            MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+            (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later)).constraints
+        (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+          MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+          (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later)))
+      (And
+        (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows later
+          (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+            MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+            (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later)))
+        (And
+          (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows before
+            (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+              MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+              (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later)))
+          (@Ne.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+            (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later)).payload
+            (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+              (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record)))))
+      (fun x =>
+        let child := MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later;
+        @Ne.{1} MicroCFTA.SourceCurrentAllocatedPartialState.NodeKey
+          {
+              inherited :=
+                @Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                  MicroCFTA.SourceEqualityConstraintMemoAllocation.State child,
+              value := value }.key
+          {
+              inherited :=
+                MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity
+                  (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record),
+              value := owner }.key)
+      right fun childReady right =>
+      @And.casesOn.{0}
+        (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows later
+          (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+            MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+            (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later)))
+        (And
+          (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows before
+            (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+              MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+              (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later)))
+          (@Ne.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+            (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later)).payload
+            (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+              (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record))))
+        (fun x =>
+          let child := MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later;
+          @Ne.{1} MicroCFTA.SourceCurrentAllocatedPartialState.NodeKey
+            {
+                inherited :=
+                  @Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                    MicroCFTA.SourceEqualityConstraintMemoAllocation.State child,
+                value := value }.key
+            {
+                inherited :=
+                  MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity
+                    (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record),
+                value := owner }.key)
+        right fun left right =>
+        @And.casesOn.{0}
+          (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows before
+            (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+              MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+              (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later)))
+          (@Ne.{1} MicroCFTA.SourceEqualityPrecheck.Constraint
+            (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later)).payload
+            (@Option.some.{0} (List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+              (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record)))
+          (fun x =>
+            let child := MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later;
+            @Ne.{1} MicroCFTA.SourceCurrentAllocatedPartialState.NodeKey
+              {
+                  inherited :=
+                    @Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+                      MicroCFTA.SourceEqualityConstraintMemoAllocation.State child,
+                  value := value }.key
+              {
+                  inherited :=
+                    MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity
+                      (@List.nil.{0} MicroCFTA.SourceEqualityClassOrder.Record),
+                  value := owner }.key)
+          right fun totalGrowth nonempty =>
+          MicroCFTA.SourceCurrentInheritedOwnerProgress.node_key_ne_top before
+            (@Prod.snd.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+              MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+              (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later))
+            childValid totalGrowth
+            (@Prod.fst.{0, 0} MicroCFTA.SourceEqualityConstraintAllocation.Value
+              MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+              (MicroCFTA.SourceEqualityConstraintMemoAllocation.descend combined index later))
+            childReady nonempty identity top value owner
+'MicroCFTA.SourceCurrentDelayedOwnerProgress.key_ne_top' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]

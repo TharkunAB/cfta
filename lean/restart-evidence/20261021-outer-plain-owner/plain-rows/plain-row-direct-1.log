@@ -1,0 +1,161 @@
+/tmp/mcfta-outer-plain-row-shapes/plain-row-direct-1.source.lean:19:5: error: unknown namespace `SourceCurrentAllocatedPartialReturnedDomain`
+/tmp/mcfta-outer-plain-row-shapes/plain-row-direct-1.source.lean:104:48: error: Type mismatch: After simplification, term
+  actualChildren
+ has type
+  @Eq (List Node) result.children (if false = true then values else [Value.empty])
+but is expected to have type
+  @Eq (List Node) result.children [Value.empty]
+/tmp/mcfta-outer-plain-row-shapes/plain-row-direct-1.source.lean:106:34: error(lean.unknownIdentifier): Unknown identifier `value.children`
+/tmp/mcfta-outer-plain-row-shapes/plain-row-direct-1.source.lean:120:10: error(lean.unknownIdentifier): Unknown identifier `Shape`
+/tmp/mcfta-outer-plain-row-shapes/plain-row-direct-1.source.lean:124:8: warning: declaration uses `sorry`
+/tmp/mcfta-outer-plain-row-shapes/plain-row-direct-1.source.lean:144:16: warning: declaration uses `sorry`
+/tmp/mcfta-outer-plain-row-shapes/plain-row-direct-1.source.lean:206:6: error: Function expected at
+  Shape
+but this term has type
+  ?m.1
+
+Note: Expected a function because this term is being applied to the argument
+  owner.value
+
+Hint: The identifier `Shape` is unknown, and Lean's `autoImplicit` option causes an unknown identifier to be treated as an implicitly bound variable with an unknown type. However, the unknown type cannot be a function, and a function is what Lean expects here. This is often the result of a typo or a missing `import` or `open` statement.
+/tmp/mcfta-outer-plain-row-shapes/plain-row-direct-1.source.lean:208:13: warning: declaration uses `sorry`
+/tmp/mcfta-outer-plain-row-shapes/plain-row-direct-1.source.lean:228:91: error: Function expected at
+  Shape
+but this term has type
+  ?m.1
+
+Note: Expected a function because this term is being applied to the argument
+  request.value
+
+Hint: The identifier `Shape` is unknown, and Lean's `autoImplicit` option causes an unknown identifier to be treated as an implicitly bound variable with an unknown type. However, the unknown type cannot be a function, and a function is what Lean expects here. This is often the result of a typo or a missing `import` or `open` statement.
+/tmp/mcfta-outer-plain-row-shapes/plain-row-direct-1.source.lean:244:105: error: Function expected at
+  Shape
+but this term has type
+  ?m.1
+
+Note: Expected a function because this term is being applied to the argument
+  request.value
+
+Hint: The identifier `Shape` is unknown, and Lean's `autoImplicit` option causes an unknown identifier to be treated as an implicitly bound variable with an unknown type. However, the unknown type cannot be a function, and a function is what Lean expects here. This is often the result of a typo or a missing `import` or `open` statement.
+/tmp/mcfta-outer-plain-row-shapes/plain-row-direct-1.source.lean:359:27: error: don't know how to synthesize implicit argument `Shape`
+  @edge_call width inst✝² inst✝¹ inst✝ ?m.1122 ?m.1123 fuel g s r e p h m c n budget
+    { inherited := inherited, value := value } before narrowed middle first good
+    ⟨ready, resident { inherited := inherited, value := value }.value List.mem_cons_self⟩ origins
+context:
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+g s r e p h m c n budget : Nat
+inherited : EqValue
+before : Caller width
+result : List Edge
+after : Caller width
+good : Good before
+ready : EqReady before.checked.operations.constraints inherited
+origins : Origins before
+value : Edge
+values : List Edge
+resident : Edges before.checked.native.machine.heap (value :: values)
+fuel : Nat
+ih : ∀ (m : Nat), m < fuel + 1 → NodeAt m ∧ BodyAt m ∧ RowsAt m ∧ DescendantsAt m ∧ ChildrenAt m ∧ WalkAt m
+walkAt : WalkAt (fuel + 1)
+childrenAt : ChildrenAt (fuel + 1)
+descendantsAt : DescendantsAt (fuel + 1)
+actual : rows (fuel + 1) g s r e p h m c n budget inherited (value :: values) before = Outcome.done result after
+narrowed : Edge
+middle : Caller width
+first :
+  edgeCall fuel g s r e p h m c n budget { inherited := inherited, value := value } before =
+    Outcome.done narrowed middle
+later :
+  ((descendants fuel g s r e p h m c n budget inherited narrowed middle).bind fun result after =>
+      (rows fuel g s r e p h m c n budget inherited values after).bind fun results final =>
+        Outcome.done (result :: results) final) =
+    Outcome.done result after
+⊢ ?m.1122
+/tmp/mcfta-outer-plain-row-shapes/plain-row-direct-1.source.lean:359:27: error: don't know how to synthesize implicit argument
+  @edge_call width inst✝² inst✝¹ inst✝ ?m.1122 ?m.1123 fuel g s r e p h m c n budget
+    { inherited := inherited, value := value } before narrowed middle first good
+    ⟨ready, resident { inherited := inherited, value := value }.value List.mem_cons_self⟩ origins
+context:
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+g s r e p h m c n budget : Nat
+inherited : EqValue
+before : Caller width
+result : List Edge
+after : Caller width
+good : Good before
+ready : EqReady before.checked.operations.constraints inherited
+origins : Origins before
+value : Edge
+values : List Edge
+resident : Edges before.checked.native.machine.heap (value :: values)
+fuel : Nat
+ih : ∀ (m : Nat), m < fuel + 1 → NodeAt m ∧ BodyAt m ∧ RowsAt m ∧ DescendantsAt m ∧ ChildrenAt m ∧ WalkAt m
+walkAt : WalkAt (fuel + 1)
+childrenAt : ChildrenAt (fuel + 1)
+descendantsAt : DescendantsAt (fuel + 1)
+actual : rows (fuel + 1) g s r e p h m c n budget inherited (value :: values) before = Outcome.done result after
+narrowed : Edge
+middle : Caller width
+first :
+  edgeCall fuel g s r e p h m c n budget { inherited := inherited, value := value } before =
+    Outcome.done narrowed middle
+later :
+  ((descendants fuel g s r e p h m c n budget inherited narrowed middle).bind fun result after =>
+      (rows fuel g s r e p h m c n budget inherited values after).bind fun results final =>
+        Outcome.done (result :: results) final) =
+    Outcome.done result after
+⊢ Sort ?u.42
+/tmp/mcfta-outer-plain-row-shapes/plain-row-direct-1.source.lean:423:31: error: don't know how to synthesize implicit argument `Shape`
+  @edge_call width✝ inst✝² inst✝¹ inst✝ ?m.201 ?m.202 fuel✝ g s r e p h m c n budget
+    { inherited := inherited✝, value := original✝ } before✝ narrowed✝ middle✝ actual good
+    ⟨inputs.left, inputs.right { inherited := inherited✝, value := original✝ }.value List.mem_cons_self⟩ origins
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+g s r e p h m c n budget width✝ fuel✝ : Nat
+inherited✝ : EqValue
+original✝ : Edge
+before✝ : Caller width✝
+narrowed✝ : Edge
+middle✝ : Caller width✝
+rest✝ : List Edge
+actual :
+  edgeCall fuel✝ g s r e p h m c n budget { inherited := inherited✝, value := original✝ } before✝ =
+    Outcome.done narrowed✝ middle✝
+good : Good (caller (Phase.rows (fuel✝ + 1) inherited✝ (original✝ :: rest✝) before✝))
+inputs : Inputs (Phase.rows (fuel✝ + 1) inherited✝ (original✝ :: rest✝) before✝)
+origins : Origins (caller (Phase.rows (fuel✝ + 1) inherited✝ (original✝ :: rest✝) before✝))
+⊢ ?m.201
+/tmp/mcfta-outer-plain-row-shapes/plain-row-direct-1.source.lean:423:31: error: don't know how to synthesize implicit argument
+  @edge_call width✝ inst✝² inst✝¹ inst✝ ?m.201 ?m.202 fuel✝ g s r e p h m c n budget
+    { inherited := inherited✝, value := original✝ } before✝ narrowed✝ middle✝ actual good
+    ⟨inputs.left, inputs.right { inherited := inherited✝, value := original✝ }.value List.mem_cons_self⟩ origins
+context:
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+g s r e p h m c n budget width✝ fuel✝ : Nat
+inherited✝ : EqValue
+original✝ : Edge
+before✝ : Caller width✝
+narrowed✝ : Edge
+middle✝ : Caller width✝
+rest✝ : List Edge
+actual :
+  edgeCall fuel✝ g s r e p h m c n budget { inherited := inherited✝, value := original✝ } before✝ =
+    Outcome.done narrowed✝ middle✝
+good : Good (caller (Phase.rows (fuel✝ + 1) inherited✝ (original✝ :: rest✝) before✝))
+inputs : Inputs (Phase.rows (fuel✝ + 1) inherited✝ (original✝ :: rest✝) before✝)
+origins : Origins (caller (Phase.rows (fuel✝ + 1) inherited✝ (original✝ :: rest✝) before✝))
+⊢ Sort ?u.37
+/tmp/mcfta-outer-plain-row-shapes/plain-row-direct-1.source.lean:443:0: error: Invalid name after `end`: Expected `SourceCurrentOuterPlainRowShapes.OuterExecution`, but found `MicroCFTA.SourceCurrentOuterPlainRowShapes`
+
+Hint: If you meant to end the outer scope(s) `MicroCFTA.SourceCurrentOuterPlainRowShapes`, you must end all the intervening scopes `MicroCFTA.SourceCurrentOuterPlainRowShapes.OuterExecution`:
+  end MicroCFTA.SourceCurrentOuterPlainRowShapes.̲O̲u̲t̲e̲r̲E̲x̲e̲c̲u̲t̲i̲o̲n̲
