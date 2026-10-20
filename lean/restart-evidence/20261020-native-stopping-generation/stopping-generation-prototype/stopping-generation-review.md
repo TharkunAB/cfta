@@ -1,0 +1,13 @@
+# Same generating writer at an actual native stopping site
+
+Checked on 2026-10-20 at 18:30 CEST. This prototype owns one public execute theorem. It changes no repository file and performs no canonical build. The earlier draft-status file remains as an explicitly uncompiled historical preparation receipt.
+
+The theorem starts from the physical InputsThrough plan, initial SemanticHeap and exact selected full Mu at the actual execute outcome state. It retains the exact initial-cell alternative. Otherwise it obtains the complete stopping-site tuple once from the official stopping-site execute theorem. All fields remain the same: prefix Trace, current Inputs, body availability, nested call outcome, literal done/pending checked-step mapping, actual step, count/resume equation, target absence/presence and physical/issued intervals.
+
+The proof calls public OptionalGeneration.maybeMu at that same site and selected call-state cell. The exact site absence excludes its local prior-cell arm. Its generated branch supplies the actual used pair reference, rich Context on the same site's original body leaves, exact generated smart-binder build, and old Rooted Written for the complete selected payload. The actual generated build equals the SAME nested outcome, including pending. Rewriting the writer endpoint through the same call equality gives Written at call.state. No independent call, writer outcome or event tuple replaces this witness.
+
+This theorem covers every bounded admitted outcome through the stopping-site foundation. It does not claim a compiler owner, original-program root ancestry, unique writer, successful completion, native memo history or termination. It adds no desired semantic relation or future-result premise. No concrete terminal-blocked specimen is owned by this package.
+
+The source stayed byte-identical to the approved draft. Strict attempt 1 has a literal zero-byte log. Full public attempt 1 contains one complete statement/proof/axiom report with all eight printer settings. Hardened verification rejects omissions, print failures, warnings and errors, and permits only propext, Classical.choice and Quot.sound. Both jobs completed with exit 0. Each recorded fresh usage above the stop threshold, 4 GiB memory.max/high, zero swap and a five-minute cap. Counts: one checked public head, zero constructed heads, two actual Lean jobs, zero failures and zero canonical jobs.
+
+The standalone verifier pins the source, every actual job receipt/log/snapshot/limits/usage record, frozen peaks, selection, report and explicit ROOT foundations. It accepts an alternate --root and supports --live from an unrelated working directory. No job remains live.

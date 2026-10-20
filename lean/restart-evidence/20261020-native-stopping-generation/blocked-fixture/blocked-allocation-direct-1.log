@@ -1,0 +1,72 @@
+/tmp/mcfta-native-blocked-allocation-fixture/blocked-allocation-direct-1.source.lean:195:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  warm.nodeRecords targetKey
+in the target expression
+  before.native.machine.heap.nodeRecords targetKey = some (Value.mu targetEntry targetBody targetDepth targetOrdinary)
+
+case inl
+atStop : outcome.state.native.machine.heap.nodeRecords targetKey = some target
+selected :
+  (SourceEqualityNativeDemand.execute 3 control before).state.native.machine.heap.nodeRecords targetKey =
+    some (Value.mu targetEntry targetBody targetDepth targetOrdinary)
+prior :
+  before.native.machine.heap.nodeRecords targetKey = some (Value.mu targetEntry targetBody targetDepth targetOrdinary)
+⊢ built = InternedNestedConstruction.Outcome.done body base ∧
+    Context base [capture] ∧
+      Context oracle [capture] ∧
+        Context warm [capture] ∧
+          base.nodes.table InternedBinderProtocol.NodeKey.empty = none ∧
+            base.nodes.table outerKey = none ∧
+              oracle.nodes.next = base.nodes.next + 1 ∧
+                warm.nodes.next = base.nodes.next + 1 ∧
+                  warm.nodes.table outerKey = some (intern base.nodes outerKey).fst ∧
+                    warm.nodeRecords outerKey = none ∧
+                      actualOrdinary.state.nodeRecords outerKey = none ∧
+                        oracleDepth = InternedNestedConstruction.Outcome.done (valueOf oracleDepth) oracleDepth.state ∧
+                          oracleOrdinary =
+                              InternedNestedConstruction.Outcome.done (valueOf oracleOrdinary) oracleOrdinary.state ∧
+                            actualDepth =
+                                InternedNestedConstruction.Outcome.done (valueOf oracleDepth) actualDepth.state ∧
+                              actualOrdinary =
+                                  InternedNestedConstruction.Outcome.done (valueOf oracleOrdinary)
+                                    actualOrdinary.state ∧
+                                bound = InternedNestedConstruction.Outcome.pending outerKey actualOrdinary.state ∧
+                                  target = Value.mu targetEntry targetBody targetDepth targetOrdinary ∧
+                                    InternedFreshOrdinaryDepthHeap.usesLocal targetDepth targetOrdinary = true ∧
+                                      targetKey ≠ outerKey ∧
+                                        warm.nodeRecords targetKey = none ∧
+                                          bound.state.nodeRecords targetKey = some target ∧
+                                            SemanticHeap before.native.machine.heap ∧
+                                              Available before.native.machine.heap body ∧
+                                                SourceCurrentAllocatedNativePhysicalExecution.InputsThrough 3 control
+                                                    before ∧
+                                                  outcome =
+                                                      Outcome.blocked
+                                                        (Blocked.native
+                                                          (SourceRecursiveIntersectionNative.Blocked.constructor
+                                                            outerKey))
+                                                        (Control.code binder) after ∧
+                                                    ∃ prefixFuel remainingFuel pair siteBody next siteBefore call
+                                                      siteStep,
+                                                      3 = prefixFuel + 1 + remainingFuel ∧
+                                                        Trace prefixFuel control before
+                                                            (Control.code (Code.optionalBinder pair siteBody next))
+                                                            siteBefore ∧
+                                                          SourceCurrentAllocatedNativePhysicalExecution.Inputs
+                                                              (Control.code (Code.optionalBinder pair siteBody next))
+                                                              siteBefore ∧
+                                                            SemanticHeap siteBefore.native.machine.heap ∧
+                                                              Available siteBefore.native.machine.heap siteBody ∧
+                                                                SourceRecursiveIntersectionMaybeMu.maybeMu pair siteBody
+                                                                      siteBefore.native.machine.heap =
+                                                                    call ∧
+                                                                  (siteStep =
+                                                                      match call with
+                                                                      |
+                                                                      InternedNestedConstruction.Outcome.done result
+                                                                          heap =>
+                                                                        ⋯
+                                                                      |
+                                                                      InternedNestedConstruction.Outcome.pending pending
+                                                                          heap =>
+                                                                        ⋯) ∧
+                                                                    ⋯ = siteStep ∧ ⋯ ∧ ⋯

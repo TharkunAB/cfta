@@ -1,0 +1,37 @@
+/tmp/mcfta-native-blocked-allocation-fixture/blocked-allocation-prefix-1.source.lean:87:58: error: unsolved goals
+⊢ InternedBinderProtocol.NodeKey.mu
+        { depthShape := InternedBinderProtocol.NodeRef.node 6,
+          ordinaryShape := InternedBinderProtocol.NodeRef.node 7 } =
+      InternedBinderProtocol.NodeKey.mu
+        { depthShape := InternedBinderProtocol.NodeRef.node 10,
+          ordinaryShape := InternedBinderProtocol.NodeRef.node 15 } →
+    False
+/tmp/mcfta-native-blocked-allocation-fixture/blocked-allocation-prefix-1.source.lean:121:71: error: unsolved goals
+⊢ (match
+      match SourceRecursiveIntersectionMaybeMu.maybeMu pair body before.native.machine.heap with
+      | InternedNestedConstruction.Outcome.done value after =>
+        SourceRecursiveIntersectionNative.Outcome.yielded (suffix value)
+          (advance before.native { heap := after, domains := before.native.machine.domains })
+      | InternedNestedConstruction.Outcome.pending pending after =>
+        SourceRecursiveIntersectionNative.Outcome.blocked
+          (SourceRecursiveIntersectionNative.Blocked.constructor pending) (Code.optionalBinder pair body suffix)
+          (advance before.native { heap := after, domains := before.native.machine.domains }) with
+    | SourceRecursiveIntersectionNative.Outcome.yielded code state =>
+      Outcome.yielded (Control.code code) { native := state, operations := before.operations }
+    | SourceRecursiveIntersectionNative.Outcome.done value state =>
+      Outcome.done value { native := state, operations := before.operations }
+    | SourceRecursiveIntersectionNative.Outcome.failed failure state =>
+      Outcome.failed failure { native := state, operations := before.operations }
+    | SourceRecursiveIntersectionNative.Outcome.blocked reason code state =>
+      Outcome.blocked (Blocked.native reason) (Control.code code)
+        { native := state, operations := before.operations }) =
+    Outcome.blocked (Blocked.native (SourceRecursiveIntersectionNative.Blocked.constructor outerKey))
+      (Control.code (Code.optionalBinder pair body suffix)) after
+/tmp/mcfta-native-blocked-allocation-fixture/blocked-allocation-prefix-1.source.lean:122:64: warning: This simp argument is unused:
+  bound_pending
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [binder, step, SourceRecursiveIntersectionNative.step, lift]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-native-blocked-allocation-fixture/blocked-allocation-prefix-1.source.lean:128:2: error: No goals to be solved

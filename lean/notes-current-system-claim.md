@@ -1,7 +1,7 @@
 # Current system claim
 
 Checked against the live theorem statements on 2026-10-20.
-Read `notes-current-native-mu-generation.md` for the latest proof checkpoint.
+Read `notes-current-native-stopping-generation.md` for the latest proof checkpoint.
 Read `notes-current-upstream-persistent-rows.md` for the current source scope.
 
 In simple technical English: fresh construction always finishes in the
@@ -127,6 +127,15 @@ writer with its prefix, checked advance and suffix. Terminal blocked-step
 integration, captured compileMu ownership and original binding ancestry
 remain open. General renewal, outer completion and Haskell refinement
 are unchanged obligations.
+
+Actual bounded native execution now retains the generating optional
+instruction and generated rooted source writer for every selected full
+Mu at its stopping heap, or the exact initial full cell. This includes
+nested cells installed before a terminal blocked return. Physical bind
+and indexed walk prefixes now retain the same unfinished call or actual
+return, checks, state and ordered continuation. Captured compiler owner
+and original binding ancestry remain unproved. General renewal, outer
+completion and Haskell refinement remain open.
 
 ## Constructed root guarantee
 
