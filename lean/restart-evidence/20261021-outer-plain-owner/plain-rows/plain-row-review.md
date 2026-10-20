@@ -1,0 +1,13 @@
+# Outer plain row shapes
+
+Written 2026-10-21 01:25 CEST. This is the author's proof report. Independent review belongs to the separate reviewer.
+
+The new source is `lean/MicroCFTA/SourceCurrentOuterPlainRowShapes.lean`, SHA256 `a88a51386f5382b4a3fac5430462331f49a3bd707e7b6d5a3439a41d2df04fdd`. It has four public heads: one definition and three theorems. All other declarations are private.
+
+The physical Parent proof uses the actual rejection or constructor receipt. The loaded field has ready/readback facts. Empty effective own equalities permit `AllocatedLocalPlain.done_shape`. The actual reduction preserves the required physical facts. `ActualParentRowOrigins.build_children` and `reject_children` give the exact three possible child lists: original children, erased children, or singleton Empty. The theorem applies to all ready inherited constraints and all local lower bounds.
+
+`Origins` records this conditional fact for each returned edge cell and its own captured request. `initial` derives it from empty edge tables. `edge_call` handles both actual cold evaluation and a warm hit. The actual Good and request readiness facts identify the stored request. The proof does not replace the captured request without this equality. Actual finish installs the same conditional fact. Completed earlier calls preserve the invariant. `reached` follows actual unfinished prefixes and needs no future selected-child or enclosing return.
+
+Arbitrary warm tables need the explicit `Origins` premise. Good and field origins alone do not constrain returned child lists. The conclusion assumes `sourceEqualities` of the selected original field equals `some []`; it does not classify arbitrary constrained rows. The proof does not require full resource Context, closed values, finite ordinary domains, or future completion. It supplies no global termination or Haskell refinement claim.
+
+Three capped Lean commands ran. The first failed during elaboration. Its missing import, Boolean simplification, inaccessible result binder, and section closure diagnostics remain archived. The source contains no written sorry. The final strict attempt `plain-row-direct-2` returned zero and has a literal empty log. The selected `plain-row-public-1` returned zero and prints all four full declarations and proofs. Its 1,731,353-byte log has exactly the standard three axioms for every head and has no omission or printer error. Every attempt records fresh usage and effective 4 GiB memory/high, zero swap, and a five-minute cap. This component owns zero canonical jobs and zero constructed examples. Parent-owned canonical and integration checks are separate.
