@@ -12,6 +12,7 @@ one generator type, `Gen symbol a`, and one facade per kind of automaton:
 | `Data.CFTA.Gen.Error` | The one failure vocabulary, and `explain`. |
 | `Data.CFTA.Gen.Label` | The labels of the engine's support and terms: `Label` for user symbols and the private labels, and `surface`. |
 | `Data.CFTA.Gen.Sig` | Operation signatures for `apply`; `Data.CFTA.Gen` re-exports them. |
+| `Data.CFTA.Gen.Typing` | Typed languages from constructor rules, with a nesting or binder bound. Use `upToSize` to visit smaller terms first. |
 | `Data.CFTA.Gen.Equality` | `ECTAGen`: equality-constrained generators, and imports ranked by symbol text. |
 | `Data.CFTA.Gen.Equality.QuickCheck` | Re-exports `Data.CFTA.Gen.Equality` with the QuickCheck functions. |
 | `Data.CFTA.Gen.Refinement` | `LTAGen`: inferred and refined pools, values without a pool with `every`, conditions with `satisfying`, contracts with `guarded`, measures with `measured`, bounded recursion with `recurUpTo`, liquid imports, `compile`, and `validOutcomes`. |
@@ -90,6 +91,40 @@ and two tree nodes.
 `Data.CFTA.Ranked` is independent of automaton representation. `Indexed`
 describes a finite rank domain, and `fromIndexed` is the generator over it.
 Counting and replay do not require enumerating the entire source.
+
+### Visit smaller typed terms first
+
+`Data.CFTA.Gen.Typing.fromTypingRules` with `Nesting` gives a finite language
+in constructor order. Apply `upToSize` to visit its terms in size order:
+
+```haskell
+{-# LANGUAGE TypeApplications #-}
+
+import qualified Data.CFTA.Gen as Gen
+import Data.CFTA.Gen.Typing (fromTypingRules)
+
+-- typing describes the rules of a HasFTA Expr datatype.
+language = fromTypingRules @Expr typing
+smallFirst = Gen.upToSize 23 <$> language
+```
+
+A size is the number of term nodes, including primitive fields. In arithmetic
+with `Number Int` and binary addition, subtraction, and multiplication,
+`6 * 7` has size 5. `(0 + (0 - 0)) + (6 * 7)` has size 14. The size order
+puts the smaller expression first. With `Nesting 3`, every term in this
+arithmetic language has at most 23 nodes, so that size bound keeps the whole
+language. A lower bound can remove terms.
+
+After checking the construction error, use `rankOfValue` and `unrank` on the
+resulting generator to encode and replay its ranks. The original ranks can
+differ. A `Binders` language already has size-major
+ranks. Size ordering does not order literals by their magnitude: zero can
+still precede six within one size class. `upToSize` also applies its documented
+sampling policy to the bounded language.
+
+An acyclic import with symbolic counting treats each term as one atom.
+For exact structural size classes of such an automaton, use
+[`Data.CFTA.Sized`](src/Data/CFTA/Sized.hs) on the explicit graph.
 
 ### Generate a language up to a depth bound
 

@@ -53,6 +53,7 @@ import qualified Data.CFTA.Template as Template
 | --- | --- | --- |
 | Derive a grammar from a datatype | `Generic.deriveFTA`, `Generic.deriveFTAWith` | A grammar with constructor metadata and typed codecs. |
 | Build a grammar with named states | `FTA.mkFTA` | A checked explicit-state graph. |
+| Update a grammar from new facts | `FTA.replaceRows` | A new checked graph that shares unchanged rows. Replace or delete rows in one batch. |
 | Build a grammar from supplied trees | `FTA.fromTerms` | A grammar that accepts those trees. |
 | Encode or decode one value | `Generic.encodeTerm`, `Generic.datatypeDecode` | A constructor tree or a typed value. This does not enumerate the grammar. |
 | Check membership | `FTA.accepts`, `Common.acceptsWith` | Whether a supplied tree belongs. The interned API takes a constraint interpreter. |
@@ -72,6 +73,9 @@ import qualified Data.CFTA.Template as Template
 `FTA` and `Common` are the two representations in this package. `FTA` retains
 explicit state names. `Common` uses interned nodes and edges to share structure.
 Conversion between them does not produce the accepted values.
+
+[`Updating a language`](../docs/updating-languages.md) describes row edits,
+validation, sharing, and the ranks of the resulting language.
 
 For example, `FTA.terms (FTA.boundDepth 3 grammar)` lists the values of a
 bounded grammar. `cfta-generator` compiles a grammar into replay ranks

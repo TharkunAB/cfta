@@ -22,6 +22,7 @@ module Data.CFTA (
     initialState,
     transitionTable,
     mkFTA,
+    replaceRows,
     fromTerms,
     states,
     transitionsFrom,
@@ -146,12 +147,38 @@ mkFTA ::
     state ->
     [(state, [Transition state symbol constraint])] ->
     Either (FTAError state symbol) (FTA state symbol constraint)
-mkFTA initial rows = do
-    let table = Map.fromListWith (flip (<>)) rows
-    ensureInitial table
-    ensureClosed table
-    ensureRanked table
-    pure FTA{initialState = initial, transitionTable = table}
+mkFTA initial rows = validateFTA $ FTA initial $ Map.fromListWith (flip (<>)) rows
+
+{- | Replace or remove rows in one batch. A 'Just' row adds or replaces its
+state. 'Nothing' removes a state; removing a missing state has no effect.
+An empty row retains its state. The initial state stays the same.
+
+The result shares unchanged rows with the input. Validation checks the whole
+result after all edits, so a batch can add a state and references to it
+together. An invalid result returns the same errors as 'mkFTA'. The input
+automaton stays unchanged. An edit can change the language and its ranks.
+-}
+replaceRows ::
+    (Ord state, Ord symbol) =>
+    Map state (Maybe [Transition state symbol constraint]) ->
+    FTA state symbol constraint ->
+    Either (FTAError state symbol) (FTA state symbol constraint)
+replaceRows edits automaton
+    | Map.null edits = Right automaton
+    | otherwise = validateFTA automaton{transitionTable = Map.foldlWithKey' replace (transitionTable automaton) edits}
+  where
+    replace table state Nothing = Map.delete state table
+    replace table state (Just row) = Map.insert state row table
+
+-- | Check an explicit graph without rebuilding its row map.
+validateFTA ::
+    (Ord state, Ord symbol) =>
+    FTA state symbol constraint -> Either (FTAError state symbol) (FTA state symbol constraint)
+validateFTA automaton@FTA{initialState = initial, transitionTable = rows} = do
+    ensureInitial rows
+    ensureClosed rows
+    ensureRanked rows
+    pure automaton
   where
     ensureInitial table
         | Map.member initial table = Right ()
