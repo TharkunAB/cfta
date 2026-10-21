@@ -3043,6 +3043,7 @@ import MicroCFTA.SourceCurrentNativePositiveSupportAdvance
 import MicroCFTA.SourceCurrentRawCorridorPositiveValue
 import MicroCFTA.SourceCurrentRawCorridorSharedTargetPositivePositions
 import MicroCFTA.SourceCurrentCappedHeadPositivePosition
+import MicroCFTA.SourceCurrentClassPositiveAncestry
 /-!
 # Proof dependency audit
 
