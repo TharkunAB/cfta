@@ -3084,6 +3084,7 @@ import MicroCFTA.SourceCurrentColdRankCapacity
 import MicroCFTA.SourceCurrentColdRankSemantic
 import MicroCFTA.SourceCurrentFiniteRoundForecast
 import MicroCFTA.SourceCurrentWarmNextPacket
+import MicroCFTA.SourceCurrentFiniteWarmCalls
 /-!
 # Proof dependency audit
 
