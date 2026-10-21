@@ -1,0 +1,38 @@
+-- PROPOSED TYPE ONLY. This file was not compiled.
+-- The ActualScope dependency is pinned as a separate checked HERE snapshot.
+namespace MicroCFTA.SourceCurrentScanNativeStores
+open InternedConstructorTemplates InternedProbeProvenance
+open InternedNestedProvenance (Values)
+open SourceCurrentConjunctionClassScan (Scan Ready)
+open SourceCurrentAllocatedNativeEffects (physical)
+open SourceCurrentNativeRequestPositivePositions (Support)
+open SourceCurrentNativeMuPublication (History)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "Memo" => SourceCurrentEmptinessMemo.Memo
+local notation "Plain" => (fun guard : Guard => SourceMemoGate.plain guard = true)
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+variable [DecidableEq (Value Symbol Guard)] {width : Nat}
+
+theorem scan
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    {budget : Nat} {unconstrained reaches : Value Symbol Guard → Bool}
+    {values : List (Value Symbol Guard)} {classes selected : EqualityNormalize.Constraints}
+    {outcome : Option EqualityNormalize.Class} {before after : Checked width} {memo saved : Memo}
+    (actual : Scan budget unconstrained reaches values classes before memo outcome selected after saved)
+    (ready : Ready before)
+    (available : Values before.native.machine.heap values)
+    (proper : ∀ paths ∈ classes, ∀ path ∈ paths, path ≠ [])
+    (current : SourceCurrentConstrainedCapCurrentNative.At Plain before)
+    (supported : Support before.native.machine.heap before.native)
+    (causal : History empty before.native.machine.heap) :
+    Ready after ∧
+      SourceCurrentConjunctionRowsAllocation.Effects (physical before) (physical after) ∧
+      SourceRecursiveIntersectionKernel.Extension before.native.machine after.native.machine ∧
+      Values after.native.machine.heap values ∧
+      SourceCurrentConstrainedCapCurrentNative.At Plain after ∧
+      Support after.native.machine.heap after.native ∧
+      Nonempty (History empty after.native.machine.heap)
+end MicroCFTA.SourceCurrentScanNativeStores

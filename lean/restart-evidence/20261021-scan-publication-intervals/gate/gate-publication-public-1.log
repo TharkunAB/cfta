@@ -1,0 +1,62 @@
+@MicroCFTA.SourceCurrentGatePublicationHistory.primary : ∀ {Symbol Guard : Type}
+  [edgeDec : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (unconstrained reaches : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Bool)
+  {values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {paths : MicroCFTA.EqualityNormalize.Class} {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {answer : Bool},
+  @MicroCFTA.EndpointStatefulGateTrace.ClassTrace Symbol Guard edgeDec unconstrained reaches values paths before answer
+      after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+        @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before values →
+          Nonempty.{1} (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard edgeDec before after)
+theorem MicroCFTA.SourceCurrentGatePublicationHistory.primary : ∀ {Symbol Guard : Type}
+  [edgeDec : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (unconstrained reaches : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Bool)
+  {values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {paths : MicroCFTA.EqualityNormalize.Class} {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {answer : Bool},
+  @MicroCFTA.EndpointStatefulGateTrace.ClassTrace Symbol Guard edgeDec unconstrained reaches values paths before answer
+      after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+        @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before values →
+          Nonempty.{1} (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard edgeDec before after) :=
+fun {Symbol Guard} [edgeDec : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+    unconstrained reaches {values} {paths} {before after} {answer} actual semantic costs available =>
+  @MicroCFTA.SourceCurrentGatePublicationHistory.Primary.class_history Symbol Guard edgeDec unconstrained reaches values
+    paths before after answer actual semantic costs available
+'MicroCFTA.SourceCurrentGatePublicationHistory.primary' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentGatePublicationHistory.secondary : ∀ {Symbol Guard : Type}
+  [edgeDec : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (unconstrained : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Bool)
+  {values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {paths : MicroCFTA.EqualityNormalize.Class} {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {answer : Bool},
+  @MicroCFTA.SourceCurrentSecondaryTrace.ClassTrace Symbol Guard edgeDec unconstrained values paths before answer
+      after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+        @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before values →
+          Nonempty.{1} (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard edgeDec before after)
+theorem MicroCFTA.SourceCurrentGatePublicationHistory.secondary : ∀ {Symbol Guard : Type}
+  [edgeDec : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (unconstrained : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Bool)
+  {values : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {paths : MicroCFTA.EqualityNormalize.Class} {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {answer : Bool},
+  @MicroCFTA.SourceCurrentSecondaryTrace.ClassTrace Symbol Guard edgeDec unconstrained values paths before answer
+      after →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady Symbol Guard before →
+      @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap Symbol Guard before →
+        @MicroCFTA.InternedNestedProvenance.Values Symbol Guard before values →
+          Nonempty.{1} (@MicroCFTA.SourceCurrentNativeMuPublication.History Symbol Guard edgeDec before after) :=
+fun {Symbol Guard} [edgeDec : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+    unconstrained {values} {paths} {before after} {answer} actual semantic costs available =>
+  @MicroCFTA.SourceCurrentGatePublicationHistory.Secondary.class_history Symbol Guard edgeDec unconstrained values paths
+    before after answer actual semantic costs available
+'MicroCFTA.SourceCurrentGatePublicationHistory.secondary' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
