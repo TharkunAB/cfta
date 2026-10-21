@@ -1,0 +1,1760 @@
+@MicroCFTA.SourceCurrentRequiredSharedTargetCap.Stored : {width : Nat} →
+  MicroCFTA.SourceCurrentAllocatedSharedTargetState.State width → Prop
+structure MicroCFTA.SourceCurrentRequiredSharedTargetCap.Stored {width : Nat}
+  (state : MicroCFTA.SourceCurrentAllocatedSharedTargetState.State width) : Prop
+number of parameters: 2
+fields:
+  MicroCFTA.SourceCurrentRequiredSharedTargetCap.Stored.current : @MicroCFTA.SourceCurrentConstrainedCapCurrentNative.At
+      width (fun guard => @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true)
+      (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.checked width state)
+  MicroCFTA.SourceCurrentRequiredSharedTargetCap.Stored.merge : @MicroCFTA.SourceCurrentConstrainedCapMemoMerge.Stored
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+      (fun guard => @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true)
+      (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.memo width state)
+  MicroCFTA.SourceCurrentRequiredSharedTargetCap.Stored.slots : ∀ (path : MicroCFTA.EqualityNormalize.Path)
+      (value :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      @Eq.{1}
+          (Option.{0}
+            (MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+          (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.targets width state path)
+          (@Option.some.{0}
+            (MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            value) →
+        @Exists.{1} Nat fun depth =>
+          @MicroCFTA.SourceCurrentConstrainedCap.Cap (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (fun guard => @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true) depth value
+constructor:
+  MicroCFTA.SourceCurrentRequiredSharedTargetCap.Stored.mk {width : Nat}
+    {state : MicroCFTA.SourceCurrentAllocatedSharedTargetState.State width}
+    (current :
+      @MicroCFTA.SourceCurrentConstrainedCapCurrentNative.At width
+        (fun guard => @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true)
+        (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.checked width state))
+    (merge :
+      @MicroCFTA.SourceCurrentConstrainedCapMemoMerge.Stored
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (fun guard => @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true)
+        (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.memo width state))
+    (slots :
+      ∀ (path : MicroCFTA.EqualityNormalize.Path)
+        (value :
+          MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+        @Eq.{1}
+            (Option.{0}
+              (MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+            (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.targets width state path)
+            (@Option.some.{0}
+              (MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              value) →
+          @Exists.{1} Nat fun depth =>
+            @MicroCFTA.SourceCurrentConstrainedCap.Cap (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (fun guard => @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true) depth value) :
+    @MicroCFTA.SourceCurrentRequiredSharedTargetCap.Stored width state
+'MicroCFTA.SourceCurrentRequiredSharedTargetCap.Stored' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentRequiredSharedTargetCap.initial_stored : ∀ {width : Nat}
+  (checked : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (memo :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  @MicroCFTA.SourceCurrentConstrainedCapCurrentNative.At width
+      (fun guard => @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true) checked →
+    @MicroCFTA.SourceCurrentConstrainedCapMemoMerge.Stored
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (fun guard => @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true) memo →
+      @MicroCFTA.SourceCurrentRequiredSharedTargetCap.Stored width
+        (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.initial width checked memo)
+theorem MicroCFTA.SourceCurrentRequiredSharedTargetCap.initial_stored : ∀ {width : Nat}
+  (checked : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (memo :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  @MicroCFTA.SourceCurrentConstrainedCapCurrentNative.At width
+      (fun guard => @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true) checked →
+    @MicroCFTA.SourceCurrentConstrainedCapMemoMerge.Stored
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (fun guard => @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true) memo →
+      @MicroCFTA.SourceCurrentRequiredSharedTargetCap.Stored width
+        (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.initial width checked memo) :=
+fun {width} checked memo current merged =>
+  @MicroCFTA.SourceCurrentRequiredSharedTargetCap.Stored.mk width
+    (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.initial width checked memo) current merged
+    fun path value absent =>
+    @Eq.casesOn.{0, 1}
+      (Option.{0}
+        (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+      (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.targets width
+        (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.initial width checked memo) path)
+      (fun a t =>
+        @Eq.{1}
+            (Option.{0}
+              (MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+            (@Option.some.{0}
+              (MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              value)
+            a →
+          @HEq.{0}
+              (@Eq.{1}
+                (Option.{0}
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.targets width
+                  (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.initial width checked memo) path)
+                (@Option.some.{0}
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  value))
+              absent
+              (@Eq.{1}
+                (Option.{0}
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.targets width
+                  (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.initial width checked memo) path)
+                a)
+              t →
+            @Exists.{1} Nat fun depth =>
+              @MicroCFTA.SourceCurrentConstrainedCap.Cap
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (fun guard => @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true) depth value)
+      (@Option.some.{0}
+        (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        value)
+      absent
+      (fun h =>
+        @False.elim.{0}
+          (@HEq.{0}
+              (@Eq.{1}
+                (Option.{0}
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.targets width
+                  (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.initial width checked memo) path)
+                (@Option.some.{0}
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  value))
+              absent
+              (@Eq.{1}
+                (Option.{0}
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.targets width
+                  (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.initial width checked memo) path)
+                (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.targets width
+                  (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.initial width checked memo) path))
+              (@Eq.refl.{1}
+                (Option.{0}
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.targets width
+                  (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.initial width checked memo) path)) →
+            @Exists.{1} Nat fun depth =>
+              @MicroCFTA.SourceCurrentConstrainedCap.Cap
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (fun guard => @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true) depth value)
+          (@noConfusion_of_Nat.{1}
+            (Option.{0}
+              (MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+            (@Option.ctorIdx.{0}
+              (MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+            (@Option.some.{0}
+              (MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              value)
+            (@Option.none.{0}
+              (MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+            h))
+      (@Eq.refl.{1}
+        (Option.{0}
+          (MicroCFTA.InternedConstructorTemplates.Value
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+        (@Option.some.{0}
+          (MicroCFTA.InternedConstructorTemplates.Value
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          value))
+      (@HEq.refl.{0}
+        (@Eq.{1}
+          (Option.{0}
+            (MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+          (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.targets width
+            (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.initial width checked memo) path)
+          (@Option.some.{0}
+            (MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            value))
+        absent)
+'MicroCFTA.SourceCurrentRequiredSharedTargetCap.initial_stored' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentRequiredSharedTargetCap.force_receipt : ∀ {width : Nat}
+  [inst :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {inventory next : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {record : MicroCFTA.SourceEqualityClassOrder.Record}
+  {originals prepared :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {requiredFuel requiredReadFuel : Nat} {selected : MicroCFTA.EqualityNormalize.Constraints}
+  {scanHeap preparedHeap receiptBase :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {action : MicroCFTA.EqualityNormalize.Path}
+  {before after : MicroCFTA.SourceCurrentAllocatedSharedTargetState.State width}
+  {value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {memos final : MicroCFTA.EndpointMemoGateTrace.Memos},
+  @Eq.{1}
+      (MicroCFTA.SourceEqualityRequiredWorker.Result (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (List.{0}
+          (MicroCFTA.InternedConstructorTemplates.Value
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))
+      (@MicroCFTA.SourceEqualityRequiredExecution.requireAll
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst requiredFuel requiredReadFuel
+        (MicroCFTA.SourceEqualitySelectedRequired.paths selected) originals scanHeap)
+      (@MicroCFTA.SourceEqualityRequiredWorker.Result.done
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (List.{0}
+          (MicroCFTA.InternedConstructorTemplates.Value
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+        prepared preparedHeap) →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) scanHeap →
+      @MicroCFTA.SourceCurrentRequiredUnionNormal.UnionNormal
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) scanHeap →
+        @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) scanHeap →
+          @MicroCFTA.InternedNestedProvenance.Values (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) scanHeap originals →
+            @MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (fun guard => @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true) scanHeap →
+              (∀ (paths : MicroCFTA.EqualityNormalize.Class),
+                  @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Class MicroCFTA.EqualityNormalize.Constraints
+                      (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Class) selected paths →
+                    @MicroCFTA.EndpointStatefulGateTrace.ClassTrace
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst
+                      MicroCFTA.SourceMemoGate.unconstrained
+                      (@MicroCFTA.SourceEndpointReachability.reaches
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                        MicroCFTA.SourceMemoGate.unconstrained)
+                      originals paths scanHeap Bool.false scanHeap) →
+                @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Class MicroCFTA.EqualityNormalize.Constraints
+                    (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Class) selected record.paths →
+                  MicroCFTA.SourceEqualityClassOrder.Coherent record →
+                    MicroCFTA.EqualityNormalize.Nontrivial record.paths →
+                      @MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt width inst_1 inst formulas solver next
+                          record prepared receiptBase action before value after memos final →
+                        @MicroCFTA.SourceCurrentAllocatedSharedTargetState.Ready width inst_1 inst formulas solver
+                            inventory record prepared preparedHeap before →
+                          @MicroCFTA.SourceCurrentRequiredSharedTargetCap.Stored width before →
+                            And (@MicroCFTA.SourceCurrentRequiredSharedTargetCap.Stored width after)
+                              (@Exists.{1} Nat fun depth =>
+                                @MicroCFTA.SourceCurrentConstrainedCap.Cap
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                  (fun guard => @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true) depth
+                                  value)
+theorem MicroCFTA.SourceCurrentRequiredSharedTargetCap.force_receipt : ∀ {width : Nat}
+  [inst :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {inventory next : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {record : MicroCFTA.SourceEqualityClassOrder.Record}
+  {originals prepared :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {requiredFuel requiredReadFuel : Nat} {selected : MicroCFTA.EqualityNormalize.Constraints}
+  {scanHeap preparedHeap receiptBase :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {action : MicroCFTA.EqualityNormalize.Path}
+  {before after : MicroCFTA.SourceCurrentAllocatedSharedTargetState.State width}
+  {value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {memos final : MicroCFTA.EndpointMemoGateTrace.Memos},
+  @Eq.{1}
+      (MicroCFTA.SourceEqualityRequiredWorker.Result (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (List.{0}
+          (MicroCFTA.InternedConstructorTemplates.Value
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))
+      (@MicroCFTA.SourceEqualityRequiredExecution.requireAll
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst requiredFuel requiredReadFuel
+        (MicroCFTA.SourceEqualitySelectedRequired.paths selected) originals scanHeap)
+      (@MicroCFTA.SourceEqualityRequiredWorker.Result.done
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (List.{0}
+          (MicroCFTA.InternedConstructorTemplates.Value
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+        prepared preparedHeap) →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) scanHeap →
+      @MicroCFTA.SourceCurrentRequiredUnionNormal.UnionNormal
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) scanHeap →
+        @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) scanHeap →
+          @MicroCFTA.InternedNestedProvenance.Values (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) scanHeap originals →
+            @MicroCFTA.SourceCurrentConstrainedCapGuardHeap.Heap
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (fun guard => @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true) scanHeap →
+              (∀ (paths : MicroCFTA.EqualityNormalize.Class),
+                  @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Class MicroCFTA.EqualityNormalize.Constraints
+                      (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Class) selected paths →
+                    @MicroCFTA.EndpointStatefulGateTrace.ClassTrace
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst
+                      MicroCFTA.SourceMemoGate.unconstrained
+                      (@MicroCFTA.SourceEndpointReachability.reaches
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                        MicroCFTA.SourceMemoGate.unconstrained)
+                      originals paths scanHeap Bool.false scanHeap) →
+                @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Class MicroCFTA.EqualityNormalize.Constraints
+                    (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Class) selected record.paths →
+                  MicroCFTA.SourceEqualityClassOrder.Coherent record →
+                    MicroCFTA.EqualityNormalize.Nontrivial record.paths →
+                      @MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt width inst_1 inst formulas solver next
+                          record prepared receiptBase action before value after memos final →
+                        @MicroCFTA.SourceCurrentAllocatedSharedTargetState.Ready width inst_1 inst formulas solver
+                            inventory record prepared preparedHeap before →
+                          @MicroCFTA.SourceCurrentRequiredSharedTargetCap.Stored width before →
+                            And (@MicroCFTA.SourceCurrentRequiredSharedTargetCap.Stored width after)
+                              (@Exists.{1} Nat fun depth =>
+                                @MicroCFTA.SourceCurrentConstrainedCap.Cap
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                  (fun guard => @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true) depth
+                                  value) :=
+fun {width}
+    [inst :
+      DecidableEq.{1}
+        (MicroCFTA.InternedConstructorTemplates.EdgeKey
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    [inst_1 : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)] {formulas} {solver}
+    {inventory next} {record} {originals prepared} {requiredFuel requiredReadFuel} {selected}
+    {scanHeap preparedHeap receiptBase} {action} {before after} {value} {memos final} required semantic normal costs
+    available guards primary chosen coherent active receipt ready stored =>
+  let data :=
+    @MicroCFTA.SourceCurrentRequiredSharedTargetCap.Data.mk inst record prepared preparedHeap requiredFuel
+      requiredReadFuel selected originals scanHeap required semantic normal costs available guards primary chosen;
+  have proper := fun path member =>
+    have nonroot := MicroCFTA.SourceEqualityClassTarget.operandPaths_nonroot record coherent active action path member;
+    @Exists.casesOn.{1} (List.{0} Nat)
+      (fun a =>
+        And
+          (@Membership.mem.{0, 0} (List.{0} Nat) (List.{0} (List.{0} Nat)) (@List.instMembership.{0} (List.{0} Nat))
+            (MicroCFTA.EqualityNarrowing.others record.paths action) a)
+          (@Eq.{1} (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat a) path))
+      (fun x =>
+        @Exists.{1} MicroCFTA.EqualityNormalize.Path fun natural =>
+          And
+            (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+              (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths natural)
+            (And (@Ne.{1} MicroCFTA.EqualityNormalize.Path natural (@List.nil.{0} Nat))
+              (@Eq.{1} (List.{0} Int) path (@List.map.{0, 0} Nat Int Int.ofNat natural))))
+      (@Iff.mp
+        (@Membership.mem.{0, 0} (List.{0} Int) (List.{0} (List.{0} Int)) (@List.instMembership.{0} (List.{0} Int))
+          (@List.map.{0, 0} (List.{0} Nat) (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat)
+            (MicroCFTA.EqualityNarrowing.others record.paths action))
+          path)
+        (@Exists.{1} (List.{0} Nat) fun a =>
+          And
+            (@Membership.mem.{0, 0} (List.{0} Nat) (List.{0} (List.{0} Nat)) (@List.instMembership.{0} (List.{0} Nat))
+              (MicroCFTA.EqualityNarrowing.others record.paths action) a)
+            (@Eq.{1} (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat a) path))
+        (@List.mem_map.{0, 0} (List.{0} Nat) (List.{0} Int) path (@List.map.{0, 0} Nat Int Int.ofNat)
+          (MicroCFTA.EqualityNarrowing.others record.paths action))
+        member)
+      fun natural h =>
+      @And.casesOn.{0}
+        (@Membership.mem.{0, 0} (List.{0} Nat) (List.{0} (List.{0} Nat)) (@List.instMembership.{0} (List.{0} Nat))
+          (MicroCFTA.EqualityNarrowing.others record.paths action) natural)
+        (@Eq.{1} (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat natural) path)
+        (fun x =>
+          @Exists.{1} MicroCFTA.EqualityNormalize.Path fun natural =>
+            And
+              (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths natural)
+              (And (@Ne.{1} MicroCFTA.EqualityNormalize.Path natural (@List.nil.{0} Nat))
+                (@Eq.{1} (List.{0} Int) path (@List.map.{0, 0} Nat Int Int.ofNat natural))))
+        h fun selected right =>
+        @Eq.ndrec.{0, 1} (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat natural)
+          (fun path =>
+            @Membership.mem.{0, 0} (List.{0} Int) (List.{0} (List.{0} Int)) (@List.instMembership.{0} (List.{0} Int))
+                (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths action) path →
+              @Ne.{1} (List.{0} Int) path (@List.nil.{0} Int) →
+                @Exists.{1} MicroCFTA.EqualityNormalize.Path fun natural =>
+                  And
+                    (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                      (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths natural)
+                    (And (@Ne.{1} MicroCFTA.EqualityNormalize.Path natural (@List.nil.{0} Nat))
+                      (@Eq.{1} (List.{0} Int) path (@List.map.{0, 0} Nat Int Int.ofNat natural))))
+          (fun member nonroot =>
+            @Exists.intro.{1} MicroCFTA.EqualityNormalize.Path
+              (fun natural_1 =>
+                And
+                  (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                    (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths natural_1)
+                  (And (@Ne.{1} MicroCFTA.EqualityNormalize.Path natural_1 (@List.nil.{0} Nat))
+                    (@Eq.{1} (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat natural)
+                      (@List.map.{0, 0} Nat Int Int.ofNat natural_1))))
+              natural
+              (@And.intro
+                (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Path MicroCFTA.EqualityNormalize.Class
+                  (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) record.paths natural)
+                (And (@Ne.{1} MicroCFTA.EqualityNormalize.Path natural (@List.nil.{0} Nat))
+                  (@Eq.{1} (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat natural)
+                    (@List.map.{0, 0} Nat Int Int.ofNat natural)))
+                (@And.left
+                  (@Membership.mem.{0, 0} (List.{0} Nat) (List.{0} (List.{0} Nat))
+                    (@List.instMembership.{0} (List.{0} Nat)) record.paths natural)
+                  (@Eq.{1} Bool
+                    (@Decidable.decide (@Ne.{1} MicroCFTA.EqualityNormalize.Path natural action)
+                      (@instDecidableNot (@Eq.{1} MicroCFTA.EqualityNormalize.Path natural action)
+                        (@instDecidableEqList.{0} Nat instDecidableEqNat natural action)))
+                    Bool.true)
+                  (@Iff.mp
+                    (@Membership.mem.{0, 0} (List.{0} Nat) (List.{0} (List.{0} Nat))
+                      (@List.instMembership.{0} (List.{0} Nat))
+                      (@List.filter.{0} (List.{0} Nat)
+                        (fun path =>
+                          @Decidable.decide (@Ne.{1} MicroCFTA.EqualityNormalize.Path path action)
+                            (@instDecidableNot (@Eq.{1} MicroCFTA.EqualityNormalize.Path path action)
+                              (@instDecidableEqList.{0} Nat instDecidableEqNat path action)))
+                        record.paths)
+                      natural)
+                    (And
+                      (@Membership.mem.{0, 0} (List.{0} Nat) (List.{0} (List.{0} Nat))
+                        (@List.instMembership.{0} (List.{0} Nat)) record.paths natural)
+                      (@Eq.{1} Bool
+                        (@Decidable.decide (@Ne.{1} MicroCFTA.EqualityNormalize.Path natural action)
+                          (@instDecidableNot (@Eq.{1} MicroCFTA.EqualityNormalize.Path natural action)
+                            (@instDecidableEqList.{0} Nat instDecidableEqNat natural action)))
+                        Bool.true))
+                    (@List.mem_filter.{0} (List.{0} Nat)
+                      (fun path =>
+                        @Decidable.decide (@Ne.{1} MicroCFTA.EqualityNormalize.Path path action)
+                          (@instDecidableNot (@Eq.{1} MicroCFTA.EqualityNormalize.Path path action)
+                            (@instDecidableEqList.{0} Nat instDecidableEqNat path action)))
+                      record.paths natural)
+                    selected))
+                (@And.intro (@Ne.{1} MicroCFTA.EqualityNormalize.Path natural (@List.nil.{0} Nat))
+                  (@Eq.{1} (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat natural)
+                    (@List.map.{0, 0} Nat Int Int.ofNat natural))
+                  (fun empty =>
+                    @Eq.ndrec.{0, 1} MicroCFTA.EqualityNormalize.Path (@List.nil.{0} Nat)
+                      (fun natural =>
+                        @Membership.mem.{0, 0} (List.{0} Nat) (List.{0} (List.{0} Nat))
+                            (@List.instMembership.{0} (List.{0} Nat))
+                            (MicroCFTA.EqualityNarrowing.others record.paths action) natural →
+                          @Membership.mem.{0, 0} (List.{0} Int) (List.{0} (List.{0} Int))
+                              (@List.instMembership.{0} (List.{0} Int))
+                              (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths action)
+                              (@List.map.{0, 0} Nat Int Int.ofNat natural) →
+                            @Ne.{1} (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat natural) (@List.nil.{0} Int) →
+                              False)
+                      (fun selected member nonroot =>
+                        nonroot (@rfl.{1} (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat (@List.nil.{0} Nat))))
+                      natural (@Eq.symm.{1} MicroCFTA.EqualityNormalize.Path natural (@List.nil.{0} Nat) empty) selected
+                      member nonroot)
+                  (@rfl.{1} (List.{0} Int) (@List.map.{0, 0} Nat Int Int.ofNat natural)))))
+          path right member nonroot;
+  @MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads.casesOn width inst_1 inst formulas solver
+    (fun {record_1} {values} {path} {before_1 after_1} {value_1} a a_1 a_2 t =>
+      @Eq.{1} MicroCFTA.SourceEqualityClassOrder.Record record record_1 →
+        @Eq.{1}
+            (List.{0}
+              (MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+            prepared values →
+          @Eq.{1} MicroCFTA.EqualityNormalize.Path action path →
+            @Eq.{2} (MicroCFTA.SourceCurrentAllocatedSharedTargetState.State width) before before_1 →
+              @Eq.{2} (MicroCFTA.SourceCurrentAllocatedSharedTargetState.State width) after after_1 →
+                @Eq.{1}
+                    (MicroCFTA.InternedConstructorTemplates.Value
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    value value_1 →
+                  @HEq.{0}
+                      (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force width inst_1 inst record prepared action
+                        before value after)
+                      (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.actual width inst_1 inst formulas
+                        solver next record prepared receiptBase action before value after memos final receipt)
+                      (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force width inst_1 inst record_1 values path
+                        before_1 value_1 after_1)
+                      a →
+                    @Eq.{1} MicroCFTA.EndpointMemoGateTrace.Memos memos a_1 →
+                      @Eq.{1} MicroCFTA.EndpointMemoGateTrace.Memos final a_2 →
+                        @HEq.{0}
+                            (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads width inst_1 inst formulas solver
+                              record prepared action before after value
+                              (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.actual width inst_1 inst
+                                formulas solver next record prepared receiptBase action before value after memos final
+                                receipt)
+                              memos final)
+                            (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.reads width inst_1 inst formulas
+                              solver next record prepared receiptBase action before value after memos final receipt)
+                            (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads width inst_1 inst formulas solver
+                              record_1 values path before_1 after_1 value_1 a a_1 a_2)
+                            t →
+                          And (@MicroCFTA.SourceCurrentRequiredSharedTargetCap.Stored width after)
+                            (@Exists.{1} Nat fun depth =>
+                              @MicroCFTA.SourceCurrentConstrainedCap.Cap
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                (fun guard => @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true) depth
+                                value))
+    record prepared action before after value
+    (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.actual width inst_1 inst formulas solver next record
+      prepared receiptBase action before value after memos final receipt)
+    memos final
+    (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.reads width inst_1 inst formulas solver next record
+      prepared receiptBase action before value after memos final receipt)
+    (fun {record_1} {values} {path} {before_1} {value_1} present memos_1 h =>
+      @Eq.ndrec.{0, 1} MicroCFTA.SourceEqualityClassOrder.Record record
+        (fun {record_2} =>
+          @Eq.{1}
+              (List.{0}
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+              prepared values →
+            @Eq.{1} MicroCFTA.EqualityNormalize.Path action path →
+              @Eq.{2} (MicroCFTA.SourceCurrentAllocatedSharedTargetState.State width) before before_1 →
+                @Eq.{2} (MicroCFTA.SourceCurrentAllocatedSharedTargetState.State width) after before_1 →
+                  @Eq.{1}
+                      (MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      value value_1 →
+                    @HEq.{0}
+                        (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force width inst_1 inst record prepared
+                          action before value after)
+                        (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.actual width inst_1 inst formulas
+                          solver next record prepared receiptBase action before value after memos final receipt)
+                        (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force width inst_1 inst record_2 values path
+                          before_1 value_1 before_1)
+                        (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force.hit width inst_1 inst record_2 values
+                          path value_1 before_1 present) →
+                      @Eq.{1} MicroCFTA.EndpointMemoGateTrace.Memos memos memos_1 →
+                        @Eq.{1} MicroCFTA.EndpointMemoGateTrace.Memos final memos_1 →
+                          @HEq.{0}
+                              (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads width inst_1 inst formulas
+                                solver record prepared action before after value
+                                (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.actual width inst_1 inst
+                                  formulas solver next record prepared receiptBase action before value after memos final
+                                  receipt)
+                                memos final)
+                              (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.reads width inst_1 inst
+                                formulas solver next record prepared receiptBase action before value after memos final
+                                receipt)
+                              (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads width inst_1 inst formulas
+                                solver record_2 values path before_1 before_1 value_1
+                                (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force.hit width inst_1 inst record_2
+                                  values path value_1 before_1 present)
+                                memos_1 memos_1)
+                              (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads.hit width inst_1 inst formulas
+                                solver record_2 values path before_1 value_1 present memos_1) →
+                            And (@MicroCFTA.SourceCurrentRequiredSharedTargetCap.Stored width after)
+                              (@Exists.{1} Nat fun depth =>
+                                @MicroCFTA.SourceCurrentConstrainedCap.Cap
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                  (fun guard => @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true) depth
+                                  value))
+        (fun h =>
+          @Eq.ndrec.{0, 1}
+            (List.{0}
+              (MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+            prepared
+            (fun {values} =>
+              @Eq.{1} MicroCFTA.EqualityNormalize.Path action path →
+                @Eq.{2} (MicroCFTA.SourceCurrentAllocatedSharedTargetState.State width) before before_1 →
+                  @Eq.{2} (MicroCFTA.SourceCurrentAllocatedSharedTargetState.State width) after before_1 →
+                    @Eq.{1}
+                        (MicroCFTA.InternedConstructorTemplates.Value
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        value value_1 →
+                      @HEq.{0}
+                          (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force width inst_1 inst record prepared
+                            action before value after)
+                          (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.actual width inst_1 inst formulas
+                            solver next record prepared receiptBase action before value after memos final receipt)
+                          (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force width inst_1 inst record values path
+                            before_1 value_1 before_1)
+                          (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force.hit width inst_1 inst record values
+                            path value_1 before_1 present) →
+                        @Eq.{1} MicroCFTA.EndpointMemoGateTrace.Memos memos memos_1 →
+                          @Eq.{1} MicroCFTA.EndpointMemoGateTrace.Memos final memos_1 →
+                            @HEq.{0}
+                                (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads width inst_1 inst formulas
+                                  solver record prepared action before after value
+                                  (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.actual width inst_1 inst
+                                    formulas solver next record prepared receiptBase action before value after memos
+                                    final receipt)
+                                  memos final)
+                                (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.reads width inst_1 inst
+                                  formulas solver next record prepared receiptBase action before value after memos final
+                                  receipt)
+                                (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads width inst_1 inst formulas
+                                  solver record values path before_1 before_1 value_1
+                                  (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force.hit width inst_1 inst record
+                                    values path value_1 before_1 present)
+                                  memos_1 memos_1)
+                                (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads.hit width inst_1 inst formulas
+                                  solver record values path before_1 value_1 present memos_1) →
+                              And (@MicroCFTA.SourceCurrentRequiredSharedTargetCap.Stored width after)
+                                (@Exists.{1} Nat fun depth =>
+                                  @MicroCFTA.SourceCurrentConstrainedCap.Cap
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                    (fun guard => @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true) depth
+                                    value))
+            (fun h =>
+              @Eq.ndrec.{0, 1} MicroCFTA.EqualityNormalize.Path action
+                (fun {path} =>
+                  ∀
+                    (present :
+                      @Eq.{1}
+                        (Option.{0}
+                          (MicroCFTA.InternedConstructorTemplates.Value
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                        (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.targets width before_1 path)
+                        (@Option.some.{0}
+                          (MicroCFTA.InternedConstructorTemplates.Value
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          value_1)),
+                    @Eq.{2} (MicroCFTA.SourceCurrentAllocatedSharedTargetState.State width) before before_1 →
+                      @Eq.{2} (MicroCFTA.SourceCurrentAllocatedSharedTargetState.State width) after before_1 →
+                        @Eq.{1}
+                            (MicroCFTA.InternedConstructorTemplates.Value
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                            value value_1 →
+                          @HEq.{0}
+                              (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force width inst_1 inst record
+                                prepared action before value after)
+                              (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.actual width inst_1 inst
+                                formulas solver next record prepared receiptBase action before value after memos final
+                                receipt)
+                              (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force width inst_1 inst record
+                                prepared path before_1 value_1 before_1)
+                              (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force.hit width inst_1 inst record
+                                prepared path value_1 before_1 present) →
+                            @Eq.{1} MicroCFTA.EndpointMemoGateTrace.Memos memos memos_1 →
+                              @Eq.{1} MicroCFTA.EndpointMemoGateTrace.Memos final memos_1 →
+                                @HEq.{0}
+                                    (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads width inst_1 inst formulas
+                                      solver record prepared action before after value
+                                      (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.actual width inst_1
+                                        inst formulas solver next record prepared receiptBase action before value after
+                                        memos final receipt)
+                                      memos final)
+                                    (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.reads width inst_1 inst
+                                      formulas solver next record prepared receiptBase action before value after memos
+                                      final receipt)
+                                    (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads width inst_1 inst formulas
+                                      solver record prepared path before_1 before_1 value_1
+                                      (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force.hit width inst_1 inst
+                                        record prepared path value_1 before_1 present)
+                                      memos_1 memos_1)
+                                    (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads.hit width inst_1 inst
+                                      formulas solver record prepared path before_1 value_1 present memos_1) →
+                                  And (@MicroCFTA.SourceCurrentRequiredSharedTargetCap.Stored width after)
+                                    (@Exists.{1} Nat fun depth =>
+                                      @MicroCFTA.SourceCurrentConstrainedCap.Cap
+                                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                        (fun guard => @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true)
+                                        depth value))
+                (fun present h =>
+                  @Eq.ndrec.{0, 2} (MicroCFTA.SourceCurrentAllocatedSharedTargetState.State width) before
+                    (fun {before_2} =>
+                      ∀
+                        (present :
+                          @Eq.{1}
+                            (Option.{0}
+                              (MicroCFTA.InternedConstructorTemplates.Value
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                            (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.targets width before_2 action)
+                            (@Option.some.{0}
+                              (MicroCFTA.InternedConstructorTemplates.Value
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                              value_1)),
+                        @Eq.{2} (MicroCFTA.SourceCurrentAllocatedSharedTargetState.State width) after before_2 →
+                          @Eq.{1}
+                              (MicroCFTA.InternedConstructorTemplates.Value
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                              value value_1 →
+                            @HEq.{0}
+                                (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force width inst_1 inst record
+                                  prepared action before value after)
+                                (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.actual width inst_1 inst
+                                  formulas solver next record prepared receiptBase action before value after memos final
+                                  receipt)
+                                (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force width inst_1 inst record
+                                  prepared action before_2 value_1 before_2)
+                                (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force.hit width inst_1 inst record
+                                  prepared action value_1 before_2 present) →
+                              @Eq.{1} MicroCFTA.EndpointMemoGateTrace.Memos memos memos_1 →
+                                @Eq.{1} MicroCFTA.EndpointMemoGateTrace.Memos final memos_1 →
+                                  @HEq.{0}
+                                      (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads width inst_1 inst
+                                        formulas solver record prepared action before after value
+                                        (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.actual width inst_1
+                                          inst formulas solver next record prepared receiptBase action before value
+                                          after memos final receipt)
+                                        memos final)
+                                      (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.reads width inst_1
+                                        inst formulas solver next record prepared receiptBase action before value after
+                                        memos final receipt)
+                                      (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads width inst_1 inst
+                                        formulas solver record prepared action before_2 before_2 value_1
+                                        (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force.hit width inst_1 inst
+                                          record prepared action value_1 before_2 present)
+                                        memos_1 memos_1)
+                                      (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads.hit width inst_1 inst
+                                        formulas solver record prepared action before_2 value_1 present memos_1) →
+                                    And (@MicroCFTA.SourceCurrentRequiredSharedTargetCap.Stored width after)
+                                      (@Exists.{1} Nat fun depth =>
+                                        @MicroCFTA.SourceCurrentConstrainedCap.Cap
+                                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                          (fun guard => @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true)
+                                          depth value))
+                    (fun present h =>
+                      @Eq.ndrec.{0, 2} (MicroCFTA.SourceCurrentAllocatedSharedTargetState.State width) before
+                        (fun {after} =>
+                          ∀
+                            (receipt :
+                              @MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt width inst_1 inst formulas
+                                solver next record prepared receiptBase action before value after memos final)
+                            (x :
+                              @MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads width inst_1 inst formulas solver
+                                record prepared action before after value
+                                (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.actual width inst_1 inst
+                                  formulas solver next record prepared receiptBase action before value after memos final
+                                  receipt)
+                                memos final),
+                            @Eq.{1}
+                                (MicroCFTA.InternedConstructorTemplates.Value
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                value value_1 →
+                              @HEq.{0}
+                                  (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force width inst_1 inst record
+                                    prepared action before value after)
+                                  (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.actual width inst_1 inst
+                                    formulas solver next record prepared receiptBase action before value after memos
+                                    final receipt)
+                                  (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force width inst_1 inst record
+                                    prepared action before value_1 before)
+                                  (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force.hit width inst_1 inst record
+                                    prepared action value_1 before present) →
+                                @Eq.{1} MicroCFTA.EndpointMemoGateTrace.Memos memos memos_1 →
+                                  @Eq.{1} MicroCFTA.EndpointMemoGateTrace.Memos final memos_1 →
+                                    @HEq.{0}
+                                        (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads width inst_1 inst
+                                          formulas solver record prepared action before after value
+                                          (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.actual width
+                                            inst_1 inst formulas solver next record prepared receiptBase action before
+                                            value after memos final receipt)
+                                          memos final)
+                                        x
+                                        (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads width inst_1 inst
+                                          formulas solver record prepared action before before value_1
+                                          (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force.hit width inst_1
+                                            inst record prepared action value_1 before present)
+                                          memos_1 memos_1)
+                                        (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads.hit width inst_1 inst
+                                          formulas solver record prepared action before value_1 present memos_1) →
+                                      And (@MicroCFTA.SourceCurrentRequiredSharedTargetCap.Stored width after)
+                                        (@Exists.{1} Nat fun depth =>
+                                          @MicroCFTA.SourceCurrentConstrainedCap.Cap
+                                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                            (fun guard => @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true)
+                                            depth value))
+                        (fun receipt x h =>
+                          @Eq.ndrec.{0, 1}
+                            (MicroCFTA.InternedConstructorTemplates.Value
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                            value
+                            (fun {value_2} =>
+                              ∀
+                                (present :
+                                  @Eq.{1}
+                                    (Option.{0}
+                                      (MicroCFTA.InternedConstructorTemplates.Value
+                                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                                    (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.targets width before
+                                      action)
+                                    (@Option.some.{0}
+                                      (MicroCFTA.InternedConstructorTemplates.Value
+                                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                      value_2)),
+                                @HEq.{0}
+                                    (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force width inst_1 inst record
+                                      prepared action before value before)
+                                    (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.actual width inst_1 inst
+                                      formulas solver next record prepared receiptBase action before value before memos
+                                      final receipt)
+                                    (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force width inst_1 inst record
+                                      prepared action before value_2 before)
+                                    (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force.hit width inst_1 inst
+                                      record prepared action value_2 before present) →
+                                  @Eq.{1} MicroCFTA.EndpointMemoGateTrace.Memos memos memos_1 →
+                                    @Eq.{1} MicroCFTA.EndpointMemoGateTrace.Memos final memos_1 →
+                                      @HEq.{0}
+                                          (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads width inst_1 inst
+                                            formulas solver record prepared action before before value
+                                            (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.actual width
+                                              inst_1 inst formulas solver next record prepared receiptBase action before
+                                              value before memos final receipt)
+                                            memos final)
+                                          x
+                                          (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads width inst_1 inst
+                                            formulas solver record prepared action before before value_2
+                                            (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force.hit width inst_1
+                                              inst record prepared action value_2 before present)
+                                            memos_1 memos_1)
+                                          (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads.hit width inst_1
+                                            inst formulas solver record prepared action before value_2 present
+                                            memos_1) →
+                                        And (@MicroCFTA.SourceCurrentRequiredSharedTargetCap.Stored width before)
+                                          (@Exists.{1} Nat fun depth =>
+                                            @MicroCFTA.SourceCurrentConstrainedCap.Cap
+                                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                              (fun guard =>
+                                                @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true)
+                                              depth value))
+                            (fun present h h_1 =>
+                              @Eq.ndrec.{0, 1} MicroCFTA.EndpointMemoGateTrace.Memos memos
+                                (fun memos_2 =>
+                                  @Eq.{1} MicroCFTA.EndpointMemoGateTrace.Memos final memos_2 →
+                                    @HEq.{0}
+                                        (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads width inst_1 inst
+                                          formulas solver record prepared action before before value
+                                          (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.actual width
+                                            inst_1 inst formulas solver next record prepared receiptBase action before
+                                            value before memos final receipt)
+                                          memos final)
+                                        x
+                                        (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads width inst_1 inst
+                                          formulas solver record prepared action before before value
+                                          (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force.hit width inst_1
+                                            inst record prepared action value before present)
+                                          memos_2 memos_2)
+                                        (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads.hit width inst_1 inst
+                                          formulas solver record prepared action before value present memos_2) →
+                                      And (@MicroCFTA.SourceCurrentRequiredSharedTargetCap.Stored width before)
+                                        (@Exists.{1} Nat fun depth =>
+                                          @MicroCFTA.SourceCurrentConstrainedCap.Cap
+                                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                            (fun guard => @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true)
+                                            depth value))
+                                (fun h =>
+                                  @Eq.ndrec.{0, 1} MicroCFTA.EndpointMemoGateTrace.Memos memos
+                                    (fun {final} =>
+                                      ∀
+                                        (receipt :
+                                          @MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt width inst_1 inst
+                                            formulas solver next record prepared receiptBase action before value before
+                                            memos final)
+                                        (x :
+                                          @MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads width inst_1 inst
+                                            formulas solver record prepared action before before value
+                                            (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.actual width
+                                              inst_1 inst formulas solver next record prepared receiptBase action before
+                                              value before memos final receipt)
+                                            memos final),
+                                        @HEq.{0}
+                                            (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads width inst_1 inst
+                                              formulas solver record prepared action before before value
+                                              (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.actual width
+                                                inst_1 inst formulas solver next record prepared receiptBase action
+                                                before value before memos final receipt)
+                                              memos final)
+                                            x
+                                            (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads width inst_1 inst
+                                              formulas solver record prepared action before before value
+                                              (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force.hit width inst_1
+                                                inst record prepared action value before present)
+                                              memos memos)
+                                            (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads.hit width inst_1
+                                              inst formulas solver record prepared action before value present memos) →
+                                          And (@MicroCFTA.SourceCurrentRequiredSharedTargetCap.Stored width before)
+                                            (@Exists.{1} Nat fun depth =>
+                                              @MicroCFTA.SourceCurrentConstrainedCap.Cap
+                                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                                (fun guard =>
+                                                  @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true)
+                                                depth value))
+                                    (fun receipt x h =>
+                                      @And.intro (@MicroCFTA.SourceCurrentRequiredSharedTargetCap.Stored width before)
+                                        (@Exists.{1} Nat fun depth =>
+                                          @MicroCFTA.SourceCurrentConstrainedCap.Cap
+                                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                            (fun guard => @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true)
+                                            depth value)
+                                        stored
+                                        (@MicroCFTA.SourceCurrentRequiredSharedTargetCap.Stored.slots width before
+                                          stored action value present))
+                                    final (@Eq.symm.{1} MicroCFTA.EndpointMemoGateTrace.Memos final memos h) receipt x)
+                                memos_1 h_1)
+                            value_1 h present)
+                        after
+                        (@Eq.symm.{2} (MicroCFTA.SourceCurrentAllocatedSharedTargetState.State width) after before h)
+                        receipt
+                        (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.reads width inst_1 inst formulas
+                          solver next record prepared receiptBase action before value after memos final receipt))
+                    before_1 h present)
+                path h present)
+            values h)
+        record_1 h)
+    (fun {memos_1 final_1} {record_1} {values} {path} {before_1} {value_1} {checked} {saved} absent {actual} reads h =>
+      @Eq.ndrec.{0, 1} MicroCFTA.SourceEqualityClassOrder.Record record
+        (fun {record_2} =>
+          ∀
+            {actual :
+              @MicroCFTA.SourceCurrentAllocatedTargetGraph.Target width inst_1 inst values
+                (MicroCFTA.SourceEqualityClassTarget.operandPaths record_2.paths path)
+                (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.checked width before_1)
+                (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.memo width before_1) value_1 checked saved}
+            (reads :
+              @MicroCFTA.SourceCurrentAllocatedTargetComplete.TargetReads width inst_1 inst formulas solver values
+                (MicroCFTA.SourceEqualityClassTarget.operandPaths record_2.paths path)
+                (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.checked width before_1) checked
+                (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.memo width before_1) saved value_1 actual
+                memos_1 final_1),
+            @Eq.{1}
+                (List.{0}
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                prepared values →
+              @Eq.{1} MicroCFTA.EqualityNormalize.Path action path →
+                @Eq.{2} (MicroCFTA.SourceCurrentAllocatedSharedTargetState.State width) before before_1 →
+                  @Eq.{2} (MicroCFTA.SourceCurrentAllocatedSharedTargetState.State width) after
+                      (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.store width before_1 path value_1 checked
+                        saved) →
+                    @Eq.{1}
+                        (MicroCFTA.InternedConstructorTemplates.Value
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        value value_1 →
+                      @HEq.{0}
+                          (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force width inst_1 inst record prepared
+                            action before value after)
+                          (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.actual width inst_1 inst formulas
+                            solver next record prepared receiptBase action before value after memos final receipt)
+                          (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force width inst_1 inst record_2 values
+                            path before_1 value_1
+                            (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.store width before_1 path value_1
+                              checked saved))
+                          (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force.miss width inst_1 inst record_2
+                            values path value_1 checked saved before_1 absent actual) →
+                        @Eq.{1} MicroCFTA.EndpointMemoGateTrace.Memos memos memos_1 →
+                          @Eq.{1} MicroCFTA.EndpointMemoGateTrace.Memos final final_1 →
+                            @HEq.{0}
+                                (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads width inst_1 inst formulas
+                                  solver record prepared action before after value
+                                  (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.actual width inst_1 inst
+                                    formulas solver next record prepared receiptBase action before value after memos
+                                    final receipt)
+                                  memos final)
+                                (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.reads width inst_1 inst
+                                  formulas solver next record prepared receiptBase action before value after memos final
+                                  receipt)
+                                (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads width inst_1 inst formulas
+                                  solver record_2 values path before_1
+                                  (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.store width before_1 path value_1
+                                    checked saved)
+                                  value_1
+                                  (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force.miss width inst_1 inst
+                                    record_2 values path value_1 checked saved before_1 absent actual)
+                                  memos_1 final_1)
+                                (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads.miss width inst_1 inst
+                                  formulas solver memos_1 final_1 record_2 values path before_1 value_1 checked saved
+                                  absent actual reads) →
+                              And (@MicroCFTA.SourceCurrentRequiredSharedTargetCap.Stored width after)
+                                (@Exists.{1} Nat fun depth =>
+                                  @MicroCFTA.SourceCurrentConstrainedCap.Cap
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                    (fun guard => @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true) depth
+                                    value))
+        (fun {actual} reads h =>
+          @Eq.ndrec.{0, 1}
+            (List.{0}
+              (MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+            prepared
+            (fun {values} =>
+              ∀
+                {actual :
+                  @MicroCFTA.SourceCurrentAllocatedTargetGraph.Target width inst_1 inst values
+                    (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths path)
+                    (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.checked width before_1)
+                    (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.memo width before_1) value_1 checked
+                    saved}
+                (reads :
+                  @MicroCFTA.SourceCurrentAllocatedTargetComplete.TargetReads width inst_1 inst formulas solver values
+                    (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths path)
+                    (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.checked width before_1) checked
+                    (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.memo width before_1) saved value_1 actual
+                    memos_1 final_1),
+                @Eq.{1} MicroCFTA.EqualityNormalize.Path action path →
+                  @Eq.{2} (MicroCFTA.SourceCurrentAllocatedSharedTargetState.State width) before before_1 →
+                    @Eq.{2} (MicroCFTA.SourceCurrentAllocatedSharedTargetState.State width) after
+                        (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.store width before_1 path value_1 checked
+                          saved) →
+                      @Eq.{1}
+                          (MicroCFTA.InternedConstructorTemplates.Value
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          value value_1 →
+                        @HEq.{0}
+                            (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force width inst_1 inst record prepared
+                              action before value after)
+                            (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.actual width inst_1 inst
+                              formulas solver next record prepared receiptBase action before value after memos final
+                              receipt)
+                            (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force width inst_1 inst record values
+                              path before_1 value_1
+                              (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.store width before_1 path value_1
+                                checked saved))
+                            (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force.miss width inst_1 inst record
+                              values path value_1 checked saved before_1 absent actual) →
+                          @Eq.{1} MicroCFTA.EndpointMemoGateTrace.Memos memos memos_1 →
+                            @Eq.{1} MicroCFTA.EndpointMemoGateTrace.Memos final final_1 →
+                              @HEq.{0}
+                                  (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads width inst_1 inst formulas
+                                    solver record prepared action before after value
+                                    (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.actual width inst_1 inst
+                                      formulas solver next record prepared receiptBase action before value after memos
+                                      final receipt)
+                                    memos final)
+                                  (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.reads width inst_1 inst
+                                    formulas solver next record prepared receiptBase action before value after memos
+                                    final receipt)
+                                  (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads width inst_1 inst formulas
+                                    solver record values path before_1
+                                    (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.store width before_1 path
+                                      value_1 checked saved)
+                                    value_1
+                                    (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force.miss width inst_1 inst
+                                      record values path value_1 checked saved before_1 absent actual)
+                                    memos_1 final_1)
+                                  (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads.miss width inst_1 inst
+                                    formulas solver memos_1 final_1 record values path before_1 value_1 checked saved
+                                    absent actual reads) →
+                                And (@MicroCFTA.SourceCurrentRequiredSharedTargetCap.Stored width after)
+                                  (@Exists.{1} Nat fun depth =>
+                                    @MicroCFTA.SourceCurrentConstrainedCap.Cap
+                                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                      (fun guard => @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true) depth
+                                      value))
+            (fun {actual} reads h =>
+              @Eq.ndrec.{0, 1} MicroCFTA.EqualityNormalize.Path action
+                (fun {path} =>
+                  ∀
+                    (absent :
+                      @Eq.{1}
+                        (Option.{0}
+                          (MicroCFTA.InternedConstructorTemplates.Value
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                        (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.targets width before_1 path)
+                        (@Option.none.{0}
+                          (MicroCFTA.InternedConstructorTemplates.Value
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))
+                    {actual :
+                      @MicroCFTA.SourceCurrentAllocatedTargetGraph.Target width inst_1 inst prepared
+                        (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths path)
+                        (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.checked width before_1)
+                        (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.memo width before_1) value_1 checked
+                        saved}
+                    (reads :
+                      @MicroCFTA.SourceCurrentAllocatedTargetComplete.TargetReads width inst_1 inst formulas solver
+                        prepared (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths path)
+                        (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.checked width before_1) checked
+                        (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.memo width before_1) saved value_1
+                        actual memos_1 final_1),
+                    @Eq.{2} (MicroCFTA.SourceCurrentAllocatedSharedTargetState.State width) before before_1 →
+                      @Eq.{2} (MicroCFTA.SourceCurrentAllocatedSharedTargetState.State width) after
+                          (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.store width before_1 path value_1 checked
+                            saved) →
+                        @Eq.{1}
+                            (MicroCFTA.InternedConstructorTemplates.Value
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                            value value_1 →
+                          @HEq.{0}
+                              (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force width inst_1 inst record
+                                prepared action before value after)
+                              (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.actual width inst_1 inst
+                                formulas solver next record prepared receiptBase action before value after memos final
+                                receipt)
+                              (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force width inst_1 inst record
+                                prepared path before_1 value_1
+                                (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.store width before_1 path value_1
+                                  checked saved))
+                              (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force.miss width inst_1 inst record
+                                prepared path value_1 checked saved before_1 absent actual) →
+                            @Eq.{1} MicroCFTA.EndpointMemoGateTrace.Memos memos memos_1 →
+                              @Eq.{1} MicroCFTA.EndpointMemoGateTrace.Memos final final_1 →
+                                @HEq.{0}
+                                    (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads width inst_1 inst formulas
+                                      solver record prepared action before after value
+                                      (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.actual width inst_1
+                                        inst formulas solver next record prepared receiptBase action before value after
+                                        memos final receipt)
+                                      memos final)
+                                    (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.reads width inst_1 inst
+                                      formulas solver next record prepared receiptBase action before value after memos
+                                      final receipt)
+                                    (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads width inst_1 inst formulas
+                                      solver record prepared path before_1
+                                      (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.store width before_1 path
+                                        value_1 checked saved)
+                                      value_1
+                                      (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force.miss width inst_1 inst
+                                        record prepared path value_1 checked saved before_1 absent actual)
+                                      memos_1 final_1)
+                                    (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads.miss width inst_1 inst
+                                      formulas solver memos_1 final_1 record prepared path before_1 value_1 checked
+                                      saved absent actual reads) →
+                                  And (@MicroCFTA.SourceCurrentRequiredSharedTargetCap.Stored width after)
+                                    (@Exists.{1} Nat fun depth =>
+                                      @MicroCFTA.SourceCurrentConstrainedCap.Cap
+                                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                        (fun guard => @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true)
+                                        depth value))
+                (fun absent {actual} reads h =>
+                  @Eq.ndrec.{0, 2} (MicroCFTA.SourceCurrentAllocatedSharedTargetState.State width) before
+                    (fun {before_2} =>
+                      ∀
+                        (absent :
+                          @Eq.{1}
+                            (Option.{0}
+                              (MicroCFTA.InternedConstructorTemplates.Value
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                            (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.targets width before_2 action)
+                            (@Option.none.{0}
+                              (MicroCFTA.InternedConstructorTemplates.Value
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))
+                        {actual :
+                          @MicroCFTA.SourceCurrentAllocatedTargetGraph.Target width inst_1 inst prepared
+                            (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths action)
+                            (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.checked width before_2)
+                            (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.memo width before_2) value_1
+                            checked saved}
+                        (reads :
+                          @MicroCFTA.SourceCurrentAllocatedTargetComplete.TargetReads width inst_1 inst formulas solver
+                            prepared (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths action)
+                            (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.checked width before_2) checked
+                            (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.memo width before_2) saved value_1
+                            actual memos_1 final_1),
+                        @Eq.{2} (MicroCFTA.SourceCurrentAllocatedSharedTargetState.State width) after
+                            (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.store width before_2 action value_1
+                              checked saved) →
+                          @Eq.{1}
+                              (MicroCFTA.InternedConstructorTemplates.Value
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                              value value_1 →
+                            @HEq.{0}
+                                (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force width inst_1 inst record
+                                  prepared action before value after)
+                                (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.actual width inst_1 inst
+                                  formulas solver next record prepared receiptBase action before value after memos final
+                                  receipt)
+                                (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force width inst_1 inst record
+                                  prepared action before_2 value_1
+                                  (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.store width before_2 action
+                                    value_1 checked saved))
+                                (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force.miss width inst_1 inst record
+                                  prepared action value_1 checked saved before_2 absent actual) →
+                              @Eq.{1} MicroCFTA.EndpointMemoGateTrace.Memos memos memos_1 →
+                                @Eq.{1} MicroCFTA.EndpointMemoGateTrace.Memos final final_1 →
+                                  @HEq.{0}
+                                      (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads width inst_1 inst
+                                        formulas solver record prepared action before after value
+                                        (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.actual width inst_1
+                                          inst formulas solver next record prepared receiptBase action before value
+                                          after memos final receipt)
+                                        memos final)
+                                      (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.reads width inst_1
+                                        inst formulas solver next record prepared receiptBase action before value after
+                                        memos final receipt)
+                                      (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads width inst_1 inst
+                                        formulas solver record prepared action before_2
+                                        (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.store width before_2 action
+                                          value_1 checked saved)
+                                        value_1
+                                        (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force.miss width inst_1 inst
+                                          record prepared action value_1 checked saved before_2 absent actual)
+                                        memos_1 final_1)
+                                      (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads.miss width inst_1 inst
+                                        formulas solver memos_1 final_1 record prepared action before_2 value_1 checked
+                                        saved absent actual reads) →
+                                    And (@MicroCFTA.SourceCurrentRequiredSharedTargetCap.Stored width after)
+                                      (@Exists.{1} Nat fun depth =>
+                                        @MicroCFTA.SourceCurrentConstrainedCap.Cap
+                                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                          (fun guard => @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true)
+                                          depth value))
+                    (fun absent {actual} reads h =>
+                      @Eq.ndrec.{0, 2} (MicroCFTA.SourceCurrentAllocatedSharedTargetState.State width)
+                        (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.store width before action value_1 checked
+                          saved)
+                        (fun {after} =>
+                          ∀
+                            (receipt :
+                              @MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt width inst_1 inst formulas
+                                solver next record prepared receiptBase action before value after memos final)
+                            (x :
+                              @MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads width inst_1 inst formulas solver
+                                record prepared action before after value
+                                (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.actual width inst_1 inst
+                                  formulas solver next record prepared receiptBase action before value after memos final
+                                  receipt)
+                                memos final),
+                            @Eq.{1}
+                                (MicroCFTA.InternedConstructorTemplates.Value
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                value value_1 →
+                              @HEq.{0}
+                                  (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force width inst_1 inst record
+                                    prepared action before value after)
+                                  (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.actual width inst_1 inst
+                                    formulas solver next record prepared receiptBase action before value after memos
+                                    final receipt)
+                                  (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force width inst_1 inst record
+                                    prepared action before value_1
+                                    (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.store width before action
+                                      value_1 checked saved))
+                                  (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force.miss width inst_1 inst
+                                    record prepared action value_1 checked saved before absent actual) →
+                                @Eq.{1} MicroCFTA.EndpointMemoGateTrace.Memos memos memos_1 →
+                                  @Eq.{1} MicroCFTA.EndpointMemoGateTrace.Memos final final_1 →
+                                    @HEq.{0}
+                                        (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads width inst_1 inst
+                                          formulas solver record prepared action before after value
+                                          (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.actual width
+                                            inst_1 inst formulas solver next record prepared receiptBase action before
+                                            value after memos final receipt)
+                                          memos final)
+                                        x
+                                        (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads width inst_1 inst
+                                          formulas solver record prepared action before
+                                          (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.store width before action
+                                            value_1 checked saved)
+                                          value_1
+                                          (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force.miss width inst_1
+                                            inst record prepared action value_1 checked saved before absent actual)
+                                          memos_1 final_1)
+                                        (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads.miss width inst_1 inst
+                                          formulas solver memos_1 final_1 record prepared action before value_1 checked
+                                          saved absent actual reads) →
+                                      And (@MicroCFTA.SourceCurrentRequiredSharedTargetCap.Stored width after)
+                                        (@Exists.{1} Nat fun depth =>
+                                          @MicroCFTA.SourceCurrentConstrainedCap.Cap
+                                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                            (fun guard => @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true)
+                                            depth value))
+                        (fun receipt x h =>
+                          @Eq.ndrec.{0, 1}
+                            (MicroCFTA.InternedConstructorTemplates.Value
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                            value
+                            (fun {value_2} =>
+                              ∀
+                                {actual :
+                                  @MicroCFTA.SourceCurrentAllocatedTargetGraph.Target width inst_1 inst prepared
+                                    (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths action)
+                                    (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.checked width before)
+                                    (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.memo width before) value_2
+                                    checked saved}
+                                (reads :
+                                  @MicroCFTA.SourceCurrentAllocatedTargetComplete.TargetReads width inst_1 inst formulas
+                                    solver prepared
+                                    (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths action)
+                                    (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.checked width before)
+                                    checked (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.memo width before)
+                                    saved value_2 actual memos_1 final_1)
+                                (receipt :
+                                  @MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt width inst_1 inst formulas
+                                    solver next record prepared receiptBase action before value
+                                    (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.store width before action
+                                      value_2 checked saved)
+                                    memos final)
+                                (x :
+                                  @MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads width inst_1 inst formulas
+                                    solver record prepared action before
+                                    (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.store width before action
+                                      value_2 checked saved)
+                                    value
+                                    (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.actual width inst_1 inst
+                                      formulas solver next record prepared receiptBase action before value
+                                      (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.store width before action
+                                        value_2 checked saved)
+                                      memos final receipt)
+                                    memos final),
+                                @HEq.{0}
+                                    (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force width inst_1 inst record
+                                      prepared action before value
+                                      (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.store width before action
+                                        value_2 checked saved))
+                                    (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.actual width inst_1 inst
+                                      formulas solver next record prepared receiptBase action before value
+                                      (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.store width before action
+                                        value_2 checked saved)
+                                      memos final receipt)
+                                    (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force width inst_1 inst record
+                                      prepared action before value_2
+                                      (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.store width before action
+                                        value_2 checked saved))
+                                    (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force.miss width inst_1 inst
+                                      record prepared action value_2 checked saved before absent actual) →
+                                  @Eq.{1} MicroCFTA.EndpointMemoGateTrace.Memos memos memos_1 →
+                                    @Eq.{1} MicroCFTA.EndpointMemoGateTrace.Memos final final_1 →
+                                      @HEq.{0}
+                                          (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads width inst_1 inst
+                                            formulas solver record prepared action before
+                                            (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.store width before
+                                              action value_2 checked saved)
+                                            value
+                                            (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.actual width
+                                              inst_1 inst formulas solver next record prepared receiptBase action before
+                                              value
+                                              (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.store width before
+                                                action value_2 checked saved)
+                                              memos final receipt)
+                                            memos final)
+                                          x
+                                          (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads width inst_1 inst
+                                            formulas solver record prepared action before
+                                            (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.store width before
+                                              action value_2 checked saved)
+                                            value_2
+                                            (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force.miss width inst_1
+                                              inst record prepared action value_2 checked saved before absent actual)
+                                            memos_1 final_1)
+                                          (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads.miss width inst_1
+                                            inst formulas solver memos_1 final_1 record prepared action before value_2
+                                            checked saved absent actual reads) →
+                                        And
+                                          (@MicroCFTA.SourceCurrentRequiredSharedTargetCap.Stored width
+                                            (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.store width before
+                                              action value_2 checked saved))
+                                          (@Exists.{1} Nat fun depth =>
+                                            @MicroCFTA.SourceCurrentConstrainedCap.Cap
+                                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                              (fun guard =>
+                                                @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true)
+                                              depth value))
+                            (fun {actual} reads receipt x h h_1 =>
+                              @Eq.ndrec.{0, 1} MicroCFTA.EndpointMemoGateTrace.Memos memos
+                                (fun {memos_2} =>
+                                  ∀
+                                    (reads :
+                                      @MicroCFTA.SourceCurrentAllocatedTargetComplete.TargetReads width inst_1 inst
+                                        formulas solver prepared
+                                        (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths action)
+                                        (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.checked width before)
+                                        checked
+                                        (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.memo width before)
+                                        saved value actual memos_2 final_1),
+                                    @Eq.{1} MicroCFTA.EndpointMemoGateTrace.Memos final final_1 →
+                                      @HEq.{0}
+                                          (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads width inst_1 inst
+                                            formulas solver record prepared action before
+                                            (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.store width before
+                                              action value checked saved)
+                                            value
+                                            (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.actual width
+                                              inst_1 inst formulas solver next record prepared receiptBase action before
+                                              value
+                                              (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.store width before
+                                                action value checked saved)
+                                              memos final receipt)
+                                            memos final)
+                                          x
+                                          (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads width inst_1 inst
+                                            formulas solver record prepared action before
+                                            (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.store width before
+                                              action value checked saved)
+                                            value
+                                            (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force.miss width inst_1
+                                              inst record prepared action value checked saved before absent actual)
+                                            memos_2 final_1)
+                                          (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads.miss width inst_1
+                                            inst formulas solver memos_2 final_1 record prepared action before value
+                                            checked saved absent actual reads) →
+                                        And
+                                          (@MicroCFTA.SourceCurrentRequiredSharedTargetCap.Stored width
+                                            (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.store width before
+                                              action value checked saved))
+                                          (@Exists.{1} Nat fun depth =>
+                                            @MicroCFTA.SourceCurrentConstrainedCap.Cap
+                                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                              (fun guard =>
+                                                @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true)
+                                              depth value))
+                                (fun reads h =>
+                                  @Eq.ndrec.{0, 1} MicroCFTA.EndpointMemoGateTrace.Memos final
+                                    (fun {final_2} =>
+                                      ∀
+                                        (reads :
+                                          @MicroCFTA.SourceCurrentAllocatedTargetComplete.TargetReads width inst_1 inst
+                                            formulas solver prepared
+                                            (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths action)
+                                            (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.checked width
+                                              before)
+                                            checked
+                                            (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.memo width before)
+                                            saved value actual memos final_2),
+                                        @HEq.{0}
+                                            (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads width inst_1 inst
+                                              formulas solver record prepared action before
+                                              (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.store width before
+                                                action value checked saved)
+                                              value
+                                              (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.actual width
+                                                inst_1 inst formulas solver next record prepared receiptBase action
+                                                before value
+                                                (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.store width before
+                                                  action value checked saved)
+                                                memos final receipt)
+                                              memos final)
+                                            x
+                                            (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads width inst_1 inst
+                                              formulas solver record prepared action before
+                                              (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.store width before
+                                                action value checked saved)
+                                              value
+                                              (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force.miss width
+                                                inst_1 inst record prepared action value checked saved before absent
+                                                actual)
+                                              memos final_2)
+                                            (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads.miss width inst_1
+                                              inst formulas solver memos final_2 record prepared action before value
+                                              checked saved absent actual reads) →
+                                          And
+                                            (@MicroCFTA.SourceCurrentRequiredSharedTargetCap.Stored width
+                                              (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.store width before
+                                                action value checked saved))
+                                            (@Exists.{1} Nat fun depth =>
+                                              @MicroCFTA.SourceCurrentConstrainedCap.Cap
+                                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                                (fun guard =>
+                                                  @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true)
+                                                depth value))
+                                    (fun reads h =>
+                                      have produced :=
+                                        @MicroCFTA.SourceCurrentRequiredSharedTargetCap.target_cap width inst inst_1
+                                          record prepared preparedHeap data formulas solver
+                                          (MicroCFTA.SourceEqualityClassTarget.operandPaths record.paths action)
+                                          (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.checked width
+                                            before)
+                                          checked
+                                          (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.State.memo width before)
+                                          saved value memos final actual reads
+                                          (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.Ready.checked width inst_1
+                                            inst formulas solver inventory record prepared preparedHeap before ready)
+                                          (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.Ready.captured width
+                                            inst_1 inst formulas solver inventory record prepared preparedHeap before
+                                            ready)
+                                          (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.Ready.stored width inst_1
+                                            inst formulas solver inventory record prepared preparedHeap before ready)
+                                          (@MicroCFTA.SourceCurrentRequiredSharedTargetCap.Stored.merge width before
+                                            stored)
+                                          (@MicroCFTA.SourceCurrentRequiredSharedTargetCap.Stored.current width before
+                                            stored)
+                                          proper;
+                                      @And.intro
+                                        (@MicroCFTA.SourceCurrentRequiredSharedTargetCap.Stored width
+                                          (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.store width before action
+                                            value checked saved))
+                                        (@Exists.{1} Nat fun depth =>
+                                          @MicroCFTA.SourceCurrentConstrainedCap.Cap
+                                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                            (fun guard => @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true)
+                                            depth value)
+                                        (@MicroCFTA.SourceCurrentRequiredSharedTargetCap.store_stored width before
+                                          action value checked saved stored
+                                          (@And.left
+                                            (@MicroCFTA.SourceCurrentConstrainedCapCurrentNative.At width
+                                              (fun guard =>
+                                                @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true)
+                                              checked)
+                                            (@Exists.{1} Nat fun depth =>
+                                              @MicroCFTA.SourceCurrentConstrainedCap.Cap
+                                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                                (fun guard =>
+                                                  @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true)
+                                                depth value)
+                                            (@And.right
+                                              (@MicroCFTA.SourceCurrentConstrainedCapMemoMerge.Stored
+                                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                                (fun guard =>
+                                                  @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true)
+                                                saved)
+                                              (And
+                                                (@MicroCFTA.SourceCurrentConstrainedCapCurrentNative.At width
+                                                  (fun guard =>
+                                                    @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true)
+                                                  checked)
+                                                (@Exists.{1} Nat fun depth =>
+                                                  @MicroCFTA.SourceCurrentConstrainedCap.Cap
+                                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                                    (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                      MicroCFTA.FullSyntax.Formula)
+                                                    (fun guard =>
+                                                      @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true)
+                                                    depth value))
+                                              produced))
+                                          (@And.left
+                                            (@MicroCFTA.SourceCurrentConstrainedCapMemoMerge.Stored
+                                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                              (fun guard =>
+                                                @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true)
+                                              saved)
+                                            (And
+                                              (@MicroCFTA.SourceCurrentConstrainedCapCurrentNative.At width
+                                                (fun guard =>
+                                                  @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true)
+                                                checked)
+                                              (@Exists.{1} Nat fun depth =>
+                                                @MicroCFTA.SourceCurrentConstrainedCap.Cap
+                                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                                  (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                    MicroCFTA.FullSyntax.Formula)
+                                                  (fun guard =>
+                                                    @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true)
+                                                  depth value))
+                                            produced)
+                                          (@And.right
+                                            (@MicroCFTA.SourceCurrentConstrainedCapCurrentNative.At width
+                                              (fun guard =>
+                                                @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true)
+                                              checked)
+                                            (@Exists.{1} Nat fun depth =>
+                                              @MicroCFTA.SourceCurrentConstrainedCap.Cap
+                                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                                (fun guard =>
+                                                  @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true)
+                                                depth value)
+                                            (@And.right
+                                              (@MicroCFTA.SourceCurrentConstrainedCapMemoMerge.Stored
+                                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                                (fun guard =>
+                                                  @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true)
+                                                saved)
+                                              (And
+                                                (@MicroCFTA.SourceCurrentConstrainedCapCurrentNative.At width
+                                                  (fun guard =>
+                                                    @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true)
+                                                  checked)
+                                                (@Exists.{1} Nat fun depth =>
+                                                  @MicroCFTA.SourceCurrentConstrainedCap.Cap
+                                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                                    (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                      MicroCFTA.FullSyntax.Formula)
+                                                    (fun guard =>
+                                                      @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true)
+                                                    depth value))
+                                              produced)))
+                                        (@And.right
+                                          (@MicroCFTA.SourceCurrentConstrainedCapCurrentNative.At width
+                                            (fun guard => @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true)
+                                            checked)
+                                          (@Exists.{1} Nat fun depth =>
+                                            @MicroCFTA.SourceCurrentConstrainedCap.Cap
+                                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                              (fun guard =>
+                                                @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true)
+                                              depth value)
+                                          (@And.right
+                                            (@MicroCFTA.SourceCurrentConstrainedCapMemoMerge.Stored
+                                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                              (fun guard =>
+                                                @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true)
+                                              saved)
+                                            (And
+                                              (@MicroCFTA.SourceCurrentConstrainedCapCurrentNative.At width
+                                                (fun guard =>
+                                                  @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true)
+                                                checked)
+                                              (@Exists.{1} Nat fun depth =>
+                                                @MicroCFTA.SourceCurrentConstrainedCap.Cap
+                                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                                  (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                    MicroCFTA.FullSyntax.Formula)
+                                                  (fun guard =>
+                                                    @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true)
+                                                  depth value))
+                                            produced)))
+                                    final_1 h reads)
+                                memos_1 h_1 reads)
+                            value_1 h actual reads receipt x)
+                        after
+                        (@Eq.symm.{2} (MicroCFTA.SourceCurrentAllocatedSharedTargetState.State width) after
+                          (@MicroCFTA.SourceCurrentAllocatedSharedTargetState.store width before action value_1 checked
+                            saved)
+                          h)
+                        receipt
+                        (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.reads width inst_1 inst formulas
+                          solver next record prepared receiptBase action before value after memos final receipt))
+                    before_1 h absent actual reads)
+                path h absent actual reads)
+            values h actual reads)
+        record_1 h actual reads)
+    (@Eq.refl.{1} MicroCFTA.SourceEqualityClassOrder.Record record)
+    (@Eq.refl.{1}
+      (List.{0}
+        (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+      prepared)
+    (@Eq.refl.{1} MicroCFTA.EqualityNormalize.Path action)
+    (@Eq.refl.{2} (MicroCFTA.SourceCurrentAllocatedSharedTargetState.State width) before)
+    (@Eq.refl.{2} (MicroCFTA.SourceCurrentAllocatedSharedTargetState.State width) after)
+    (@Eq.refl.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      value)
+    (@HEq.refl.{0}
+      (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Force width inst_1 inst record prepared action before value
+        after)
+      (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.actual width inst_1 inst formulas solver next record
+        prepared receiptBase action before value after memos final receipt))
+    (@Eq.refl.{1} MicroCFTA.EndpointMemoGateTrace.Memos memos)
+    (@Eq.refl.{1} MicroCFTA.EndpointMemoGateTrace.Memos final)
+    (@HEq.refl.{0}
+      (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Reads width inst_1 inst formulas solver record prepared action
+        before after value
+        (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.actual width inst_1 inst formulas solver next record
+          prepared receiptBase action before value after memos final receipt)
+        memos final)
+      (@MicroCFTA.SourceCurrentAllocatedSharedTargetForce.Receipt.reads width inst_1 inst formulas solver next record
+        prepared receiptBase action before value after memos final receipt))
+'MicroCFTA.SourceCurrentRequiredSharedTargetCap.force_receipt' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]

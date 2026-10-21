@@ -1,0 +1,106 @@
+/tmp/mcfta-required-shared-target-cap-proof/shared-cap-direct-1.source.lean:40:2: warning: missing doc string for public field Stored.current
+
+Note: This linter can be disabled with `set_option linter.missingDocs false`
+/tmp/mcfta-required-shared-target-cap-proof/shared-cap-direct-1.source.lean:41:2: warning: missing doc string for public field Stored.merge
+
+Note: This linter can be disabled with `set_option linter.missingDocs false`
+/tmp/mcfta-required-shared-target-cap-proof/shared-cap-direct-1.source.lean:42:2: warning: missing doc string for public field Stored.slots
+
+Note: This linter can be disabled with `set_option linter.missingDocs false`
+/tmp/mcfta-required-shared-target-cap-proof/shared-cap-direct-1.source.lean:136:9: error: Application type mismatch: The argument
+  receipt.ready
+has type
+  ClassReady middle✝
+of sort `Prop` but is expected to have type
+  Data record values✝ preparedHeap
+of sort `Type` in the application
+  ih receipt.ready
+/tmp/mcfta-required-shared-target-cap-proof/shared-cap-direct-1.source.lean:137:14: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+width : Nat
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq Symbol
+record : SourceEqualityClassOrder.Record
+prepared : List Node
+preparedHeap : Heap
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+seed : List Int
+paths : List (List Int)
+before after : Checked width
+memo saved : Memo
+result : Node
+memos final : Memos
+actual : Fold prepared seed paths before memo result after saved
+path✝ : List Int
+values✝ : List Node
+before✝ : Checked width
+memo✝ : Memo
+value✝ : Node
+middle✝ : Checked width
+current✝ : Memo
+seed✝ : List Int
+paths✝ : List (List Int)
+tail✝ : Node
+later✝ : Checked width
+saved✝ : Memo
+result✝ : Node
+after✝ : Checked width
+inventory✝ : Inventory
+memos✝ nextMemos✝ lastMemos✝ : Memos
+nextInventory✝ : Inventory
+operand✝ : Operand path✝ values✝ before✝ memo✝ value✝ middle✝ current✝
+rest✝ : Fold values✝ seed✝ paths✝ middle✝ current✝ tail✝ later✝ saved✝
+step✝ : SourceCurrentAllocatedTargetQuery.Step value✝ tail✝ later✝ result✝ after✝
+receipt :
+  SourceCurrentAllocatedMergeOperand.Receipt formulas solver inventory✝ path✝ values✝ before✝ memo✝ value✝ middle✝
+    current✝ memos✝ nextMemos✝
+remaining : FoldReads formulas solver rest✝ nextMemos✝ lastMemos✝
+query :
+  SourceCurrentAllocatedTargetQuery.Receipt formulas solver nextInventory✝ value✝ tail✝ later✝ result✝ after✝ lastMemos✝
+ih :
+  ∀ (data : Data record values✝ preparedHeap),
+    ClassReady middle✝ →
+      Keeps preparedHeap middle✝.native.machine.heap →
+        PhysicalStored middle✝.native.machine.heap current✝ →
+          SourceCurrentConstrainedCapMemoMerge.Stored (fun guard => SourceMemoGate.plain guard = true) current✝ →
+            SourceCurrentConstrainedCapCurrentNative.At (fun guard => SourceMemoGate.plain guard = true) middle✝ →
+              (∀ (path : List Int),
+                  path ∈ seed✝ :: paths✝ →
+                    ∃ natural, natural ∈ record.paths ∧ natural ≠ [] ∧ path = List.map Int.ofNat natural) →
+                ClassReady later✝ ∧
+                  Effects (physical middle✝) (physical later✝) ∧
+                    PhysicalStored later✝.native.machine.heap saved✝ ∧
+                      SourceCurrentConstrainedCapMemoMerge.Stored (fun guard => SourceMemoGate.plain guard = true)
+                          saved✝ ∧
+                        SourceCurrentConstrainedCapCurrentNative.At (fun guard => SourceMemoGate.plain guard = true)
+                            later✝ ∧
+                          Available later✝.native.machine.heap tail✝ ∧
+                            tail✝.free = [] ∧ ∃ depth, Cap (fun guard => SourceMemoGate.plain guard = true) depth tail✝
+data : Data record values✝ preparedHeap
+ready : ClassReady before✝
+captured : Keeps preparedHeap before✝.native.machine.heap
+physicalStored : PhysicalStored before✝.native.machine.heap memo✝
+merged : SourceCurrentConstrainedCapMemoMerge.Stored (fun guard => SourceMemoGate.plain guard = true) memo✝
+current : SourceCurrentConstrainedCapCurrentNative.At (fun guard => SourceMemoGate.plain guard = true) before✝
+proper :
+  ∀ (path : List Int),
+    path ∈ seed✝ :: path✝ :: paths✝ →
+      ∃ natural, natural ∈ record.paths ∧ natural ≠ [] ∧ path = List.map Int.ofNat natural
+own :
+  SourceCurrentConstrainedCapMemoMerge.Stored (fun guard => SourceMemoGate.plain guard = true) current✝ ∧
+    SourceCurrentConstrainedCapCurrentNative.At (fun guard => SourceMemoGate.plain guard = true) middle✝ ∧
+      ∃ depth, Cap (fun guard => SourceMemoGate.plain guard = true) depth value✝
+⊢ SourceCurrentConstrainedCapCurrentNative.At (fun guard => SourceMemoGate.plain guard = true) middle✝
+/tmp/mcfta-required-shared-target-cap-proof/shared-cap-direct-1.source.lean:135:11: error: Tactic `rcases` failed: `x✝ : (∀ (path : List Int),
+    path ∈ seed✝ :: paths✝ → ∃ natural, natural ∈ record.paths ∧ natural ≠ [] ∧ path = List.map Int.ofNat natural) →
+  ClassReady later✝ ∧
+    Effects (physical middle✝) (physical later✝) ∧
+      PhysicalStored later✝.native.machine.heap saved✝ ∧
+        SourceCurrentConstrainedCapMemoMerge.Stored (fun guard => SourceMemoGate.plain guard = true) saved✝ ∧
+          SourceCurrentConstrainedCapCurrentNative.At (fun guard => SourceMemoGate.plain guard = true) later✝ ∧
+            Available later✝.native.machine.heap tail✝ ∧
+              tail✝.free = [] ∧
+                ∃ depth, Cap (fun guard => SourceMemoGate.plain guard = true) depth tail✝` is not an inductive datatype
+/tmp/mcfta-required-shared-target-cap-proof/shared-cap-direct-1.source.lean:164:2: error: Dependent elimination failed: Failed to solve equation
+  List.map (List.map Int.ofNat) (EqualityNarrowing.others record.paths action) = []
