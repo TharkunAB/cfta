@@ -1,0 +1,11 @@
+--- resource-owner-progress-direct-1.source.lean
++++ SourceCurrentResourceOwnerProgress.lean
+@@ -22,7 +22,7 @@
+     (formulas : SourceGuards.Formulas FullSyntax.Formula)
+     (solver : SourceGuards.Entailment FullSyntax.Formula)
+     {request : EdgeRequest} {returned : Edge}
+-    (written : Written (bits := bits) formulas solver request returned)
++    (written : SourceCurrentResourceParentWriters.Written (bits := bits) formulas solver request returned)
+     {ownerEntry ownerDepth ownerFree} {ownerRows : List Edge} {index : Nat}
+     (member : request.value ∈ ownerRows)
+     (found : returned.children[index]? = some (.node ownerEntry ownerRows ownerDepth ownerFree))

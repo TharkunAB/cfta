@@ -1,0 +1,27 @@
+--- resource-owner-progress-direct-2.source.lean
++++ SourceCurrentResourceOwnerProgress.lean
+@@ -46,10 +46,12 @@
+   obtain ⟨g,s,r,e,p,h,m,c,n,budget,writerBefore,writerAfter,savedFourth,savedMerge,
+       globals,inventory,profile,observed,context,frame,fits,inheritedReady,resident,
+       liveInputs,reserved,normal,supported,⟨causal⟩,merged,positiveMemo⟩ := written
++  have nativeGood := SourceCurrentNativeOperationHeap.Good.of_native
++    (SourceCurrentNativeOperationInvariants.Good.of_checked context.ready.good) context.ready.semantic context.ready.costs
+   obtain ⟨loaded,middle,records,kept,scanned,scanFourth,preparedValues,preparedHeap,
+       noncontradictory,loadedAt,_reduced,_built,_accepted,precheck,scanCall,nonempty,
+       requiredCall,passCall,_sameFourth,primary⟩ :=
+-    SourceCurrentActualOwnerSelection.selected observed context.ready.good context.stored liveInputs member found
++    SourceCurrentActualOwnerSelection.selected observed nativeGood context.stored liveInputs member found
+   obtain ⟨fieldAt,_inherited,_available⟩ := liveInputs noncontradictory
+   have parentLive : SourceCurrentParentNumeric.LiveInputs request.value.entry.key.constraint loaded
+       request.inherited request.value.children writerBefore :=
+@@ -84,7 +86,9 @@
+           rw [emptyChildren] at inside
+           cases List.mem_singleton.mp inside
+       | true =>
+-          simpa only [keep,ite_true,readback] using constructed.guard
++          have acceptedGuard : returned.entry.key.constraint = SourceEqualityConjoinAllocation.readback loaded := by
++            simpa only [keep,ite_true] using constructed.guard
++          exact acceptedGuard.trans readback
+   have physical : SourceCurrentMemoMergeEffects.Stored scanned.native.machine.heap writerBefore.merge :=
+     context.stored.grows scanEffects.keeps
+   have currentField : SourceCurrentConjunctionEquality.FieldAvailable prefixBefore request.value.entry.key.constraint := by

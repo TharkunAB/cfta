@@ -1,0 +1,45 @@
+import MicroCFTA.SourceCurrentResourceParentWriters
+import MicroCFTA.SourceCurrentActualOwnerPair
+import MicroCFTA.SourceCurrentDelayedCombinedOwnerProgress
+
+namespace MicroCFTA.SourceCurrentResourceOwnerProgress
+open Cache InternedConstructorTemplates
+open SourceCurrentAllocatedPartialState (EdgeRequest NodeRequest)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Guard
+local notation "Edge" => EdgeValue Symbol Guard
+local notation "EqValue" => SourceEqualityConstraintAllocation.Value
+local notation "Operations" => SourceEqualityConstraintMemoAllocation.State
+local notation "EqReady" => SourceEqualityConstraintAllocation.Ready
+local notation "Valid" => SourceEqualityConstraintMemoAllocation.Valid
+local notation "Grows" => SourceEqualityConstraintMemoAllocation.Grows
+local notation "Written" => SourceCurrentResourceParentWriters.Written
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Node] {bits : Nat}
+
+theorem key_ne_top
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    {request : EdgeRequest} {returned : Edge}
+    (written : Written (bits := bits) formulas solver request returned)
+    {ownerEntry ownerDepth ownerFree} {ownerRows : List Edge} {index : Nat}
+    (member : request.value ∈ ownerRows)
+    (found : returned.children[index]? = some (.node ownerEntry ownerRows ownerDepth ownerFree))
+    (prefixBefore : Operations) (valid : Valid prefixBefore)
+    (ready : EqReady prefixBefore.constraints request.inherited)
+    (field : SourceCurrentConjunctionEquality.FieldAvailable prefixBefore returned.entry.key.constraint)
+    (combined : EqValue)
+    (prefixActual : (SourceCurrentAllocatedInheritedPrefix.run returned.entry.key.constraint
+      request.inherited prefixBefore).1 = .ok (some combined))
+    (live : combined ≠ .contradiction)
+    (later : Operations) (laterValid : Valid later)
+    (laterGrowth : Grows (SourceCurrentAllocatedInheritedPrefix.run returned.entry.key.constraint
+      request.inherited prefixBefore).2 later)
+    (identity : Nat) (top : EqReady prefixBefore.constraints (.live identity [])) :
+    let child := SourceEqualityConstraintMemoAllocation.descend combined index later
+    returned.entry.key.constraint = request.value.entry.key.constraint ∧
+      SourceMemoGate.plain request.value.entry.key.constraint = false ∧
+      child.1.payload ≠ some [] ∧
+      (NodeRequest.mk child.1 (.node ownerEntry ownerRows ownerDepth ownerFree)).key ≠
+        (NodeRequest.mk (.live identity []) (.node ownerEntry ownerRows ownerDepth ownerFree)).key
+end MicroCFTA.SourceCurrentResourceOwnerProgress
