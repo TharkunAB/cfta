@@ -3047,6 +3047,7 @@ import MicroCFTA.SourceCurrentClassPositiveAncestry
 import MicroCFTA.SourceCurrentClassPositiveChronology
 import MicroCFTA.SourceCurrentRequiredPositiveChronology
 import MicroCFTA.SourceCurrentPositiveOwnerPair
+import MicroCFTA.SourceCurrentNativeCurrentStores
 /-!
 # Proof dependency audit
 
