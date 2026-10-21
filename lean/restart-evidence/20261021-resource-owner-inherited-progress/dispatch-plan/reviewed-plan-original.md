@@ -1,0 +1,24 @@
+# Immediate dispatch for the same inherited owner
+
+Propose one public `SourceCurrentResourceOwnerInheritedDispatch.key_ne_inherited` theorem. Replace the Top inherited value in checked `ResourceOwnerDispatch.key_ne_top` with an arbitrary `inherited : EqValue`. Retain the exact active owner, source-row membership, actual Parent call, live prefix, earlier-slot walk, and selected child lookup. The result is the same literal immediate dispatch prefix and key inequality against that SAME inherited owner.
+
+The 68-line proposed public type is unproved and unelaborated. Its initial Context, Frame, Fits, alphabet carrier, Inputs, scheduled Room, UnionNormal, native positive Support, causal History, conditional Merge law, positive Merge law, and resource Origins remain unchanged. It adds no current readiness, historical writer, ancestry, or future-return premise.
+
+## Same-witness route
+
+1. Reuse the checked Top dispatch proof's row resource cut and reservation derivation (`ResourceOwnerDispatch` 100–125). `OuterPrefixNativeStores.reached` (160–196) supplies the actual row Context, resource packet, native stores, and History. `OuterResourceWriters.reached` (437–463) supplies Origins at that SAME physical row entry. Its existential inventory and memo witnesses need not equal the prefix theorem's witnesses.
+2. Call `ResourceParentWriters.edge_call` (159–176) ONCE with the actual Parent equation and that row packet. Retain its SAME Written. The inherited Ready input comes from the actual row Inputs. The reservation proof already accepts an arbitrary inherited value. Do not select another weak historical writer.
+3. Reuse the exact `rows_edge`, inherited-prefix, `children_walk`, and `walk_prefix` composition in checked `ResourceOwnerDispatch` (126–140). It reaches the actual immediate node at index `slot`. There is no whole-walk or enclosing completion premise.
+4. At the actual descendants cut, the prefix theorem supplies the returned edge's residency and inherited Ready. They derive FieldAvailable at `afterParent`. At the actual walk cut, the prefix theorem supplies the complete child forest and the walk resources. `OuterInitialActual.walk` (527–543) on the SAME `take slot` call supplies the actual `start` Context, valid operations, and operation growth from the inherited-prefix result. Earlier calls may change native tables and inventory. Use these actual returned facts.
+5. Reuse active-cell preservation and current coherent readback from checked `ResourceOwnerDispatch` (160–178). Under a hypothetical key collision, its reference component plus the available child and active owner's full value at `start` gives `value = ownerNode`. Rewrite the SAME selected child lookup. No equality between a caller request and an unrelated captured request is used.
+6. Apply the forthcoming `ResourceOwnerInheritedProgress.key_ne_inherited` ONCE with THAT Written, SAME member row, SAME full-owner lookup, and the actual prefix/validity/growth facts. The consumer compares against `request.inherited`; there is no identity argument or TopReady argument. Its final key inequality contradicts the same collision after full-value substitution.
+
+## Exact changed boundary
+
+The arbitrary inherited value can be contradictory at the type level. The actual successful live prefix is the genuine restriction; the proposed consumer handles its impossible contradictory branch by literal prefix inversion. Do not add a desired payload inequality or a prepared false gate. The consumer derives the returned-guard equality and nonplain row internally.
+
+The consumer contract is the frozen `9ef7489e` proposal. It is NOT yet checked at this plan's source cue. Its author reports a complete 240-line candidate with the exact same public type and zero compiler jobs. This plan depends on that endpoint becoming checked. The dependency status file retains that boundary; it supplies no theorem evidence.
+
+This is an immediate returned-row dispatch through a member of the SAME ordinary owner's rows, with the SAME inherited value at that row cut and active owner cell. It can cover non-Top inherited values under those exact premises. It does not exclude every older active owner, compare arbitrary deeper descendants, identify captured requests, or prove general renewal, a rank, or termination. The checked owner-prefix decomposition can derive source-row membership and branch stages for its own retained chain; its captured-request alternative still needs genuine physical correspondence before this endpoint applies.
+
+Expected implementation is a new 180–210-line module. Reuse the checked 187-line dispatch proof additively, with only inherited-value and final consumer substitutions. Preserve the old Top source and every frozen package. No implementation, Lean, Lake, canonical command, runtime example, or official edit is authorized by this plan.

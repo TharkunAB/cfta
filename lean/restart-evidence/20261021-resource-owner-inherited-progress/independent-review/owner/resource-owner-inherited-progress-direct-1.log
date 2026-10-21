@@ -1,0 +1,37 @@
+/tmp/mcfta-resource-owner-inherited-progress-proof/resource-owner-inherited-progress-direct-1.source.lean:234:43: error: Application type mismatch: The argument
+  payloadNe
+has type
+  (SourceEqualityConstraintMemoAllocation.descend
+          (SourceEqualityConstraintAllocation.Value.live combinedIdentity outputs) index later).fst.payload ≠
+    request.inherited.payload
+but is expected to have type
+  (SourceEqualityConstraintMemoAllocation.descend
+          (SourceEqualityConstraintAllocation.Value.live combinedIdentity outputs) index later).fst.payload ≠
+    (SourceEqualityConstraintAllocation.Value.live inheritedIdentity inheritedRecords).payload
+in the application
+  And.intro payloadNe
+/tmp/mcfta-resource-owner-inherited-progress-proof/resource-owner-inherited-progress-direct-1.source.lean:237:72: error: Application type mismatch: The argument
+  congrArg Prod.fst sameKey
+has type
+  {
+          inherited :=
+            (SourceEqualityConstraintMemoAllocation.descend
+                (SourceEqualityConstraintAllocation.Value.live combinedIdentity outputs) index later).fst,
+          value := Value.node ownerEntry ownerRows ownerDepth ownerFree }.key.fst =
+    { inherited := SourceEqualityConstraintAllocation.Value.live inheritedIdentity inheritedRecords,
+          value := Value.node ownerEntry ownerRows ownerDepth ownerFree }.key.fst
+but is expected to have type
+  (SourceEqualityConstraintMemoAllocation.descend
+          (SourceEqualityConstraintAllocation.Value.live combinedIdentity outputs) index later).fst.identity =
+    request.inherited.identity
+in the application
+  SourceEqualityConstraintMemoAllocation.ready_eq_of_identity
+    (SourceEqualityConstraintMemoAllocation.descend
+          (SourceEqualityConstraintAllocation.Value.live combinedIdentity outputs) index later).snd.constraints
+    checked.left.constraints
+    (SourceEqualityConstraintMemoAllocation.descend
+        (SourceEqualityConstraintAllocation.Value.live combinedIdentity outputs) index later).fst
+    request.inherited checked.right.left
+    (SourceEqualityConstraintAllocation.Ready.grows ready
+      (SourceEqualityConstraintMemoAllocation.Grows.constraint_growth totalGrowth))
+    (congrArg Prod.fst sameKey)

@@ -1,0 +1,15 @@
+--- strict1-240-339d1fb7
++++ current241
+@@ -231,10 +231,11 @@
+               simpa only [inheritedShape] using prefixGrowth
+             exact SourceCurrentConjunctionEquality.grows_trans first
+               (SourceCurrentConjunctionEquality.grows_trans currentGrowth checked.2.2.2)
++          rw [inheritedShape] at payloadNe
+           refine ⟨returnedGuard, nonplain, payloadNe, ?_⟩
+           intro sameKey
+           have sameValues := SourceEqualityConstraintMemoAllocation.ready_eq_of_identity _ checked.1.constraints
+-            _ _ checked.2.1 (ready.grows totalGrowth.constraint_growth) (congrArg Prod.fst sameKey)
++            _ _ checked.2.1 (inputReady.grows totalGrowth.constraint_growth) (congrArg Prod.fst sameKey)
+           exact payloadNe (congrArg SourceEqualityConstraintAllocation.Value.payload sameValues)
+ 
+ end MicroCFTA.SourceCurrentResourceOwnerInheritedProgress
