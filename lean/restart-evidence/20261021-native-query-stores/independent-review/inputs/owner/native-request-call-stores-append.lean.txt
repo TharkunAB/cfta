@@ -1,0 +1,32 @@
+/-- An actual completed request retains conditional cell laws without root cap assumptions. -/
+theorem call_stores (source : Heap) (facts : Facts source)
+    (before after : Checked width) (left right result : Node) (fuel : Nat)
+    (known : Current source (SourceRecursiveIntersectionSourceInventory.domains source) initialDomains before)
+    (context : Context Plain source before.native.machine)
+    (causal : SourceCurrentNativeMuPublication.History empty before.native.machine.heap)
+    (oldStored : SourceCurrentConstrainedCapCheckedJointCache.Stored Plain source before.native)
+    (supported : Support source before.native)
+    (leftAvailable : Available source left) (rightAvailable : Available source right)
+    (leftClosed : left.free = []) (rightClosed : right.free = [])
+    (actual : Trace fuel (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before (.code (.pure result)) after) :
+    Support source after.native ∧
+    SourceCurrentConstrainedCapCheckedJointInduction.Return
+      (source := source) (inventory := SourceRecursiveIntersectionSourceInventory.domains source) (initial := initialDomains)
+      before after result (fun final value => Available final.heap value)
+      (fun _ value => NodeLaw Plain source ⟨IntersectionEmptyDomain.emptyDomain,left,right⟩ value) ∧
+    Nonempty (SourceCurrentNativeMuPublication.History empty after.native.machine.heap) := by
+  let request : NodeRequest Symbol Guard := ⟨IntersectionEmptyDomain.emptyDomain,left,right⟩
+  have inputs := SourceCurrentConstrainedCapOriginalSupport.closed_inputs source facts request.domain left right leftAvailable rightAvailable leftClosed rightClosed
+  have ready : NodeReady before.native.machine request := ⟨empty_domain _,
+    leftAvailable.grows source _ context.growth context.history,rightAvailable.grows source _ context.growth context.history⟩
+  have physical : Physical source (SourceRecursiveIntersectionSourceInventory.domains source) (.code (requestNode request.domain left right)) before.native.machine (fun final value => Available final.heap value) :=
+    SourceCurrentAllocatedRecursivePrefixCode.request_node source _ request before.native.machine ready
+    (initial_scope source left right inputs.1 inputs.2.1 leftAvailable rightAvailable)
+    (SourceRecursiveIntersectionSourceInventory.empty_mem source)
+  have oldCertificate : Old source (.code (requestNode request.domain left right)) before.native.machine (fun _ value => NodeLaw Plain source request value) := fun _ _ _ _ _ law => law
+  have certificate : ControlPos (source := source) (.code (requestNode request.domain left right)) before.native.machine (fun _ value => NodePos source request value) := fun _ _ _ _ _ _ _ law => law
+  have closed := SourceCurrentAllocatedRecursiveDomainCode.source_closed source facts
+  have pos := completed facts closed fuel _ before after result _ _ _ known physical (fun _ => trivial) context oldCertificate oldStored certificate ⟨supported.1,supported.2⟩ ⟨causal⟩ actual
+  have old := SourceCurrentConstrainedCapCheckedJointTrace.completed facts closed fuel _ before after result _ _ known physical (fun _ => trivial) context oldCertificate oldStored actual
+  exact ⟨⟨pos.1.nodes,pos.1.edges⟩,old,
+    (SourceCurrentNativePublicationTrace.from_history actual context.semantic causal).2⟩

@@ -1,0 +1,42 @@
+-- Proposed public interval heads only. No proof is supplied or compiled here.
+namespace MicroCFTA.SourceCurrentGatePublicationHistory
+open InternedConstructorTemplates InternedProbeProvenance
+variable {Symbol Guard : Type} [DecidableEq (EdgeKey Symbol Guard)]
+
+theorem primary (unconstrained reaches : Value Symbol Guard → Bool)
+    {values : List (Value Symbol Guard)} {paths : EqualityNormalize.Class}
+    {before after : State Symbol Guard} {answer : Bool}
+    (actual : EndpointStatefulGateTrace.ClassTrace unconstrained reaches values paths before answer after)
+    (semantic : SourceEqualityRequiredSemanticCache.SemanticReady before)
+    (costs : InternedFreshOrdinaryCostHeap.Heap before)
+    (available : InternedNestedProvenance.Values before values) :
+    Nonempty (SourceCurrentNativeMuPublication.History before after)
+
+theorem secondary (unconstrained : Value Symbol Guard → Bool)
+    {values : List (Value Symbol Guard)} {paths : EqualityNormalize.Class}
+    {before after : State Symbol Guard} {answer : Bool}
+    (actual : SourceCurrentSecondaryTrace.ClassTrace unconstrained values paths before answer after)
+    (semantic : SourceEqualityRequiredSemanticCache.SemanticReady before)
+    (costs : InternedFreshOrdinaryCostHeap.Heap before)
+    (available : InternedNestedProvenance.Values before values) :
+    Nonempty (SourceCurrentNativeMuPublication.History before after)
+
+end MicroCFTA.SourceCurrentGatePublicationHistory
+
+namespace MicroCFTA.SourceCurrentConjunctionPublicationHistory
+open InternedConstructorTemplates InternedProbeProvenance
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Physical" => SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula
+local notation "Memo" => SourceCurrentEmptinessMemo.Memo
+
+theorem call [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    [DecidableEq (Value Symbol Guard)]
+    {budget : Nat} {memo saved : Memo} {query : Value Symbol Guard}
+    {before after : Physical} {answer : Bool}
+    (actual : SourceCurrentConjunctionMemo.Call budget memo query before answer after saved)
+    (ready : SourceCurrentConjunctionRowsAllocation.Ready before)
+    (available : Available before.heap query) :
+    Nonempty (SourceCurrentNativeMuPublication.History before.heap after.heap)
+
+end MicroCFTA.SourceCurrentConjunctionPublicationHistory

@@ -1,0 +1,40 @@
+import os, sys, json, subprocess, datetime, hashlib
+from pathlib import Path
+ROOT = Path('/home/tritlo/Code/mcfta')
+HERE = Path(__file__).resolve().parent
+name, kind, *args = sys.argv[1:]
+assert not (HERE/(name+'.json')).exists()
+usage = subprocess.check_output(['/usr/bin/python3', '/tmp/mcfta-weekly-usage.py'], text=True)
+(HERE/(name+'.usage.json')).write_text(usage)
+sampled = json.loads(usage)
+assert sampled['age_seconds'] <= 600 and sampled['remaining_percent'] > 1
+if kind == 'source':
+ source = Path(args[0])
+ frozen = HERE/(name+'.source.lean')
+ assert not frozen.exists()
+ frozen.write_bytes(source.read_bytes())
+ command = ['/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean', '-Dlinter.all=true', str(frozen)]
+else:
+ assert kind == 'lake'
+ command = ['/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake', '-d', str(ROOT/'lean'), 'build', *args]
+imports = str(ROOT/'lean/.lake/build/lib/lean')
+if kind == 'source' and len(args) == 2:
+ imports = args[1]
+ layout = json.loads((HERE/'root-import-layout.json').read_text())
+ assert imports == layout['overlay']
+ artifact = Path(layout['replacement_artifact'])
+ assert hashlib.sha256(artifact.read_bytes()).hexdigest() == layout['replacement_sha256']
+env = dict(os.environ, LEAN_PATH=imports, XDG_RUNTIME_DIR='/run/user/1000', DBUS_SESSION_BUS_ADDRESS='unix:path=/run/user/1000/bus', HEAVY_PEAKS=str(HERE/'root-peaks.txt'), NATIVE_CAUSAL_LIMITS=str(HERE/(name+'.limits.json')), NATIVE_CAUSAL_COMMAND=json.dumps(command))
+wrapped = ['/home/tritlo/Code/heavy-management/bin/capped','--mem','4G','--time','5m','python3',str(HERE/'root-capped-worker.py')]
+with (HERE/(name+'.log')).open('xb') as log:
+ result = subprocess.run(wrapped, env=env, cwd=ROOT/'lean', stdout=log, stderr=subprocess.STDOUT)
+report = dict(command=command, wrapper=wrapped, exit_code=result.returncode, observed_at=datetime.datetime.now(datetime.timezone.utc).isoformat(), log=name+'.log', limits=name+'.limits.json')
+if kind == 'source':
+ report.update(source=frozen.name, sha256=hashlib.sha256(frozen.read_bytes()).hexdigest())
+ if len(args) == 2:
+  report.update(import_layout='root-import-layout.json', imported_artifact_sha256=layout['replacement_sha256'])
+(HERE/(name+'.json')).write_text(json.dumps(report, indent=2)+'\n')
+print(json.dumps(report))
+if result.returncode:
+ print((HERE/(name+'.log')).read_text()[-18000:])
+raise SystemExit(result.returncode)
