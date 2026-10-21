@@ -232,9 +232,9 @@ two longest stalls, 84 and 90 seconds, were next to
 constructors and arrows. `--function-buckets` gives a bucket to each
 function type between two small data types of the signature.
 `--recheck N` tests each new law again on N random cases of sizes 1 to 8,
-and drops a law that one of them refutes. All rows use one core (`-N1`)
-and `--recheck 2000`. Other runs shared the machine (load 3 to 10), so
-compare allocation, not seconds.
+and drops a law that one of them refutes. All rows use `--recheck 2000`,
+and all rows except the last use one core (`-N1`). Other runs shared the
+machine (load 3 to 10), so compare allocation, not seconds.
 
 | Configuration | Options | Outcome | Seconds | Allocation GB | Peak RSS MiB | Laws | Dropped by recheck | Completion fallbacks |
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -244,13 +244,27 @@ compare allocation, not seconds.
 | HugeLists-7-p3 | `--type-depth 2` | complete | 1185.3 | 5,243 | 7250.5 | 680 | 100 | 0 |
 | HugeLists-7-p3 | `--type-depth 2 --function-buckets` | complete | 2278.6 | 9,906 | 8245.4 | 686 | 106 | 0 |
 | HugeLists-7-p4 | `--type-depth 2` | T at 7200 s | 7199.9 | — | 13017.5 | 1109 visible | 140 | 61 |
+| HugeLists-7-p4 | `--type-depth 2 --enumerate-ahead`, `-N12` | complete | 40449.7 | 300,080 | 29748.6 | 1945 | 249 | 81 |
 
-The 7-p4 row used `e8c1e79d5`, whose `--type-depth` code is that of
-`5c168176d`. The other rows used `5c168176d`. At 7-p4, phase 3 completes,
-and the run stops in the size-7 `Int` bucket of phase 4. Completion takes
-3,642 of its 7,200 seconds. The 61 laws whose completion reaches the
-256 GiB budget take 2,997 seconds, and then keep only their own rules.
-At 7-p3, function buckets almost double the allocation.
+The first 7-p4 row used `e8c1e79d5`, whose `--type-depth` code is that of
+`5c168176d`. The other rows used `5c168176d`. The first 7-p4 run stops in
+the size-7 `Int` bucket of phase 4. Completion takes 3,642 of its 7,200
+seconds. The 61 laws whose completion reaches the 256 GiB budget take
+2,997 seconds, and then keep only their own rules. At 7-p3, function
+buckets almost double the allocation.
+
+The second 7-p4 run has no time limit and uses 12 cores
+(`-N12 -qg -A64m`). It completes in 11 hours 14 minutes with 1,945 laws
+(236, 6, 438 and 1,265 in phases 1 to 4). Its maximum residency is
+11.9 GB. Phases 1 to 3 take 1,462 seconds, phase 4 sizes 3 to 6 take
+5,620 seconds, and phase 4 size 7 takes 32,926 seconds. In size 7, the
+tests take about 6,500 seconds. For 26,397 seconds, the thread that tests
+waits for the background enumeration of the next type: 700 seconds before
+`Int`, 3,440 before `[A]`, 1,655 before `[Int]` and 20,602 before
+`[(A,B)]`. Each part of the enumeration is one shape of the left spine
+(`--split 2`), and the last part of `[(A,B)]` runs on one thread at the
+end. Completion takes 8,508 seconds in all, and 6,956 seconds of that go
+to the 80 laws whose completion reaches the 256 GiB budget.
 
 An equational prover checks which laws of the unbounded 6-p4 run follow
 from the laws of a bounded run. The check uses twee 2.7.1. Each subterm
