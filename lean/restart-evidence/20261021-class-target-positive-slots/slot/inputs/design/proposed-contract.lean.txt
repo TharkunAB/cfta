@@ -1,0 +1,45 @@
+-- Proposed statement sketch only. No elaboration, implementation or Lean job.
+-- All names use the aliases of SourceCurrentRawCorridorSharedTargetCap.
+-- CapStored = SourceCurrentRequiredSharedTargetCap.Stored
+-- NativeSupport = SourceCurrentNativeRequestPositivePositions.Support
+-- MergeSupport = SourceCurrentMergePositivePosition.Support
+-- History = SourceCurrentNativeMuPublication.History
+-- PositiveAt = SourceCurrentRequiredPositivePosition.PositiveAt
+-- NativeSupport and History use the literal current heap.
+
+theorem force_receipt [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    {formulas : SourceGuards.Formulas FullSyntax.Formula}
+    {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {inventory next : Inventory} {record : SourceEqualityClassOrder.Record} {values : List Node}
+    {base receiptBase : Heap} {action : EqualityNormalize.Path} {before after : State width}
+    {value : Node} {memos final : Memos}
+    (known : Values base values)
+    (masks : ∀ index path, index :: path ∈ record.paths → ∀ original,
+      select values (Int.ofNat index) = some original → RawCorridor (path.map Int.ofNat) original)
+    (coherent : SourceEqualityClassOrder.Coherent record)
+    (active : EqualityNormalize.Nontrivial record.paths)
+    (receipt : SourceCurrentAllocatedSharedTargetForce.Receipt formulas solver next record values
+      receiptBase action before value after memos final)
+    (ready : SourceCurrentAllocatedSharedTargetState.Ready formulas solver inventory record values base before)
+    (stored : CapStored before)
+    (supported : NativeSupport before.checked.native.machine.heap before.checked.native)
+    (causal : History empty before.checked.native.machine.heap)
+    (mergePositive : MergeSupport before.memo)
+    (slots : ∀ a t, before.targets a = some t → ∀ q, PositiveAt t q →
+      ∃ index path original,
+        ((index :: path).map Int.ofNat) ∈ SourceEqualityClassTarget.operandPaths record.paths a ∧
+        values[index]? = some original ∧ PositiveAt original (path ++ q)) :
+    CapStored after ∧
+      NativeSupport after.checked.native.machine.heap after.checked.native ∧
+      Nonempty (History empty after.checked.native.machine.heap) ∧
+      MergeSupport after.memo ∧
+      (∀ a t, after.targets a = some t → ∀ q, PositiveAt t q →
+        ∃ index path original,
+          ((index :: path).map Int.ofNat) ∈ SourceEqualityClassTarget.operandPaths record.paths a ∧
+          values[index]? = some original ∧ PositiveAt original (path ++ q))
+
+-- No ancestor premise is supplied for the new target on a miss.
+-- The slots premise covers only actual entry cache entries.
+-- Fresh class slots discharge it by absence.
+-- receipt.present instantiates the returned law at action/value.
+-- The SAME captured values occur on both sides of the slot preservation law.

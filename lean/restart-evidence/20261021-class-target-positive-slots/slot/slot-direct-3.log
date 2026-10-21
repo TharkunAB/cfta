@@ -1,0 +1,19 @@
+/tmp/mcfta-raw-corridor-shared-target-positive-proof/slot-direct-3.source.lean:77:41: error: don't know how to synthesize placeholder for argument `val`
+context:
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+index : Nat
+path q : List Nat
+values : List Node
+before after : Heap
+result : Node
+semantic : SourceEqualityRequiredSemanticCache.SemanticReady before
+costs : InternedFreshOrdinaryCostHeap.Heap before
+available : Values before values
+guards : SourceCurrentConstrainedCapGuardHeap.Heap (fun guard => SourceMemoGate.plain guard = true) before
+corridor :
+  ∀ (original : Node), select values (Int.ofNat index) = some original → RawCorridor (List.map Int.ofNat path) original
+positive : PositiveAt result q
+value✝ : Node
+found : select values (Int.ofNat index) = some value✝
+project : SourceEqualityProjectionGraph.Project (List.map Int.ofNat path) value✝ before result after
+⊢ Node
