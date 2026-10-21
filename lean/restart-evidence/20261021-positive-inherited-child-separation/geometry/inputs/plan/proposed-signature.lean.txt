@@ -1,0 +1,33 @@
+-- UNPROVED SOURCE-ONLY PROPOSAL. No proof or Lean elaboration.
+-- NEW module. No change to the frozen PositiveOwnerPair module.
+namespace MicroCFTA.SourceCurrentPositiveInheritedChildSeparation
+open EqualityNormalize SourceEqualityClassOrder
+open InternedConstructorTemplates
+open SourceCurrentRequiredPositivePosition (PositiveAt)
+open SourceCurrentNormalizedChildSeparation (Rel)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Row" => EdgeValue Symbol Guard
+
+theorem child_reflect
+    (parents : List Record)
+    (coherent : ∀ record ∈ parents, SourceEqualityClassOrder.Coherent record)
+    (fixed : congruenceStep (parents.map Record.paths) = some (parents.map Record.paths))
+    (index : Nat) {left right : Path}
+    (related : Rel (parents.map Record.paths) (index :: left) (index :: right)) :
+    Rel ((SourceEqualityDescend.records index parents).map Record.paths) left right
+
+theorem same_child_payload_ne
+    (parents inherited : List Record)
+    (coherent : ∀ record ∈ parents, SourceEqualityClassOrder.Coherent record)
+    (fixed : congruenceStep (parents.map Record.paths) = some (parents.map Record.paths))
+    (covered : Covers (inherited.map Record.paths) (parents.map Record.paths))
+    (index : Nat) {entry depth free} {rows : List Row}
+    (row : Row) (member : row ∈ rows)
+    (nonplain : SourceMemoGate.plain row.entry.key.constraint = false)
+    (back : ∀ q, PositiveAt (.node entry rows depth free) q →
+      ∃ j p original, row.children[j]? = some original ∧ PositiveAt original p ∧
+        Rel (parents.map Record.paths) (index :: q) (j :: p)) :
+    SourceEqualityDescend.descend (some parents) index ≠ some inherited
+
+end MicroCFTA.SourceCurrentPositiveInheritedChildSeparation

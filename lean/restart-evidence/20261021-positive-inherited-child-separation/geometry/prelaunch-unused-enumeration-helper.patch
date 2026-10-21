@@ -1,0 +1,22 @@
+--- prelaunch240/f0853c77
++++ current236
+@@ -19,7 +19,7 @@
+ local notation "Node" => Value Symbol Guard
+ local notation "Row" => EdgeValue Symbol Guard
+ 
+-/- The finite enumeration below is copied from PositiveOwnerPair23–78. -/
++/- The finite enumeration below is copied from PositiveOwnerPair23–74. -/
+ private def candidates : Nat → Node → List Path
+   | 0, _ => []
+   | fuel + 1, .node _ rows _ _ =>
+@@ -72,10 +72,6 @@
+   simp only [positivePaths, List.mem_eraseDups, List.mem_filter, decide_eq_true_eq]
+   exact ⟨And.right, fun positive =>
+     ⟨candidates_complete positive _ (by omega), positive⟩⟩
+-
+-private theorem positivePaths_nodup (value : Node) : (positivePaths value).Nodup := by
+-  classical
+-  exact SymbolicDriver.eraseDups_nodup _
+ 
+ private theorem rel_symm {classes : Constraints} {left right : Path}
+     (related : Rel classes left right) : Rel classes right left := by
