@@ -1,0 +1,11 @@
+--- resource-owner-dispatch-direct-1.source.lean
++++ SourceCurrentResourceOwnerDispatch.lean
+@@ -162,7 +162,7 @@
+       ⟨⟨.live identity [],.node ownerEntry ownerRows ownerDepth ownerFree⟩,.evaluating⟩ := activeAtDispatch
+   refine ⟨dispatchReached,?_⟩
+   intro collision
+-  have sameReference : value.referenceOf = (.node ownerEntry ownerRows ownerDepth ownerFree).referenceOf :=
++  have sameReference : value.referenceOf = (.node ownerEntry ownerRows ownerDepth ownerFree : Node).referenceOf :=
+     congrArg Prod.snd collision
+   have ownerGood := startPost.context.sound.nodes handle _ activeAtStart
+   have childAvailable := startPost.effects.keeps.available value

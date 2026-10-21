@@ -1,0 +1,12 @@
+--- dispatch-prelaunch-1.source.lean
++++ SourceCurrentResourceOwnerDispatch.lean
+@@ -109,7 +109,8 @@
+   have rowOrigins := SourceCurrentOuterResourceWriters.reached formulas solver seed past
+     initial frame fits known inputs room normal supported causal merged positiveMemo origins
+   have headRoom := rowRoom
+-  simp only [SourceCurrentOuterInitialPrefix.forecast,SourceCurrentOuterInitialSchedule.rows] at headRoom
++  change Room bits (SourceCurrentOuterInitialSchedule.rows ((fuel + slot + 1) + 1) budget rowSeed).2 at headRoom
++  rw [SourceCurrentOuterInitialSchedule.rows] at headRoom
+   let parentSeed := SourceCurrentOuterInitialSchedule.parent budget rowSeed
+   have parentRoom : Room bits parentSeed.2 := headRoom.mono
+     ((SourceCurrentOuterInitialSchedule.descendants_ge (fuel + slot + 1) budget parentSeed).1.trans

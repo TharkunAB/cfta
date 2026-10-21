@@ -1,0 +1,19 @@
+# Immediate Top-owner dispatch
+
+`SourceCurrentResourceOwnerDispatch.key_ne_top` is checked. The sole public theorem derives the exact unfinished indexed node dispatch and excludes the key of one evaluating ordinary Top owner. The original row must be a member of that SAME owner's rows.
+
+The theorem consumes the genuine initial Context, Frame, Fits, guard carrier, Inputs, scheduled Room, UnionNormal, native positive Support, causal Mu History, conditional and positive Merge laws, and resource-writer Origins. Its stage inputs are the actual reached row prefix, active owner cell, completed edge call, live inherited-prefix equation, completed earlier-slot walk, and exact child lookup. It assumes no future enclosing return or per-sibling readiness callback.
+
+The proof calls `ResourceParentWriters.edge_call` once. It retains that exact historical Written. It derives the current returned row field and Top readiness at the actual descendants cut. The same completed earlier walk supplies its actual start Context, validity, and operation growth. Active-table preservation and current coherent availability turn a hypothetical equal dispatched key into the same full owner value. The proof then calls `ResourceOwnerProgress.key_ne_top` once with that Written and those actual states. It does not use the older weak writer selector.
+
+The public header matches the frozen 67-line proposal byte for byte. The proposal was not elaborated before the draft. The final 187-line source is `1e287d68471babbaf486eee9e224ce5ed5cd3e9f30544053fd82da0e4c71ad7b`. The original 186-line source is retained as an uncompiled draft. Before the first check, its rows-schedule simplification changed to one controlled unfold. Root and the independent reviewer read the complete 187-line source before launch.
+
+Strict 1 is one real failed Lean job. It reported one private dotted-constructor type error and no warning. The exact one-line repair adds `: Node` in the sameReference fact. Root and the independent reviewer cleared the complete delta before strict 2. All failed input, raw log, receipt, limits, usage, and repair bytes remain in this package.
+
+Selected strict: `resource-owner-dispatch-direct-2`, terminal 0 and literally empty log. Selected FULL: `resource-owner-dispatch-public-1`, terminal 0, 9,274,578 bytes, `3290e0161977d35675aa03a2796b3a4bf8257ef3979eadceb7fc03eb3de6daec`. The checker validates all eight printer settings, the complete checked/printed public type, no private name in that type, and no omitted proof or printer failure. The only axioms are `propext`, `Classical.choice`, and `Quot.sound`. It uses the unique newline before the proof lambda as the type/proof boundary.
+
+This package owns 3 actual Lean jobs: 2 strict checks and 1 FULL check. Exactly 1 job failed; none reported warnings. It owns 0 infrastructure attempts, 0 canonical jobs, 1 public declaration, and 0 constructed examples. Copied dependency and plan evidence adds 0 jobs. Fresh weekly remaining usage was 48/48/48 percent. Each actual command used effective memory.max=memory.high=4294967296, memory.swap.max=0, and a 5-minute cap. Peak records retain 170/167/307MiB for the three jobs.
+
+The author made no official source, Audit, Git, Haskell, or board edit. Root separately installed and checked the selected source. The mandatory live pin checks those exact installed bytes. The verifier runs from any working directory, with `--root` and optional `--live`, and never runs Lean.
+
+Scope remains immediate dispatch to a Top owner through one of its own original rows. This does not prove exclusion for a non-Top owner, arbitrary deeper descendants, all busy failures, general renewal, a runtime rank, or global termination. A later actual ancestor consumer must establish the SAME row-membership and literal stage equations.

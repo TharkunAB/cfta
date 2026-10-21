@@ -1,0 +1,1 @@
+The complete source is a draft. It has run zero Lean, Lake, canonical, or other proof commands. Root and independent complete-source clearance are required before the first proof launch. The frozen source-only plan remains unchanged in inputs/plan.
