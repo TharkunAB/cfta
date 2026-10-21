@@ -1,0 +1,94 @@
+-- PROPOSED INTERFACE ONLY. No declaration in this file has been elaborated.
+-- The six internal store-only phase predicates follow OuterInitialActual.
+-- These three public heads suffice for a later actual Reached induction.
+namespace MicroCFTA.SourceCurrentOuterNativeStores
+open Cache InternedConstructorTemplates InternedProbeProvenance
+open SourceCurrentAllocatedPartialState
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedPartialInvariant (Context)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Frame Fits)
+open SourceCurrentAllocatedNativeResourceForecast (Profile Room)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Guard
+local notation "Edge" => EdgeValue Symbol Guard
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "EqValue" => SourceEqualityConstraintAllocation.Value
+local notation "EqReady" => SourceEqualityConstraintAllocation.Ready
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Plain" => (fun guard : Guard => SourceMemoGate.plain guard = true)
+local notation "NativeSupport" => SourceCurrentNativeRequestPositivePositions.Support
+local notation "MergeStored" => SourceCurrentConstrainedCapMemoMerge.Stored Plain
+local notation "MergeSupport" => SourceCurrentMergePositivePosition.Support
+local notation "UnionNormal" => SourceCurrentRequiredUnionNormal.UnionNormal
+local notation "History" => SourceCurrentNativeMuPublication.History
+local notation "Resident" => InternedEdgeResidency.EdgeResident
+local notation "Carrier" => SourceEqualityAnnotationHeap.Heap
+local notation "Seed" => List Guard × Profile
+variable {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Node]
+
+-- The caller keeps this exact receipt; the conclusion only adds state laws.
+theorem edge_call
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory next : Inventory) (budget : Nat) (request : EdgeRequest)
+    (before after : Caller (bits + 2)) (memos final : Memos) (profile : Profile) (result : Edge)
+    (initial : Context formulas solver inventory before memos)
+    (frame : Frame formulas solver inventory before.checked) (fits : Fits profile before.checked)
+    (inherited : EqReady before.checked.operations.constraints request.inherited)
+    (resident : Resident before.checked.native.machine.heap request.value)
+    (reserved : SourceCurrentEdgeCallNumeric.Reserved bits budget request before profile)
+    (receipt : SourceCurrentEdgeCallNumeric.Receipt formulas solver next profile budget request before memos result after final)
+    (normal : UnionNormal before.checked.native.machine.heap)
+    (supported : NativeSupport before.checked.native.machine.heap before.checked.native)
+    (causal : History empty before.checked.native.machine.heap)
+    (merged : MergeStored before.merge) (positiveMemo : MergeSupport before.merge) :
+    NativeSupport after.checked.native.machine.heap after.checked.native ∧
+      Nonempty (History empty after.checked.native.machine.heap) ∧
+      MergeStored after.merge ∧ MergeSupport after.merge ∧ UnionNormal after.checked.native.machine.heap
+
+-- All entry resources are the old node_call premises at this SAME caller.
+theorem node_call
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (fuel : Nat) {g s r e p h m c n budget : Nat}
+    {request : NodeRequest} {before after : Caller (bits + 2)} {result : Node}
+    {inventory : Inventory} {memos : Memos} (seed : Seed)
+    (initial : Context formulas solver inventory before memos)
+    (frame : Frame formulas solver inventory before.checked) (fits : Fits seed.2 before.checked)
+    (known : Carrier (fun guard => guard ∈ seed.1) before.checked.native.machine.heap)
+    (inherited : EqReady before.checked.operations.constraints request.inherited)
+    (available : Available before.checked.native.machine.heap request.value)
+    (room : Room bits (SourceCurrentOuterInitialSchedule.node fuel budget seed).2)
+    (normal : UnionNormal before.checked.native.machine.heap)
+    (supported : NativeSupport before.checked.native.machine.heap before.checked.native)
+    (causal : History empty before.checked.native.machine.heap)
+    (merged : MergeStored before.merge) (positiveMemo : MergeSupport before.merge)
+    (observed : SourceCurrentAllocatedPartialWorker.nodeCall fuel g s r e p h m c n budget request before = .done result after) :
+    NativeSupport after.checked.native.machine.heap after.checked.native ∧
+      Nonempty (History empty after.checked.native.machine.heap) ∧
+      MergeStored after.merge ∧ MergeSupport after.merge ∧ UnionNormal after.checked.native.machine.heap
+
+-- This is the other completed outer phase used by rows_tail in Reached.
+theorem descendants
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (fuel : Nat) {g s r e p h m c n budget : Nat}
+    {inherited : EqValue} {value result : Edge} {before after : Caller (bits + 2)}
+    {inventory : Inventory} {memos : Memos} (seed : Seed)
+    (initial : Context formulas solver inventory before memos)
+    (frame : Frame formulas solver inventory before.checked) (fits : Fits seed.2 before.checked)
+    (known : Carrier (fun guard => guard ∈ seed.1) before.checked.native.machine.heap)
+    (inheritedReady : EqReady before.checked.operations.constraints inherited)
+    (resident : Resident before.checked.native.machine.heap value)
+    (room : Room bits (SourceCurrentOuterInitialSchedule.descendants fuel budget seed).2)
+    (normal : UnionNormal before.checked.native.machine.heap)
+    (supported : NativeSupport before.checked.native.machine.heap before.checked.native)
+    (causal : History empty before.checked.native.machine.heap)
+    (merged : MergeStored before.merge) (positiveMemo : MergeSupport before.merge)
+    (observed : SourceCurrentAllocatedPartialWorker.descendants fuel g s r e p h m c n budget inherited value before = .done result after) :
+    NativeSupport after.checked.native.machine.heap after.checked.native ∧
+      Nonempty (History empty after.checked.native.machine.heap) ∧
+      MergeStored after.merge ∧ MergeSupport after.merge ∧ UnionNormal after.checked.native.machine.heap
+end MicroCFTA.SourceCurrentOuterNativeStores

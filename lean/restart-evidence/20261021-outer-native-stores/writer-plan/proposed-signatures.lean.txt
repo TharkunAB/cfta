@@ -1,0 +1,90 @@
+-- SOURCE-ONLY PROPOSAL. These declarations have not been elaborated.
+import MicroCFTA.SourceCurrentActualParentSelectedCertificates
+import MicroCFTA.SourceCurrentActualParentNativeStores
+import MicroCFTA.SourceCurrentEdgeCallNumeric
+import MicroCFTA.FlatMemoThunkReturned
+
+namespace MicroCFTA.SourceCurrentResourceParentWriters
+open Cache InternedConstructorTemplates InternedProbeProvenance InternedEdgeResidency
+open InternedNestedProvenance (Values)
+open SourceCurrentAllocatedPartialState
+open SourceCurrentAllocatedPartialInvariant (Context)
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedNativeResourceForecast (Profile)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Frame Fits)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Guard
+local notation "Edge" => EdgeValue Symbol Guard
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "Fourth" => SourceCurrentEmptinessMemo.Memo
+local notation "Memo" => SourceCurrentMemoMergeGraph.Memo Symbol Guard
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "EqReady" => SourceEqualityConstraintAllocation.Ready
+local notation "FieldAvailable" => SourceCurrentConjunctionEquality.FieldAvailable
+local notation "Plain" => (fun guard : Guard => SourceMemoGate.plain guard = true)
+local notation "NativeSupport" => SourceCurrentNativeRequestPositivePositions.Support
+local notation "MergeStored" => SourceCurrentConstrainedCapMemoMerge.Stored Plain
+local notation "MergePositive" => SourceCurrentMergePositivePosition.Support
+local notation "Normal" => SourceCurrentRequiredUnionNormal.UnionNormal
+local notation "History" => SourceCurrentNativeMuPublication.History
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Node]
+variable {bits : Nat}
+
+-- One tuple retains the full historical caller and every entry resource.
+def Written (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (request : EdgeRequest) (result : Edge) : Prop :=
+  ∃ (g s r e p h m c n budget : Nat)
+    (writerBefore : Caller (bits + 2)) (writerAfter : Checked (bits + 2))
+    (savedFourth : Fourth) (savedMerge : Memo) (globals : Memos)
+    (inventory : Inventory) (profile : Profile),
+    SourceCurrentAllocatedParentWorker.edge g s r e p h m c n budget
+      request.value.entry.key.symbol request.value.entry.key.constraint request.inherited request.value.children
+      writerBefore.checked writerBefore.fourth writerBefore.merge = .done result writerAfter savedFourth savedMerge ∧
+    Context formulas solver inventory writerBefore globals ∧
+    Frame formulas solver inventory writerBefore.checked ∧ Fits profile writerBefore.checked ∧
+    EqReady writerBefore.checked.operations.constraints request.inherited ∧
+    EdgeResident writerBefore.checked.native.machine.heap request.value ∧
+    (SourceEqualityMkEdgeAllocation.contradictory request.value.entry.key.constraint = false →
+      FieldAvailable writerBefore.checked.operations request.value.entry.key.constraint ∧
+      EqReady writerBefore.checked.operations.constraints request.inherited ∧
+      Values writerBefore.checked.native.machine.heap request.value.children) ∧
+    SourceCurrentParentForecast.residentReserved bits budget request writerBefore.checked profile ∧
+    Normal writerBefore.checked.native.machine.heap ∧
+    NativeSupport writerBefore.checked.native.machine.heap writerBefore.checked.native ∧
+    Nonempty (History empty writerBefore.checked.native.machine.heap) ∧
+    MergeStored writerBefore.merge ∧ MergePositive writerBefore.merge
+
+-- The exact cell.request selects the joint receipt.
+def Origins (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (state : Caller (bits + 2)) : Prop :=
+  FlatMemoThunk.Valid (fun request key => request.key = key)
+    (FlatMemoThunk.CellSpec (Written (bits := bits) formulas solver)) state.edgeResults
+
+-- Proposed theorem header only. No proof follows.
+theorem initial (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (checked : Checked (bits + 2)) (memo : Memo) (fourth : Fourth) :
+    Origins formulas solver (SourceCurrentAllocatedPartialState.initial checked memo fourth)
+
+-- A successful local call records its actual cold entry or recovers its warm cell.
+theorem edge_call
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (profile : Profile) (globals : Memos)
+    {fuel g s r e p h m c n budget : Nat} {request : EdgeRequest}
+    {before after : Caller (bits + 2)} {result : Edge}
+    (actual : SourceCurrentAllocatedPartialWorker.edgeCall fuel g s r e p h m c n budget request before = .done result after)
+    (context : Context formulas solver inventory before globals)
+    (frame : Frame formulas solver inventory before.checked) (fits : Fits profile before.checked)
+    (inherited : EqReady before.checked.operations.constraints request.inherited)
+    (resident : EdgeResident before.checked.native.machine.heap request.value)
+    (reserved : SourceCurrentEdgeCallNumeric.Reserved bits budget request before profile)
+    (origins : Origins formulas solver before)
+    (normal : Normal before.checked.native.machine.heap)
+    (supported : NativeSupport before.checked.native.machine.heap before.checked.native)
+    (causal : History empty before.checked.native.machine.heap)
+    (merged : MergeStored before.merge) (positiveMemo : MergePositive before.merge) :
+    Origins formulas solver after ∧ Written (bits := bits) formulas solver request result
+
+end MicroCFTA.SourceCurrentResourceParentWriters
