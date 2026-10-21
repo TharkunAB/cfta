@@ -3086,6 +3086,7 @@ import MicroCFTA.SourceCurrentFiniteRoundForecast
 import MicroCFTA.SourceCurrentWarmNextPacket
 import MicroCFTA.SourceCurrentFiniteWarmCalls
 import MicroCFTA.SourceCurrentColdFiniteWarmCalls
+import MicroCFTA.SourceCurrentSameSymbolEdgeControl
 /-!
 # Proof dependency audit
 
