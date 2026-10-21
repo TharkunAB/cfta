@@ -284,6 +284,8 @@ data Settings = Settings
     -- ^ The bytes by which the completion of one law may grow the live heap.
     , recheckCount :: Int
     -- ^ The number of extra test cases of a new law (see 'recheckSchedule').
+    , dumpLaws :: Bool
+    -- ^ Whether to write each law with the types of its subterms on stderr.
     , completionAllocLimit :: Word64
     {- ^ The bytes that the completion of one law may allocate.
     ^ The bytes by which a bucket may grow the live heap.
@@ -403,6 +405,8 @@ data SearchOptions = SearchOptions
     {- ^ With 'searchStopAfter', the only bucket of the last size, by the
     'show' of its type. Each of its schemas prints its time and its term.
     -}
+    , searchDumpLaws :: Bool
+    -- ^ Whether to write each law with the types of its subterms on stderr.
     }
     deriving (Show)
 
@@ -436,6 +440,7 @@ defaultOptions size phase =
         , searchSkeletonTemplates = True
         , searchStopAfter = Nothing
         , searchOnlyBucket = Nothing
+        , searchDumpLaws = False
         }
 
 {- | Read the options from the program arguments: the size, the phase,
@@ -477,6 +482,7 @@ parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.p
                         <> O.help "With --stop-after, run only this bucket at the last size, and time each of its schemas"
                     )
                 )
+            <*> O.switch (O.long "dump-laws" <> O.help "Write each law with the types of its subterms on stderr")
     testsOption =
         O.option
             O.auto
@@ -668,6 +674,7 @@ searchPhases
         , searchSkeletonTemplates = skeletonTemplatesSetting
         , searchStopAfter = stopSetting
         , searchOnlyBucket = onlySetting
+        , searchDumpLaws = dumpLawsSetting
         }
     givenInstances
     givenSig =
@@ -734,6 +741,7 @@ searchPhases
                         , lawSink = sink
                         , stopAfter = stopSetting
                         , onlyBucket = onlySetting
+                        , dumpLaws = dumpLawsSetting
                         }
             runPhases env size (max 1 (min 4 phase)) instances sig
 
@@ -1380,6 +1388,8 @@ consider env@Settings{..} StEcta{..} lvl full_term s0
             unless deferLaws $ do
                 when progress $ hPutStr stderr "\r\ESC[K"
                 putStrLn law_str
+            when dumpLaws $
+                hPutStrLn stderr ("specftacular-law\t" ++ show n ++ "\t" ++ show (canonicalLaw lawSig law))
             when deferLaws $ modifyIORef' lawSink ((w, i, lawSig, law) :)
             -- With parallel buckets, the merge completes the law, so the
             -- bucket adds the rules of the law alone.

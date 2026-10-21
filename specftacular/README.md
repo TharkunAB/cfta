@@ -43,6 +43,8 @@ representation or capture class dictionaries for them. Use concrete types
 such as `Int` for arithmetic and ordering. Phases 3 and 4 instantiate each
 constant separately. `--checked` retains runtime type checks.
 
+`--dump-laws` writes each law on stderr, with the type of each subterm.
+
 Use `--diagnostics phases` to trace phase and size/type buckets. Use
 `--diagnostics detailed` to include candidate demands, schema and instance
 exploration, tree insertion, and completion. Events use versioned TSV on stderr. They
