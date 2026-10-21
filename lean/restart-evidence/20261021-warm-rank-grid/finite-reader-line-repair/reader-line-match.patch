@@ -1,0 +1,11 @@
+--- original-reader
++++ line-matching-reader
+@@ -26,7 +26,7 @@
+ for head, _ in heads:
+     name = NAMESPACE + head
+     for directive in ["#check @", "#print ", "#print axioms "]:
+-        assert printer.count(directive + name) == 1, (directive, name)
++        assert printer.splitlines().count(directive + name) == 1, (directive, name)
+     found = list(re.finditer(r"^(?:@)?" + re.escape(name) + r" :", log, re.M))
+     assert len(found) == 1, (head, len(found))
+     markers.append(found[0])

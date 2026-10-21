@@ -1,0 +1,27 @@
+--- previous
++++ current
+@@ -5,7 +5,7 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ ROOT = HERE.parents[2]
+-START = '571fd630a332be6407a91da5c9e2d8965d285979'
++START = '99f2b2f9b63122539d8edb1eee5ac4cffa62ee6e'
+ 
+ 
+ def git(*args):
+@@ -17,7 +17,7 @@
+ with (HERE/'pull.log').open('xb') as log:
+     subprocess.run(['timeout','45s','git','pull','--ff-only'],cwd=ROOT,env=env,check=True,stdout=log,stderr=subprocess.STDOUT)
+ assert git('rev-parse','HEAD').decode().strip()==START
+-subprocess.run(['git','branch','codex/backup-warm-return-20261021-2006',START],cwd=ROOT,check=True)
++subprocess.run(['git','branch','codex/backup-warm-rank-grid-20261021-2037',START],cwd=ROOT,check=True)
+ paths = git('ls-tree', '-r', '-z', START).split(b'\0')
+ baseline = {}
+ for item in paths:
+@@ -41,5 +41,5 @@
+     'starting-worktrees.txt': ('worktree', 'list', '--porcelain'),
+ }.items():
+     (HERE / name).write_bytes(git(*arguments))
+-(HERE / 'previous-publication.json').write_bytes(Path('/tmp/mcfta-cold-rank-capacity-publication.json').read_bytes())
++(HERE / 'previous-publication.json').write_bytes(Path('/tmp/mcfta-warm-return-publication.json').read_bytes())
+ print(json.dumps({'status': 'PASS', 'baseline_files': len(baseline), 'starting_head': START}))

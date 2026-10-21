@@ -1,0 +1,27 @@
+--- SourceCurrentFiniteRoundForecast.original-161.lean.txt
++++ SourceCurrentFiniteRoundForecast.lean
+@@ -35,12 +35,12 @@
+   let scheduled := SourceCurrentOuterInitialSchedule.node output.1 budget entry
+   (output.2.2.1 ++ scheduled.1, cover [output.2.2.2] scheduled.2)
+ 
+-private noncomputable def cases (budget : Nat) (entry : Seed) : List Seed :=
++private noncomputable def caseSeeds (budget : Nat) (entry : Seed) : List Seed :=
+   (grid entry).map fun rank => caseSeed budget rank.1 rank.2 entry
+ 
+ private noncomputable def next (budget : Nat) (entry : Seed) : Seed :=
+-  (entry.1 ++ (cases budget entry).flatMap Prod.fst,
+-    cover ((cases budget entry).map Prod.snd) entry.2)
++  (entry.1 ++ (caseSeeds budget entry).flatMap Prod.fst,
++    cover ((caseSeeds budget entry).map Prod.snd) entry.2)
+ 
+ private theorem next_retains (budget : Nat) (entry : Seed) :
+     Le entry.2 (next budget entry).2 ∧ entry.1 ⊆ (next budget entry).1 := by
+@@ -51,7 +51,7 @@
+     (counts : count ≤ entry.2.mass) (masses : mass ≤ entry.2.mass) :
+     Le (caseSeed budget count mass entry).2 (next budget entry).2 ∧
+       (caseSeed budget count mass entry).1 ⊆ (next budget entry).1 := by
+-  have member : caseSeed budget count mass entry ∈ cases budget entry :=
++  have member : caseSeed budget count mass entry ∈ caseSeeds budget entry :=
+     List.mem_map.mpr ⟨(count,mass), grid_member entry count mass counts masses, rfl⟩
+   refine ⟨SourceCurrentInitialSelectionForecast.cover_member entry.2
+     (List.mem_map.mpr ⟨_, member, rfl⟩), ?_⟩

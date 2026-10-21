@@ -1,0 +1,11 @@
+--- verify-proofs.initial-128.py.txt
++++ verify-proofs.py
+@@ -78,6 +78,8 @@
+     data = (evidence / item["snapshot"]).read_bytes()
+     assert digest(data) == item["sha256"] and len(data.splitlines()) == item["lines"]
+ standard = {"Classical.choice", "Quot.sound", "propext"}
++assert digest((evidence / "finite-round-check-full-public.py").read_bytes()) == "a62de1943fdda11097912eda1e49632a19a0f103af8d3441e62117142dc0bb30"
++assert digest((evidence / "finite-round-check-full-public.original-before-line-repair.py.txt").read_bytes()) == "5061c4a19769ca1a26ebb2d24466527b2c91c92412730d0535364e40d05ae844"
+ for kind, name in [("count", "SourceCurrentPositiveQuotientCount"), ("finite", "SourceCurrentFiniteRoundForecast")]:
+     report = load(kind + "-full-readback.json")
+     sha, lines, _, full = selected[name]

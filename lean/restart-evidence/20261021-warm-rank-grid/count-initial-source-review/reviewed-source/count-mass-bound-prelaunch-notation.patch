@@ -1,0 +1,19 @@
+--- candidate-1
++++ candidate-2
+@@ -206,7 +206,7 @@
+           simp only [List.flatMap_cons, List.length_append, InternedValueMass.values]
+           omega
+       have childrenBound (children : List Node) (start : Nat) :
+-          (children.zipIdx start |>.flatMap (fun child =>
++          ((children.zipIdx start).flatMap (fun child =>
+             (candidates fuel child.1).map (child.2 :: ·))).length ≤ InternedValueMass.values children := by
+         induction children generalizing start with
+         | nil => simp only [List.zipIdx_nil, List.flatMap_nil, List.length_nil, InternedValueMass.values, Nat.le_refl]
+@@ -252,6 +252,6 @@
+   simp only [List.length_map] at first
+   apply Nat.le_trans first
+   unfold positivePaths
+-  exact (dedup _).trans ((List.length_filter_le _ _).trans (candidates_length_le _ _))
++  exact Nat.le_trans (dedup _) (Nat.le_trans (List.length_filter_le _ _) (candidates_length_le _ _))
+ 
+ end MicroCFTA.SourceCurrentPositiveQuotientCount

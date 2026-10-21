@@ -1,0 +1,12 @@
+  (1 + completed.1, completed.2.1, SourceCurrentOuterInitialSchedule.rebuild completed.2.2)
+
+/-- Compute finite work, lower fuel, and an output seed from the initial rank and seed. -/
+noncomputable def envelope (budget count mass : Nat)
+    (seed : List Guard × Profile) : Nat × Nat × (List Guard × Profile) :=
+  WellFounded.fix (C := fun _ : Nat × Nat => Seed → Out)
+    (Prod.lex Nat.lt_wfRel Nat.lt_wfRel).wf (recipe budget) (count,mass) seed
+
+private theorem envelope_eq (budget count mass : Nat) (seed : Seed) :
+    envelope budget count mass seed = recipe budget (count,mass)
+      (fun child _ current => envelope budget child.1 child.2 current) seed := by
+  unfold envelope

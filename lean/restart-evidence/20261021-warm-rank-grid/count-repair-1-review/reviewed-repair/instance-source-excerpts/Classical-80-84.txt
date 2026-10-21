@@ -1,0 +1,5 @@
+/-- All propositions are `Decidable`. -/
+noncomputable scoped instance (priority := low) propDecidable (a : Prop) : Decidable a :=
+  choice <| match em a with
+    | Or.inl h => ⟨isTrue h⟩
+    | Or.inr h => ⟨isFalse h⟩

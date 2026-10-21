@@ -1,0 +1,6 @@
+def zipIdx : (l : List α) → (n : Nat := 0) → List (α × Nat)
+  | [], _ => nil
+  | x :: xs, n => (x, n) :: zipIdx xs (n + 1)
+
+@[simp] theorem zipIdx_nil : ([] : List α).zipIdx i = [] := rfl
+@[simp] theorem zipIdx_cons : (a::as).zipIdx i = (a, i) :: as.zipIdx (i+1) := rfl

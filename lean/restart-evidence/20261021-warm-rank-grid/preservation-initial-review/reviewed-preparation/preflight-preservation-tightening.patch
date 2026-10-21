@@ -1,0 +1,19 @@
+--- verify-preservation.initial-111.py.txt
++++ verify-preservation.py
+@@ -61,6 +61,7 @@
+ archives.update(added)
+ registries = dict(previous['frozen_manifests'])
+ assert len(registries) == 286 and sum(pin['checked'] for pin in registries.values()) == 1378
++assert 'lean/restart-evidence/20261021-warm-return/frozen-modules.json' not in registries
+ registries['lean/restart-evidence/20261021-warm-return/frozen-modules.json'] = {'checked': 2}
+ frozen = {}
+ for name in registries:
+@@ -85,7 +86,7 @@
+         actual, expected = others(actual), others(expected)
+     assert actual == expected, name
+ assert git('branch', '--show-current').strip() == 'formalize'
+-assert git('rev-parse', 'origin/main').strip() == (HERE / 'starting-main.txt').read_text().strip()
++assert git('rev-parse', 'main').strip() == git('rev-parse', 'origin/main').strip() == (HERE / 'starting-main.txt').read_text().strip()
+ subprocess.run(['git', 'merge-base', '--is-ancestor', start, 'HEAD'], cwd=ROOT, check=True)
+ tracked = set(git('ls-files').splitlines())
+ hs = {name for name in base if name.endswith('.hs')}

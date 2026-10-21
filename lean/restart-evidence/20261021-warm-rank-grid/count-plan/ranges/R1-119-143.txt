@@ -1,0 +1,25 @@
+private def relationSetoid (classes : Constraints) : Setoid Path where
+  r := Rel classes
+  iseqv := ⟨Rel.refl, fun related => rel_symm related, fun first second => .trans first second⟩
+
+/-- Count the inherited-relation classes represented by positive natural child paths. -/
+noncomputable def count (inherited : List Record) (value : Node) : Nat := by
+  classical
+  exact (((positivePaths value).map (Quotient.mk (relationSetoid (inherited.map Record.paths)))).eraseDups).length
+
+/-- Actual descended records bound every backwards-linked child and strictly count a nonplain row. -/
+theorem child_count
+    (parents inherited : List Record)
+    (coherent : ∀ record ∈ parents, SourceEqualityClassOrder.Coherent record)
+    (fixed : congruenceStep (parents.map Record.paths) = some (parents.map Record.paths))
+    (covered : Covers (inherited.map Record.paths) (parents.map Record.paths))
+    (index : Nat) (child : Node) {entry depth free} {rows : List Row}
+    (row : Row) (member : row ∈ rows)
+    (back : ∀ q, PositiveAt child q →
+      ∃ j p original, row.children[j]? = some original ∧ PositiveAt original p ∧
+        Rel (parents.map Record.paths) (index :: q) (j :: p)) :
+    count (SourceEqualityDescend.records index parents) child ≤
+        count inherited (.node entry rows depth free) ∧
+      (SourceMemoGate.plain row.entry.key.constraint = false →
+        count (SourceEqualityDescend.records index parents) child <
+          count inherited (.node entry rows depth free)) := by

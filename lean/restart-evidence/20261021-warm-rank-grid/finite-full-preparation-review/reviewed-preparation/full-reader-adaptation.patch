@@ -1,0 +1,45 @@
+--- accepted-H2-closure-reader.original.py
++++ finite-round-check-full-public.py
+@@ -1,20 +1,20 @@
+-"""Read both complete public closure types. Report explicit private-name markers in types."""
++"""Read all finite-round public types and report their actual axiom sets."""
+ from pathlib import Path
+ import hashlib
+ import json
+ import re
+ 
+ HERE = Path(__file__).resolve().parent
+-PREFIX = "warm-return-closure-"
+-NAMESPACE = "MicroCFTA.SourceCurrentOuterClosedInputs."
+-source = (HERE / "SourceCurrentOuterClosedInputs.lean").read_text()
++PREFIX = "finite-round-"
++NAMESPACE = "MicroCFTA.SourceCurrentFiniteRoundForecast."
++source = (HERE / "SourceCurrentFiniteRoundForecast.lean").read_text()
+ printer = (HERE / (PREFIX + "public-1.source.lean")).read_text()
+ raw = (HERE / (PREFIX + "public-1.log")).read_bytes()
+ log = raw.decode()
+ options = ["maxRecDepth 30000", "maxHeartbeats 0", "linter.all true", "pp.explicit true", "pp.fullNames true", "pp.proofs true",
+     "pp.proofs.threshold 254", "pp.universes true", "pp.deepTerms true", "pp.maxSteps 10000000"]
+ assert printer.startswith(source)
+-heads = [("reached", "theorem"), ("node_call", "theorem")]
++heads = [("stage", "def"), ("fuelBounds", "def"), ("stage_bounds", "theorem")]
+ expected_tail = "\n" + "".join("set_option " + option + "\n" for option in options)
+ expected_tail += "".join(directive + NAMESPACE + head + "\n"
+     for head, _ in heads for directive in ["#check @", "#print ", "#print axioms "])
+@@ -32,7 +32,7 @@
+     markers.append(found[0])
+ assert [marker.start() for marker in markers] == sorted(marker.start() for marker in markers)
+ normalize = lambda text: "".join(text.split())
+-private = ['same_nodes', 'begin_stored', 'finish_stored', 'reservation', 'node_hit_closed', 'node_start_closed', 'modify_closed', 'NodeCallAt', 'NodeBodyAt', 'RowsAt', 'DescendantsAt', 'ChildrenAt', 'WalkAt', 'reached_complete']
++private = ['grid', 'grid_member', 'caseSeed', 'caseSeeds', 'next', 'next_retains', 'next_case', 'stage_succ', 'stage_retains', 'boundsImage', 'fuel_member', 'fuel_limits']
+ private_markers = ("_private", "✝", "†", "‡")
+ results = []
+ for index, (head, kind) in enumerate(heads):
+@@ -61,6 +61,7 @@
+     type_tokens = re.findall(r"[^\s()\[\]{},:]+", type_text)
+     private_names = sorted({token for token in type_tokens
+         if any(marker in token for marker in private_markers)})
++    assert not private_names, (head, "private TYPE markers", private_names)
+     for helper in private:
+         assert NAMESPACE + helper not in checked + declared, (head, helper)
+     assert body.startswith("fun ") and len(body) > 50, head

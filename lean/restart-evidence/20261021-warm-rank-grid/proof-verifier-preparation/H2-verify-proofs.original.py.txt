@@ -1,0 +1,112 @@
+"""Check saved warm-return proof evidence. This script does not run Lean."""
+import argparse
+import hashlib
+import json
+import re
+from pathlib import Path
+
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument("--root", required=True, type=Path)
+parser.add_argument("--live", action="store_true")
+args = parser.parse_args()
+root = args.root.resolve()
+evidence = root / "lean/restart-evidence/20261021-warm-return"
+def load(name):
+    return json.loads((evidence / name).read_text())
+def digest(data):
+    return hashlib.sha256(data).hexdigest()
+
+selected = {
+    "SourceCurrentOuterResourceWriters": ("cccd170af4066f6889c94638d4243470038f2a41022f6965ed9568370e5a1ed8", 489, "origins-strict-1", "warm-return-origins-public-1"),
+    "SourceCurrentOuterClosedInputs": ("b80975e0144768b6ae0a3c0d490e026c00a06e534f3721d2b647e0e8c346cb8b", 479, "closure-strict-2", "warm-return-closure-public-1"),
+}
+original = {
+    "SourceCurrentOuterResourceWriters": ("50ae9ee05230de797cfe71b68c0fb016b4352f763c99161b98708fb9d20ceab5", 465),
+    "SourceCurrentOuterClosedInputs": ("a4c2f2bfdd3a0be7e5ae88e46e1d816facbee28fa9c6179967a95a8008e490ec", 420),
+}
+jobs = {
+    "closure-strict-1": (1, "68d33c018f49935fc78fd175964df962a7ac680a1b6285b86422f924ee1857d3", "5e5a73c67f5c9ceb76f6edbbc3f45497cf76a12963808242a061f6753cbf87f8"),
+    "closure-strict-2": (0, selected["SourceCurrentOuterClosedInputs"][0], hashlib.sha256(b"").hexdigest()),
+    "origins-strict-1": (0, selected["SourceCurrentOuterResourceWriters"][0], hashlib.sha256(b"").hexdigest()),
+    "warm-return-closure-public-1": (0, "6717a8eda1da7e1fe391720f51dfb8ce12b4975a8d48bd436f754f9f2b257841", "40b70a1826e49349d20fe11b610351422246ccc2b7fe15660898e95e7c5b7298"),
+    "warm-return-origins-public-1": (0, "83ee9b3f690fca52b512f92f3fd7c429bd55193c5ffa890a9ae64829776b97cb", "29b1dc2067435e1d348a937923485b03d11c533cd904611949866cb23bd0b419"),
+    "audit-1": (0, None, "ce70b90030621ae241e3ed70a7f641c755af7c2eecb3ff724ec08617da7db3b3"),
+}
+assert len(jobs) == 6 and sum(job[0] != 0 for job in jobs.values()) == 1
+actual = set()
+for path in evidence.glob("*.json"):
+    item = json.loads(path.read_text())
+    if isinstance(item, dict) and "wrapper" in item and "exit_code" in item:
+        if Path(item.get("command", [""])[0]).name in {"lean", "lake"}:
+            actual.add(path.stem)
+assert actual == set(jobs), actual
+for stem, (exit_code, source_hash, log_hash) in jobs.items():
+    receipt = load(stem + ".json")
+    assert receipt["exit_code"] == exit_code and receipt["log"] == stem + ".log"
+    assert digest((evidence / receipt["log"]).read_bytes()) == log_hash, stem
+    limits, usage = load(stem + ".limits.json"), load(stem + ".usage.json")
+    assert limits == {"memory.max": "4294967296", "memory.high": "4294967296", "memory.swap.max": "0"}
+    assert 0 <= usage["age_seconds"] <= 600 and usage["remaining_percent"] > 1, stem
+    assert receipt["wrapper"][1:5] == ["--mem", "4G", "--time", "5m"]
+    if source_hash:
+        assert receipt["source"] == stem + ".source.lean" and receipt["sha256"] == source_hash
+        assert digest((evidence / receipt["source"]).read_bytes()) == source_hash
+        assert receipt["command"][1] == "-Dlinter.all=true"
+        assert Path(receipt["command"][-1]).name == receipt["source"]
+selection = load("selected-sources.json")
+assert set(selection) == {"lean/MicroCFTA/" + name + ".lean" for name in selected}
+for name, (sha, lines, strict, full) in selected.items():
+    path = "lean/MicroCFTA/" + name + ".lean"
+    assert selection[path] == dict(sha256=sha, lines=lines, strict=strict, full=full)
+    source = (evidence / (name + ".lean")).read_bytes()
+    assert digest(source) == sha and len(source.splitlines()) == lines
+    assert source == (evidence / (strict + ".source.lean")).read_bytes()
+    assert (evidence / (strict + ".log")).read_bytes() == b""
+    assert (evidence / (full + ".source.lean")).read_bytes().startswith(source)
+    if args.live:
+        assert (root / path).read_bytes() == source, path
+archive = load("original-source-index.json")["sources"]
+assert len(archive) == len(original)
+for item in archive:
+    name = Path(item["path"]).stem
+    assert (item["sha256"], item["lines"]) == original[name]
+    data = (evidence / item["snapshot"]).read_bytes()
+    assert digest(data) == item["sha256"] and len(data.splitlines()) == item["lines"]
+standard = {"Classical.choice", "Quot.sound", "propext"}
+for kind, name in [("origins", "SourceCurrentOuterResourceWriters"), ("closure", "SourceCurrentOuterClosedInputs")]:
+    report = load(kind + "-full-readback.json")
+    sha, lines, _, full = selected[name]
+    raw = (evidence / (full + ".log")).read_bytes()
+    printer = (evidence / (full + ".source.lean")).read_text()
+    assert report["source_sha256"] == sha and report["source_lines"] == lines
+    assert report["printer_sha256"] == digest(printer.encode())
+    assert report["log_sha256"] == digest(raw) and report["log_bytes"] == len(raw)
+    assert report["all_eight_printer_settings"] and report["no_omissions"] and report["owned_public_job_exit"] == 0
+    expected_heads = ["node_call"] if kind == "origins" else ["reached", "node_call"]
+    assert [head["head"].split(".")[-1] for head in report["heads"]] == expected_heads
+    options = ["maxRecDepth 30000", "maxHeartbeats 0", "linter.all true", "pp.explicit true", "pp.fullNames true",
+        "pp.proofs true", "pp.proofs.threshold 254", "pp.universes true", "pp.deepTerms true", "pp.maxSteps 10000000"]
+    tail = "\n" + "".join("set_option " + option + "\n" for option in options)
+    tail += "".join(directive + head["head"] + "\n" for head in report["heads"]
+        for directive in ["#check @", "#print ", "#print axioms "])
+    assert printer == (evidence / (name + ".lean")).read_text() + tail
+    log = raw.decode()
+    assert not re.search(r"sorryAx|\b(?:warning|error)(?:\([^)]*\))?:|failed to pretty print|pp\.rawOnError|⋯|…|\.\.\.", log)
+    for head in report["heads"]:
+        assert head["check_print_type_identity"] and head["unique_complete_type_body_delimiter"]
+        assert set(head["actual_axioms"]) == standard and head["actual_standard_three_axioms"]
+        assert head.get("private_public_type_names", False) is False and not head.get("private_type_names", [])
+        marker = list(re.finditer(r"^(?:@)?" + re.escape(head["head"]) + r" :", log, re.M))
+        assert len(marker) == 1
+        checked, rest = log[marker[0].end():].split("\ntheorem " + head["head"] + " :", 1)
+        normalized = "".join(checked.split())
+        matches = [m for m in re.finditer(r" :=\n", rest) if "".join(rest[:m.start()].split()) == normalized]
+        assert len(matches) == 1 and len(checked) == head["checked_type_characters"]
+        assert not any(token in checked for token in ["_private", "†", "✝", "‡"])
+        assert rest[matches[0].end():].startswith("fun ")
+        axiom = re.search("'" + re.escape(head["head"]) + r"' depends on axioms:\s*\[([^\]]*)\]", rest)
+        assert axiom and {re.sub(r"\.\{[^}]*\}", "", item.strip()) for item in axiom.group(1).split(",")} == standard
+audit = (evidence / "audit-1.log").read_text()
+assert "Build completed successfully (3619 jobs)." in audit and "75221 MicroCFTA theorems" in audit
+print(json.dumps(dict(status="PASS", live=args.live, source_jobs=5, audit_jobs=1, actual_jobs=6,
+    failed_jobs=1, new_lean_lake_jobs=0, selected_modules=2, original_archives=2), indent=2))

@@ -1,0 +1,13 @@
+theorem eraseDups_nodup [BEq Value] [LawfulBEq Value] (values : List Value) : values.eraseDups.Nodup := by
+  cases values with
+  | nil => simp
+  | cons first rest =>
+      rw [List.eraseDups_cons]
+      apply List.nodup_cons.mpr
+      constructor
+      · simp [List.mem_eraseDups]
+      · exact eraseDups_nodup _
+termination_by values.length
+decreasing_by
+  simp only [List.length_cons]
+  exact Nat.lt_succ_of_le (List.length_filter_le ..)

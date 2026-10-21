@@ -1,0 +1,54 @@
+/-- One predicted Parent contributes the common bound for each of its nine lower fuels. -/
+noncomputable def parentNeed (budget : Nat) (seed : Seed) : Nat :=
+  SourceCurrentParentUniformEnvelope.fuel budget seed.1 seed.2
+
+mutual
+/-- Node demand reserves its possible body; ready hits consume no lower fuel. -/
+noncomputable def nodeNeed (fuel budget : Nat) (seed : Seed) : Nat :=
+  bodyNeed fuel budget seed
+termination_by (fuel, 3)
+
+/-- A nonterminal ordinary body reserves its row pass. -/
+noncomputable def bodyNeed (fuel budget : Nat) (seed : Seed) : Nat :=
+  match fuel with
+  | 0 => 0
+  | next + 1 => rowsNeed next budget seed
+termination_by (fuel, 2)
+
+/-- Row work reserves Parent, descendants and the suffix at their exact predicted entries. -/
+noncomputable def rowsNeed (fuel budget : Nat) (seed : Seed) : Nat :=
+  match fuel with
+  | 0 => 0
+  | next + 1 => max (parentNeed budget seed)
+      (max (descendantsNeed next budget (Schedule.parent budget seed))
+        (rowsNeed next budget (Schedule.descendants next budget (Schedule.parent budget seed))))
+termination_by (fuel, 2)
+
+/-- Descendants reserve children; their final raw constructor consumes no lower fuel. -/
+noncomputable def descendantsNeed (fuel budget : Nat) (seed : Seed) : Nat :=
+  childrenNeed fuel budget seed
+termination_by (fuel, 2)
+
+/-- A live combined field reserves its indexed walk; contradiction consumes no lower fuel. -/
+noncomputable def childrenNeed (fuel budget : Nat) (seed : Seed) : Nat :=
+  walkNeed fuel budget seed
+termination_by (fuel, 1)
+
+/-- Each walk slot reserves its node and its suffix at the predicted node return. -/
+noncomputable def walkNeed (fuel budget : Nat) (seed : Seed) : Nat :=
+  match fuel with
+  | 0 => 0
+  | next + 1 => max (nodeNeed next budget seed)
+      (walkNeed next budget (Schedule.node next budget seed))
+termination_by (fuel, 0)
+end
+
+/-- The literal phase tag selects the corresponding initial lower-fuel bound. -/
+noncomputable def phaseNeed (budget : Nat) (phase : Phase width) (seed : Seed) : Nat :=
+  match phase with
+  | .node fuel _ _ => nodeNeed fuel budget seed
+  | .body fuel _ _ => bodyNeed fuel budget seed
+  | .rows fuel _ _ _ => rowsNeed fuel budget seed
+  | .descendants fuel _ _ _ => descendantsNeed fuel budget seed
+  | .children fuel _ _ _ => childrenNeed fuel budget seed
+  | .walk fuel _ _ _ _ => walkNeed fuel budget seed

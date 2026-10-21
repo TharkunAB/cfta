@@ -1,0 +1,8 @@
+instance Quotient.decidableEq {α : Sort u} {s : Setoid α} [d : ∀ (a b : α), Decidable (a ≈ b)]
+    : DecidableEq (Quotient s) :=
+  fun (q₁ q₂ : Quotient s) =>
+    Quotient.recOnSubsingleton₂ q₁ q₂
+      fun a₁ a₂ =>
+        match d a₁ a₂ with
+        | isTrue h₁  => isTrue (Quotient.sound h₁)
+        | isFalse h₂ => isFalse fun h => absurd (Quotient.exact h) h₂

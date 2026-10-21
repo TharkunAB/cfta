@@ -1,0 +1,13 @@
+/-- A finite original list supplies a common natural-number ceiling. -/
+def maximum (values : List Nat) : Nat := values.foldr max 0
+
+/-- Each original listed value fits its computed maximum. -/
+theorem maximum_member {values : List Nat} {value : Nat} (member : value ∈ values) :
+    value ≤ maximum values := by
+  induction values with
+  | nil => cases member
+  | cons first rest ih =>
+      rcases List.mem_cons.mp member with rfl | included
+      · exact Nat.le_max_left _ _
+      · exact Nat.le_trans (ih included) (Nat.le_max_right _ _)
+

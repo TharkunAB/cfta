@@ -1,0 +1,5 @@
+[2026-10-21 21:07:43 CEST] SOURCE CLEAR for the 112-line preservation verifier a492c546593870167594d929c1bc6f92f3fb7e19b87e949998c14115db534017.
+
+I read the complete script, full H2 adaptation patch, initial tightening patch and preparation metadata. Exact patch reconstruction and AST parsing pass. The script checks every 71517 baseline file hash and mode, the nine additive document inverses, exact selected source hashes and lengths, the one Audit-import deletion inverse, old count archive without key replacement, 286 prior registries plus the two-entry H2 registry, all archived component pins, both local and remote main references, other worktrees, stashes, 268 Haskell files and 207 active package files. New forecast and focus-note absence at baseline is checked. The Haskell repair index remains first. Existing archive and registry checks retain all original frozen evidence.
+
+This is a source-only review. I did not run the verifier, Git, a compiler, runtime evaluation or a capped worker. Root must copy the script into H3 before execution, since its HERE-relative paths intentionally refer to the checkpoint. Runtime PASS and final publication remain root-owned.

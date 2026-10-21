@@ -1,0 +1,7 @@
+[2026-10-21 20:58:39 CEST] SOURCE CLEAR for count repair2, not an accepted proof claim.
+
+I read the complete 257-line candidate 8447e032e02bd715be1c8a797f60ebcb118855868806205a6fc7e184bd7b79c9 and the complete actual strict2 raw (11 lines, 582 bytes), receipt, gate and caps. The single error used native List BEq in positivePaths and decidable-equality-derived BEq in the local dedup helper. The exact one-line patch changes only the local helper instance binders to BEq and LawfulBEq. This preserves each call site's equality instance and adds no public premise.
+
+I checked all four cited API ranges against complete live file hashes and exact excerpt hashes: SymbolicSelection 23-35, List.Basic 140-162, List.Lemmas 3762-3764 and List.Perm 485-489. Their instance and membership contracts match this repair. Exact patch/inverse checks recover the failed 1214 input. Both approved two-line headers remain byte-identical. Removing the full append recovers all original 195 source lines and bytes. The private candidate-length proof and all old APIs remain unchanged. Source remains 257 lines, within the 315 total ceiling.
+
+The copied failed root job is one existing job. Reviewer compiler, runtime, FULL and capped jobs: zero. Actual retry results remain for root to observe. I authored imported native-store and support foundations; this review checks the new composition and instance repair, not an independent re-proof of those foundations.

@@ -1,0 +1,28 @@
+import MicroCFTA.SourceCurrentPositiveInheritedChildSeparation
+
+/-!
+# Positive path counts under inherited equality classes
+
+The finite count identifies positive paths under the current inherited relation.
+Actual physical child descent reflects the combined relation. A supplied
+backwards relation bounds each child count. A nonplain source row makes the
+bound strict. This module does not produce that relation from runtime work.
+-/
+namespace MicroCFTA.SourceCurrentPositiveQuotientCount
+open EqualityNormalize SourceEqualityClassOrder InternedConstructorTemplates
+open SourceCurrentRequiredPositivePosition (PositiveAt)
+open SourceCurrentNormalizedChildSeparation (Rel)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Guard
+local notation "Row" => EdgeValue Symbol Guard
+
+/- Copy PositiveOwnerPair23–74 exactly. Both earlier enumerations are private. -/
+private def candidates : Nat → Node → List Path
+  | 0, _ => []
+  | fuel + 1, .node _ rows _ _ =>
+      [] :: rows.flatMap (fun row => row.children.zipIdx.flatMap
+        (fun child => (candidates fuel child.1).map (child.2 :: ·)))
+  | fuel + 1, .union _ members _ _ =>
+      [] :: members.flatMap (candidates fuel)
+  | _ + 1, _ => [[]]

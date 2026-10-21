@@ -1,0 +1,385 @@
+MicroCFTA.SourceCurrentPositiveQuotientCount.count_le_mass : ∀
+  (inherited : List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentPositiveQuotientCount.count inherited value)
+    (@MicroCFTA.InternedValueMass.value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) value)
+theorem MicroCFTA.SourceCurrentPositiveQuotientCount.count_le_mass : ∀
+  (inherited : List.{0} MicroCFTA.SourceEqualityClassOrder.Record)
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  @LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentPositiveQuotientCount.count inherited value)
+    (@MicroCFTA.InternedValueMass.value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) value) :=
+fun inherited value =>
+  have dedup := fun {Item} [inst : BEq.{0} Item] [inst_1 : @LawfulBEq.{0} Item inst] values =>
+    @List.Nodup.length_le_of_subset.{0} Item (@List.eraseDups.{0} Item inst values) values
+      (@MicroCFTA.SymbolicDriver.eraseDups_nodup.{0} Item inst inst_1 values) fun ⦃item⦄ member =>
+      @Iff.mp
+        (@Membership.mem.{0, 0} Item (List.{0} Item) (@List.instMembership.{0} Item)
+          (@List.eraseDups.{0} Item inst values) item)
+        (@Membership.mem.{0, 0} Item (List.{0} Item) (@List.instMembership.{0} Item) values item)
+        (@List.mem_eraseDups.{0} Item inst inst_1 item values) member;
+  @id.{0}
+    (@LE.le.{0} Nat instLENat (MicroCFTA.SourceCurrentPositiveQuotientCount.count inherited value)
+      (@MicroCFTA.InternedValueMass.value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) value))
+    (have first :=
+      @dedup
+        (@Quotient.{1} MicroCFTA.EqualityNormalize.Path
+          (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+            (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+              MicroCFTA.SourceEqualityClassOrder.Record.paths inherited)))
+        (@instBEqOfDecidableEq.{0}
+          (@Quotient.{1} MicroCFTA.EqualityNormalize.Path
+            (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+              (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                MicroCFTA.SourceEqualityClassOrder.Record.paths inherited)))
+          fun a b =>
+          @Quotient.decidableEq.{1} MicroCFTA.EqualityNormalize.Path
+            (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+              (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                MicroCFTA.SourceEqualityClassOrder.Record.paths inherited))
+            (fun a b =>
+              Classical.propDecidable
+                (@HasEquiv.Equiv.{1, 0} MicroCFTA.EqualityNormalize.Path
+                  (@instHasEquivOfSetoid.{1} MicroCFTA.EqualityNormalize.Path
+                    (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+                      (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                        MicroCFTA.SourceEqualityClassOrder.Record.paths inherited)))
+                  a b))
+            a b)
+        (@instLawfulBEq.{0}
+          (@Quotient.{1} MicroCFTA.EqualityNormalize.Path
+            (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+              (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                MicroCFTA.SourceEqualityClassOrder.Record.paths inherited)))
+          fun a b =>
+          @Quotient.decidableEq.{1} MicroCFTA.EqualityNormalize.Path
+            (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+              (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                MicroCFTA.SourceEqualityClassOrder.Record.paths inherited))
+            (fun a b =>
+              Classical.propDecidable
+                (@HasEquiv.Equiv.{1, 0} MicroCFTA.EqualityNormalize.Path
+                  (@instHasEquivOfSetoid.{1} MicroCFTA.EqualityNormalize.Path
+                    (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+                      (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                        MicroCFTA.SourceEqualityClassOrder.Record.paths inherited)))
+                  a b))
+            a b)
+        (@List.map.{0, 0} MicroCFTA.EqualityNormalize.Path
+          (@Quotient.{1} MicroCFTA.EqualityNormalize.Path
+            (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+              (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                MicroCFTA.SourceEqualityClassOrder.Record.paths inherited)))
+          (@Quotient.mk.{1} MicroCFTA.EqualityNormalize.Path
+            (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+              (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                MicroCFTA.SourceEqualityClassOrder.Record.paths inherited)))
+          (MicroCFTA.SourceCurrentPositiveQuotientCount.positivePaths value));
+    @Nat.le_trans
+      (@List.length.{0}
+        (@Quotient.{1} MicroCFTA.EqualityNormalize.Path
+          (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+            (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+              MicroCFTA.SourceEqualityClassOrder.Record.paths inherited)))
+        (@List.eraseDups.{0}
+          (@Quotient.{1} MicroCFTA.EqualityNormalize.Path
+            (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+              (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                MicroCFTA.SourceEqualityClassOrder.Record.paths inherited)))
+          (@instBEqOfDecidableEq.{0}
+            (@Quotient.{1} MicroCFTA.EqualityNormalize.Path
+              (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+                (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                  MicroCFTA.SourceEqualityClassOrder.Record.paths inherited)))
+            fun a b =>
+            @Quotient.decidableEq.{1} MicroCFTA.EqualityNormalize.Path
+              (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+                (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                  MicroCFTA.SourceEqualityClassOrder.Record.paths inherited))
+              (fun a b =>
+                Classical.propDecidable
+                  (@HasEquiv.Equiv.{1, 0} MicroCFTA.EqualityNormalize.Path
+                    (@instHasEquivOfSetoid.{1} MicroCFTA.EqualityNormalize.Path
+                      (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+                        (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                          MicroCFTA.SourceEqualityClassOrder.Record.paths inherited)))
+                    a b))
+              a b)
+          (@List.map.{0, 0} MicroCFTA.EqualityNormalize.Path
+            (@Quotient.{1} MicroCFTA.EqualityNormalize.Path
+              (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+                (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                  MicroCFTA.SourceEqualityClassOrder.Record.paths inherited)))
+            (@Quotient.mk.{1} MicroCFTA.EqualityNormalize.Path
+              (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+                (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                  MicroCFTA.SourceEqualityClassOrder.Record.paths inherited)))
+            (MicroCFTA.SourceCurrentPositiveQuotientCount.positivePaths value))))
+      (@List.length.{0} MicroCFTA.EqualityNormalize.Path
+        (MicroCFTA.SourceCurrentPositiveQuotientCount.positivePaths value))
+      (@MicroCFTA.InternedValueMass.value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) value)
+      (@Eq.mp.{0}
+        (@LE.le.{0} Nat instLENat
+          (@List.length.{0}
+            (@Quotient.{1} MicroCFTA.EqualityNormalize.Path
+              (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+                (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                  MicroCFTA.SourceEqualityClassOrder.Record.paths inherited)))
+            (@List.eraseDups.{0}
+              (@Quotient.{1} MicroCFTA.EqualityNormalize.Path
+                (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+                  (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                    MicroCFTA.SourceEqualityClassOrder.Record.paths inherited)))
+              (@instBEqOfDecidableEq.{0}
+                (@Quotient.{1} MicroCFTA.EqualityNormalize.Path
+                  (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+                    (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                      MicroCFTA.SourceEqualityClassOrder.Record.paths inherited)))
+                fun a b =>
+                @Quotient.decidableEq.{1} MicroCFTA.EqualityNormalize.Path
+                  (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+                    (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                      MicroCFTA.SourceEqualityClassOrder.Record.paths inherited))
+                  (fun a b =>
+                    Classical.propDecidable
+                      (@HasEquiv.Equiv.{1, 0} MicroCFTA.EqualityNormalize.Path
+                        (@instHasEquivOfSetoid.{1} MicroCFTA.EqualityNormalize.Path
+                          (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+                            (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                              MicroCFTA.EqualityNormalize.Class MicroCFTA.SourceEqualityClassOrder.Record.paths
+                              inherited)))
+                        a b))
+                  a b)
+              (@List.map.{0, 0} MicroCFTA.EqualityNormalize.Path
+                (@Quotient.{1} MicroCFTA.EqualityNormalize.Path
+                  (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+                    (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                      MicroCFTA.SourceEqualityClassOrder.Record.paths inherited)))
+                (@Quotient.mk.{1} MicroCFTA.EqualityNormalize.Path
+                  (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+                    (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                      MicroCFTA.SourceEqualityClassOrder.Record.paths inherited)))
+                (MicroCFTA.SourceCurrentPositiveQuotientCount.positivePaths value))))
+          (@List.length.{0}
+            (@Quotient.{1} MicroCFTA.EqualityNormalize.Path
+              (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+                (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                  MicroCFTA.SourceEqualityClassOrder.Record.paths inherited)))
+            (@List.map.{0, 0} MicroCFTA.EqualityNormalize.Path
+              (@Quotient.{1} MicroCFTA.EqualityNormalize.Path
+                (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+                  (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                    MicroCFTA.SourceEqualityClassOrder.Record.paths inherited)))
+              (@Quotient.mk.{1} MicroCFTA.EqualityNormalize.Path
+                (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+                  (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                    MicroCFTA.SourceEqualityClassOrder.Record.paths inherited)))
+              (MicroCFTA.SourceCurrentPositiveQuotientCount.positivePaths value))))
+        (@LE.le.{0} Nat instLENat
+          (@List.length.{0}
+            (@Quotient.{1} MicroCFTA.EqualityNormalize.Path
+              (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+                (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                  MicroCFTA.SourceEqualityClassOrder.Record.paths inherited)))
+            (@List.eraseDups.{0}
+              (@Quotient.{1} MicroCFTA.EqualityNormalize.Path
+                (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+                  (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                    MicroCFTA.SourceEqualityClassOrder.Record.paths inherited)))
+              (@instBEqOfDecidableEq.{0}
+                (@Quotient.{1} MicroCFTA.EqualityNormalize.Path
+                  (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+                    (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                      MicroCFTA.SourceEqualityClassOrder.Record.paths inherited)))
+                fun a b =>
+                @Quotient.decidableEq.{1} MicroCFTA.EqualityNormalize.Path
+                  (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+                    (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                      MicroCFTA.SourceEqualityClassOrder.Record.paths inherited))
+                  (fun a b =>
+                    Classical.propDecidable
+                      (@HasEquiv.Equiv.{1, 0} MicroCFTA.EqualityNormalize.Path
+                        (@instHasEquivOfSetoid.{1} MicroCFTA.EqualityNormalize.Path
+                          (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+                            (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                              MicroCFTA.EqualityNormalize.Class MicroCFTA.SourceEqualityClassOrder.Record.paths
+                              inherited)))
+                        a b))
+                  a b)
+              (@List.map.{0, 0} MicroCFTA.EqualityNormalize.Path
+                (@Quotient.{1} MicroCFTA.EqualityNormalize.Path
+                  (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+                    (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                      MicroCFTA.SourceEqualityClassOrder.Record.paths inherited)))
+                (@Quotient.mk.{1} MicroCFTA.EqualityNormalize.Path
+                  (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+                    (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                      MicroCFTA.SourceEqualityClassOrder.Record.paths inherited)))
+                (MicroCFTA.SourceCurrentPositiveQuotientCount.positivePaths value))))
+          (@List.length.{0} MicroCFTA.EqualityNormalize.Path
+            (MicroCFTA.SourceCurrentPositiveQuotientCount.positivePaths value)))
+        (@congrArg.{1, 1} Nat Prop
+          (@List.length.{0}
+            (@Quotient.{1} MicroCFTA.EqualityNormalize.Path
+              (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+                (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                  MicroCFTA.SourceEqualityClassOrder.Record.paths inherited)))
+            (@List.map.{0, 0} MicroCFTA.EqualityNormalize.Path
+              (@Quotient.{1} MicroCFTA.EqualityNormalize.Path
+                (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+                  (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                    MicroCFTA.SourceEqualityClassOrder.Record.paths inherited)))
+              (@Quotient.mk.{1} MicroCFTA.EqualityNormalize.Path
+                (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+                  (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                    MicroCFTA.SourceEqualityClassOrder.Record.paths inherited)))
+              (MicroCFTA.SourceCurrentPositiveQuotientCount.positivePaths value)))
+          (@List.length.{0} MicroCFTA.EqualityNormalize.Path
+            (MicroCFTA.SourceCurrentPositiveQuotientCount.positivePaths value))
+          (@LE.le.{0} Nat instLENat
+            (@List.length.{0}
+              (@Quotient.{1} MicroCFTA.EqualityNormalize.Path
+                (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+                  (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                    MicroCFTA.SourceEqualityClassOrder.Record.paths inherited)))
+              (@List.eraseDups.{0}
+                (@Quotient.{1} MicroCFTA.EqualityNormalize.Path
+                  (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+                    (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                      MicroCFTA.SourceEqualityClassOrder.Record.paths inherited)))
+                (@instBEqOfDecidableEq.{0}
+                  (@Quotient.{1} MicroCFTA.EqualityNormalize.Path
+                    (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+                      (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                        MicroCFTA.SourceEqualityClassOrder.Record.paths inherited)))
+                  fun a b =>
+                  @Quotient.decidableEq.{1} MicroCFTA.EqualityNormalize.Path
+                    (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+                      (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                        MicroCFTA.SourceEqualityClassOrder.Record.paths inherited))
+                    (fun a b =>
+                      Classical.propDecidable
+                        (@HasEquiv.Equiv.{1, 0} MicroCFTA.EqualityNormalize.Path
+                          (@instHasEquivOfSetoid.{1} MicroCFTA.EqualityNormalize.Path
+                            (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+                              (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record
+                                MicroCFTA.EqualityNormalize.Class MicroCFTA.SourceEqualityClassOrder.Record.paths
+                                inherited)))
+                          a b))
+                    a b)
+                (@List.map.{0, 0} MicroCFTA.EqualityNormalize.Path
+                  (@Quotient.{1} MicroCFTA.EqualityNormalize.Path
+                    (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+                      (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                        MicroCFTA.SourceEqualityClassOrder.Record.paths inherited)))
+                  (@Quotient.mk.{1} MicroCFTA.EqualityNormalize.Path
+                    (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+                      (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                        MicroCFTA.SourceEqualityClassOrder.Record.paths inherited)))
+                  (MicroCFTA.SourceCurrentPositiveQuotientCount.positivePaths value)))))
+          (@List.length_map.{0, 0} MicroCFTA.EqualityNormalize.Path
+            (@Quotient.{1} MicroCFTA.EqualityNormalize.Path
+              (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+                (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                  MicroCFTA.SourceEqualityClassOrder.Record.paths inherited)))
+            (MicroCFTA.SourceCurrentPositiveQuotientCount.positivePaths value)
+            (@Quotient.mk.{1} MicroCFTA.EqualityNormalize.Path
+              (MicroCFTA.SourceCurrentPositiveQuotientCount.relationSetoid
+                (@List.map.{0, 0} MicroCFTA.SourceEqualityClassOrder.Record MicroCFTA.EqualityNormalize.Class
+                  MicroCFTA.SourceEqualityClassOrder.Record.paths inherited)))))
+        first)
+      (@id.{0}
+        (@LE.le.{0} Nat instLENat
+          (@List.length.{0} MicroCFTA.EqualityNormalize.Path
+            (MicroCFTA.SourceCurrentPositiveQuotientCount.positivePaths value))
+          (@MicroCFTA.InternedValueMass.value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) value))
+        (@Nat.le_trans
+          (@List.length.{0} MicroCFTA.EqualityNormalize.Path
+            (@List.eraseDups.{0} (List.{0} Nat)
+              (@List.instBEq.{0} Nat (@instBEqOfDecidableEq.{0} Nat instDecidableEqNat))
+              (@List.filter.{0} (List.{0} Nat)
+                (fun path =>
+                  @Decidable.decide (MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt value path)
+                    (Classical.propDecidable (MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt value path)))
+                (MicroCFTA.SourceCurrentPositiveQuotientCount.candidates
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@MicroCFTA.InternedValueMass.value
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) value)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                  value))))
+          (@List.length.{0} MicroCFTA.EqualityNormalize.Path
+            (@List.filter.{0} (List.{0} Nat)
+              (fun path =>
+                @Decidable.decide (MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt value path)
+                  (Classical.propDecidable (MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt value path)))
+              (MicroCFTA.SourceCurrentPositiveQuotientCount.candidates
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@MicroCFTA.InternedValueMass.value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) value)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                value)))
+          (@MicroCFTA.InternedValueMass.value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) value)
+          (@dedup MicroCFTA.EqualityNormalize.Path
+            (@List.instBEq.{0} Nat (@instBEqOfDecidableEq.{0} Nat instDecidableEqNat))
+            (@List.instLawfulBEq.{0} Nat (@instBEqOfDecidableEq.{0} Nat instDecidableEqNat) Nat.instLawfulBEq)
+            (@List.filter.{0} (List.{0} Nat)
+              (fun path =>
+                @Decidable.decide (MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt value path)
+                  (Classical.propDecidable (MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt value path)))
+              (MicroCFTA.SourceCurrentPositiveQuotientCount.candidates
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@MicroCFTA.InternedValueMass.value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) value)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                value)))
+          (@Nat.le_trans
+            (@List.length.{0} MicroCFTA.EqualityNormalize.Path
+              (@List.filter.{0} (List.{0} Nat)
+                (fun path =>
+                  @Decidable.decide (MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt value path)
+                    (Classical.propDecidable (MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt value path)))
+                (MicroCFTA.SourceCurrentPositiveQuotientCount.candidates
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@MicroCFTA.InternedValueMass.value
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) value)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                  value)))
+            (@List.length.{0} MicroCFTA.EqualityNormalize.Path
+              (MicroCFTA.SourceCurrentPositiveQuotientCount.candidates
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@MicroCFTA.InternedValueMass.value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) value)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                value))
+            (@MicroCFTA.InternedValueMass.value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) value)
+            (@List.length_filter_le.{0} MicroCFTA.EqualityNormalize.Path
+              (fun path =>
+                @Decidable.decide (MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt value path)
+                  (Classical.propDecidable (MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt value path)))
+              (MicroCFTA.SourceCurrentPositiveQuotientCount.candidates
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@MicroCFTA.InternedValueMass.value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) value)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                value))
+            (MicroCFTA.SourceCurrentPositiveQuotientCount.candidates_length_le
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@MicroCFTA.InternedValueMass.value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) value)
+                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+              value)))))
+'MicroCFTA.SourceCurrentPositiveQuotientCount.count_le_mass' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]

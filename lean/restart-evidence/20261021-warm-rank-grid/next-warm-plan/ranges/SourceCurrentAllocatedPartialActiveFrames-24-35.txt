@@ -1,0 +1,12 @@
+structure NoNewActive (before after : Caller width) : Prop where
+  nodes : FlatMemoThunk.Running after.nodeResults before.nodeResults
+  edges : FlatMemoThunk.Running after.edgeResults before.edgeResults
+
+/-- An unchanged caller has the same evaluating owners. -/
+theorem NoNewActive.refl (state : Caller width) : NoNewActive state state :=
+  ⟨.refl _, .refl _⟩
+
+/-- Consecutive completed prefixes leave no new evaluating owner. -/
+theorem NoNewActive.trans {before middle after : Caller width}
+    (first : NoNewActive before middle) (last : NoNewActive middle after) : NoNewActive before after :=
+  ⟨last.nodes.trans first.nodes, last.edges.trans first.edges⟩

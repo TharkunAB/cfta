@@ -1,0 +1,25 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261021-warm-rank-grid/count-mass-strict-1.source.lean:253:2: error: Tactic `apply` failed: could not unify the conclusion of `Nat.le_trans first`
+  (@List.eraseDups (Quotient (relationSetoid (List.map Record.paths inherited)))
+        (@instBEqOfDecidableEq (Quotient (relationSetoid (List.map Record.paths inherited))) fun a b =>
+          Classical.propDecidable (a = b))
+        (List.map (Quotient.mk (relationSetoid (List.map Record.paths inherited))) (positivePaths value))).length ≤
+    ?m.50
+with the goal
+  (@List.eraseDups (Quotient (relationSetoid (List.map Record.paths inherited)))
+        (@instBEqOfDecidableEq (Quotient (relationSetoid (List.map Record.paths inherited))) fun a b => a.decidableEq b)
+        (List.map (Quotient.mk (relationSetoid (List.map Record.paths inherited))) (positivePaths value))).length ≤
+    InternedValueMass.value value
+
+Note: The full type of `Nat.le_trans first` is
+  (positivePaths value).length ≤ ?m.50 →
+    (List.map (Quotient.mk (relationSetoid (List.map Record.paths inherited))) (positivePaths value)).eraseDups.length ≤
+      ?m.50
+
+inherited : List Record
+value : Node
+dedup : ∀ {Item : Type} (values : List Item), values.eraseDups.length ≤ values.length
+first :
+  (List.map (Quotient.mk (relationSetoid (List.map Record.paths inherited))) (positivePaths value)).eraseDups.length ≤
+    (positivePaths value).length
+⊢ (List.map (Quotient.mk (relationSetoid (List.map Record.paths inherited))) (positivePaths value)).eraseDups.length ≤
+    InternedValueMass.value value

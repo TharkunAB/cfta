@@ -1,0 +1,20 @@
+--- finite-round-strict-1.source.lean
++++ SourceCurrentFiniteRoundForecast.proposed-repair.source.lean.txt
+@@ -71,6 +71,7 @@
+     Le (stage budget initial index).2 (stage budget initial rounds).2 ∧
+       (stage budget initial index).1 ⊆ (stage budget initial rounds).1 := by
+   obtain ⟨extra, rfl⟩ := Nat.exists_eq_add_of_le bound
++  clear bound
+   induction extra with
+   | zero => exact ⟨Le.refl _, fun _ member => member⟩
+   | succ extra ih =>
+@@ -138,9 +139,7 @@
+   dsimp only
+   refine ⟨fun index bound => stage_retains budget initial bound, ?_⟩
+   intro index included
+-  dsimp only
+   intro count mass counts masses
+-  dsimp only
+   let entry := stage budget initial index
+   let joined := caseSeed budget count mass entry
+   have first := next_case budget count mass entry counts masses

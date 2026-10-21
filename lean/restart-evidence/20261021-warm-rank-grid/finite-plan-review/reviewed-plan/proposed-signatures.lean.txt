@@ -1,0 +1,23 @@
+noncomputable def stage (budget : Nat) (initial : List Guard × Profile)
+    (rounds : Nat) : List Guard × Profile
+
+noncomputable def fuelBounds (budget rounds : Nat)
+    (initial : List Guard × Profile) : Nat × Nat
+
+theorem stage_bounds (budget rounds : Nat) (initial : List Guard × Profile) :
+    let final := stage budget initial rounds
+    let bits := roomBits final.2
+    (∀ index, index ≤ rounds →
+      Le (stage budget initial index).2 final.2 ∧
+        (stage budget initial index).1 ⊆ final.1) ∧
+    ∀ index, index < rounds →
+      let entry := stage budget initial index
+      ∀ count mass, count ≤ entry.2.mass → mass ≤ entry.2.mass →
+        let output := C budget count mass entry
+        let scheduled := SourceCurrentOuterInitialSchedule.node output.1 budget entry
+        let joined : List Guard × Profile :=
+          (output.2.2.1 ++ scheduled.1, cover [output.2.2.2] scheduled.2)
+        Le joined.2 final.2 ∧ joined.1 ⊆ final.1 ∧ Room bits joined.2 ∧
+          output.1 ≤ (fuelBounds budget rounds initial).1 ∧
+          SourceCurrentOuterInitialFuel.nodeNeed output.1 budget entry ≤
+            (fuelBounds budget rounds initial).2

@@ -1,0 +1,78 @@
+--- templates/origins-check-full-public.original.py
++++ count-mass-check-full-public.py
+@@ -1,23 +1,27 @@
+-"""Read the completed-node Origins theorem without running Lean."""
++"""Read the complete count bound type and actual axiom subset without running Lean."""
+ from pathlib import Path
+ import hashlib
+ import json
+ import re
+ 
+ HERE = Path(__file__).resolve().parent
+-PREFIX = "warm-return-origins-"
+-NAMESPACE = "MicroCFTA.SourceCurrentOuterResourceWriters."
+-source = (HERE / "SourceCurrentOuterResourceWriters.lean").read_text()
++PREFIX = "count-mass-"
++NAMESPACE = "MicroCFTA.SourceCurrentPositiveQuotientCount."
++source = (HERE / "SourceCurrentPositiveQuotientCount.lean").read_text()
+ printer = (HERE / (PREFIX + "public-1.source.lean")).read_text()
+ raw = (HERE / (PREFIX + "public-1.log")).read_bytes()
+ log = raw.decode()
+-options = ["linter.all true", "pp.explicit true", "pp.fullNames true", "pp.proofs true",
++options = ["maxRecDepth 30000", "maxHeartbeats 0", "linter.all true", "pp.explicit true", "pp.fullNames true", "pp.proofs true",
+     "pp.proofs.threshold 254", "pp.universes true", "pp.deepTerms true", "pp.maxSteps 10000000"]
+ assert printer.startswith(source)
++expected_tail = "\n" + "".join("set_option " + option + "\n" for option in options)
++expected_tail += "".join(directive + NAMESPACE + "count_le_mass\n"
++    for directive in ["#check @", "#print ", "#print axioms "])
++assert printer[len(source):] == expected_tail
+ for option in options:
+     assert printer.count("set_option " + option) == 1, option
+ assert not re.search(r"sorryAx|\b(?:warning|error)(?:\([^)]*\))?:|failed to pretty print|pp\.rawOnError|maximum recursion depth|maximum number of heartbeats|⋯|…|\.\.\.", log)
+-heads = [("node_call", "theorem")]
++heads = [("count_le_mass", "theorem")]
+ markers = []
+ for head, _ in heads:
+     name = NAMESPACE + head
+@@ -27,7 +31,7 @@
+     assert len(found) == 1, (head, len(found))
+     markers.append(found[0])
+ normalize = lambda text: "".join(text.split())
+-private = ['Stores', 'reservation', 'same_edges', 'head_edge', 'NodeCallAt', 'NodeBodyAt', 'RowsAt', 'DescendantsAt', 'ChildrenAt', 'WalkAt', 'nodeCall_step', 'walk_step', 'children_step', 'descendants_step', 'rows_step', 'nodeBody_step', 'all_origins', 'one_step']
++private = ['candidates', 'candidates_complete', 'positivePaths', 'positivePaths_spec', 'rel_symm', 'rel_covers', 'consistent', 'root_separate', 'relationSetoid', 'candidates_length_le']
+ results = []
+ for index, (head, kind) in enumerate(heads):
+     name = NAMESPACE + head
+@@ -52,7 +56,7 @@
+     declared, body = declaration[:split.start()], declaration[split.end():]
+     assert normalize(checked) == normalize(declared), head
+     public_type = checked + declared
+-    for spelling in ["_private", "†", "✝"]:
++    for spelling in ["_private", "✝", "†", "‡"]:
+         assert spelling not in public_type, (head, "private TYPE spelling", spelling)
+     for helper in private:
+         assert NAMESPACE + helper not in checked + declared, (head, helper)
+@@ -63,15 +67,19 @@
+         axioms = {re.sub(r"\.\{[^}]*\}", "", item.strip()) for item in report.group(1).split(",") if item.strip()}
+     else:
+         axioms = set()
+-    assert axioms == {"propext", "Classical.choice", "Quot.sound"}, (head, axioms)
++    assert axioms <= {"propext", "Classical.choice", "Quot.sound"}, (head, axioms)
+     results.append(dict(head=name, kind=kind, check_print_type_identity=True,
+         checked_type_characters=len(checked), normalized_type_characters=len(normalize(checked)),
+         unique_complete_type_body_delimiter=True, actual_body_starts_with="fun ", body_characters=len(body),
+-        private_public_type_names=False, private_type_spellings_checked=["_private", "†", "✝"],
+-        private_namespace_helpers_checked=private, actual_axioms=sorted(axioms), actual_standard_three_axioms=True))
++        private_public_type_names=False, private_type_spellings_checked=["_private", "✝", "†", "‡"],
++        private_namespace_helpers_checked=private, actual_axioms=sorted(axioms),
++        actual_axioms_within_standard_allowed=True,
++        actual_standard_three_axioms=axioms == {"propext", "Classical.choice", "Quot.sound"}))
+ receipt = json.loads((HERE / (PREFIX + "public-1.json")).read_text())
+ assert receipt["exit_code"] == 0
+ print(json.dumps(dict(source_sha256=hashlib.sha256(source.encode()).hexdigest(), source_lines=len(source.splitlines()),
+     printer_sha256=hashlib.sha256(printer.encode()).hexdigest(), log_bytes=len(raw), log_sha256=hashlib.sha256(raw).hexdigest(),
+-    all_eight_printer_settings=True, no_omissions=True, heads=results, owned_public_job_exit=receipt["exit_code"],
++    all_eight_printer_settings=True, exact_module_and_diagnostic_tail=True,
++    diagnostic_limits_after_module_only=True, no_omissions=True, heads=results,
++    owned_public_job_exit=receipt["exit_code"],
+     new_metadata_proof_jobs=0), indent=2))

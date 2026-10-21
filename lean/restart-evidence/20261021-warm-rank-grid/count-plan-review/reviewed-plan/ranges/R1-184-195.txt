@@ -1,0 +1,12 @@
+  have counted := SymbolicDriver.relation_cardinality_le sources (targets.erase (toPath [])) (toPath [])
+    distinct relation total injective
+  refine ⟨Nat.le_trans counted List.length_erase_le, ?_⟩
+  intro nonplain
+  have rootPosition : [] ∈ positivePaths owner := positivePaths_spec.mpr
+    (.root rowIndex row selected nonplain)
+  have root : toPath [] ∈ targets := List.mem_eraseDups.mpr (List.mem_map.mpr ⟨[], rootPosition, rfl⟩)
+  have shorter := List.length_erase_of_mem root
+  have nonempty := List.length_pos_of_mem root
+  omega
+
+end MicroCFTA.SourceCurrentPositiveQuotientCount

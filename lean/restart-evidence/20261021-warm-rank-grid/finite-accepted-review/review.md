@@ -1,0 +1,7 @@
+[2026-10-21 21:06:12 CEST] Accepted FULL evidence and scope CLEAR for finite.
+
+I personally read every checked public TYPE: 6 lines for stage, 5 lines for fuelBounds, 126 lines for stage_bounds. I checked the actual zero-exit FULL receipt, fresh gate, 4 GiB max/high with swap zero, exact accepted source/printer prefix, complete raw hash, unique complete check/print TYPE identity, all print settings after the source, actual axiom reports and private TYPE markers. Every selected head has the actual standard three axioms. The raw proof bodies remain retained and traversed programmatically; I do not claim to have personally read them in full.
+
+The two definitions and stage_bounds state only finite numeric forecasts. Cases use each exact stage seed, cover BOTH C output and oldSchedule(C.W), and bound both alphabets, outer fuel and nodeNeed. No physical next packet, execution, convergence, cross-seed C monotonicity or Room at a common enlarged fuel is claimed. The original reader prefix-collision failure and empty-output extraction failure remain separate metadata evidence; the one-line exact directive repair changes no Lean source or FULL job.
+
+These are two copied existing ROOT jobs, not reviewer checks. Reviewer Lean/compiler/FULL/runtime/capped jobs: zero. Original failed checks remain in the separate repair audits and root evidence. This audit predates the aggregate official Audit and does not claim its outcome. Imported-foundation authorship boundaries remain as disclosed in the prior source reviews.

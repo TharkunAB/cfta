@@ -1,0 +1,12 @@
+/-- A list with no duplicates that is a subset of another list is no longer than
+that list. -/
+theorem Nodup.length_le_of_subset {l₁ l₂ : List α}
+    (h₁ : l₁.Nodup) (hsub : l₁ ⊆ l₂) : l₁.length ≤ l₂.length := by
+  classical
+  induction l₁ generalizing l₂ with
+  | nil => simp
+  | cons a t ih =>
+    rw [nodup_cons] at h₁
+    have ha : a ∈ l₂ := hsub (mem_cons_self ..)
+    have htsub : t ⊆ l₂.erase a := by
+      intro x hx

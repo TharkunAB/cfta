@@ -1,0 +1,5 @@
+theorem available (source : State Symbol Guard) (stored : Stored bound source)
+    (value : Value Symbol Guard) (known : Available source value) : InternedValueMass.value value ≤ bound := by
+  cases value with
+  | empty | reference => simpa only [InternedValueMass.value] using stored.positive
+  | node entry rows depth free | mu entry rows depth free | union entry rows depth free =>
