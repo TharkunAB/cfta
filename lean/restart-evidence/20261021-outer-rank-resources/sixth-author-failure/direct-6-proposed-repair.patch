@@ -1,0 +1,25 @@
+--- outer-rank-resources-direct-6.source.lean
++++ direct-6-proposed-repair.source.lean.txt
+@@ -124,10 +124,10 @@
+       ∀ a b, a ≤ count → b ≤ current.2.mass → Prod.Lex Nat.lt Nat.lt (a,b) (count,mass) →
+         Le (envelope budget a b current).2.2.2 (envelope budget count mass seed).2.2.2 := by
+   dsimp only
+-  intro k slotBound a b counts masses smaller
+   let all := images budget count mass
+   let prior := fold (row budget all) j (0,0,seed)
+-  let post := SourceCurrentOuterInitialSchedule.parent budget prior.2.2
++  generalize post_eq : SourceCurrentOuterInitialSchedule.parent budget prior.2.2 = post
++  intro k slotBound a b counts masses smaller
+   let current := fold (slot all) k (0,0,post)
+   let walked := fold (slot all) post.2.mass (0,0,post)
+   let completed := fold (row budget all) mass (0,0,seed)
+@@ -139,7 +139,8 @@
+     rw [fold_succ (slot all) k (0,0,post)] at suffix
+     exact suffix
+   have rebuilt : Kept walked.2.2 (row budget all prior).2.2 := by
+-    change Kept walked.2.2 (SourceCurrentOuterInitialSchedule.rebuild walked.2.2)
++    dsimp only [row]
++    rw [post_eq]
+     exact SourceCurrentOuterInitialSchedule.rebuild_ge _
+   have rows : Kept (row budget all prior).2.2 completed.2.2 := by
+     have suffix := prefix_kept (row budget all) (row_kept budget all)

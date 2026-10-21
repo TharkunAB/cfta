@@ -1,0 +1,21 @@
+  149         let request : NodeRequest := ⟨(descend start combined slot).1,child⟩
+  150         let before := (descend start combined slot).2
+  151         obtain ⟨next,final,currentSeed,_trace,post,_frame,_fits,_known,currentInputs,
+  152             _below,_alphabet,_room,_bounds,_carrier,_need⟩ :=
+  153           SourceCurrentOuterInitialPrefix.reached formulas solver seed childReached initial frame fits known inputs room
+  154         have ready : SourceCurrentOuterPrefixInvariants.NodeReady before request := currentInputs
+  155         obtain ⟨activatedContext,capturedGood,key,_cell⟩ :=
+  156           SourceCurrentAllocatedPartialCallSteps.node_start formulas solver post.context ready.1 ready.2 started
+  157         have checked := (beginNode_components request before).1
+  158         rw [started] at checked
+  159         dsimp only at checked
+  160         have requested : SourceCurrentOuterPrefixInvariants.NodeReady activated request := by
+  161           simpa only [SourceCurrentOuterPrefixInvariants.NodeReady,checked] using ready
+  162         have capturedReady : SourceCurrentOuterPrefixInvariants.NodeReady activated captured :=
+  163           ⟨capturedGood.inherited,capturedGood.input⟩
+  164         have same := same_request activatedContext captured request capturedReady requested key
+  165         have activationPast : Reached g s r e p h m c n budget first (.body childFuel captured activated) :=
+  166           childReached.snoc (.node_evaluate started)
+  167         have deeper := ih childFuel smaller (candidateFuel := candidateFuel) (owner := captured)
+  168           (candidate := candidate) (running := activated) (current := current) activationPast remaining
+  169         rw [same] at deeper

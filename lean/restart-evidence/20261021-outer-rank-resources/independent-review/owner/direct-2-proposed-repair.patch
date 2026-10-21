@@ -1,0 +1,17 @@
+--- outer-rank-resources-direct-2.source.lean
++++ direct-2-proposed-repair.source.lean.txt
+@@ -372,9 +372,12 @@
+                               change parentSeed.2.mass ≤ current.2.mass at base
+                               omega
+                             have member := image_member budget count mass current a b counts massBound smaller
+-                            have bounds := stage.2.2.2 index (by simp only [List.length_cons] at bound; omega)
++                            have slotBound : index < parentSeed.2.mass := by
++                              simp only [List.length_cons] at bound
++                              omega
++                            have bounds := stage.2.2.2 index (Nat.le_of_lt slotBound)
+                             have childRoom := currentRoom.mono
+-                              ((bounds.2.2.2.2 a b (by simp only [List.length_cons] at bound; omega) counts massBound smaller).2.2.1)
++                              ((bounds.2.2.2.2 a b slotBound counts massBound smaller).2.2.1)
+                             have descent := SourceCurrentOuterConstructorBounds.descend current.1 current.2 start
+                               (.live identity records) index numeric carrier
+                             have childReturned := ih walkFuel (by omega) (request := childRequest) (before := childBefore)

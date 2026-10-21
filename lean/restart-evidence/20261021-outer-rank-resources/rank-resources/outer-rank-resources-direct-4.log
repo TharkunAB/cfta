@@ -1,0 +1,1127 @@
+/tmp/mcfta-outer-rank-resources-proof/outer-rank-resources-direct-4.source.lean:118:0: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/mcfta-outer-rank-resources-proof/outer-rank-resources-direct-4.source.lean:403:32: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  slots (fold slots index (0, 0, parentSeed))
+in the target expression
+  Fits (slot all (fold slots index (0, 0, parentSeed))).snd.snd.snd middle.checked ∧
+    SourceEqualityAnnotationHeap.Heap
+      (fun guard => guard ∈ (slot all (fold slots index (0, 0, parentSeed))).snd.snd.fst)
+      middle.checked.native.machine.heap
+
+case cons.succ.refl
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+g s r e p h m c n budget : Nat
+first : Phase (bits + 2)
+inventory : Inventory
+memos : Memos
+rootSeed : List Guard × Profile
+initial : Context formulas solver inventory (caller first) memos
+frame : Frame formulas solver inventory (caller first).checked
+fits : Fits rootSeed.snd (caller first).checked
+known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ rootSeed.fst) (caller first).checked.native.machine.heap
+inputs : SourceCurrentOuterPrefixInvariants.Inputs first
+rootRoom : Room bits (SourceCurrentOuterInitialPrefix.forecast budget first rootSeed).snd
+normal : SourceCurrentRequiredUnionNormal.UnionNormal (caller first).checked.native.machine.heap
+supported :
+  SourceCurrentNativeRequestPositivePositions.Support (caller first).checked.native.machine.heap
+    (caller first).checked.native
+causal : SourceCurrentNativeMuPublication.History empty (caller first).checked.native.machine.heap
+merged :
+  SourceCurrentConstrainedCapMemoMerge.Stored (fun guard => SourceMemoGate.plain guard = true) (caller first).merge
+positiveMemo : SourceCurrentMergePositivePosition.Support (caller first).merge
+origins : SourceCurrentResourceParentWriters.Origins formulas solver (caller first)
+resources :
+  ∀ {phase : Phase (bits + 2)} (cut : Reached g s r e p h m c n budget first phase),
+    ∃ next final current,
+      SourceCurrentOuterInitialPrefix.SeedTrace cut rootSeed current ∧
+        SourceCurrentAllocatedPartialInvariant.Post formulas solver next (caller first) (caller phase) final ∧
+          Frame formulas solver next (caller phase).checked ∧
+            Fits current.snd (caller phase).checked ∧
+              SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ current.fst)
+                  (caller phase).checked.native.machine.heap ∧
+                SourceCurrentOuterPrefixInvariants.Inputs phase ∧
+                  Le (SourceCurrentOuterInitialPrefix.forecast budget phase current).snd
+                      (SourceCurrentOuterInitialPrefix.forecast budget first rootSeed).snd ∧
+                    (SourceCurrentOuterInitialPrefix.forecast budget phase current).fst ⊆
+                        (SourceCurrentOuterInitialPrefix.forecast budget first rootSeed).fst ∧
+                      Room bits (SourceCurrentOuterInitialPrefix.forecast budget phase current).snd ∧
+                        Fits (SourceCurrentOuterInitialPrefix.forecast budget first rootSeed).snd
+                            (caller phase).checked ∧
+                          SourceEqualityAnnotationHeap.Heap
+                              (fun guard =>
+                                guard ∈ (SourceCurrentOuterInitialPrefix.forecast budget first rootSeed).fst)
+                              (caller phase).checked.native.machine.heap ∧
+                            SourceCurrentOuterInitialFuel.phaseNeed budget phase current ≤
+                              SourceCurrentOuterInitialFuel.phaseNeed budget first rootSeed
+widen :
+  ∀ {one two : List Guard × Profile} {state : SourceEqualityNativeDemand.State (bits + 2)},
+    Kept one two →
+      Fits one.snd state →
+        SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ one.fst) state.native.machine.heap →
+          Fits two.snd state ∧
+            SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ two.fst) state.native.machine.heap
+before : Caller (bits + 2)
+seed : List Guard × Profile
+currentFits : Fits seed.snd before.checked
+currentKnown : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.fst) before.checked.native.machine.heap
+iv : Inventory
+ms : Memos
+old : List Guard × Profile
+handle : Nat
+running : Caller (bits + 2)
+bodyContext : Context formulas solver iv running ms
+checked : running.checked = before.checked
+runningFits : Fits seed.snd running.checked
+runningKnown : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.fst) running.checked.native.machine.heap
+inherited : SourceEqualityConstraintAllocation.Value
+entry : Interned InternedBinderProtocol.NodeKey
+originals : List Edge
+depth : Nat
+free : List InternedBinderProtocol.Reference
+currentRoom :
+  Room bits
+    (envelope budget
+            (rankCount
+              (Option.getD { inherited := inherited, value := Value.node entry originals depth free }.inherited.payload
+                [])
+              { inherited := inherited, value := Value.node entry originals depth free }.value)
+            (massOf { inherited := inherited, value := Value.node entry originals depth free }.value) seed).snd.snd.snd
+ready :
+  SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints
+      { inherited := inherited, value := Value.node entry originals depth free }.inherited ∧
+    Available before.checked.native.machine.heap
+      { inherited := inherited, value := Value.node entry originals depth free }.value
+requested :
+  SourceCurrentOuterPrefixInvariants.NodeReady running
+    { inherited := inherited, value := Value.node entry originals depth free }
+started :
+  beginNode { inherited := inherited, value := Value.node entry originals depth free } before =
+    (handle,
+      FlatMemoThunk.Observation.evaluate { inherited := inherited, value := Value.node entry originals depth free },
+      running)
+owner :
+  SourceCurrentAllocatedPartialMemoSound.NodeGood formulas solver running.checked
+    { request := { inherited := inherited, value := Value.node entry originals depth free },
+      status := FlatMemoThunk.Status.evaluating }
+key :
+  { inherited := inherited, value := Value.node entry originals depth free }.key =
+    { inherited := inherited, value := Value.node entry originals depth free }.key
+_cell :
+  running.nodeResults.cells handle =
+    some
+      { request := { inherited := inherited, value := Value.node entry originals depth free },
+        status := FlatMemoThunk.Status.evaluating }
+kept :
+  massOf { inherited := inherited, value := Value.node entry originals depth free }.value + 1 ≤
+      (envelope budget
+          (rankCount
+            (Option.getD { inherited := inherited, value := Value.node entry originals depth free }.inherited.payload
+              [])
+            { inherited := inherited, value := Value.node entry originals depth free }.value)
+          (massOf { inherited := inherited, value := Value.node entry originals depth free }.value) seed).fst ∧
+    Le seed.snd
+        (envelope budget
+                (rankCount
+                  (Option.getD
+                    { inherited := inherited, value := Value.node entry originals depth free }.inherited.payload [])
+                  { inherited := inherited, value := Value.node entry originals depth free }.value)
+                (massOf { inherited := inherited, value := Value.node entry originals depth free }.value)
+                seed).snd.snd.snd ∧
+      seed.fst ⊆
+        (envelope budget
+                (rankCount
+                  (Option.getD
+                    { inherited := inherited, value := Value.node entry originals depth free }.inherited.payload [])
+                  { inherited := inherited, value := Value.node entry originals depth free }.value)
+                (massOf { inherited := inherited, value := Value.node entry originals depth free }.value)
+                seed).snd.snd.fst
+terminal :
+  Fits
+      (envelope budget
+              (rankCount
+                (Option.getD
+                  { inherited := inherited, value := Value.node entry originals depth free }.inherited.payload [])
+                { inherited := inherited, value := Value.node entry originals depth free }.value)
+              (massOf { inherited := inherited, value := Value.node entry originals depth free }.value)
+              seed).snd.snd.snd
+      running.checked ∧
+    SourceEqualityAnnotationHeap.Heap
+      (fun guard =>
+        guard ∈
+          (envelope budget
+                  (rankCount
+                    (Option.getD
+                      { inherited := inherited, value := Value.node entry originals depth free }.inherited.payload [])
+                    { inherited := inherited, value := Value.node entry originals depth free }.value)
+                  (massOf { inherited := inherited, value := Value.node entry originals depth free }.value)
+                  seed).snd.snd.fst)
+      running.checked.native.machine.heap
+bodyFuel : Nat
+ih :
+  ∀ (m_1 : Nat),
+    m_1 < bodyFuel + 1 →
+      ∀ {request : NodeRequest} {before after : Caller (bits + 2)} {result : Node} (seed : List Guard × Profile),
+        Reached g s r e p h m c n budget first (Phase.node m_1 request before) →
+          Fits seed.snd before.checked →
+            SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.fst) before.checked.native.machine.heap →
+              Room bits
+                  (envelope budget (rankCount (Option.getD request.inherited.payload []) request.value)
+                          (massOf request.value) seed).snd.snd.snd →
+                nodeCall m_1 g s r e p h m c n budget request before = Outcome.done result after →
+                  let output :=
+                    envelope budget (rankCount (Option.getD request.inherited.payload []) request.value)
+                      (massOf request.value) seed;
+                  Fits output.snd.snd.snd after.checked ∧
+                    SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ output.snd.snd.fst)
+                      after.checked.native.machine.heap
+past :
+  Reached g s r e p h m c n budget first
+    (Phase.node (bodyFuel + 1) { inherited := inherited, value := Value.node entry originals depth free } before)
+_trace : SourceCurrentOuterInitialPrefix.SeedTrace past rootSeed old
+post :
+  SourceCurrentAllocatedPartialInvariant.Post formulas solver iv (caller first)
+    (caller
+      (Phase.node (bodyFuel + 1) { inherited := inherited, value := Value.node entry originals depth free } before))
+    ms
+fr :
+  Frame formulas solver iv
+    (caller
+        (Phase.node (bodyFuel + 1) { inherited := inherited, value := Value.node entry originals depth free }
+          before)).checked
+_ff :
+  Fits old.snd
+    (caller
+        (Phase.node (bodyFuel + 1) { inherited := inherited, value := Value.node entry originals depth free }
+          before)).checked
+_kk :
+  SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ old.fst)
+    (caller
+              (Phase.node (bodyFuel + 1) { inherited := inherited, value := Value.node entry originals depth free }
+                before)).checked.native.machine.heap
+_below :
+  Le
+    (SourceCurrentOuterInitialPrefix.forecast budget
+        (Phase.node (bodyFuel + 1) { inherited := inherited, value := Value.node entry originals depth free } before)
+        old).snd
+    (SourceCurrentOuterInitialPrefix.forecast budget first rootSeed).snd
+_alphabet :
+  (SourceCurrentOuterInitialPrefix.forecast budget
+        (Phase.node (bodyFuel + 1) { inherited := inherited, value := Value.node entry originals depth free } before)
+        old).fst ⊆
+    (SourceCurrentOuterInitialPrefix.forecast budget first rootSeed).fst
+_room :
+  Room bits
+    (SourceCurrentOuterInitialPrefix.forecast budget
+        (Phase.node (bodyFuel + 1) { inherited := inherited, value := Value.node entry originals depth free } before)
+        old).snd
+_rest :
+  Fits (SourceCurrentOuterInitialPrefix.forecast budget first rootSeed).snd
+      (caller
+          (Phase.node (bodyFuel + 1) { inherited := inherited, value := Value.node entry originals depth free }
+            before)).checked ∧
+    SourceEqualityAnnotationHeap.Heap
+        (fun guard => guard ∈ (SourceCurrentOuterInitialPrefix.forecast budget first rootSeed).fst)
+        (caller
+                  (Phase.node (bodyFuel + 1) { inherited := inherited, value := Value.node entry originals depth free }
+                    before)).checked.native.machine.heap ∧
+      SourceCurrentOuterInitialFuel.phaseNeed budget
+          (Phase.node (bodyFuel + 1) { inherited := inherited, value := Value.node entry originals depth free } before)
+          old ≤
+        SourceCurrentOuterInitialFuel.phaseNeed budget first rootSeed
+bodyPast :
+  Reached g s r e p h m c n budget first
+    (Phase.body (bodyFuel + 1) { inherited := inherited, value := Value.node entry originals depth free } running)
+results : List Edge
+rowEnd : Caller (bits + 2)
+rowsDone : rows bodyFuel g s r e p h m c n budget inherited originals running = Outcome.done results rowEnd
+observed :
+  ((nodeBody (bodyFuel + 1) g s r e p h m c n budget
+          { inherited := inherited, value := Value.node entry originals depth free } running).bind
+      fun result after => Outcome.done result (finishNode handle result after)) =
+    Outcome.done
+      (SourceCurrentAllocatedRawRebuild.modify (Value.node entry originals depth free) originals results
+          rowEnd.checked).fst
+      (finishNode handle
+        (SourceCurrentAllocatedRawRebuild.modify (Value.node entry originals depth free) originals results
+            rowEnd.checked).fst
+        (advance rowEnd
+          (SourceCurrentAllocatedRawRebuild.modify (Value.node entry originals depth free) originals results
+              rowEnd.checked).snd
+          rowEnd.fourth rowEnd.merge))
+bodyDone :
+  ((rows bodyFuel g s r e p h m c n budget inherited originals running).bind fun results after =>
+      Outcome.done
+        (SourceCurrentAllocatedRawRebuild.modify (Value.node entry originals depth free) originals results
+            after.checked).fst
+        (advance after
+          (SourceCurrentAllocatedRawRebuild.modify (Value.node entry originals depth free) originals results
+              after.checked).snd
+          after.fourth after.merge)) =
+    Outcome.done
+      (SourceCurrentAllocatedRawRebuild.modify (Value.node entry originals depth free) originals results
+          rowEnd.checked).fst
+      (advance rowEnd
+        (SourceCurrentAllocatedRawRebuild.modify (Value.node entry originals depth free) originals results
+            rowEnd.checked).snd
+        rowEnd.fourth rowEnd.merge)
+count : Nat := rankCount (Option.getD inherited.payload []) (Value.node entry originals depth free)
+mass : Nat := massOf (Value.node entry originals depth free)
+all : List Guard × Profile → List (Nat × Nat × List Guard × Profile) := images budget count mass
+rowStep : Nat × Nat × List Guard × Profile → Nat × Nat × List Guard × Profile := row budget all
+rowSeed : Nat → List Guard × Profile := fun j => (fold rowStep j (0, 0, seed)).snd.snd
+complete : List Guard × Profile := rowSeed mass
+original : Edge
+rest✝ : List Edge
+tailRows :
+  ∀ (rowFuel j : Nat) (start finish : Caller (bits + 2)) (output : List Edge),
+    rowFuel ≤ bodyFuel →
+      j + rest✝.length ≤ mass →
+        Reached g s r e p h m c n budget
+            (Phase.body (bodyFuel + 1) { inherited := inherited, value := Value.node entry originals depth free }
+              running)
+            (Phase.rows rowFuel inherited rest✝ start) →
+          Fits (rowSeed j).snd start.checked →
+            SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ (rowSeed j).fst) start.checked.native.machine.heap →
+              rows rowFuel g s r e p h m c n budget inherited rest✝ start = Outcome.done output finish →
+                Fits complete.snd finish.checked ∧
+                  SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ complete.fst)
+                    finish.checked.native.machine.heap
+j : Nat
+start✝ finish✝ : Caller (bits + 2)
+bound✝ : j + (original :: rest✝).length ≤ mass
+numeric✝ : Fits (rowSeed j).snd start✝.checked
+carrier✝ : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ (rowSeed j).fst) start✝.checked.native.machine.heap
+rowFuel : Nat
+small : rowFuel + 1 ≤ bodyFuel
+inside✝ :
+  Reached g s r e p h m c n budget
+    (Phase.body (bodyFuel + 1) { inherited := inherited, value := Value.node entry originals depth free } running)
+    (Phase.rows (rowFuel + 1) inherited (original :: rest✝) start✝)
+parented : Edge
+afterParent : Caller (bits + 2)
+parentDone :
+  edgeCall rowFuel g s r e p h m c n budget { inherited := inherited, value := original } start✝ =
+    Outcome.done parented afterParent
+restResults : List Edge
+prior : Nat × Nat × List Guard × Profile := fold rowStep j (0, 0, seed)
+parentSeed : List Guard × Profile := SourceCurrentOuterInitialSchedule.parent budget prior.snd.snd
+slots : Nat × Nat × List Guard × Profile → Nat × Nat × List Guard × Profile := slot all
+slotSeed : Nat → List Guard × Profile := fun k => (fold slots k (0, 0, parentSeed)).snd.snd
+fullSlots : List Guard × Profile := slotSeed parentSeed.snd.mass
+rowBound : j < mass
+stage :
+  have prior :=
+    List.foldl
+      (fun acc x =>
+        have post := SourceCurrentOuterInitialSchedule.parent budget acc.snd.snd;
+        have walked :=
+          List.foldl
+            (fun acc x =>
+              have xs :=
+                (fun current =>
+                    List.map (fun r => envelope budget r.fst r.snd current)
+                      (List.filter (fun r => decide (r.fst < count ∨ r.fst = count ∧ r.snd < mass))
+                        (List.flatMap (fun a => List.map (fun b => (a, b)) (List.range (current.snd.mass + 1)))
+                          (List.range (count + 1)))))
+                  acc.snd.snd;
+              (acc.fst + 1 + maximum (List.map (fun x => x.fst) xs),
+                max acc.snd.fst (maximum (List.map (fun x => x.snd.fst) xs)),
+                acc.snd.snd.fst ++ List.flatMap (fun x => x.snd.snd.fst) xs,
+                cover (List.map (fun x => x.snd.snd.snd) xs) acc.snd.snd.snd))
+            (0, 0, post) (List.range post.snd.mass);
+        (acc.fst + 1 + walked.fst,
+          max acc.snd.fst
+            (max (SourceCurrentParentUniformEnvelope.fuel budget acc.snd.snd.fst acc.snd.snd.snd) walked.snd.fst),
+          SourceCurrentOuterInitialSchedule.rebuild walked.snd.snd))
+      (0, 0, seed) (List.range j);
+  have post := SourceCurrentOuterInitialSchedule.parent budget prior.snd.snd;
+  SourceCurrentParentUniformEnvelope.fuel budget prior.snd.snd.fst prior.snd.snd.snd ≤
+      (envelope budget count mass seed).snd.fst ∧
+    Le post.snd (envelope budget count mass seed).snd.snd.snd ∧
+      post.fst ⊆ (envelope budget count mass seed).snd.snd.fst ∧
+        ∀ (slotIndex : Nat),
+          slotIndex ≤ post.snd.mass →
+            have current :=
+              List.foldl
+                (fun acc x =>
+                  have xs :=
+                    (fun current =>
+                        List.map (fun r => envelope budget r.fst r.snd current)
+                          (List.filter (fun r => decide (r.fst < count ∨ r.fst = count ∧ r.snd < mass))
+                            (List.flatMap (fun a => List.map (fun b => (a, b)) (List.range (current.snd.mass + 1)))
+                              (List.range (count + 1)))))
+                      acc.snd.snd;
+                  (acc.fst + 1 + maximum (List.map (fun x => x.fst) xs),
+                    max acc.snd.fst (maximum (List.map (fun x => x.snd.fst) xs)),
+                    acc.snd.snd.fst ++ List.flatMap (fun x => x.snd.snd.fst) xs,
+                    cover (List.map (fun x => x.snd.snd.snd) xs) acc.snd.snd.snd))
+                (0, 0, post) (List.range slotIndex);
+            prior.fst + current.fst + 2 ≤ (envelope budget count mass seed).fst ∧
+              current.snd.fst ≤ (envelope budget count mass seed).snd.fst ∧
+                Le current.snd.snd.snd (envelope budget count mass seed).snd.snd.snd ∧
+                  current.snd.snd.fst ⊆ (envelope budget count mass seed).snd.snd.fst ∧
+                    ∀ (childCount childMass : Nat),
+                      slotIndex < post.snd.mass →
+                        childCount ≤ count →
+                          childMass ≤ current.snd.snd.snd.mass →
+                            Prod.Lex Nat.lt Nat.lt (childCount, childMass) (count, mass) →
+                              have child := envelope budget childCount childMass current.snd.snd;
+                              child.fst + 3 + j + slotIndex ≤ (envelope budget count mass seed).fst ∧
+                                child.snd.fst ≤ (envelope budget count mass seed).snd.fst ∧
+                                  Le child.snd.snd.snd (envelope budget count mass seed).snd.snd.snd ∧
+                                    child.snd.snd.fst ⊆ (envelope budget count mass seed).snd.snd.fst
+rowIv : Inventory
+rowMs : Memos
+rowOld : List Guard × Profile
+_t : SourceCurrentOuterInitialPrefix.SeedTrace ⋯ rootSeed rowOld
+rowPost :
+  SourceCurrentAllocatedPartialInvariant.Post formulas solver rowIv (caller first)
+    (caller (Phase.rows (rowFuel + 1) inherited (original :: rest✝) start✝)) rowMs
+rowFrame : Frame formulas solver rowIv (caller (Phase.rows (rowFuel + 1) inherited (original :: rest✝) start✝)).checked
+_nf : Fits rowOld.snd (caller (Phase.rows (rowFuel + 1) inherited (original :: rest✝) start✝)).checked
+_nk :
+  SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ rowOld.fst)
+    (caller (Phase.rows (rowFuel + 1) inherited (original :: rest✝) start✝)).checked.native.machine.heap
+rowInputs : SourceCurrentOuterPrefixInvariants.Inputs (Phase.rows (rowFuel + 1) inherited (original :: rest✝) start✝)
+_b :
+  Le
+    (SourceCurrentOuterInitialPrefix.forecast budget (Phase.rows (rowFuel + 1) inherited (original :: rest✝) start✝)
+        rowOld).snd
+    (SourceCurrentOuterInitialPrefix.forecast budget first rootSeed).snd
+_a :
+  (SourceCurrentOuterInitialPrefix.forecast budget (Phase.rows (rowFuel + 1) inherited (original :: rest✝) start✝)
+        rowOld).fst ⊆
+    (SourceCurrentOuterInitialPrefix.forecast budget first rootSeed).fst
+_r :
+  Room bits
+    (SourceCurrentOuterInitialPrefix.forecast budget (Phase.rows (rowFuel + 1) inherited (original :: rest✝) start✝)
+        rowOld).snd
+right✝ :
+  Fits (SourceCurrentOuterInitialPrefix.forecast budget first rootSeed).snd
+      (caller (Phase.rows (rowFuel + 1) inherited (original :: rest✝) start✝)).checked ∧
+    SourceEqualityAnnotationHeap.Heap
+        (fun guard => guard ∈ (SourceCurrentOuterInitialPrefix.forecast budget first rootSeed).fst)
+        (caller (Phase.rows (rowFuel + 1) inherited (original :: rest✝) start✝)).checked.native.machine.heap ∧
+      SourceCurrentOuterInitialFuel.phaseNeed budget (Phase.rows (rowFuel + 1) inherited (original :: rest✝) start✝)
+          rowOld ≤
+        SourceCurrentOuterInitialFuel.phaseNeed budget first rootSeed
+parentIv : Inventory
+parentMs : Memos
+parentReceipt :
+  SourceCurrentEdgeCallNumeric.Receipt formulas solver parentIv prior.snd.snd.snd budget
+    { inherited := inherited, value := original } start✝ rowMs parented afterParent parentMs
+parentFits :
+  Fits (SourceCurrentParentUniformEnvelope.profile budget prior.snd.snd.fst prior.snd.snd.snd) afterParent.checked
+parentKnown :
+  SourceEqualityAnnotationHeap.Heap
+    (fun guard => guard ∈ SourceCurrentParentUniformGuardAlphabet.forecast budget prior.snd.snd.fst prior.snd.snd.snd)
+    afterParent.checked.native.machine.heap
+inheritedAfter :
+  SourceEqualityConstraintAllocation.Ready
+    (SourceCurrentAllocatedNativeEffects.physical afterParent.checked).equality.constraints inherited
+prefixFrame : Frame formulas solver parentIv (prefixState afterParent parented inherited).checked
+prefixFits : Fits parentSeed.snd (prefixState afterParent parented inherited).checked
+prefixPost :
+  SourceCurrentAllocatedPartialInvariant.Post formulas solver parentIv afterParent
+    (prefixState afterParent parented inherited) parentMs
+childrenResult : List Node
+childEnd : Caller (bits + 2)
+done✝ :
+  ((edgeCall rowFuel g s r e p h m c n budget { inherited := inherited, value := original } start✝).bind
+      fun narrowed middle =>
+      (descendants rowFuel g s r e p h m c n budget inherited narrowed middle).bind fun result after =>
+        (rows rowFuel g s r e p h m c n budget inherited rest✝ after).bind fun results final =>
+          Outcome.done (result :: results) final) =
+    Outcome.done ((SourceCurrentAllocatedRawRebuild.edge parented childrenResult childEnd.checked).fst :: restResults)
+      finish✝
+later✝¹ :
+  ((descendants rowFuel g s r e p h m c n budget inherited parented afterParent).bind fun result after =>
+      (rows rowFuel g s r e p h m c n budget inherited rest✝ after).bind fun results final =>
+        Outcome.done (result :: results) final) =
+    Outcome.done ((SourceCurrentAllocatedRawRebuild.edge parented childrenResult childEnd.checked).fst :: restResults)
+      finish✝
+tailDone✝ :
+  rows rowFuel g s r e p h m c n budget inherited rest✝
+      (advance childEnd (SourceCurrentAllocatedRawRebuild.edge parented childrenResult childEnd.checked).snd
+        childEnd.fourth childEnd.merge) =
+    Outcome.done restResults finish✝
+later✝ :
+  ((rows rowFuel g s r e p h m c n budget inherited rest✝
+          (advance childEnd (SourceCurrentAllocatedRawRebuild.edge parented childrenResult childEnd.checked).snd
+            childEnd.fourth childEnd.merge)).bind
+      fun results final =>
+      Outcome.done ((SourceCurrentAllocatedRawRebuild.edge parented childrenResult childEnd.checked).fst :: results)
+        final) =
+    Outcome.done ((SourceCurrentAllocatedRawRebuild.edge parented childrenResult childEnd.checked).fst :: restResults)
+      finish✝
+descObserved :
+  descendants rowFuel g s r e p h m c n budget inherited parented afterParent =
+    Outcome.done (SourceCurrentAllocatedRawRebuild.edge parented childrenResult childEnd.checked).fst
+      (advance childEnd (SourceCurrentAllocatedRawRebuild.edge parented childrenResult childEnd.checked).snd
+        childEnd.fourth childEnd.merge)
+prefixKnown :
+  SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ parentSeed.fst)
+    (prefixState afterParent parented inherited).checked.native.machine.heap
+childMass :
+  1 + InternedValueMass.values parented.children ≤
+      (SourceCurrentParentUniformEnvelope.profile budget prior.snd.snd.fst prior.snd.snd.snd).mass ∧
+    parented.children.length <
+        (SourceCurrentParentUniformEnvelope.profile budget prior.snd.snd.fst prior.snd.snd.snd).mass ∧
+      ∀ (child : Node),
+        child ∈ parented.children →
+          massOf child < (SourceCurrentParentUniformEnvelope.profile budget prior.snd.snd.fst prior.snd.snd.snd).mass
+identity : Nat
+records : List SourceEqualityClassOrder.Record
+prefixReceipt :
+  SourceCurrentAllocatedInheritedPrefix.Receipt formulas solver parentIv parented.entry.key.constraint inherited
+    afterParent.checked (SourceEqualityConstraintAllocation.Value.live identity records)
+combinedAt :
+  (SourceCurrentAllocatedInheritedPrefix.run parented.entry.key.constraint inherited
+        afterParent.checked.operations).fst =
+    Except.ok (some (SourceEqualityConstraintAllocation.Value.live identity records))
+descDone :
+  ((SourceCurrentAllocatedPartialWorker.children rowFuel g s r e p h m c n budget
+          (SourceEqualityConstraintAllocation.Value.live identity records) parented.children
+          (advance afterParent
+            (SourceCurrentAllocatedQueryMemo.advancePhysical afterParent.checked
+              { heap := afterParent.checked.native.machine.heap,
+                equality :=
+                  (SourceCurrentAllocatedInheritedPrefix.run parented.entry.key.constraint inherited
+                      afterParent.checked.operations).snd })
+            afterParent.fourth afterParent.merge)).bind
+      fun results after =>
+      Outcome.done (SourceCurrentAllocatedRawRebuild.edge parented results after.checked).fst
+        (advance after (SourceCurrentAllocatedRawRebuild.edge parented results after.checked).snd after.fourth
+          after.merge)) =
+    Outcome.done (SourceCurrentAllocatedRawRebuild.edge parented childrenResult childEnd.checked).fst
+      (advance childEnd (SourceCurrentAllocatedRawRebuild.edge parented childrenResult childEnd.checked).snd
+        childEnd.fourth childEnd.merge)
+childInside :
+  Reached g s r e p h m c n budget
+    (Phase.body (bodyFuel + 1) { inherited := inherited, value := Value.node entry originals depth free } running)
+    (Phase.children rowFuel (SourceEqualityConstraintAllocation.Value.live identity records) parented.children
+      (prefixState afterParent parented inherited))
+childDone :
+  walk rowFuel g s r e p h m c n budget (SourceEqualityConstraintAllocation.Value.live identity records) 0
+      parented.children (prefixState afterParent parented inherited) =
+    Outcome.done childrenResult childEnd
+value : Node
+rest : List Node
+tailWalk :
+  ∀ (walkFuel index : Nat) (start finish : Caller (bits + 2)) (output : List Node),
+    walkFuel ≤ rowFuel →
+      index + rest.length ≤ parentSeed.snd.mass →
+        (∀ (value : Node), value ∈ rest → massOf value < parentSeed.snd.mass) →
+          Reached g s r e p h m c n budget
+              (Phase.body (bodyFuel + 1) { inherited := inherited, value := Value.node entry originals depth free }
+                running)
+              (Phase.walk walkFuel (SourceEqualityConstraintAllocation.Value.live identity records) index rest start) →
+            Fits (slotSeed index).snd start.checked →
+              SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ (slotSeed index).fst)
+                  start.checked.native.machine.heap →
+                walk walkFuel g s r e p h m c n budget (SourceEqualityConstraintAllocation.Value.live identity records)
+                      index rest start =
+                    Outcome.done output finish →
+                  Fits fullSlots.snd finish.checked ∧
+                    SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ fullSlots.fst)
+                      finish.checked.native.machine.heap
+index : Nat
+start finish : Caller (bits + 2)
+bound : index + (value :: rest).length ≤ parentSeed.snd.mass
+masses : ∀ (value_1 : Node), value_1 ∈ value :: rest → massOf value_1 < parentSeed.snd.mass
+numeric : Fits (slotSeed index).snd start.checked
+carrier :
+  SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ (slotSeed index).fst) start.checked.native.machine.heap
+walkFuel : Nat
+lower : walkFuel + 1 ≤ rowFuel
+inside :
+  Reached g s r e p h m c n budget
+    (Phase.body (bodyFuel + 1) { inherited := inherited, value := Value.node entry originals depth free } running)
+    (Phase.walk (walkFuel + 1) (SourceEqualityConstraintAllocation.Value.live identity records) index (value :: rest)
+      start)
+headValue : Node
+middle : Caller (bits + 2)
+headDone :
+  nodeCall walkFuel g s r e p h m c n budget
+      { inherited := (descend start (SourceEqualityConstraintAllocation.Value.live identity records) index).fst,
+        value := value }
+      (descend start (SourceEqualityConstraintAllocation.Value.live identity records) index).snd =
+    Outcome.done headValue middle
+tailValue : List Node
+done :
+  ((nodeCall walkFuel g s r e p h m c n budget
+          { inherited := (descend start (SourceEqualityConstraintAllocation.Value.live identity records) index).fst,
+            value := value }
+          (descend start (SourceEqualityConstraintAllocation.Value.live identity records) index).snd).bind
+      fun result middle =>
+      (walk walkFuel g s r e p h m c n budget (SourceEqualityConstraintAllocation.Value.live identity records)
+            (index + 1) rest middle).bind
+        fun results after => Outcome.done (result :: results) after) =
+    Outcome.done (headValue :: tailValue) finish
+later :
+  ((walk walkFuel g s r e p h m c n budget (SourceEqualityConstraintAllocation.Value.live identity records) (index + 1)
+          rest middle).bind
+      fun results after => Outcome.done (headValue :: results) after) =
+    Outcome.done (headValue :: tailValue) finish
+tailDone :
+  walk walkFuel g s r e p h m c n budget (SourceEqualityConstraintAllocation.Value.live identity records) (index + 1)
+      rest middle =
+    Outcome.done tailValue finish
+current : List Guard × Profile := slotSeed index
+childRequest : NodeRequest :=
+  { inherited := (descend start (SourceEqualityConstraintAllocation.Value.live identity records) index).fst,
+    value := value }
+childBefore : Caller (bits + 2) :=
+  (descend start (SourceEqualityConstraintAllocation.Value.live identity records) index).snd
+a : Nat := rankCount (Option.getD childRequest.inherited.payload []) value
+b : Nat := massOf value
+childPath :
+  Reached g s r e p h m c n budget
+    (Phase.body (bodyFuel + 1) { inherited := inherited, value := Value.node entry originals depth free } running)
+    (Phase.node walkFuel
+      { inherited := (descend start (SourceEqualityConstraintAllocation.Value.live identity records) index).fst,
+        value := value }
+      (descend start (SourceEqualityConstraintAllocation.Value.live identity records) index).snd)
+smaller :
+  Prod.Lex Nat.lt Nat.lt
+    (rankCount
+        (Option.getD
+          { inherited := (descend start (SourceEqualityConstraintAllocation.Value.live identity records) index).fst,
+                value := value }.inherited.payload
+          [])
+        { inherited := (descend start (SourceEqualityConstraintAllocation.Value.live identity records) index).fst,
+            value := value }.value,
+      massOf
+        { inherited := (descend start (SourceEqualityConstraintAllocation.Value.live identity records) index).fst,
+            value := value }.value)
+    (rankCount
+        (Option.getD { inherited := inherited, value := Value.node entry originals depth free }.inherited.payload [])
+        { inherited := inherited, value := Value.node entry originals depth free }.value,
+      massOf { inherited := inherited, value := Value.node entry originals depth free }.value)
+counts : a ≤ count
+massBound : b ≤ current.snd.mass
+member : envelope budget a b current ∈ images budget count mass current
+slotBound : index < parentSeed.snd.mass
+childRoom : Room bits (envelope budget a b current).snd.snd.snd
+descent :
+  have after := (descend start (SourceEqualityConstraintAllocation.Value.live identity records) index).snd;
+  Fits current.snd after.checked ∧
+    SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ current.fst) after.checked.native.machine.heap ∧
+      after.checked.native.machine.heap = start.checked.native.machine.heap ∧
+        after.checked.native.machine.domains = start.checked.native.machine.domains
+childReturned :
+  let output :=
+    envelope budget (rankCount (Option.getD childRequest.inherited.payload []) childRequest.value)
+      (massOf childRequest.value) current;
+  Fits output.snd.snd.snd middle.checked ∧
+    SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ output.snd.snd.fst) middle.checked.native.machine.heap
+next :
+  Fits (slot all (fold slots index (0, 0, parentSeed))).snd.snd.snd middle.checked ∧
+    SourceEqualityAnnotationHeap.Heap
+      (fun guard => guard ∈ (slot all (fold slots index (0, 0, parentSeed))).snd.snd.fst)
+      middle.checked.native.machine.heap
+⊢ Fits fullSlots.snd finish.checked ∧
+    SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ fullSlots.fst) finish.checked.native.machine.heap
+/tmp/mcfta-outer-rank-resources-proof/outer-rank-resources-direct-4.source.lean:409:53: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  z ≥ 0
+  y ≥ 0
+  y - z ≥ 1
+  x ≥ 0
+  w ≥ 0
+  w - x ≥ 1
+  w - y ≥ 1
+  v ≥ 0
+  u ≥ 0
+  t ≥ 0
+  t - u ≥ 0
+  q ≥ 0
+  o ≥ 0
+  o - q ≥ 1
+  l ≥ 0
+  k ≥ 0
+  i ≥ 0
+  i - k ≥ 1
+  i - k - l ≥ 0
+  f ≥ 0
+  d ≥ 0
+  d - f ≥ 0
+  d - v ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 1
+where
+ a := ↑(envelope budget
+      (rankCount
+        (Option.getD { inherited := inherited, value := Value.node entry originals depth free }.inherited.payload [])
+        { inherited := inherited, value := Value.node entry originals depth free }.value)
+      (massOf { inherited := inherited, value := Value.node entry originals depth free }.value) seed).fst
+ b := ↑(massOf { inherited := inherited, value := Value.node entry originals depth free }.value)
+ d := ↑(SourceCurrentOuterInitialFuel.phaseNeed budget first rootSeed)
+ f := ↑(SourceCurrentOuterInitialFuel.phaseNeed budget
+    (Phase.node (bodyFuel + 1) { inherited := inherited, value := Value.node entry originals depth free } before) old)
+ i := ↑(massOf (Value.node entry originals depth free))
+ k := ↑j
+ l := ↑(original :: rest).length
+ o := ↑bodyFuel
+ q := ↑rowFuel
+ t := ↑(envelope budget count mass seed).snd.fst
+ u := ↑(SourceCurrentParentUniformEnvelope.fuel budget
+    (List.foldl
+            (fun acc x =>
+              have post := SourceCurrentOuterInitialSchedule.parent budget acc.snd.snd;
+              have walked :=
+                List.foldl
+                  (fun acc x =>
+                    have xs :=
+                      (fun current =>
+                          List.map (fun r => envelope budget r.fst r.snd current)
+                            (List.filter (fun r => decide (r.fst < count ∨ r.fst = count ∧ r.snd < mass))
+                              (List.flatMap (fun a => List.map (fun b => (a, b)) (List.range (current.snd.mass + 1)))
+                                (List.range (count + 1)))))
+                        acc.snd.snd;
+                    (acc.fst + 1 + maximum (List.map (fun x => x.fst) xs),
+                      max acc.snd.fst (maximum (List.map (fun x => x.snd.fst) xs)),
+                      acc.snd.snd.fst ++ List.flatMap (fun x => x.snd.snd.fst) xs,
+                      cover (List.map (fun x => x.snd.snd.snd) xs) acc.snd.snd.snd))
+                  (0, 0, post) (List.range post.snd.mass);
+              (acc.fst + 1 + walked.fst,
+                max acc.snd.fst
+                  (max (SourceCurrentParentUniformEnvelope.fuel budget acc.snd.snd.fst acc.snd.snd.snd) walked.snd.fst),
+                SourceCurrentOuterInitialSchedule.rebuild walked.snd.snd))
+            (0, 0, seed) (List.range j)).snd.snd.fst
+    (List.foldl
+            (fun acc x =>
+              have post := SourceCurrentOuterInitialSchedule.parent budget acc.snd.snd;
+              have walked :=
+                List.foldl
+                  (fun acc x =>
+                    have xs :=
+                      (fun current =>
+                          List.map (fun r => envelope budget r.fst r.snd current)
+                            (List.filter (fun r => decide (r.fst < count ∨ r.fst = count ∧ r.snd < mass))
+                              (List.flatMap (fun a => List.map (fun b => (a, b)) (List.range (current.snd.mass + 1)))
+                                (List.range (count + 1)))))
+                        acc.snd.snd;
+                    (acc.fst + 1 + maximum (List.map (fun x => x.fst) xs),
+                      max acc.snd.fst (maximum (List.map (fun x => x.snd.fst) xs)),
+                      acc.snd.snd.fst ++ List.flatMap (fun x => x.snd.snd.fst) xs,
+                      cover (List.map (fun x => x.snd.snd.snd) xs) acc.snd.snd.snd))
+                  (0, 0, post) (List.range post.snd.mass);
+              (acc.fst + 1 + walked.fst,
+                max acc.snd.fst
+                  (max (SourceCurrentParentUniformEnvelope.fuel budget acc.snd.snd.fst acc.snd.snd.snd) walked.snd.fst),
+                SourceCurrentOuterInitialSchedule.rebuild walked.snd.snd))
+            (0, 0, seed) (List.range j)).snd.snd.snd)
+ v := ↑(SourceCurrentOuterInitialFuel.phaseNeed budget (Phase.rows (rowFuel + 1) inherited (original :: rest) start)
+    rowOld)
+ w := ↑(SourceCurrentParentUniformEnvelope.profile budget prior.snd.snd.fst prior.snd.snd.snd).mass
+ x := ↑(InternedValueMass.values parented.children)
+ y := ↑parented.children.length
+ z := ↑parentSeed.snd.mass
+/tmp/mcfta-outer-rank-resources-proof/outer-rank-resources-direct-4.source.lean:431:49: error(lean.unknownIdentifier): Unknown identifier `finalState`
+/tmp/mcfta-outer-rank-resources-proof/outer-rank-resources-direct-4.source.lean:436:65: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.refl` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `BEq.refl`
+  [apply] `Eq.refl`
+  [apply] `Equivalence.refl`
+  [apply] `HEq.refl`
+  [apply] `Iff.refl`
+  [apply] `Setoid.refl`
+  [apply] `Array.Perm.refl`
+  [apply] `List.Perm.refl`
+  [apply] `List.Sublist.refl`
+  [apply] `List.Subset.refl`
+  [apply] `InternedProfileEquivalence.refl`
+  [apply] `Nat.le.refl`
+  [apply] `Std.Refl.refl`
+  [apply] `Vector.Perm.refl`
+  [apply] `Lean.Grind.AC.refl`
+  [apply] `Steps.refl`
+  [apply] `CacheFiniteInterning.Trace.refl`
+  [apply] `EnumerationCarriers.PreservesCarriers.refl`
+  [apply] `EnumerationDependencies.EnumeratedOrigin.refl`
+  [apply] `EnumerationDriver.Protected.refl`
+  [apply] `EnumerationDriver.RenderStable.refl`
+  [apply] `EqualityArray.Connected.refl`
+  [apply] `FlatMemoThunk.Returned.refl`
+  [apply] `FlatMemoThunk.Running.refl`
+  [apply] `HeightOrderControlled.Path.refl`
+  [apply] `MergedAdaptiveEffects.Extension.refl`
+  [apply] `MergedColdMerge.Extension.refl`
+  [apply] `MergedComparisonStability.Refines.refl`
+  [apply] `SourceCurrentActualRequiredRowOrigins.Link.refl`
+  [apply] `SourceCurrentAllocatedFiniteOrdinaryReservations.AtomicTrace.refl`
+  [apply] `SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace.refl`
+  [apply] `Le.refl`
+  [apply] `SourceCurrentAllocatedPartialActiveFrames.NoNewActive.refl`
+  [apply] `SourceCurrentAllocatedPartialChecks.Reach.refl`
+  [apply] `SourceCurrentAllocatedPartialFrames.Frame.refl`
+  [apply] `SourceCurrentAllocatedPartialInvariant.Post.refl`
+  [apply] `SourceCurrentAllocatedReaderConsumed.Path.refl`
+  [apply] `SourceCurrentAllocatedSharedTargetForce.Retains.refl`
+  [apply] `SourceCurrentAllocatedUnfoldHistory.History.refl`
+  [apply] `SourceCurrentConjunctionRowsAllocation.Effects.refl`
+  [apply] `SourceCurrentLowerOperationInvariants.Effect.refl`
+  [apply] `SourceCurrentLowerProbeHeap.Effect.refl`
+  [apply] `SourceCurrentNativeMuGrowthHistory.Path.refl`
+  [apply] `SourceCurrentNativeMuIssuedHistory.Path.refl`
+  [apply] `SourceCurrentNativeMuPublication.History.refl`
+  [apply] `SourceCurrentNativeQueryRowOrigins.Route.refl`
+  [apply] `SourceCurrentNormalizedChildSeparation.Rel.refl`
+  [apply] `SourceCurrentOpenObservations.Same.refl`
+  [apply] `SourceCurrentOuterActiveAncestry.Reached.refl`
+  [apply] `SourceCurrentOuterCopiedWarmHit.Reached.refl`
+  [apply] `Reached.refl`
+  [apply] `SourceCurrentOuterInitialPrefix.SeedTrace.refl`
+  [apply] `SourceEmptinessTaskBodies.RetainsBodies.refl`
+  [apply] `SourceEmptinessTasks.Retains.refl`
+  [apply] `SourceEqualityNativeDemand.Steps.refl`
+  [apply] `SourceEqualityNativeDemandMemo.Retained.refl`
+  [apply] `SourceEqualityPartialMemoFrame.Frame.refl`
+  [apply] `SourceMergedComparisonMass.Resources.refl`
+  [apply] `SourceRecursiveIntersectionDomainAllocation.Trace.refl`
+  [apply] `SourceRecursiveIntersectionKernel.Extension.refl`
+  [apply] `SourceRecursiveIntersectionNative.Retains.refl`
+  [apply] `SourceRecursiveIntersectionNative.Steps.refl`
+  [apply] `SymbolicDriver.ExceptRefines.refl`
+  [apply] `SymbolicInternedView.ConstructorHistory.refl`
+  [apply] `Nat.le.below.refl`
+  [apply] `Std.BundledIterM.Equiv.refl`
+  [apply] `Std.DHashMap.Equiv.refl`
+  [apply] `Std.HashMap.Equiv.refl`
+  [apply] `Std.HashSet.Equiv.refl`
+  [apply] `Std.Iter.Equiv.refl`
+  [apply] `Std.Iter.IsPlausibleIndirectSuccessorOf.refl`
+  [apply] `Std.IterM.Equiv.refl`
+  [apply] `Std.IterM.IsPlausibleIndirectSuccessorOf.refl`
+  [apply] `Lean.Order.FlatOrder.rel.refl`
+  [apply] `Steps.below.refl`
+  [apply] `CacheFiniteInterning.Trace.below.refl`
+  [apply] `EqualityArray.Connected.below.refl`
+  [apply] `HeightOrderControlled.Path.below.refl`
+  [apply] `SourceCurrentAllocatedFiniteOrdinaryReservations.AtomicTrace.below.refl`
+  [apply] `SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace.below.refl`
+  [apply] `SourceCurrentAllocatedPartialChecks.Reach.below.refl`
+  [apply] `SourceCurrentAllocatedReaderConsumed.Path.below.refl`
+  [apply] `SourceCurrentAllocatedUnfoldHistory.History.below.refl`
+  [apply] `SourceCurrentNativeQueryRowOrigins.Route.below.refl`
+  [apply] `SourceCurrentNormalizedChildSeparation.Rel.below.refl`
+  [apply] `SourceCurrentOuterActiveAncestry.Reached.below.refl`
+  [apply] `SourceCurrentOuterCopiedWarmHit.Reached.below.refl`
+  [apply] `Reached.below.refl`
+  [apply] `SourceCurrentOuterInitialPrefix.SeedTrace.below.refl`
+  [apply] `SourceEqualityNativeDemand.Steps.below.refl`
+  [apply] `SourceRecursiveIntersectionDomainAllocation.Trace.below.refl`
+  [apply] `SourceRecursiveIntersectionNative.Steps.below.refl`
+  [apply] `SymbolicInternedView.ConstructorHistory.below.refl`
+  [apply] `Std.DHashMap.Raw.Equiv.refl`
+  [apply] `Std.Do.ExceptConds.entails.refl`
+  [apply] `Std.Do.PostCond.entails.refl`
+  [apply] `Std.Do.SPred.bientails.refl`
+  [apply] `Std.Do.SPred.entails.refl`
+  [apply] `Std.HashMap.Raw.Equiv.refl`
+  [apply] `Std.HashSet.Raw.Equiv.refl`
+  [apply] `Std.Iter.IsPlausibleIndirectSuccessorOf.below.refl`
+  [apply] `Std.IterM.IsPlausibleIndirectSuccessorOf.below.refl`
+  [apply] `Std.Tactic.BVDecide.LRAT.Internal.Liff.refl`
+  [apply] `Std.Tactic.BVDecide.LRAT.Internal.Limplies.refl`
+/tmp/mcfta-outer-rank-resources-proof/outer-rank-resources-direct-4.source.lean:438:65: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  InternedValueMass.edges ?rows
+in the target expression
+  0 + originals.length ≤ massOf (Value.node entry originals depth free)
+
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+g s r e p h m c n budget : Nat
+first : Phase (bits + 2)
+inventory : Inventory
+memos : Memos
+rootSeed : List Guard × Profile
+initial : Context formulas solver inventory (caller first) memos
+frame : Frame formulas solver inventory (caller first).checked
+fits : Fits rootSeed.snd (caller first).checked
+known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ rootSeed.fst) (caller first).checked.native.machine.heap
+inputs : SourceCurrentOuterPrefixInvariants.Inputs first
+rootRoom : Room bits (SourceCurrentOuterInitialPrefix.forecast budget first rootSeed).snd
+normal : SourceCurrentRequiredUnionNormal.UnionNormal (caller first).checked.native.machine.heap
+supported :
+  SourceCurrentNativeRequestPositivePositions.Support (caller first).checked.native.machine.heap
+    (caller first).checked.native
+causal : SourceCurrentNativeMuPublication.History empty (caller first).checked.native.machine.heap
+merged :
+  SourceCurrentConstrainedCapMemoMerge.Stored (fun guard => SourceMemoGate.plain guard = true) (caller first).merge
+positiveMemo : SourceCurrentMergePositivePosition.Support (caller first).merge
+origins : SourceCurrentResourceParentWriters.Origins formulas solver (caller first)
+resources :
+  ∀ {phase : Phase (bits + 2)} (cut : Reached g s r e p h m c n budget first phase),
+    ∃ next final current,
+      SourceCurrentOuterInitialPrefix.SeedTrace cut rootSeed current ∧
+        SourceCurrentAllocatedPartialInvariant.Post formulas solver next (caller first) (caller phase) final ∧
+          Frame formulas solver next (caller phase).checked ∧
+            Fits current.snd (caller phase).checked ∧
+              SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ current.fst)
+                  (caller phase).checked.native.machine.heap ∧
+                SourceCurrentOuterPrefixInvariants.Inputs phase ∧
+                  Le (SourceCurrentOuterInitialPrefix.forecast budget phase current).snd
+                      (SourceCurrentOuterInitialPrefix.forecast budget first rootSeed).snd ∧
+                    (SourceCurrentOuterInitialPrefix.forecast budget phase current).fst ⊆
+                        (SourceCurrentOuterInitialPrefix.forecast budget first rootSeed).fst ∧
+                      Room bits (SourceCurrentOuterInitialPrefix.forecast budget phase current).snd ∧
+                        Fits (SourceCurrentOuterInitialPrefix.forecast budget first rootSeed).snd
+                            (caller phase).checked ∧
+                          SourceEqualityAnnotationHeap.Heap
+                              (fun guard =>
+                                guard ∈ (SourceCurrentOuterInitialPrefix.forecast budget first rootSeed).fst)
+                              (caller phase).checked.native.machine.heap ∧
+                            SourceCurrentOuterInitialFuel.phaseNeed budget phase current ≤
+                              SourceCurrentOuterInitialFuel.phaseNeed budget first rootSeed
+widen :
+  ∀ {one two : List Guard × Profile} {state : SourceEqualityNativeDemand.State (bits + 2)},
+    Kept one two →
+      Fits one.snd state →
+        SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ one.fst) state.native.machine.heap →
+          Fits two.snd state ∧
+            SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ two.fst) state.native.machine.heap
+before : Caller (bits + 2)
+seed : List Guard × Profile
+currentFits : Fits seed.snd before.checked
+currentKnown : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.fst) before.checked.native.machine.heap
+iv : Inventory
+ms : Memos
+old : List Guard × Profile
+handle : Nat
+running : Caller (bits + 2)
+bodyContext : Context formulas solver iv running ms
+checked : running.checked = before.checked
+runningFits : Fits seed.snd running.checked
+runningKnown : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.fst) running.checked.native.machine.heap
+inherited : SourceEqualityConstraintAllocation.Value
+entry : Interned InternedBinderProtocol.NodeKey
+originals : List Edge
+depth : Nat
+free : List InternedBinderProtocol.Reference
+currentRoom :
+  Room bits
+    (envelope budget
+            (rankCount
+              (Option.getD { inherited := inherited, value := Value.node entry originals depth free }.inherited.payload
+                [])
+              { inherited := inherited, value := Value.node entry originals depth free }.value)
+            (massOf { inherited := inherited, value := Value.node entry originals depth free }.value) seed).snd.snd.snd
+ready :
+  SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints
+      { inherited := inherited, value := Value.node entry originals depth free }.inherited ∧
+    Available before.checked.native.machine.heap
+      { inherited := inherited, value := Value.node entry originals depth free }.value
+requested :
+  SourceCurrentOuterPrefixInvariants.NodeReady running
+    { inherited := inherited, value := Value.node entry originals depth free }
+started :
+  beginNode { inherited := inherited, value := Value.node entry originals depth free } before =
+    (handle,
+      FlatMemoThunk.Observation.evaluate { inherited := inherited, value := Value.node entry originals depth free },
+      running)
+owner :
+  SourceCurrentAllocatedPartialMemoSound.NodeGood formulas solver running.checked
+    { request := { inherited := inherited, value := Value.node entry originals depth free },
+      status := FlatMemoThunk.Status.evaluating }
+key :
+  { inherited := inherited, value := Value.node entry originals depth free }.key =
+    { inherited := inherited, value := Value.node entry originals depth free }.key
+_cell :
+  running.nodeResults.cells handle =
+    some
+      { request := { inherited := inherited, value := Value.node entry originals depth free },
+        status := FlatMemoThunk.Status.evaluating }
+kept :
+  massOf { inherited := inherited, value := Value.node entry originals depth free }.value + 1 ≤
+      (envelope budget
+          (rankCount
+            (Option.getD { inherited := inherited, value := Value.node entry originals depth free }.inherited.payload
+              [])
+            { inherited := inherited, value := Value.node entry originals depth free }.value)
+          (massOf { inherited := inherited, value := Value.node entry originals depth free }.value) seed).fst ∧
+    Le seed.snd
+        (envelope budget
+                (rankCount
+                  (Option.getD
+                    { inherited := inherited, value := Value.node entry originals depth free }.inherited.payload [])
+                  { inherited := inherited, value := Value.node entry originals depth free }.value)
+                (massOf { inherited := inherited, value := Value.node entry originals depth free }.value)
+                seed).snd.snd.snd ∧
+      seed.fst ⊆
+        (envelope budget
+                (rankCount
+                  (Option.getD
+                    { inherited := inherited, value := Value.node entry originals depth free }.inherited.payload [])
+                  { inherited := inherited, value := Value.node entry originals depth free }.value)
+                (massOf { inherited := inherited, value := Value.node entry originals depth free }.value)
+                seed).snd.snd.fst
+terminal :
+  Fits
+      (envelope budget
+              (rankCount
+                (Option.getD
+                  { inherited := inherited, value := Value.node entry originals depth free }.inherited.payload [])
+                { inherited := inherited, value := Value.node entry originals depth free }.value)
+              (massOf { inherited := inherited, value := Value.node entry originals depth free }.value)
+              seed).snd.snd.snd
+      running.checked ∧
+    SourceEqualityAnnotationHeap.Heap
+      (fun guard =>
+        guard ∈
+          (envelope budget
+                  (rankCount
+                    (Option.getD
+                      { inherited := inherited, value := Value.node entry originals depth free }.inherited.payload [])
+                    { inherited := inherited, value := Value.node entry originals depth free }.value)
+                  (massOf { inherited := inherited, value := Value.node entry originals depth free }.value)
+                  seed).snd.snd.fst)
+      running.checked.native.machine.heap
+bodyFuel : Nat
+ih :
+  ∀ (m_1 : Nat),
+    m_1 < bodyFuel + 1 →
+      ∀ {request : NodeRequest} {before after : Caller (bits + 2)} {result : Node} (seed : List Guard × Profile),
+        Reached g s r e p h m c n budget first (Phase.node m_1 request before) →
+          Fits seed.snd before.checked →
+            SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.fst) before.checked.native.machine.heap →
+              Room bits
+                  (envelope budget (rankCount (Option.getD request.inherited.payload []) request.value)
+                          (massOf request.value) seed).snd.snd.snd →
+                nodeCall m_1 g s r e p h m c n budget request before = Outcome.done result after →
+                  let output :=
+                    envelope budget (rankCount (Option.getD request.inherited.payload []) request.value)
+                      (massOf request.value) seed;
+                  Fits output.snd.snd.snd after.checked ∧
+                    SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ output.snd.snd.fst)
+                      after.checked.native.machine.heap
+past :
+  Reached g s r e p h m c n budget first
+    (Phase.node (bodyFuel + 1) { inherited := inherited, value := Value.node entry originals depth free } before)
+_trace : SourceCurrentOuterInitialPrefix.SeedTrace past rootSeed old
+post :
+  SourceCurrentAllocatedPartialInvariant.Post formulas solver iv (caller first)
+    (caller
+      (Phase.node (bodyFuel + 1) { inherited := inherited, value := Value.node entry originals depth free } before))
+    ms
+fr :
+  Frame formulas solver iv
+    (caller
+        (Phase.node (bodyFuel + 1) { inherited := inherited, value := Value.node entry originals depth free }
+          before)).checked
+_ff :
+  Fits old.snd
+    (caller
+        (Phase.node (bodyFuel + 1) { inherited := inherited, value := Value.node entry originals depth free }
+          before)).checked
+_kk :
+  SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ old.fst)
+    (caller
+              (Phase.node (bodyFuel + 1) { inherited := inherited, value := Value.node entry originals depth free }
+                before)).checked.native.machine.heap
+_below :
+  Le
+    (SourceCurrentOuterInitialPrefix.forecast budget
+        (Phase.node (bodyFuel + 1) { inherited := inherited, value := Value.node entry originals depth free } before)
+        old).snd
+    (SourceCurrentOuterInitialPrefix.forecast budget first rootSeed).snd
+_alphabet :
+  (SourceCurrentOuterInitialPrefix.forecast budget
+        (Phase.node (bodyFuel + 1) { inherited := inherited, value := Value.node entry originals depth free } before)
+        old).fst ⊆
+    (SourceCurrentOuterInitialPrefix.forecast budget first rootSeed).fst
+_room :
+  Room bits
+    (SourceCurrentOuterInitialPrefix.forecast budget
+        (Phase.node (bodyFuel + 1) { inherited := inherited, value := Value.node entry originals depth free } before)
+        old).snd
+_rest :
+  Fits (SourceCurrentOuterInitialPrefix.forecast budget first rootSeed).snd
+      (caller
+          (Phase.node (bodyFuel + 1) { inherited := inherited, value := Value.node entry originals depth free }
+            before)).checked ∧
+    SourceEqualityAnnotationHeap.Heap
+        (fun guard => guard ∈ (SourceCurrentOuterInitialPrefix.forecast budget first rootSeed).fst)
+        (caller
+                  (Phase.node (bodyFuel + 1) { inherited := inherited, value := Value.node entry originals depth free }
+                    before)).checked.native.machine.heap ∧
+      SourceCurrentOuterInitialFuel.phaseNeed budget
+          (Phase.node (bodyFuel + 1) { inherited := inherited, value := Value.node entry originals depth free } before)
+          old ≤
+        SourceCurrentOuterInitialFuel.phaseNeed budget first rootSeed
+bodyPast :
+  Reached g s r e p h m c n budget first
+    (Phase.body (bodyFuel + 1) { inherited := inherited, value := Value.node entry originals depth free } running)
+results : List Edge
+rowEnd : Caller (bits + 2)
+rowsDone : rows bodyFuel g s r e p h m c n budget inherited originals running = Outcome.done results rowEnd
+observed :
+  ((nodeBody (bodyFuel + 1) g s r e p h m c n budget
+          { inherited := inherited, value := Value.node entry originals depth free } running).bind
+      fun result after => Outcome.done result (finishNode handle result after)) =
+    Outcome.done
+      (SourceCurrentAllocatedRawRebuild.modify (Value.node entry originals depth free) originals results
+          rowEnd.checked).fst
+      (finishNode handle
+        (SourceCurrentAllocatedRawRebuild.modify (Value.node entry originals depth free) originals results
+            rowEnd.checked).fst
+        (advance rowEnd
+          (SourceCurrentAllocatedRawRebuild.modify (Value.node entry originals depth free) originals results
+              rowEnd.checked).snd
+          rowEnd.fourth rowEnd.merge))
+bodyDone :
+  ((rows bodyFuel g s r e p h m c n budget inherited originals running).bind fun results after =>
+      Outcome.done
+        (SourceCurrentAllocatedRawRebuild.modify (Value.node entry originals depth free) originals results
+            after.checked).fst
+        (advance after
+          (SourceCurrentAllocatedRawRebuild.modify (Value.node entry originals depth free) originals results
+              after.checked).snd
+          after.fourth after.merge)) =
+    Outcome.done
+      (SourceCurrentAllocatedRawRebuild.modify (Value.node entry originals depth free) originals results
+          rowEnd.checked).fst
+      (advance rowEnd
+        (SourceCurrentAllocatedRawRebuild.modify (Value.node entry originals depth free) originals results
+            rowEnd.checked).snd
+        rowEnd.fourth rowEnd.merge)
+count : Nat := rankCount (Option.getD inherited.payload []) (Value.node entry originals depth free)
+mass : Nat := massOf (Value.node entry originals depth free)
+all : List Guard × Profile → List (Nat × Nat × List Guard × Profile) := images budget count mass
+rowStep : Nat × Nat × List Guard × Profile → Nat × Nat × List Guard × Profile := row budget all
+rowSeed : Nat → List Guard × Profile := fun j => (fold rowStep j (0, 0, seed)).snd.snd
+complete : List Guard × Profile := rowSeed mass
+rowsFit :
+  ∀ (rowFuel j : Nat) (values : List Edge) (start finish : Caller (bits + 2)) (output : List Edge),
+    rowFuel ≤ bodyFuel →
+      j + values.length ≤ mass →
+        Reached g s r e p h m c n budget
+            (Phase.body (bodyFuel + 1) { inherited := inherited, value := Value.node entry originals depth free }
+              running)
+            (Phase.rows rowFuel inherited values start) →
+          Fits (rowSeed j).snd start.checked →
+            SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ (rowSeed j).fst) start.checked.native.machine.heap →
+              rows rowFuel g s r e p h m c n budget inherited values start = Outcome.done output finish →
+                Fits complete.snd finish.checked ∧
+                  SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ complete.fst)
+                    finish.checked.native.machine.heap
+rowInside :
+  Reached g s r e p h m c n budget
+    (Phase.body (bodyFuel + 1) { inherited := inherited, value := Value.node entry originals depth free } running)
+    (Phase.rows bodyFuel inherited originals running)
+⊢ 0 + originals.length ≤ massOf (Value.node entry originals depth free)

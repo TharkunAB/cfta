@@ -1,0 +1,45 @@
+  244 private theorem descendants_step (fuel : Nat) (child : ChildrenAt formulas solver (bits := bits) fuel) :
+  245     DescendantsAt formulas solver (bits := bits) fuel := by
+  246   intro g s r e p h m c n budget inherited value result before after inventory memos seed
+  247     initial frame fits known inheritedReady resident room done
+  248   rw [Schedule.descendants] at room ⊢
+  249   cases observed : SourceCurrentAllocatedInheritedPrefix.run value.entry.key.constraint inherited before.checked.operations with
+  250   | mk answer operations =>
+  251       cases answer with
+  252       | error message => simp only [descendants,observed] at done; cases done
+  253       | ok answer =>
+  254           cases answer with
+  255           | none => simp only [descendants,observed] at done; cases done
+  256           | some combined =>
+  257               have prefixSame : prefixState before value inherited =
+  258                   advance before (SourceCurrentAllocatedQueryMemo.advancePhysical before.checked
+  259                     ⟨before.checked.native.machine.heap,operations⟩) before.fourth before.merge := by
+  260                 simp only [prefixState,SourceCurrentAllocatedInheritedPrefix.state,observed]
+  261               simp only [descendants,observed] at done
+  262               rw [← prefixSame] at done
+  263               obtain ⟨values,middle,first,last⟩ := (bind_done_iff _ _ _ _).mp done
+  264               cases last
+  265               have combinedEquation : (SourceCurrentAllocatedInheritedPrefix.run value.entry.key.constraint inherited
+  266                   before.checked.operations).1 = .ok (some combined) := by rw [observed]
+  267               obtain ⟨chosen,prefixReceipt,prefixFrame,prefixFits,prefixPost⟩ :=
+  268                 SourceCurrentInheritedNumeric.resident_complete formulas solver inventory value inherited before memos
+  269                   initial frame seed.2 fits (fun _ => resident) (fun _ => inheritedReady)
+  270               have same := Option.some.inj (Except.ok.inj (prefixReceipt.actual.symm.trans combinedEquation))
+  271               subst chosen
+  272               have inputs := initial.ready.semantic.ready.semantic.1.normal.facts.cached.edges value.entry.key value resident
+  273               have childInputs : Values (prefixState before value inherited).checked.native.machine.heap value.children :=
+  274                 fun item member => prefixPost.effects.keeps.available _ (inputs item member)
+  275               have childRoom : Room bits (Schedule.children fuel budget seed).2 :=
+  276                 room.mono (Schedule.rebuild_ge (Schedule.children fuel budget seed)).1
+  277               obtain ⟨next,final,actual,reads,childReturned,available,law⟩ := child seed prefixPost.context prefixFrame prefixFits
+  278                 known prefixReceipt.combinedReady childInputs childRoom first
+  279               obtain ⟨childPost,childFrame,childFits,childKnown⟩ := childReturned
+  280               have firstPost := prefixPost.trans childPost
+  281               have sourceResident := InternedEdgeResidency.edge_grows _ _ firstPost.effects.keeps.growth _ resident
+  282               obtain ⟨rebuilt,returned,numeric,carrier⟩ := SourceCurrentOuterRebuildGuardAlphabet.edge
+  283                 (Schedule.children fuel budget seed).1 formulas solver next (Schedule.children fuel budget seed).2
+  284                   value values middle.checked childFrame childFits childKnown sourceResident available actual.length
+  285               obtain ⟨_same,lastPost⟩ := SourceCurrentAllocatedPartialStepEffects.raw_edge formulas solver next middle final
+  286                 childPost.context value values sourceResident available actual.length
+  287               exact ⟨next,final,.run combinedEquation actual,.run (combined := combinedEquation) reads,
+  288                 ⟨firstPost.trans lastPost,returned,numeric,carrier⟩,rebuilt.resident,

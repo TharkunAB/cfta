@@ -1,0 +1,88 @@
+  131 private theorem nodeCall_step (fuel : Nat) (bodyAt : NodeBodyAt formulas solver (bits := bits) fuel) :
+  132     NodeCallAt formulas solver (bits := bits) fuel := by
+  133   intro g s r e p h m c n budget request before after result inventory memos seed initial frame fits known inherited available room done
+  134   rcases started : beginNode request before with ⟨handle,action,running⟩
+  135   cases action with
+  136   | ready value =>
+  137       simp only [nodeCall,started] at done
+  138       have hit := SourceCurrentAllocatedPartialMemoSound.beginNode_ready_sound formulas solver request before
+  139         initial.sound initial.ready.good.operations.constraints initial.ready.semantic.ready.semantic.1.normal.facts.coherent
+  140         inherited available handle value running started
+  141       cases done
+  142       obtain ⟨same,resident,law⟩ := hit
+  143       subst after
+  144       have padded := Schedule.node_ge fuel budget seed
+  145       exact ⟨inventory,memos,.hit started,.hit (started := started),
+  146         ⟨Post.refl initial,frame,fits.mono padded.1,fun key edge found => padded.2 (known key edge found)⟩,resident,law⟩
+  147   | evaluate original =>
+  148       simp only [nodeCall,started] at done
+  149       obtain ⟨value,middle,first,last⟩ := (bind_done_iff _ _ _ _).mp done
+  150       cases last
+  151       obtain ⟨runningContext,owner,_key,_cell⟩ :=
+  152         SourceCurrentAllocatedPartialCallSteps.node_start formulas solver initial inherited available started
+  153       have checked := (beginNode_components request before).1
+  154       rw [started] at checked
+  155       dsimp only at checked
+  156       have runningFrame : Frame formulas solver inventory running.checked := by simpa only [checked] using frame
+  157       have runningFits : Fits seed.2 running.checked := by simpa only [checked] using fits
+  158       have runningKnown : Carrier (fun guard => guard ∈ seed.1) running.checked.native.machine.heap := by
+  159         simpa only [checked] using known
+  160       have bodyRoom : Room bits (Schedule.body fuel budget seed).2 := by simpa only [Schedule.node] using room
+  161       obtain ⟨next,final,actual,reads,returned,resident,law⟩ := bodyAt seed runningContext runningFrame runningFits
+  162         runningKnown owner.inherited owner.input bodyRoom first
+  163       obtain ⟨post,returnedFrame,numeric,carrier⟩ := returned
+  164       obtain ⟨finished,returnedAvailable,returnedLaw⟩ := SourceCurrentAllocatedPartialCallSteps.node_finish formulas solver
+  165         initial inherited available started actual post resident law
+  166       exact ⟨next,final,.evaluate started actual,.evaluate (started := started) reads,
+  167         ⟨finished,returnedFrame,(by simpa only [Schedule.node,finishNode] using numeric),
+  168           (by simpa only [Schedule.node,finishNode] using carrier)⟩,returnedAvailable,returnedLaw⟩
+  169   | busy | absent => simp only [nodeCall,started] at done; cases done
+  170 
+  171 private theorem walk_step (fuel : Nat)
+  172     (nodes : ∀ smaller, smaller < fuel → NodeCallAt formulas solver (bits := bits) smaller)
+  173     (tails : ∀ smaller, smaller < fuel → WalkAt formulas solver (bits := bits) smaller) :
+  174     WalkAt formulas solver (bits := bits) fuel := by
+  175   intro g s r e p h m c n budget combined index values results before after inventory memos seed
+  176     initial frame fits known inherited available room done
+  177   cases values with
+  178   | nil =>
+  179       simp only [walk] at done
+  180       cases done
+  181       have padded := Schedule.walk_ge fuel budget seed
+  182       exact ⟨inventory,memos,.nil,.nil,
+  183         ⟨Post.refl initial,frame,fits.mono padded.1,fun key edge found => padded.2 (known key edge found)⟩,
+  184         (by intro value member; cases member),
+  185         SourceCurrentAllocatedPartialWalkLanguage.walk_nil formulas solver budget combined index before⟩
+  186   | cons value rest =>
+  187       cases fuel with
+  188       | zero => simp only [walk] at done; cases done
+  189       | succ fuel =>
+  190           rw [Schedule.walk] at room ⊢
+  191           simp only [walk] at done
+  192           obtain ⟨headValue,middle,first,remaining⟩ := (bind_done_iff _ _ _ _).mp done
+  193           obtain ⟨restValues,finalState,tail,last⟩ := (bind_done_iff _ _ _ _).mp remaining
+  194           cases last
+  195           obtain ⟨descentReceipt,descentFrame,descentFits,descentPost⟩ := SourceCurrentInheritedNumeric.descent formulas solver
+  196             inventory before memos combined index initial frame seed.2 fits inherited
+  197           have nodeRoom : Room bits (Schedule.node fuel budget seed).2 :=
+  198             room.mono (Schedule.walk_ge fuel budget (Schedule.node fuel budget seed)).1
+  199           obtain ⟨headInventory,headMemos,headGraph,headReads,headReturned,headAvailable,headLaw⟩ :=
+  200             nodes fuel (Nat.lt_succ_self _) (request := ⟨(descend before combined index).1,value⟩)
+  201               (before := (descend before combined index).2) seed descentPost.context descentFrame descentFits known descentReceipt.inherited
+  202               (descentPost.effects.keeps.available _ (available value List.mem_cons_self)) nodeRoom first
+  203           obtain ⟨headPost,headFrame,headFits,headKnown⟩ := headReturned
+  204           have firstPost := descentPost.trans headPost
+  205           have tailAvailable : Values middle.checked.native.machine.heap rest :=
+  206             fun child member => firstPost.effects.keeps.available _ (available child (List.mem_cons_of_mem _ member))
+  207           obtain ⟨next,final,tailGraph,tailReads,tailReturned,restAvailable,tailLaw⟩ :=
+  208             tails fuel (Nat.lt_succ_self _) (Schedule.node fuel budget seed) headPost.context headFrame headFits headKnown
+  209               (inherited.grows firstPost.effects.grows.constraint_growth) tailAvailable room tail
+  210           obtain ⟨tailPost,tailFrame,tailFits,tailKnown⟩ := tailReturned
+  211           refine ⟨next,final,.cons headGraph tailGraph,.cons headReads tailReads,
+  212             ⟨firstPost.trans tailPost,tailFrame,tailFits,tailKnown⟩,?_,
+  213             SourceCurrentAllocatedPartialWalkLanguage.walk_cons_receipt formulas solver headGraph tailGraph descentReceipt headLaw tailLaw⟩
+  214           intro child member
+  215           rcases List.mem_cons.mp member with same | member
+  216           · subst child
+  217             exact tailPost.effects.keeps.available _ headAvailable
+  218           · exact restAvailable child member

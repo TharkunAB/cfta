@@ -1,0 +1,54 @@
+#!/usr/bin/env python3
+"""Verify portable plan bytes and optional current source identities."""
+from pathlib import Path
+import argparse
+import hashlib
+import json
+
+def digest(data: bytes) -> str:
+    return hashlib.sha256(data).hexdigest()
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--root", type=Path, required=True)
+    parser.add_argument("--live", action="store_true")
+    parser.add_argument("--toolchain-source", type=Path,
+        help="Installed Lean source root containing Init/WF.lean")
+    args = parser.parse_args()
+    here = Path(__file__).resolve().parent
+    manifest = json.loads((here / "manifest.json").read_text())
+    for item in manifest["files"]:
+        path = here / item["path"]
+        assert path.is_file(), f"Missing artifact: {path}"
+        assert digest(path.read_bytes()) == item["sha256"], f"Changed artifact: {path}"
+    index = json.loads((here / "source-index.json").read_text())
+    root_sources = 0
+    external_sources = 0
+    range_count = 0
+    for item in index["sources"]:
+        snapshot = (here / item["snapshot"]).read_bytes()
+        assert digest(snapshot) == item["sha256"], item["snapshot"]
+        lines = snapshot.splitlines(keepends=True)
+        for span in item["ranges"]:
+            assert 1 <= span["start"] <= span["end"] <= len(lines), item["snapshot"]
+            data = b"".join(lines[span["start"] - 1:span["end"]])
+            assert digest(data) == span["sha256"], item["snapshot"]
+            range_count += 1
+        if "root_path" in item:
+            current = args.root / item["root_path"]
+            root_sources += 1
+        else:
+            current = (args.toolchain_source / item["toolchain_path"]
+                if args.toolchain_source is not None else Path(item["external_path"]))
+            external_sources += 1
+        if args.live:
+            assert digest(current.read_bytes()) == item["sha256"], f"Changed source: {current}"
+    assert len((here / "proposed-signature.lean.txt").read_text().splitlines()) == 37
+    assert len((here / "context.lean.txt").read_text().splitlines()) == 21
+    print(json.dumps({"status":"PASS", "live":args.live, "local_pins":len(manifest["files"]),
+        "root_sources":root_sources, "external_sources":external_sources, "ranges":range_count,
+        "toolchain_source":str(args.toolchain_source) if args.toolchain_source else None,
+        "new_proof_or_runtime_jobs":0}, sort_keys=True))
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,429 @@
+/tmp/mcfta-outer-rank-resources-proof/outer-rank-resources-direct-2.source.lean:375:104: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  j_1 ≥ 0
+  i_1 ≥ 0
+  h_1 ≥ 0
+  h_1 - i_1 ≥ 0
+  g_1 ≥ 0
+  f_1 ≥ 0
+  f_1 - g_1 ≥ 0
+  e_1 ≥ 0
+  d_1 ≥ 0
+  c_1 ≥ 0
+  c_1 - j_1 ≥ 1
+  b_1 ≥ 0
+  b_1 - c_1 - d_1 ≥ 1
+  a_1 ≥ 0
+  z ≥ 0
+  y ≥ 0
+  y - z ≥ 1
+  y - a_1 ≥ 1
+  x ≥ 0
+  w ≥ 0
+  v ≥ 0
+  v - w ≥ 0
+  u ≥ 0
+  u - e_1 ≥ 1
+  t ≥ 0
+  t - u ≥ 1
+  q ≥ 0
+  o ≥ 0
+  l ≥ 0
+  l - o ≥ 1
+  l - o - q ≥ 0
+  k ≥ 0
+  i ≥ 0
+  i - k ≥ 0
+  i - x ≥ 0
+  f ≥ 0
+  d ≥ 0
+  d - f ≥ 1
+where
+ d := ↑(envelope budget
+      (rankCount
+        (Option.getD { inherited := inherited, value := Value.node entry originals depth free }.inherited.payload [])
+        { inherited := inherited, value := Value.node entry originals depth free }.value)
+      (massOf { inherited := inherited, value := Value.node entry originals depth free }.value) seed).fst
+ f := ↑(massOf { inherited := inherited, value := Value.node entry originals depth free }.value)
+ i := ↑(SourceCurrentOuterInitialFuel.phaseNeed budget first rootSeed)
+ k := ↑(SourceCurrentOuterInitialFuel.phaseNeed budget
+    (Phase.node (bodyFuel + 1) { inherited := inherited, value := Value.node entry originals depth free } before) old)
+ l := ↑(massOf (Value.node entry originals depth free))
+ o := ↑j
+ q := ↑(original :: rest✝).length
+ t := ↑bodyFuel
+ u := ↑rowFuel
+ v := ↑(envelope budget count mass seed).snd.fst
+ w := ↑(SourceCurrentParentUniformEnvelope.fuel budget
+    (List.foldl
+            (fun acc x =>
+              have post := SourceCurrentOuterInitialSchedule.parent budget acc.snd.snd;
+              have walked :=
+                List.foldl
+                  (fun acc x =>
+                    have xs :=
+                      (fun current =>
+                          List.map (fun r => envelope budget r.fst r.snd current)
+                            (List.filter (fun r => decide (r.fst < count ∨ r.fst = count ∧ r.snd < mass))
+                              (List.flatMap (fun a => List.map (fun b => (a, b)) (List.range (current.snd.mass + 1)))
+                                (List.range (count + 1)))))
+                        acc.snd.snd;
+                    (acc.fst + 1 + maximum (List.map (fun x => x.fst) xs),
+                      max acc.snd.fst (maximum (List.map (fun x => x.snd.fst) xs)),
+                      acc.snd.snd.fst ++ List.flatMap (fun x => x.snd.snd.fst) xs,
+                      cover (List.map (fun x => x.snd.snd.snd) xs) acc.snd.snd.snd))
+                  (0, 0, post) (List.range post.snd.mass);
+              (acc.fst + 1 + walked.fst,
+                max acc.snd.fst
+                  (max (SourceCurrentParentUniformEnvelope.fuel budget acc.snd.snd.fst acc.snd.snd.snd) walked.snd.fst),
+                SourceCurrentOuterInitialSchedule.rebuild walked.snd.snd))
+            (0, 0, seed) (List.range j)).snd.snd.fst
+    (List.foldl
+            (fun acc x =>
+              have post := SourceCurrentOuterInitialSchedule.parent budget acc.snd.snd;
+              have walked :=
+                List.foldl
+                  (fun acc x =>
+                    have xs :=
+                      (fun current =>
+                          List.map (fun r => envelope budget r.fst r.snd current)
+                            (List.filter (fun r => decide (r.fst < count ∨ r.fst = count ∧ r.snd < mass))
+                              (List.flatMap (fun a => List.map (fun b => (a, b)) (List.range (current.snd.mass + 1)))
+                                (List.range (count + 1)))))
+                        acc.snd.snd;
+                    (acc.fst + 1 + maximum (List.map (fun x => x.fst) xs),
+                      max acc.snd.fst (maximum (List.map (fun x => x.snd.fst) xs)),
+                      acc.snd.snd.fst ++ List.flatMap (fun x => x.snd.snd.fst) xs,
+                      cover (List.map (fun x => x.snd.snd.snd) xs) acc.snd.snd.snd))
+                  (0, 0, post) (List.range post.snd.mass);
+              (acc.fst + 1 + walked.fst,
+                max acc.snd.fst
+                  (max (SourceCurrentParentUniformEnvelope.fuel budget acc.snd.snd.fst acc.snd.snd.snd) walked.snd.fst),
+                SourceCurrentOuterInitialSchedule.rebuild walked.snd.snd))
+            (0, 0, seed) (List.range j)).snd.snd.snd)
+ x := ↑(SourceCurrentOuterInitialFuel.phaseNeed budget (Phase.rows (rowFuel + 1) inherited (original :: rest✝) start✝)
+    rowOld)
+ y := ↑(SourceCurrentParentUniformEnvelope.profile budget prior.snd.snd.fst prior.snd.snd.snd).mass
+ z := ↑(InternedValueMass.values parented.children)
+ a_1 := ↑parented.children.length
+ b_1 := ↑parentSeed.snd.mass
+ c_1 := ↑index
+ d_1 := ↑rest.length
+ e_1 := ↑walkFuel
+ f_1 := ↑(rankCount (Option.getD inherited.payload []) (Value.node entry originals depth free))
+ g_1 := ↑(rankCount (Option.getD childRequest.inherited.payload []) value)
+ h_1 := ↑current.snd.mass
+ i_1 := ↑(massOf value)
+ j_1 := ↑(SourceCurrentOuterInitialSchedule.parent budget
+        (List.foldl
+              (fun acc x =>
+                have post := SourceCurrentOuterInitialSchedule.parent budget acc.snd.snd;
+                have walked :=
+                  List.foldl
+                    (fun acc x =>
+                      have xs :=
+                        (fun current =>
+                            List.map (fun r => envelope budget r.fst r.snd current)
+                              (List.filter (fun r => decide (r.fst < count ∨ r.fst = count ∧ r.snd < mass))
+                                (List.flatMap (fun a => List.map (fun b => (a, b)) (List.range (current.snd.mass + 1)))
+                                  (List.range (count + 1)))))
+                          acc.snd.snd;
+                      (acc.fst + 1 + maximum (List.map (fun x => x.fst) xs),
+                        max acc.snd.fst (maximum (List.map (fun x => x.snd.fst) xs)),
+                        acc.snd.snd.fst ++ List.flatMap (fun x => x.snd.snd.fst) xs,
+                        cover (List.map (fun x => x.snd.snd.snd) xs) acc.snd.snd.snd))
+                    (0, 0, post) (List.range post.snd.mass);
+                (acc.fst + 1 + walked.fst,
+                  max acc.snd.fst
+                    (max (SourceCurrentParentUniformEnvelope.fuel budget acc.snd.snd.fst acc.snd.snd.snd)
+                      walked.snd.fst),
+                  SourceCurrentOuterInitialSchedule.rebuild walked.snd.snd))
+              (0, 0, seed) (List.range j)).snd.snd).snd.mass
+/tmp/mcfta-outer-rank-resources-proof/outer-rank-resources-direct-2.source.lean:377:94: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  n_1 ≥ 0
+  m_1 ≥ 0
+  l_1 ≥ 0
+  k_1 ≥ 0
+  j_1 ≥ 0
+  j_1 - k_1 - l_1 ≥ 2
+  i_1 ≥ 0
+  h_1 ≥ 0
+  h_1 - i_1 ≥ 0
+  g_1 ≥ 0
+  f_1 ≥ 0
+  f_1 - g_1 ≥ 0
+  e_1 ≥ 0
+  d_1 ≥ 0
+  c_1 ≥ 0
+  c_1 - n_1 ≥ 0
+  b_1 ≥ 0
+  b_1 - c_1 - d_1 ≥ 1
+  a_1 ≥ 0
+  z ≥ 0
+  y ≥ 0
+  y - z ≥ 1
+  y - a_1 ≥ 1
+  x ≥ 0
+  w ≥ 0
+  v ≥ 0
+  v - w ≥ 0
+  v - m_1 ≥ 0
+  u ≥ 0
+  u - e_1 ≥ 1
+  t ≥ 0
+  t - u ≥ 1
+  q ≥ 0
+  o ≥ 0
+  l ≥ 0
+  l - o ≥ 1
+  l - o - q ≥ 0
+  k ≥ 0
+  i ≥ 0
+  i - k ≥ 0
+  i - x ≥ 0
+  f ≥ 0
+  d ≥ 0
+  d - f ≥ 1
+where
+ d := ↑(envelope budget
+      (rankCount
+        (Option.getD { inherited := inherited, value := Value.node entry originals depth free }.inherited.payload [])
+        { inherited := inherited, value := Value.node entry originals depth free }.value)
+      (massOf { inherited := inherited, value := Value.node entry originals depth free }.value) seed).fst
+ f := ↑(massOf { inherited := inherited, value := Value.node entry originals depth free }.value)
+ i := ↑(SourceCurrentOuterInitialFuel.phaseNeed budget first rootSeed)
+ k := ↑(SourceCurrentOuterInitialFuel.phaseNeed budget
+    (Phase.node (bodyFuel + 1) { inherited := inherited, value := Value.node entry originals depth free } before) old)
+ l := ↑(massOf (Value.node entry originals depth free))
+ o := ↑j
+ q := ↑(original :: rest✝).length
+ t := ↑bodyFuel
+ u := ↑rowFuel
+ v := ↑(envelope budget count mass seed).snd.fst
+ w := ↑(SourceCurrentParentUniformEnvelope.fuel budget
+    (List.foldl
+            (fun acc x =>
+              have post := SourceCurrentOuterInitialSchedule.parent budget acc.snd.snd;
+              have walked :=
+                List.foldl
+                  (fun acc x =>
+                    have xs :=
+                      (fun current =>
+                          List.map (fun r => envelope budget r.fst r.snd current)
+                            (List.filter (fun r => decide (r.fst < count ∨ r.fst = count ∧ r.snd < mass))
+                              (List.flatMap (fun a => List.map (fun b => (a, b)) (List.range (current.snd.mass + 1)))
+                                (List.range (count + 1)))))
+                        acc.snd.snd;
+                    (acc.fst + 1 + maximum (List.map (fun x => x.fst) xs),
+                      max acc.snd.fst (maximum (List.map (fun x => x.snd.fst) xs)),
+                      acc.snd.snd.fst ++ List.flatMap (fun x => x.snd.snd.fst) xs,
+                      cover (List.map (fun x => x.snd.snd.snd) xs) acc.snd.snd.snd))
+                  (0, 0, post) (List.range post.snd.mass);
+              (acc.fst + 1 + walked.fst,
+                max acc.snd.fst
+                  (max (SourceCurrentParentUniformEnvelope.fuel budget acc.snd.snd.fst acc.snd.snd.snd) walked.snd.fst),
+                SourceCurrentOuterInitialSchedule.rebuild walked.snd.snd))
+            (0, 0, seed) (List.range j)).snd.snd.fst
+    (List.foldl
+            (fun acc x =>
+              have post := SourceCurrentOuterInitialSchedule.parent budget acc.snd.snd;
+              have walked :=
+                List.foldl
+                  (fun acc x =>
+                    have xs :=
+                      (fun current =>
+                          List.map (fun r => envelope budget r.fst r.snd current)
+                            (List.filter (fun r => decide (r.fst < count ∨ r.fst = count ∧ r.snd < mass))
+                              (List.flatMap (fun a => List.map (fun b => (a, b)) (List.range (current.snd.mass + 1)))
+                                (List.range (count + 1)))))
+                        acc.snd.snd;
+                    (acc.fst + 1 + maximum (List.map (fun x => x.fst) xs),
+                      max acc.snd.fst (maximum (List.map (fun x => x.snd.fst) xs)),
+                      acc.snd.snd.fst ++ List.flatMap (fun x => x.snd.snd.fst) xs,
+                      cover (List.map (fun x => x.snd.snd.snd) xs) acc.snd.snd.snd))
+                  (0, 0, post) (List.range post.snd.mass);
+              (acc.fst + 1 + walked.fst,
+                max acc.snd.fst
+                  (max (SourceCurrentParentUniformEnvelope.fuel budget acc.snd.snd.fst acc.snd.snd.snd) walked.snd.fst),
+                SourceCurrentOuterInitialSchedule.rebuild walked.snd.snd))
+            (0, 0, seed) (List.range j)).snd.snd.snd)
+ x := ↑(SourceCurrentOuterInitialFuel.phaseNeed budget (Phase.rows (rowFuel + 1) inherited (original :: rest✝) start✝)
+    rowOld)
+ y := ↑(SourceCurrentParentUniformEnvelope.profile budget prior.snd.snd.fst prior.snd.snd.snd).mass
+ z := ↑(InternedValueMass.values parented.children)
+ a_1 := ↑parented.children.length
+ b_1 := ↑parentSeed.snd.mass
+ c_1 := ↑index
+ d_1 := ↑rest.length
+ e_1 := ↑walkFuel
+ f_1 := ↑(rankCount (Option.getD inherited.payload []) (Value.node entry originals depth free))
+ g_1 := ↑(rankCount (Option.getD childRequest.inherited.payload []) value)
+ h_1 := ↑current.snd.mass
+ i_1 := ↑(massOf value)
+ j_1 := ↑(envelope budget count mass seed).fst
+ k_1 := ↑(List.foldl
+      (fun acc x =>
+        have post := SourceCurrentOuterInitialSchedule.parent budget acc.snd.snd;
+        have walked :=
+          List.foldl
+            (fun acc x =>
+              have xs :=
+                (fun current =>
+                    List.map (fun r => envelope budget r.fst r.snd current)
+                      (List.filter (fun r => decide (r.fst < count ∨ r.fst = count ∧ r.snd < mass))
+                        (List.flatMap (fun a => List.map (fun b => (a, b)) (List.range (current.snd.mass + 1)))
+                          (List.range (count + 1)))))
+                  acc.snd.snd;
+              (acc.fst + 1 + maximum (List.map (fun x => x.fst) xs),
+                max acc.snd.fst (maximum (List.map (fun x => x.snd.fst) xs)),
+                acc.snd.snd.fst ++ List.flatMap (fun x => x.snd.snd.fst) xs,
+                cover (List.map (fun x => x.snd.snd.snd) xs) acc.snd.snd.snd))
+            (0, 0, post) (List.range post.snd.mass);
+        (acc.fst + 1 + walked.fst,
+          max acc.snd.fst
+            (max (SourceCurrentParentUniformEnvelope.fuel budget acc.snd.snd.fst acc.snd.snd.snd) walked.snd.fst),
+          SourceCurrentOuterInitialSchedule.rebuild walked.snd.snd))
+      (0, 0, seed) (List.range j)).fst
+ l_1 := ↑(List.foldl
+      (fun acc x =>
+        have xs :=
+          (fun current =>
+              List.map (fun r => envelope budget r.fst r.snd current)
+                (List.filter (fun r => decide (r.fst < count ∨ r.fst = count ∧ r.snd < mass))
+                  (List.flatMap (fun a => List.map (fun b => (a, b)) (List.range (current.snd.mass + 1)))
+                    (List.range (count + 1)))))
+            acc.snd.snd;
+        (acc.fst + 1 + maximum (List.map (fun x => x.fst) xs),
+          max acc.snd.fst (maximum (List.map (fun x => x.snd.fst) xs)),
+          acc.snd.snd.fst ++ List.flatMap (fun x => x.snd.snd.fst) xs,
+          cover (List.map (fun x => x.snd.snd.snd) xs) acc.snd.snd.snd))
+      (0, 0,
+        SourceCurrentOuterInitialSchedule.parent budget
+          (List.foldl
+                (fun acc x =>
+                  have post := SourceCurrentOuterInitialSchedule.parent budget acc.snd.snd;
+                  have walked :=
+                    List.foldl
+                      (fun acc x =>
+                        have xs :=
+                          (fun current =>
+                              List.map (fun r => envelope budget r.fst r.snd current)
+                                (List.filter (fun r => decide (r.fst < count ∨ r.fst = count ∧ r.snd < mass))
+                                  (List.flatMap
+                                    (fun a => List.map (fun b => (a, b)) (List.range (current.snd.mass + 1)))
+                                    (List.range (count + 1)))))
+                            acc.snd.snd;
+                        (acc.fst + 1 + maximum (List.map (fun x => x.fst) xs),
+                          max acc.snd.fst (maximum (List.map (fun x => x.snd.fst) xs)),
+                          acc.snd.snd.fst ++ List.flatMap (fun x => x.snd.snd.fst) xs,
+                          cover (List.map (fun x => x.snd.snd.snd) xs) acc.snd.snd.snd))
+                      (0, 0, post) (List.range post.snd.mass);
+                  (acc.fst + 1 + walked.fst,
+                    max acc.snd.fst
+                      (max (SourceCurrentParentUniformEnvelope.fuel budget acc.snd.snd.fst acc.snd.snd.snd)
+                        walked.snd.fst),
+                    SourceCurrentOuterInitialSchedule.rebuild walked.snd.snd))
+                (0, 0, seed) (List.range j)).snd.snd)
+      (List.range index)).fst
+ m_1 := ↑(List.foldl
+        (fun acc x =>
+          have xs :=
+            (fun current =>
+                List.map (fun r => envelope budget r.fst r.snd current)
+                  (List.filter (fun r => decide (r.fst < count ∨ r.fst = count ∧ r.snd < mass))
+                    (List.flatMap (fun a => List.map (fun b => (a, b)) (List.range (current.snd.mass + 1)))
+                      (List.range (count + 1)))))
+              acc.snd.snd;
+          (acc.fst + 1 + maximum (List.map (fun x => x.fst) xs),
+            max acc.snd.fst (maximum (List.map (fun x => x.snd.fst) xs)),
+            acc.snd.snd.fst ++ List.flatMap (fun x => x.snd.snd.fst) xs,
+            cover (List.map (fun x => x.snd.snd.snd) xs) acc.snd.snd.snd))
+        (0, 0,
+          SourceCurrentOuterInitialSchedule.parent budget
+            (List.foldl
+                  (fun acc x =>
+                    have post := SourceCurrentOuterInitialSchedule.parent budget acc.snd.snd;
+                    have walked :=
+                      List.foldl
+                        (fun acc x =>
+                          have xs :=
+                            (fun current =>
+                                List.map (fun r => envelope budget r.fst r.snd current)
+                                  (List.filter (fun r => decide (r.fst < count ∨ r.fst = count ∧ r.snd < mass))
+                                    (List.flatMap
+                                      (fun a => List.map (fun b => (a, b)) (List.range (current.snd.mass + 1)))
+                                      (List.range (count + 1)))))
+                              acc.snd.snd;
+                          (acc.fst + 1 + maximum (List.map (fun x => x.fst) xs),
+                            max acc.snd.fst (maximum (List.map (fun x => x.snd.fst) xs)),
+                            acc.snd.snd.fst ++ List.flatMap (fun x => x.snd.snd.fst) xs,
+                            cover (List.map (fun x => x.snd.snd.snd) xs) acc.snd.snd.snd))
+                        (0, 0, post) (List.range post.snd.mass);
+                    (acc.fst + 1 + walked.fst,
+                      max acc.snd.fst
+                        (max (SourceCurrentParentUniformEnvelope.fuel budget acc.snd.snd.fst acc.snd.snd.snd)
+                          walked.snd.fst),
+                      SourceCurrentOuterInitialSchedule.rebuild walked.snd.snd))
+                  (0, 0, seed) (List.range j)).snd.snd)
+        (List.range index)).snd.fst
+ n_1 := ↑(SourceCurrentOuterInitialSchedule.parent budget
+        (List.foldl
+              (fun acc x =>
+                have post := SourceCurrentOuterInitialSchedule.parent budget acc.snd.snd;
+                have walked :=
+                  List.foldl
+                    (fun acc x =>
+                      have xs :=
+                        (fun current =>
+                            List.map (fun r => envelope budget r.fst r.snd current)
+                              (List.filter (fun r => decide (r.fst < count ∨ r.fst = count ∧ r.snd < mass))
+                                (List.flatMap (fun a => List.map (fun b => (a, b)) (List.range (current.snd.mass + 1)))
+                                  (List.range (count + 1)))))
+                          acc.snd.snd;
+                      (acc.fst + 1 + maximum (List.map (fun x => x.fst) xs),
+                        max acc.snd.fst (maximum (List.map (fun x => x.snd.fst) xs)),
+                        acc.snd.snd.fst ++ List.flatMap (fun x => x.snd.snd.fst) xs,
+                        cover (List.map (fun x => x.snd.snd.snd) xs) acc.snd.snd.snd))
+                    (0, 0, post) (List.range post.snd.mass);
+                (acc.fst + 1 + walked.fst,
+                  max acc.snd.fst
+                    (max (SourceCurrentParentUniformEnvelope.fuel budget acc.snd.snd.fst acc.snd.snd.snd)
+                      walked.snd.fst),
+                  SourceCurrentOuterInitialSchedule.rebuild walked.snd.snd))
+              (0, 0, seed) (List.range j)).snd.snd).snd.mass
+/tmp/mcfta-outer-rank-resources-proof/outer-rank-resources-direct-2.source.lean:382:52: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/mcfta-outer-rank-resources-proof/outer-rank-resources-direct-2.source.lean:325:44: error: (deterministic) timeout at `«tactic execution»`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/mcfta-outer-rank-resources-proof/outer-rank-resources-direct-2.source.lean:395:18: error: (deterministic) timeout at `«tactic execution»`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/mcfta-outer-rank-resources-proof/outer-rank-resources-direct-2.source.lean:419:12: error: (deterministic) timeout at `«tactic execution»`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/mcfta-outer-rank-resources-proof/outer-rank-resources-direct-2.source.lean:203:24: error: (deterministic) timeout at `«tactic execution»`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/mcfta-outer-rank-resources-proof/outer-rank-resources-direct-2.source.lean:380:63: error: (deterministic) timeout at `«synthesize pending MVars»`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/mcfta-outer-rank-resources-proof/outer-rank-resources-direct-2.source.lean:138:0: error: (deterministic) timeout at `isDefEq`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.

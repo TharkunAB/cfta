@@ -1,0 +1,18 @@
+   51 def cover (profiles : List Profile) (entry : Profile) : Profile :=
+   52   profiles.foldr join entry
+   53 
+   54 /-- The profile join retains the original entry. -/
+   55 theorem cover_ge (profiles : List Profile) (entry : Profile) : Le entry (cover profiles entry) := by
+   56   induction profiles with
+   57   | nil => exact Le.refl _
+   58   | cons first rest ih => exact ih.trans (join_right _ _)
+   59 
+   60 /-- Every listed profile fits the same initial join. -/
+   61 theorem cover_member {profiles : List Profile} {profile : Profile} (entry : Profile)
+   62     (member : profile ∈ profiles) : Le profile (cover profiles entry) := by
+   63   induction profiles with
+   64   | nil => cases member
+   65   | cons first rest ih =>
+   66       rcases List.mem_cons.mp member with rfl | included
+   67       · exact join_left _ _
+   68       · exact (ih included).trans (join_right _ _)

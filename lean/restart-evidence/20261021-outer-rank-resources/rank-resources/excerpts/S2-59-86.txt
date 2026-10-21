@@ -1,0 +1,28 @@
+   59 /-- On a literal step, the phase pair determines the exact next resource seed. -/
+   60 noncomputable def StepSeed (budget : Nat) (first last : Phase width) (entry next : Seed) : Prop :=
+   61   match first, last with
+   62   | .rows (_+1) .., .descendants .. => next = Schedule.parent budget entry
+   63   | .rows (fuel+1) .., .rows .. => next = Schedule.descendants fuel budget (Schedule.parent budget entry)
+   64   | .walk (fuel+1) .., .walk .. => next = Schedule.node fuel budget entry
+   65   | _, _ => next = entry
+   66 
+   67 private def Below (first last : Seed) : Prop := Le first.2 last.2 ∧ first.1 ⊆ last.1
+   68 
+   69 private theorem below_refl (seed : Seed) : Below seed seed := ⟨Le.refl _,fun _ member => member⟩
+   70 
+   71 private theorem below_trans {first middle last : Seed} (one : Below first middle) (two : Below middle last) :
+   72     Below first last := ⟨one.1.trans two.1,fun _ member => two.2 (one.2 member)⟩
+   73 
+   74 variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Node] {bits : Nat}
+   75 variable (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+   76 
+   77 /-- Seed changes follow the same exact literal prefix proof. -/
+   78 inductive SeedTrace {g s r e p h m c n budget : Nat} :
+   79     {first last : Phase width} → Reached g s r e p h m c n budget first last → Seed → Seed → Prop where
+   80   /-- A zero-step prefix retains its initial seed. -/
+   81   | refl (phase : Phase width) (seed : Seed) : SeedTrace (.refl phase) seed seed
+   82   /-- One literal step retains the preceding exact seed changes. -/
+   83   | snoc {first middle last : Phase width} {earlier : Reached g s r e p h m c n budget first middle}
+   84       {step : Step g s r e p h m c n budget middle last} {entry current next : Seed}
+   85       (past : SeedTrace earlier entry current) (change : StepSeed budget middle last current next) :
+   86       SeedTrace (.snoc earlier step) entry next

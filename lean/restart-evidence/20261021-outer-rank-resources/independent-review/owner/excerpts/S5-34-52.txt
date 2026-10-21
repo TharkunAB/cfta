@@ -1,0 +1,19 @@
+   34 private theorem equation (budget count mass : Nat) (seed : Seed) :
+   35     envelope budget count mass seed = finish (fold (row budget (outputs budget count mass)) mass (0,0,seed)) := by
+   36   have eta {R : (Nat × Nat) → Prop} (f : (Nat × Nat) → Seed → Out) :
+   37       (fun child (_ : R child) => f child) =
+   38       (fun child _ => f (child.1,child.2)) := by
+   39     funext child smaller current
+   40     cases child
+   41     rfl
+   42   conv =>
+   43     lhs
+   44     unfold envelope
+   45     rw [WellFounded.fix_eq, eta]
+   46   change finish (fold (row budget (fun current => (ranks count mass current).attach.map
+   47     (fun child => envelope budget child.val.1 child.val.2 current))) mass (0,0,seed)) = _
+   48   have images_eq (current : Seed) :
+   49       (ranks count mass current).attach.map (fun child => envelope budget child.val.1 child.val.2 current) =
+   50         outputs budget count mass current :=
+   51     List.attach_map_val (f := fun r : Nat × Nat => envelope budget r.1 r.2 current)
+   52   simp only [images_eq]

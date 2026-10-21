@@ -1,0 +1,167 @@
+import MicroCFTA.SourceCurrentOlderOwnerLineage
+import MicroCFTA.SourceCurrentOuterRankEnvelopeStages
+
+namespace MicroCFTA.SourceCurrentOuterRankEnvelopeResources
+open Cache InternedConstructorTemplates
+open InternedProbeProvenance InternedEdgeResidency
+open SourceCurrentAllocatedPartialState SourceCurrentAllocatedPartialWorker
+open SourceCurrentOuterCopiedWarmHit (Phase)
+open SourceCurrentOuterExecutionAncestry (Reached)
+open SourceCurrentAllocatedPartialInvariant (Context)
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedNativeResourceForecast (Profile Room Le)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Frame Fits)
+open SourceCurrentOuterRankEnvelope (envelope)
+open SourceCurrentInitialSelectionForecast (cover cover_ge cover_member maximum)
+open SourceCurrentAllocatedPartialWorkerStability (bind_done_iff)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Guard
+local notation "Edge" => EdgeValue Symbol Guard
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Seed" => List Guard × Profile
+local notation "Out" => Nat × Nat × Seed
+local notation "caller" => SourceCurrentOuterActiveAncestry.caller
+local notation "descend" => SourceCurrentAllocatedPartialGraph.descend
+local notation "prefixState" => SourceCurrentAllocatedPartialGraph.prefixState
+local notation "rankCount" => SourceCurrentPositiveQuotientCount.count
+local notation "massOf" => InternedValueMass.value
+
+private noncomputable def images (budget count mass : Nat) (seed : Seed) : List Out :=
+  (((List.range (count + 1)).flatMap fun a => (List.range (seed.2.mass + 1)).map fun b => (a,b)).filter
+    (fun r => decide (r.1 < count ∨ (r.1 = count ∧ r.2 < mass)))).map
+      fun r => envelope budget r.1 r.2 seed
+private def fold (step : Out → Out) (n : Nat) (entry : Out) : Out :=
+  (List.range n).foldl (fun acc _ => step acc) entry
+private def slot (all : Seed → List Out) (acc : Out) : Out :=
+  let xs := all acc.2.2
+  (acc.1 + 1 + maximum (xs.map fun x => x.1), max acc.2.1 (maximum (xs.map fun x => x.2.1)),
+    (acc.2.2.1 ++ xs.flatMap (fun x => x.2.2.1), cover (xs.map fun x => x.2.2.2) acc.2.2.2))
+private noncomputable def row (budget : Nat) (all : Seed → List Out) (acc : Out) : Out :=
+  let post := SourceCurrentOuterInitialSchedule.parent budget acc.2.2
+  let walked := fold (slot all) post.2.mass (0,0,post)
+  (acc.1 + 1 + walked.1,
+    max acc.2.1 (max (SourceCurrentParentUniformEnvelope.fuel budget acc.2.2.1 acc.2.2.2) walked.2.1),
+    SourceCurrentOuterInitialSchedule.rebuild walked.2.2)
+
+private theorem equation (budget count mass : Nat) (seed : Seed) :
+    (envelope budget count mass seed).2.2 = SourceCurrentOuterInitialSchedule.rebuild
+      (fold (row budget (images budget count mass)) mass (0,0,seed)).2.2 := by
+  have eta {R : (Nat × Nat) → Prop} (f : (Nat × Nat) → Seed → Out) :
+      (fun child (_ : R child) => f child) = (fun child _ => f (child.1,child.2)) := by
+    funext child smaller current
+    cases child
+    rfl
+  conv =>
+    lhs
+    unfold envelope
+    rw [WellFounded.fix_eq, eta]
+  change (SourceCurrentOuterInitialSchedule.rebuild
+    (fold (row budget (fun current => (_ : List (Nat × Nat)).attach.map
+      (fun child => envelope budget child.val.1 child.val.2 current))) mass (0,0,seed)).2.2) = _
+  simp only [List.attach_map_val, images]
+
+private def Kept (first last : Seed) : Prop := Le first.2 last.2 ∧ first.1 ⊆ last.1
+private theorem kept_trans {first middle last : Seed} (one : Kept first middle) (two : Kept middle last) :
+    Kept first last := ⟨one.1.trans two.1, fun _ h => two.2 (one.2 h)⟩
+private theorem fold_kept (step : Out → Out) (one : ∀ acc, Kept acc.2.2 (step acc).2.2)
+    (n : Nat) (entry : Out) : Kept entry.2.2 (fold step n entry).2.2 := by
+  have general (values : List Nat) (acc : Out) : Kept acc.2.2 (values.foldl (fun x _ => step x) acc).2.2 := by
+    induction values generalizing acc with
+    | nil => exact ⟨Le.refl _, fun _ h => h⟩
+    | cons head tail ih => exact kept_trans (one acc) (ih (step acc))
+  exact general _ _
+private theorem fold_succ (step : Out → Out) (n : Nat) (entry : Out) :
+    fold step (n+1) entry = step (fold step n entry) := by
+  simp only [fold, List.range_succ, List.foldl_append, List.foldl_cons, List.foldl_nil]
+private theorem prefix_kept (step : Out → Out) (one : ∀ acc, Kept acc.2.2 (step acc).2.2)
+    {n k : Nat} (bound : k ≤ n) (entry : Out) : Kept (fold step k entry).2.2 (fold step n entry).2.2 := by
+  have cut : fold step n entry = fold step (n-k) (fold step k entry) := by
+    unfold fold
+    conv =>
+      lhs
+      rw [show n = k + (n-k) by omega, List.range_add, List.foldl_append, List.foldl_map]
+  rw [cut]
+  exact fold_kept step one _ _
+private theorem slot_kept (all : Seed → List Out) (acc : Out) : Kept acc.2.2 (slot all acc).2.2 :=
+  ⟨cover_ge _ _, fun _ h => List.mem_append_left _ h⟩
+private theorem row_kept (budget : Nat) (all : Seed → List Out) (acc : Out) :
+    Kept acc.2.2 (row budget all acc).2.2 := by
+  dsimp only [row]
+  generalize post_eq : SourceCurrentOuterInitialSchedule.parent budget acc.2.2 = post
+  have parent := SourceCurrentOuterInitialSchedule.parent_ge budget acc.2.2
+  rw [post_eq] at parent
+  exact kept_trans parent (kept_trans (fold_kept (slot all) (slot_kept all) _ _)
+    (SourceCurrentOuterInitialSchedule.rebuild_ge _))
+private theorem image_kept (all : Seed → List Out) (acc value : Out) (member : value ∈ all acc.2.2) :
+    Kept value.2.2 (slot all acc).2.2 := by
+  refine ⟨cover_member _ (List.mem_map.mpr ⟨value,member,rfl⟩), ?_⟩
+  intro guard present
+  exact List.mem_append_right _ (List.mem_flatMap.mpr ⟨value,member,present⟩)
+private theorem image_member (budget count mass : Nat) (seed : Seed) (a b : Nat)
+    (counts : a ≤ count) (masses : b ≤ seed.2.mass) (smaller : Prod.Lex Nat.lt Nat.lt (a,b) (count,mass)) :
+    envelope budget a b seed ∈ images budget count mass seed := by
+  apply List.mem_map.mpr
+  refine ⟨(a,b), List.mem_filter.mpr ⟨?_, ?_⟩, rfl⟩
+  · exact List.mem_flatMap.mpr ⟨a,List.mem_range.mpr (by omega),
+      List.mem_map.mpr ⟨b,List.mem_range.mpr (by omega),rfl⟩⟩
+  · exact of_decide_eq_true (by simpa only [decide_eq_true_eq] using Prod.lex_def.mp smaller)
+
+private theorem same_request [DecidableEq (EdgeKey Symbol Guard)]
+    {bits : Nat} {formulas : SourceGuards.Formulas FullSyntax.Formula}
+    {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {inventory : Inventory} {before : Caller (bits+2)} {memos : Memos}
+    (initial : Context formulas solver inventory before memos) (first second : NodeRequest)
+    (left : SourceCurrentOuterPrefixInvariants.NodeReady before first)
+    (right : SourceCurrentOuterPrefixInvariants.NodeReady before second) (same : first.key = second.key) : first = second := by
+  have inherited := SourceEqualityConstraintMemoAllocation.ready_eq_of_identity _
+    initial.ready.good.operations.constraints first.inherited second.inherited left.1 right.1 (congrArg Prod.fst same)
+  have values := InternedFreshProbeKeys.resident_reference_injective _
+    initial.ready.semantic.ready.semantic.1.normal.facts.coherent first.value second.value
+    left.2.resident right.2.resident (congrArg Prod.snd same)
+  cases first
+  cases second
+  cases inherited
+  cases values
+  rfl
+
+variable {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Node]
+theorem node_call
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    {g s r e p h m c n budget fuel : Nat}
+    {first : Phase (bits + 2)} {inventory : Inventory} {memos : Memos}
+    (rootSeed : List Guard × Profile)
+    (initial : Context formulas solver inventory (caller first) memos)
+    (frame : Frame formulas solver inventory (caller first).checked)
+    (fits : Fits rootSeed.2 (caller first).checked)
+    (known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ rootSeed.1)
+      (caller first).checked.native.machine.heap)
+    (inputs : SourceCurrentOuterPrefixInvariants.Inputs first)
+    (rootRoom : Room bits (SourceCurrentOuterInitialPrefix.forecast budget first rootSeed).2)
+    (normal : SourceCurrentRequiredUnionNormal.UnionNormal (caller first).checked.native.machine.heap)
+    (supported : SourceCurrentNativeRequestPositivePositions.Support
+      (caller first).checked.native.machine.heap (caller first).checked.native)
+    (causal : SourceCurrentNativeMuPublication.History empty (caller first).checked.native.machine.heap)
+    (merged : SourceCurrentConstrainedCapMemoMerge.Stored
+      (fun guard : Guard => SourceMemoGate.plain guard = true) (caller first).merge)
+    (positiveMemo : SourceCurrentMergePositivePosition.Support (caller first).merge)
+    (origins : SourceCurrentResourceParentWriters.Origins formulas solver (caller first))
+    {request : NodeRequest} {before after : Caller (bits + 2)} {result : Node}
+    (seed : List Guard × Profile)
+    (past : Reached g s r e p h m c n budget first (.node fuel request before))
+    (currentFits : Fits seed.2 before.checked)
+    (currentKnown : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.1)
+      before.checked.native.machine.heap)
+    (currentRoom : Room bits (envelope budget
+      (SourceCurrentPositiveQuotientCount.count (request.inherited.payload.getD []) request.value)
+      (InternedValueMass.value request.value) seed).2.2.2)
+    (observed : nodeCall fuel g s r e p h m c n budget request before = .done result after) :
+    let output := envelope budget
+      (SourceCurrentPositiveQuotientCount.count (request.inherited.payload.getD []) request.value)
+      (InternedValueMass.value request.value) seed
+    Fits output.2.2.2 after.checked ∧
+      SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ output.2.2.1)
+        after.checked.native.machine.heap

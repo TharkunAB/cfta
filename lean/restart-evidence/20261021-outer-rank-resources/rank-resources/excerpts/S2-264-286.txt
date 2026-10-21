@@ -1,0 +1,23 @@
+  264 theorem reached {g s r e p h m c n budget : Nat} {first last : Phase (bits+2)}
+  265     {inventory : Inventory} {memos : Memos} (seed : Seed)
+  266     (actual : Reached g s r e p h m c n budget first last)
+  267     (initial : Context formulas solver inventory (caller first) memos)
+  268     (frame : Frame formulas solver inventory (caller first).checked)
+  269     (fits : Fits seed.2 (caller first).checked)
+  270     (known : Carrier (fun guard => guard ∈ seed.1) (caller first).checked.native.machine.heap)
+  271     (inputs : Inputs first) (room : Room bits (forecast budget first seed).2) :
+  272     ∃ next final current, SeedTrace actual seed current ∧
+  273       Post formulas solver next (caller first) (caller last) final ∧
+  274       Frame formulas solver next (caller last).checked ∧ Fits current.2 (caller last).checked ∧
+  275       Carrier (fun guard => guard ∈ current.1) (caller last).checked.native.machine.heap ∧ Inputs last ∧
+  276       Le (forecast budget last current).2 (forecast budget first seed).2 ∧
+  277       (forecast budget last current).1 ⊆ (forecast budget first seed).1 ∧
+  278       Room bits (forecast budget last current).2 ∧
+  279       Fits (forecast budget first seed).2 (caller last).checked ∧
+  280       Carrier (fun guard => guard ∈ (forecast budget first seed).1) (caller last).checked.native.machine.heap ∧
+  281       SourceCurrentOuterInitialFuel.phaseNeed budget last current ≤ SourceCurrentOuterInitialFuel.phaseNeed budget first seed := by
+  282   obtain ⟨next,final,current,post,returned,numeric,carrier,currentInputs,trace,below⟩ :=
+  283     prefixes formulas solver actual seed initial frame fits known inputs room
+  284   have growing := forecast_ge budget last current
+  285   exact ⟨next,final,current,trace,post,returned,numeric,carrier,currentInputs,below.1,below.2,room.mono below.1,
+  286     numeric.mono (growing.1.trans below.1),fun key row found => below.2 (growing.2 (carrier key row found)),trace_need trace⟩

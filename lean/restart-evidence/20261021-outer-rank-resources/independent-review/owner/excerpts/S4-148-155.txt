@@ -1,0 +1,8 @@
+  148 /-- The envelope has positive work and retains its complete entry profile and alphabet. -/
+  149 theorem retains (budget count mass : Nat) (seed : List Guard × Profile) :
+  150     mass + 1 ≤ (envelope budget count mass seed).1 ∧
+  151     Le seed.2 (envelope budget count mass seed).2.2.2 ∧
+  152     seed.1 ⊆ (envelope budget count mass seed).2.2.1 := by
+  153   rw [envelope_eq]
+  154   exact recipe_retains budget (count,mass)
+  155     (fun child _ current => envelope budget child.1 child.2 current) seed

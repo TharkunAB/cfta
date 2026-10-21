@@ -1,0 +1,5 @@
+   77 theorem edges_eq_length_sum (rows : List (EdgeValue Symbol Guard)) :
+   78     edges rows = rows.length + (rows.map edge).sum := by
+   79   induction rows with
+   80   | nil => simp only [edges, List.length_nil, List.map_nil, List.sum_nil, Nat.zero_add]
+   81   | cons first rest ih => simp only [edges, List.length_cons, List.map_cons, List.sum_cons, ih]; omega

@@ -1,0 +1,103 @@
+  346 private theorem nodeBody_step (fuel : Nat)
+  347     (rowCalls : ∀ smaller, smaller < fuel → RowsAt formulas solver (bits := bits) smaller) :
+  348     NodeBodyAt formulas solver (bits := bits) fuel := by
+  349   intro g s r e p h m c n budget request before after result inventory memos seed
+  350     initial frame fits known inherited available room done
+  351   cases request with
+  352   | mk inheritedValue value =>
+  353       cases value with
+  354       | empty =>
+  355           simp only [nodeBody] at done
+  356           cases done
+  357           have padded := Schedule.body_ge fuel budget seed
+  358           exact ⟨inventory,memos,.empty,.empty,
+  359             ⟨Post.refl initial,frame,fits.mono padded.1,fun key edge found => padded.2 (known key edge found)⟩,
+  360             InternedProbeProvenance.empty_available _,SourceCurrentAllocatedPartialCallSteps.node_refl formulas solver _⟩
+  361       | union entry members depth free =>
+  362           simp only [nodeBody] at done
+  363           cases done
+  364           have padded := Schedule.body_ge fuel budget seed
+  365           exact ⟨inventory,memos,.union,.union,
+  366             ⟨Post.refl initial,frame,fits.mono padded.1,fun key edge found => padded.2 (known key edge found)⟩,
+  367             available,SourceCurrentAllocatedPartialCallSteps.node_refl formulas solver _⟩
+  368       | reference name => simp only [nodeBody] at done; cases done
+  369       | mu entry body depth ordinary =>
+  370           cases observed : SourceEqualityMuReconstruction.rebuild entry body depth ordinary before.checked.native.machine.heap with
+  371           | pending => simp only [nodeBody,observed] at done; cases done
+  372           | done value heap =>
+  373               have computed := SourceCurrentMuReconstructionEffects.complete entry body depth ordinary
+  374                 before.checked.native.machine.heap initial.ready.semantic.ready.semantic.1.normal.facts.coherent initial.probes available
+  375               have sameHeap : heap = before.checked.native.machine.heap :=
+  376                 congrArg InternedNestedConstruction.Outcome.state (observed.symm.trans computed.1)
+  377               subst heap
+  378               simp only [nodeBody,observed] at done
+  379               cases done
+  380               have unchanged : advance before (SourceCurrentAllocatedQueryMemo.advancePhysical before.checked
+  381                   ⟨before.checked.native.machine.heap,before.checked.operations⟩) before.fourth before.merge = before := by
+  382                 cases before
+  383                 rfl
+  384               obtain ⟨post,resident,law⟩ := SourceCurrentAllocatedPartialCallSteps.node_binder formulas solver initial available observed
+  385               have padded := Schedule.body_ge fuel budget seed
+  386               exact ⟨inventory,memos,.binder observed,.binder (actual := observed),
+  387                 ⟨post,(by simpa only [unchanged] using frame),
+  388                   (by simpa only [unchanged] using fits.mono padded.1),
+  389                   (by simpa only [unchanged] using (show Carrier (fun guard => guard ∈ (Schedule.body fuel budget seed).1)
+  390                     before.checked.native.machine.heap from fun key edge found => padded.2 (known key edge found)))⟩,
+  391                 resident,law⟩
+  392       | node entry original depth free =>
+  393           cases fuel with
+  394           | zero => simp only [nodeBody] at done; cases done
+  395           | succ fuel =>
+  396               rw [Schedule.body] at room ⊢
+  397               simp only [nodeBody] at done
+  398               obtain ⟨results,middle,first,last⟩ := (bind_done_iff _ _ _ _).mp done
+  399               cases last
+  400               have edges := InternedEdgeResidency.resident_edges _ initial.ready.semantic.ready.semantic.1.normal.facts.linked _ available.resident
+  401               have rowsRoom : Room bits (Schedule.rows fuel budget seed).2 :=
+  402                 room.mono (Schedule.rebuild_ge (Schedule.rows fuel budget seed)).1
+  403               obtain ⟨next,final,actual,reads,rowReturned,rowsResident,law⟩ :=
+  404                 rowCalls fuel (Nat.lt_succ_self _) seed initial frame fits known inherited edges rowsRoom first
+  405               obtain ⟨rowPost,rowFrame,rowFits,rowKnown⟩ := rowReturned
+  406               have sourceAvailable := rowPost.effects.keeps.available _ available
+  407               obtain ⟨rebuilt,returned,numeric,carrier⟩ := SourceCurrentOuterRebuildGuardAlphabet.modify
+  408                 (Schedule.rows fuel budget seed).1 formulas solver next (Schedule.rows fuel budget seed).2
+  409                   entry original results depth free middle.checked rowFrame rowFits rowKnown sourceAvailable rowsResident actual.length
+  410               obtain ⟨_same,lastPost⟩ := SourceCurrentAllocatedPartialStepEffects.modify formulas solver next middle final
+  411                 rowPost.context entry original results depth free sourceAvailable rowsResident
+  412               exact ⟨next,final,.ordinary actual,.ordinary reads,
+  413                 ⟨rowPost.trans lastPost,returned,numeric,carrier⟩,rebuilt.available,
+  414                 SourceCurrentAllocatedPartialForestLanguage.ordinary formulas solver actual law rebuilt⟩
+  415 
+  416 private theorem all_actual (fuel : Nat) :
+  417     NodeCallAt formulas solver (bits := bits) fuel ∧ NodeBodyAt formulas solver (bits := bits) fuel ∧
+  418     RowsAt formulas solver (bits := bits) fuel ∧ DescendantsAt formulas solver (bits := bits) fuel ∧
+  419     ChildrenAt formulas solver (bits := bits) fuel ∧ WalkAt formulas solver (bits := bits) fuel := by
+  420   induction fuel using Nat.strongRecOn with
+  421   | ind fuel ih =>
+  422       have walks : WalkAt formulas solver (bits := bits) fuel := walk_step formulas solver fuel (fun smaller less => (ih smaller less).1)
+  423         (fun smaller less => (ih smaller less).2.2.2.2.2)
+  424       have child : ChildrenAt formulas solver (bits := bits) fuel := children_step formulas solver fuel walks
+  425       have descendAt : DescendantsAt formulas solver (bits := bits) fuel := descendants_step formulas solver fuel child
+  426       have rowsAt : RowsAt formulas solver (bits := bits) fuel := rows_step formulas solver fuel (fun smaller less => (ih smaller less).2.2.2.1)
+  427         (fun smaller less => (ih smaller less).2.2.1)
+  428       have bodyAt : NodeBodyAt formulas solver (bits := bits) fuel := nodeBody_step formulas solver fuel (fun smaller less => (ih smaller less).2.2.1)
+  429       exact ⟨nodeCall_step formulas solver fuel bodyAt,bodyAt,rowsAt,descendAt,child,walks⟩
+  430 
+  431 /-- A successful node call has exact semantic reads and scheduled returned resources. -/
+  432 theorem node_call (fuel : Nat) :
+  433   ∀ {g s r e p h m c n budget : Nat} {request : NodeRequest} {before after : Caller (bits+2)} {result : Node}
+  434     {inventory : Inventory} {memos : Memos} (seed : Seed),
+  435     Context formulas solver inventory before memos → Frame formulas solver inventory before.checked →
+  436     Fits seed.2 before.checked → Carrier (fun guard => guard ∈ seed.1) before.checked.native.machine.heap →
+  437     EqReady before.checked.operations.constraints request.inherited → Available before.checked.native.machine.heap request.value →
+  438     Room bits (Schedule.node fuel budget seed).2 →
+  439     nodeCall fuel g s r e p h m c n budget request before = .done result after →
+  440     ∃ next final, ∃ actual : NodeCall budget request before result after,
+  441       NodeCallReads formulas solver actual memos final ∧
+  442       Post formulas solver next before after final ∧
+  443       Frame formulas solver next after.checked ∧ Fits (Schedule.node fuel budget seed).2 after.checked ∧
+  444       Carrier (fun guard => guard ∈ (Schedule.node fuel budget seed).1) after.checked.native.machine.heap ∧
+  445       Available after.checked.native.machine.heap result ∧ NodeLaw formulas solver request result := by
+  446   intro g s r e p h m c n budget request before after result inventory memos seed initial frame fits known inherited available room done
+  447   simpa only [Returned, and_assoc] using
+  448     ((all_actual formulas solver (bits := bits) fuel).1 seed initial frame fits known inherited available room done)

@@ -1,0 +1,86 @@
+--- outer-rank-resources-direct-4.source.lean
++++ direct-4-proposed-repair.source.lean.txt
+@@ -125,10 +125,29 @@
+         Le (envelope budget a b current).2.2.2 (envelope budget count mass seed).2.2.2 := by
+   dsimp only
+   intro k slotBound a b counts masses smaller
+-  have bounds := SourceCurrentOuterRankEnvelopeStages.stage_bounds budget count mass seed j rowBound
+-  have atSlot := bounds.2.2.2 k (Nat.le_of_lt slotBound)
+-  simpa only [fold, row, slot, images] using
+-    (atSlot.2.2.2.2 a b slotBound counts masses smaller).2.2.1
++  let all := images budget count mass
++  let prior := fold (row budget all) j (0,0,seed)
++  let post := SourceCurrentOuterInitialSchedule.parent budget prior.2.2
++  let current := fold (slot all) k (0,0,post)
++  let walked := fold (slot all) post.2.mass (0,0,post)
++  let completed := fold (row budget all) mass (0,0,seed)
++  have member := image_member budget count mass current.2.2 a b counts masses smaller
++  have selected := image_kept all current (envelope budget a b current.2.2) member
++  have slots : Kept (slot all current).2.2 walked.2.2 := by
++    have bound : k < post.2.mass := slotBound
++    have suffix := prefix_kept (slot all) (slot_kept all) (n := post.2.mass) (k := k+1) (by omega) (0,0,post)
++    simpa only [fold_succ] using suffix
++  have rebuilt : Kept walked.2.2 (row budget all prior).2.2 := by
++    change Kept walked.2.2 (SourceCurrentOuterInitialSchedule.rebuild walked.2.2)
++    exact SourceCurrentOuterInitialSchedule.rebuild_ge _
++  have rows : Kept (row budget all prior).2.2 completed.2.2 := by
++    have suffix := prefix_kept (row budget all) (row_kept budget all)
++      (n := mass) (k := j+1) (by omega) (0,0,seed)
++    simpa only [fold_succ] using suffix
++  have final := SourceCurrentOuterInitialSchedule.rebuild_ge completed.2.2
++  have last := kept_trans selected (kept_trans slots (kept_trans rebuilt (kept_trans rows final)))
++  rw [equation budget count mass seed]
++  exact last.1
+ 
+ private theorem same_request [DecidableEq (EdgeKey Symbol Guard)]
+     {bits : Nat} {formulas : SourceGuards.Formulas FullSyntax.Formula}
+@@ -330,6 +349,7 @@
+                     afterParent parented inherited parentFits parentKnown).2.1
+                   have childMass := SourceCurrentAllocatedNativePhysicalMass.resident_children
+                     afterParent.checked.native.machine.heap parentFits.stored parented parentReceipt.semantic.resident
++                  have widthBound : parented.children.length < parentSeed.2.mass := childMass.2.1
+                   have childrenFit : Fits fullSlots.2 childEnd.checked ∧
+                       SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ fullSlots.1) childEnd.checked.native.machine.heap := by
+                     cases combined with
+@@ -400,13 +420,16 @@
+                               descent.1 descent.2.1 childRoom headDone
+                             have next := widen (image_kept all (fold slots index (0,0,parentSeed))
+                               (envelope budget a b current) member) childReturned.1 childReturned.2
+-                            rw [← fold_succ slots index (0,0,parentSeed)] at next
+-                            exact tailWalk walkFuel (index+1) middle finalState tailValue (by omega)
++                            have nextSlot : Fits (slotSeed (index+1)).2 middle.checked ∧
++                                SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ (slotSeed (index+1)).1)
++                                  middle.checked.native.machine.heap := by
++                              simpa only [slotSeed,fold_succ,slots] using next
++                            exact tailWalk walkFuel (index+1) middle finish tailValue (by omega)
+                               (by simp only [List.length_cons] at bound; omega)
+                               (fun value member => masses value (List.mem_cons_of_mem _ member))
+-                              (inside.snoc (.walk_tail headDone)) next.1 next.2 tailDone
++                              (inside.snoc (.walk_tail headDone)) nextSlot.1 nextSlot.2 tailDone
+                       exact walks rowFuel 0 parented.children _ childEnd childrenResult (Nat.le_refl _)
+-                        (by have h := childMass.2.1; omega) childMass.2.2
++                        (by simpa only [Nat.zero_add] using Nat.le_of_lt widthBound) childMass.2.2
+                         (childInside.snoc (.children_walk (by intro impossible; cases impossible))) prefixFits prefixKnown childDone
+                   obtain ⟨childIv,childMs,childOld,_t,childPost,childFrame,oldFits,oldKnown,childInputs,_b,_a,childRoom,_⟩ :=
+                     resources (bodyPast.trans childInside)
+@@ -428,14 +451,17 @@
+                         childEnd.fourth childEnd.merge).checked.native.machine.heap := by
+                     simpa only [rowSeed,fold_succ,rowStep,row,prior,fullSlots,slotSeed,slots,parentSeed,
+                       SourceCurrentAllocatedPartialState.advance,SourceCurrentOuterInitialSchedule.rebuild] using builtKnown
+-                  exact tailRows rowFuel (j+1) _ finalState restResults (by omega)
++                  exact tailRows rowFuel (j+1) _ finish restResults (by omega)
+                     (by simp only [List.length_cons] at bound; omega)
+                     (inside.snoc (.rows_tail parentDone descObserved)) nextFits nextKnown tailDone
+             have rowInside : Reached g s r e p h m c n budget
+                 (.body (bodyFuel+1) ⟨inherited,.node entry originals depth free⟩ running)
+-                (.rows bodyFuel inherited originals running) := (.refl _).snoc (.body_rows rfl)
++                (.rows bodyFuel inherited originals running) := (Reached.refl _).snoc (.body_rows rfl)
+             have padded := rowsFit bodyFuel 0 originals running rowEnd results (Nat.le_refl _)
+-              (by dsimp only [mass,InternedValueMass.value]; rw [InternedValueMass.edges_eq_length_sum]; omega)
++              (by
++                change 0 + originals.length ≤ 1 + InternedValueMass.edges originals
++                rw [InternedValueMass.edges_eq_length_sum]
++                omega)
+               rowInside runningFits runningKnown rowsDone
+             obtain ⟨rowIv,rowMs,rowOld,_t,rowPost,rowFrame,oldFits,oldKnown,rowInputs,_b,_a,rowRoom,_⟩ :=
+               resources (bodyPast.trans rowInside)

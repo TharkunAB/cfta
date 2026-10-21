@@ -1,0 +1,37 @@
+--- outer-rank-resources-direct-3.source.lean
++++ direct-3-proposed-repair.source.lean.txt
+@@ -114,6 +114,21 @@
+   · exact List.mem_flatMap.mpr ⟨a,List.mem_range.mpr (by omega),
+       List.mem_map.mpr ⟨b,List.mem_range.mpr (by omega),rfl⟩⟩
+   · simpa only [decide_eq_true_eq, Nat.lt_eq] using Prod.lex_def.mp smaller
++
++private theorem candidate_profile (budget count mass : Nat) (seed : Seed) (j : Nat) (rowBound : j < mass) :
++    let all := images budget count mass
++    let prior := fold (row budget all) j (0,0,seed)
++    let post := SourceCurrentOuterInitialSchedule.parent budget prior.2.2
++    ∀ k, k < post.2.mass →
++      let current := (fold (slot all) k (0,0,post)).2.2
++      ∀ a b, a ≤ count → b ≤ current.2.mass → Prod.Lex Nat.lt Nat.lt (a,b) (count,mass) →
++        Le (envelope budget a b current).2.2.2 (envelope budget count mass seed).2.2.2 := by
++  dsimp only
++  intro k slotBound a b counts masses smaller
++  have bounds := SourceCurrentOuterRankEnvelopeStages.stage_bounds budget count mass seed j rowBound
++  have atSlot := bounds.2.2.2 k (Nat.le_of_lt slotBound)
++  simpa only [fold, row, slot, images] using
++    (atSlot.2.2.2.2 a b slotBound counts masses smaller).2.2.1
+ 
+ private theorem same_request [DecidableEq (EdgeKey Symbol Guard)]
+     {bits : Nat} {formulas : SourceGuards.Formulas FullSyntax.Formula}
+@@ -375,9 +390,9 @@
+                             have slotBound : index < parentSeed.2.mass := by
+                               simp only [List.length_cons] at bound
+                               omega
+-                            have bounds := stage.2.2.2 index (Nat.le_of_lt slotBound)
+-                            have childRoom := currentRoom.mono
+-                              ((bounds.2.2.2.2 a b slotBound counts massBound smaller).2.2.1)
++                            have childRoom : Room bits (envelope budget a b current).2.2.2 :=
++                              currentRoom.mono (candidate_profile budget count mass seed j rowBound
++                                index slotBound a b counts massBound smaller)
+                             have descent := SourceCurrentOuterConstructorBounds.descend current.1 current.2 start
+                               (.live identity records) index numeric carrier
+                             have childReturned := ih walkFuel (by omega) (request := childRequest) (before := childBefore)

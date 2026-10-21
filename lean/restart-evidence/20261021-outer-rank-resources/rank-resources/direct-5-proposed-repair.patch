@@ -1,0 +1,31 @@
+--- outer-rank-resources-direct-5.source.lean
++++ direct-5-proposed-repair.source.lean.txt
+@@ -136,14 +136,16 @@
+   have slots : Kept (slot all current).2.2 walked.2.2 := by
+     have bound : k < post.2.mass := slotBound
+     have suffix := prefix_kept (slot all) (slot_kept all) (n := post.2.mass) (k := k+1) (by omega) (0,0,post)
+-    simpa only [fold_succ] using suffix
++    rw [fold_succ (slot all) k (0,0,post)] at suffix
++    exact suffix
+   have rebuilt : Kept walked.2.2 (row budget all prior).2.2 := by
+     change Kept walked.2.2 (SourceCurrentOuterInitialSchedule.rebuild walked.2.2)
+     exact SourceCurrentOuterInitialSchedule.rebuild_ge _
+   have rows : Kept (row budget all prior).2.2 completed.2.2 := by
+     have suffix := prefix_kept (row budget all) (row_kept budget all)
+       (n := mass) (k := j+1) (by omega) (0,0,seed)
+-    simpa only [fold_succ] using suffix
++    rw [fold_succ (row budget all) j (0,0,seed)] at suffix
++    exact suffix
+   have final := SourceCurrentOuterInitialSchedule.rebuild_ge completed.2.2
+   have last := kept_trans selected (kept_trans slots (kept_trans rebuilt (kept_trans rows final)))
+   rw [equation budget count mass seed]
+@@ -459,8 +461,7 @@
+                 (.rows bodyFuel inherited originals running) := (Reached.refl _).snoc (.body_rows rfl)
+             have padded := rowsFit bodyFuel 0 originals running rowEnd results (Nat.le_refl _)
+               (by
+-                change 0 + originals.length ≤ 1 + InternedValueMass.edges originals
+-                rw [InternedValueMass.edges_eq_length_sum]
++                simp only [mass, InternedValueMass.value, InternedValueMass.edges_eq_length_sum]
+                 omega)
+               rowInside runningFits runningKnown rowsDone
+             obtain ⟨rowIv,rowMs,rowOld,_t,rowPost,rowFrame,oldFits,oldKnown,rowInputs,_b,_a,rowRoom,_⟩ :=

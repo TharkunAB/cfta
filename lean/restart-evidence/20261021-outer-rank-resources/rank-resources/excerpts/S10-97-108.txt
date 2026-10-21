@@ -1,0 +1,12 @@
+   97 theorem resident_children (source : State Symbol Guard) (stored : Stored bound source)
+   98     (edge : EdgeValue Symbol Guard) (resident : EdgeResident source edge) :
+   99     1 + InternedValueMass.values edge.children ≤ bound ∧
+  100       edge.children.length < bound ∧
+  101       ∀ child ∈ edge.children, InternedValueMass.value child < bound := by
+  102   have mass := InternedValueMassHeap.resident source stored edge resident
+  103   rw [InternedValueMass.edge_children] at mass
+  104   have length := InternedValueMass.values_eq_length_sum edge.children
+  105   refine ⟨mass, by omega, ?_⟩
+  106   intro child member
+  107   have smaller := InternedValueMass.value_mem_lt child edge.children member
+  108   omega

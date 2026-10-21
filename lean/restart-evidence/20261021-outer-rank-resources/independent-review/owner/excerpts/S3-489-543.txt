@@ -1,0 +1,55 @@
+  489 theorem descendants (fuel : Nat) :
+  490   ∀ {g s r e p h m c n budget : Nat} {inherited : EqValue} {value result : Edge} {before after : Caller (bits+2)}
+  491     {inventory : Inventory} {memos : Memos} (seed : Seed),
+  492     Context formulas solver inventory before memos → Frame formulas solver inventory before.checked →
+  493     Fits seed.2 before.checked → Carrier (fun guard => guard ∈ seed.1) before.checked.native.machine.heap →
+  494     EqReady before.checked.operations.constraints inherited → Resident before.checked.native.machine.heap value →
+  495     Room bits (Schedule.descendants fuel budget seed).2 →
+  496     SourceCurrentAllocatedPartialWorker.descendants fuel g s r e p h m c n budget inherited value before = .done result after →
+  497     ∃ next final, ∃ actual : Descendants budget inherited value before result after,
+  498       DescendantsReads formulas solver actual memos final ∧
+  499       Post formulas solver next before after final ∧
+  500       Frame formulas solver next after.checked ∧ Fits (Schedule.descendants fuel budget seed).2 after.checked ∧
+  501       Carrier (fun guard => guard ∈ (Schedule.descendants fuel budget seed).1) after.checked.native.machine.heap ∧
+  502       Resident after.checked.native.machine.heap result ∧ EdgeLaw formulas solver ⟨inherited,value⟩ result := by
+  503   intro g s r e p h m c n budget inherited value result before after inventory memos seed initial frame fits known inheritedReady resident room done
+  504   simpa only [Returned, and_assoc] using
+  505     ((all_actual formulas solver (bits := bits) fuel).2.2.2.1 seed initial frame fits known inheritedReady resident room done)
+  506 
+  507 /-- Successful children retain the exact forest law and scheduled returned resources. -/
+  508 theorem children (fuel : Nat) :
+  509   ∀ {g s r e p h m c n budget : Nat} {combined : EqValue} {values results : List Node} {before after : Caller (bits+2)}
+  510     {inventory : Inventory} {memos : Memos} (seed : Seed),
+  511     Context formulas solver inventory before memos → Frame formulas solver inventory before.checked →
+  512     Fits seed.2 before.checked → Carrier (fun guard => guard ∈ seed.1) before.checked.native.machine.heap →
+  513     EqReady before.checked.operations.constraints combined → Values before.checked.native.machine.heap values →
+  514     Room bits (Schedule.children fuel budget seed).2 →
+  515     SourceCurrentAllocatedPartialWorker.children fuel g s r e p h m c n budget combined values before = .done results after →
+  516     ∃ next final, ∃ actual : Children budget combined values before results after,
+  517       ChildrenReads formulas solver actual memos final ∧
+  518       Post formulas solver next before after final ∧
+  519       Frame formulas solver next after.checked ∧ Fits (Schedule.children fuel budget seed).2 after.checked ∧
+  520       Carrier (fun guard => guard ∈ (Schedule.children fuel budget seed).1) after.checked.native.machine.heap ∧
+  521       Values after.checked.native.machine.heap results ∧ ChildrenLaw formulas solver actual := by
+  522   intro g s r e p h m c n budget combined values results before after inventory memos seed initial frame fits known inheritedReady available room done
+  523   simpa only [Returned, and_assoc] using
+  524     ((all_actual formulas solver (bits := bits) fuel).2.2.2.2.1 seed initial frame fits known inheritedReady available room done)
+  525 
+  526 /-- A successful indexed walk retains the exact forest law and scheduled returned resources. -/
+  527 theorem walk (fuel : Nat) :
+  528   ∀ {g s r e p h m c n budget : Nat} {combined : EqValue} {index : Nat} {values results : List Node} {before after : Caller (bits+2)}
+  529     {inventory : Inventory} {memos : Memos} (seed : Seed),
+  530     Context formulas solver inventory before memos → Frame formulas solver inventory before.checked →
+  531     Fits seed.2 before.checked → Carrier (fun guard => guard ∈ seed.1) before.checked.native.machine.heap →
+  532     EqReady before.checked.operations.constraints combined → Values before.checked.native.machine.heap values →
+  533     Room bits (Schedule.walk fuel budget seed).2 →
+  534     SourceCurrentAllocatedPartialWorker.walk fuel g s r e p h m c n budget combined index values before = .done results after →
+  535     ∃ next final, ∃ actual : Walk budget combined index values before results after,
+  536       WalkReads formulas solver actual memos final ∧
+  537       Post formulas solver next before after final ∧
+  538       Frame formulas solver next after.checked ∧ Fits (Schedule.walk fuel budget seed).2 after.checked ∧
+  539       Carrier (fun guard => guard ∈ (Schedule.walk fuel budget seed).1) after.checked.native.machine.heap ∧
+  540       Values after.checked.native.machine.heap results ∧ WalkLaw formulas solver actual := by
+  541   intro g s r e p h m c n budget combined index values results before after inventory memos seed initial frame fits known inheritedReady available room done
+  542   simpa only [Returned, and_assoc] using
+  543     ((all_actual formulas solver (bits := bits) fuel).2.2.2.2.2 seed initial frame fits known inheritedReady available room done)

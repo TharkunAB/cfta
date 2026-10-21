@@ -1,0 +1,32 @@
+  164 theorem children_length {fuel g s r e p h m c n limit combined values before results after}
+  165     (actual : SourceCurrentAllocatedPartialWorker.children fuel g s r e p h m c n limit combined values before =
+  166       .done results (after : Caller width)) : results.length = values.length := by
+  167   cases combined with
+  168   | contradiction =>
+  169     simp only [SourceCurrentAllocatedPartialWorker.children] at actual
+  170     cases actual
+  171     exact List.length_map _
+  172   | live identity records =>
+  173     simpa only [SourceCurrentAllocatedPartialWorker.children] using walk_length fuel
+  174       (by simpa only [SourceCurrentAllocatedPartialWorker.children] using actual)
+  175 
+  176 /-- Literal successful row traversal retains the exact original row count. -/
+  177 theorem rows_length (fuel : Nat) {g s r e p h m c n limit inherited values before results after}
+  178     (actual : SourceCurrentAllocatedPartialWorker.rows fuel g s r e p h m c n limit inherited values before =
+  179       .done results (after : Caller width)) : results.length = values.length := by
+  180   induction fuel generalizing values before results after with
+  181   | zero =>
+  182     cases values <;> simp only [SourceCurrentAllocatedPartialWorker.rows] at actual
+  183     · cases actual; rfl
+  184     · cases actual
+  185   | succ fuel ih =>
+  186     cases values with
+  187     | nil => simp only [SourceCurrentAllocatedPartialWorker.rows] at actual; cases actual; rfl
+  188     | cons value rest =>
+  189       simp only [SourceCurrentAllocatedPartialWorker.rows] at actual
+  190       obtain ⟨narrowed,middle,_,later⟩ := (bind_done_iff _ _ _ _).mp actual
+  191       obtain ⟨head,current,_,later⟩ := (bind_done_iff _ _ _ _).mp later
+  192       obtain ⟨tail,final,called,last⟩ := (bind_done_iff _ _ _ _).mp later
+  193       cases last
+  194       have length := ih called
+  195       simpa only [List.length_cons] using congrArg Nat.succ length

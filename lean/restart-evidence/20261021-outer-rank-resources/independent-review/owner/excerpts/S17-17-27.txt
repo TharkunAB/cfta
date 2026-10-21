@@ -1,0 +1,11 @@
+   17 def value : Value Symbol Guard → Nat
+   18   | .empty | .reference _ => 1
+   19   | .node _ rows _ _ => 1 + edges rows
+   20   | .union _ members _ _ => 1 + values members
+   21   | .mu _ body depth ordinary => 1 + value body + value depth + value ordinary
+   22 termination_by node => sizeOf node
+   23 
+   24 /-- Count an edge constructor and its complete ordered child payloads. -/
+   25 def edge : EdgeValue Symbol Guard → Nat
+   26   | .mk _ children => 1 + values children
+   27 termination_by row => sizeOf row

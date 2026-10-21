@@ -1,0 +1,29 @@
+--- verify-before-toolchain-option.py
++++ verify.py
+@@ -12,6 +12,8 @@
+     parser = argparse.ArgumentParser()
+     parser.add_argument("--root", type=Path, required=True)
+     parser.add_argument("--live", action="store_true")
++    parser.add_argument("--toolchain-source", type=Path,
++        help="Installed Lean source root containing Init/WF.lean")
+     args = parser.parse_args()
+     here = Path(__file__).resolve().parent
+     manifest = json.loads((here / "manifest.json").read_text())
+@@ -36,7 +38,8 @@
+             current = args.root / item["root_path"]
+             root_sources += 1
+         else:
+-            current = Path(item["external_path"])
++            current = (args.toolchain_source / item["toolchain_path"]
++                if args.toolchain_source is not None else Path(item["external_path"]))
+             external_sources += 1
+         if args.live:
+             assert digest(current.read_bytes()) == item["sha256"], f"Changed source: {current}"
+@@ -44,6 +47,7 @@
+     assert len((here / "context.lean.txt").read_text().splitlines()) == 21
+     print(json.dumps({"status":"PASS", "live":args.live, "local_pins":len(manifest["files"]),
+         "root_sources":root_sources, "external_sources":external_sources, "ranges":range_count,
++        "toolchain_source":str(args.toolchain_source) if args.toolchain_source else None,
+         "new_proof_or_runtime_jobs":0}, sort_keys=True))
+ 
+ if __name__ == "__main__":

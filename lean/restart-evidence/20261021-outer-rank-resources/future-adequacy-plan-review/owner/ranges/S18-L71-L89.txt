@@ -1,0 +1,19 @@
+/-- Indexed equality descent retains the initial physical profile and flat guard carrier. -/
+theorem descend (alphabet : List Guard) (entry : Profile) (before : Caller width)
+    (combined : EqValue) (index : Nat) (fits : Fits entry before.checked)
+    (known : Known (fun guard => guard ∈ alphabet) before.checked.native.machine.heap) :
+    let after := (SourceCurrentAllocatedPartialGraph.descend before combined index).2
+    Fits entry after.checked ∧ Known (fun guard => guard ∈ alphabet) after.checked.native.machine.heap ∧
+      after.checked.native.machine.heap = before.checked.native.machine.heap ∧
+      after.checked.native.machine.domains = before.checked.native.machine.domains :=
+  ⟨⟨fits.nodes,fits.edges,fits.domains,fits.stored⟩,known,rfl,rfl⟩
+
+/-- The literal inherited prefix retains the profile and flat carrier in every return branch. -/
+theorem prefix_state (alphabet : List Guard) (entry : Profile) (before : Caller width)
+    (original : Edge) (inherited : EqValue) (fits : Fits entry before.checked)
+    (known : Known (fun guard => guard ∈ alphabet) before.checked.native.machine.heap) :
+    let after := SourceCurrentAllocatedPartialGraph.prefixState before original inherited
+    Fits entry after.checked ∧ Known (fun guard => guard ∈ alphabet) after.checked.native.machine.heap ∧
+      after.checked.native.machine.heap = before.checked.native.machine.heap ∧
+      after.checked.native.machine.domains = before.checked.native.machine.domains :=
+  ⟨⟨fits.nodes,fits.edges,fits.domains,fits.stored⟩,known,rfl,rfl⟩

@@ -1,0 +1,19 @@
+   43 /-- Node preparation reads existing identities and allocates no equality value. -/
+   44 def NodeRequest.key (request : NodeRequest) : NodeKey :=
+   45   (request.inherited.identity, request.value.referenceOf)
+   46 
+   47 /-- Edge preparation reads existing identities and allocates no equality value. -/
+   48 def EdgeRequest.key (request : EdgeRequest) : EdgeKey :=
+   49   (request.inherited.identity, request.value.entry.identity)
+   50 
+   51 /-- Every continuation carries the complete checked state and all caller result tables. -/
+   52 structure State (width : Nat) : Type 1 where
+   53   checked : Checked width
+   54   merge : MergeMemo
+   55   fourth : Fourth
+   56   nodeResults : FlatMemoThunk.State NodeKey NodeRequest Node
+   57   edgeResults : FlatMemoThunk.State EdgeKey EdgeRequest Edge
+   58 
+   59 /-- A fresh caller family clears only its two result tables. -/
+   60 def initial (checked : Checked width) (merge : MergeMemo) (fourth : Fourth) : State width :=
+   61   ⟨checked, merge, fourth, FlatMemoThunk.empty, FlatMemoThunk.empty⟩

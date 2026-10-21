@@ -1,0 +1,54 @@
+  291 private theorem rows_step (fuel : Nat)
+  292     (descendAt : ∀ smaller, smaller < fuel → DescendantsAt formulas solver (bits := bits) smaller)
+  293     (tails : ∀ smaller, smaller < fuel → RowsAt formulas solver (bits := bits) smaller) :
+  294     RowsAt formulas solver (bits := bits) fuel := by
+  295   intro g s r e p h m c n budget inherited values results before after inventory memos seed
+  296     initial frame fits known inheritedReady resident room done
+  297   cases values with
+  298   | nil =>
+  299       simp only [rows] at done
+  300       cases done
+  301       have padded := Schedule.rows_ge fuel budget seed
+  302       exact ⟨inventory,memos,.nil,.nil,
+  303         ⟨Post.refl initial,frame,fits.mono padded.1,fun key edge found => padded.2 (known key edge found)⟩,
+  304         (by intro row member; cases member),SourceCurrentAllocatedPartialForestLanguage.rows_nil formulas solver budget inherited before⟩
+  305   | cons original rest =>
+  306       cases fuel with
+  307       | zero => simp only [rows] at done; cases done
+  308       | succ fuel =>
+  309           rw [Schedule.rows] at room ⊢
+  310           simp only [rows] at done
+  311           obtain ⟨narrowed,middle,first,remaining⟩ := (bind_done_iff _ _ _ _).mp done
+  312           obtain ⟨edgeResult,current,second,remaining⟩ := (bind_done_iff _ _ _ _).mp remaining
+  313           obtain ⟨restResults,finalState,tail,last⟩ := (bind_done_iff _ _ _ _).mp remaining
+  314           cases last
+  315           let edgeSeed := Schedule.parent budget seed
+  316           let childSeed := Schedule.descendants fuel budget edgeSeed
+  317           have edgeRoom : Room bits edgeSeed.2 := room.mono
+  318             ((Schedule.descendants_ge fuel budget edgeSeed).1.trans (Schedule.rows_ge fuel budget childSeed).1)
+  319           obtain ⟨edgeInventory,edgeMemos,edgeReceipt,edgeFits,edgeKnown⟩ :=
+  320             SourceCurrentOuterEdgeGuardAlphabet.edge_call formulas solver inventory budget seed.1 ⟨inherited,original⟩
+  321               before memos initial frame seed.2 fits known inheritedReady (resident original List.mem_cons_self)
+  322               (Schedule.parent_reserved bits budget seed edgeRoom) first
+  323           have childRoom : Room bits childSeed.2 := room.mono (Schedule.rows_ge fuel budget childSeed).1
+  324           obtain ⟨childInventory,childMemos,childGraph,childReads,childReturned,childResident,childLaw⟩ :=
+  325             descendAt fuel (Nat.lt_succ_self _) edgeSeed edgeReceipt.post.context edgeReceipt.frame edgeFits edgeKnown
+  326               (inheritedReady.grows edgeReceipt.post.effects.grows.constraint_growth) edgeReceipt.semantic.resident childRoom second
+  327           obtain ⟨childPost,childFrame,childFits,childKnown⟩ := childReturned
+  328           have firstPost := edgeReceipt.post.trans childPost
+  329           have tailResident : Edges current.checked.native.machine.heap rest :=
+  330             fun edge member => InternedEdgeResidency.edge_grows _ _ firstPost.effects.keeps.growth _
+  331               (resident edge (List.mem_cons_of_mem _ member))
+  332           obtain ⟨next,final,tailGraph,tailReads,tailReturned,resultsResident,tailLaw⟩ :=
+  333             tails fuel (Nat.lt_succ_self _) childSeed childPost.context childFrame childFits childKnown
+  334               (inheritedReady.grows firstPost.effects.grows.constraint_growth) tailResident room tail
+  335           obtain ⟨tailPost,tailFrame,tailFits,tailKnown⟩ := tailReturned
+  336           refine ⟨next,final,.cons edgeReceipt.actual childGraph tailGraph,.cons edgeReceipt.reads childReads tailReads,
+  337             ⟨firstPost.trans tailPost,tailFrame,tailFits,tailKnown⟩,?_,
+  338             SourceCurrentAllocatedPartialForestLanguage.rows_cons formulas solver edgeReceipt.actual childGraph tailGraph
+  339               edgeReceipt.semantic.language childLaw tailLaw⟩
+  340           intro edge member
+  341           rcases List.mem_cons.mp member with same | member
+  342           · subst edge
+  343             exact InternedEdgeResidency.edge_grows _ _ tailPost.effects.keeps.growth _ childResident
+  344           · exact resultsResident edge member

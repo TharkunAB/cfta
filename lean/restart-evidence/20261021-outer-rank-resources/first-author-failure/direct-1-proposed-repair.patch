@@ -1,0 +1,81 @@
+--- outer-rank-resources-direct-1.source.lean
++++ direct-1-proposed-repair.source.lean.txt
+@@ -98,8 +98,9 @@
+   generalize post_eq : SourceCurrentOuterInitialSchedule.parent budget acc.2.2 = post
+   have parent := SourceCurrentOuterInitialSchedule.parent_ge budget acc.2.2
+   rw [post_eq] at parent
+-  exact kept_trans parent (kept_trans (fold_kept (slot all) (slot_kept all) _ _)
+-    (SourceCurrentOuterInitialSchedule.rebuild_ge _))
++  have walked : Kept post (fold (slot all) post.2.mass (0,0,post)).2.2 :=
++    fold_kept (slot all) (slot_kept all) post.2.mass (0,0,post)
++  exact kept_trans parent (kept_trans walked (SourceCurrentOuterInitialSchedule.rebuild_ge _))
+ private theorem image_kept (all : Seed → List Out) (acc value : Out) (member : value ∈ all acc.2.2) :
+     Kept value.2.2 (slot all acc).2.2 := by
+   refine ⟨cover_member _ (List.mem_map.mpr ⟨value,member,rfl⟩), ?_⟩
+@@ -112,7 +113,7 @@
+   refine ⟨(a,b), List.mem_filter.mpr ⟨?_, ?_⟩, rfl⟩
+   · exact List.mem_flatMap.mpr ⟨a,List.mem_range.mpr (by omega),
+       List.mem_map.mpr ⟨b,List.mem_range.mpr (by omega),rfl⟩⟩
+-  · simpa only [decide_eq_true_eq] using Prod.lex_def.mp smaller
++  · simpa only [decide_eq_true_eq, Nat.lt_eq] using Prod.lex_def.mp smaller
+ 
+ private theorem same_request [DecidableEq (EdgeKey Symbol Guard)]
+     {bits : Nat} {formulas : SourceGuards.Formulas FullSyntax.Formula}
+@@ -183,16 +184,17 @@
+   | ind fuel ih =>
+     dsimp only
+     obtain ⟨iv,ms,old,_trace,post,fr,_ff,_kk,ready,_below,_alphabet,_room,_rest⟩ := resources past
++    dsimp only [SourceCurrentOuterPrefixInvariants.Inputs, SourceCurrentOuterPrefixInvariants.NodeReady] at ready
+     generalize started : beginNode request before = observation
+     obtain ⟨handle,action,running⟩ := observation
+     cases action with
+     | ready value =>
+-      simp only [nodeCall,started] at observed
+-      cases observed
+       have same := (SourceCurrentAllocatedPartialMemoSound.beginNode_ready_sound formulas solver request before
+         post.context.sound post.context.ready.good.operations.constraints
+         post.context.ready.semantic.ready.semantic.1.normal.facts.coherent ready.1 ready.2 handle value running started).1
+       subst running
++      simp only [nodeCall,started] at observed
++      cases observed
+       have kept := SourceCurrentOuterRankEnvelope.retains budget
+         (rankCount (request.inherited.payload.getD []) request.value) (massOf request.value) seed
+       exact widen ⟨kept.2.1,kept.2.2⟩ currentFits currentKnown
+@@ -306,7 +308,7 @@
+                   simp only [descendants,combinedAt] at descDone
+                   obtain ⟨childrenResult,childEnd,childDone,last⟩ := (bind_done_iff _ _ _ _).mp descDone
+                   cases last
+-                  change children rowFuel g s r e p h m c n budget combined parented.children
++                  change SourceCurrentAllocatedPartialWorker.children rowFuel g s r e p h m c n budget combined parented.children
+                     (prefixState afterParent parented inherited) = .done childrenResult childEnd at childDone
+                   have childInside := (inside.snoc (.rows_edge parentDone)).snoc (.descendants_children combinedAt)
+                   have prefixKnown := (SourceCurrentOuterConstructorBounds.prefix_state parentSeed.1 parentSeed.2
+@@ -317,10 +319,11 @@
+                       SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ fullSlots.1) childEnd.checked.native.machine.heap := by
+                     cases combined with
+                     | contradiction =>
+-                      simp only [children] at childDone
++                      simp only [SourceCurrentAllocatedPartialWorker.children] at childDone
+                       cases childDone
+                       exact widen (fold_kept slots (slot_kept all) _ _) prefixFits prefixKnown
+                     | live identity records =>
++                      simp only [SourceCurrentAllocatedPartialWorker.children] at childDone
+                       change walk rowFuel g s r e p h m c n budget (.live identity records) 0 parented.children
+                         (prefixState afterParent parented inherited) = .done childrenResult childEnd at childDone
+                       have walks : ∀ walkFuel index values start finish output,
+@@ -400,11 +403,13 @@
+                     childrenFit.1 childrenFit.2 sourceResident childAvailable childGraph.length
+                   have nextFits : Fits (rowSeed (j+1)).2 (advance childEnd
+                       (SourceCurrentAllocatedRawRebuild.edge parented childrenResult childEnd.checked).2 childEnd.fourth childEnd.merge).checked := by
+-                    simpa only [rowSeed,fold_succ,row,prior,fullSlots,slotSeed,slots,parentSeed] using builtFits
++                    simpa only [rowSeed,fold_succ,rowStep,row,prior,fullSlots,slotSeed,slots,parentSeed,
++                      SourceCurrentAllocatedPartialState.advance,SourceCurrentOuterInitialSchedule.rebuild] using builtFits
+                   have nextKnown : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ (rowSeed (j+1)).1)
+                       (advance childEnd (SourceCurrentAllocatedRawRebuild.edge parented childrenResult childEnd.checked).2
+                         childEnd.fourth childEnd.merge).checked.native.machine.heap := by
+-                    simpa only [rowSeed,fold_succ,row,prior,fullSlots,slotSeed,slots,parentSeed] using builtKnown
++                    simpa only [rowSeed,fold_succ,rowStep,row,prior,fullSlots,slotSeed,slots,parentSeed,
++                      SourceCurrentAllocatedPartialState.advance,SourceCurrentOuterInitialSchedule.rebuild] using builtKnown
+                   exact tailRows rowFuel (j+1) _ finalState restResults (by omega)
+                     (by simp only [List.length_cons] at bound; omega)
+                     (inside.snoc (.rows_tail parentDone descObserved)) nextFits nextKnown tailDone

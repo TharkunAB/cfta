@@ -1,0 +1,15 @@
+   71 omit [DecidableEq Symbol] [DecidableEq (Value Symbol Guard)] in
+   72 /-- A completed node hit keeps the whole caller and derives its candidate law. -/
+   73 theorem node_hit {inventory : Inventory} {request : NodeRequest} {before after : Caller width}
+   74     {memos : Memos} {handle : Nat} {result : Value Symbol Guard}
+   75     (initial : Context formulas solver inventory before memos)
+   76     (inherited : EqReady before.checked.operations.constraints request.inherited)
+   77     (available : Available before.checked.native.machine.heap request.value)
+   78     (started : beginNode request before = (handle, .ready result, after)) :
+   79     Post formulas solver inventory before after memos ∧
+   80       Available after.checked.native.machine.heap result ∧ NodeLaw formulas solver request result := by
+   81   obtain ⟨same, resident, law⟩ := beginNode_ready_sound formulas solver request before initial.sound
+   82     initial.ready.good.operations.constraints initial.ready.semantic.ready.semantic.1.normal.facts.coherent
+   83     inherited available handle result after started
+   84   subst after
+   85   exact ⟨Post.refl initial, resident, law⟩

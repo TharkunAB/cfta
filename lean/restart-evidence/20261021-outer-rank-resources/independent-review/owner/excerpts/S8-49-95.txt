@@ -1,0 +1,47 @@
+   49 /-- The literal raw edge retains its full receipt, Frame, uniform profile, and initial carrier. -/
+   50 theorem edge (alphabet : List Guard) (formulas : SourceGuards.Formulas FullSyntax.Formula)
+   51     (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+   52     (profile : Profile) (original : Edge) (children : List Node) (before : Checked width)
+   53     (frame : Frame formulas solver inventory before) (fits : Fits profile before)
+   54     (known : Known (fun guard => guard ∈ alphabet) before.native.machine.heap)
+   55     (resident : EdgeResident before.native.machine.heap original)
+   56     (available : Values before.native.machine.heap children) (same : children.length = original.children.length) :
+   57     let actual := rawEdge original children before
+   58     SourceCurrentAllocatedRawRebuild.EdgeReceipt formulas solver inventory original children before actual.1 actual.2 ∧
+   59       Frame formulas solver inventory actual.2 ∧ Fits (uniform profile) actual.2 ∧
+   60       Known (fun guard => guard ∈ alphabet) actual.2.native.machine.heap := by
+   61   have built := SourceCurrentRawRebuildNumeric.edge formulas solver inventory original children before frame profile fits
+   62     resident available same
+   63   have length : children.length ≤ scalar profile := same ▸ edge_width profile before fits original resident
+   64   have carrier := SourceEqualityAnnotationHeap.run (fun guard => guard ∈ alphabet)
+   65     (makeEdge original.entry.key.symbol original.entry.key.constraint children)
+   66     (SourceEqualityAnnotationHeap.makeEdge _ _ _ _ (known _ _ resident)) before.native.machine.heap known
+   67   exact ⟨built.1, built.2.1, built.2.2.1.mono
+   68     (SourceCurrentEditFrame.constructorProfile_count_mono length profile), carrier⟩
+   69 
+   70 /-- Both literal node identity branches retain the full receipt and the same finite carrier. -/
+   71 theorem modify (alphabet : List Guard) (formulas : SourceGuards.Formulas FullSyntax.Formula)
+   72     (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+   73     (profile : Profile) (identity : Interned InternedBinderProtocol.NodeKey)
+   74     (oldRows newRows : List Edge) (depth : Nat) (free : List InternedBinderProtocol.Reference)
+   75     (before : Checked width) (frame : Frame formulas solver inventory before) (fits : Fits profile before)
+   76     (known : Known (fun guard => guard ∈ alphabet) before.native.machine.heap)
+   77     (available : Available before.native.machine.heap (.node identity oldRows depth free))
+   78     (resident : Edges before.native.machine.heap newRows) (sameLength : newRows.length = oldRows.length) :
+   79     let original := Value.node identity oldRows depth free
+   80     let actual := rawModify original oldRows newRows before
+   81     SourceCurrentAllocatedRawRebuild.NodeReceipt formulas solver inventory original oldRows newRows before actual.1 actual.2 ∧
+   82       Frame formulas solver inventory actual.2 ∧ Fits (uniform profile) actual.2 ∧
+   83       Known (fun guard => guard ∈ alphabet) actual.2.native.machine.heap := by
+   84   have built := SourceCurrentRawRebuildNumeric.modify formulas solver inventory identity oldRows newRows depth free before
+   85     frame profile fits available resident
+   86   have length : newRows.length ≤ scalar profile := sameLength ▸ node_width profile before fits identity oldRows depth free available
+   87   refine ⟨built.1, built.2.1, built.2.2.1.mono
+   88     (SourceCurrentEditFrame.constructorProfile_count_mono length profile), ?_⟩
+   89   by_cases same : newRows.map (fun row => row.entry.identity) = oldRows.map (fun row => row.entry.identity)
+   90   · simpa only [SourceCurrentAllocatedRawRebuild.modify_unchanged _ _ _ _ same] using known
+   91   · simpa only [SourceCurrentAllocatedRawRebuild.modify, SourceEqualityPartialNodeRebuild.modify, same, ↓reduceIte,
+   92       SourceEqualityNativeScoped.advanceHeap, SourceRecursiveIntersectionThunks.advance,
+   93       SourceCurrentAllocatedQueryMemo.advancePhysical] using
+   94         SourceEqualityAnnotationHeap.run (fun guard => guard ∈ alphabet) (makeNode newRows)
+   95           (SourceEqualityAnnotationHeap.makeNode _ _) before.native.machine.heap known

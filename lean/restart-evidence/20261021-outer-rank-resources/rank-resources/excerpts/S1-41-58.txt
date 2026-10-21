@@ -1,0 +1,18 @@
+   41 private theorem same_request [DecidableEq (EdgeKey Symbol Guard)]
+   42     {bits : Nat} {formulas : SourceGuards.Formulas FullSyntax.Formula}
+   43     {solver : SourceGuards.Entailment FullSyntax.Formula}
+   44     {inventory : Inventory} {before : Caller (bits + 2)} {memos : Memos}
+   45     (initial : Context formulas solver inventory before memos) (first second : NodeRequest)
+   46     (left : SourceCurrentOuterPrefixInvariants.NodeReady before first)
+   47     (right : SourceCurrentOuterPrefixInvariants.NodeReady before second) (same : first.key = second.key) :
+   48     first = second := by
+   49   have inherited := SourceEqualityConstraintMemoAllocation.ready_eq_of_identity _
+   50     initial.ready.good.operations.constraints first.inherited second.inherited left.1 right.1 (congrArg Prod.fst same)
+   51   have values := InternedFreshProbeKeys.resident_reference_injective _
+   52     initial.ready.semantic.ready.semantic.1.normal.facts.coherent first.value second.value
+   53     left.2.resident right.2.resident (congrArg Prod.snd same)
+   54   cases first
+   55   cases second
+   56   cases inherited
+   57   cases values
+   58   rfl

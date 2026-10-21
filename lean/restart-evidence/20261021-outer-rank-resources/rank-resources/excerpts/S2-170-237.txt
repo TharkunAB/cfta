@@ -1,0 +1,68 @@
+  170   | rows_edge done =>
+  171       rename_i fuel inherited original before narrowed middle rest
+  172       simp only [forecast,Schedule.rows] at room
+  173       let current := Schedule.parent budget seed
+  174       have parentRoom : Room bits current.2 := room.mono
+  175         ((Schedule.descendants_ge fuel budget current).1.trans
+  176           (Schedule.rows_ge fuel budget (Schedule.descendants fuel budget current)).1)
+  177       obtain ⟨next,final,receipt,numeric,carrier⟩ := SourceCurrentOuterEdgeGuardAlphabet.edge_call
+  178         formulas solver inventory budget seed.1 ⟨inherited,original⟩ before memos initial frame seed.2 fits known
+  179         inputs.1 (inputs.2 _ List.mem_cons_self) (Schedule.parent_reserved bits budget seed parentRoom) done
+  180       exact ⟨next,final,current,receipt.post,receipt.frame,numeric,carrier,
+  181         ⟨inputs.1.grows receipt.post.effects.grows.constraint_growth,receipt.semantic.resident⟩,rfl,
+  182         (by simpa only [forecast,Schedule.rows,Below,current] using Schedule.rows_ge fuel budget (Schedule.descendants fuel budget current))⟩
+  183   | rows_tail edge children =>
+  184       rename_i fuel inherited original before narrowed middle result after rest
+  185       simp only [forecast,Schedule.rows] at room
+  186       let parentSeed := Schedule.parent budget seed
+  187       let current := Schedule.descendants fuel budget parentSeed
+  188       have parentRoom : Room bits parentSeed.2 := room.mono
+  189         ((Schedule.descendants_ge fuel budget parentSeed).1.trans (Schedule.rows_ge fuel budget current).1)
+  190       obtain ⟨edgeInventory,edgeMemos,receipt,numeric,carrier⟩ := SourceCurrentOuterEdgeGuardAlphabet.edge_call
+  191         formulas solver inventory budget seed.1 ⟨inherited,original⟩ before memos initial frame seed.2 fits known
+  192         inputs.1 (inputs.2 _ List.mem_cons_self) (Schedule.parent_reserved bits budget seed parentRoom) edge
+  193       have descendantRoom : Room bits current.2 := room.mono (Schedule.rows_ge fuel budget current).1
+  194       obtain ⟨next,final,_graph,_reads,post,returned,numeric,carrier,_resident,_law⟩ :=
+  195         SourceCurrentOuterInitialActual.descendants formulas solver fuel parentSeed receipt.post.context receipt.frame
+  196           numeric carrier (inputs.1.grows receipt.post.effects.grows.constraint_growth) receipt.semantic.resident descendantRoom children
+  197       have total := receipt.post.trans post
+  198       exact ⟨next,final,current,total,returned,numeric,carrier,
+  199         ⟨inputs.1.grows total.effects.grows.constraint_growth,fun row member =>
+  200           InternedEdgeResidency.edge_grows _ _ total.effects.keeps.growth _
+  201             (inputs.2 row (List.mem_cons_of_mem _ member))⟩,rfl,
+  202         (by simpa only [forecast,Schedule.rows] using below_refl (Schedule.rows fuel budget current))⟩
+  203   | descendants_children actual =>
+  204       rename_i inherited combined fuel before edge
+  205       obtain ⟨chosen,receipt,returned,numeric,post⟩ := SourceCurrentInheritedNumeric.resident_complete formulas solver
+  206         inventory edge inherited before memos initial frame seed.2 fits (fun _ => inputs.2) (fun _ => inputs.1)
+  207       have same := Option.some.inj (Except.ok.inj (receipt.actual.symm.trans actual))
+  208       subst chosen
+  209       have children := initial.ready.semantic.ready.semantic.1.normal.facts.cached.edges edge.entry.key edge inputs.2
+  210       exact ⟨inventory,memos,seed,post,returned,numeric,known,
+  211         ⟨receipt.combinedReady,fun value member => post.effects.keeps.available _ (children value member)⟩,
+  212         rfl,(by simpa only [forecast,Schedule.descendants,Below] using Schedule.rebuild_ge _)⟩
+  213   | children_walk _ =>
+  214       exact ⟨inventory,memos,seed,Post.refl initial,frame,fits,known,inputs,rfl,
+  215         (by simpa only [forecast,Schedule.children] using below_refl (Schedule.walk _ budget seed))⟩
+  216   | walk_head =>
+  217       rename_i fuel combined index value rest before
+  218       obtain ⟨receipt,returned,numeric,post⟩ := SourceCurrentInheritedNumeric.descent formulas solver
+  219         inventory before memos combined index initial frame seed.2 fits inputs.1
+  220       exact ⟨inventory,memos,seed,post,returned,numeric,known,
+  221         ⟨receipt.inherited,post.effects.keeps.available _ (inputs.2 _ List.mem_cons_self)⟩,rfl,
+  222         (by simpa only [forecast,Schedule.walk,Below] using Schedule.walk_ge fuel budget (Schedule.node fuel budget seed))⟩
+  223   | walk_tail done =>
+  224       rename_i fuel before combined index value result middle rest
+  225       simp only [forecast,Schedule.walk] at room
+  226       obtain ⟨receipt,returned,numeric,post⟩ := SourceCurrentInheritedNumeric.descent formulas solver
+  227         inventory before memos combined index initial frame seed.2 fits inputs.1
+  228       let current := Schedule.node fuel budget seed
+  229       have nodeRoom : Room bits current.2 := room.mono (Schedule.walk_ge fuel budget current).1
+  230       obtain ⟨next,final,_graph,_reads,nodePost,nodeFrame,numeric,carrier,_available,_law⟩ :=
+  231         SourceCurrentOuterInitialActual.node_call formulas solver fuel seed post.context returned numeric known
+  232           receipt.inherited (post.effects.keeps.available _ (inputs.2 _ List.mem_cons_self)) nodeRoom done
+  233       have total := post.trans nodePost
+  234       exact ⟨next,final,current,total,nodeFrame,numeric,carrier,
+  235         ⟨inputs.1.grows total.effects.grows.constraint_growth,fun child member =>
+  236           total.effects.keeps.available _ (inputs.2 child (List.mem_cons_of_mem _ member))⟩,rfl,
+  237         (by simpa only [forecast,Schedule.walk] using below_refl (Schedule.walk fuel budget current))⟩

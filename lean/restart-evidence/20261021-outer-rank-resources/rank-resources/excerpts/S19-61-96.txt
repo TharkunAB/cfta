@@ -1,0 +1,36 @@
+   61 /-- The node family demands its cell before inspecting the body recursion bound. -/
+   62 noncomputable def nodeCall (fuel g s r e p h m c n budget : Nat) (request : NodeRequest)
+   63     (before : Caller width) : Outcome Node width :=
+   64   let actual := beginNode request before
+   65   match actual.2.1 with
+   66   | .ready result => .done result actual.2.2
+   67   | .evaluate original =>
+   68       (nodeBody fuel g s r e p h m c n budget original actual.2.2).bind fun result after =>
+   69         .done result (finishNode actual.1 result after)
+   70   | .busy => .failed (.nodeMemo actual.1 .busy) actual.2.2
+   71   | .absent => .failed (.nodeMemo actual.1 .absent) actual.2.2
+   72 termination_by (fuel, 3)
+   73 
+   74 /-- Source terminal and binder branches run literally; ordinary rows consume one recursion step. -/
+   75 noncomputable def nodeBody (fuel g s r e p h m c n budget : Nat) (request : NodeRequest)
+   76     (before : Caller width) : Outcome Node width :=
+   77   match request.value with
+   78   | .empty => .done .empty before
+   79   | value@(.union ..) => .done value before
+   80   | .reference name => .failed (.unexpectedReference name) before
+   81   | .mu entry body depth ordinary =>
+   82       match SourceEqualityMuReconstruction.rebuild entry body depth ordinary before.checked.native.machine.heap with
+   83       | .done result heap => .done result (advance before
+   84           (SourceCurrentAllocatedQueryMemo.advancePhysical before.checked ⟨heap, before.checked.operations⟩)
+   85           before.fourth before.merge)
+   86       | observation@(.pending _ heap) => .failed (.binder observation) (advance before
+   87           (SourceCurrentAllocatedQueryMemo.advancePhysical before.checked ⟨heap, before.checked.operations⟩)
+   88           before.fourth before.merge)
+   89   | value@(.node _ original _ _) =>
+   90       match fuel with
+   91       | 0 => .failed (.exhausted .nodeBody) before
+   92       | next + 1 =>
+   93           (rows next g s r e p h m c n budget request.inherited original before).bind fun results after =>
+   94             let rebuilt := SourceCurrentAllocatedRawRebuild.modify value original results after.checked
+   95             .done rebuilt.1 (advance after rebuilt.2 after.fourth after.merge)
+   96 termination_by (fuel, 2)

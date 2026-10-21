@@ -1,0 +1,23 @@
+  104     (initial checked merge fourth).checked = checked ∧
+  105     (initial checked merge fourth).merge = merge ∧ (initial checked merge fourth).fourth = fourth ∧
+  106     (initial checked merge fourth).nodeResults = FlatMemoThunk.empty ∧
+  107     (initial checked merge fourth).edgeResults = FlatMemoThunk.empty := ⟨rfl, rfl, rfl, rfl, rfl⟩
+  108 
+  109 /-- Physical advancement retains both complete caller result tables. -/
+  110 theorem advance_tables (before : State width) (checked : Checked width) (fourth : Fourth) (merge : MergeMemo) :
+  111     (advance before checked fourth merge).checked = checked ∧
+  112     (advance before checked fourth merge).fourth = fourth ∧ (advance before checked fourth merge).merge = merge ∧
+  113     (advance before checked fourth merge).nodeResults = before.nodeResults ∧
+  114     (advance before checked fourth merge).edgeResults = before.edgeResults := ⟨rfl, rfl, rfl, rfl, rfl⟩
+  115 
+  116 /-- Node publication and demand change only their own result table. -/
+  117 theorem beginNode_components (request : NodeRequest) (before : State width) :
+  118     let after := (beginNode request before).2.2
+  119     after.checked = before.checked ∧ after.merge = before.merge ∧ after.fourth = before.fourth ∧
+  120       after.edgeResults = before.edgeResults := ⟨rfl, rfl, rfl, rfl⟩
+  121 
+  122 /-- Edge publication and demand change only their own result table. -/
+  123 theorem beginEdge_components (request : EdgeRequest) (before : State width) :
+  124     let after := (beginEdge request before).2.2
+  125     after.checked = before.checked ∧ after.merge = before.merge ∧ after.fourth = before.fourth ∧
+  126       after.nodeResults = before.nodeResults := ⟨rfl, rfl, rfl, rfl⟩

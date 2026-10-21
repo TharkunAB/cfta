@@ -1,0 +1,30 @@
+   95 theorem body_rank_lt
+   96     (formulas : SourceGuards.Formulas FullSyntax.Formula)
+   97     (solver : SourceGuards.Entailment FullSyntax.Formula)
+   98     {g s r e p h m c n budget ownerFuel candidateFuel : Nat}
+   99     {first : Phase (bits + 2)} {inventory : Inventory} {memos : Memos}
+  100     (seed : List Guard × Profile)
+  101     (initial : Context formulas solver inventory (caller first) memos)
+  102     (frame : Frame formulas solver inventory (caller first).checked)
+  103     (fits : Fits seed.2 (caller first).checked)
+  104     (known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.1)
+  105       (caller first).checked.native.machine.heap)
+  106     (inputs : SourceCurrentOuterPrefixInvariants.Inputs first)
+  107     (room : Room bits (SourceCurrentOuterInitialPrefix.forecast budget first seed).2)
+  108     (normal : SourceCurrentRequiredUnionNormal.UnionNormal (caller first).checked.native.machine.heap)
+  109     (supported : SourceCurrentNativeRequestPositivePositions.Support
+  110       (caller first).checked.native.machine.heap (caller first).checked.native)
+  111     (causal : SourceCurrentNativeMuPublication.History empty (caller first).checked.native.machine.heap)
+  112     (merged : SourceCurrentConstrainedCapMemoMerge.Stored
+  113       (fun guard : Guard => SourceMemoGate.plain guard = true) (caller first).merge)
+  114     (positiveMemo : SourceCurrentMergePositivePosition.Support (caller first).merge)
+  115     (origins : SourceCurrentResourceParentWriters.Origins formulas solver (caller first))
+  116     {owner candidate : NodeRequest} {running current : Caller (bits + 2)}
+  117     (past : Reached g s r e p h m c n budget first (.body ownerFuel owner running))
+  118     (inside : Reached g s r e p h m c n budget (.body ownerFuel owner running)
+  119       (.node candidateFuel candidate current)) :
+  120     Prod.Lex Nat.lt Nat.lt
+  121       (SourceCurrentPositiveQuotientCount.count (candidate.inherited.payload.getD []) candidate.value,
+  122         InternedValueMass.value candidate.value)
+  123       (SourceCurrentPositiveQuotientCount.count (owner.inherited.payload.getD []) owner.value,
+  124         InternedValueMass.value owner.value)

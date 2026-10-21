@@ -1,0 +1,6 @@
+theorem Reached.failed (actual : Reached g s r e p h m c n budget first last)
+    (failed : run g s r e p h m c n budget last = .failed fault after) :
+    run g s r e p h m c n budget first = .failed fault after := by
+  induction actual with
+  | refl => exact failed
+  | snoc earlier last ih => exact ih (last.failed failed)

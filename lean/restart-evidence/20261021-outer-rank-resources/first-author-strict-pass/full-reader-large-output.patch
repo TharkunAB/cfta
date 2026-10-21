@@ -1,0 +1,19 @@
+--- full-reader-before-large-output.py.txt
++++ outer-rank-resources-check-full-public.py
+@@ -41,8 +41,14 @@
+     axiom = re.search("'" + re.escape(name) + "' (depends on axioms:|does not depend on any axioms)", printed)
+     assert axiom, (head, "axiom report")
+     declaration, axiom_text = printed[:axiom.start()], printed[axiom.end():]
+-    candidates = [match for match in re.finditer(r" :=\n", declaration)
+-        if normalize(declaration[:match.start()]) == normalize(checked)]
++    expected = normalize(checked)
++    candidates = []
++    for match in re.finditer(r" :=\n", declaration):
++        prefix = normalize(declaration[:match.start()])
++        if prefix == expected:
++            candidates.append(match)
++        elif len(prefix) > len(expected):
++            break
+     assert len(candidates) == 1, (head, "unique complete TYPE/body delimiter", len(candidates))
+     split = candidates[0]
+     declared, body = declaration[:split.start()], declaration[split.end():]

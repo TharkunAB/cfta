@@ -1,0 +1,43 @@
+  104 theorem edge_call
+  105     (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  106     (inventory : Inventory) (budget : Nat) (alphabet : List Guard) (request : EdgeRequest)
+  107     (before : Caller (bits + 2)) (memos : Memos)
+  108     (initial : Context formulas solver inventory before memos)
+  109     (frame : Frame formulas solver inventory before.checked) (entry : Profile) (fits : Fits entry before.checked)
+  110     (known : Carrier (fun guard => guard ∈ alphabet) before.checked.native.machine.heap)
+  111     (inherited : EqReady before.checked.operations.constraints request.inherited)
+  112     (resident : Resident before.checked.native.machine.heap request.value)
+  113     (uniform : UniformReserved bits budget alphabet entry)
+  114     {f g s r e p h m c n : Nat} {result : Edge} {after : Caller (bits + 2)}
+  115     (observed : SourceCurrentAllocatedPartialWorker.edgeCall f g s r e p h m c n budget request before = .done result after) :
+  116     ∃ next final,
+  117       SourceCurrentEdgeCallNumeric.Receipt formulas solver next entry budget request before memos result after final ∧
+  118       Fits (outputProfile budget alphabet entry) after.checked ∧
+  119       Carrier (fun guard => guard ∈ outputAlphabet budget alphabet entry) after.checked.native.machine.heap := by
+  120   generalize started : beginEdge request before = observation
+  121   obtain ⟨handle,phase,running⟩ := observation
+  122   cases phase with
+  123   | ready value =>
+  124       obtain ⟨same,receipt⟩ := SourceCurrentEdgeCallNumeric.ready formulas solver inventory budget request before memos
+  125         initial frame entry fits inherited resident started
+  126       subst running
+  127       have done := SourceCurrentAllocatedPartialWorker.edgeCall_ready f g s r e p h m c n budget request before before handle value started
+  128       obtain ⟨sameResult,sameState⟩ := SourceCurrentAllocatedPartialWorkerStability.edgeCall_done_unique observed done
+  129       subst value after
+  130       have enlarged : Le entry (outputProfile budget alphabet entry) :=
+  131         (SourceCurrentInitialSelectionForecast.cover_ge _ _).trans (SourceCurrentMkEdgeNumeric.finalProfile_ge _ _)
+  132       exact ⟨inventory,memos,receipt,fits.mono enlarged,
+  133         fun key edge found => SourceCurrentParentUniformGuardAlphabet.initial_mem budget alphabet entry (known key edge found)⟩
+  134   | evaluate original =>
+  135       obtain ⟨runningContext,owner,_key,_cell⟩ := SourceCurrentAllocatedPartialCallSteps.edge_start
+  136         formulas solver initial inherited resident started
+  137       have components := beginEdge_components request before
+  138       rw [started] at components
+  139       dsimp only at components
+  140       obtain ⟨checked,_merge,_fourth,_nodes⟩ := components
+  141       have runningFrame : Frame formulas solver inventory running.checked := by simpa only [checked] using frame
+  142       have runningFits : Fits entry running.checked := by simpa only [checked] using fits
+  143       have runningKnown : Carrier (fun guard => guard ∈ alphabet) running.checked.native.machine.heap := by
+  144         simpa only [checked] using known
+  145       have parentReserved := SourceCurrentParentAlphabetReservation.resident_reserved formulas solver inventory budget alphabet
+  146         original running memos runningContext entry runningFits runningKnown owner.inherited owner.input uniform

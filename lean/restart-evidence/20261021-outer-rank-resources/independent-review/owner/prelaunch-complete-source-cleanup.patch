@@ -1,0 +1,81 @@
+--- first-complete-420.source.lean.txt
++++ SourceCurrentOuterRankEnvelopeResources.lean
+@@ -57,10 +57,16 @@
+     lhs
+     unfold envelope
+     rw [WellFounded.fix_eq, eta]
+-  change (SourceCurrentOuterInitialSchedule.rebuild
+-    (fold (row budget (fun current => (_ : List (Nat × Nat)).attach.map
+-      (fun child => envelope budget child.val.1 child.val.2 current))) mass (0,0,seed)).2.2) = _
+-  simp only [List.attach_map_val, images]
++  let ranks := fun (current : Seed) =>
++    ((List.range (count+1)).flatMap fun a => (List.range (current.2.mass+1)).map fun b => (a,b)).filter
++      (fun r => decide (r.1 < count ∨ (r.1 = count ∧ r.2 < mass)))
++  change SourceCurrentOuterInitialSchedule.rebuild
++    (fold (row budget (fun current => (ranks current).attach.map
++      (fun child => envelope budget child.val.1 child.val.2 current))) mass (0,0,seed)).2.2 = _
++  have images_eq (current : Seed) :
++      (ranks current).attach.map (fun child => envelope budget child.val.1 child.val.2 current) = images budget count mass current :=
++    List.attach_map_val (f := fun r : Nat × Nat => envelope budget r.1 r.2 current)
++  simp only [images_eq]
+ 
+ private def Kept (first last : Seed) : Prop := Le first.2 last.2 ∧ first.1 ⊆ last.1
+ private theorem kept_trans {first middle last : Seed} (one : Kept first middle) (two : Kept middle last) :
+@@ -106,7 +112,7 @@
+   refine ⟨(a,b), List.mem_filter.mpr ⟨?_, ?_⟩, rfl⟩
+   · exact List.mem_flatMap.mpr ⟨a,List.mem_range.mpr (by omega),
+       List.mem_map.mpr ⟨b,List.mem_range.mpr (by omega),rfl⟩⟩
+-  · exact of_decide_eq_true (by simpa only [decide_eq_true_eq] using Prod.lex_def.mp smaller)
++  · simpa only [decide_eq_true_eq] using Prod.lex_def.mp smaller
+ 
+ private theorem same_request [DecidableEq (EdgeKey Symbol Guard)]
+     {bits : Nat} {formulas : SourceGuards.Formulas FullSyntax.Formula}
+@@ -187,7 +193,9 @@
+         post.context.sound post.context.ready.good.operations.constraints
+         post.context.ready.semantic.ready.semantic.1.normal.facts.coherent ready.1 ready.2 handle value running started).1
+       subst running
+-      exact widen (envelope_retains := by assumption) currentFits currentKnown
++      have kept := SourceCurrentOuterRankEnvelope.retains budget
++        (rankCount (request.inherited.payload.getD []) request.value) (massOf request.value) seed
++      exact widen ⟨kept.2.1,kept.2.2⟩ currentFits currentKnown
+     | busy => simp only [nodeCall,started] at observed; cases observed
+     | absent => simp only [nodeCall,started] at observed; cases observed
+     | evaluate captured =>
+@@ -294,6 +302,7 @@
+                       parentReceipt.post.context parentReceipt.frame parentSeed.2 parentFits
+                       (fun _ => parentReceipt.semantic.resident) (fun _ => inheritedAfter)
+                   have combinedAt := prefixReceipt.actual
++                  have descObserved := descDone
+                   simp only [descendants,combinedAt] at descDone
+                   obtain ⟨childrenResult,childEnd,childDone,last⟩ := (bind_done_iff _ _ _ _).mp descDone
+                   cases last
+@@ -370,7 +379,7 @@
+                               descent.1 descent.2.1 childRoom headDone
+                             have next := widen (image_kept all (fold slots index (0,0,parentSeed))
+                               (envelope budget a b current) member) childReturned.1 childReturned.2
+-                            rw [← fold_succ] at next
++                            rw [← fold_succ slots index (0,0,parentSeed)] at next
+                             exact tailWalk walkFuel (index+1) middle finalState tailValue (by omega)
+                               (by simp only [List.length_cons] at bound; omega)
+                               (fun value member => masses value (List.mem_cons_of_mem _ member))
+@@ -383,8 +392,9 @@
+                   obtain ⟨next,final,childGraph,_reads,childPost,childFrame,_nf,_nk,childAvailable,_law⟩ :=
+                     SourceCurrentOuterInitialActual.children formulas solver rowFuel childOld childPost.context childFrame
+                       oldFits oldKnown childInputs.1 childInputs.2 childRoom childDone
+-                  have sourceResident := InternedEdgeResidency.edge_grows _ _
+-                    (prefixPost.effects.keeps.growth.trans childPost.effects.keeps.growth) parented parentReceipt.semantic.resident
++                  have prefixResident := InternedEdgeResidency.edge_grows _ _
++                    prefixPost.effects.keeps.growth parented parentReceipt.semantic.resident
++                  have sourceResident := InternedEdgeResidency.edge_grows _ _ childPost.effects.keeps.growth parented prefixResident
+                   obtain ⟨_built,_frame,builtFits,builtKnown⟩ := SourceCurrentOuterRebuildGuardAlphabet.edge fullSlots.1
+                     formulas solver next fullSlots.2 parented childrenResult childEnd.checked childFrame
+                     childrenFit.1 childrenFit.2 sourceResident childAvailable childGraph.length
+@@ -397,7 +407,7 @@
+                     simpa only [rowSeed,fold_succ,row,prior,fullSlots,slotSeed,slots,parentSeed] using builtKnown
+                   exact tailRows rowFuel (j+1) _ finalState restResults (by omega)
+                     (by simp only [List.length_cons] at bound; omega)
+-                    (inside.snoc (.rows_tail parentDone descDone)) nextFits nextKnown tailDone
++                    (inside.snoc (.rows_tail parentDone descObserved)) nextFits nextKnown tailDone
+             have rowInside : Reached g s r e p h m c n budget
+                 (.body (bodyFuel+1) ⟨inherited,.node entry originals depth free⟩ running)
+                 (.rows bodyFuel inherited originals running) := (.refl _).snoc (.body_rows rfl)

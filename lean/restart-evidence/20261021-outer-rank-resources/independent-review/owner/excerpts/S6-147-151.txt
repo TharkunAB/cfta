@@ -1,0 +1,5 @@
+  147 theorem parent_reserved (bits budget : Nat) (seed : List Guard × Profile)
+  148     (room : Room bits (parent budget seed).2) :
+  149     SourceCurrentParentAlphabetReservation.UniformReserved bits budget seed.1 seed.2 :=
+  150   SourceCurrentParentInitialRoom.uniform_of_room bits budget seed.1 seed.2
+  151     (room.mono (SourceCurrentMkEdgeNumeric.finalProfile_ge seed.2.mass _))

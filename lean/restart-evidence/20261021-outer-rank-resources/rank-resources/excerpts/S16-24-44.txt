@@ -1,0 +1,21 @@
+   24 /-- Every entry retains initial physical facts and all phase-appropriate warm laws. -/
+   25 structure Context (formulas : SourceGuards.Formulas FullSyntax.Formula)
+   26     (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+   27     (state : Caller width) (memos : Memos) : Prop where
+   28   ready : SourceCurrentConjunctionClassScan.Ready state.checked
+   29   admitted : At formulas solver inventory state.checked
+   30   sound : SourceCurrentAllocatedPartialMemoSound.Sound formulas solver state
+   31   stored : SourceCurrentMemoMergeEffects.Stored state.checked.native.machine.heap state.merge
+   32   covered : ∀ ambient, SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient state.merge
+   33   correct : SourceCurrentEmptinessMemo.Correct formulas solver state.checked.native.machine.heap state.fourth
+   34   globals : EndpointMemoGateTrace.Valid state.checked.native.machine.heap memos
+   35   probes : InternedFreshOrdinaryProbeHeap.Heap state.checked.native.machine.heap
+   36 
+   37 /-- A returned caller retains its actual current context and completed table history. -/
+   38 structure Post (formulas : SourceGuards.Formulas FullSyntax.Formula)
+   39     (solver : SourceGuards.Entailment FullSyntax.Formula) (next : Inventory)
+   40     (before after : Caller width) (final : Memos) : Prop where
+   41   context : Context formulas solver next after final
+   42   effects : SourceCurrentConjunctionRowsAllocation.Effects (physical before.checked) (physical after.checked)
+   43   retained : Cache.Extends before.merge after.merge
+   44   fourthRetained : SourceCurrentEmptinessMemo.Extends before.fourth after.fourth

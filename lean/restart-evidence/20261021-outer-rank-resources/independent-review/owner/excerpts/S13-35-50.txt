@@ -1,0 +1,16 @@
+   35 theorem node_start {inventory : Inventory} {request original : NodeRequest}
+   36     {before running : Caller width} {memos : Memos} {handle : Nat}
+   37     (initial : Context formulas solver inventory before memos)
+   38     (inherited : EqReady before.checked.operations.constraints request.inherited)
+   39     (available : Available before.checked.native.machine.heap request.value)
+   40     (started : beginNode request before = (handle, .evaluate original, running)) :
+   41     Context formulas solver inventory running memos ∧
+   42       NodeGood formulas solver running.checked ⟨original, .evaluating⟩ ∧
+   43       original.key = request.key ∧ running.nodeResults.cells handle = some ⟨original, .evaluating⟩ := by
+   44   obtain ⟨sound, cell, owner, key⟩ := beginNode_evaluate_sound formulas solver request before initial.sound
+   45     inherited available handle original running started
+   46   have components := beginNode_components request before
+   47   rw [started] at components
+   48   dsimp only at components
+   49   obtain ⟨checked, merge, fourth, _⟩ := components
+   50   exact ⟨initial.rebase checked merge fourth sound, owner, key, cell⟩

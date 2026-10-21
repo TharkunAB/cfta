@@ -1,0 +1,17 @@
+  470 theorem rows (fuel : Nat) :
+  471   ∀ {g s r e p h m c n budget : Nat} {inherited : EqValue} {values results : List Edge} {before after : Caller (bits+2)}
+  472     {inventory : Inventory} {memos : Memos} (seed : Seed),
+  473     Context formulas solver inventory before memos → Frame formulas solver inventory before.checked →
+  474     Fits seed.2 before.checked → Carrier (fun guard => guard ∈ seed.1) before.checked.native.machine.heap →
+  475     EqReady before.checked.operations.constraints inherited → Edges before.checked.native.machine.heap values →
+  476     Room bits (Schedule.rows fuel budget seed).2 →
+  477     SourceCurrentAllocatedPartialWorker.rows fuel g s r e p h m c n budget inherited values before = .done results after →
+  478     ∃ next final, ∃ actual : Rows budget inherited values before results after,
+  479       RowsReads formulas solver actual memos final ∧
+  480       Post formulas solver next before after final ∧
+  481       Frame formulas solver next after.checked ∧ Fits (Schedule.rows fuel budget seed).2 after.checked ∧
+  482       Carrier (fun guard => guard ∈ (Schedule.rows fuel budget seed).1) after.checked.native.machine.heap ∧
+  483       Edges after.checked.native.machine.heap results ∧ RowsLaw formulas solver actual := by
+  484   intro g s r e p h m c n budget inherited values results before after inventory memos seed initial frame fits known inheritedReady resident room done
+  485   simpa only [Returned, and_assoc] using
+  486     ((all_actual formulas solver (bits := bits) fuel).2.2.1 seed initial frame fits known inheritedReady resident room done)

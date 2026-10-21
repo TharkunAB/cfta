@@ -1,0 +1,42 @@
+   73 private theorem fold_cut (step : Out → Out) (n k : Nat) (bound : k ≤ n) (entry : Out) :
+   74     fold step n entry = fold step (n-k) (fold step k entry) := by
+   75   unfold fold
+   76   conv =>
+   77     lhs
+   78     rw [show n = k + (n-k) by omega, List.range_add, List.foldl_append, List.foldl_map]
+   79 private theorem prefix_kept (step : Out → Out)
+   80     (one : ∀ acc, acc.1 + 1 ≤ (step acc).1 ∧ Kept acc (step acc))
+   81     (n k : Nat) (bound : k ≤ n) (entry : Out) : Kept (fold step k entry) (fold step n entry) := by
+   82   rw [fold_cut step n k bound entry]
+   83   exact (fold_bounds step one _ _).2
+   84 private theorem next_kept (step : Out → Out)
+   85     (one : ∀ acc, acc.1 + 1 ≤ (step acc).1 ∧ Kept acc (step acc))
+   86     (n k : Nat) (bound : k < n) (entry : Out) : Kept (step (fold step k entry)) (fold step n entry) := by
+   87   have h := prefix_kept step one n (k+1) (by omega) entry
+   88   simpa only [fold, List.range_succ, List.foldl_append, List.foldl_cons, List.foldl_nil] using h
+   89 private theorem slot_growth (all : Seed → List Out) (acc : Out) :
+   90     acc.1 + 1 ≤ (slot all acc).1 ∧ Kept acc (slot all acc) := by
+   91   dsimp only [slot, Kept]
+   92   exact ⟨Nat.le_add_right _ _, by omega, Nat.le_max_left _ _, cover_ge _ _,
+   93     fun _ h => List.mem_append_left _ h⟩
+   94 private theorem row_growth (budget : Nat) (all : Seed → List Out) (acc : Out) :
+   95     acc.1 + 1 ≤ (row budget all acc).1 ∧ Kept acc (row budget all acc) := by
+   96   dsimp only [row]
+   97   generalize post_eq : SourceCurrentOuterInitialSchedule.parent budget acc.2.2 = post
+   98   have parent := SourceCurrentOuterInitialSchedule.parent_ge budget acc.2.2
+   99   rw [post_eq] at parent
+  100   have walk := (fold_bounds (slot all) (slot_growth all) post.2.mass (0,0,post)).2
+  101   have rebuilt := SourceCurrentOuterInitialSchedule.rebuild_ge (fold (slot all) post.2.mass (0,0,post)).2.2
+  102   refine ⟨by omega, by omega, Nat.le_max_left _ _, parent.1.trans (walk.2.2.1.trans rebuilt.1), ?_⟩
+  103   exact fun _ h => rebuilt.2 (walk.2.2.2 (parent.2 h))
+  104 private theorem row_need (budget : Nat) (all : Seed → List Out) (acc : Out) :
+  105     SourceCurrentParentUniformEnvelope.fuel budget acc.2.2.1 acc.2.2.2 ≤ (row budget all acc).2.1 := by
+  106   dsimp only [row]
+  107   exact Nat.le_trans (Nat.le_max_left _ _) (Nat.le_max_right _ _)
+  108 private theorem row_walk (budget : Nat) (all : Seed → List Out) (acc : Out) :
+  109     Kept (fold (slot all) (SourceCurrentOuterInitialSchedule.parent budget acc.2.2).2.mass
+  110       (0,0,SourceCurrentOuterInitialSchedule.parent budget acc.2.2)) (row budget all acc) := by
+  111   dsimp only [row, Kept]
+  112   generalize SourceCurrentOuterInitialSchedule.parent budget acc.2.2 = post
+  113   have rebuilt := SourceCurrentOuterInitialSchedule.rebuild_ge (fold (slot all) post.2.mass (0,0,post)).2.2
+  114   exact ⟨by omega, Nat.le_trans (Nat.le_max_right _ _) (Nat.le_max_right _ _), rebuilt.1, rebuilt.2⟩
