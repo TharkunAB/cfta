@@ -1,0 +1,102 @@
+/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-1.source.lean:38:4: warning: missing doc string for public def NodeStored
+
+Note: This linter can be disabled with `set_option linter.missingDocs false`
+/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-1.source.lean:43:4: warning: missing doc string for public def InputsClosed
+
+Note: This linter can be disabled with `set_option linter.missingDocs false`
+/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-1.source.lean:244:6: error: Application type mismatch: The argument
+  (SourceCurrentOuterInitialSchedule.rows_ge fuel budget
+      (SourceCurrentOuterInitialSchedule.descendants fuel budget
+        (SourceCurrentOuterInitialSchedule.parent budget current))).left
+has type
+  SourceCurrentAllocatedNativeResourceForecast.Le
+    (SourceCurrentOuterInitialSchedule.descendants fuel budget
+        (SourceCurrentOuterInitialSchedule.parent budget current)).snd
+    (SourceCurrentOuterInitialSchedule.rows fuel budget
+        (SourceCurrentOuterInitialSchedule.descendants fuel budget
+          (SourceCurrentOuterInitialSchedule.parent budget current))).snd
+but is expected to have type
+  SourceCurrentAllocatedNativeResourceForecast.Le
+    (SourceCurrentOuterInitialSchedule.descendants fuel budget
+        (SourceCurrentOuterInitialSchedule.parent budget current)).snd
+    (SourceCurrentOuterInitialSchedule.rows (fuel + 1) budget current).snd
+in the application
+  SourceCurrentAllocatedNativeResourceForecast.Le.trans
+    (SourceCurrentOuterInitialSchedule.descendants_ge fuel budget
+        (SourceCurrentOuterInitialSchedule.parent budget current)).left
+    (SourceCurrentOuterInitialSchedule.rows_ge fuel budget
+        (SourceCurrentOuterInitialSchedule.descendants fuel budget
+          (SourceCurrentOuterInitialSchedule.parent budget current))).left
+/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-1.source.lean:232:52: error: unsolved goals
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+g s r e p h m c n budget : Nat
+first last : Phase (bits + 2)
+inventory : Inventory
+memos : Memos
+seed : List Guard × Profile
+actual : Reached g s r e p h m c n budget first last
+initial : Context formulas solver inventory (caller first) memos
+frame : Frame formulas solver inventory (caller first).checked
+fits : Fits seed.snd (caller first).checked
+known : Carrier (fun guard => guard ∈ seed.fst) (caller first).checked.native.machine.heap
+inputs : SourceCurrentOuterPrefixInvariants.Inputs first
+room : Room bits (SourceCurrentOuterInitialPrefix.forecast budget first seed).snd
+normal : SourceCurrentRequiredUnionNormal.UnionNormal (caller first).checked.native.machine.heap
+supported :
+  SourceCurrentNativeRequestPositivePositions.Support (caller first).checked.native.machine.heap
+    (caller first).checked.native
+causal : SourceCurrentNativeMuPublication.History empty (caller first).checked.native.machine.heap
+merged :
+  SourceCurrentConstrainedCapMemoMerge.Stored (fun guard => SourceMemoGate.plain guard = true) (caller first).merge
+positiveMemo : SourceCurrentMergePositivePosition.Support (caller first).merge
+origins : SourceCurrentResourceParentWriters.Origins formulas solver (caller first)
+stored : NodeStored (caller first)
+closed : InputsClosed first
+resources :
+  ∀ {phase : Phase (bits + 2)} (cut : Reached g s r e p h m c n budget first phase),
+    ∃ next final current,
+      SourceCurrentOuterInitialPrefix.SeedTrace cut seed current ∧
+        SourceCurrentAllocatedPartialInvariant.Post formulas solver next (caller first) (caller phase) final ∧
+          Frame formulas solver next (caller phase).checked ∧
+            Fits current.snd (caller phase).checked ∧
+              Carrier (fun guard => guard ∈ current.fst) (caller phase).checked.native.machine.heap ∧
+                SourceCurrentOuterPrefixInvariants.Inputs phase ∧
+                  SourceCurrentAllocatedNativeResourceForecast.Le
+                      (SourceCurrentOuterInitialPrefix.forecast budget phase current).snd
+                      (SourceCurrentOuterInitialPrefix.forecast budget first seed).snd ∧
+                    (SourceCurrentOuterInitialPrefix.forecast budget phase current).fst ⊆
+                        (SourceCurrentOuterInitialPrefix.forecast budget first seed).fst ∧
+                      Room bits (SourceCurrentOuterInitialPrefix.forecast budget phase current).snd ∧
+                        Fits (SourceCurrentOuterInitialPrefix.forecast budget first seed).snd (caller phase).checked ∧
+                          Carrier
+                              (fun guard => guard ∈ (SourceCurrentOuterInitialPrefix.forecast budget first seed).fst)
+                              (caller phase).checked.native.machine.heap ∧
+                            SourceCurrentOuterInitialFuel.phaseNeed budget phase current ≤
+                                SourceCurrentOuterInitialFuel.phaseNeed budget first seed ∧
+                              SourceCurrentNativeRequestPositivePositions.Support
+                                  (caller phase).checked.native.machine.heap (caller phase).checked.native ∧
+                                Nonempty
+                                    (SourceCurrentNativeMuPublication.History empty
+                                      (caller phase).checked.native.machine.heap) ∧
+                                  SourceCurrentConstrainedCapMemoMerge.Stored
+                                      (fun guard => SourceMemoGate.plain guard = true) (caller phase).merge ∧
+                                    SourceCurrentMergePositivePosition.Support (caller phase).merge ∧
+                                      SourceCurrentRequiredUnionNormal.UnionNormal
+                                        (caller phase).checked.native.machine.heap
+ledger :
+  ∀ {phase : Phase (bits + 2)},
+    Reached g s r e p h m c n budget first phase →
+      SourceCurrentResourceParentWriters.Origins formulas solver (caller phase)
+edgeAt :
+  ∀ {fuel : Nat} {inherited : SourceEqualityConstraintAllocation.Value} {original : Edge} {rest : List Edge}
+    {before : Caller (bits + 2)} {narrowed : Edge} {middle : Caller (bits + 2)},
+    Reached g s r e p h m c n budget first (Phase.rows (fuel + 1) inherited (original :: rest) before) →
+      edgeCall fuel g s r e p h m c n budget { inherited := inherited, value := original } before =
+          Outcome.done narrowed middle →
+        NodeStored before → ClosedValues original.children → NodeStored middle ∧ ClosedValues narrowed.children
+⊢ NodeStored (caller last) ∧ InputsClosed last

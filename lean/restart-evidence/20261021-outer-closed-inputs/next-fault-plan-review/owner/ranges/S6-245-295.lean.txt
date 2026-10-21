@@ -1,0 +1,51 @@
+/-- Run a literal phase with the same lower bounds and erase only its successful value. -/
+noncomputable def run (g s r e p h m c n budget : Nat) : Phase width → Outcome Unit width
+  | .node fuel request before => (nodeCall fuel g s r e p h m c n budget request before).bind (fun _ after => .done () after)
+  | .body fuel request before => (nodeBody fuel g s r e p h m c n budget request before).bind (fun _ after => .done () after)
+  | .rows fuel inherited values before => (rows fuel g s r e p h m c n budget inherited values before).bind (fun _ after => .done () after)
+  | .descendants fuel inherited edge before => (descendants fuel g s r e p h m c n budget inherited edge before).bind (fun _ after => .done () after)
+  | .children fuel combined values before => (children fuel g s r e p h m c n budget combined values before).bind (fun _ after => .done () after)
+  | .walk fuel combined index values before => (walk fuel g s r e p h m c n budget combined index values before).bind (fun _ after => .done () after)
+
+/-- A reached failure propagates through each actual prefix with the same full caller. -/
+theorem Step.failed (actual : Step g s r e p h m c n budget first last)
+    (failed : run g s r e p h m c n budget last = .failed fault after) :
+    run g s r e p h m c n budget first = .failed fault after := by
+  cases actual with
+  | node_evaluate actual =>
+      have actualFailed := erase_failed failed
+      simp only [run, nodeCall, actual, actualFailed, Outcome.bind]
+  | body_rows actual =>
+      have actualFailed := erase_failed failed
+      simp only [run, nodeBody, actual, actualFailed, Outcome.bind]
+  | rows_edge actual _ =>
+      have actualFailed := erase_failed failed
+      simp only [run, rows, actual, actualFailed, Outcome.bind]
+  | rows_tail edge _ children _ =>
+      have actualFailed := erase_failed failed
+      simp only [run, rows, edge, children, actualFailed, Outcome.bind]
+  | descendants_children actual =>
+      have actualFailed := erase_failed failed
+      simp only [SourceCurrentAllocatedPartialGraph.prefixState,
+        SourceCurrentAllocatedInheritedPrefix.state] at actualFailed
+      simp only [run, descendants, actual, actualFailed, Outcome.bind]
+  | children_walk live =>
+      rename_i combined fuel values before
+      simp only [run] at failed ⊢
+      cases combined with
+      | contradiction => exact False.elim (live rfl)
+      | live identity records => simpa only [children] using failed
+  | walk_head =>
+      have actualFailed := erase_failed failed
+      simp only [run, walk, actualFailed, Outcome.bind]
+  | walk_tail actual _ =>
+      have actualFailed := erase_failed failed
+      simp only [run, walk, actual, actualFailed, Outcome.bind]
+
+/-- Literal failure correspondence holds for the entire derived unfinished prefix. -/
+theorem Reached.failed (actual : Reached g s r e p h m c n budget first last)
+    (failed : run g s r e p h m c n budget last = .failed fault after) :
+    run g s r e p h m c n budget first = .failed fault after := by
+  induction actual with
+  | refl => exact failed
+  | snoc earlier last ih => exact ih (last.failed failed)

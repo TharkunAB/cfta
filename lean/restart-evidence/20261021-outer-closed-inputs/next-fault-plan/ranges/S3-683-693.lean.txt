@@ -1,0 +1,11 @@
+/-- Every actual node-busy phase failure constructs its own literal dispatch prefix. -/
+theorem failed (valid : NodeValid (caller phase))
+    (actual : run g s r e p h m c n budget phase = .failed (.nodeMemo handle .busy) after) :
+    Dispatch g s r e p h m c n budget phase handle after := by
+  cases phase with
+  | node fuel request before => exact (all_failures fuel).1 _ _ _ _ _ _ _ _ _ _ _ _ _ _ valid (erase_failed actual)
+  | body fuel request before => exact (all_failures fuel).2.1 _ _ _ _ _ _ _ _ _ _ _ _ _ _ valid (erase_failed actual)
+  | rows fuel inherited values before => exact (all_failures fuel).2.2.1 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ valid (erase_failed actual)
+  | descendants fuel inherited value before => exact (all_failures fuel).2.2.2.1 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ valid (erase_failed actual)
+  | children fuel combined values before => exact (all_failures fuel).2.2.2.2.1 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ valid (erase_failed actual)
+  | walk fuel combined index values before => exact (all_failures fuel).2.2.2.2.2 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ valid (erase_failed actual)

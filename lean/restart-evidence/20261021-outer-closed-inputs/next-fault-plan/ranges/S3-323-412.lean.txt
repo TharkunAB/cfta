@@ -1,0 +1,90 @@
+  exact frame
+
+/-- A prefix enters a literal branch or skips only completed earlier calls. -/
+inductive Step (g s r e p h m c n budget : Nat) : Phase width → Phase width → Prop where
+  /-- A node enters its exact stored owner after demand. -/
+  | node_evaluate (actual : beginNode request before = (handle, .evaluate original, running)) :
+      Step g s r e p h m c n budget (.node fuel request before) (.body fuel original running)
+  /-- An ordinary body enters its original rows. -/
+  | body_rows (actual : request.value = .node entry originals depth free) :
+      Step g s r e p h m c n budget (.body (fuel + 1) request before)
+        (.rows fuel request.inherited originals before)
+  /-- A completed parent edge precedes its actual descendants. -/
+  | rows_edge
+      (actual : edgeCall fuel g s r e p h m c n budget ⟨inherited, original⟩ before = .done narrowed middle) :
+      Step g s r e p h m c n budget (.rows (fuel + 1) inherited (original :: rest) before)
+        (.descendants fuel inherited narrowed middle)
+  /-- The row suffix starts after the exact completed parent and descendants. -/
+  | rows_tail
+      (edge : edgeCall fuel g s r e p h m c n budget ⟨inherited, original⟩ before = .done narrowed middle)
+      (children : descendants fuel g s r e p h m c n budget inherited narrowed middle = .done result after) :
+      Step g s r e p h m c n budget (.rows (fuel + 1) inherited (original :: rest) before)
+        (.rows fuel inherited rest after)
+  /-- The inherited prefix enters the exact returned children. -/
+  | descendants_children {edge : Edge}
+      (actual : (SourceCurrentAllocatedInheritedPrefix.run edge.entry.key.constraint inherited
+        before.checked.operations).1 = .ok (some combined)) :
+      Step g s r e p h m c n budget (.descendants fuel inherited edge before)
+        (.children fuel combined edge.children (SourceCurrentAllocatedPartialGraph.prefixState before edge inherited))
+  /-- A live combined payload enters its indexed walk. -/
+  | children_walk (live : combined ≠ .contradiction) :
+      Step g s r e p h m c n budget (.children fuel combined values before) (.walk fuel combined 0 values before)
+  /-- The next node uses the actual indexed descent. -/
+  | walk_head :
+      Step g s r e p h m c n budget (.walk (fuel + 1) combined index (value :: rest) before)
+        (.node fuel ⟨(SourceCurrentAllocatedPartialGraph.descend before combined index).1, value⟩
+          (SourceCurrentAllocatedPartialGraph.descend before combined index).2)
+  /-- The next slot starts after the actual completed earlier node. -/
+  | walk_tail
+      (actual : nodeCall fuel g s r e p h m c n budget
+        ⟨(SourceCurrentAllocatedPartialGraph.descend before combined index).1, value⟩
+        (SourceCurrentAllocatedPartialGraph.descend before combined index).2 = .done result middle) :
+      Step g s r e p h m c n budget (.walk (fuel + 1) combined index (value :: rest) before)
+        (.walk fuel combined (index + 1) rest middle)
+
+/-- A finite literal prefix retains every completed earlier-call witness. -/
+inductive Reached (g s r e p h m c n budget : Nat) : Phase width → Phase width → Prop where
+  /-- The entry phase is already reached. -/
+  | refl (phase) : Reached g s r e p h m c n budget phase phase
+  /-- An actual branch extends the preceding prefix. -/
+  | snoc (earlier : Reached g s r e p h m c n budget first middle)
+      (last : Step g s r e p h m c n budget middle final) :
+      Reached g s r e p h m c n budget first final
+
+/-- Consecutive actual prefixes form one prefix. -/
+theorem Reached.trans (first : Reached g s r e p h m c n budget entryPhase middle)
+    (last : Reached g s r e p h m c n budget middle final) :
+    Reached g s r e p h m c n budget entryPhase final := by
+  induction last with
+  | refl => exact first
+  | snoc earlier last ih => exact .snoc ih last
+
+private theorem step_forward (actual : Step g s r e p h m c n budget first last)
+    (valid : NodeValid (caller first)) :
+    NodeValid (caller last) ∧ FlatMemoThunk.Running (caller first).nodeResults (caller last).nodeResults := by
+  cases actual with
+  | node_evaluate started =>
+    rename_i request before handle running original fuel
+    have checked := start_valid request before valid
+    have forward := start_forward request before valid
+    rw [started] at checked forward
+    exact ⟨checked,forward⟩
+  | body_rows => exact ⟨valid,.refl _⟩
+  | rows_edge done => exact ⟨(edge_done done valid).valid,(edge_done done valid).forward⟩
+  | rows_tail edge children =>
+    have first := edge_done edge valid
+    have last := descendants_done children first.valid
+    exact ⟨last.valid,first.forward.trans last.forward⟩
+  | descendants_children => exact ⟨valid,.refl _⟩
+  | children_walk => exact ⟨valid,.refl _⟩
+  | walk_head => exact ⟨valid,.refl _⟩
+  | walk_tail done =>
+    have frame := node_done done valid
+    exact ⟨frame.valid,frame.forward⟩
+
+/-- Every actual prefix derives the validity of its reached node table. -/
+theorem Reached.valid (actual : Reached g s r e p h m c n budget first last)
+    (valid : NodeValid (caller first)) : NodeValid (caller last) := by
+  induction actual with
+  | refl => exact valid
+  | snoc earlier last ih => exact (step_forward last ih).1

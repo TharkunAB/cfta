@@ -1,0 +1,39 @@
+--- outer-closed-inputs-direct-3.source.lean
++++ SourceCurrentOuterClosedInputs.lean
+@@ -31,9 +31,7 @@
+ local notation "EqReady" => SourceEqualityConstraintAllocation.Ready
+ local notation "Resident" => InternedEdgeResidency.EdgeResident
+ local notation "Carrier" => SourceEqualityAnnotationHeap.Heap
+-local notation "Seed" => List Guard × Profile
+ local notation "caller" => SourceCurrentOuterActiveAncestry.caller
+-local notation "Plain" => (fun guard : Guard => SourceMemoGate.plain guard = true)
+ 
+ /-- Returned node cells preserve closure of their captured closed inputs. -/
+ def NodeStored (state : Caller width) : Prop :=
+@@ -290,7 +288,8 @@
+           obtain ⟨_,_,same⟩ := List.mem_map.mp member
+           subst child
+           rfl
+-        | live identity records => exact walks (.snoc cut (.children_walk (by intro same; cases same))) done stored closed
++        | live identity records =>
++          exact walks (.snoc cut (.children_walk (by intro same; cases same))) (by simpa only [SourceCurrentAllocatedPartialWorker.children] using done) stored closed
+       have desc : DescendantsAt (g := g) (s := s) (r := r) (e := e) (p := p) (h := h) (m := m) (c := c) (n := n) (budget := budget) first fuel := by
+         intro inherited value result before after cut done stored closed
+         cases observed : SourceCurrentAllocatedInheritedPrefix.run value.entry.key.constraint inherited before.checked.operations with
+@@ -367,6 +366,7 @@
+               cases last
+               have originals := MergedColdReaderClosed.node_children_closed before.checked.native.machine.heap post.context.ready.semantic.ready.semantic.1.normal.facts entry original depth free ins.2 closed
+               have returned := (ih fuel (Nat.lt_succ_self _)).2.2.1 (.snoc cut (.body_rows rfl)) run stored originals
++              rw [SourceCurrentOuterInitialPrefix.forecast,Schedule.body] at rm
+               have rowRoom := rm.mono (Schedule.rebuild_ge (Schedule.rows fuel budget current)).1
+               have edges := InternedEdgeResidency.resident_edges _ post.context.ready.semantic.ready.semantic.1.normal.facts.linked _ ins.2.resident
+               obtain ⟨ni,nm,_graph,_reads,rowPost,_frame,_fits,_known,resident,_law⟩ := SourceCurrentOuterInitialActual.rows formulas solver fuel current post.context frm fts carrier ins.1 edges rowRoom run
+@@ -388,7 +388,7 @@
+           obtain ⟨value,middle,body,last⟩ := (bind_done_iff _ _ _ _).mp done
+           cases last
+           have returned := bodies (.snoc cut (.node_evaluate started)) body runningStored (node_start_closed formulas solver post.context ins.1 ins.2 started closed)
+-          exact ⟨finish_stored handle value returned.1 returned.2,returned.2⟩
++          exact ⟨finish_stored handle result returned.1 returned.2,returned.2⟩
+       exact ⟨nodes,bodies,rowCalls,desc,kids,walks⟩
+   induction actual with
+   | refl => exact ⟨stored,closed⟩

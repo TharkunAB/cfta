@@ -1,0 +1,14 @@
+/-- Every edge-memo fault derives its exact failing edge call and preceding literal prefix. -/
+theorem failed {g s r e p h m c n budget : Nat} {phase : Phase width}
+    {observation : FlatMemoThunk.Observation EdgeRequest Edge} {after : Caller width}
+    (actual : run g s r e p h m c n budget phase = .failed (.edgeMemo handle observation) after) :
+    ∃ fuel inherited original rest before,
+      Reached g s r e p h m c n budget phase (.rows (fuel+1) inherited (original::rest) before) ∧
+      edgeCall fuel g s r e p h m c n budget ⟨inherited,original⟩ before = .failed (.edgeMemo handle observation) after := by
+  cases phase with
+  | node fuel request before => exact (all_failures (handle := handle) fuel).1 _ _ _ _ _ _ _ _ _ _ _ _ _ _ (erase_failed actual)
+  | body fuel request before => exact (all_failures (handle := handle) fuel).2.1 _ _ _ _ _ _ _ _ _ _ _ _ _ _ (erase_failed actual)
+  | rows fuel inherited values before => exact (all_failures (handle := handle) fuel).2.2.1 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ (erase_failed actual)
+  | descendants fuel inherited value before => exact (all_failures (handle := handle) fuel).2.2.2.1 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ (erase_failed actual)
+  | children fuel combined values before => exact (all_failures (handle := handle) fuel).2.2.2.2.1 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ (erase_failed actual)
+  | walk fuel combined index values before => exact (all_failures (handle := handle) fuel).2.2.2.2.2 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ (erase_failed actual)

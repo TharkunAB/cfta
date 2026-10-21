@@ -1,0 +1,824 @@
+{
+  "raw_sha256": "9d2472c98b13f753fe830bfbff4c78122f6c16335d29580cdb3fa4c917547b49",
+  "raw_bytes": 315918,
+  "raw_lines": 4693,
+  "unique_lines": [
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:256:57: error: don't know how to synthesize implicit argument `budget`\n",
+    "  @WalkAt bits inst\u271d\u00b2 inst\u271d\u00b9 inst\u271d (?m.684 fuel) (?m.685 fuel) (?m.686 fuel) (?m.687 fuel) (?m.688 fuel) (?m.689 fuel)\n",
+    "    (?m.690 fuel) (?m.691 fuel) (?m.692 fuel) (?m.693 fuel) first fuel\n",
+    "context:\n",
+    "bits : Nat\n",
+    "inst\u271d\u00b2 : DecidableEq Symbol\n",
+    "inst\u271d\u00b9 : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)\n",
+    "inst\u271d : DecidableEq Node\n",
+    "formulas : SourceGuards.Formulas FullSyntax.Formula\n",
+    "solver : SourceGuards.Entailment FullSyntax.Formula\n",
+    "g s r e p h m c n budget : Nat\n",
+    "first last : Phase (bits + 2)\n",
+    "inventory : Inventory\n",
+    "memos : Memos\n",
+    "seed : List Guard \u00d7 Profile\n",
+    "actual : Reached g s r e p h m c n budget first last\n",
+    "initial : Context formulas solver inventory (caller first) memos\n",
+    "frame : Frame formulas solver inventory (caller first).checked\n",
+    "fits : Fits seed.snd (caller first).checked\n",
+    "known : Carrier (fun guard => guard \u2208 seed.fst) (caller first).checked.native.machine.heap\n",
+    "inputs : SourceCurrentOuterPrefixInvariants.Inputs first\n",
+    "room : Room bits (SourceCurrentOuterInitialPrefix.forecast budget first seed).snd\n",
+    "normal : SourceCurrentRequiredUnionNormal.UnionNormal (caller first).checked.native.machine.heap\n",
+    "supported :\n",
+    "  SourceCurrentNativeRequestPositivePositions.Support (caller first).checked.native.machine.heap\n",
+    "    (caller first).checked.native\n",
+    "causal : SourceCurrentNativeMuPublication.History empty (caller first).checked.native.machine.heap\n",
+    "merged :\n",
+    "  SourceCurrentConstrainedCapMemoMerge.Stored (fun guard => SourceMemoGate.plain guard = true) (caller first).merge\n",
+    "positiveMemo : SourceCurrentMergePositivePosition.Support (caller first).merge\n",
+    "origins : SourceCurrentResourceParentWriters.Origins formulas solver (caller first)\n",
+    "stored : NodeStored (caller first)\n",
+    "closed : InputsClosed first\n",
+    "resources :\n",
+    "  \u2200 {phase : Phase (bits + 2)} (cut : Reached g s r e p h m c n budget first phase),\n",
+    "    \u2203 next final current,\n",
+    "      SourceCurrentOuterInitialPrefix.SeedTrace cut seed current \u2227\n",
+    "        SourceCurrentAllocatedPartialInvariant.Post formulas solver next (caller first) (caller phase) final \u2227\n",
+    "          Frame formulas solver next (caller phase).checked \u2227\n",
+    "            Fits current.snd (caller phase).checked \u2227\n",
+    "              Carrier (fun guard => guard \u2208 current.fst) (caller phase).checked.native.machine.heap \u2227\n",
+    "                SourceCurrentOuterPrefixInvariants.Inputs phase \u2227\n",
+    "                  SourceCurrentAllocatedNativeResourceForecast.Le\n",
+    "                      (SourceCurrentOuterInitialPrefix.forecast budget phase current).snd\n",
+    "                      (SourceCurrentOuterInitialPrefix.forecast budget first seed).snd \u2227\n",
+    "                    (SourceCurrentOuterInitialPrefix.forecast budget phase current).fst \u2286\n",
+    "                        (SourceCurrentOuterInitialPrefix.forecast budget first seed).fst \u2227\n",
+    "                      Room bits (SourceCurrentOuterInitialPrefix.forecast budget phase current).snd \u2227\n",
+    "                        Fits (SourceCurrentOuterInitialPrefix.forecast budget first seed).snd (caller phase).checked \u2227\n",
+    "                          Carrier\n",
+    "                              (fun guard => guard \u2208 (SourceCurrentOuterInitialPrefix.forecast budget first seed).fst)\n",
+    "                              (caller phase).checked.native.machine.heap \u2227\n",
+    "                            SourceCurrentOuterInitialFuel.phaseNeed budget phase current \u2264\n",
+    "                                SourceCurrentOuterInitialFuel.phaseNeed budget first seed \u2227\n",
+    "                              SourceCurrentNativeRequestPositivePositions.Support\n",
+    "                                  (caller phase).checked.native.machine.heap (caller phase).checked.native \u2227\n",
+    "                                Nonempty\n",
+    "                                    (SourceCurrentNativeMuPublication.History empty\n",
+    "                                      (caller phase).checked.native.machine.heap) \u2227\n",
+    "                                  SourceCurrentConstrainedCapMemoMerge.Stored\n",
+    "                                      (fun guard => SourceMemoGate.plain guard = true) (caller phase).merge \u2227\n",
+    "                                    SourceCurrentMergePositivePosition.Support (caller phase).merge \u2227\n",
+    "                                      SourceCurrentRequiredUnionNormal.UnionNormal\n",
+    "                                        (caller phase).checked.native.machine.heap\n",
+    "ledger :\n",
+    "  \u2200 {phase : Phase (bits + 2)},\n",
+    "    Reached g s r e p h m c n budget first phase \u2192\n",
+    "      SourceCurrentResourceParentWriters.Origins formulas solver (caller phase)\n",
+    "edgeAt :\n",
+    "  \u2200 {fuel : Nat} {inherited : SourceEqualityConstraintAllocation.Value} {original : Edge} {rest : List Edge}\n",
+    "    {before : Caller (bits + 2)} {narrowed : Edge} {middle : Caller (bits + 2)},\n",
+    "    Reached g s r e p h m c n budget first (Phase.rows (fuel + 1) inherited (original :: rest) before) \u2192\n",
+    "      edgeCall fuel g s r e p h m c n budget { inherited := inherited, value := original } before =\n",
+    "          Outcome.done narrowed middle \u2192\n",
+    "        NodeStored before \u2192 ClosedValues original.children \u2192 NodeStored middle \u2227 ClosedValues narrowed.children\n",
+    "fuel : Nat\n",
+    "\u22a2 Nat\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:256:57: error: don't know how to synthesize implicit argument `n`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:256:57: error: don't know how to synthesize implicit argument `c`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:256:57: error: don't know how to synthesize implicit argument `m`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:256:57: error: don't know how to synthesize implicit argument `h`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:256:57: error: don't know how to synthesize implicit argument `p`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:256:57: error: don't know how to synthesize implicit argument `e`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:256:57: error: don't know how to synthesize implicit argument `r`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:256:57: error: don't know how to synthesize implicit argument `s`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:256:57: error: don't know how to synthesize implicit argument `g`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:256:33: error: don't know how to synthesize implicit argument `budget`\n",
+    "  @ChildrenAt bits inst\u271d\u00b2 inst\u271d\u00b9 inst\u271d (?m.674 fuel) (?m.675 fuel) (?m.676 fuel) (?m.677 fuel) (?m.678 fuel)\n",
+    "    (?m.679 fuel) (?m.680 fuel) (?m.681 fuel) (?m.682 fuel) (?m.683 fuel) first fuel\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:256:33: error: don't know how to synthesize implicit argument `n`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:256:33: error: don't know how to synthesize implicit argument `c`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:256:33: error: don't know how to synthesize implicit argument `m`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:256:33: error: don't know how to synthesize implicit argument `h`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:256:33: error: don't know how to synthesize implicit argument `p`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:256:33: error: don't know how to synthesize implicit argument `e`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:256:33: error: don't know how to synthesize implicit argument `r`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:256:33: error: don't know how to synthesize implicit argument `s`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:256:33: error: don't know how to synthesize implicit argument `g`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:256:6: error: don't know how to synthesize implicit argument `budget`\n",
+    "  @DescendantsAt bits inst\u271d\u00b2 inst\u271d\u00b9 inst\u271d (?m.664 fuel) (?m.665 fuel) (?m.666 fuel) (?m.667 fuel) (?m.668 fuel)\n",
+    "    (?m.669 fuel) (?m.670 fuel) (?m.671 fuel) (?m.672 fuel) (?m.673 fuel) first fuel\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:256:6: error: don't know how to synthesize implicit argument `n`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:256:6: error: don't know how to synthesize implicit argument `c`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:256:6: error: don't know how to synthesize implicit argument `m`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:256:6: error: don't know how to synthesize implicit argument `h`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:256:6: error: don't know how to synthesize implicit argument `p`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:256:6: error: don't know how to synthesize implicit argument `e`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:256:6: error: don't know how to synthesize implicit argument `r`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:256:6: error: don't know how to synthesize implicit argument `s`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:256:6: error: don't know how to synthesize implicit argument `g`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:255:74: error: don't know how to synthesize implicit argument `budget`\n",
+    "  @RowsAt bits inst\u271d\u00b2 inst\u271d\u00b9 inst\u271d (?m.654 fuel) (?m.655 fuel) (?m.656 fuel) (?m.657 fuel) (?m.658 fuel) (?m.659 fuel)\n",
+    "    (?m.660 fuel) (?m.661 fuel) (?m.662 fuel) (?m.663 fuel) first fuel\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:255:74: error: don't know how to synthesize implicit argument `n`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:255:74: error: don't know how to synthesize implicit argument `c`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:255:74: error: don't know how to synthesize implicit argument `m`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:255:74: error: don't know how to synthesize implicit argument `h`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:255:74: error: don't know how to synthesize implicit argument `p`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:255:74: error: don't know how to synthesize implicit argument `e`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:255:74: error: don't know how to synthesize implicit argument `r`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:255:74: error: don't know how to synthesize implicit argument `s`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:255:74: error: don't know how to synthesize implicit argument `g`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:255:50: error: don't know how to synthesize implicit argument `budget`\n",
+    "  @NodeBodyAt bits inst\u271d\u00b2 inst\u271d\u00b9 inst\u271d (?m.644 fuel) (?m.645 fuel) (?m.646 fuel) (?m.647 fuel) (?m.648 fuel)\n",
+    "    (?m.649 fuel) (?m.650 fuel) (?m.651 fuel) (?m.652 fuel) (?m.653 fuel) first fuel\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:255:50: error: don't know how to synthesize implicit argument `n`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:255:50: error: don't know how to synthesize implicit argument `c`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:255:50: error: don't know how to synthesize implicit argument `m`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:255:50: error: don't know how to synthesize implicit argument `h`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:255:50: error: don't know how to synthesize implicit argument `p`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:255:50: error: don't know how to synthesize implicit argument `e`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:255:50: error: don't know how to synthesize implicit argument `r`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:255:50: error: don't know how to synthesize implicit argument `s`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:255:50: error: don't know how to synthesize implicit argument `g`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:255:26: error: don't know how to synthesize implicit argument `budget`\n",
+    "  @NodeCallAt bits inst\u271d\u00b2 inst\u271d\u00b9 inst\u271d (?m.634 fuel) (?m.635 fuel) (?m.636 fuel) (?m.637 fuel) (?m.638 fuel)\n",
+    "    (?m.639 fuel) (?m.640 fuel) (?m.641 fuel) (?m.642 fuel) (?m.643 fuel) first fuel\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:255:26: error: don't know how to synthesize implicit argument `n`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:255:26: error: don't know how to synthesize implicit argument `c`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:255:26: error: don't know how to synthesize implicit argument `m`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:255:26: error: don't know how to synthesize implicit argument `h`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:255:26: error: don't know how to synthesize implicit argument `p`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:255:26: error: don't know how to synthesize implicit argument `e`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:255:26: error: don't know how to synthesize implicit argument `r`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:255:26: error: don't know how to synthesize implicit argument `s`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:255:26: error: don't know how to synthesize implicit argument `g`\n",
+    "/tmp/mcfta-outer-closed-inputs-proof/outer-closed-inputs-direct-2.source.lean:234:52: error: unsolved goals\n",
+    "\u22a2 NodeStored (caller last) \u2227 InputsClosed last\n"
+  ],
+  "mapping_consecutive_runs": [
+    [
+      0,
+      78
+    ],
+    [
+      1,
+      76
+    ],
+    [
+      78,
+      1
+    ],
+    [
+      1,
+      76
+    ],
+    [
+      79,
+      1
+    ],
+    [
+      1,
+      76
+    ],
+    [
+      80,
+      1
+    ],
+    [
+      1,
+      76
+    ],
+    [
+      81,
+      1
+    ],
+    [
+      1,
+      76
+    ],
+    [
+      82,
+      1
+    ],
+    [
+      1,
+      76
+    ],
+    [
+      83,
+      1
+    ],
+    [
+      1,
+      76
+    ],
+    [
+      84,
+      1
+    ],
+    [
+      1,
+      76
+    ],
+    [
+      85,
+      1
+    ],
+    [
+      1,
+      76
+    ],
+    [
+      86,
+      3
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      89,
+      1
+    ],
+    [
+      87,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      90,
+      1
+    ],
+    [
+      87,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      91,
+      1
+    ],
+    [
+      87,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      92,
+      1
+    ],
+    [
+      87,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      93,
+      1
+    ],
+    [
+      87,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      94,
+      1
+    ],
+    [
+      87,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      95,
+      1
+    ],
+    [
+      87,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      96,
+      1
+    ],
+    [
+      87,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      97,
+      1
+    ],
+    [
+      87,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      98,
+      3
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      101,
+      1
+    ],
+    [
+      99,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      102,
+      1
+    ],
+    [
+      99,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      103,
+      1
+    ],
+    [
+      99,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      104,
+      1
+    ],
+    [
+      99,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      105,
+      1
+    ],
+    [
+      99,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      106,
+      1
+    ],
+    [
+      99,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      107,
+      1
+    ],
+    [
+      99,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      108,
+      1
+    ],
+    [
+      99,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      109,
+      1
+    ],
+    [
+      99,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      110,
+      3
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      113,
+      1
+    ],
+    [
+      111,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      114,
+      1
+    ],
+    [
+      111,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      115,
+      1
+    ],
+    [
+      111,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      116,
+      1
+    ],
+    [
+      111,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      117,
+      1
+    ],
+    [
+      111,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      118,
+      1
+    ],
+    [
+      111,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      119,
+      1
+    ],
+    [
+      111,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      120,
+      1
+    ],
+    [
+      111,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      121,
+      1
+    ],
+    [
+      111,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      122,
+      3
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      125,
+      1
+    ],
+    [
+      123,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      126,
+      1
+    ],
+    [
+      123,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      127,
+      1
+    ],
+    [
+      123,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      128,
+      1
+    ],
+    [
+      123,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      129,
+      1
+    ],
+    [
+      123,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      130,
+      1
+    ],
+    [
+      123,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      131,
+      1
+    ],
+    [
+      123,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      132,
+      1
+    ],
+    [
+      123,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      133,
+      1
+    ],
+    [
+      123,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      134,
+      3
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      137,
+      1
+    ],
+    [
+      135,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      138,
+      1
+    ],
+    [
+      135,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      139,
+      1
+    ],
+    [
+      135,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      140,
+      1
+    ],
+    [
+      135,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      141,
+      1
+    ],
+    [
+      135,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      142,
+      1
+    ],
+    [
+      135,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      143,
+      1
+    ],
+    [
+      135,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      144,
+      1
+    ],
+    [
+      135,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      145,
+      1
+    ],
+    [
+      135,
+      2
+    ],
+    [
+      3,
+      74
+    ],
+    [
+      146,
+      1
+    ],
+    [
+      4,
+      71
+    ],
+    [
+      147,
+      1
+    ]
+  ],
+  "roundtrip_byte_exact": true,
+  "error_headers": 61,
+  "warning_headers": 0
+}

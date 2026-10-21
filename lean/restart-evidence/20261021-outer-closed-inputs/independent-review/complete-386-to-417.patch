@@ -1,0 +1,107 @@
+--- complete-386.source.lean
++++ SourceCurrentOuterClosedInputs.lean
+@@ -252,12 +252,15 @@
+   have complete : ∀ fuel, NodeCallAt first fuel ∧ NodeBodyAt first fuel ∧ RowsAt first fuel ∧
+       DescendantsAt first fuel ∧ ChildrenAt first fuel ∧ WalkAt first fuel := by
+     intro fuel
+-    induction fuel using Nat.strong_induction_on with
+-    | h fuel ih =>
++    induction fuel using Nat.strongRecOn with
++    | ind fuel ih =>
+       have walks : WalkAt first fuel := by
+         intro combined index values results before after cut done stored closed
+         cases values with
+-        | nil => simp only [walk] at done; cases done; exact ⟨stored,fun _ member => nomatch member⟩
++        | nil =>
++          simp only [walk] at done
++          cases done
++          exact ⟨stored,fun _ member => nomatch member⟩
+         | cons value rest =>
+           cases fuel with
+           | zero => simp only [walk] at done; cases done
+@@ -268,11 +271,22 @@
+             cases last
+             have headClosed := (ih fuel (Nat.lt_succ_self _)).1 (.snoc cut .walk_head) head stored (closed _ List.mem_cons_self)
+             have tailClosed := (ih fuel (Nat.lt_succ_self _)).2.2.2.2.2 (.snoc cut (.walk_tail head)) tail headClosed.1 (fun _ member => closed _ (List.mem_cons_of_mem _ member))
+-            exact ⟨tailClosed.1,by intro child member; rcases List.mem_cons.mp member with rfl | member; exact headClosed.2; exact tailClosed.2 _ member⟩
++            refine ⟨tailClosed.1,?_⟩
++            intro child member
++            rcases List.mem_cons.mp member with rfl | member
++            · exact headClosed.2
++            · exact tailClosed.2 _ member
+       have kids : ChildrenAt first fuel := by
+         intro combined values results before after cut done stored closed
+         cases combined with
+-        | contradiction => simp only [SourceCurrentAllocatedPartialWorker.children] at done; cases done; exact ⟨stored,by intro child member; obtain ⟨_,_,same⟩ := List.mem_map.mp member; subst child; rfl⟩
++        | contradiction =>
++          simp only [SourceCurrentAllocatedPartialWorker.children] at done
++          cases done
++          refine ⟨stored,?_⟩
++          intro child member
++          obtain ⟨_,_,same⟩ := List.mem_map.mp member
++          subst child
++          rfl
+         | live identity records => exact walks (.snoc cut (.children_walk (by intro same; cases same))) done stored closed
+       have desc : DescendantsAt first fuel := by
+         intro inherited value result before after cut done stored closed
+@@ -300,7 +314,10 @@
+       have rowCalls : RowsAt first fuel := by
+         intro inherited values results before after cut done stored closed
+         cases values with
+-        | nil => simp only [rows] at done; cases done; exact ⟨stored,fun _ member => nomatch member⟩
++        | nil =>
++          simp only [rows] at done
++          cases done
++          exact ⟨stored,fun _ member => nomatch member⟩
+         | cons original rest =>
+           cases fuel with
+           | zero => simp only [rows] at done; cases done
+@@ -313,15 +330,25 @@
+             have headClosed := edgeAt cut head stored (closed _ List.mem_cons_self)
+             have childClosed := (ih fuel (Nat.lt_succ_self _)).2.2.2.1 (.snoc cut (.rows_edge head)) children headClosed.1 headClosed.2
+             have tailClosed := (ih fuel (Nat.lt_succ_self _)).2.2.1 (.snoc cut (.rows_tail head children)) tail childClosed.1 (fun _ member => closed _ (List.mem_cons_of_mem _ member))
+-            exact ⟨tailClosed.1,by intro edge member; rcases List.mem_cons.mp member with rfl | member; exact childClosed.2; exact tailClosed.2 _ member⟩
++            refine ⟨tailClosed.1,?_⟩
++            intro edge member
++            rcases List.mem_cons.mp member with rfl | member
++            · exact childClosed.2
++            · exact tailClosed.2 _ member
+       have bodies : NodeBodyAt first fuel := by
+         intro request before after result cut done stored closed
+         obtain ⟨i,globals,current,_,post,frm,fts,carrier,ins,_,_,rm,_⟩ := resources cut
+         cases request with
+         | mk inherited value =>
+           cases value with
+-          | empty => simp only [nodeBody] at done; cases done; exact ⟨stored,rfl⟩
+-          | union entry members depth free => simp only [nodeBody] at done; cases done; exact ⟨stored,closed⟩
++          | empty =>
++            simp only [nodeBody] at done
++            cases done
++            exact ⟨stored,rfl⟩
++          | union entry members depth free =>
++            simp only [nodeBody] at done
++            cases done
++            exact ⟨stored,closed⟩
+           | reference name => simp only [nodeBody] at done; cases done
+           | mu entry body depth ordinary =>
+             have rebuilt := SourceCurrentAllocatedMuRebuild.resident_rebuild before.checked post.context.ready post.context.probes entry body depth ordinary ins.2
+@@ -348,7 +375,10 @@
+         have runningStored := begin_stored request stored
+         rw [started] at runningStored
+         cases action with
+-        | ready value => simp only [nodeCall,started] at done; cases done; exact ⟨runningStored,node_hit_closed formulas solver post.context ins.1 ins.2 started stored closed⟩
++        | ready value =>
++          simp only [nodeCall,started] at done
++          cases done
++          exact ⟨runningStored,node_hit_closed formulas solver post.context ins.1 ins.2 started stored closed⟩
+         | busy | absent => simp only [nodeCall,started] at done; cases done
+         | evaluate captured =>
+           simp only [nodeCall,started] at done
+@@ -369,6 +399,7 @@
+       exact ⟨retained,node_start_closed formulas solver post.context ins.1 ins.2 started closed⟩
+     | body_rows shape =>
+       obtain ⟨i,globals,current,_,post,_frm,_fts,_known,ins,_⟩ := resources earlier
++      dsimp only [InputsClosed,SourceCurrentOuterPrefixInvariants.Inputs,SourceCurrentOuterPrefixInvariants.NodeReady] at closed ins
+       rw [shape] at closed ins
+       exact ⟨stored,MergedColdReaderClosed.node_children_closed _ post.context.ready.semantic.ready.semantic.1.normal.facts _ _ _ _ ins.2 closed⟩
+     | rows_edge done => exact edgeAt earlier done stored (closed _ List.mem_cons_self)

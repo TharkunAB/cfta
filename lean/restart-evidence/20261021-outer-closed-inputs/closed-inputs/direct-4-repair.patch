@@ -1,0 +1,14 @@
+--- outer-closed-inputs-direct-4.source.lean
++++ SourceCurrentOuterClosedInputs.lean
+@@ -395,9 +395,9 @@
+   | snoc earlier step ih =>
+     obtain ⟨stored,closed⟩ := ih
+     cases step with
+-    | node_evaluate started =>
++    | @node_evaluate request before handle running original fuel started =>
+       obtain ⟨i,globals,current,_,post,_frm,_fts,_known,ins,_⟩ := resources earlier
+-      have retained := begin_stored _ stored
++      have retained := begin_stored request stored
+       rw [started] at retained
+       exact ⟨retained,node_start_closed formulas solver post.context ins.1 ins.2 started closed⟩
+     | body_rows shape =>

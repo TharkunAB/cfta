@@ -1,0 +1,24 @@
+--- outer-closed-inputs-direct-1.source.lean
++++ SourceCurrentOuterClosedInputs.lean
+@@ -35,11 +35,13 @@
+ local notation "caller" => SourceCurrentOuterActiveAncestry.caller
+ local notation "Plain" => (fun guard : Guard => SourceMemoGate.plain guard = true)
+ 
++/-- Returned node cells preserve closure of their captured closed inputs. -/
+ def NodeStored (state : Caller width) : Prop :=
+   FlatMemoThunk.Valid (fun request key => request.key = key)
+     (FlatMemoThunk.CellSpec (fun request result => request.value.free = [] → result.free = []))
+     state.nodeResults
+ 
++/-- Each actual phase retains closure of its literal inputs. -/
+ def InputsClosed (phase : Phase width) : Prop :=
+   match phase with
+   | .node _ request _ | .body _ request _ => request.value.free = []
+@@ -240,6 +242,7 @@
+       (stored : NodeStored before) (closed : ClosedValues original.children) : NodeStored middle ∧ ClosedValues narrowed.children := by
+     obtain ⟨i,globals,current,_,post,frm,fts,carrier,ins,_,_,rm,_,_,_,sup,⟨his⟩,mer,pos,norm⟩ := resources cut
+     change Room bits (Schedule.rows (fuel+1) budget current).2 at rm
++    rw [Schedule.rows] at rm
+     have parentRoom := rm.mono ((Schedule.descendants_ge fuel budget (Schedule.parent budget current)).1.trans
+       (Schedule.rows_ge fuel budget (Schedule.descendants fuel budget (Schedule.parent budget current))).1)
+     have uniform := Schedule.parent_reserved bits budget current parentRoom
