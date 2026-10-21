@@ -1,0 +1,236 @@
+import MicroCFTA.SourceCurrentPositiveOwnerPair
+import MicroCFTA.SourceEqualityDescend
+
+/-!
+# Positive owner separation under inherited equality classes
+
+Actual physical descent reflects completed class relations through one child.
+A copied positive owner cannot return the inherited payload unchanged.
+These results concern geometry and a supplied backwards relation. They do not
+claim that a runtime prefix supplies that relation or that all owners terminate.
+-/
+namespace MicroCFTA.SourceCurrentPositiveInheritedChildSeparation
+open EqualityNormalize SourceEqualityClassOrder
+open InternedConstructorTemplates
+open SourceCurrentRequiredPositivePosition (PositiveAt)
+open SourceCurrentNormalizedChildSeparation (Rel)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Guard
+local notation "Row" => EdgeValue Symbol Guard
+
+/- The finite enumeration below is copied from PositiveOwnerPair23–74. -/
+private def candidates : Nat → Node → List Path
+  | 0, _ => []
+  | fuel + 1, .node _ rows _ _ =>
+      [] :: rows.flatMap (fun row => row.children.zipIdx.flatMap
+        (fun child => (candidates fuel child.1).map (child.2 :: ·)))
+  | fuel + 1, .union _ members _ _ =>
+      [] :: members.flatMap (candidates fuel)
+  | _ + 1, _ => [[]]
+
+private theorem candidates_complete {value path} (positive : PositiveAt value path) :
+    ∀ fuel, InternedValueMass.value value < fuel → path ∈ candidates fuel value := by
+  induction positive with
+  | root rowIndex row selected nonplain =>
+      intro fuel bounded
+      cases fuel with
+      | zero => omega
+      | succ fuel => exact List.mem_cons_self
+  | @child entry rows depth free rowIndex childIndex row child selected chosen path rest ih =>
+      intro fuel bounded
+      cases fuel with
+      | zero => omega
+      | succ fuel =>
+          have smaller := InternedValueMass.node_child_lt entry rows depth free row
+            (List.mem_of_getElem? selected) child (List.mem_of_getElem? chosen)
+          have present := ih fuel (by omega)
+          apply List.mem_cons_of_mem
+          apply List.mem_flatMap.mpr
+          refine ⟨row, List.mem_of_getElem? selected, ?_⟩
+          apply List.mem_flatMap.mpr
+          refine ⟨(child, childIndex), List.mk_mem_zipIdx_iff_getElem?.mpr chosen, ?_⟩
+          exact List.mem_map.mpr ⟨path, present, rfl⟩
+  | @member entry members depth free memberIndex child selected path rest ih =>
+      intro fuel bounded
+      cases fuel with
+      | zero => omega
+      | succ fuel =>
+          have smaller := InternedValueMass.union_member_lt entry members depth free child
+            (List.mem_of_getElem? selected)
+          exact List.mem_cons_of_mem [] (List.mem_flatMap.mpr
+            ⟨child, List.mem_of_getElem? selected, ih fuel (by omega)⟩)
+
+private noncomputable def positivePaths (value : Node) : List Path := by
+  classical
+  exact ((candidates (InternedValueMass.value value + 1) value).filter
+    (fun path => decide (PositiveAt value path))).eraseDups
+
+private theorem positivePaths_spec {value path} :
+    path ∈ positivePaths value ↔ PositiveAt value path := by
+  classical
+  simp only [positivePaths, List.mem_eraseDups, List.mem_filter, decide_eq_true_eq]
+  exact ⟨And.right, fun positive =>
+    ⟨candidates_complete positive _ (by omega), positive⟩⟩
+
+private theorem rel_symm {classes : Constraints} {left right : Path}
+    (related : Rel classes left right) : Rel classes right left := by
+  induction related with
+  | refl path => exact .refl path
+  | member paths selected left right first second suffix =>
+      exact .member paths selected right left second first suffix
+  | trans _ _ first second => exact .trans second first
+
+private theorem rel_covers {classes others : Constraints} (covered : Covers classes others)
+    {left right : Path} (related : Rel classes left right) : Rel others left right := by
+  induction related with
+  | refl path => exact .refl path
+  | member paths selected left right first second suffix =>
+      obtain ⟨larger, included, preserves⟩ := covered paths selected
+      exact .member larger included left right (preserves left first) (preserves right second) suffix
+  | trans _ _ first second => exact .trans first second
+
+private theorem consistent {classes : Constraints}
+    (fixed : congruenceStep classes = some classes) : isContradicting classes = false := by
+  dsimp only [congruenceStep] at fixed
+  split at fixed
+  · cases fixed
+  · rename_i condition
+    have same := Option.some.inj fixed
+    rw [same] at condition
+    exact Bool.eq_false_iff.mpr condition
+
+/-- The literal descended records retain a relation between two paths through the same child. -/
+theorem child_reflect
+    (parents : List Record)
+    (coherent : ∀ record ∈ parents, SourceEqualityClassOrder.Coherent record)
+    (fixed : congruenceStep (parents.map Record.paths) = some (parents.map Record.paths))
+    (index : Nat) {left right : Path}
+    (related : Rel (parents.map Record.paths) (index :: left) (index :: right)) :
+    Rel ((SourceEqualityDescend.records index parents).map Record.paths) left right := by
+  rcases SourceCurrentNormalizedChildSeparation.single fixed related with same |
+      ⟨paths, selected, a, aMember, b, bMember, suffix, firstSame, secondSame⟩
+  · have equal := (List.cons.inj same).2
+    rw [equal]
+    exact .refl _
+  by_cases same : a = b
+  · have equal := (List.cons.inj (firstSame.trans (same ▸ secondSame.symm))).2
+    rw [equal]
+    exact .refl _
+  have notPrefix := consistent_subsumption_irreflexive _ (consistent fixed) paths selected
+  cases a with
+  | nil => exact False.elim (notPrefix ⟨[], aMember, b, bMember, ⟨b, rfl⟩, same⟩)
+  | cons firstIndex firstPath =>
+      cases b with
+      | nil => exact False.elim (notPrefix ⟨[], bMember, firstIndex::firstPath, aMember,
+          ⟨firstIndex::firstPath, rfl⟩, Ne.symm same⟩)
+      | cons secondIndex secondPath =>
+          have firstParts := List.cons.inj firstSame
+          have secondParts := List.cons.inj secondSame
+          obtain ⟨parent, parentMember, rfl⟩ := List.mem_map.mp selected
+          have first : index::firstPath ∈ parent.paths := by rw [firstParts.1]; exact aMember
+          have second : index::secondPath ∈ parent.paths := by rw [secondParts.1]; exact bMember
+          have different : firstPath ≠ secondPath := by
+            intro equal
+            apply same
+            rw [← firstParts.1, ← secondParts.1, equal]
+          have known := coherent parent parentMember
+          have valid := EqualityTrie.descend_valid parent.trie known.1 index
+          have pairs := EqualityTrie.descend_exact parent.trie known.1 index
+          have kept := (EqualitySaturation.pathTrieHasAtLeastTwoPaths_nontrivial _ valid).mpr
+            ⟨firstPath, (pairs firstPath).mpr ((known.2.2 _).mpr first),
+              secondPath, (pairs secondPath).mpr ((known.2.2 _).mpr second), different⟩
+          let output := SourceEqualityDescend.fromTrie (EqualityTrie.pathTrieDescend parent.trie index)
+          have found : SourceEqualityDescend.record index parent = some output := by
+            simp only [SourceEqualityDescend.record, kept, ite_true, output]
+          have included := (SourceEqualityDescend.records_perm index parents).mem_iff.mpr
+            (List.mem_filterMap.mpr ⟨parent, parentMember, found⟩)
+          have suffixes := SourceEqualityDescend.record_pairs index parent known output found
+          rw [firstParts.2, secondParts.2]
+          exact .member output.paths (List.mem_map.mpr ⟨output, included, rfl⟩)
+            firstPath secondPath ((suffixes _).mpr first) ((suffixes _).mpr second) suffix
+
+private theorem root_separate {classes : Constraints}
+    (fixed : congruenceStep classes = some classes) {path : Path} (nonempty : path ≠ []) :
+    ¬ Rel classes [] path := by
+  intro related
+  rcases SourceCurrentNormalizedChildSeparation.single fixed related with same |
+      ⟨paths, selected, a, aMember, b, bMember, suffix, firstSame, secondSame⟩
+  · exact nonempty same.symm
+  have empty := List.append_eq_nil_iff.mp firstSame.symm
+  rcases empty with ⟨rfl, rfl⟩
+  simp only [List.append_nil] at secondSame
+  have different : [] ≠ b := by
+    intro same
+    apply nonempty
+    exact secondSame.trans same.symm
+  exact consistent_subsumption_irreflexive _ (consistent fixed) paths selected
+    ⟨[], aMember, b, bMember, ⟨b, rfl⟩, different⟩
+
+private def relationSetoid (classes : Constraints) : Setoid Path where
+  r := Rel classes
+  iseqv := ⟨Rel.refl, fun related => rel_symm related, fun first second => .trans first second⟩
+
+/-- A backwards positive owner relation prevents its inherited payload from recurring after descent. -/
+theorem same_child_payload_ne
+    (parents inherited : List Record)
+    (coherent : ∀ record ∈ parents, SourceEqualityClassOrder.Coherent record)
+    (fixed : congruenceStep (parents.map Record.paths) = some (parents.map Record.paths))
+    (covered : Covers (inherited.map Record.paths) (parents.map Record.paths))
+    (index : Nat) {entry depth free} {rows : List Row}
+    (row : Row) (member : row ∈ rows)
+    (nonplain : SourceMemoGate.plain row.entry.key.constraint = false)
+    (back : ∀ q, PositiveAt (.node entry rows depth free) q →
+      ∃ j p original, row.children[j]? = some original ∧ PositiveAt original p ∧
+        Rel (parents.map Record.paths) (index :: q) (j :: p)) :
+    SourceEqualityDescend.descend (some parents) index ≠ some inherited := by
+  classical
+  intro same
+  have payload : SourceEqualityDescend.descend (some parents) index =
+      some (SourceEqualityDescend.records index parents) := by cases parents <;> rfl
+  have recordsSame := Option.some.inj (payload.symm.trans same)
+  have reflect {a b : Path} (related : Rel (parents.map Record.paths) (index::a) (index::b)) :
+      Rel (inherited.map Record.paths) a b := by
+    have result := child_reflect parents coherent fixed index related
+    simpa only [recordsSame] using result
+  let equivalence := relationSetoid (inherited.map Record.paths)
+  let cls : Path → Quotient equivalence := Quotient.mk equivalence
+  let positions := positivePaths (.node entry rows depth free)
+  let classes := (positions.map cls).eraseDups
+  have distinct : classes.Nodup := SymbolicDriver.eraseDups_nodup _
+  obtain ⟨rowIndex, selected⟩ := List.mem_iff_getElem?.mp member
+  have rootPosition : [] ∈ positions := positivePaths_spec.mpr (.root rowIndex row selected nonplain)
+  have root : cls [] ∈ classes := List.mem_eraseDups.mpr (List.mem_map.mpr ⟨[], rootPosition, rfl⟩)
+  let relation := fun (source target : Quotient equivalence) =>
+    ∃ q ∈ positions, ∃ t ∈ positions,
+      cls q = source ∧ cls t = target ∧ Rel (parents.map Record.paths) (index::q) t
+  have total : ∀ source ∈ classes, ∃ target ∈ classes.erase (cls []), relation source target := by
+    intro source present
+    obtain ⟨q, qMember, rfl⟩ := List.mem_map.mp (List.mem_eraseDups.mp present)
+    obtain ⟨j, p, original, chosen, positive, related⟩ := back q (positivePaths_spec.mp qMember)
+    have targetMember : j::p ∈ positions := positivePaths_spec.mpr
+      (.child rowIndex j row original selected chosen positive)
+    have different : cls (j::p) ≠ cls [] := by
+      intro equal
+      have inheritedRelated : Rel (inherited.map Record.paths) [] (j::p) := Quotient.exact equal.symm
+      exact root_separate fixed (by simp) (rel_covers covered inheritedRelated)
+    refine ⟨cls (j::p), (List.mem_erase_of_ne different).mpr ?_, q, qMember,
+      j::p, targetMember, rfl, rfl, related⟩
+    exact List.mem_eraseDups.mpr (List.mem_map.mpr ⟨j::p, targetMember, rfl⟩)
+  have injective : ∀ first ∈ classes, ∀ second ∈ classes,
+      ∀ target ∈ classes.erase (cls []), relation first target → relation second target → first = second := by
+    intro first _ second _ target _ firstRelated secondRelated
+    obtain ⟨q, _qMember, t, _tMember, sourceEq, targetEq, firstBack⟩ := firstRelated
+    obtain ⟨r, _rMember, u, _uMember, nextEq, otherEq, secondBack⟩ := secondRelated
+    have equal : cls t = cls u := targetEq.trans otherEq.symm
+    have inheritedRelated : Rel (inherited.map Record.paths) t u := Quotient.exact equal
+    have related := Rel.trans firstBack (Rel.trans (rel_covers covered inheritedRelated) (rel_symm secondBack))
+    have domainEq : cls q = cls r := Quotient.sound (reflect related)
+    exact sourceEq.symm.trans (domainEq.trans nextEq)
+  have counted := SymbolicDriver.relation_cardinality_le classes (classes.erase (cls [])) (cls [])
+    distinct relation total injective
+  have shorter := List.length_erase_of_mem root
+  have nonempty := List.length_pos_of_mem root
+  omega
+
+end MicroCFTA.SourceCurrentPositiveInheritedChildSeparation
