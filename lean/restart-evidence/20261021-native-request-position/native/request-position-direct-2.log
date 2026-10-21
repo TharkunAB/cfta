@@ -1,0 +1,952 @@
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:533:6: error: unsolved goals
+case root.inl.node.tail
+source : InternedConstructorTemplates.State Symbol Guard
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq Symbol
+depth : Nat
+domain : Interned DomainKey
+right : Node
+facts : Facts source
+bindings :
+  SourceCurrentConstrainedCapNativeOccurrenceCache.OriginalBindings (fun guard => SourceMemoGate.plain guard = true)
+    source domain.key
+rightCap : Cap (fun guard => SourceMemoGate.plain guard = true) depth right
+state : Machine Symbol Guard
+context : Context (fun guard => SourceMemoGate.plain guard = true) source state
+causal : Causal state
+rows : List Row
+after : Machine Symbol Guard
+a✝⁵ : Extension state after
+afterContext : Context (fun guard => SourceMemoGate.plain guard = true) source after
+a✝⁴ : Causal after
+a✝³ :
+  Extension after
+    { heap := (InternedConstructorTemplates.run (makeNode rows) after.heap).snd, domains := after.domains }
+a✝² :
+  Context (fun guard => SourceMemoGate.plain guard = true) source
+    { heap := (InternedConstructorTemplates.run (makeNode rows) after.heap).snd, domains := after.domains }
+a✝¹ : Causal { heap := (InternedConstructorTemplates.run (makeNode rows) after.heap).snd, domains := after.domains }
+done :
+  work (makeNode rows) after =
+    Result.done (InternedConstructorTemplates.run (makeNode rows) after.heap).fst
+      { heap := (InternedConstructorTemplates.run (makeNode rows) after.heap).snd, domains := after.domains }
+resident : Edges after.heap rows
+index : Nat
+row : Row
+nonplain : SourceMemoGate.plain row.entry.key.constraint = false
+selected : rows[index]? = some row
+positive : PositiveAt (InternedConstructorTemplates.run (makeNode rows) after.heap).fst []
+pair : Row × Row
+left✝ : EdgeResident after.heap row
+law : RowBack pair.fst pair.snd row
+first : SourceMemoGate.plain pair.fst.entry.key.constraint = false
+entry✝ : Interned InternedBinderProtocol.NodeKey
+depth✝ : Nat
+free✝ : List Reference
+b✝ : Row
+as✝ : List Row
+a✝ : List.Mem pair.fst as✝
+inputs : NodeInputs source { domain := domain, left := Value.node entry✝ (b✝ :: as✝) depth✝ free✝, right := right }
+leftCap : Cap (fun guard => SourceMemoGate.plain guard = true) depth (Value.node entry✝ (b✝ :: as✝) depth✝ free✝)
+walked :
+  CodePos
+    (SourceRecursiveIntersectionCode.walk (fun pair => requestEdge domain pair.fst pair.snd)
+      (pairs (nodeEdges (Value.node entry✝ (b✝ :: as✝) depth✝ free✝)) (nodeEdges right)))
+    state fun after values =>
+    All₂ (fun pair row => EdgeResident after.heap row ∧ RowBack pair.fst pair.snd row)
+      (pairs (nodeEdges (Value.node entry✝ (b✝ :: as✝) depth✝ free✝)) (nodeEdges right)) values
+related :
+  All₂ (fun pair row => EdgeResident after.heap row ∧ RowBack pair.fst pair.snd row)
+    (pairs (nodeEdges (Value.node entry✝ (b✝ :: as✝) depth✝ free✝)) (nodeEdges right)) rows
+member : pair ∈ pairs (nodeEdges (Value.node entry✝ (b✝ :: as✝) depth✝ free✝)) (nodeEdges right)
+inside :
+  pair.fst ∈ nodeEdges (Value.node entry✝ (b✝ :: as✝) depth✝ free✝) ∧
+    pair.snd ∈ nodeEdges right ∧ pair.fst.entry.key.symbol = pair.snd.entry.key.symbol
+⊢ PositiveAt (Value.node entry✝ (b✝ :: as✝) depth✝ free✝) [] ∨ PositiveAt right []
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:535:6: error: unsolved goals
+case root.inr.node.tail
+source : InternedConstructorTemplates.State Symbol Guard
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq Symbol
+depth : Nat
+domain : Interned DomainKey
+left : Node
+facts : Facts source
+bindings :
+  SourceCurrentConstrainedCapNativeOccurrenceCache.OriginalBindings (fun guard => SourceMemoGate.plain guard = true)
+    source domain.key
+leftCap : Cap (fun guard => SourceMemoGate.plain guard = true) depth left
+state : Machine Symbol Guard
+context : Context (fun guard => SourceMemoGate.plain guard = true) source state
+causal : Causal state
+rows : List Row
+after : Machine Symbol Guard
+a✝⁵ : Extension state after
+afterContext : Context (fun guard => SourceMemoGate.plain guard = true) source after
+a✝⁴ : Causal after
+a✝³ :
+  Extension after
+    { heap := (InternedConstructorTemplates.run (makeNode rows) after.heap).snd, domains := after.domains }
+a✝² :
+  Context (fun guard => SourceMemoGate.plain guard = true) source
+    { heap := (InternedConstructorTemplates.run (makeNode rows) after.heap).snd, domains := after.domains }
+a✝¹ : Causal { heap := (InternedConstructorTemplates.run (makeNode rows) after.heap).snd, domains := after.domains }
+done :
+  work (makeNode rows) after =
+    Result.done (InternedConstructorTemplates.run (makeNode rows) after.heap).fst
+      { heap := (InternedConstructorTemplates.run (makeNode rows) after.heap).snd, domains := after.domains }
+resident : Edges after.heap rows
+index : Nat
+row : Row
+nonplain : SourceMemoGate.plain row.entry.key.constraint = false
+selected : rows[index]? = some row
+positive : PositiveAt (InternedConstructorTemplates.run (makeNode rows) after.heap).fst []
+pair : Row × Row
+left✝ : EdgeResident after.heap row
+law : RowBack pair.fst pair.snd row
+second : SourceMemoGate.plain pair.snd.entry.key.constraint = false
+entry✝ : Interned InternedBinderProtocol.NodeKey
+depth✝ : Nat
+free✝ : List Reference
+b✝ : Row
+as✝ : List Row
+a✝ : List.Mem pair.snd as✝
+inputs : NodeInputs source { domain := domain, left := left, right := Value.node entry✝ (b✝ :: as✝) depth✝ free✝ }
+rightCap : Cap (fun guard => SourceMemoGate.plain guard = true) depth (Value.node entry✝ (b✝ :: as✝) depth✝ free✝)
+walked :
+  CodePos
+    (SourceRecursiveIntersectionCode.walk (fun pair => requestEdge domain pair.fst pair.snd)
+      (pairs (nodeEdges left) (nodeEdges (Value.node entry✝ (b✝ :: as✝) depth✝ free✝))))
+    state fun after values =>
+    All₂ (fun pair row => EdgeResident after.heap row ∧ RowBack pair.fst pair.snd row)
+      (pairs (nodeEdges left) (nodeEdges (Value.node entry✝ (b✝ :: as✝) depth✝ free✝))) values
+related :
+  All₂ (fun pair row => EdgeResident after.heap row ∧ RowBack pair.fst pair.snd row)
+    (pairs (nodeEdges left) (nodeEdges (Value.node entry✝ (b✝ :: as✝) depth✝ free✝))) rows
+member : pair ∈ pairs (nodeEdges left) (nodeEdges (Value.node entry✝ (b✝ :: as✝) depth✝ free✝))
+inside :
+  pair.fst ∈ nodeEdges left ∧
+    pair.snd ∈ nodeEdges (Value.node entry✝ (b✝ :: as✝) depth✝ free✝) ∧
+      pair.fst.entry.key.symbol = pair.snd.entry.key.symbol
+⊢ PositiveAt left [] ∨ PositiveAt (Value.node entry✝ (b✝ :: as✝) depth✝ free✝) []
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:541:6: error: unsolved goals
+case child.inl.node.tail
+source : InternedConstructorTemplates.State Symbol Guard
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq Symbol
+depth : Nat
+domain : Interned DomainKey
+right : Node
+facts : Facts source
+bindings :
+  SourceCurrentConstrainedCapNativeOccurrenceCache.OriginalBindings (fun guard => SourceMemoGate.plain guard = true)
+    source domain.key
+rightCap : Cap (fun guard => SourceMemoGate.plain guard = true) depth right
+state : Machine Symbol Guard
+context : Context (fun guard => SourceMemoGate.plain guard = true) source state
+causal : Causal state
+rows : List Row
+after : Machine Symbol Guard
+a✝⁵ : Extension state after
+afterContext : Context (fun guard => SourceMemoGate.plain guard = true) source after
+a✝⁴ : Causal after
+a✝³ :
+  Extension after
+    { heap := (InternedConstructorTemplates.run (makeNode rows) after.heap).snd, domains := after.domains }
+a✝² :
+  Context (fun guard => SourceMemoGate.plain guard = true) source
+    { heap := (InternedConstructorTemplates.run (makeNode rows) after.heap).snd, domains := after.domains }
+a✝¹ : Causal { heap := (InternedConstructorTemplates.run (makeNode rows) after.heap).snd, domains := after.domains }
+done :
+  work (makeNode rows) after =
+    Result.done (InternedConstructorTemplates.run (makeNode rows) after.heap).fst
+      { heap := (InternedConstructorTemplates.run (makeNode rows) after.heap).snd, domains := after.domains }
+resident : Edges after.heap rows
+index childIndex : Nat
+row : Row
+child : Node
+chosen : row.children[childIndex]? = some child
+path✝ : List Nat
+rest : PositiveAt child path✝
+selected : rows[index]? = some row
+positive✝ : PositiveAt (InternedConstructorTemplates.run (makeNode rows) after.heap).fst (childIndex :: path✝)
+pair : Row × Row
+left✝ : EdgeResident after.heap row
+law : RowBack pair.fst pair.snd row
+original : Node
+found : pair.fst.children[childIndex]? = some original
+positive : PositiveAt original path✝
+entry✝ : Interned InternedBinderProtocol.NodeKey
+depth✝ : Nat
+free✝ : List Reference
+b✝ : Row
+as✝ : List Row
+a✝ : List.Mem pair.fst as✝
+inputs : NodeInputs source { domain := domain, left := Value.node entry✝ (b✝ :: as✝) depth✝ free✝, right := right }
+leftCap : Cap (fun guard => SourceMemoGate.plain guard = true) depth (Value.node entry✝ (b✝ :: as✝) depth✝ free✝)
+walked :
+  CodePos
+    (SourceRecursiveIntersectionCode.walk (fun pair => requestEdge domain pair.fst pair.snd)
+      (pairs (nodeEdges (Value.node entry✝ (b✝ :: as✝) depth✝ free✝)) (nodeEdges right)))
+    state fun after values =>
+    All₂ (fun pair row => EdgeResident after.heap row ∧ RowBack pair.fst pair.snd row)
+      (pairs (nodeEdges (Value.node entry✝ (b✝ :: as✝) depth✝ free✝)) (nodeEdges right)) values
+related :
+  All₂ (fun pair row => EdgeResident after.heap row ∧ RowBack pair.fst pair.snd row)
+    (pairs (nodeEdges (Value.node entry✝ (b✝ :: as✝) depth✝ free✝)) (nodeEdges right)) rows
+member : pair ∈ pairs (nodeEdges (Value.node entry✝ (b✝ :: as✝) depth✝ free✝)) (nodeEdges right)
+inside :
+  pair.fst ∈ nodeEdges (Value.node entry✝ (b✝ :: as✝) depth✝ free✝) ∧
+    pair.snd ∈ nodeEdges right ∧ pair.fst.entry.key.symbol = pair.snd.entry.key.symbol
+⊢ PositiveAt (Value.node entry✝ (b✝ :: as✝) depth✝ free✝) (childIndex :: path✝) ∨ PositiveAt right (childIndex :: path✝)
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:543:6: error: unsolved goals
+case child.inr.node.tail
+source : InternedConstructorTemplates.State Symbol Guard
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq Symbol
+depth : Nat
+domain : Interned DomainKey
+left : Node
+facts : Facts source
+bindings :
+  SourceCurrentConstrainedCapNativeOccurrenceCache.OriginalBindings (fun guard => SourceMemoGate.plain guard = true)
+    source domain.key
+leftCap : Cap (fun guard => SourceMemoGate.plain guard = true) depth left
+state : Machine Symbol Guard
+context : Context (fun guard => SourceMemoGate.plain guard = true) source state
+causal : Causal state
+rows : List Row
+after : Machine Symbol Guard
+a✝⁵ : Extension state after
+afterContext : Context (fun guard => SourceMemoGate.plain guard = true) source after
+a✝⁴ : Causal after
+a✝³ :
+  Extension after
+    { heap := (InternedConstructorTemplates.run (makeNode rows) after.heap).snd, domains := after.domains }
+a✝² :
+  Context (fun guard => SourceMemoGate.plain guard = true) source
+    { heap := (InternedConstructorTemplates.run (makeNode rows) after.heap).snd, domains := after.domains }
+a✝¹ : Causal { heap := (InternedConstructorTemplates.run (makeNode rows) after.heap).snd, domains := after.domains }
+done :
+  work (makeNode rows) after =
+    Result.done (InternedConstructorTemplates.run (makeNode rows) after.heap).fst
+      { heap := (InternedConstructorTemplates.run (makeNode rows) after.heap).snd, domains := after.domains }
+resident : Edges after.heap rows
+index childIndex : Nat
+row : Row
+child : Node
+chosen : row.children[childIndex]? = some child
+path✝ : List Nat
+rest : PositiveAt child path✝
+selected : rows[index]? = some row
+positive✝ : PositiveAt (InternedConstructorTemplates.run (makeNode rows) after.heap).fst (childIndex :: path✝)
+pair : Row × Row
+left✝ : EdgeResident after.heap row
+law : RowBack pair.fst pair.snd row
+original : Node
+found : pair.snd.children[childIndex]? = some original
+positive : PositiveAt original path✝
+entry✝ : Interned InternedBinderProtocol.NodeKey
+depth✝ : Nat
+free✝ : List Reference
+b✝ : Row
+as✝ : List Row
+a✝ : List.Mem pair.snd as✝
+inputs : NodeInputs source { domain := domain, left := left, right := Value.node entry✝ (b✝ :: as✝) depth✝ free✝ }
+rightCap : Cap (fun guard => SourceMemoGate.plain guard = true) depth (Value.node entry✝ (b✝ :: as✝) depth✝ free✝)
+walked :
+  CodePos
+    (SourceRecursiveIntersectionCode.walk (fun pair => requestEdge domain pair.fst pair.snd)
+      (pairs (nodeEdges left) (nodeEdges (Value.node entry✝ (b✝ :: as✝) depth✝ free✝))))
+    state fun after values =>
+    All₂ (fun pair row => EdgeResident after.heap row ∧ RowBack pair.fst pair.snd row)
+      (pairs (nodeEdges left) (nodeEdges (Value.node entry✝ (b✝ :: as✝) depth✝ free✝))) values
+related :
+  All₂ (fun pair row => EdgeResident after.heap row ∧ RowBack pair.fst pair.snd row)
+    (pairs (nodeEdges left) (nodeEdges (Value.node entry✝ (b✝ :: as✝) depth✝ free✝))) rows
+member : pair ∈ pairs (nodeEdges left) (nodeEdges (Value.node entry✝ (b✝ :: as✝) depth✝ free✝))
+inside :
+  pair.fst ∈ nodeEdges left ∧
+    pair.snd ∈ nodeEdges (Value.node entry✝ (b✝ :: as✝) depth✝ free✝) ∧
+      pair.fst.entry.key.symbol = pair.snd.entry.key.symbol
+⊢ PositiveAt left (childIndex :: path✝) ∨ PositiveAt (Value.node entry✝ (b✝ :: as✝) depth✝ free✝) (childIndex :: path✝)
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:590:103: error(lean.unknownIdentifier): Unknown identifier `output`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:606:12: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case pos.false
+source : InternedConstructorTemplates.State Symbol Guard
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+depth : Nat
+domain : Interned DomainKey
+name : Nat
+other : Node
+state : Machine Symbol Guard
+context : Context (fun guard => SourceMemoGate.plain guard = true) source state
+bindings :
+  SourceCurrentConstrainedCapNativeOccurrenceCache.OriginalBindings (fun guard => SourceMemoGate.plain guard = true)
+    source domain.key
+original : SourceRecursiveIntersectionInputView.Original other
+available : Available source other
+covered : SourceCurrentConstrainedCapNativeIdentity.Covered domain.key other
+bounded : Cap (fun guard => SourceMemoGate.plain guard = true) depth other
+member : name ∈ SourceRecursiveIntersectionDomain.names domain.key
+bound : Node
+found : SourcePreparedSharedRows.read state.heap name = some bound
+sourceAvailable : Available source bound
+left✝ : Available state.heap bound
+reference : bound.referenceOf = NodeRef.mu name
+annotated : SourceEqualityAnnotationLanguage.Annotated (fun guard => SourceMemoGate.plain guard = true) bound
+boundCovered : SourceCurrentConstrainedCapNativeIdentity.Covered domain.key bound
+boundOriginal : SourceRecursiveIntersectionInputView.Original bound
+⊢ CodePos
+    (Code.read name fun found =>
+      match found with
+      | some bound => if false = true then requestNode domain bound other else requestNode domain other bound
+      | none => Code.fail (Failure.missingPayload name))
+    state fun x value => ∀ (path : List Nat), PositiveAt value path → PositiveAt other path
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:610:12: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case pos.true
+source : InternedConstructorTemplates.State Symbol Guard
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+depth : Nat
+domain : Interned DomainKey
+name : Nat
+other : Node
+state : Machine Symbol Guard
+context : Context (fun guard => SourceMemoGate.plain guard = true) source state
+bindings :
+  SourceCurrentConstrainedCapNativeOccurrenceCache.OriginalBindings (fun guard => SourceMemoGate.plain guard = true)
+    source domain.key
+original : SourceRecursiveIntersectionInputView.Original other
+available : Available source other
+covered : SourceCurrentConstrainedCapNativeIdentity.Covered domain.key other
+bounded : Cap (fun guard => SourceMemoGate.plain guard = true) depth other
+member : name ∈ SourceRecursiveIntersectionDomain.names domain.key
+bound : Node
+found : SourcePreparedSharedRows.read state.heap name = some bound
+sourceAvailable : Available source bound
+left✝ : Available state.heap bound
+reference : bound.referenceOf = NodeRef.mu name
+annotated : SourceEqualityAnnotationLanguage.Annotated (fun guard => SourceMemoGate.plain guard = true) bound
+boundCovered : SourceCurrentConstrainedCapNativeIdentity.Covered domain.key bound
+boundOriginal : SourceRecursiveIntersectionInputView.Original bound
+⊢ CodePos
+    (Code.read name fun found =>
+      match found with
+      | some bound => if true = true then requestNode domain bound other else requestNode domain other bound
+      | none => Code.fail (Failure.missingPayload name))
+    state fun x value => ∀ (path : List Nat), PositiveAt value path → PositiveAt other path
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:604:48: warning: This simp argument is unused:
+  found
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [compileReference, member, ite_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:791:15: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  DecidableEq (EdgeKey Symbol Guard)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:791:85: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.yielded` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `SourceCurrentAllocatedNativeDomainTrace.yielded`
+  [apply] `SourceCurrentAllocatedRecursivePrefixState.yielded`
+  [apply] `Outcome.yielded`
+  [apply] `SourceRecursiveIntersectionNative.Outcome.yielded`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:809:23: error: Application type mismatch: The argument
+  stored
+has type
+  Stored source before.native
+but is expected to have type
+  Stored source after.native
+in the application
+  And.intro stored
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:809:44: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.258 = ?m.258
+but is expected to have type
+  after = before
+in the application
+  ⟨?m.256, rfl⟩
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:819:24: error: unsolved goals
+case mk.memoized.mk.absent.intro
+source : InternedConstructorTemplates.State Symbol Guard
+A : Type
+width : Nat
+inst✝ : DecidableEq Symbol
+request : NodeRequest Symbol Guard
+next : Node → Code Symbol Guard A
+before : Checked width
+control : Control A
+after : Checked width
+valid : SourceCurrentAllocatedNativePhysicalCache.Valid before.native
+stored : Stored source before.native
+oldStored :
+  SourceCurrentConstrainedCapCheckedJointCache.Stored (fun guard => SourceMemoGate.plain guard = true) source
+    before.native
+ready : NodeReady before.native.machine request
+words : SourceCurrentAllocatedNativeRequestBounds.Words width (Control.code (Code.node request next))
+chosen : SourceRecursiveIntersectionThunks.State width Symbol Guard
+chosenMachine : chosen.machine = before.native.machine
+handle : Nat
+selected : lookupNode width request before.native = (NodeSelection.memoized handle, chosen)
+key : Triple width
+encoded : SourceRecursiveIntersectionMemo.requestKey width request.domain request.left request.right = some key
+left✝ : chosen.nodes.table key = some handle
+right✝ : chosen.machine = before.native.machine
+safe : SourceRecursiveIntersectionMemo.KeySafe width request.domain request.left request.right
+running : SourceRecursiveIntersectionThunks.State width Symbol Guard
+machine : running.machine = before.native.machine
+demanded : demandNode handle chosen = (FlatMemoThunk.Observation.absent, running)
+⊢ after.native.machine = before.native.machine ∧
+    after.operations = before.operations ∧
+      Stored source after.native ∧
+        (control = Control.code ((compileNode request).bind next) ∧ after = before ∨
+          (∃ value,
+              control = Control.code (next value) ∧
+                Available after.native.machine.heap value ∧
+                  NodePos source request value ∧
+                    NodeLaw (fun guard => SourceMemoGate.plain guard = true) source request value) ∨
+            ∃ handle,
+              control =
+                  Control.code ((compileNode request).bind fun value => Code.finishNode handle value (next value)) ∧
+                after.native.nodes.cells handle =
+                  some { request := request, status := FlatMemoThunk.Status.evaluating })
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:819:24: error: unsolved goals
+case mk.memoized.mk.busy.intro
+source : InternedConstructorTemplates.State Symbol Guard
+A : Type
+width : Nat
+inst✝ : DecidableEq Symbol
+request : NodeRequest Symbol Guard
+next : Node → Code Symbol Guard A
+before : Checked width
+control : Control A
+after : Checked width
+valid : SourceCurrentAllocatedNativePhysicalCache.Valid before.native
+stored : Stored source before.native
+oldStored :
+  SourceCurrentConstrainedCapCheckedJointCache.Stored (fun guard => SourceMemoGate.plain guard = true) source
+    before.native
+ready : NodeReady before.native.machine request
+words : SourceCurrentAllocatedNativeRequestBounds.Words width (Control.code (Code.node request next))
+chosen : SourceRecursiveIntersectionThunks.State width Symbol Guard
+chosenMachine : chosen.machine = before.native.machine
+handle : Nat
+selected : lookupNode width request before.native = (NodeSelection.memoized handle, chosen)
+key : Triple width
+encoded : SourceRecursiveIntersectionMemo.requestKey width request.domain request.left request.right = some key
+left✝ : chosen.nodes.table key = some handle
+right✝ : chosen.machine = before.native.machine
+safe : SourceRecursiveIntersectionMemo.KeySafe width request.domain request.left request.right
+running : SourceRecursiveIntersectionThunks.State width Symbol Guard
+machine : running.machine = before.native.machine
+demanded : demandNode handle chosen = (FlatMemoThunk.Observation.busy, running)
+⊢ after.native.machine = before.native.machine ∧
+    after.operations = before.operations ∧
+      Stored source after.native ∧
+        (control = Control.code ((compileNode request).bind next) ∧ after = before ∨
+          (∃ value,
+              control = Control.code (next value) ∧
+                Available after.native.machine.heap value ∧
+                  NodePos source request value ∧
+                    NodeLaw (fun guard => SourceMemoGate.plain guard = true) source request value) ∨
+            ∃ handle,
+              control =
+                  Control.code ((compileNode request).bind fun value => Code.finishNode handle value (next value)) ∧
+                after.native.nodes.cells handle =
+                  some { request := request, status := FlatMemoThunk.Status.evaluating })
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:831:17: error: Application type mismatch: The argument
+  machine
+has type
+  running.machine = before.native.machine
+but is expected to have type
+  after.native.machine = before.native.machine
+in the application
+  And.intro machine
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:831:31: error: Application type mismatch: The argument
+  receipt.right.left
+has type
+  Stored source running
+but is expected to have type
+  Stored source after.native
+in the application
+  And.intro receipt.right.left
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:831:72: error: Application type mismatch: The argument
+  receipt.right.right.right
+has type
+  Available running.machine.heap value
+but is expected to have type
+  Available after.native.machine.heap value
+in the application
+  And.intro receipt.right.right.right
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:831:67: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.494 = ?m.494
+but is expected to have type
+  control = Control.code (next value)
+in the application
+  And.intro rfl
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:840:17: error: Application type mismatch: The argument
+  machine
+has type
+  running.machine = before.native.machine
+but is expected to have type
+  after.native.machine = before.native.machine
+in the application
+  And.intro machine
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:840:31: error: Application type mismatch: The argument
+  started.right.left
+has type
+  Stored source running
+but is expected to have type
+  Stored source after.native
+in the application
+  And.intro started.right.left
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:840:73: error: Application type mismatch: The argument
+  started.right.right
+has type
+  running.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+but is expected to have type
+  after.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+in the application
+  ⟨?m.582, started.right.right⟩
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:840:68: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.581 = ?m.581
+but is expected to have type
+  control = Control.code ((compileNode request).bind fun value => Code.finishNode handle value (next value))
+in the application
+  And.intro rfl
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:806:17: warning: This simp argument is unused:
+  SourceEqualityNativeDemand.step
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceRecursiveIntersectionNative.step, selected, SourceEqualityNativeDemand.lift] at yielded
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:806:50: warning: This simp argument is unused:
+  SourceRecursiveIntersectionNative.step
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceEqualityNativeDemand.step, selected, SourceEqualityNativeDemand.lift] at yielded
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:806:90: warning: This simp argument is unused:
+  selected
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceEqualityNativeDemand.step, SourceRecursiveIntersectionNative.step,
+    SourceEqualityNativeDemand.lift] at yielded
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:807:8: warning: This simp argument is unused:
+  SourceEqualityNativeDemand.lift
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceEqualityNativeDemand.step, SourceRecursiveIntersectionNative.step, selected] at yielded
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:820:21: warning: This simp argument is unused:
+  SourceEqualityNativeDemand.step
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceRecursiveIntersectionNative.step, selected, demanded,
+    SourceEqualityNativeDemand.lift] at yielded
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:820:54: warning: This simp argument is unused:
+  SourceRecursiveIntersectionNative.step
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceEqualityNativeDemand.step, selected, demanded, SourceEqualityNativeDemand.lift] at yielded
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:820:94: warning: This simp argument is unused:
+  selected
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceEqualityNativeDemand.step, SourceRecursiveIntersectionNative.step, demanded,
+    SourceEqualityNativeDemand.lift] at yielded
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:820:104: warning: This simp argument is unused:
+  demanded
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceEqualityNativeDemand.step, SourceRecursiveIntersectionNative.step, selected,
+    SourceEqualityNativeDemand.lift] at yielded
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:821:12: warning: This simp argument is unused:
+  SourceEqualityNativeDemand.lift
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceEqualityNativeDemand.step, SourceRecursiveIntersectionNative.step, selected,
+    demanded] at yielded
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:828:21: warning: This simp argument is unused:
+  SourceEqualityNativeDemand.step
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceRecursiveIntersectionNative.step, selected, demanded,
+    SourceEqualityNativeDemand.lift] at yielded
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:828:54: warning: This simp argument is unused:
+  SourceRecursiveIntersectionNative.step
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceEqualityNativeDemand.step, selected, demanded, SourceEqualityNativeDemand.lift] at yielded
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:828:94: warning: This simp argument is unused:
+  selected
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceEqualityNativeDemand.step, SourceRecursiveIntersectionNative.step, demanded,
+    SourceEqualityNativeDemand.lift] at yielded
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:828:104: warning: This simp argument is unused:
+  demanded
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceEqualityNativeDemand.step, SourceRecursiveIntersectionNative.step, selected,
+    SourceEqualityNativeDemand.lift] at yielded
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:829:12: warning: This simp argument is unused:
+  SourceEqualityNativeDemand.lift
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceEqualityNativeDemand.step, SourceRecursiveIntersectionNative.step, selected,
+    demanded] at yielded
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:837:21: warning: This simp argument is unused:
+  SourceEqualityNativeDemand.step
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceRecursiveIntersectionNative.step, selected, demanded,
+    SourceEqualityNativeDemand.lift] at yielded
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:837:54: warning: This simp argument is unused:
+  SourceRecursiveIntersectionNative.step
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceEqualityNativeDemand.step, selected, demanded, SourceEqualityNativeDemand.lift] at yielded
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:837:94: warning: This simp argument is unused:
+  selected
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceEqualityNativeDemand.step, SourceRecursiveIntersectionNative.step, demanded,
+    SourceEqualityNativeDemand.lift] at yielded
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:837:104: warning: This simp argument is unused:
+  demanded
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceEqualityNativeDemand.step, SourceRecursiveIntersectionNative.step, selected,
+    SourceEqualityNativeDemand.lift] at yielded
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:838:12: warning: This simp argument is unused:
+  SourceEqualityNativeDemand.lift
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceEqualityNativeDemand.step, SourceRecursiveIntersectionNative.step, selected,
+    demanded] at yielded
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:850:15: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  DecidableEq (EdgeKey Symbol Guard)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:850:85: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.yielded` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `SourceCurrentAllocatedNativeDomainTrace.yielded`
+  [apply] `SourceCurrentAllocatedRecursivePrefixState.yielded`
+  [apply] `Outcome.yielded`
+  [apply] `SourceRecursiveIntersectionNative.Outcome.yielded`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:865:22: error: unsolved goals
+case mk.mk.absent.intro
+source : InternedConstructorTemplates.State Symbol Guard
+A : Type
+width : Nat
+inst✝ : DecidableEq Symbol
+request : EdgeRequest Symbol Guard
+next : Row → Code Symbol Guard A
+before : Checked width
+control : Control A
+after : Checked width
+valid : SourceCurrentAllocatedNativePhysicalCache.Valid before.native
+stored : Stored source before.native
+oldStored :
+  SourceCurrentConstrainedCapCheckedJointCache.Stored (fun guard => SourceMemoGate.plain guard = true) source
+    before.native
+ready : EdgeReady before.native.machine request
+words : SourceCurrentAllocatedNativeRequestBounds.Words width (Control.code (Code.edge request next))
+handle : Nat
+chosen : SourceRecursiveIntersectionThunks.State width Symbol Guard
+selected : lookupEdge width request before.native = (handle, chosen)
+chosenMachine : chosen.machine = before.native.machine
+running : SourceRecursiveIntersectionThunks.State width Symbol Guard
+machine : running.machine = before.native.machine
+demanded : demandEdge handle chosen = (FlatMemoThunk.Observation.absent, running)
+⊢ after.native.machine = before.native.machine ∧
+    after.operations = before.operations ∧
+      Stored source after.native ∧
+        ((∃ value,
+            control = Control.code (next value) ∧
+              EdgeResident after.native.machine.heap value ∧
+                EdgePos source request value ∧
+                  EdgeLaw (fun guard => SourceMemoGate.plain guard = true) source request value) ∨
+          ∃ handle,
+            (control = Control.edgeBody request fun value => Code.finishEdge handle value (next value)) ∧
+              after.native.edges.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating })
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:865:22: error: unsolved goals
+case mk.mk.busy.intro
+source : InternedConstructorTemplates.State Symbol Guard
+A : Type
+width : Nat
+inst✝ : DecidableEq Symbol
+request : EdgeRequest Symbol Guard
+next : Row → Code Symbol Guard A
+before : Checked width
+control : Control A
+after : Checked width
+valid : SourceCurrentAllocatedNativePhysicalCache.Valid before.native
+stored : Stored source before.native
+oldStored :
+  SourceCurrentConstrainedCapCheckedJointCache.Stored (fun guard => SourceMemoGate.plain guard = true) source
+    before.native
+ready : EdgeReady before.native.machine request
+words : SourceCurrentAllocatedNativeRequestBounds.Words width (Control.code (Code.edge request next))
+handle : Nat
+chosen : SourceRecursiveIntersectionThunks.State width Symbol Guard
+selected : lookupEdge width request before.native = (handle, chosen)
+chosenMachine : chosen.machine = before.native.machine
+running : SourceRecursiveIntersectionThunks.State width Symbol Guard
+machine : running.machine = before.native.machine
+demanded : demandEdge handle chosen = (FlatMemoThunk.Observation.busy, running)
+⊢ after.native.machine = before.native.machine ∧
+    after.operations = before.operations ∧
+      Stored source after.native ∧
+        ((∃ value,
+            control = Control.code (next value) ∧
+              EdgeResident after.native.machine.heap value ∧
+                EdgePos source request value ∧
+                  EdgeLaw (fun guard => SourceMemoGate.plain guard = true) source request value) ∨
+          ∃ handle,
+            (control = Control.edgeBody request fun value => Code.finishEdge handle value (next value)) ∧
+              after.native.edges.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating })
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:875:15: error: Application type mismatch: The argument
+  machine
+has type
+  running.machine = before.native.machine
+but is expected to have type
+  after.native.machine = before.native.machine
+in the application
+  And.intro machine
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:875:29: error: Application type mismatch: The argument
+  receipt.right.left
+has type
+  Stored source running
+but is expected to have type
+  Stored source after.native
+in the application
+  And.intro receipt.right.left
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:875:62: error: Application type mismatch: The argument
+  receipt.right.right.right
+has type
+  EdgeResident running.machine.heap value
+but is expected to have type
+  EdgeResident after.native.machine.heap value
+in the application
+  And.intro receipt.right.right.right
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:875:57: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.335 = ?m.335
+but is expected to have type
+  control = Control.code (next value)
+in the application
+  And.intro rfl
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:883:15: error: Application type mismatch: The argument
+  machine
+has type
+  running.machine = before.native.machine
+but is expected to have type
+  after.native.machine = before.native.machine
+in the application
+  And.intro machine
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:883:29: error: Application type mismatch: The argument
+  started.right.left
+has type
+  Stored source running
+but is expected to have type
+  Stored source after.native
+in the application
+  And.intro started.right.left
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:883:63: error: Application type mismatch: The argument
+  started.right.right
+has type
+  running.edges.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+but is expected to have type
+  after.native.edges.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+in the application
+  ⟨?m.421, started.right.right⟩
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:883:58: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.420 = ?m.420
+but is expected to have type
+  control = Control.edgeBody request fun value => Code.finishEdge handle value (next value)
+in the application
+  And.intro rfl
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:866:19: warning: This simp argument is unused:
+  SourceEqualityNativeDemand.step
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [selected, demanded] at yielded
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:866:52: warning: This simp argument is unused:
+  selected
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceEqualityNativeDemand.step, demanded] at yielded
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:866:62: warning: This simp argument is unused:
+  demanded
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceEqualityNativeDemand.step, selected] at yielded
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:873:19: warning: This simp argument is unused:
+  SourceEqualityNativeDemand.step
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [selected, demanded] at yielded
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:873:52: warning: This simp argument is unused:
+  selected
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceEqualityNativeDemand.step, demanded] at yielded
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:873:62: warning: This simp argument is unused:
+  demanded
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceEqualityNativeDemand.step, selected] at yielded
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:881:19: warning: This simp argument is unused:
+  SourceEqualityNativeDemand.step
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [selected, demanded] at yielded
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:881:52: warning: This simp argument is unused:
+  selected
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceEqualityNativeDemand.step, demanded] at yielded
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:881:62: warning: This simp argument is unused:
+  demanded
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceEqualityNativeDemand.step, selected] at yielded
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:1044:29: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+source : InternedConstructorTemplates.State Symbol Guard
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+inventory : List DomainKey
+initialDomains : Cache.State DomainKey
+facts : Facts source
+closed : SourceCurrentAllocatedRecursiveDomainCode.Closed source inventory
+A : Type
+before after : Checked width
+value : A
+physicalPost oldPost post : Machine Symbol Guard → A → Prop
+known : Current source inventory initialDomains before
+context : Context (fun guard => SourceMemoGate.plain guard = true) source before.native.machine
+oldStored :
+  SourceCurrentConstrainedCapCheckedJointCache.Stored (fun guard => SourceMemoGate.plain guard = true) source
+    before.native
+stored : Stored source before.native
+causal : Causal before.native.machine
+fuel : Nat
+ih : ∀ (m : Nat), m < fuel + 1 → Preserves m
+middle : Checked width
+middleContext : Context (fun guard => SourceMemoGate.plain guard = true) source middle.native.machine
+middleCausal : Causal middle.native.machine
+request : EdgeRequest Symbol Guard
+next : Row → Code Symbol Guard A
+physical : Physical source inventory (Control.edgeBody request next) before.native.machine physicalPost
+fields : Fields (Control.edgeBody request next) before
+oldCertificate :
+  SourceCurrentConstrainedCapCheckedJointControl.Certified (fun guard => SourceMemoGate.plain guard = true) source
+    (Control.edgeBody request next) before.native.machine oldPost
+certificate : ControlPos (Control.edgeBody request next) before.native.machine post
+admitted : SourceCurrentAllocatedNativeDomainTrace.Entered inventory (Control.edgeBody request next)
+inputs : SourceCurrentAllocatedNativePhysicalExecution.Inputs (Control.edgeBody request next) before
+stepHistory :
+  Nonempty
+    (SourceCurrentNativeMuPublication.History before.native.machine.heap
+      (step (Control.edgeBody request next) before).state.native.machine.heap)
+body : Code Symbol Guard Row
+pureBody : SourceEqualityNativeDemand.body request Code.pure before = Outcome.yielded (Control.code body) middle
+tail : Trace fuel (Control.code (body.bind next)) middle (Control.code (Code.pure value)) after
+effects :
+  Current source inventory initialDomains middle ∧
+    Extension before.native.machine middle.native.machine ∧
+      SourceEqualityRequiredCache.Keeps before.native.machine.heap middle.native.machine.heap ∧
+        SourceEqualityConstraintMemoAllocation.Grows before.operations middle.operations ∧
+          Fields (Control.code (body.bind next)) middle
+one : step (Control.edgeBody request next) before = Outcome.yielded (Control.code (body.bind next)) middle
+data : EdgeScope source request ∧ request.domain.key ∈ inventory ∧ EdgeReady before.native.machine request
+bodyPhysical :
+  SourceCurrentAllocatedRecursivePrefixCode.Certified source inventory body middle.native.machine fun final value =>
+    EdgeResident final.heap value
+bodyFields : Fields (Control.code body) middle
+nativeSame : middle.native = before.native
+middleOld :
+  SourceCurrentConstrainedCapCheckedJointCache.Stored (fun guard => SourceMemoGate.plain guard = true) source
+    middle.native
+middleStored : Stored source middle.native
+bodyOld :
+  SourceCurrentConstrainedCapCheckedJointCode.Certified (fun guard => SourceMemoGate.plain guard = true) source body
+    middle.native.machine fun x value => EdgeLaw (fun guard => SourceMemoGate.plain guard = true) source request value
+bodyPos : CodePos body middle.native.machine fun x result => EdgePos source request result
+result : Machine Symbol Guard
+final : A
+⊢ Prop
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:1083:65: error(lean.unknownIdentifier): Unknown identifier `node_yielded`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:1083:19: error: Tactic `rcases` failed: `x✝ : ?m.1362` is not an inductive datatype
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:1107:65: error(lean.unknownIdentifier): Unknown identifier `edge_yielded`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-2.source.lean:1107:19: error: Tactic `rcases` failed: `x✝ : ?m.1406` is not an inductive datatype

@@ -1,0 +1,169 @@
+private theorem edge_work_pos (request : EdgeRequest Symbol Guard) (guard : Guard)
+    (values : List Node) (state : Machine Symbol Guard) (context : Context Plain source state)
+    (guardBack : SourceMemoGate.plain guard = false →
+      SourceMemoGate.plain request.left.entry.key.constraint = false ∨
+        SourceMemoGate.plain request.right.entry.key.constraint = false)
+    (related : All₂ (fun pair value => Available state.heap value ∧ Back pair.1 pair.2 value)
+      (request.left.children.zip request.right.children) values) :
+    CodePos (source := source) (.work (makeEdge request.left.entry.key.symbol guard values) .pure) state
+      (fun _ result => RowBack request.left request.right result) := by
+  intro result after done _ _ _
+  obtain ⟨rfl, rfl⟩ := work_done _ state result after done
+  have available : Values state.heap values := by
+    intro value member
+    obtain ⟨index, found⟩ := List.mem_iff_getElem?.mp member
+    obtain ⟨pair, _, physical, _⟩ := SourceEqualityProjectionLanguage.all₂_selected related index value found
+    exact physical
+  have fields := MergedPhysicalGroupEdges.makeEdge_fields state.heap context.valid.1
+    request.left.entry.key.symbol guard values available
+  constructor
+  · intro positive
+    exact guardBack (fields.2.1 ▸ positive)
+  · intro index child chosen path positive
+    rw [fields.2.2] at chosen
+    obtain ⟨pair, selected, _, law⟩ := SourceEqualityProjectionLanguage.all₂_selected related index child chosen
+    have originals := List.getElem?_zip_eq_some.mp selected
+    exact (law path positive).imp (fun back => ⟨pair.1, originals.1, back⟩)
+      (fun back => ⟨pair.2, originals.2, back⟩)
+
+private theorem children_fixed_pos (depth : Nat) (request : EdgeRequest Symbol Guard)
+    (combined : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula)
+    (state : Machine Symbol Guard) (context : Context Plain source state) (causal : Causal state)
+    (bindings : OriginalBindings Plain source request.domain.key) (inputs : EdgeInputs source request)
+    (left : Edge Plain depth request.left) (right : Edge Plain depth request.right)
+    (guardBack : SourceMemoGate.plain (SourceEqualityConjoinAllocation.readback combined) = false →
+      SourceMemoGate.plain request.left.entry.key.constraint = false ∨
+        SourceMemoGate.plain request.right.entry.key.constraint = false) :
+    CodePos (source := source) (SourceEqualityNativeCheckedCode.children request.domain request.left request.right combined) state
+      (fun _ result => RowBack request.left request.right result) := by
+  let relation := fun (after : Machine Symbol Guard) (pair : Node × Node) (value : Node) =>
+    Available after.heap value ∧ Back pair.1 pair.2 value
+  have walked := pos_walk
+    (fun pair : Node × Node => requestNode request.domain pair.1 pair.2)
+    (request.left.children.zip request.right.children) relation
+    (by intro before after growth pair result known; exact ⟨growth.available result known.1, known.2⟩)
+    (by
+      intro pair member current _ _ result after _ _ _ physical _ law
+      have inside := List.of_mem_zip member
+      have first := inputs.1 pair.1 inside.1
+      have second := inputs.2 pair.2 inside.2
+      have capped := SourceCurrentConstrainedCapNativeScope.edge_child Plain depth request.left request.right
+        left right pair member
+      exact ⟨physical, law (depth - 1) bindings
+        ⟨first.1, second.1, first.2.1, second.2.1, first.2.2, second.2.2⟩ capped.1 capped.2⟩)
+    state context causal
+  unfold SourceEqualityNativeCheckedCode.children
+  apply pos_bind _ _ state context causal _ _ walked
+  intro values middle _ middleContext _ related
+  exact edge_work_pos request _ values middle middleContext guardBack related
+
+private theorem sentinel_pos (request : EdgeRequest Symbol Guard) (state : Machine Symbol Guard)
+    (context : Context Plain source state) :
+    CodePos (source := source) (SourceEqualityNativeCheckedCode.sentinel request.left) state
+      (fun _ result => EdgePos source request result) := by
+  intro result after done _ _ _
+  obtain ⟨rfl, rfl⟩ := work_done _ state result after done
+  have available : Values state.heap ([.empty] : List Node) := by
+    intro value member
+    cases List.mem_singleton.mp member
+    exact empty_available _
+  have fields := MergedPhysicalGroupEdges.makeEdge_fields state.heap context.valid.1
+    request.left.entry.key.symbol SourceEqualityConstraintConstructors.top [.empty] available
+  intro _ _ _ _ _
+  constructor
+  · intro positive
+    rw [fields.2.1] at positive
+    cases positive
+  · intro index child chosen path positive
+    rw [fields.2.2] at chosen
+    cases List.mem_singleton.mp (List.mem_of_getElem? chosen)
+    cases positive
+
+private theorem edge_body_fixed_pos (depth : Nat) (request : EdgeRequest Symbol Guard)
+    (before after : Checked width) (code : Code Symbol Guard Row)
+    (good : SourceCurrentAllocatedNativePhysicalCompletion.Good before)
+    (context : Context Plain source before.native.machine) (causal : Causal before.native.machine)
+    (ready : EdgeReady before.native.machine request)
+    (bindings : OriginalBindings Plain source request.domain.key) (inputs : EdgeInputs source request)
+    (left : Edge Plain depth request.left) (right : Edge Plain depth request.right)
+    (yielded : SourceEqualityNativeDemand.body request .pure before = .yielded (.code code) after) :
+    CodePos (source := source) code after.native.machine (fun _ result => RowBack request.left request.right result) := by
+  have same := (SourceCurrentConstrainedCapCheckedJointEdge.body_effects request before after code good ready yielded).1
+  rw [same]
+  by_cases arity : request.left.children.length = request.right.children.length
+  · have matched : ¬ request.left.children.length ≠ request.right.children.length := by omega
+    simp only [SourceEqualityNativeDemand.body, ite_eq_right matched] at yielded
+    cases firstLoaded : SourceEqualityConstraintFieldLookup.load request.left.entry.key.constraint before.operations.constraints with
+    | error message => simp only [firstLoaded] at yielded; cases yielded
+    | ok first =>
+      cases first with
+      | none => simp only [firstLoaded] at yielded; cases yielded
+      | some first =>
+        simp only [firstLoaded] at yielded
+        cases secondLoaded : SourceEqualityConstraintFieldLookup.load request.right.entry.key.constraint before.operations.constraints with
+        | error message => simp only [secondLoaded] at yielded; cases yielded
+        | ok second =>
+          cases second with
+          | none => simp only [secondLoaded] at yielded; cases yielded
+          | some second =>
+            simp only [secondLoaded] at yielded
+            have firstCached := (good.fields _ _ ready.2.1).1
+            have secondCached := (good.fields _ _ ready.2.2).1
+            have firstReady := (SourceEqualityConstraintFieldLookup.load_ready _ _ good.operations.constraints
+              firstCached first firstLoaded).1
+            have secondReady := (SourceEqualityConstraintFieldLookup.load_ready _ _ good.operations.constraints
+              secondCached second secondLoaded).1
+            obtain ⟨branch, done, _, _⟩ := SourceEqualityIntersectionEdgeAllocation.run_correct
+              GuardStructuralOrder.le first second request.left.children.length request.right.children.length
+              before.operations good.operations firstReady secondReady
+            cases branch with
+            | mismatch | rejected =>
+              simp only [done, SourceEqualityNativeDemand.sentinel, SourceEqualityNativeDemand.code_bind_pure] at yielded
+              cases yielded
+              exact pos_mono _ _ _ _ (sentinel_pos request _ context)
+                (fun _ result known => known depth bindings inputs left right)
+            | ready combined =>
+              have guardBack : SourceMemoGate.plain (SourceEqualityConjoinAllocation.readback combined) = false →
+                  SourceMemoGate.plain request.left.entry.key.constraint = false ∨
+                    SourceMemoGate.plain request.right.entry.key.constraint = false := by
+                intro positive
+                cases firstPlain : SourceMemoGate.plain request.left.entry.key.constraint with
+                | false => exact .inl rfl
+                | true =>
+                  cases secondPlain : SourceMemoGate.plain request.right.entry.key.constraint with
+                  | false => exact .inr rfl
+                  | true =>
+                    have combinedPlain := SourceCurrentUnconstrainedGuardClosure.loaded_ready_plain
+                      GuardStructuralOrder.le request.left.entry.key.constraint request.right.entry.key.constraint
+                      first second request.left.children.length request.right.children.length before.operations good.operations
+                      firstCached secondCached firstLoaded secondLoaded firstPlain secondPlain combined done
+                    rw [positive] at combinedPlain
+                    cases combinedPlain
+              simp only [done, SourceEqualityNativeDemand.code_bind_pure] at yielded
+              cases yielded
+              exact children_fixed_pos depth request combined _ context causal bindings inputs left right guardBack
+  · simp only [SourceEqualityNativeDemand.body, ite_eq_left arity, SourceEqualityNativeDemand.sentinel,
+      SourceEqualityNativeDemand.code_bind_pure] at yielded
+    cases yielded
+    exact pos_mono _ _ _ _ (sentinel_pos request _ context)
+      (fun _ result known => known depth bindings inputs left right)
+
+private theorem edge_body_pos (request : EdgeRequest Symbol Guard)
+    (before after : Checked width) (code : Code Symbol Guard Row)
+    (good : SourceCurrentAllocatedNativePhysicalCompletion.Good before)
+    (context : Context Plain source before.native.machine) (causal : Causal before.native.machine)
+    (ready : EdgeReady before.native.machine request)
+    (yielded : SourceEqualityNativeDemand.body request .pure before = .yielded (.code code) after) :
+    CodePos (source := source) code after.native.machine (fun _ result => EdgePos source request result) := by
+  have clean : BodyCode code := SourceEqualityNativeDemandBodyCode.body_clean request .pure before after (.code code)
+    yielded (fun _ => trivial)
+  let Spec := {depth : Nat // OriginalBindings Plain source request.domain.key ∧ EdgeInputs source request ∧
+    Edge Plain depth request.left ∧ Edge Plain depth request.right}
+  have all : CodePos (source := source) code after.native.machine (fun _ result => ∀ spec : Spec, RowBack request.left request.right result) := by
+    apply pos_forall code after.native.machine _ clean
+    intro spec
+    exact edge_body_fixed_pos spec.val request before after code good context causal ready spec.property.1
+      spec.property.2.1 spec.property.2.2.1 spec.property.2.2.2 yielded
+  apply pos_mono code after.native.machine _ _ all
+  intro final result returned depth bindings inputs left right
+  exact returned ⟨depth, bindings, inputs, left, right⟩

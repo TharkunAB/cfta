@@ -1,0 +1,955 @@
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:217:82: error: Invalid argument name `source` for function
+
+Hint: Perhaps you meant one of the following parameter names:
+  • `A`: s̵o̵u̵r̵c̵e̵A̲
+  • `code`: s̵o̵u̵r̵c̵e̵c̲o̲d̲e̲
+  • `state`: s̵o̵u̵r̵c̵e̵s̲t̲a̲t̲e̲
+  • `post`: s̵o̵u̵r̵c̵e̵p̲o̲s̲t̲
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:221:82: error: Invalid argument name `source` for function
+
+Hint: Perhaps you meant one of the following parameter names:
+  • `A`: s̵o̵u̵r̵c̵e̵A̲
+  • `code`: s̵o̵u̵r̵c̵e̵c̲o̲d̲e̲
+  • `state`: s̵o̵u̵r̵c̵e̵s̲t̲a̲t̲e̲
+  • `post`: s̵o̵u̵r̵c̵e̵p̲o̲s̲t̲
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:222:31: error: Invalid argument name `source` for function
+
+Hint: Perhaps you meant one of the following parameter names:
+  • `A`: s̵o̵u̵r̵c̵e̵A̲
+  • `code`: s̵o̵u̵r̵c̵e̵c̲o̲d̲e̲
+  • `state`: s̵o̵u̵r̵c̵e̵s̲t̲a̲t̲e̲
+  • `post`: s̵o̵u̵r̵c̵e̵p̲o̲s̲t̲
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:225:82: error: Invalid argument name `source` for function
+
+Hint: Perhaps you meant one of the following parameter names:
+  • `A`: s̵o̵u̵r̵c̵e̵A̲
+  • `code`: s̵o̵u̵r̵c̵e̵c̲o̲d̲e̲
+  • `state`: s̵o̵u̵r̵c̵e̵s̲t̲a̲t̲e̲
+  • `post`: s̵o̵u̵r̵c̵e̵p̲o̲s̲t̲
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:227:111: error: Invalid argument name `source` for function
+
+Hint: Perhaps you meant one of the following parameter names:
+  • `A`: s̵o̵u̵r̵c̵e̵A̲
+  • `code`: s̵o̵u̵r̵c̵e̵c̲o̲d̲e̲
+  • `state`: s̵o̵u̵r̵c̵e̵s̲t̲a̲t̲e̲
+  • `post`: s̵o̵u̵r̵c̵e̵p̲o̲s̲t̲
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:229:114: error: Invalid argument name `source` for function
+
+Hint: Perhaps you meant one of the following parameter names:
+  • `A`: s̵o̵u̵r̵c̵e̵A̲
+  • `code`: s̵o̵u̵r̵c̵e̵c̲o̲d̲e̲
+  • `state`: s̵o̵u̵r̵c̵e̵s̲t̲a̲t̲e̲
+  • `post`: s̵o̵u̵r̵c̵e̵p̲o̲s̲t̲
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:253:59: error: Application type mismatch: The argument
+  certificate
+has type
+  CodePos (Code.read name resume) state middle
+but is expected to have type
+  CodePos (resume ?m.153) state middle
+in the application
+  ih ?m.153 state context causal certificate
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:271:54: error: Application type mismatch: The argument
+  known
+has type
+  ∀ (i : I), CodePos (Code.read name resume) state (post i)
+but is expected to have type
+  ∀ (i : I), CodePos (resume ?m.110) state (post i)
+in the application
+  ih ?m.110 state (clean ?m.110) known
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:288:44: error: Application type mismatch: The argument
+  known
+has type
+  CodePos (Code.read name resume) state first
+but is expected to have type
+  CodePos (resume ?m.100) state first
+in the application
+  ih ?m.100 state known
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:329:2: error: Tactic `constructor` failed: target is not an inductive datatype
+
+source : InternedConstructorTemplates.State Symbol Guard
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+request : EdgeRequest Symbol Guard
+guard : Guard
+values : List Node
+state : Machine Symbol Guard
+context : Context (fun guard => SourceMemoGate.plain guard = true) source state
+guardBack :
+  SourceMemoGate.plain guard = false →
+    SourceMemoGate.plain request.left.entry.key.constraint = false ∨
+      SourceMemoGate.plain request.right.entry.key.constraint = false
+related :
+  All₂ (fun pair value => Available state.heap value ∧ Back pair.fst pair.snd value)
+    (request.left.children.zip request.right.children) values
+a✝² :
+  Extension state
+    { heap := (InternedConstructorTemplates.run (makeEdge request.left.entry.key.symbol guard values) state.heap).snd,
+      domains := state.domains }
+a✝¹ :
+  Context (fun guard => SourceMemoGate.plain guard = true) source
+    { heap := (InternedConstructorTemplates.run (makeEdge request.left.entry.key.symbol guard values) state.heap).snd,
+      domains := state.domains }
+a✝ :
+  Causal
+    { heap := (InternedConstructorTemplates.run (makeEdge request.left.entry.key.symbol guard values) state.heap).snd,
+      domains := state.domains }
+done :
+  work (makeEdge request.left.entry.key.symbol guard values) state =
+    Result.done (InternedConstructorTemplates.run (makeEdge request.left.entry.key.symbol guard values) state.heap).fst
+      { heap := (InternedConstructorTemplates.run (makeEdge request.left.entry.key.symbol guard values) state.heap).snd,
+        domains := state.domains }
+available : Values state.heap values
+fields :
+  have result :=
+    (InternedConstructorTemplates.run (makeEdge request.left.entry.key.symbol guard values) state.heap).fst;
+  result.entry.key.symbol = request.left.entry.key.symbol ∧
+    result.entry.key.constraint = guard ∧ result.children = values
+⊢ sorry
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:339:16: warning: declaration uses `sorry`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:342:5: warning: Variable name `bindings` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _bindings
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:382:8: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+source : InternedConstructorTemplates.State Symbol Guard
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+request : EdgeRequest Symbol Guard
+state : Machine Symbol Guard
+context : Context (fun guard => SourceMemoGate.plain guard = true) source state
+a✝² :
+  Extension state
+    {
+      heap :=
+        (InternedConstructorTemplates.run
+            (makeEdge request.left.entry.key.symbol SourceEqualityConstraintConstructors.top [Value.empty])
+            state.heap).snd,
+      domains := state.domains }
+a✝¹ :
+  Context (fun guard => SourceMemoGate.plain guard = true) source
+    {
+      heap :=
+        (InternedConstructorTemplates.run
+            (makeEdge request.left.entry.key.symbol SourceEqualityConstraintConstructors.top [Value.empty])
+            state.heap).snd,
+      domains := state.domains }
+a✝ :
+  Causal
+    {
+      heap :=
+        (InternedConstructorTemplates.run
+            (makeEdge request.left.entry.key.symbol SourceEqualityConstraintConstructors.top [Value.empty])
+            state.heap).snd,
+      domains := state.domains }
+done :
+  work (makeEdge request.left.entry.key.symbol SourceEqualityConstraintConstructors.top [Value.empty]) state =
+    Result.done
+      (InternedConstructorTemplates.run
+          (makeEdge request.left.entry.key.symbol SourceEqualityConstraintConstructors.top [Value.empty])
+          state.heap).fst
+      {
+        heap :=
+          (InternedConstructorTemplates.run
+              (makeEdge request.left.entry.key.symbol SourceEqualityConstraintConstructors.top [Value.empty])
+              state.heap).snd,
+        domains := state.domains }
+available : Values state.heap [Value.empty]
+fields :
+  have result :=
+    (InternedConstructorTemplates.run
+        (makeEdge request.left.entry.key.symbol SourceEqualityConstraintConstructors.top [Value.empty]) state.heap).fst;
+  result.entry.key.symbol = request.left.entry.key.symbol ∧
+    result.entry.key.constraint = SourceEqualityConstraintConstructors.top ∧ result.children = [Value.empty]
+⊢ sorry
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:481:8: warning: automatically included section variable(s) unused in theorem `_private._stdin.0.MicroCFTA.SourceCurrentNativeRequestPositivePositions.paired_output`:
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:481:0: warning: `paired_output` does not use the following hypothesis in its type:
+  • [DecidableEq (EdgeKey Symbol Guard)] (#1)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:487:16: warning: declaration uses `sorry`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:488:5: warning: Variable name `bindings` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _bindings
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:488:67: warning: Variable name `inputs` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _inputs
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:489:5: warning: Variable name `left` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _left
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:489:43: warning: Variable name `right` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _right
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:512:68: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+source : InternedConstructorTemplates.State Symbol Guard
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq Symbol
+depth : Nat
+domain : Interned DomainKey
+left right : Node
+facts : Facts source
+bindings :
+  SourceCurrentConstrainedCapNativeOccurrenceCache.OriginalBindings (fun guard => SourceMemoGate.plain guard = true)
+    source domain.key
+inputs : NodeInputs source { domain := domain, left := left, right := right }
+leftCap : Cap (fun guard => SourceMemoGate.plain guard = true) depth left
+rightCap : Cap (fun guard => SourceMemoGate.plain guard = true) depth right
+state : Machine Symbol Guard
+context : Context (fun guard => SourceMemoGate.plain guard = true) source state
+causal : Causal state
+walked :
+  CodePos
+    (SourceRecursiveIntersectionCode.walk (fun pair => requestEdge domain pair.fst pair.snd)
+      (pairs (nodeEdges left) (nodeEdges right)))
+    state fun after values =>
+    All₂ (fun pair row => EdgeResident after.heap row ∧ RowBack pair.fst pair.snd row)
+      (pairs (nodeEdges left) (nodeEdges right)) values
+rows : List Row
+after : Machine Symbol Guard
+a✝⁴ : Extension state after
+afterContext : Context (fun guard => SourceMemoGate.plain guard = true) source after
+a✝³ : Causal after
+related :
+  All₂ (fun pair row => EdgeResident after.heap row ∧ RowBack pair.fst pair.snd row)
+    (pairs (nodeEdges left) (nodeEdges right)) rows
+result : Node
+final : Machine Symbol Guard
+done : work (makeNode rows) after = Result.done result final
+a✝² : Extension after final
+a✝¹ : Context (fun guard => SourceMemoGate.plain guard = true) source final
+a✝ : Causal final
+⊢ sorry
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:544:70: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+source : InternedConstructorTemplates.State Symbol Guard
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+members : List Node
+call : Node → Code Symbol Guard Node
+left right : Node
+state : Machine Symbol Guard
+context : Context (fun guard => SourceMemoGate.plain guard = true) source state
+causal : Causal state
+calls :
+  ∀ (member : Node),
+    member ∈ members →
+      ∀ (current : Machine Symbol Guard),
+        Context (fun guard => SourceMemoGate.plain guard = true) source current →
+          Causal current →
+            CodePos (call member) current fun after value => Available after.heap value ∧ Back left right value
+values : List Node
+after : Machine Symbol Guard
+a✝⁴ : Extension state after
+afterContext : Context (fun guard => SourceMemoGate.plain guard = true) source after
+a✝³ : Causal after
+related : All₂ (fun x value => Available after.heap value ∧ Back left right value) members values
+result : Node
+final : Machine Symbol Guard
+done : work (makeUnion values) after = Result.done result final
+a✝² : Extension after final
+a✝¹ : Context (fun guard => SourceMemoGate.plain guard = true) source final
+a✝ : Causal final
+⊢ sorry
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:551:8: warning: automatically included section variable(s) unused in theorem `_private._stdin.0.MicroCFTA.SourceCurrentNativeRequestPositivePositions.body_back`:
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:551:0: warning: `body_back` does not use the following hypothesis in its type:
+  • [DecidableEq (EdgeKey Symbol Guard)] (#1)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:580:8: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case some.some
+source : InternedConstructorTemplates.State Symbol Guard
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+depth : Nat
+domain : Interned DomainKey
+left right : Node
+state : Machine Symbol Guard
+context : Context (fun guard => SourceMemoGate.plain guard = true) source state
+bindings :
+  SourceCurrentConstrainedCapNativeOccurrenceCache.OriginalBindings (fun guard => SourceMemoGate.plain guard = true)
+    source domain.key
+inputs : NodeInputs source { domain := domain, left := left, right := right }
+leftCap : Cap (fun guard => SourceMemoGate.plain guard = true) depth left
+rightCap : Cap (fun guard => SourceMemoGate.plain guard = true) depth right
+firstId : Nat
+first : identity left = some firstId
+secondId : Nat
+second : identity right = some secondId
+entered : Interned DomainKey × Cache.State DomainKey :=
+  SourceRecursiveIntersectionEnvironment.enter state.domains domain.key left right firstId secondId
+a✝¹ :
+  Extension state
+    { heap := state.heap,
+      domains :=
+        (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key left right firstId secondId).snd }
+enteredContext :
+  Context (fun guard => SourceMemoGate.plain guard = true) source
+    { heap := state.heap,
+      domains :=
+        (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key left right firstId secondId).snd }
+a✝ :
+  Causal
+    { heap := state.heap,
+      domains :=
+        (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key left right firstId secondId).snd }
+enteredBindings :
+  SourceCurrentConstrainedCapNativeOccurrenceCache.OriginalBindings (fun guard => SourceMemoGate.plain guard = true)
+    source (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key left right firstId secondId).fst.key
+key :
+  (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key left right firstId secondId).fst.key =
+    SourceRecursiveIntersectionDomain.extend domain.key
+      (List.map Prod.fst (SourceRecursiveIntersectionEnvironment.bindings left right)) (pair firstId secondId)
+firstBody :
+  SourceRecursiveIntersectionInputView.Original (SourceRecursiveIntersectionKernel.body left) ∧
+    Available source (SourceRecursiveIntersectionKernel.body left)
+secondBody :
+  SourceRecursiveIntersectionInputView.Original (SourceRecursiveIntersectionKernel.body right) ∧
+    Available source (SourceRecursiveIntersectionKernel.body right)
+bodyInputs :
+  NodeInputs source
+    { domain := entered.fst, left := SourceRecursiveIntersectionKernel.body left,
+      right := SourceRecursiveIntersectionKernel.body right }
+firstCap : Cap (fun guard => SourceMemoGate.plain guard = true) depth (SourceRecursiveIntersectionKernel.body left)
+secondCap : Cap (fun guard => SourceMemoGate.plain guard = true) depth (SourceRecursiveIntersectionKernel.body right)
+⊢ sorry
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:605:12: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case pos.false
+source : InternedConstructorTemplates.State Symbol Guard
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+depth : Nat
+domain : Interned DomainKey
+name : Nat
+other : Node
+state : Machine Symbol Guard
+context : Context (fun guard => SourceMemoGate.plain guard = true) source state
+bindings :
+  SourceCurrentConstrainedCapNativeOccurrenceCache.OriginalBindings (fun guard => SourceMemoGate.plain guard = true)
+    source domain.key
+original : SourceRecursiveIntersectionInputView.Original other
+available : Available source other
+covered : SourceCurrentConstrainedCapNativeIdentity.Covered domain.key other
+bounded : Cap (fun guard => SourceMemoGate.plain guard = true) depth other
+member : name ∈ SourceRecursiveIntersectionDomain.names domain.key
+bound : Node
+found : SourcePreparedSharedRows.read state.heap name = some bound
+sourceAvailable : Available source bound
+left✝ : Available state.heap bound
+reference : bound.referenceOf = NodeRef.mu name
+annotated : SourceEqualityAnnotationLanguage.Annotated (fun guard => SourceMemoGate.plain guard = true) bound
+boundCovered : SourceCurrentConstrainedCapNativeIdentity.Covered domain.key bound
+boundOriginal : SourceRecursiveIntersectionInputView.Original bound
+⊢ CodePos
+    (Code.read name fun found =>
+      match found with
+      | some bound => if false = true then requestNode domain bound other else requestNode domain other bound
+      | none => Code.fail (Failure.missingPayload name))
+    state fun x value => ∀ (path : List Nat), PositiveAt value path → PositiveAt other path
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:609:12: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case pos.true
+source : InternedConstructorTemplates.State Symbol Guard
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+depth : Nat
+domain : Interned DomainKey
+name : Nat
+other : Node
+state : Machine Symbol Guard
+context : Context (fun guard => SourceMemoGate.plain guard = true) source state
+bindings :
+  SourceCurrentConstrainedCapNativeOccurrenceCache.OriginalBindings (fun guard => SourceMemoGate.plain guard = true)
+    source domain.key
+original : SourceRecursiveIntersectionInputView.Original other
+available : Available source other
+covered : SourceCurrentConstrainedCapNativeIdentity.Covered domain.key other
+bounded : Cap (fun guard => SourceMemoGate.plain guard = true) depth other
+member : name ∈ SourceRecursiveIntersectionDomain.names domain.key
+bound : Node
+found : SourcePreparedSharedRows.read state.heap name = some bound
+sourceAvailable : Available source bound
+left✝ : Available state.heap bound
+reference : bound.referenceOf = NodeRef.mu name
+annotated : SourceEqualityAnnotationLanguage.Annotated (fun guard => SourceMemoGate.plain guard = true) bound
+boundCovered : SourceCurrentConstrainedCapNativeIdentity.Covered domain.key bound
+boundOriginal : SourceRecursiveIntersectionInputView.Original bound
+⊢ CodePos
+    (Code.read name fun found =>
+      match found with
+      | some bound => if true = true then requestNode domain bound other else requestNode domain other bound
+      | none => Code.fail (Failure.missingPayload name))
+    state fun x value => ∀ (path : List Nat), PositiveAt value path → PositiveAt other path
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:603:48: warning: This simp argument is unused:
+  found
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [compileReference, member, ite_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:648:12: error: Application type mismatch: The argument
+  fun x x_1 known path positive =>
+    Or.imp
+      (fun rest =>
+        PositiveAt.member (List.mem_iff_getElem?.mp inside).choose member
+          (Exists.choose_spec (List.mem_iff_getElem?.mp inside)) rest)
+      id (known.right path positive)
+has type
+  ∀ (x : Machine Symbol Guard) (x_1 : Node)
+    (known :
+      Available x.heap x_1 ∧
+        Back { domain := domain, left := member, right := right }.left
+          { domain := domain, left := member, right := right }.right x_1)
+    (path : List Nat) (positive : PositiveAt x_1 path),
+    PositiveAt
+        (Value.union (?m.565 x x_1 known path positive) members (?m.566 x x_1 known path positive)
+          (?m.567 x x_1 known path positive))
+        path ∨
+      PositiveAt { domain := domain, left := member, right := right }.right path
+but is expected to have type
+  ∀ (after : Machine Symbol Guard) (value : Node),
+    Available after.heap value ∧
+        Back { domain := domain, left := member, right := right }.left
+          { domain := domain, left := member, right := right }.right value →
+      Available after.heap value ∧ Back (Value.union entry members level free) right value
+in the application
+  pos_mono (requestNode domain member right) current
+    (fun after result =>
+      Available after.heap result ∧
+        Back { domain := domain, left := member, right := right }.left
+          { domain := domain, left := member, right := right }.right result)
+    (fun after value => Available after.heap value ∧ Back (Value.union entry members level free) right value)
+    (request_pos depth { domain := domain, left := member, right := right } current bindings
+      ⟨original.left,
+        ⟨inputs.right.left,
+          ⟨original.right, ⟨inputs.right.right.right.left, ⟨covered, inputs.right.right.right.right.right⟩⟩⟩⟩⟩
+      (SourceCurrentConstrainedCap.union_member leftCap member inside) rightCap)
+    fun x x_1 known path positive =>
+    Or.imp
+      (fun rest =>
+        PositiveAt.member (List.mem_iff_getElem?.mp inside).choose member
+          (Exists.choose_spec (List.mem_iff_getElem?.mp inside)) rest)
+      id (known.right path positive)
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:662:12: error: Application type mismatch: The argument
+  fun x x_1 known path positive =>
+    Or.imp id
+      (fun rest =>
+        PositiveAt.member (List.mem_iff_getElem?.mp inside).choose member
+          (Exists.choose_spec (List.mem_iff_getElem?.mp inside)) rest)
+      (known.right path positive)
+has type
+  ∀ (x : Machine Symbol Guard) (x_1 : Node)
+    (known :
+      Available x.heap x_1 ∧
+        Back { domain := domain, left := left, right := member }.left
+          { domain := domain, left := left, right := member }.right x_1)
+    (path : List Nat) (positive : PositiveAt x_1 path),
+    PositiveAt { domain := domain, left := left, right := member }.left path ∨
+      PositiveAt
+        (Value.union (?m.791 x x_1 known path positive) members (?m.792 x x_1 known path positive)
+          (?m.793 x x_1 known path positive))
+        path
+but is expected to have type
+  ∀ (after : Machine Symbol Guard) (value : Node),
+    Available after.heap value ∧
+        Back { domain := domain, left := left, right := member }.left
+          { domain := domain, left := left, right := member }.right value →
+      Available after.heap value ∧ Back left (Value.union entry members level free) value
+in the application
+  pos_mono (requestNode domain left member) current
+    (fun after result =>
+      Available after.heap result ∧
+        Back { domain := domain, left := left, right := member }.left
+          { domain := domain, left := left, right := member }.right result)
+    (fun after value => Available after.heap value ∧ Back left (Value.union entry members level free) value)
+    (request_pos depth { domain := domain, left := left, right := member } current bindings
+      ⟨inputs.left,
+        ⟨original.left, ⟨inputs.right.right.left, ⟨original.right, ⟨inputs.right.right.right.right.left, covered⟩⟩⟩⟩⟩
+      leftCap (SourceCurrentConstrainedCap.union_member rightCap member inside))
+    fun x x_1 known path positive =>
+    Or.imp id
+      (fun rest =>
+        PositiveAt.member (List.mem_iff_getElem?.mp inside).choose member
+          (Exists.choose_spec (List.mem_iff_getElem?.mp inside)) rest)
+      (known.right path positive)
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:698:8: warning: automatically included section variable(s) unused in theorem `_private._stdin.0.MicroCFTA.SourceCurrentNativeRequestPositivePositions.initial_stored`:
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:698:0: warning: `initial_stored` does not use the following hypothesis in its type:
+  • [DecidableEq (EdgeKey Symbol Guard)] (#2)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:705:95: error: Application type mismatch: The argument
+  stored.edges
+has type
+  FlatMemoThunk.Valid (fun x x_1 => True) (FlatMemoThunk.CellSpec (EdgePos source)) state.edges
+but is expected to have type
+  FlatMemoThunk.Valid (fun x x_1 => True) (FlatMemoThunk.CellSpec (EdgePos source))
+    (lookupNode width request state).snd.edges
+in the application
+  { nodes := ?m.62, edges := stored.edges }
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:706:8: warning: automatically included section variable(s) unused in theorem `_private._stdin.0.MicroCFTA.SourceCurrentNativeRequestPositivePositions.lookup_edge`:
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:706:0: warning: `lookup_edge` does not use the following hypothesis in its type:
+  • [DecidableEq (EdgeKey Symbol Guard)] (#2)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:709:8: warning: automatically included section variable(s) unused in theorem `_private._stdin.0.MicroCFTA.SourceCurrentNativeRequestPositivePositions.demand_node`:
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:709:0: warning: `demand_node` does not use the following hypothesis in its type:
+  • [DecidableEq (EdgeKey Symbol Guard)] (#2)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:712:8: warning: automatically included section variable(s) unused in theorem `_private._stdin.0.MicroCFTA.SourceCurrentNativeRequestPositivePositions.demand_edge`:
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:712:0: warning: `demand_edge` does not use the following hypothesis in its type:
+  • [DecidableEq (EdgeKey Symbol Guard)] (#2)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:715:8: warning: automatically included section variable(s) unused in theorem `_private._stdin.0.MicroCFTA.SourceCurrentNativeRequestPositivePositions.finish_node`:
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:715:0: warning: `finish_node` does not use the following hypothesis in its type:
+  • [DecidableEq (EdgeKey Symbol Guard)] (#2)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:723:8: warning: automatically included section variable(s) unused in theorem `_private._stdin.0.MicroCFTA.SourceCurrentNativeRequestPositivePositions.finish_edge`:
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:723:0: warning: `finish_edge` does not use the following hypothesis in its type:
+  • [DecidableEq (EdgeKey Symbol Guard)] (#2)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:731:0: warning: `node_ready` does not use the following hypothesis in its type:
+  • [DecidableEq (EdgeKey Symbol Guard)] (#2)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:742:0: warning: `edge_ready` does not use the following hypothesis in its type:
+  • [DecidableEq (EdgeKey Symbol Guard)] (#2)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:753:0: warning: `node_started` does not use the following hypothesis in its type:
+  • [DecidableEq (EdgeKey Symbol Guard)] (#2)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:766:0: warning: `edge_started` does not use the following hypothesis in its type:
+  • [DecidableEq (EdgeKey Symbol Guard)] (#2)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:779:8: warning: automatically included section variable(s) unused in theorem `_private._stdin.0.MicroCFTA.SourceCurrentNativeRequestPositivePositions.node_yielded`:
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:779:0: warning: `node_yielded` does not use the following hypothesis in its type:
+  • [DecidableEq (EdgeKey Symbol Guard)] (#2)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:838:8: warning: automatically included section variable(s) unused in theorem `_private._stdin.0.MicroCFTA.SourceCurrentNativeRequestPositivePositions.edge_yielded`:
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:838:0: warning: `edge_yielded` does not use the following hypothesis in its type:
+  • [DecidableEq (EdgeKey Symbol Guard)] (#2)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:939:27: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.code` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `IntersectionFlatMemoKey.code`
+  [apply] `SourceCurrentAllocatedRecursivePrefixControl.code`
+  [apply] `Control.code`
+  [apply] `Std.Http.CustomStatus.code`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:981:27: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.edgeBody` could not be determined
+
+Hint: Using `Control.edgeBody would be unambiguous:
+  [apply] `Control.edgeBody`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:1037:180: error: Application type mismatch: The argument
+  bodyPos
+has type
+  CodePos body middle.native.machine fun x result => EdgePos source request result
+but is expected to have type
+  ControlPos (Control.code body) middle.native.machine ?m.559
+in the application
+  through facts closed (fuel + 1) fuel ih ?m.555 (Control.code body) next middle after value
+    (fun final value => EdgeResident final.heap value)
+    (fun x value => EdgeLaw (fun guard => SourceMemoGate.plain guard = true) source request value) ?m.559 ?m.560 ?m.561
+    ?m.562 effects.left bodyPhysical bodyFields middleContext bodyOld middleOld bodyPos
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:1039:29: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+source : InternedConstructorTemplates.State Symbol Guard
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq Symbol
+width : Nat
+inventory : List DomainKey
+initialDomains : Cache.State DomainKey
+facts : Facts source
+closed : SourceCurrentAllocatedRecursiveDomainCode.Closed source inventory
+A : Type
+before after : Checked width
+value : A
+physicalPost oldPost post : Machine Symbol Guard → A → Prop
+known : Current source inventory initialDomains before
+context : Context (fun guard => SourceMemoGate.plain guard = true) source before.native.machine
+oldStored :
+  SourceCurrentConstrainedCapCheckedJointCache.Stored (fun guard => SourceMemoGate.plain guard = true) source
+    before.native
+stored : Stored source before.native
+causal : Causal before.native.machine
+fuel : Nat
+ih : ∀ (m : Nat), m < fuel + 1 → Preserves m
+middle : Checked width
+middleContext : Context (fun guard => SourceMemoGate.plain guard = true) source middle.native.machine
+middleCausal : Causal middle.native.machine
+request : EdgeRequest Symbol Guard
+next : Row → Code Symbol Guard A
+physical : Physical source inventory (Control.edgeBody request next) before.native.machine physicalPost
+fields : Fields (Control.edgeBody request next) before
+oldCertificate :
+  SourceCurrentConstrainedCapCheckedJointControl.Certified (fun guard => SourceMemoGate.plain guard = true) source
+    (Control.edgeBody request next) before.native.machine oldPost
+certificate : ControlPos (Control.edgeBody request next) before.native.machine post
+admitted : SourceCurrentAllocatedNativeDomainTrace.Entered inventory (Control.edgeBody request next)
+inputs : SourceCurrentAllocatedNativePhysicalExecution.Inputs (Control.edgeBody request next) before
+stepHistory :
+  Nonempty
+    (SourceCurrentNativeMuPublication.History before.native.machine.heap
+      (step (Control.edgeBody request next) before).state.native.machine.heap)
+body : Code Symbol Guard Row
+pureBody : SourceEqualityNativeDemand.body request Code.pure before = Outcome.yielded (Control.code body) middle
+tail : Trace fuel (Control.code (body.bind next)) middle (Control.code (Code.pure value)) after
+effects :
+  Current source inventory initialDomains middle ∧
+    Extension before.native.machine middle.native.machine ∧
+      SourceEqualityRequiredCache.Keeps before.native.machine.heap middle.native.machine.heap ∧
+        SourceEqualityConstraintMemoAllocation.Grows before.operations middle.operations ∧
+          Fields (Control.code (body.bind next)) middle
+one : step (Control.edgeBody request next) before = Outcome.yielded (Control.code (body.bind next)) middle
+data : EdgeScope source request ∧ request.domain.key ∈ inventory ∧ EdgeReady before.native.machine request
+bodyPhysical :
+  SourceCurrentAllocatedRecursivePrefixCode.Certified source inventory body middle.native.machine fun final value =>
+    EdgeResident final.heap value
+bodyFields : Fields (Control.code body) middle
+nativeSame : middle.native = before.native
+middleOld :
+  SourceCurrentConstrainedCapCheckedJointCache.Stored (fun guard => SourceMemoGate.plain guard = true) source
+    middle.native
+middleStored : Stored source middle.native
+bodyOld :
+  SourceCurrentConstrainedCapCheckedJointCode.Certified (fun guard => SourceMemoGate.plain guard = true) source body
+    middle.native.machine fun x value => EdgeLaw (fun guard => SourceMemoGate.plain guard = true) source request value
+bodyPos : CodePos body middle.native.machine fun x result => EdgePos source request result
+result : Machine Symbol Guard
+final : Row
+⊢ Prop
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:1050:69: error: Application type mismatch: The argument
+  nextPhysical.right.right.right
+has type
+  SourceCurrentAllocatedRecursivePrefixCode.Certified source inventory
+    (next (InternedConstructorTemplates.run job before.native.machine.heap).fst)
+    { heap := (InternedConstructorTemplates.run job before.native.machine.heap).snd,
+      domains := before.native.machine.domains }
+    physicalPost
+but is expected to have type
+  Physical source inventory ?m.792
+    {
+          native :=
+            advance before.native
+              (have __src := before.native.machine;
+              { heap := (InternedConstructorTemplates.run job before.native.machine.heap).snd,
+                domains := __src.domains }),
+          operations := before.operations }.native.machine
+    ?m.794
+in the application
+  ih fuel ?m.790 ?m.792
+    {
+      native :=
+        advance before.native
+          (have __src := before.native.machine;
+          { heap := (InternedConstructorTemplates.run job before.native.machine.heap).snd, domains := __src.domains }),
+      operations := before.operations }
+    after value ?m.794 ?m.795 post effects.left nextPhysical.right.right.right
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:1056:69: error: Application type mismatch: The argument
+  nextPhysical.right.right.right
+has type
+  SourceCurrentAllocatedRecursivePrefixCode.Certified source inventory
+    (next
+      (SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains domain.key left right first
+          second).fst)
+    { heap := before.native.machine.heap,
+      domains :=
+        (SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains domain.key left right first
+            second).snd }
+    physicalPost
+but is expected to have type
+  Physical source inventory ?m.922
+    {
+          native :=
+            advance before.native
+              (have __src := before.native.machine;
+              { heap := __src.heap,
+                domains :=
+                  (SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains domain.key left right
+                      first second).snd }),
+          operations := before.operations }.native.machine
+    ?m.924
+in the application
+  ih fuel ?m.920 ?m.922
+    {
+      native :=
+        advance before.native
+          (have __src := before.native.machine;
+          { heap := __src.heap,
+            domains :=
+              (SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains domain.key left right first
+                  second).snd }),
+      operations := before.operations }
+    after value ?m.924 ?m.925 post effects.left nextPhysical.right.right.right
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:1062:14: error: Application type mismatch: The argument
+  SourceCurrentAllocatedRecursivePrefixCode.read_next source inventory name next before.native.machine physicalPost
+    physical
+has type
+  SourceCurrentAllocatedRecursivePrefixCode.Certified source inventory
+    (next (SourcePreparedSharedRows.read before.native.machine.heap name)) before.native.machine physicalPost
+but is expected to have type
+  Physical source inventory ?m.1030 { native := before.native, operations := before.operations }.native.machine ?m.1032
+in the application
+  ih fuel ?m.1028 ?m.1030 { native := before.native, operations := before.operations } after value ?m.1032 ?m.1033 post
+    effects.left
+    (SourceCurrentAllocatedRecursivePrefixCode.read_next source inventory name next before.native.machine physicalPost
+      physical)
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:1072:71: error: Application type mismatch: The argument
+  nextPhysical.right.right.right
+has type
+  SourceCurrentAllocatedRecursivePrefixCode.Certified source inventory (next result)
+    (let __src := before.native.machine;
+    { heap := heap, domains := __src.domains })
+    physicalPost
+but is expected to have type
+  Physical source inventory ?m.1225
+    { native := advance before.native { heap := heap, domains := before.native.machine.domains },
+          operations := before.operations }.native.machine
+    ?m.1227
+in the application
+  ih fuel ?m.1223 ?m.1225
+    { native := advance before.native { heap := heap, domains := before.native.machine.domains },
+      operations := before.operations }
+    after value ?m.1227 ?m.1228 post effects.left nextPhysical.right.right.right
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:1089:21: error(lean.unknownIdentifier): Unknown identifier `SourceCurrentAllocatedRecursivePrefixControl.node_next`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:1093:205: error: Application type mismatch: The argument
+  bodyPos
+has type
+  CodePos (compileNode request) middle.native.machine fun x result => NodePos source request result
+but is expected to have type
+  ControlPos (Control.code (compileNode request)) middle.native.machine ?m.1771
+in the application
+  through facts closed (fuel + 1) fuel ih ?m.1764 (Control.code (compileNode request)) next middle after value
+    (fun after value => Available after.heap value)
+    (fun x value => NodeLaw (fun guard => SourceMemoGate.plain guard = true) source request value) ?m.1771 ?m.1772
+    ?m.1773 post effects.left bodyPhysical bodyFields middleContext bodyOld oldStep.right.right.left bodyPos
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:1095:17: error(lean.unknownIdentifier): Unknown identifier `SourceCurrentAllocatedRecursivePrefixControl.node_next`
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:1118:141: error: Application type mismatch: The argument
+  physical
+has type
+  Physical source inventory (Control.code (Code.edge request next)) before.native.machine physicalPost
+but is expected to have type
+  Physical source inventory (Control.edgeBody request next) before.native.machine physicalPost
+in the application
+  SourceCurrentAllocatedRecursivePrefixControl.edge_next source inventory request next before.native.machine
+    physicalPost physical
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:1123:137: error: Application type mismatch: The argument
+  physical
+has type
+  Physical source inventory (Control.code (Code.edge request next)) before.native.machine physicalPost
+but is expected to have type
+  Physical source inventory (Control.edgeBody request next) before.native.machine physicalPost
+in the application
+  SourceCurrentAllocatedRecursivePrefixControl.edge_next source inventory request next before.native.machine
+    physicalPost physical
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:1155:76: error: Application type mismatch: The argument
+  physical
+has type
+  SourceCurrentAllocatedRecursivePrefixCode.Certified source (SourceRecursiveIntersectionSourceInventory.domains source)
+    (requestNode request.domain request.left request.right) before.native.machine fun after value =>
+    Available after.heap value
+but is expected to have type
+  Physical source (SourceRecursiveIntersectionSourceInventory.domains source) ?m.226 before.native.machine ?m.227
+in the application
+  completed facts closed fuel ?m.226 before after result ?m.227 ?m.228 ?m.229 known physical
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:1144:91: error: unsolved goals
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq Symbol
+width : Nat
+initialDomains : Cache.State DomainKey
+source : InternedConstructorTemplates.State Symbol Guard
+facts : Facts source
+depth : Nat
+before after : Checked width
+left right result : Node
+fuel : Nat
+known : Current source (SourceRecursiveIntersectionSourceInventory.domains source) initialDomains before
+context : Context (fun guard => SourceMemoGate.plain guard = true) source before.native.machine
+causal : SourceCurrentNativeMuPublication.History empty before.native.machine.heap
+oldStored :
+  SourceCurrentConstrainedCapCheckedJointCache.Stored (fun guard => SourceMemoGate.plain guard = true) source
+    before.native
+supported : Support source before.native
+leftAvailable : Available source left
+rightAvailable : Available source right
+leftClosed : left.free = []
+rightClosed : right.free = []
+leftCap : Cap (fun guard => SourceMemoGate.plain guard = true) depth left
+rightCap : Cap (fun guard => SourceMemoGate.plain guard = true) depth right
+actual :
+  Trace fuel (Control.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before
+    (Control.code (Code.pure result)) after
+request : NodeRequest Symbol Guard := { domain := IntersectionEmptyDomain.emptyDomain, left := left, right := right }
+inputs : NodeInputs source { domain := request.domain, left := left, right := right }
+ready : NodeReady before.native.machine request
+physical :
+  SourceCurrentAllocatedRecursivePrefixCode.Certified source (SourceRecursiveIntersectionSourceInventory.domains source)
+    (requestNode request.domain request.left request.right) before.native.machine fun after value =>
+    Available after.heap value
+oldCertificate :
+  SourceCurrentConstrainedCapCheckedJointControl.Certified (fun guard => SourceMemoGate.plain guard = true) source
+    (Control.code (requestNode request.domain left right)) before.native.machine fun x value =>
+    NodeLaw (fun guard => SourceMemoGate.plain guard = true) source request value
+certificate :
+  ControlPos (Control.code (requestNode request.domain left right)) before.native.machine fun x value =>
+    NodePos source request value
+closed :
+  SourceCurrentAllocatedRecursiveDomainCode.Closed source (SourceRecursiveIntersectionSourceInventory.domains source)
+⊢ Support source after.native ∧
+    (∀ (path : List Nat), PositiveAt result path → PositiveAt left path ∨ PositiveAt right path) ∧
+      (SourceCurrentConstrainedCapCheckedJointInduction.Return before after result
+          (fun final value => Available final.heap value) fun x value =>
+          NodeLaw (fun guard => SourceMemoGate.plain guard = true) source
+            { domain := IntersectionEmptyDomain.emptyDomain, left := left, right := right } value) ∧
+        Nonempty (SourceCurrentNativeMuPublication.History empty after.native.machine.heap)
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:1177:80: error: don't know how to synthesize placeholder for argument `inventory`
+context:
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq Symbol
+width depth : Nat
+machine : Machine Symbol Guard
+operations : SourceEqualityConstraintMemoAllocation.State
+good : SourceCurrentAllocatedNativePhysicalCompletion.Good { native := initial width machine, operations := operations }
+semantic : SourceEqualityRequiredSemanticCache.SemanticReady machine.heap
+guards : SourceCurrentConstrainedCapGuardHeap.Heap (fun guard => SourceMemoGate.plain guard = true) machine.heap
+causal : SourceCurrentNativeMuPublication.History empty machine.heap
+left right result : Node
+leftAvailable : Available machine.heap left
+rightAvailable : Available machine.heap right
+leftClosed : left.free = []
+rightClosed : right.free = []
+leftCap : Cap (fun guard => SourceMemoGate.plain guard = true) depth left
+rightCap : Cap (fun guard => SourceMemoGate.plain guard = true) depth right
+fuel : Nat
+after : Checked width
+actual :
+  Trace fuel (Control.code (requestNode IntersectionEmptyDomain.emptyDomain left right))
+    { native := initial width machine, operations := operations } (Control.code (Code.pure result)) after
+⊢ List DomainKey
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:1177:7: error: failed to infer `have` declaration type
+/tmp/mcfta-native-request-positive-position-proof/request-position-direct-1.source.lean:1176:91: error: unsolved goals
+inst✝¹ : DecidableEq (EdgeKey Symbol Guard)
+inst✝ : DecidableEq Symbol
+width depth : Nat
+machine : Machine Symbol Guard
+operations : SourceEqualityConstraintMemoAllocation.State
+good : SourceCurrentAllocatedNativePhysicalCompletion.Good { native := initial width machine, operations := operations }
+semantic : SourceEqualityRequiredSemanticCache.SemanticReady machine.heap
+guards : SourceCurrentConstrainedCapGuardHeap.Heap (fun guard => SourceMemoGate.plain guard = true) machine.heap
+causal : SourceCurrentNativeMuPublication.History empty machine.heap
+left right result : Node
+leftAvailable : Available machine.heap left
+rightAvailable : Available machine.heap right
+leftClosed : left.free = []
+rightClosed : right.free = []
+leftCap : Cap (fun guard => SourceMemoGate.plain guard = true) depth left
+rightCap : Cap (fun guard => SourceMemoGate.plain guard = true) depth right
+fuel : Nat
+after : Checked width
+actual :
+  Trace fuel (Control.code (requestNode IntersectionEmptyDomain.emptyDomain left right))
+    { native := initial width machine, operations := operations } (Control.code (Code.pure result)) after
+⊢ Support machine.heap after.native ∧
+    (∀ (path : List Nat), PositiveAt result path → PositiveAt left path ∨ PositiveAt right path) ∧
+      (SourceCurrentConstrainedCapCheckedJointInduction.Return
+          { native := initial width machine, operations := operations } after result
+          (fun final value => Available final.heap value) fun x value =>
+          NodeLaw (fun guard => SourceMemoGate.plain guard = true) machine.heap
+            { domain := IntersectionEmptyDomain.emptyDomain, left := left, right := right } value) ∧
+        Nonempty (SourceCurrentNativeMuPublication.History empty after.native.machine.heap)
