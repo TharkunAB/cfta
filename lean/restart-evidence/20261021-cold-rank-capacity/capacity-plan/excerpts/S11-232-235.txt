@@ -1,0 +1,4 @@
+  232 /-- A closed source starts this history at the actual empty tables. -/
+  233 noncomputable def closed_history [DecidableEq (EdgeKey Symbol Guard)] (expression : Syntax Symbol Guard) :
+  234     History empty (build expression [] empty).state :=
+  235   Classical.choice (build_history expression [] empty SourceCurrentConstrainedCapSourceHistory.empty_context)

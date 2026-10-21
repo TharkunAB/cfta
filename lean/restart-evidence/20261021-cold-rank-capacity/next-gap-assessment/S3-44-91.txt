@@ -1,0 +1,48 @@
+
+{- | Recognize through the common traversal and the equality interpreter. A
+constraint's residual beyond its path equalities is not decided here.
+-}
+accepts :: (Hashable symbol, Typeable symbol) => Node symbol -> Term symbol -> Bool
+accepts = acceptsWith equalitiesHold
+
+------------------------------------
+------ Reduction
+------------------------------------
+
+{- | Propagate equality constraints through one reduction pass.
+
+One pass narrows every child by the constraints that reach it, but a nested
+constrained edge can narrow a child after an outer edge has already read it.
+Iterate to a fixpoint, as 'fixUnbounded' does, when every
+constrained position must agree with every other.
+
+The pass does not unfold a recursive node that has constraints. A class that
+reaches into such a node, or ends above one, stays unreduced (see
+'reduceEqConstraints'). The language does not change, because enumeration and
+'accepts' still check that class. When the class ends above such a node and
+the nodes at its paths provably share no term, the edge becomes empty instead.
+-}
+reducePartially ::
+    (Hashable symbol, Typeable symbol) => Node symbol -> Node symbol
+reducePartially = reducePartially' EmptyConstraints
+
+genericReducePartiallyCache :: TypeableMemoCache
+genericReducePartiallyCache = unsafePerformIO newTypeableMemoCache
+{-# NOINLINE genericReducePartiallyCache #-}
+
+reducePartially' ::
+    forall symbol.
+    (Hashable symbol, Typeable symbol) =>
+    EqConstraints -> Node symbol -> Node symbol
+reducePartially' constraints node =
+    memo2TypeableWith @symbol genericReducePartiallyCache go constraints node
+  where
+    go :: EqConstraints -> Node symbol -> Node symbol
+    go _ EmptyNode = EmptyNode
+    go _ (Mu n) = Mu n
+    go _ n@(InternedUnion _) = n
+    go inheritedEcs n@(Node _) = modifyNode n $ \es ->
+        map
+            (reduceChildren inheritedEcs . reduceEdgeIntersection inheritedEcs)
+            es
+    go _ (Rec _) = error "reducePartially: unexpected Rec"

@@ -1,0 +1,4 @@
+inductive Available (state : InternedConstructorTemplates.State Symbol Guard) : Value Symbol Guard → Prop where
+  | intro (value : Value Symbol Guard) (resident : Resident state value)
+      (issued : IssuedReferences state.nodes value)
+      (children : ∀ child ∈ children value, Available state child) : Available state value

@@ -1,0 +1,36 @@
+    1 theorem initial_node_call
+    2     (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    3     (solver : SourceGuards.Entailment FullSyntax.Formula)
+    4     {g s r e p h m c n budget : Nat} {inventory : Inventory} {memos : Memos}
+    5     {request : NodeRequest} {before : Caller (bits + 2)}
+    6     (seed : List Guard × Profile) :
+    7     let output := envelope budget
+    8       (SourceCurrentPositiveQuotientCount.count (request.inherited.payload.getD []) request.value)
+    9       (InternedValueMass.value request.value) seed
+   10     let first : Phase (bits + 2) := .node output.1 request before
+   11     let need := phaseNeed budget first seed
+   12     ∀ (initial : Context formulas solver inventory before memos)
+   13       (frame : Frame formulas solver inventory before.checked)
+   14       (fits : Fits seed.2 before.checked)
+   15       (known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.1)
+   16         before.checked.native.machine.heap)
+   17       (inputs : SourceCurrentOuterPrefixInvariants.Inputs first)
+   18       (room : Room bits (SourceCurrentInitialSelectionForecast.cover [output.2.2.2]
+   19         (SourceCurrentOuterInitialPrefix.forecast budget first seed).2))
+   20       (normal : SourceCurrentRequiredUnionNormal.UnionNormal before.checked.native.machine.heap)
+   21       (supported : SourceCurrentNativeRequestPositivePositions.Support
+   22         before.checked.native.machine.heap before.checked.native)
+   23       (causal : SourceCurrentNativeMuPublication.History empty before.checked.native.machine.heap)
+   24       (merged : SourceCurrentConstrainedCapMemoMerge.Stored
+   25         (fun guard : Guard => SourceMemoGate.plain guard = true) before.merge)
+   26       (positiveMemo : SourceCurrentMergePositivePosition.Support before.merge)
+   27       (origins : SourceCurrentResourceParentWriters.Origins formulas solver before)
+   28       (stored : SourceCurrentOuterClosedInputs.NodeStored before)
+   29       (closed : SourceCurrentOuterClosedInputs.InputsClosed first)
+   30       (initialNodeIdle : ∀ chosen owner, before.nodeResults.cells chosen ≠ some ⟨owner, .evaluating⟩)
+   31       (initialEdgeIdle : SourceCurrentOuterEdgeIdle.EdgeIdle before)
+   32       (gBound : need ≤ g) (sBound : need ≤ s) (rBound : need ≤ r)
+   33       (eBound : need ≤ e) (pBound : need ≤ p) (hBound : need ≤ h)
+   34       (mBound : need ≤ m) (cBound : need ≤ c) (nBound : need ≤ n),
+   35     ∃ result after, ∀ fuel, output.1 ≤ fuel →
+   36       nodeCall fuel g s r e p h m c n budget request before = .done result after

@@ -1,0 +1,20 @@
+/-- Coherent initial records establish the computed store bound without a future execution. -/
+theorem initial (source : State Symbol Guard) (facts : Facts source) : Stored (initialBound source) source := by
+  refine ⟨by simp only [initialBound]; omega, ?_, ?_⟩
+  · intro key value found
+    obtain ⟨entry, present, _fields⟩ := facts.coherent.nodes key value found
+    have issued := (facts.coherent.valid.2.2 key entry present).2
+    have captured : SourcePreparedSharedRows.read source entry.identity = some value := by
+      simp only [SourcePreparedSharedRows.read, issued, Option.bind_some]
+      exact found
+    have lower := member_sum InternedValueMass.value _ _ (SourceRecursiveIntersectionSourceProfile.node_mem source facts entry.identity value captured)
+    simp only [initialBound]
+    omega
+  · intro key edge found
+    have keyEq := (facts.coherent.edges key edge found).2.1
+    have resident : EdgeResident source edge := by simpa only [EdgeResident, keyEq] using found
+    have captured := SourceRecursiveIntersectionSourceProfile.resident_read source facts edge resident
+    have lower := member_sum InternedValueMass.edge _ _ (SourceRecursiveIntersectionSourceProfile.edge_mem source facts edge.entry.identity edge captured)
+    simp only [initialBound]
+    omega
+

@@ -1,0 +1,7 @@
+   25 def Stored (valid : Guard → Prop) (memo : Memo Symbol Guard) : Prop :=
+   26   ∀ key entry, memo key = some entry → Local.Certificate valid entry.original entry.result
+   27 
+   28 /-- An empty completed table needs no conditional depth law. -/
+   29 theorem stored_empty (valid : Guard → Prop) : Stored valid (empty : Memo Symbol Guard) := by
+   30   intro key entry found
+   31   cases found

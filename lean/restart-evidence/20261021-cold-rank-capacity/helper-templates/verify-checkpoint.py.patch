@@ -1,0 +1,31 @@
+--- previous/verify-checkpoint.py
++++ verify-checkpoint.py
+@@ -37,14 +37,14 @@
+ audit_source=(ROOT/'lean/MicroCFTA/Audit.lean').read_text()
+ sources = read('selected-sources.json')
+ checks = read('selected-checks.json')
+-for tag, module in [('rank-adequacy','SourceCurrentOuterRankAdequacy')]:
++for tag, module in [('cold-capacity','SourceCurrentColdRankCapacity'),('cold-semantic','SourceCurrentColdRankSemantic')]:
+     line='import MicroCFTA.'+module+'\n'
+     assert audit_source.count(line)==1 and audit_source.index(line)<audit_source.index('run_cmd do')
+     name='lean/MicroCFTA/'+module+'.lean'
+     digest=hashlib.sha256((ROOT/name).read_bytes()).hexdigest()
+     assert digest==sources[name]['sha256']==checked(checks[tag]['strict'],True)['sha256']
+-checked('audit-1')
+-audit = (HERE / 'audit-1.log').read_text()
++checked('audit-2')
++audit = (HERE / 'audit-2.log').read_text()
+ assert f"Build completed successfully ({cfg['audit_jobs']} jobs)" in audit
+ assert f"{cfg['audit_dependencies']} MicroCFTA theorems" in audit
+ assert not re.search(r'^error', audit, re.M)
+@@ -94,8 +94,8 @@
+                                          for key, values in unique.items()]}
+ assert account['actual_lean_lake_jobs'] == cfg['actual_jobs'] and account['nonzero_lean_jobs'] == cfg['failed_jobs'], account
+ write('attempt-accounting.json', account)
+-result = {'status': 'PASS', 'proof': (HERE / 'proof-commit-rank-adequacy.txt').read_text().strip(),
+-    'work_status': 'continuing_at_user_request', 'new_public_theorems': 1, 'new_public_structures': 0, 'new_public_definitions': 0,
++result = {'status': 'PASS', 'proof': (HERE / 'proof-commit-semantic.txt').read_text().strip(),
++    'work_status': 'continuing_at_user_request', 'new_public_theorems': 2, 'new_public_structures': 0, 'new_public_definitions': 0,
+     'constructed_consumers': 0, 'audit_jobs': cfg['audit_jobs'], 'audit_dependencies': cfg['audit_dependencies'],
+     'baseline_files': preserved['baseline_files'], 'unchanged_haskell_files': preserved['unchanged_haskell_files'],
+     **{key: value for key, value in account.items() if key not in ['commands', 'infrastructure_commands']}, 'completion_claimed': False}

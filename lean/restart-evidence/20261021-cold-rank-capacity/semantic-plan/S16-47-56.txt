@@ -1,0 +1,10 @@
+/-- Every finite accepted table term belongs to the independent language of its physical root. -/
+theorem language_sound [DecidableEq (EdgeKey Symbol Guard)] (state : State Symbol Guard) (semantic : SemanticHeap state)
+    (covered : Covered [] state) (guarded : InternedGuardedProbeHeap.Heap state) (rows : Rows Symbol Guard)
+    (holds : Guard → Term Symbol → Bool) (ambient : Env Symbol) (replayed : ReplayedRows state rows)
+    (resident : ResidentRows state rows) (closedRows : CoveredRows rows rows) (value : Value Symbol Guard)
+    (available : Available state value) (closed : value.free = []) (supported : Supported rows value) (term : Term Symbol)
+    (accepted : Language.Accepts (SourceInternedRows.graph (heap rows) holds) (encode value) term) :
+    meaning holds ambient value term := by
+  have facts := semantic.1.normal.facts
+  induction term using Term.rec

@@ -1,0 +1,41 @@
+  104 
+  105 /-- Covered construction derives the complete initial context and exact inherited value. -/
+  106 theorem constructed [DecidableEq Symbol] (width : Nat)
+  107     {initial final : Cache.State Key} {originals : List Guard}
+  108     (history : History initial final originals) (valid : Cache.Valid initial)
+  109     (expression : InternedNestedConstruction.Syntax Symbol Guard)
+  110     (covered : ∀ original ∈ SourceEqualityConstraintOrigins.guards expression, original ∈ originals)
+  111     (value : Value Symbol Guard) (heap : State Symbol Guard)
+  112     (built : InternedFreshOrdinaryConstruction.build expression [] empty = .done value heap)
+  113     (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  114     (solver : SourceGuards.Entailment FullSyntax.Formula) :
+  115     Context formulas solver (inventory expression value heap built) (caller width final heap) globals ∧
+  116       ∃ identity, emptyValue final = .live identity [] ∧
+  117         EqReady (caller width final heap).checked.operations.constraints (.live identity []) ∧
+  118         Available heap value ∧ value.free = [] ∧ SourceRecursiveIntersectionInputView.Original value := by
+  119   obtain ⟨ready, available, closed, original⟩ :=
+  120     SourceCurrentConjunctionClassHistoryEntry.constructed width history valid expression covered value heap built
+  121   have allocation := SourceEqualityMkEdgeAllocation.emptyField_correct _ ready.good.operations
+  122   have initialized : SourceCurrentConjunctionClassScan.Ready (checked width final heap) :=
+  123     ⟨⟨ready.good.native, ready.good.heap, allocation.1, ready.good.fields.grows allocation.2.1⟩,
+  124       ready.semantic, ready.costs, ready.scopedCache, ready.idle⟩
+  125   have admitted := SourceCurrentAllocatedNativeInventoryState.initial
+  126     (inventory expression value heap built) formulas solver width ⟨heap, Cache.emptyState⟩
+  127     (operations final) (grows_refl heap) (Cache.extends_refl heap.nodes.issued)
+  128   have context : Context formulas solver (inventory expression value heap built)
+  129       (caller width final heap) globals :=
+  130     ⟨initialized, admitted,
+  131       SourceCurrentAllocatedPartialMemoSound.initial_sound formulas solver (checked width final heap)
+  132         SourceCurrentMemoMergeGraph.empty SourceCurrentEmptinessMemo.empty,
+  133       SourceCurrentMemoMergeEffects.stored_empty heap,
+  134       fun ambient => SourceCurrentMemoMergeLanguage.cache_covers_empty
+  135         (SourceEqualityPCSGuard.holds formulas solver) ambient,
+  136       SourceCurrentEmptinessMemo.empty_correct formulas solver heap, globals_valid heap,
+  137       SourceCurrentAllocatedMuRebuild.constructed expression value heap built⟩
+  138   obtain ⟨identity, same⟩ := emptyValue_live final
+  139   refine ⟨context, identity, same, ?_, available, closed, original⟩
+  140   change EqReady (operations final).constraints (.live identity [])
+  141   rw [← same]
+  142   exact allocation.2.2
+  143 
+  144 end MicroCFTA.SourceCurrentAllocatedPartialInitialization

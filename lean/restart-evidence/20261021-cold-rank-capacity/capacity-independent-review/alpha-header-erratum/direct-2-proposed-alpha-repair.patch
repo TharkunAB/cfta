@@ -1,0 +1,11 @@
+--- cold-rank-capacity-direct-2.source.lean
++++ direct-2-proposed-alpha-repair.source.lean.txt
+@@ -28,7 +28,7 @@
+     (expression : InternedNestedConstruction.Syntax Symbol Guard)
+     (covered : ∀ guard ∈ SourceEqualityConstraintOrigins.guards expression, guard ∈ originals)
+     (budget : Nat) :
+-    ∃ value heap, ∃ built : InternedFreshOrdinaryConstruction.build expression [] empty = .done value heap,
++    ∃ value heap, ∃ _built : InternedFreshOrdinaryConstruction.build expression [] empty = .done value heap,
+     let seed : List Guard × Profile := (SourceEqualityConstraintOrigins.guards expression,
+       ⟨heap.nodes.next, heap.edges.next, 0, InternedValueMassHeap.initialBound heap⟩)
+     let request : NodeRequest := ⟨SourceCurrentAllocatedPartialInitialization.emptyValue finalCache, value⟩

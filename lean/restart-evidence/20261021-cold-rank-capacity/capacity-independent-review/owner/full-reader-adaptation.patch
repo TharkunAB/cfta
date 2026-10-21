@@ -1,0 +1,38 @@
+--- accepted-adequacy-check-full-public.original.py
++++ cold-rank-capacity-check-full-public.py
+@@ -1,13 +1,13 @@
+-"""Read the full initial-node theorem without running Lean or evaluating the numeric recurrence."""
++"""Read the full cold constructed-node theorem without running Lean or evaluating the numeric recurrence."""
+ from pathlib import Path
+ import hashlib
+ import json
+ import re
+ 
+ HERE = Path(__file__).resolve().parent
+-PREFIX = "outer-rank-adequacy-"
+-NAMESPACE = "MicroCFTA.SourceCurrentOuterRankAdequacy."
+-source = (HERE / "SourceCurrentOuterRankAdequacy.lean").read_text()
++PREFIX = "cold-rank-capacity-"
++NAMESPACE = "MicroCFTA.SourceCurrentColdRankCapacity."
++source = (HERE / "SourceCurrentColdRankCapacity.lean").read_text()
+ printer = (HERE / (PREFIX + "public-1.source.lean")).read_text()
+ raw = (HERE / (PREFIX + "public-1.log")).read_bytes()
+ log = raw.decode()
+@@ -17,7 +17,7 @@
+ for option in options:
+     assert printer.count("set_option " + option) == 1, option
+ assert not re.search(r"sorryAx|\b(?:warning|error)(?:\([^)]*\))?:|failed to pretty print|pp\.rawOnError|maximum recursion depth|maximum number of heartbeats|⋯|…|\.\.\.", log)
+-heads = [("initial_node_call", "theorem")]
++heads = [("constructed_initial_node_call", "theorem")]
+ markers = []
+ for head, _ in heads:
+     name = NAMESPACE + head
+@@ -27,7 +27,7 @@
+     assert len(found) == 1, (head, len(found))
+     markers.append(found[0])
+ normalize = lambda text: "".join(text.split())
+-private = ["images", "fold", "slot", "row", "Kept", "kept_trans", "fold_kept", "fold_succ", "prefix_kept", "slot_kept", "image_kept", "image_member", "same_request", "fold_work", "slot_work", "row_work", "numeric_stages", "edge_not_exhausted"]
++private = []
+ results = []
+ for index, (head, kind) in enumerate(heads):
+     name = NAMESPACE + head

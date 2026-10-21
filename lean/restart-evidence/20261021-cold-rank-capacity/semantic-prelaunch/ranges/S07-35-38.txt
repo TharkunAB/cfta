@@ -1,0 +1,4 @@
+/-- A complete physical constraint payload denotes its path equalities; contradiction denotes no term. -/
+def Sat (term : Language.Term Symbol) : Constraint → Prop
+  | none => False
+  | some records => Satisfies term (records.map Record.paths)

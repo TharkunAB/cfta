@@ -1,0 +1,7 @@
+/-- Solver soundness is a per-query contract over the actual declared environments. -/
+def Sound (model : Interpretation Value)
+    (admitted : List (Name × Name) → (Name → Value) → Prop)
+    (solver : SourceGuards.Entailment Formula) : Prop :=
+  ∀ bindings antecedent consequent,
+    Guards.Supports (solver bindings antecedent consequent)
+      (Entails model (admitted bindings) antecedent consequent)

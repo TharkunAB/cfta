@@ -1,0 +1,14 @@
+   39     (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+   40     (machine : Machine Symbol Guard) (operations : SourceEqualityConstraintMemoAllocation.State)
+   41     (expression : Syntax Symbol Guard) (root : Node)
+   42     (constructed : build expression [] empty = .done root machine.heap)
+   43     (ready : SourceCurrentConjunctionClassScan.Ready (⟨initial width machine,operations⟩ : Checked width))
+   44     (same : inventory.source = machine.heap) :
+   45     Frame formulas solver inventory (⟨initial width machine,operations⟩ : Checked width) := by
+   46   have guards : SourceCurrentConstrainedCapGuardHeap.Heap Plain machine.heap := by
+   47     simpa only [constructed,Outcome.state] using
+   48       SourceCurrentConstrainedCapGuardExecution.closed_heap Plain expression
+   49   exact Frame.initial formulas solver inventory machine operations ready guards same
+   50 
+   51 /-- A completed constructed-source node call needs no separate initial guard heap or Frame. -/
+   52 theorem node_call [DecidableEq Symbol] [DecidableEq Node]

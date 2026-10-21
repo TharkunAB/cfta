@@ -1,0 +1,12 @@
+/-- Actual ordinary target merging reaches an exact fixed point within the original ordinary height. -/
+theorem fixed_point_complete [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Symbol]
+    (clear : Guard → Bool) (top : Guard) (input : Value Symbol Guard) (before : State Symbol Guard)
+    (facts : Facts before) (prepared : Prepared before) (available : Available before input) (tree : Tree input) :
+    ∃ result after, Runs clear top (height input) input before result after ∧
+      Extension before after ∧ Available after result ∧ Tree result ∧
+      ∀ comparison, execute groups clear top comparison result after = .done result after := by
+  obtain ⟨result, after, runs, extension, resultAvailable⟩ := runs_exist clear top (height input) input before facts prepared available
+  obtain ⟨_, _, resultTree, trace⟩ := runs_valid clear top (height input) input before result after facts prepared available tree runs
+  have normal := source_exact_normal clear top (height input) input result trace (Nat.le_refl _)
+  exact ⟨result, after, runs, extension, resultAvailable, resultTree,
+    fun comparison => execute_fixed clear top comparison result normal after extension.facts extension.prepared resultAvailable⟩

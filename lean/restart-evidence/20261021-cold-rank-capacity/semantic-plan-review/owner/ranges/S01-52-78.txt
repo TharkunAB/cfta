@@ -1,0 +1,27 @@
+theorem node_call [DecidableEq Symbol] [DecidableEq Node]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (expression : Syntax Symbol Guard) (root : Node)
+    (machine : Machine Symbol Guard) (operations : SourceEqualityConstraintMemoAllocation.State)
+    (constructed : build expression [] empty = .done root machine.heap)
+    (before after : Caller (bits+2)) (inventory : Inventory) (memos : EndpointMemoGateTrace.Memos)
+    (entry : before.checked = (⟨initial (bits+2) machine,operations⟩ : Checked (bits+2)))
+    (same : inventory.source = machine.heap)
+    (context : SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory before memos)
+    (seed : Seed) (fits : Fits seed.2 before.checked)
+    (carrier : Carrier (fun guard => guard ∈ seed.1) before.checked.native.machine.heap)
+    (request : NodeRequest) (inherited : EqReady before.checked.operations.constraints request.inherited)
+    (available : Available before.checked.native.machine.heap request.value)
+    (fuel g s r e p h m c n budget : Nat)
+    (room : Room bits (SourceCurrentOuterInitialActual.Schedule.node fuel budget seed).2)
+    (result : Node)
+    (called : nodeCall fuel g s r e p h m c n budget request before = .done result after) :
+    Available after.checked.native.machine.heap result ∧ NodeLaw formulas solver request result := by
+  have initialReady : SourceCurrentConjunctionClassScan.Ready
+      (⟨initial (bits+2) machine,operations⟩ : Checked (bits+2)) := entry ▸ context.ready
+  have initialFrame := frame formulas solver inventory machine operations expression root constructed initialReady same
+  have currentFrame : Frame formulas solver inventory before.checked := entry.symm ▸ initialFrame
+  obtain ⟨_next,_final,_actual,_reads,_post,_frame,_fits,_carrier,resultAvailable,law⟩ :=
+    SourceCurrentOuterInitialActual.node_call formulas solver fuel seed context currentFrame fits carrier
+      inherited available room called
+  exact ⟨resultAvailable,law⟩

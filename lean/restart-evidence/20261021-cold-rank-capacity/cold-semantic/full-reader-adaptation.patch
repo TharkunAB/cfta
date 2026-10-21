@@ -1,0 +1,20 @@
+--- producer-check-full-public.original.py
++++ cold-rank-semantic-check-full-public.py
+@@ -1,13 +1,13 @@
+-"""Read the full cold constructed-node theorem without running Lean or evaluating the numeric recurrence."""
++"""Read the full cold constructed-node semantic theorem without running Lean or evaluating the numeric recurrence."""
+ from pathlib import Path
+ import hashlib
+ import json
+ import re
+ 
+ HERE = Path(__file__).resolve().parent
+-PREFIX = "cold-rank-capacity-"
+-NAMESPACE = "MicroCFTA.SourceCurrentColdRankCapacity."
+-source = (HERE / "SourceCurrentColdRankCapacity.lean").read_text()
++PREFIX = "cold-rank-semantic-"
++NAMESPACE = "MicroCFTA.SourceCurrentColdRankSemantic."
++source = (HERE / "SourceCurrentColdRankSemantic.lean").read_text()
+ printer = (HERE / (PREFIX + "public-1.source.lean")).read_text()
+ raw = (HERE / (PREFIX + "public-1.log")).read_bytes()
+ log = raw.decode()

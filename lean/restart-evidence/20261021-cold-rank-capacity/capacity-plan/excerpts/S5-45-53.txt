@@ -1,0 +1,9 @@
+   45 theorem allowed (annotation : Guard → Prop) (expression : Syntax Symbol Guard)
+   46     (checked : ∀ guard ∈ guards expression, annotation guard) : Allowed annotation expression := by
+   47   cases expression with
+   48   | empty | var => simp only [Allowed]
+   49   | node edges => simpa only [Allowed] using edges_allowed annotation edges checked
+   50   | union members => simpa only [Allowed] using children_allowed annotation members checked
+   51   | binder smart body => simpa only [Allowed] using allowed annotation body checked
+   52 termination_by sizeOf expression
+   53 

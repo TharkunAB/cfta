@@ -1,0 +1,49 @@
+reduceEqConstraints ::
+    forall symbol.
+    (Hashable symbol, Typeable symbol) =>
+    EqConstraints ->
+    EqConstraints ->
+    [Node symbol] ->
+    [Node symbol]
+reduceEqConstraints = go
+  where
+    propagateEmptyNodes :: [Node symbol] -> [Node symbol]
+    propagateEmptyNodes ns = if EmptyNode `elem` ns then map (const EmptyNode) ns else ns
+
+    go :: EqConstraints -> EqConstraints -> [Node symbol] -> [Node symbol]
+    go EmptyConstraints EmptyConstraints origNs = origNs
+    go ecs inheritedEcs origNs
+        | constraintsAreContradictory (ecs `combineEqConstraints` inheritedEcs) = map (const EmptyNode) origNs
+        | any emptyBelowEnd refused = map (const EmptyNode) origNs
+        | otherwise = propagateEmptyNodes $ foldr reduceEClass withNeededChildren eclasses
+      where
+        (refused, eclasses) = partition (any (meetsConstrainedMu True origNs) . unPathEClass) (unsafeSubsumptionOrderedEclasses ecs)
+
+        -- Only the end of a path refuses this class: the nodes at its paths
+        -- are closed, and one is or reaches a recursive node with
+        -- constraints. The check reads their intersection and puts it into
+        -- no child.
+        emptyBelowEnd :: PathEClass -> Bool
+        emptyBelowEnd pec =
+            not (any (meetsConstrainedMu False origNs) paths)
+                && provablyEmpty (intersectList [getPath p origNs | p <- paths])
+          where
+            paths = Set.toList (unPathEClass pec)
+
+        withNeededChildren = requireAll (Set.unions $ map unPathEClass eclasses) origNs
+
+        intersectList :: [Node symbol] -> Node symbol
+        intersectList [] = EmptyNode
+        intersectList (n : ns) = foldr intersect n ns
+
+        -- Narrow the node at each path of the class to the nodes at the other
+        -- paths. The narrowing set is merged ('mergeAlternatives'): it can keep
+        -- more terms, never fewer. At a merged ordinary root, intersection
+        -- pairs each edge of the other side with at most one merged edge.
+        reduceEClass :: PathEClass -> [Node symbol] -> [Node symbol]
+        reduceEClass pec ns =
+            editAll
+                [ (p, intersect $ intersectList [mergeAlternatives (getPath other ns) | other <- Set.toAscList paths, other /= p])
+                | p <- Set.toAscList paths
+                ]
+                ns

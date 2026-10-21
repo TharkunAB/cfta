@@ -1,0 +1,14 @@
+/-- Physical memo-key equality is exact payload equality under the actual supply bound and source record invariants. -/
+theorem physical_key_eq_iff (bits : Nat) (state : State Symbol Guard) (facts : Facts state)
+    (supply : state.nodes.next < 2 ^ bits)
+    (left right : Value Symbol Guard) (leftAvailable : Available state left) (rightAvailable : Available state right)
+    (first second : Input) (leftInput : input left.referenceOf = some first) (rightInput : input right.referenceOf = some second) :
+    key (bits + 2) left.referenceOf = key (bits + 2) right.referenceOf ↔ left = right := by
+  constructor
+  · intro same
+    have references := (key_eq_iff (bits + 2) left.referenceOf right.referenceOf first second leftInput rightInput
+      (available_safe bits state facts supply left leftAvailable first leftInput)
+      (available_safe bits state facts supply right rightAvailable second rightInput)).mp same
+    exact resident_reference_injective state facts.coherent left right leftAvailable.resident rightAvailable.resident references
+  · rintro rfl
+    rfl

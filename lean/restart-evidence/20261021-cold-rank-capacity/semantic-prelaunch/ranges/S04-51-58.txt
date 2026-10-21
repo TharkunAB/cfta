@@ -1,0 +1,8 @@
+def cover (profiles : List Profile) (entry : Profile) : Profile :=
+  profiles.foldr join entry
+
+/-- The profile join retains the original entry. -/
+theorem cover_ge (profiles : List Profile) (entry : Profile) : Le entry (cover profiles entry) := by
+  induction profiles with
+  | nil => exact Le.refl _
+  | cons first rest ih => exact ih.trans (join_right _ _)

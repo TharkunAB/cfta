@@ -1,0 +1,22 @@
+--- pre-private-scope-verify.py
++++ cold-rank-semantic-verify.py
+@@ -95,6 +95,19 @@
+ raw = (HERE / public_type["raw_log"]).read_bytes()
+ assert (HERE / public_type["checked_type_file"]).read_bytes() == raw[public_type["start_byte"]:public_type["end_byte_exclusive"]]
+ assert any(pin["path"] == selected["official_path"] and pin["sha256"] == digest(source) for pin in index["sources"])
++scope = json.loads((HERE / "public-type-private-scope-audit.json").read_text())
++printed_type = (HERE / public_type["checked_type_file"]).read_text()
++imported = selected["imported_private_equality_instance_in_printed_type"]
++assert printed_type.count(imported) == scope["occurrences"] == 2
++assert set(re.findall(r"[\w.]+✝", printed_type)) == {imported}
++assert not scope["original_private_name_scan_exhaustive"] and scope["no_new_private_helpers_in_current_module"]
++assert not re.search(rb"^private\b", source, re.M)
++assert digest((HERE / (PREFIX + "check-full-public.py")).read_bytes()) == scope["original_reader_sha256"]
++assert digest((HERE / (PREFIX + "full-public-readback.json")).read_bytes()) == scope["original_readback_sha256"]
++root_scope = json.loads((HERE / "root-type-name-scope-audit/type-name-scope-erratum.json").read_text())
++assert root_scope["imported_private_instances"] == [imported] and root_scope["original_field_is_too_broad"]
++assert not root_scope["new_current_module_private_helpers_in_type"]
++assert digest((HERE / "root-type-name-scope-audit/imported-private-instance-source-30-32.txt").read_bytes()) == root_scope["excerpt_sha256"]
+ command = [sys.executable, str(HERE / "frozen-plan-inputs/verify.py"), "--root", str(args.root)]
+ if args.live:
+     command.append("--live")

@@ -1,0 +1,10 @@
+        it "stops on classes over recursive children" $
+            -- 'reducePartially'' never enters a 'Mu'. No proof shows that one
+            -- pass, or repeated rounds, end on every input. Each case must end
+            -- within two seconds.
+            property $
+                forAll recursiveNode $ \m -> within 2000000 $ ioProperty $ do
+                    onePass <- evaluate (reducePartially m)
+                    rounds <- evaluate (fixUnbounded reducePartially m)
+                    _ <- evaluate (nodeCount onePass + nodeCount rounds)
+                    pure $ shallowTerms 3 onePass == shallowTerms 3 m && shallowTerms 3 rounds == shallowTerms 3 m

@@ -1,0 +1,21 @@
+as 'Data.CFTA.Interned.Type.NodeId', so that the identities of two types do
+not mix.
+
+The supply is one counter that takes atomic fetch-and-add increments, so
+threads draw distinct identities and never retry, as an 'IORef' update can.
+One thread draws 0, 1, 2, and so on, in the order that it interns values.
+Nodes order their edges by identity, so this order makes enumeration and
+sampling deterministic in a single-threaded program.
+-}
+newtype IdSupply = IdSupply (MutableByteArray RealWorld)
+
+-- | Allocate a supply that starts at 0.
+newIdSupply :: IO IdSupply
+newIdSupply = IO $ \state -> case newByteArray# 8# state of
+    (# state', counter #) -> case writeIntArray# counter 0# 0# state' of
+        state'' -> (# state'', IdSupply (MutableByteArray counter) #)
+
+-- | Draw a fresh identity.
+nextId :: IdSupply -> IO Int
+nextId (IdSupply (MutableByteArray counter)) = IO $ \state -> case fetchAddIntArray# counter 0# 1# state of
+    (# state', previous #) -> (# state', I# previous #)

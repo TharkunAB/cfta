@@ -1,0 +1,15 @@
+- **Exact transformation**: an operation on an automaton that keeps its
+  language, the set of terms it accepts. Equality reduction
+  (`reducePartially`), `prune`, `withoutRedundantEdges`, `refold`, and `trim`
+  are exact. A path that lists, counts, or ranks accepted terms, such as the
+  generator imports, uses only exact transformations.
+- **Over-approximation**: an operation whose result accepts every term of
+  its input and possibly more, such as `mergeAlternatives` and
+  `dropConstraints`. It enters an exact path only where the caller checks the
+  original constraints again: the narrowing set of `reduceEqConstraints` is
+  merged, and enumeration and `accepts` still check each equality class.
+- **Representative selection**: `minimize` replaces a transition by the
+  representative of its similarity class, so the result can accept fewer
+  terms. No exact path uses it. The user applies it: to a pool with
+  `minimizePoolOn`, or as the last step of the paper's reduction, `reduce`,
+  which keeps the most specific term of each refinement, as a synthesizer

@@ -1,0 +1,7 @@
+/-- A PCS class equates every pair of distinct paths. Trivial classes impose no condition. -/
+def ClassSat (term : Term Symbol) (paths : Class) : Prop :=
+  ∀ left ∈ paths, ∀ right ∈ paths, left ≠ right → PathsEqual term left right
+
+/-- All equality classes constrain the same complete term. -/
+def Satisfies (term : Term Symbol) (classes : Constraints) : Prop :=
+  ∀ paths ∈ classes, ClassSat term paths

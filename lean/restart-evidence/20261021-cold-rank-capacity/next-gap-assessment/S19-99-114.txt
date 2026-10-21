@@ -1,0 +1,16 @@
+-- | The number of slots in a new table.
+initialCapacity :: Int
+initialCapacity = 1024
+
+-- | Allocate an empty table.
+newFlatTable :: IO (FlatTable value)
+newFlatTable = FlatTable <$> newMVar 0 <*> (newSlots initialCapacity >>= newIORef)
+
+-- | Allocate empty arrays for a power-of-two number of slots.
+newSlots :: Int -> IO (Slots value)
+newSlots capacity@(I# slots) = IO $ \s0 -> case newByteArray# bytes s0 of
+    (# s1, keys #) -> case setByteArray# keys 0# bytes 255# s1 of
+        s2 -> case newArray# slots emptyValue s2 of
+            (# s3, values #) -> (# s3, Slots (capacity - 1) keys values #)
+  where
+    !(I# bytes) = 24 * capacity

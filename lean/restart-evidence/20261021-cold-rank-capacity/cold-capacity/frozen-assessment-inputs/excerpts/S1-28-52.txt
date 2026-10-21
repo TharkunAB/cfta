@@ -1,0 +1,25 @@
+   28 def emptyValue (cache : Cache.State Key) : EqValue :=
+   29   (SourceEqualityConstraintAllocation.intern (some []) cache).1
+   30 
+   31 /-- Empty equality allocation retains the supplied physical interner. -/
+   32 def operations (cache : Cache.State Key) : OpState :=
+   33   SourceEqualityMkEdgeAllocation.emptyField (SourceEqualityConstraintMemoAllocation.initial cache)
+   34 
+   35 /-- A checked initial state uses the actual returned empty-equality interner. -/
+   36 def checked (width : Nat) (cache : Cache.State Key) (heap : State Symbol Guard) : Checked width :=
+   37   ⟨SourceRecursiveIntersectionThunks.initial width ⟨heap, Cache.emptyState⟩, operations cache⟩
+   38 
+   39 /-- The logical cold caller has separate empty merge, fourth, and result tables. -/
+   40 def caller (width : Nat) (cache : Cache.State Key) (heap : State Symbol Guard) : Caller width :=
+   41   SourceCurrentAllocatedPartialState.initial (checked width cache heap)
+   42     SourceCurrentMemoMergeGraph.empty SourceCurrentEmptinessMemo.empty
+   43 
+   44 /-- The three global memo families start with no saved entries. -/
+   45 def globals : EndpointMemoGateTrace.Memos :=
+   46   ⟨InternedFreshOrdinaryUnfoldMemo.empty, SourceEndpointMemo.empty⟩
+   47 
+   48 /-- Empty allocation returns a live value with exactly the empty payload. -/
+   49 theorem emptyValue_live (cache : Cache.State Key) :
+   50     ∃ identity, emptyValue cache = .live identity [] :=
+   51   ⟨(Cache.intern cache (SourceEqualityPartialConstraintKey.key [])).1.identity, rfl⟩
+   52 

@@ -1,0 +1,5 @@
+/-- A bounded actual issued counter makes every memoizable available source input safe. -/
+theorem available_safe (bits : Nat) (state : State Symbol Guard) (facts : Facts state)
+    (supply : state.nodes.next < 2 ^ bits)
+    (value : Value Symbol Guard) (available : Available state value) (request : Input)
+    (complete : input value.referenceOf = some request) : Safe (bits + 2) request := by

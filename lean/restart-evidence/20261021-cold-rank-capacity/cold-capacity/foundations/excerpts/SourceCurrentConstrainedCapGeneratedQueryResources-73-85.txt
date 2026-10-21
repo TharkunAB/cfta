@@ -1,0 +1,13 @@
+  origins : SourceCurrentConstrainedCapCheckedJointOrigins.Stored inventory.source state.native
+
+/-- Empty native tables derive the initial inventory and joint laws from physical readiness. -/
+theorem Frame.initial (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (machine : Machine Symbol Guard) (operations : SourceEqualityConstraintMemoAllocation.State)
+    (ready : Ready (⟨initial width machine, operations⟩ : Checked width))
+    (guards : SourceCurrentConstrainedCapGuardHeap.Heap Plain machine.heap) (same : inventory.source = machine.heap) :
+    Frame formulas solver inventory ⟨initial width machine, operations⟩ := by
+  have growth : Grows inventory.source machine.heap := by rw [same]; exact grows_refl _
+  have history : Extends inventory.source.nodes.issued machine.heap.nodes.issued := by rw [same]; exact extends_refl _
+  exact ⟨ready, SourceCurrentAllocatedNativeInventoryState.initial inventory formulas solver width machine operations growth history,
+    ⟨ready.good.native.machine, ready.semantic.ready.semantic, guards, growth, history⟩,

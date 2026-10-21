@@ -1,0 +1,39 @@
+                j <- findSlot grown a b c
+                write grown (-1 - j) a b c value
+                pure (count + 1, value)
+            | otherwise -> do
+                write slots (-1 - i) a b c value
+                pure (count + 1, value)
+
+-- | Copy all entries to new arrays of double the capacity.
+grow :: Slots value -> IO (Slots value)
+grow old@(Slots mask keys _) = do
+    new <- newSlots (2 * (mask + 1))
+    let copy i
+            | i > mask = pure new
+            | otherwise = do
+                first <- readKey keys (3 * i)
+                if first == -1
+                    then copy (i + 1)
+                    else do
+                        second <- readKey keys (3 * i + 1)
+                        third <- readKey keys (3 * i + 2)
+                        value <- readValue old i
+                        j <- findSlot new first second third
+                        write new (-1 - j) first second third value
+                        copy (i + 1)
+    copy 0
+
+-- | Fill an empty slot. Write the first key last.
+write :: Slots value -> Int -> Int -> Int -> Int -> value -> IO ()
+write (Slots _ keys values) i a b c value = do
+    writeValue values i value
+    writeKey keys (3 * i + 1) b
+    writeKey keys (3 * i + 2) c
+    atomicWriteKey keys (3 * i) a
+
+-- | Read one word of the keys.
+readKey :: MutableByteArray# RealWorld -> Int -> IO Int
+{-# INLINE readKey #-}
+readKey keys (I# i) = IO $ \s -> case readIntArray# keys i s of
+    (# s', k #) -> (# s', I# k #)

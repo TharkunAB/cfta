@@ -1,0 +1,8 @@
+   27 /-- Each completed entry retains positive positions of its full captured original. -/
+   28 def Support (memo : Memo Symbol Guard) : Prop :=
+   29   ∀ key entry, memo key = some entry → ∀ path, PositiveAt entry.result path → PositiveAt entry.original path
+   30 
+   31 /-- The empty table contains no unsupported result. -/
+   32 theorem support_empty : Support (empty : Memo Symbol Guard) := by
+   33   intro key entry found
+   34   cases found

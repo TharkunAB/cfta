@@ -1,0 +1,4 @@
+/-- Original repaired source construction preserves all physical edge annotations in every outcome. -/
+theorem build [DecidableEq (EdgeKey Symbol Guard)] (valid : Guard → Prop) (expression : Syntax Symbol Guard)
+    (allowed : Allowed valid expression) (environment : List (Value Symbol Guard)) (state : State Symbol Guard) (heap : Heap valid state) :
+    Heap valid (InternedFreshOrdinaryConstruction.build expression environment state).state := by

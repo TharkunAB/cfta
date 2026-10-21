@@ -1,0 +1,20 @@
+/-- A hit returns the original thunk. A miss publishes a suspended request. -/
+def lookupOrInsert [DecidableEq Key] (key : Key) (request : Request) (state : State Key Request Value) :
+    Nat × State Key Request Value :=
+  match state.table key with
+  | some handle => (handle, state)
+  | none => (state.next, ⟨put state.table key state.next,
+      put state.cells state.next ⟨request, .suspended⟩, state.next + 1⟩)
+
+/-- A published key cannot replace its original request with a later candidate. -/
+theorem lookup_hit [DecidableEq Key] (key : Key) (request : Request) (state : State Key Request Value)
+    (handle : Nat) (stored : state.table key = some handle) :
+    lookupOrInsert key request state = (handle, state) := by
+  simp only [lookupOrInsert, stored]
+
+/-- Miss publication installs the original suspended request before evaluation. -/
+theorem lookup_miss [DecidableEq Key] (key : Key) (request : Request) (state : State Key Request Value)
+    (missing : state.table key = none) :
+    (lookupOrInsert key request state).1 = state.next ∧
+    (lookupOrInsert key request state).2.table key = some state.next ∧
+    (lookupOrInsert key request state).2.cells state.next = some ⟨request, .suspended⟩ := by

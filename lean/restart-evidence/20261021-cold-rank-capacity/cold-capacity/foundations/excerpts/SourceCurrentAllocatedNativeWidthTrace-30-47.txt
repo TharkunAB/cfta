@@ -1,0 +1,18 @@
+
+/-- Initial code safety derives all reached widths and the final continuation certificate. -/
+theorem widths {control next : Control A} {before after : Checked width}
+    (actual : Trace fuel control before next after) (good : Good before) (fields : Fields control before)
+    (stored : Stored bound before.native.machine.heap)
+    (certificate : ControlAt control before bound post) :
+    SourceCurrentAllocatedRecursiveMassTrace.InputsThrough fuel bound control before ∧
+      ControlAt next after (massAfter fuel bound) post := by
+  induction actual generalizing bound with
+  | refl => exact ⟨trivial, certificate⟩
+  | cons control before middle current next after count physical one rest ih =>
+      have own := SourceCurrentAllocatedNativeWidthStep.inputs control before bound certificate
+      have retained := SourceCurrentAllocatedNativeWidthStep.yielded_at control middle before current bound post
+        good physical fields stored certificate one
+      have effects := SourceCurrentAllocatedNativePhysicalCompletion.step_invariants control before good physical fields
+      have reached : Good current := by simpa only [one, Outcome.state] using effects.1
+      have remaining : Fields middle current := by simpa only [one, OutcomeFields] using effects.2.2.2.2.2
+      have currentStore : Stored (SourceCurrentAllocatedRecursiveMassTrace.ceiling bound) current.native.machine.heap := by

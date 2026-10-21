@@ -1,0 +1,18 @@
+   26 def guards : Syntax Symbol Guard → List Guard
+   27   | .empty | .var _ => []
+   28   | .node edges => edgeGuards edges
+   29   | .union members => childGuards members
+   30   | .binder _ body => guards body
+   31 
+   32 /-- Retain literal guard occurrences in original child order. -/
+   33 def childGuards : List (Syntax Symbol Guard) → List Guard
+   34   | [] => []
+   35   | first :: rest => guards first ++ childGuards rest
+   36 
+   37 /-- Include each row guard before the complete literal guards of its children and tail. -/
+   38 def edgeGuards : List (EdgeSyntax Symbol Guard) → List Guard
+   39   | [] => []
+   40   | .mk _ guard children :: rest => guard :: (childGuards children ++ edgeGuards rest)
+   41 end
+   42 
+   43 mutual

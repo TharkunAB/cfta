@@ -1,0 +1,11 @@
+--- previous/archive-support.py
++++ archive-support.py
+@@ -5,7 +5,7 @@
+ HERE = Path(__file__).resolve().parent
+ (HERE / 'root-support').mkdir(exist_ok=True)
+ stems = []
+-for receipt in Path('/tmp').glob('mcfta-outer-rank-adequacy-*.json'):
++for receipt in Path('/tmp').glob('mcfta-cold-rank-capacity-*.json'):
+     value = json.loads(receipt.read_text())
+     if isinstance(value, dict) and 'wrapper' in value and 'exit_code' in value:
+         stems.append(receipt.name.removesuffix('.json'))

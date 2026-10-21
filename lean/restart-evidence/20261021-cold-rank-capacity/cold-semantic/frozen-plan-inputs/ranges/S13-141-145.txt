@@ -1,0 +1,5 @@
+/-- Empty-state nested construction establishes all record invariants even
+when a pending source cache entry is reached. -/
+theorem closed_verified [DecidableEq (EdgeKey Symbol Guard)] (expression : Syntax Symbol Guard) :
+    Verified empty (build expression [] empty) Available :=
+  build_verified expression [] empty empty_facts (by intro value member; cases member)

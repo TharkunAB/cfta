@@ -1,0 +1,11 @@
+--- frozen-proposed-signature.lean.txt
++++ corrected-proposal-alpha.lean.txt
+@@ -8,7 +8,7 @@
+     (expression : InternedNestedConstruction.Syntax Symbol Guard)
+     (covered : ∀ guard ∈ SourceEqualityConstraintOrigins.guards expression, guard ∈ originals)
+     (budget : Nat) :
+-    ∃ value heap, ∃ built : InternedFreshOrdinaryConstruction.build expression [] empty = .done value heap,
++    ∃ value heap, ∃ _built : InternedFreshOrdinaryConstruction.build expression [] empty = .done value heap,
+     let seed : List Guard × Profile := (SourceEqualityConstraintOrigins.guards expression,
+       ⟨heap.nodes.next, heap.edges.next, 0, InternedValueMassHeap.initialBound heap⟩)
+     let request : NodeRequest := ⟨SourceCurrentAllocatedPartialInitialization.emptyValue finalCache, value⟩

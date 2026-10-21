@@ -1,0 +1,11 @@
+  133 theorem closed [DecidableEq (EdgeKey Symbol Guard)] (valid : Guard → Prop) (expression : Syntax Symbol Guard)
+  134     (allowed : Allowed valid expression) :
+  135     ∃ value heap, ∃ _done : InternedFreshOrdinaryConstruction.build expression [] empty = .done value heap,
+  136       Heap valid heap ∧ SourceEqualityAnnotationLanguage.Annotated valid value := by
+  137   obtain ⟨value, heap, done⟩ := InternedFreshOrdinaryClosedCompletion.closed_complete expression
+  138   have physical : Heap valid heap := by
+  139     simpa only [done, Outcome.state] using build valid expression allowed [] empty (empty_heap valid)
+  140   have checked := InternedFreshOrdinaryFacts.closed_verified expression
+  141   have facts : InternedNestedFacts.Facts heap := by simpa only [done, Outcome.state] using checked.facts
+  142   exact ⟨value, heap, done, physical,
+  143     SourceEqualityAnnotationHeap.available valid heap physical facts.linked value (checked.result value heap done)⟩

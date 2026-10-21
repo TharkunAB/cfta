@@ -1,0 +1,8 @@
+/-- Larger outer and lower bounds retain the exact successful nodeCall return. -/
+theorem nodeCall_done_stable {fuel F g s r e p h m c n G S R E P H M C N budget : Nat}
+    {request : NodeRequest} {before after : Caller width} {result : Node}
+    (actual : nodeCall fuel g s r e p h m c n budget request before = .done result after)
+    (enoughFuel : fuel ≤ F) (enoughG : g ≤ G) (enoughS : s ≤ S) (enoughR : r ≤ R) (enoughE : e ≤ E)
+    (enoughP : p ≤ P) (enoughH : h ≤ H) (enoughM : m ≤ M) (enoughC : c ≤ C) (enoughN : n ≤ N) :
+    nodeCall F G S R E P H M C N budget request before = .done result after :=
+  (all_stable fuel).1 budget request before actual enoughFuel enoughG enoughS enoughR enoughE enoughP enoughH enoughM enoughC enoughN

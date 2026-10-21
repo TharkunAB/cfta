@@ -1,0 +1,20 @@
+/-- Source effects and the two native memo families have separate state. -/
+structure State (width : Nat) (Symbol Guard : Type) where
+  machine : Machine Symbol Guard
+  nodes : FlatMemoThunk.State (Triple width) (NodeRequest Symbol Guard) (Value Symbol Guard)
+  edges : FlatMemoThunk.State (Triple width) (EdgeRequest Symbol Guard) (EdgeValue Symbol Guard)
+
+/-- Every pending request and completed observation retains source provenance. -/
+structure Valid [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] (width : Nat) (emptyGuard : Guard)
+    (conjoin : Guard → Guard → Guard) (state : State width Symbol Guard) : Prop where
+  machine : SourceRecursiveIntersectionKernel.Valid state.machine
+  nodes : FlatMemoThunk.Valid (NodeKey width) (NodeGood emptyGuard conjoin state.machine) state.nodes
+  edges : FlatMemoThunk.Valid (EdgeKeyOf width) (EdgeGood emptyGuard conjoin state.machine) state.edges
+
+/-- Initialize both memo families without result assumptions. -/
+def initial (width : Nat) (machine : Machine Symbol Guard) : State width Symbol Guard := ⟨machine, FlatMemoThunk.empty, FlatMemoThunk.empty⟩
+
+/-- An actual valid source machine admits empty node and edge memo state. -/
+theorem initial_valid [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] (width : Nat) (emptyGuard : Guard)
+    (conjoin : Guard → Guard → Guard) (machine : Machine Symbol Guard) (valid : SourceRecursiveIntersectionKernel.Valid machine) :
+    Valid width emptyGuard conjoin (initial width machine) :=

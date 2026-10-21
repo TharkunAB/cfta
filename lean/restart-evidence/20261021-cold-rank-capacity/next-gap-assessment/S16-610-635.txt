@@ -1,0 +1,26 @@
+{- | Propagate the constraints and remove the redundant edges until nothing
+changes, for at most 'reductionRounds' rounds, as the paper does. At some
+sizes the rounds do not converge: on takeNdropM at size 7 the automaton
+stays near 3,400 nodes, and the enumeration of the bounded result finds the
+solution. Reduction does not change the language, so the bound only stops
+earlier.
+-}
+reduceFully :: Node Symbol -> Node Symbol
+reduceFully = last . reductions
+
+{- | The spaces of 'reduceFully': the input, and the space after each round,
+until a round changes nothing or after 'reductionRounds' rounds.
+-}
+reductions :: Node Symbol -> [Node Symbol]
+reductions = go reductionRounds
+  where
+    go 0 node = [node]
+    go rounds node
+        | next == node = [node]
+        | otherwise = node : go (rounds - 1) next
+      where
+        next = withoutRedundantEdges (reducePartially node)
+
+-- | The bound of 'reduceFully' on reduction rounds: 30, as in the paper.
+reductionRounds :: Int
+reductionRounds = 30

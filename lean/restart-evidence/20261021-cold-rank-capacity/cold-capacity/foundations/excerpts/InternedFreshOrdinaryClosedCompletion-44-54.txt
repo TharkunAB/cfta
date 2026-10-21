@@ -1,0 +1,11 @@
+theorem closed_not_pending [DecidableEq (EdgeKey Symbol Guard)] (expression : Syntax Symbol Guard)
+    (key : NodeKey) (final : State Symbol Guard) : build expression [] empty ≠ .pending key final :=
+  literal_not_pending expression [] empty InternedFreshOrdinaryContext.empty_context
+    InternedFreshOrdinaryDepthHeap.empty_heap empty_correct.2 key final
+
+/-- Every repaired closed source expression returns a complete value and its actual final cache. -/
+theorem closed_complete [DecidableEq (EdgeKey Symbol Guard)] (expression : Syntax Symbol Guard) :
+    ∃ value final, build expression [] empty = .done value final :=
+  literal_complete expression [] empty InternedFreshOrdinaryContext.empty_context
+    InternedFreshOrdinaryDepthHeap.empty_heap empty_correct.2
+

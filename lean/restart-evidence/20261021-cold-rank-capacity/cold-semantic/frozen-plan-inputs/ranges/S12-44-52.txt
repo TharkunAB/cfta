@@ -1,0 +1,9 @@
+/-- Literal inventory membership derives every original source annotation check. -/
+theorem allowed (annotation : Guard → Prop) (expression : Syntax Symbol Guard)
+    (checked : ∀ guard ∈ guards expression, annotation guard) : Allowed annotation expression := by
+  cases expression with
+  | empty | var => simp only [Allowed]
+  | node edges => simpa only [Allowed] using edges_allowed annotation edges checked
+  | union members => simpa only [Allowed] using children_allowed annotation members checked
+  | binder smart body => simpa only [Allowed] using allowed annotation body checked
+termination_by sizeOf expression

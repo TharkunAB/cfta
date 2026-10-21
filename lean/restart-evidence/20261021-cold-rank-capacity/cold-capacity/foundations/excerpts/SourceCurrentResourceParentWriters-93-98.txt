@@ -1,0 +1,6 @@
+/-- Empty caller edge tables require no historical writer premise. -/
+theorem initial (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (checked : Checked (bits + 2)) (memo : Memo) (fourth : Fourth) :
+    Origins formulas solver (SourceCurrentAllocatedPartialState.initial checked memo fourth) :=
+  FlatMemoThunk.empty_valid _ _

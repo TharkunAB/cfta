@@ -1,0 +1,7 @@
+    exact closed
+
+/-- The computed inventory uses the literal constructed source heap. -/
+theorem inventory_source (expression : InternedNestedConstruction.Syntax Symbol Guard)
+    (value : Value Symbol Guard) (heap : State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build expression [] empty = .done value heap) :
+    (inventory expression value heap built).source = heap := rfl

@@ -1,0 +1,5 @@
+-- | The reduced automaton of the terms of a size and a type.
+searchSpace :: StEcta -> Int -> TypeSkeleton -> Node Symbol
+searchSpace StEcta{..} lvl tc =
+    let !ecta = filterType (union $ tk any_arg lvl) $ typeToFta tc
+     in fixWithin 100 (withoutRedundantEdges . reducePartially) ecta

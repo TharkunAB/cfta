@@ -1,0 +1,18 @@
+   36 /-- Returned node cells preserve closure of their captured closed inputs. -/
+   37 def NodeStored (state : Caller width) : Prop :=
+   38   FlatMemoThunk.Valid (fun request key => request.key = key)
+   39     (FlatMemoThunk.CellSpec (fun request result => request.value.free = [] → result.free = []))
+   40     state.nodeResults
+   41 
+   42 /-- Each actual phase retains closure of its literal inputs. -/
+   43 def InputsClosed (phase : Phase width) : Prop :=
+   44   match phase with
+   45   | .node _ request _ | .body _ request _ => request.value.free = []
+   46   | .rows _ _ values _ => MergedColdReaderClosedInputs.ClosedEdges values
+   47   | .descendants _ _ edge _ => MergedColdReaderClosedInputs.ClosedValues edge.children
+   48   | .children _ _ values _ | .walk _ _ _ values _ => MergedColdReaderClosedInputs.ClosedValues values
+   49 
+   50 theorem initial (checked : SourceEqualityNativeDemand.State width)
+   51     (memo : SourceCurrentMemoMergeGraph.Memo Symbol Guard) (fourth : SourceCurrentEmptinessMemo.Memo) :
+   52     NodeStored (SourceCurrentAllocatedPartialState.initial checked memo fourth) :=
+   53   FlatMemoThunk.empty_valid _ _

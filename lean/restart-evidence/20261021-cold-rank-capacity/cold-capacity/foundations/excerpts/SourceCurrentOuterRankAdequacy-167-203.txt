@@ -1,0 +1,37 @@
+
+theorem initial_node_call
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    {g s r e p h m c n budget : Nat} {inventory : Inventory} {memos : Memos}
+    {request : NodeRequest} {before : Caller (bits + 2)}
+    (seed : List Guard × Profile) :
+    let output := envelope budget
+      (SourceCurrentPositiveQuotientCount.count (request.inherited.payload.getD []) request.value)
+      (InternedValueMass.value request.value) seed
+    let first : Phase (bits + 2) := .node output.1 request before
+    let need := phaseNeed budget first seed
+    ∀ (_initial : Context formulas solver inventory before memos)
+      (_frame : Frame formulas solver inventory before.checked)
+      (_fits : Fits seed.2 before.checked)
+      (_known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.1)
+        before.checked.native.machine.heap)
+      (_inputs : SourceCurrentOuterPrefixInvariants.Inputs first)
+      (_room : Room bits (SourceCurrentInitialSelectionForecast.cover [output.2.2.2]
+        (SourceCurrentOuterInitialPrefix.forecast budget first seed).2))
+      (_normal : SourceCurrentRequiredUnionNormal.UnionNormal before.checked.native.machine.heap)
+      (_supported : SourceCurrentNativeRequestPositivePositions.Support
+        before.checked.native.machine.heap before.checked.native)
+      (_causal : SourceCurrentNativeMuPublication.History empty before.checked.native.machine.heap)
+      (_merged : SourceCurrentConstrainedCapMemoMerge.Stored
+        (fun guard : Guard => SourceMemoGate.plain guard = true) before.merge)
+      (_positiveMemo : SourceCurrentMergePositivePosition.Support before.merge)
+      (_origins : SourceCurrentResourceParentWriters.Origins formulas solver before)
+      (_stored : SourceCurrentOuterClosedInputs.NodeStored before)
+      (_closed : SourceCurrentOuterClosedInputs.InputsClosed first)
+      (_initialNodeIdle : ∀ chosen owner, before.nodeResults.cells chosen ≠ some ⟨owner, .evaluating⟩)
+      (_initialEdgeIdle : SourceCurrentOuterEdgeIdle.EdgeIdle before)
+      (_gBound : need ≤ g) (_sBound : need ≤ s) (_rBound : need ≤ r)
+      (_eBound : need ≤ e) (_pBound : need ≤ p) (_hBound : need ≤ h)
+      (_mBound : need ≤ m) (_cBound : need ≤ c) (_nBound : need ≤ n),
+    ∃ result after, ∀ fuel, output.1 ≤ fuel →
+      nodeCall fuel g s r e p h m c n budget request before = .done result after
