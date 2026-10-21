@@ -3039,6 +3039,7 @@ import MicroCFTA.SourceCurrentClassCorridorChronology
 import MicroCFTA.SourceCurrentNativeCurrentPositivePositions
 import MicroCFTA.SourceCurrentRawCorridorPositiveProjection
 import MicroCFTA.SourceCurrentRequiredCorridorChronology
+import MicroCFTA.SourceCurrentNativePositiveSupportAdvance
 /-!
 # Proof dependency audit
 
