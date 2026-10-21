@@ -3030,6 +3030,7 @@ import MicroCFTA.SourceCurrentNativePositiveSupportRebase
 import MicroCFTA.SourceCurrentCappedProjectionPositivePosition
 import MicroCFTA.SourceCurrentOriginalGateProjectionCap
 import MicroCFTA.SourceCurrentRequiredForestProjectionCap
+import MicroCFTA.SourceCurrentRequiredSharedTargetCap
 /-!
 # Proof dependency audit
 
