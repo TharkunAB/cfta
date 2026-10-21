@@ -3027,6 +3027,7 @@ import MicroCFTA.SourceCurrentTargetOperandPositivePosition
 import MicroCFTA.SourceCurrentTargetLaterHeapPositivePosition
 import MicroCFTA.SourceCurrentNativeRequestPositivePositions
 import MicroCFTA.SourceCurrentNativePositiveSupportRebase
+import MicroCFTA.SourceCurrentCappedProjectionPositivePosition
 /-!
 # Proof dependency audit
 
