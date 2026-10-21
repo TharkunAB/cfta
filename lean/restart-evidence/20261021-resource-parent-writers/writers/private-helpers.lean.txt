@@ -1,0 +1,79 @@
+private theorem begin_origins
+    {formulas : SourceGuards.Formulas FullSyntax.Formula}
+    {solver : SourceGuards.Entailment FullSyntax.Formula}
+    (request : EdgeRequest) {before : Caller (bits + 2)}
+    (origins : Origins formulas solver before) :
+    Origins formulas solver (beginEdge request before).2.2 := by
+  apply FlatMemoThunk.demand_spec
+  exact FlatMemoThunk.lookup_valid _ _ _ _ _ origins rfl trivial
+
+omit [DecidableEq Symbol] [DecidableEq Node] in
+private theorem request_eq
+    {formulas : SourceGuards.Formulas FullSyntax.Formula}
+    {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {inventory : Inventory} {globals : Memos} {before : Caller (bits + 2)}
+    {first second : EdgeRequest}
+    (context : Context formulas solver inventory before globals)
+    (firstReady : EqReady before.checked.operations.constraints first.inherited)
+    (firstResident : EdgeResident before.checked.native.machine.heap first.value)
+    (secondReady : EqReady before.checked.operations.constraints second.inherited)
+    (secondResident : EdgeResident before.checked.native.machine.heap second.value)
+    (same : first.key = second.key) : first = second := by
+  have inherited := SourceEqualityConstraintMemoAllocation.ready_eq_of_identity _
+    context.ready.good.operations.constraints first.inherited second.inherited firstReady secondReady
+    (congrArg Prod.fst same)
+  have values := edge_identity_unique _ context.ready.semantic.ready.semantic.1.normal.facts.coherent
+    first.value second.value firstResident secondResident (congrArg Prod.snd same)
+  cases first
+  cases second
+  cases inherited
+  cases values
+  rfl
+
+private theorem finish_origins
+    {formulas : SourceGuards.Formulas FullSyntax.Formula}
+    {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {before : Caller (bits + 2)} (handle : Nat) (owner : EdgeRequest) (value : Edge)
+    (origins : Origins formulas solver before)
+    (found : before.edgeResults.cells handle = some ⟨owner, .evaluating⟩)
+    (written : Written (bits := bits) formulas solver owner value) :
+    Origins formulas solver (finishEdge handle value before) := by
+  apply FlatMemoThunk.finish_spec
+  · exact origins
+  · intro request present
+    have owners : owner = request := congrArg
+      (fun cell : FlatMemoThunk.Cell EdgeRequest Edge => cell.request)
+      (Option.some.inj (found.symm.trans present))
+    exact owners ▸ written
+
+private theorem body_written
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (profile : Profile) (globals : Memos)
+    {fuel g s r e p h m c n budget : Nat} {request : EdgeRequest}
+    {before after : Caller (bits + 2)} {value : Edge}
+    (actual : SourceCurrentAllocatedPartialWorker.edgeBody fuel g s r e p h m c n budget request before = .done value after)
+    (context : Context formulas solver inventory before globals)
+    (frame : Frame formulas solver inventory before.checked) (fits : Fits profile before.checked)
+    (inherited : EqReady before.checked.operations.constraints request.inherited)
+    (resident : EdgeResident before.checked.native.machine.heap request.value)
+    (reserved : SourceCurrentParentForecast.residentReserved bits budget request before.checked profile)
+    (normal : Normal before.checked.native.machine.heap)
+    (supported : NativeSupport before.checked.native.machine.heap before.checked.native)
+    (causal : History empty before.checked.native.machine.heap)
+    (merged : MergeStored before.merge) (positiveMemo : MergePositive before.merge) :
+    after.edgeResults = before.edgeResults ∧ Written (bits := bits) formulas solver request value := by
+  cases observed : SourceCurrentAllocatedParentWorker.edge g s r e p h m c n budget
+      request.value.entry.key.symbol request.value.entry.key.constraint request.inherited request.value.children
+      before.checked before.fourth before.merge with
+  | failed =>
+      simp only [SourceCurrentAllocatedPartialWorker.edgeBody, observed] at actual
+      cases actual
+  | done result checked fourth memo =>
+      simp only [SourceCurrentAllocatedPartialWorker.edgeBody, observed] at actual
+      cases actual
+      exact ⟨rfl, g, s, r, e, p, h, m, c, n, budget, before, checked, fourth, memo,
+        globals, inventory, profile, observed, context, frame, fits, inherited, resident,
+        (fun _ => ⟨context.ready.good.fields request.value.entry.key request.value resident, inherited,
+          context.ready.semantic.ready.semantic.1.normal.facts.cached.edges _ _ resident⟩),
+        reserved, normal, supported, ⟨causal⟩, merged, positiveMemo⟩

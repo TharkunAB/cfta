@@ -1,0 +1,32 @@
+--- resource-writers-direct-1.source.lean
++++ SourceCurrentResourceParentWriters.lean
+@@ -195,8 +195,8 @@
+       cases actual
+       let published := FlatMemoThunk.lookupOrInsert request.key request before.edgeResults
+       have observed := congrArg (fun result => (result.2.1, result.2.2.edgeResults)) started
+-      change FlatMemoThunk.demand published.1 published.2 = (.ready value, running.edgeResults) at observed
+-      obtain ⟨owner, found, unchanged⟩ := FlatMemoThunk.demand_ready_original _ _ value _ observed
++      change FlatMemoThunk.demand published.1 published.2 = (.ready result, after.edgeResults) at observed
++      obtain ⟨owner, found, unchanged⟩ := FlatMemoThunk.demand_ready_original _ _ result _ observed
+       have publishedOrigins := FlatMemoThunk.lookup_valid request.key request before.edgeResults
+         (fun request key => request.key = key)
+         (FlatMemoThunk.CellSpec (Written (bits := bits) formulas solver)) origins rfl trivial
+@@ -204,8 +204,8 @@
+         (FlatMemoThunk.lookup_stored _ _ _)
+       have cells := Option.some.inj (present.symm.trans found)
+       subst cell
+-      have written : Written (bits := bits) formulas solver owner value := publishedOrigins.checked _ _ found
+-      have retained : running.edgeResults.cells handle = some ⟨owner, .returned value⟩ := by
++      have written : Written (bits := bits) formulas solver owner result := publishedOrigins.checked _ _ found
++      have retained : after.edgeResults.cells handle = some ⟨owner, .returned result⟩ := by
+         have handles : published.1 = handle := congrArg Prod.fst started
+         rw [← unchanged, handles] at found
+         exact found
+@@ -245,6 +245,6 @@
+           have evaluating : middle.edgeResults.cells handle = some ⟨owner, .evaluating⟩ := by
+             rw [tables]
+             exact cell
+-          exact ⟨finish_origins handle owner value middleOrigins evaluating written, same ▸ written⟩
++          exact ⟨finish_origins handle owner result middleOrigins evaluating written, same ▸ written⟩
+ 
+ end MicroCFTA.SourceCurrentResourceParentWriters

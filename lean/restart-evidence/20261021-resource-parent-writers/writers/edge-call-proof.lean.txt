@@ -1,0 +1,74 @@
+:= by
+  rcases started : beginEdge request before with ⟨handle, action, running⟩
+  have prior := begin_origins request origins
+  rw [started] at prior
+  have components := beginEdge_components request before
+  rw [started] at components
+  dsimp only at components
+  obtain ⟨checked, merge, _fourth, _nodes⟩ := components
+  have candidateReady : EqReady running.checked.operations.constraints request.inherited := by
+    rw [checked]
+    exact inherited
+  have candidateResident : EdgeResident running.checked.native.machine.heap request.value := by
+    rw [checked]
+    exact resident
+  cases action with
+  | busy | absent =>
+      simp only [SourceCurrentAllocatedPartialWorker.edgeCall, started] at actual
+      cases actual
+  | ready value =>
+      simp only [SourceCurrentAllocatedPartialWorker.edgeCall, started] at actual
+      cases actual
+      let published := FlatMemoThunk.lookupOrInsert request.key request before.edgeResults
+      have observed := congrArg (fun result => (result.2.1, result.2.2.edgeResults)) started
+      change FlatMemoThunk.demand published.1 published.2 = (.ready value, running.edgeResults) at observed
+      obtain ⟨owner, found, unchanged⟩ := FlatMemoThunk.demand_ready_original _ _ value _ observed
+      have publishedOrigins := FlatMemoThunk.lookup_valid request.key request before.edgeResults
+        (fun request key => request.key = key)
+        (FlatMemoThunk.CellSpec (Written (bits := bits) formulas solver)) origins rfl trivial
+      obtain ⟨cell, present, key⟩ := publishedOrigins.linked request.key published.1
+        (FlatMemoThunk.lookup_stored _ _ _)
+      have cells := Option.some.inj (present.symm.trans found)
+      subst cell
+      have written : Written (bits := bits) formulas solver owner value := publishedOrigins.checked _ _ found
+      have retained : running.edgeResults.cells handle = some ⟨owner, .returned value⟩ := by
+        have handles : published.1 = handle := congrArg Prod.fst started
+        rw [← unchanged, handles] at found
+        exact found
+      have runningContext := (SourceCurrentAllocatedPartialCallSteps.edge_hit formulas solver
+        context inherited resident started).1.context
+      have ownerGood := runningContext.sound.edges _ _ retained
+      have same := request_eq runningContext ownerGood.inherited ownerGood.input
+        candidateReady candidateResident key
+      exact ⟨prior, same ▸ written⟩
+  | evaluate owner =>
+      obtain ⟨runningContext, ownerGood, key, cell⟩ :=
+        SourceCurrentAllocatedPartialCallSteps.edge_start formulas solver context inherited resident started
+      have same := request_eq runningContext ownerGood.inherited ownerGood.input
+        candidateReady candidateResident key
+      have runningFrame : Frame formulas solver inventory running.checked := by
+        simpa only [checked] using frame
+      have runningFits : Fits profile running.checked := by
+        simpa only [checked] using fits
+      have room : SourceCurrentParentForecast.residentReserved bits budget owner running.checked profile := by
+        simpa only [SourceCurrentEdgeCallNumeric.Reserved, started] using reserved
+      cases body : SourceCurrentAllocatedPartialWorker.edgeBody fuel g s r e p h m c n budget owner running with
+      | failed =>
+          simp only [SourceCurrentAllocatedPartialWorker.edgeCall, started, body,
+            SourceCurrentAllocatedPartialWorker.Outcome.bind] at actual
+          cases actual
+      | done value middle =>
+          simp only [SourceCurrentAllocatedPartialWorker.edgeCall, started, body,
+            SourceCurrentAllocatedPartialWorker.Outcome.bind] at actual
+          cases actual
+          obtain ⟨tables, written⟩ := body_written formulas solver inventory profile globals body
+            runningContext runningFrame runningFits ownerGood.inherited ownerGood.input room
+            (by simpa only [checked] using normal) (by simpa only [checked] using supported)
+            (by simpa only [checked] using causal) (by simpa only [merge] using merged)
+            (by simpa only [merge] using positiveMemo)
+          have middleOrigins : Origins formulas solver middle := by
+            simpa only [Origins, tables] using prior
+          have evaluating : middle.edgeResults.cells handle = some ⟨owner, .evaluating⟩ := by
+            rw [tables]
+            exact cell
+          exact ⟨finish_origins handle owner value middleOrigins evaluating written, same ▸ written⟩
