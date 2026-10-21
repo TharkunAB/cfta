@@ -192,4 +192,66 @@ theorem child_count
   have nonempty := List.length_pos_of_mem root
   omega
 
+private theorem candidates_length_le (fuel : Nat) (value : Node) :
+    (candidates fuel value).length ≤ InternedValueMass.value value := by
+  induction fuel generalizing value with
+  | zero => simp only [candidates, List.length_nil, Nat.zero_le]
+  | succ fuel ih =>
+      have membersBound (members : List Node) :
+          (members.flatMap (candidates fuel)).length ≤ InternedValueMass.values members := by
+        induction members with
+        | nil => simp only [List.flatMap_nil, List.length_nil, InternedValueMass.values, Nat.le_refl]
+        | cons first rest restIH =>
+          have one := ih first
+          simp only [List.flatMap_cons, List.length_append, InternedValueMass.values]
+          omega
+      have childrenBound (children : List Node) (start : Nat) :
+          ((children.zipIdx start).flatMap (fun child =>
+            (candidates fuel child.1).map (child.2 :: ·))).length ≤ InternedValueMass.values children := by
+        induction children generalizing start with
+        | nil => simp only [List.zipIdx_nil, List.flatMap_nil, List.length_nil, InternedValueMass.values, Nat.le_refl]
+        | cons first rest restIH =>
+          have one := ih first
+          have later := restIH (start + 1)
+          simp only [List.zipIdx_cons, List.flatMap_cons, List.length_append, List.length_map, InternedValueMass.values]
+          omega
+      have rowsBound (rows : List Row) :
+          (rows.flatMap (fun row => row.children.zipIdx.flatMap
+            (fun child => (candidates fuel child.1).map (child.2 :: ·)))).length ≤ InternedValueMass.edges rows := by
+        induction rows with
+        | nil => simp only [List.flatMap_nil, List.length_nil, InternedValueMass.edges, Nat.le_refl]
+        | cons first rest restIH =>
+          have one := childrenBound first.children 0
+          have mass := InternedValueMass.edge_children first
+          simp only [List.flatMap_cons, List.length_append, InternedValueMass.edges]
+          omega
+      cases value with
+      | empty => simp only [candidates, InternedValueMass.value, List.length_cons, List.length_nil, Nat.le_refl]
+      | reference name => simp only [candidates, InternedValueMass.value, List.length_cons, List.length_nil, Nat.le_refl]
+      | node entry rows depth free =>
+          have bounded := rowsBound rows
+          simp only [candidates, InternedValueMass.value, List.length_cons]
+          omega
+      | union entry members depth free =>
+          have bounded := membersBound members
+          simp only [candidates, InternedValueMass.value, List.length_cons]
+          omega
+      | mu entry body depth ordinary =>
+          simp only [candidates, InternedValueMass.value, List.length_cons, List.length_nil]
+          omega
+
+theorem count_le_mass (inherited : List Record) (value : Node) :
+    count inherited value ≤ InternedValueMass.value value := by
+  classical
+  have dedup {Item : Type} [BEq Item] [LawfulBEq Item] (values : List Item) : values.eraseDups.length ≤ values.length :=
+    List.Nodup.length_le_of_subset (SymbolicDriver.eraseDups_nodup values)
+      (by intro item member; exact List.mem_eraseDups.mp member)
+  unfold count
+  have first := dedup ((positivePaths value).map
+    (Quotient.mk (relationSetoid (inherited.map Record.paths))))
+  simp only [List.length_map] at first
+  apply Nat.le_trans first
+  unfold positivePaths
+  exact Nat.le_trans (dedup _) (Nat.le_trans (List.length_filter_le _ _) (candidates_length_le _ _))
+
 end MicroCFTA.SourceCurrentPositiveQuotientCount
