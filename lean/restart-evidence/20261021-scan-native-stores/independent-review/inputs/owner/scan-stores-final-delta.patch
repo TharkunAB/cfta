@@ -1,0 +1,21 @@
+--- scan-stores-direct-1.source.lean
++++ SourceCurrentScanNativeStores.lean
+@@ -74,7 +74,7 @@
+     (causal : History empty before.native.machine.heap) : QueryPost before after result := by
+   obtain ⟨natural, rfl, supportedPath⟩ := supportedPath
+   cases actual with
+-  | force result heap projected =>
++  | force heap projected =>
+       obtain ⟨effects, resident, closed⟩ := SourceCurrentAllocatedGateFields.forest unconstrained anchor
+         anchorSemantic anchorReady projected
+         (SourceCurrentAllocatedConjunctionMemo.ready before ready.good ready.semantic ready.costs)
+@@ -123,7 +123,8 @@
+         head.closed tail.closed
+       have effects := SourceCurrentAllocatedNativeTraceEffects.effects native tail.ready.good tail.ready.semantic
+         tail.ready.costs (fun _ => trivial)
+-      have resident := SourceCurrentNativeOpenRequestResults.node_result _ _ _ _ _ tail.ready.good.native native
++      have resident := SourceCurrentNativeOpenRequestResults.node_result _ ⟨IntersectionEmptyDomain.emptyDomain,_,_⟩ _ _ _
++        tail.ready.good.native native
+       exact ⟨⟨effects.1,effects.2.1.ready.semantic,effects.2.1.ready.costs,scopedCache,idle⟩,
+         head.effects.trans (tail.effects.trans effects.2.1),
+         head.extension.trans (tail.extension.trans effects.2.2), resident, closed,
