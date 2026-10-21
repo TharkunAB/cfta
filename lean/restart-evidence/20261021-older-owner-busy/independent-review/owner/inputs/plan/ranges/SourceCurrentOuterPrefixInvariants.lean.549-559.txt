@@ -1,0 +1,11 @@
+theorem same_key {before : Caller width} {first second : NodeRequest} (good : Good before)
+    (left : NodeReady before first) (right : NodeReady before second) (same : first.key = second.key) : first = second := by
+  have inherited := SourceEqualityConstraintMemoAllocation.ready_eq_of_identity _ good.checked.operations.constraints
+    first.inherited second.inherited left.1 right.1 (congrArg Prod.fst same)
+  have values := InternedFreshProbeKeys.resident_reference_injective _ good.checked.heap.semantic.1.normal.facts.coherent
+    first.value second.value left.2.resident right.2.resident (congrArg Prod.snd same)
+  cases first
+  cases second
+  cases inherited
+  cases values
+  rfl

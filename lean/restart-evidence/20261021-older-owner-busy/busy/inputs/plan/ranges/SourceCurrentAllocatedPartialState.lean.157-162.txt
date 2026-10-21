@@ -1,0 +1,6 @@
+theorem beginNode_busy (candidate original : NodeRequest) (before : State width) (handle : Nat)
+    (published : before.nodeResults.table candidate.key = some handle)
+    (running : before.nodeResults.cells handle = some ⟨original, .evaluating⟩) :
+    beginNode candidate before = (handle, .busy, before) := by
+  simp only [beginNode, FlatMemoThunk.lookup_hit _ _ _ _ published,
+    FlatMemoThunk.demand_busy _ _ _ running]

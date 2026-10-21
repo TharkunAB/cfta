@@ -1,0 +1,19 @@
+/-- Stored inherited requests retain their exact physical key in the current operation cache. -/
+def NodeLinked (cache : Cache.State SourceEqualityPartialConstraintKey.Key) (request : NodeRequest) (key : NodeKey) : Prop :=
+  SourceEqualityConstraintAllocation.Stored cache request.inherited ∧ request.key = key
+
+/-- The edge family uses the same current equality cache and its own edge key. -/
+def EdgeLinked (cache : Cache.State SourceEqualityPartialConstraintKey.Key) (request : EdgeRequest) (key : EdgeKey) : Prop :=
+  SourceEqualityConstraintAllocation.Stored cache request.inherited ∧ request.key = key
+
+/-- Structural validity retains every original request in all three phases. -/
+structure Valid (state : State width) : Prop where
+  nodes : FlatMemoThunk.Valid (NodeLinked state.checked.operations.constraints) (fun _ => True) state.nodeResults
+  edges : FlatMemoThunk.Valid (EdgeLinked state.checked.operations.constraints) (fun _ => True) state.edgeResults
+
+/-- Caller initialization retains all supplied warm state components. -/
+theorem initial_components (checked : Checked width) (merge : MergeMemo) (fourth : Fourth) :
+    (initial checked merge fourth).checked = checked ∧
+    (initial checked merge fourth).merge = merge ∧ (initial checked merge fourth).fourth = fourth ∧
+    (initial checked merge fourth).nodeResults = FlatMemoThunk.empty ∧
+    (initial checked merge fourth).edgeResults = FlatMemoThunk.empty := ⟨rfl, rfl, rfl, rfl, rfl⟩

@@ -1,0 +1,20 @@
+/-- An edge-idle caller has no evaluating cell in its edge result family. -/
+def EdgeIdle (state : Caller width) : Prop :=
+  ∀ handle owner, state.edgeResults.cells handle ≠ some ⟨owner, .evaluating⟩
+
+/-- A failed worker does not report the evaluating phase of an outer edge cell. -/
+def NoEdgeBusy : Fault width → Prop
+  | .edgeMemo _ .busy => False
+  | _ => True
+
+/-- Successful outcomes retain edge idle; failed outcomes exclude a busy edge diagnostic. -/
+def Safe : Outcome A width → Prop
+  | .done _ after => EdgeIdle after
+  | .failed fault _ => NoEdgeBusy fault
+
+/-- Initial outer tables are edge-idle for every supplied lower checked state. -/
+theorem initial (checked : SourceEqualityNativeDemand.State width)
+    (merge : SourceCurrentMemoMergeGraph.Memo Symbol Guard) (fourth : SourceCurrentEmptinessMemo.Memo) :
+    EdgeIdle (SourceCurrentAllocatedPartialState.initial checked merge fourth) := by
+  intro handle owner impossible
+  cases impossible

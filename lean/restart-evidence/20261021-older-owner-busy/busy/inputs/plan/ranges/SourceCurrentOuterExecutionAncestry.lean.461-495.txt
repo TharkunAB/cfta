@@ -1,0 +1,35 @@
+def Ancestor (g s r e p h m c n budget : Nat) (entryPhase current : Phase width)
+    (handle : Nat) (owner : NodeRequest) : Prop :=
+  ∃ fuel request before running,
+    Reached g s r e p h m c n budget entryPhase (.node fuel request before) ∧
+    beginNode request before = (handle, .evaluate owner, running) ∧
+    owner.key = request.key ∧ NodeValid running ∧
+    running.nodeResults.cells handle = some ⟨owner, .evaluating⟩ ∧
+    Reached g s r e p h m c n budget (.body fuel owner running) current
+
+private theorem ancestor_extend (ancestor : Ancestor g s r e p h m c n budget entryPhase first handle owner)
+    (step : Step g s r e p h m c n budget first last) :
+    Ancestor g s r e p h m c n budget entryPhase last handle owner := by
+  obtain ⟨fuel,request,before,running,earlier,started,key,valid,present,later⟩ := ancestor
+  exact ⟨fuel,request,before,running,earlier,started,key,valid,present,.snoc later step⟩
+
+/-- Every evaluating node cell comes from an enclosing activation when the entry table is idle. -/
+theorem Reached.owners (actual : Reached g s r e p h m c n budget entryPhase current)
+    (valid : NodeValid (caller entryPhase))
+    (idle : ∀ handle owner, (caller entryPhase).nodeResults.cells handle ≠ some ⟨owner, .evaluating⟩)
+    (handle : Nat) (owner : NodeRequest)
+    (present : (caller current).nodeResults.cells handle = some ⟨owner, .evaluating⟩) :
+    Ancestor g s r e p h m c n budget entryPhase current handle owner := by
+  induction actual with
+  | refl => exact False.elim (idle handle owner present)
+  | snoc earlier last ih =>
+      rcases step_owner last (earlier.valid valid) handle owner present with old | fresh
+      · exact ancestor_extend (ih old) last
+      · obtain ⟨fuel,request,before,running,firstEq,lastEq,started⟩ := fresh
+        cases firstEq
+        cases lastEq
+        have protocol := earlier.valid valid
+        have owned := start_owner request before protocol started
+        have runningValid := start_valid request before protocol
+        rw [started] at runningValid
+        exact ⟨fuel,request,before,running,earlier,started,owned.2,runningValid,owned.1,.refl _⟩
