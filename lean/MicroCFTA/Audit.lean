@@ -3054,6 +3054,7 @@ import MicroCFTA.SourceCurrentAllocatedNativeActualScope
 import MicroCFTA.SourceCurrentScanNativeStores
 import MicroCFTA.SourceCurrentActualParentScanNativeStores
 import MicroCFTA.SourceCurrentActualOwnerPair
+import MicroCFTA.SourceCurrentActualParentSelectedCertificates
 /-!
 # Proof dependency audit
 
