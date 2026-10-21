@@ -1,0 +1,11 @@
+--- note.original-v1.md
++++ note.md
+@@ -3,7 +3,7 @@
+ State.checked is the COMPLETE existing NativeDemand.State. State.memo is a distinct typed pair-key table with captured complete edge pairs and returned Edge values. [S05:24–49;S08:14–73]
+ Control.call publishes the ORIGINAL ordered pair through lookupOrInsert, then yields demand(handle,pending). Demand ready yields ret(value,pending), evaluate yields order(handle,captured,pending), and absent/busy yields the distinct wrapper blockage with current full state.
+ Control.order tests captured right.identity < left.identity. True yields call(reversed,handle::pending); false yields native(edgeBody(emptyDomain,captured,.pure),handle::pending). It adds no equal-edge shortcut. [S01:392–409;S11:13–43]
+-Native yielded/blocked controls retain the returned native control and exact checked state. Native failures and constraint errors retain their actual checked state. Every branch keeps the separate table and pending handles; no failed/partial run completes them. [S05:39–114]
++Native yielded/blocked propagation retains the returned native control, residual pending handles and exact checked state; terminal failed/constraintError propagation retains the current full state. Native propagation does not itself finish pending same-symbol handles. Earlier steps of a bounded partial run may already have finished cells. [S05:39–114]
+ Native done yields ret(value,pending) at its literal final checked state. Ret with a handle finishes THAT same-symbol cell and removes one handle; ret with no handles yields done. It never invokes native finishEdge for this outer table. [S08:189–198;S10:99–117]
+ The first theorem is deliberately a completed-past BOTH-miss readback, not an unconditional completion producer. Native state and all other same-symbol entries may already be populated. It accepts an observed wrapper done and returns an actual direct native Steps trace, with exactly the same before.checked and after.checked. [S16:17–22,125–145]
+ Both initial pair keys are absent, so each started cell captures the literal caller operands. If swapped, two distinct handles retain the reversed/original ordered keys and the same result; generic Returned retains all earlier completed cells. Equal identities take the unswapped branch. [S08:53–73;S09:13–34]

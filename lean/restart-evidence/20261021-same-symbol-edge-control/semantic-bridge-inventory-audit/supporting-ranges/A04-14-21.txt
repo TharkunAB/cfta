@@ -1,0 +1,8 @@
+/-- Source body code contains no explicit native node or edge completion frame. -/
+def BodyCode (code : Code Symbol Guard A) : Prop :=
+  match code with
+  | .pure _ | .fail _ => True
+  | .work _ next | .enter _ _ _ _ _ next | .read _ next | .optionalBinder _ _ next | .node _ next | .edge _ next =>
+      ∀ value, BodyCode (next value)
+  | .finishNode .. | .finishEdge .. => False
+

@@ -1,0 +1,6 @@
+/-- Idle memo tables satisfy every active-request bound, including after earlier complete calls. -/
+theorem Idle.active [DecidableEq Symbol] (view : IntersectSchedule.View Symbol)
+    (holds : Guard → Language.Term Symbol → Bool) (bound : Nat)
+    (state : SourceRecursiveIntersectionThunks.State width Symbol Guard) (idle : Idle state) : ActiveAbove view holds bound state :=
+  ⟨fun handle request running => False.elim (idle.1 handle request running),
+    fun handle request running => False.elim (idle.2 handle request running)⟩

@@ -1,0 +1,6 @@
+
+/-- Literal source code retains physical results and a numeric list-width certificate. -/
+def At (code : Code Symbol Guard A) (state : Machine Symbol Guard) (bound : Nat)
+    (post : Machine Symbol Guard → A → Prop) : Prop :=
+  match code with
+  | .pure value => post state value

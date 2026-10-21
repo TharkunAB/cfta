@@ -1,0 +1,39 @@
+-- | Memoize one application in an explicitly supplied table.
+memoWith :: (Hashable a) => MemoCache a b -> (a -> b) -> a -> b
+{-# INLINEABLE memoWith #-}
+memoWith (MemoCache table) f x = unsafeDupablePerformIO $ insertKeepingFirst table x (f x)
+
+{- | A family of memo tables for one function.
+
+Each symbol type has its own table, and the symbol type must determine the
+function's argument and result types. Individual entries
+contain ordinary typed keys and values.
+-}
+newtype TypeableMemoCache = TypeableMemoCache CacheFamily
+
+-- | Allocate an empty memo-table family.
+newTypeableMemoCache :: IO TypeableMemoCache
+newTypeableMemoCache = TypeableMemoCache <$> newCacheFamily
+
+-- | Memoize one application in the table for the symbol type.
+memoTypeableWith ::
+    forall symbol a b.
+    (Hashable a, Typeable symbol) =>
+    TypeableMemoCache ->
+    (a -> b) ->
+    a ->
+    b
+{-# INLINE memoTypeableWith #-}
+memoTypeableWith (TypeableMemoCache family) =
+    memoWith (selectCache @symbol family (newMemoCache @a @b))
+
+-- | Binary variant of 'memoTypeableWith', keyed by the argument pair.
+memo2TypeableWith ::
+    forall symbol a b c.
+    (Hashable a, Hashable b, Typeable symbol) =>
+    TypeableMemoCache ->
+    (a -> b -> c) ->
+    a ->
+    b ->
+    c
+memo2TypeableWith cache f = curry (memoTypeableWith @symbol cache (uncurry f))

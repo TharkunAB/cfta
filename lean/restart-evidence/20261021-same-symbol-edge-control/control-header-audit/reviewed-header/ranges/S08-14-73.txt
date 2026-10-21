@@ -1,0 +1,60 @@
+/-- A published thunk can be suspended, under evaluation, or complete. -/
+inductive Status (Value : Type) where
+  | suspended
+  | evaluating
+  | returned (value : Value)
+
+/-- A thunk retains its original request in every evaluation phase. -/
+structure Cell (Request Value : Type) where
+  request : Request
+  status : Status Value
+
+/-- The effective table stores logical thunk identities. -/
+structure State (Key Request Value : Type) where
+  table : Table Key Nat
+  cells : Table Nat (Cell Request Value)
+  next : Nat
+
+/-- The initial table has no published or allocated thunk. -/
+def empty : State Key Request Value := ⟨fun _ => none, fun _ => none, 0⟩
+
+/-- Every table entry identifies its original request and an allocated cell. -/
+structure Valid (keyOf : Request → Key → Prop) (good : Cell Request Value → Prop)
+    (state : State Key Request Value) : Prop where
+  bounded : ∀ handle cell, state.cells handle = some cell → handle < state.next
+  linked : ∀ key handle, state.table key = some handle →
+    ∃ cell, state.cells handle = some cell ∧ keyOf cell.request key
+  checked : ∀ handle cell, state.cells handle = some cell → good cell
+
+/-- An empty table has no supplied result or request assumptions. -/
+theorem empty_valid (keyOf : Request → Key → Prop) (good : Cell Request Value → Prop) :
+    Valid keyOf good empty := by
+  constructor <;> intros <;> contradiction
+
+/-- Retained source facts can strengthen the cell interpretation without table effects. -/
+theorem Valid.map (state : State Key Request Value) (keyOf : Request → Key → Prop)
+    (first second : Cell Request Value → Prop) (valid : Valid keyOf first state)
+    (retained : ∀ cell, first cell → second cell) : Valid keyOf second state :=
+  ⟨valid.bounded, valid.linked, fun handle cell stored => retained cell (valid.checked handle cell stored)⟩
+
+/-- A hit returns the original thunk. A miss publishes a suspended request. -/
+def lookupOrInsert [DecidableEq Key] (key : Key) (request : Request) (state : State Key Request Value) :
+    Nat × State Key Request Value :=
+  match state.table key with
+  | some handle => (handle, state)
+  | none => (state.next, ⟨put state.table key state.next,
+      put state.cells state.next ⟨request, .suspended⟩, state.next + 1⟩)
+
+/-- A published key cannot replace its original request with a later candidate. -/
+theorem lookup_hit [DecidableEq Key] (key : Key) (request : Request) (state : State Key Request Value)
+    (handle : Nat) (stored : state.table key = some handle) :
+    lookupOrInsert key request state = (handle, state) := by
+  simp only [lookupOrInsert, stored]
+
+/-- Miss publication installs the original suspended request before evaluation. -/
+theorem lookup_miss [DecidableEq Key] (key : Key) (request : Request) (state : State Key Request Value)
+    (missing : state.table key = none) :
+    (lookupOrInsert key request state).1 = state.next ∧
+    (lookupOrInsert key request state).2.table key = some state.next ∧
+    (lookupOrInsert key request state).2.cells state.next = some ⟨request, .suspended⟩ := by
+  simp [lookupOrInsert, missing, put]

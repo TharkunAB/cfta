@@ -1,0 +1,56 @@
+/-- A node thunk captures the original source domain and ordered operands. -/
+structure NodeRequest (Symbol Guard : Type) where
+  domain : Interned DomainKey
+  left : Value Symbol Guard
+  right : Value Symbol Guard
+
+/-- An edge thunk captures the original source domain and ordered physical rows. -/
+structure EdgeRequest (Symbol Guard : Type) where
+  domain : Interned DomainKey
+  left : EdgeValue Symbol Guard
+  right : EdgeValue Symbol Guard
+
+/-- Node publication uses the original tagged key and explicit machine bounds. -/
+def NodeKey (width : Nat) (request : NodeRequest Symbol Guard) (key : Triple width) : Prop :=
+  SourceRecursiveIntersectionMemo.requestKey width request.domain request.left request.right = some key ∧
+    SourceRecursiveIntersectionMemo.KeySafe width request.domain request.left request.right
+
+/-- Edge publication uses raw row identities and explicit machine bounds. -/
+def EdgeKeyOf (width : Nat) (request : EdgeRequest Symbol Guard) (key : Triple width) : Prop :=
+  SourceRecursiveIntersectionEdgeMemo.requestKey width request.domain request.left request.right = key ∧
+    SourceRecursiveIntersectionEdgeMemo.KeySafe width request.domain request.left request.right
+
+/-- Original node inputs stay available while the thunk is suspended or running. -/
+def NodeReady (machine : Machine Symbol Guard) (request : NodeRequest Symbol Guard) : Prop :=
+  Domain machine request.domain ∧ Available machine.heap request.left ∧ Available machine.heap request.right
+
+/-- Original edge inputs retain their complete resident row records. -/
+def EdgeReady (machine : Machine Symbol Guard) (request : EdgeRequest Symbol Guard) : Prop :=
+  Domain machine request.domain ∧ EdgeResident machine.heap request.left ∧ EdgeResident machine.heap request.right
+
+/-- Completed node cells have concrete source execution, without a supplied purity law. -/
+def NodeGood [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] (emptyGuard : Guard) (conjoin : Guard → Guard → Guard)
+    (machine : Machine Symbol Guard) (cell : FlatMemoThunk.Cell (NodeRequest Symbol Guard) (Value Symbol Guard)) : Prop :=
+  NodeReady machine cell.request ∧ match cell.status with
+    | .returned value => SourceRecursiveIntersectionMemo.Produced emptyGuard conjoin machine cell.request.domain cell.request.left cell.request.right value
+    | .suspended | .evaluating => True
+
+/-- Completed edge cells have concrete guarded row execution. -/
+def EdgeGood [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] (emptyGuard : Guard) (conjoin : Guard → Guard → Guard)
+    (machine : Machine Symbol Guard) (cell : FlatMemoThunk.Cell (EdgeRequest Symbol Guard) (EdgeValue Symbol Guard)) : Prop :=
+  EdgeReady machine cell.request ∧ match cell.status with
+    | .returned value => SourceRecursiveIntersectionEdgeMemo.Produced emptyGuard conjoin machine cell.request.domain cell.request.left cell.request.right value
+    | .suspended | .evaluating => True
+
+/-- Source effects and the two native memo families have separate state. -/
+structure State (width : Nat) (Symbol Guard : Type) where
+  machine : Machine Symbol Guard
+  nodes : FlatMemoThunk.State (Triple width) (NodeRequest Symbol Guard) (Value Symbol Guard)
+  edges : FlatMemoThunk.State (Triple width) (EdgeRequest Symbol Guard) (EdgeValue Symbol Guard)
+
+/-- Every pending request and completed observation retains source provenance. -/
+structure Valid [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] (width : Nat) (emptyGuard : Guard)
+    (conjoin : Guard → Guard → Guard) (state : State width Symbol Guard) : Prop where
+  machine : SourceRecursiveIntersectionKernel.Valid state.machine
+  nodes : FlatMemoThunk.Valid (NodeKey width) (NodeGood emptyGuard conjoin state.machine) state.nodes
+  edges : FlatMemoThunk.Valid (EdgeKeyOf width) (EdgeGood emptyGuard conjoin state.machine) state.edges

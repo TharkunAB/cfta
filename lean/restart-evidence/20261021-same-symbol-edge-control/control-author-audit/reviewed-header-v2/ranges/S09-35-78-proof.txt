@@ -1,0 +1,44 @@
+
+/-- Demand cannot reset a returned cell, including the demanded cell itself. -/
+theorem demand_returned (handle : Nat) (state : State Key Request Value) : Returned state (demand handle state).2 := by
+  intro other original value returned
+  cases found : state.cells handle with
+  | none => simpa only [demand, found] using returned
+  | some cell =>
+      cases cell with
+      | mk request status =>
+          cases status with
+          | suspended =>
+              have different : other ≠ handle := by
+                intro same
+                subst other
+                have impossible := Option.some.inj (returned.symm.trans found)
+                cases impossible
+              simpa only [demand, found, setStatus, put, ite_eq_right different] using returned
+          | evaluating | returned result => simpa only [demand, found] using returned
+
+/-- Completion cannot overwrite an earlier returned cell. -/
+theorem finish_returned (handle : Nat) (value : Value) (state : State Key Request Value) : Returned state (finish handle value state) := by
+  intro other original result returned
+  cases found : state.cells handle with
+  | none => simpa only [finish, found] using returned
+  | some cell =>
+      cases cell with
+      | mk request status =>
+          cases status with
+          | suspended | returned previous => simpa only [finish, found] using returned
+          | evaluating =>
+              have different : other ≠ handle := by
+                intro same
+                subst other
+                have impossible := Option.some.inj (returned.symm.trans found)
+                cases impossible
+              simpa only [finish, found, setStatus, put, ite_eq_right different] using returned
+
+/-- A larger interpretation can retain the same original request links. -/
+theorem Valid.keyMap (state : State Key Request Value) (first second : Request → Key → Prop)
+    (good : Cell Request Value → Prop) (valid : Valid first good state)
+    (retained : ∀ request key, first request key → second request key) : Valid second good state :=
+  ⟨valid.bounded, fun key handle stored => by
+    obtain ⟨cell, present, checked⟩ := valid.linked key handle stored
+    exact ⟨cell, present, retained cell.request key checked⟩, valid.checked⟩

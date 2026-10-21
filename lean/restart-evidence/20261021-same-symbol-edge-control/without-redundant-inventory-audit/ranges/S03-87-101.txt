@@ -1,0 +1,15 @@
+/-- Removing redundant alternatives preserves every term of the cluster. -/
+theorem reduce_exact [DecidableEq Edge] (meet : Edge → Edge → Edge) (meaning : Edge → Term → Prop)
+    (intersection : ∀ first second term, meaning (meet first second) term ↔ meaning first term ∧ meaning second term)
+    (edges : List Edge) (term : Term) : Denotes meaning (reduce meet edges) term ↔ Denotes meaning edges term := by
+  fun_induction reduce meet edges with
+  | case1 => rfl
+  | case2 edge rest other remaining result ih =>
+    have preserved := ruleOut_exact meet meaning intersection edge rest term
+    rw [result] at preserved
+    exact ih.trans preserved
+  | case3 edge rest remaining result ih =>
+    have preserved := ruleOut_exact meet meaning intersection edge rest term
+    rw [result] at preserved
+    simp only [Option.getD_none, denotes_cons] at preserved
+    simpa only [denotes_cons] using (or_congr Iff.rfl ih).trans preserved

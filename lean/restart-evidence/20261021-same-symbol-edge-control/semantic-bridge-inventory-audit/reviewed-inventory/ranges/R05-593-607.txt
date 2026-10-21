@@ -1,0 +1,15 @@
+/-- Actual checked edge bodies derive scope through rejection or their ordered child requests. -/
+theorem edge_complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (source : InternedConstructorTemplates.State Symbol Guard) (facts : InternedNestedFacts.Facts source)
+    (holds : Guard → Term Symbol → Bool) (request : EdgeRequest Symbol Guard) (scope : EdgeScope source request)
+    (complete : Completes (view source holds) (SourceRecursiveIntersectionNative.edgeSemantic holds request))
+    (state : Checked width) (valid : Good state) (scopedCache : Scoped state.native)
+    (semantic : SemanticReady state.native.machine.heap) (ready : EdgeReady state.native.machine request)
+    (growth : Grows source state.native.machine.heap) (history : Extends source.nodes.issued state.native.machine.heap.nodes.issued)
+    (active : ActiveAbove (view source holds) holds
+      (requiredFuel (view source holds) (SourceRecursiveIntersectionNative.edgeSemantic holds request) complete) state.native)
+    (ranges : WordRanges (.edgeBody request .pure) state) :
+    Returned (.edgeBody request .pure) state (fun after value => EdgeResident after.heap value) (fun _ value => EdgeLaw request value) := by
+  exact (source_bodies source facts holds
+    (requiredFuel (view source holds) (SourceRecursiveIntersectionNative.edgeSemantic holds request) complete + 1)).edges
+    request scope complete (Nat.lt_succ_self _) state valid scopedCache semantic ready growth history active ranges

@@ -1,0 +1,14 @@
+structure Contextual (view : IntersectSchedule.View Symbol) (model : IntersectSchedule.InputMeaning view)
+    (ranked : IntersectSchedule.RankedInput view model.valid) (holds : Guard → Term Symbol → Bool)
+    (state : Native width Symbol Guard) : Prop where
+  nodes : Returned (NodeLaw view model ranked holds) state.nodes
+  edges : Returned (EdgeLaw view model ranked holds) state.edges
+
+section Lifecycle
+variable (view : IntersectSchedule.View Symbol) (model : IntersectSchedule.InputMeaning view)
+  (ranked : IntersectSchedule.RankedInput view model.valid) (holds : Guard → Term Symbol → Bool)
+
+/-- Empty tables need no supplied completed contextual answer. -/
+theorem initial_contextual (width : Nat) (machine : Machine Symbol Guard) :
+    Contextual view model ranked holds (initial width machine) :=
+  ⟨returned_empty _, returned_empty _⟩

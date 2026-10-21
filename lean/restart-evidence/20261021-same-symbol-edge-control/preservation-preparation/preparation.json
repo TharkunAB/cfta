@@ -1,0 +1,82 @@
+{
+  "state": "FROZEN_SOURCE_ONLY_PREPARATION_WITH_PENDING_SELECTION_GATE",
+  "original_root_path": "lean/restart-evidence/20261021-cold-finite-warm-calls/verify-preservation.py",
+  "original_sha256": "66965247bd2be685cd35996756c53a92e8022e212e892530bfd07ae20e486f1a",
+  "source_sha256": "5cc572afa76deac05d9cf3492f06ad6d55008e3fa018606d390ac7d0b0caabf5",
+  "source_lines": 114,
+  "hard_stop": 130,
+  "baseline_entries": 75687,
+  "baseline_sha256": "63fd63261405bfbf0a681dc58048b172e90592586ac994f6f2b460e560f80200",
+  "starting_head": "e03b78047a647ba1f7c99ec0d4d1c16c8f188b64",
+  "audit_original_sha256": "54c43b5a02ca28f66963385976ae3e3846d903b5294d9ecca7dc476d5c137901",
+  "audit_original_lines": 3112,
+  "predecessor_registries": 290,
+  "predecessor_entries": 1384,
+  "next_registries": 291,
+  "next_entries": 1385,
+  "archive_overrides": 5,
+  "candidate_status": "UNCHECKED REPAIR V4; not accepted by this preparation",
+  "candidate_sha256": "062815f1619dce95fac323ce8bfdaebdf11252728516503d6e9ac3c87b034141",
+  "candidate_lines": 334,
+  "gate_template": "selected-source-gate.template.json",
+  "gate_required_at_execution": "selected-source-gate.json with ROOT_ACCEPTED and actual selected source pins",
+  "changes": [
+    {
+      "old": "assert len(base) == 74266",
+      "new": "assert len(base) == 75687",
+      "occurrences": 1
+    },
+    {
+      "old": "SourceCurrentColdFiniteWarmCalls",
+      "new": "SourceCurrentSameSymbolEdgeControl",
+      "occurrences": 3
+    },
+    {
+      "old": "expected = {\n    'lean/MicroCFTA/SourceCurrentSameSymbolEdgeControl.lean': ('e4665b0bb522ec88f1925fe6bc360b76e9e4bdfbe6192210ac708a3097a20cc5', int('157'))}",
+      "new": "gate = json.loads((HERE / 'selected-source-gate.json').read_text())\nassert gate['status'] == 'ROOT_ACCEPTED'\nassert gate['path'] == 'lean/MicroCFTA/SourceCurrentSameSymbolEdgeControl.lean'\nassert isinstance(gate['lines'], int) and gate['lines'] > 0\nassert sha(HERE / gate['snapshot']) == gate['sha256']\nexpected = {gate['path']: (gate['sha256'], gate['lines'])}",
+      "occurrences": 1
+    },
+    {
+      "old": "notes-current-cold-finite-warm-calls.md",
+      "new": "notes-current-same-symbol-edge-control.md",
+      "occurrences": 2
+    },
+    {
+      "old": "93f3d0ad7a15196177d4961bcb49092cda94b0e1",
+      "new": "e03b78047a647ba1f7c99ec0d4d1c16c8f188b64",
+      "occurrences": 1
+    },
+    {
+      "old": "d11e901227fa107e2b36ebd5a76f96f1f89f7f8f697e39be2907011648cf9487",
+      "new": "54c43b5a02ca28f66963385976ae3e3846d903b5294d9ecca7dc476d5c137901",
+      "occurrences": 1
+    },
+    {
+      "old": "== 3111",
+      "new": "== 3112",
+      "occurrences": 1
+    },
+    {
+      "old": "assert len(registries) == 289 and sum(pin['checked'] for pin in registries.values()) == 1383",
+      "new": "assert len(registries) == 290 and sum(pin['checked'] for pin in registries.values()) == 1384",
+      "occurrences": 1
+    },
+    {
+      "old": "20261021-finite-warm-calls/frozen-modules.json",
+      "new": "20261021-cold-finite-warm-calls/frozen-modules.json",
+      "occurrences": 2
+    },
+    {
+      "old": "assert len(frozen) == 290 and sum(pin['checked'] for pin in frozen.values()) == 1384",
+      "new": "assert len(frozen) == 291 and sum(pin['checked'] for pin in frozen.values()) == 1385",
+      "occurrences": 1
+    },
+    {
+      "old": "new_cold_finite_calls_absent_baseline=True",
+      "new": "new_same_symbol_edge_control_absent_baseline=True",
+      "occurrences": 1
+    }
+  ],
+  "verifier_executions": 0,
+  "lean_runtime_capped_git_network_actions": 0
+}

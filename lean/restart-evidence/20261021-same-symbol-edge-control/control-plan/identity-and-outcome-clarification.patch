@@ -1,0 +1,20 @@
+--- history-before-identity-endpoint/note.md
++++ note.md
+@@ -4,7 +4,7 @@
+ The same-symbol key is the ORIGINAL ordered pair of Edge identities in the symbol-type-specific family. Haskell Edge equality/hash/order use EdgeId. It has no domain coordinate or new bit-width cast. [S02:90–128;S03:196–232;S04:180–216]
+ Lookup installs the lazy result thunk BEFORE its body is forced. Cache.insertHashed keeps the first writer and reads its winner back outside the atomic update. Publication is not a post-body table insert. [S02:13–21,90–93;S03:134–157]
+ Proposed full state is the existing SourceEqualityNativeDemand.State plus ONE distinct typed logical thunk table for same-symbol requests/results. Retain the existing native node/domain-edge tables, constructor/domain/binder heaps and all equality-operation caches. [S05:24–49;S13:16–71]
+-A captured request retains both complete original edge records. A key-link invariant must recover those records from resident identity coherence; pair-key equality alone is not full-record equality.
++A captured request retains both complete original edge records. Reuse InternedEdgeResidency.edge_identity_unique under SAME-heap Coherent and EdgeResident facts to recover records from identity equality; no new equality helper is needed. [S15:157–166]
+ Proposed controls are pair-call, suspended native-body control and a finite same-symbol finish-handle stack. This is a design inventory, not a proposed public Lean API.
+ At pair-call, use lookupOrInsert on the original ordered key, then demand that exact handle. A ready hit returns its original value with the entire full state unchanged; it does not replay historical constructor or equality effects. [S08:53–73,163–198;S09:123–138]
+ An evaluating hit remains a distinct same-symbol busy observation; an absent cell remains an explicit protocol blockage. Neither is a domain-edge busy key, nor an established Haskell exception or impossibility theorem.
+@@ -15,7 +15,7 @@
+ Preserve the literal source guards: there is no extra equal-edge shortcut. A miss with equal operands still enters the edge body; equal-symbol input is a real cluster fact, not a new worker branch. [S01:340–370,392–402]
+ Arity mismatch constructs the exact empty-edge sentinel without children. Equal arity loads the original guards, records actual conjunction/allocation effects, then rejects to the sentinel or emits the ordered zipped child calls and final mkEdge. [S04:541–568;S05:58–84]
+ On successful direct-body return, apply generic finish to the SAME running same-symbol handle, not native finishEdge. That operation changes the cell status, not the key or captured request. [S08:189–198;S09:101–116]
+-Every yielded/blocked/failed/constraintError outcome retains its actual full native/equality state, same-symbol table, remaining native control and finish stack. Do not finish a cell or roll back allocations on a partial/error outcome. [S05:39–56,104–114]
++Every yielded/blocked/failed/constraintError outcome retains its actual full native/equality state and same-symbol table. Yielded/blocked outcomes also retain remaining native control and finish stack; errors must not finish cells or roll back allocations. [S05:39–56,104–114]
+ FlatMemoThunk lookup/demand/finish, CellSpec, demand_spec, finish_spec and returned/running retention are reusable typed lifecycle primitives. They do not establish a physical HashMap/IORef/concurrent-runtime refinement. [S08–S10]
+ SymbolicCanonicalOrder.orderWorker_exact proves at most one numeric swap. Its canonical-key memo theorem is not the actual original-pair publication protocol and must not replace it. Haskell Int EdgeId order still needs its actual representation correspondence. [S11:13–43;S04:180–216]
+ The eager compileEdge is only an accepted-code comparison: children_eq_of_conjoin needs the SAME actual field loads/readbacks and conjunction; native `.edgeBody` preserves rejection before children exist. Do not substitute compileEdge for the whole wrapper. [S06:45–51,131–138;S07:23–60]

@@ -1,0 +1,334 @@
+import MicroCFTA.SourceEqualityNativeDemandTrace
+import MicroCFTA.FlatMemoThunkReturned
+import MicroCFTA.IntersectionEmptyDomain
+
+namespace MicroCFTA.SourceCurrentSameSymbolEdgeControl
+open InternedConstructorTemplates
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Edge" => EdgeValue Symbol Guard
+variable {width : Nat}
+
+/-!
+# Same-symbol edge comparison
+
+Publish the original pair before demand and numeric operand ordering.
+Keep the pair memo separate from the native memo tables.
+A completed miss supplies its body trace and captured operands.
+Completion and semantic intersection require separate proofs.
+-/
+
+/-- A comparison retains the complete checked state and a separate pair memo. -/
+structure State (width : Nat) : Type 1 where
+  /-- Retain the native machine and all equality operation caches. -/
+  checked : SourceEqualityNativeDemand.State width
+  /-- Store the captured operand pair and its eventual returned edge. -/
+  memo : FlatMemoThunk.State (Nat × Nat) (Edge × Edge) Edge
+
+/-- Each phase retains the handles that must receive the returned edge. -/
+inductive Control : Type 1 where
+  /-- Publish the original pair before demand. -/
+  | call (request : Edge × Edge) (pending : List Nat)
+  /-- Observe the captured cell without replacing its request. -/
+  | demand (handle : Nat) (pending : List Nat)
+  /-- Order the captured operands after publication and demand. -/
+  | order (handle : Nat) (request : Edge × Edge) (pending : List Nat)
+  /-- Execute the existing native body with its complete checked state. -/
+  | native (control : SourceEqualityNativeDemand.Control Edge) (pending : List Nat)
+  /-- Finish each pending pair cell with the actual returned edge. -/
+  | ret (value : Edge) (pending : List Nat)
+
+/-- Pair-memo blockages remain distinct from native blockages. -/
+inductive Blocked where
+  /-- Report a handle with no allocated cell. -/
+  | absent (handle : Nat)
+  /-- Report a cell that is already under evaluation. -/
+  | busy (handle : Nat)
+  /-- Report the original native blockage. -/
+  | native (reason : SourceEqualityNativeDemand.Blocked)
+
+/-- Every outcome retains the actual current state. -/
+inductive Outcome (width : Nat) : Type 1 where
+  /-- Retain the next control and its full state. -/
+  | yielded (control : Control) (state : State width)
+  /-- Return the completed edge and its full state. -/
+  | done (value : Edge) (state : State width)
+  /-- Retain the native failure and its full state. -/
+  | failed (reason : SourceRecursiveIntersectionKernel.Failure) (state : State width)
+  /-- Retain the constraint error and its full state. -/
+  | constraintError (message : String) (state : State width)
+  /-- Retain the blockage, exact remaining control and full state. -/
+  | blocked (reason : Blocked) (control : Control) (state : State width)
+
+/-- Advance one pair-memo or native step without resetting either state. -/
+noncomputable def step [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (control : Control) (state : State width) : Outcome width :=
+  match control with
+  | .call request pending =>
+      let selected := FlatMemoThunk.lookupOrInsert
+        (request.1.entry.identity, request.2.entry.identity) request state.memo
+      .yielded (.demand selected.1 pending) {state with memo := selected.2}
+  | .demand handle pending =>
+      let observed := FlatMemoThunk.demand handle state.memo
+      let after := {state with memo := observed.2}
+      match observed.1 with
+      | .absent => .blocked (.absent handle) control after
+      | .busy => .blocked (.busy handle) control after
+      | .ready value => .yielded (.ret value pending) after
+      | .evaluate request => .yielded (.order handle request pending) after
+  | .order handle request pending =>
+      if request.2.entry.identity < request.1.entry.identity then
+        .yielded (.call (request.2, request.1) (handle :: pending)) state
+      else .yielded (.native (.edgeBody
+        ⟨IntersectionEmptyDomain.emptyDomain, request.1, request.2⟩ .pure) (handle :: pending)) state
+  | .native body pending =>
+      match SourceEqualityNativeDemand.step body state.checked with
+      | .yielded next after => .yielded (.native next pending) {state with checked := after}
+      | .done value after => .yielded (.ret value pending) {state with checked := after}
+      | .failed failure after => .failed failure {state with checked := after}
+      | .constraintError message after => .constraintError message {state with checked := after}
+      | .blocked reason next after =>
+          .blocked (.native reason) (.native next pending) {state with checked := after}
+  | .ret value [] => .done value state
+  | .ret value (handle :: pending) =>
+      .yielded (.ret value pending) {state with memo := FlatMemoThunk.finish handle value state.memo}
+
+/-- Run at most the supplied number of control steps. -/
+noncomputable def execute [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] :
+    Nat → Control → State width → Outcome width
+  | 0, control, state => .yielded control state
+  | fuel + 1, control, state =>
+      match step control state with
+      | .yielded next after => execute fuel next after
+      | .done value after => .done value after
+      | .failed reason after => .failed reason after
+      | .constraintError message after => .constraintError message after
+      | .blocked reason next after => .blocked reason next after
+
+private abbrev Memo := FlatMemoThunk.State (Nat × Nat) (Edge × Edge) Edge
+private def pairKey (request : Edge × Edge) : Nat × Nat :=
+  (request.1.entry.identity, request.2.entry.identity)
+private abbrev MemoValid (memo : Memo) : Prop :=
+  FlatMemoThunk.Valid (fun request key => pairKey request = key) (fun _ => True) memo
+
+private theorem tail_done [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (control next : Control) (before middle after : State width) (result : Edge)
+    (one : step control before = .yielded next middle)
+    (done : execute fuel control before = .done result after) :
+    ∃ rest, execute rest next middle = .done result after := by
+  cases fuel with
+  | zero => cases done
+  | succ fuel => exact ⟨fuel, by simpa only [execute, one] using done⟩
+
+private theorem finish_table (handle : Nat) (value : Edge) (memo : Memo) :
+    (FlatMemoThunk.finish handle value memo).table = memo.table := by
+  cases stored : memo.cells handle with
+  | none => simp only [FlatMemoThunk.finish, stored]
+  | some cell =>
+      cases cell with
+      | mk request status =>
+          cases status <;> simp only [FlatMemoThunk.finish, stored, FlatMemoThunk.setStatus]
+
+private theorem ret_done [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (value result : Edge) (pending : List Nat) (before after : State width)
+    (done : execute fuel (.ret value pending) before = .done result after) :
+    value = result ∧ after.checked = before.checked ∧
+      after.memo = pending.foldl (fun memo handle => FlatMemoThunk.finish handle value memo) before.memo := by
+  induction fuel generalizing pending before with
+  | zero => cases done
+  | succ fuel ih =>
+      cases pending with
+      | nil =>
+          have same : value = result ∧ before = after := by
+            simpa only [execute, step, Outcome.done.injEq] using done
+          rcases same with ⟨rfl, rfl⟩
+          exact ⟨rfl, rfl, rfl⟩
+      | cons handle pending =>
+          have tail : execute fuel (.ret value pending)
+              {before with memo := FlatMemoThunk.finish handle value before.memo} = .done result after := by
+            simpa only [execute, step] using done
+          obtain ⟨same, checked, memo⟩ := ih pending _ tail
+          exact ⟨same, checked, by simpa only [List.foldl] using memo⟩
+
+private theorem native_done [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (body : SourceEqualityNativeDemand.Control Edge) (pending : List Nat)
+    (before after : State width) (result : Edge)
+    (done : execute fuel (.native body pending) before = .done result after) :
+    ∃ count rest value current,
+      SourceEqualityNativeDemand.Steps count body before.checked (.code (.pure value)) current ∧
+      execute rest (.ret value pending) {before with checked := current} = .done result after := by
+  induction fuel generalizing body before with
+  | zero => cases done
+  | succ fuel ih =>
+      cases one : SourceEqualityNativeDemand.step body before.checked with
+      | yielded next middle =>
+          have tail : execute fuel (.native next pending) {before with checked := middle} = .done result after := by
+            simpa only [execute, step, one] using done
+          obtain ⟨count, rest, value, current, trace, last⟩ := ih next _ tail
+          exact ⟨count + 1, rest, value, current, .cons _ _ _ _ _ _ _ one trace, last⟩
+      | done value current =>
+          have same := (SourceEqualityNativeDemand.step_done_iff body before.checked current value).mp one
+          refine ⟨0, fuel, value, current, ?_, ?_⟩
+          · rw [same.1, same.2]
+            exact .refl _ _
+          · simpa only [execute, step, one] using done
+      | failed reason current => simp only [execute, step, one] at done; cases done
+      | constraintError message current => simp only [execute, step, one] at done; cases done
+      | blocked reason next current => simp only [execute, step, one] at done; cases done
+
+private theorem start_miss [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (request : Edge × Edge) (pending : List Nat)
+    (before after : State width) (result : Edge) (valid : MemoValid before.memo)
+    (missing : before.memo.table (pairKey request) = none)
+    (done : execute fuel (.call request pending) before = .done result after) :
+    ∃ rest current, execute rest (.order before.memo.next request pending) current = .done result after ∧
+      current.checked = before.checked ∧ MemoValid current.memo ∧
+      FlatMemoThunk.Running before.memo current.memo ∧ FlatMemoThunk.Returned before.memo current.memo ∧
+      current.memo.table = Cache.put before.memo.table (pairKey request) before.memo.next ∧
+      current.memo.cells before.memo.next = some ⟨request, .evaluating⟩ ∧
+      current.memo.next = before.memo.next + 1 := by
+  let published := (FlatMemoThunk.lookupOrInsert (pairKey request) request before.memo).2
+  let running := FlatMemoThunk.setStatus before.memo.next .evaluating published
+  have allocated := FlatMemoThunk.lookup_miss (pairKey request) request before.memo missing
+  have stored : published.cells before.memo.next = some ⟨request, .suspended⟩ := allocated.2.2
+  have demanded : FlatMemoThunk.demand before.memo.next published = (.evaluate request, running) := by
+    simp only [FlatMemoThunk.demand, stored, running]
+  have looked : step (.call request pending) before =
+      .yielded (.demand before.memo.next pending) {before with memo := published} := by
+    change Outcome.yielded
+      (.demand (FlatMemoThunk.lookupOrInsert (pairKey request) request before.memo).1 pending)
+      {before with memo := published} = _
+    exact congrArg (fun handle => Outcome.yielded (.demand handle pending)
+      {before with memo := published}) allocated.1
+  obtain ⟨remaining, tail⟩ := tail_done fuel _ _ _ _ after result looked done
+  have started : step (.demand before.memo.next pending) {before with memo := published} =
+      .yielded (.order before.memo.next request pending) {before with memo := running} := by
+    simp only [step, demanded]
+  obtain ⟨rest, last⟩ := tail_done remaining _ _ _ _ after result started tail
+  have publishedValid : MemoValid published :=
+    FlatMemoThunk.lookup_valid (pairKey request) request before.memo _ _ valid rfl trivial
+  have runningValid : MemoValid running := by
+    simpa only [demanded] using FlatMemoThunk.demand_valid before.memo.next published _ publishedValid
+  have retainedRunning : FlatMemoThunk.Running before.memo running := by
+    apply (FlatMemoThunk.lookup_running (pairKey request) request before.memo _ valid).trans
+    simpa only [demanded] using FlatMemoThunk.demand_running before.memo.next published
+  have retainedReturned : FlatMemoThunk.Returned before.memo running := by
+    apply (FlatMemoThunk.lookup_returned (pairKey request) request before.memo _ valid).trans
+    simpa only [demanded] using FlatMemoThunk.demand_returned before.memo.next published
+  refine ⟨rest, {before with memo := running}, last, rfl, runningValid,
+    retainedRunning, retainedReturned, ?_, ?_, ?_⟩
+  · simp only [running, FlatMemoThunk.setStatus, stored]
+    simp only [published, FlatMemoThunk.lookupOrInsert, missing]
+  · exact FlatMemoThunk.setStatus_cell before.memo.next .evaluating published _ stored
+  · simp only [running, FlatMemoThunk.setStatus, stored]
+    simp only [published, FlatMemoThunk.lookupOrInsert, missing]
+
+/-- Read the native trace and completed pair cells from a successful miss. -/
+theorem miss_readback [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (left right result : Edge) (before after : State width)
+    (valid : FlatMemoThunk.Valid
+      (fun (request : Edge × Edge) (key : Nat × Nat) =>
+        (request.1.entry.identity, request.2.entry.identity) = key)
+      (fun _ => True) before.memo)
+    (missing : before.memo.table (left.entry.identity, right.entry.identity) = none)
+    (reverseMissing : before.memo.table (right.entry.identity, left.entry.identity) = none)
+    (done : execute fuel (.call (left, right) []) before = .done result after) :
+    let ordered := if right.entry.identity < left.entry.identity then (right, left) else (left, right)
+    ∃ nativeFuel handle,
+      SourceEqualityNativeDemand.Steps nativeFuel
+        (.edgeBody ⟨IntersectionEmptyDomain.emptyDomain, ordered.1, ordered.2⟩ .pure)
+        before.checked (.code (.pure result)) after.checked ∧
+      after.memo.table (left.entry.identity, right.entry.identity) = some handle ∧
+      after.memo.cells handle = some ⟨(left, right), .returned result⟩ ∧
+      FlatMemoThunk.Returned before.memo after.memo ∧
+      (right.entry.identity < left.entry.identity →
+        ∃ reversedHandle, reversedHandle ≠ handle ∧
+          after.memo.table (right.entry.identity, left.entry.identity) = some reversedHandle ∧
+          after.memo.cells reversedHandle = some ⟨(right, left), .returned result⟩) := by
+  obtain ⟨remaining, current, tail, checked, currentValid, _, retained, table, cell, fresh⟩ :=
+    start_miss fuel (left, right) [] before after result valid missing done
+  dsimp only
+  by_cases reversed : right.entry.identity < left.entry.identity
+  · simp only [reversed, ↓reduceIte]
+    have different : pairKey (right, left) ≠ pairKey (left, right) := by
+      intro same
+      have identities := congrArg Prod.fst same
+      simp only [pairKey] at identities
+      omega
+    have missingReverse : current.memo.table (pairKey (right, left)) = none := by
+      rw [table]
+      rw [Cache.put, if_neg different]
+      simpa only [pairKey] using reverseMissing
+    have one : step (.order before.memo.next (left, right) []) current =
+        .yielded (.call (right, left) [before.memo.next]) current := by
+      simp only [step, reversed, ↓reduceIte]
+    obtain ⟨remaining, reverseCall⟩ := tail_done remaining _ _ _ _ after result one tail
+    obtain ⟨nextFuel, next, nextTail, nextChecked, _, stillRunning, nextReturned, nextTable, nextCell, _⟩ :=
+      start_miss remaining (right, left) [before.memo.next] current after result currentValid missingReverse reverseCall
+    have forward : ¬ left.entry.identity < right.entry.identity := by omega
+    have nextOne : step (.order current.memo.next (right, left) [before.memo.next]) next =
+        .yielded (.native (.edgeBody ⟨IntersectionEmptyDomain.emptyDomain, right, left⟩ .pure)
+          [current.memo.next, before.memo.next]) next := by
+      simp only [step, forward, ↓reduceIte]
+    obtain ⟨nativeFuel, nativeRun⟩ := tail_done nextFuel _ _ _ _ after result nextOne nextTail
+    obtain ⟨count, rest, value, finalChecked, trace, retRun⟩ :=
+      native_done nativeFuel _ _ next after result nativeRun
+    obtain ⟨same, finalState, finalMemo⟩ := ret_done rest value result _ _ after retRun
+    subst value
+    have memo : after.memo = FlatMemoThunk.finish before.memo.next result
+        (FlatMemoThunk.finish current.memo.next result next.memo) := by
+      simpa only [List.foldl] using finalMemo
+    have distinct : current.memo.next ≠ before.memo.next := by omega
+    have originalRunning := stillRunning before.memo.next (left, right) cell
+    have originalStill := FlatMemoThunk.finish_running_other current.memo.next before.memo.next result
+      next.memo (left, right) (Ne.symm distinct) originalRunning
+    have originalDone := FlatMemoThunk.finish_evaluating before.memo.next result _ (left, right) originalStill
+    have reverseDone := FlatMemoThunk.finish_evaluating current.memo.next result next.memo (right, left) nextCell
+    have reverseFinal := FlatMemoThunk.finish_returned before.memo.next result _
+      current.memo.next (right, left) result reverseDone
+    have originalTable : next.memo.table (pairKey (left, right)) = some before.memo.next := by
+      rw [nextTable]
+      simp only [Cache.put, ite_eq_right (Ne.symm different)]
+      simp [table, Cache.put]
+    have reverseTable : next.memo.table (pairKey (right, left)) = some current.memo.next := by
+      simp [nextTable, Cache.put]
+    refine ⟨count, before.memo.next, ?_, ?_, ?_, ?_, ?_⟩
+    · rw [nextChecked, checked] at trace
+      simpa only [finalState] using trace
+    · simpa only [memo, finish_table, pairKey] using originalTable
+    · rw [memo]
+      exact originalDone
+    · rw [memo]
+      exact retained.trans (nextReturned.trans
+        ((FlatMemoThunk.finish_returned current.memo.next result next.memo).trans
+          (FlatMemoThunk.finish_returned before.memo.next result _)))
+    · intro _
+      refine ⟨current.memo.next, distinct, ?_, ?_⟩
+      · simpa only [memo, finish_table, pairKey] using reverseTable
+      · rw [memo]
+        exact reverseFinal
+  · simp only [reversed, ↓reduceIte]
+    have one : step (.order before.memo.next (left, right) []) current =
+        .yielded (.native (.edgeBody ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩ .pure)
+          [before.memo.next]) current := by
+      simp only [step, reversed, ↓reduceIte]
+    obtain ⟨nativeFuel, nativeRun⟩ := tail_done remaining _ _ _ _ after result one tail
+    obtain ⟨count, rest, value, finalChecked, trace, retRun⟩ :=
+      native_done nativeFuel _ _ current after result nativeRun
+    obtain ⟨same, finalState, finalMemo⟩ := ret_done rest value result _ _ after retRun
+    subst value
+    have memo : after.memo = FlatMemoThunk.finish before.memo.next result current.memo := by
+      simpa only [List.foldl] using finalMemo
+    refine ⟨count, before.memo.next, ?_, ?_, ?_, ?_, ?_⟩
+    · rw [checked] at trace
+      simpa only [finalState] using trace
+    · have stored := congrFun table (pairKey (left, right))
+      simpa [memo, finish_table, pairKey, Cache.put] using stored
+    · rw [memo]
+      exact FlatMemoThunk.finish_evaluating before.memo.next result current.memo (left, right) cell
+    · rw [memo]
+      exact retained.trans (FlatMemoThunk.finish_returned before.memo.next result current.memo)
+    · intro impossible
+      exact False.elim impossible
+
+end MicroCFTA.SourceCurrentSameSymbolEdgeControl

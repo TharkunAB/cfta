@@ -1,0 +1,45 @@
+import hashlib
+import json
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parents[2]
+name = 'SourceCurrentSameSymbolEdgeControl'
+source = (HERE / (name + '.lean')).read_bytes()
+sha = hashlib.sha256(source).hexdigest()
+assert sha == 'dbf416168635ecc34effe17891f557f31ec14df2f7cb368c52863d69a6174559'
+assert len(source.splitlines()) == 334
+assert source == (HERE / 'same-symbol-edge-strict-3.source.lean').read_bytes()
+assert (HERE / 'same-symbol-edge-strict-3.log').read_bytes() == b''
+assert json.loads((HERE / 'same-symbol-edge-public-1.json').read_text())['exit_code'] == 0
+review = json.loads((HERE / 'root-full-review.json').read_text())
+assert review['source_sha256'] == sha
+assert review['complete_public_type_root_review'] == 'CLEAR'
+assert review['independent_complete_public_type_review'] == 'CLEAR'
+assert review['official_install_authorized'] is True
+target = ROOT / ('lean/MicroCFTA/' + name + '.lean')
+assert not target.exists()
+audit = ROOT / 'lean/MicroCFTA/Audit.lean'
+original = audit.read_bytes()
+assert hashlib.sha256(original).hexdigest() == '54c43b5a02ca28f66963385976ae3e3846d903b5294d9ecca7dc476d5c137901'
+assert len(original.splitlines()) == 3112
+archive = HERE / 'original-sources'
+archive.mkdir()
+(archive / 'Audit.original.lean.txt').write_bytes(original)
+addition = b'import MicroCFTA.SourceCurrentSameSymbolEdgeControl\n'
+assert addition not in original
+target.write_bytes(source)
+audit.write_bytes(original.replace(b'/-!', addition + b'/-!', 1))
+path = 'lean/MicroCFTA/' + name + '.lean'
+selected = {path: dict(sha256=sha, lines=334, strict='same-symbol-edge-strict-3', full='same-symbol-edge-public-1')}
+(HERE / 'selected-sources.json').write_text(json.dumps(selected, indent=2) + '\n')
+(HERE / 'frozen-modules.json').write_text(json.dumps({name: sha}, indent=2) + '\n')
+snapshots = HERE / 'selected-sources'
+snapshots.mkdir()
+(snapshots / (name + '.lean')).write_bytes(source)
+(HERE / 'selected-source-gate.json').write_text(json.dumps(dict(status='ROOT_ACCEPTED', path=path,
+    sha256=sha, lines=334, snapshot='selected-sources/' + name + '.lean'), indent=2) + '\n')
+(HERE / 'original-source-index.json').write_text(json.dumps({'sources': [dict(path='lean/MicroCFTA/Audit.lean',
+    snapshot='original-sources/Audit.original.lean.txt', lines=3112,
+    sha256=hashlib.sha256(original).hexdigest())]}, indent=2) + '\n')
+print(json.dumps({'status': 'PASS', 'installed_module': path, 'audit_only_new_import': True}))

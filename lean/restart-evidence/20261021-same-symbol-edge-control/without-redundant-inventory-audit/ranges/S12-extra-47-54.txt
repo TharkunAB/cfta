@@ -1,0 +1,8 @@
+/-- Actual physical traces compose at the same returned control and state. -/
+theorem Trace.trans [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (first : Trace fuel control state middle current) (second : Trace extra middle current next after) :
+    Trace (fuel + extra) control state next after := by
+  induction first with
+  | refl => simpa only [Nat.zero_add] using second
+  | cons start before resume reached final result count inputs one rest ih =>
+      simpa only [Nat.succ_add] using Trace.cons start before resume reached next after (count + extra) inputs one (ih second)

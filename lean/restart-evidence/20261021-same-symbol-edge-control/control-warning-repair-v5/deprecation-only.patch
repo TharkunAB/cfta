@@ -1,0 +1,11 @@
+--- warned-strict2-source.lean.txt
++++ SourceCurrentSameSymbolEdgeControl.lean
+@@ -257,7 +257,7 @@
+       omega
+     have missingReverse : current.memo.table (pairKey (right, left)) = none := by
+       rw [table]
+-      rw [Cache.put, if_neg different]
++      rw [Cache.put, ite_eq_right different]
+       simpa only [pairKey] using reverseMissing
+     have one : step (.order before.memo.next (left, right) []) current =
+         .yielded (.call (right, left) [before.memo.next]) current := by

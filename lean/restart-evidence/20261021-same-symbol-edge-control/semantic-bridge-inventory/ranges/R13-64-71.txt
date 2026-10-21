@@ -1,0 +1,8 @@
+/-- Every actual physical prefix spends at most its original credit. -/
+theorem prefix_bound (source : InternedConstructorTemplates.State Symbol Guard) (facts : InternedNestedFacts.Facts source)
+    (holds : Guard → Language.Term Symbol → Bool) {control next : Control A} {before after : Checked width}
+    (actual : Trace fuel control before next after) (good : Good before) (fields : Fields control before)
+    (sourceGrowth : Grows source before.native.machine.heap)
+    (sourceHistory : Extends source.nodes.issued before.native.machine.heap.nodes.issued)
+    (certificate : ControlAt source holds control before amount post) :
+    ∃ remaining, fuel + remaining ≤ amount ∧ ControlAt source holds next after remaining post := by

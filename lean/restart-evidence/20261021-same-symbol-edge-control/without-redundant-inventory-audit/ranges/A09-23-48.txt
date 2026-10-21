@@ -1,0 +1,26 @@
+/-- One actual return retains the fixed model, closedness, and original operand language. -/
+structure Receipt [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (source : InternedConstructorTemplates.State Symbol Guard)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inputs : FiniteInput (view source (SourceEqualityPCSGuard.holds formulas solver)))
+    (fuel : Nat) (left right : Value Symbol Guard) (before : Checked width)
+    (value : Value Symbol Guard) (after : Checked width) : Prop
+    extends toContextualReceipt : SourceCurrentAllocatedNativeContextualCompletion.Receipt
+      (semanticView := view source (SourceEqualityPCSGuard.holds formulas solver))
+      (model := finiteInputMeaning (view source (SourceEqualityPCSGuard.holds formulas solver)) inputs)
+      (ranked := finiteRankedInput (view source (SourceEqualityPCSGuard.holds formulas solver)) inputs)
+      (semanticHolds := SourceEqualityPCSGuard.holds formulas solver)
+      fuel (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before value after
+      (fun final result => Available final.heap result)
+      (fun _ result => SourceCurrentAllocatedNativeContextCache.NodeLaw
+        (view source (SourceEqualityPCSGuard.holds formulas solver))
+        (finiteInputMeaning (view source (SourceEqualityPCSGuard.holds formulas solver)) inputs)
+        (finiteRankedInput (view source (SourceEqualityPCSGuard.holds formulas solver)) inputs)
+        (SourceEqualityPCSGuard.holds formulas solver) ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩ result) where
+  scopedCache : SourceCurrentAllocatedNativeScopeCache.Scoped after.native
+  idle : SourceRecursiveIntersectionNative.Idle after.native
+  closed : value.free = []
+  meaning : ∀ output term,
+    InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) output value term ↔
+      InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) output left term ∧
+      InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) output right term

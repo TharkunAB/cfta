@@ -1,0 +1,48 @@
+/-- An exact closed return retains causal admission for all actual final native cells. -/
+structure Receipt [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (source : InternedConstructorTemplates.State Symbol Guard)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inputs : FiniteInput (view source (SourceEqualityPCSGuard.holds formulas solver)))
+    (fuel : Nat) (left right : Value Symbol Guard) (before : Checked width)
+    (value : Value Symbol Guard) (after : Checked width) : Prop
+    extends toWarmReceipt : SourceCurrentAllocatedNativeWarmQuery.Receipt
+      source formulas solver inputs fuel left right before value after where
+  covered : Covered inputs after.native
+
+/-- Fixed-model query execution derives admission of each newly published internal request. -/
+theorem query_complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (source : InternedConstructorTemplates.State Symbol Guard) (facts : InternedNestedFacts.Facts source)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inputs : FiniteInput (view source (SourceEqualityPCSGuard.holds formulas solver)))
+    (state : Checked width) (good : Good state)
+    (contextual : SourceCurrentAllocatedNativeContextCache.Contextual
+      (view source (SourceEqualityPCSGuard.holds formulas solver))
+      (finiteInputMeaning (view source (SourceEqualityPCSGuard.holds formulas solver)) inputs)
+      (finiteRankedInput (view source (SourceEqualityPCSGuard.holds formulas solver)) inputs)
+      (SourceEqualityPCSGuard.holds formulas solver) state.native)
+    (covered : Covered inputs state.native)
+    (scopedCache : SourceCurrentAllocatedNativeScopeCache.Scoped state.native)
+    (semantic : SemanticReady state.native.machine.heap) (idle : SourceRecursiveIntersectionNative.Idle state.native)
+    (growth : Grows source state.native.machine.heap)
+    (history : Extends source.nodes.issued state.native.machine.heap.nodes.issued)
+    (left right : Value Symbol Guard) (leftOriginal : Original left) (rightOriginal : Original right)
+    (leftAvailable : Available source left) (rightAvailable : Available source right)
+    (leftClosed : left.free = []) (rightClosed : right.free = [])
+    (leftValid : inputs.valid (inputOf left)) (rightValid : inputs.valid (inputOf right))
+    (ranges : WordRanges (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) state) :
+    ∃ fuel value after, Receipt source formulas solver inputs fuel left right state value after := by
+  let holds := SourceEqualityPCSGuard.holds formulas solver
+  let request : NodeRequest Symbol Guard := ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩
+  have scope := initial_scope source left right leftOriginal rightOriginal leftAvailable rightAvailable
+  have known : NodeCovered inputs request :=
+    ⟨⟨leftOriginal, rightOriginal, leftValid, rightValid⟩,
+      SourceCurrentAllocatedNativePairAdmission.empty_seen inputs⟩
+  have certificate := SourceCurrentAllocatedNativeAdmissionCode.requestNode_certified
+    source holds inputs request state.native.machine scope known
+  obtain ⟨fuel, value, after, receipt⟩ := SourceCurrentAllocatedNativeWarmQuery.query_complete
+    source facts formulas solver inputs state good contextual scopedCache semantic idle growth history
+    left right leftOriginal rightOriginal leftAvailable rightAvailable leftClosed rightClosed leftValid rightValid ranges
+  have retained := SourceCurrentAllocatedNativeAdmissionTrace.Trace.covered source holds inputs
+    (branches source facts holds inputs) receipt.trace (fun final value => Available final.heap value)
+    good semantic growth history (fun _ => trivial) covered certificate
+  exact ⟨fuel, value, after, receipt, retained.1⟩

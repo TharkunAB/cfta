@@ -1,0 +1,32 @@
+# withoutRedundantEdges inventory audit
+
+The main gap diagnosis is sound. Keep the comparison-cache distinction and existing generated-input producers explicit before selecting a worker or header.
+I read all 24 frozen cuts and the additional indexed definitions. All 12 original full-source hashes and 24 excerpt hashes match live files. All selected ranges are in bounds.
+The actual ruleOut order is common==other, then common==pivot, then recursive retention of other. Equal operands take the first branch. [S01:361–370]
+Haskell Edge Eq and Ord compare edgeId. The first branch removes other; the second promotes other and returns the unvisited suffix. [A01:175–216; S01:349–368]
+Coherent same-heap EdgeResident records already give full-record equality from identity equality. Reuse edge_identity_unique after retaining both inputs and result at the same returned heap. [A14:157–166]
+Both tests demand the same common result identity. A removed comparison must retain its reached memo, operation and heap effects; equality does not justify restoring the old state. [S01:365–402; A05:64–102]
+The note must not identify two distinct memo APIs automatically. intersectEdgeSameSymbol uses a type-indexed binary cache and swaps descending operands. intersectOpenEdge uses a domain-indexed flat cache. [S01:383–402,554–579; A02:101–128]
+memoWith retains a lazy first-winner value. The original ordered key can be published before its body enters the swapped-key call; do not discard either publication from a source-state correspondence. [A02:90–93; A20:133–155; S01:392–396]
+Modeled requestEdge keeps the domain and ordered full operands. Under coherent resident inputs and checked key bounds, swapped unequal rows have distinct native keys. The checked step retains full native and equality-operation state. [A03:19–21; A04:15–25,60–71; A05:24–49,86–102]
+Thus a source-shaped same-symbol worker needs an explicit ordering/cache correspondence or a separately defined modeled boundary. Empty-domain body agreement alone is not same-state Haskell memo refinement.
+The Mu description is correct. nodeEdges exposes unfolded rows; kept is a set of those rows. Each stored body row is unfolded with substFree before membership testing. [S01:144–180,760–769]
+Filter original body rows by that mapped test, not by their raw identities in kept. Equal length returns n; a changed list is rebound with Mu and substFree. [S01:763–769]
+Open local nodes keep alternatives after recursive child/body/union traversal. This does not say the original whole node is unchanged. [S01:96–101,757–770]
+ContextualCompletion.edge_request_complete is a real SAME-control/SAME-state completion producer, including warm demand and protected finish. Its Facts/model/ranks/scope/Completes/Good/contextual/readiness/growth/active/WordRanges premises remain genuine. [S05:576–603]
+Receipt retains its actual trace, Good, machine Extension, heap Keeps, operation Grows, residency and contextual law. Trace composition joins the exact intermediate state. [S05:38–56; S12:47–54,90–111]
+Existing stronger readback pieces were omitted from the small inventory: closed EdgeMeaning and EdgeProduced.spec give physical edge-language iff, but EdgeProduced already contains the law and is not a free producer. [A06:31–61,92–101]
+AcceptedLanguage.edge_exact and edgeMeaning_of_nodes compose complete guards and ordered actual child laws. They do not produce those child laws or scan termination. [A07:63–88,119–138]
+ScopeCompletion.edge_request_complete also retains Scoped and a syntactic result-scope law. It has no matching-symbol premise. Deterministic completed_unique can align two receipts for the SAME control and initial state. [A13:37–49,629–647; A18:20–31; A17:24–34]
+Most importantly, generated closed-operand admission is already implemented for NODE queries. CoveredQuery.generated_complete constructs the enlarged finite inventory and rebases contextual/coverage laws at the SAME populated state. [A08:86–161]
+InventoryState.query_complete exposes the next actual inventory, actual return and retained At. WarmQuery.Receipt adds final closedness, idle, scope and independent physical intersection iff. Do not reset these tables or re-prove this node infrastructure. [A10:84–108; A09:23–48]
+These APIs require the current Good/At/Scoped/SemanticReady/Idle packet, actual available closed operands and WordRanges. They are not a direct edge-scan entry producer. [A08:97–118; A10:84–99]
+ComputedBudget.initial already derives a NODE query's execution and output resources from initial counters, stored mass and explicit numeric room. ResourceForecast supplies finite query-step/advance/reservation laws. Neither is a pass-specific direct edge-scan bound. [A11:61–107; A12:44–99,104–119,157–164]
+WidthTrace.edge_return bounds an already constructed edge trace. WordRanges quantifies every actual yielded prefix. Neither can be supplied from the desired scan success. [S12:125–137; A19:133–148]
+The next honest slice remains a literal ruleOut state-threaded scan after its comparison boundary, compatible current packet and finite resource producer are fixed. No total exact-meet callback or future-success premise substitutes for these pieces.
+The existing abstract reducer and GraphRewrite preserve finite-term languages from supplied exact intersections. They do not establish this physical boundary, Mu body selection or Haskell demand order. [S03:60–101; S04:24–27,67–82]
+The actual name search still locates only the pure RedundantEdges ruleOut/reduce control. It found no concrete stateful ruleOut/dropRedundantEdges/mapNodesStep declaration; this search is not a proof that no differently named API exists.
+Whole-pass traversal, grouping/promotion, canonical reconstruction, Mu correspondence, finite capacity, fixed-point convergence and Haskell refinement remain separate obligations. reduceFully composes this pass with reducePartially. [S02:53–55]
+No new theorem, header, proof body, implementation, termination result or capacity result is claimed by this audit.
+I authored related current-store, resource, closure, rank-envelope and cold adapters. I did not author the contextual edge APIs or abstract RedundantEdges/GraphRewrite proofs. This is an independent inventory audit, not a re-proof of those foundations.
+Only source reads, static comparisons and new audit snapshots ran. No Lean, runtime, capped, Git, network, prepared checker or official/restart edit ran. Frozen H6 publication statements remain unchanged.

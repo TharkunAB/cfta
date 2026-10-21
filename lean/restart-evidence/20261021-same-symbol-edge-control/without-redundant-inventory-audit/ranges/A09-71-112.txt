@@ -1,0 +1,42 @@
+/-- Fixed-model cache invariants admit the next original query and derive its exact closed return. -/
+theorem query_complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (source : InternedConstructorTemplates.State Symbol Guard) (facts : InternedNestedFacts.Facts source)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inputs : FiniteInput (view source (SourceEqualityPCSGuard.holds formulas solver)))
+    (state : Checked width) (valid : Good state)
+    (contextual : SourceCurrentAllocatedNativeContextCache.Contextual
+      (view source (SourceEqualityPCSGuard.holds formulas solver))
+      (finiteInputMeaning (view source (SourceEqualityPCSGuard.holds formulas solver)) inputs)
+      (finiteRankedInput (view source (SourceEqualityPCSGuard.holds formulas solver)) inputs)
+      (SourceEqualityPCSGuard.holds formulas solver) state.native)
+    (scopedCache : SourceCurrentAllocatedNativeScopeCache.Scoped state.native)
+    (semantic : SemanticReady state.native.machine.heap) (idle : SourceRecursiveIntersectionNative.Idle state.native)
+    (growth : Grows source state.native.machine.heap)
+    (history : Extends source.nodes.issued state.native.machine.heap.nodes.issued)
+    (left right : Value Symbol Guard) (leftOriginal : Original left) (rightOriginal : Original right)
+    (leftAvailable : Available source left) (rightAvailable : Available source right)
+    (leftClosed : left.free = []) (rightClosed : right.free = [])
+    (leftValid : inputs.valid (inputOf left)) (rightValid : inputs.valid (inputOf right))
+    (ranges : WordRanges (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) state) :
+    ∃ fuel value after, Receipt source formulas solver inputs fuel left right state value after := by
+  let holds := SourceEqualityPCSGuard.holds formulas solver
+  let request : NodeRequest Symbol Guard := ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩
+  let model := finiteInputMeaning (view source holds) inputs
+  let ranked := finiteRankedInput (view source holds) inputs
+  have complete : Completes (view source holds) (SourceRecursiveIntersectionNative.nodeSemantic request) :=
+    SourceRecursiveIntersectionRequestProgress.initial_complete source facts holds left right leftOriginal rightOriginal
+      leftAvailable rightAvailable leftClosed rightClosed
+  have scope : NodeScope source request := initial_scope source left right leftOriginal rightOriginal leftAvailable rightAvailable
+  have ready : NodeReady state.native.machine request :=
+    ⟨empty_domain _, leftAvailable.grows source _ growth history, rightAvailable.grows source _ growth history⟩
+  have active := idle.active (view source holds) holds
+    (requiredFuel (view source holds) (SourceRecursiveIntersectionNative.nodeSemantic request) complete + 1) state.native
+  obtain ⟨fuel, value, after, receipt⟩ := SourceCurrentAllocatedNativeContextualCompletion.request_complete
+    source facts formulas solver model ranked request scope complete state valid contextual semantic ready growth history active ranges
+  obtain ⟨scopeFuel, scopedValue, scopedAfter, scopeReceipt⟩ := SourceCurrentAllocatedNativeScopeCompletion.request_complete
+    source facts holds request scope complete state valid scopedCache semantic ready growth history active ranges
+  have same := SourceCurrentAllocatedNativeColdClosedExact.completed_unique (fuel + 1) (scopeFuel + 1) _ _
+    after scopedAfter value scopedValue receipt.done scopeReceipt.done
+  rcases same with ⟨rfl, rfl⟩
+  have afterIdle := SourceCurrentAllocatedNativeRunning.done_idle (fuel + 1) _ state after value
+    (by intro value; trivial) valid.native.shape idle receipt.done

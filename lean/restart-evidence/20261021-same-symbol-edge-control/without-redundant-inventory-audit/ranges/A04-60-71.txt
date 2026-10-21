@@ -1,0 +1,12 @@
+/-- Swapping distinct physical rows requests a distinct checked native edge key. -/
+theorem swapped_key_eq_iff (width : Nat) (state : Machine Symbol Guard) (valid : Valid state)
+    (domain : Interned DomainKey) (left right : EdgeValue Symbol Guard) (known : Domain state domain)
+    (safe : KeySafe width domain left right) (leftResident : EdgeResident state.heap left) (rightResident : EdgeResident state.heap right) :
+    requestKey width domain left right = requestKey width domain right left ↔ left = right := by
+  constructor
+  · intro equal
+    have same := Prod.mk.inj (requestKey_injective width state valid domain domain left right right left known known
+      safe safe.swap leftResident rightResident rightResident leftResident equal)
+    exact (Prod.mk.inj same.2).1
+  · intro equal
+    rw [equal]

@@ -1,0 +1,22 @@
+/-- A later memo retains every earlier returned value and its original request. -/
+def Returned (before after : State Key Request Value) : Prop :=
+  ∀ handle request value, before.cells handle = some ⟨request, .returned value⟩ →
+    after.cells handle = some ⟨request, .returned value⟩
+
+/-- An unchanged table retains each returned cell. -/
+theorem Returned.refl (state : State Key Request Value) : Returned state state := fun _ _ _ stored => stored
+
+/-- Returned-cell retention composes through consecutive states. -/
+theorem Returned.trans (first : Returned before middle) (second : Returned middle after) : Returned before after :=
+  fun handle request value stored => second handle request value (first handle request value stored)
+
+/-- Fresh publication cannot replace any allocated returned cell. -/
+theorem lookup_returned [DecidableEq Key] (key : Key) (request : Request) (state : State Key Request Value)
+    (keyOf : Request → Key → Prop) (valid : Valid keyOf (fun _ => True) state) :
+    Returned state (lookupOrInsert key request state).2 := by
+  intro handle original value stored
+  cases found : state.table key with
+  | some existing => simpa only [lookupOrInsert, found] using stored
+  | none =>
+      have different : handle ≠ state.next := by have := valid.bounded handle _ stored; omega
+      simpa only [lookupOrInsert, found, put, ite_eq_right different] using stored

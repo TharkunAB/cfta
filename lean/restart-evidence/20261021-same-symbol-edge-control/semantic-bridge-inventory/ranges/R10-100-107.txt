@@ -1,0 +1,8 @@
+/-- Both ordered edge-child lists and enclosing pair names belong to the fixed inventory. -/
+def EdgeCovered (inputs : FiniteInput view) (request : EdgeRequest Symbol Guard) : Prop :=
+  EdgeInputs view (finiteInputMeaning view inputs) request ∧ SeenCovered inputs request.domain.key
+
+/-- Request coverage applies to all cells, including suspended and running cells. -/
+structure Covered (inputs : FiniteInput view) (state : Native width Symbol Guard) : Prop where
+  nodes : Requests (NodeCovered inputs) state.nodes
+  edges : Requests (EdgeCovered inputs) state.edges

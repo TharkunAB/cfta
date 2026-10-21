@@ -1,0 +1,36 @@
+/-- Only a pure code control can complete one checked native step. -/
+theorem step_done_iff [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (control : Control Output) (state after : State width) (value : Output) :
+    step control state = .done value after ↔ control = .code (.pure value) ∧ state = after := by
+  cases control with
+  | edgeBody request next => simp only [step, body_ne_done, reduceCtorEq, false_and]
+  | code code =>
+      cases code with
+      | pure result =>
+          simp only [step, SourceRecursiveIntersectionNative.step, lift, Outcome.done.injEq,
+            Control.code.injEq, Code.pure.injEq]
+      | fail | work | enter | read | finishNode | finishEdge =>
+          simp only [step, SourceRecursiveIntersectionNative.step, lift, Control.code.injEq, reduceCtorEq, false_and]
+      | optionalBinder key body next =>
+          cases actual : SourceRecursiveIntersectionMaybeMu.maybeMu key body state.native.machine.heap <;>
+            simp only [step, SourceRecursiveIntersectionNative.step, actual, lift, Control.code.injEq,
+              reduceCtorEq, false_and]
+      | node request next =>
+          cases selected : lookupNode width request state.native with
+          | mk selection current =>
+              cases selection with
+              | direct actual =>
+                  simp only [step, SourceRecursiveIntersectionNative.step, selected, lift,
+                    Control.code.injEq, reduceCtorEq, false_and]
+              | memoized handle =>
+                  cases demanded : demandNode handle current with
+                  | mk observation final =>
+                      cases observation <;> simp only [step, SourceRecursiveIntersectionNative.step,
+                        selected, demanded, lift, Control.code.injEq, reduceCtorEq, false_and]
+      | edge request next =>
+          cases selected : lookupEdge width request state.native with
+          | mk handle current =>
+              cases demanded : demandEdge handle current with
+              | mk observation final =>
+                  cases observation <;> simp only [step, selected, demanded, Control.code.injEq, reduceCtorEq, false_and]
+

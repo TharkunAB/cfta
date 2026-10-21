@@ -1,0 +1,21 @@
+/-- An actual completed run derives a bounded exact trace to its returned pure value. -/
+theorem done_trace [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (control : Control Output) (state after : State width) (value : Output)
+    (done : execute fuel control state = .done value after) :
+    ∃ steps, steps < fuel ∧ Steps steps control state (.code (.pure value)) after := by
+  induction fuel generalizing control state with
+  | zero => cases done
+  | succ fuel ih =>
+      cases one : step control state with
+      | done result current =>
+          have same := Outcome.done.inj (by simpa only [execute, one] using done)
+          rcases same.1 with rfl
+          rcases same.2 with rfl
+          have pure := (step_done_iff control state current result).mp one
+          rcases pure.1 with rfl
+          rcases pure.2 with rfl
+          exact ⟨0, by omega, .refl _ _⟩
+      | yielded next current =>
+          obtain ⟨steps, bounded, trace⟩ := ih next current (by simpa only [execute, one] using done)
+          exact ⟨steps + 1, by omega, .cons _ _ _ _ _ _ _ one trace⟩
+      | failed | constraintError | blocked => simp only [execute, one] at done; cases done

@@ -1,0 +1,39 @@
+/-- Closed native node results have the independent intersection language. -/
+def NodeMeaning (holds : Guard → Term Symbol → Bool) (request : NodeRequest Symbol Guard)
+    (value : Value Symbol Guard) : Prop :=
+  request.domain = IntersectionEmptyDomain.emptyDomain → request.left.free = [] → request.right.free = [] →
+    ∀ ambient term, InternedGuardedLanguage.meaning holds ambient value term ↔
+      InternedGuardedLanguage.meaning holds ambient request.left term ∧
+      InternedGuardedLanguage.meaning holds ambient request.right term
+
+/-- Closed native edge results have the independent intersection language. -/
+def EdgeMeaning (holds : Guard → Term Symbol → Bool) (request : EdgeRequest Symbol Guard)
+    (value : EdgeValue Symbol Guard) : Prop :=
+  request.domain = IntersectionEmptyDomain.emptyDomain →
+    MergedColdReaderClosedInputs.ClosedValues request.left.children →
+    MergedColdReaderClosedInputs.ClosedValues request.right.children →
+    ∀ ambient term, InternedGuardedLanguage.edgeMeaning holds ambient value term ↔
+      InternedGuardedLanguage.edgeMeaning holds ambient request.left term ∧
+      InternedGuardedLanguage.edgeMeaning holds ambient request.right term
+
+/-- A node receipt records checked body execution and its exact physical and language results. -/
+def NodeProduced [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (holds : Guard → Term Symbol → Bool) (machine : Machine Symbol Guard)
+    (request : NodeRequest Symbol Guard) (value : Value Symbol Guard) : Prop :=
+  ∃ (before after : Checked width), ∃ fuel,
+    NodeReady before.native.machine request ∧
+    SourceEqualityNativeDemand.execute fuel (.code (compileNode request)) before = .done value after ∧
+    Extension before.native.machine after.native.machine ∧
+    Available after.native.machine.heap value ∧
+    Extension after.native.machine machine ∧ NodeMeaning holds request value
+
+/-- An edge receipt records the checked body, including its equality-operation state. -/
+def EdgeProduced [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (holds : Guard → Term Symbol → Bool) (machine : Machine Symbol Guard)
+    (request : EdgeRequest Symbol Guard) (value : EdgeValue Symbol Guard) : Prop :=
+  ∃ (before after : Checked width), ∃ fuel,
+    EdgeReady before.native.machine request ∧
+    SourceEqualityNativeDemand.execute fuel (.edgeBody request .pure) before = .done value after ∧
+    Extension before.native.machine after.native.machine ∧
+    EdgeResident after.native.machine.heap value ∧
+    Extension after.native.machine machine ∧ EdgeMeaning holds request value

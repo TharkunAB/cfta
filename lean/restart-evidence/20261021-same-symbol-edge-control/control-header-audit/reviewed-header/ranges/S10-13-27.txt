@@ -1,0 +1,15 @@
+/-- Later memo state retains every original running request. -/
+def Running (before after : State Key Request Value) : Prop :=
+  ∀ handle request, before.cells handle = some ⟨request, .evaluating⟩ → after.cells handle = some ⟨request, .evaluating⟩
+
+/-- Unchanged memo state retains all running cells. -/
+theorem Running.refl (state : State Key Request Value) : Running state state := fun _ _ stored => stored
+
+/-- Running-cell retention composes through consecutive actual states. -/
+theorem Running.trans (first : Running before middle) (second : Running middle after) : Running before after :=
+  fun handle request stored => second handle request (first handle request stored)
+
+/-- Fresh miss allocation cannot replace any already-running cell. -/
+theorem lookup_running [DecidableEq Key] (key : Key) (request : Request) (state : State Key Request Value)
+    (keyOf : Request → Key → Prop) (valid : Valid keyOf (fun _ => True) state) :
+    Running state (lookupOrInsert key request state).2 := by

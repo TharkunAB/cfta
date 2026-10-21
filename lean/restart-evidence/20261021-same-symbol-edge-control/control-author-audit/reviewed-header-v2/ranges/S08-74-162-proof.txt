@@ -1,0 +1,89 @@
+
+/-- Publication retains every earlier key and thunk identity. -/
+theorem lookup_extends [DecidableEq Key] (key : Key) (request : Request) (state : State Key Request Value) :
+    Extends state.table (lookupOrInsert key request state).2.table := by
+  cases found : state.table key with
+  | some handle => simpa only [lookupOrInsert, found] using extends_refl state.table
+  | none =>
+    intro other handle stored
+    have different : other ≠ key := by intro same; subst other; rw [found] at stored; cases stored
+    simpa only [lookupOrInsert, found, put, ite_eq_right different] using stored
+
+/-- Publication preserves checked cells and allocates a fresh suspended cell. -/
+theorem lookup_valid [DecidableEq Key] (key : Key) (request : Request) (state : State Key Request Value)
+    (keyOf : Request → Key → Prop) (good : Cell Request Value → Prop)
+    (valid : Valid keyOf good state) (requestKey : keyOf request key) (suspended : good ⟨request, .suspended⟩) :
+    Valid keyOf good (lookupOrInsert key request state).2 := by
+  cases found : state.table key with
+  | some handle => simpa only [lookupOrInsert, found] using valid
+  | none =>
+    simp only [lookupOrInsert, found]
+    constructor
+    · intro handle cell stored
+      change handle < state.next + 1
+      by_cases same : handle = state.next
+      · subst handle
+        omega
+      · have old : state.cells handle = some cell := by simpa only [put, ite_eq_right same] using stored
+        have := valid.bounded handle cell old
+        omega
+    · intro other handle stored
+      by_cases same : other = key
+      · subst other
+        have handles : state.next = handle := by simpa [put] using stored
+        subst handle
+        exact ⟨⟨request, .suspended⟩, by simp [put], requestKey⟩
+      · have old : state.table other = some handle := by simpa only [put, ite_eq_right same] using stored
+        obtain ⟨cell, present, agrees⟩ := valid.linked other handle old
+        have different : handle ≠ state.next := by have := valid.bounded handle cell present; omega
+        exact ⟨cell, by simpa only [put, ite_eq_right different] using present, agrees⟩
+    · intro handle cell stored
+      by_cases same : handle = state.next
+      · subst handle
+        have cells : (⟨request, .suspended⟩ : Cell Request Value) = cell := by
+          simpa [put] using stored
+        subst cell
+        exact suspended
+      · exact valid.checked handle cell (by simpa only [put, ite_eq_right same] using stored)
+
+/-- Set a phase without changing the request, published key, or allocation count. -/
+def setStatus (handle : Nat) (status : Status Value) (state : State Key Request Value) : State Key Request Value :=
+  match state.cells handle with
+  | none => state
+  | some cell => { state with cells := put state.cells handle { cell with status := status } }
+
+/-- A phase change retains the published table and original request. -/
+theorem setStatus_cell (handle : Nat) (status : Status Value) (state : State Key Request Value)
+    (cell : Cell Request Value) (stored : state.cells handle = some cell) :
+    (setStatus handle status state).cells handle = some { cell with status := status } := by
+  simp [setStatus, stored, put]
+
+/-- Checked phase changes preserve all published request identities. -/
+theorem setStatus_valid (handle : Nat) (status : Status Value) (state : State Key Request Value)
+    (keyOf : Request → Key → Prop) (good : Cell Request Value → Prop) (valid : Valid keyOf good state)
+    (cell : Cell Request Value) (stored : state.cells handle = some cell) (changed : good { cell with status := status }) :
+    Valid keyOf good (setStatus handle status state) := by
+  simp only [setStatus, stored]
+  constructor
+  · intro other value present
+    by_cases same : other = handle
+    · subst other
+      exact valid.bounded handle cell stored
+    · exact valid.bounded other value (by simpa only [put, ite_eq_right same] using present)
+  · intro key other published
+    obtain ⟨original, present, agrees⟩ := valid.linked key other published
+    by_cases same : other = handle
+    · subst other
+      have equal : original = cell := Option.some.inj (present.symm.trans stored)
+      subst original
+      exact ⟨{ cell with status := status }, by simp [put], agrees⟩
+    · exact ⟨original, by simpa only [put, ite_eq_right same] using present, agrees⟩
+  · intro other value present
+    by_cases same : other = handle
+    · subst other
+      have equal : { cell with status := status } = value := by
+        simpa [put] using present
+      subst value
+      exact changed
+    · exact valid.checked other value (by simpa only [put, ite_eq_right same] using present)
+

@@ -1,0 +1,12 @@
+/-- A demanded edge body pays its own effect, child code, and exact continuation. -/
+def ControlAt (source : InternedConstructorTemplates.State Symbol Guard)
+    (holds : Guard → Language.Term Symbol → Bool) (control : Control A) (before : Checked width)
+    (amount : Nat) (post : Machine Symbol Guard → A → Prop) : Prop :=
+  match control with
+  | .code code => Credit source holds (sourceBranching source) code before.native.machine amount post
+  | .edgeBody request next => EdgeReady before.native.machine request ∧ EdgeScope source request ∧
+      ∃ (complete : Completes (view source holds) (SourceRecursiveIntersectionNative.edgeSemantic holds request)) (rest : Nat),
+        2 + sourceBranching source * budget (sourceBranching source)
+          (requiredFuel (view source holds) (SourceRecursiveIntersectionNative.edgeSemantic holds request) complete - 1) + rest ≤ amount ∧
+        ∀ value after, SourceRecursiveIntersectionKernel.Valid after → Extension before.native.machine after →
+          EdgeResident after.heap value → Credit source holds (sourceBranching source) (next value) after rest post

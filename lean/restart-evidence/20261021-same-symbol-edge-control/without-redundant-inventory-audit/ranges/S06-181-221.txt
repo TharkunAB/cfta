@@ -1,0 +1,41 @@
+/-- A checked ready prefix, actual child laws, and actual construction derive the parent law. -/
+theorem accepted_body [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (view : IntersectSchedule.View Symbol) (model : IntersectSchedule.InputMeaning view)
+    (ranked : IntersectSchedule.RankedInput view model.valid)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (request : EdgeRequest Symbol Guard) (before middle : SourceEqualityNativeDemand.State width) (first second combined : Allocated)
+    (values : List (Value Symbol Guard)) (fuel : Nat) (valid : SourceEqualityConstraintMemoAllocation.Valid before.operations)
+    (ready : SourceEqualityRequiredCache.Ready before.native.machine.heap)
+    (leftCached : SourceEqualityGuardReadback.Cached request.left.entry.key.constraint.equalities)
+    (rightCached : SourceEqualityGuardReadback.Cached request.right.entry.key.constraint.equalities)
+    (arity : request.left.children.length = request.right.children.length)
+    (symbols : request.left.entry.key.symbol = request.right.entry.key.symbol)
+    (left : SourceEqualityConstraintFieldLookup.load request.left.entry.key.constraint before.operations.constraints = .ok (some first))
+    (right : SourceEqualityConstraintFieldLookup.load request.right.entry.key.constraint before.operations.constraints = .ok (some second))
+    (accepted : (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second
+      request.left.children.length request.right.children.length before.operations).1 = .ok (.ready combined))
+    (walk : Walk view model ranked (SourceEqualityPCSGuard.holds formulas solver) request.domain
+      (request.left.children.zip request.right.children)
+      {before with operations := (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second
+        request.left.children.length request.right.children.length before.operations).2} values middle fuel) :
+    let built := run (makeEdge request.left.entry.key.symbol (SourceEqualityConjoinAllocation.readback combined) values) middle.native.machine.heap
+    let after : SourceEqualityNativeDemand.State width := {middle with native := advance middle.native {middle.native.machine with heap := built.2}}
+    execute (fuel + 3) (.edgeBody request .pure) before = .done built.1 after ∧
+      EdgeLaw view model ranked (SourceEqualityPCSGuard.holds formulas solver) request built.1 ∧
+      SourceEqualityRequiredCache.Keeps before.native.machine.heap after.native.machine.heap ∧
+      EdgeResident after.native.machine.heap built.1 := by
+  have childEffects := walk.effects ready
+  have constructor := SourceEqualityRequiredCache.edge request.left.entry.key.symbol
+    (SourceEqualityConjoinAllocation.readback combined) values middle.native.machine.heap childEffects.1.ready childEffects.2.1
+  have fields := MergedPhysicalGroupEdges.makeEdge_fields middle.native.machine.heap childEffects.1.ready.semantic.1.normal.facts
+    request.left.entry.key.symbol (SourceEqualityConjoinAllocation.readback combined) values childEffects.2.1
+  have literal := SourceEqualityNativeDemandAcceptedLanguage.ready_readback request before first second combined valid
+    leftCached rightCached arity left right accepted
+  have law := edge_law view model ranked (SourceEqualityPCSGuard.holds formulas solver) request _ arity symbols fields.1
+    (fun term => by rw [fields.2.1, literal]; exact SourceEqualityPCSConstructors.conjoined GuardStructuralOrder.le formulas solver _ _ term)
+    (by rw [constructor.2.2]; exact childEffects.2.2)
+  have prefixStep := body_ready request (.pure : EdgeValue Symbol Guard → Code Symbol Guard (EdgeValue Symbol Guard))
+    before arity first second combined left right accepted
+  simp only [code_bind_pure] at prefixStep
+  exact ⟨trace_done (fuel + 2) _ before _ _ (.cons _ _ _ _ _ _ (fuel + 1) prefixStep
+    (children_trace request combined _ middle values fuel walk)), law, childEffects.1.trans constructor.1, constructor.2.1⟩

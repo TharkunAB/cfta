@@ -1,0 +1,27 @@
+structure State (width : Nat) : Type 1 where
+  checked : SourceEqualityNativeDemand.State width
+  memo : FlatMemoThunk.State (Nat × Nat) (Edge × Edge) Edge
+
+inductive Control : Type 1 where
+  | call (request : Edge × Edge) (pending : List Nat)
+  | demand (handle : Nat) (pending : List Nat)
+  | order (handle : Nat) (request : Edge × Edge) (pending : List Nat)
+  | native (control : SourceEqualityNativeDemand.Control Edge) (pending : List Nat)
+  | ret (value : Edge) (pending : List Nat)
+
+inductive Blocked where
+  | absent (handle : Nat)
+  | busy (handle : Nat)
+  | native (reason : SourceEqualityNativeDemand.Blocked)
+
+inductive Outcome (width : Nat) : Type 1 where
+  | yielded (control : Control) (state : State width)
+  | done (value : Edge) (state : State width)
+  | failed (reason : SourceRecursiveIntersectionKernel.Failure) (state : State width)
+  | constraintError (message : String) (state : State width)
+  | blocked (reason : Blocked) (control : Control) (state : State width)
+
+noncomputable def step [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (control : Control) (state : State width) : Outcome width
+noncomputable def execute [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] :
+    Nat → Control → State width → Outcome width

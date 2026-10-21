@@ -1,0 +1,12 @@
+--- SourceCurrentSameSymbolEdgeControl.draft-1.lean.txt
++++ SourceCurrentSameSymbolEdgeControl.lean
+@@ -287,7 +287,8 @@
+     refine ⟨count, before.memo.next, ?_, ?_, ?_, ?_, ?_⟩
+     · rw [checked] at trace
+       simpa only [finalState] using trace
+-    · simpa only [memo, finish_table, pairKey, Cache.put] using table
++    · have stored := congrFun table (pairKey (left, right))
++      simpa only [memo, finish_table, pairKey, Cache.put, ite_eq_left rfl] using stored
+     · rw [memo]
+       exact FlatMemoThunk.finish_evaluating before.memo.next result current.memo (left, right) cell
+     · rw [memo]

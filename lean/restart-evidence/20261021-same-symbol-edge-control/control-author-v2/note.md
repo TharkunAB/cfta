@@ -1,0 +1,2 @@
+SOURCE-ONLY prelaunch v2. The complete original299-line source remains in v1 and is copied here. Only one proof argument changes to Ne.symm distinct. Existing finish_running_other requires other ≠ handle, so before.memo.next ≠ current.memo.next is the required orientation.
+Context, API, miss_readback header, interpreter and every other proof byte remain unchanged. No compiler/check ran. Root and independent whole-source review remain required.

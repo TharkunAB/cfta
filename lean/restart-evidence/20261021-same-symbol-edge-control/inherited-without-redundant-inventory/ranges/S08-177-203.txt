@@ -1,0 +1,27 @@
+/-- Repeating one completed prepared binding returns the same record without further allocation. -/
+theorem execute_replay [DecidableEq (EdgeKey Symbol Guard)] (value : Value Symbol Guard)
+    (environment : Environment Symbol Guard) (before after : State Symbol Guard) (result : Value Symbol Guard)
+    (final : State Symbol Guard) (valid : Valid before)
+    (completed : execute value environment before = .done result final) (growth : Grows final after) :
+    execute value environment after = .done result after :=
+  build_replay _ _ before after result final valid completed growth
+
+/-- A reported pending outcome still names an actual incomplete canonical cache slot. -/
+theorem execute_pending [DecidableEq (EdgeKey Symbol Guard)] (value : Value Symbol Guard)
+    (environment : Environment Symbol Guard) (state : State Symbol Guard) (key : NodeKey) (later : State Symbol Guard)
+    (pending : execute value environment state = .pending key later) : IsPending key later :=
+  build_pending _ _ state key later pending
+
+/-- The single outer-reference replacement inherits provenance from its source Mu record. -/
+theorem unfold_verified [DecidableEq (EdgeKey Symbol Guard)] (value : Value Symbol Guard)
+    (state : State Symbol Guard) (facts : Facts state) (available : Available state value) :
+    Verified state (unfold value state) Available := by
+  cases value with
+  | empty | reference | node | union => exact pure_verified state facts _ Available available
+  | mu entry body depth ordinary =>
+      apply execute_verified body _ state facts (available.children body (by simp [InternedProbeProvenance.children]))
+      intro name replacement found
+      simp only [] at found
+      split at found
+      · cases found; exact available
+      · contradiction

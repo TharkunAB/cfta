@@ -1,0 +1,19 @@
+/-- Actual ordered edge lookup and ready demand derive the requested row law. -/
+theorem edge_observed_ready [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (before chosen after : Native width Symbol Guard) (request : EdgeRequest Symbol Guard)
+    (handle : Nat) (result : EdgeValue Symbol Guard)
+    (physical : SourceEqualityNativeDemandProvenance.Valid holds before)
+    (valid : Contextual view model ranked holds before) (ready : EdgeReady before.machine request)
+    (safe : SourceRecursiveIntersectionEdgeMemo.KeySafe width request.domain request.left request.right)
+    (selected : lookupEdge width request before = (handle, chosen))
+    (demanded : demandEdge handle chosen = (.ready result, after)) :
+    EdgeLaw view model ranked holds request result ∧ after = chosen := by
+  have chosenPhysical := SourceEqualityNativeDemandProvenance.lookupEdge_valid before physical request ready safe
+  have chosenContext := lookupEdge_contextual view model ranked holds before request valid
+  simp only [selected] at chosenPhysical chosenContext
+  obtain ⟨published, machine⟩ :=
+    SourceRecursiveIntersectionNative.lookupEdge_selected request before chosen handle selected
+  have chosenReady : EdgeReady chosen.machine request := by rw [machine]; exact ready
+  obtain ⟨original, stored, same⟩ := SourceRecursiveIntersectionNative.demandEdge_ready handle chosen after result demanded
+  exact ⟨(edge_ready_contextual view model ranked holds chosen chosenPhysical chosenContext request original chosenReady
+    _ ⟨rfl, safe⟩ handle published result stored).2.2, same⟩

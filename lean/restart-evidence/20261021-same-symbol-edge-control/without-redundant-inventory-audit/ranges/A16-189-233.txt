@@ -1,0 +1,45 @@
+theorem edge_request_exact
+    (state : Native width Symbol Guard) (valid : Valid state)
+    (request : EdgeRequest Symbol Guard) (ready : EdgeReady state.machine request)
+    (key : IntersectionFlatMemoKeyDomain.Triple width) (checked : EdgeKeyOf width request key)
+    (handle : Nat) (published : state.edges.table key = some handle)
+    (cell : FlatMemoThunk.Cell (EdgeRequest Symbol Guard) (EdgeValue Symbol Guard))
+    (stored : state.edges.cells handle = some cell) : cell.request = request := by
+  obtain ⟨original, present, originalKey⟩ := valid.edges.linked key handle published
+  have same : original = cell := Option.some.inj (present.symm.trans stored)
+  subst original
+  have good := valid.edges.checked handle cell stored
+  exact EdgeRequest.components _ _ (SourceRecursiveIntersectionEdgeMemo.requestKey_injective width state.machine valid.machine
+    cell.request.domain request.domain cell.request.left cell.request.right request.left request.right good.1.1 ready.1
+    originalKey.2 checked.2 good.1.2.1 good.1.2.2 ready.2.1 ready.2.2 (originalKey.1.trans checked.1.symm))
+
+
+/-- A completed node hit retains the exact original request and returns an available value without effects. -/
+theorem node_ready_receipt
+    (state : Native width Symbol Guard) (valid : Valid state)
+    (request original : NodeRequest Symbol Guard) (ready : NodeReady state.machine request)
+    (key : IntersectionFlatMemoKeyDomain.Triple width) (checked : NodeKey width request key)
+    (handle : Nat) (published : state.nodes.table key = some handle) (value : Value Symbol Guard)
+    (stored : state.nodes.cells handle = some ⟨original, .returned value⟩) :
+    original = request ∧ lookupNode width request state = (.memoized handle, state) ∧
+      demandNode handle state = (.ready value, state) ∧ Available state.machine.heap value := by
+  have same := node_request_exact state valid request ready key checked handle published _ stored
+  change original = request at same
+  refine ⟨same, ?_, ?_, (valid.nodes.checked handle _ stored).2⟩
+  · simp only [lookupNode, checked.1, FlatMemoThunk.lookupOrInsert, published]
+  · simp only [demandNode, FlatMemoThunk.demand, stored]
+
+/-- A completed edge hit retains the exact original rows and returns a resident row without effects. -/
+theorem edge_ready_receipt
+    (state : Native width Symbol Guard) (valid : Valid state)
+    (request original : EdgeRequest Symbol Guard) (ready : EdgeReady state.machine request)
+    (key : IntersectionFlatMemoKeyDomain.Triple width) (checked : EdgeKeyOf width request key)
+    (handle : Nat) (published : state.edges.table key = some handle) (value : EdgeValue Symbol Guard)
+    (stored : state.edges.cells handle = some ⟨original, .returned value⟩) :
+    original = request ∧ lookupEdge width request state = (handle, state) ∧
+      demandEdge handle state = (.ready value, state) ∧ EdgeResident state.machine.heap value := by
+  have same := edge_request_exact state valid request ready key checked handle published _ stored
+  change original = request at same
+  refine ⟨same, ?_, ?_, (valid.edges.checked handle _ stored).2⟩
+  · simp only [lookupEdge, checked.1, FlatMemoThunk.lookupOrInsert, published]
+  · simp only [demandEdge, FlatMemoThunk.demand, stored]

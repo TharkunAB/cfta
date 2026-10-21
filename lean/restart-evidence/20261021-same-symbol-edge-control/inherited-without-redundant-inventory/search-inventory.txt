@@ -1,0 +1,17 @@
+lean/MicroCFTA/RedundantEdges.lean:13:def ruleOut [DecidableEq Edge] (meet : Edge → Edge → Edge) (edge : Edge) :
+lean/MicroCFTA/RedundantEdges.lean:18:    if common = other then ruleOut meet edge rest
+lean/MicroCFTA/RedundantEdges.lean:20:    else let result := ruleOut meet edge rest; (result.1, other :: result.2)
+lean/MicroCFTA/RedundantEdges.lean:23:theorem ruleOut_length [DecidableEq Edge] (meet : Edge → Edge → Edge) (edge : Edge) (edges : List Edge) :
+lean/MicroCFTA/RedundantEdges.lean:24:    (ruleOut meet edge edges).1.toList.length + (ruleOut meet edge edges).2.length ≤ edges.length := by
+lean/MicroCFTA/RedundantEdges.lean:26:  | nil => simp [ruleOut]
+lean/MicroCFTA/RedundantEdges.lean:28:    simp only [ruleOut]
+lean/MicroCFTA/RedundantEdges.lean:40:    match _result : ruleOut meet edge rest with
+lean/MicroCFTA/RedundantEdges.lean:46:    have bound := ruleOut_length meet edge rest
+lean/MicroCFTA/RedundantEdges.lean:61:theorem ruleOut_exact [DecidableEq Edge] (meet : Edge → Edge → Edge) (meaning : Edge → Term → Prop)
+lean/MicroCFTA/RedundantEdges.lean:64:    Denotes meaning ((ruleOut meet edge edges).1.getD edge :: (ruleOut meet edge edges).2) term ↔
+lean/MicroCFTA/RedundantEdges.lean:73:      simp only [ruleOut, ite_eq_left covered]
+lean/MicroCFTA/RedundantEdges.lean:80:        simp only [ruleOut, ite_eq_right covered, ite_eq_left dominates, Option.getD_some]
+lean/MicroCFTA/RedundantEdges.lean:83:      · simp only [ruleOut, ite_eq_right covered, ite_eq_right dominates]
+lean/MicroCFTA/RedundantEdges.lean:94:    have preserved := ruleOut_exact meet meaning intersection edge rest term
+lean/MicroCFTA/RedundantEdges.lean:98:    have preserved := ruleOut_exact meet meaning intersection edge rest term
+lean/MicroCFTA/SourceCurrentFiniteWarmCalls.lean:29:This result does not include withoutRedundantEdges or assert convergence.

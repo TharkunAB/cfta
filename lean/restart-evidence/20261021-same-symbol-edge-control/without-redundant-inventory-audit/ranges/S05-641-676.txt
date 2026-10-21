@@ -1,0 +1,36 @@
+/-- Cold closed inputs derive both fixed models and exact independent root language. -/
+theorem cold_complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (machine : Machine Symbol Guard) (operations : SourceEqualityConstraintMemoAllocation.State)
+    (valid : Good (⟨initial width machine, operations⟩ : Checked width))
+    (semantic : SemanticReady machine.heap)
+    (left right : Value Symbol Guard) (leftOriginal : Original left) (rightOriginal : Original right)
+    (leftAvailable : Available machine.heap left) (rightAvailable : Available machine.heap right)
+    (leftClosed : left.free = []) (rightClosed : right.free = [])
+    (ranges : WordRanges (.code (requestNode IntersectionEmptyDomain.emptyDomain left right))
+      (⟨initial width machine, operations⟩ : Checked width)) :
+    ∃ (inputModel : InputMeaning (view machine.heap (SourceEqualityPCSGuard.holds formulas solver)))
+      (inputRanked : RankedInput (view machine.heap (SourceEqualityPCSGuard.holds formulas solver)) inputModel.valid)
+      (fuel : Nat) (value : Value Symbol Guard) (after : Checked width),
+      Receipt (semanticView := view machine.heap (SourceEqualityPCSGuard.holds formulas solver)) (model := inputModel)
+        (ranked := inputRanked) (semanticHolds := SourceEqualityPCSGuard.holds formulas solver)
+        fuel (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) ⟨initial width machine, operations⟩ value after
+        (fun final value => Available final.heap value)
+        (fun _ value => SourceCurrentAllocatedNativeContextCache.NodeLaw
+          (view machine.heap (SourceEqualityPCSGuard.holds formulas solver)) inputModel inputRanked (SourceEqualityPCSGuard.holds formulas solver)
+          ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩ value) ∧
+      SourceRecursiveIntersectionNative.Idle after.native ∧
+      ∀ output term, InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) output value term ↔
+        InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) output left term ∧
+        InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) output right term := by
+  let holds := SourceEqualityPCSGuard.holds formulas solver
+  let request : NodeRequest Symbol Guard := ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩
+  obtain ⟨inputModel, inputRanked, _, sourceLaw⟩ := SourceCurrentAllocatedNativeClosedReceipts.source_models machine.heap
+    valid.native.machine.1 holds request leftOriginal rightOriginal leftAvailable rightAvailable leftClosed rightClosed
+  have contextual := SourceCurrentAllocatedNativeContextCache.initial_contextual
+    (view machine.heap holds) inputModel inputRanked holds width machine
+  obtain ⟨fuel, value, after, receipt, idle⟩ := initial_complete formulas solver ⟨initial width machine, operations⟩ valid
+    inputModel inputRanked contextual semantic (SourceRecursiveIntersectionNative.idle_initial machine)
+    left right leftOriginal rightOriginal leftAvailable rightAvailable leftClosed rightClosed ranges
+  exact ⟨inputModel, inputRanked, fuel, value, after, receipt, idle,
+    (sourceLaw value receipt.law) rfl leftClosed rightClosed⟩

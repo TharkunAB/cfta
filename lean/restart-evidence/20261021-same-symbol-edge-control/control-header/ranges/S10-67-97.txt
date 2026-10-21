@@ -1,0 +1,31 @@
+/-- Starting evaluation identifies the original suspended cell and exact returned running cell. -/
+theorem demand_evaluate (handle : Nat) (state after : State Key Request Value) (request : Request)
+    (started : demand handle state = (.evaluate request, after)) :
+    state.cells handle = some ⟨request, .suspended⟩ ∧ after.cells handle = some ⟨request, .evaluating⟩ := by
+  cases found : state.cells handle with
+  | none => simp only [demand, found] at started; cases started
+  | some cell =>
+    cases cell with
+    | mk original status =>
+      cases status with
+      | evaluating | returned value => simp only [demand, found] at started; cases started
+      | suspended =>
+        have same := Prod.mk.inj (by simpa only [demand, found] using started)
+        have requests : original = request := Observation.evaluate.inj same.1
+        subst original
+        rcases same.2 with rfl
+        exact ⟨rfl, setStatus_cell handle .evaluating state _ found⟩
+
+/-- Completion preserves original request links and fresh allocation bounds in every phase. -/
+theorem finish_valid (handle : Nat) (value : Value) (state : State Key Request Value) (keyOf : Request → Key → Prop)
+    (valid : Valid keyOf (fun _ => True) state) : Valid keyOf (fun _ => True) (finish handle value state) := by
+  cases found : state.cells handle with
+  | none => simpa only [finish, found] using valid
+  | some cell =>
+    cases cell with
+    | mk request status =>
+      cases status with
+      | suspended | returned value => simpa only [finish, found] using valid
+      | evaluating =>
+        simp only [finish, found]
+        exact setStatus_valid handle (.returned value) state _ _ valid _ found trivial

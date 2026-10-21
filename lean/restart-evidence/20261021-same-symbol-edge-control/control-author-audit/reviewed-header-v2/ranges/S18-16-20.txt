@@ -1,0 +1,5 @@
+abbrev Table (Key Value : Type) := Key → Option Value
+
+/-- Store one key without changing the other entries. -/
+def put [DecidableEq Key] (table : Table Key Value) (key : Key) (value : Value) : Table Key Value :=
+  fun other => if other = key then some value else table other

@@ -1,0 +1,28 @@
+newtype TypeableMemoCache = TypeableMemoCache CacheFamily
+
+-- | Allocate an empty memo-table family.
+newTypeableMemoCache :: IO TypeableMemoCache
+newTypeableMemoCache = TypeableMemoCache <$> newCacheFamily
+
+-- | Memoize one application in the table for the symbol type.
+memoTypeableWith ::
+    forall symbol a b.
+    (Hashable a, Typeable symbol) =>
+    TypeableMemoCache ->
+    (a -> b) ->
+    a ->
+    b
+{-# INLINE memoTypeableWith #-}
+memoTypeableWith (TypeableMemoCache family) =
+    memoWith (selectCache @symbol family (newMemoCache @a @b))
+
+-- | Binary variant of 'memoTypeableWith', keyed by the argument pair.
+memo2TypeableWith ::
+    forall symbol a b c.
+    (Hashable a, Hashable b, Typeable symbol) =>
+    TypeableMemoCache ->
+    (a -> b -> c) ->
+    a ->
+    b ->
+    c
+memo2TypeableWith cache f = curry (memoTypeableWith @symbol cache (uncurry f))

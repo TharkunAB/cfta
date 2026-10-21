@@ -1,0 +1,12 @@
+/-- Edge compilation checks arity before requesting any child. -/
+def compileEdge (emptyGuard : Guard) (conjoin : Guard → Guard → Guard) (request : EdgeRequest Symbol Guard) :
+    Code Symbol Guard (EdgeValue Symbol Guard) :=
+  if request.left.children.length = request.right.children.length then
+    (walk (fun children => requestNode request.domain children.1 children.2) (request.left.children.zip request.right.children)).bind fun values =>
+      .work (makeEdge request.left.entry.key.symbol (conjoin request.left.entry.key.constraint request.right.entry.key.constraint) values) .pure
+  else .work (makeEdge request.left.entry.key.symbol emptyGuard [.empty]) .pure
+
+/-- Node rows retain the actual hash-join order before canonical node construction. -/
+def compileRows [DecidableEq Symbol] (domain : Interned DomainKey) (left right : List (EdgeValue Symbol Guard)) :
+    Code Symbol Guard (Value Symbol Guard) :=
+  (walk (fun rows => requestEdge domain rows.1 rows.2) (pairs left right)).bind fun values => .work (makeNode values) .pure

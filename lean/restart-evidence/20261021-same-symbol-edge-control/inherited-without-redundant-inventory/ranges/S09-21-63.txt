@@ -1,0 +1,43 @@
+/-- Actual child checks and the available child value derive the complete source Mu body. -/
+theorem mu_body [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (source : InternedConstructorTemplates.State Symbol Guard) (facts : Facts source)
+    (holds : Guard → Term Symbol → Bool) (model : IntersectSchedule.InputMeaning (view source holds))
+    (ranked : IntersectSchedule.RankedInput (view source holds) model.valid)
+    (request : NodeRequest Symbol Guard) (inputs : NodeInputs (view source holds) model request)
+    (leftAvailable : Available source request.left) (rightAvailable : Available source request.right)
+    (before middle : SourceEqualityNativeDemand.State width)
+    (cacheValid : Cache.Valid before.native.machine.domains)
+    (semantic : SourceEqualityRequiredSemanticCache.SemanticReady before.native.machine.heap)
+    (first second : Nat)
+    (leftIdentity : SourceRecursiveIntersectionControl.identity request.left = some first)
+    (rightIdentity : SourceRecursiveIntersectionControl.identity request.right = some second)
+    (leftNonempty : inputOf request.left ≠ .empty) (rightNonempty : inputOf request.right ≠ .empty)
+    (recursive : (∃ name, inputOf request.left = .mu name) ∨ ∃ name, inputOf request.right = .mu name)
+    (selected : SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right = .bothMu ∨
+      SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right = .leftMu ∨
+      SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right = .rightMu)
+    (fresh : SourceRecursiveIntersectionControl.pair first second ∉ request.domain.key.seen)
+    (bodyValue : Value Symbol Guard) (fuel : Nat)
+    (child : SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace fuel
+      (.code (requestNode
+        (SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains request.domain.key
+          request.left request.right first second).1
+        (SourceRecursiveIntersectionKernel.body request.left) (SourceRecursiveIntersectionKernel.body request.right)))
+      {before with native := advance before.native {before.native.machine with domains :=
+        (SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains request.domain.key
+          request.left request.right first second).2}}
+      (.code (.pure bodyValue)) middle)
+    (keeps : SourceEqualityRequiredCache.Keeps before.native.machine.heap middle.native.machine.heap)
+    (available : Available middle.native.machine.heap bodyValue)
+    (childLaw : NodeLaw (view source holds) model ranked holds
+      ⟨(SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains request.domain.key
+          request.left request.right first second).1,
+        SourceRecursiveIntersectionKernel.body request.left, SourceRecursiveIntersectionKernel.body request.right⟩ bodyValue) :
+    ∃ (value : Value Symbol Guard) (heap : InternedConstructorTemplates.State Symbol Guard),
+      let after : SourceEqualityNativeDemand.State width :=
+        {middle with native := advance middle.native {middle.native.machine with heap := heap}}
+      execute (fuel + 3) (.code (compileNode request)) before = .done value after ∧
+        NodeLaw (view source holds) model ranked holds request value ∧
+        SourceEqualityRequiredCache.Keeps before.native.machine.heap after.native.machine.heap ∧
+        Available after.native.machine.heap value ∧
+        SourceEqualityRequiredSemanticCache.SemanticReady after.native.machine.heap := by

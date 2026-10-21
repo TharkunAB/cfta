@@ -1,0 +1,13 @@
+structure EdgeLaw (view : IntersectSchedule.View Symbol) (model : IntersectSchedule.InputMeaning view)
+    (ranked : IntersectSchedule.RankedInput view model.valid) (holds : Guard → Term Symbol → Bool)
+    (request : EdgeRequest Symbol Guard) (result : EdgeValue Symbol Guard) : Prop where
+  sound : EdgeInputs view model request → ∀ output,
+    SoundPairs model.languages request.domain.key output →
+    Included (InternedGuardedLanguage.edgeMeaning holds output result) (fun term =>
+      RowLanguage holds model.languages request.left term ∧ RowLanguage holds model.languages request.right term)
+  complete : EdgeInputs view model request → ∀ bound output,
+    CompletePairs ranked.languages bound request.domain.key output → ∀ first second,
+    first + second ≤ bound → ∀ term,
+    RowAt holds ranked.languages first request.left term → RowAt holds ranked.languages second request.right term →
+    InternedGuardedLanguage.edgeMeaning holds output result term
+

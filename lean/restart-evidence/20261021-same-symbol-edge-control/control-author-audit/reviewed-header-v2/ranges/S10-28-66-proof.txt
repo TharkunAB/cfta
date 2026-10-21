@@ -1,0 +1,39 @@
+  intro handle original stored
+  cases found : state.table key with
+  | some existing => simpa only [lookupOrInsert, found] using stored
+  | none =>
+    have different : handle ≠ state.next := by have := valid.bounded handle _ stored; omega
+    simpa only [lookupOrInsert, found, put, ite_eq_right different] using stored
+
+/-- Demand preserves structural validity without an assumed result property. -/
+theorem demand_valid (handle : Nat) (state : State Key Request Value) (keyOf : Request → Key → Prop)
+    (valid : Valid keyOf (fun _ => True) state) : Valid keyOf (fun _ => True) (demand handle state).2 := by
+  cases stored : state.cells handle with
+  | none => simpa only [demand, stored] using valid
+  | some cell =>
+    cases cell with
+    | mk request status =>
+      cases status with
+      | suspended =>
+        simp only [demand, stored]
+        exact setStatus_valid handle .evaluating state _ _ valid _ stored trivial
+      | evaluating | returned value => simpa only [demand, stored] using valid
+
+/-- Demanding another cell cannot reset an already-running request. -/
+theorem demand_running (handle : Nat) (state : State Key Request Value) : Running state (demand handle state).2 := by
+  intro other original running
+  cases found : state.cells handle with
+  | none => simpa only [demand, found] using running
+  | some cell =>
+    cases cell with
+    | mk request status =>
+      cases status with
+      | suspended =>
+        have different : other ≠ handle := by
+          intro same
+          subst other
+          have impossible := Option.some.inj (running.symm.trans found)
+          cases impossible
+        simpa only [demand, found, setStatus, put, ite_eq_right different] using running
+      | evaluating | returned value => simpa only [demand, found] using running
+

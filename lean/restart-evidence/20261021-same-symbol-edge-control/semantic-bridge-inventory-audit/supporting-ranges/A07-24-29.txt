@@ -1,0 +1,6 @@
+/-- Source requests establish admission before the native interpreter can publish them. -/
+def Certified [DecidableEq (EdgeKey Symbol Guard)] (code : Code Symbol Guard A)
+    (state : Machine Symbol Guard) (post : Machine Symbol Guard → A → Prop) : Prop :=
+  match code with
+  | .pure value => post state value
+  | .fail _ => True

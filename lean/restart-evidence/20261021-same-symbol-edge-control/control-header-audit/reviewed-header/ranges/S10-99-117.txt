@@ -1,0 +1,19 @@
+/-- Completion does not change any different running cell. -/
+theorem finish_running_other (handle other : Nat) (value : Value) (state : State Key Request Value) (request : Request)
+    (different : other ≠ handle) (running : state.cells other = some ⟨request, .evaluating⟩) :
+    (finish handle value state).cells other = some ⟨request, .evaluating⟩ := by
+  cases found : state.cells handle with
+  | none => simpa only [finish, found] using running
+  | some cell =>
+    cases cell with
+    | mk original status =>
+      cases status with
+      | suspended | returned value => simpa only [finish, found] using running
+      | evaluating => simpa only [finish, found, setStatus, put, ite_eq_right different] using running
+
+/-- Finishing a running request retains that exact request with its actual returned value. -/
+theorem finish_evaluating (handle : Nat) (value : Value) (state : State Key Request Value) (request : Request)
+    (running : state.cells handle = some ⟨request, .evaluating⟩) :
+    (finish handle value state).cells handle = some ⟨request, .returned value⟩ := by
+  simp only [finish, running]
+  exact setStatus_cell handle (.returned value) state _ running

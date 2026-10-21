@@ -1,0 +1,22 @@
+/-- Word checks range over actual checked yielded prefixes and assume no completed result. -/
+def WordRanges [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (control : Control Output) (state : State width) : Prop :=
+  ∀ fuel next after, Steps fuel control state next after → Words width next
+
+/-- The zero-length actual checked prefix supplies its current request words. -/
+theorem WordRanges.current [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (control : Control Output) (state : State width) (ranges : WordRanges control state) : Words width control :=
+  ranges 0 control state (.refl _ _)
+
+/-- A checked yielded prefix retains the word plan for its exact next control and full state. -/
+theorem WordRanges.after_trace [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (control next : Control Output) (state after : State width) (ranges : WordRanges control state)
+    (fuel : Nat) (trace : Steps fuel control state next after) : WordRanges next after := by
+  intro extra final current rest
+  exact ranges _ final current (trace.trans _ _ _ _ _ _ _ _ rest)
+
+/-- One actual checked step retains the word plan through the resulting operation cache. -/
+theorem WordRanges.after_step [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (control next : Control Output) (state after : State width) (ranges : WordRanges control state)
+    (one : step control state = .yielded next after) : WordRanges next after :=
+  ranges.after_trace control next state after 1 (.cons _ _ _ _ _ _ 0 one (.refl _ _))

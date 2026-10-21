@@ -1,0 +1,21 @@
+/-- Physical validity includes exact original keys, fresh handles, and resident results. -/
+structure Valid (state : Native width Symbol Guard) : Prop where
+  machine : SourceRecursiveIntersectionKernel.Valid state.machine
+  nodes : FlatMemoThunk.Valid (NodeKey width) (NodeGood state.machine) state.nodes
+  edges : FlatMemoThunk.Valid (EdgeKeyOf width) (EdgeGood state.machine) state.edges
+
+/-- An actual valid machine admits empty physical memo tables. -/
+theorem initial_valid (machine : Machine Symbol Guard)
+    (valid : SourceRecursiveIntersectionKernel.Valid machine) : Valid (initial width machine) :=
+  ⟨valid, FlatMemoThunk.empty_valid _ _, FlatMemoThunk.empty_valid _ _⟩
+
+/-- Physical validity supplies the structural key and fresh-handle invariant. -/
+theorem Valid.shape {state : Native width Symbol Guard} (valid : Valid state) :
+    SourceRecursiveIntersectionNative.Shape state := by
+  constructor
+  · exact ⟨valid.nodes.bounded, fun key handle stored => by
+      obtain ⟨cell, present, linked⟩ := valid.nodes.linked key handle stored
+      exact ⟨cell, present, linked.1⟩, fun _ _ _ => trivial⟩
+  · exact ⟨valid.edges.bounded, fun key handle stored => by
+      obtain ⟨cell, present, linked⟩ := valid.edges.linked key handle stored
+      exact ⟨cell, present, linked.1⟩, fun _ _ _ => trivial⟩

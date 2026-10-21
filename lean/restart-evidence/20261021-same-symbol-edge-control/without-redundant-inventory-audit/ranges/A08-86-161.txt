@@ -1,0 +1,76 @@
+section Generated
+variable (source : InternedConstructorTemplates.State Symbol Guard) (facts : InternedNestedFacts.Facts source)
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (roots : List (Value Symbol Guard)) (originals : ∀ root ∈ roots, Original root)
+  (available : Values source roots) (closed : ∀ root ∈ roots, root.free = [])
+local notation "holds" => SourceEqualityPCSGuard.holds formulas solver
+local notation "oldView" => view source holds
+local notation "oldInputs" => SourceCurrentAllocatedNativeInputInventoryModels.finiteInput
+  source facts holds roots originals available closed
+
+/-- Actual model growth admits generated operands and derives coverage for every next final cell. -/
+theorem generated_complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (state : Checked width) (good : Good state)
+    (contextual : SourceCurrentAllocatedNativeContextCache.Contextual oldView
+      (finiteInputMeaning oldView oldInputs) (finiteRankedInput oldView oldInputs) holds state.native)
+    (covered : Covered oldInputs state.native)
+    (scopedCache : SourceCurrentAllocatedNativeScopeCache.Scoped state.native)
+    (semantic : SemanticReady state.native.machine.heap) (idle : SourceRecursiveIntersectionNative.Idle state.native)
+    (growth : Grows source state.native.machine.heap)
+    (history : Extends source.nodes.issued state.native.machine.heap.nodes.issued)
+    (left right : Value Symbol Guard)
+    (leftAvailable : Available state.native.machine.heap left) (rightAvailable : Available state.native.machine.heap right)
+    (leftClosed : left.free = []) (rightClosed : right.free = [])
+    (ranges : WordRanges (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) state) :
+    let target := state.native.machine.heap
+    let targetRoots := roots ++ [left, right]
+    ∃ targetAvailable : Values target targetRoots,
+      ∃ targetClosed : ∀ root ∈ targetRoots, root.free = [],
+        ∃ fuel value after, Receipt target formulas solver
+          (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput target good.native.machine.1 holds targetRoots
+            (SourceCurrentAllocatedNativeGrownInventory.closed_originals target good.native.machine.1
+              targetRoots targetAvailable targetClosed) targetAvailable targetClosed)
+          fuel left right state value after := by
+  let target := state.native.machine.heap
+  have targetFacts : InternedNestedFacts.Facts target := good.native.machine.1
+  let targetRoots := roots ++ [left, right]
+  have targetAvailable : Values target targetRoots := by
+    intro root member
+    change root ∈ roots ++ [left, right] at member
+    rcases List.mem_append.mp member with old | next
+    · exact (available root old).grows source target growth history
+    · simp only [List.mem_cons, List.not_mem_nil, or_false] at next
+      rcases next with rfl | rfl
+      · exact leftAvailable
+      · exact rightAvailable
+  have targetClosed : ∀ root ∈ targetRoots, root.free = [] := by
+    intro root member
+    change root ∈ roots ++ [left, right] at member
+    rcases List.mem_append.mp member with old | next
+    · exact closed root old
+    · simp only [List.mem_cons, List.not_mem_nil, or_false] at next
+      rcases next with rfl | rfl
+      · exact leftClosed
+      · exact rightClosed
+  have included : ∀ root ∈ roots, root ∈ targetRoots := fun _ member => List.mem_append.mpr (Or.inl member)
+  have targetOriginals := SourceCurrentAllocatedNativeGrownInventory.closed_originals
+    target targetFacts targetRoots targetAvailable targetClosed
+  let inputs := SourceCurrentAllocatedNativeInputInventoryModels.finiteInput
+    target targetFacts holds targetRoots targetOriginals targetAvailable targetClosed
+  have agreement : SourceCurrentAllocatedNativeContextRebase.Agreement oldInputs inputs :=
+    SourceCurrentAllocatedNativeAdmittedQuery.inventory_agreement source target facts targetFacts growth history holds
+      roots originals available closed targetRoots targetAvailable targetClosed included
+  have targetContextual := SourceCurrentAllocatedNativeContextRebase.contextual agreement holds state.native
+    covered.admitted covered.seen_admitted contextual
+  have targetCovered := covered.rebase agreement
+  have leftMember : left ∈ targetRoots := by simp [targetRoots]
+  have rightMember : right ∈ targetRoots := by simp [targetRoots]
+  obtain ⟨fuel, value, after, receipt⟩ := query_complete target targetFacts formulas solver inputs state good
+    targetContextual targetCovered scopedCache semantic idle (grows_refl target) (extends_refl target.nodes.issued)
+    left right (targetOriginals left leftMember) (targetOriginals right rightMember)
+    leftAvailable rightAvailable leftClosed rightClosed
+    (SourceCurrentAllocatedNativeGrownInventory.target_root_valid target targetFacts holds targetRoots
+      targetAvailable targetClosed left leftMember)
+    (SourceCurrentAllocatedNativeGrownInventory.target_root_valid target targetFacts holds targetRoots
+      targetAvailable targetClosed right rightMember) ranges
+  exact ⟨targetAvailable, targetClosed, fuel, value, after, receipt⟩

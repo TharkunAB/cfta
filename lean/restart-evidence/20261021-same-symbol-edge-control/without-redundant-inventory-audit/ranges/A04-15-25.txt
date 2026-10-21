@@ -1,0 +1,11 @@
+/-- The source edge memo uses raw edge identities, without node tags. -/
+def requestKey (width : Nat) (domain : Interned DomainKey) (left right : EdgeValue Symbol Guard) : Triple width :=
+  edgeKey width domain left.entry.identity right.entry.identity
+
+/-- Source edge requests retain the nonnegative first key and injective raw identity bounds. -/
+def KeySafe (width : Nat) (domain : Interned DomainKey) (left right : EdgeValue Symbol Guard) : Prop :=
+  0 < width ∧ domain.identity < 2 ^ (width - 1) ∧ left.entry.identity < 2 ^ width ∧ right.entry.identity < 2 ^ width
+
+/-- Reversed edge requests retain the same source machine bounds. -/
+theorem KeySafe.swap (safe : KeySafe width domain left right) : KeySafe width domain right left :=
+  ⟨safe.1, safe.2.1, safe.2.2.2, safe.2.2.1⟩

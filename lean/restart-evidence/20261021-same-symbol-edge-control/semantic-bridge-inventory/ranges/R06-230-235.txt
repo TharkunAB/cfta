@@ -1,0 +1,6 @@
+/-- A completed checked source body returns idle native tables from idle native tables. -/
+theorem done_idle [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (control : Control Output) (before after : State width) (value : Output)
+    (clean : Clean control) (shape : Shape before.native) (idle : Idle before.native)
+    (done : execute fuel control before = .done value after) : Idle after.native :=
+  idle.retained (done_running_before fuel control before after value done clean shape)

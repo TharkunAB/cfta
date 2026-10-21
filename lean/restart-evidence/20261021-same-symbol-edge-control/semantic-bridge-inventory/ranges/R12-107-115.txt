@@ -1,0 +1,9 @@
+/-- Each control carries the current code widths and its exact result continuation. -/
+def ControlAt (control : Control A) (before : Checked width) (bound : Nat)
+    (post : Machine Symbol Guard → A → Prop) : Prop :=
+  match control with
+  | .code code => SourceRecursiveIntersectionCodeMass.At code before.native.machine bound post
+  | .edgeBody request next => EdgeReady before.native.machine request ∧
+      ∀ value after larger, SourceRecursiveIntersectionKernel.Valid after →
+        Extension before.native.machine after → bound ≤ larger → Stored larger after.heap →
+        EdgeResident after.heap value → SourceRecursiveIntersectionCodeMass.At (next value) after larger post

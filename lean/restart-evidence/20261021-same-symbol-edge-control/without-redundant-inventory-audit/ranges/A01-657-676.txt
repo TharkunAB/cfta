@@ -1,0 +1,20 @@
+>   -- { definition of createMu }
+> foo (InternedMu mu) =
+>   let g = f . Rec
+>       bodyAtDepth = g RecDepth
+>   in internNode $ UninternedMu bodyAtDepth (g (muPlaceholder bodyAtDepth)) g
+
+Before calling 'intern', 'createMu' computes and stores both the body at
+'RecDepth' and its ordinary shape in the 'UninternedMu'. The stored depth probe
+is reused to choose the shape placeholder, so the body function is evaluated
+twice in total. 'matchMu' reuses both forms, so rebuilding an unchanged 'Mu'
+does not evaluate the original body function again. Placeholder selection
+scans the free references of the cached depth observation. Equality, hashing,
+and identification do not invoke the function inside the interning cache.
+-}
+pattern Mu ::
+    (Hashable symbol, Typeable symbol) =>
+    (Node symbol -> Node symbol) -> Node symbol
+pattern Mu f <- (matchMu -> Just f)
+  where
+    Mu = createMu

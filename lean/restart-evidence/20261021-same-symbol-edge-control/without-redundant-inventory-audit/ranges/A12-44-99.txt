@@ -1,0 +1,56 @@
+def step (profile : Profile) : Profile :=
+  let instructions := instructionBound profile.nodes profile.edges profile.mass
+  let constructors := credit instructions profile.mass
+  ⟨profile.nodes + constructors, profile.edges + constructors,
+    profile.domains + instructions, massAfter instructions profile.mass⟩
+
+/-- One forecast retains each initial component bound. -/
+theorem step_ge (profile : Profile) : Le profile (step profile) :=
+  ⟨Nat.le_add_right _ _, Nat.le_add_right _ _, Nat.le_add_right _ _,
+    SourceCurrentAllocatedRecursiveMassTrace.massAfter_ge _ _⟩
+
+/-- A larger initial profile retains the one-query forecast. -/
+theorem step_mono {first last : Profile} (increase : Le first last) : Le (step first) (step last) := by
+  have instructions := SourceCurrentAllocatedNativeComputedBudget.instructionBound_mono
+    increase.1 increase.2.1 increase.2.2.2
+  have constructors := SourceCurrentAllocatedRecursiveMassMonotone.credit_mono
+    instructions increase.2.2.2
+  exact ⟨Nat.add_le_add increase.1 constructors, Nat.add_le_add increase.2.1 constructors,
+    Nat.add_le_add increase.2.2.1 instructions,
+    SourceCurrentAllocatedRecursiveMassMonotone.massAfter_mono instructions increase.2.2.2⟩
+
+/-- Forecast a fixed number of queries from the original profile. -/
+def advance (profile : Profile) : Nat → Profile
+  | 0 => profile
+  | count + 1 => advance (step profile) count
+
+/-- An empty query sequence retains the original profile. -/
+theorem advance_zero (profile : Profile) : advance profile 0 = profile := rfl
+
+/-- A nonempty query sequence starts with one forecast step. -/
+theorem advance_succ (profile : Profile) (count : Nat) :
+    advance profile (count + 1) = advance (step profile) count := rfl
+
+/-- Two consecutive query forecasts compose in source order. -/
+theorem advance_add (profile : Profile) (first last : Nat) :
+    advance profile (first + last) = advance (advance profile first) last := by
+  induction first generalizing profile with
+  | zero => simp only [Nat.zero_add, advance]
+  | succ first ih => simpa only [Nat.succ_add, advance] using ih (step profile)
+
+/-- A finite query forecast retains every original component bound. -/
+theorem advance_ge (profile : Profile) (count : Nat) : Le profile (advance profile count) := by
+  induction count generalizing profile with
+  | zero => exact Le.refl _
+  | succ count ih => exact (step_ge profile).trans (ih (step profile))
+
+/-- A larger original profile retains every fixed query forecast. -/
+theorem advance_mono {first last : Profile} (increase : Le first last) (count : Nat) :
+    Le (advance first count) (advance last count) := by
+  induction count generalizing first last with
+  | zero => exact increase
+  | succ count ih => exact ih (step_mono increase)
+
+/-- Additional forecast queries retain all earlier component bounds. -/
+theorem advance_count_mono (profile : Profile) {first last : Nat} (counts : first ≤ last) :
+    Le (advance profile first) (advance profile last) := by

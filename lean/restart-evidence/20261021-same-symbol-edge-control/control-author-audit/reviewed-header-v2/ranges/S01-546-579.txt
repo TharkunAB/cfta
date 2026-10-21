@@ -1,0 +1,34 @@
+            | RecIntersect (IntersectId i j) `Set.member` freeVars n =
+                Mu $ \recNode -> substFree (RecIntersect (IntersectId i j)) recNode n
+            | otherwise =
+                n
+
+{- | Tables for edge intersection in a recursive environment. The key is the
+identities of the domain and of the two edges.
+-}
+genericIntersectOpenEdgeCache :: FlatMemoCache
+genericIntersectOpenEdgeCache = unsafePerformIO newFlatMemoCache
+{-# NOINLINE genericIntersectOpenEdgeCache #-}
+
+-- | Intersect two edges under the same recursive environment.
+intersectOpenEdge ::
+    forall symbol.
+    (Hashable symbol, Typeable symbol) =>
+    (IntersectionDom symbol, Edge symbol, Edge symbol) -> Edge symbol
+{-# INLINEABLE intersectOpenEdge #-}
+intersectOpenEdge (domain, left, right) =
+    memoFlatTypeableWith @symbol
+        genericIntersectOpenEdgeCache
+        (idIdent domain)
+        (coerce (edgeId left))
+        (coerce (edgeId right))
+        (onEdge domain left right)
+  where
+    onEdge ::
+        IntersectionDom symbol -> Edge symbol -> Edge symbol -> Edge symbol
+    onEdge _ l r | length (edgeChildren l) /= length (edgeChildren r) = emptyEdge (edgeSymbol l)
+    onEdge !dom l r =
+        mkEdge
+            (edgeSymbol l)
+            (zipWith (\a b -> intersectOpen (dom, a, b)) (edgeChildren l) (edgeChildren r))
+            (edgeConstraint l `conjoinConstraints` edgeConstraint r)

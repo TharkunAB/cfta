@@ -1,0 +1,13 @@
+  have currentEffects : Good current ∧ Extension state.native.machine current.native.machine ∧
+      SourceEqualityRequiredCache.Keeps state.native.machine.heap current.native.machine.heap ∧
+      SourceEqualityConstraintMemoAllocation.Grows state.operations current.operations ∧
+      SourceCurrentAllocatedNativeFieldClosure.OutcomeFields (.yielded next current) := by
+    simpa only [one, Outcome.state] using checked
+  obtain ⟨fuel, value, after, receipt⟩ := later
+  exact ⟨fuel + 1, value, after, ⟨.cons _ _ _ _ _ _ _ inputs one receipt.trace, receipt.good,
+    currentEffects.2.1.trans receipt.extension, currentEffects.2.2.1.trans receipt.keeps,
+    operations_trans currentEffects.2.2.2.1 receipt.operations, receipt.result⟩⟩
+
+
+private theorem yielded_good [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (control next : Control A) (state current : Checked width) (valid : Good state)

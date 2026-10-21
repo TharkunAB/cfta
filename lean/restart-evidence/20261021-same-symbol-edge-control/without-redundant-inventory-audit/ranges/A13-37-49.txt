@@ -1,0 +1,13 @@
+/-- A returned scope refers to the same actual physical trace and machine. -/
+structure Receipt [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (control : Control A) (before : Checked width) (value : A) (after : Checked width)
+    (post scopePost : Machine Symbol Guard → A → Prop) : Prop
+    extends SourceCurrentAllocatedNativePhysicalTraceCompletion.Receipt fuel control before value after post where
+  scopedCache : Scoped after.native
+  semantic : SemanticReady after.native.machine.heap
+  law : scopePost after.native.machine value
+
+/-- Joint completion returns one physical result and its scope. -/
+def Returned [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (control : Control A) (before : Checked width) (post scopePost : Machine Symbol Guard → A → Prop) : Prop :=
+  ∃ fuel value after, Receipt fuel control before value after post scopePost

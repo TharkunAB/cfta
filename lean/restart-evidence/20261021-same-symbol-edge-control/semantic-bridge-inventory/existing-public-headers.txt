@@ -1,0 +1,156 @@
+EXISTING PUBLIC DECLARATION PREFIX INVENTORY
+No new theorem, proof body, or compilable module is proposed.
+Prefixes retain original source notation and use the complete source snapshot for context.
+
+MicroCFTA.SourceCurrentAllocatedNativeContextualCompletion.edge_complete
+SOURCE R01 lean/MicroCFTA/SourceCurrentAllocatedNativeContextualCompletion.lean:520-542
+SOURCE-SHA256 2779bf6294cb9acf847bc6747c3947c955519d5cdcf65129d198dd92904911de
+PREFIX-SHA256 c4d3bfdf937792acd9ef3e96be4401f9e67a01dcc42f7f7bc7514c990fb4609d
+theorem edge_complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (source : InternedConstructorTemplates.State Symbol Guard) (facts : InternedNestedFacts.Facts source)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inputModel : InputMeaning (view source (SourceEqualityPCSGuard.holds formulas solver)))
+    (inputRanked : RankedInput (view source (SourceEqualityPCSGuard.holds formulas solver)) inputModel.valid)
+    (request : EdgeRequest Symbol Guard) (scope : EdgeScope source request)
+    (complete : Completes (view source (SourceEqualityPCSGuard.holds formulas solver))
+      (SourceRecursiveIntersectionNative.edgeSemantic (SourceEqualityPCSGuard.holds formulas solver) request))
+    (state : Checked width) (valid : Good state)
+    (contextual : SourceCurrentAllocatedNativeContextCache.Contextual
+      (view source (SourceEqualityPCSGuard.holds formulas solver)) inputModel inputRanked (SourceEqualityPCSGuard.holds formulas solver) state.native)
+    (semantic : SemanticReady state.native.machine.heap)
+    (symbols : request.left.entry.key.symbol = request.right.entry.key.symbol) (ready : EdgeReady state.native.machine request)
+    (growth : Grows source state.native.machine.heap) (history : Extends source.nodes.issued state.native.machine.heap.nodes.issued)
+    (active : ActiveAbove (view source (SourceEqualityPCSGuard.holds formulas solver)) (SourceEqualityPCSGuard.holds formulas solver)
+      (requiredFuel (view source (SourceEqualityPCSGuard.holds formulas solver))
+        (SourceRecursiveIntersectionNative.edgeSemantic (SourceEqualityPCSGuard.holds formulas solver) request) complete) state.native)
+    (ranges : WordRanges (.edgeBody request .pure) state) :
+    Returned (semanticView := view source (SourceEqualityPCSGuard.holds formulas solver)) (model := inputModel)
+      (ranked := inputRanked) (semanticHolds := SourceEqualityPCSGuard.holds formulas solver)
+      (.edgeBody request .pure) state (fun after value => EdgeResident after.heap value)
+      (fun _ value => SourceCurrentAllocatedNativeContextCache.EdgeLaw
+        (view source (SourceEqualityPCSGuard.holds formulas solver)) inputModel inputRanked (SourceEqualityPCSGuard.holds formulas solver) request value) := by
+
+MicroCFTA.SourceCurrentAllocatedNativeContextualCompletion.Receipt.done
+SOURCE R01 lean/MicroCFTA/SourceCurrentAllocatedNativeContextualCompletion.lean:53-56
+SOURCE-SHA256 2779bf6294cb9acf847bc6747c3947c955519d5cdcf65129d198dd92904911de
+PREFIX-SHA256 ab8e6f565fd32e4859138802026af71c5489c5e35929a2a225ece011c521d611
+theorem Receipt.done [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    {control : Control A} {before after : Checked width} {value : A} {post semanticPost : Machine Symbol Guard → A → Prop}
+    (receipt : Receipt (semanticView := semanticView) (model := model) (ranked := ranked) (semanticHolds := semanticHolds) fuel control before value after post semanticPost) :
+    execute (fuel + 1) control before = .done value after := receipt.toReceipt.done
+
+MicroCFTA.SourceEqualityNativeDemand.trace_done
+SOURCE R03 lean/MicroCFTA/SourceEqualityNativeDemandTrace.lean:148-151
+SOURCE-SHA256 e27ef3f62859ecb6f31ceb86504051c6e9a4eb31996b7e50c8e40f6526e999d1
+PREFIX-SHA256 66052868dc274b63cccb48baa1aa29f2e8830720f8cd6eddf20d8db3bbfe5abd
+theorem trace_done [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (control : Control Output) (state after : State width) (value : Output)
+    (trace : Steps fuel control state (.code (.pure value)) after) :
+    execute (fuel + 1) control state = .done value after := by
+
+MicroCFTA.SourceCurrentAllocatedNativeColdClosedExact.completed_unique
+SOURCE R04 lean/MicroCFTA/SourceCurrentAllocatedNativeColdClosedExact.lean:25-30
+SOURCE-SHA256 c61f3d8d8f595ac38d3cfdb80eb2be23b5f06e74b56112379184017dc2ce803b
+PREFIX-SHA256 7d27070a346f35191eb2fdc66ec76b21c3a4f7445d3fff1150c2cb727444d984
+theorem completed_unique [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (firstFuel secondFuel : Nat) (control : Control A) (before firstAfter secondAfter : Checked width)
+    (firstValue secondValue : A)
+    (first : execute firstFuel control before = .done firstValue firstAfter)
+    (second : execute secondFuel control before = .done secondValue secondAfter) :
+    firstValue = secondValue ∧ firstAfter = secondAfter := by
+
+MicroCFTA.SourceCurrentAllocatedNativeScopeCompletion.edge_complete
+SOURCE R05 lean/MicroCFTA/SourceCurrentAllocatedNativeScopeCompletion.lean:594-604
+SOURCE-SHA256 d3ee51746d0affdfb623db252c6277409bf0167a0848679425281d59f5d6d2e8
+PREFIX-SHA256 d22887fd4f4d7323215996d6a47881d11c4f08cb614587c58401e3a7d1227ea5
+theorem edge_complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (source : InternedConstructorTemplates.State Symbol Guard) (facts : InternedNestedFacts.Facts source)
+    (holds : Guard → Term Symbol → Bool) (request : EdgeRequest Symbol Guard) (scope : EdgeScope source request)
+    (complete : Completes (view source holds) (SourceRecursiveIntersectionNative.edgeSemantic holds request))
+    (state : Checked width) (valid : Good state) (scopedCache : Scoped state.native)
+    (semantic : SemanticReady state.native.machine.heap) (ready : EdgeReady state.native.machine request)
+    (growth : Grows source state.native.machine.heap) (history : Extends source.nodes.issued state.native.machine.heap.nodes.issued)
+    (active : ActiveAbove (view source holds) holds
+      (requiredFuel (view source holds) (SourceRecursiveIntersectionNative.edgeSemantic holds request) complete) state.native)
+    (ranges : WordRanges (.edgeBody request .pure) state) :
+    Returned (.edgeBody request .pure) state (fun after value => EdgeResident after.heap value) (fun _ value => EdgeLaw request value) := by
+
+MicroCFTA.SourceCurrentAllocatedNativeRunning.done_idle
+SOURCE R06 lean/MicroCFTA/SourceCurrentAllocatedNativeRunning.lean:231-234
+SOURCE-SHA256 407cf54127db6114544f8b5f327845faf45c51dd2b46b2f20072a829fc31a994
+PREFIX-SHA256 b3cec4e2fd0bc141a0ed55e1eba3e263dcc63fc95925336593e603d96a290edd
+theorem done_idle [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (control : Control Output) (before after : State width) (value : Output)
+    (clean : Clean control) (shape : Shape before.native) (idle : Idle before.native)
+    (done : execute fuel control before = .done value after) : Idle after.native :=
+
+MicroCFTA.SourceRecursiveIntersectionNativeIdle.Idle.active
+SOURCE R07 lean/MicroCFTA/SourceRecursiveIntersectionNativeIdle.lean:34-36
+SOURCE-SHA256 477b08b298f708ca7f1d8954b5e770f6ae5a2827afeac06ad0702ae898ac4eb1
+PREFIX-SHA256 3e35a71e3e5e2940793c3fe56b289b9532467ffef9f7c5d51cda76dbcff45cba
+theorem Idle.active [DecidableEq Symbol] (view : IntersectSchedule.View Symbol)
+    (holds : Guard → Language.Term Symbol → Bool) (bound : Nat)
+    (state : SourceRecursiveIntersectionThunks.State width Symbol Guard) (idle : Idle state) : ActiveAbove view holds bound state :=
+
+MicroCFTA.SourceCurrentAllocatedNativeAdmissionTrace.Trace.covered
+SOURCE R08 lean/MicroCFTA/SourceCurrentAllocatedNativeAdmissionTrace.lean:213-222
+SOURCE-SHA256 a2567bdfcceae6888bd0f7345f5a7088d0e74dec0712207a574dafeb83bb079e
+PREFIX-SHA256 66997dbdb3be0a703581d08428672a16bb30d8288ba5f2b94935d717d5b82665
+theorem Trace.covered [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (branches : Branches (width := width) source holds inputs)
+    {fuel : Nat} {control next : Control A} {before after : Checked width}
+    (trace : Trace fuel control before next after) (post : Machine Symbol Guard → A → Prop)
+    (good : Good before) (semantic : SemanticReady before.native.machine.heap)
+    (growth : Grows source before.native.machine.heap)
+    (history : Extends source.nodes.issued before.native.machine.heap.nodes.issued)
+    (fields : Fields control before) (covered : Covered inputs before.native)
+    (certificate : ControlCertified source holds inputs control before.native.machine post) :
+    Covered inputs after.native ∧ ControlCertified source holds inputs next after.native.machine post := by
+
+MicroCFTA.SourceCurrentAllocatedNativeWidthTrace.prefix_bound
+SOURCE R11 lean/MicroCFTA/SourceCurrentAllocatedNativeWidthTrace.lean:55-64
+SOURCE-SHA256 15f065e754fb0bc0a9bff8fc906e0a6a8e85813ab5f72d176ccc197abee6e677
+PREFIX-SHA256 8068ce20691e70986d687843d79d564a470712ef78804900469e0255e3d4ac19
+theorem prefix_bound {control next : Control A} {before after : Checked width}
+    (actual : Trace fuel control before next after) (good : Good before) (fields : Fields control before)
+    (stored : Stored bound before.native.machine.heap)
+    (certificate : ControlAt control before bound post) :
+    SourceCurrentAllocatedRecursiveMassTrace.InputsThrough fuel bound control before ∧
+      ControlAt next after (massAfter fuel bound) post ∧ Good after ∧ Fields next after ∧
+      Stored (massAfter fuel bound) after.native.machine.heap ∧
+      after.native.machine.heap.nodes.next ≤ before.native.machine.heap.nodes.next + credit fuel bound ∧
+      after.native.machine.heap.edges.next ≤ before.native.machine.heap.edges.next + credit fuel bound ∧
+      after.native.machine.domains.next ≤ before.native.machine.domains.next + fuel := by
+
+MicroCFTA.SourceCurrentAllocatedNativeInstructionTrace.prefix_bound
+SOURCE R13 lean/MicroCFTA/SourceCurrentAllocatedNativeInstructionTrace.lean:65-71
+SOURCE-SHA256 ee353f43dfb7318a923933a406eecd175563c0fa4e20e1703b01d0a7a33c5acd
+PREFIX-SHA256 c89d099e61191269bae0b94341a38ee7cba4940ca3d8581480ad0edce6960061
+theorem prefix_bound (source : InternedConstructorTemplates.State Symbol Guard) (facts : InternedNestedFacts.Facts source)
+    (holds : Guard → Language.Term Symbol → Bool) {control next : Control A} {before after : Checked width}
+    (actual : Trace fuel control before next after) (good : Good before) (fields : Fields control before)
+    (sourceGrowth : Grows source before.native.machine.heap)
+    (sourceHistory : Extends source.nodes.issued before.native.machine.heap.nodes.issued)
+    (certificate : ControlAt source holds control before amount post) :
+    ∃ remaining, fuel + remaining ≤ amount ∧ ControlAt source holds next after remaining post := by
+
+MicroCFTA.InternedEdgeResidency.edge_grows
+SOURCE R18 lean/MicroCFTA/InternedEdgeResidency.lean:35-37
+SOURCE-SHA256 c0596750df3bc2472271cf68451f233c27846bcff0baea5eb4d31da05d5723b0
+PREFIX-SHA256 d8481776229dee250f99c39bf83ce69183e5169f901d1e96ca9577eb7c5aae9a
+theorem edge_grows (before after : State Symbol Guard) (growth : Grows before after)
+    (edge : EdgeValue Symbol Guard) (resident : EdgeResident before edge) : EdgeResident after edge :=
+  growth.edgeRecords edge.entry.key edge resident
+
+MicroCFTA.SourceRecursiveIntersectionKernel.Domain.grows
+SOURCE R19 lean/MicroCFTA/SourceRecursiveIntersectionKernelFacts.lean:45-46
+SOURCE-SHA256 3d357ba3752609d4c9d6c46e871535de8c22db56b1a834da29b58c526dfb2ac0
+PREFIX-SHA256 c4878c69f0eec8b5502952705c0882392d8ebdfb984b9ad354a4811129de76b0
+theorem Domain.grows (domain : Interned DomainKey) (known : Domain before domain) (extension : Extension before after) :
+    Domain after domain := by
+
+MicroCFTA.SourceRecursiveIntersectionKernel.empty_domain
+SOURCE R19 lean/MicroCFTA/SourceRecursiveIntersectionKernelFacts.lean:57-57
+SOURCE-SHA256 3d357ba3752609d4c9d6c46e871535de8c22db56b1a834da29b58c526dfb2ac0
+PREFIX-SHA256 43d9ecdfb8ea1b2c02fda4efb8472307cc59e7a7723f19f7f5112a4e99002906
+theorem empty_domain (state : Machine Symbol Guard) : Domain state IntersectionEmptyDomain.emptyDomain := by

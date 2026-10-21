@@ -1,0 +1,160 @@
+import MicroCFTA.SourceEqualityConstraintFieldLookup
+import MicroCFTA.SourceEqualityNativeCheckedCode
+import MicroCFTA.SourceEqualityIntersectionEdgeAllocation
+import MicroCFTA.SourceRecursiveIntersectionNative
+import MicroCFTA.SourceEqualityPCSNativeEdge
+
+/-!
+# Native intersection with checked edge demand
+
+Native state retains both typed memo tables and all equality-operation
+caches. Edge publication precedes its body. The body checks arity and
+constraint rejection before child instructions exist. Missing represented
+fields retain the body continuation after publication. Completed native
+provenance and runtime scheduling require separate correspondence proofs.
+-/
+namespace MicroCFTA.SourceEqualityNativeDemand
+open InternedConstructorTemplates SourceRecursiveIntersectionCode SourceRecursiveIntersectionThunks
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Native" => SourceRecursiveIntersectionThunks.State
+local notation "Operations" => SourceEqualityConstraintMemoAllocation.State
+local instance : DecidableEq (SourceGuards.Guard FullSyntax.Formula) := SourceEqualityPCSNativeEdge.guardDecidableEq
+
+/-- Native requests retain both physical equality caches and their completed operation tables. -/
+structure State (width : Nat) : Type 1 where
+  native : Native width Symbol Guard
+  operations : Operations
+
+/-- A demanded edge body resumes without looking up its running thunk again. -/
+inductive Control (Output : Type) : Type 1 where
+  | code (body : Code Symbol Guard Output)
+  | edgeBody (request : EdgeRequest Symbol Guard) (next : EdgeValue Symbol Guard → Code Symbol Guard Output)
+
+/-- Missing model storage is distinct from a native busy thunk or a source error. -/
+inductive Blocked where
+  | native (reason : SourceRecursiveIntersectionNative.Blocked)
+  | missingField (original : Guard)
+
+/-- Every observation retains the current equality state and complete native state. -/
+inductive Outcome (width : Nat) (Output : Type) : Type 1 where
+  | yielded (control : Control Output) (state : State width)
+  | done (value : Output) (state : State width)
+  | failed (failure : SourceRecursiveIntersectionKernel.Failure) (state : State width)
+  | constraintError (message : String) (state : State width)
+  | blocked (reason : Blocked) (control : Control Output) (state : State width)
+
+/-- Read actual returned state from every complete or incomplete observation. -/
+def Outcome.state : Outcome width Output → State width
+  | .yielded _ state | .done _ state | .failed _ state | .constraintError _ state | .blocked _ _ state => state
+
+/-- Ordinary source instructions retain equality state at the exact native continuation. -/
+def lift (operations : Operations) : SourceRecursiveIntersectionNative.Outcome width Symbol Guard Output → Outcome width Output
+  | .yielded code state => .yielded (.code code) ⟨state, operations⟩
+  | .done value state => .done value ⟨state, operations⟩
+  | .failed failure state => .failed failure ⟨state, operations⟩
+  | .blocked reason code state => .blocked (.native reason) (.code code) ⟨state, operations⟩
+
+/-- Sentinel demand retains the canonical empty equality-field allocation before direct edge interning. -/
+def sentinel (request : EdgeRequest Symbol Guard) (next : EdgeValue Symbol Guard → Code Symbol Guard Output)
+    (state : State width) : Outcome width Output :=
+  .yielded (.code ((SourceEqualityNativeCheckedCode.sentinel request.left).bind next))
+    {state with operations := SourceEqualityMkEdgeAllocation.emptyField state.operations}
+
+/-- Check a published original edge before compiling any child request. -/
+noncomputable def body (request : EdgeRequest Symbol Guard) (next : EdgeValue Symbol Guard → Code Symbol Guard Output)
+    (state : State width) : Outcome width Output :=
+  if request.left.children.length ≠ request.right.children.length then sentinel request next state
+  else
+    match SourceEqualityConstraintFieldLookup.load request.left.entry.key.constraint state.operations.constraints with
+    | .error message => .constraintError message state
+    | .ok none => .blocked (.missingField request.left.entry.key.constraint) (.edgeBody request next) state
+    | .ok (some first) =>
+        match SourceEqualityConstraintFieldLookup.load request.right.entry.key.constraint state.operations.constraints with
+        | .error message => .constraintError message state
+        | .ok none => .blocked (.missingField request.right.entry.key.constraint) (.edgeBody request next) state
+        | .ok (some second) =>
+            let checked := SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second
+              request.left.children.length request.right.children.length state.operations
+            let after := {state with operations := checked.2}
+            match checked.1 with
+            | .error message => .constraintError message after
+            | .ok .mismatch | .ok .rejected => sentinel request next after
+            | .ok (.ready combined) =>
+                .yielded (.code ((SourceEqualityNativeCheckedCode.children request.domain request.left request.right combined).bind next)) after
+
+/-- One instruction retains native publication and demand while replacing the eager edge body. -/
+noncomputable def step [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (control : Control Output) (state : State width) : Outcome width Output :=
+  match control with
+  | .edgeBody request next => body request next state
+  | .code (.edge request next) =>
+      let selected := lookupEdge width request state.native
+      let demanded := demandEdge selected.1 selected.2
+      let after := {state with native := demanded.2}
+      match demanded.1 with
+      | .absent => .blocked (.native (.absentEdge selected.1)) control after
+      | .busy => .blocked (.native (.edgeBusy selected.1)) control after
+      | .ready value => .yielded (.code (next value)) after
+      | .evaluate actual =>
+          .yielded (.edgeBody actual (fun value => .finishEdge selected.1 value (next value))) after
+  | .code code => lift state.operations
+      (SourceRecursiveIntersectionNative.step SourceEqualityConstraintConstructors.top SourceEqualityPCSNativeEdge.conjoin code state.native)
+
+/-- A finite bound retains the exact remaining control and every current cache. -/
+noncomputable def execute [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] :
+    Nat → Control Output → State width → Outcome width Output
+  | 0, control, state => .yielded control state
+  | fuel + 1, control, state =>
+      match step control state with
+      | .yielded next after => execute fuel next after
+      | .done value after => .done value after
+      | .failed failure after => .failed failure after
+      | .constraintError message after => .constraintError message after
+      | .blocked reason next after => .blocked reason next after
+
+/-- Only yielded work continues under another finite bound. -/
+noncomputable def resume [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) : Outcome width Output → Outcome width Output
+  | .yielded next after => execute fuel next after
+  | .done value after => .done value after
+  | .failed failure after => .failed failure after
+  | .constraintError message after => .constraintError message after
+  | .blocked reason next after => .blocked reason next after
+
+/-- Splitting a bound preserves every continuation, publication, and operation cache. -/
+theorem execute_add [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel extra : Nat) (control : Control Output) (state : State width) :
+    execute (fuel + extra) control state = resume extra (execute fuel control state) := by
+  induction fuel generalizing control state with
+  | zero => simp only [Nat.zero_add, execute, resume]
+  | succ fuel ih =>
+      simp only [Nat.succ_add, execute]
+      cases actual : step control state with
+      | yielded next after => exact ih next after
+      | done | failed | constraintError | blocked => rfl
+
+/-- A completed result retains its actual state under every larger bound. -/
+theorem done_stable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel extra : Nat) (control : Control Output) (before after : State width) (value : Output)
+    (done : execute fuel control before = .done value after) :
+    execute (fuel + extra) control before = .done value after := by
+  rw [execute_add, done]
+  rfl
+
+/-- Additional fuel cannot change a blocked body or fabricate a completed result. -/
+theorem blocked_stable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel extra : Nat) (control next : Control Output) (before after : State width) (reason : Blocked)
+    (blocked : execute fuel control before = .blocked reason next after) :
+    execute (fuel + extra) control before = .blocked reason next after := by
+  rw [execute_add, blocked]
+  rfl
+
+/-- Arity mismatch creates only the sentinel continuation before any original field lookup. -/
+theorem body_mismatch (request : EdgeRequest Symbol Guard) (next : EdgeValue Symbol Guard → Code Symbol Guard Output)
+    (state : State width) (mismatch : request.left.children.length ≠ request.right.children.length) :
+    body request next state = sentinel request next state := by
+  unfold body
+  exact ite_eq_left mismatch
+
+end MicroCFTA.SourceEqualityNativeDemand

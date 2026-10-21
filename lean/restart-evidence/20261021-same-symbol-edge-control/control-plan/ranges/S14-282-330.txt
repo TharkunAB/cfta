@@ -1,0 +1,49 @@
+/-- Mismatch completes without children at the exact sentinel heap and empty-field state. -/
+theorem mismatch_body [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (view : IntersectSchedule.View Symbol) (model : IntersectSchedule.InputMeaning view)
+    (ranked : IntersectSchedule.RankedInput view model.valid) (holds : Guard → Term Symbol → Bool)
+    (request : EdgeRequest Symbol Guard) (before : SourceEqualityNativeDemand.State width)
+    (ready : SourceEqualityRequiredCache.Ready before.native.machine.heap)
+    (mismatch : request.left.children.length ≠ request.right.children.length) :
+    let built := run (makeEdge request.left.entry.key.symbol SourceEqualityConstraintConstructors.top [.empty]) before.native.machine.heap
+    let after : SourceEqualityNativeDemand.State width :=
+      ⟨advance before.native {before.native.machine with heap := built.2}, SourceEqualityMkEdgeAllocation.emptyField before.operations⟩
+    execute 3 (.edgeBody request .pure) before = .done built.1 after ∧
+      EdgeLaw view model ranked holds request built.1 ∧
+      SourceEqualityRequiredCache.Keeps before.native.machine.heap after.native.machine.heap ∧ EdgeResident after.native.machine.heap built.1 := by
+  have constructor := SourceEqualityNativeDemandMismatchProvenance.sentinel_provenance request.left.entry.key.symbol before.native.machine.heap ready
+  exact ⟨SourceEqualityNativeDemandMismatchReceipt.mismatch_body_complete request before mismatch,
+    sentinel_edge_law view model ranked holds request _ constructor.2.2.2.2.1
+      (rowAt_mismatch holds ranked.languages request.left request.right mismatch), constructor.1, constructor.2.1⟩
+
+/-- Rejection skips children and retains both allocation stages in the literal returned state. -/
+theorem rejected_body [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (view : IntersectSchedule.View Symbol) (model : IntersectSchedule.InputMeaning view)
+    (ranked : IntersectSchedule.RankedInput view model.valid)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (request : EdgeRequest Symbol Guard) (before : SourceEqualityNativeDemand.State width) (first second : Allocated)
+    (valid : SourceEqualityConstraintMemoAllocation.Valid before.operations)
+    (ready : SourceEqualityRequiredCache.Ready before.native.machine.heap)
+    (leftCached : SourceEqualityGuardReadback.Cached request.left.entry.key.constraint.equalities)
+    (rightCached : SourceEqualityGuardReadback.Cached request.right.entry.key.constraint.equalities)
+    (arity : request.left.children.length = request.right.children.length)
+    (left : SourceEqualityConstraintFieldLookup.load request.left.entry.key.constraint before.operations.constraints = .ok (some first))
+    (right : SourceEqualityConstraintFieldLookup.load request.right.entry.key.constraint before.operations.constraints = .ok (some second))
+    (rejected : (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second
+      request.left.children.length request.right.children.length before.operations).1 = .ok .rejected) :
+    let checked := SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second
+      request.left.children.length request.right.children.length before.operations
+    let built := run (makeEdge request.left.entry.key.symbol SourceEqualityConstraintConstructors.top [.empty]) before.native.machine.heap
+    let after : SourceEqualityNativeDemand.State width :=
+      ⟨advance before.native {before.native.machine with heap := built.2}, SourceEqualityMkEdgeAllocation.emptyField checked.2⟩
+    execute 3 (.edgeBody request .pure) before = .done built.1 after ∧
+      EdgeLaw view model ranked (SourceEqualityPCSGuard.holds formulas solver) request built.1 ∧
+      SourceEqualityRequiredCache.Keeps before.native.machine.heap after.native.machine.heap ∧ EdgeResident after.native.machine.heap built.1 := by
+  have constructor := SourceEqualityNativeDemandMismatchProvenance.sentinel_provenance request.left.entry.key.symbol before.native.machine.heap ready
+  have sourceRejected := rejected_source request before valid leftCached rightCached first second left right rejected
+  refine ⟨?_, sentinel_edge_law view model ranked (SourceEqualityPCSGuard.holds formulas solver) request _ constructor.2.2.2.2.1
+    (rowAt_rejected formulas solver ranked.languages request leftCached rightCached sourceRejected), constructor.1, constructor.2.1⟩
+  have prefixStep := body_rejected request (.pure : EdgeValue Symbol Guard → Code Symbol Guard (EdgeValue Symbol Guard))
+    before arity first second left right rejected
+  simp only [SourceEqualityNativeDemand.execute, SourceEqualityNativeDemand.step, prefixStep]
+  rfl

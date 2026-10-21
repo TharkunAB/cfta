@@ -1,0 +1,53 @@
+--- failed-strict1-source.lean.txt
++++ SourceCurrentSameSymbolEdgeControl.lean
+@@ -195,8 +195,11 @@
+     simp only [FlatMemoThunk.demand, stored, running]
+   have looked : step (.call request pending) before =
+       .yielded (.demand before.memo.next pending) {before with memo := published} := by
+-    simpa only [step, pairKey, allocated.1] using
+-      (rfl : step (.call request pending) before = step (.call request pending) before)
++    change Outcome.yielded
++      (.demand (FlatMemoThunk.lookupOrInsert (pairKey request) request before.memo).1 pending)
++      {before with memo := published} = _
++    exact congrArg (fun handle => Outcome.yielded (.demand handle pending)
++      {before with memo := published}) allocated.1
+   obtain ⟨remaining, tail⟩ := tail_done fuel _ _ _ _ after result looked done
+   have started : step (.demand before.memo.next pending) {before with memo := published} =
+       .yielded (.order before.memo.next request pending) {before with memo := running} := by
+@@ -254,7 +257,8 @@
+       omega
+     have missingReverse : current.memo.table (pairKey (right, left)) = none := by
+       rw [table]
+-      simpa only [Cache.put, ite_eq_right different] using reverseMissing
++      rw [Cache.put, if_neg different]
++      simpa only [pairKey] using reverseMissing
+     have one : step (.order before.memo.next (left, right) []) current =
+         .yielded (.call (right, left) [before.memo.next]) current := by
+       simp only [step, reversed, ↓reduceIte]
+@@ -285,9 +289,9 @@
+     have originalTable : next.memo.table (pairKey (left, right)) = some before.memo.next := by
+       rw [nextTable]
+       simp only [Cache.put, ite_eq_right (Ne.symm different)]
+-      simp only [table, Cache.put, ite_eq_left rfl]
++      simp [table, Cache.put]
+     have reverseTable : next.memo.table (pairKey (right, left)) = some current.memo.next := by
+-      simp only [nextTable, Cache.put, ite_eq_left rfl]
++      simp [nextTable, Cache.put]
+     refine ⟨count, before.memo.next, ?_, ?_, ?_, ?_, ?_⟩
+     · rw [nextChecked, checked] at trace
+       simpa only [finalState] using trace
+@@ -319,12 +323,12 @@
+     · rw [checked] at trace
+       simpa only [finalState] using trace
+     · have stored := congrFun table (pairKey (left, right))
+-      simpa only [memo, finish_table, pairKey, Cache.put, ite_eq_left rfl] using stored
++      simpa [memo, finish_table, pairKey, Cache.put] using stored
+     · rw [memo]
+       exact FlatMemoThunk.finish_evaluating before.memo.next result current.memo (left, right) cell
+     · rw [memo]
+       exact retained.trans (FlatMemoThunk.finish_returned before.memo.next result current.memo)
+     · intro impossible
+-      exact False.elim (reversed impossible)
++      exact False.elim impossible
+ 
+ end MicroCFTA.SourceCurrentSameSymbolEdgeControl

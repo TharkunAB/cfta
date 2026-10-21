@@ -1,0 +1,17 @@
+/-- A compiled edge request interprets to the actual edge callback. -/
+theorem interpret_requestEdge [DecidableEq (EdgeKey Symbol Guard)] (nodes : NodeCall Symbol Guard) (edges : EdgeCall Symbol Guard)
+    (domain : Interned DomainKey) (left right : EdgeValue Symbol Guard) (state : Machine Symbol Guard) :
+    interpret nodes edges (requestEdge domain left right) state = edges ⟨domain, left, right⟩ state := by
+  simp only [requestEdge, interpret, result_bind_pure]
+
+/-- The complete node callback function agrees at every actual source cache. -/
+theorem interpret_requestNode_fun [DecidableEq (EdgeKey Symbol Guard)] (nodes : NodeCall Symbol Guard) (edges : EdgeCall Symbol Guard)
+    (domain : Interned DomainKey) (left right : Value Symbol Guard) :
+    interpret nodes edges (requestNode domain left right) = nodes ⟨domain, left, right⟩ :=
+  funext (interpret_requestNode nodes edges domain left right)
+
+/-- The complete edge callback function agrees at every actual source cache. -/
+theorem interpret_requestEdge_fun [DecidableEq (EdgeKey Symbol Guard)] (nodes : NodeCall Symbol Guard) (edges : EdgeCall Symbol Guard)
+    (domain : Interned DomainKey) (left right : EdgeValue Symbol Guard) :
+    interpret nodes edges (requestEdge domain left right) = edges ⟨domain, left, right⟩ :=
+  funext (interpret_requestEdge nodes edges domain left right)

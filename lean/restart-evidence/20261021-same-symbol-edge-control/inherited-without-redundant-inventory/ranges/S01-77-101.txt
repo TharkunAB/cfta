@@ -1,0 +1,25 @@
+mapNodes ::
+    forall symbol.
+    (Hashable symbol, Typeable symbol) =>
+    (Node symbol -> Node symbol) -> Node symbol -> Node symbol
+mapNodes f = go
+  where
+    -- This table belongs to this transformation.
+    go :: Node symbol -> Node symbol
+    go = memo (mapNodesStep go f)
+    {-# NOINLINE go #-}
+
+-- | Perform one recursive traversal step using the supplied recursive call.
+{-# INLINEABLE mapNodesStep #-}
+mapNodesStep ::
+    (Hashable symbol, Typeable symbol) =>
+    (Node symbol -> Node symbol) ->
+    (Node symbol -> Node symbol) ->
+    Node symbol ->
+    Node symbol
+mapNodesStep _ _ EmptyNode = EmptyNode
+mapNodesStep recurse f (Node es) =
+    f $ Node $ map (\edge -> setChildren edge (map recurse (edgeChildren edge))) es
+mapNodesStep recurse f (Mu body) = f $ Mu (recurse . body)
+mapNodesStep recurse f (InternedUnion alternatives) = f $ createUnion $ map recurse $ internedUnionMembers alternatives
+mapNodesStep _ f (Rec recId) = f $ Rec recId

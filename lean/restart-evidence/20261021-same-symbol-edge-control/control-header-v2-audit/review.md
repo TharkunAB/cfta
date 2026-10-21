@@ -1,0 +1,5 @@
+[2026-10-21T23:40:09+02:00] Header-v2 SOURCE CLEAR. I read the complete corrected16-line note and exact11-line patch. Only note line6 changes; the inverse recovers the original note exactly.
+The corrected text retains residual native control and pending handles for yielded/blocked propagation. Terminal failed/constraintError propagation retains the actual full state. Native propagation does not implicitly finish pending same-symbol cells; prior explicit finishes in a partial run remain possible.
+Context10, API27, theorem header21 and source-index.json are byte-identical to the frozen reviewed v1. The17-source/32-cut mathematical review remains applicable; no premise, conclusion, operation or public name changed.
+The prior note6 correction request is resolved. Header/prose is clear for root to authorize a separately bounded implementation; no body, compiler result, completion or Haskell refinement is accepted here.
+Only static text/hash comparisons and new snapshots occurred. Zero prepared-script, compiler, Lean, Lake, FULL, runtime, capped, Git, network or official-file actions occurred. All older audits remain unchanged.

@@ -1,0 +1,26 @@
+/-- Equal checked edge triples identify the same original domain and complete physical row payloads. -/
+theorem requestKey_injective (width : Nat) (state : Machine Symbol Guard) (valid : Valid state)
+    (firstDomain secondDomain : Interned DomainKey) (firstLeft firstRight secondLeft secondRight : EdgeValue Symbol Guard)
+    (firstKnown : Domain state firstDomain) (secondKnown : Domain state secondDomain)
+    (firstSafe : KeySafe width firstDomain firstLeft firstRight) (secondSafe : KeySafe width secondDomain secondLeft secondRight)
+    (firstLeftResident : EdgeResident state.heap firstLeft) (firstRightResident : EdgeResident state.heap firstRight)
+    (secondLeftResident : EdgeResident state.heap secondLeft) (secondRightResident : EdgeResident state.heap secondRight)
+    (same : requestKey width firstDomain firstLeft firstRight = requestKey width secondDomain secondLeft secondRight) :
+    (firstDomain, firstLeft, firstRight) = (secondDomain, secondLeft, secondRight) := by
+  have components := Prod.mk.inj ((IntersectionEmptyDomain.edgeKey_exact width state.domains valid.2
+    firstDomain.key secondDomain.key firstDomain secondDomain firstKnown.represented secondKnown.represented
+    (SourceRecursiveIntersectionMemo.domain_fits width _ firstSafe.2.1)
+    (SourceRecursiveIntersectionMemo.domain_fits width _ secondSafe.2.1)
+    firstLeft.entry.identity firstRight.entry.identity secondLeft.entry.identity secondRight.entry.identity
+    firstSafe.2.2.1 firstSafe.2.2.2 secondSafe.2.2.1 secondSafe.2.2.2).mp same)
+  have identities := Prod.mk.inj components.2
+  have domainIdentities := (IntersectionEmptyDomain.identity_exact state.domains valid.2 _ _ _ _
+    firstKnown.represented secondKnown.represented).mpr components.1
+  have domains : firstDomain = secondDomain := by
+    cases firstDomain
+    cases secondDomain
+    simp only [Interned.mk.injEq]
+    exact ⟨domainIdentities, components.1⟩
+  have left := edge_identity_unique state.heap valid.1.coherent firstLeft secondLeft firstLeftResident secondLeftResident identities.1
+  have right := edge_identity_unique state.heap valid.1.coherent firstRight secondRight firstRightResident secondRightResident identities.2
+  rw [domains, left, right]

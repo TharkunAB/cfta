@@ -1,0 +1,8 @@
+/-- Compiled child requests and edge construction equal the actual guarded source edge worker. -/
+theorem compileEdge_exact [DecidableEq (EdgeKey Symbol Guard)] (nodes : NodeCall Symbol Guard) (edges : EdgeCall Symbol Guard)
+    (emptyGuard : Guard) (conjoin : Guard → Guard → Guard) (request : EdgeRequest Symbol Guard) (state : Machine Symbol Guard) :
+    interpret nodes edges (compileEdge emptyGuard conjoin request) state =
+      SourceRecursiveIntersectionKernel.edge emptyGuard conjoin (fun left right => nodes ⟨request.domain, left, right⟩) request.left request.right state := by
+  by_cases arity : request.left.children.length = request.right.children.length <;>
+    simp only [compileEdge, SourceRecursiveIntersectionKernel.edge, arity, ite_true, ite_false,
+      interpret_bind, interpret_walk, interpret_requestNode_fun, interpret, result_bind_pure]

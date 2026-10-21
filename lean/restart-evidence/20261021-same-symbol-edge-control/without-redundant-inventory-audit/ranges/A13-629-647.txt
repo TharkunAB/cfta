@@ -1,0 +1,19 @@
+/-- Actual edge lookup and demand retain scope without a symbol-matching premise. -/
+theorem edge_request_complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (source : InternedConstructorTemplates.State Symbol Guard) (facts : InternedNestedFacts.Facts source)
+    (holds : Guard → Term Symbol → Bool) (request : EdgeRequest Symbol Guard) (scope : EdgeScope source request)
+    (complete : Completes (view source holds) (SourceRecursiveIntersectionNative.edgeSemantic holds request))
+    (state : Checked width) (valid : Good state) (scopedCache : Scoped state.native)
+    (semantic : SemanticReady state.native.machine.heap) (ready : EdgeReady state.native.machine request)
+    (growth : Grows source state.native.machine.heap) (history : Extends source.nodes.issued state.native.machine.heap.nodes.issued)
+    (active : ActiveAbove (view source holds) holds
+      (requiredFuel (view source holds) (SourceRecursiveIntersectionNative.edgeSemantic holds request) complete + 1) state.native)
+    (ranges : WordRanges (.code (requestEdge request.domain request.left request.right)) state) :
+    Returned (.code (requestEdge request.domain request.left request.right)) state
+      (fun after value => EdgeResident after.heap value) (fun _ value => EdgeLaw request value) := by
+  apply code_of_bodies source holds
+    (requiredFuel (view source holds) (SourceRecursiveIntersectionNative.edgeSemantic holds request) complete + 1)
+    (source_bodies source facts holds _) _ state _ _ (safe_requestEdge _ _ _ _ ready)
+    ⟨ready, fun _ _ _ _ _ => trivial⟩
+    (below_requestEdge source holds _ request state.native.machine ⟨scope, complete, Nat.lt_succ_self _⟩)
+    valid scopedCache semantic (fun _ _ _ _ _ _ law => law) (fun _ => trivial) growth history active ranges

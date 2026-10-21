@@ -1,0 +1,56 @@
+/-- Actual checked edge bodies derive rejection or ordered child laws before any finish. -/
+theorem edge_complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (source : InternedConstructorTemplates.State Symbol Guard) (facts : InternedNestedFacts.Facts source)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inputModel : InputMeaning (view source (SourceEqualityPCSGuard.holds formulas solver)))
+    (inputRanked : RankedInput (view source (SourceEqualityPCSGuard.holds formulas solver)) inputModel.valid)
+    (request : EdgeRequest Symbol Guard) (scope : EdgeScope source request)
+    (complete : Completes (view source (SourceEqualityPCSGuard.holds formulas solver))
+      (SourceRecursiveIntersectionNative.edgeSemantic (SourceEqualityPCSGuard.holds formulas solver) request))
+    (state : Checked width) (valid : Good state)
+    (contextual : SourceCurrentAllocatedNativeContextCache.Contextual
+      (view source (SourceEqualityPCSGuard.holds formulas solver)) inputModel inputRanked (SourceEqualityPCSGuard.holds formulas solver) state.native)
+    (semantic : SemanticReady state.native.machine.heap)
+    (symbols : request.left.entry.key.symbol = request.right.entry.key.symbol) (ready : EdgeReady state.native.machine request)
+    (growth : Grows source state.native.machine.heap) (history : Extends source.nodes.issued state.native.machine.heap.nodes.issued)
+    (active : ActiveAbove (view source (SourceEqualityPCSGuard.holds formulas solver)) (SourceEqualityPCSGuard.holds formulas solver)
+      (requiredFuel (view source (SourceEqualityPCSGuard.holds formulas solver))
+        (SourceRecursiveIntersectionNative.edgeSemantic (SourceEqualityPCSGuard.holds formulas solver) request) complete) state.native)
+    (ranges : WordRanges (.edgeBody request .pure) state) :
+    Returned (semanticView := view source (SourceEqualityPCSGuard.holds formulas solver)) (model := inputModel)
+      (ranked := inputRanked) (semanticHolds := SourceEqualityPCSGuard.holds formulas solver)
+      (.edgeBody request .pure) state (fun after value => EdgeResident after.heap value)
+      (fun _ value => SourceCurrentAllocatedNativeContextCache.EdgeLaw
+        (view source (SourceEqualityPCSGuard.holds formulas solver)) inputModel inputRanked (SourceEqualityPCSGuard.holds formulas solver) request value) := by
+  exact (source_bodies source facts formulas solver inputModel inputRanked
+    (requiredFuel (view source (SourceEqualityPCSGuard.holds formulas solver))
+      (SourceRecursiveIntersectionNative.edgeSemantic (SourceEqualityPCSGuard.holds formulas solver) request) complete + 1)).edges
+    request scope complete (Nat.lt_succ_self _) state valid contextual semantic symbols ready growth history active ranges
+
+/-- Lookup, demand, and each protected finish return the same node law and native cache. -/
+theorem request_complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (source : InternedConstructorTemplates.State Symbol Guard) (facts : InternedNestedFacts.Facts source)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inputModel : InputMeaning (view source (SourceEqualityPCSGuard.holds formulas solver)))
+    (inputRanked : RankedInput (view source (SourceEqualityPCSGuard.holds formulas solver)) inputModel.valid)
+    (request : NodeRequest Symbol Guard) (scope : NodeScope source request)
+    (complete : Completes (view source (SourceEqualityPCSGuard.holds formulas solver)) (SourceRecursiveIntersectionNative.nodeSemantic request))
+    (state : Checked width) (valid : Good state)
+    (contextual : SourceCurrentAllocatedNativeContextCache.Contextual
+      (view source (SourceEqualityPCSGuard.holds formulas solver)) inputModel inputRanked (SourceEqualityPCSGuard.holds formulas solver) state.native)
+    (semantic : SemanticReady state.native.machine.heap) (ready : NodeReady state.native.machine request)
+    (growth : Grows source state.native.machine.heap) (history : Extends source.nodes.issued state.native.machine.heap.nodes.issued)
+    (active : ActiveAbove (view source (SourceEqualityPCSGuard.holds formulas solver)) (SourceEqualityPCSGuard.holds formulas solver)
+      (requiredFuel (view source (SourceEqualityPCSGuard.holds formulas solver)) (SourceRecursiveIntersectionNative.nodeSemantic request) complete + 1) state.native)
+    (ranges : WordRanges (.code (requestNode request.domain request.left request.right)) state) :
+    Returned (semanticView := view source (SourceEqualityPCSGuard.holds formulas solver)) (model := inputModel)
+      (ranked := inputRanked) (semanticHolds := SourceEqualityPCSGuard.holds formulas solver)
+      (.code (requestNode request.domain request.left request.right)) state (fun after value => Available after.heap value)
+      (fun _ value => SourceCurrentAllocatedNativeContextCache.NodeLaw
+        (view source (SourceEqualityPCSGuard.holds formulas solver)) inputModel inputRanked (SourceEqualityPCSGuard.holds formulas solver) request value) := by
+  apply code_of_bodies source (SourceEqualityPCSGuard.holds formulas solver)
+    (requiredFuel (view source (SourceEqualityPCSGuard.holds formulas solver)) (SourceRecursiveIntersectionNative.nodeSemantic request) complete + 1)
+    (source_bodies source facts formulas solver inputModel inputRanked _) _ state _ _
+    (safe_requestNode _ _ _ _ ready) ⟨ready, fun _ _ _ _ _ => trivial⟩
+    (below_requestNode source (SourceEqualityPCSGuard.holds formulas solver) _ request state.native.machine ⟨scope, complete, Nat.lt_succ_self _⟩)
+    valid contextual semantic (fun _ _ _ _ _ _ law => law) (fun _ => trivial) growth history active ranges

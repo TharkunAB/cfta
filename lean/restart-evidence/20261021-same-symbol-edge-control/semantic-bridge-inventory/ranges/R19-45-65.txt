@@ -1,0 +1,21 @@
+theorem Domain.grows (domain : Interned DomainKey) (known : Domain before domain) (extension : Extension before after) :
+    Domain after domain := by
+  refine ⟨⟨known.represented.1, ?_⟩, known.canonical, known.typed,
+    known.bindings.grows before.heap after.heap domain.key extension.heap extension.history⟩
+  by_cases empty : domain.key = IntersectionEmptyDomain.emptyKey
+  · simpa only [empty, ite_true] using known.represented.2
+  · obtain ⟨entry, present, same⟩ := by simpa only [empty, ite_false] using known.represented.2
+    simpa only [empty, ite_false] using
+      (show ∃ entry, after.domains.table domain.key = some entry ∧ domain.identity = entry.identity + 1 from
+        ⟨entry, extension.domains _ _ present, same⟩)
+
+/-- The reserved empty source domain requires no cache allocation or physical binding. -/
+theorem empty_domain (state : Machine Symbol Guard) : Domain state IntersectionEmptyDomain.emptyDomain := by
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · simp [IntersectionEmptyDomain.Represents, IntersectionEmptyDomain.emptyDomain]
+  · exact ⟨List.Pairwise.nil, List.Pairwise.nil⟩
+  · intro binding member
+    cases member
+  · intro name member
+    cases member
+

@@ -1,0 +1,23 @@
+-- | Intersect edges with equal symbols and reject unequal arities.
+intersectEdgeSameSymbol ::
+    forall symbol.
+    (Hashable symbol, Typeable symbol) =>
+    Edge symbol -> Edge symbol -> Edge symbol
+intersectEdgeSameSymbol left right =
+    memo2TypeableWith @symbol genericIntersectEdgeSameSymbolCache go left right
+  where
+    go e1 e2
+        | e2 < e1 = intersectEdgeSameSymbol e2 e1
+        | length (edgeChildren e1) /= length (edgeChildren e2) = emptyEdge (edgeSymbol e1)
+        | otherwise =
+            mkEdge
+                (edgeSymbol e1)
+                (zipWith intersect (edgeChildren e1) (edgeChildren e2))
+                (edgeConstraint e1 `conjoinConstraints` edgeConstraint e2)
+{-# INLINEABLE intersectEdgeSameSymbol #-}
+
+-- | Intersection of two automata.
+intersect ::
+    (Hashable symbol, Typeable symbol) =>
+    Node symbol -> Node symbol -> Node symbol
+intersect l r = intersectOpen (emptyIntersectionDom, l, r)

@@ -1,0 +1,69 @@
+--- originals/commit-proofs.py.H6.txt
++++ commit-proofs.py
+@@ -5,43 +5,51 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ ROOT = HERE.parents[2]
++AUDIT_SHA = '__H7_AUDIT_LOG_SHA256__'
++AUDIT_JOBS = int('__H7_AUDIT_BUILD_JOBS__')
++AUDIT_DEPENDENCIES = int('__H7_AUDIT_DEPENDENCIES__')
+ def git(*args):
+     return subprocess.check_output(['git', *args], cwd=ROOT, text=True)
+ 
+ assert git('branch', '--show-current').strip() == 'formalize'
+-assert git('rev-parse', 'HEAD').strip() == (HERE / 'starting-head.txt').read_text().strip() == '93f3d0ad7a15196177d4961bcb49092cda94b0e1'
++assert git('rev-parse', 'HEAD').strip() == (HERE / 'starting-head.txt').read_text().strip() == 'e03b78047a647ba1f7c99ec0d4d1c16c8f188b64'
+ assert not git('diff', '--cached', '--name-only').strip()
++assert git('rev-parse', 'codex/backup-same-symbol-edge-control-20261021-2332').strip() == (HERE / 'starting-head.txt').read_text().strip()
++assert git('rev-parse', 'main').strip() == (HERE / 'starting-local-main.txt').read_text().strip() == 'ed73f5997f1c07e2961d06e6e290d1de38319dad'
++assert git('rev-parse', 'origin/main').strip() == (HERE / 'starting-main.txt').read_text().strip() == '794903b3fbad3becb8b28736fc33463760731fc7'
+ selected = json.loads((HERE / 'selected-sources.json').read_text())
+-assert set(selected) == {'lean/MicroCFTA/SourceCurrentColdFiniteWarmCalls.lean'}
+-assert selected[next(iter(selected))]['sha256'] == 'e4665b0bb522ec88f1925fe6bc360b76e9e4bdfbe6192210ac708a3097a20cc5'
+-assert selected[next(iter(selected))]['strict'] == 'cold-finite-calls-strict-2'
+-assert selected[next(iter(selected))]['full'] == 'cold-finite-calls-public-2'
+-assert 'lean/MicroCFTA/SourceCurrentColdFiniteWarmCalls.lean' not in json.loads((HERE / 'starting-files.json').read_text())
++assert set(selected) == {'lean/MicroCFTA/SourceCurrentSameSymbolEdgeControl.lean'}
++gate = json.loads((HERE / 'selected-source-gate.json').read_text())
++assert gate['status'] == 'ROOT_ACCEPTED' and gate['path'] == next(iter(selected))
++assert selected[gate['path']]['sha256'] == gate['sha256'] == hashlib.sha256((HERE / gate['snapshot']).read_bytes()).hexdigest()
++assert selected[next(iter(selected))]['strict'] == 'same-symbol-edge-strict-3'
++assert selected[next(iter(selected))]['full'] == 'same-symbol-edge-public-1'
++assert 'lean/MicroCFTA/SourceCurrentSameSymbolEdgeControl.lean' not in json.loads((HERE / 'starting-files.json').read_text())
+ for name, pin in selected.items():
+     data = (ROOT / name).read_bytes()
+     assert hashlib.sha256(data).hexdigest() == pin['sha256']
+     assert data == (HERE / (pin['strict'] + '.source.lean')).read_bytes()
+     assert not (HERE / (pin['strict'] + '.log')).read_bytes()
+     assert json.loads((HERE / (pin['full'] + '.json')).read_text())['exit_code'] == 0
+-assert json.loads((HERE / 'cold-finite-calls-audit-1.json').read_text())['exit_code'] == 0
+-audit_raw = (HERE / 'cold-finite-calls-audit-1.log').read_bytes()
+-assert hashlib.sha256(audit_raw).hexdigest() == 'a64c52004a4efc52f348fd0328a1c77eda1fffbb7a01424d2b7a196d9e5b1346'
++assert json.loads((HERE / 'same-symbol-edge-audit-1.json').read_text())['exit_code'] == 0
++audit_raw = (HERE / 'same-symbol-edge-audit-1.log').read_bytes()
++assert hashlib.sha256(audit_raw).hexdigest() == AUDIT_SHA
+ audit = audit_raw.decode()
+-assert f"Build completed successfully ({int('3623')} jobs)." in audit
+-assert f"{int('75263')} MicroCFTA theorems" in audit
++assert f"Build completed successfully ({AUDIT_JOBS} jobs)." in audit
++assert f"{AUDIT_DEPENDENCIES} MicroCFTA theorems" in audit
+ paths = sorted([*selected, 'lean/MicroCFTA/Audit.lean'])
+ assert set(git('diff', '--name-only').splitlines()) == {'lean/MicroCFTA/Audit.lean'}
+ original_audit = (HERE / 'original-sources/Audit.original.lean.txt').read_bytes()
+-assert hashlib.sha256(original_audit).hexdigest() == 'd11e901227fa107e2b36ebd5a76f96f1f89f7f8f697e39be2907011648cf9487'
+-assert len(original_audit.splitlines()) == 3111
++assert hashlib.sha256(original_audit).hexdigest() == '54c43b5a02ca28f66963385976ae3e3846d903b5294d9ecca7dc476d5c137901'
++assert len(original_audit.splitlines()) == 3112
+ audit_bytes = (ROOT / 'lean/MicroCFTA/Audit.lean').read_bytes()
+-addition = b'import MicroCFTA.SourceCurrentColdFiniteWarmCalls\n'
++addition = b'import MicroCFTA.SourceCurrentSameSymbolEdgeControl\n'
+ assert audit_bytes.count(addition) == 1 and audit_bytes.replace(addition, b'', 1) == original_audit
+ assert audit_bytes.index(addition) < audit_bytes.index(b'/-!')
+ subprocess.run(['git', 'add', '--', *paths], cwd=ROOT, check=True)
+ assert set(git('diff', '--cached', '--name-only').splitlines()) == set(paths)
+ subprocess.run(['git', 'diff', '--cached', '--check'], cwd=ROOT, check=True)
+-subprocess.run(['git', 'commit', '-m', 'Prove finite source-built reduction calls'], cwd=ROOT, check=True)
++subprocess.run(['git', 'commit', '-m', 'Record same-symbol edge comparison control'], cwd=ROOT, check=True)
+ commit = git('rev-parse', 'HEAD').strip()
+ (HERE / 'proof-commit.txt').write_text(commit + '\n')
+ print(json.dumps({'status': 'PASS', 'proof_commit': commit, 'proof_files': paths}))

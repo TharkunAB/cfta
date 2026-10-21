@@ -1,0 +1,19 @@
+--- verify-proofs.pending-audit.py.txt
++++ verify-proofs.py
+@@ -41,7 +41,7 @@
+     "same-symbol-edge-strict-2": (0, "062815f1619dce95fac323ce8bfdaebdf11252728516503d6e9ac3c87b034141", "8d2ec6755ee878cdc3e2637b158dd50684dc193ff81a4ad498234e28bc45bdd3", 0, 1),
+     "same-symbol-edge-strict-3": (0, selected_sha, digest(b""), 0, 0),
+     "same-symbol-edge-public-1": (0, "75b3982bc568afb39dfdc91cf0f1f5ab3c38fcbfcfb5669c3355d6a15c5b3995", "e90cfe4417e4cc5fec32da1dec6cae89d9ce3b31ef6b6a32fd61a1dfc0571bb6", 0, 0),
+-    "same-symbol-edge-audit-1": (0, None, None, None, None),
++    "same-symbol-edge-audit-1": (0, None, "4e6d8db305002d56aa075782fee1591b65490e4db1aba48bd9006a37d249de18", None, None),
+ }
+ assert (evidence / "same-symbol-edge-audit-1.json").is_file(), "Audit is pending; no complete proof report is available"
+ actual = set()
+@@ -151,6 +151,7 @@
+ build = re.search(r"Build completed successfully \((\d+) jobs\)\.", audit)
+ dependencies = re.search(r"Checked axiom dependencies of (\d+) MicroCFTA theorems", audit)
+ assert build and dependencies and not re.search(r"\berror(?:\([^)]*\))?:", audit)
++assert int(build.group(1)) == 3624 and int(dependencies.group(1)) == 75337
+ print(json.dumps(dict(status="PASS", live=args.live, source_jobs=4, audit_jobs=1, actual_jobs=5,
+     failed_jobs=1, warned_source_exit_zero_jobs=1, rejected_public_type_jobs=0, new_lean_lake_jobs=0, selected_modules=1, original_archives=1,
+     audit_build_jobs=int(build.group(1)), audit_dependencies=int(dependencies.group(1)), audit_log_sha256=digest(audit.encode())), indent=2))

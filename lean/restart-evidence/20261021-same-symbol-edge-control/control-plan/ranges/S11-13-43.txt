@@ -1,0 +1,31 @@
+/-- The source numeric identity order, independent of the intersection body. -/
+def orderedPair (left right : Nat) : Nat × Nat :=
+  if right < left then (right, left) else (left, right)
+
+/-- The stored pair is the minimum and maximum of the two identities. -/
+theorem orderedPair_minmax (left right : Nat) : orderedPair left right = (min left right, max left right) := by
+  by_cases reverse : right < left
+  · simp [orderedPair, reverse, Nat.min_eq_right (by omega : right ≤ left), Nat.max_eq_left (by omega : right ≤ left)]
+  · simp [orderedPair, reverse, Nat.min_eq_left (by omega : left ≤ right), Nat.max_eq_right (by omega : left ≤ right)]
+
+/-- Reversing operands retains the same complete canonical key. -/
+theorem orderedPair_symmetric (left right : Nat) : orderedPair left right = orderedPair right left := by
+  simp [orderedPair_minmax, Nat.min_comm, Nat.max_comm]
+
+/-- The bounded operational port makes the same recursive swap as the source. -/
+def orderWorker (body : Nat → Nat → Value) : Nat → Nat → Nat → Option Value
+  | 0, _, _ => none
+  | fuel + 1, left, right =>
+      if right < left then orderWorker body fuel right left else some (body left right)
+
+/-- At most one swap is needed before the source reaches the ordinary body. -/
+theorem orderWorker_exact (body : Nat → Nat → Value) (fuel left right : Nat) :
+    orderWorker body (fuel + 2) left right = some (body (orderedPair left right).1 (orderedPair left right).2) := by
+  by_cases reverse : right < left
+  · simp [orderWorker, orderedPair, reverse, show ¬left < right by omega]
+  · simp [orderWorker, orderedPair, reverse]
+
+/-- The actual swap worker has equal results in both directions without a symmetric-body premise. -/
+theorem orderWorker_symmetric (body : Nat → Nat → Value) (fuel left right : Nat) :
+    orderWorker body (fuel + 2) left right = orderWorker body (fuel + 2) right left := by
+  rw [orderWorker_exact, orderWorker_exact, orderedPair_symmetric]

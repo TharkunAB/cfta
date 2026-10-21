@@ -1,0 +1,254 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261021-same-symbol-edge-control/same-symbol-edge-strict-1.source.lean:198:4: error: Type mismatch: After simplification, term
+  rfl
+ has type
+  True
+but is expected to have type
+  Outcome.yielded
+      (Control.demand
+        (FlatMemoThunk.lookupOrInsert (request.fst.entry.identity, request.snd.entry.identity) request before.memo).fst
+        pending)
+      { checked := before.checked,
+        memo :=
+          (FlatMemoThunk.lookupOrInsert (request.fst.entry.identity, request.snd.entry.identity) request
+              before.memo).snd } =
+    Outcome.yielded (Control.demand before.memo.next pending) { checked := before.checked, memo := published }
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261021-same-symbol-edge-control/same-symbol-edge-strict-1.source.lean:257:6: error: Type mismatch: After simplification, term
+  reverseMissing
+ has type
+  @Eq (Option Nat) (before.memo.table (right.entry.identity, left.entry.identity)) none
+but is expected to have type
+  @Eq (Option Nat) (before.memo.table (pairKey (right, left))) none
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261021-same-symbol-edge-control/same-symbol-edge-strict-1.source.lean:285:92: error: unsolved goals
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+fuel : Nat
+left right result : Edge
+before after : State width
+valid :
+  FlatMemoThunk.Valid (fun request key => (request.fst.entry.identity, request.snd.entry.identity) = key)
+    (fun x => True) before.memo
+missing : before.memo.table (left.entry.identity, right.entry.identity) = none
+reverseMissing : before.memo.table (right.entry.identity, left.entry.identity) = none
+done : execute fuel (Control.call (left, right) []) before = Outcome.done result after
+remaining✝ : Nat
+current : State width
+tail : execute remaining✝ (Control.order before.memo.next (left, right) []) current = Outcome.done result after
+checked : current.checked = before.checked
+currentValid : MemoValid current.memo
+left✝¹ : FlatMemoThunk.Running before.memo current.memo
+retained : FlatMemoThunk.Returned before.memo current.memo
+table : current.memo.table = Cache.put before.memo.table (pairKey (left, right)) before.memo.next
+cell :
+  current.memo.cells before.memo.next = some { request := (left, right), status := FlatMemoThunk.Status.evaluating }
+fresh : current.memo.next = before.memo.next + 1
+reversed : right.entry.identity < left.entry.identity
+different : pairKey (right, left) ≠ pairKey (left, right)
+missingReverse : current.memo.table (pairKey (right, left)) = none
+one :
+  step (Control.order before.memo.next (left, right) []) current =
+    Outcome.yielded (Control.call (right, left) [before.memo.next]) current
+remaining : Nat
+reverseCall : execute remaining (Control.call (right, left) [before.memo.next]) current = Outcome.done result after
+nextFuel : Nat
+next : State width
+nextTail :
+  execute nextFuel (Control.order current.memo.next (right, left) [before.memo.next]) next = Outcome.done result after
+nextChecked : next.checked = current.checked
+left✝ : MemoValid next.memo
+stillRunning : FlatMemoThunk.Running current.memo next.memo
+nextReturned : FlatMemoThunk.Returned current.memo next.memo
+nextTable : next.memo.table = Cache.put current.memo.table (pairKey (right, left)) current.memo.next
+nextCell :
+  next.memo.cells current.memo.next = some { request := (right, left), status := FlatMemoThunk.Status.evaluating }
+right✝ : next.memo.next = current.memo.next + 1
+forward : ¬left.entry.identity < right.entry.identity
+nextOne :
+  step (Control.order current.memo.next (right, left) [before.memo.next]) next =
+    Outcome.yielded
+      (Control.native
+        (SourceEqualityNativeDemand.Control.edgeBody
+          { domain := IntersectionEmptyDomain.emptyDomain, left := right, right := left }
+          SourceRecursiveIntersectionCode.Code.pure)
+        [current.memo.next, before.memo.next])
+      next
+nativeFuel : Nat
+nativeRun :
+  execute nativeFuel
+      (Control.native
+        (SourceEqualityNativeDemand.Control.edgeBody
+          { domain := IntersectionEmptyDomain.emptyDomain, left := right, right := left }
+          SourceRecursiveIntersectionCode.Code.pure)
+        [current.memo.next, before.memo.next])
+      next =
+    Outcome.done result after
+count rest : Nat
+finalChecked : SourceEqualityNativeDemand.State width
+finalState : after.checked = { checked := finalChecked, memo := next.memo }.checked
+trace :
+  SourceEqualityNativeDemand.Steps count
+    (SourceEqualityNativeDemand.Control.edgeBody
+      { domain := IntersectionEmptyDomain.emptyDomain, left := right, right := left }
+      SourceRecursiveIntersectionCode.Code.pure)
+    next.checked (SourceEqualityNativeDemand.Control.code (SourceRecursiveIntersectionCode.Code.pure result))
+    finalChecked
+retRun :
+  execute rest (Control.ret result [current.memo.next, before.memo.next])
+      { checked := finalChecked, memo := next.memo } =
+    Outcome.done result after
+finalMemo :
+  after.memo =
+    List.foldl (fun memo handle => FlatMemoThunk.finish handle result memo)
+      { checked := finalChecked, memo := next.memo }.memo [current.memo.next, before.memo.next]
+memo :
+  after.memo = FlatMemoThunk.finish before.memo.next result (FlatMemoThunk.finish current.memo.next result next.memo)
+distinct : current.memo.next ≠ before.memo.next
+originalRunning :
+  next.memo.cells before.memo.next = some { request := (left, right), status := FlatMemoThunk.Status.evaluating }
+originalStill :
+  (FlatMemoThunk.finish current.memo.next result next.memo).cells before.memo.next =
+    some { request := (left, right), status := FlatMemoThunk.Status.evaluating }
+originalDone :
+  (FlatMemoThunk.finish before.memo.next result (FlatMemoThunk.finish current.memo.next result next.memo)).cells
+      before.memo.next =
+    some { request := (left, right), status := FlatMemoThunk.Status.returned result }
+reverseDone :
+  (FlatMemoThunk.finish current.memo.next result next.memo).cells current.memo.next =
+    some { request := (right, left), status := FlatMemoThunk.Status.returned result }
+reverseFinal :
+  (FlatMemoThunk.finish before.memo.next result (FlatMemoThunk.finish current.memo.next result next.memo)).cells
+      current.memo.next =
+    some { request := (right, left), status := FlatMemoThunk.Status.returned result }
+⊢ (if True then some before.memo.next else before.memo.table (pairKey (left, right))) = some before.memo.next
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261021-same-symbol-edge-control/same-symbol-edge-strict-1.source.lean:289:92: error: unsolved goals
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+fuel : Nat
+left right result : Edge
+before after : State width
+valid :
+  FlatMemoThunk.Valid (fun request key => (request.fst.entry.identity, request.snd.entry.identity) = key)
+    (fun x => True) before.memo
+missing : before.memo.table (left.entry.identity, right.entry.identity) = none
+reverseMissing : before.memo.table (right.entry.identity, left.entry.identity) = none
+done : execute fuel (Control.call (left, right) []) before = Outcome.done result after
+remaining✝ : Nat
+current : State width
+tail : execute remaining✝ (Control.order before.memo.next (left, right) []) current = Outcome.done result after
+checked : current.checked = before.checked
+currentValid : MemoValid current.memo
+left✝¹ : FlatMemoThunk.Running before.memo current.memo
+retained : FlatMemoThunk.Returned before.memo current.memo
+table : current.memo.table = Cache.put before.memo.table (pairKey (left, right)) before.memo.next
+cell :
+  current.memo.cells before.memo.next = some { request := (left, right), status := FlatMemoThunk.Status.evaluating }
+fresh : current.memo.next = before.memo.next + 1
+reversed : right.entry.identity < left.entry.identity
+different : pairKey (right, left) ≠ pairKey (left, right)
+missingReverse : current.memo.table (pairKey (right, left)) = none
+one :
+  step (Control.order before.memo.next (left, right) []) current =
+    Outcome.yielded (Control.call (right, left) [before.memo.next]) current
+remaining : Nat
+reverseCall : execute remaining (Control.call (right, left) [before.memo.next]) current = Outcome.done result after
+nextFuel : Nat
+next : State width
+nextTail :
+  execute nextFuel (Control.order current.memo.next (right, left) [before.memo.next]) next = Outcome.done result after
+nextChecked : next.checked = current.checked
+left✝ : MemoValid next.memo
+stillRunning : FlatMemoThunk.Running current.memo next.memo
+nextReturned : FlatMemoThunk.Returned current.memo next.memo
+nextTable : next.memo.table = Cache.put current.memo.table (pairKey (right, left)) current.memo.next
+nextCell :
+  next.memo.cells current.memo.next = some { request := (right, left), status := FlatMemoThunk.Status.evaluating }
+right✝ : next.memo.next = current.memo.next + 1
+forward : ¬left.entry.identity < right.entry.identity
+nextOne :
+  step (Control.order current.memo.next (right, left) [before.memo.next]) next =
+    Outcome.yielded
+      (Control.native
+        (SourceEqualityNativeDemand.Control.edgeBody
+          { domain := IntersectionEmptyDomain.emptyDomain, left := right, right := left }
+          SourceRecursiveIntersectionCode.Code.pure)
+        [current.memo.next, before.memo.next])
+      next
+nativeFuel : Nat
+nativeRun :
+  execute nativeFuel
+      (Control.native
+        (SourceEqualityNativeDemand.Control.edgeBody
+          { domain := IntersectionEmptyDomain.emptyDomain, left := right, right := left }
+          SourceRecursiveIntersectionCode.Code.pure)
+        [current.memo.next, before.memo.next])
+      next =
+    Outcome.done result after
+count rest : Nat
+finalChecked : SourceEqualityNativeDemand.State width
+finalState : after.checked = { checked := finalChecked, memo := next.memo }.checked
+trace :
+  SourceEqualityNativeDemand.Steps count
+    (SourceEqualityNativeDemand.Control.edgeBody
+      { domain := IntersectionEmptyDomain.emptyDomain, left := right, right := left }
+      SourceRecursiveIntersectionCode.Code.pure)
+    next.checked (SourceEqualityNativeDemand.Control.code (SourceRecursiveIntersectionCode.Code.pure result))
+    finalChecked
+retRun :
+  execute rest (Control.ret result [current.memo.next, before.memo.next])
+      { checked := finalChecked, memo := next.memo } =
+    Outcome.done result after
+finalMemo :
+  after.memo =
+    List.foldl (fun memo handle => FlatMemoThunk.finish handle result memo)
+      { checked := finalChecked, memo := next.memo }.memo [current.memo.next, before.memo.next]
+memo :
+  after.memo = FlatMemoThunk.finish before.memo.next result (FlatMemoThunk.finish current.memo.next result next.memo)
+distinct : current.memo.next ≠ before.memo.next
+originalRunning :
+  next.memo.cells before.memo.next = some { request := (left, right), status := FlatMemoThunk.Status.evaluating }
+originalStill :
+  (FlatMemoThunk.finish current.memo.next result next.memo).cells before.memo.next =
+    some { request := (left, right), status := FlatMemoThunk.Status.evaluating }
+originalDone :
+  (FlatMemoThunk.finish before.memo.next result (FlatMemoThunk.finish current.memo.next result next.memo)).cells
+      before.memo.next =
+    some { request := (left, right), status := FlatMemoThunk.Status.returned result }
+reverseDone :
+  (FlatMemoThunk.finish current.memo.next result next.memo).cells current.memo.next =
+    some { request := (right, left), status := FlatMemoThunk.Status.returned result }
+reverseFinal :
+  (FlatMemoThunk.finish before.memo.next result (FlatMemoThunk.finish current.memo.next result next.memo)).cells
+      current.memo.next =
+    some { request := (right, left), status := FlatMemoThunk.Status.returned result }
+originalTable : next.memo.table (pairKey (left, right)) = some before.memo.next
+⊢ (if True then some current.memo.next else current.memo.table (pairKey (right, left))) = some current.memo.next
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261021-same-symbol-edge-control/same-symbol-edge-strict-1.source.lean:322:6: error: Type mismatch: After simplification, term
+  stored
+ has type
+  @Eq (Option Nat) (current.memo.table (left.entry.identity, right.entry.identity))
+    (if True then some before.memo.next else before.memo.table (left.entry.identity, right.entry.identity))
+but is expected to have type
+  @Eq (Option Nat) (current.memo.table (left.entry.identity, right.entry.identity)) (some before.memo.next)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261021-same-symbol-edge-control/same-symbol-edge-strict-1.source.lean:328:33: error: Application type mismatch: The argument
+  impossible
+has type
+  False
+but is expected to have type
+  right.entry.identity < left.entry.identity
+in the application
+  reversed impossible
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261021-same-symbol-edge-control/same-symbol-edge-strict-1.source.lean:288:35: warning: This simp argument is unused:
+  ite_eq_left rfl
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [table, Cache.put]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261021-same-symbol-edge-control/same-symbol-edge-strict-1.source.lean:290:39: warning: This simp argument is unused:
+  ite_eq_left rfl
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [nextTable, Cache.put]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

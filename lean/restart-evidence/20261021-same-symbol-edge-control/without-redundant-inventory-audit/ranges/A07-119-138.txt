@@ -1,0 +1,20 @@
+/-- Ordered checked child receipts derive the closed empty-domain language of actual accepted edge fields. -/
+theorem edgeMeaning_of_nodes (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (request : EdgeRequest Symbol Guard) (result : EdgeValue Symbol Guard)
+    (arity : request.left.children.length = request.right.children.length)
+    (symbols : request.left.entry.key.symbol = request.right.entry.key.symbol)
+    (label : result.entry.key.symbol = request.left.entry.key.symbol)
+    (constraint : result.entry.key.constraint = SourceEqualityConstraintConstructors.conjoin GuardStructuralOrder.le
+      request.left.entry.key.constraint request.right.entry.key.constraint)
+    (children : All₂ (fun pair child => NodeMeaning (SourceEqualityPCSGuard.holds formulas solver)
+      ⟨request.domain, pair.1, pair.2⟩ child) (request.left.children.zip request.right.children) result.children) :
+    EdgeMeaning (SourceEqualityPCSGuard.holds formulas solver) request result := by
+  intro domain leftClosed rightClosed ambient term
+  apply edge_exact (SourceEqualityPCSGuard.holds formulas solver) request.left request.right result arity symbols label
+  · intro term
+    rw [constraint]
+    exact SourceEqualityPCSConstructors.conjoined GuardStructuralOrder.le formulas solver _ _ term
+  · apply MergedPhysicalGroupCalls.all₂_left_imp _ _ _ _ children
+    intro pair member child meaning ambient term
+    have originals := List.of_mem_zip member
+    exact meaning domain (leftClosed pair.1 originals.1) (rightClosed pair.2 originals.2) ambient term

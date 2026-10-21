@@ -1,0 +1,12 @@
+[2026-10-22T00:00:46+02:00] Complete v4 source334/SHA062815f1619dce95fac323ce8bfdaebdf11252728516503d6e9ac3c87b034141 SOURCE CLEAR for one root-owned ordinary retry. I personally read every334 lines and the entire exact six-site patch.
+I read the complete actual strict1 log254lines/13450B/SHA1e8850864aef836a8525a156f79e61577b4fd8dc4f1b804bbd50dc03076111cd. It records six errors and two unusedSimpArgs warnings in one failed job, not extra jobs.
+The actual failed input matches documented-v3 source330/89ceb exactly. Receipt exit1, default linter flag,4GiB max/high, swap0 and fresh25% age0 are copied and pinned. No FULL has run.
+The new looked proof lifts the actual allocated-handle equality through the yielded-control constructor with congrArg. It no longer simplifies a reflexive equality to True before using that projection.
+The reverse-key miss proof explicitly applies the genuine unequal-key update branch, then unfolds pairKey to match the literal reverseMissing premise. No missing-key assumption is added.
+The two swapped table proofs and the final unswapped lookup use normal simp to reduce the actual if True residuals. The two reported unused ite_eq_left arguments are removed; no linter is disabled.
+The unswapped implication now eliminates its actual already-simplified False premise directly. It does not apply reversed to a term of the wrong type or add a logical premise.
+Exact context10 and public header21/SHA5cc6bb5f574fb4223f8d5ed5f193eb2b330f3b54ff39e459ec1da2d8511319f4 are unchanged. The entire public state/control/outcome/interpreter prefix is byte-identical to the failed input.
+All changes lie in the six reported proof sites. Existing private statements, control publication/order, native body, finish order, same-state trace and both-miss scope remain unchanged. The334-line source stays below400.
+This is proof-source clearance, not a claim that the six errors or two warnings are compiler-resolved. Default limits and actual public TYPE/axiom/FULL acceptance remain separate root gates.
+Prior source/plan/tooling audits and every failed input remain unchanged. The carried18-source/37-cut inventory continues to identify the exact APIs used; no new API dependency appears.
+Only source/log/receipt reads, static byte/hash/diff checks and new audit snapshots occurred. Zero prepared-script, Lean, Lake, FULL, runtime, capped, Git, network or official-file actions occurred. Reviewer execution jobs remain zero.

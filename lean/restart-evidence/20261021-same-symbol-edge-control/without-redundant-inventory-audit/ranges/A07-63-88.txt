@@ -1,0 +1,26 @@
+theorem edge_exact (holds : Guard → Term Symbol → Bool) (left right result : EdgeValue Symbol Guard)
+    (arity : left.children.length = right.children.length) (symbols : left.entry.key.symbol = right.entry.key.symbol)
+    (label : result.entry.key.symbol = left.entry.key.symbol)
+    (guards : ∀ term, holds result.entry.key.constraint term = (holds left.entry.key.constraint term && holds right.entry.key.constraint term))
+    (children : All₂ (fun pair child => ∀ ambient term,
+      InternedGuardedLanguage.meaning holds ambient child term ↔
+        InternedGuardedLanguage.meaning holds ambient pair.1 term ∧ InternedGuardedLanguage.meaning holds ambient pair.2 term)
+      (left.children.zip right.children) result.children) (ambient : InternedGuardedLanguage.Env Symbol) (term : Term Symbol) :
+    InternedGuardedLanguage.edgeMeaning holds ambient result term ↔
+      InternedGuardedLanguage.edgeMeaning holds ambient left term ∧ InternedGuardedLanguage.edgeMeaning holds ambient right term := by
+  rw [InternedGuardedLanguage.edgeMeaning_all, InternedGuardedLanguage.edgeMeaning_all, InternedGuardedLanguage.edgeMeaning_all]
+  constructor
+  · rintro ⟨terms, shape, forest, guard⟩
+    have both := (forest_zip holds _ _ _ arity children ambient terms).mp forest
+    have gates := Bool.and_eq_true_iff.mp ((guards term).symm.trans guard)
+    exact ⟨⟨terms, by rw [← label]; exact shape, both.1, gates.1⟩,
+      ⟨terms, by rw [← symbols, ← label]; exact shape, both.2, gates.2⟩⟩
+  · rintro ⟨⟨terms, shape, first, firstGuard⟩, ⟨other, secondShape, second, secondGuard⟩⟩
+    have equal : other = terms := by
+      rw [shape, ← symbols] at secondShape
+      exact (Term.node.inj secondShape).2.symm
+    subst other
+    refine ⟨terms, by rw [label]; exact shape,
+      (forest_zip holds _ _ _ arity children ambient terms).mpr ⟨first, second⟩, ?_⟩
+    rw [guards term, firstGuard, secondGuard]
+    rfl

@@ -1,0 +1,38 @@
+/-- Delay original child requests until the actual combined constraint passes its constructor check. -/
+def children (domain : Interned DomainKey) (left right : EdgeValue Symbol Guard) (combined : Allocated) :
+    Code Symbol Guard (EdgeValue Symbol Guard) :=
+  (SourceRecursiveIntersectionCode.walk (fun pair => requestNode domain pair.1 pair.2)
+    (left.children.zip right.children)).bind fun values =>
+      .work (makeEdge left.entry.key.symbol (readback combined) values) .pure
+
+/-- The rejected or mismatched branch emits the exact source empty-edge constructor request. -/
+def sentinel (left : EdgeValue Symbol Guard) : Code Symbol Guard (EdgeValue Symbol Guard) :=
+  .work (makeEdge left.entry.key.symbol SourceEqualityConstraintConstructors.top [.empty]) .pure
+
+/-- Equal arity and literal combined readback identify the accepted code with the older compiler. -/
+theorem children_eq_compileEdge (domain : Interned DomainKey) (left right : EdgeValue Symbol Guard)
+    (combined : Allocated) (conjoin : Guard → Guard → Guard)
+    (arity : left.children.length = right.children.length)
+    (same : readback combined = conjoin left.entry.key.constraint right.entry.key.constraint) :
+    children domain left right combined =
+      compileEdge SourceEqualityConstraintConstructors.top conjoin ⟨domain, left, right⟩ := by
+  simp only [children, compileEdge, arity, ↓reduceIte, same]
+
+/-- Actual allocated conjunction supplies the literal readback needed by accepted compiler correspondence. -/
+theorem children_eq_of_conjoin [DecidableEq (SourceGuards.Guard Formula)]
+    (le : SourceGuards.Guard Formula → SourceGuards.Guard Formula → Bool)
+    (domain : Interned DomainKey) (left right : EdgeValue Symbol Guard) (first second combined : Allocated)
+    (before : SourceEqualityConstraintMemoAllocation.State)
+    (valid : SourceEqualityConstraintMemoAllocation.Valid before)
+    (firstReady : SourceEqualityConstraintAllocation.Ready before.constraints first.stored)
+    (secondReady : SourceEqualityConstraintAllocation.Ready before.constraints second.stored)
+    (firstFields : readback first = left.entry.key.constraint) (secondFields : readback second = right.entry.key.constraint)
+    (done : (SourceEqualityConjoinAllocation.conjoin le first second before).1 = .ok combined)
+    (arity : left.children.length = right.children.length) :
+    children domain left right combined = compileEdge SourceEqualityConstraintConstructors.top
+      (SourceEqualityConstraintConstructors.conjoin le) ⟨domain, left, right⟩ := by
+  obtain ⟨actual, completed, _, _, fields, _, _, _⟩ := conjoin_correct le first second before valid firstReady secondReady
+  have identical : actual = combined := Except.ok.inj (completed.symm.trans done)
+  subst actual
+  apply children_eq_compileEdge domain left right combined _ arity
+  simpa only [firstFields, secondFields] using fields

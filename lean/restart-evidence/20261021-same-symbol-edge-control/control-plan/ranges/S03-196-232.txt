@@ -1,0 +1,37 @@
+{- | Get the cache for one symbol type. Concurrent allocations keep the first
+cache.
+
+The caller guarantees that, in this family, the symbol type determines the
+cache type. The stored cache is coerced back on that
+guarantee. Every intern and memo call selects a cache, so the selection must
+not use 'System.IO.Unsafe.unsafePerformIO': with more than one capability, its
+protection against duplication walks the thread's stack on each call. On a
+threaded build with four capabilities, 'System.IO.Unsafe.unsafePerformIO' here
+makes @micro-bench@ run 1.0% more instructions. With one capability, the
+counts do not change. A duplicated selection is harmless, because the atomic
+update keeps the first cache.
+-}
+selectCache ::
+    forall symbol cache.
+    (Typeable symbol) =>
+    CacheFamily ->
+    IO cache ->
+    cache
+{-# NOINLINE selectCache #-}
+selectCache (CacheFamily ref) allocate = unsafeDupablePerformIO $ do
+    existing <- findCache <$> readIORef ref
+    case existing of
+        Just found -> pure found
+        Nothing -> do
+            candidate <- allocate
+            atomicModifyIORef' ref $ \entries -> case findCache entries of
+                Just found -> (entries, found)
+                Nothing -> ((symbolKey, unsafeCoerce candidate) : entries, candidate)
+  where
+    symbolKey = SomeTypeRep (typeRep @symbol)
+    findCache entries =
+        listToMaybe
+            [ unsafeCoerce cache
+            | (symbolType, cache) <- entries
+            , symbolType == symbolKey
+            ]

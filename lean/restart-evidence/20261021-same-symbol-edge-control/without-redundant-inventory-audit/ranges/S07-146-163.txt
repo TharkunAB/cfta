@@ -1,0 +1,18 @@
+theorem source_models (source : InternedConstructorTemplates.State Symbol Guard) (facts : Facts source)
+    (holds : Guard → Term Symbol → Bool) (request : NodeRequest Symbol Guard)
+    (leftOriginal : SourceRecursiveIntersectionInputView.Original request.left)
+    (rightOriginal : SourceRecursiveIntersectionInputView.Original request.right)
+    (leftAvailable : Available source request.left) (rightAvailable : Available source request.right)
+    (leftClosed : request.left.free = []) (rightClosed : request.right.free = []) :
+    ∃ (model : IntersectSchedule.InputMeaning (SourceRecursiveIntersectionInputView.view source holds))
+      (ranked : IntersectSchedule.RankedInput (SourceRecursiveIntersectionInputView.view source holds) model.valid),
+      NodeInputs (SourceRecursiveIntersectionInputView.view source holds) model request ∧
+      (∀ value, NodeLaw (SourceRecursiveIntersectionInputView.view source holds) model ranked holds request value →
+        SourceEqualityNativeDemandProvenance.NodeMeaning holds request value) := by
+  obtain ⟨model, ranked, leftValid, rightValid, finite, left, right⟩ :=
+    source_input_models source facts holds request.left request.right leftOriginal rightOriginal leftAvailable rightAvailable
+      leftClosed rightClosed
+  have inputs : NodeInputs (SourceRecursiveIntersectionInputView.view source holds) model request :=
+    ⟨leftOriginal, rightOriginal, leftValid, rightValid⟩
+  exact ⟨model, ranked, inputs, fun value law =>
+    node_meaning _ model ranked holds finite request value inputs law (fun _ => left) (fun _ => right)⟩

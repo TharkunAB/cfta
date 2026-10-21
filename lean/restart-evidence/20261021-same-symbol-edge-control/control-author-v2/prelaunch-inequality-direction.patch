@@ -1,0 +1,11 @@
+--- SourceCurrentSameSymbolEdgeControl.original-v1.lean.txt
++++ SourceCurrentSameSymbolEdgeControl.lean
+@@ -246,7 +246,7 @@
+     have distinct : current.memo.next ≠ before.memo.next := by omega
+     have originalRunning := stillRunning before.memo.next (left, right) cell
+     have originalStill := FlatMemoThunk.finish_running_other current.memo.next before.memo.next result
+-      next.memo (left, right) distinct originalRunning
++      next.memo (left, right) (Ne.symm distinct) originalRunning
+     have originalDone := FlatMemoThunk.finish_evaluating before.memo.next result _ (left, right) originalStill
+     have reverseDone := FlatMemoThunk.finish_evaluating current.memo.next result next.memo (right, left) nextCell
+     have reverseFinal := FlatMemoThunk.finish_returned before.memo.next result _
