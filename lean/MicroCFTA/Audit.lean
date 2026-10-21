@@ -3076,6 +3076,7 @@ import MicroCFTA.SourceCurrentOuterClosedInputs
 import MicroCFTA.SourceCurrentOuterReferenceAbsent
 import MicroCFTA.SourceCurrentOuterLocalFaults
 import MicroCFTA.SourceCurrentOuterDoneOrExhausted
+import MicroCFTA.SourceCurrentOuterRankEnvelope
 /-!
 # Proof dependency audit
 
