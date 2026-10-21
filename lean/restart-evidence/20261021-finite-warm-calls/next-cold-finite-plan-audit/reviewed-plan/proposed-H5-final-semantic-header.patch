@@ -1,0 +1,16 @@
+--- H5-trace-only-header.original.lean.txt
++++ proposed-H5-final-semantic-header.lean.txt
+@@ -25,8 +25,11 @@
+       (edgeIdle : SourceCurrentOuterEdgeIdle.EdgeIdle before),
+     ∃ trace : Fin (rounds + 1) → Node × Caller (bits + 2),
+       trace 0 = (value, before) ∧
+-      ∀ index : Fin rounds,
++      (∀ index : Fin rounds,
+         nodeCall fuels.1
+           fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 budget
+           ⟨inherited, (trace index.castSucc).1⟩ (trace index.castSucc).2 =
+-            .done (trace index.succ).1 (trace index.succ).2
++            .done (trace index.succ).1 (trace index.succ).2) ∧
++      Available (trace (Fin.last rounds)).2.checked.native.machine.heap (trace (Fin.last rounds)).1 ∧
++      SourceCurrentAllocatedPartialMemoSound.NodeLaw formulas solver
++        ⟨inherited, value⟩ (trace (Fin.last rounds)).1

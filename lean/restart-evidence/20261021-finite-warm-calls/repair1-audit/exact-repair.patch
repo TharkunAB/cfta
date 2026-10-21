@@ -1,0 +1,25 @@
+--- finite-calls-strict-1.source.lean
++++ SourceCurrentFiniteWarmCalls.lean
+@@ -32,8 +32,8 @@
+ local notation "Seed" => List Guard × Profile
+ 
+ private def Entry (formulas : SourceGuards.Formulas FullSyntax.Formula)
+-    (solver : SourceGuards.Entailment FullSyntax.Formula) {width : Nat}
+-    (seed : Seed) (inherited : EqValue) (current : Node × Caller width) : Prop :=
++    (solver : SourceGuards.Entailment FullSyntax.Formula) {bits : Nat}
++    (seed : Seed) (inherited : EqValue) (current : Node × Caller (bits + 2)) : Prop :=
+   ∃ (inventory : Inventory) (memos : Memos),
+     Context formulas solver inventory current.2 memos ∧
+     Frame formulas solver inventory current.2.checked ∧ Fits seed.2 current.2.checked ∧
+@@ -209,9 +209,9 @@
+         have unchanged (index : Nat) (earlier : index ≤ length) :
+             extended index = trace index := by
+           have distinct : index ≠ length + 1 := by omega
+-          exact if_neg distinct
++          exact ite_eq_right distinct
+         have latest : extended (length + 1) = next := by
+-          exact if_pos rfl
++          exact ite_eq_left rfl
+         refine ⟨extended, ?_, ?_, ?_, ?_⟩
+         · rw [unchanged 0 (Nat.zero_le _)]
+           exact first

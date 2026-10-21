@@ -1,0 +1,5 @@
+/-- Every returned edge cell retains its exact captured request and writer. -/
+def Origins (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (state : Caller (bits + 2)) : Prop :=
+  FlatMemoThunk.Valid (fun request key => request.key = key)
+    (FlatMemoThunk.CellSpec (Written (bits := bits) formulas solver)) state.edgeResults

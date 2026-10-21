@@ -1,0 +1,5 @@
+def roomBits (profile : Profile) : Nat :=
+  profile.nodes + profile.edges + profile.domains + 2 ^ (profile.nodes + profile.nodes * profile.nodes) + 1
+
+/-- The computed mathematical width satisfies the exact native room predicate. -/
+theorem room_computed (profile : Profile) : Room (roomBits profile) profile := by

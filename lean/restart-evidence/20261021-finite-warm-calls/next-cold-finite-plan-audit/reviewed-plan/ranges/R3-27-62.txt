@@ -1,0 +1,36 @@
+/-- The empty inherited value retains the actual canonical identity. -/
+def emptyValue (cache : Cache.State Key) : EqValue :=
+  (SourceEqualityConstraintAllocation.intern (some []) cache).1
+
+/-- Empty equality allocation retains the supplied physical interner. -/
+def operations (cache : Cache.State Key) : OpState :=
+  SourceEqualityMkEdgeAllocation.emptyField (SourceEqualityConstraintMemoAllocation.initial cache)
+
+/-- A checked initial state uses the actual returned empty-equality interner. -/
+def checked (width : Nat) (cache : Cache.State Key) (heap : State Symbol Guard) : Checked width :=
+  ⟨SourceRecursiveIntersectionThunks.initial width ⟨heap, Cache.emptyState⟩, operations cache⟩
+
+/-- The logical cold caller has separate empty merge, fourth, and result tables. -/
+def caller (width : Nat) (cache : Cache.State Key) (heap : State Symbol Guard) : Caller width :=
+  SourceCurrentAllocatedPartialState.initial (checked width cache heap)
+    SourceCurrentMemoMergeGraph.empty SourceCurrentEmptinessMemo.empty
+
+/-- The three global memo families start with no saved entries. -/
+def globals : EndpointMemoGateTrace.Memos :=
+  ⟨InternedFreshOrdinaryUnfoldMemo.empty, SourceEndpointMemo.empty⟩
+
+/-- Empty allocation returns a live value with exactly the empty payload. -/
+theorem emptyValue_live (cache : Cache.State Key) :
+    ∃ identity, emptyValue cache = .live identity [] :=
+  ⟨(Cache.intern cache (SourceEqualityPartialConstraintKey.key [])).1.identity, rfl⟩
+
+/-- The retained interner and actual empty allocation derive inherited readiness. -/
+theorem operations_correct (cache : Cache.State Key) (valid : Cache.Valid cache) :
+    SourceEqualityConstraintMemoAllocation.Valid (operations cache) ∧
+      SourceEqualityConstraintMemoAllocation.Grows
+        (SourceEqualityConstraintMemoAllocation.initial cache) (operations cache) ∧
+      EqReady (operations cache).constraints (emptyValue cache) :=
+  SourceEqualityMkEdgeAllocation.emptyField_correct _
+    (SourceEqualityConstraintMemoAllocation.initial_valid cache valid)
+
+variable [DecidableEq (EdgeKey Symbol Guard)]

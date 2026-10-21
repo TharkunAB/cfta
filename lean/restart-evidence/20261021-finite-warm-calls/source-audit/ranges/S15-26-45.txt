@@ -1,0 +1,20 @@
+variable {Symbol Guard : Type} [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+
+/-- Each actual direct request uses its own reached heap and result table. -/
+def Requests (child : Nat → Nat) (clear : Guard → Bool) (top : Guard)
+    (events : List (SourceCurrentMemoMergeRequestBounds.Occurrence Symbol Guard)) : Prop :=
+  ∀ event ∈ events, ∀ bound, Fits bound event.before →
+    ∃ cost, ∃ actual : MeasuredCall clear top cost event.input event.before event.memo event.output event.after event.saved,
+      CallTrace (child bound) actual ∧ cost ≤ child bound
+
+/-- Direct instruction count composes current resources and all nested measured costs. -/
+theorem Counted.resources {clear : Guard → Bool} {top : Guard} {code : Code Symbol Guard Output}
+    {before after : State Symbol Guard} {memo saved : Memo Symbol Guard} {output : Output}
+    {events : List (SourceCurrentMemoMergeRequestBounds.Occurrence Symbol Guard)} {directCost : Nat}
+    (actual : Counted clear top code before memo output after saved events directCost) :
+    ∀ (child : Nat → Nat) (width bound : Nat) (post : State Symbol Guard → Output → Prop),
+      SemanticReady before → CostHeap before → Stored before memo → Checked width clear code before post →
+      Fits bound before → Requests child clear top events →
+      ∃ cost, ∃ measured : MeasuredRun clear top cost code before memo output after saved,
+        Trace (iterate (step width child) directCost bound) measured ∧
+          bound + cost ≤ iterate (step width child) directCost bound := by

@@ -1,0 +1,14 @@
+/-- Actual closed construction derives the guard premise of an initial native Frame. -/
+theorem frame (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (machine : Machine Symbol Guard) (operations : SourceEqualityConstraintMemoAllocation.State)
+    (expression : Syntax Symbol Guard) (root : Node)
+    (constructed : build expression [] empty = .done root machine.heap)
+    (ready : SourceCurrentConjunctionClassScan.Ready (⟨initial width machine,operations⟩ : Checked width))
+    (same : inventory.source = machine.heap) :
+    Frame formulas solver inventory (⟨initial width machine,operations⟩ : Checked width) := by
+  have guards : SourceCurrentConstrainedCapGuardHeap.Heap Plain machine.heap := by
+    simpa only [constructed,Outcome.state] using
+      SourceCurrentConstrainedCapGuardExecution.closed_heap Plain expression
+  exact Frame.initial formulas solver inventory machine operations ready guards same
+

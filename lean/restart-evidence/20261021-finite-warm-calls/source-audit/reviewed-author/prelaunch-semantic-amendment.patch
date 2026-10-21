@@ -1,0 +1,122 @@
+--- initial-complete-210.source.lean.txt
++++ amended-complete-236.source.lean.txt
+@@ -63,7 +63,9 @@
+         nodeCall fuels.1
+           fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 budget
+           ⟨inherited, current.1⟩ current.2 = .done next.1 next.2 ∧
+-        Entry formulas solver (stage budget seed (index + 1)) inherited next := by
++        Entry formulas solver (stage budget seed (index + 1)) inherited next ∧
++        SourceCurrentAllocatedPartialMemoSound.NodeLaw formulas solver
++          ⟨inherited, current.1⟩ next.1 := by
+   dsimp only
+   intro inherited current packet
+   obtain ⟨inventory, memos, initial, frame, fits, known, inputs, normal,
+@@ -99,6 +101,10 @@
+   have observed := stable fuels.1 outerBound
+   have scheduleRoom : Room (roomBits (stage budget seed rounds).2) scheduled.2 :=
+     room.mono (SourceCurrentInitialSelectionForecast.cover_ge _ _)
++  obtain ⟨_next, _final, _actual, _reads, _post, _frame, _fits, _known,
++      _available, stepLaw⟩ :=
++    SourceCurrentOuterInitialActual.node_call formulas solver output.1 entry
++      initial frame fits known inputs.1 inputs.2 scheduleRoom base
+   obtain ⟨next, final, post, nextFrame, nextFits, nextKnown, nextInputs,
+       nextSupported, nextCausal, nextMerged, nextPositive, nextNormal,
+       nextOrigins, nextStored, nextClosed, nextNodeIdle, nextEdgeIdle⟩ :=
+@@ -113,12 +119,14 @@
+       after.checked.native.machine.heap := by
+     intro key edge present
+     exact nextBounds.2.1 (List.mem_append_right _ (nextKnown key edge present))
+-  exact ⟨(result, after), observed, next, final, post.context, nextFrame,
+-    nextFits.mono growth, nextCarrier, nextInputs, nextNormal, nextSupported,
+-    nextCausal, nextMerged, nextPositive, nextOrigins, nextStored, nextClosed,
+-    nextNodeIdle, nextEdgeIdle⟩
+-
+-/-- A finite fixed-width trace keeps each actual returned caller at common fuels. -/
++  have nextEntry : Entry formulas solver (stage budget seed (index + 1))
++      inherited (result, after) :=
++    ⟨next, final, post.context, nextFrame, nextFits.mono growth, nextCarrier,
++      nextInputs, nextNormal, nextSupported, nextCausal, nextMerged, nextPositive,
++      nextOrigins, nextStored, nextClosed, nextNodeIdle, nextEdgeIdle⟩
++  exact ⟨(result, after), observed, nextEntry, stepLaw⟩
++
++/-- A finite trace retains its callers, final availability and inherited-conditioned node law. -/
+ theorem node_calls
+     (formulas : SourceGuards.Formulas FullSyntax.Formula)
+     (solver : SourceGuards.Entailment FullSyntax.Formula)
+@@ -146,11 +154,14 @@
+       (edgeIdle : SourceCurrentOuterEdgeIdle.EdgeIdle before),
+     ∃ trace : Fin (rounds + 1) → Node × Caller (bits + 2),
+       trace 0 = (value, before) ∧
+-      ∀ index : Fin rounds,
++      (∀ index : Fin rounds,
+         nodeCall fuels.1
+           fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 budget
+           ⟨inherited, (trace index.castSucc).1⟩ (trace index.castSucc).2 =
+-            .done (trace index.succ).1 (trace index.succ).2
++            .done (trace index.succ).1 (trace index.succ).2) ∧
++      Available (trace (Fin.last rounds)).2.checked.native.machine.heap (trace (Fin.last rounds)).1 ∧
++      SourceCurrentAllocatedPartialMemoSound.NodeLaw formulas solver
++        ⟨inherited, value⟩ (trace (Fin.last rounds)).1
+  := by
+   dsimp only
+   intro inherited value before inventory memos initial frame fits known inputs normal
+@@ -167,20 +178,32 @@
+             fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 budget
+             ⟨inherited, (trace index).1⟩ (trace index).2 =
+               .done (trace (index + 1)).1 (trace (index + 1)).2) ∧
+-        Entry formulas solver (stage budget seed length) inherited (trace length) := by
++        Entry formulas solver (stage budget seed length) inherited (trace length) ∧
++        SourceCurrentAllocatedPartialMemoSound.NodeLaw formulas solver
++          ⟨inherited, value⟩ (trace length).1 := by
+     intro length
+     induction length with
+     | zero =>
+         intro _bound
+-        refine ⟨fun _ => (value, before), rfl, ?_, firstEntry⟩
++        refine ⟨fun _ => (value, before), rfl, ?_, firstEntry,
++          SourceCurrentAllocatedPartialCallSteps.node_refl formulas solver _⟩
+         intro index impossible
+         omega
+     | succ length ih =>
+         intro bound
+         have included : length < rounds := by omega
+-        obtain ⟨trace, first, steps, lastEntry⟩ := ih (by omega)
+-        obtain ⟨next, observed, nextEntry⟩ :=
++        obtain ⟨trace, first, steps, lastEntry, cumulative⟩ := ih (by omega)
++        obtain ⟨next, observed, nextEntry, stepLaw⟩ :=
+           advance_entry formulas solver budget rounds seed included lastEntry
++        have nextLaw : SourceCurrentAllocatedPartialMemoSound.NodeLaw formulas solver
++            ⟨inherited, value⟩ next.1 := by
++          intro ambient term
++          refine ⟨?_, ?_⟩
++          · intro accepted
++            exact (cumulative ambient term).1 ((stepLaw ambient term).1 accepted)
++          · intro satisfied
++            exact ((stepLaw ambient term).2 satisfied).trans
++              ((cumulative ambient term).2 satisfied)
+         let extended : Nat → Node × Caller (roomBits (stage budget seed rounds).2 + 2) :=
+           fun index => if index = length + 1 then next else trace index
+         have unchanged (index : Nat) (earlier : index ≤ length) :
+@@ -189,7 +212,7 @@
+           exact if_neg distinct
+         have latest : extended (length + 1) = next := by
+           exact if_pos rfl
+-        refine ⟨extended, ?_, ?_, ?_⟩
++        refine ⟨extended, ?_, ?_, ?_, ?_⟩
+         · rw [unchanged 0 (Nat.zero_le _)]
+           exact first
+         · intro index inside
+@@ -202,8 +225,11 @@
+             exact steps index earlier
+         · rw [latest]
+           exact nextEntry
+-  obtain ⟨trace, first, steps, _lastEntry⟩ := prefixes rounds (Nat.le_refl _)
+-  refine ⟨fun index => trace index.val, first, ?_⟩
++        · rw [latest]
++          exact nextLaw
++  obtain ⟨trace, first, steps, lastEntry, law⟩ := prefixes rounds (Nat.le_refl _)
++  obtain ⟨_inventory, _memos, _initial, _frame, _fits, _known, lastInputs, _rest⟩ := lastEntry
++  refine ⟨fun index => trace index.val, first, ?_, lastInputs.2, law⟩
+   intro index
+   exact steps index.val index.isLt
+ 

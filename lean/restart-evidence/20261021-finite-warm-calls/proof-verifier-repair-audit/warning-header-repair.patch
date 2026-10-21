@@ -1,0 +1,11 @@
+--- verify-proofs.original-147.py.txt
++++ verify-proofs.fixed-147.py.txt
+@@ -60,7 +60,7 @@
+ warning_names = ["initial", "frame", "fits", "known", "inputs", "normal", "supported", "causal",
+     "merged", "positiveMemo", "origins", "stored", "closed", "nodeIdle", "edgeIdle"]
+ assert re.findall(r"warning: Variable name `([^`]+)` is not explicitly referenced\.", warned) == warning_names
+-assert len(re.findall(r"\bwarning(?:\([^)]*\))?:", warned)) == 15
++assert len(re.findall(r"^.*:\d+:\d+: warning(?:\([^)]*\))?:", warned, re.M)) == 15
+ assert not re.search(r"\berror(?:\([^)]*\))?:|\bsorry(?:Ax)?\b", warned)
+ assert len(warned.encode()) == 6352 and len(warned.splitlines()) == 90
+ selection = load("selected-sources.json")

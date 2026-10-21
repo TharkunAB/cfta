@@ -1,0 +1,32 @@
+theorem node_calls
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (budget rounds : Nat) (seed : List Guard × Profile) :
+    let bits := roomBits (stage budget seed rounds).2
+    let fuels := fuelBounds budget rounds seed
+    ∀ {inherited : EqValue} {value : Node} {before : Caller (bits + 2)}
+      {inventory : Inventory} {memos : Memos}
+      (initial : Context formulas solver inventory before memos)
+      (frame : Frame formulas solver inventory before.checked)
+      (fits : Fits seed.2 before.checked)
+      (known : Carrier (fun guard => guard ∈ seed.1) before.checked.native.machine.heap)
+      (inputs : SourceCurrentOuterPrefixInvariants.NodeReady before ⟨inherited, value⟩)
+      (normal : SourceCurrentRequiredUnionNormal.UnionNormal before.checked.native.machine.heap)
+      (supported : SourceCurrentNativeRequestPositivePositions.Support
+        before.checked.native.machine.heap before.checked.native)
+      (causal : SourceCurrentNativeMuPublication.History empty before.checked.native.machine.heap)
+      (merged : SourceCurrentConstrainedCapMemoMerge.Stored
+        (fun guard : Guard => SourceMemoGate.plain guard = true) before.merge)
+      (positiveMemo : SourceCurrentMergePositivePosition.Support before.merge)
+      (origins : SourceCurrentResourceParentWriters.Origins formulas solver before)
+      (stored : SourceCurrentOuterClosedInputs.NodeStored before)
+      (closed : value.free = [])
+      (nodeIdle : ∀ chosen owner, before.nodeResults.cells chosen ≠ some ⟨owner, .evaluating⟩)
+      (edgeIdle : SourceCurrentOuterEdgeIdle.EdgeIdle before),
+    ∃ trace : Fin (rounds + 1) → Node × Caller (bits + 2),
+      trace 0 = (value, before) ∧
+      ∀ index : Fin rounds,
+        nodeCall fuels.1
+          fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 budget
+          ⟨inherited, (trace index.castSucc).1⟩ (trace index.castSucc).2 =
+            .done (trace index.succ).1 (trace index.succ).2

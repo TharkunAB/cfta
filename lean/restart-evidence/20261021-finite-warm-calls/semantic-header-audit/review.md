@@ -1,0 +1,13 @@
+# Finite warm semantic header amendment review
+
+Reviewed: 2026-10-21 22:05:39 CEST. SOURCE CLEAR for the exact 35-line f064b85a header and its proposed proof route. This is not acceptance of an amended implementation or theorem. No proof body was changed or executed.
+
+I personally read the entire 210-line trace-only source, the new header, its complete patch, missing-producer note and plan. The original 32-line public header occurs exactly in the frozen 210-line source. The patch identity and full source/header hashes match. The first 27 header lines are byte-identical. The prior trace equations are only parenthesized to add two final conjuncts. All premises, initial equality, inherited value, widths, common fuels and trace remain unchanged.
+
+The new conclusion adds Available at the SAME final caller heap and NodeLaw relative to the initial value under the exact inherited value. NodeLaw retains unconditional result-to-input narrowing and equivalence conditional on Sat of that identical inherited payload. It does not add unconditional language equivalence for arbitrary inherited values. The proposed cold corollary may obtain unconditional equivalence only from its separately derived empty-payload Sat fact.
+
+At a step, public InitialActual.node_call 432–449 accepts the current Entry Context, Frame, Fits, carrier, readiness and availability, the existing base-W scheduled Room and the SAME already proved base-W done equation. It returns the immutable step NodeLaw and availability. No additional future success, read graph, Room or callback is required. Compose narrowing as old narrowing after step narrowing. Compose the step conditional iff with the cumulative old iff at the same ambient, term and Sat hypothesis. The fixed inherited allocation value makes both Sat arguments identical. One local semantic accumulation in the existing prefix induction is sufficient; no second resource induction or H4 amendment is needed.
+
+For zero rounds, public CallSteps.node_refl supplies NodeLaw on the initial request; initial NodeReady supplies Available. Fin.last rounds is definitionally the point with natural value rounds, so it selects the private induction's last packet. At positive rounds, the same final Entry supplies final availability. The bounded amended complete source remains subject to the separate whole-source gate and hard 300 lines.
+
+I authored WarmNextPacket and earlier native-store foundations. Arity independently reviewed that dependency. This review assesses the new semantic composition route and does not independently re-prove those authored dependencies. No compiler, verifier, runtime, capped, Git, network or official edit occurred.

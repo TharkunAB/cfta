@@ -1,0 +1,9 @@
+/-- A node result narrows its input and retains each inherited-satisfying term. -/
+def NodeLaw (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (request : NodeRequest) (result : Node) : Prop :=
+  ∀ ambient term,
+    (InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient result term →
+      InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient request.value term) ∧
+    (SourceEqualityPrecheck.Sat term request.inherited.payload →
+      (InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient result term ↔
+        InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient request.value term))

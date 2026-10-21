@@ -1,0 +1,25 @@
+
+/-- Increasing the initial vector increases every later fold vector. -/
+theorem foldLimit_mono {first last : Limits} (enough : Le first last) (count : Nat) :
+    Le (foldLimit first count) (foldLimit last count) := by
+  induction count with
+  | zero => exact enough
+  | succ count ih => exact step_mono ih
+
+/-- More literal queries retain every earlier fold vector. -/
+theorem foldLimit_count_mono (limits : Limits) {first last : Nat} (enough : first ≤ last) :
+    Le (foldLimit limits first) (foldLimit limits last) := by
+  induction last with
+  | zero =>
+      have same : first = 0 := by omega
+      subst first
+      exact le_refl _
+  | succ last ih =>
+      by_cases same : first = last + 1
+      · subst first
+        exact le_refl _
+      · exact le_trans (ih (by omega)) (step_ge _)
+
+/-- Sequential fold query counts add in their literal order. -/
+theorem foldLimit_add (limits : Limits) (first last : Nat) :
+    foldLimit limits (first + last) = foldLimit (foldLimit limits first) last := by

@@ -1,0 +1,16 @@
+theorem root_exact {inventory : Inventory} {identity : Nat} {value result : Node} {before after : Caller width}
+    {actual : NodeCall budget ⟨.live identity [], value⟩ before result after} {memos final : Memos}
+    (reads : NodeCallReads formulas solver actual memos final) (checks : Checks (nodeCallTrace actual))
+    (initial : Context formulas solver inventory before memos)
+    (inherited : EqReady before.checked.operations.constraints (.live identity []))
+    (available : Available before.checked.native.machine.heap value) :
+    ∃ next, Post formulas solver next before after final ∧ Available after.checked.native.machine.heap result ∧
+      ∀ ambient term, InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient result term ↔
+        InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient value term := by
+  obtain ⟨next, post, resident, law⟩ := node_call formulas solver reads inventory checks initial inherited available
+  refine ⟨next, post, resident, ?_⟩
+  intro ambient term
+  apply (law ambient term).2
+  simp [SourceEqualityConstraintAllocation.Value.payload, SourceEqualityPrecheck.Sat, EqualityNormalize.Satisfies]
+
+end MicroCFTA.SourceCurrentAllocatedPartialActual
