@@ -1,0 +1,211 @@
+@MicroCFTA.SourceCurrentMergeEmptySupport.EmptySafe : {Symbol Guard : Type} →
+  MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard → Prop
+def MicroCFTA.SourceCurrentMergeEmptySupport.EmptySafe : {Symbol Guard : Type} →
+  MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard → Prop :=
+fun {Symbol Guard} memo =>
+  ∀ (entry : MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard),
+    @Eq.{1} (Option.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard))
+        (memo
+          (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+            (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)))
+        (@Option.some.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard) entry) →
+      @Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result Symbol Guard entry)
+        (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+'MicroCFTA.SourceCurrentMergeEmptySupport.EmptySafe' does not depend on any axioms
+@MicroCFTA.SourceCurrentMergeEmptySupport.empty_safe : ∀ {Symbol Guard : Type},
+  @MicroCFTA.SourceCurrentMergeEmptySupport.EmptySafe Symbol Guard
+    (@MicroCFTA.SourceCurrentMemoMergeGraph.empty Symbol Guard)
+theorem MicroCFTA.SourceCurrentMergeEmptySupport.empty_safe : ∀ {Symbol Guard : Type},
+  @MicroCFTA.SourceCurrentMergeEmptySupport.EmptySafe Symbol Guard
+    (@MicroCFTA.SourceCurrentMemoMergeGraph.empty Symbol Guard) :=
+fun {Symbol Guard} entry impossible =>
+  @Eq.casesOn.{0, 1} (Option.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard))
+    (@MicroCFTA.SourceCurrentMemoMergeGraph.empty Symbol Guard
+      (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+        (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)))
+    (fun a t =>
+      @Eq.{1} (Option.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard))
+          (@Option.some.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard) entry) a →
+        @HEq.{0}
+            (@Eq.{1} (Option.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard))
+              (@MicroCFTA.SourceCurrentMemoMergeGraph.empty Symbol Guard
+                (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                  (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)))
+              (@Option.some.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard) entry))
+            impossible
+            (@Eq.{1} (Option.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard))
+              (@MicroCFTA.SourceCurrentMemoMergeGraph.empty Symbol Guard
+                (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                  (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)))
+              a)
+            t →
+          @Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result Symbol Guard entry)
+            (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+    (@Option.some.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard) entry) impossible
+    (fun h =>
+      @False.elim.{0}
+        (@HEq.{0}
+            (@Eq.{1} (Option.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard))
+              (@MicroCFTA.SourceCurrentMemoMergeGraph.empty Symbol Guard
+                (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                  (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)))
+              (@Option.some.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard) entry))
+            impossible
+            (@Eq.{1} (Option.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard))
+              (@MicroCFTA.SourceCurrentMemoMergeGraph.empty Symbol Guard
+                (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                  (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)))
+              (@MicroCFTA.SourceCurrentMemoMergeGraph.empty Symbol Guard
+                (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                  (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))))
+            (@Eq.refl.{1} (Option.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard))
+              (@MicroCFTA.SourceCurrentMemoMergeGraph.empty Symbol Guard
+                (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                  (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)))) →
+          @Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result Symbol Guard entry)
+            (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+        (@noConfusion_of_Nat.{1} (Option.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard))
+          (@Option.ctorIdx.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard))
+          (@Option.some.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard) entry)
+          (@Option.none.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard)) h))
+    (@Eq.refl.{1} (Option.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard))
+      (@Option.some.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard) entry))
+    (@HEq.refl.{0}
+      (@Eq.{1} (Option.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard))
+        (@MicroCFTA.SourceCurrentMemoMergeGraph.empty Symbol Guard
+          (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+            (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)))
+        (@Option.some.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard) entry))
+      impossible)
+'MicroCFTA.SourceCurrentMergeEmptySupport.empty_safe' does not depend on any axioms
+@MicroCFTA.SourceCurrentMergeEmptySupport.run : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {Output : Type}
+  {clear : Guard → Bool} {top : Guard} {code : MicroCFTA.SourceCurrentMemoMergeGraph.Code Symbol Guard Output}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {memo saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard} {output : Output},
+  @MicroCFTA.SourceCurrentMemoMergeGraph.Run Symbol Guard inst inst_1 clear top Output code before memo output after
+      saved →
+    @MicroCFTA.SourceCurrentMergeEmptySupport.EmptySafe Symbol Guard memo →
+      @MicroCFTA.SourceCurrentMergeEmptySupport.EmptySafe Symbol Guard saved
+theorem MicroCFTA.SourceCurrentMergeEmptySupport.run : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {Output : Type}
+  {clear : Guard → Bool} {top : Guard} {code : MicroCFTA.SourceCurrentMemoMergeGraph.Code Symbol Guard Output}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {memo saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard} {output : Output},
+  @MicroCFTA.SourceCurrentMemoMergeGraph.Run Symbol Guard inst inst_1 clear top Output code before memo output after
+      saved →
+    @MicroCFTA.SourceCurrentMergeEmptySupport.EmptySafe Symbol Guard memo →
+      @MicroCFTA.SourceCurrentMergeEmptySupport.EmptySafe Symbol Guard saved :=
+fun {Symbol Guard} [inst : DecidableEq.{1} Symbol]
+    [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {Output} {clear} {top}
+    {code} {before after} {memo saved} {output} actual safe =>
+  @MicroCFTA.SourceCurrentMergeEmptySupport.run_safe Symbol Guard inst inst_1 Output clear top code before after memo
+    saved output actual safe
+'MicroCFTA.SourceCurrentMergeEmptySupport.run' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMergeEmptySupport.call : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {clear : Guard → Bool}
+  {top : Guard} {input output : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {memo saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard},
+  @MicroCFTA.SourceCurrentMemoMergeGraph.Call Symbol Guard inst inst_1 clear top input before memo output after saved →
+    @MicroCFTA.SourceCurrentMergeEmptySupport.EmptySafe Symbol Guard memo →
+      And (@MicroCFTA.SourceCurrentMergeEmptySupport.EmptySafe Symbol Guard saved)
+        (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) input
+            (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) →
+          @Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output
+            (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+theorem MicroCFTA.SourceCurrentMergeEmptySupport.call : ∀ {Symbol Guard : Type} [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {clear : Guard → Bool}
+  {top : Guard} {input output : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard}
+  {before after : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {memo saved : MicroCFTA.SourceCurrentMemoMergeGraph.Memo Symbol Guard},
+  @MicroCFTA.SourceCurrentMemoMergeGraph.Call Symbol Guard inst inst_1 clear top input before memo output after saved →
+    @MicroCFTA.SourceCurrentMergeEmptySupport.EmptySafe Symbol Guard memo →
+      And (@MicroCFTA.SourceCurrentMergeEmptySupport.EmptySafe Symbol Guard saved)
+        (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) input
+            (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) →
+          @Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output
+            (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} Symbol]
+    [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] {clear} {top}
+    {input output} {before after} {memo saved} actual safe =>
+  have finalSafe :=
+    @MicroCFTA.SourceCurrentMergeEmptySupport.run Symbol Guard inst inst_1
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) clear top
+      (@MicroCFTA.SourceCurrentMemoMergeGraph.Code.request Symbol Guard input) before after memo saved output
+      (@MicroCFTA.SourceCurrentMemoMergeGraph.Run.request Symbol Guard inst inst_1 clear top input before memo output
+        after saved actual)
+      safe;
+  @And.intro (@MicroCFTA.SourceCurrentMergeEmptySupport.EmptySafe Symbol Guard saved)
+    (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) input
+        (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) →
+      @Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output
+        (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+    finalSafe fun same =>
+    @Exists.casesOn.{1} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard)
+      (fun entry =>
+        And
+          (@Eq.{1} (Option.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard))
+            (saved (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard input))
+            (@Option.some.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard) entry))
+          (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output
+            (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result Symbol Guard entry)))
+      (fun x =>
+        @Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output
+          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+      (@MicroCFTA.SourceCurrentMemoMergeGraph.Call.present Symbol Guard inst inst_1 clear top input output before after
+        memo saved actual)
+      fun entry h =>
+      @And.casesOn.{0}
+        (@Eq.{1} (Option.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard))
+          (saved (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard input))
+          (@Option.some.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard) entry))
+        (@Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output
+          (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result Symbol Guard entry))
+        (fun x =>
+          @Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output
+            (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+        h fun found returned =>
+        @Eq.trans.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) output
+          (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result Symbol Guard entry)
+          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) returned
+          (finalSafe entry
+            (@Eq.mp.{0}
+              (@Eq.{1} (Option.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard))
+                (saved (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard input))
+                (@Option.some.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard) entry))
+              (@Eq.{1} (Option.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard))
+                (saved
+                  (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                    (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)))
+                (@Option.some.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard) entry))
+              (@congrFun'.{1, 1} (Option.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard)) Prop
+                (@Eq.{1} (Option.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard))
+                  (saved (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard input)))
+                (@Eq.{1} (Option.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard))
+                  (saved
+                    (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                      (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))))
+                (@congrArg.{1, 1} (Option.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard))
+                  (Option.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard) → Prop)
+                  (saved (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard input))
+                  (saved
+                    (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                      (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)))
+                  (@Eq.{1} (Option.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard)))
+                  (@congrArg.{1, 1} MicroCFTA.InternedBinderProtocol.NodeRef
+                    (Option.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard))
+                    (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard input)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                      (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                    saved
+                    (@congrArg.{1, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      MicroCFTA.InternedBinderProtocol.NodeRef input
+                      (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard) same)))
+                (@Option.some.{0} (MicroCFTA.SourceCurrentMemoMergeGraph.Entry Symbol Guard) entry))
+              found))
+'MicroCFTA.SourceCurrentMergeEmptySupport.call' depends on axioms: [propext, Quot.sound.{u}]

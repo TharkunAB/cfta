@@ -1,0 +1,45 @@
+/tmp/mcfta-merge-empty-support/merge-empty-direct-2.source.lean:47:12: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case hit
+Symbol Guard : Type
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+Output : Type
+clear : Guard → Bool
+top : Guard
+code : Code Symbol Guard Output
+before after : State Symbol Guard
+memo saved : Memo Symbol Guard
+output : Output
+memo✝ : Memo Symbol Guard
+entry✝ : Entry Symbol Guard
+input✝ : Value Symbol Guard
+before✝ : State Symbol Guard
+found : memo✝ input✝.referenceOf = some entry✝
+a✝ : EmptySafe memo✝
+⊢ EmptySafe memo✝ ∧ (input✝ = Value.empty → entry✝.result = Value.empty)
+/tmp/mcfta-merge-empty-support/merge-empty-direct-2.source.lean:53:12: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case miss
+Symbol Guard : Type
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+Output : Type
+clear : Guard → Bool
+top : Guard
+code : Code Symbol Guard Output
+before✝ after✝ : State Symbol Guard
+memo✝ saved : Memo Symbol Guard
+output : Output
+memo : Memo Symbol Guard
+input : Value Symbol Guard
+before : State Symbol Guard
+candidate : Value Symbol Guard
+after : State Symbol Guard
+current : Memo Symbol Guard
+absent : memo input.referenceOf = none
+actual : Run clear top (body top input) before memo candidate after current
+ih : EmptySafe memo → EmptySafe current
+a✝ : EmptySafe memo
+⊢ EmptySafe (remember current input candidate) ∧
+    (input = Value.empty → (winner current input candidate).result = Value.empty)

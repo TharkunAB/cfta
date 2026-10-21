@@ -1,0 +1,65 @@
+/tmp/mcfta-child-separation-investigation/child-separation-direct-1.source.lean:16:4: warning: missing doc string for public constructor Rel.refl
+
+Note: This linter can be disabled with `set_option linter.missingDocs false`
+/tmp/mcfta-child-separation-investigation/child-separation-direct-1.source.lean:17:4: warning: missing doc string for public constructor Rel.member
+
+Note: This linter can be disabled with `set_option linter.missingDocs false`
+/tmp/mcfta-child-separation-investigation/child-separation-direct-1.source.lean:20:4: warning: missing doc string for public constructor Rel.trans
+
+Note: This linter can be disabled with `set_option linter.missingDocs false`
+/tmp/mcfta-child-separation-investigation/child-separation-direct-1.source.lean:67:6: error: Type mismatch: After simplification, term
+  common
+ has type
+  b ++ firstSuffix = c ++ secondSuffix
+but is expected to have type
+  b ++ firstSuffix = b ++ (extra ++ secondSuffix)
+/tmp/mcfta-child-separation-investigation/child-separation-direct-1.source.lean:75:6: error: Type mismatch: After simplification, term
+  Eq.symm common
+ has type
+  c ++ secondSuffix = b ++ firstSuffix
+but is expected to have type
+  c ++ secondSuffix = c ++ (extra ++ firstSuffix)
+/tmp/mcfta-child-separation-investigation/child-separation-direct-1.source.lean:105:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  (have closed := complete (addCongruences classes);
+    if isContradicting closed = true then none else some closed) =
+    some classes
+of `fixed`
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+classes : Constraints
+fixed :
+  (have closed := complete (addCongruences classes);
+    if isContradicting closed = true then none else some closed) =
+    some classes
+⊢ isContradicting classes = false
+/tmp/mcfta-child-separation-investigation/child-separation-direct-1.source.lean:138:6: error: Tactic `subst` failed: did not find equation for eliminating 'firstIndex'
+
+case neg.cons.cons
+classes : Constraints
+fixed : congruenceStep classes = some classes
+index : Nat
+dropped :
+  ∀ (paths : Class),
+    paths ∈ classes → ∀ (left right : Path), index :: left ∈ paths → index :: right ∈ paths → left = right
+left right other : Path
+first : Rel classes (index :: left) other
+second : Rel classes (index :: right) other
+sameChild : Rel classes (index :: left) (index :: right)
+paths : Class
+selected : paths ∈ classes
+suffix : Path
+consistent : isContradicting classes = false
+notPrefix : ¬Subsumes paths paths
+firstIndex : Nat
+firstPath : List Nat
+aMember : firstIndex :: firstPath ∈ paths
+firstSame : index :: left = firstIndex :: firstPath ++ suffix
+secondIndex : Nat
+secondPath : List Nat
+bMember : secondIndex :: secondPath ∈ paths
+secondSame : index :: right = secondIndex :: secondPath ++ suffix
+same : ¬firstIndex :: firstPath = secondIndex :: secondPath
+firstParts : index = firstIndex ∧ left = firstPath.append suffix
+secondParts : index = secondIndex ∧ right = secondPath.append suffix
+⊢ left = right
