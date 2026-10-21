@@ -1,0 +1,22 @@
+--- candidate488 (reviewed nine-site repair)
++++ candidate490 (explicit original fold arguments)
+@@ -356,7 +356,8 @@
+                         (fun guard => guard ∈ fullSlots.1) finish.checked.native.machine.heap := by
+                     cases combined with
+                     | contradiction =>
+-                      have padded := widen (fold_kept slots (slot_kept all) _ _) prefixFits prefixKnown
++                      have padded := widen (fold_kept slots (slot_kept all) parentSeed.2.mass
++                        (0,0,parentSeed)) prefixFits prefixKnown
+                       exact ⟨EqualityLeafProjectionRuntimeEmpty.erase parented.children,_,by simp only [SourceCurrentAllocatedPartialWorker.children],padded.1,padded.2⟩
+                     | live identity records =>
+                       have walks : ∀ walkFuel index values start,
+@@ -375,7 +376,8 @@
+                         induction values generalizing walkFuel index with
+                         | nil =>
+                           intro start _ bound _ _ numeric carrier
+-                          have padded := widen (prefix_kept slots (slot_kept all) (by simpa using bound) _) numeric carrier
++                          have padded := widen (prefix_kept slots (slot_kept all)
++                            (n := parentSeed.2.mass) (k := index) (by simpa using bound) (0,0,parentSeed)) numeric carrier
+                           exact ⟨[],start,by simp only [walk],padded.1,padded.2⟩
+                         | cons value rest tailWalk =>
+                           intro start walkPosition bound masses inside numeric carrier

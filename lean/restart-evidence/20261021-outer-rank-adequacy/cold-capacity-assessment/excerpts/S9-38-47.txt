@@ -1,0 +1,10 @@
+   38 /-- The current phase selects its initial pure resource schedule. -/
+   39 noncomputable def forecast (budget : Nat) (phase : Phase width) (seed : Seed) : Seed :=
+   40   match phase with
+   41   | .node fuel .. => Schedule.node fuel budget seed
+   42   | .body fuel .. => Schedule.body fuel budget seed
+   43   | .rows fuel .. => Schedule.rows fuel budget seed
+   44   | .descendants fuel .. => Schedule.descendants fuel budget seed
+   45   | .children fuel .. => Schedule.children fuel budget seed
+   46   | .walk fuel .. => Schedule.walk fuel budget seed
+   47 

@@ -1,0 +1,50 @@
+--- uncompiled-complete468.lean
++++ uncompiled-complete476.lean
+@@ -189,7 +189,7 @@
+   have rootRoom : Room bits (SourceCurrentOuterInitialPrefix.forecast budget first seed).2 :=
+     room.mono (cover_ge _ _)
+   have outputRoom : Room bits output.2.2.2 := room.mono (cover_member _ List.mem_cons_self)
+-  have classified := SourceCurrentOuterDoneOrExhausted.done_or_exhausted formulas solver seed initial frame fits known
++  have classified := SourceCurrentOuterDoneOrExhausted.done_or_exhausted formulas solver (first := first) seed initial frame fits known
+     inputs rootRoom normal supported causal merged positiveMemo origins stored closed initialNodeIdle initialEdgeIdle
+     gBound sBound rBound eBound pBound hBound mBound cBound nBound
+   have resources {phase : Phase (bits+2)} (cut : Reached g s r e p h m c n budget first phase) :=
+@@ -230,12 +230,16 @@
+     cases action with
+     | ready value => exact ⟨value,running,by simp only [nodeCall,started]⟩
+     | busy =>
+-      obtain ⟨limit,bad⟩ := only_exhausted past (by
+-        simp only [SourceCurrentOuterActiveAncestry.run,nodeCall,started,Outcome.bind])
++      have failed : runPhase g s r e p h m c n budget (.node fuel candidate start) =
++          .failed (.nodeMemo handle .busy) running := by
++        simp only [SourceCurrentOuterActiveAncestry.run,nodeCall,started,Outcome.bind]
++      obtain ⟨limit,bad⟩ := only_exhausted past failed
+       cases bad
+     | absent =>
+-      obtain ⟨limit,bad⟩ := only_exhausted past (by
+-        simp only [SourceCurrentOuterActiveAncestry.run,nodeCall,started,Outcome.bind])
++      have failed : runPhase g s r e p h m c n budget (.node fuel candidate start) =
++          .failed (.nodeMemo handle .absent) running := by
++        simp only [SourceCurrentOuterActiveAncestry.run,nodeCall,started,Outcome.bind]
++      obtain ⟨limit,bad⟩ := only_exhausted past failed
+       cases bad
+     | evaluate captured =>
+       obtain ⟨bodyContext,owner,key,_cell⟩ :=
+@@ -368,6 +372,8 @@
+                           have priorWork := fold_work rowStep (row_work budget all) j (0,0,entrySeed)
+                           have nextWork := fold_work slots (slot_work all) (index+1) (0,0,parentSeed)
+                           have prefixWork := nextStage.1
++                          change prior.1 + (fold slots (index+1) (0,0,parentSeed)).1 + 2 ≤
++                            (envelope budget count mass entrySeed).1 at prefixWork
+                           cases walkFuel with
+                           | zero => omega
+                           | succ walkFuel =>
+@@ -395,6 +401,8 @@
+                             have childRoom : Room bits (envelope budget a b current).2.2.2 := currentRoom.mono selected.2.2.1
+                             have childEnough : (envelope budget a b current).1 ≤ walkFuel := by
+                               have work := selected.1
++                              change (envelope budget a b current).1 + 3 + j + index ≤
++                                (envelope budget count mass entrySeed).1 at work
+                               omega
+                             have descent := SourceCurrentOuterConstructorBounds.descend current.1 current.2 start
+                               (.live identity records) index numeric carrier

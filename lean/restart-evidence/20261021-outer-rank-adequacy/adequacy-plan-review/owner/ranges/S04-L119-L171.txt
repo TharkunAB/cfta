@@ -1,0 +1,53 @@
+/-- Each original row uses its returned parent edge for descendants before entering the suffix. -/
+noncomputable def rows (fuel g s r e p h m c n budget : Nat) (inherited : EqValue)
+    (originals : List Edge) (before : Caller width) : Outcome (List Edge) width :=
+  match originals with
+  | [] => .done [] before
+  | original :: rest =>
+      match fuel with
+      | 0 => .failed (.exhausted .rows) before
+      | next + 1 =>
+          (edgeCall next g s r e p h m c n budget ⟨inherited, original⟩ before).bind fun narrowed middle =>
+            (descendants next g s r e p h m c n budget inherited narrowed middle).bind fun result after =>
+              (rows next g s r e p h m c n budget inherited rest after).bind fun results final =>
+                .done (result :: results) final
+termination_by (fuel, 2)
+
+/-- The inherited prefix runs once and passes its actual operation return into indexed children. -/
+noncomputable def descendants (fuel g s r e p h m c n budget : Nat) (inherited : EqValue)
+    (edge : Edge) (before : Caller width) : Outcome Edge width :=
+  let actual := SourceCurrentAllocatedInheritedPrefix.run edge.entry.key.constraint inherited before.checked.operations
+  let middle := advance before
+    (SourceCurrentAllocatedQueryMemo.advancePhysical before.checked ⟨before.checked.native.machine.heap, actual.2⟩)
+    before.fourth before.merge
+  match actual.1 with
+  | .error message => .failed (.inherited message) middle
+  | .ok none => .failed .missingInherited middle
+  | .ok (some combined) =>
+      (children fuel g s r e p h m c n budget combined edge.children middle).bind fun results after =>
+        let rebuilt := SourceCurrentAllocatedRawRebuild.edge edge results after.checked
+        .done rebuilt.1 (advance after rebuilt.2 after.fourth after.merge)
+termination_by (fuel, 2)
+
+/-- Contradictory inherited constraints erase slots without invoking a child request. -/
+noncomputable def children (fuel g s r e p h m c n budget : Nat) (combined : EqValue)
+    (values : List Node) (before : Caller width) : Outcome (List Node) width :=
+  match combined with
+  | .contradiction => .done (EqualityLeafProjectionRuntimeEmpty.erase values) before
+  | .live _ _ => walk fuel g s r e p h m c n budget combined 0 values before
+termination_by (fuel, 1)
+
+/-- Indexed child calls use each actual descent at the current operation state. -/
+noncomputable def walk (fuel g s r e p h m c n budget : Nat) (combined : EqValue) (index : Nat)
+    (values : List Node) (before : Caller width) : Outcome (List Node) width :=
+  match values with
+  | [] => .done [] before
+  | value :: rest =>
+      match fuel with
+      | 0 => .failed (.exhausted .walk) before
+      | next + 1 =>
+          let actual := SourceCurrentAllocatedPartialGraph.descend before combined index
+          (nodeCall next g s r e p h m c n budget ⟨actual.1, value⟩ actual.2).bind fun result middle =>
+            (walk next g s r e p h m c n budget combined (index + 1) rest middle).bind fun results after =>
+              .done (result :: results) after
+termination_by (fuel, 0)

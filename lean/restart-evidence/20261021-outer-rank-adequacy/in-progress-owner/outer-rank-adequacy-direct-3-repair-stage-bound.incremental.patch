@@ -1,0 +1,11 @@
+--- candidate491 (two-site repair)
++++ candidate491 (same known bound at second stage invocation)
+@@ -411,7 +411,7 @@
+                               have base := (fold_kept slots (slot_kept all) index (0,0,parentSeed)).1.2.2.2
+                               change parentSeed.2.mass ≤ current.2.mass at base
+                               omega
+-                            obtain ⟨_work,_lower,_profile,_alphabet,candidates⟩ := stage.2.2.2 index (by omega)
++                            obtain ⟨_work,_lower,_profile,_alphabet,candidates⟩ := stage.2.2.2 index slotBound.le
+                             have selected := candidates a b slotBound counts massBound smaller
+                             have childRoom : Room bits (envelope budget a b current).2.2.2 := currentRoom.mono selected.2.2.1
+                             have childEnough : (envelope budget a b current).1 ≤ walkFuel := by

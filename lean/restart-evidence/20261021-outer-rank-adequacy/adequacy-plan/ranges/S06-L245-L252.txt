@@ -1,0 +1,8 @@
+/-- Run a literal phase with the same lower bounds and erase only its successful value. -/
+noncomputable def run (g s r e p h m c n budget : Nat) : Phase width → Outcome Unit width
+  | .node fuel request before => (nodeCall fuel g s r e p h m c n budget request before).bind (fun _ after => .done () after)
+  | .body fuel request before => (nodeBody fuel g s r e p h m c n budget request before).bind (fun _ after => .done () after)
+  | .rows fuel inherited values before => (rows fuel g s r e p h m c n budget inherited values before).bind (fun _ after => .done () after)
+  | .descendants fuel inherited edge before => (descendants fuel g s r e p h m c n budget inherited edge before).bind (fun _ after => .done () after)
+  | .children fuel combined values before => (children fuel g s r e p h m c n budget combined values before).bind (fun _ after => .done () after)
+  | .walk fuel combined index values before => (walk fuel g s r e p h m c n budget combined index values before).bind (fun _ after => .done () after)

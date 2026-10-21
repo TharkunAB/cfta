@@ -1,0 +1,20 @@
+/-- The literal raw edge retains its full receipt, Frame, uniform profile, and initial carrier. -/
+theorem edge (alphabet : List Guard) (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (profile : Profile) (original : Edge) (children : List Node) (before : Checked width)
+    (frame : Frame formulas solver inventory before) (fits : Fits profile before)
+    (known : Known (fun guard => guard ∈ alphabet) before.native.machine.heap)
+    (resident : EdgeResident before.native.machine.heap original)
+    (available : Values before.native.machine.heap children) (same : children.length = original.children.length) :
+    let actual := rawEdge original children before
+    SourceCurrentAllocatedRawRebuild.EdgeReceipt formulas solver inventory original children before actual.1 actual.2 ∧
+      Frame formulas solver inventory actual.2 ∧ Fits (uniform profile) actual.2 ∧
+      Known (fun guard => guard ∈ alphabet) actual.2.native.machine.heap := by
+  have built := SourceCurrentRawRebuildNumeric.edge formulas solver inventory original children before frame profile fits
+    resident available same
+  have length : children.length ≤ scalar profile := same ▸ edge_width profile before fits original resident
+  have carrier := SourceEqualityAnnotationHeap.run (fun guard => guard ∈ alphabet)
+    (makeEdge original.entry.key.symbol original.entry.key.constraint children)
+    (SourceEqualityAnnotationHeap.makeEdge _ _ _ _ (known _ _ resident)) before.native.machine.heap known
+  exact ⟨built.1, built.2.1, built.2.2.1.mono
+    (SourceCurrentEditFrame.constructorProfile_count_mono length profile), carrier⟩

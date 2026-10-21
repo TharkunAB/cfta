@@ -1,0 +1,26 @@
+   59 /-- A finite profile computes a sufficient mathematical word width. -/
+   60 def roomBits (profile : Profile) : Nat :=
+   61   profile.nodes + profile.edges + profile.domains + 2 ^ (profile.nodes + profile.nodes * profile.nodes) + 1
+   62 
+   63 /-- The computed mathematical width satisfies the exact native room predicate. -/
+   64 theorem room_computed (profile : Profile) : Room (roomBits profile) profile := by
+   65   let total := profile.nodes + profile.edges + profile.domains + 2 ^ (profile.nodes + profile.nodes * profile.nodes)
+   66   have large := power_large total
+   67   have one := Nat.pow_le_pow_right (by decide : 1 ≤ 2) (show total + 1 ≤ total + 1 + 1 by omega)
+   68   have two := Nat.pow_le_pow_right (by decide : 1 ≤ 2) (show total + 1 ≤ total + 1 + 2 by omega)
+   69   change profile.nodes < 2 ^ (total + 1) ∧ profile.edges ≤ 2 ^ (total + 1 + 2) ∧
+   70     profile.domains + 2 ^ (profile.nodes + profile.nodes * profile.nodes) < 2 ^ (total + 1 + 1)
+   71   have nodes : profile.nodes ≤ total := by
+   72     exact Nat.le_trans (Nat.le_trans (Nat.le_add_right profile.nodes profile.edges)
+   73       (Nat.le_add_right (profile.nodes + profile.edges) profile.domains))
+   74       (Nat.le_add_right (profile.nodes + profile.edges + profile.domains) _)
+   75   have edges : profile.edges ≤ total := by
+   76     exact Nat.le_trans (Nat.le_trans (Nat.le_add_left profile.edges profile.nodes)
+   77       (Nat.le_add_right (profile.nodes + profile.edges) profile.domains))
+   78       (Nat.le_add_right (profile.nodes + profile.edges + profile.domains) _)
+   79   have domains : profile.domains + 2 ^ (profile.nodes + profile.nodes * profile.nodes) ≤ total :=
+   80     Nat.add_le_add_right (Nat.le_add_left profile.domains (profile.nodes + profile.edges)) _
+   81   exact ⟨Nat.lt_of_le_of_lt nodes large,
+   82     Nat.le_trans edges (Nat.le_trans (Nat.le_of_lt large) two),
+   83     Nat.lt_of_le_of_lt domains (Nat.lt_of_lt_of_le large one)⟩
+   84 

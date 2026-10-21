@@ -1,0 +1,20 @@
+/-- The edge family evaluates its stored winner and completes only the selected handle. -/
+noncomputable def edgeCall (fuel g s r e p h m c n budget : Nat) (request : EdgeRequest)
+    (before : Caller width) : Outcome Edge width :=
+  let actual := beginEdge request before
+  match actual.2.1 with
+  | .ready result => .done result actual.2.2
+  | .evaluate original =>
+      (edgeBody fuel g s r e p h m c n budget original actual.2.2).bind fun result after =>
+        .done result (finishEdge actual.1 result after)
+  | .busy => .failed (.edgeMemo actual.1 .busy) actual.2.2
+  | .absent => .failed (.edgeMemo actual.1 .absent) actual.2.2
+
+/-- A parent return advances checked state and warm memos without changing either outer result table. -/
+noncomputable def edgeBody (_fuel g s r e p h m c n budget : Nat) (request : EdgeRequest)
+    (before : Caller width) : Outcome Edge width :=
+  match SourceCurrentAllocatedParentWorker.edge g s r e p h m c n budget
+      request.value.entry.key.symbol request.value.entry.key.constraint request.inherited
+      request.value.children before.checked before.fourth before.merge with
+  | .done result checked fourth memo => .done result (advance before checked fourth memo)
+  | .failed fault checked fourth memo => .failed (.parent fault) (advance before checked fourth memo)

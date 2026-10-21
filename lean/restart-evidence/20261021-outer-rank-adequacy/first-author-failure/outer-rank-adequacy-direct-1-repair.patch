@@ -1,0 +1,19 @@
+--- SourceCurrentOuterRankAdequacy.lean (direct-1)
++++ SourceCurrentOuterRankAdequacy.lean (proposed explicit motive)
+@@ -220,7 +220,15 @@
+       (envelope budget rank.1 rank.2 entrySeed).1 ≤ fuel →
+       ∃ result after, nodeCall fuel g s r e p h m c n budget candidate start = .done result after := by
+     intro rank
+-    refine (Prod.lex Nat.lt_wfRel Nat.lt_wfRel).wf.induction rank ?_
++    refine (Prod.lex Nat.lt_wfRel Nat.lt_wfRel).wf.induction (C := fun rank =>
++      ∀ (fuel : Nat) (candidate : NodeRequest) (start : Caller (bits+2)) (entrySeed : Seed),
++      (rankCount (candidate.inherited.payload.getD []) candidate.value, massOf candidate.value) = rank →
++      Reached g s r e p h m c n budget first (.node fuel candidate start) →
++      Fits entrySeed.2 start.checked →
++      SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ entrySeed.1) start.checked.native.machine.heap →
++      Room bits (envelope budget rank.1 rank.2 entrySeed).2.2.2 →
++      (envelope budget rank.1 rank.2 entrySeed).1 ≤ fuel →
++      ∃ result after, nodeCall fuel g s r e p h m c n budget candidate start = .done result after) rank ?_
+     intro rank ih fuel candidate start entrySeed ranked past currentFits currentKnown currentRoom enough
+     rcases rank with ⟨count,mass⟩
+     obtain ⟨_iv,_ms,_old,_trace,post,_fr,_ff,_kk,ready,_below,_alphabet,_room,_rest⟩ := resources past
