@@ -1,0 +1,22 @@
+/-- Required execution retains the exact checked state and every selected original path domain. -/
+structure Receipt [DecidableEq (EdgeKey Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (selected : Constraints) (values results : List (Value Symbol Guard))
+    (before after : Checked width) : Prop where
+  stable : SourceEqualityRequiredWorkerComplete.StableRun
+    (fun fuel readFuel => SourceEqualityRequiredExecution.requireAll fuel readFuel
+      (SourceEqualitySelectedRequired.paths selected) values before.native.machine.heap) results after.native.machine.heap
+  effects : Effects (physical before) (physical after)
+  ready : Ready after
+  admitted : At formulas solver inventory after
+  extension : SourceRecursiveIntersectionKernel.Extension before.native.machine after.native.machine
+  nodes : after.native.nodes = before.native.nodes
+  edges : after.native.edges = before.native.edges
+  domains : after.native.machine.domains = before.native.machine.domains
+  operations : after.operations = before.operations
+  originals : Values after.native.machine.heap values
+  resident : Values after.native.machine.heap results
+  paths : ∀ path ∈ selected.flatten, SourceEqualityProjectionPathDomain.ForestClosed (path.map Int.ofNat) results
+  language : ∀ holds ambient terms, All₂ (meaning holds ambient) results terms ↔
+    All₂ (meaning holds ambient) values terms ∧
+      SourceEqualityRequiredAPI.ForestRequired (SourceEqualitySelectedRequired.paths selected) terms

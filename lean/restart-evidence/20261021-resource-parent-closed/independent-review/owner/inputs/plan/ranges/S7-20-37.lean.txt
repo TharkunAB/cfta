@@ -1,0 +1,18 @@
+
+omit [DecidableEq Symbol] [DecidableEq (Value Symbol Guard)] in
+/-- Two actual completed required calls agree at arbitrary completed bounds. -/
+theorem required_unique
+    {fuel readFuel otherFuel otherReadFuel : Nat} {paths : List SourceEqualityNeeded.Path}
+    {values first second : List (Value Symbol Guard)}
+    {before afterFirst afterSecond : State Symbol Guard}
+    (one : SourceEqualityRequiredExecution.requireAll fuel readFuel paths values before = .done first afterFirst)
+    (two : SourceEqualityRequiredExecution.requireAll otherFuel otherReadFuel paths values before = .done second afterSecond) :
+    first = second ∧ afterFirst = afterSecond := by
+  have left := (SourceEqualityRequiredExecution.requireAll_execution_iff paths values before first afterFirst).mpr
+    ⟨fuel, readFuel, one⟩
+  have right := (SourceEqualityRequiredExecution.requireAll_execution_iff paths values before second afterSecond).mpr
+    ⟨otherFuel, otherReadFuel, two⟩
+  cases compiled : SourceEqualityNeeded.build paths with
+  | node entries =>
+      simp only [compiled] at left right
+      exact SourceEqualityRequiredExecution.children_unique left right

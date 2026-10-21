@@ -1,0 +1,10 @@
+/-- Each actual outer phase names its current ready operands. -/
+def Inputs (phase : Phase width) : Prop :=
+  match phase with
+  | .node _ request before | .body _ request before => NodeReady before request
+  | .rows _ inherited values before =>
+      EqReady before.checked.operations.constraints inherited ∧ Edges before.checked.native.machine.heap values
+  | .descendants _ inherited value before =>
+      EqReady before.checked.operations.constraints inherited ∧ EdgeResident before.checked.native.machine.heap value
+  | .children _ inherited values before | .walk _ inherited _ values before =>
+      EqReady before.checked.operations.constraints inherited ∧ Values before.checked.native.machine.heap values

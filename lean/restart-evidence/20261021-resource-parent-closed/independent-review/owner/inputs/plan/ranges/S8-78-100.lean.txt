@@ -1,0 +1,23 @@
+/-- A full pass narrows its forest and retains every class-satisfying original term. -/
+structure Receipt (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (records : List SourceEqualityClassOrder.Record) (values : List (Value Symbol Guard))
+    (before : Checked width) (memo : Memo) (results : List (Value Symbol Guard))
+    (after : Checked width) (saved : Memo) (memos final : Memos) : Prop where
+  ready : Ready after
+  admitted : At formulas solver inventory after
+  effects : SourceCurrentConjunctionRowsAllocation.Effects (physical before) (physical after)
+  extension : SourceRecursiveIntersectionKernel.Extension before.native.machine after.native.machine
+  stored : Stored after.native.machine.heap saved
+  covered : ∀ ambient, CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient saved
+  available : Values after.native.machine.heap results
+  transport : All₂ Transport values results
+  domains : ∀ path, ForestClosed path values → ForestClosed path results
+  retained : Extends memo saved
+  globals : SourceCurrentSubsumesQueryMemos.Effect before.native.machine.heap after.native.machine.heap memos final
+  language : ∀ ambient symbol terms,
+    (All₂ (meaning (SourceEqualityPCSGuard.holds formulas solver) ambient) results terms →
+      All₂ (meaning (SourceEqualityPCSGuard.holds formulas solver) ambient) values terms) ∧
+    ((∀ record ∈ records, EqualityNormalize.ClassSat (.node symbol terms) record.paths) →
+      (All₂ (meaning (SourceEqualityPCSGuard.holds formulas solver) ambient) results terms ↔
+        All₂ (meaning (SourceEqualityPCSGuard.holds formulas solver) ambient) values terms))

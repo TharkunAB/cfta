@@ -1,0 +1,31 @@
+/-- A completed Parent supplies its exact child shape or selected phase receipts. -/
+theorem edge_cases {g s r e p h m c n budget symbol original inherited children before fourth memo returned after saved current}
+    (actual : SourceCurrentAllocatedParentWorker.edge g s r e p h m c n budget symbol original inherited children
+      before fourth memo = .done returned after saved current)
+    (good : Good (width := width) before) (stored : Stored before.native.machine.heap memo)
+    (live : SourceEqualityMkEdgeAllocation.contradictory original = false →
+      FieldAvailable before.operations original ∧ EqReady before.operations.constraints inherited ∧
+        Values before.native.machine.heap children) :
+    returned.children = children ∨
+      returned.children = EqualityLeafProjectionRuntimeEmpty.erase children ∨
+      returned.children = [.empty] ∨
+      ∃ (loaded : Allocated) (middle : Checked width) (records kept : List Record)
+        (scanned : Checked width) (scanFourth : Fourth) (prepared : List Node) (preparedHeap : Heap),
+        SourceEqualityMkEdgeAllocation.contradictory original = false ∧
+        SourceEqualityConstraintFieldLookup.load original before.operations.constraints = .ok (some loaded) ∧
+        SourceCurrentAllocatedLocalWorker.reduce g s r e p h m c n budget loaded inherited children
+          before fourth memo = .done returned.children middle saved current ∧
+        SourceCurrentAllocatedMkEdge.build symbol loaded returned.children middle = (.ok returned, after) ∧
+        SourceEqualityMkEdgeAllocation.accepted (SourceEqualityConjoinAllocation.readback loaded)
+          returned.children.length = true ∧
+        (SourceEqualityPartialPrecheckAllocation.run loaded.stored loaded.guard inherited before.operations).1 =
+          .ok (.classes records) ∧
+        SourceCurrentAllocatedRecordScanWorker.scan g s p h n budget children records
+          (prefixState before loaded inherited) fourth = .done (none, kept) scanned scanFourth ∧
+        kept ≠ [] ∧
+        SourceEqualityRequiredExecution.requireAll r h
+          (SourceEqualitySelectedRequired.paths (kept.map SourceEqualityClassOrder.Record.paths)) children
+          scanned.native.machine.heap = .done prepared preparedHeap ∧
+        SourceCurrentAllocatedClassWorker.pass e p h m c n kept prepared
+          (advanceHeap scanned preparedHeap) memo = .done returned.children middle current ∧
+        saved = scanFourth := by

@@ -1,0 +1,15 @@
+/-- The complete compiled child-list worker derives every callback completion premise. -/
+theorem requireAll_complete [DecidableEq (EdgeKey Symbol Guard)] (paths : List Path)
+    (values : List (Value Symbol Guard)) (before : State Symbol Guard) (ready : Ready before)
+    (available : Values before values) (closed : ClosedValues values) :
+    ∃ results after, Keeps before after ∧ Values after results ∧ ClosedValues results ∧
+      StableRun (fun fuel readFuel => requireAll fuel readFuel paths values before) results after := by
+  cases compiled : build paths with
+  | node entries =>
+      have callbacks : SourceEqualityRequiredListsComplete.ChildComplete (Symbol := Symbol) (Guard := Guard) entries := by
+        intro index needed member value current currentReady inputAvailable inputClosed
+        exact SourceEqualityRequiredComplete.complete needed value current currentReady inputAvailable inputClosed
+      obtain ⟨results, after, trace, keeps, resultAvailable, resultClosed⟩ :=
+        SourceEqualityRequiredListsComplete.children_complete entries callbacks 0 values before ready available closed
+      refine ⟨results, after, keeps, resultAvailable, resultClosed, ?_⟩
+      simpa only [requireAll, compiled] using children_stable trace

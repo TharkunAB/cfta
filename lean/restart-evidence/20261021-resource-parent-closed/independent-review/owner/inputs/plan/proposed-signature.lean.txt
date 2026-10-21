@@ -1,0 +1,8 @@
+theorem children
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    {request : SourceCurrentAllocatedPartialState.EdgeRequest}
+    {returned : EdgeValue Symbol Guard}
+    (written : SourceCurrentResourceParentWriters.Written (bits := bits) formulas solver request returned)
+    (closed : MergedColdReaderClosedInputs.ClosedValues request.value.children) :
+    MergedColdReaderClosedInputs.ClosedValues returned.children

@@ -1,0 +1,10 @@
+/-- Resident physical identities recover the exact original argument of a hit. -/
+theorem hit_original [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    {heap : State Symbol Guard} {memo : Memo Symbol Guard} {input : Value Symbol Guard} {entry : Entry Symbol Guard}
+    (semantic : SemanticReady heap) (available : Available heap input) (stored : Stored heap memo)
+    (found : memo input.referenceOf = some entry) :
+    entry.original = input ∧ Available heap entry.result ∧ (input.free = [] → entry.result.free = []) := by
+  obtain ⟨identity, original, result, closed⟩ := stored _ _ found
+  have same := InternedFreshProbeKeys.resident_reference_injective heap semantic.ready.semantic.1.normal.facts.coherent
+    entry.original input original.resident available.resident identity
+  exact ⟨same, result, same ▸ closed⟩

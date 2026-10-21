@@ -1,0 +1,7 @@
+    have physical : SourceCurrentMemoMergeEffects.Stored scanned.native.machine.heap writerBefore.merge :=
+      context.stored.grows scanEffects.keeps
+    obtain ⟨_next,_receipt,_currentAfter,_mergedAfter,_corridors,
+        _supportedAfter,_causalAfter,_positiveAfter,back⟩ :=
+      SourceCurrentRequiredPositiveChronology.pass formulas solver preparedInventory requiredReceipt
+        scanReady.semantic scanNormal scanReady.costs scanValues gates scanCurrent scanSupport scanHistory
+        kept rfl coherent active passReads physical context.covered preparedValid merged positiveMemo

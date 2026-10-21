@@ -1,0 +1,19 @@
+/-- Follow selected ordinary children; recursive heads retain the whole-value closedness boundary. -/
+def NodeClosed (path : List Int) (value : Value Symbol Guard) : Prop :=
+  match path, value with
+  | [], value => value.free = []
+  | _ :: _, .empty => True
+  | index :: path, .node _ edges _ _ =>
+      ∀ edge ∈ edges, ∀ child, select edge.children index = some child → NodeClosed path child
+  | _ :: _, value => value.free = []
+termination_by path.length
+
+/-- Every selected child of every original row satisfies the shorter path domain. -/
+def RowsClosed (path : List Int) (index : Int) (edges : List (EdgeValue Symbol Guard)) : Prop :=
+  ∀ edge ∈ edges, ∀ child, select edge.children index = some child → NodeClosed path child
+
+/-- Root union reads all values; a proper forest path reads only its selected original value. -/
+def ForestClosed (path : List Int) (values : List (Value Symbol Guard)) : Prop :=
+  match path with
+  | [] => ClosedValues values
+  | index :: path => ∀ value, select values index = some value → NodeClosed path value

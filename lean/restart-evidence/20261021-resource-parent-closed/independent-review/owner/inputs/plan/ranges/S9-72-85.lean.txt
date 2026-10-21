@@ -1,0 +1,14 @@
+/-- The positional receipt retains exact original order and the actual selected path list. -/
+theorem Retained.fields [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    [DecidableEq (Value Symbol Guard)]
+    {budget : Nat} {unconstrained reaches : Value Symbol Guard → Bool} {values : List (Value Symbol Guard)}
+    {records kept : List Record} {classes selected : Constraints} {outcome : Option Class}
+    {before after : Checked width} {memo saved : SourceCurrentEmptinessMemo.Memo}
+    {trace : Scan budget unconstrained reaches values classes before memo outcome selected after saved}
+    (receipt : Retained trace records kept) : kept.Sublist records ∧ kept.map Record.paths = selected := by
+  induction receipt with
+  | nil => exact ⟨.refl _, rfl⟩
+  | selected head tail ih => exact ⟨.cons_cons _ ih.1, by simp only [List.map_cons, head, ih.2]⟩
+  | skipped head tail ih => exact ⟨.cons _ ih.1, ih.2⟩
+  | continued head tail ih => exact ⟨.cons _ ih.1, ih.2⟩
+  | stopped => exact ⟨List.nil_sublist _, rfl⟩

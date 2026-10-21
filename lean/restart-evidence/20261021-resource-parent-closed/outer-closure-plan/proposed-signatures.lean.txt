@@ -1,0 +1,59 @@
+namespace MicroCFTA.SourceCurrentOuterClosedInputs
+open InternedConstructorTemplates SourceCurrentAllocatedPartialState
+open SourceCurrentAllocatedPartialInvariant (Context)
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedNativeResourceForecast (Profile Room)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Frame Fits)
+open SourceCurrentOuterCopiedWarmHit (Phase)
+open SourceCurrentOuterExecutionAncestry (Reached)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Guard
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "caller" => SourceCurrentOuterActiveAncestry.caller
+
+-- Proposed definitions. This text is not an elaborated module.
+def NodeStored (state : Caller width) : Prop :=
+  FlatMemoThunk.Valid (fun request key => request.key = key)
+    (FlatMemoThunk.CellSpec (fun request result => request.value.free = [] → result.free = []))
+    state.nodeResults
+
+def InputsClosed (phase : Phase width) : Prop :=
+  match phase with
+  | .node _ request _ | .body _ request _ => request.value.free = []
+  | .rows _ _ values _ => MergedColdReaderClosedInputs.ClosedEdges values
+  | .descendants _ _ edge _ => MergedColdReaderClosedInputs.ClosedValues edge.children
+  | .children _ _ values _ | .walk _ _ _ values _ => MergedColdReaderClosedInputs.ClosedValues values
+
+theorem initial (checked : SourceEqualityNativeDemand.State width)
+    (memo : SourceCurrentMemoMergeGraph.Memo Symbol Guard) (fourth : SourceCurrentEmptinessMemo.Memo) :
+    NodeStored (SourceCurrentAllocatedPartialState.initial checked memo fourth)
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Node] {bits : Nat}
+
+theorem reached
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    {g s r e p h m c n budget : Nat} {first last : Phase (bits + 2)}
+    {inventory : Inventory} {memos : Memos} (seed : List Guard × Profile)
+    (actual : Reached g s r e p h m c n budget first last)
+    (initial : Context formulas solver inventory (caller first) memos)
+    (frame : Frame formulas solver inventory (caller first).checked)
+    (fits : Fits seed.2 (caller first).checked)
+    (known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.1)
+      (caller first).checked.native.machine.heap)
+    (inputs : SourceCurrentOuterPrefixInvariants.Inputs first)
+    (room : Room bits (SourceCurrentOuterInitialPrefix.forecast budget first seed).2)
+    (normal : SourceCurrentRequiredUnionNormal.UnionNormal (caller first).checked.native.machine.heap)
+    (supported : SourceCurrentNativeRequestPositivePositions.Support
+      (caller first).checked.native.machine.heap (caller first).checked.native)
+    (causal : SourceCurrentNativeMuPublication.History empty (caller first).checked.native.machine.heap)
+    (merged : SourceCurrentConstrainedCapMemoMerge.Stored
+      (fun guard : Guard => SourceMemoGate.plain guard = true) (caller first).merge)
+    (positiveMemo : SourceCurrentMergePositivePosition.Support (caller first).merge)
+    (origins : SourceCurrentResourceParentWriters.Origins formulas solver (caller first))
+    (stored : NodeStored (caller first)) (closed : InputsClosed first) :
+    NodeStored (caller last) ∧ InputsClosed last
+
+end MicroCFTA.SourceCurrentOuterClosedInputs

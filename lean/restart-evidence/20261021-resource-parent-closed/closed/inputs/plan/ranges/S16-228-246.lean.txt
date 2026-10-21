@@ -1,0 +1,19 @@
+/-- Initial filtered resident probes complete the Mu body at the unchanged full caller and profile. -/
+theorem mu_body (alphabet : List Guard) (entryProfile : Profile)
+    (fuel g s r e p h m c n limit : Nat) (identity : Interned InternedBinderProtocol.NodeKey)
+    (body depth ordinary : Node) (inherited : EqValue) (before : Caller width)
+    (coherent : InternedRecordCoherence.Coherent before.checked.native.machine.heap)
+    (probes : InternedFreshOrdinaryProbeHeap.Heap before.checked.native.machine.heap)
+    (available : Available before.checked.native.machine.heap (.mu identity body depth ordinary))
+    (fits : Fits entryProfile before.checked)
+    (known : Known (fun guard => guard ∈ alphabet) before.checked.native.machine.heap) :
+    SourceCurrentAllocatedPartialWorker.nodeBody fuel g s r e p h m c n limit
+      ⟨inherited,.mu identity body depth ordinary⟩ before =
+      .done (cleanup (.mu identity body depth ordinary)) before ∧
+    Fits entryProfile before.checked ∧ Known (fun guard => guard ∈ alphabet) before.checked.native.machine.heap ∧
+      Available before.checked.native.machine.heap (cleanup (.mu identity body depth ordinary)) := by
+  have completed := SourceCurrentMuReconstructionEffects.complete identity body depth ordinary
+    before.checked.native.machine.heap coherent probes available
+  refine ⟨?_,fits,known,completed.2⟩
+  simp only [SourceCurrentAllocatedPartialWorker.nodeBody,completed.1]
+  rfl

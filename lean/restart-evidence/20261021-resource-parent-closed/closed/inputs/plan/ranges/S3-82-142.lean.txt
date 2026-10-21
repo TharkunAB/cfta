@@ -1,0 +1,61 @@
+  obtain ⟨g,s,r,e,p,h,m,c,n,budget,writerBefore,writerAfter,savedFourth,savedMerge,
+      globals,inventory,profile,observed,context,frame,fits,inheritedReady,resident,
+      liveInputs,reserved,normal,supported,⟨causal⟩,merged,positiveMemo⟩ := written
+  have nativeGood := SourceCurrentNativeOperationHeap.Good.of_native
+    (SourceCurrentNativeOperationInvariants.Good.of_checked context.ready.good) context.ready.semantic context.ready.costs
+  rcases SourceCurrentActualParentBranchCases.edge_cases observed nativeGood context.stored liveInputs with
+      unchanged | erased | sentinel | selected
+  · refine ⟨fun _ => Or.inl unchanged,?_⟩
+    intro index child found residual positive
+    exact ⟨index,residual,child,by simpa only [unchanged] using found,positive,.refl _⟩
+  · refine ⟨fun _ => Or.inr (Or.inl erased),?_⟩
+    intro index child found residual positive
+    have inside := List.mem_of_getElem? found
+    rw [erased] at inside
+    obtain ⟨_,_,rfl⟩ := List.mem_map.mp inside
+    cases positive
+  · refine ⟨fun _ => Or.inr (Or.inr sentinel),?_⟩
+    intro index child found residual positive
+    have inside := List.mem_of_getElem? found
+    rw [sentinel] at inside
+    have same : child = .empty := List.mem_singleton.mp inside
+    subst child
+    cases positive
+  · obtain ⟨loaded,middle,records,kept,scanned,scanFourth,preparedValues,preparedHeap,
+        noncontradictory,loadedAt,_reduced,_built,_accepted,precheck,scanCall,nonempty,
+        requiredCall,passCall,_sameFourth⟩ := selected
+    obtain ⟨fieldAt,_inherited,_available⟩ := liveInputs noncontradictory
+    have parentLive : SourceCurrentParentNumeric.LiveInputs request.value.entry.key.constraint loaded
+        request.inherited request.value.children writerBefore :=
+      fun _ => ⟨fieldAt.1,loadedAt,inheritedReady,_available⟩
+    have parentReserved : SourceCurrentParentForecast.Reserved bits budget request.value.children.length
+        request.value.entry.key.constraint loaded request.inherited writerBefore.checked profile := by
+      simpa only [SourceCurrentParentForecast.residentReserved,noncontradictory,
+        Bool.false_eq_true,ite_false,loadedAt] using reserved
+    obtain ⟨next,final,own,preparedInventory,scanMemos,preparedMemos,numeric,trace,retained,
+        pass,_assembled,precheckReceipt,_scanReads,_requiredReads,passReads,requiredReceipt,
+        preparedValid,scanReady,scanEffects,_extension,scanValues,scanCurrent,scanSupport,
+        ⟨scanHistory⟩,scanNormal⟩ :=
+      SourceCurrentActualParentSelectedCertificates.selected_certificates formulas solver inventory budget
+        request.value.entry.key.symbol request.value.entry.key.constraint loaded request.inherited
+        request.value.children writerBefore globals context frame profile fits parentLive parentReserved observed
+        noncontradictory precheck scanCall requiredCall passCall normal supported causal
+    obtain ⟨_proper,raw,_rawRead,sourceClasses,order,recordFields⟩ := precheckReceipt.classes records rfl
+    have retainedFields := retained.fields
+    have ownNonempty : SourceCompactGuards.sourceEqualities request.value.entry.key.constraint ≠ some [] := by
+      intro ownEmpty
+      have rawEmpty : raw = [] := List.map_eq_nil_iff.mp (Option.some.inj (sourceClasses.symm.trans ownEmpty))
+      have recordsEmpty : records = [] := by rw [order,rawEmpty]; rfl
+      exact nonempty (List.sublist_nil.mp (recordsEmpty ▸ retainedFields.1))
+    have ownSelected : ∀ paths ∈ kept.map SourceEqualityClassOrder.Record.paths,
+        paths ∈ (SourceCompactGuards.sourceEqualities request.value.entry.key.constraint).getD [] := by
+      intro paths chosen
+      obtain ⟨record,member,rfl⟩ := List.mem_map.mp chosen
+      have rawMember : record ∈ raw := (SourceEqualityClassOrder.ordered_perm raw).mem_iff.mp
+        (by simpa only [order] using retainedFields.1.subset member)
+      rw [sourceClasses]
+      exact List.mem_map.mpr ⟨record,rawMember,rfl⟩
+    have coherent : ∀ record ∈ kept, SourceEqualityClassOrder.Coherent record :=
+      fun record member => (recordFields record (retainedFields.1.subset member)).1
+    have active : ∀ record ∈ kept, EqualityNormalize.Nontrivial record.paths :=
+      fun record member => (recordFields record (retainedFields.1.subset member)).2.2

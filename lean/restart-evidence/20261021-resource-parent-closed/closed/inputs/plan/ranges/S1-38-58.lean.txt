@@ -1,0 +1,21 @@
+private theorem request_eq [DecidableEq (EdgeKey Symbol Guard)] {bits : Nat}
+    {formulas : SourceGuards.Formulas FullSyntax.Formula}
+    {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {inventory : Inventory} {globals : Memos} {before : Caller (bits + 2)}
+    {first second : EdgeRequest}
+    (context : Context formulas solver inventory before globals)
+    (firstReady : EqReady before.checked.operations.constraints first.inherited)
+    (firstResident : EdgeResident before.checked.native.machine.heap first.value)
+    (secondReady : EqReady before.checked.operations.constraints second.inherited)
+    (secondResident : EdgeResident before.checked.native.machine.heap second.value)
+    (same : first.key = second.key) : first = second := by
+  have inherited := SourceEqualityConstraintMemoAllocation.ready_eq_of_identity _
+    context.ready.good.operations.constraints first.inherited second.inherited firstReady secondReady
+    (congrArg Prod.fst same)
+  have values := edge_identity_unique _ context.ready.semantic.ready.semantic.1.normal.facts.coherent
+    first.value second.value firstResident secondResident (congrArg Prod.snd same)
+  cases first
+  cases second
+  cases inherited
+  cases values
+  rfl

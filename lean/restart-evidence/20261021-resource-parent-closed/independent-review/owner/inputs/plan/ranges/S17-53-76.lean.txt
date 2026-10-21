@@ -1,0 +1,24 @@
+/-- The same actual closed request returns scoped cells, an idle cache, and a closed value. -/
+theorem step {left right result : Value Symbol Guard} {before after : Checked width}
+    (actual : SourceCurrentAllocatedTargetQuery.Step left right before result after)
+    (good : SourceCurrentAllocatedNativePhysicalCompletion.Good before)
+    (semantic : SourceEqualityRequiredSemanticCache.SemanticReady before.native.machine.heap)
+    (scopedCache : SourceCurrentAllocatedNativeScopeCache.Scoped before.native)
+    (idle : SourceRecursiveIntersectionNative.Idle before.native)
+    (leftAvailable : Available before.native.machine.heap left)
+    (rightAvailable : Available before.native.machine.heap right)
+    (leftClosed : left.free = []) (rightClosed : right.free = []) :
+    SourceCurrentAllocatedNativeScopeCache.Scoped after.native ∧
+      SourceRecursiveIntersectionNative.Idle after.native ∧ result.free = [] := by
+  have leftOriginal := SourceRecursiveIntersectionOriginalOutput.closed_original left before.native.machine.heap
+    good.native.machine.1.coherent leftAvailable leftClosed
+  have rightOriginal := SourceRecursiveIntersectionOriginalOutput.closed_original right before.native.machine.heap
+    good.native.machine.1.coherent rightAvailable rightClosed
+  have ranges : WordRanges (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before := by
+    cases actual with
+    | run trace => exact word_ranges trace
+  obtain ⟨count, value, reached, receipt, returnedIdle, closed⟩ :=
+    SourceCurrentAllocatedNativeScopeCompletion.initial_complete (fun _ _ => true) before good scopedCache semantic idle
+      left right leftOriginal rightOriginal leftAvailable rightAvailable leftClosed rightClosed ranges
+  obtain ⟨rfl, rfl⟩ := actual.unique (.run receipt.trace)
+  exact ⟨receipt.scopedCache, returnedIdle, closed⟩

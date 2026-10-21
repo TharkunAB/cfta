@@ -1,0 +1,43 @@
+  have current : Current before.checked := SourceCurrentConstrainedCapOperandFrame.current frame
+  obtain ⟨next, final, numeric, _selectedScan, scanReady, effects, extension, scanAvailable,
+      scanCurrent, scanSupport, scanHistory⟩ :=
+    SourceCurrentActualParentScanNativeStores.selected_scan formulas solver inventory budget symbol original loaded
+      inherited values before memos initial frame profile fits live reserved observed noncontradictory precheck
+      scanCall current supported causal
+  obtain ⟨scanMemos, preparedMemos, trace, retained, pass, assembled, first, second, last⟩ :=
+    selected_graph numeric.reads noncontradictory precheck scanCall requiredCall passCall
+  obtain ⟨cached, found, inheritedReady, available⟩ := live noncontradictory
+  obtain ⟨own, prefixReceipt⟩ := SourceCurrentAllocatedLocalReductionActual.prefix_verified formulas solver inventory
+    before.checked original loaded inherited initial.ready initial.admitted cached found inheritedReady precheck
+  obtain ⟨proper, _, _, _, _, fields⟩ := prefixReceipt.classes records rfl
+  have active : ∀ paths ∈ records.map SourceEqualityClassOrder.Record.paths, EqualityNormalize.Nontrivial paths := by
+    intro paths member
+    obtain ⟨record, included, rfl⟩ := List.mem_map.mp member
+    exact (fields record included).2.2
+  have prefixFrame : Frame formulas solver inventory (prefixState before.checked loaded inherited) :=
+    ⟨prefixReceipt.ready, prefixReceipt.admitted, frame.context, frame.joint, frame.origins⟩
+  have prefixFits : Fits profile (prefixState before.checked loaded inherited) :=
+    ⟨fits.nodes, fits.edges, fits.domains, fits.stored⟩
+  have classRoom : SourceCurrentClassesForecast.Reserved bits budget values.length records
+      (SourceCurrentConjunctionGuardUniverse.guards before.checked.native.machine.heap) profile := by
+    simpa only [SourceCurrentParentForecast.Reserved, noncontradictory, Bool.false_eq_true, ↓reduceIte,
+      SourceCurrentLocalForecast.Reserved, precheck] using reserved
+  obtain ⟨_, _, _, _, _, boundedScan⟩ := SourceCurrentScanNumeric.complete formulas solver
+    (SourceCurrentConjunctionGuardUniverse.guards before.checked.native.machine.heap) budget values
+    (records.map SourceEqualityClassOrder.Record.paths) (prefixState before.checked loaded inherited) before.fourth
+    inventory prefixFrame profile prefixFits available initial.correct
+    (SourceCurrentConjunctionGuardUniverse.initial _ prefixFrame.ready.semantic.ready.semantic.1.normal.facts)
+    proper classRoom.1 memos initial.globals
+  have scanValid := (SourceCurrentAllocatedScanReadValidity.scan first prefixReceipt.ready available proper
+    formulas solver initial.correct boundedScan.ranges initial.globals).1
+  obtain ⟨preparedInventory, requiredReceipt⟩ := SourceCurrentConjunctionRequiredActual.verified formulas solver
+    inventory trace prefixReceipt.ready prefixReceipt.admitted available proper active initial.correct
+    boundedScan.ranges requiredCall
+  have preparedValid := (SourceCurrentAllocatedRequiredReadValidity.required second scanReady.semantic
+    scanReady.costs scanAvailable scanValid).1
+  have scanNormal := SourceCurrentUnionNormalScan.records g s p h n budget values records
+    (prefixState before.checked loaded inherited) before.fourth normal
+  rw [scanCall] at scanNormal
+  exact ⟨next, final, own, preparedInventory, scanMemos, preparedMemos, numeric, trace, retained, pass,
+    assembled, prefixReceipt, first, second, last, requiredReceipt, preparedValid, scanReady, effects, extension,
+    scanAvailable, scanCurrent, scanSupport, scanHistory, scanNormal⟩

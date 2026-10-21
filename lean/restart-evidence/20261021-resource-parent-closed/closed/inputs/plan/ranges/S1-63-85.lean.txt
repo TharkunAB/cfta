@@ -1,0 +1,23 @@
+/-- One Parent writer retains its complete caller and entry resources. -/
+def Written (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (request : EdgeRequest) (result : Edge) : Prop :=
+  ∃ (g s r e p h m c n budget : Nat)
+    (writerBefore : Caller (bits + 2)) (writerAfter : Checked (bits + 2))
+    (savedFourth : Fourth) (savedMerge : Memo) (globals : Memos)
+    (inventory : Inventory) (profile : Profile),
+    SourceCurrentAllocatedParentWorker.edge g s r e p h m c n budget
+      request.value.entry.key.symbol request.value.entry.key.constraint request.inherited request.value.children
+      writerBefore.checked writerBefore.fourth writerBefore.merge = .done result writerAfter savedFourth savedMerge ∧
+    Context formulas solver inventory writerBefore globals ∧
+    Frame formulas solver inventory writerBefore.checked ∧ Fits profile writerBefore.checked ∧
+    EqReady writerBefore.checked.operations.constraints request.inherited ∧
+    EdgeResident writerBefore.checked.native.machine.heap request.value ∧
+    (SourceEqualityMkEdgeAllocation.contradictory request.value.entry.key.constraint = false →
+      FieldAvailable writerBefore.checked.operations request.value.entry.key.constraint ∧
+      EqReady writerBefore.checked.operations.constraints request.inherited ∧
+      Values writerBefore.checked.native.machine.heap request.value.children) ∧
+    SourceCurrentParentForecast.residentReserved bits budget request writerBefore.checked profile ∧
+    Normal writerBefore.checked.native.machine.heap ∧
+    NativeSupport writerBefore.checked.native.machine.heap writerBefore.checked.native ∧
+    Nonempty (History empty writerBefore.checked.native.machine.heap) ∧
+    MergeStored writerBefore.merge ∧ MergePositive writerBefore.merge

@@ -1,0 +1,15 @@
+/-- An outer node request has an allocated inherited payload and an available value. -/
+def NodeReady (before : Caller width) (request : NodeRequest) : Prop :=
+  EqReady before.checked.operations.constraints request.inherited ∧
+    Available before.checked.native.machine.heap request.value
+
+/-- An outer edge request has an allocated inherited payload and a resident row. -/
+def EdgeReady (before : Caller width) (request : EdgeRequest) : Prop :=
+  EqReady before.checked.operations.constraints request.inherited ∧
+    EdgeResident before.checked.native.machine.heap request.value
+
+private def NodeCell (before : Caller width) (cell : FlatMemoThunk.Cell NodeRequest Node) : Prop :=
+  NodeReady before cell.request ∧ ∀ value, cell.status = .returned value → Available before.checked.native.machine.heap value
+
+private def EdgeCell (before : Caller width) (cell : FlatMemoThunk.Cell EdgeRequest Edge) : Prop :=
+  EdgeReady before cell.request ∧ ∀ value, cell.status = .returned value → EdgeResident before.checked.native.machine.heap value

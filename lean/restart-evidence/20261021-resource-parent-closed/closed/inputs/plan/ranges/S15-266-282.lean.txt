@@ -1,0 +1,17 @@
+/-- Unused-binder and bare-self cleanup preserve the exact stored free-name list. -/
+theorem cleanup_free (value : Value Symbol Guard) : (cleanup value).free = value.free := by
+  cases value <;> simp only [cleanup] <;> try rfl
+  case mu entry body depth ordinary =>
+    split
+    · rename_i unused
+      simp only [Value.free]
+      symm
+      apply List.filter_eq_self.mpr
+      intro name present
+      have different : name ≠ .interned entry.identity := fun same => unused (same ▸ present)
+      simpa using different
+    · split
+      · rename_i self
+        have same := (referenceOf_self_iff (.interned entry.identity) body).mp self
+        simp [Value.free, same]
+      · rfl
