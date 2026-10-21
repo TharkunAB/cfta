@@ -1,5 +1,45 @@
 # cfta formal model
 
+## Current finite caps through actual target misses and hits
+
+Updated: 2026-10-21 04:48 CEST. Proof checkpoint: `00112452db`.
+Start: `2edb0b776b`. Imported main remains `794903b3f`.
+Read `lean/notes-current-required-shared-target-cap.md`.
+
+The SAME actual target Force now preserves current native and Merge laws
+and a finite cap for every exact present slot value. A miss derives each
+competing operand cap from its own actual Required-forest projection and
+the ORIGINAL false class gates. The actual Merge returned law covers warm
+winners. The fold raises the two depths to their maximum at the SAME checked
+native query. It stores the cap of that exact returned target. A hit uses
+the old certificate of the SAME slot value. Empty slots start vacuously.
+Current native and stored Merge laws remain genuine entry premises.
+Coherence and Nontrivial derive proper competing paths. The actual prepared
+capture stays fixed; unrelated prepared roots need no whole-value cap.
+
+Root strict has an empty log. Full three-head readback, independent review
+and default Audit pass: 3570 jobs and 74761 dependencies.
+The structure and both theorems each use only the standard three axioms.
+Only the old ClosedCompletion warning remains. Five actual Lean/Lake jobs
+include one retained failed elaboration. Copies add no jobs. Counts do not
+measure completion. All older sources, evidence, frozen registries,
+Haskell/package files, stashes, other worktrees and main remain.
+All sealed raw logs must be indexed.
+
+Next, preserve raw endpoint conditions for ALL selected paths through
+overlapping class edits. The exact compiler leaf path equals its recorded
+class path. Completed projected caps alone do not cap raw edit inputs:
+projection can remove dead rows. Later classes capture actual tail results,
+so fixed prepared captures cannot stand in for changed phaseValues.
+Original false gates do not automatically transfer to changed values.
+Chronological positive-path transport, retained pair/owner exclusion,
+renewal, final retention, outer completion, convergence and Haskell
+correspondence remain open. Unrestricted opaque-Mu counterexamples remain.
+
+Keep the Haskell repair index FIRST in FINDINGS; insert proof updates AFTER it.
+No new Haskell source, runtime result or external repair. All earlier repair
+entries remain. The full goal is active. Regular formalize pushes are authorized.
+
 ## Current projected caps from the actual Required forest
 
 Updated: 2026-10-21 04:37 CEST. Proof checkpoint: `b531f25a7f`.
