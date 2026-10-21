@@ -3079,6 +3079,7 @@ import MicroCFTA.SourceCurrentOuterDoneOrExhausted
 import MicroCFTA.SourceCurrentOuterRankEnvelope
 import MicroCFTA.SourceCurrentOuterRankEnvelopeStages
 import MicroCFTA.SourceCurrentOuterRankEnvelopeResources
+import MicroCFTA.SourceCurrentOuterRankAdequacy
 /-!
 # Proof dependency audit
 
