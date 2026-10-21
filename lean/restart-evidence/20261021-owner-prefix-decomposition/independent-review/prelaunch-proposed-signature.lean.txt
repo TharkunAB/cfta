@@ -1,0 +1,46 @@
+namespace MicroCFTA.SourceCurrentOuterOwnerPrefix
+open Cache InternedConstructorTemplates
+open SourceCurrentAllocatedPartialState SourceCurrentAllocatedPartialWorker
+open SourceCurrentOuterCopiedWarmHit (Phase)
+open SourceCurrentOuterExecutionAncestry (Reached)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Guard
+local notation "Edge" => EdgeValue Symbol Guard
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "EqValue" => SourceEqualityConstraintAllocation.Value
+local notation "prefixState" => SourceCurrentAllocatedPartialGraph.prefixState
+local notation "descend" => SourceCurrentAllocatedPartialGraph.descend
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Node] {width : Nat}
+
+theorem first_child
+    {g s r e p h m c n budget bodyFuel candidateFuel : Nat}
+    {inherited : EqValue} {ownerEntry ownerDepth ownerFree} {ownerRows : List Edge}
+    {before current : Caller width} {candidate : NodeRequest}
+    (actual : Reached g s r e p h m c n budget
+      (.body bodyFuel ⟨inherited,.node ownerEntry ownerRows ownerDepth ownerFree⟩ before)
+      (.node candidateFuel candidate current)) :
+    ∃ (skippedRows : List Edge) (original parented : Edge) (rest : List Edge)
+      (rowBefore afterParent start : Caller width) (slot childFuel : Nat)
+      (combined : EqValue) (earlier : List Node) (child : Node),
+      ownerRows = skippedRows ++ original :: rest ∧
+      Reached g s r e p h m c n budget
+        (.body bodyFuel ⟨inherited,.node ownerEntry ownerRows ownerDepth ownerFree⟩ before)
+        (.rows (childFuel + slot + 2) inherited (original :: rest) rowBefore) ∧
+      edgeCall (childFuel + slot + 1) g s r e p h m c n budget
+        ⟨inherited,original⟩ rowBefore = .done parented afterParent ∧
+      (SourceCurrentAllocatedInheritedPrefix.run parented.entry.key.constraint
+        inherited afterParent.checked.operations).1 = .ok (some combined) ∧
+      combined ≠ .contradiction ∧
+      walk (childFuel + slot + 1) g s r e p h m c n budget combined 0
+        (parented.children.take slot) (prefixState afterParent parented inherited) = .done earlier start ∧
+      parented.children[slot]? = some child ∧
+      (((.node candidateFuel candidate current : Phase width) =
+          .node childFuel ⟨(descend start combined slot).1,child⟩ (descend start combined slot).2) ∨
+        ∃ (handle : Nat) (captured : NodeRequest) (running : Caller width),
+          beginNode ⟨(descend start combined slot).1,child⟩ (descend start combined slot).2 =
+            (handle,.evaluate captured,running) ∧
+          Reached g s r e p h m c n budget (.body childFuel captured running)
+            (.node candidateFuel candidate current))
+
+end MicroCFTA.SourceCurrentOuterOwnerPrefix

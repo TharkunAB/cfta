@@ -1,0 +1,11 @@
+The complete 204-line source, frozen 46-line public type, and literal Step/Reached/worker walk contracts were read. No mathematical or witness-correlation issue was found. The public header matches the frozen proposal byte for byte. This is a prelaunch source judgment, not an elaboration result.
+
+head_cases converts the snoc Reached proof into equality or a real first Step and remaining prefix. node_tail stops at the explicit node entry. It returns either that same phase or the actual beginNode evaluate equation and the actual CAPTURED request body prefix. It does not identify captured with dispatched request. No Context or physical coherence premise exists from which to infer that identity.
+
+walk_first retains the selected slot, full child, current caller, and exact completed walk over values.take slot. The walk_tail case prepends the actual completed head result to the same earlier results. Its absolute child index is offset+slot. It does not require a completed whole walk or later siblings. descendants_first inverts the actual inherited prefix and live children transition. A contradictory child state cannot enter a node.
+
+rows_first retains the source-row split and an actual row cut. rows_tail keeps the completed Parent and descendants equations and the source suffix. It does not replace them with completed graph or semantic receipts. The public ordinary-body case derives the original row list by the exact body_rows equation and composes the same row cut.
+
+The selected child is the first explicit walk_head on the retained unfinished chain. Completed calls inside skipped rows or slots can contain earlier node activations. The theorem does not claim chronological first activation, key inequality, semantic descent, a renewal bound, or termination. It preserves the exact captured activation in the later alternative.
+
+The reviewer runs zero Lean, Lake, canonical or native runtime commands and makes no official edits. The new graph decomposition is authored by required_memos. The reviewer previously authored several outer/native transport foundations and repaired the ResourceOwnerProgress consumer pipeline. Those semantic/resource proofs are not re-reviewed independently here; the new graph proof uses only literal control contracts. All earlier frozen packages remain unchanged.

@@ -1,0 +1,38 @@
+-- UNPROVED CONTRACT FOR ROOT REVIEW. No implementation or Lean check.
+-- This tests the direct non-Top copy case only. It is not an approved law.
+namespace MicroCFTA.SourceCurrentResourceOwnerProgress
+open Cache InternedConstructorTemplates
+open SourceCurrentAllocatedPartialState (EdgeRequest NodeRequest)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Edge" => EdgeValue Symbol Guard
+local notation "EqValue" => SourceEqualityConstraintAllocation.Value
+local notation "Operations" => SourceEqualityConstraintMemoAllocation.State
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+  [DecidableEq (Value Symbol Guard)] {bits : Nat}
+
+theorem non_top_copy
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    {request : EdgeRequest} {returned : Edge}
+    (written : SourceCurrentResourceParentWriters.Written (bits := bits) formulas solver request returned)
+    {ownerEntry ownerDepth ownerFree} {ownerRows : List Edge} {index : Nat}
+    (member : request.value ∈ ownerRows)
+    (found : returned.children[index]? = some (.node ownerEntry ownerRows ownerDepth ownerFree))
+    (records : List SourceEqualityClassOrder.Record)
+    (payload : request.inherited.payload = some records) (nonempty : records ≠ [])
+    (prefixBefore : Operations) (valid : SourceEqualityConstraintMemoAllocation.Valid prefixBefore)
+    (ready : SourceEqualityConstraintAllocation.Ready prefixBefore.constraints request.inherited)
+    (field : SourceCurrentConjunctionEquality.FieldAvailable prefixBefore returned.entry.key.constraint)
+    (combined : EqValue)
+    (prefixActual : (SourceCurrentAllocatedInheritedPrefix.run returned.entry.key.constraint
+      request.inherited prefixBefore).1 = .ok (some combined))
+    (live : combined ≠ .contradiction)
+    (later : Operations) (laterValid : SourceEqualityConstraintMemoAllocation.Valid later)
+    (laterGrowth : SourceEqualityConstraintMemoAllocation.Grows
+      (SourceCurrentAllocatedInheritedPrefix.run returned.entry.key.constraint request.inherited prefixBefore).2 later) :
+    let child := SourceEqualityConstraintMemoAllocation.descend combined index later
+    (NodeRequest.mk child.1 (.node ownerEntry ownerRows ownerDepth ownerFree)).key ≠
+      (NodeRequest.mk request.inherited (.node ownerEntry ownerRows ownerDepth ownerFree)).key
+
+end MicroCFTA.SourceCurrentResourceOwnerProgress

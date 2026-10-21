@@ -1,0 +1,12 @@
+--- owner-prefix-decomposition-direct-2.source.lean
++++ SourceCurrentOuterOwnerPrefix.lean
+@@ -197,8 +197,7 @@
+           earlier,child,split,cut,parent,combinedAt,live,previous,selected,tail⟩ := rows_first _ remaining
+         have ownerSplit : ownerRows = skipped ++ original :: rest :=
+           (congrArg InternedEdgeResidency.nodeEdges ordinary).trans split
+-        have entered := Reached.snoc (Reached.refl _) (SourceCurrentOuterExecutionAncestry.Step.body_rows ordinary)
+         exact ⟨skipped,original,parented,rest,rowBefore,afterParent,start,slot,childFuel,combined,
+-          earlier,child,ownerSplit,entered.trans cut,parent,combinedAt,live,previous,selected,tail⟩
++          earlier,child,ownerSplit,(Reached.snoc (.refl _) (.body_rows ordinary)).trans cut,parent,combinedAt,live,previous,selected,tail⟩
+ 
+ end MicroCFTA.SourceCurrentOuterOwnerPrefix

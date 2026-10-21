@@ -1,0 +1,1 @@
+This draft has run zero Lean, Lake, canonical, or runtime commands. Root and independent complete-source review plus explicit activation are required before any compiler launch. No official source or frozen plan was edited.

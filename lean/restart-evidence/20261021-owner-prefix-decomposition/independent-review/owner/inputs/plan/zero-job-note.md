@@ -1,0 +1,1 @@
+This package records a resource-free graph decomposition plan. It owns zero Lean, Lake, canonical, runtime, or proof commands. It contains no implementation. Frozen prior packages and official source files remain unchanged.

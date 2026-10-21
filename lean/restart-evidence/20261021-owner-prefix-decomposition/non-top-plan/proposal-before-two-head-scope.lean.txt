@@ -1,0 +1,26 @@
+-- UNPROVED SOURCE-ONLY PROPOSAL. No proof or Lean elaboration.
+-- Additive namespace block only. Existing private enumeration stays unchanged.
+namespace MicroCFTA.SourceCurrentPositiveOwnerPair
+open EqualityNormalize SourceEqualityClassOrder
+open InternedConstructorTemplates
+open SourceCurrentRequiredPositivePosition (PositiveAt)
+open SourceCurrentNormalizedChildSeparation (Rel)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Guard
+local notation "Row" => EdgeValue Symbol Guard
+
+theorem same_child_payload_ne
+    (parents inherited : List Record)
+    (wellFormed : SourceEqualityDescend.WellFormed (some parents))
+    (fixed : congruenceStep (parents.map Record.paths) = some (parents.map Record.paths))
+    (covered : Covers (inherited.map Record.paths) (parents.map Record.paths))
+    (index : Nat) {entry depth free} {rows : List Row}
+    (row : Row) (member : row ∈ rows)
+    (nonplain : SourceMemoGate.plain row.entry.key.constraint = false)
+    (back : ∀ q, PositiveAt (.node entry rows depth free) q →
+      ∃ j p original, row.children[j]? = some original ∧ PositiveAt original p ∧
+        Rel (parents.map Record.paths) (index :: q) (j :: p)) :
+    SourceEqualityDescend.descend (some parents) index ≠ some inherited
+
+end MicroCFTA.SourceCurrentPositiveOwnerPair

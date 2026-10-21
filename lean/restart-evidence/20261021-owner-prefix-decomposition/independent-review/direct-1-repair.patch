@@ -1,0 +1,32 @@
+--- owner-prefix-decomposition-direct-1.source.lean
++++ SourceCurrentOuterOwnerPrefix.lean
+@@ -76,7 +76,7 @@
+       · cases same
+       · cases step with
+         | @walk_head next combined offset value rest before =>
+-            refine ⟨0,next,value,[],before,by omega,rfl,?_,?_⟩
++            refine ⟨0,fuel,value,[],before,by omega,rfl,?_,?_⟩
+             · simp only [List.take_zero,walk]
+             · simpa only [Nat.add_zero] using node_tail remaining
+         | @walk_tail next before combined offset value returned middle rest called =>
+@@ -145,9 +145,9 @@
+               descendants_first remaining
+             refine ⟨[],original,parented,rest,before,afterParent,start,slot,childFuel,combined,earlier,child,
+               rfl,?_,?_,combinedAt,live,?_,selected,?_⟩
+-            · have sameFuel : next + 1 = childFuel + slot + 2 := by omega
++            · have sameFuel : fuel + 1 = childFuel + slot + 2 := by omega
+               simpa only [sameFuel] using (Reached.refl
+-                (.rows (next + 1) inherited (original::rest) before))
++                (.rows (fuel + 1) inherited (original::rest) before))
+             · simpa only [count] using called
+             · simpa only [count] using previous
+             · simpa only [Nat.zero_add] using tail
+@@ -196,7 +196,7 @@
+         obtain ⟨skipped,original,parented,rest,rowBefore,afterParent,start,slot,childFuel,combined,
+           earlier,child,split,cut,parent,combinedAt,live,previous,selected,tail⟩ := rows_first _ remaining
+         have ownerSplit : ownerRows = skipped ++ original :: rest :=
+-          (congrArg nodeEdges ordinary).trans split
++          (congrArg InternedEdgeResidency.nodeEdges ordinary).trans split
+         have entered := Reached.snoc (Reached.refl _) (SourceCurrentOuterExecutionAncestry.Step.body_rows ordinary)
+         exact ⟨skipped,original,parented,rest,rowBefore,afterParent,start,slot,childFuel,combined,
+           earlier,child,ownerSplit,entered.trans cut,parent,combinedAt,live,previous,selected,tail⟩
