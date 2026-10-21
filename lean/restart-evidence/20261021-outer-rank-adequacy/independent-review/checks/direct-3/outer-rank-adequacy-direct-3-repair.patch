@@ -1,0 +1,21 @@
+--- SourceCurrentOuterRankAdequacy.lean (direct-3)
++++ SourceCurrentOuterRankAdequacy.lean (proposed direct-3 repair)
+@@ -272,7 +272,7 @@
+         | reference name =>
+           have failed : runPhase g s r e p h m c n budget
+               (.body fuel ⟨inherited,.reference name⟩ running) = .failed (.unexpectedReference name) running := by
+-            simp only [SourceCurrentOuterActiveAncestry.run,nodeBody]
++            simp only [SourceCurrentOuterActiveAncestry.run,nodeBody,Outcome.bind]
+           obtain ⟨limit,bad⟩ := only_exhausted bodyPast failed
+           cases bad
+         | mu entry body depth ordinary =>
+@@ -382,7 +382,8 @@
+                         | cons value rest tailWalk =>
+                           intro start walkPosition bound masses inside numeric carrier
+                           have slotBound : index < parentSeed.2.mass := by simp only [List.length_cons] at bound; omega
+-                          have nextStage := stage.2.2.2 (index+1) (by omega)
++                          have nextBound : index+1 ≤ parentSeed.2.mass := Nat.succ_le_of_lt slotBound
++                          have nextStage := stage.2.2.2 (index+1) nextBound
+                           have priorWork := fold_work rowStep (row_work budget all) j (0,0,entrySeed)
+                           have nextWork := fold_work slots (slot_work all) (index+1) (0,0,parentSeed)
+                           have prefixWork := nextStage.1

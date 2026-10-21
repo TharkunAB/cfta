@@ -1,0 +1,5 @@
+/-- Node publication and demand change only their own result table. -/
+theorem beginNode_components (request : NodeRequest) (before : State width) :
+    let after := (beginNode request before).2.2
+    after.checked = before.checked ∧ after.merge = before.merge ∧ after.fourth = before.fourth ∧
+      after.edgeResults = before.edgeResults := ⟨rfl, rfl, rfl, rfl⟩

@@ -1,0 +1,40 @@
+--- resource-check-full-public.original.py
++++ outer-rank-adequacy-check-full-public.py
+@@ -1,13 +1,13 @@
+-"""Read the full successful-node theorem without running Lean or the numeric recurrence."""
++"""Read the full initial-node theorem without running Lean or evaluating the numeric recurrence."""
+ from pathlib import Path
+ import hashlib
+ import json
+ import re
+ 
+ HERE = Path(__file__).resolve().parent
+-PREFIX = "outer-rank-resources-"
+-NAMESPACE = "MicroCFTA.SourceCurrentOuterRankEnvelopeResources."
+-source = (HERE / "SourceCurrentOuterRankEnvelopeResources.lean").read_text()
++PREFIX = "outer-rank-adequacy-"
++NAMESPACE = "MicroCFTA.SourceCurrentOuterRankAdequacy."
++source = (HERE / "SourceCurrentOuterRankAdequacy.lean").read_text()
+ printer = (HERE / (PREFIX + "public-1.source.lean")).read_text()
+ raw = (HERE / (PREFIX + "public-1.log")).read_bytes()
+ log = raw.decode()
+@@ -17,7 +17,7 @@
+ for option in options:
+     assert printer.count("set_option " + option) == 1, option
+ assert not re.search(r"sorryAx|\b(?:warning|error)(?:\([^)]*\))?:|failed to pretty print|pp\.rawOnError|maximum recursion depth|maximum number of heartbeats|⋯|…|\.\.\.", log)
+-heads = [("node_call", "theorem")]
++heads = [("initial_node_call", "theorem")]
+ markers = []
+ for head, _ in heads:
+     name = NAMESPACE + head
+@@ -27,9 +27,7 @@
+     assert len(found) == 1, (head, len(found))
+     markers.append(found[0])
+ normalize = lambda text: "".join(text.split())
+-private = ["ranks", "outputs", "fold", "slot", "row", "finish", "equation", "Kept",
+-    "kept_refl", "kept_trans", "fold_bounds", "fold_cut", "prefix_kept", "next_kept",
+-    "slot_growth", "row_growth", "row_walk", "row_need", "finite_stages", "finish_kept", "image_bound", "images", "fold_kept", "fold_succ", "slot_kept", "row_kept", "image_kept", "image_member", "same_request", "candidate_profile"]
++private = ["images", "fold", "slot", "row", "Kept", "kept_trans", "fold_kept", "fold_succ", "prefix_kept", "slot_kept", "image_kept", "image_member", "same_request", "fold_work", "slot_work", "row_work", "numeric_stages", "edge_not_exhausted"]
+ results = []
+ for index, (head, kind) in enumerate(heads):
+     name = NAMESPACE + head

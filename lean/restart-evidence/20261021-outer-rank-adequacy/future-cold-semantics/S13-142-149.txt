@@ -1,0 +1,8 @@
+/-- The complete public evaluator confirms only logically valid guards. -/
+theorem public_yes (model : Interpretation Value) (sortDomain : Name → Value → Prop)
+    (solver : SourceGuards.Entailment Formula) (term : Language.Term (Label Formula))
+    (sound : ∀ guard, SourceEntailment.Sound model (SolverDomain sortDomain term guard) solver)
+    (positive : Bool) (guard : Guard Formula)
+    (yes : SourceSubstitutionPrecedence.evaluate operations solver (observe term) (sameTerm operations term) positive guard = .yes) :
+    Public model sortDomain term positive guard := by
+  cases guard with

@@ -1,0 +1,6 @@
+/-- Complete evaluation is unchanged because every complete actual identity is known. -/
+theorem complete_unchanged [DecidableEq Formula] (formulas : Formulas Formula) (solver : Entailment Formula)
+    (guard : Guard Formula) (term : Language.Term (Label Formula)) :
+    evaluateGuard formulas solver guard term = SourceBooleanEntry.evaluateGuard formulas solver guard term :=
+  public_known formulas solver (observe term) (sameTerm formulas term) true guard
+    (ActualQuotient.complete_ambiguity_empty formulas term guard)

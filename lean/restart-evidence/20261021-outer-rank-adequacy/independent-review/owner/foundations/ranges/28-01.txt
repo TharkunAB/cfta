@@ -1,0 +1,5 @@
+theorem Good.of_checked {state : Checked width}
+    (valid : SourceCurrentAllocatedNativePhysicalCompletion.Good state) : Good state := by
+  refine ⟨⟨valid.native.machine, ?_, ?_⟩,valid.heap,valid.operations,valid.fields⟩
+  · exact FlatMemoThunk.Valid.keyMap _ _ _ _ valid.native.nodes (fun _ _ _ => trivial)
+  · exact FlatMemoThunk.Valid.keyMap _ _ _ _ valid.native.edges (fun _ _ _ => trivial)

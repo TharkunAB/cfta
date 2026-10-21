@@ -1,0 +1,12 @@
+--- SourceCurrentOuterRankAdequacy.lean (direct-6)
++++ SourceCurrentOuterRankAdequacy.lean (proposed literal prefix normalization)
+@@ -480,7 +480,8 @@
+                     childrenFit childrenKnown sourceResident childAvailable childGraph.length
+                   let rebuilt := SourceCurrentAllocatedRawRebuild.edge parented childrenResult childEnd.checked
+                   let afterEdge := advance childEnd rebuilt.2 childEnd.fourth childEnd.merge
+-                  dsimp only [prefixState] at childDone
++                  simp only [SourceCurrentAllocatedPartialGraph.prefixState,
++                    SourceCurrentAllocatedInheritedPrefix.state] at childDone
+                   have descDone : descendants rowFuel g s r e p h m c n budget inherited parented afterParent =
+                       .done rebuilt.1 afterEdge := by
+                     simp only [descendants,combinedAt,childDone,Outcome.bind,rebuilt,afterEdge]

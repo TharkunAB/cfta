@@ -1,0 +1,6 @@
+/-- Room at one predicted Parent return supplies every initial Parent query reservation. -/
+theorem parent_reserved (bits budget : Nat) (seed : List Guard × Profile)
+    (room : Room bits (parent budget seed).2) :
+    SourceCurrentParentAlphabetReservation.UniformReserved bits budget seed.1 seed.2 :=
+  SourceCurrentParentInitialRoom.uniform_of_room bits budget seed.1 seed.2
+    (room.mono (SourceCurrentMkEdgeNumeric.finalProfile_ge seed.2.mass _))

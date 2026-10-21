@@ -1,0 +1,77 @@
+--- SourceCurrentOuterRankAdequacy.lean (direct-2)
++++ SourceCurrentOuterRankAdequacy.lean (proposed cumulative repair)
+@@ -231,6 +231,7 @@
+       ∃ result after, nodeCall fuel g s r e p h m c n budget candidate start = .done result after) rank ?_
+     intro rank ih fuel candidate start entrySeed ranked past currentFits currentKnown currentRoom enough
+     rcases rank with ⟨count,mass⟩
++    change (envelope budget count mass entrySeed).1 ≤ fuel at enough
+     obtain ⟨_iv,_ms,_old,_trace,post,_fr,_ff,_kk,ready,_below,_alphabet,_room,_rest⟩ := resources past
+     dsimp only [SourceCurrentOuterPrefixInvariants.Inputs, SourceCurrentOuterPrefixInvariants.NodeReady] at ready
+     generalize started : beginNode candidate start = observation
+@@ -266,17 +267,20 @@
+       have bodyProgress : ∃ result after, nodeBody fuel g s r e p h m c n budget candidate running = .done result after := by
+         rcases candidate with ⟨inherited,value⟩
+         cases value with
+-        | empty => exact ⟨.empty,running,rfl⟩
+-        | union entry members depth free => exact ⟨.union entry members depth free,running,rfl⟩
++        | empty => exact ⟨.empty,running,by simp only [nodeBody]⟩
++        | union entry members depth free => exact ⟨.union entry members depth free,running,by simp only [nodeBody]⟩
+         | reference name =>
+           have failed : runPhase g s r e p h m c n budget
+-              (.body fuel ⟨inherited,.reference name⟩ running) = .failed (.unexpectedReference name) running := rfl
++              (.body fuel ⟨inherited,.reference name⟩ running) = .failed (.unexpectedReference name) running := by
++            simp only [SourceCurrentOuterActiveAncestry.run,nodeBody]
+           obtain ⟨limit,bad⟩ := only_exhausted bodyPast failed
+           cases bad
+         | mu entry body depth ordinary =>
+           exact ⟨cleanup (.mu entry body depth ordinary),running,
+             SourceCurrentMuReconstructionEffects.node_body fuel g s r e p h m c n budget entry body depth ordinary
+-              inherited running bodyContext.ready.good bodyContext.probes owner.input⟩
++              inherited running (SourceCurrentNativeOperationHeap.Good.of_native
++                (SourceCurrentNativeOperationInvariants.Good.of_checked bodyContext.ready.good)
++                bodyContext.ready.semantic bodyContext.ready.costs) bodyContext.probes owner.input⟩
+         | node entry originals depth free =>
+           have massSame := congrArg Prod.snd ranked
+           have rowLength : originals.length ≤ mass := by
+@@ -300,7 +304,7 @@
+                 ∃ output finish, rows rowFuel g s r e p h m c n budget inherited values start = .done output finish := by
+               intro rowFuel j values
+               induction values generalizing rowFuel j with
+-              | nil => intro start _ _ _ _ _; exact ⟨[],start,rfl⟩
++              | nil => intro start _ _ _ _ _; exact ⟨[],start,by simp only [rows]⟩
+               | cons original rest tailRows =>
+                 intro start position bound inside numeric carrier
+                 have rowBound : j < mass := by simp only [List.length_cons] at bound; omega
+@@ -316,7 +320,7 @@
+                   have parentProgress : ∃ parented afterParent,
+                       edgeCall rowFuel g s r e p h m c n budget ⟨inherited,original⟩ start = .done parented afterParent := by
+                     cases observed : edgeCall rowFuel g s r e p h m c n budget ⟨inherited,original⟩ start with
+-                    | done parented afterParent => exact ⟨parented,afterParent,observed⟩
++                    | done parented afterParent => exact ⟨parented,afterParent,rfl⟩
+                     | failed fault after =>
+                       have failed : runPhase g s r e p h m c n budget
+                           (.rows (rowFuel+1) inherited (original::rest) start) = .failed fault after := by
+@@ -352,8 +356,9 @@
+                         (fun guard => guard ∈ fullSlots.1) finish.checked.native.machine.heap := by
+                     cases combined with
+                     | contradiction =>
+-                      have padded := widen (fold_kept slots (slot_kept all) _ _) prefixFits prefixKnown
+-                      exact ⟨EqualityLeafProjectionRuntimeEmpty.erase parented.children,_,rfl,padded.1,padded.2⟩
++                      have padded := widen (fold_kept slots (slot_kept all) parentSeed.2.mass
++                        (0,0,parentSeed)) prefixFits prefixKnown
++                      exact ⟨EqualityLeafProjectionRuntimeEmpty.erase parented.children,_,by simp only [SourceCurrentAllocatedPartialWorker.children],padded.1,padded.2⟩
+                     | live identity records =>
+                       have walks : ∀ walkFuel index values start,
+                           walkFuel + index = rowFuel → index + values.length ≤ parentSeed.2.mass →
+@@ -371,8 +376,9 @@
+                         induction values generalizing walkFuel index with
+                         | nil =>
+                           intro start _ bound _ _ numeric carrier
+-                          have padded := widen (prefix_kept slots (slot_kept all) (by simpa using bound) _) numeric carrier
+-                          exact ⟨[],start,rfl,padded.1,padded.2⟩
++                          have padded := widen (prefix_kept slots (slot_kept all)
++                            (n := parentSeed.2.mass) (k := index) (by simpa using bound) (0,0,parentSeed)) numeric carrier
++                          exact ⟨[],start,by simp only [walk],padded.1,padded.2⟩
+                         | cons value rest tailWalk =>
+                           intro start walkPosition bound masses inside numeric carrier
+                           have slotBound : index < parentSeed.2.mass := by simp only [List.length_cons] at bound; omega

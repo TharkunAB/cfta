@@ -1,0 +1,21 @@
+/-- One Parent uses the common finite initial guard and numeric image. -/
+noncomputable def parent (budget : Nat) (seed : List Guard × Profile) : List Guard × Profile :=
+  (SourceCurrentParentUniformGuardAlphabet.forecast budget seed.1 seed.2,
+    SourceCurrentParentUniformEnvelope.profile budget seed.1 seed.2)
+
+/-- One raw constructor retains its alphabet and reserves its original width. -/
+def rebuild (seed : List Guard × Profile) : List Guard × Profile :=
+  (seed.1, SourceCurrentOuterConstructorBounds.profile seed.2)
+
+/-- The Parent image retains both initial bounds. -/
+theorem parent_ge (budget : Nat) (seed : List Guard × Profile) :
+    Le seed.2 (parent budget seed).2 ∧ seed.1 ⊆ (parent budget seed).1 := by
+  refine ⟨?_, fun _ member => SourceCurrentParentUniformGuardAlphabet.initial_mem budget seed.1 seed.2 member⟩
+  exact (SourceCurrentInitialSelectionForecast.cover_ge _ seed.2).trans
+    (SourceCurrentMkEdgeNumeric.finalProfile_ge seed.2.mass
+      (SourceCurrentParentUniformEnvelope.classesProfile budget seed.1 seed.2))
+
+/-- A raw constructor retains both initial bounds. -/
+theorem rebuild_ge (seed : List Guard × Profile) :
+    Le seed.2 (rebuild seed).2 ∧ seed.1 ⊆ (rebuild seed).1 :=
+  ⟨SourceCurrentOuterConstructorBounds.profile_ge seed.2, fun _ member => member⟩

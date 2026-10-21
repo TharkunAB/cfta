@@ -1,0 +1,9 @@
+/-- Exact stored row equations and declared children give the original physical guarded language. -/
+theorem language_exact [DecidableEq (EdgeKey Symbol Guard)] (state : State Symbol Guard) (semantic : SemanticHeap state) (covered : Covered [] state)
+    (rows : Rows Symbol Guard) (meaning : Guard → Term Symbol → Bool) (replayed : ReplayedRows state rows)
+    (resident : ResidentRows state rows) (closedRows : CoveredRows rows rows) (value : Value Symbol Guard)
+    (available : Available state value) (closed : value.free = []) (supported : Supported rows value) (term : Term Symbol) :
+    Language.Accepts (SourceInternedRows.graph (heap rows) meaning) (encode value) term ↔
+      EpsilonUnion.Accepts (MergedFreshOrdinaryGraph.graph state meaning) value term := by
+  have facts := semantic.1.normal.facts
+  induction term using Term.rec

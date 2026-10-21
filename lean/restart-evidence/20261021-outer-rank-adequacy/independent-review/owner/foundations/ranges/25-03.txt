@@ -1,0 +1,14 @@
+private theorem image_kept (all : Seed → List Out) (acc value : Out) (member : value ∈ all acc.2.2) :
+    Kept value.2.2 (slot all acc).2.2 := by
+  refine ⟨cover_member _ (List.mem_map.mpr ⟨value,member,rfl⟩), ?_⟩
+  intro guard present
+  exact List.mem_append_right _ (List.mem_flatMap.mpr ⟨value,member,present⟩)
+private theorem image_member (budget count mass : Nat) (seed : Seed) (a b : Nat)
+    (counts : a ≤ count) (masses : b ≤ seed.2.mass) (smaller : Prod.Lex Nat.lt Nat.lt (a,b) (count,mass)) :
+    envelope budget a b seed ∈ images budget count mass seed := by
+  apply List.mem_map.mpr
+  refine ⟨(a,b), List.mem_filter.mpr ⟨?_, ?_⟩, rfl⟩
+  · exact List.mem_flatMap.mpr ⟨a,List.mem_range.mpr (by omega),
+      List.mem_map.mpr ⟨b,List.mem_range.mpr (by omega),rfl⟩⟩
+  · simpa only [decide_eq_true_eq, Nat.lt_eq] using Prod.lex_def.mp smaller
+

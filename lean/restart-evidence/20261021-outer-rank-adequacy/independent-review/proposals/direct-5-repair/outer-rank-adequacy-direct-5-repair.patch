@@ -1,0 +1,71 @@
+--- SourceCurrentOuterRankAdequacy.lean (direct-5)
++++ SourceCurrentOuterRankAdequacy.lean (proposed direct-5 repair)
+@@ -405,8 +405,10 @@
+                           have slotBound : index < parentSeed.2.mass := by simp only [List.length_cons] at bound; omega
+                           have nextBound : index+1 ≤ parentSeed.2.mass := Nat.succ_le_of_lt slotBound
+                           have nextStage := stage.2.2.2 (index+1) nextBound
+-                          have priorWork := fold_work rowStep (row_work budget all) j (0,0,entrySeed)
+-                          have nextWork := fold_work slots (slot_work all) (index+1) (0,0,parentSeed)
++                          have priorWork : j ≤ prior.1 := by
++                            simpa only [Nat.zero_add,prior] using fold_work rowStep (row_work budget all) j (0,0,entrySeed)
++                          have nextWork : index+1 ≤ (fold slots (index+1) (0,0,parentSeed)).1 := by
++                            simpa only [Nat.zero_add] using fold_work slots (slot_work all) (index+1) (0,0,parentSeed)
+                           have prefixWork := nextStage.1
+                           change prior.1 + (fold slots (index+1) (0,0,parentSeed)).1 + 2 ≤
+                             (envelope budget count mass entrySeed).1 at prefixWork
+@@ -419,7 +421,7 @@
+                             let a := rankCount (childRequest.inherited.payload.getD []) value
+                             let b := massOf value
+                             have childPath := inside.snoc .walk_head
+-                            have smaller := SourceCurrentOlderOwnerLineage.body_rank_lt formulas solver seed
++                            have smaller := SourceCurrentOlderOwnerLineage.body_rank_lt formulas solver seed (first := first)
+                               initial frame fits known inputs rootRoom normal supported causal merged positiveMemo origins bodyPast childPath
+                             change Prod.Lex Nat.lt Nat.lt (a,b) _ at smaller
+                             rw [ranked] at smaller
+@@ -432,7 +434,7 @@
+                               have base := (fold_kept slots (slot_kept all) index (0,0,parentSeed)).1.2.2.2
+                               change parentSeed.2.mass ≤ current.2.mass at base
+                               omega
+-                            obtain ⟨_work,_lower,_profile,_alphabet,candidates⟩ := stage.2.2.2 index slotBound.le
++                            obtain ⟨_work,_lower,_profile,_alphabet,candidates⟩ := stage.2.2.2 index (Nat.le_of_lt slotBound)
+                             have selected := candidates a b slotBound counts massBound smaller
+                             have childRoom : Room bits (envelope budget a b current).2.2.2 := currentRoom.mono selected.2.2.1
+                             have childEnough : (envelope budget a b current).1 ≤ walkFuel := by
+@@ -444,7 +446,7 @@
+                               (.live identity records) index numeric carrier
+                             obtain ⟨headValue,middle,headDone⟩ := ih (a,b) smaller walkFuel childRequest childBefore current rfl
+                               (bodyPast.trans childPath) descent.1 descent.2.1 childRoom childEnough
+-                            have childReturned := SourceCurrentOuterRankEnvelopeResources.node_call formulas solver seed
++                            have childReturned := SourceCurrentOuterRankEnvelopeResources.node_call formulas solver seed (first := first)
+                               initial frame fits known inputs rootRoom normal supported causal merged positiveMemo origins current
+                               (bodyPast.trans childPath) descent.1 descent.2.1 childRoom headDone
+                             have member := image_member budget count mass current a b counts massBound smaller
+@@ -458,6 +460,7 @@
+                                 (by simp only [List.length_cons] at bound; omega)
+                                 (fun value member => masses value (List.mem_cons_of_mem _ member))
+                                 (inside.snoc (.walk_tail headDone)) nextSlot.1 nextSlot.2
++                            dsimp only [childRequest,childBefore] at headDone
+                             exact ⟨headValue::tailValues,finish,by simp only [walk,headDone,tailDone,Outcome.bind],finalFits,finalKnown⟩
+                       obtain ⟨results,finish,done,numeric,carrier⟩ := walks rowFuel 0 parented.children _ (by omega)
+                         (by simpa only [Nat.zero_add] using Nat.le_of_lt widthBound) childMass.2.2
+@@ -477,9 +480,10 @@
+                     childrenFit childrenKnown sourceResident childAvailable childGraph.length
+                   let rebuilt := SourceCurrentAllocatedRawRebuild.edge parented childrenResult childEnd.checked
+                   let afterEdge := advance childEnd rebuilt.2 childEnd.fourth childEnd.merge
++                  dsimp only [prefixState] at childDone
+                   have descDone : descendants rowFuel g s r e p h m c n budget inherited parented afterParent =
+                       .done rebuilt.1 afterEdge := by
+-                    simp only [descendants,combinedAt,childDone,Outcome.bind]
++                    simp only [descendants,combinedAt,childDone,Outcome.bind,rebuilt,afterEdge]
+                   have nextFits : Fits (rowSeed (j+1)).2 afterEdge.checked := by
+                     simpa only [afterEdge,rebuilt,rowSeed,fold_succ,rowStep,row,prior,fullSlots,slotSeed,slots,parentSeed,
+                       SourceCurrentAllocatedPartialState.advance,SourceCurrentOuterInitialSchedule.rebuild] using builtFits
+@@ -497,7 +501,7 @@
+             obtain ⟨results,rowEnd,rowsDone⟩ := rowsProgress bodyFuel 0 originals running (by omega)
+               (by simpa only [Nat.zero_add] using rowLength) rowInside runningFits runningKnown
+             let rebuilt := SourceCurrentAllocatedRawRebuild.modify (.node entry originals depth free) originals results rowEnd.checked
+-            exact ⟨rebuilt.1,advance rowEnd rebuilt.2 rowEnd.fourth rowEnd.merge,by simp only [nodeBody,rowsDone,Outcome.bind]⟩
++            exact ⟨rebuilt.1,advance rowEnd rebuilt.2 rowEnd.fourth rowEnd.merge,by simp only [nodeBody,rowsDone,Outcome.bind,rebuilt]⟩
+       obtain ⟨result,after,bodyDone⟩ := bodyProgress
+       exact ⟨result,finishNode handle result after,by simp only [nodeCall,started,bodyDone,Outcome.bind]⟩
+   obtain ⟨result,after,done⟩ := progress

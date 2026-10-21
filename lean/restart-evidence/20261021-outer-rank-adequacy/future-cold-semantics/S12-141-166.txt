@@ -1,0 +1,26 @@
+/-- Guard name replacement has the full capture-avoiding formula meaning. -/
+theorem substitute_semantics (model : Interpretation Value)
+    (nullary : ∀ value, model.apply value [] = value) (env : Name → Value)
+    (renamed : List (Name × Name)) (input : Formula) :
+    Holds model env (substitute renamed input) ↔ Holds model
+      (assignment model env ((replacements renamed).filter fun entry => !identityReplacement entry)) input :=
+  FormulaCorrectness.checked_semantics model nullary _ _ _ (substitute_checked renamed input) env
+
+/-- Instantiate every formula operation of the full source guard evaluator. -/
+def operations : SourceGuards.Formulas Formula where
+  substitute := substitute
+  negate := Formula.not
+  conjunction := fun parts => FormulaExecutable.simplify (.and parts)
+  equalNames := fun left right => .atom .eq (.var left) (.var right)
+  freeNames := freeNames
+
+/-- The source conjunction requires every supplied assumption. -/
+theorem conjunction_semantics (model : Interpretation Value) (laws : FormulaSimplify.RelationLaws model)
+    (env : Name → Value) (parts : List Formula) :
+    Holds model env (operations.conjunction parts) ↔ ∀ part ∈ parts, Holds model env part := by
+  exact (FormulaExecutable.simplify_semantics model laws env (.and parts)).trans
+    (by simpa [Holds] using FormulaSimplify.all_iff model env parts)
+
+/-- Source formula negation negates truth under the same ambient environment. -/
+theorem negate_semantics (model : Interpretation Value) (env : Name → Value) (input : Formula) :
+    Holds model env (operations.negate input) ↔ ¬Holds model env input := by simp [operations, Holds]

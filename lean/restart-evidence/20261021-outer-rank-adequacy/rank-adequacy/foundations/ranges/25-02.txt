@@ -1,0 +1,24 @@
+private def Kept (first last : Seed) : Prop := Le first.2 last.2 ∧ first.1 ⊆ last.1
+private theorem kept_trans {first middle last : Seed} (one : Kept first middle) (two : Kept middle last) :
+    Kept first last := ⟨one.1.trans two.1, fun _ h => two.2 (one.2 h)⟩
+private theorem fold_kept (step : Out → Out) (one : ∀ acc, Kept acc.2.2 (step acc).2.2)
+    (n : Nat) (entry : Out) : Kept entry.2.2 (fold step n entry).2.2 := by
+  have general (values : List Nat) (acc : Out) : Kept acc.2.2 (values.foldl (fun x _ => step x) acc).2.2 := by
+    induction values generalizing acc with
+    | nil => exact ⟨Le.refl _, fun _ h => h⟩
+    | cons head tail ih => exact kept_trans (one acc) (ih (step acc))
+  exact general _ _
+private theorem fold_succ (step : Out → Out) (n : Nat) (entry : Out) :
+    fold step (n+1) entry = step (fold step n entry) := by
+  simp only [fold, List.range_succ, List.foldl_append, List.foldl_cons, List.foldl_nil]
+private theorem prefix_kept (step : Out → Out) (one : ∀ acc, Kept acc.2.2 (step acc).2.2)
+    {n k : Nat} (bound : k ≤ n) (entry : Out) : Kept (fold step k entry).2.2 (fold step n entry).2.2 := by
+  have cut : fold step n entry = fold step (n-k) (fold step k entry) := by
+    unfold fold
+    conv =>
+      lhs
+      rw [show n = k + (n-k) by omega, List.range_add, List.foldl_append, List.foldl_map]
+  rw [cut]
+  exact fold_kept step one _ _
+private theorem slot_kept (all : Seed → List Out) (acc : Out) : Kept acc.2.2 (slot all acc).2.2 :=
+  ⟨cover_ge _ _, fun _ h => List.mem_append_left _ h⟩

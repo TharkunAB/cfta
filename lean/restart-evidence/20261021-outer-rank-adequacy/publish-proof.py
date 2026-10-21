@@ -1,6 +1,7 @@
 import hashlib
 import json
 import os
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -14,10 +15,18 @@ assert receipt['exit_code'] == 0 and not (HERE / (strict + '.log')).read_bytes()
 assert hashlib.sha256(source.read_bytes()).hexdigest() == receipt['sha256']
 audit = ROOT / 'lean/MicroCFTA/Audit.lean'
 line = 'import MicroCFTA.' + module + '\n'
-assert line not in audit.read_text()
+assert audit.read_text().count(line) == 1
 marker = '/-!\n# Proof dependency audit\n'
 assert audit.read_text().count(marker) == 1
-audit.write_text(audit.read_text().replace(marker, line + marker, 1))
+assert audit.read_text().index(line) < audit.read_text().index(marker)
+audit_receipt = json.loads((HERE / 'audit-1.json').read_text())
+assert audit_receipt['exit_code'] == 0
+assert audit_receipt['command'][-1] == 'MicroCFTA.Audit'
+audit_log = (HERE / 'audit-1.log').read_text()
+assert 'Build completed successfully' in audit_log
+assert not re.search(r'^error', audit_log, re.M)
+assert all('InternedFreshOrdinaryClosedCompletion.lean' in warning
+           for warning in re.findall(r'^warning:.*$', audit_log, re.M))
 files = [str(source.relative_to(ROOT)), str(audit.relative_to(ROOT))]
 def git(*args):
     return subprocess.check_output(['git', *args], cwd=ROOT, text=True)

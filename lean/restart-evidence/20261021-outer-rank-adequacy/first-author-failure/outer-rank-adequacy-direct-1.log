@@ -1,0 +1,13 @@
+/tmp/mcfta-outer-rank-adequacy-proof/outer-rank-adequacy-direct-1.source.lean:223:4: error: Type mismatch
+  WellFounded.induction WellFoundedRelation.wf rank ?m.608
+has type
+  ?m.607 rank
+but is expected to have type
+  ∀ (fuel : Nat) (candidate : NodeRequest) (start : Caller (bits + 2)) (entrySeed : List Guard × Profile),
+    (rankCount (Option.getD candidate.inherited.payload []) candidate.value, massOf candidate.value) = rank →
+      Reached g s r e p h m c n budget first (Phase.node fuel candidate start) →
+        Fits entrySeed.snd start.checked →
+          SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ entrySeed.fst) start.checked.native.machine.heap →
+            Room bits (envelope budget rank.fst rank.snd entrySeed).snd.snd.snd →
+              (envelope budget rank.fst rank.snd entrySeed).fst ≤ fuel →
+                ∃ result after, nodeCall fuel g s r e p h m c n budget candidate start = Outcome.done result after

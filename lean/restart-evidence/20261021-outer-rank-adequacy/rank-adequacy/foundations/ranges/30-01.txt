@@ -1,0 +1,10 @@
+noncomputable def state (before : Checked width) (original : Guard) (inherited : EqValue) : Checked width :=
+  advancePhysical before ⟨before.native.machine.heap, (run original inherited before.operations).2⟩
+
+/-- Both native memo tables, the domain cache, and the constructor heap stay exact. -/
+theorem state_native (before : Checked width) (original : Guard) (inherited : EqValue) :
+    (state before original inherited).native = before.native := rfl
+
+/-- The checked state retains the literal prefix operation result. -/
+theorem state_operations (before : Checked width) (original : Guard) (inherited : EqValue) :
+    (state before original inherited).operations = (run original inherited before.operations).2 := rfl

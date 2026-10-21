@@ -1,0 +1,458 @@
+/tmp/mcfta-outer-rank-adequacy-proof/outer-rank-adequacy-direct-3.source.lean:274:112: error: unsolved goals
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)
+inst✝ : DecidableEq Node
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+g s r e p h m c n budget : Nat
+inventory : Inventory
+memos : Memos
+request : NodeRequest
+before : Caller (bits + 2)
+seed : List Guard × Profile
+initial : Context formulas solver inventory before memos
+frame : Frame formulas solver inventory before.checked
+fits : Fits seed.snd before.checked
+known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.fst) before.checked.native.machine.heap
+inputs :
+  SourceCurrentOuterPrefixInvariants.Inputs
+    (Phase.node
+      (envelope budget (rankCount (Option.getD request.inherited.payload []) request.value) (massOf request.value)
+          seed).fst
+      request before)
+room :
+  Room bits
+    (cover
+      [(envelope budget (rankCount (Option.getD request.inherited.payload []) request.value) (massOf request.value)
+                seed).snd.snd.snd]
+      (SourceCurrentOuterInitialPrefix.forecast budget
+          (Phase.node
+            (envelope budget (rankCount (Option.getD request.inherited.payload []) request.value) (massOf request.value)
+                seed).fst
+            request before)
+          seed).snd)
+normal : SourceCurrentRequiredUnionNormal.UnionNormal before.checked.native.machine.heap
+supported : SourceCurrentNativeRequestPositivePositions.Support before.checked.native.machine.heap before.checked.native
+causal : SourceCurrentNativeMuPublication.History empty before.checked.native.machine.heap
+merged : SourceCurrentConstrainedCapMemoMerge.Stored (fun guard => SourceMemoGate.plain guard = true) before.merge
+positiveMemo : SourceCurrentMergePositivePosition.Support before.merge
+origins : SourceCurrentResourceParentWriters.Origins formulas solver before
+stored : SourceCurrentOuterClosedInputs.NodeStored before
+closed :
+  SourceCurrentOuterClosedInputs.InputsClosed
+    (Phase.node
+      (envelope budget (rankCount (Option.getD request.inherited.payload []) request.value) (massOf request.value)
+          seed).fst
+      request before)
+initialNodeIdle :
+  ∀ (chosen : Nat) (owner : NodeRequest),
+    before.nodeResults.cells chosen ≠ some { request := owner, status := FlatMemoThunk.Status.evaluating }
+initialEdgeIdle : SourceCurrentOuterEdgeIdle.EdgeIdle before
+gBound :
+  phaseNeed budget
+      (Phase.node
+        (envelope budget (rankCount (Option.getD request.inherited.payload []) request.value) (massOf request.value)
+            seed).fst
+        request before)
+      seed ≤
+    g
+sBound :
+  phaseNeed budget
+      (Phase.node
+        (envelope budget (rankCount (Option.getD request.inherited.payload []) request.value) (massOf request.value)
+            seed).fst
+        request before)
+      seed ≤
+    s
+rBound :
+  phaseNeed budget
+      (Phase.node
+        (envelope budget (rankCount (Option.getD request.inherited.payload []) request.value) (massOf request.value)
+            seed).fst
+        request before)
+      seed ≤
+    r
+eBound :
+  phaseNeed budget
+      (Phase.node
+        (envelope budget (rankCount (Option.getD request.inherited.payload []) request.value) (massOf request.value)
+            seed).fst
+        request before)
+      seed ≤
+    e
+pBound :
+  phaseNeed budget
+      (Phase.node
+        (envelope budget (rankCount (Option.getD request.inherited.payload []) request.value) (massOf request.value)
+            seed).fst
+        request before)
+      seed ≤
+    p
+hBound :
+  phaseNeed budget
+      (Phase.node
+        (envelope budget (rankCount (Option.getD request.inherited.payload []) request.value) (massOf request.value)
+            seed).fst
+        request before)
+      seed ≤
+    h
+mBound :
+  phaseNeed budget
+      (Phase.node
+        (envelope budget (rankCount (Option.getD request.inherited.payload []) request.value) (massOf request.value)
+            seed).fst
+        request before)
+      seed ≤
+    m
+cBound :
+  phaseNeed budget
+      (Phase.node
+        (envelope budget (rankCount (Option.getD request.inherited.payload []) request.value) (massOf request.value)
+            seed).fst
+        request before)
+      seed ≤
+    c
+nBound :
+  phaseNeed budget
+      (Phase.node
+        (envelope budget (rankCount (Option.getD request.inherited.payload []) request.value) (massOf request.value)
+            seed).fst
+        request before)
+      seed ≤
+    n
+output : Nat × Nat × List Guard × Profile :=
+  envelope budget (rankCount (Option.getD request.inherited.payload []) request.value) (massOf request.value) seed
+first : Phase (bits + 2) := Phase.node output.fst request before
+rootRoom : Room bits (SourceCurrentOuterInitialPrefix.forecast budget first seed).snd
+outputRoom : Room bits output.snd.snd.snd
+classified :
+  (∃ after, runPhase g s r e p h m c n budget first = Outcome.done () after) ∨
+    ∃ limit after, runPhase g s r e p h m c n budget first = Outcome.failed (Fault.exhausted limit) after
+resources :
+  ∀ {phase : Phase (bits + 2)} (cut : Reached g s r e p h m c n budget first phase),
+    ∃ next final current,
+      SourceCurrentOuterInitialPrefix.SeedTrace cut seed current ∧
+        SourceCurrentAllocatedPartialInvariant.Post formulas solver next (caller first) (caller phase) final ∧
+          Frame formulas solver next (caller phase).checked ∧
+            Fits current.snd (caller phase).checked ∧
+              SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ current.fst)
+                  (caller phase).checked.native.machine.heap ∧
+                SourceCurrentOuterPrefixInvariants.Inputs phase ∧
+                  Le (SourceCurrentOuterInitialPrefix.forecast budget phase current).snd
+                      (SourceCurrentOuterInitialPrefix.forecast budget first seed).snd ∧
+                    (SourceCurrentOuterInitialPrefix.forecast budget phase current).fst ⊆
+                        (SourceCurrentOuterInitialPrefix.forecast budget first seed).fst ∧
+                      Room bits (SourceCurrentOuterInitialPrefix.forecast budget phase current).snd ∧
+                        Fits (SourceCurrentOuterInitialPrefix.forecast budget first seed).snd (caller phase).checked ∧
+                          SourceEqualityAnnotationHeap.Heap
+                              (fun guard => guard ∈ (SourceCurrentOuterInitialPrefix.forecast budget first seed).fst)
+                              (caller phase).checked.native.machine.heap ∧
+                            phaseNeed budget phase current ≤ phaseNeed budget first seed
+only_exhausted :
+  ∀ {phase : Phase (bits + 2)} {fault : Fault (bits + 2)} {after : Caller (bits + 2)},
+    Reached g s r e p h m c n budget first phase →
+      runPhase g s r e p h m c n budget phase = Outcome.failed fault after → ∃ limit, fault = Fault.exhausted limit
+widen :
+  ∀ {one two : List Guard × Profile} {state : SourceEqualityNativeDemand.State (bits + 2)},
+    Kept one two →
+      Fits one.snd state →
+        SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ one.fst) state.native.machine.heap →
+          Fits two.snd state ∧
+            SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ two.fst) state.native.machine.heap
+rank : Nat × Nat
+fuel : Nat
+start : Caller (bits + 2)
+entrySeed : List Guard × Profile
+currentFits : Fits entrySeed.snd start.checked
+currentKnown : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ entrySeed.fst) start.checked.native.machine.heap
+count mass : Nat
+ih :
+  ∀ (y : Nat × Nat),
+    WellFoundedRelation.rel y (count, mass) →
+      ∀ (fuel : Nat) (candidate : NodeRequest) (start : Caller (bits + 2)) (entrySeed : List Guard × Profile),
+        (rankCount (Option.getD candidate.inherited.payload []) candidate.value, massOf candidate.value) = y →
+          Reached g s r e p h m c n budget first (Phase.node fuel candidate start) →
+            Fits entrySeed.snd start.checked →
+              SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ entrySeed.fst) start.checked.native.machine.heap →
+                Room bits (envelope budget y.fst y.snd entrySeed).snd.snd.snd →
+                  (envelope budget y.fst y.snd entrySeed).fst ≤ fuel →
+                    ∃ result after, nodeCall fuel g s r e p h m c n budget candidate start = Outcome.done result after
+currentRoom : Room bits (envelope budget (count, mass).fst (count, mass).snd entrySeed).snd.snd.snd
+enough : (envelope budget count mass entrySeed).fst ≤ fuel
+_iv : Inventory
+_ms : Memos
+_old : List Guard × Profile
+handle : Nat
+running : Caller (bits + 2)
+bodyContext : Context formulas solver _iv running _ms
+checked : running.checked = start.checked
+runningFits : Fits entrySeed.snd running.checked
+runningKnown :
+  SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ entrySeed.fst) running.checked.native.machine.heap
+inherited : SourceEqualityConstraintAllocation.Value
+name : InternedBinderProtocol.Reference
+past :
+  Reached g s r e p h m c n budget first
+    (Phase.node fuel { inherited := inherited, value := Value.reference name } start)
+ranked :
+  (rankCount (Option.getD { inherited := inherited, value := Value.reference name }.inherited.payload [])
+        { inherited := inherited, value := Value.reference name }.value,
+      massOf { inherited := inherited, value := Value.reference name }.value) =
+    (count, mass)
+_trace : SourceCurrentOuterInitialPrefix.SeedTrace past seed _old
+post :
+  SourceCurrentAllocatedPartialInvariant.Post formulas solver _iv (caller first)
+    (caller (Phase.node fuel { inherited := inherited, value := Value.reference name } start)) _ms
+_fr :
+  Frame formulas solver _iv
+    (caller (Phase.node fuel { inherited := inherited, value := Value.reference name } start)).checked
+_ff : Fits _old.snd (caller (Phase.node fuel { inherited := inherited, value := Value.reference name } start)).checked
+_kk :
+  SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ _old.fst)
+    (caller
+              (Phase.node fuel { inherited := inherited, value := Value.reference name }
+                start)).checked.native.machine.heap
+ready :
+  SourceEqualityConstraintAllocation.Ready start.checked.operations.constraints
+      { inherited := inherited, value := Value.reference name }.inherited ∧
+    Available start.checked.native.machine.heap { inherited := inherited, value := Value.reference name }.value
+_below :
+  Le
+    (SourceCurrentOuterInitialPrefix.forecast budget
+        (Phase.node fuel { inherited := inherited, value := Value.reference name } start) _old).snd
+    (SourceCurrentOuterInitialPrefix.forecast budget first seed).snd
+_alphabet :
+  (SourceCurrentOuterInitialPrefix.forecast budget
+        (Phase.node fuel { inherited := inherited, value := Value.reference name } start) _old).fst ⊆
+    (SourceCurrentOuterInitialPrefix.forecast budget first seed).fst
+_room :
+  Room bits
+    (SourceCurrentOuterInitialPrefix.forecast budget
+        (Phase.node fuel { inherited := inherited, value := Value.reference name } start) _old).snd
+_rest :
+  Fits (SourceCurrentOuterInitialPrefix.forecast budget first seed).snd
+      (caller (Phase.node fuel { inherited := inherited, value := Value.reference name } start)).checked ∧
+    SourceEqualityAnnotationHeap.Heap
+        (fun guard => guard ∈ (SourceCurrentOuterInitialPrefix.forecast budget first seed).fst)
+        (caller
+                  (Phase.node fuel { inherited := inherited, value := Value.reference name }
+                    start)).checked.native.machine.heap ∧
+      phaseNeed budget (Phase.node fuel { inherited := inherited, value := Value.reference name } start) _old ≤
+        phaseNeed budget first seed
+requested :
+  SourceCurrentOuterPrefixInvariants.NodeReady running { inherited := inherited, value := Value.reference name }
+started :
+  beginNode { inherited := inherited, value := Value.reference name } start =
+    (handle, FlatMemoThunk.Observation.evaluate { inherited := inherited, value := Value.reference name }, running)
+owner :
+  SourceCurrentAllocatedPartialMemoSound.NodeGood formulas solver running.checked
+    { request := { inherited := inherited, value := Value.reference name }, status := FlatMemoThunk.Status.evaluating }
+key :
+  { inherited := inherited, value := Value.reference name }.key =
+    { inherited := inherited, value := Value.reference name }.key
+_cell :
+  running.nodeResults.cells handle =
+    some
+      { request := { inherited := inherited, value := Value.reference name },
+        status := FlatMemoThunk.Status.evaluating }
+bodyPast :
+  Reached g s r e p h m c n budget first
+    (Phase.body fuel { inherited := inherited, value := Value.reference name } running)
+⊢ ((Outcome.failed (Fault.unexpectedReference name) running).bind fun x after => Outcome.done () after) =
+    Outcome.failed (Fault.unexpectedReference name) running
+/tmp/mcfta-outer-rank-adequacy-proof/outer-rank-adequacy-direct-3.source.lean:385:70: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  l_1 ≥ 0
+  k_1 ≥ 0
+  j_1 ≥ 0
+  j_1 - l_1 ≥ 0
+  i_1 ≥ 0
+  i_1 + j_1 ≥ 0
+  h_1 ≥ 0
+  h_1 - j_1 ≥ 1
+  h_1 - j_1 - k_1 ≥ 0
+  g_1 ≥ 0
+  g_1 - h_1 ≤ -1
+  f_1 ≥ 0
+  e_1 ≥ 0
+  e_1 - f_1 ≥ 1
+  e_1 - g_1 ≥ 1
+  d_1 ≥ 0
+  c_1 ≥ 0
+  b_1 ≥ 0
+  b_1 - c_1 ≥ 0
+  a_1 ≥ 0
+  z ≥ 0
+  z + i_1 + j_1 ≥ -1
+  y ≥ 0
+  x ≥ 0
+  x - y ≥ 0
+  x - d_1 ≥ 0
+  w ≥ 0
+  w - z - i_1 - j_1 ≤ 2
+  v ≥ 0
+  u ≥ 0
+  u - v ≥ 0
+  u - w ≤ -1
+  u - z ≥ 1
+  u - z - a_1 ≥ 0
+  t ≥ 0
+  q ≥ 0
+  o ≥ 0
+  l ≥ 0
+  k ≥ 0
+  i ≥ 0
+  f ≥ 0
+  d ≥ 0
+  b ≥ 0
+  b - d ≤ 0
+  b - f ≤ 0
+  b - i ≤ 0
+  b - k ≤ 0
+  b - l ≤ 0
+  b - o ≤ 0
+  b - q ≤ 0
+  b - t ≤ 0
+  a ≥ 0
+  a - b ≥ 0
+where
+ a := ↑g
+ b := ↑(phaseNeed budget
+    (Phase.node
+      (envelope budget (rankCount (Option.getD request.inherited.payload []) request.value) (massOf request.value)
+          seed).fst
+      request before)
+    seed)
+ d := ↑s
+ f := ↑r
+ i := ↑e
+ k := ↑p
+ l := ↑h
+ o := ↑m
+ q := ↑c
+ t := ↑n
+ u := ↑mass
+ v := ↑originals.length
+ w := ↑(envelope budget count mass entrySeed).fst
+ x := ↑(phaseNeed budget first seed)
+ y := ↑(phaseNeed budget
+    (Phase.node (bodyFuel + 1) { inherited := inherited, value := Value.node entry originals depth free } start✝¹) _old)
+ z := ↑j
+ a_1 := ↑(original :: rest✝).length
+ b_1 := ↑(envelope budget count mass entrySeed).snd.fst
+ c_1 := ↑(SourceCurrentParentUniformEnvelope.fuel budget
+    (List.foldl
+            (fun acc x =>
+              have post := SourceCurrentOuterInitialSchedule.parent budget acc.snd.snd;
+              have walked :=
+                List.foldl
+                  (fun acc x =>
+                    have xs :=
+                      (fun current =>
+                          List.map (fun r => envelope budget r.fst r.snd current)
+                            (List.filter (fun r => decide (r.fst < count ∨ r.fst = count ∧ r.snd < mass))
+                              (List.flatMap (fun a => List.map (fun b => (a, b)) (List.range (current.snd.mass + 1)))
+                                (List.range (count + 1)))))
+                        acc.snd.snd;
+                    (acc.fst + 1 + maximum (List.map (fun x => x.fst) xs),
+                      max acc.snd.fst (maximum (List.map (fun x => x.snd.fst) xs)),
+                      acc.snd.snd.fst ++ List.flatMap (fun x => x.snd.snd.fst) xs,
+                      cover (List.map (fun x => x.snd.snd.snd) xs) acc.snd.snd.snd))
+                  (0, 0, post) (List.range post.snd.mass);
+              (acc.fst + 1 + walked.fst,
+                max acc.snd.fst
+                  (max (SourceCurrentParentUniformEnvelope.fuel budget acc.snd.snd.fst acc.snd.snd.snd) walked.snd.fst),
+                SourceCurrentOuterInitialSchedule.rebuild walked.snd.snd))
+            (0, 0, entrySeed) (List.range j)).snd.snd.fst
+    (List.foldl
+            (fun acc x =>
+              have post := SourceCurrentOuterInitialSchedule.parent budget acc.snd.snd;
+              have walked :=
+                List.foldl
+                  (fun acc x =>
+                    have xs :=
+                      (fun current =>
+                          List.map (fun r => envelope budget r.fst r.snd current)
+                            (List.filter (fun r => decide (r.fst < count ∨ r.fst = count ∧ r.snd < mass))
+                              (List.flatMap (fun a => List.map (fun b => (a, b)) (List.range (current.snd.mass + 1)))
+                                (List.range (count + 1)))))
+                        acc.snd.snd;
+                    (acc.fst + 1 + maximum (List.map (fun x => x.fst) xs),
+                      max acc.snd.fst (maximum (List.map (fun x => x.snd.fst) xs)),
+                      acc.snd.snd.fst ++ List.flatMap (fun x => x.snd.snd.fst) xs,
+                      cover (List.map (fun x => x.snd.snd.snd) xs) acc.snd.snd.snd))
+                  (0, 0, post) (List.range post.snd.mass);
+              (acc.fst + 1 + walked.fst,
+                max acc.snd.fst
+                  (max (SourceCurrentParentUniformEnvelope.fuel budget acc.snd.snd.fst acc.snd.snd.snd) walked.snd.fst),
+                SourceCurrentOuterInitialSchedule.rebuild walked.snd.snd))
+            (0, 0, entrySeed) (List.range j)).snd.snd.snd)
+ d_1 := ↑(phaseNeed budget (Phase.rows (rowFuel + 1) inherited (original :: rest✝) start✝) _rowOld)
+ e_1 := ↑(SourceCurrentParentUniformEnvelope.profile budget prior.snd.snd.fst prior.snd.snd.snd).mass
+ f_1 := ↑(InternedValueMass.values parented.children)
+ g_1 := ↑parented.children.length
+ h_1 := ↑parentSeed.snd.mass
+ i_1 := ↑walkFuel
+ j_1 := ↑index
+ k_1 := ↑(value :: rest).length
+ l_1 := ↑(SourceCurrentOuterInitialSchedule.parent budget
+        (List.foldl
+              (fun acc x =>
+                have post := SourceCurrentOuterInitialSchedule.parent budget acc.snd.snd;
+                have walked :=
+                  List.foldl
+                    (fun acc x =>
+                      have xs :=
+                        (fun current =>
+                            List.map (fun r => envelope budget r.fst r.snd current)
+                              (List.filter (fun r => decide (r.fst < count ∨ r.fst = count ∧ r.snd < mass))
+                                (List.flatMap (fun a => List.map (fun b => (a, b)) (List.range (current.snd.mass + 1)))
+                                  (List.range (count + 1)))))
+                          acc.snd.snd;
+                      (acc.fst + 1 + maximum (List.map (fun x => x.fst) xs),
+                        max acc.snd.fst (maximum (List.map (fun x => x.snd.fst) xs)),
+                        acc.snd.snd.fst ++ List.flatMap (fun x => x.snd.snd.fst) xs,
+                        cover (List.map (fun x => x.snd.snd.snd) xs) acc.snd.snd.snd))
+                    (0, 0, post) (List.range post.snd.mass);
+                (acc.fst + 1 + walked.fst,
+                  max acc.snd.fst
+                    (max (SourceCurrentParentUniformEnvelope.fuel budget acc.snd.snd.fst acc.snd.snd.snd)
+                      walked.snd.fst),
+                  SourceCurrentOuterInitialSchedule.rebuild walked.snd.snd))
+              (0, 0, entrySeed) (List.range j)).snd.snd).snd.mass
+/tmp/mcfta-outer-rank-adequacy-proof/outer-rank-adequacy-direct-3.source.lean:389:26: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/mcfta-outer-rank-adequacy-proof/outer-rank-adequacy-direct-3.source.lean:382:51: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/mcfta-outer-rank-adequacy-proof/outer-rank-adequacy-direct-3.source.lean:374:103: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/mcfta-outer-rank-adequacy-proof/outer-rank-adequacy-direct-3.source.lean:445:18: error: (deterministic) timeout at `«tactic execution»`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/mcfta-outer-rank-adequacy-proof/outer-rank-adequacy-direct-3.source.lean:475:12: error: (deterministic) timeout at `«tactic execution»`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/mcfta-outer-rank-adequacy-proof/outer-rank-adequacy-direct-3.source.lean:480:6: error: (deterministic) timeout at `«tactic execution»`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/mcfta-outer-rank-adequacy-proof/outer-rank-adequacy-direct-3.source.lean:147:0: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.

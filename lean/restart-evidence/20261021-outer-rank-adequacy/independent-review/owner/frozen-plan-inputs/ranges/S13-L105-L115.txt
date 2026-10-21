@@ -1,0 +1,11 @@
+def Room (bits : Nat) (profile : Profile) : Prop :=
+  profile.nodes < 2 ^ bits ∧ profile.edges ≤ 2 ^ (bits + 2) ∧
+    profile.domains + 2 ^ (profile.nodes + profile.nodes * profile.nodes) < 2 ^ (bits + 1)
+
+/-- Entry room for a larger profile gives entry room for a smaller profile. -/
+theorem Room.mono {bits : Nat} {first last : Profile} (room : Room bits last)
+    (below : Le first last) : Room bits first := by
+  have exponent := Nat.add_le_add below.1 (Nat.mul_le_mul below.1 below.1)
+  have power := Nat.pow_le_pow_right (by decide : 1 ≤ 2) exponent
+  exact ⟨Nat.lt_of_le_of_lt below.1 room.1, Nat.le_trans below.2.1 room.2.1,
+    Nat.lt_of_le_of_lt (Nat.add_le_add below.2.2.1 power) room.2.2⟩

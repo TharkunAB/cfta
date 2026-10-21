@@ -11,7 +11,7 @@ def write(name, value):
 
 components = json.loads((HERE / 'components.json').read_text())
 paths = {item['path'] for item in components}
-assert {'rank-adequacy', 'independent-review', 'adequacy-plan', 'adequacy-plan-review'} == paths
+assert {'rank-adequacy', 'independent-review', 'adequacy-plan', 'adequacy-plan-review', 'cold-capacity-assessment'} == paths
 config = [
     ('rank-adequacy', 'outer-rank-adequacy', 'SourceCurrentOuterRankAdequacy',
      json.loads((HERE/'rank-adequacy/outer-rank-adequacy-selection.json').read_text())['source_sha256']),

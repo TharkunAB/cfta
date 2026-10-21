@@ -1,0 +1,12 @@
+/-- An indexed descent retains every other caller table at its literal operation return. -/
+def descend (before : Caller width) (combined : EqValue) (index : Nat) : EqValue × Caller width :=
+  let actual := SourceEqualityConstraintMemoAllocation.descend combined index before.checked.operations
+  (actual.1, advanceCaller before
+    (SourceCurrentAllocatedQueryMemo.advancePhysical before.checked ⟨before.checked.native.machine.heap, actual.2⟩)
+    before.fourth before.merge)
+
+/-- The single inherited prefix uses the actual returned edge field. -/
+noncomputable def prefixState (before : Caller width) (edge : EdgeValue Symbol Guard) (inherited : EqValue) : Caller width :=
+  advanceCaller before (SourceCurrentAllocatedInheritedPrefix.state before.checked edge.entry.key.constraint inherited)
+    before.fourth before.merge
+

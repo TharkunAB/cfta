@@ -1,0 +1,16 @@
+theorem node_body [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    [DecidableEq (Value Symbol Guard)] {width : Nat}
+    (fuel g s r e p h m c n budget : Nat)
+    (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (inherited : SourceEqualityConstraintAllocation.Value) (before : Caller width)
+    (good : Good before.checked)
+    (probes : InternedFreshOrdinaryProbeHeap.Heap before.checked.native.machine.heap)
+    (available : Available before.checked.native.machine.heap (.mu entry body depth ordinary)) :
+    SourceCurrentAllocatedPartialWorker.nodeBody fuel g s r e p h m c n budget
+      ⟨inherited,.mu entry body depth ordinary⟩ before =
+      .done (cleanup (.mu entry body depth ordinary)) before := by
+  have actual := (physical entry body depth ordinary before.checked good probes available).1
+  simp only [SourceCurrentAllocatedPartialWorker.nodeBody,actual]
+  rfl
+
+end MicroCFTA.SourceCurrentMuReconstructionEffects

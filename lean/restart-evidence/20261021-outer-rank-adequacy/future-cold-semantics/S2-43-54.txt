@@ -1,0 +1,12 @@
+
+/-- The three global memo families start with no saved entries. -/
+def globals : EndpointMemoGateTrace.Memos :=
+  ⟨InternedFreshOrdinaryUnfoldMemo.empty, SourceEndpointMemo.empty⟩
+
+/-- Empty allocation returns a live value with exactly the empty payload. -/
+theorem emptyValue_live (cache : Cache.State Key) :
+    ∃ identity, emptyValue cache = .live identity [] :=
+  ⟨(Cache.intern cache (SourceEqualityPartialConstraintKey.key [])).1.identity, rfl⟩
+
+/-- The retained interner and actual empty allocation derive inherited readiness. -/
+theorem operations_correct (cache : Cache.State Key) (valid : Cache.Valid cache) :

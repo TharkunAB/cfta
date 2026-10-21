@@ -1,0 +1,19 @@
+/-- Join a fixed list of numeric profiles with its original entry profile. -/
+def cover (profiles : List Profile) (entry : Profile) : Profile :=
+  profiles.foldr join entry
+
+/-- The profile join retains the original entry. -/
+theorem cover_ge (profiles : List Profile) (entry : Profile) : Le entry (cover profiles entry) := by
+  induction profiles with
+  | nil => exact Le.refl _
+  | cons first rest ih => exact ih.trans (join_right _ _)
+
+/-- Every listed profile fits the same initial join. -/
+theorem cover_member {profiles : List Profile} {profile : Profile} (entry : Profile)
+    (member : profile ∈ profiles) : Le profile (cover profiles entry) := by
+  induction profiles with
+  | nil => cases member
+  | cons first rest ih =>
+      rcases List.mem_cons.mp member with rfl | included
+      · exact join_left _ _
+      · exact (ih included).trans (join_right _ _)

@@ -1,0 +1,25 @@
+structure Good (state : Checked width) : Prop where
+  /-- The native tables retain physical operands and results. -/
+  native : SourceCurrentNativeOperationInvariants.Cells state.native
+  /-- The constructor heap retains its semantic and depth fields. -/
+  heap : SourceEqualityRequiredCache.Ready state.native.machine.heap
+  /-- Equality memo entries are valid. -/
+  operations : SourceEqualityConstraintMemoAllocation.Valid state.operations
+  /-- Stored edge guards have allocated fields. -/
+  fields : Fields state.operations state.native.machine.heap
+  /-- Actual probe-language heaps remain valid. -/
+  semantic : SourceEqualityRequiredSemanticCache.SemanticReady state.native.machine.heap
+  /-- Stored Mu cost observations remain valid. -/
+  costs : InternedFreshOrdinaryCostHeap.Heap state.native.machine.heap
+
+/-- The extra initial heap fields extend the range-free native invariant. -/
+theorem Good.of_native {state : Checked width}
+    (good : SourceCurrentNativeOperationInvariants.Good state)
+    (semantic : SourceEqualityRequiredSemanticCache.SemanticReady state.native.machine.heap)
+    (costs : InternedFreshOrdinaryCostHeap.Heap state.native.machine.heap) : Good state :=
+  ⟨good.native,good.heap,good.operations,good.fields,semantic,costs⟩
+
+/-- The strengthened heap invariant retains the weaker physical cell invariant. -/
+theorem Good.native_good {state : Checked width} (good : Good state) :
+    SourceCurrentNativeOperationInvariants.Good state :=
+  ⟨good.native,good.heap,good.operations,good.fields⟩

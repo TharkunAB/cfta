@@ -1,0 +1,13 @@
+/-- Returned node cells preserve closure of their captured closed inputs. -/
+def NodeStored (state : Caller width) : Prop :=
+  FlatMemoThunk.Valid (fun request key => request.key = key)
+    (FlatMemoThunk.CellSpec (fun request result => request.value.free = [] → result.free = []))
+    state.nodeResults
+
+/-- Each actual phase retains closure of its literal inputs. -/
+def InputsClosed (phase : Phase width) : Prop :=
+  match phase with
+  | .node _ request _ | .body _ request _ => request.value.free = []
+  | .rows _ _ values _ => MergedColdReaderClosedInputs.ClosedEdges values
+  | .descendants _ _ edge _ => MergedColdReaderClosedInputs.ClosedValues edge.children
+  | .children _ _ values _ | .walk _ _ _ values _ => MergedColdReaderClosedInputs.ClosedValues values

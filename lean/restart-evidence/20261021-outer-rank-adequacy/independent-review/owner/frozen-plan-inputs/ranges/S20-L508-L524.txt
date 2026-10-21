@@ -1,0 +1,17 @@
+theorem children (fuel : Nat) :
+  ∀ {g s r e p h m c n budget : Nat} {combined : EqValue} {values results : List Node} {before after : Caller (bits+2)}
+    {inventory : Inventory} {memos : Memos} (seed : Seed),
+    Context formulas solver inventory before memos → Frame formulas solver inventory before.checked →
+    Fits seed.2 before.checked → Carrier (fun guard => guard ∈ seed.1) before.checked.native.machine.heap →
+    EqReady before.checked.operations.constraints combined → Values before.checked.native.machine.heap values →
+    Room bits (Schedule.children fuel budget seed).2 →
+    SourceCurrentAllocatedPartialWorker.children fuel g s r e p h m c n budget combined values before = .done results after →
+    ∃ next final, ∃ actual : Children budget combined values before results after,
+      ChildrenReads formulas solver actual memos final ∧
+      Post formulas solver next before after final ∧
+      Frame formulas solver next after.checked ∧ Fits (Schedule.children fuel budget seed).2 after.checked ∧
+      Carrier (fun guard => guard ∈ (Schedule.children fuel budget seed).1) after.checked.native.machine.heap ∧
+      Values after.checked.native.machine.heap results ∧ ChildrenLaw formulas solver actual := by
+  intro g s r e p h m c n budget combined values results before after inventory memos seed initial frame fits known inheritedReady available room done
+  simpa only [Returned, and_assoc] using
+    ((all_actual formulas solver (bits := bits) fuel).2.2.2.2.1 seed initial frame fits known inheritedReady available room done)

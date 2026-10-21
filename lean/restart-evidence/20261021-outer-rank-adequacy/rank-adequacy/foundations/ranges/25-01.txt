@@ -1,0 +1,17 @@
+private noncomputable def images (budget count mass : Nat) (seed : Seed) : List Out :=
+  (((List.range (count + 1)).flatMap fun a => (List.range (seed.2.mass + 1)).map fun b => (a,b)).filter
+    (fun r => decide (r.1 < count ∨ (r.1 = count ∧ r.2 < mass)))).map
+      fun r => envelope budget r.1 r.2 seed
+private def fold (step : Out → Out) (n : Nat) (entry : Out) : Out :=
+  (List.range n).foldl (fun acc _ => step acc) entry
+private def slot (all : Seed → List Out) (acc : Out) : Out :=
+  let xs := all acc.2.2
+  (acc.1 + 1 + maximum (xs.map fun x => x.1), max acc.2.1 (maximum (xs.map fun x => x.2.1)),
+    (acc.2.2.1 ++ xs.flatMap (fun x => x.2.2.1), cover (xs.map fun x => x.2.2.2) acc.2.2.2))
+private noncomputable def row (budget : Nat) (all : Seed → List Out) (acc : Out) : Out :=
+  let post := SourceCurrentOuterInitialSchedule.parent budget acc.2.2
+  let walked := fold (slot all) post.2.mass (0,0,post)
+  (acc.1 + 1 + walked.1,
+    max acc.2.1 (max (SourceCurrentParentUniformEnvelope.fuel budget acc.2.2.1 acc.2.2.2) walked.2.1),
+    SourceCurrentOuterInitialSchedule.rebuild walked.2.2)
+

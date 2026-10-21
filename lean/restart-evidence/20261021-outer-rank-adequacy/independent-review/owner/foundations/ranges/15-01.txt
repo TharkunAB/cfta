@@ -1,0 +1,16 @@
+theorem edge_call
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (budget : Nat) (alphabet : List Guard) (request : EdgeRequest)
+    (before : Caller (bits + 2)) (memos : Memos)
+    (initial : Context formulas solver inventory before memos)
+    (frame : Frame formulas solver inventory before.checked) (entry : Profile) (fits : Fits entry before.checked)
+    (known : Carrier (fun guard => guard ∈ alphabet) before.checked.native.machine.heap)
+    (inherited : EqReady before.checked.operations.constraints request.inherited)
+    (resident : Resident before.checked.native.machine.heap request.value)
+    (uniform : UniformReserved bits budget alphabet entry)
+    {f g s r e p h m c n : Nat} {result : Edge} {after : Caller (bits + 2)}
+    (observed : SourceCurrentAllocatedPartialWorker.edgeCall f g s r e p h m c n budget request before = .done result after) :
+    ∃ next final,
+      SourceCurrentEdgeCallNumeric.Receipt formulas solver next entry budget request before memos result after final ∧
+      Fits (outputProfile budget alphabet entry) after.checked ∧
+      Carrier (fun guard => guard ∈ outputAlphabet budget alphabet entry) after.checked.native.machine.heap := by

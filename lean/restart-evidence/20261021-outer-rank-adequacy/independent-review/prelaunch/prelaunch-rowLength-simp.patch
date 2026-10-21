@@ -1,0 +1,11 @@
+--- prelaunch-476-5aed403b.lean
++++ prelaunch-476-rowLength-simp.lean
+@@ -272,7 +272,7 @@
+         | node entry originals depth free =>
+           have massSame := congrArg Prod.snd ranked
+           have rowLength : originals.length ≤ mass := by
+-            dsimp only [InternedValueMass.value] at massSame
++            simp only [InternedValueMass.value] at massSame
+             rw [InternedValueMass.edges_eq_length_sum] at massSame
+             omega
+           have positive := (SourceCurrentOuterRankEnvelope.retains budget count mass entrySeed).1

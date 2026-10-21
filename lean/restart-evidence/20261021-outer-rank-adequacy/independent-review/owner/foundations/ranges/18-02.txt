@@ -1,0 +1,11 @@
+theorem children_length {fuel g s r e p h m c n limit combined values before results after}
+    (actual : SourceCurrentAllocatedPartialWorker.children fuel g s r e p h m c n limit combined values before =
+      .done results (after : Caller width)) : results.length = values.length := by
+  cases combined with
+  | contradiction =>
+    simp only [SourceCurrentAllocatedPartialWorker.children] at actual
+    cases actual
+    exact List.length_map _
+  | live identity records =>
+    simpa only [SourceCurrentAllocatedPartialWorker.children] using walk_length fuel
+      (by simpa only [SourceCurrentAllocatedPartialWorker.children] using actual)
