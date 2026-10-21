@@ -1,0 +1,13 @@
+# Positional support through unchanged cells
+
+The 35-line source adds one public theorem, SourceCurrentNativePositiveSupportAdvance.advance. It takes actual before and after checked states, CurrentNative.At Plain before, positional Support at the entry heap, Good after, an actual Kernel.Extension, and equality of both complete native tables. It returns Support at the actual after heap and native state.
+
+The proof transfers the entry Support to after.native at the SAME entry source by the literal table equalities. It transfers current.2.2's captured Origins through those same equalities. Existing NativePositiveSupportRebase.rebase then consumes those original source witnesses, entry Facts, final Facts from Good after, and the extension's actual heap growth and issued-key extension.
+
+This is an unchanged-cell rule. It applies to every cell phase. It does not infer Support for new cells from growth, scalar guard profiles, availability, or final source origins. The source origin remains the entry heap until the final rebase. It does not infer or require causal Mu publication History, semantic readiness after, a guard heap after, a future return, an empty native table, or a positional output law from a caller. Those separate invariants remain necessary where later query theorems require them.
+
+The actual table equalities are stronger than equality of captured keys. They retain the complete request and phase payload. The public theorem has no typeclass parameters. The proof adds no evaluator, history induction, or cache framework. It changes no official source, Audit, or earlier frozen package. Root owns official installation and canonical validation.
+
+Two capped Lean commands were run. The first strict command returned zero and its raw log is literally empty. The first FULL command returned zero and printed the complete public type and proof with all eight required settings. Its exact axiom list is propext, Classical.choice and Quot.sound. The log contains 273850 bytes. No private name in the public type, warning, error, proof omission or printer fallback is accepted. Each command records fresh usage above one percent, 4 GiB memory.max, 4 GiB memory.high, zero swap, and a five-minute time cap. There are no failed or unselected attempts, no constructed examples, and no owned canonical commands.
+
+This rule is suitable for actual projection, Merge, and rebuilding phases only when their own receipts prove the machine extension, final Good, and unchanged native tables. It does not by itself supply those receipts. It does not prove a chronological slot ancestry law, unfinished class entry support, owner exclusion, global termination, or Haskell refinement.
