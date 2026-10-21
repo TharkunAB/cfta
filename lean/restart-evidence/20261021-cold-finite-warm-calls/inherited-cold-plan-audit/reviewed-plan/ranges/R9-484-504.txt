@@ -1,0 +1,21 @@
+theorem root_exact
+    {fuel g s r e p h m c n budget identity : Nat} {value result : Node}
+    {before after : Caller width} {inventory : Inventory} {memos : Memos}
+    (initial : Context formulas solver inventory before memos)
+    (inheritedReady : EqReady before.checked.operations.constraints (.live identity []))
+    (available : Available before.checked.native.machine.heap value)
+    (ranges : SourceCurrentAllocatedPartialWorkerRanges.nodeCall fuel g s r e p h m c n budget
+      ⟨.live identity [], value⟩ before)
+    (done : nodeCall fuel g s r e p h m c n budget ⟨.live identity [], value⟩ before = .done result after) :
+    ∃ next final, ∃ actual : NodeCall budget ⟨.live identity [], value⟩ before result after,
+      NodeCallReads formulas solver actual memos final ∧ Checks (nodeCallTrace actual) ∧
+      Post formulas solver next before after final ∧ Available after.checked.native.machine.heap result ∧
+      ∀ ambient term, InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient result term ↔
+        InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient value term := by
+  obtain ⟨final, actual, reads, checks⟩ := (all_actual formulas solver fuel).1
+    initial inheritedReady available ranges done
+  obtain ⟨next, post, resident, law⟩ := SourceCurrentAllocatedPartialActual.root_exact formulas solver
+    reads checks initial inheritedReady available
+  exact ⟨next, final, actual, reads, checks, post, resident, law⟩
+
+end MicroCFTA.SourceCurrentAllocatedPartialWorkerActual

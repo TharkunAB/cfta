@@ -1,0 +1,76 @@
+--- verify-preservation.original-H5.py.txt
++++ verify-preservation.py
+@@ -11,7 +11,7 @@
+     return subprocess.check_output(['git', *args], cwd=ROOT, text=True)
+ 
+ base = json.loads((HERE / 'starting-files.json').read_text())
+-assert len(base) == 73200
++assert len(base) == 74266
+ changed = []
+ for name, pin in base.items():
+     path = ROOT / name
+@@ -24,25 +24,25 @@
+              'lean/notes-proof-status-20261017.md', 'lean/notes-current-system-claim.md']
+ selected = json.loads((HERE / 'selected-sources.json').read_text())
+ expected = {
+-    'lean/MicroCFTA/SourceCurrentFiniteWarmCalls.lean': ('984f34529a1050fd015ba0fb742b39cc38e0b518eaae69801cbde1727578a6bd', 236)}
++    'lean/MicroCFTA/SourceCurrentColdFiniteWarmCalls.lean': ('__H6_SOURCE_SHA__', int('__H6_SOURCE_LINES__'))}
+ assert set(selected) == set(expected)
+ for name, (expected_sha, lines) in expected.items():
+     assert selected[name]['sha256'] == expected_sha and sha(ROOT / name) == expected_sha
+     assert len((ROOT / name).read_bytes().splitlines()) == lines
+-new_module = 'lean/MicroCFTA/SourceCurrentFiniteWarmCalls.lean'
++new_module = 'lean/MicroCFTA/SourceCurrentColdFiniteWarmCalls.lean'
+ assert new_module not in base
+-assert 'lean/notes-current-finite-warm-calls.md' not in base
+-assert (ROOT / 'lean/notes-current-finite-warm-calls.md').is_file()
++assert 'lean/notes-current-cold-finite-warm-calls.md' not in base
++assert (ROOT / 'lean/notes-current-cold-finite-warm-calls.md').is_file()
+ assert json.loads((HERE / 'frozen-modules.json').read_text()) == {
+     Path(name).stem: pin['sha256'] for name, pin in selected.items()}
+ assert set(changed) == set(documents) | (set(selected) & set(base)) | {'lean/MicroCFTA/Audit.lean'}, changed
+ start = (HERE / 'starting-head.txt').read_text().strip()
+-assert start == '8adf2d4aca20ee029de027462bca2878c4c599bf'
++assert start == '93f3d0ad7a15196177d4961bcb49092cda94b0e1'
+ audit_original = HERE / 'original-sources/Audit.original.lean.txt'
+-assert sha(audit_original) == '1013bd1cb1c723049d249b7940b57569cb1c19824b89fae206708db1a4732a11'
+-assert len(audit_original.read_bytes().splitlines()) == 3110
++assert sha(audit_original) == 'd11e901227fa107e2b36ebd5a76f96f1f89f7f8f697e39be2907011648cf9487'
++assert len(audit_original.read_bytes().splitlines()) == 3111
+ audit = (ROOT / 'lean/MicroCFTA/Audit.lean').read_bytes()
+-addition = b'import MicroCFTA.SourceCurrentFiniteWarmCalls\n'
++addition = b'import MicroCFTA.SourceCurrentColdFiniteWarmCalls\n'
+ assert audit.count(addition) == 1 and audit.replace(addition, b'', 1) == audit_original.read_bytes()
+ assert audit.index(addition) < audit.index(b'/-!')
+ for name in documents:
+@@ -54,9 +54,9 @@
+ previous = json.loads((HERE / 'previous-publication.json').read_text())['preservation']
+ archives = dict(previous['frozen_entry_archives'])
+ registries = dict(previous['frozen_manifests'])
+-assert len(registries) == 288 and sum(pin['checked'] for pin in registries.values()) == 1382
+-assert 'lean/restart-evidence/20261021-warm-next-packet/frozen-modules.json' not in registries
+-registries['lean/restart-evidence/20261021-warm-next-packet/frozen-modules.json'] = {'checked': 1}
++assert len(registries) == 289 and sum(pin['checked'] for pin in registries.values()) == 1383
++assert 'lean/restart-evidence/20261021-finite-warm-calls/frozen-modules.json' not in registries
++registries['lean/restart-evidence/20261021-finite-warm-calls/frozen-modules.json'] = {'checked': 1}
+ frozen = {}
+ for name in registries:
+     entries = json.loads((ROOT / name).read_text())
+@@ -70,7 +70,7 @@
+             assert entry['sha256'] == expected and sha(ROOT / entry['snapshot']) == expected
+             assert sha(ROOT / source) == entry['current_sha256']
+     frozen[name] = {'checked': len(entries), 'manifest_sha256': sha(ROOT / name)}
+-assert len(frozen) == 289 and sum(pin['checked'] for pin in frozen.values()) == 1383
++assert len(frozen) == 290 and sum(pin['checked'] for pin in frozen.values()) == 1384
+ for name, args in [('starting-stashes.txt', ('stash', 'list', '--format=%gd %H %s')),
+                    ('starting-worktrees.txt', ('worktree', 'list', '--porcelain'))]:
+     actual, expected = git(*args), (HERE / name).read_text()
+@@ -104,7 +104,7 @@
+                   and name != 'lean/MicroCFTA/Audit.lean' and name not in selected for name in base),
+               frozen_registry_count=len(frozen), frozen_entries=sum(item['checked'] for item in frozen.values()),
+               frozen_manifests=frozen, frozen_entry_archives=archives,
+-              audit_only_new_import=True, new_finite_calls_absent_baseline=True,
++              audit_only_new_import=True, new_cold_finite_calls_absent_baseline=True,
+               stashes_preserved=True, other_worktrees_preserved=True,
+               haskell_fix_registry_first_and_retained=True, archived_components=len(components))
+ print(json.dumps(report, indent=2))

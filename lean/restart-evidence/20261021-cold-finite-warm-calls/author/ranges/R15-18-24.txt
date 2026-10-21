@@ -1,0 +1,7 @@
+
+/-- Source structural comparison decides full formula equality. -/
+instance formulaDecidableEq : DecidableEq Formula := fun left right =>
+  if same : FormulaOrder.compareFormula left right = .eq then
+    .isTrue ((FormulaOrder.formula_eq left right).mp same)
+  else .isFalse (fun equal => same ((FormulaOrder.formula_eq left right).mpr equal))
+

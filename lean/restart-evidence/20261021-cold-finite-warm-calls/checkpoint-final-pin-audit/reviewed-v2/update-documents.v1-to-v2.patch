@@ -1,0 +1,31 @@
+--- /tmp/mcfta-cold-finite-warm-calls-checkpoint-prep-v2/originals/update-documents.H6-v1.frozen.py.txt	2026-10-21 23:15:10.681072607 +0200
++++ /tmp/mcfta-cold-finite-warm-calls-checkpoint-prep-v2/update-documents.py	2026-10-21 23:16:28.569006649 +0200
+@@ -11,11 +11,11 @@
+ proof = (HERE / 'proof-commit.txt').read_text().strip()
+ assert len(proof) == 40 and all(char in '0123456789abcdef' for char in proof)
+ now = datetime.datetime.now().astimezone().strftime('%Y-%m-%d %H:%M %Z')
+-assert json.loads((HERE / 'audit-1.json').read_text())['exit_code'] == 0
+-audit_raw = (HERE / 'audit-1.log').read_bytes()
+-assert hashlib.sha256(audit_raw).hexdigest() == '__H6_AUDIT_SHA__'
+-audit_build_jobs = int('__H6_AUDIT_BUILD_JOBS__')
+-audit_dependencies = int('__H6_AUDIT_DEPENDENCIES__')
++assert json.loads((HERE / 'cold-finite-calls-audit-1.json').read_text())['exit_code'] == 0
++audit_raw = (HERE / 'cold-finite-calls-audit-1.log').read_bytes()
++assert hashlib.sha256(audit_raw).hexdigest() == 'a64c52004a4efc52f348fd0328a1c77eda1fffbb7a01424d2b7a196d9e5b1346'
++audit_build_jobs = int('3623')
++audit_dependencies = int('75263')
+ audit = audit_raw.decode()
+ assert f'Build completed successfully ({audit_build_jobs} jobs).' in audit
+ assert f'{audit_dependencies} MicroCFTA theorems' in audit
+@@ -60,8 +60,9 @@
+ finite-tree language is equivalent to the original constructed value for
+ every ambient environment and finite term. Empty inherited constraints discharge Sat.
+ The result has no initial caller-packet, future Room or success premise.
+-It does not reset or widen an existing caller. Exact stage seeds retain
+-the actual inventory and global memos. No C monotonicity across seeds or
++It does not reset or widen an existing caller.
++Each trace point retains its actual inventory and global memos under the corresponding stage seed.
++No C monotonicity across seeds or
+ Room for the common-outer-fuel schedule is assumed.
+ 
+ This is the strongest combined COLD finite-N semantic theorem. Its source

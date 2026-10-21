@@ -1,0 +1,1 @@
+Complete the existing cold semantic public header citation through line46. Line45 ends at the iff; line46 names the result meaning. The old index, assessment and shorter excerpt remain preserved. This changes only citation metadata, not a proposal or proof.

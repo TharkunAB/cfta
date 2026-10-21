@@ -1,0 +1,4 @@
+local notation "EqValue" => SourceEqualityConstraintAllocation.Value
+private instance : DecidableEq FullSyntax.Formula :=
+  fun first second => decidable_of_iff (FormulaOrder.compareFormula first second = .eq)
+    (FormulaOrder.formula_eq first second)

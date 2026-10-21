@@ -1,0 +1,25 @@
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    {initial finalCache : Cache.State SourceEqualityPartialConstraintKey.Key}
+    {originals : List Guard}
+    (history : SourceEqualityOriginalAllocationHistory.History initial finalCache originals)
+    (valid : Cache.Valid initial)
+    (expression : InternedNestedConstruction.Syntax Symbol Guard)
+    (covered : ∀ guard ∈ SourceEqualityConstraintOrigins.guards expression, guard ∈ originals)
+    (budget : Nat) :
+    ∃ value heap, ∃ _built : InternedFreshOrdinaryConstruction.build expression [] empty = .done value heap,
+    let seed : List Guard × Profile := (SourceEqualityConstraintOrigins.guards expression,
+      ⟨heap.nodes.next, heap.edges.next, 0, InternedValueMassHeap.initialBound heap⟩)
+    let request : NodeRequest := ⟨SourceCurrentAllocatedPartialInitialization.emptyValue finalCache, value⟩
+    let output := envelope budget
+      (SourceCurrentPositiveQuotientCount.count (request.inherited.payload.getD []) value)
+      (InternedValueMass.value value) seed
+    let joined := SourceCurrentInitialSelectionForecast.cover [output.2.2.2]
+      (SourceCurrentOuterInitialSchedule.node output.1 budget seed).2
+    let bits := SourceCurrentParentInitialRoom.roomBits joined
+    let before := SourceCurrentAllocatedPartialInitialization.caller (bits + 2) finalCache heap
+    let first : Phase (bits + 2) := .node output.1 request before
+    let need := SourceCurrentOuterInitialFuel.phaseNeed budget first seed
+    ∃ (result : Node) (after : Caller (bits + 2)), ∀ fuel, output.1 ≤ fuel →
+      nodeCall fuel need need need need need need need need need budget request before = .done result after
+ := by

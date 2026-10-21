@@ -1,0 +1,54 @@
+--- cold-finite-calls-check-full-public.py.H5
++++ cold-finite-calls-check-full-public.py.H6
+@@ -1,13 +1,13 @@
+-"""Read the complete finite-call type and actual axiom subset without running Lean."""
++"""Read the complete cold finite-call type and actual axiom subset without running Lean."""
+ from pathlib import Path
+ import hashlib
+ import json
+ import re
+ 
+ HERE = Path(__file__).resolve().parent
+-PREFIX = "finite-calls-"
+-NAMESPACE = "MicroCFTA.SourceCurrentFiniteWarmCalls."
+-source = (HERE / "SourceCurrentFiniteWarmCalls.lean").read_text()
++PREFIX = "cold-finite-calls-"
++NAMESPACE = "MicroCFTA.SourceCurrentColdFiniteWarmCalls."
++source = (HERE / "SourceCurrentColdFiniteWarmCalls.lean").read_text()
+ printer = (HERE / (PREFIX + "public-1.source.lean")).read_text()
+ raw = (HERE / (PREFIX + "public-1.log")).read_bytes()
+ log = raw.decode()
+@@ -15,13 +15,13 @@
+     "pp.proofs.threshold 254", "pp.universes true", "pp.deepTerms true", "pp.maxSteps 10000000"]
+ assert printer.startswith(source)
+ expected_tail = "\n" + "".join("set_option " + option + "\n" for option in options)
+-expected_tail += "".join(directive + NAMESPACE + "node_calls\n"
++expected_tail += "".join(directive + NAMESPACE + "constructed_node_calls\n"
+     for directive in ["#check @", "#print ", "#print axioms "])
+ assert printer[len(source):] == expected_tail
+ for option in options:
+     assert printer.count("set_option " + option) == 1, option
+ assert not re.search(r"sorryAx|\b(?:warning|error)(?:\([^)]*\))?:|failed to pretty print|pp\.rawOnError|maximum recursion depth|maximum number of heartbeats|⋯|…|\.\.\.", log)
+-heads = [("node_calls", "theorem")]
++heads = [("constructed_node_calls", "theorem")]
+ markers = []
+ for head, _ in heads:
+     name = NAMESPACE + head
+@@ -31,7 +31,8 @@
+     assert len(found) == 1, (head, len(found))
+     markers.append(found[0])
+ normalize = lambda text: "".join(text.split())
+-private = ["Entry", "advance_entry"]
++private = []
++assert not re.search(r"^private (?:noncomputable )?(?:def|theorem|abbrev) ", source, re.M)
+ results = []
+ for index, (head, kind) in enumerate(heads):
+     name = NAMESPACE + head
+@@ -55,6 +56,7 @@
+     split = candidates[0]
+     declared, body = declaration[:split.start()], declaration[split.end():]
+     assert normalize(checked) == normalize(declared), head
++    assert checked.count("MicroCFTA.FormulaExecutable.formulaDecidableEq") == 2
+     public_type = checked + declared
+     for spelling in ["_private", "✝", "†", "‡"]:
+         assert spelling not in public_type, (head, "private TYPE spelling", spelling)

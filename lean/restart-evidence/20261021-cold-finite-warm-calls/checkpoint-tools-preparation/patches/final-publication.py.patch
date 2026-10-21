@@ -1,0 +1,43 @@
+--- originals/final-publication.py.H5.txt
++++ final-publication.py
+@@ -1,11 +1,11 @@
+ import hashlib,json,os,subprocess
+ from pathlib import Path
+-R=Path('/home/tritlo/Code/mcfta');H=R/'lean/restart-evidence/20261021-finite-warm-calls'
++R=Path('/home/tritlo/Code/mcfta');H=R/'lean/restart-evidence/20261021-cold-finite-warm-calls'
+ def git(*a):return subprocess.check_output(['git',*a],cwd=R)
+-assert (H/'starting-head.txt').read_text().strip()=='8adf2d4aca20ee029de027462bca2878c4c599bf'
+-assert git('rev-parse','HEAD').decode().strip()==(H/'proof-commit.txt').read_text().strip()=='a33536a752d6b299d8767f90d3cc776fe8374b7a'
++assert (H/'starting-head.txt').read_text().strip()=='93f3d0ad7a15196177d4961bcb49092cda94b0e1'
++assert git('rev-parse','HEAD').decode().strip()==(H/'proof-commit.txt').read_text().strip()=='__H6_PROOF_COMMIT__'
+ subprocess.run(['/usr/bin/python3',str(H/'verify-seal.py')],check=True)
+-files=['NEXT-PROMPT.md','HANDOFF.md','FINDINGS.md','lean/README.md','lean/SYSTEM.md','lean/API-COVERAGE.md','lean/COVERAGE.md','lean/notes-proof-status-20261017.md','lean/notes-current-system-claim.md','lean/notes-current-finite-warm-calls.md']
++files=['NEXT-PROMPT.md','HANDOFF.md','FINDINGS.md','lean/README.md','lean/SYSTEM.md','lean/API-COVERAGE.md','lean/COVERAGE.md','lean/notes-proof-status-20261017.md','lean/notes-current-system-claim.md','lean/notes-current-cold-finite-warm-calls.md']
+ subprocess.run(['git','diff','--check','--',*files],cwd=R,check=True)
+ subprocess.run(['git','add','-f','--',*files,str(H.relative_to(R))],cwd=R,check=True)
+ selected=git('diff','--cached','--name-only').decode().splitlines()
+@@ -19,7 +19,7 @@
+   relative=str(p.relative_to(R))
+   assert relative in index_names,relative
+   sealed_paths+=1
+-subprocess.run(['git','commit','--quiet','-m','Preserve finite-call proof evidence and handoff'],cwd=R,check=True)
++subprocess.run(['git','commit','--quiet','-m','Preserve cold finite-call proof evidence and handoff'],cwd=R,check=True)
+ head=git('rev-parse','HEAD').decode().strip()
+ assert not git('status','--porcelain')
+ head_entries={}
+@@ -36,12 +36,12 @@
+ assert index==head_entries
+ subprocess.run(['/usr/bin/python3',str(H/'verify-seal.py')],check=True)
+ env={**os.environ,'GIT_SSH_COMMAND':'ssh -p 443 -o Hostname=ssh.github.com -o HostKeyAlias=github.com -o StrictHostKeyChecking=yes -o ConnectTimeout=15 -o ConnectionAttempts=1 -o BatchMode=yes -o ServerAliveInterval=10 -o ServerAliveCountMax=2'}
+-with Path('/tmp/mcfta-finite-warm-calls-final-push.log').open('xb') as log:
++with Path('/tmp/mcfta-cold-finite-warm-calls-final-push.log').open('xb') as log:
+  subprocess.run(['timeout','45s','git','push','origin','HEAD:formalize'],cwd=R,env=env,stdout=log,stderr=subprocess.STDOUT,check=True)
+ remote=subprocess.check_output(['timeout','45s','git','ls-remote','origin','refs/heads/formalize','refs/heads/main'],cwd=R,env=env,text=True)
+-Path('/tmp/mcfta-finite-warm-calls-final-remote.txt').write_text(remote)
++Path('/tmp/mcfta-cold-finite-warm-calls-final-remote.txt').write_text(remote)
+ assert head+'\trefs/heads/formalize' in remote
+ assert '794903b3fbad3becb8b28736fc33463760731fc7\trefs/heads/main' in remote
+ report={'status':'PASS','checkpoint':head,'proof':(H/'proof-commit.txt').read_text().strip(),'work_status':'continuing_at_user_request','filesystem_index_head_equal':True,'tracked_blobs_and_modes':len(index),'all_sealed_paths_in_index':sealed_paths,'clean':not bool(git('status','--porcelain')),'remote':remote,'selected_proof':json.loads((H/'verification.json').read_text()),'preservation':json.loads((H/'preservation-final.json').read_text())}
+-Path('/tmp/mcfta-finite-warm-calls-publication.json').write_text(json.dumps(report,indent=2)+'\n')
++Path('/tmp/mcfta-cold-finite-warm-calls-publication.json').write_text(json.dumps(report,indent=2)+'\n')
+ print(json.dumps({k:v for k,v in report.items() if k not in ['selected_proof','preservation']}))

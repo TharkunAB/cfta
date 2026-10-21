@@ -1,0 +1,9 @@
+theorem formula_eq (p q : Formula) : compareFormula p q = .eq ↔ p = q := by
+  cases p with
+  | top | bottom => cases q <;> simp [compareFormula, formulaTag]
+  | and ps | or ps => cases q <;> simp [compareFormula, formulaTag, parts_eq ps]
+  | not p => cases q <;> simp [compareFormula, formulaTag, formula_eq p]
+  | atom r t u => cases q <;> simp [compareFormula, formulaTag, term_eq t, term_eq u, relation_eq]
+  | «forall» bound p | «exists» bound p => cases q <;> simp [compareFormula, formulaTag, binders_eq bound, formula_eq p]
+termination_by sizeOf p
+

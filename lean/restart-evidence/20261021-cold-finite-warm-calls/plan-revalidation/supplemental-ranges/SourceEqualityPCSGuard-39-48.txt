@@ -1,0 +1,10 @@
+noncomputable def holds [DecidableEq Formula] (formulas : Formulas Formula) (solver : Entailment Formula)
+    (constraint : Constraint Formula) (term : Term (Label Formula)) : Bool := by
+  classical
+  exact decide (Sat term constraint.equalities) && decide (SourceBooleanEntry.evaluateGuard formulas solver constraint.guard term = .yes)
+
+/-- The complete independent constraint test has exactly its two intended conjuncts. -/
+theorem holds_exact [DecidableEq Formula] (formulas : Formulas Formula) (solver : Entailment Formula)
+    (constraint : Constraint Formula) (term : Term (Label Formula)) :
+    holds formulas solver constraint term = true ↔ Sat term constraint.equalities ∧ SourceBooleanEntry.evaluateGuard formulas solver constraint.guard term = .yes := by
+  simp only [holds, Bool.and_eq_true_iff, decide_eq_true_eq]

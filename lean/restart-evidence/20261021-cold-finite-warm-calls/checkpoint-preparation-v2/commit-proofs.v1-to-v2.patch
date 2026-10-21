@@ -1,0 +1,20 @@
+--- /tmp/mcfta-cold-finite-warm-calls-checkpoint-prep-v2/originals/commit-proofs.H6-v1.frozen.py.txt	2026-10-21 23:15:10.682389208 +0200
++++ /tmp/mcfta-cold-finite-warm-calls-checkpoint-prep-v2/commit-proofs.py	2026-10-21 23:16:28.616966646 +0200
+@@ -23,12 +23,12 @@
+     assert data == (HERE / (pin['strict'] + '.source.lean')).read_bytes()
+     assert not (HERE / (pin['strict'] + '.log')).read_bytes()
+     assert json.loads((HERE / (pin['full'] + '.json')).read_text())['exit_code'] == 0
+-assert json.loads((HERE / 'audit-1.json').read_text())['exit_code'] == 0
+-audit_raw = (HERE / 'audit-1.log').read_bytes()
+-assert hashlib.sha256(audit_raw).hexdigest() == '__H6_AUDIT_SHA__'
++assert json.loads((HERE / 'cold-finite-calls-audit-1.json').read_text())['exit_code'] == 0
++audit_raw = (HERE / 'cold-finite-calls-audit-1.log').read_bytes()
++assert hashlib.sha256(audit_raw).hexdigest() == 'a64c52004a4efc52f348fd0328a1c77eda1fffbb7a01424d2b7a196d9e5b1346'
+ audit = audit_raw.decode()
+-assert f"Build completed successfully ({int('__H6_AUDIT_BUILD_JOBS__')} jobs)." in audit
+-assert f"{int('__H6_AUDIT_DEPENDENCIES__')} MicroCFTA theorems" in audit
++assert f"Build completed successfully ({int('3623')} jobs)." in audit
++assert f"{int('75263')} MicroCFTA theorems" in audit
+ paths = sorted([*selected, 'lean/MicroCFTA/Audit.lean'])
+ assert set(git('diff', '--name-only').splitlines()) == {'lean/MicroCFTA/Audit.lean'}
+ original_audit = (HERE / 'original-sources/Audit.original.lean.txt').read_bytes()

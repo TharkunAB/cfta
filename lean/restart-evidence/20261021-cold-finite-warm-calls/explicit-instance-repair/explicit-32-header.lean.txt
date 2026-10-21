@@ -1,0 +1,32 @@
+theorem constructed_node_calls
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    {initial finalCache : Cache.State SourceEqualityPartialConstraintKey.Key}
+    {originals : List Guard}
+    (history : SourceEqualityOriginalAllocationHistory.History initial finalCache originals)
+    (valid : Cache.Valid initial)
+    (expression : InternedNestedConstruction.Syntax Symbol Guard)
+    (covered : ∀ guard ∈ SourceEqualityConstraintOrigins.guards expression, guard ∈ originals)
+    (budget rounds : Nat) :
+    ∃ value heap, ∃ _built : InternedFreshOrdinaryConstruction.build expression [] empty = .done value heap,
+    let seed : List Guard × Profile := (SourceEqualityConstraintOrigins.guards expression,
+      ⟨heap.nodes.next, heap.edges.next, 0, InternedValueMassHeap.initialBound heap⟩)
+    let bits := SourceCurrentParentInitialRoom.roomBits
+      (SourceCurrentFiniteRoundForecast.stage budget seed rounds).2
+    let fuels := SourceCurrentFiniteRoundForecast.fuelBounds budget rounds seed
+    let inherited := SourceCurrentAllocatedPartialInitialization.emptyValue finalCache
+    let before := SourceCurrentAllocatedPartialInitialization.caller (bits + 2) finalCache heap
+    ∃ trace : Fin (rounds + 1) → Node × Caller (bits + 2),
+      trace 0 = (value, before) ∧
+      (∀ index : Fin rounds,
+        nodeCall fuels.1
+          fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 budget
+          ⟨inherited, (trace index.castSucc).1⟩ (trace index.castSucc).2 =
+            .done (trace index.succ).1 (trace index.succ).2) ∧
+      Available (trace (Fin.last rounds)).2.checked.native.machine.heap (trace (Fin.last rounds)).1 ∧
+      ∀ ambient term,
+        InternedGuardedLanguage.meaning (@SourceEqualityPCSGuard.holds FullSyntax.Formula
+          FormulaExecutable.formulaDecidableEq formulas solver) ambient value term ↔
+          InternedGuardedLanguage.meaning (@SourceEqualityPCSGuard.holds FullSyntax.Formula
+            FormulaExecutable.formulaDecidableEq formulas solver) ambient
+            (trace (Fin.last rounds)).1 term

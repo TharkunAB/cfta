@@ -1,0 +1,5 @@
+/-- Compute common outer and nine-stage lower-fuel ceilings for all finite cases. -/
+noncomputable def fuelBounds (budget rounds : Nat)
+    (initial : List Guard × Profile) : Nat × Nat :=
+  (maximum ((boundsImage budget rounds initial).map Prod.fst),
+    maximum ((boundsImage budget rounds initial).map Prod.snd))

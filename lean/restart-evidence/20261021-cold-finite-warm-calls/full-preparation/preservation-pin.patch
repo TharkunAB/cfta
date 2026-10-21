@@ -1,0 +1,11 @@
+--- templates/verify-preservation.pending.py.txt
++++ verify-preservation.py
+@@ -24,7 +24,7 @@
+              'lean/notes-proof-status-20261017.md', 'lean/notes-current-system-claim.md']
+ selected = json.loads((HERE / 'selected-sources.json').read_text())
+ expected = {
+-    'lean/MicroCFTA/SourceCurrentColdFiniteWarmCalls.lean': ('__H6_SOURCE_SHA__', int('__H6_SOURCE_LINES__'))}
++    'lean/MicroCFTA/SourceCurrentColdFiniteWarmCalls.lean': ('3299d48ee9c5ba1d09cbc25c88946b0b67ecc86ac028df67b30eadae8ae40a9d', int('153'))}
+ assert set(selected) == set(expected)
+ for name, (expected_sha, lines) in expected.items():
+     assert selected[name]['sha256'] == expected_sha and sha(ROOT / name) == expected_sha

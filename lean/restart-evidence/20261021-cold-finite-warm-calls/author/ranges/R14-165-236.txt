@@ -1,0 +1,72 @@
+ := by
+  dsimp only
+  intro inherited value before inventory memos initial frame fits known inputs normal
+    supported causal merged positiveMemo origins stored closed nodeIdle edgeIdle
+  let fuels := fuelBounds budget rounds seed
+  have firstEntry : Entry formulas solver seed inherited (value, before) :=
+    ⟨inventory, memos, initial, frame, fits, known, inputs, normal, supported,
+      ⟨causal⟩, merged, positiveMemo, origins, stored, closed, nodeIdle, edgeIdle⟩
+  have prefixes : ∀ length, length ≤ rounds →
+      ∃ trace : Nat → Node × Caller (roomBits (stage budget seed rounds).2 + 2),
+        trace 0 = (value, before) ∧
+        (∀ index, index < length →
+          nodeCall fuels.1
+            fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 budget
+            ⟨inherited, (trace index).1⟩ (trace index).2 =
+              .done (trace (index + 1)).1 (trace (index + 1)).2) ∧
+        Entry formulas solver (stage budget seed length) inherited (trace length) ∧
+        SourceCurrentAllocatedPartialMemoSound.NodeLaw formulas solver
+          ⟨inherited, value⟩ (trace length).1 := by
+    intro length
+    induction length with
+    | zero =>
+        intro _bound
+        refine ⟨fun _ => (value, before), rfl, ?_, firstEntry,
+          SourceCurrentAllocatedPartialCallSteps.node_refl formulas solver _⟩
+        intro index impossible
+        omega
+    | succ length ih =>
+        intro bound
+        have included : length < rounds := by omega
+        obtain ⟨trace, first, steps, lastEntry, cumulative⟩ := ih (by omega)
+        obtain ⟨next, observed, nextEntry, stepLaw⟩ :=
+          advance_entry formulas solver budget rounds seed included lastEntry
+        have nextLaw : SourceCurrentAllocatedPartialMemoSound.NodeLaw formulas solver
+            ⟨inherited, value⟩ next.1 := by
+          intro ambient term
+          refine ⟨?_, ?_⟩
+          · intro accepted
+            exact (cumulative ambient term).1 ((stepLaw ambient term).1 accepted)
+          · intro satisfied
+            exact ((stepLaw ambient term).2 satisfied).trans
+              ((cumulative ambient term).2 satisfied)
+        let extended : Nat → Node × Caller (roomBits (stage budget seed rounds).2 + 2) :=
+          fun index => if index = length + 1 then next else trace index
+        have unchanged (index : Nat) (earlier : index ≤ length) :
+            extended index = trace index := by
+          have distinct : index ≠ length + 1 := by omega
+          exact ite_eq_right distinct
+        have latest : extended (length + 1) = next := by
+          exact ite_eq_left rfl
+        refine ⟨extended, ?_, ?_, ?_, ?_⟩
+        · rw [unchanged 0 (Nat.zero_le _)]
+          exact first
+        · intro index inside
+          by_cases atLast : index = length
+          · subst index
+            rw [unchanged length (Nat.le_refl _), latest]
+            exact observed
+          · have earlier : index < length := by omega
+            rw [unchanged index (by omega), unchanged (index + 1) (by omega)]
+            exact steps index earlier
+        · rw [latest]
+          exact nextEntry
+        · rw [latest]
+          exact nextLaw
+  obtain ⟨trace, first, steps, lastEntry, law⟩ := prefixes rounds (Nat.le_refl _)
+  obtain ⟨_inventory, _memos, _initial, _frame, _fits, _known, lastInputs, _rest⟩ := lastEntry
+  refine ⟨fun index => trace index.val, first, ?_, lastInputs.2, law⟩
+  intro index
+  exact steps index.val index.isLt
+
+end MicroCFTA.SourceCurrentFiniteWarmCalls

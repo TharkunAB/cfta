@@ -1,0 +1,17 @@
+instance (p : Prop) : Subsingleton p := ⟨fun a b => proof_irrel a b⟩
+
+instance : Subsingleton Empty  := ⟨(·.elim)⟩
+instance : Subsingleton PEmpty := ⟨(·.elim)⟩
+
+instance [Subsingleton α] [Subsingleton β] : Subsingleton (α × β) :=
+  ⟨fun {..} {..} => by congr <;> apply Subsingleton.elim⟩
+
+instance (p : Prop) : Subsingleton (Decidable p) :=
+  Subsingleton.intro fun
+    | isTrue t₁ => fun
+      | isTrue _   => rfl
+      | isFalse f₂ => absurd t₁ f₂
+    | isFalse f₁ => fun
+      | isTrue t₂  => absurd t₂ f₁
+      | isFalse _  => rfl
+

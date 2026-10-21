@@ -1,0 +1,28 @@
+--- original-153.source.lean.txt
++++ proposed-157.source.lean.txt
+@@ -50,8 +50,10 @@
+             .done (trace index.succ).1 (trace index.succ).2) ∧
+       Available (trace (Fin.last rounds)).2.checked.native.machine.heap (trace (Fin.last rounds)).1 ∧
+       ∀ ambient term,
+-        InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient value term ↔
+-          InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient
++        InternedGuardedLanguage.meaning (@SourceEqualityPCSGuard.holds FullSyntax.Formula
++          FormulaExecutable.formulaDecidableEq formulas solver) ambient value term ↔
++          InternedGuardedLanguage.meaning (@SourceEqualityPCSGuard.holds FullSyntax.Formula
++            FormulaExecutable.formulaDecidableEq formulas solver) ambient
+             (trace (Fin.last rounds)).1 term
+  := by
+   let alphabet := SourceEqualityConstraintOrigins.guards expression
+@@ -78,8 +80,10 @@
+           .done (trace index.succ).1 (trace index.succ).2) ∧
+     Available (trace (Fin.last rounds)).2.checked.native.machine.heap (trace (Fin.last rounds)).1 ∧
+     ∀ ambient term,
+-      InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient value term ↔
+-        InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient
++      InternedGuardedLanguage.meaning (@SourceEqualityPCSGuard.holds FullSyntax.Formula
++        FormulaExecutable.formulaDecidableEq formulas solver) ambient value term ↔
++        InternedGuardedLanguage.meaning (@SourceEqualityPCSGuard.holds FullSyntax.Formula
++          FormulaExecutable.formulaDecidableEq formulas solver) ambient
+           (trace (Fin.last rounds)).1 term
+   obtain ⟨context, _identity, same, inheritedReady, available, closed, _original⟩ :=
+     SourceCurrentAllocatedPartialInitialization.constructed (bits + 2) history valid

@@ -1,0 +1,4 @@
+/-- Exact local row replacement preserves the complete finite-term language. -/
+theorem rows_preserve_language (before after : Automaton State Symbol)
+    (rowMeaning : ∀ state term, AcceptsRows before (after state) term ↔ Accepts before state term)
+    (state : State) (term : Term Symbol) : Accepts after state term ↔ Accepts before state term := by

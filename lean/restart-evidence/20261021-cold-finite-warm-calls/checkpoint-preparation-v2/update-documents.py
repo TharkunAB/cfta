@@ -1,0 +1,158 @@
+import datetime
+import hashlib
+import json
+import subprocess
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parents[2]
+start = (HERE / 'starting-head.txt').read_text().strip()
+assert start == '93f3d0ad7a15196177d4961bcb49092cda94b0e1'
+proof = (HERE / 'proof-commit.txt').read_text().strip()
+assert len(proof) == 40 and all(char in '0123456789abcdef' for char in proof)
+now = datetime.datetime.now().astimezone().strftime('%Y-%m-%d %H:%M %Z')
+assert json.loads((HERE / 'cold-finite-calls-audit-1.json').read_text())['exit_code'] == 0
+audit_raw = (HERE / 'cold-finite-calls-audit-1.log').read_bytes()
+assert hashlib.sha256(audit_raw).hexdigest() == 'a64c52004a4efc52f348fd0328a1c77eda1fffbb7a01424d2b7a196d9e5b1346'
+audit_build_jobs = int('3623')
+audit_dependencies = int('75263')
+audit = audit_raw.decode()
+assert f'Build completed successfully ({audit_build_jobs} jobs).' in audit
+assert f'{audit_dependencies} MicroCFTA theorems' in audit
+selected = json.loads((HERE / 'selected-sources.json').read_text())
+assert set(selected) == {'lean/MicroCFTA/SourceCurrentColdFiniteWarmCalls.lean'}
+assert selected[next(iter(selected))]['sha256'] == 'e4665b0bb522ec88f1925fe6bc360b76e9e4bdfbe6192210ac708a3097a20cc5'
+assert selected[next(iter(selected))]['strict'] == 'cold-finite-calls-strict-2'
+assert selected[next(iter(selected))]['full'] == 'cold-finite-calls-public-2'
+readback = json.loads((HERE / 'cold-finite-full-readback.json').read_text())
+assert readback['log_bytes'] == 731663 and readback['log_sha256'] == 'd84c0cdcd3e399a5f75fea97834a3d651ac25003dce70615e5cc3781edcbce9d'
+checked = (HERE / 'cold-finite-constructed_node_calls-public-type.txt').read_bytes()
+assert checked == (HERE / 'cold-finite-constructed_node_calls-printed-public-type.txt').read_bytes()
+assert len(checked) == 21121 and len(checked.decode()) == 21099
+assert len(checked.splitlines()) == 268 and checked.count(b'\n') == 267 and not checked.endswith(b'\n')
+assert hashlib.sha256(checked).hexdigest() == '82edd836ff1da14c590e9fc9a4b8223955258f138a821be6dea8253920a11b8d'
+head = readback['heads'][0]
+assert head['actual_standard_three_axioms'] and head['check_print_type_byte_identity']
+assert not head['private_public_type_names']
+assert head['private_type_spellings_checked'] == ['_private', '✝', '†', '‡']
+assert head['private_namespace_helpers_checked'] == []
+assert checked.count(b'MicroCFTA.FormulaExecutable.formulaDecidableEq') == 2
+for name, pin in selected.items():
+    assert hashlib.sha256((ROOT / name).read_bytes()).hexdigest() == pin['sha256']
+    assert not (HERE / (pin['strict'] + '.log')).read_bytes()
+    assert json.loads((HERE / (pin['full'] + '.json')).read_text())['exit_code'] == 0
+
+update = f'''## Finite calls from a constructed source
+
+Updated: {now}. Proof checkpoint: `{proof[:10]}`.
+Start: `{start[:10]}`. Imported main remains `794903b3f`.
+Read `lean/notes-current-cold-finite-warm-calls.md`.
+
+SourceCurrentColdFiniteWarmCalls.constructed_node_calls now starts from
+a genuine covered source expression, its actual allocation history and a
+valid initial cache. It constructs the heap ONCE. It chooses one finite-N
+mathematical width and ten common fuel arguments BEFORE the fresh caller.
+It invokes the checked finite-call producer once. Zero rounds are included.
+
+The theorem returns the literal SAME actual caller trace and final heap
+availability. Every round uses the previous full returned caller, with
+the SAME empty inherited value from the final source interner. Its final
+finite-tree language is equivalent to the original constructed value for
+every ambient environment and finite term. Empty inherited constraints discharge Sat.
+The result has no initial caller-packet, future Room or success premise.
+It does not reset or widen an existing caller.
+Each trace point retains its actual inventory and global memos under the corresponding stage seed.
+No C monotonicity across seeds or
+Room for the common-outer-fuel schedule is assumed.
+
+This is the strongest combined COLD finite-N semantic theorem. Its source
+has 157 lines and one public theorem. Selected ordinary strict2 passes at
+default declaration limits with an empty raw log. Accepted FULL2 has 268
+logical public TYPE lines: 267 LF characters and no final newline, 21099
+Unicode characters and 21121 bytes. Complete check/print TYPE bytes match.
+The TYPE has two public FormulaExecutable.formulaDecidableEq occurrences.
+All four private/dagger markers are absent. Actual axioms are the standard
+three. FULL2 raw has 731663 bytes; SHA256
+d84c0cdcd3e399a5f75fea97834a3d651ac25003dce70615e5cc3781edcbce9d.
+Audit passes: {audit_build_jobs} jobs /{audit_dependencies} theorem dependencies.
+
+Five actual ROOT Lean/Lake commands are retained: strict1, FULL1, strict2,
+FULL2 and Audit1. All exit zero. FULL1 was PUBLIC-TYPE REJECTED despite its
+kernel success: two private Formula equality instances remained in its
+TYPE, and reader1 metadata failed. Four explicit public instance arguments
+fix two header and two matching proof-goal occurrences. The old 153-line
+source and 30-line header, corrected 157-line source and 32-line header,
+both FULL variants and failed reader output remain. Each source variant
+has one FULL. Copies and metadata add no proof jobs. Only the old Audit
+inputs warning remains.
+
+The next withoutRedundantEdges inventory is SOURCE-ONLY. It has no public
+Lean header or implementation. Root has read its note, contract outline
+and some source cuts. Detailed range review and independent review remain
+pending. Finite partial nodeCall rounds do not include that public pass.
+Practical fixed-width feasibility, public-pass composition, convergence,
+solver-contract/exported-table composition and Haskell refinement remain
+open. Mathematical reservation bounds do not prove those results.
+
+All old proofs, counterexamples, marked drafts and optimized core remain.
+The only old Lean edit is one Audit import. All 268 Haskell files and 207
+active package files remain unchanged. No Haskell fix or runtime change
+is claimed. FINDINGS keeps the external Haskell repair index FIRST.
+Work continues.
+'''
+findings = f'''Current proof update: {now}. Proof checkpoint: `{proof[:10]}`.
+ColdFiniteWarmCalls.constructed_node_calls derives finite-N actual calls
+from a covered source, actual allocation history and valid initial cache.
+It builds the heap ONCE, then chooses the width and ten common fuels
+BEFORE a fresh caller. The literal SAME populated trace retains full
+returned caller state and final availability. Zero rounds are included.
+Empty inherited constraints give unconditional finite-term language
+equivalence to the original constructed value. No caller packet, future
+Room, success, reset or widening premise is supplied.
+
+The 157-line module has one public theorem. Selected strict2, accepted
+FULL2 and Audit pass: {audit_build_jobs} jobs /{audit_dependencies} dependencies.
+All 268 logical TYPE lines have byte-identical check/print outputs, two
+public Formula equality instances, no private/dagger markers and actual
+standard-three axioms. Five ROOT Lean/Lake commands all exit zero.
+FULL1 remains PUBLIC-TYPE REJECTED with failed reader1 metadata. The four
+explicit-instance changes, old 153/30 and corrected 157/32 source/header
+pairs, and both unique FULL variants remain. No metadata adds proof jobs.
+
+The next withoutRedundantEdges inventory has no Lean header or body.
+It is SOURCE-ONLY; detailed ranges and independent review remain pending.
+Practical width, public pass composition, convergence, solver/API/table
+composition and Haskell refinement remain open. All old evidence and
+optimized core remain; no Haskell source/package/fix/runtime change.
+The external Haskell repair index stays FIRST.
+Read `lean/notes-current-cold-finite-warm-calls.md`.
+'''
+documents = ['NEXT-PROMPT.md', 'HANDOFF.md', 'FINDINGS.md', 'lean/README.md',
+             'lean/SYSTEM.md', 'lean/API-COVERAGE.md', 'lean/COVERAGE.md',
+             'lean/notes-proof-status-20261017.md', 'lean/notes-current-system-claim.md']
+index = (ROOT / 'lean/restart-evidence/20261021-warm-next-packet/haskell-repair-index.md').read_text()
+(HERE / 'haskell-repair-index.md').write_text(index)
+for name in documents:
+    original = subprocess.check_output(['git', 'show', start + ':' + name], cwd=ROOT, text=True)
+    assert (ROOT / name).read_text() == original, name
+    if name == 'FINDINGS.md':
+        marker = '# Current formalization findings\n\n## Haskell fix handoff for external work\n\n'
+        marker += index.rstrip() + '\n\n'
+        assert original.startswith(marker)
+        changed = marker + findings + '\n' + original[len(marker):]
+        assert changed.replace(findings + '\n', '', 1) == original
+    else:
+        first, rest = original.split('\n', 1)
+        changed = first + '\n\n' + update + rest
+        assert changed.replace(update + '\n', '', 1) == original
+    (ROOT / name).write_text(changed)
+(HERE / 'current-update.md').write_text(update)
+(HERE / 'findings-update.md').write_text(findings)
+note = '# Finite calls from a constructed source\n\n' + update
+for name, pin in selected.items():
+    raw = (HERE / (pin['full'] + '.log')).read_bytes()
+    note += f"\n{name}: source SHA256 {pin['sha256']}.\n"
+    note += f"Sole accepted FULL2: {len(raw)} bytes; SHA256 {hashlib.sha256(raw).hexdigest()}.\n"
+assert not (ROOT / 'lean/notes-current-cold-finite-warm-calls.md').exists()
+(ROOT / 'lean/notes-current-cold-finite-warm-calls.md').write_text(note)
+print('Updated nine documents and focused note. All prior text remains.')

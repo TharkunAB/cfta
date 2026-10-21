@@ -1,0 +1,11 @@
+--- final-publication.pending.py.txt
++++ final-publication.py
+@@ -3,7 +3,7 @@
+ R=Path('/home/tritlo/Code/mcfta');H=R/'lean/restart-evidence/20261021-cold-finite-warm-calls'
+ def git(*a):return subprocess.check_output(['git',*a],cwd=R)
+ assert (H/'starting-head.txt').read_text().strip()=='93f3d0ad7a15196177d4961bcb49092cda94b0e1'
+-assert git('rev-parse','HEAD').decode().strip()==(H/'proof-commit.txt').read_text().strip()=='__H6_PROOF_COMMIT__'
++assert git('rev-parse','HEAD').decode().strip()==(H/'proof-commit.txt').read_text().strip()=='15da5fe564a0a946cb5b18e9b8e2093ccf468098'
+ subprocess.run(['/usr/bin/python3',str(H/'verify-seal.py')],check=True)
+ files=['NEXT-PROMPT.md','HANDOFF.md','FINDINGS.md','lean/README.md','lean/SYSTEM.md','lean/API-COVERAGE.md','lean/COVERAGE.md','lean/notes-proof-status-20261017.md','lean/notes-current-system-claim.md','lean/notes-current-cold-finite-warm-calls.md']
+ subprocess.run(['git','diff','--check','--',*files],cwd=R,check=True)

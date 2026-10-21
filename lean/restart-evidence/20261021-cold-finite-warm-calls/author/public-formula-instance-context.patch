@@ -1,0 +1,14 @@
+--- frozen-plan-inputs/proposed-context.lean.txt
++++ selected-context.lean.txt
+@@ -1,5 +1,6 @@
+ import MicroCFTA.SourceCurrentFiniteWarmCalls
+ import MicroCFTA.SourceCurrentColdRankCapacity
++import MicroCFTA.FormulaExecutable
+ 
+ namespace MicroCFTA.SourceCurrentColdFiniteWarmCalls
+ open Cache InternedConstructorTemplates InternedProbeProvenance
+@@ -10,3 +11,4 @@
+ local notation "Node" => Value Symbol Guard
+ local notation "Caller" => SourceCurrentAllocatedPartialState.State
+ variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Node]
++attribute [local instance] FormulaExecutable.formulaDecidableEq

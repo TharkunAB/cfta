@@ -1,0 +1,10 @@
+
+section
+variable {p q : Prop}
+/-- Transfer a decidability proof across an equivalence of propositions. -/
+@[inline] def decidable_of_decidable_of_iff [Decidable p] (h : p ↔ q) : Decidable q :=
+  if hp : p then
+    isTrue (Iff.mp h hp)
+  else
+    isFalse fun hq => absurd (Iff.mpr h hq) hp
+

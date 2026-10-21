@@ -1,0 +1,13 @@
+--- original-30-header.lean.txt
++++ explicit-32-header.lean.txt
+@@ -25,6 +25,8 @@
+             .done (trace index.succ).1 (trace index.succ).2) ∧
+       Available (trace (Fin.last rounds)).2.checked.native.machine.heap (trace (Fin.last rounds)).1 ∧
+       ∀ ambient term,
+-        InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient value term ↔
+-          InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient
++        InternedGuardedLanguage.meaning (@SourceEqualityPCSGuard.holds FullSyntax.Formula
++          FormulaExecutable.formulaDecidableEq formulas solver) ambient value term ↔
++          InternedGuardedLanguage.meaning (@SourceEqualityPCSGuard.holds FullSyntax.Formula
++            FormulaExecutable.formulaDecidableEq formulas solver) ambient
+             (trace (Fin.last rounds)).1 term

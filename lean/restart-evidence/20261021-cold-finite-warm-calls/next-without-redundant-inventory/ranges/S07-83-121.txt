@@ -1,0 +1,39 @@
+theorem node_closed_exact (view : IntersectSchedule.View Symbol) (model : IntersectSchedule.InputMeaning view)
+    (ranked : IntersectSchedule.RankedInput view model.valid) (holds : Guard → Term Symbol → Bool)
+    (finite : ∀ name term, model.languages name term ↔ ∃ rank, ranked.languages name rank term)
+    (request : NodeRequest Symbol Guard) (value : Value Symbol Guard)
+    (inputs : NodeInputs view model request) (law : NodeLaw view model ranked holds request value)
+    (domain : request.domain = IntersectionEmptyDomain.emptyDomain)
+    (output : InternedGuardedLanguage.Env Symbol) (term : Term Symbol) :
+    InternedGuardedLanguage.meaning holds output value term ↔
+      IntersectSchedule.inputLanguage model.languages (SourceRecursiveIntersectionInputView.inputOf request.left) term ∧
+      IntersectSchedule.inputLanguage model.languages (SourceRecursiveIntersectionInputView.inputOf request.right) term := by
+  have sound : SoundPairs model.languages request.domain.key output := by
+    rw [domain]
+    exact sound_empty_domain model.languages output
+  constructor
+  · exact law.sound inputs output sound term
+  · intro common
+    obtain ⟨first, left⟩ := input_finite model.languages ranked.languages finite _ term common.1
+    obtain ⟨second, right⟩ := input_finite model.languages ranked.languages finite _ term common.2
+    have complete : CompletePairs ranked.languages (first + second) request.domain.key output := by
+      rw [domain]
+      exact complete_empty_domain ranked.languages (first + second) output
+    exact law.complete inputs (first + second) output complete first second (Nat.le_refl _) term left right
+
+/-- Original physical input readback turns the contextual law into the closed receipt law. -/
+theorem node_meaning (view : IntersectSchedule.View Symbol) (model : IntersectSchedule.InputMeaning view)
+    (ranked : IntersectSchedule.RankedInput view model.valid) (holds : Guard → Term Symbol → Bool)
+    (finite : ∀ name term, model.languages name term ↔ ∃ rank, ranked.languages name rank term)
+    (request : NodeRequest Symbol Guard) (value : Value Symbol Guard)
+    (inputs : NodeInputs view model request) (law : NodeLaw view model ranked holds request value)
+    (left : request.left.free = [] → ∀ output term,
+      InternedGuardedLanguage.meaning holds output request.left term ↔
+        IntersectSchedule.inputLanguage model.languages (SourceRecursiveIntersectionInputView.inputOf request.left) term)
+    (right : request.right.free = [] → ∀ output term,
+      InternedGuardedLanguage.meaning holds output request.right term ↔
+        IntersectSchedule.inputLanguage model.languages (SourceRecursiveIntersectionInputView.inputOf request.right) term) :
+    SourceEqualityNativeDemandProvenance.NodeMeaning holds request value := by
+  intro domain leftClosed rightClosed output term
+  rw [node_closed_exact view model ranked holds finite request value inputs law domain output term,
+    left leftClosed output term, right rightClosed output term]

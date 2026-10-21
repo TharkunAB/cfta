@@ -1,0 +1,13 @@
+theorem closed [DecidableEq (EdgeKey Symbol Guard)] (valid : Guard → Prop) (expression : Syntax Symbol Guard)
+    (allowed : Allowed valid expression) :
+    ∃ value heap, ∃ _done : InternedFreshOrdinaryConstruction.build expression [] empty = .done value heap,
+      Heap valid heap ∧ SourceEqualityAnnotationLanguage.Annotated valid value := by
+  obtain ⟨value, heap, done⟩ := InternedFreshOrdinaryClosedCompletion.closed_complete expression
+  have physical : Heap valid heap := by
+    simpa only [done, Outcome.state] using build valid expression allowed [] empty (empty_heap valid)
+  have checked := InternedFreshOrdinaryFacts.closed_verified expression
+  have facts : InternedNestedFacts.Facts heap := by simpa only [done, Outcome.state] using checked.facts
+  exact ⟨value, heap, done, physical,
+    SourceEqualityAnnotationHeap.available valid heap physical facts.linked value (checked.result value heap done)⟩
+
+end MicroCFTA.SourceEqualityAnnotationConstruction

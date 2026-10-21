@@ -1,0 +1,11 @@
+--- verify-checkpoint.py.pending-original.txt
++++ verify-checkpoint.py
+@@ -13,7 +13,7 @@
+     report = json.loads(result.stdout)
+     assert report['status'] == 'PASS' and report['actual_jobs'] == 5 and report['failed_jobs'] == 0
+     assert report['source_jobs'] == 4 and report['audit_jobs'] == 1 and report['selected_modules'] == 1
+-    assert report['audit_build_jobs'] == int('__H6_AUDIT_BUILD_JOBS__') and report['audit_dependencies'] == int('__H6_AUDIT_DEPENDENCIES__')
++    assert report['audit_build_jobs'] == 3623 and report['audit_dependencies'] == 75263
+     assert report['warned_source_exit_zero_jobs'] == 0
+     assert report['rejected_public_type_jobs'] == 1
+ result = subprocess.run(['/usr/bin/python3', str(HERE / 'verify-preservation.py')],

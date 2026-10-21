@@ -1,0 +1,35 @@
+theorem node_calls
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (budget rounds : Nat) (seed : List Guard × Profile) :
+    let bits := roomBits (stage budget seed rounds).2
+    let fuels := fuelBounds budget rounds seed
+    ∀ {inherited : EqValue} {value : Node} {before : Caller (bits + 2)}
+      {inventory : Inventory} {memos : Memos}
+      (_initial : Context formulas solver inventory before memos)
+      (_frame : Frame formulas solver inventory before.checked)
+      (_fits : Fits seed.2 before.checked)
+      (_known : Carrier (fun guard => guard ∈ seed.1) before.checked.native.machine.heap)
+      (_inputs : SourceCurrentOuterPrefixInvariants.NodeReady before ⟨inherited, value⟩)
+      (_normal : SourceCurrentRequiredUnionNormal.UnionNormal before.checked.native.machine.heap)
+      (_supported : SourceCurrentNativeRequestPositivePositions.Support
+        before.checked.native.machine.heap before.checked.native)
+      (_causal : SourceCurrentNativeMuPublication.History empty before.checked.native.machine.heap)
+      (_merged : SourceCurrentConstrainedCapMemoMerge.Stored
+        (fun guard : Guard => SourceMemoGate.plain guard = true) before.merge)
+      (_positiveMemo : SourceCurrentMergePositivePosition.Support before.merge)
+      (_origins : SourceCurrentResourceParentWriters.Origins formulas solver before)
+      (_stored : SourceCurrentOuterClosedInputs.NodeStored before)
+      (_closed : value.free = [])
+      (_nodeIdle : ∀ chosen owner, before.nodeResults.cells chosen ≠ some ⟨owner, .evaluating⟩)
+      (_edgeIdle : SourceCurrentOuterEdgeIdle.EdgeIdle before),
+    ∃ trace : Fin (rounds + 1) → Node × Caller (bits + 2),
+      trace 0 = (value, before) ∧
+      (∀ index : Fin rounds,
+        nodeCall fuels.1
+          fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 fuels.2 budget
+          ⟨inherited, (trace index.castSucc).1⟩ (trace index.castSucc).2 =
+            .done (trace index.succ).1 (trace index.succ).2) ∧
+      Available (trace (Fin.last rounds)).2.checked.native.machine.heap (trace (Fin.last rounds)).1 ∧
+      SourceCurrentAllocatedPartialMemoSound.NodeLaw formulas solver
+        ⟨inherited, value⟩ (trace (Fin.last rounds)).1

@@ -1,0 +1,22 @@
+--- templates/reader.public1.original.py.txt
++++ cold-finite-calls-check-full-public.py
+@@ -8,8 +8,8 @@
+ PREFIX = "cold-finite-calls-"
+ NAMESPACE = "MicroCFTA.SourceCurrentColdFiniteWarmCalls."
+ source = (HERE / "SourceCurrentColdFiniteWarmCalls.lean").read_text()
+-printer = (HERE / (PREFIX + "public-1.source.lean")).read_text()
+-raw = (HERE / (PREFIX + "public-1.log")).read_bytes()
++printer = (HERE / (PREFIX + "public-2.source.lean")).read_text()
++raw = (HERE / (PREFIX + "public-2.log")).read_bytes()
+ log = raw.decode()
+ options = ["maxRecDepth 30000", "maxHeartbeats 0", "linter.all true", "pp.explicit true", "pp.fullNames true", "pp.proofs true",
+     "pp.proofs.threshold 254", "pp.universes true", "pp.deepTerms true", "pp.maxSteps 10000000"]
+@@ -77,7 +77,7 @@
+         private_namespace_helpers_checked=private, actual_axioms=sorted(axioms),
+         actual_axioms_within_standard_allowed=True,
+         actual_standard_three_axioms=axioms == {"propext", "Classical.choice", "Quot.sound"}))
+-receipt = json.loads((HERE / (PREFIX + "public-1.json")).read_text())
++receipt = json.loads((HERE / (PREFIX + "public-2.json")).read_text())
+ assert receipt["exit_code"] == 0
+ print(json.dumps(dict(source_sha256=hashlib.sha256(source.encode()).hexdigest(), source_lines=len(source.splitlines()),
+     printer_sha256=hashlib.sha256(printer.encode()).hexdigest(), log_bytes=len(raw), log_sha256=hashlib.sha256(raw).hexdigest(),

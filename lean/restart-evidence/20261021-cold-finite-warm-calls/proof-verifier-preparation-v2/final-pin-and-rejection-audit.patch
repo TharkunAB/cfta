@@ -1,0 +1,53 @@
+--- verify-proofs.pending-original.py.txt
++++ verify-proofs.py
+@@ -27,7 +27,7 @@
+     "cold-finite-calls-public-1": (0, "c15b5496804e405b5cd740f862540ec4754388762ddbd0b1c4d1afc33f99ec33", "ce8d6f9021c746e8c0b824544f458a0ae51259efbe4ac129e665bfe42d84f8aa"),
+     "cold-finite-calls-strict-2": (0, selected["SourceCurrentColdFiniteWarmCalls"][0], hashlib.sha256(b"").hexdigest()),
+     "cold-finite-calls-public-2": (0, "a0a6d1dd326c17cb4c46bae03a5e1f797df6e8030554d8576a03fd64eb39f160", "d84c0cdcd3e399a5f75fea97834a3d651ac25003dce70615e5cc3781edcbce9d"),
+-    "audit-1": (0, None, "__H6_AUDIT_LOG_SHA__"),
++    "cold-finite-calls-audit-1": (0, None, "a64c52004a4efc52f348fd0328a1c77eda1fffbb7a01424d2b7a196d9e5b1346"),
+ }
+ assert len(jobs) == 5 and sum(job[0] != 0 for job in jobs.values()) == 0
+ actual = set()
+@@ -138,7 +138,12 @@
+ badmarkers = list(re.finditer(r"^(?:@)?" + re.escape(badname) + r" :", badlog, re.M)); assert len(badmarkers) == 1
+ badchecked, badrest = badlog[badmarkers[0].end():].split("\ntheorem " + badname + " :", 1)
+ badmatches = [m for m in re.finditer(r" :=\n", badrest) if "".join(badrest[:m.start()].split()) == "".join(badchecked.split())]
+-assert len(badmatches) == 1
++assert len(badmatches) == 1 and badrest[badmatches[0].end():].startswith("fun ")
++assert not re.search(r"sorryAx|\b(?:warning|error)(?:\([^)]*\))?:|failed to pretty print|pp\.rawOnError|maximum recursion depth|maximum number of heartbeats|⋯|…|\.\.\.", badlog)
++bad_axiom = re.search("'" + re.escape(badname) + r"' (depends on axioms:|does not depend on any axioms)", badrest); assert bad_axiom
++bad_values = re.match(r"\s*\[([^\]]*)\]", badrest[bad_axiom.end():]) if bad_axiom.group(1) == "depends on axioms:" else None
++assert bad_values or bad_axiom.group(1) == "does not depend on any axioms"
++assert ({re.sub(r"\.\{[^}]*\}", "", item.strip()) for item in bad_values.group(1).split(",") if item.strip()} if bad_values else set()) <= standard
+ badtype = (evidence / "rejected-v1-constructed_node_calls-public-type.txt").read_bytes()
+ assert badtype == (evidence / "rejected-v1-constructed_node_calls-printed-public-type.txt").read_bytes() == badchecked.encode() == badrest[:badmatches[0].start()].encode()
+ assert len(badtype) == 21163 and digest(badtype) == rejected["TYPE_sha256"] == "95b4ce3079effe4abb1494d24adc23016d05fde243a63f21c564293706dad373"
+@@ -152,15 +157,23 @@
+ assert (evidence / "full-reader-1.stderr").read_bytes() == (badarchive / "full-reader-1.stderr").read_bytes() != b""
+ assert (badarchive / "cold-finite-calls-public-1.log").read_bytes() == badraw
+ assert (badarchive / "rejected-checked-TYPE.txt").read_bytes() == badtype
+-reader_receipt = load("completed-root-support/mcfta-cold-finite-warm-calls-full-reader-1.json")
++reader_archive = evidence / "proof-verifier-preparation-v2/reader1-root-evidence"
++reader_stem = "mcfta-cold-finite-warm-calls-full-reader-1."
++reader_pins = {'json': 'ddf2324251f8c719ebe2a1c43c79d9784c2090c1843dcf416b722a4dd0b42857', 'log': '82fde320716b9ac8942319df338ea96d237f6974acedccd2820f04eed7b6997e', 'limits.json': '408bad6c1715f2c15adecf485dbfcb2753512b2f94e0a96011ddef6f6650faf3', 'peaks.txt': 'd3256fa8e8fb8bb1ece79e1fce7feb600b8eb5cce85fc24b7cacbb043a655cfc', 'source.py': 'cc80826b1704d5e624f77a2e82fe3627258df4b427dd38b6b08db940ae4847cd', 'usage.json': '8e63f5a9a637401031c7713fa83c269f6fd1a85e3c253dd480dddf056f76caad'}
++for suffix, sha in reader_pins.items():
++    assert digest((reader_archive / (reader_stem + suffix)).read_bytes()) == sha
++reader_receipt = json.loads((reader_archive / (reader_stem + "json")).read_text())
+ assert reader_receipt["exit_code"] == 1 and Path(reader_receipt["command"][0]).name == "python3"
+-assert digest((evidence / "completed-root-support/mcfta-cold-finite-warm-calls-full-reader-1.log").read_bytes()) == "82fde320716b9ac8942319df338ea96d237f6974acedccd2820f04eed7b6997e"
++assert reader_receipt["wrapper"][1:5] == ["--mem", "4G", "--time", "5m"]
++assert json.loads((reader_archive / (reader_stem + "limits.json")).read_text()) == {"memory.max": "4294967296", "memory.high": "4294967296", "memory.swap.max": "0"}
++reader_usage = json.loads((reader_archive / (reader_stem + "usage.json")).read_text())
++assert 0 <= reader_usage["age_seconds"] <= 600 and reader_usage["remaining_percent"] > 1
+ assert (root / "lean/MicroCFTA/Audit.lean").read_bytes().replace(b"import MicroCFTA.SourceCurrentColdFiniteWarmCalls\n", b"", 1) == (evidence / "original-sources/Audit.original.lean.txt").read_bytes()
+-audit = (evidence / "audit-1.log").read_text()
++audit = (evidence / "cold-finite-calls-audit-1.log").read_text()
+ build = re.search(r"Build completed successfully \((\d+) jobs\)\.", audit)
+ dependencies = re.search(r"Checked axiom dependencies of (\d+) MicroCFTA theorems", audit)
+ assert build and dependencies and not re.search(r"\berror(?:\([^)]*\))?:", audit)
+-assert int(build.group(1)) == int('__H6_AUDIT_BUILD_JOBS__') and int(dependencies.group(1)) == int('__H6_AUDIT_DEPENDENCIES__')
++assert int(build.group(1)) == 3623 and int(dependencies.group(1)) == 75263
+ print(json.dumps(dict(status="PASS", live=args.live, source_jobs=4, audit_jobs=1, actual_jobs=5,
+     failed_jobs=0, warned_source_exit_zero_jobs=0, rejected_public_type_jobs=1, new_lean_lake_jobs=0, selected_modules=1, original_archives=1,
+     audit_build_jobs=int(build.group(1)), audit_dependencies=int(dependencies.group(1)),

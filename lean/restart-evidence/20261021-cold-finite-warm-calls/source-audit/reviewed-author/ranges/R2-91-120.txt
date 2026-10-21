@@ -1,0 +1,30 @@
+  have fits : SourceCurrentConstrainedCapGeneratedQueryResources.Fits seed.2 before.checked :=
+    ⟨Nat.le_refl _, Nat.le_refl _, Nat.le_refl _, InternedValueMassHeap.initial heap facts⟩
+  have allowed : SourceEqualityAnnotationConstruction.Allowed
+      (fun guard => guard ∈ seed.1) expression :=
+    SourceEqualityConstraintOrigins.allowed _ expression (fun _ member => member)
+  have carrier : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.1)
+      before.checked.native.machine.heap := by
+    change SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.1) heap
+    simpa only [built, InternedNestedConstruction.Outcome.state] using
+      SourceEqualityAnnotationConstruction.build (fun guard => guard ∈ seed.1) expression allowed
+        [] empty (SourceEqualityAnnotationHeap.empty_heap _)
+  have roomJoined : SourceCurrentAllocatedNativeResourceForecast.Room bits joined :=
+    SourceCurrentParentInitialRoom.room_computed joined
+  have room : SourceCurrentAllocatedNativeResourceForecast.Room bits
+      (SourceCurrentOuterInitialSchedule.node output.1 budget seed).2 :=
+    roomJoined.mono (SourceCurrentInitialSelectionForecast.cover_ge _ _)
+  obtain ⟨resultAvailable, law⟩ := SourceCurrentConstructedOuterInitial.node_call
+    formulas solver expression value ⟨heap, Cache.emptyState⟩
+    (SourceCurrentAllocatedPartialInitialization.operations finalCache)
+    built before after inventory SourceCurrentAllocatedPartialInitialization.globals rfl
+    (SourceCurrentAllocatedPartialInitialization.inventory_source expression value heap built)
+    initial seed fits carrier request inherited inputAvailable
+    output.1 need need need need need need need need need budget room result called
+  refine ⟨result, after, stableSame, resultAvailable, ?_⟩
+  intro ambient term
+  apply ((law ambient term).2 ?_).symm
+  simp [request, same, SourceEqualityConstraintAllocation.Value.payload,
+    SourceEqualityPrecheck.Sat, EqualityNormalize.Satisfies]
+
+end MicroCFTA.SourceCurrentColdRankSemantic

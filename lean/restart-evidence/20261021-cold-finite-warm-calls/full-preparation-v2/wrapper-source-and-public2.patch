@@ -1,0 +1,21 @@
+--- templates/wrapper.public1.original.py.txt
++++ read-full.py
+@@ -6,13 +6,13 @@
+ HERE = Path(__file__).resolve().parent
+ result = subprocess.run(['/usr/bin/python3', str(HERE / 'cold-finite-calls-check-full-public.py')],
+     cwd='/', capture_output=True, text=True)
+-(HERE / 'full-reader-1.stdout').write_text(result.stdout)
+-(HERE / 'full-reader-1.stderr').write_text(result.stderr)
++(HERE / 'full-reader-2.stdout').write_text(result.stdout)
++(HERE / 'full-reader-2.stderr').write_text(result.stderr)
+ assert result.returncode == 0, result.stderr
+ report = json.loads(result.stdout)
+-assert report['source_sha256'] == '3299d48ee9c5ba1d09cbc25c88946b0b67ecc86ac028df67b30eadae8ae40a9d'
+-assert report['source_lines'] == int('153') and len(report['heads']) == 1
+-log = (HERE / 'cold-finite-calls-public-1.log').read_text()
++assert report['source_sha256'] == 'e4665b0bb522ec88f1925fe6bc360b76e9e4bdfbe6192210ac708a3097a20cc5'
++assert report['source_lines'] == int('157') and len(report['heads']) == 1
++log = (HERE / 'cold-finite-calls-public-2.log').read_text()
+ name = 'MicroCFTA.SourceCurrentColdFiniteWarmCalls.constructed_node_calls'
+ marker = re.search(r'^(?:@)?' + re.escape(name) + r' :', log, re.M)
+ assert marker

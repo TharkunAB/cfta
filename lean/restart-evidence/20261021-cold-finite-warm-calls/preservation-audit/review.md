@@ -1,0 +1,11 @@
+# Cold finite-call preservation preparation review
+
+Reviewed: 2026-10-21 22:52:26 CEST. SOURCE SCOPE CLEAR for the complete 110-line adaptation 1ee579b19810e2f905b702fc203c30486bb9b7e15eade77bc75c63cf8a21c256. It is deliberately not executable until final source pins are inserted and reviewed. No verifier execution is claimed.
+
+I personally read the whole new source and exact 76-line delta. The complete original is the unchanged, previously whole-reviewed H5 110-line source 5442497a. All nine preparation pins, exact diff reconstruction and AST parsing pass. The changes are only the checkpoint-specific baseline, selected module/focus, start, Audit pin, previous registry and report flag. The placeholder __H6_SOURCE_SHA__ and int('__H6_SOURCE_LINES__') remain present exactly once. The latter cannot supply a numeric count while pending. No source hash or line count is guessed.
+
+Actual H6 baseline bytes record 74266 files and start93f3d0ad7a15196177d4961bcb49092cda94b0e1. The copied pre-install Audit is exactly 3111 lines at d11e901227fa107e2b36ebd5a76f96f1f89f7f8f697e39be2907011648cf9487, matching the baseline index. Both proposed new module and focus note are absent from that baseline. The prior publication snapshot equals the actual H6 copy. It has 289 frozen registries/1383 entries and five unchanged archive overrides; adding the actual one-entry H5 registry yields 290/1384.
+
+All baseline byte/mode checks remain. The only legal old source change is the exact single Audit import with a deletion inverse. All nine additive document inverses, the external Haskell repair index FIRST, historical module/archive comparisons, 268 Haskell and 207 active package sets, stashes, other worktrees, distinct local main ed73 and remote main7949, and archived component file/hash checks remain intact. No preservation condition is dropped or widened.
+
+I authored the earlier H5 adapter; arity separately reviewed it. This review assesses arity's new H6 adaptation and its exact existing metadata. Root must review final complete Lean source, accepted evidence and the final two-pin delta before activating preservation after document updates. No prepared script, compiler, runtime, capped, Git, network or official action ran, and all earlier frozen artifacts remain unchanged.
