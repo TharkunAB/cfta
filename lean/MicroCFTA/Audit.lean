@@ -3023,6 +3023,7 @@ import MicroCFTA.SourceCurrentRequiredPositivePosition
 import MicroCFTA.SourceCurrentRequiredForestPositive
 import MicroCFTA.SourceCurrentMergePositivePosition
 import MicroCFTA.SourceCurrentNativeMaybeMuPositivePositions
+import MicroCFTA.SourceCurrentTargetOperandPositivePosition
 /-!
 # Proof dependency audit
 
