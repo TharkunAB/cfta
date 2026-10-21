@@ -3031,6 +3031,9 @@ import MicroCFTA.SourceCurrentCappedProjectionPositivePosition
 import MicroCFTA.SourceCurrentOriginalGateProjectionCap
 import MicroCFTA.SourceCurrentRequiredForestProjectionCap
 import MicroCFTA.SourceCurrentRequiredSharedTargetCap
+import MicroCFTA.SourceCurrentRequiredRawCorridor
+import MicroCFTA.SourceCurrentRawCorridorProjectionCap
+import MicroCFTA.SourceCurrentRawCorridorSharedTargetCap
 /-!
 # Proof dependency audit
 
