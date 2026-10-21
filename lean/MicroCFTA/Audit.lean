@@ -3067,6 +3067,7 @@ import MicroCFTA.SourceCurrentPositiveInheritedChildSeparation
 import MicroCFTA.SourceCurrentResourceOwnerInheritedProgress
 import MicroCFTA.SourceCurrentResourceOwnerInheritedDispatch
 import MicroCFTA.SourceCurrentPositiveQuotientCount
+import MicroCFTA.SourceCurrentResourceParentPositiveBack
 /-!
 # Proof dependency audit
 
