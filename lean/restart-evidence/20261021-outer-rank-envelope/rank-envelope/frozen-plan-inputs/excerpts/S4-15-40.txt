@@ -1,0 +1,26 @@
+   15 local notation "massAfter" => SourceCurrentAllocatedRecursiveMassTrace.massAfter
+   16 
+   17 /-- Numeric upper bounds for one query entry. -/
+   18 structure Profile where
+   19   /-- Upper bound on the issued node counter. -/
+   20   nodes : Nat
+   21   /-- Upper bound on the issued edge counter. -/
+   22   edges : Nat
+   23   /-- Upper bound on the domain counter. -/
+   24   domains : Nat
+   25   /-- Upper bound on every stored payload mass. -/
+   26   mass : Nat
+   27 
+   28 /-- Each component of the first profile is at most the second component. -/
+   29 def Le (first last : Profile) : Prop :=
+   30   first.nodes ≤ last.nodes ∧ first.edges ≤ last.edges ∧
+   31     first.domains ≤ last.domains ∧ first.mass ≤ last.mass
+   32 
+   33 /-- A profile bounds itself. -/
+   34 theorem Le.refl (profile : Profile) : Le profile profile :=
+   35   ⟨Nat.le_refl _, Nat.le_refl _, Nat.le_refl _, Nat.le_refl _⟩
+   36 
+   37 /-- Component bounds compose. -/
+   38 theorem Le.trans {first middle last : Profile} (one : Le first middle) (two : Le middle last) :
+   39     Le first last :=
+   40   ⟨Nat.le_trans one.1 two.1, Nat.le_trans one.2.1 two.2.1,

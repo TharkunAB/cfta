@@ -1,0 +1,10 @@
+ 2896 theorem foldl_rel {l : List α} {f : β → α → β} {g : γ → α → γ} {a : β} {b : γ} {r : β → γ → Prop}
+ 2897     (h : r a b) (h' : ∀ (a : α), a ∈ l → ∀ (c : β) (c' : γ), r c c' → r (f c a) (g c' a)) :
+ 2898     r (l.foldl (fun acc a => f acc a) a) (l.foldl (fun acc a => g acc a) b) := by
+ 2899   induction l generalizing a b with
+ 2900   | nil => simp_all
+ 2901   | cons a l ih =>
+ 2902     simp only [foldl_cons]
+ 2903     apply ih
+ 2904     · simp_all
+ 2905     · exact fun a m c c' h => h' _ (by simp_all) _ _ h

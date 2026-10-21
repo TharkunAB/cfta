@@ -1,0 +1,7 @@
+ 2923 @[simp] theorem foldl_add_const {l : List α} {a b : Nat} :
+ 2924     l.foldl (fun x _ => x + a) b = b + a * l.length := by
+ 2925   induction l generalizing b with
+ 2926   | nil => simp
+ 2927   | cons y l ih =>
+ 2928     simp only [foldl_cons, ih, length_cons, Nat.mul_add, Nat.mul_one, Nat.add_assoc,
+ 2929       Nat.add_comm a]

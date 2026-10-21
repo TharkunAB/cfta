@@ -1,0 +1,64 @@
+--- prelaunch-draft-1.source.lean.txt
++++ SourceCurrentOuterRankEnvelope.lean
+@@ -17,7 +17,6 @@
+ local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+ local notation "Seed" => List Guard × Profile
+ local notation "Out" => Nat × Nat × Seed
+-local notation "Schedule" => SourceCurrentOuterInitialSchedule
+ 
+ private def candidates (rank : Nat × Nat) (seed : Seed) : List (Nat × Nat) :=
+   ((List.range (rank.1 + 1)).flatMap fun a =>
+@@ -46,17 +45,17 @@
+ 
+ private noncomputable def row (budget : Nat) (all : Seed → List Out)
+     (acc : Out) (_index : Nat) : Out :=
+-  let post := Schedule.parent budget acc.2.2
++  let post := SourceCurrentOuterInitialSchedule.parent budget acc.2.2
+   let walked := (List.range post.2.mass).foldl (slot all) (0,0,post)
+   (acc.1 + 1 + walked.1,
+     max acc.2.1 (max (SourceCurrentParentUniformEnvelope.fuel budget acc.2.2.1 acc.2.2.2) walked.2.1),
+-    Schedule.rebuild walked.2.2)
++    SourceCurrentOuterInitialSchedule.rebuild walked.2.2)
+ 
+ private noncomputable def recipe (budget : Nat) (rank : Nat × Nat)
+     (recurse : ∀ child, Prod.Lex Nat.lt Nat.lt child rank → Seed → Out)
+     (seed : Seed) : Out :=
+   let completed := (List.range rank.2).foldl (row budget (images rank recurse)) (0,0,seed)
+-  (1 + completed.1, completed.2.1, Schedule.rebuild completed.2.2)
++  (1 + completed.1, completed.2.1, SourceCurrentOuterInitialSchedule.rebuild completed.2.2)
+ 
+ /-- Compute finite work, lower fuel, and an output seed from the initial rank and seed. -/
+ noncomputable def envelope (budget count mass : Nat)
+@@ -103,13 +102,13 @@
+ private theorem row_retains (budget : Nat) (all : Seed → List Out) (acc : Out) (index : Nat) :
+     Le acc.2.2.2 (row budget all acc index).2.2.2 ∧
+       acc.2.2.1 ⊆ (row budget all acc index).2.2.1 := by
+-  let post := Schedule.parent budget acc.2.2
++  let post := SourceCurrentOuterInitialSchedule.parent budget acc.2.2
+   let walked := (List.range post.2.mass).foldl (slot all) (0,0,post)
+-  have one := Schedule.parent_ge budget acc.2.2
++  have one := SourceCurrentOuterInitialSchedule.parent_ge budget acc.2.2
+   have middle := fold_retains (slot all) (slot_retains all) (List.range post.2.mass) (0,0,post)
+-  have last := Schedule.rebuild_ge walked.2.2
+-  change Le acc.2.2.2 (Schedule.rebuild walked.2.2).2 ∧
+-    acc.2.2.1 ⊆ (Schedule.rebuild walked.2.2).1
++  have last := SourceCurrentOuterInitialSchedule.rebuild_ge walked.2.2
++  change Le acc.2.2.2 (SourceCurrentOuterInitialSchedule.rebuild walked.2.2).2 ∧
++    acc.2.2.1 ⊆ (SourceCurrentOuterInitialSchedule.rebuild walked.2.2).1
+   exact ⟨one.1.trans (middle.1.trans last.1),
+     fun _ member => last.2 (middle.2 (one.2 member))⟩
+ 
+@@ -128,11 +127,11 @@
+   let completed := (List.range rank.2).foldl (row budget all) (0,0,seed)
+   have kept := fold_retains (row budget all) (row_retains budget all) (List.range rank.2) (0,0,seed)
+   have work := fold_work (row budget all) (row_work budget all) (List.range rank.2) (0,0,seed)
+-  have last := Schedule.rebuild_ge completed.2.2
++  have last := SourceCurrentOuterInitialSchedule.rebuild_ge completed.2.2
+   have countBound : rank.2 ≤ completed.1 := by
+     simpa only [List.length_range, Nat.zero_add] using work
+   change rank.2 + 1 ≤ 1 + completed.1 ∧
+-    Le seed.2 (Schedule.rebuild completed.2.2).2 ∧ seed.1 ⊆ (Schedule.rebuild completed.2.2).1
++    Le seed.2 (SourceCurrentOuterInitialSchedule.rebuild completed.2.2).2 ∧ seed.1 ⊆ (SourceCurrentOuterInitialSchedule.rebuild completed.2.2).1
+   exact ⟨by omega, kept.1.trans last.1, fun _ member => last.2 (kept.2 member)⟩
+ 
+ /-- The envelope has positive work and retains its complete entry profile and alphabet. -/

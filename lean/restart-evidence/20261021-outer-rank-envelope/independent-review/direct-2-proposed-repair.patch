@@ -1,0 +1,10 @@
+--- outer-rank-envelope-direct-2.source.lean
++++ direct-2-proposed-repair.source.lean.txt
+@@ -114,6 +114,7 @@
+   have middle : Le post.2 walked.2.2.2 ∧ post.1 ⊆ walked.2.2.1 :=
+     fold_retains (slot all) (slot_retains all) (List.range post.2.mass) (0,0,post)
+   have last := SourceCurrentOuterInitialSchedule.rebuild_ge walked.2.2
++  dsimp only [row]
+   change Le acc.2.2.2 (SourceCurrentOuterInitialSchedule.rebuild walked.2.2).2 ∧
+     acc.2.2.1 ⊆ (SourceCurrentOuterInitialSchedule.rebuild walked.2.2).1
+   refine ⟨one.1.trans (middle.1.trans last.1), ?_⟩

@@ -1,0 +1,3 @@
+@[reducible] def lex (ha : WellFoundedRelation α) (hb : WellFoundedRelation β) : WellFoundedRelation (α × β) where
+  rel := Prod.Lex ha.rel hb.rel
+  wf  := ⟨fun (a, b) => lexAccessible (WellFounded.apply ha.wf a) (WellFounded.apply hb.wf) b⟩

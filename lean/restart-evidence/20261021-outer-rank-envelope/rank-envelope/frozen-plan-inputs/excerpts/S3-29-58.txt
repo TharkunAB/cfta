@@ -1,0 +1,30 @@
+   29 noncomputable def classesProfile (budget : Nat) (alphabet : List Guard) (entry : Profile) : Profile :=
+   30   cover ((ownRecordImage alphabet).flatMap fun records =>
+   31     (List.range (entry.mass + 1)).flatMap fun count =>
+   32       (wordsThrough alphabet entry.edges).map fun ambient =>
+   33         SourceCurrentClassesForecast.finalProfile budget count records ambient entry) entry
+   34 
+   35 /-- One constructor at the maximum original child count follows the joined class profile. -/
+   36 noncomputable def profile (budget : Nat) (alphabet : List Guard) (entry : Profile) : Profile :=
+   37   SourceCurrentMkEdgeNumeric.finalProfile entry.mass (classesProfile budget alphabet entry)
+   38 
+   39 /-- Every exact finite class schedule contributes to the common nine-stage fuel ceiling. -/
+   40 noncomputable def fuel (budget : Nat) (alphabet : List Guard) (entry : Profile) : Nat :=
+   41   maximum ((ownRecordImage alphabet).flatMap fun records =>
+   42     (List.range (entry.mass + 1)).flatMap fun count =>
+   43       (wordsThrough alphabet entry.edges).map fun ambient =>
+   44         SourceCurrentClassesForecast.fuel budget count records ambient entry)
+   45 
+   46 /-- Every finite initial case fits the common class profile and common fuel ceiling. -/
+   47 theorem case_bounds (budget : Nat) (alphabet : List Guard) (entry : Profile)
+   48     (records : List Record) (selected : records ∈ ownRecordImage alphabet)
+   49     (count : Nat) (countBound : count ≤ entry.mass)
+   50     (ambient : List Guard) (ambientMember : ambient ∈ wordsThrough alphabet entry.edges) :
+   51     Le (SourceCurrentClassesForecast.finalProfile budget count records ambient entry)
+   52       (classesProfile budget alphabet entry) ∧
+   53     SourceCurrentClassesForecast.fuel budget count records ambient entry ≤ fuel budget alphabet entry := by
+   54   constructor
+   55   · apply cover_member
+   56     exact List.mem_flatMap.mpr ⟨records,selected,List.mem_flatMap.mpr
+   57       ⟨count,List.mem_range.mpr (by omega),List.mem_map.mpr ⟨ambient,ambientMember,rfl⟩⟩⟩
+   58   · apply maximum_member

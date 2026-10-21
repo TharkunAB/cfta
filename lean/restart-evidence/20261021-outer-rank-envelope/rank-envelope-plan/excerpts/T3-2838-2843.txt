@@ -1,0 +1,6 @@
+ 2838 def foldlRecOn {motive : β → Sort _} : ∀ (l : List α) (op : β → α → β) {b : β} (_ : motive b)
+ 2839     (_ : ∀ (b : β) (_ : motive b) (a : α) (_ : a ∈ l), motive (op b a)), motive (List.foldl op b l)
+ 2840   | [], _, _, hb, _ => hb
+ 2841   | hd :: tl, op, b, hb, hl =>
+ 2842     foldlRecOn tl op (hl b hb hd mem_cons_self)
+ 2843       fun y hy x hx => hl y hy x (mem_cons_of_mem hd hx)

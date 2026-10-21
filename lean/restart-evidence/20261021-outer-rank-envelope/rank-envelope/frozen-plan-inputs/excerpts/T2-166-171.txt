@@ -1,0 +1,6 @@
+  166 theorem mem_attach (l : List α) : ∀ x, x ∈ l.attach
+  167   | ⟨a, h⟩ => by
+  168     have := mem_map.1 (by rw [attach_map_subtype_val]; exact h)
+  169     rcases this with ⟨⟨_, _⟩, m, rfl⟩
+  170     exact m
+  171 

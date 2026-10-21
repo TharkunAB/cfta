@@ -1,0 +1,15 @@
+   46 @[implemented_by attachWithImpl, expose] def attachWith
+   47     (l : List α) (P : α → Prop) (H : ∀ x ∈ l, P x) : List {x // P x} := pmap Subtype.mk l H
+   48 
+   49 /--
+   50 “Attaches” the proof that the elements of `l` are in fact elements of `l`, producing a new list with
+   51 the same elements but in the subtype `{ x // x ∈ l }`.
+   52 
+   53 `O(1)`.
+   54 
+   55 This function is primarily used to allow definitions by [well-founded
+   56 recursion](lean-manual://section/well-founded-recursion) that use higher-order functions (such as
+   57 `List.map`) to prove that an value taken from a list is smaller than the list. This allows the
+   58 well-founded recursion mechanism to prove that the function terminates.
+   59 -/
+   60 @[inline, expose] def attach (l : List α) : List {x // x ∈ l} := attachWith l _ fun _ => id

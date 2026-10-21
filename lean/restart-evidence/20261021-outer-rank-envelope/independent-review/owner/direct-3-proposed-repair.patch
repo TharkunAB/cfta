@@ -1,0 +1,21 @@
+--- outer-rank-envelope-direct-3.source.lean
++++ direct-3-proposed-repair.source.lean.txt
+@@ -107,14 +107,14 @@
+ private theorem row_retains (budget : Nat) (all : Seed → List Out) (acc : Out) (index : Nat) :
+     Le acc.2.2.2 (row budget all acc index).2.2.2 ∧
+       acc.2.2.1 ⊆ (row budget all acc index).2.2.1 := by
+-  let post := SourceCurrentOuterInitialSchedule.parent budget acc.2.2
++  dsimp only [row]
++  generalize post_eq : SourceCurrentOuterInitialSchedule.parent budget acc.2.2 = post
+   let walked := (List.range post.2.mass).foldl (slot all) (0,0,post)
+-  have one : Le acc.2.2.2 post.2 ∧ acc.2.2.1 ⊆ post.1 :=
+-    SourceCurrentOuterInitialSchedule.parent_ge budget acc.2.2
++  have one := SourceCurrentOuterInitialSchedule.parent_ge budget acc.2.2
++  rw [post_eq] at one
+   have middle : Le post.2 walked.2.2.2 ∧ post.1 ⊆ walked.2.2.1 :=
+     fold_retains (slot all) (slot_retains all) (List.range post.2.mass) (0,0,post)
+   have last := SourceCurrentOuterInitialSchedule.rebuild_ge walked.2.2
+-  dsimp only [row]
+   change Le acc.2.2.2 (SourceCurrentOuterInitialSchedule.rebuild walked.2.2).2 ∧
+     acc.2.2.1 ⊆ (SourceCurrentOuterInitialSchedule.rebuild walked.2.2).1
+   refine ⟨one.1.trans (middle.1.trans last.1), ?_⟩

@@ -1,0 +1,10 @@
+  141 
+  142 /-- Each walk forecast retains the entry profile and every initial raw guard. -/
+  143 theorem walk_ge (fuel budget : Nat) (seed : List Guard × Profile) :
+  144     Le seed.2 (walk fuel budget seed).2 ∧ seed.1 ⊆ (walk fuel budget seed).1 := (all_ge fuel budget).2.2.2.2.2 seed
+  145 
+  146 /-- Room at one predicted Parent return supplies every initial Parent query reservation. -/
+  147 theorem parent_reserved (bits budget : Nat) (seed : List Guard × Profile)
+  148     (room : Room bits (parent budget seed).2) :
+  149     SourceCurrentParentAlphabetReservation.UniformReserved bits budget seed.1 seed.2 :=
+  150   SourceCurrentParentInitialRoom.uniform_of_room bits budget seed.1 seed.2
