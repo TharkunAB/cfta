@@ -3012,6 +3012,9 @@ import MicroCFTA.SourceCurrentDelayedOwnerProgress
 import MicroCFTA.SourceCurrentOuterParentHistory
 import MicroCFTA.SourceCurrentOuterOwnerSelection
 import MicroCFTA.SourceCurrentPhysicalMergeSupportBoundary
+import MicroCFTA.SourceCurrentDelayedCombinedOwnerProgress
+import MicroCFTA.SourceCurrentNormalizedChildSeparation
+import MicroCFTA.SourceCurrentMergeEmptySupport
 /-!
 # Proof dependency audit
 
