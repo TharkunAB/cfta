@@ -1,0 +1,22 @@
+    (ready : EqReady checked.operations.constraints request.inherited) (available : Available checked.native.machine.heap request.value)
+    {after : Caller width}
+    (actual : nodeCall fuel g s r e p h m c n budget request (SourceCurrentAllocatedPartialState.initial checked memo fourth) =
+      .failed (.nodeMemo handle .busy) after) :
+    Good after ∧ ∃ next candidate,
+      NodeReady after candidate ∧
+      Reached g s r e p h m c n budget
+        (.node fuel request (SourceCurrentAllocatedPartialState.initial checked memo fourth)) (.node next candidate after) ∧
+      beginNode candidate after = (handle,.busy,after) ∧
+      ∃ owner, after.nodeResults.cells handle = some ⟨owner,.evaluating⟩ ∧ owner = candidate ∧
+        SourceCurrentOuterExecutionGrowth.GrowingAncestor g s r e p h m c n budget
+          (.node fuel request (SourceCurrentAllocatedPartialState.initial checked memo fourth)) (.node next candidate after) handle owner ∧
+        (∀ other captured, after.nodeResults.cells other = some ⟨captured,.evaluating⟩ → NodeReady after captured ∧
+          SourceCurrentOuterExecutionGrowth.GrowingAncestor g s r e p h m c n budget
+            (.node fuel request (SourceCurrentAllocatedPartialState.initial checked memo fourth)) (.node next candidate after) other captured) := by
+  obtain ⟨next,candidate,past,busy,owner,present,key,earlier,allOwners⟩ :=
+    SourceCurrentOuterExecutionAncestry.initial checked memo fourth fuel request actual
+  have current := reached past (initial checked memo fourth good stored probes) ⟨ready,available⟩
+  have ownerReady := (current.1.nodes.checked handle _ present).1
+  exact ⟨current.1,next,candidate,current.2,past,busy,owner,present,same_key current.1 ownerReady current.2 key,
+    SourceCurrentOuterExecutionGrowth.ancestor earlier,fun other captured found =>
+      ⟨(current.1.nodes.checked other _ found).1,SourceCurrentOuterExecutionGrowth.ancestor (allOwners other captured found)⟩⟩

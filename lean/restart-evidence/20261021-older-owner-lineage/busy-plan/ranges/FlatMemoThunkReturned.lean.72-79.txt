@@ -1,0 +1,8 @@
+/-- A larger interpretation can retain the same original request links. -/
+theorem Valid.keyMap (state : State Key Request Value) (first second : Request → Key → Prop)
+    (good : Cell Request Value → Prop) (valid : Valid first good state)
+    (retained : ∀ request key, first request key → second request key) : Valid second good state :=
+  ⟨valid.bounded, fun key handle stored => by
+    obtain ⟨cell, present, checked⟩ := valid.linked key handle stored
+    exact ⟨cell, present, retained cell.request key checked⟩, valid.checked⟩
+

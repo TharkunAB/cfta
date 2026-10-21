@@ -1,0 +1,30 @@
+--- older-owner-lineage-direct-1.source.lean
++++ SourceCurrentOlderOwnerLineage.lean
+@@ -28,9 +28,15 @@
+ private theorem lex_trans {first middle last : Nat × Nat}
+     (left : Prod.Lex Nat.lt Nat.lt first middle) (right : Prod.Lex Nat.lt Nat.lt middle last) :
+     Prod.Lex Nat.lt Nat.lt first last := by
+-  rcases Prod.lex_def.mp left with smaller | ⟨same,smaller⟩ <;>
+-    rcases Prod.lex_def.mp right with larger | ⟨equal,larger⟩ <;>
+-      apply Prod.lex_def.mpr <;> omega
++  cases left with
++  | left _ _ smaller =>
++      cases right with
++      | left _ _ larger => exact .left _ _ (Nat.lt_trans smaller larger)
++      | right _ _ => exact .left _ _ smaller
++  | right _ smaller =>
++      cases right with
++      | left _ _ larger => exact .left _ _ larger
++      | right _ larger => exact .right _ (Nat.lt_trans smaller larger)
+ 
+ private theorem same_request [DecidableEq (EdgeKey Symbol Guard)]
+     {bits : Nat} {formulas : SourceGuards.Formulas FullSyntax.Formula}
+@@ -152,7 +158,7 @@
+         rw [started] at checked
+         dsimp only at checked
+         have requested : SourceCurrentOuterPrefixInvariants.NodeReady activated request := by
+-          simpa only [checked] using ready
++          simpa only [SourceCurrentOuterPrefixInvariants.NodeReady,checked] using ready
+         have capturedReady : SourceCurrentOuterPrefixInvariants.NodeReady activated captured :=
+           ⟨capturedGood.inherited,capturedGood.input⟩
+         have same := same_request activatedContext captured request capturedReady requested key

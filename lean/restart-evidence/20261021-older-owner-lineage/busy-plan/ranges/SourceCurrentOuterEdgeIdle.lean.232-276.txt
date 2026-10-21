@@ -1,0 +1,45 @@
+/-- Every bounded node call preserves edge idle on success and excludes a busy edge failure. -/
+theorem node_call (fuel g s r e p h m c n budget : Nat) (request : NodeRequest)
+    (before : Caller width) (idle : EdgeIdle before) :
+    Safe (nodeCall fuel g s r e p h m c n budget request before) :=
+  (all_safe fuel).1 _ _ _ _ _ _ _ _ _ _ _ _ idle
+
+/-- Every bounded node body has the same edge-family property. -/
+theorem node_body (fuel g s r e p h m c n budget : Nat) (request : NodeRequest)
+    (before : Caller width) (idle : EdgeIdle before) :
+    Safe (nodeBody fuel g s r e p h m c n budget request before) :=
+  (all_safe fuel).2.1 _ _ _ _ _ _ _ _ _ _ _ _ idle
+
+/-- A complete edge call finishes its selected edge before returning to descendants. -/
+theorem edge_call (fuel g s r e p h m c n budget : Nat) (request : EdgeRequest)
+    (before : Caller width) (idle : EdgeIdle before) :
+    Safe (edgeCall fuel g s r e p h m c n budget request before) := edgeCall_safe _ _ _ _ _ _ _ _ _ _ _ _ _ idle
+
+/-- The actual parent edge body cannot introduce an outer busy diagnostic. -/
+theorem edge_body (fuel g s r e p h m c n budget : Nat) (request : EdgeRequest)
+    (before : Caller width) (idle : EdgeIdle before) :
+    Safe (edgeBody fuel g s r e p h m c n budget request before) := edgeBody_safe _ _ _ _ _ _ _ _ _ _ _ _ _ idle
+
+/-- Ordered rows retain the edge-family property through their actual descendant calls. -/
+theorem row_pass (fuel g s r e p h m c n budget : Nat) (inherited : EqValue)
+    (values : List Edge) (before : Caller width) (idle : EdgeIdle before) :
+    Safe (rows fuel g s r e p h m c n budget inherited values before) :=
+  (all_safe fuel).2.2.1 _ _ _ _ _ _ _ _ _ _ _ _ _ idle
+
+/-- Actual inherited prefixes and descendant reconstruction retain the property. -/
+theorem descendant_pass (fuel g s r e p h m c n budget : Nat) (inherited : EqValue)
+    (value : Edge) (before : Caller width) (idle : EdgeIdle before) :
+    Safe (descendants fuel g s r e p h m c n budget inherited value before) :=
+  (all_safe fuel).2.2.2.1 _ _ _ _ _ _ _ _ _ _ _ _ _ idle
+
+/-- Both contradictory child erasure and live indexed traversal retain the property. -/
+theorem child_pass (fuel g s r e p h m c n budget : Nat) (inherited : EqValue)
+    (values : List Node) (before : Caller width) (idle : EdgeIdle before) :
+    Safe (children fuel g s r e p h m c n budget inherited values before) :=
+  (all_safe fuel).2.2.2.2.1 _ _ _ _ _ _ _ _ _ _ _ _ _ idle
+
+/-- Every indexed walk excludes a busy edge failure from its edge-idle entry. -/
+theorem indexed_walk (fuel g s r e p h m c n budget : Nat) (inherited : EqValue)
+    (index : Nat) (values : List Node) (before : Caller width) (idle : EdgeIdle before) :
+    Safe (walk fuel g s r e p h m c n budget inherited index values before) :=
+  (all_safe fuel).2.2.2.2.2 _ _ _ _ _ _ _ _ _ _ _ _ _ _ idle

@@ -1,0 +1,11 @@
+--- older-owner-lineage-prelaunch-1.source.lean
++++ SourceCurrentOlderOwnerLineage.lean
+@@ -62,7 +62,7 @@
+     (actual : Reached g s r e p h m c n budget first last) : phaseFuel last ≤ phaseFuel first := by
+   induction actual with
+   | refl => exact Nat.le_refl _
+-  | snoc earlier last ih => exact (step_fuel last).trans ih
++  | snoc earlier last ih => exact Nat.le_trans (step_fuel last) ih
+ 
+ private theorem head_cases {first last : Phase width}
+     (actual : Reached g s r e p h m c n budget first last) :
