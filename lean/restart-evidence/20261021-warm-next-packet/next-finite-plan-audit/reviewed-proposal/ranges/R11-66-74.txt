@@ -1,0 +1,9 @@
+/-- The literal phase tag selects the corresponding initial lower-fuel bound. -/
+noncomputable def phaseNeed (budget : Nat) (phase : Phase width) (seed : Seed) : Nat :=
+  match phase with
+  | .node fuel _ _ => nodeNeed fuel budget seed
+  | .body fuel _ _ => bodyNeed fuel budget seed
+  | .rows fuel _ _ _ => rowsNeed fuel budget seed
+  | .descendants fuel _ _ _ => descendantsNeed fuel budget seed
+  | .children fuel _ _ _ => childrenNeed fuel budget seed
+  | .walk fuel _ _ _ _ => walkNeed fuel budget seed

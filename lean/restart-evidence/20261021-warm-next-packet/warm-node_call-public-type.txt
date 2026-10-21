@@ -1,0 +1,518 @@
+ ∀ {bits : Nat}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula) {g s r e p h m c n budget fuel : Nat}
+  {request : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest}
+  {before after :
+    MicroCFTA.SourceCurrentAllocatedPartialState.State
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {memos : MicroCFTA.EndpointMemoGateTrace.Memos}
+  (seed :
+    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  @MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context inst_1
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+      formulas solver inventory before memos →
+    @MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Frame
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+        formulas solver inventory
+        (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+          before) →
+      @MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+          (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+          (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+            before) →
+        @MicroCFTA.SourceEqualityAnnotationHeap.Heap
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (fun guard =>
+              @Membership.mem.{0, 0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (@List.instMembership.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile seed)
+                guard)
+            (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.SourceEqualityNativeDemand.State.native
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                  (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                    before)))) →
+          @MicroCFTA.SourceCurrentOuterPrefixInvariants.NodeReady
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+              before request →
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+                (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                  (MicroCFTA.SourceCurrentOuterInitialSchedule.node fuel budget seed)) →
+              @MicroCFTA.SourceCurrentRequiredUnionNormal.UnionNormal
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                    (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                      (@MicroCFTA.SourceEqualityNativeDemand.State.native
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                        (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                          before)))) →
+                @MicroCFTA.SourceCurrentNativeRequestPositivePositions.Support
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                    (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                        (@MicroCFTA.SourceEqualityNativeDemand.State.native
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                          (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                            before))))
+                    (@MicroCFTA.SourceEqualityNativeDemand.State.native
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                      (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                        before)) →
+                  ∀
+                    (causal :
+                      @MicroCFTA.SourceCurrentNativeMuPublication.History
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inst_1
+                        (@MicroCFTA.InternedConstructorTemplates.empty
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                          (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                            (@MicroCFTA.SourceEqualityNativeDemand.State.native
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                              (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                before))))),
+                    @MicroCFTA.SourceCurrentConstrainedCapMemoMerge.Stored
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                        (fun guard => @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard) Bool.true)
+                        (@MicroCFTA.SourceCurrentAllocatedPartialState.State.merge
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                          before) →
+                      MicroCFTA.SourceCurrentMergePositivePosition.Support
+                          (@MicroCFTA.SourceCurrentAllocatedPartialState.State.merge
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                            before) →
+                        @MicroCFTA.SourceCurrentResourceParentWriters.Origins inst inst_1 inst_2 bits formulas solver
+                            before →
+                          @MicroCFTA.SourceCurrentOuterClosedInputs.NodeStored
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                              before →
+                            @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                (@MicroCFTA.InternedConstructorTemplates.Value.free
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) request.value)
+                                (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+                              (∀ (chosen : Nat) (owner : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest),
+                                  @Ne.{1}
+                                    (Option.{0}
+                                      (MicroCFTA.FlatMemoThunk.Cell
+                                        MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest
+                                        (MicroCFTA.InternedConstructorTemplates.Value
+                                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))
+                                    (@MicroCFTA.FlatMemoThunk.State.cells
+                                      MicroCFTA.SourceCurrentAllocatedPartialState.NodeKey
+                                      MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest
+                                      (MicroCFTA.InternedConstructorTemplates.Value
+                                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                      (@MicroCFTA.SourceCurrentAllocatedPartialState.State.nodeResults
+                                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                        before)
+                                      chosen)
+                                    (@Option.some.{0}
+                                      (MicroCFTA.FlatMemoThunk.Cell
+                                        MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest
+                                        (MicroCFTA.InternedConstructorTemplates.Value
+                                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                                      (@MicroCFTA.FlatMemoThunk.Cell.mk
+                                        MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest
+                                        (MicroCFTA.InternedConstructorTemplates.Value
+                                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                        owner
+                                        (@MicroCFTA.FlatMemoThunk.Status.evaluating
+                                          (MicroCFTA.InternedConstructorTemplates.Value
+                                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                            (MicroCFTA.SourceSymbolicIndex.Constraint
+                                              MicroCFTA.FullSyntax.Formula)))))) →
+                                @MicroCFTA.SourceCurrentOuterEdgeIdle.EdgeIdle
+                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                    before →
+                                  @Eq.{2}
+                                      (MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome
+                                        (MicroCFTA.InternedConstructorTemplates.Value
+                                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+                                      (@MicroCFTA.SourceCurrentAllocatedPartialWorker.nodeCall inst inst_1 inst_2
+                                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                        fuel g s r e p h m c n budget request before)
+                                      (@MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.done
+                                        (MicroCFTA.InternedConstructorTemplates.Value
+                                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                        result after) →
+                                    have scheduled := MicroCFTA.SourceCurrentOuterInitialSchedule.node fuel budget seed;
+                                    @Exists.{1} MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory
+                                      fun next =>
+                                      @Exists.{1} MicroCFTA.EndpointMemoGateTrace.Memos fun final =>
+                                        And
+                                          (@MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post inst_1
+                                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                            formulas solver next before after final)
+                                          (And
+                                            (@MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Frame
+                                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                              formulas solver next
+                                              (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked
+                                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                                after))
+                                            (And
+                                              (@MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits
+                                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                                  (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                                (@Prod.snd.{0, 0}
+                                                  (List.{0}
+                                                    (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                      MicroCFTA.FullSyntax.Formula))
+                                                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                                                  scheduled)
+                                                (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked
+                                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) bits
+                                                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                                  after))
+                                              (And
+                                                (@MicroCFTA.SourceEqualityAnnotationHeap.Heap
+                                                  (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                    MicroCFTA.FullSyntax.Formula)
+                                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                                  (fun guard =>
+                                                    @Membership.mem.{0, 0}
+                                                      (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                        MicroCFTA.FullSyntax.Formula)
+                                                      (List.{0}
+                                                        (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                          MicroCFTA.FullSyntax.Formula))
+                                                      (@List.instMembership.{0}
+                                                        (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                          MicroCFTA.FullSyntax.Formula))
+                                                      (@Prod.fst.{0, 0}
+                                                        (List.{0}
+                                                          (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                            MicroCFTA.FullSyntax.Formula))
+                                                        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                                                        scheduled)
+                                                      guard)
+                                                  (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                                    (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                      MicroCFTA.FullSyntax.Formula)
+                                                    (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine
+                                                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                                        bits
+                                                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                                      (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                        MicroCFTA.FullSyntax.Formula)
+                                                      (@MicroCFTA.SourceEqualityNativeDemand.State.native
+                                                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                                          bits
+                                                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                                        (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked
+                                                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                            (@instHAdd.{0} Nat instAddNat) bits
+                                                            (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                              (instOfNatNat (nat_lit 2))))
+                                                          after)))))
+                                                (And
+                                                  (@MicroCFTA.SourceCurrentOuterPrefixInvariants.NodeReady
+                                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                                      bits
+                                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                                    after { inherited := request.inherited, value := result })
+                                                  (And
+                                                    (@MicroCFTA.SourceCurrentNativeRequestPositivePositions.Support
+                                                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                                        bits
+                                                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                                      (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                                                        (MicroCFTA.SourceObservations.Label
+                                                          MicroCFTA.FullSyntax.Formula)
+                                                        (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                          MicroCFTA.FullSyntax.Formula)
+                                                        (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine
+                                                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                            (@instHAdd.{0} Nat instAddNat) bits
+                                                            (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                              (instOfNatNat (nat_lit 2))))
+                                                          (MicroCFTA.SourceObservations.Label
+                                                            MicroCFTA.FullSyntax.Formula)
+                                                          (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                            MicroCFTA.FullSyntax.Formula)
+                                                          (@MicroCFTA.SourceEqualityNativeDemand.State.native
+                                                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                              (@instHAdd.{0} Nat instAddNat) bits
+                                                              (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                (instOfNatNat (nat_lit 2))))
+                                                            (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked
+                                                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                (@instHAdd.{0} Nat instAddNat) bits
+                                                                (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                  (instOfNatNat (nat_lit 2))))
+                                                              after))))
+                                                      (@MicroCFTA.SourceEqualityNativeDemand.State.native
+                                                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                                          bits
+                                                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                                                        (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked
+                                                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                            (@instHAdd.{0} Nat instAddNat) bits
+                                                            (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                              (instOfNatNat (nat_lit 2))))
+                                                          after)))
+                                                    (And
+                                                      (Nonempty.{1}
+                                                        (@MicroCFTA.SourceCurrentNativeMuPublication.History
+                                                          (MicroCFTA.SourceObservations.Label
+                                                            MicroCFTA.FullSyntax.Formula)
+                                                          (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                            MicroCFTA.FullSyntax.Formula)
+                                                          inst_1
+                                                          (@MicroCFTA.InternedConstructorTemplates.empty
+                                                            (MicroCFTA.SourceObservations.Label
+                                                              MicroCFTA.FullSyntax.Formula)
+                                                            (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                              MicroCFTA.FullSyntax.Formula))
+                                                          (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                                                            (MicroCFTA.SourceObservations.Label
+                                                              MicroCFTA.FullSyntax.Formula)
+                                                            (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                              MicroCFTA.FullSyntax.Formula)
+                                                            (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine
+                                                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                (@instHAdd.{0} Nat instAddNat) bits
+                                                                (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                  (instOfNatNat (nat_lit 2))))
+                                                              (MicroCFTA.SourceObservations.Label
+                                                                MicroCFTA.FullSyntax.Formula)
+                                                              (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                                MicroCFTA.FullSyntax.Formula)
+                                                              (@MicroCFTA.SourceEqualityNativeDemand.State.native
+                                                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                  (@instHAdd.{0} Nat instAddNat) bits
+                                                                  (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                    (instOfNatNat (nat_lit 2))))
+                                                                (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked
+                                                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                    (@instHAdd.{0} Nat instAddNat) bits
+                                                                    (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                      (instOfNatNat (nat_lit 2))))
+                                                                  after))))))
+                                                      (And
+                                                        (@MicroCFTA.SourceCurrentConstrainedCapMemoMerge.Stored
+                                                          (MicroCFTA.SourceObservations.Label
+                                                            MicroCFTA.FullSyntax.Formula)
+                                                          (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                            MicroCFTA.FullSyntax.Formula)
+                                                          (fun guard =>
+                                                            @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain guard)
+                                                              Bool.true)
+                                                          (@MicroCFTA.SourceCurrentAllocatedPartialState.State.merge
+                                                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                              (@instHAdd.{0} Nat instAddNat) bits
+                                                              (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                (instOfNatNat (nat_lit 2))))
+                                                            after))
+                                                        (And
+                                                          (MicroCFTA.SourceCurrentMergePositivePosition.Support
+                                                            (@MicroCFTA.SourceCurrentAllocatedPartialState.State.merge
+                                                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                (@instHAdd.{0} Nat instAddNat) bits
+                                                                (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                  (instOfNatNat (nat_lit 2))))
+                                                              after))
+                                                          (And
+                                                            (@MicroCFTA.SourceCurrentRequiredUnionNormal.UnionNormal
+                                                              (MicroCFTA.SourceObservations.Label
+                                                                MicroCFTA.FullSyntax.Formula)
+                                                              (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                                MicroCFTA.FullSyntax.Formula)
+                                                              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap
+                                                                (MicroCFTA.SourceObservations.Label
+                                                                  MicroCFTA.FullSyntax.Formula)
+                                                                (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                                  MicroCFTA.FullSyntax.Formula)
+                                                                (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine
+                                                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                    (@instHAdd.{0} Nat instAddNat) bits
+                                                                    (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                      (instOfNatNat (nat_lit 2))))
+                                                                  (MicroCFTA.SourceObservations.Label
+                                                                    MicroCFTA.FullSyntax.Formula)
+                                                                  (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                                    MicroCFTA.FullSyntax.Formula)
+                                                                  (@MicroCFTA.SourceEqualityNativeDemand.State.native
+                                                                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                      (@instHAdd.{0} Nat instAddNat) bits
+                                                                      (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                        (instOfNatNat (nat_lit 2))))
+                                                                    (@MicroCFTA.SourceCurrentAllocatedPartialState.State.checked
+                                                                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                        (@instHAdd.{0} Nat instAddNat) bits
+                                                                        (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                          (instOfNatNat (nat_lit 2))))
+                                                                      after)))))
+                                                            (And
+                                                              (@MicroCFTA.SourceCurrentResourceParentWriters.Origins
+                                                                inst inst_1 inst_2 bits formulas solver after)
+                                                              (And
+                                                                (@MicroCFTA.SourceCurrentOuterClosedInputs.NodeStored
+                                                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                    (@instHAdd.{0} Nat instAddNat) bits
+                                                                    (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                      (instOfNatNat (nat_lit 2))))
+                                                                  after)
+                                                                (And
+                                                                  (@Eq.{1}
+                                                                    (List.{0}
+                                                                      MicroCFTA.InternedBinderProtocol.Reference)
+                                                                    (@MicroCFTA.InternedConstructorTemplates.Value.free
+                                                                      (MicroCFTA.SourceObservations.Label
+                                                                        MicroCFTA.FullSyntax.Formula)
+                                                                      (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                                        MicroCFTA.FullSyntax.Formula)
+                                                                      result)
+                                                                    (@List.nil.{0}
+                                                                      MicroCFTA.InternedBinderProtocol.Reference))
+                                                                  (And
+                                                                    (∀ (chosen : Nat)
+                                                                      (owner :
+                                                                        MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest),
+                                                                      @Ne.{1}
+                                                                        (Option.{0}
+                                                                          (MicroCFTA.FlatMemoThunk.Cell
+                                                                            MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest
+                                                                            (MicroCFTA.InternedConstructorTemplates.Value
+                                                                              (MicroCFTA.SourceObservations.Label
+                                                                                MicroCFTA.FullSyntax.Formula)
+                                                                              (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                                                MicroCFTA.FullSyntax.Formula))))
+                                                                        (@MicroCFTA.FlatMemoThunk.State.cells
+                                                                          MicroCFTA.SourceCurrentAllocatedPartialState.NodeKey
+                                                                          MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest
+                                                                          (MicroCFTA.InternedConstructorTemplates.Value
+                                                                            (MicroCFTA.SourceObservations.Label
+                                                                              MicroCFTA.FullSyntax.Formula)
+                                                                            (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                                              MicroCFTA.FullSyntax.Formula))
+                                                                          (@MicroCFTA.SourceCurrentAllocatedPartialState.State.nodeResults
+                                                                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                              (@instHAdd.{0} Nat instAddNat) bits
+                                                                              (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                                (instOfNatNat (nat_lit 2))))
+                                                                            after)
+                                                                          chosen)
+                                                                        (@Option.some.{0}
+                                                                          (MicroCFTA.FlatMemoThunk.Cell
+                                                                            MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest
+                                                                            (MicroCFTA.InternedConstructorTemplates.Value
+                                                                              (MicroCFTA.SourceObservations.Label
+                                                                                MicroCFTA.FullSyntax.Formula)
+                                                                              (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                                                MicroCFTA.FullSyntax.Formula)))
+                                                                          (@MicroCFTA.FlatMemoThunk.Cell.mk
+                                                                            MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest
+                                                                            (MicroCFTA.InternedConstructorTemplates.Value
+                                                                              (MicroCFTA.SourceObservations.Label
+                                                                                MicroCFTA.FullSyntax.Formula)
+                                                                              (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                                                MicroCFTA.FullSyntax.Formula))
+                                                                            owner
+                                                                            (@MicroCFTA.FlatMemoThunk.Status.evaluating
+                                                                              (MicroCFTA.InternedConstructorTemplates.Value
+                                                                                (MicroCFTA.SourceObservations.Label
+                                                                                  MicroCFTA.FullSyntax.Formula)
+                                                                                (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                                                  MicroCFTA.FullSyntax.Formula))))))
+                                                                    (@MicroCFTA.SourceCurrentOuterEdgeIdle.EdgeIdle
+                                                                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat
+                                                                        (@instHAdd.{0} Nat instAddNat) bits
+                                                                        (@OfNat.ofNat.{0} Nat (nat_lit 2)
+                                                                          (instOfNatNat (nat_lit 2))))
+                                                                      after))))))))))))))

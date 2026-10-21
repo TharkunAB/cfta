@@ -1,0 +1,24 @@
+reducePartially ::
+    (Hashable symbol, Typeable symbol) => Node symbol -> Node symbol
+reducePartially = reducePartially' EmptyConstraints
+
+genericReducePartiallyCache :: TypeableMemoCache
+genericReducePartiallyCache = unsafePerformIO newTypeableMemoCache
+{-# NOINLINE genericReducePartiallyCache #-}
+
+reducePartially' ::
+    forall symbol.
+    (Hashable symbol, Typeable symbol) =>
+    EqConstraints -> Node symbol -> Node symbol
+reducePartially' constraints node =
+    memo2TypeableWith @symbol genericReducePartiallyCache go constraints node
+  where
+    go :: EqConstraints -> Node symbol -> Node symbol
+    go _ EmptyNode = EmptyNode
+    go _ (Mu n) = Mu n
+    go _ n@(InternedUnion _) = n
+    go inheritedEcs n@(Node _) = modifyNode n $ \es ->
+        map
+            (reduceChildren inheritedEcs . reduceEdgeIntersection inheritedEcs)
+            es
+    go _ (Rec _) = error "reducePartially: unexpected Rec"

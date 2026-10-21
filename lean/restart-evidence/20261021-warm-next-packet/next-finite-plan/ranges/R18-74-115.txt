@@ -1,0 +1,42 @@
+  obtain ⟨next, final, actual, _reads, post, nextFrame, nextFits,
+      nextKnown, available, _law⟩ :=
+    SourceCurrentOuterInitialActual.node_call formulas solver fuel seed
+      initial frame fits known inputs.1 inputs.2 room observed
+
+  obtain ⟨nextSupported, nextCausal, nextMerged, nextPositive, nextNormal⟩ :=
+    SourceCurrentOuterNativeStores.node_call formulas solver fuel seed
+      initial frame fits known inputs.1 inputs.2 room
+      normal supported causal merged positiveMemo observed
+
+  have nextOrigins : SourceCurrentResourceParentWriters.Origins formulas solver after :=
+    SourceCurrentOuterResourceWriters.node_call formulas solver fuel seed
+      initial frame fits known inputs.1 inputs.2 room
+      normal supported ⟨causal⟩ merged positiveMemo observed origins
+
+  have nextClosure : SourceCurrentOuterClosedInputs.NodeStored after ∧ result.free = [] :=
+    SourceCurrentOuterClosedInputs.node_call formulas solver seed
+      initial frame fits known inputs room normal supported causal
+      merged positiveMemo origins stored closed observed
+
+  have inheritedAfter :
+      SourceEqualityConstraintAllocation.Ready after.checked.operations.constraints
+        request.inherited :=
+    inputs.1.grows post.effects.grows.constraint_growth
+  have nextInputs :
+      SourceCurrentOuterPrefixInvariants.NodeReady after ⟨request.inherited, result⟩ :=
+    ⟨inheritedAfter, available⟩
+
+  have noNewActive :
+      SourceCurrentAllocatedPartialActiveFrames.NoNewActive before after :=
+    SourceCurrentAllocatedPartialActiveFrames.node_call actual
+  have nextNodeIdle :
+      ∀ chosen owner, after.nodeResults.cells chosen ≠ some ⟨owner, .evaluating⟩ := by
+    intro chosen owner present
+    exact nodeIdle chosen owner (noNewActive.nodes chosen owner present)
+  have nextEdgeIdle : SourceCurrentOuterEdgeIdle.EdgeIdle after := by
+    intro chosen owner present
+    exact edgeIdle chosen owner (noNewActive.edges chosen owner present)
+
+  exact ⟨next, final, post, nextFrame, nextFits, nextKnown, nextInputs,
+    nextSupported, nextCausal, nextMerged, nextPositive, nextNormal,
+    nextOrigins, nextClosure.1, nextClosure.2, nextNodeIdle, nextEdgeIdle⟩

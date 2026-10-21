@@ -1,0 +1,40 @@
+theorem node_call
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    {g s r e p h m c n budget fuel : Nat}
+    {first : Phase (bits + 2)} {inventory : Inventory} {memos : Memos}
+    (rootSeed : List Guard × Profile)
+    (initial : Context formulas solver inventory (caller first) memos)
+    (frame : Frame formulas solver inventory (caller first).checked)
+    (fits : Fits rootSeed.2 (caller first).checked)
+    (known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ rootSeed.1)
+      (caller first).checked.native.machine.heap)
+    (inputs : SourceCurrentOuterPrefixInvariants.Inputs first)
+    (rootRoom : Room bits (SourceCurrentOuterInitialPrefix.forecast budget first rootSeed).2)
+    (normal : SourceCurrentRequiredUnionNormal.UnionNormal (caller first).checked.native.machine.heap)
+    (supported : SourceCurrentNativeRequestPositivePositions.Support
+      (caller first).checked.native.machine.heap (caller first).checked.native)
+    (causal : SourceCurrentNativeMuPublication.History empty (caller first).checked.native.machine.heap)
+    (merged : SourceCurrentConstrainedCapMemoMerge.Stored
+      (fun guard : Guard => SourceMemoGate.plain guard = true) (caller first).merge)
+    (positiveMemo : SourceCurrentMergePositivePosition.Support (caller first).merge)
+    (origins : SourceCurrentResourceParentWriters.Origins formulas solver (caller first))
+    {request : NodeRequest} {before after : Caller (bits + 2)} {result : Node}
+    (seed : List Guard × Profile)
+    (past : Reached g s r e p h m c n budget first (.node fuel request before))
+    (currentFits : Fits seed.2 before.checked)
+    (currentKnown : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.1)
+      before.checked.native.machine.heap)
+    (currentRoom : Room bits (envelope budget
+      (SourceCurrentPositiveQuotientCount.count (request.inherited.payload.getD []) request.value)
+      (InternedValueMass.value request.value) seed).2.2.2)
+    (observed : nodeCall fuel g s r e p h m c n budget request before = .done result after) :
+    let output := envelope budget
+      (SourceCurrentPositiveQuotientCount.count (request.inherited.payload.getD []) request.value)
+      (InternedValueMass.value request.value) seed
+    Fits output.2.2.2 after.checked ∧
+      SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ output.2.2.1)
+        after.checked.native.machine.heap
+ := by
+  have resources {phase : Phase (bits+2)} (cut : Reached g s r e p h m c n budget first phase) :=
+    SourceCurrentOuterInitialPrefix.reached formulas solver rootSeed cut initial frame fits known inputs rootRoom

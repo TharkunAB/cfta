@@ -1,0 +1,13 @@
+/-- The node family demands its cell before inspecting the body recursion bound. -/
+noncomputable def nodeCall (fuel g s r e p h m c n budget : Nat) (request : NodeRequest)
+    (before : Caller width) : Outcome Node width :=
+  let actual := beginNode request before
+  match actual.2.1 with
+  | .ready result => .done result actual.2.2
+  | .evaluate original =>
+      (nodeBody fuel g s r e p h m c n budget original actual.2.2).bind fun result after =>
+        .done result (finishNode actual.1 result after)
+  | .busy => .failed (.nodeMemo actual.1 .busy) actual.2.2
+  | .absent => .failed (.nodeMemo actual.1 .absent) actual.2.2
+termination_by (fuel, 3)
+

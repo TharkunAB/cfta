@@ -1,0 +1,5 @@
+/-- Returned node cells preserve closure of their captured closed inputs. -/
+def NodeStored (state : Caller width) : Prop :=
+  FlatMemoThunk.Valid (fun request key => request.key = key)
+    (FlatMemoThunk.CellSpec (fun request result => request.value.free = [] → result.free = []))
+    state.nodeResults

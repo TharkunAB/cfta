@@ -1,0 +1,10 @@
+Independent actual FULL TYPE review: CLEAR. No proof, reader or compiler was rerun.
+I personally read every logical public TYPE line in bounded slices and the final tail. There are 518 logical lines and 517 newline characters; the final line has no newline. The first broad display was truncated, so it was not used as complete reading evidence.
+The exact 47015-byte TYPE is the literal raw #check slice. The full #print TYPE is byte-identical. Its whitespace-normalized length is 22056 characters. The unique complete TYPE/body delimiter was independently verified.
+The TYPE retains the full initial packet, same actual completed equation, same next/final/Post, scheduled Fits/carrier, returned inherited readiness, all stores, Origins, closed result and both idles. It has no future reservation or success premise.
+The complete TYPEs contain no _private, cross or dagger markers. The module declares no private helper. The actual axiom report is exactly propext, Classical.choice and Quot.sound. I read the literal report and entire retained readback JSON.
+The complete raw is 717427 bytes at68cd5d5b. The 623110-character proof body is retained and traversed by parsing; I do not claim to have personally read the whole body.
+The root strict input117/13e8 has no limit overrides and uses linter.all. The FULL input131/2fa0 keeps that exact prefix; its post-module diagnostics match the already reviewed printer preparation.
+Both actual root receipts are exit0. Strict log is empty. Fresh usage28%/age0 and effective memory max/high4GiB, swap0 and five-minute wrappers match the retained inputs. The FULL raw has no warnings, errors or omission markers.
+Earlier source and preparation review packages remain frozen. My authored foundations are disclosed there; this review checks the actual new composition TYPE and evidence.
+Zero reviewer Lean/FULL/reader/runtime/capped/Git/network jobs and zero official edits. These are copied root checks, not new reviewer checks. No later owned audit writes are planned.

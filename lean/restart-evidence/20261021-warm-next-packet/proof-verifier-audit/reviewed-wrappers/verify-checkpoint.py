@@ -1,0 +1,35 @@
+import json
+import subprocess
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parents[2]
+for mode, label in [([], 'normal'), (['--live'], 'live')]:
+    result = subprocess.run(['/usr/bin/python3', str(HERE / 'verify-proofs.py'),
+        '--root', str(ROOT), *mode], cwd='/', capture_output=True, text=True)
+    (HERE / ('proof-verification-' + label + '.stdout')).write_text(result.stdout)
+    (HERE / ('proof-verification-' + label + '.stderr')).write_text(result.stderr)
+    assert result.returncode == 0, result.stderr
+    report = json.loads(result.stdout)
+    assert report['status'] == 'PASS' and report['actual_jobs'] == 3 and report['failed_jobs'] == 0
+    assert report['source_jobs'] == 2 and report['audit_jobs'] == 1 and report['selected_modules'] == 1
+    assert report['audit_build_jobs'] == 3621 and report['audit_dependencies'] == 75253
+result = subprocess.run(['/usr/bin/python3', str(HERE / 'verify-preservation.py')],
+    cwd='/', capture_output=True, text=True)
+(HERE / 'preservation-final.stderr').write_text(result.stderr)
+assert result.returncode == 0, result.stderr
+preserved = json.loads(result.stdout)
+(HERE / 'preservation-final.json').write_text(json.dumps(preserved, indent=2) + '\n')
+assert preserved['status'] == 'PASS' and preserved['baseline_files'] == 72392
+baseline = json.loads((HERE / 'starting-files.json').read_text())
+selected = json.loads((HERE / 'selected-sources.json').read_text())
+new_modules = sum(name not in baseline for name in selected)
+assert len(selected) == 1 and new_modules == 1
+report = dict(status='PASS', actual_jobs=report['actual_jobs'], source_jobs=report['source_jobs'],
+    audit_jobs=report['audit_jobs'], failed_jobs=report['failed_jobs'],
+    audit_dependencies=report['audit_dependencies'], audit_build_jobs=report['audit_build_jobs'],
+    selected_modules=len(selected), new_modules=new_modules, proof_declaration_limits_unchanged=True,
+    baseline_files=preserved['baseline_files'], archived_components=preserved['archived_components'],
+    both_proof_verification_modes=True, no_haskell_or_package_changes=True)
+(HERE / 'verification.json').write_text(json.dumps(report, indent=2) + '\n')
+print(json.dumps(report))

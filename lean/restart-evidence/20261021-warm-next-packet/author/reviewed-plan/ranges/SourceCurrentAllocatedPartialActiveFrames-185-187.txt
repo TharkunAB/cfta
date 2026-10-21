@@ -1,0 +1,3 @@
+theorem node_call {budget : Nat} {request : NodeRequest} {before after : Caller width} {result : Node}
+    (actual : NodeCall budget request before result after) : NoNewActive before after := by
+  active_induction NodeCall.rec actual

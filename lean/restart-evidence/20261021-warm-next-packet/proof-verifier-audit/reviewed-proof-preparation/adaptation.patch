@@ -1,0 +1,83 @@
+--- verify-proofs.original-H3.py.txt
++++ verify-proofs.py
+@@ -1,4 +1,4 @@
+-"""Check saved warm rank-grid proof evidence. This script does not run Lean."""
++"""Check saved warm next-packet proof evidence. This script does not run Lean."""
+ import argparse
+ import hashlib
+ import json
+@@ -10,36 +10,26 @@
+ parser.add_argument("--live", action="store_true")
+ args = parser.parse_args()
+ root = args.root.resolve()
+-evidence = root / "lean/restart-evidence/20261021-warm-rank-grid"
++evidence = root / "lean/restart-evidence/20261021-warm-next-packet"
+ def load(name):
+     return json.loads((evidence / name).read_text())
+ def digest(data):
+     return hashlib.sha256(data).hexdigest()
+ 
+ selected = {
+-    "SourceCurrentPositiveQuotientCount": ("8447e032e02bd715be1c8a797f60ebcb118855868806205a6fc7e184bd7b79c9", 257, "count-mass-strict-3", "count-mass-public-1"),
+-    "SourceCurrentFiniteRoundForecast": ("733b1fa6a3daf32b240a45e7de1cc256777722c048f5e73c1850946088c8ad25", 160, "finite-round-strict-2", "finite-round-public-1"),
++    "SourceCurrentWarmNextPacket": ("13e8373cff925aca8832a47e12514767dd94dbe3fdb8d68bd73b2cdf19246be8", 117, "warm-packet-strict-1", "warm-packet-public-1"),
+ }
+ original = {
+-    "SourceCurrentPositiveQuotientCount": ("7647bb4b3f89be344e4e97711a81c8cf2d9326edffa867692c1b10f7478b14ca", 195),
+-    "Audit": ("f1617d840424849ce061ec87839f74a9539bfd88b128870726adc8d4cfc6ed0d", 3108),
++    "Audit": ("dde44b93bbc658d4aa7decec70afff57c6680b0878df6af7c510325006067a0a", 3109),
+ }
+ jobs = {
+-    "count-mass-strict-1": (1, "19fc24921fc20d83f2432d07936bdebbd9d49cba01f23cd62b39132b85b795ef", "9b2255a9b24304993a345a36c7a509463310b0794d1c1ee61f696ce57e990054"),
+-    "count-mass-strict-2": (1, "1214b0e0112039d20aa52fad4c0fc47f9ce382a08ca99f778d5520895a7a266e", "b5d49792a2f6217b8261d6fc68bc610edc0f6f5bb4d5a5abf0e03c4a9849f682"),
+-    "count-mass-strict-3": (0, selected["SourceCurrentPositiveQuotientCount"][0], hashlib.sha256(b"").hexdigest()),
+-    "finite-round-strict-1": (1, "2b85657aef6b864c3a28a394275e2c9537d92aeb45d0e9763314de9bc7dfd4c4", "e75cd2c46eafdcba5d9fead77cc3a075b93d1799c3ec6509e611fe94245e2590"),
+-    "finite-round-strict-2": (0, selected["SourceCurrentFiniteRoundForecast"][0], hashlib.sha256(b"").hexdigest()),
+-    "count-mass-public-1": (0, "b55fbc5ed2f67f9b84a8ef96f4234731d541aa125ed469d5aea49ea2c2e4abd8", "dc82056c70a195c1526b476ce1003802df37cb38852146f47186b6b8a207d38a"),
+-    "finite-round-public-1": (0, "3a471537bd69f62575aeacf0311d0d3ef7fe1ae4516ace0aff14b721276d5f19", "9d434b45076822e6ccc69ad5c232d2a6042561743b624a510ad36535bb998a23"),
+-    "audit-1": (0, None, "3c322d416e68219e2246f4db8b805ee77ad8da928a281ec5b06612bb857c2d60"),
++    "warm-packet-strict-1": (0, selected["SourceCurrentWarmNextPacket"][0], hashlib.sha256(b"").hexdigest()),
++    "warm-packet-public-1": (0, "2fa0e8e568ecc8a2decd9575448cc1ab264c888c018131ec1bd8ef33b293279d", "68cd5d5bf82cfb8fa7d0d1877c5ec78bcd9fff18052735354ba6a61ec6cbfc48"),
++    "audit-1": (0, None, "c12aad3737ece46dbf7edbf18700e5c971f0d710d21183891c37c74ab86f01e9"),
+ }
+-assert len(jobs) == 8 and sum(job[0] != 0 for job in jobs.values()) == 3
++assert len(jobs) == 3 and sum(job[0] != 0 for job in jobs.values()) == 0
+ actual = set()
+ for path in evidence.glob("*.json"):
+-    if path.name == "finite-full-readback.failed-1.json":
+-        assert path.read_bytes() == b""
+-        continue
+     item = json.loads(path.read_text())
+     if isinstance(item, dict) and "wrapper" in item and "exit_code" in item:
+         if Path(item.get("command", [""])[0]).name in {"lean", "lake"}:
+@@ -81,9 +71,8 @@
+     data = (evidence / item["snapshot"]).read_bytes()
+     assert digest(data) == item["sha256"] and len(data.splitlines()) == item["lines"]
+ standard = {"Classical.choice", "Quot.sound", "propext"}
+-assert digest((evidence / "finite-round-check-full-public.py").read_bytes()) == "a62de1943fdda11097912eda1e49632a19a0f103af8d3441e62117142dc0bb30"
+-assert digest((evidence / "finite-round-check-full-public.original-before-line-repair.py.txt").read_bytes()) == "5061c4a19769ca1a26ebb2d24466527b2c91c92412730d0535364e40d05ae844"
+-for kind, name in [("count", "SourceCurrentPositiveQuotientCount"), ("finite", "SourceCurrentFiniteRoundForecast")]:
++assert digest((evidence / "warm-packet-check-full-public.py").read_bytes()) == "95229fc1023967865d5ff2db32e3303e59d8abc43223228573755010bc3ecc5f"
++for kind, name in [("warm", "SourceCurrentWarmNextPacket")]:
+     report = load(kind + "-full-readback.json")
+     sha, lines, _, full = selected[name]
+     raw = (evidence / (full + ".log")).read_bytes()
+@@ -92,7 +81,7 @@
+     assert report["printer_sha256"] == digest(printer.encode())
+     assert report["log_sha256"] == digest(raw) and report["log_bytes"] == len(raw)
+     assert report["all_eight_printer_settings"] and report["no_omissions"] and report["owned_public_job_exit"] == 0
+-    expected_heads = [("count_le_mass", "theorem")] if kind == "count" else [("stage", "def"), ("fuelBounds", "def"), ("stage_bounds", "theorem")]
++    expected_heads = [("node_call", "theorem")]
+     assert [(head["head"], head["kind"]) for head in report["heads"]] == [("MicroCFTA." + name + "." + head, kind) for head, kind in expected_heads]
+     options = ["maxRecDepth 30000", "maxHeartbeats 0", "linter.all true", "pp.explicit true", "pp.fullNames true",
+         "pp.proofs true", "pp.proofs.threshold 254", "pp.universes true", "pp.deepTerms true", "pp.maxSteps 10000000"]
+@@ -127,7 +116,7 @@
+ build = re.search(r"Build completed successfully \((\d+) jobs\)\.", audit)
+ dependencies = re.search(r"Checked axiom dependencies of (\d+) MicroCFTA theorems", audit)
+ assert build and dependencies and not re.search(r"\berror(?:\([^)]*\))?:", audit)
+-print(json.dumps(dict(status="PASS", live=args.live, source_jobs=7, audit_jobs=1, actual_jobs=8,
+-    failed_jobs=3, new_lean_lake_jobs=0, selected_modules=2, original_archives=2,
++print(json.dumps(dict(status="PASS", live=args.live, source_jobs=2, audit_jobs=1, actual_jobs=3,
++    failed_jobs=0, new_lean_lake_jobs=0, selected_modules=1, original_archives=1,
+     audit_build_jobs=int(build.group(1)), audit_dependencies=int(dependencies.group(1)),
+     audit_log_sha256=digest(audit.encode())), indent=2))

@@ -1,0 +1,6 @@
+SOURCE-ONLY H4 checkpoint script preparation. No script, Git, network, compiler or publication command was executed.
+The three exact sealed H3 originals and complete unified deltas are retained. Only Python AST parsing and static source checks ran.
+update-documents.py retains the nine additive prelude checks and first-position external Haskell repair index. It adds the new focus note and records the checked SAME-return packet, actual FULL/default strict/Audit evidence and explicit future-capacity/public-pass/Haskell boundaries. It runs only after the proof commit exists.
+commit-proofs.py requires an empty initial index and exact starting0e0d. It commits only the new WarmNextPacket module plus the single legal Audit import. Its tracked diff must contain Audit alone; source and exact Audit-removal checks precede staging. The plain commit title is Retain warm entry facts after completed node calls.
+archive-support.py changes only the support filename prefix to H4 and excludes its own support-1 output as before. No recursive directory copy is added.
+The scripts are inert preparation files. Root must review every changed line before any later official use. No implementation or publication action is authorized by this preparation.

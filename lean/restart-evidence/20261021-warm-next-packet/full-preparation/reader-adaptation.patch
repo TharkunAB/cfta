@@ -1,0 +1,48 @@
+--- templates/count-reader.original.py.txt
++++ warm-packet-check-full-public.py
+@@ -1,13 +1,13 @@
+-"""Read the complete count bound type and actual axiom subset without running Lean."""
++"""Read the complete returned-packet type and actual axiom subset without running Lean."""
+ from pathlib import Path
+ import hashlib
+ import json
+ import re
+ 
+ HERE = Path(__file__).resolve().parent
+-PREFIX = "count-mass-"
+-NAMESPACE = "MicroCFTA.SourceCurrentPositiveQuotientCount."
+-source = (HERE / "SourceCurrentPositiveQuotientCount.lean").read_text()
++PREFIX = "warm-packet-"
++NAMESPACE = "MicroCFTA.SourceCurrentWarmNextPacket."
++source = (HERE / "SourceCurrentWarmNextPacket.lean").read_text()
+ printer = (HERE / (PREFIX + "public-1.source.lean")).read_text()
+ raw = (HERE / (PREFIX + "public-1.log")).read_bytes()
+ log = raw.decode()
+@@ -15,23 +15,23 @@
+     "pp.proofs.threshold 254", "pp.universes true", "pp.deepTerms true", "pp.maxSteps 10000000"]
+ assert printer.startswith(source)
+ expected_tail = "\n" + "".join("set_option " + option + "\n" for option in options)
+-expected_tail += "".join(directive + NAMESPACE + "count_le_mass\n"
++expected_tail += "".join(directive + NAMESPACE + "node_call\n"
+     for directive in ["#check @", "#print ", "#print axioms "])
+ assert printer[len(source):] == expected_tail
+ for option in options:
+     assert printer.count("set_option " + option) == 1, option
+ assert not re.search(r"sorryAx|\b(?:warning|error)(?:\([^)]*\))?:|failed to pretty print|pp\.rawOnError|maximum recursion depth|maximum number of heartbeats|⋯|…|\.\.\.", log)
+-heads = [("count_le_mass", "theorem")]
++heads = [("node_call", "theorem")]
+ markers = []
+ for head, _ in heads:
+     name = NAMESPACE + head
+     for directive in ["#check @", "#print ", "#print axioms "]:
+-        assert printer.count(directive + name) == 1, (directive, name)
++        assert printer.splitlines().count(directive + name) == 1, (directive, name)
+     found = list(re.finditer(r"^(?:@)?" + re.escape(name) + r" :", log, re.M))
+     assert len(found) == 1, (head, len(found))
+     markers.append(found[0])
+ normalize = lambda text: "".join(text.split())
+-private = ['candidates', 'candidates_complete', 'positivePaths', 'positivePaths_spec', 'rel_symm', 'rel_covers', 'consistent', 'root_separate', 'relationSetoid', 'candidates_length_le']
++private = []
+ results = []
+ for index, (head, kind) in enumerate(heads):
+     name = NAMESPACE + head

@@ -1,0 +1,15 @@
+theorem count_le_mass (inherited : List Record) (value : Node) :
+    count inherited value ≤ InternedValueMass.value value := by
+  classical
+  have dedup {Item : Type} [BEq Item] [LawfulBEq Item] (values : List Item) : values.eraseDups.length ≤ values.length :=
+    List.Nodup.length_le_of_subset (SymbolicDriver.eraseDups_nodup values)
+      (by intro item member; exact List.mem_eraseDups.mp member)
+  unfold count
+  have first := dedup ((positivePaths value).map
+    (Quotient.mk (relationSetoid (inherited.map Record.paths))))
+  simp only [List.length_map] at first
+  apply Nat.le_trans first
+  unfold positivePaths
+  exact Nat.le_trans (dedup _) (Nat.le_trans (List.length_filter_le _ _) (candidates_length_le _ _))
+
+end MicroCFTA.SourceCurrentPositiveQuotientCount

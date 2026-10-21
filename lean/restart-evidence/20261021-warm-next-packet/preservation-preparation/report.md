@@ -1,0 +1,8 @@
+SOURCE-ONLY H4 preservation preparation. No verifier, Git, network, compiler or publication command was executed.
+The candidate adapts the whole sealed H3 verifier. The exact original and unified delta are retained.
+The baseline has 72392 files at 0e0d372f5f42837c838f4beb6e4c5e2fcf24bb93. The only selected source is the entirely new WarmNextPacket module, 117 lines at 13e8373c. Existing source changes remain restricted to the sole Audit import.
+The exact original Audit SHA comes from H4 starting-files.json: dde44b93bbc658d4aa7decec70afff57c6680b0878df6af7c510325006067a0a. Its copied baseline snapshot has 3109 lines and matches that pin. Root must place the original snapshot at the existing original-sources/Audit.original.lean.txt convention before running the verifier.
+The nine additive document checks remain. The new focus note is notes-current-warm-next-packet.md. All current sources, modes, historical registries, stashes, worktrees, 268 Haskell files, 207 package files and archived components retain their original checks.
+Historical frozen_entry_archives are copied unchanged from the previous publication. There is no added override or rewritten old module. The prior 287 registries / 1380 entries gain only the H3 two-module registry, giving 288 / 1382.
+Local main ed73f599 remains distinct from origin/main 794903b3; the original separate branch checks remain. No branch or Git command was run during preparation.
+This script must run only from its final H4 location after the root finishes documents, source registration and archive setup. Its HERE/ROOT conventions are unchanged. Only AST parsing and static comparisons were performed here.

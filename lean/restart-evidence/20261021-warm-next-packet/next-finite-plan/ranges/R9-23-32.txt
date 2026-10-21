@@ -1,0 +1,10 @@
+inductive Value where
+  | contradiction
+  | live (identity : Nat) (records : List SourceEqualityClassOrder.Record)
+
+/-- Read the complete physical payload without its allocation identity. -/
+def Value.payload : Value → SourceEqualityPrecheck.Constraint
+  | .contradiction => none
+  | .live _ records => some records
+
+/-- Read the source equality identity while retaining contradiction separately. -/

@@ -1,0 +1,11 @@
+--- pending-proof
++++ final-publication.py
+@@ -3,7 +3,7 @@
+ R=Path('/home/tritlo/Code/mcfta');H=R/'lean/restart-evidence/20261021-warm-next-packet'
+ def git(*a):return subprocess.check_output(['git',*a],cwd=R)
+ assert (H/'starting-head.txt').read_text().strip()=='0e0d372f5f42837c838f4beb6e4c5e2fcf24bb93'
+-assert git('rev-parse','HEAD').decode().strip()==(H/'proof-commit.txt').read_text().strip()=='__H4_PROOF_COMMIT__'
++assert git('rev-parse','HEAD').decode().strip()==(H/'proof-commit.txt').read_text().strip()=='00c626f3db16e46ad7c975157117cd74d7208062'
+ subprocess.run(['/usr/bin/python3',str(H/'verify-seal.py')],check=True)
+ files=['NEXT-PROMPT.md','HANDOFF.md','FINDINGS.md','lean/README.md','lean/SYSTEM.md','lean/API-COVERAGE.md','lean/COVERAGE.md','lean/notes-proof-status-20261017.md','lean/notes-current-system-claim.md','lean/notes-current-warm-next-packet.md']
+ subprocess.run(['git','diff','--check','--',*files],cwd=R,check=True)

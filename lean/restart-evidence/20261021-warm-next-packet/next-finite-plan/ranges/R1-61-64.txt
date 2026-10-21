@@ -1,0 +1,4 @@
+/-- Join all case forecasts at each exact stage entry before choosing a width. -/
+noncomputable def stage (budget : Nat) (initial : List Guard × Profile)
+    (rounds : Nat) : List Guard × Profile :=
+  Nat.rec initial (fun _ entry => next budget entry) rounds
