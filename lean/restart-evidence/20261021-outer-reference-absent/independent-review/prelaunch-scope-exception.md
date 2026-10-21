@@ -1,0 +1,3 @@
+# ReferenceAbsent source scope exception
+
+The initial source recipe contains254 total Lean lines. This exceeds the original250-line stop by4 lines. No compiler ran. Root and guard read the complete existing recipe and rendered source. Root explicitly authorized export and a254-line review ceiling at13:45 CEST on2026-10-21. The original recipe and254-line source are retained. The corrected source contains254 lines. Its public header is byte-exact to the frozen27-line proposal. Seven same-line replacements split the five immediate fault selectors and bind both existing arguments in the two public calls. Compiler checks remain on hold until complete root and guard reviews and separate root activation. No official file was changed.

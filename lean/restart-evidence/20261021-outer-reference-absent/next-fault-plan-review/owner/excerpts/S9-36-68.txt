@@ -1,0 +1,33 @@
+   36 /-- Initial scheduled capacity and lower fuels exclude every Parent diagnostic at any outer outcome. -/
+   37 theorem no_parent_failure {g s r e p h m c n budget : Nat} {phase : Phase (bits+2)}
+   38     {inventory : Inventory} {memos : Memos} (seed : List Guard × Profile)
+   39     (initial : Context formulas solver inventory (caller phase) memos)
+   40     (frame : Frame formulas solver inventory (caller phase).checked)
+   41     (fits : Fits seed.2 (caller phase).checked)
+   42     (known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.1) (caller phase).checked.native.machine.heap)
+   43     (inputs : Inputs phase) (room : Room bits (forecast budget phase seed).2)
+   44     (gBound : phaseNeed budget phase seed ≤ g) (sBound : phaseNeed budget phase seed ≤ s)
+   45     (rBound : phaseNeed budget phase seed ≤ r) (eBound : phaseNeed budget phase seed ≤ e)
+   46     (pBound : phaseNeed budget phase seed ≤ p) (hBound : phaseNeed budget phase seed ≤ h)
+   47     (mBound : phaseNeed budget phase seed ≤ m) (cBound : phaseNeed budget phase seed ≤ c)
+   48     (nBound : phaseNeed budget phase seed ≤ n)
+   49     (observation : SourceCurrentAllocatedParentWorker.Fault (bits+2)) (after : Caller (bits+2)) :
+   50     SourceCurrentOuterActiveAncestry.run g s r e p h m c n budget phase ≠ .failed (.parent observation) after := by
+   51   intro failed
+   52   obtain ⟨fuel,inherited,original,rest,before,actual,edgeFailed⟩ := SourceCurrentOuterParentFailure.failed failed
+   53   obtain ⟨_next,_final,current,_trace,post,returned,numeric,carrier,ready,_below,_subset,currentRoom,_fits,_carrier,need⟩ :=
+   54     SourceCurrentOuterInitialPrefix.reached formulas solver seed actual initial frame fits known inputs room
+   55   have parentRoom : Room bits (Schedule.parent budget current).2 := by
+   56     simp only [SourceCurrentOuterInitialPrefix.forecast, Schedule.rows] at currentRoom
+   57     exact currentRoom.mono ((Schedule.descendants_ge fuel budget (Schedule.parent budget current)).1.trans
+   58       (Schedule.rows_ge fuel budget (Schedule.descendants fuel budget (Schedule.parent budget current))).1)
+   59   have parentNeed : SourceCurrentParentUniformEnvelope.fuel budget current.1 current.2 ≤ phaseNeed budget phase seed :=
+   60     Nat.le_trans (SourceCurrentOuterInitialFuel.rows_parent_le fuel budget current) need
+   61   exact SourceCurrentOuterEdgeParentFailure.edge_no_parent_failure formulas solver
+   62     _ budget current.1 ⟨inherited,original⟩ before _ post.context returned current.2 numeric carrier
+   63     ready.1 (ready.2 original List.mem_cons_self) (Schedule.parent_reserved bits budget current parentRoom)
+   64     fuel g s r e p h m c n
+   65     (Nat.le_trans parentNeed gBound) (Nat.le_trans parentNeed sBound) (Nat.le_trans parentNeed rBound)
+   66     (Nat.le_trans parentNeed eBound) (Nat.le_trans parentNeed pBound) (Nat.le_trans parentNeed hBound)
+   67     (Nat.le_trans parentNeed mBound) (Nat.le_trans parentNeed cBound) (Nat.le_trans parentNeed nBound)
+   68     observation after edgeFailed

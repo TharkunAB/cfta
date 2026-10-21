@@ -1,0 +1,13 @@
+/-- A busy node remains incomplete at its actual published caller state. -/
+theorem nodeCall_busy (fuel g s r e p h m c n budget : Nat) (request : NodeRequest)
+    (before after : Caller width) (handle : Nat)
+    (actual : beginNode request before = (handle, .busy, after)) :
+    nodeCall fuel g s r e p h m c n budget request before = .failed (.nodeMemo handle .busy) after := by
+  simp only [nodeCall, actual]
+
+/-- An absent node observation remains distinct from busy and successful return. -/
+theorem nodeCall_absent (fuel g s r e p h m c n budget : Nat) (request : NodeRequest)
+    (before after : Caller width) (handle : Nat)
+    (actual : beginNode request before = (handle, .absent, after)) :
+    nodeCall fuel g s r e p h m c n budget request before = .failed (.nodeMemo handle .absent) after := by
+  simp only [nodeCall, actual]

@@ -1,0 +1,13 @@
+/-- Pure key links and cell bounds do not depend on the changing equality cache. -/
+structure Protocol (state : Caller width) : Prop where
+  nodes : FlatMemoThunk.Valid (fun request key => request.key = key) (fun _ => True) state.nodeResults
+  edges : FlatMemoThunk.Valid (fun request key => request.key = key) (fun _ => True) state.edgeResults
+
+/-- The stronger current-cache structural invariant supplies the pure protocol. -/
+theorem Protocol.of_valid {state : Caller width} (valid : SourceCurrentAllocatedPartialState.Valid state) : Protocol state :=
+  ⟨FlatMemoThunk.Valid.keyMap _ _ _ _ valid.nodes (fun _ _ linked => linked.2),
+    FlatMemoThunk.Valid.keyMap _ _ _ _ valid.edges (fun _ _ linked => linked.2)⟩
+
+/-- Cold result families derive their protocol without input or body facts. -/
+theorem initial_protocol (checked : Checked width) (merge : MergeMemo) (fourth : Fourth) :
+    Protocol (initial checked merge fourth) := Protocol.of_valid (initial_valid checked merge fourth)

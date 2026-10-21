@@ -1,0 +1,58 @@
+  325 /-- A prefix enters a literal branch or skips only completed earlier calls. -/
+  326 inductive Step (g s r e p h m c n budget : Nat) : Phase width → Phase width → Prop where
+  327   /-- A node enters its exact stored owner after demand. -/
+  328   | node_evaluate (actual : beginNode request before = (handle, .evaluate original, running)) :
+  329       Step g s r e p h m c n budget (.node fuel request before) (.body fuel original running)
+  330   /-- An ordinary body enters its original rows. -/
+  331   | body_rows (actual : request.value = .node entry originals depth free) :
+  332       Step g s r e p h m c n budget (.body (fuel + 1) request before)
+  333         (.rows fuel request.inherited originals before)
+  334   /-- A completed parent edge precedes its actual descendants. -/
+  335   | rows_edge
+  336       (actual : edgeCall fuel g s r e p h m c n budget ⟨inherited, original⟩ before = .done narrowed middle) :
+  337       Step g s r e p h m c n budget (.rows (fuel + 1) inherited (original :: rest) before)
+  338         (.descendants fuel inherited narrowed middle)
+  339   /-- The row suffix starts after the exact completed parent and descendants. -/
+  340   | rows_tail
+  341       (edge : edgeCall fuel g s r e p h m c n budget ⟨inherited, original⟩ before = .done narrowed middle)
+  342       (children : descendants fuel g s r e p h m c n budget inherited narrowed middle = .done result after) :
+  343       Step g s r e p h m c n budget (.rows (fuel + 1) inherited (original :: rest) before)
+  344         (.rows fuel inherited rest after)
+  345   /-- The inherited prefix enters the exact returned children. -/
+  346   | descendants_children {edge : Edge}
+  347       (actual : (SourceCurrentAllocatedInheritedPrefix.run edge.entry.key.constraint inherited
+  348         before.checked.operations).1 = .ok (some combined)) :
+  349       Step g s r e p h m c n budget (.descendants fuel inherited edge before)
+  350         (.children fuel combined edge.children (SourceCurrentAllocatedPartialGraph.prefixState before edge inherited))
+  351   /-- A live combined payload enters its indexed walk. -/
+  352   | children_walk (live : combined ≠ .contradiction) :
+  353       Step g s r e p h m c n budget (.children fuel combined values before) (.walk fuel combined 0 values before)
+  354   /-- The next node uses the actual indexed descent. -/
+  355   | walk_head :
+  356       Step g s r e p h m c n budget (.walk (fuel + 1) combined index (value :: rest) before)
+  357         (.node fuel ⟨(SourceCurrentAllocatedPartialGraph.descend before combined index).1, value⟩
+  358           (SourceCurrentAllocatedPartialGraph.descend before combined index).2)
+  359   /-- The next slot starts after the actual completed earlier node. -/
+  360   | walk_tail
+  361       (actual : nodeCall fuel g s r e p h m c n budget
+  362         ⟨(SourceCurrentAllocatedPartialGraph.descend before combined index).1, value⟩
+  363         (SourceCurrentAllocatedPartialGraph.descend before combined index).2 = .done result middle) :
+  364       Step g s r e p h m c n budget (.walk (fuel + 1) combined index (value :: rest) before)
+  365         (.walk fuel combined (index + 1) rest middle)
+  366 
+  367 /-- A finite literal prefix retains every completed earlier-call witness. -/
+  368 inductive Reached (g s r e p h m c n budget : Nat) : Phase width → Phase width → Prop where
+  369   /-- The entry phase is already reached. -/
+  370   | refl (phase) : Reached g s r e p h m c n budget phase phase
+  371   /-- An actual branch extends the preceding prefix. -/
+  372   | snoc (earlier : Reached g s r e p h m c n budget first middle)
+  373       (last : Step g s r e p h m c n budget middle final) :
+  374       Reached g s r e p h m c n budget first final
+  375 
+  376 /-- Consecutive actual prefixes form one prefix. -/
+  377 theorem Reached.trans (first : Reached g s r e p h m c n budget entryPhase middle)
+  378     (last : Reached g s r e p h m c n budget middle final) :
+  379     Reached g s r e p h m c n budget entryPhase final := by
+  380   induction last with
+  381   | refl => exact first
+  382   | snoc earlier last ih => exact .snoc ih last

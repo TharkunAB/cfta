@@ -1,0 +1,18 @@
+   93 structure Receipt (formulas : SourceGuards.Formulas FullSyntax.Formula)
+   94     (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+   95     (original : Guard) (inherited : EqValue) (before : Checked width) (combined : EqValue) : Prop where
+   96   actual : (run original inherited before.operations).1 = .ok (some combined)
+   97   native : (state before original inherited).native = before.native
+   98   operations : (state before original inherited).operations = (run original inherited before.operations).2
+   99   valid : SourceEqualityConstraintMemoAllocation.Valid (state before original inherited).operations
+  100   grows : SourceEqualityConstraintMemoAllocation.Grows before.operations (state before original inherited).operations
+  101   combinedReady : EqReady (state before original inherited).operations.constraints combined
+  102   ready : Ready (state before original inherited)
+  103   admitted : At formulas solver inventory (state before original inherited)
+  104   effects : Effects (physical before) (physical (state before original inherited))
+  105   extension : SourceRecursiveIntersectionKernel.Extension before.native.machine
+  106     (state before original inherited).native.machine
+  107   exact : ∀ term : Term Symbol, SourceEqualityPrecheck.Sat term combined.payload ↔
+  108     SourceEqualityPrecheck.Sat term inherited.payload ∧
+  109       SourceEqualityGuardReadback.Sat term (SourceCompactGuards.sourceEqualities original)
+  110 

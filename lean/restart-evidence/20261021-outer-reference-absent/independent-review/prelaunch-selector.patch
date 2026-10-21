@@ -1,0 +1,56 @@
+--- reference-absent-prelaunch-254.lean.txt
++++ SourceCurrentOuterReferenceAbsent.lean
+@@ -102,7 +102,7 @@
+       | nil => simp only [walk] at failed; cases failed
+       | cons value rest =>
+         cases fuel with
+-        | zero => simp only [walk] at failed; cases failed
++        | zero => simp only [walk] at failed; cases kind <;> simp only [diagnostic] at failed <;> cases failed
+         | succ fuel =>
+           simp only [walk] at failed
+           rcases bind_failed _ _ failed with headFailed | ⟨head,middle,headDone,later⟩
+@@ -124,8 +124,8 @@
+       intro g s r e p h m c n budget inherited value before kind name handle after failed
+       simp only [descendants] at failed
+       split at failed
+-      · cases failed
+-      · cases failed
++      · cases kind <;> simp only [diagnostic] at failed <;> cases failed
++      · cases kind <;> simp only [diagnostic] at failed <;> cases failed
+       · rename_i combined observed
+         rcases bind_failed _ _ failed with childFailed | ⟨outputs,middle,childDone,impossible⟩
+         · have observed : (SourceCurrentAllocatedInheritedPrefix.run value.entry.key.constraint inherited before.checked.operations).1 =
+@@ -144,7 +144,7 @@
+       | nil => simp only [rows] at failed; cases failed
+       | cons original rest =>
+         cases fuel with
+-        | zero => simp only [rows] at failed; cases failed
++        | zero => simp only [rows] at failed; cases kind <;> simp only [diagnostic] at failed <;> cases failed
+         | succ fuel =>
+           simp only [rows] at failed
+           rcases bind_failed _ _ failed with edgeFailed | ⟨narrowed,middle,edgeDone,later⟩
+@@ -171,7 +171,7 @@
+         split at failed <;> cases kind <;> simp only [diagnostic] at failed <;> cases failed
+       | node entry original depth free =>
+         cases fuel with
+-        | zero => simp only [nodeBody] at failed; cases failed
++        | zero => simp only [nodeBody] at failed; cases kind <;> simp only [diagnostic] at failed <;> cases failed
+         | succ fuel =>
+           simp only [nodeBody] at failed
+           rcases bind_failed _ _ failed with rowsFailed | ⟨outputs,middle,rowsDone,impossible⟩
+@@ -240,13 +240,13 @@
+       .failed (.nodeMemo handle .absent) after) := by
+   constructor
+   · intro failed
+-    obtain ⟨fuel,inherited,actual⟩ := failure_cut (kind := true) failed
++    obtain ⟨fuel,inherited,actual⟩ := failure_cut (kind := true) (name := name) (handle := handle) failed
+     have closedAt := (SourceCurrentOuterClosedInputs.reached formulas solver seed actual initial frame fits known inputs room
+       normal supported causal merged positiveMemo origins stored closed).2
+     change [name] = [] at closedAt
+     cases closedAt
+   · intro failed
+-    obtain ⟨fuel,request,before,actual,started⟩ := failure_cut (kind := false) failed
++    obtain ⟨fuel,request,before,actual,started⟩ := failure_cut (kind := false) (name := name) (handle := handle) failed
+     have valid : NodeValid (caller first) :=
+       FlatMemoThunk.Valid.keyMap _ _ _ _ initial.sound.valid.nodes (fun _ _ linked => linked.2)
+     exact not_absent request before (actual.valid valid) (congrArg (fun result => result.2.1) started)

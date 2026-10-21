@@ -1,0 +1,44 @@
+   29 /-- Contradiction skips the accessor; live inputs combine at its actual return. -/
+   30 noncomputable def run (original : Guard) (inherited : EqValue) (before : Operations) :
+   31     Except String (Option EqValue) × Operations :=
+   32   match inherited with
+   33   | .contradiction => (.ok (some .contradiction), before)
+   34   | .live _ _ =>
+   35       let own := SourceCurrentConjunctionEquality.accessor original before
+   36       match own.1 with
+   37       | .error message => (.error message, own.2)
+   38       | .ok none => (.ok none, own.2)
+   39       | .ok (some value) =>
+   40           let combined := SourceEqualityConstraintMemoAllocation.combine inherited value own.2
+   41           (combined.1.map some, combined.2)
+   42 
+   43 /-- Inherited contradiction has no accessor or allocation effect. -/
+   44 theorem run_contradiction (original : Guard) (before : Operations) :
+   45     run original .contradiction before = (.ok (some .contradiction), before) := rfl
+   46 
+   47 /-- A reached accessor error retains its literal returned operation state. -/
+   48 theorem run_error (original : Guard) (identity : Nat) (records : List SourceEqualityClassOrder.Record)
+   49     (before : Operations) (message : String)
+   50     (failed : (SourceCurrentConjunctionEquality.accessor original before).1 = .error message) :
+   51     run original (.live identity records) before =
+   52       (.error message, (SourceCurrentConjunctionEquality.accessor original before).2) := by
+   53   simp only [run, failed]
+   54 
+   55 /-- A reached missing field stays missing without a combination. -/
+   56 theorem run_missing (original : Guard) (identity : Nat) (records : List SourceEqualityClassOrder.Record)
+   57     (before : Operations)
+   58     (missing : (SourceCurrentConjunctionEquality.accessor original before).1 = .ok none) :
+   59     run original (.live identity records) before =
+   60       (.ok none, (SourceCurrentConjunctionEquality.accessor original before).2) := by
+   61   simp only [run, missing]
+   62 
+   63 /-- A reached own value enters the source combination in inherited-first order. -/
+   64 theorem run_combine (original : Guard) (identity : Nat) (records : List SourceEqualityClassOrder.Record)
+   65     (before : Operations) (own : EqValue)
+   66     (loaded : (SourceCurrentConjunctionEquality.accessor original before).1 = .ok (some own)) :
+   67     run original (.live identity records) before =
+   68       ((SourceEqualityConstraintMemoAllocation.combine (.live identity records) own
+   69         (SourceCurrentConjunctionEquality.accessor original before).2).1.map some,
+   70        (SourceEqualityConstraintMemoAllocation.combine (.live identity records) own
+   71         (SourceCurrentConjunctionEquality.accessor original before).2).2) := by
+   72   simp only [run, loaded]

@@ -1,0 +1,7 @@
+private theorem not_absent (request : EdgeRequest) (before : Caller width) (valid : Valid before) :
+    (beginEdge request before).2.1 ≠ .absent := by
+  cases published : before.edgeResults.table request.key with
+  | none => simp only [beginEdge, FlatMemoThunk.lookupOrInsert, published, FlatMemoThunk.demand, put]; simp
+  | some handle =>
+    obtain ⟨⟨original,status⟩,present,_key⟩ := valid.edges.linked request.key handle published
+    cases status <;> simp only [beginEdge,FlatMemoThunk.lookupOrInsert,published,FlatMemoThunk.demand,present] <;> simp

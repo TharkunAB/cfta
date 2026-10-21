@@ -1,0 +1,3 @@
+/-- Node key links and cell bounds refer to the exact current node table. -/
+def NodeValid (state : Caller width) : Prop :=
+  FlatMemoThunk.Valid (fun request key => request.key = key) (fun _ => True) state.nodeResults

@@ -1,0 +1,16 @@
+-- Source-only private contracts. No proof is supplied.
+-- Here width is arbitrary and the three standard decidable instances are in scope.
+private theorem reference_cut
+    {g s r e p h m c n budget : Nat} {first : Phase width}
+    {name : InternedBinderProtocol.Reference} {after : Caller width}
+    (failed : SourceCurrentOuterActiveAncestry.run g s r e p h m c n budget first =
+      .failed (.unexpectedReference name) after) :
+    ∃ fuel inherited, Reached g s r e p h m c n budget first
+      (.body fuel ⟨inherited, .reference name⟩ after)
+
+private theorem absent_cut
+    {g s r e p h m c n budget handle : Nat} {first : Phase width} {after : Caller width}
+    (failed : SourceCurrentOuterActiveAncestry.run g s r e p h m c n budget first =
+      .failed (.nodeMemo handle .absent) after) :
+    ∃ fuel request before, Reached g s r e p h m c n budget first (.node fuel request before) ∧
+      beginNode request before = (handle, .absent, after)
