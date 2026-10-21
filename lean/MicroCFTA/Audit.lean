@@ -3061,6 +3061,7 @@ import MicroCFTA.SourceCurrentResourceParentWriters
 import MicroCFTA.SourceCurrentOuterPrefixNativeStores
 import MicroCFTA.SourceCurrentOuterResourceWriters
 import MicroCFTA.SourceCurrentResourceOwnerProgress
+import MicroCFTA.SourceCurrentResourceOwnerDispatch
 /-!
 # Proof dependency audit
 
