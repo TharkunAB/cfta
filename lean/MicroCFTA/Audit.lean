@@ -3046,3 +3046,4 @@ run_cmd do
   if checked == 0 then
     throwError "No MicroCFTA theorems were checked"
   logInfo m!"Checked axiom dependencies of {checked} MicroCFTA theorems."
+import MicroCFTA.SourceCurrentNativeMaybeMuPositivePositions
