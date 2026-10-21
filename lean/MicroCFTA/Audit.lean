@@ -3060,6 +3060,7 @@ import MicroCFTA.SourceCurrentOuterNativeStores
 import MicroCFTA.SourceCurrentResourceParentWriters
 import MicroCFTA.SourceCurrentOuterPrefixNativeStores
 import MicroCFTA.SourceCurrentOuterResourceWriters
+import MicroCFTA.SourceCurrentResourceOwnerProgress
 /-!
 # Proof dependency audit
 
