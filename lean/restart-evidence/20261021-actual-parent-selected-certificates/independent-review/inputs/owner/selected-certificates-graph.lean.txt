@@ -1,0 +1,103 @@
+private theorem selected_graph
+    {width budget : Nat} {formulas : SourceGuards.Formulas FullSyntax.Formula}
+    {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {symbol : Symbol} {original : Guard} {loaded : Allocated} {inherited : EqValue}
+    {values : List Node} {before after : Checked width} {fourth savedFourth : Fourth}
+    {memo saved : Memo} {result : EdgeValue Symbol Guard} {memos final : Memos}
+    {actual : SourceCurrentAllocatedParentEdge.Edge budget symbol original loaded inherited values
+      before fourth memo result after savedFourth saved}
+    (reads : SourceCurrentAllocatedParentEdgeActual.Reads formulas solver actual memos final)
+    (noncontradictory : SourceEqualityMkEdgeAllocation.contradictory original = false)
+    {records kept : List SourceEqualityClassOrder.Record} {scanned : Checked width} {scanFourth : Fourth}
+    (precheck : (SourceEqualityPartialPrecheckAllocation.run loaded.stored loaded.guard inherited before.operations).1 =
+      .ok (.classes records)) {g s r e p h m c n : Nat}
+    (scanCall : SourceCurrentAllocatedRecordScanWorker.scan g s p h n budget values records
+      (prefixState before loaded inherited) fourth = .done (none, kept) scanned scanFourth)
+    {preparedValues : List Node} {preparedHeap : InternedConstructorTemplates.State Symbol Guard}
+    {classAfter : Checked width}
+    (requiredCall : SourceEqualityRequiredExecution.requireAll r h
+      (SourceEqualitySelectedRequired.paths (kept.map SourceEqualityClassOrder.Record.paths)) values
+      scanned.native.machine.heap = .done preparedValues preparedHeap)
+    (passCall : SourceCurrentAllocatedClassWorker.pass e p h m c n kept preparedValues
+      (SourceCurrentConjunctionClassScan.advanceHeap scanned preparedHeap) memo =
+      .done result.children classAfter saved) :
+    ∃ scanMemos preparedMemos,
+      ∃ trace : Scan budget SourceMemoGate.unconstrained (SourceEndpointReachability.reaches SourceMemoGate.unconstrained)
+        values (records.map SourceEqualityClassOrder.Record.paths) (prefixState before loaded inherited) fourth none
+        (kept.map SourceEqualityClassOrder.Record.paths) scanned scanFourth,
+      ∃ retained : SourceCurrentConjunctionSelectedRecords.Retained trace records kept,
+      ∃ pass : SourceCurrentAllocatedClassPass.Pass kept preparedValues
+        (SourceCurrentConjunctionClassScan.advanceHeap scanned preparedHeap) memo result.children classAfter saved,
+      (∃ built : SourceCurrentAllocatedMkEdge.build symbol loaded result.children classAfter = (.ok result, after),
+        actual = SourceCurrentAllocatedParentEdge.Edge.live noncontradictory
+          (SourceCurrentAllocatedLocalReduction.Reduction.classes precheck
+            (SourceCurrentConjunctionScanClassPass.Reduction.completed trace retained requiredCall pass)) built) ∧
+      SourceCurrentAllocatedScanSourceReads.ScanReads trace memos scanMemos ∧
+      SourceCurrentRequiredQueryMemos.RequireAllReads
+        (SourceEqualitySelectedRequired.paths (kept.map SourceEqualityClassOrder.Record.paths)) values preparedValues
+        scanned.native.machine.heap preparedHeap scanMemos preparedMemos ∧
+      SourceCurrentAllocatedClassPass.PassReads formulas solver pass preparedMemos final := by
+  cases reads with
+  | rejected =>
+      rename_i test
+      rw [noncontradictory] at test
+      cases test
+  | live localReads =>
+      rename_i children middle test built reduction
+      cases localReads with
+      | unchanged =>
+          rename_i checked
+          have impossible := Except.ok.inj (checked.symm.trans precheck)
+          cases impossible
+      | emptyChildren =>
+          rename_i checked
+          have impossible := Except.ok.inj (checked.symm.trans precheck)
+          cases impossible
+      | classes classReads =>
+          rename_i originalRecords outcome checked continuation
+          have sameRecords := Except.ok.inj (checked.symm.trans precheck)
+          cases sameRecords
+          cases classReads with
+          | stopped first =>
+              rename_i paths selected scan
+              obtain ⟨G, S, P, H, N, stable⟩ := SourceCurrentAllocatedScanWorkerCompletion.scan_complete scan
+              have completed := stable G S P H N (Nat.le_refl _) (Nat.le_refl _) (Nat.le_refl _)
+                (Nat.le_refl _) (Nat.le_refl _)
+              have mapped := SourceCurrentAllocatedRecordScanWorker.scan_mapPaths g s p h n budget values records
+                (prefixState before loaded inherited) fourth
+              rw [scanCall] at mapped
+              have literal : SourceCurrentAllocatedScanWorker.scan g s p h n budget values
+                  (records.map SourceEqualityClassOrder.Record.paths) (prefixState before loaded inherited) fourth =
+                  .done (none, kept.map SourceEqualityClassOrder.Record.paths) scanned scanFourth := by
+                simpa only [SourceCurrentAllocatedRecordScanWorker.mapPaths] using mapped.symm
+              have impossible := (Prod.mk.inj
+                (SourceCurrentAllocatedScanWorkerStability.scan_done_unique completed literal).1).1
+              cases impossible
+          | completed first second last =>
+              rename_i actualKept requiredValues actualScanned selected heap fuel readFuel
+                actualScanMemos actualRequiredMemos required scan retained pass
+              obtain ⟨G, S, P, H, N, stable⟩ :=
+                SourceCurrentAllocatedRecordScanWorkerActual.scan_complete retained
+              have completed := stable G S P H N (Nat.le_refl _) (Nat.le_refl _) (Nat.le_refl _)
+                (Nat.le_refl _) (Nat.le_refl _)
+              obtain ⟨sameResult, sameState, sameFourth⟩ :=
+                SourceCurrentAllocatedRecordScanWorkerStability.scan_done_unique completed scanCall
+              have sameKept := (Prod.mk.inj sameResult).2
+              cases sameKept
+              cases sameState
+              cases sameFourth
+              have sameSelected := retained.fields.2
+              cases sameSelected
+              obtain ⟨sameRequired, sameHeap⟩ :=
+                SourceCurrentConjunctionRequiredActual.required_unique required requiredCall
+              cases sameRequired
+              cases sameHeap
+              obtain ⟨E, P, H, M, C, N, stablePass⟩ :=
+                SourceCurrentAllocatedClassWorkerCompletion.pass_complete pass
+              have passDone := stablePass E P H M C N (Nat.le_refl _) (Nat.le_refl _) (Nat.le_refl _)
+                (Nat.le_refl _) (Nat.le_refl _) (Nat.le_refl _)
+              obtain ⟨sameChildren, sameClassState, _⟩ :=
+                SourceCurrentAllocatedClassWorkerStability.pass_done_unique passDone passCall
+              cases sameChildren
+              cases sameClassState
+              exact ⟨actualScanMemos, actualRequiredMemos, scan, retained, pass, ⟨built, rfl⟩, first, second, last⟩
