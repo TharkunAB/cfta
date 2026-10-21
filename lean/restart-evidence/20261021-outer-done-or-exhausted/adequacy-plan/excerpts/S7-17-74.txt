@@ -1,0 +1,58 @@
+   17 /-- One Parent uses the common finite initial guard and numeric image. -/
+   18 noncomputable def parent (budget : Nat) (seed : List Guard × Profile) : List Guard × Profile :=
+   19   (SourceCurrentParentUniformGuardAlphabet.forecast budget seed.1 seed.2,
+   20     SourceCurrentParentUniformEnvelope.profile budget seed.1 seed.2)
+   21 
+   22 /-- One raw constructor retains its alphabet and reserves its original width. -/
+   23 def rebuild (seed : List Guard × Profile) : List Guard × Profile :=
+   24   (seed.1, SourceCurrentOuterConstructorBounds.profile seed.2)
+   25 
+   26 /-- The Parent image retains both initial bounds. -/
+   27 theorem parent_ge (budget : Nat) (seed : List Guard × Profile) :
+   28     Le seed.2 (parent budget seed).2 ∧ seed.1 ⊆ (parent budget seed).1 := by
+   29   refine ⟨?_, fun _ member => SourceCurrentParentUniformGuardAlphabet.initial_mem budget seed.1 seed.2 member⟩
+   30   exact (SourceCurrentInitialSelectionForecast.cover_ge _ seed.2).trans
+   31     (SourceCurrentMkEdgeNumeric.finalProfile_ge seed.2.mass
+   32       (SourceCurrentParentUniformEnvelope.classesProfile budget seed.1 seed.2))
+   33 
+   34 /-- A raw constructor retains both initial bounds. -/
+   35 theorem rebuild_ge (seed : List Guard × Profile) :
+   36     Le seed.2 (rebuild seed).2 ∧ seed.1 ⊆ (rebuild seed).1 :=
+   37   ⟨SourceCurrentOuterConstructorBounds.profile_ge seed.2, fun _ member => member⟩
+   38 
+   39 mutual
+   40 /-- Node demand reserves its possible body; a warm hit can retain entry bounds. -/
+   41 noncomputable def node (fuel budget : Nat) (seed : List Guard × Profile) : List Guard × Profile :=
+   42   body fuel budget seed
+   43 termination_by (fuel, 3)
+   44 
+   45 /-- An ordinary body reserves its row pass and one raw node constructor. -/
+   46 noncomputable def body (fuel budget : Nat) (seed : List Guard × Profile) : List Guard × Profile :=
+   47   match fuel with
+   48   | 0 => seed
+   49   | next + 1 => rebuild (rows next budget seed)
+   50 termination_by (fuel, 2)
+   51 
+   52 /-- Rows reserve the head Parent, its descendants and then the original suffix. -/
+   53 noncomputable def rows (fuel budget : Nat) (seed : List Guard × Profile) : List Guard × Profile :=
+   54   match fuel with
+   55   | 0 => seed
+   56   | next + 1 => rows next budget (descendants next budget (parent budget seed))
+   57 termination_by (fuel, 2)
+   58 
+   59 /-- Descendants reserve the child pass and one raw edge constructor. -/
+   60 noncomputable def descendants (fuel budget : Nat) (seed : List Guard × Profile) : List Guard × Profile :=
+   61   rebuild (children fuel budget seed)
+   62 termination_by (fuel, 2)
+   63 
+   64 /-- The child schedule includes the live walk; contradiction can retain entry bounds. -/
+   65 noncomputable def children (fuel budget : Nat) (seed : List Guard × Profile) : List Guard × Profile :=
+   66   walk fuel budget seed
+   67 termination_by (fuel, 1)
+   68 
+   69 /-- A walk reserves the selected node and then the original suffix at its returned bounds. -/
+   70 noncomputable def walk (fuel budget : Nat) (seed : List Guard × Profile) : List Guard × Profile :=
+   71   match fuel with
+   72   | 0 => seed
+   73   | next + 1 => walk next budget (node next budget seed)
+   74 termination_by (fuel, 0)

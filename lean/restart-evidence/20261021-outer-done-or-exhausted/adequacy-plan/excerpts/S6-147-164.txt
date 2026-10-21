@@ -1,0 +1,18 @@
+  147 /-- A reservation for a larger profile applies to a smaller profile. -/
+  148 theorem Reserved.mono {bits count : Nat} {first last : Profile}
+  149     (reservation : Reserved bits last count) (below : Le first last) : Reserved bits first count :=
+  150   fun index less => (reservation index less).mono (advance_mono below index)
+  151 
+  152 /-- A finite reservation applies to every shorter initial query sequence. -/
+  153 theorem Reserved.prefix {bits first last : Nat} {profile : Profile}
+  154     (reservation : Reserved bits profile last) (counts : first ≤ last) : Reserved bits profile first :=
+  155   fun index less => reservation index (Nat.lt_of_lt_of_le less counts)
+  156 
+  157 /-- One numeric test at the last query entry supplies the full finite reservation. -/
+  158 theorem reserved_iff_last (bits : Nat) (profile : Profile) (count : Nat) :
+  159     Reserved bits profile (count + 1) ↔ Room bits (advance profile count) := by
+  160   constructor
+  161   · intro reservation
+  162     exact reservation count (by omega)
+  163   · intro room index less
+  164     exact room.mono (advance_count_mono profile (by omega))

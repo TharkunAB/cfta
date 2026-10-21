@@ -1,0 +1,31 @@
+/-- Only recursive ordinary rows and indexed walks consume the outer bound. -/
+inductive Limit where
+  | nodeBody
+  | rows
+  | walk
+  deriving DecidableEq, Repr
+
+/-- Every incomplete outer observation retains its phase and full underlying diagnostic. -/
+inductive Fault (width : Nat) : Type 1 where
+  | exhausted (phase : Limit)
+  | nodeMemo (handle : Nat) (observation : FlatMemoThunk.Observation NodeRequest Node)
+  | edgeMemo (handle : Nat) (observation : FlatMemoThunk.Observation EdgeRequest Edge)
+  | unexpectedReference (name : InternedBinderProtocol.Reference)
+  | binder (observation : InternedNestedConstruction.Outcome Symbol Guard Node)
+  | parent (observation : SourceCurrentAllocatedParentWorker.Fault width)
+  | inherited (message : String)
+  | missingInherited
+
+/-- Every outer return retains both complete result tables and all lower-stage state. -/
+inductive Outcome (Output : Type) (width : Nat) : Type 1 where
+  | done (value : Output) (state : Caller width)
+  | failed (fault : Fault width) (state : Caller width)
+
+def Outcome.state : Outcome Output width → Caller width
+  | .done _ state | .failed _ state => state
+
+/-- A failed body retains its evaluating owner and never enters a finish continuation. -/
+def Outcome.bind (first : Outcome A width) (next : A → Caller width → Outcome B width) : Outcome B width :=
+  match first with
+  | .done value state => next value state
+  | .failed fault state => .failed fault state

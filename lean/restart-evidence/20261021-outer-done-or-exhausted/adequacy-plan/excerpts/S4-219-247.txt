@@ -1,0 +1,29 @@
+  219           obtain ⟨combinedReady,fixed,covered⟩ := prefix_data parented.entry.key.constraint
+  220             inheritedIdentity inheritedRecords afterParent.checked.operations
+  221             descPost.context.ready.good.operations descInputs.1 field combinedIdentity classes combinedAt
+  222           obtain ⟨shape,back⟩ := SourceCurrentResourceParentPositiveBack.children formulas solver written
+  223             afterParent.checked.operations descPost.context.ready.good.operations descInputs.1 field
+  224             combinedIdentity classes combinedAt
+  225           have counted := SourceCurrentPositiveQuotientCount.child_count classes inheritedRecords
+  226             (fun record member => (combinedReady.2 classes rfl record member).1) fixed covered slot value
+  227             (entry := ownerEntry) (depth := ownerDepth) (free := ownerFree) original member
+  228             (back slot value selected)
+  229           have currentReady := combinedReady.grows startPost.effects.grows.constraint_growth
+  230           have actualDescent := SourceEqualityConstraintMemoAllocation.descend_correct
+  231             (.live combinedIdentity classes) slot start.checked.operations
+  232             startPost.context.ready.good.operations currentReady
+  233           have records : SourceEqualityDescend.descend (some classes) slot =
+  234               some (SourceEqualityDescend.records slot classes) := by cases classes <;> rfl
+  235           have payload : (descend start (.live combinedIdentity classes) slot).1.payload =
+  236               some (SourceEqualityDescend.records slot classes) := actualDescent.2.2.1.trans records
+  237           rw [payload]; simp only [SourceEqualityConstraintAllocation.Value.payload, Option.getD_some]
+  238           cases plain : SourceMemoGate.plain original.entry.key.constraint with
+  239           | false => exact Prod.Lex.left _ _ (counted.2 plain)
+  240           | true =>
+  241               have ownEmpty : SourceCompactGuards.sourceEqualities original.entry.key.constraint = some [] :=
+  242                 of_decide_eq_true (Bool.and_eq_true_iff.mp plain).1
+  243               have smaller := shape_mass (entry := ownerEntry) (depth := ownerDepth) (free := ownerFree)
+  244                 member (shape ownEmpty) (List.mem_of_getElem? selected)
+  245               rcases Nat.lt_or_eq_of_le counted.1 with strict | equal
+  246               · exact Prod.Lex.left _ _ strict
+  247               · rw [equal]; exact Prod.Lex.right _ smaller

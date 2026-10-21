@@ -1,0 +1,27 @@
+  111 /-- A completed actual node trace derives its own result mass and numeric headroom from the original heap. -/
+  112 theorem node_return (request : NodeRequest Symbol Guard) {before after : Checked width} (value : Value Symbol Guard)
+  113     (actual : Trace fuel (.code (requestNode request.domain request.left request.right)) before (.code (.pure value)) after)
+  114     (good : Good before) (ready : NodeReady before.native.machine request) :
+  115     execute (fuel + 1) (.code (requestNode request.domain request.left request.right)) before = .done value after ∧
+  116       Stored (massAfter fuel (initialBound before.native.machine.heap)) after.native.machine.heap ∧
+  117       InternedValueMass.value value ≤ massAfter fuel (initialBound before.native.machine.heap) ∧
+  118       after.native.machine.heap.nodes.next ≤ before.native.machine.heap.nodes.next + credit fuel (initialBound before.native.machine.heap) ∧
+  119       after.native.machine.heap.edges.next ≤ before.native.machine.heap.edges.next + credit fuel (initialBound before.native.machine.heap) ∧
+  120       after.native.machine.domains.next ≤ before.native.machine.domains.next + fuel := by
+  121   obtain ⟨_widths, available, _good, _fields, stored, nodes, edges, domains⟩ := node_prefix request actual good ready
+  122   exact ⟨trace_done _ _ _ _ _ actual.steps, stored,
+  123     InternedValueMassHeap.available after.native.machine.heap stored value available, nodes, edges, domains⟩
+  124 
+  125 /-- A completed actual edge trace derives its own row mass and numeric headroom from the original heap. -/
+  126 theorem edge_return (request : EdgeRequest Symbol Guard) {before after : Checked width} (value : EdgeValue Symbol Guard)
+  127     (actual : Trace fuel (.code (requestEdge request.domain request.left request.right)) before (.code (.pure value)) after)
+  128     (good : Good before) (ready : EdgeReady before.native.machine request) :
+  129     execute (fuel + 1) (.code (requestEdge request.domain request.left request.right)) before = .done value after ∧
+  130       Stored (massAfter fuel (initialBound before.native.machine.heap)) after.native.machine.heap ∧
+  131       InternedValueMass.edge value ≤ massAfter fuel (initialBound before.native.machine.heap) ∧
+  132       after.native.machine.heap.nodes.next ≤ before.native.machine.heap.nodes.next + credit fuel (initialBound before.native.machine.heap) ∧
+  133       after.native.machine.heap.edges.next ≤ before.native.machine.heap.edges.next + credit fuel (initialBound before.native.machine.heap) ∧
+  134       after.native.machine.domains.next ≤ before.native.machine.domains.next + fuel := by
+  135   obtain ⟨_widths, resident, _good, _fields, stored, nodes, edges, domains⟩ := edge_prefix request actual good ready
+  136   exact ⟨trace_done _ _ _ _ _ actual.steps, stored,
+  137     InternedValueMassHeap.resident after.native.machine.heap stored value resident, nodes, edges, domains⟩

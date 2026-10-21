@@ -1,0 +1,21 @@
+# Concrete controlled-envelope obligations
+
+No public Lean header is proposed. The candidate below is a mathematical design, not a proved specification or an implementation authorization.
+
+Let Seed = List Guard × Profile. Let r=(n,m), with the strict lexicographic Nat relation used by ActualChildRank.
+The proposed C takes budget, r, and a Seed. It returns a natural work bound and a Seed. It takes no state, actual run, trace, completed-call graph, supplied growth function, or future capacity function.
+For a current seed s, define the finite child-rank image as all (a,b) with a≤n, b≤s.profile.mass, and (a<n OR (a=n AND b<m)).
+For each image member, the recursive C call uses THAT rank and the SAME current s. All such rank calls are strictly smaller. C must be defined as a rank recursion with Seed as a further argument.
+Join all predicted output profiles and the entry profile using the existing cover; join all predicted guard lists and the entry alphabet by finite concatenation/union. Take a maximum of the predicted child work.
+A child-slot iteration updates s to this joined seed. Recompute its finite rank image at the next slot. Do not substitute the literal original prepared heap or reuse the first slot's profile after earlier siblings.
+One row first uses Schedule.parent budget s. Freeze the returned child-list upper bound B from that Parent forecast's mass, apply the child-slot transformer B times, and use Schedule.rebuild for the final edge.
+An ordinary owner has at most its mass many literal original rows. Iterate this row transformer with evolving seed, then use Schedule.rebuild for the final node. Empty/union/Mu branches and warm hits require no recursive ordinary child expansion.
+The work component must include local body, row and walk decrements as well as each selected recursive child's work. A maximum of child depth alone is insufficient. Use an explicit sum or another proved bound on the literal nested decrements.
+
+Required arithmetic results are finite image coverage, componentwise and alphabet inclusion of each join, seed retention, finite iteration composition, and the worker-fuel inequalities. No desired output-support or completion callback can replace these results.
+Required physical connection is SAME-cut entry Fits/known guards and actual strict child rank; the existing local Parent result supplies the next bounded state. Warm cache hits use their genuine available returned payload and perform no new recursive body.
+An implementation must settle whether concrete C seed monotonicity is needed. A slotwise finite join can avoid assuming it; this still needs a proof that the selected child's actual poststate fits the joined output seed.
+Compute F from C at the initial rank and seed. A later conditional execution theorem may require Room(bits,(Schedule.node F budget seed).profile), plus nine phaseNeed(F) bounds and the genuine initial semantic/closure/store/idle packet. These checks are initial data; none asserts that F succeeds.
+C and the initial capacity checks do not prove that an arbitrary fixed-width state has enough room. Choosing or transferring width is a separate construction problem.
+
+This design still needs an actual definition and soundness proof. A function type returning Nat × Seed alone would be vacuous, so this report does not publish one as an adequacy theorem.

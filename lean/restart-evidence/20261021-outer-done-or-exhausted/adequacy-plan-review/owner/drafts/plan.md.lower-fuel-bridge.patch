@@ -1,0 +1,20 @@
+--- room-bridge-plan.md
++++ plan.md
+@@ -14,7 +14,7 @@
+ 
+ ## Smallest genuine missing numeric producer
+ 
+-The concrete candidate is C(budget,n,m,seed) = (work,outputSeed), with seed=(guardAlphabet,Profile). Recurse on Lex(n,m); seed is an additional argument, not part of the decreasing measure.
++The concrete candidate is C(budget,n,m,seed), with seed=(guardAlphabet,Profile), returning work and an output seed, plus an accumulated lower-fuel maximum if domination is not proved. Recurse on Lex(n,m); seed is an additional argument, not part of the decreasing measure.
+ At a child slot, enumerate all (n',m') with n'≤n, m'≤CURRENTseed.profile.mass, and (n',m') Lex-smaller than (n,m). This is finite even when count decreases and mass grows.
+ Join the recursive output profiles with the existing finite cover, join output alphabets by finite list union, and take the maximum recursive work. Retain the entry seed in that join.
+ Iterate that slot transformer through a fixed child-list bound obtained immediately after Parent, carrying the joined seed through earlier siblings. Iterate row work at most owner mass times, then apply the existing raw constructor forecast.
+@@ -25,7 +25,7 @@
+ Prove finite smaller-rank coverage from ActualChildRank and SAME-cut Fits; do not use unknown future profiles as a premise.
+ Prove that each finite seed join covers every selected recursive output and retains the input seed, then that the sequential folds cover the actual later sibling entries. parent_ge alone is retention, not arbitrary seed monotonicity.
+ Either prove the needed concrete seed monotonicity, or use joins at EACH current slot so no unproved global monotonicity of C is assumed. Finite list enumeration must retain full guard syntax and alphabet membership.
+-Prove cumulative work arithmetic against literal body/rows/walk fuel consumption. A depth bound alone does not cover sequential row and child decrements.
++Prove cumulative work arithmetic against literal body/rows/walk fuel consumption. A depth bound alone does not cover sequential row and child decrements. Also prove controlled Parent fuel domination or retain its initial-only maximum L and require each lower fuel ≥max(phaseNeed(F),L).
+ C is still undefined and unproved. No initial-only work bound F has been constructed, and no standalone public adequacy header is justified by this survey.
+ 
+ ## Circularity and capacity boundary

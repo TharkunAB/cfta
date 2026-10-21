@@ -1,0 +1,29 @@
+  122 /-- Node demand retains the entry profile and every initial raw guard. -/
+  123 theorem node_ge (fuel budget : Nat) (seed : List Guard × Profile) :
+  124     Le seed.2 (node fuel budget seed).2 ∧ seed.1 ⊆ (node fuel budget seed).1 := (all_ge fuel budget).1 seed
+  125 
+  126 /-- Each body forecast retains the entry profile and every initial raw guard. -/
+  127 theorem body_ge (fuel budget : Nat) (seed : List Guard × Profile) :
+  128     Le seed.2 (body fuel budget seed).2 ∧ seed.1 ⊆ (body fuel budget seed).1 := (all_ge fuel budget).2.1 seed
+  129 
+  130 /-- Each row forecast retains the entry profile and every initial raw guard. -/
+  131 theorem rows_ge (fuel budget : Nat) (seed : List Guard × Profile) :
+  132     Le seed.2 (rows fuel budget seed).2 ∧ seed.1 ⊆ (rows fuel budget seed).1 := (all_ge fuel budget).2.2.1 seed
+  133 
+  134 /-- Each descendants forecast retains the entry profile and every initial raw guard. -/
+  135 theorem descendants_ge (fuel budget : Nat) (seed : List Guard × Profile) :
+  136     Le seed.2 (descendants fuel budget seed).2 ∧ seed.1 ⊆ (descendants fuel budget seed).1 := (all_ge fuel budget).2.2.2.1 seed
+  137 
+  138 /-- Each child forecast retains the entry profile and every initial raw guard. -/
+  139 theorem children_ge (fuel budget : Nat) (seed : List Guard × Profile) :
+  140     Le seed.2 (children fuel budget seed).2 ∧ seed.1 ⊆ (children fuel budget seed).1 := (all_ge fuel budget).2.2.2.2.1 seed
+  141 
+  142 /-- Each walk forecast retains the entry profile and every initial raw guard. -/
+  143 theorem walk_ge (fuel budget : Nat) (seed : List Guard × Profile) :
+  144     Le seed.2 (walk fuel budget seed).2 ∧ seed.1 ⊆ (walk fuel budget seed).1 := (all_ge fuel budget).2.2.2.2.2 seed
+  145 
+  146 /-- Room at one predicted Parent return supplies every initial Parent query reservation. -/
+  147 theorem parent_reserved (bits budget : Nat) (seed : List Guard × Profile)
+  148     (room : Room bits (parent budget seed).2) :
+  149     SourceCurrentParentAlphabetReservation.UniformReserved bits budget seed.1 seed.2 :=
+  150   SourceCurrentParentInitialRoom.uniform_of_room bits budget seed.1 seed.2

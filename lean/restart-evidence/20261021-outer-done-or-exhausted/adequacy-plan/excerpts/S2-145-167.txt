@@ -1,0 +1,23 @@
+  145       obtain ⟨result, after, constructor, finalFrame, numeric, _nodes, _edges⟩ := SourceCurrentMkEdgeNumeric.complete
+  146         formulas solver next symbol loaded children middle lowerReceipt.frame
+  147         (SourceCurrentLocalForecast.finalProfile budget values.length loaded inherited before.checked profile) lowerReceipt.fits
+  148         storedReady field lower.available
+  149       let actual : Graph.Edge budget symbol original loaded inherited values before.checked before.fourth before.merge
+  150           result after savedFourth saved := .live test lowerReceipt.actual constructor.actual
+  151       have reads : Graph.Reads formulas solver actual memos final := .live (test := test) (built := constructor.actual) lowerReceipt.reads
+  152       have semantic : Graph.Receipt formulas solver next symbol original loaded inherited values before.checked result after
+  153           before.fourth savedFourth before.merge saved final := by
+  154         refine ⟨constructor.ready, constructor.admitted, lower.effects.trans constructor.effects, constructor.resident,
+  155           lower.stored.grows constructor.effects.keeps, lower.covered, lower.retained,
+  156           SourceQueryUnfoldMemo.valid_grows _ _ lower.ready.semantic constructor.effects.keeps final lower.globals,
+  157           SourceCurrentEmptinessMemo.grows formulas solver constructor.effects.keeps savedFourth lower.correct,
+  158           lower.fourthRetained, Or.inr ⟨children, middle, lower.length, constructor⟩, ?_⟩
+  159         intro ambient term
+  160         have edgeLaw := constructor.language storedReady ambient term
+  161         rw [loadedReady.2] at edgeLaw
+  162         have narrows : edgeMeaning (SourceEqualityPCSGuard.holds formulas solver) ambient result term →
+  163             Graph.RawMeaning (SourceEqualityPCSGuard.holds formulas solver) ambient symbol original values term := by
+  164           intro accepted
+  165           obtain ⟨terms, shape, forest, guard⟩ := edgeLaw.mp accepted
+  166           exact ⟨terms, shape, (lower.language ambient symbol terms).1 forest, guard⟩
+  167         refine ⟨narrows, fun inheritedSat => ⟨narrows, ?_⟩⟩

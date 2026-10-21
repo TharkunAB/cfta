@@ -1,0 +1,98 @@
+   18 structure Profile where
+   19   /-- Upper bound on the issued node counter. -/
+   20   nodes : Nat
+   21   /-- Upper bound on the issued edge counter. -/
+   22   edges : Nat
+   23   /-- Upper bound on the domain counter. -/
+   24   domains : Nat
+   25   /-- Upper bound on every stored payload mass. -/
+   26   mass : Nat
+   27 
+   28 /-- Each component of the first profile is at most the second component. -/
+   29 def Le (first last : Profile) : Prop :=
+   30   first.nodes ≤ last.nodes ∧ first.edges ≤ last.edges ∧
+   31     first.domains ≤ last.domains ∧ first.mass ≤ last.mass
+   32 
+   33 /-- A profile bounds itself. -/
+   34 theorem Le.refl (profile : Profile) : Le profile profile :=
+   35   ⟨Nat.le_refl _, Nat.le_refl _, Nat.le_refl _, Nat.le_refl _⟩
+   36 
+   37 /-- Component bounds compose. -/
+   38 theorem Le.trans {first middle last : Profile} (one : Le first middle) (two : Le middle last) :
+   39     Le first last :=
+   40   ⟨Nat.le_trans one.1 two.1, Nat.le_trans one.2.1 two.2.1,
+   41     Nat.le_trans one.2.2.1 two.2.2.1, Nat.le_trans one.2.2.2 two.2.2.2⟩
+   42 
+   43 /-- Forecast one query with the complete initial instruction and mass bounds. -/
+   44 def step (profile : Profile) : Profile :=
+   45   let instructions := instructionBound profile.nodes profile.edges profile.mass
+   46   let constructors := credit instructions profile.mass
+   47   ⟨profile.nodes + constructors, profile.edges + constructors,
+   48     profile.domains + instructions, massAfter instructions profile.mass⟩
+   49 
+   50 /-- One forecast retains each initial component bound. -/
+   51 theorem step_ge (profile : Profile) : Le profile (step profile) :=
+   52   ⟨Nat.le_add_right _ _, Nat.le_add_right _ _, Nat.le_add_right _ _,
+   53     SourceCurrentAllocatedRecursiveMassTrace.massAfter_ge _ _⟩
+   54 
+   55 /-- A larger initial profile retains the one-query forecast. -/
+   56 theorem step_mono {first last : Profile} (increase : Le first last) : Le (step first) (step last) := by
+   57   have instructions := SourceCurrentAllocatedNativeComputedBudget.instructionBound_mono
+   58     increase.1 increase.2.1 increase.2.2.2
+   59   have constructors := SourceCurrentAllocatedRecursiveMassMonotone.credit_mono
+   60     instructions increase.2.2.2
+   61   exact ⟨Nat.add_le_add increase.1 constructors, Nat.add_le_add increase.2.1 constructors,
+   62     Nat.add_le_add increase.2.2.1 instructions,
+   63     SourceCurrentAllocatedRecursiveMassMonotone.massAfter_mono instructions increase.2.2.2⟩
+   64 
+   65 /-- Forecast a fixed number of queries from the original profile. -/
+   66 def advance (profile : Profile) : Nat → Profile
+   67   | 0 => profile
+   68   | count + 1 => advance (step profile) count
+   69 
+   70 /-- An empty query sequence retains the original profile. -/
+   71 theorem advance_zero (profile : Profile) : advance profile 0 = profile := rfl
+   72 
+   73 /-- A nonempty query sequence starts with one forecast step. -/
+   74 theorem advance_succ (profile : Profile) (count : Nat) :
+   75     advance profile (count + 1) = advance (step profile) count := rfl
+   76 
+   77 /-- Two consecutive query forecasts compose in source order. -/
+   78 theorem advance_add (profile : Profile) (first last : Nat) :
+   79     advance profile (first + last) = advance (advance profile first) last := by
+   80   induction first generalizing profile with
+   81   | zero => simp only [Nat.zero_add, advance]
+   82   | succ first ih => simpa only [Nat.succ_add, advance] using ih (step profile)
+   83 
+   84 /-- A finite query forecast retains every original component bound. -/
+   85 theorem advance_ge (profile : Profile) (count : Nat) : Le profile (advance profile count) := by
+   86   induction count generalizing profile with
+   87   | zero => exact Le.refl _
+   88   | succ count ih => exact (step_ge profile).trans (ih (step profile))
+   89 
+   90 /-- A larger original profile retains every fixed query forecast. -/
+   91 theorem advance_mono {first last : Profile} (increase : Le first last) (count : Nat) :
+   92     Le (advance first count) (advance last count) := by
+   93   induction count generalizing first last with
+   94   | zero => exact increase
+   95   | succ count ih => exact ih (step_mono increase)
+   96 
+   97 /-- Additional forecast queries retain all earlier component bounds. -/
+   98 theorem advance_count_mono (profile : Profile) {first last : Nat} (counts : first ≤ last) :
+   99     Le (advance profile first) (advance profile last) := by
+  100   obtain ⟨extra, rfl⟩ := Nat.exists_eq_add_of_le counts
+  101   rw [advance_add]
+  102   exact advance_ge _ extra
+  103 
+  104 /-- Numeric entry conditions for the checked native query at this width. -/
+  105 def Room (bits : Nat) (profile : Profile) : Prop :=
+  106   profile.nodes < 2 ^ bits ∧ profile.edges ≤ 2 ^ (bits + 2) ∧
+  107     profile.domains + 2 ^ (profile.nodes + profile.nodes * profile.nodes) < 2 ^ (bits + 1)
+  108 
+  109 /-- Entry room for a larger profile gives entry room for a smaller profile. -/
+  110 theorem Room.mono {bits : Nat} {first last : Profile} (room : Room bits last)
+  111     (below : Le first last) : Room bits first := by
+  112   have exponent := Nat.add_le_add below.1 (Nat.mul_le_mul below.1 below.1)
+  113   have power := Nat.pow_le_pow_right (by decide : 1 ≤ 2) exponent
+  114   exact ⟨Nat.lt_of_le_of_lt below.1 room.1, Nat.le_trans below.2.1 room.2.1,
+  115     Nat.lt_of_le_of_lt (Nat.add_le_add below.2.2.1 power) room.2.2⟩

@@ -1,0 +1,17 @@
+# Proposed done-or-exhausted composition
+
+This is a source-only plan. It adds no proof declaration. The exact34-line public header proposes one SourceCurrentOuterDoneOrExhausted.done_or_exhausted theorem. proposed-context.lean.txt contains its21-line context. plan.md contains the complete34-line route and boundary report.
+
+The candidate keeps the complete genuine initial resource packet,initialNodeIdle,initial EdgeIdle,NodeStored,InputsClosed and all nine phaseNeed inequalities. It concludes either a literal done()Caller equation or a literal exhausted(limit)Caller equation for the same chosen phase and the same nine lower bounds and budget. It adds no adequate-fuel or capacity premise.
+
+The only missing composition dependency is the unchecked LocalFaults.failed_cases contract. Its frozen21-line public proposal is copied unchanged with its historical plan. A separate cue records that its author reported a216-line source-only implementation draft under review at14:04 CEST. This package does not claim that any LocalFaults check ran or passed. The context import remains a future dependency. ReferenceAbsent is separately checked,officially installed and compiled; the cue records its exact254/e478 source and root Audit3613jobs/75090dependencies.
+
+The proof proposal cases the actual Outcome. Its done branch retains the literal Caller. Its failed branch consumes LocalFaults.failed_cases once at the same fault and Caller. Exhaustion remains. Existing public exclusions remove node busy,node absent,all edgeMemo payloads,reference and all Parent observations. The nine lower bounds are passed only to InitialParentFailure. NodeMemo's datatype includes ready/evaluate observations;the pending provenance theorem is required to exclude those unsupported payloads. No inverse or graph induction is copied by this composition.
+
+Root read the original complete plan,header and all12 direct source ranges. Root also read the one-line status correction. The original plan and exact correction are retained. The separate scope addendum imposes a hard stop at150 TOTAL source lines before ANY compiler or further implementation. It also requires complete root and guard source reviews,officially compiled LocalFaults and a separate activation. The earlier60–100-line estimate grants no exception. No implementation is authorized now.
+
+The first jointly adequate OUTER fuel and initial Room for that SAME forecast remain unproved. phaseNeed bounds lower workers for a chosen phase. Room can fail for a larger forecast at fixed width. Existing completion requires a finite actual graph,and existing stability requires an actual success. A rank-driven finite envelope or a proved width/state/fuel transport may still be needed. This proposal supplies neither.
+
+Twelve direct source files and twelve exact ranges are pinned. The unchanged historical LocalFaults plan adds eleven source files and seventeen ranges. Their union contains seventeen distinct live repository paths. The ordinary verifier uses only packaged source bytes and the supplied root argument;the mandatory live verifier compares every direct and historical source pin. No Lean,Lake,canonical,runtime,public-pair,constructed-pair or official-edit job was run for this plan.
+
+The author wrote ReferenceAbsent and related resource and closure adapters. This report does not independently certify those authored foundations. It changes no official source,Git state,shared board or frozen proof package. No completion or termination result is claimed.

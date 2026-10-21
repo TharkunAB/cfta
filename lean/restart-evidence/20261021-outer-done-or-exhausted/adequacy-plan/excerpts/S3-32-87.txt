@@ -1,0 +1,56 @@
+   32 /-- Actual counters and every stored payload fit the supplied numeric forecast. -/
+   33 structure Fits (profile : Profile) (state : Checked width) : Prop where
+   34   /-- The current node supply fits the forecast. -/
+   35   nodes : state.native.machine.heap.nodes.next ≤ profile.nodes
+   36   /-- The current edge supply fits the forecast. -/
+   37   edges : state.native.machine.heap.edges.next ≤ profile.edges
+   38   /-- The current domain supply fits the forecast. -/
+   39   domains : state.native.machine.domains.next ≤ profile.domains
+   40   /-- Every successful stored payload fits the causal mass bound. -/
+   41   stored : Stored profile.mass state.native.machine.heap
+   42 
+   43 /-- Initial numeric room bounds the actual query entry. -/
+   44 theorem Fits.room {profile : Profile} {state : Checked width} (fits : Fits profile state)
+   45     (room : Room bits profile) :
+   46     state.native.machine.heap.nodes.next < 2 ^ bits ∧
+   47       state.native.machine.heap.edges.next ≤ 2 ^ (bits + 2) ∧
+   48       state.native.machine.domains.next +
+   49         2 ^ (state.native.machine.heap.nodes.next + state.native.machine.heap.nodes.next * state.native.machine.heap.nodes.next) <
+   50         2 ^ (bits + 1) := by
+   51   exact Room.mono room (show Le
+   52     ⟨state.native.machine.heap.nodes.next, state.native.machine.heap.edges.next, state.native.machine.domains.next, profile.mass⟩
+   53     profile from ⟨fits.nodes, fits.edges, fits.domains, Nat.le_refl _⟩)
+   54 
+   55 /-- Larger numeric forecasts retain the same actual state. -/
+   56 theorem Fits.mono {first last : Profile} {state : Checked width} (fits : Fits first state) (larger : Le first last) :
+   57     Fits last state :=
+   58   ⟨Nat.le_trans fits.nodes larger.1, Nat.le_trans fits.edges larger.2.1,
+   59     Nat.le_trans fits.domains larger.2.2.1, fits.stored.mono larger.2.2.2⟩
+   60 
+   61 /-- One current inventory retains all laws needed by the next generated query. -/
+   62 structure Frame (formulas : SourceGuards.Formulas FullSyntax.Formula)
+   63     (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory) (state : Checked width) : Prop where
+   64   /-- The same state retains all physical query invariants. -/
+   65   ready : Ready state
+   66   /-- Populated native cells retain current inventory admission. -/
+   67   admitted : At formulas solver inventory state
+   68   /-- The current heap retains its semantic and guard observations. -/
+   69   context : Context Plain inventory.source state.native.machine
+   70   /-- Completed native cells retain both joint laws. -/
+   71   joint : SourceCurrentConstrainedCapCheckedJointCache.Stored Plain inventory.source state.native
+   72   /-- Every allocated native cell retains its captured source witnesses. -/
+   73   origins : SourceCurrentConstrainedCapCheckedJointOrigins.Stored inventory.source state.native
+   74 
+   75 /-- Empty native tables derive the initial inventory and joint laws from physical readiness. -/
+   76 theorem Frame.initial (formulas : SourceGuards.Formulas FullSyntax.Formula)
+   77     (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+   78     (machine : Machine Symbol Guard) (operations : SourceEqualityConstraintMemoAllocation.State)
+   79     (ready : Ready (⟨initial width machine, operations⟩ : Checked width))
+   80     (guards : SourceCurrentConstrainedCapGuardHeap.Heap Plain machine.heap) (same : inventory.source = machine.heap) :
+   81     Frame formulas solver inventory ⟨initial width machine, operations⟩ := by
+   82   have growth : Grows inventory.source machine.heap := by rw [same]; exact grows_refl _
+   83   have history : Extends inventory.source.nodes.issued machine.heap.nodes.issued := by rw [same]; exact extends_refl _
+   84   exact ⟨ready, SourceCurrentAllocatedNativeInventoryState.initial inventory formulas solver width machine operations growth history,
+   85     ⟨ready.good.native.machine, ready.semantic.ready.semantic, guards, growth, history⟩,
+   86     SourceCurrentConstrainedCapCheckedJointCache.initial_stored Plain inventory.source width machine,
+   87     SourceCurrentConstrainedCapCheckedJointOrigins.initial_stored inventory.source width machine⟩

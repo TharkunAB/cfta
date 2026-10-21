@@ -1,0 +1,31 @@
+   71 theorem resident_bounds
+   72     (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+   73     (inventory : Inventory) (budget : Nat) (alphabet : List Guard) (request : Request)
+   74     (before : Caller (bits + 2)) (memos : Memos)
+   75     (initial : Context formulas solver inventory before memos) (entry : Profile) (fits : Fits entry before.checked)
+   76     (known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ alphabet) before.checked.native.machine.heap)
+   77     (inherited : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited)
+   78     (resident : EdgeResident before.checked.native.machine.heap request.value) :
+   79     Le (SourceCurrentParentForecast.residentProfile budget request before.checked entry) (profile budget alphabet entry) ∧
+   80       SourceCurrentParentForecast.residentFuel budget request before.checked entry ≤ fuel budget alphabet entry := by
+   81   classical
+   82   cases raw : SourceEqualityMkEdgeAllocation.contradictory request.value.entry.key.constraint with
+   83   | true =>
+   84       exact ⟨by simpa only [SourceCurrentParentForecast.residentProfile,raw,ite_true] using
+   85         constructor_bound budget alphabet entry 0 (Nat.zero_le _), by simp only
+   86         [SourceCurrentParentForecast.residentFuel,raw,ite_true,Nat.zero_le]⟩
+   87   | false =>
+   88       obtain ⟨loaded,own,branch,receipt⟩ := SourceCurrentAllocatedPrecheck.resident_complete formulas solver inventory
+   89         before.checked initial.ready initial.admitted request.value resident request.inherited inherited
+   90       have countBound : request.value.children.length ≤ entry.mass := by
+   91         have mass := InternedValueMassHeap.resident _ fits.stored request.value resident
+   92         have length : request.value.children.length ≤ InternedValueMass.values request.value.children := by
+   93           rw [InternedValueMass.values_eq_length_sum]
+   94           omega
+   95         rw [InternedValueMass.edge_children] at mass
+   96         omega
+   97       simp only [SourceCurrentParentForecast.residentProfile,SourceCurrentParentForecast.residentFuel,raw,
+   98         Bool.false_eq_true,ite_false,receipt.load,SourceCurrentParentForecast.finalProfile,
+   99         SourceCurrentParentForecast.fuel,SourceCurrentLocalForecast.finalProfile,
+  100         SourceCurrentLocalForecast.fuel,receipt.actual]
+  101       cases branch with

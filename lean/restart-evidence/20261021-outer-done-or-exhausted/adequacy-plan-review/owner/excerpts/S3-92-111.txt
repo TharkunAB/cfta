@@ -1,0 +1,20 @@
+   92 structure Receipt (profile : Profile) (depth : Nat)
+   93     (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+   94     (inventory : Inventory) (fuel : Nat) (left right : Value Symbol Guard) (before : Checked width)
+   95     (value : Value Symbol Guard) (after : Checked width) (memos : Memos) : Prop where
+   96   /-- The actual query retains its joint laws and captured origins. -/
+   97   joint : SourceCurrentConstrainedCapCheckedJointInventoryQuery.Receipt inventory depth formulas solver fuel left right before value after
+   98   /-- The same trace retains exact language, readiness, and global tables. -/
+   99   query : SourceCurrentAllocatedTargetQuery.Receipt formulas solver inventory left right before value after memos
+  100   /-- The literal returned state admits the next generated query. -/
+  101   frame : Frame formulas solver inventory after
+  102   /-- The initial forecast bounds all yielded instructions. -/
+  103   count : fuel ≤ instructionBound profile.nodes profile.edges profile.mass
+  104   /-- The computed fuel executes to the same result and checked state. -/
+  105   done : execute (instructionBound profile.nodes profile.edges profile.mass + 1)
+  106     (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before = .done value after
+  107   /-- The same returned state fits the next numeric forecast. -/
+  108   fits : Fits (SourceCurrentAllocatedNativeResourceForecast.step profile) after
+  109   /-- The returned payload fits the forecast mass schedule. -/
+  110   mass : InternedValueMass.value value ≤
+  111     massAfter (instructionBound profile.nodes profile.edges profile.mass) profile.mass

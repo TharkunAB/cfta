@@ -1,0 +1,21 @@
+  123 /-- Count the inherited-relation classes represented by positive natural child paths. -/
+  124 noncomputable def count (inherited : List Record) (value : Node) : Nat := by
+  125   classical
+  126   exact (((positivePaths value).map (Quotient.mk (relationSetoid (inherited.map Record.paths)))).eraseDups).length
+  127 
+  128 /-- Actual descended records bound every backwards-linked child and strictly count a nonplain row. -/
+  129 theorem child_count
+  130     (parents inherited : List Record)
+  131     (coherent : ∀ record ∈ parents, SourceEqualityClassOrder.Coherent record)
+  132     (fixed : congruenceStep (parents.map Record.paths) = some (parents.map Record.paths))
+  133     (covered : Covers (inherited.map Record.paths) (parents.map Record.paths))
+  134     (index : Nat) (child : Node) {entry depth free} {rows : List Row}
+  135     (row : Row) (member : row ∈ rows)
+  136     (back : ∀ q, PositiveAt child q →
+  137       ∃ j p original, row.children[j]? = some original ∧ PositiveAt original p ∧
+  138         Rel (parents.map Record.paths) (index :: q) (j :: p)) :
+  139     count (SourceEqualityDescend.records index parents) child ≤
+  140         count inherited (.node entry rows depth free) ∧
+  141       (SourceMemoGate.plain row.entry.key.constraint = false →
+  142         count (SourceEqualityDescend.records index parents) child <
+  143           count inherited (.node entry rows depth free)) := by

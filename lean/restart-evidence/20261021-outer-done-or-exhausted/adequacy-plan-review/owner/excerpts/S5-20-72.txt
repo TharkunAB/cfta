@@ -1,0 +1,53 @@
+   20 /- Copy PositiveOwnerPair23–74 exactly. Both earlier enumerations are private. -/
+   21 private def candidates : Nat → Node → List Path
+   22   | 0, _ => []
+   23   | fuel + 1, .node _ rows _ _ =>
+   24       [] :: rows.flatMap (fun row => row.children.zipIdx.flatMap
+   25         (fun child => (candidates fuel child.1).map (child.2 :: ·)))
+   26   | fuel + 1, .union _ members _ _ =>
+   27       [] :: members.flatMap (candidates fuel)
+   28   | _ + 1, _ => [[]]
+   29 
+   30 private theorem candidates_complete {value path} (positive : PositiveAt value path) :
+   31     ∀ fuel, InternedValueMass.value value < fuel → path ∈ candidates fuel value := by
+   32   induction positive with
+   33   | root rowIndex row selected nonplain =>
+   34       intro fuel bounded
+   35       cases fuel with
+   36       | zero => omega
+   37       | succ fuel => exact List.mem_cons_self
+   38   | @child entry rows depth free rowIndex childIndex row child selected chosen path rest ih =>
+   39       intro fuel bounded
+   40       cases fuel with
+   41       | zero => omega
+   42       | succ fuel =>
+   43           have smaller := InternedValueMass.node_child_lt entry rows depth free row
+   44             (List.mem_of_getElem? selected) child (List.mem_of_getElem? chosen)
+   45           have present := ih fuel (by omega)
+   46           apply List.mem_cons_of_mem
+   47           apply List.mem_flatMap.mpr
+   48           refine ⟨row, List.mem_of_getElem? selected, ?_⟩
+   49           apply List.mem_flatMap.mpr
+   50           refine ⟨(child, childIndex), List.mk_mem_zipIdx_iff_getElem?.mpr chosen, ?_⟩
+   51           exact List.mem_map.mpr ⟨path, present, rfl⟩
+   52   | @member entry members depth free memberIndex child selected path rest ih =>
+   53       intro fuel bounded
+   54       cases fuel with
+   55       | zero => omega
+   56       | succ fuel =>
+   57           have smaller := InternedValueMass.union_member_lt entry members depth free child
+   58             (List.mem_of_getElem? selected)
+   59           exact List.mem_cons_of_mem [] (List.mem_flatMap.mpr
+   60             ⟨child, List.mem_of_getElem? selected, ih fuel (by omega)⟩)
+   61 
+   62 private noncomputable def positivePaths (value : Node) : List Path := by
+   63   classical
+   64   exact ((candidates (InternedValueMass.value value + 1) value).filter
+   65     (fun path => decide (PositiveAt value path))).eraseDups
+   66 
+   67 private theorem positivePaths_spec {value path} :
+   68     path ∈ positivePaths value ↔ PositiveAt value path := by
+   69   classical
+   70   simp only [positivePaths, List.mem_eraseDups, List.mem_filter, decide_eq_true_eq]
+   71   exact ⟨And.right, fun positive =>
+   72     ⟨candidates_complete positive _ (by omega), positive⟩⟩

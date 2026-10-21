@@ -1,0 +1,34 @@
+  139 /-- Initial uniform reservations construct the actual Parent with the common output and replay bounds. -/
+  140 theorem complete
+  141     (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  142     (inventory : Inventory) (budget : Nat) (alphabet : List Guard) (request : Request)
+  143     (before : Caller (bits + 2)) (memos : Memos)
+  144     (initial : Context formulas solver inventory before memos)
+  145     (frame : Frame formulas solver inventory before.checked) (entry : Profile) (fits : Fits entry before.checked)
+  146     (known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ alphabet) before.checked.native.machine.heap)
+  147     (inherited : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited)
+  148     (resident : EdgeResident before.checked.native.machine.heap request.value)
+  149     (uniform : UniformReserved bits budget alphabet entry) :
+  150     ∃ loaded result after savedFourth saved next final,
+  151       SourceCurrentParentNumeric.Receipt formulas solver next entry budget request.value.entry.key.symbol
+  152         request.value.entry.key.constraint loaded request.inherited request.value.children before memos
+  153         result after savedFourth saved final ∧ Fits (profile budget alphabet entry) after ∧
+  154       ∀ g s r e p h m c n,
+  155         fuel budget alphabet entry ≤ g → fuel budget alphabet entry ≤ s → fuel budget alphabet entry ≤ r →
+  156         fuel budget alphabet entry ≤ e → fuel budget alphabet entry ≤ p → fuel budget alphabet entry ≤ h →
+  157         fuel budget alphabet entry ≤ m → fuel budget alphabet entry ≤ c → fuel budget alphabet entry ≤ n →
+  158         SourceCurrentAllocatedParentWorker.edge g s r e p h m c n budget request.value.entry.key.symbol
+  159           request.value.entry.key.constraint request.inherited request.value.children
+  160           before.checked before.fourth before.merge = .done result after savedFourth saved := by
+  161   have reserved := SourceCurrentParentAlphabetReservation.resident_reserved formulas solver inventory budget alphabet request
+  162     before memos initial entry fits known inherited resident uniform
+  163   have bounds := resident_bounds formulas solver inventory budget alphabet request before memos initial entry fits
+  164     known inherited resident
+  165   obtain ⟨loaded,result,after,savedFourth,saved,next,final,receipt,numeric,done⟩ :=
+  166     SourceCurrentParentNumeric.resident_complete formulas solver inventory budget request before memos
+  167       initial frame entry fits (fun _ => resident) (fun _ => inherited) reserved
+  168   refine ⟨loaded,result,after,savedFourth,saved,next,final,receipt,numeric.mono bounds.1,?_⟩
+  169   intro g s r e p h m c n hg hs hr he hp hh hm hc hn
+  170   exact done g s r e p h m c n (Nat.le_trans bounds.2 hg) (Nat.le_trans bounds.2 hs) (Nat.le_trans bounds.2 hr)
+  171     (Nat.le_trans bounds.2 he) (Nat.le_trans bounds.2 hp) (Nat.le_trans bounds.2 hh)
+  172     (Nat.le_trans bounds.2 hm) (Nat.le_trans bounds.2 hc) (Nat.le_trans bounds.2 hn)

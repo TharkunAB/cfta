@@ -1,0 +1,46 @@
+  108 theorem dispatch
+  109     (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  110     (solver : SourceGuards.Entailment FullSyntax.Formula)
+  111     {g s r e p h m c n budget fuel slot : Nat}
+  112     {inherited : EqValue}
+  113     {first : Phase (bits + 2)} {inventory : Inventory} {memos : Memos}
+  114     (seed : List Guard × Profile)
+  115     (initial : Context formulas solver inventory (caller first) memos)
+  116     (frame : Frame formulas solver inventory (caller first).checked)
+  117     (fits : Fits seed.2 (caller first).checked)
+  118     (known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.1)
+  119       (caller first).checked.native.machine.heap)
+  120     (inputs : SourceCurrentOuterPrefixInvariants.Inputs first)
+  121     (room : Room bits (SourceCurrentOuterInitialPrefix.forecast budget first seed).2)
+  122     (normal : SourceCurrentRequiredUnionNormal.UnionNormal (caller first).checked.native.machine.heap)
+  123     (supported : SourceCurrentNativeRequestPositivePositions.Support
+  124       (caller first).checked.native.machine.heap (caller first).checked.native)
+  125     (causal : SourceCurrentNativeMuPublication.History empty (caller first).checked.native.machine.heap)
+  126     (merged : SourceCurrentConstrainedCapMemoMerge.Stored
+  127       (fun guard : Guard => SourceMemoGate.plain guard = true) (caller first).merge)
+  128     (positiveMemo : SourceCurrentMergePositivePosition.Support (caller first).merge)
+  129     (origins : SourceCurrentResourceParentWriters.Origins formulas solver (caller first))
+  130     {ownerEntry ownerDepth ownerFree} {ownerRows : List Edge}
+  131     {original parented : Edge} {rest : List Edge}
+  132     {before afterParent start : Caller (bits + 2)} {earlier : List Node}
+  133     {combined : EqValue} {value : Node}
+  134     (past : Reached g s r e p h m c n budget first
+  135       (.rows (fuel + slot + 2) inherited (original :: rest) before))
+  136     (member : original ∈ ownerRows)
+  137     (parent : edgeCall (fuel + slot + 1) g s r e p h m c n budget
+  138       ⟨inherited, original⟩ before = .done parented afterParent)
+  139     (combinedAt : (SourceCurrentAllocatedInheritedPrefix.run parented.entry.key.constraint
+  140       inherited afterParent.checked.operations).1 = .ok (some combined))
+  141     (live : combined ≠ .contradiction)
+  142     (earlierCalls : walk (fuel + slot + 1) g s r e p h m c n budget combined 0
+  143       (parented.children.take slot) (prefixState afterParent parented inherited) =
+  144         .done earlier start)
+  145     (selected : parented.children[slot]? = some value) :
+  146     let child := descend start combined slot
+  147     Reached g s r e p h m c n budget first (.node fuel ⟨child.1,value⟩ child.2) ∧
+  148       Prod.Lex Nat.lt Nat.lt
+  149         (SourceCurrentPositiveQuotientCount.count (child.1.payload.getD []) value,
+  150           InternedValueMass.value value)
+  151         (SourceCurrentPositiveQuotientCount.count (inherited.payload.getD [])
+  152             (.node ownerEntry ownerRows ownerDepth ownerFree),
+  153           InternedValueMass.value (.node ownerEntry ownerRows ownerDepth ownerFree : Node))

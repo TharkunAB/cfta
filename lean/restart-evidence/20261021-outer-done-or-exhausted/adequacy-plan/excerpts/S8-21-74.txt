@@ -1,0 +1,54 @@
+   21 /-- One predicted Parent contributes the common bound for each of its nine lower fuels. -/
+   22 noncomputable def parentNeed (budget : Nat) (seed : Seed) : Nat :=
+   23   SourceCurrentParentUniformEnvelope.fuel budget seed.1 seed.2
+   24 
+   25 mutual
+   26 /-- Node demand reserves its possible body; ready hits consume no lower fuel. -/
+   27 noncomputable def nodeNeed (fuel budget : Nat) (seed : Seed) : Nat :=
+   28   bodyNeed fuel budget seed
+   29 termination_by (fuel, 3)
+   30 
+   31 /-- A nonterminal ordinary body reserves its row pass. -/
+   32 noncomputable def bodyNeed (fuel budget : Nat) (seed : Seed) : Nat :=
+   33   match fuel with
+   34   | 0 => 0
+   35   | next + 1 => rowsNeed next budget seed
+   36 termination_by (fuel, 2)
+   37 
+   38 /-- Row work reserves Parent, descendants and the suffix at their exact predicted entries. -/
+   39 noncomputable def rowsNeed (fuel budget : Nat) (seed : Seed) : Nat :=
+   40   match fuel with
+   41   | 0 => 0
+   42   | next + 1 => max (parentNeed budget seed)
+   43       (max (descendantsNeed next budget (Schedule.parent budget seed))
+   44         (rowsNeed next budget (Schedule.descendants next budget (Schedule.parent budget seed))))
+   45 termination_by (fuel, 2)
+   46 
+   47 /-- Descendants reserve children; their final raw constructor consumes no lower fuel. -/
+   48 noncomputable def descendantsNeed (fuel budget : Nat) (seed : Seed) : Nat :=
+   49   childrenNeed fuel budget seed
+   50 termination_by (fuel, 2)
+   51 
+   52 /-- A live combined field reserves its indexed walk; contradiction consumes no lower fuel. -/
+   53 noncomputable def childrenNeed (fuel budget : Nat) (seed : Seed) : Nat :=
+   54   walkNeed fuel budget seed
+   55 termination_by (fuel, 1)
+   56 
+   57 /-- Each walk slot reserves its node and its suffix at the predicted node return. -/
+   58 noncomputable def walkNeed (fuel budget : Nat) (seed : Seed) : Nat :=
+   59   match fuel with
+   60   | 0 => 0
+   61   | next + 1 => max (nodeNeed next budget seed)
+   62       (walkNeed next budget (Schedule.node next budget seed))
+   63 termination_by (fuel, 0)
+   64 end
+   65 
+   66 /-- The literal phase tag selects the corresponding initial lower-fuel bound. -/
+   67 noncomputable def phaseNeed (budget : Nat) (phase : Phase width) (seed : Seed) : Nat :=
+   68   match phase with
+   69   | .node fuel _ _ => nodeNeed fuel budget seed
+   70   | .body fuel _ _ => bodyNeed fuel budget seed
+   71   | .rows fuel _ _ _ => rowsNeed fuel budget seed
+   72   | .descendants fuel _ _ _ => descendantsNeed fuel budget seed
+   73   | .children fuel _ _ _ => childrenNeed fuel budget seed
+   74   | .walk fuel _ _ _ _ => walkNeed fuel budget seed

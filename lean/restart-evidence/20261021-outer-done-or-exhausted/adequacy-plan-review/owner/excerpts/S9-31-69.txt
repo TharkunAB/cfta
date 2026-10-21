@@ -1,0 +1,39 @@
+   31 /-- Initial code safety derives all reached widths and the final continuation certificate. -/
+   32 theorem widths {control next : Control A} {before after : Checked width}
+   33     (actual : Trace fuel control before next after) (good : Good before) (fields : Fields control before)
+   34     (stored : Stored bound before.native.machine.heap)
+   35     (certificate : ControlAt control before bound post) :
+   36     SourceCurrentAllocatedRecursiveMassTrace.InputsThrough fuel bound control before ∧
+   37       ControlAt next after (massAfter fuel bound) post := by
+   38   induction actual generalizing bound with
+   39   | refl => exact ⟨trivial, certificate⟩
+   40   | cons control before middle current next after count physical one rest ih =>
+   41       have own := SourceCurrentAllocatedNativeWidthStep.inputs control before bound certificate
+   42       have retained := SourceCurrentAllocatedNativeWidthStep.yielded_at control middle before current bound post
+   43         good physical fields stored certificate one
+   44       have effects := SourceCurrentAllocatedNativePhysicalCompletion.step_invariants control before good physical fields
+   45       have reached : Good current := by simpa only [one, Outcome.state] using effects.1
+   46       have remaining : Fields middle current := by simpa only [one, OutcomeFields] using effects.2.2.2.2.2
+   47       have currentStore : Stored (SourceCurrentAllocatedRecursiveMassTrace.ceiling bound) current.native.machine.heap := by
+   48         have ownBound := SourceCurrentAllocatedRecursiveMassTrace.step_bound control before good physical stored own
+   49         simpa only [one, Outcome.state] using ownBound.1
+   50       obtain ⟨tail, final⟩ := ih reached remaining currentStore retained
+   51       refine ⟨⟨own, ?_⟩, final⟩
+   52       simpa only [one] using tail
+   53 
+   54 /-- Every actual certified query prefix derives its numeric resources without future width premises. -/
+   55 theorem prefix_bound {control next : Control A} {before after : Checked width}
+   56     (actual : Trace fuel control before next after) (good : Good before) (fields : Fields control before)
+   57     (stored : Stored bound before.native.machine.heap)
+   58     (certificate : ControlAt control before bound post) :
+   59     SourceCurrentAllocatedRecursiveMassTrace.InputsThrough fuel bound control before ∧
+   60       ControlAt next after (massAfter fuel bound) post ∧ Good after ∧ Fields next after ∧
+   61       Stored (massAfter fuel bound) after.native.machine.heap ∧
+   62       after.native.machine.heap.nodes.next ≤ before.native.machine.heap.nodes.next + credit fuel bound ∧
+   63       after.native.machine.heap.edges.next ≤ before.native.machine.heap.edges.next + credit fuel bound ∧
+   64       after.native.machine.domains.next ≤ before.native.machine.domains.next + fuel := by
+   65   obtain ⟨produced, final⟩ := widths actual good fields stored certificate
+   66   obtain ⟨lastGood, lastFields, lastStore, nodes, edges⟩ :=
+   67     SourceCurrentAllocatedRecursiveMassTrace.prefix_bound actual good fields stored produced
+   68   exact ⟨produced, final, lastGood, lastFields, lastStore, nodes, edges,
+   69     SourceCurrentAllocatedRecursiveMassTrace.domain_prefix_bound actual⟩

@@ -1,0 +1,44 @@
+   26 theorem no_node_busy
+   27     (formulas : SourceGuards.Formulas FullSyntax.Formula)
+   28     (solver : SourceGuards.Entailment FullSyntax.Formula)
+   29     {g s r e p h m c n budget handle : Nat}
+   30     {first : Phase (bits + 2)} {inventory : Inventory} {memos : Memos}
+   31     (seed : List Guard × Profile)
+   32     (initial : Context formulas solver inventory (caller first) memos)
+   33     (frame : Frame formulas solver inventory (caller first).checked)
+   34     (fits : Fits seed.2 (caller first).checked)
+   35     (known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.1)
+   36       (caller first).checked.native.machine.heap)
+   37     (inputs : SourceCurrentOuterPrefixInvariants.Inputs first)
+   38     (room : Room bits (SourceCurrentOuterInitialPrefix.forecast budget first seed).2)
+   39     (normal : SourceCurrentRequiredUnionNormal.UnionNormal (caller first).checked.native.machine.heap)
+   40     (supported : SourceCurrentNativeRequestPositivePositions.Support
+   41       (caller first).checked.native.machine.heap (caller first).checked.native)
+   42     (causal : SourceCurrentNativeMuPublication.History empty (caller first).checked.native.machine.heap)
+   43     (merged : SourceCurrentConstrainedCapMemoMerge.Stored
+   44       (fun guard : Guard => SourceMemoGate.plain guard = true) (caller first).merge)
+   45     (positiveMemo : SourceCurrentMergePositivePosition.Support (caller first).merge)
+   46     (origins : SourceCurrentResourceParentWriters.Origins formulas solver (caller first))
+   47     (initialNodeIdle : ∀ chosen owner,
+   48       (caller first).nodeResults.cells chosen ≠ some ⟨owner, .evaluating⟩)
+   49     (after : Caller (bits + 2)) :
+   50     SourceCurrentOuterActiveAncestry.run g s r e p h m c n budget first ≠
+   51       .failed (.nodeMemo handle .busy) after
+   52 
+   53  := by
+   54   intro failed
+   55   obtain ⟨fuel,request,_next,_final,past,_started,_post,_frame,_fits,_known,_ready,present⟩ :=
+   56     SourceCurrentOuterInitialBusy.busy formulas solver seed initial frame fits known inputs room failed
+   57   have protocol : SourceCurrentOuterExecutionAncestry.NodeValid (caller first) :=
+   58     FlatMemoThunk.Valid.keyMap _ _ _ _ initial.sound.valid.nodes (fun _ _ linked => linked.2)
+   59   obtain ⟨ownerFuel,_requested,_before,running,earlier,activated,_key,_valid,_cell,inside⟩ :=
+   60     past.owners protocol initialNodeIdle handle request present
+   61   have bodyPast : Reached g s r e p h m c n budget first (.body ownerFuel request running) :=
+   62     earlier.snoc (.node_evaluate activated)
+   63   have rank := SourceCurrentOlderOwnerLineage.body_rank_lt formulas solver seed initial frame fits known inputs room
+   64     normal supported causal merged positiveMemo origins bodyPast inside
+   65   cases rank with
+   66   | left _ _ impossible => exact Nat.lt_irrefl _ impossible
+   67   | right _ impossible => exact Nat.lt_irrefl _ impossible
+   68 
+   69 end MicroCFTA.SourceCurrentOlderOwnerBusy

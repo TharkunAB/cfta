@@ -1,0 +1,34 @@
+   54 structure Receipt (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+   55     (inventory : Inventory) (profile : Profile) (budget : Nat) (symbol : Symbol) (original : Guard) (loaded : Allocated)
+   56     (inherited : EqValue) (values : List (Value Symbol Guard)) (before : Caller width) (memos : Memos)
+   57     (result : EdgeValue Symbol Guard) (after : Checked width) (savedFourth : Fourth) (saved : Memo) (final : Memos) : Prop where
+   58   /-- The live field was loaded from the original initial operations. -/
+   59   field : contradictory original = false →
+   60     SourceEqualityConstraintFieldLookup.load original before.checked.operations.constraints = .ok (some loaded)
+   61   /-- The source graph retains raw rejection or the exact local and constructor order. -/
+   62   actual : Graph.Edge budget symbol original loaded inherited values before.checked before.fourth before.merge
+   63     result after savedFourth saved
+   64   /-- Global memo reads belong to that same actual graph. -/
+   65   reads : Graph.Reads formulas solver actual memos final
+   66   /-- The complete old receipt retains physical stores and guarded language. -/
+   67   semantic : Graph.Receipt formulas solver inventory symbol original loaded inherited values before.checked result after
+   68     before.fourth savedFourth before.merge saved final
+   69   /-- The full Frame shares the caller Post inventory. -/
+   70   frame : Frame formulas solver inventory after
+   71   /-- The initial local schedule and original child count bound construction. -/
+   72   fits : Fits (SourceCurrentParentForecast.finalProfile budget values.length original loaded inherited before.checked profile) after
+   73   /-- Both outer tables and the complete caller retain their current laws. -/
+   74   post : Post formulas solver inventory before (advance before after savedFourth saved) final
+   75   /-- All nine independently larger fuels retain the same full parent return. -/
+   76   run : ∀ g s r e p h m c n,
+   77     fuel budget values.length original loaded inherited before.checked profile ≤ g →
+   78     fuel budget values.length original loaded inherited before.checked profile ≤ s →
+   79     fuel budget values.length original loaded inherited before.checked profile ≤ r →
+   80     fuel budget values.length original loaded inherited before.checked profile ≤ e →
+   81     fuel budget values.length original loaded inherited before.checked profile ≤ p →
+   82     fuel budget values.length original loaded inherited before.checked profile ≤ h →
+   83     fuel budget values.length original loaded inherited before.checked profile ≤ m →
+   84     fuel budget values.length original loaded inherited before.checked profile ≤ c →
+   85     fuel budget values.length original loaded inherited before.checked profile ≤ n →
+   86     SourceCurrentAllocatedParentWorker.edge g s r e p h m c n budget symbol original inherited values
+   87       before.checked before.fourth before.merge = .done result after savedFourth saved

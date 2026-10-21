@@ -1,0 +1,54 @@
+  155  := by
+  156   obtain ⟨rowInventory,rowMemos,rowSeed,_rowTrace,rowPost,rowFrame,rowFits,rowKnown,
+  157       rowInputs,_rowBelow,_rowAlphabet,rowRoom,_rowBounds,_rowCarrier,_rowNeed,
+  158       rowSupport,⟨rowCausal⟩,rowMerged,rowPositive,rowNormal⟩ :=
+  159     SourceCurrentOuterPrefixNativeStores.reached formulas solver seed past initial frame fits known inputs room
+  160       normal supported causal merged positiveMemo
+  161   have rowOrigins := SourceCurrentOuterResourceWriters.reached formulas solver seed past
+  162     initial frame fits known inputs room normal supported causal merged positiveMemo origins
+  163   have headRoom := rowRoom
+  164   change Room bits (SourceCurrentOuterInitialSchedule.rows ((fuel + slot + 1) + 1) budget rowSeed).2 at headRoom
+  165   rw [SourceCurrentOuterInitialSchedule.rows] at headRoom
+  166   let parentSeed := SourceCurrentOuterInitialSchedule.parent budget rowSeed
+  167   have parentRoom : Room bits parentSeed.2 := headRoom.mono
+  168     ((SourceCurrentOuterInitialSchedule.descendants_ge (fuel + slot + 1) budget parentSeed).1.trans
+  169       (SourceCurrentOuterInitialSchedule.rows_ge (fuel + slot + 1) budget
+  170         (SourceCurrentOuterInitialSchedule.descendants (fuel + slot + 1) budget parentSeed)).1)
+  171   have uniform := SourceCurrentOuterInitialSchedule.parent_reserved bits budget rowSeed parentRoom
+  172   have reserved := reservation formulas solver (request := ⟨inherited,original⟩)
+  173     rowPost.context rowFits rowKnown rowInputs.1 (rowInputs.2 _ List.mem_cons_self) uniform
+  174   have written := (SourceCurrentResourceParentWriters.edge_call formulas solver rowInventory rowSeed.2 rowMemos
+  175     parent rowPost.context rowFrame rowFits rowInputs.1 (rowInputs.2 _ List.mem_cons_self) reserved
+  176     rowOrigins rowNormal rowSupport rowCausal rowMerged rowPositive).2
+  177   have rowStep : Reached g s r e p h m c n budget
+  178       (.rows (fuel + slot + 2) inherited (original :: rest) before)
+  179       (.descendants (fuel + slot + 1) inherited parented afterParent) :=
+  180     .snoc (.refl _) (.rows_edge parent)
+  181   have descReached := past.trans rowStep
+  182   have walkLocal := (rowStep.snoc (SourceCurrentOuterExecutionAncestry.Step.descendants_children combinedAt)).snoc
+  183     (SourceCurrentOuterExecutionAncestry.Step.children_walk live)
+  184   have walkReached := past.trans walkLocal
+  185   have selectedPrefix := SourceCurrentOuterUntouchedProgress.walk_prefix earlierCalls selected
+  186   have dispatchLocal : Reached g s r e p h m c n budget
+  187       (.rows (fuel + slot + 2) inherited (original :: rest) before)
+  188       (.node fuel ⟨(descend start combined slot).1,value⟩ (descend start combined slot).2) := by
+  189     simpa only [Nat.zero_add] using walkLocal.trans selectedPrefix
+  190   have dispatchReached := past.trans dispatchLocal
+  191   obtain ⟨descInventory,descMemos,_descSeed,_descTrace,descPost,_descFrame,_descFits,_descKnown,
+  192       descInputs,_descBelow,_descAlphabet,_descRoom,_descBounds,_descCarrier,_descNeed,
+  193       _descSupport,_descHistory,_descMerged,_descPositive,_descNormal⟩ :=
+  194     SourceCurrentOuterPrefixNativeStores.reached formulas solver seed descReached initial frame fits known inputs room
+  195       normal supported causal merged positiveMemo
+  196   have field := descPost.context.ready.good.fields parented.entry.key parented descInputs.2
+  197   obtain ⟨walkInventory,walkMemos,walkSeed,_walkTrace,walkPost,walkFrame,walkFits,walkKnown,
+  198       walkInputs,_walkBelow,_walkAlphabet,walkRoom,_walkBounds,_walkCarrier,_walkNeed,
+  199       _walkSupport,_walkHistory,_walkMerged,_walkPositive,_walkNormal⟩ :=
+  200     SourceCurrentOuterPrefixNativeStores.reached formulas solver seed walkReached initial frame fits known inputs room
+  201       normal supported causal merged positiveMemo
+  202   obtain ⟨startInventory,startMemos,_walkGraph,_walkReads,startPost,_startFrame,_startFits,
+  203       _startKnown,_startValues,_startLaw⟩ :=
+  204     SourceCurrentOuterInitialActual.walk formulas solver (fuel + slot + 1)
+  205       (combined := combined) (index := 0) (values := parented.children.take slot)
+  206       (before := prefixState afterParent parented inherited) (after := start)
+  207       walkSeed walkPost.context walkFrame walkFits walkKnown walkInputs.1
+  208       (fun child member => walkInputs.2 child (List.mem_of_mem_take member)) walkRoom earlierCalls
