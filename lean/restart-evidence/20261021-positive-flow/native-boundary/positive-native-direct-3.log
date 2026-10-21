@@ -1,0 +1,43 @@
+/tmp/mcfta-positive-native-support-investigation/positive-native-direct-3.source.lean:159:12: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+count : Nat
+left✝² : count < 64
+traced :
+  Trace count (Control.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before
+    (Control.code (Code.pure output)) after
+left✝¹ : Good after
+left✝ : Available after.native.machine.heap output
+right✝ :
+  InternedValueMassHeap.Stored
+      (SourceCurrentAllocatedRecursiveMassTrace.massAfter count
+        (InternedValueMassHeap.initialBound before.native.machine.heap))
+      after.native.machine.heap ∧
+    InternedValueMass.value output ≤
+        SourceCurrentAllocatedRecursiveMassTrace.massAfter count
+          (InternedValueMassHeap.initialBound before.native.machine.heap) ∧
+      after.native.machine.heap.nodes.next ≤
+          before.native.machine.heap.nodes.next +
+            SourceCurrentAllocatedRecursiveMassTrace.credit count
+              (InternedValueMassHeap.initialBound before.native.machine.heap) ∧
+        after.native.machine.heap.edges.next ≤
+            before.native.machine.heap.edges.next +
+              SourceCurrentAllocatedRecursiveMassTrace.credit count
+                (InternedValueMassHeap.initialBound before.native.machine.heap) ∧
+          after.native.machine.domains.next ≤ before.native.machine.domains.next + count
+positive_output : SourceCurrentRequiredPositivePosition.PositiveAt output []
+no_left : ∀ (path : List Nat), ¬SourceCurrentRequiredPositivePosition.PositiveAt left path
+no_right : ∀ (path : List Nat), ¬SourceCurrentRequiredPositivePosition.PositiveAt right path
+⊢ left ≠ right ∧
+    (∃ entry body depth ordinary, left = Value.mu entry body depth ordinary ∧ body.free = []) ∧
+      (∃ entry body depth ordinary, right = Value.mu entry body depth ordinary ∧ body.free = []) ∧
+        (∀ (path : List Nat), ¬SourceCurrentRequiredPositivePosition.PositiveAt left path) ∧
+          (∀ (path : List Nat), ¬SourceCurrentRequiredPositivePosition.PositiveAt right path) ∧
+            SourceEqualityNativeDemand.execute 64
+                  (Control.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before =
+                Outcome.done output after ∧
+              (∃ count,
+                  Trace count (Control.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before
+                    (Control.code (Code.pure output)) after) ∧
+                (nodeEdges output)[0]? = some row ∧
+                  SourceMemoGate.plain row.entry.key.constraint = false ∧
+                    SourceCurrentRequiredPositivePosition.PositiveAt output []
