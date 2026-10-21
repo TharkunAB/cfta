@@ -1,0 +1,6 @@
+  182 theorem range_succ {n : Nat} : range (succ n) = range n ++ [n] := by
+  183   simp only [range_eq_range', range'_1_concat, Nat.zero_add]
+  184 
+  185 theorem range_add {n m : Nat} : range (n + m) = range n ++ (range m).map (n + ·) := by
+  186   rw [← range'_eq_map_range]
+  187   simpa [range_eq_range', Nat.add_comm] using (range'_append_1 (s := 0)).symm

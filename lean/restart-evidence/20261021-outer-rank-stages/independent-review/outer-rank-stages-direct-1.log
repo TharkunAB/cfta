@@ -1,0 +1,66 @@
+/tmp/mcfta-outer-rank-stages-proof/outer-rank-stages-direct-1.source.lean:42:3: error: unknown tactic
+/tmp/mcfta-outer-rank-stages-proof/outer-rank-stages-direct-1.source.lean:35:112: error: unsolved goals
+budget count mass : Nat
+seed : List Guard × Profile
+eta :
+  ∀ (f : Nat × Nat → List Guard × Profile → Nat × Nat × List Guard × Profile),
+    (fun child x => f child) = fun child x => f (child.fst, child.snd)
+⊢ envelope budget count mass seed = finish (fold (row budget (outputs budget count mass)) mass (0, 0, seed))
+/tmp/mcfta-outer-rank-stages-proof/outer-rank-stages-direct-1.source.lean:65:16: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  d ≥ 0
+  c ≥ 0
+  b ≥ 0
+  b + c - e ≥ 0
+  a ≥ 0
+  a - b - c ≥ 0
+  a - d ≤ -1
+where
+ a := ↑(fold step n entry).fst
+ b := ↑entry.fst
+ c := ↑n
+ d := ↑(step (fold step n entry)).fst
+ e := ↑(step (List.foldl (fun acc x => step acc) entry (List.range n))).fst
+/tmp/mcfta-outer-rank-stages-proof/outer-rank-stages-direct-1.source.lean:69:3: error: unknown tactic
+/tmp/mcfta-outer-rank-stages-proof/outer-rank-stages-direct-1.source.lean:67:63: error: unsolved goals
+step : Nat × Nat × List Guard × Profile → Nat × Nat × List Guard × Profile
+n k : Nat
+bound : k ≤ n
+entry : Nat × Nat × List Guard × Profile
+⊢ List.foldl (fun acc x => step acc) entry (List.range n) =
+    List.foldl (fun acc x => step acc) (List.foldl (fun acc x => step acc) entry (List.range k)) (List.range (n - k))
+/tmp/mcfta-outer-rank-stages-proof/outer-rank-stages-direct-1.source.lean:160:25: error: Application type mismatch: The argument
+  rowIndex
+has type
+  List Guard × Profile → List (Nat × Nat × List Guard × Profile)
+but is expected to have type
+  Nat
+in the application
+  fold rows rowIndex
+/tmp/mcfta-outer-rank-stages-proof/outer-rank-stages-direct-1.source.lean:166:62: error: Application type mismatch: The argument
+  rowIndex
+has type
+  List Guard × Profile → List (Nat × Nat × List Guard × Profile)
+but is expected to have type
+  Nat
+in the application
+  fold_bounds rows (row_growth budget all) rowIndex
+/tmp/mcfta-outer-rank-stages-proof/outer-rank-stages-direct-1.source.lean:168:48: error: Application type mismatch: The argument
+  rowIndex
+has type
+  List Guard × Profile → List (Nat × Nat × List Guard × Profile)
+but is expected to have type
+  Nat
+in the application
+  next_kept rows (row_growth budget all) mass rowIndex
+/tmp/mcfta-outer-rank-stages-proof/outer-rank-stages-direct-1.source.lean:181:4: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/mcfta-outer-rank-stages-proof/outer-rank-stages-direct-1.source.lean:121:0: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.

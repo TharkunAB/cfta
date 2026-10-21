@@ -1,0 +1,39 @@
+--- original-complete-200.source.lean.txt
++++ SourceCurrentOuterRankEnvelopeStages.lean
+@@ -80,7 +80,7 @@
+ private theorem slot_growth (all : Seed → List Out) (acc : Out) :
+     acc.1 + 1 ≤ (slot all acc).1 ∧ Kept acc (slot all acc) := by
+   dsimp only [slot, Kept]
+-  exact ⟨Nat.le_add_right _ _, Nat.le_add_right _ _, Nat.le_max_left _ _, cover_ge _ _,
++  exact ⟨Nat.le_add_right _ _, by omega, Nat.le_max_left _ _, cover_ge _ _,
+     fun _ h => List.mem_append_left _ h⟩
+ private theorem row_growth (budget : Nat) (all : Seed → List Out) (acc : Out) :
+     acc.1 + 1 ≤ (row budget all acc).1 ∧ Kept acc (row budget all acc) := by
+@@ -101,15 +101,22 @@
+   exact ⟨by omega, Nat.le_trans (Nat.le_max_right _ _) (Nat.le_max_right _ _), rebuilt.1, rebuilt.2⟩
+ private theorem finish_kept (acc : Out) : Kept acc (finish acc) := by
+   have rebuilt := SourceCurrentOuterInitialSchedule.rebuild_ge acc.2.2
+-  exact ⟨by dsimp [finish]; omega, Nat.le_refl _, rebuilt.1, rebuilt.2⟩
++  refine ⟨?_, Nat.le_refl _, rebuilt.1, rebuilt.2⟩
++  dsimp only [finish]
++  omega
+ private theorem image_bound (all : Seed → List Out) (acc value : Out) (member : value ∈ all acc.2.2) :
+     value.1 + acc.1 + 1 ≤ (slot all acc).1 ∧ Kept value (slot all acc) := by
+   have work := maximum_member (List.mem_map.mpr ⟨value, member, rfl⟩ : value.1 ∈ (all acc.2.2).map (fun x => x.1))
+   have lower := maximum_member (List.mem_map.mpr ⟨value, member, rfl⟩ : value.2.1 ∈ (all acc.2.2).map (fun x => x.2.1))
+-  have profile := cover_member acc.2.2.2 (List.mem_map.mpr ⟨value, member, rfl⟩)
+-  refine ⟨by dsimp [slot]; omega, by dsimp [slot]; omega, Nat.le_trans lower (Nat.le_max_right _ _), profile, ?_⟩
+-  intro guard present
+-  exact List.mem_append_right _ (List.mem_flatMap.mpr ⟨value, member, present⟩)
++  have profile := cover_member acc.2.2.2
++    (List.mem_map.mpr ⟨value, member, rfl⟩ : value.2.2.2 ∈ (all acc.2.2).map (fun x => x.2.2.2))
++  refine ⟨?_, ?_, Nat.le_trans lower (Nat.le_max_right _ _), profile, ?_⟩
++  · dsimp only [slot]
++    omega
++  · dsimp only [slot]
++    omega
++  · intro guard present
++    exact List.mem_append_right _ (List.mem_flatMap.mpr ⟨value, member, present⟩)
+ 
+ /-- Every literal row, slot prefix, and selected finite candidate fits the same numeric total. -/
+ theorem stage_bounds (budget count mass : Nat) (seed : List Guard × Profile) :

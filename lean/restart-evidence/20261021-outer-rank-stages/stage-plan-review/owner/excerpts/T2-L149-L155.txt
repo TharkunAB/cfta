@@ -1,0 +1,7 @@
+  149 theorem attach_map_val {l : List α} {f : α → β} :
+  150     (l.attach.map fun (i : {i // i ∈ l}) => f i) = l.map f := by
+  151   rw [attach, attachWith, map_pmap]; exact pmap_eq_map _
+  152 
+  153 -- The argument `l : List α` is explicit to allow rewriting from right to left.
+  154 theorem attach_map_subtype_val (l : List α) : l.attach.map Subtype.val = l :=
+  155   attach_map_val.trans (List.map_id _)

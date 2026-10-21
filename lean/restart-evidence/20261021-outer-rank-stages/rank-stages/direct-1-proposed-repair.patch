@@ -1,0 +1,39 @@
+--- outer-rank-stages-direct-1.source.lean
++++ direct-1-proposed-repair.source.lean.txt
+@@ -39,7 +39,8 @@
+     funext child smaller current
+     cases child
+     rfl
+-  conv_lhs =>
++  conv =>
++    lhs
+     unfold envelope
+     rw [WellFounded.fix_eq, eta]
+   change finish (fold (row budget (fun current => (ranks count mass current).attach.map
+@@ -61,12 +62,16 @@
+   | zero => exact ⟨Nat.le_refl _, kept_refl _⟩
+   | succ n ih =>
+       have next := one (fold step n entry)
+-      simp only [fold, List.range_succ, List.foldl_append, List.foldl_cons, List.foldl_nil]
++      have successor : fold step (n+1) entry = step (fold step n entry) := by
++        simp only [fold, List.range_succ, List.foldl_append, List.foldl_cons, List.foldl_nil]
++      rw [successor]
+       exact ⟨by omega, kept_trans ih.2 next.2⟩
+ private theorem fold_cut (step : Out → Out) (n k : Nat) (bound : k ≤ n) (entry : Out) :
+     fold step n entry = fold step (n-k) (fold step k entry) := by
+   unfold fold
+-  conv_lhs => rw [show n = k + (n-k) by omega, List.range_add, List.foldl_append, List.foldl_map]
++  conv =>
++    lhs
++    rw [show n = k + (n-k) by omega, List.range_add, List.foldl_append, List.foldl_map]
+ private theorem prefix_kept (step : Out → Out)
+     (one : ∀ acc, acc.1 + 1 ≤ (step acc).1 ∧ Kept acc (step acc))
+     (n k : Nat) (bound : k ≤ n) (entry : Out) : Kept (fold step k entry) (fold step n entry) := by
+@@ -154,6 +159,7 @@
+           child.1 + 3 + rowIndex + slotIndex ≤ total.1 ∧ child.2.1 ≤ total.2.1 ∧
+           Le child.2.2.2 total.2.2.2 ∧ child.2.2.1 ⊆ total.2.2.1 := by
+   rw [equation budget count mass seed]
++  dsimp only
+   intro rowIndex rowBound
+   let all := outputs budget count mass
+   let rows := row budget all

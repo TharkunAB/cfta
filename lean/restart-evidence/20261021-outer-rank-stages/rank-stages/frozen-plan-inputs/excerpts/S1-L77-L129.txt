@@ -1,0 +1,53 @@
+   77 private theorem fold_retains (step : Out → Nat → Out)
+   78     (growth : ∀ acc index, Le acc.2.2.2 (step acc index).2.2.2 ∧
+   79       acc.2.2.1 ⊆ (step acc index).2.2.1)
+   80     (values : List Nat) (initial : Out) :
+   81     Le initial.2.2.2 (values.foldl step initial).2.2.2 ∧
+   82       initial.2.2.1 ⊆ (values.foldl step initial).2.2.1 := by
+   83   induction values generalizing initial with
+   84   | nil => exact ⟨Le.refl _, fun _ member => member⟩
+   85   | cons first rest ih =>
+   86       have one := growth initial first
+   87       have last := ih (step initial first)
+   88       exact ⟨one.1.trans last.1, fun _ member => last.2 (one.2 member)⟩
+   89 
+   90 private theorem fold_work (step : Out → Nat → Out)
+   91     (growth : ∀ acc index, acc.1 + 1 ≤ (step acc index).1)
+   92     (values : List Nat) (initial : Out) :
+   93     initial.1 + values.length ≤ (values.foldl step initial).1 := by
+   94   induction values generalizing initial with
+   95   | nil => simp only [List.length_nil, List.foldl_nil, Nat.add_zero, Nat.le_refl]
+   96   | cons first rest ih =>
+   97       have one := growth initial first
+   98       have last := ih (step initial first)
+   99       simp only [List.length_cons, List.foldl_cons]
+  100       omega
+  101 
+  102 private theorem slot_retains (all : Seed → List Out) (acc : Out) (index : Nat) :
+  103     Le acc.2.2.2 (slot all acc index).2.2.2 ∧ acc.2.2.1 ⊆ (slot all acc index).2.2.1 := by
+  104   dsimp only [slot, joinSeed]
+  105   exact ⟨cover_ge _ _, fun _ member => List.mem_append_left _ member⟩
+  106 
+  107 private theorem row_retains (budget : Nat) (all : Seed → List Out) (acc : Out) (index : Nat) :
+  108     Le acc.2.2.2 (row budget all acc index).2.2.2 ∧
+  109       acc.2.2.1 ⊆ (row budget all acc index).2.2.1 := by
+  110   dsimp only [row]
+  111   generalize post_eq : SourceCurrentOuterInitialSchedule.parent budget acc.2.2 = post
+  112   let walked := (List.range post.2.mass).foldl (slot all) (0,0,post)
+  113   have one := SourceCurrentOuterInitialSchedule.parent_ge budget acc.2.2
+  114   rw [post_eq] at one
+  115   have middle : Le post.2 walked.2.2.2 ∧ post.1 ⊆ walked.2.2.1 :=
+  116     fold_retains (slot all) (slot_retains all) (List.range post.2.mass) (0,0,post)
+  117   have last := SourceCurrentOuterInitialSchedule.rebuild_ge walked.2.2
+  118   change Le acc.2.2.2 (SourceCurrentOuterInitialSchedule.rebuild walked.2.2).2 ∧
+  119     acc.2.2.1 ⊆ (SourceCurrentOuterInitialSchedule.rebuild walked.2.2).1
+  120   refine ⟨one.1.trans (middle.1.trans last.1), ?_⟩
+  121   change acc.2.2.1 ⊆ walked.2.2.1
+  122   intro guard member
+  123   have present : guard ∈ post.1 := one.2 member
+  124   exact middle.2 present
+  125 
+  126 private theorem row_work (budget : Nat) (all : Seed → List Out) (acc : Out) (index : Nat) :
+  127     acc.1 + 1 ≤ (row budget all acc index).1 := by
+  128   dsimp only [row]
+  129   exact Nat.le_add_right _ _

@@ -1,0 +1,8 @@
+ 1125 @[simp 500, grind =] theorem mem_map {f : α → β} :
+ 1126     ∀ {l : List α}, b ∈ l.map f ↔ ∃ a, a ∈ l ∧ f a = b
+ 1127   | [] => by simp
+ 1128   | _ :: l => by simp [mem_map (l := l), eq_comm (a := b)]
+ 1129 
+ 1130 theorem exists_of_mem_map (h : b ∈ map f l) : ∃ a, a ∈ l ∧ f a = b := mem_map.1 h
+ 1131 
+ 1132 theorem mem_map_of_mem {f : α → β} (h : a ∈ l) : f a ∈ map f l := mem_map.2 ⟨_, h, rfl⟩

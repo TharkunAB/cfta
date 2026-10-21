@@ -1,0 +1,645 @@
+ ∀ (budget count mass : Nat)
+  (seed :
+    Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+  have images := fun current =>
+    @List.map.{0, 0} (Prod.{0, 0} Nat Nat)
+      (Prod.{0, 0} Nat
+        (Prod.{0, 0} Nat
+          (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)))
+      (fun r =>
+        MicroCFTA.SourceCurrentOuterRankEnvelope.envelope budget (@Prod.fst.{0, 0} Nat Nat r)
+          (@Prod.snd.{0, 0} Nat Nat r) current)
+      (@List.filter.{0} (Prod.{0, 0} Nat Nat)
+        (fun r =>
+          @Decidable.decide
+            (Or (@LT.lt.{0} Nat instLTNat (@Prod.fst.{0, 0} Nat Nat r) count)
+              (And (@Eq.{1} Nat (@Prod.fst.{0, 0} Nat Nat r) count)
+                (@LT.lt.{0} Nat instLTNat (@Prod.snd.{0, 0} Nat Nat r) mass)))
+            (@instDecidableOr (@LT.lt.{0} Nat instLTNat (@Prod.fst.{0, 0} Nat Nat r) count)
+              (And (@Eq.{1} Nat (@Prod.fst.{0, 0} Nat Nat r) count)
+                (@LT.lt.{0} Nat instLTNat (@Prod.snd.{0, 0} Nat Nat r) mass))
+              ((@Prod.fst.{0, 0} Nat Nat r).decLt count)
+              (@instDecidableAnd (@Eq.{1} Nat (@Prod.fst.{0, 0} Nat Nat r) count)
+                (@LT.lt.{0} Nat instLTNat (@Prod.snd.{0, 0} Nat Nat r) mass)
+                (instDecidableEqNat (@Prod.fst.{0, 0} Nat Nat r) count) ((@Prod.snd.{0, 0} Nat Nat r).decLt mass))))
+        (@List.flatMap.{0, 0} Nat (Prod.{0, 0} Nat Nat)
+          (fun a =>
+            @List.map.{0, 0} Nat (Prod.{0, 0} Nat Nat) (fun b => @Prod.mk.{0, 0} Nat Nat a b)
+              (List.range
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile current).mass
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+          (List.range
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) count
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))));
+  have slotStep := fun acc x =>
+    have xs :=
+      images
+        (@Prod.snd.{0, 0} Nat
+          (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+          (@Prod.snd.{0, 0} Nat
+            (Prod.{0, 0} Nat
+              (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+            acc));
+    @Prod.mk.{0, 0} Nat
+      (Prod.{0, 0} Nat
+        (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@Prod.fst.{0, 0} Nat
+            (Prod.{0, 0} Nat
+              (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+            acc)
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+        (MicroCFTA.SourceCurrentInitialSelectionForecast.maximum
+          (@List.map.{0, 0}
+            (Prod.{0, 0} Nat
+              (Prod.{0, 0} Nat
+                (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)))
+            Nat
+            (fun x =>
+              @Prod.fst.{0, 0} Nat
+                (Prod.{0, 0} Nat
+                  (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+                x)
+            xs)))
+      (@Prod.mk.{0, 0} Nat
+        (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+        (@Max.max.{0} Nat Nat.instMax
+          (@Prod.fst.{0, 0} Nat
+            (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+            (@Prod.snd.{0, 0} Nat
+              (Prod.{0, 0} Nat
+                (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+              acc))
+          (MicroCFTA.SourceCurrentInitialSelectionForecast.maximum
+            (@List.map.{0, 0}
+              (Prod.{0, 0} Nat
+                (Prod.{0, 0} Nat
+                  (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)))
+              Nat
+              (fun x =>
+                @Prod.fst.{0, 0} Nat
+                  (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+                  (@Prod.snd.{0, 0} Nat
+                    (Prod.{0, 0} Nat
+                      (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+                    x))
+              xs)))
+        (@Prod.mk.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+          (@HAppend.hAppend.{0, 0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            (@instHAppendOfAppend.{0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (@List.instAppend.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+            (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+              (@Prod.snd.{0, 0} Nat
+                (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+                (@Prod.snd.{0, 0} Nat
+                  (Prod.{0, 0} Nat
+                    (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+                  acc)))
+            (@List.flatMap.{0, 0}
+              (Prod.{0, 0} Nat
+                (Prod.{0, 0} Nat
+                  (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)))
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (fun x =>
+                @Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                  (@Prod.snd.{0, 0} Nat
+                    (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+                    (@Prod.snd.{0, 0} Nat
+                      (Prod.{0, 0} Nat
+                        (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+                      x)))
+              xs))
+          (MicroCFTA.SourceCurrentInitialSelectionForecast.cover
+            (@List.map.{0, 0}
+              (Prod.{0, 0} Nat
+                (Prod.{0, 0} Nat
+                  (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+              (fun x =>
+                @Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                  (@Prod.snd.{0, 0} Nat
+                    (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+                    (@Prod.snd.{0, 0} Nat
+                      (Prod.{0, 0} Nat
+                        (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+                      x)))
+              xs)
+            (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+              (@Prod.snd.{0, 0} Nat
+                (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+                (@Prod.snd.{0, 0} Nat
+                  (Prod.{0, 0} Nat
+                    (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+                  acc))))));
+  have rowStep := fun acc x =>
+    have post :=
+      MicroCFTA.SourceCurrentOuterInitialSchedule.parent budget
+        (@Prod.snd.{0, 0} Nat
+          (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+          (@Prod.snd.{0, 0} Nat
+            (Prod.{0, 0} Nat
+              (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+            acc));
+    have walked :=
+      @List.foldl.{0, 0}
+        (Prod.{0, 0} Nat
+          (Prod.{0, 0} Nat
+            (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)))
+        Nat slotStep
+        (@Prod.mk.{0, 0} Nat
+          (Prod.{0, 0} Nat
+            (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+          (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+          (@Prod.mk.{0, 0} Nat
+            (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+            (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) post))
+        (List.range
+          (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile post).mass);
+    @Prod.mk.{0, 0} Nat
+      (Prod.{0, 0} Nat
+        (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@Prod.fst.{0, 0} Nat
+            (Prod.{0, 0} Nat
+              (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+            acc)
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+        (@Prod.fst.{0, 0} Nat
+          (Prod.{0, 0} Nat
+            (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+          walked))
+      (@Prod.mk.{0, 0} Nat
+        (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+        (@Max.max.{0} Nat Nat.instMax
+          (@Prod.fst.{0, 0} Nat
+            (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+            (@Prod.snd.{0, 0} Nat
+              (Prod.{0, 0} Nat
+                (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+              acc))
+          (@Max.max.{0} Nat Nat.instMax
+            (MicroCFTA.SourceCurrentParentUniformEnvelope.fuel budget
+              (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                (@Prod.snd.{0, 0} Nat
+                  (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+                  (@Prod.snd.{0, 0} Nat
+                    (Prod.{0, 0} Nat
+                      (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+                    acc)))
+              (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                (@Prod.snd.{0, 0} Nat
+                  (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+                  (@Prod.snd.{0, 0} Nat
+                    (Prod.{0, 0} Nat
+                      (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+                    acc))))
+            (@Prod.fst.{0, 0} Nat
+              (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+              (@Prod.snd.{0, 0} Nat
+                (Prod.{0, 0} Nat
+                  (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+                walked))))
+        (MicroCFTA.SourceCurrentOuterInitialSchedule.rebuild
+          (@Prod.snd.{0, 0} Nat
+            (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+            (@Prod.snd.{0, 0} Nat
+              (Prod.{0, 0} Nat
+                (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+              walked))));
+  have total := MicroCFTA.SourceCurrentOuterRankEnvelope.envelope budget count mass seed;
+  ∀ (rowIndex : Nat),
+    @LT.lt.{0} Nat instLTNat rowIndex mass →
+      have prior :=
+        @List.foldl.{0, 0}
+          (Prod.{0, 0} Nat
+            (Prod.{0, 0} Nat
+              (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)))
+          Nat rowStep
+          (@Prod.mk.{0, 0} Nat
+            (Prod.{0, 0} Nat
+              (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+            (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+            (@Prod.mk.{0, 0} Nat
+              (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+              (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) seed))
+          (List.range rowIndex);
+      have post :=
+        MicroCFTA.SourceCurrentOuterInitialSchedule.parent budget
+          (@Prod.snd.{0, 0} Nat
+            (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+            (@Prod.snd.{0, 0} Nat
+              (Prod.{0, 0} Nat
+                (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+              prior));
+      And
+        (@LE.le.{0} Nat instLENat
+          (MicroCFTA.SourceCurrentParentUniformEnvelope.fuel budget
+            (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+              (@Prod.snd.{0, 0} Nat
+                (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+                (@Prod.snd.{0, 0} Nat
+                  (Prod.{0, 0} Nat
+                    (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+                  prior)))
+            (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+              (@Prod.snd.{0, 0} Nat
+                (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+                (@Prod.snd.{0, 0} Nat
+                  (Prod.{0, 0} Nat
+                    (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+                  prior))))
+          (@Prod.fst.{0, 0} Nat
+            (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+            (@Prod.snd.{0, 0} Nat
+              (Prod.{0, 0} Nat
+                (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+              total)))
+        (And
+          (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+            (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile post)
+            (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+              (@Prod.snd.{0, 0} Nat
+                (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+                (@Prod.snd.{0, 0} Nat
+                  (Prod.{0, 0} Nat
+                    (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+                  total))))
+          (And
+            (@HasSubset.Subset.{0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (@List.instHasSubset.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile post)
+              (@Prod.fst.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                (@Prod.snd.{0, 0} Nat
+                  (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+                  (@Prod.snd.{0, 0} Nat
+                    (Prod.{0, 0} Nat
+                      (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+                    total))))
+            (∀ (slotIndex : Nat),
+              @LE.le.{0} Nat instLENat slotIndex
+                  (@Prod.snd.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile post).mass →
+                have current :=
+                  @List.foldl.{0, 0}
+                    (Prod.{0, 0} Nat
+                      (Prod.{0, 0} Nat
+                        (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)))
+                    Nat slotStep
+                    (@Prod.mk.{0, 0} Nat
+                      (Prod.{0, 0} Nat
+                        (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+                      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                      (@Prod.mk.{0, 0} Nat
+                        (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+                        (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) post))
+                    (List.range slotIndex);
+                And
+                  (@LE.le.{0} Nat instLENat
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                        (@Prod.fst.{0, 0} Nat
+                          (Prod.{0, 0} Nat
+                            (Prod.{0, 0}
+                              (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+                          prior)
+                        (@Prod.fst.{0, 0} Nat
+                          (Prod.{0, 0} Nat
+                            (Prod.{0, 0}
+                              (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+                          current))
+                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+                    (@Prod.fst.{0, 0} Nat
+                      (Prod.{0, 0} Nat
+                        (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+                      total))
+                  (And
+                    (@LE.le.{0} Nat instLENat
+                      (@Prod.fst.{0, 0} Nat
+                        (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+                        (@Prod.snd.{0, 0} Nat
+                          (Prod.{0, 0} Nat
+                            (Prod.{0, 0}
+                              (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+                          current))
+                      (@Prod.fst.{0, 0} Nat
+                        (Prod.{0, 0} (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+                        (@Prod.snd.{0, 0} Nat
+                          (Prod.{0, 0} Nat
+                            (Prod.{0, 0}
+                              (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+                          total)))
+                    (And
+                      (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+                        (@Prod.snd.{0, 0}
+                          (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                          (@Prod.snd.{0, 0} Nat
+                            (Prod.{0, 0}
+                              (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+                            (@Prod.snd.{0, 0} Nat
+                              (Prod.{0, 0} Nat
+                                (Prod.{0, 0}
+                                  (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+                              current)))
+                        (@Prod.snd.{0, 0}
+                          (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                          (@Prod.snd.{0, 0} Nat
+                            (Prod.{0, 0}
+                              (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+                            (@Prod.snd.{0, 0} Nat
+                              (Prod.{0, 0} Nat
+                                (Prod.{0, 0}
+                                  (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+                              total))))
+                      (And
+                        (@HasSubset.Subset.{0}
+                          (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          (@List.instHasSubset.{0}
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          (@Prod.fst.{0, 0}
+                            (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                            (@Prod.snd.{0, 0} Nat
+                              (Prod.{0, 0}
+                                (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+                              (@Prod.snd.{0, 0} Nat
+                                (Prod.{0, 0} Nat
+                                  (Prod.{0, 0}
+                                    (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+                                current)))
+                          (@Prod.fst.{0, 0}
+                            (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                            (@Prod.snd.{0, 0} Nat
+                              (Prod.{0, 0}
+                                (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+                              (@Prod.snd.{0, 0} Nat
+                                (Prod.{0, 0} Nat
+                                  (Prod.{0, 0}
+                                    (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+                                total))))
+                        (∀ (childCount childMass : Nat),
+                          @LT.lt.{0} Nat instLTNat slotIndex
+                              (@Prod.snd.{0, 0}
+                                  (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile post).mass →
+                            @LE.le.{0} Nat instLENat childCount count →
+                              @LE.le.{0} Nat instLENat childMass
+                                  (@Prod.snd.{0, 0}
+                                      (List.{0} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                      MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                                      (@Prod.snd.{0, 0} Nat
+                                        (Prod.{0, 0}
+                                          (List.{0}
+                                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+                                        (@Prod.snd.{0, 0} Nat
+                                          (Prod.{0, 0} Nat
+                                            (Prod.{0, 0}
+                                              (List.{0}
+                                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+                                          current))).mass →
+                                @Prod.Lex.{0, 0} Nat Nat Nat.lt Nat.lt (@Prod.mk.{0, 0} Nat Nat childCount childMass)
+                                    (@Prod.mk.{0, 0} Nat Nat count mass) →
+                                  have child :=
+                                    MicroCFTA.SourceCurrentOuterRankEnvelope.envelope budget childCount childMass
+                                      (@Prod.snd.{0, 0} Nat
+                                        (Prod.{0, 0}
+                                          (List.{0}
+                                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                          MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+                                        (@Prod.snd.{0, 0} Nat
+                                          (Prod.{0, 0} Nat
+                                            (Prod.{0, 0}
+                                              (List.{0}
+                                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                              MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+                                          current));
+                                  And
+                                    (@LE.le.{0} Nat instLENat
+                                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                            (@Prod.fst.{0, 0} Nat
+                                              (Prod.{0, 0} Nat
+                                                (Prod.{0, 0}
+                                                  (List.{0}
+                                                    (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                      MicroCFTA.FullSyntax.Formula))
+                                                  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+                                              child)
+                                            (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))))
+                                          rowIndex)
+                                        slotIndex)
+                                      (@Prod.fst.{0, 0} Nat
+                                        (Prod.{0, 0} Nat
+                                          (Prod.{0, 0}
+                                            (List.{0}
+                                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+                                        total))
+                                    (And
+                                      (@LE.le.{0} Nat instLENat
+                                        (@Prod.fst.{0, 0} Nat
+                                          (Prod.{0, 0}
+                                            (List.{0}
+                                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+                                          (@Prod.snd.{0, 0} Nat
+                                            (Prod.{0, 0} Nat
+                                              (Prod.{0, 0}
+                                                (List.{0}
+                                                  (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                    MicroCFTA.FullSyntax.Formula))
+                                                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+                                            child))
+                                        (@Prod.fst.{0, 0} Nat
+                                          (Prod.{0, 0}
+                                            (List.{0}
+                                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+                                          (@Prod.snd.{0, 0} Nat
+                                            (Prod.{0, 0} Nat
+                                              (Prod.{0, 0}
+                                                (List.{0}
+                                                  (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                    MicroCFTA.FullSyntax.Formula))
+                                                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+                                            total)))
+                                      (And
+                                        (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+                                          (@Prod.snd.{0, 0}
+                                            (List.{0}
+                                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                                            (@Prod.snd.{0, 0} Nat
+                                              (Prod.{0, 0}
+                                                (List.{0}
+                                                  (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                    MicroCFTA.FullSyntax.Formula))
+                                                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+                                              (@Prod.snd.{0, 0} Nat
+                                                (Prod.{0, 0} Nat
+                                                  (Prod.{0, 0}
+                                                    (List.{0}
+                                                      (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                        MicroCFTA.FullSyntax.Formula))
+                                                    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+                                                child)))
+                                          (@Prod.snd.{0, 0}
+                                            (List.{0}
+                                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                                            (@Prod.snd.{0, 0} Nat
+                                              (Prod.{0, 0}
+                                                (List.{0}
+                                                  (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                    MicroCFTA.FullSyntax.Formula))
+                                                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+                                              (@Prod.snd.{0, 0} Nat
+                                                (Prod.{0, 0} Nat
+                                                  (Prod.{0, 0}
+                                                    (List.{0}
+                                                      (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                        MicroCFTA.FullSyntax.Formula))
+                                                    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+                                                total))))
+                                        (@HasSubset.Subset.{0}
+                                          (List.{0}
+                                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                          (@List.instHasSubset.{0}
+                                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                          (@Prod.fst.{0, 0}
+                                            (List.{0}
+                                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                                            (@Prod.snd.{0, 0} Nat
+                                              (Prod.{0, 0}
+                                                (List.{0}
+                                                  (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                    MicroCFTA.FullSyntax.Formula))
+                                                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+                                              (@Prod.snd.{0, 0} Nat
+                                                (Prod.{0, 0} Nat
+                                                  (Prod.{0, 0}
+                                                    (List.{0}
+                                                      (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                        MicroCFTA.FullSyntax.Formula))
+                                                    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+                                                child)))
+                                          (@Prod.fst.{0, 0}
+                                            (List.{0}
+                                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                            MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile
+                                            (@Prod.snd.{0, 0} Nat
+                                              (Prod.{0, 0}
+                                                (List.{0}
+                                                  (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                    MicroCFTA.FullSyntax.Formula))
+                                                MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+                                              (@Prod.snd.{0, 0} Nat
+                                                (Prod.{0, 0} Nat
+                                                  (Prod.{0, 0}
+                                                    (List.{0}
+                                                      (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                        MicroCFTA.FullSyntax.Formula))
+                                                    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile))
+                                                total)))))))))))))

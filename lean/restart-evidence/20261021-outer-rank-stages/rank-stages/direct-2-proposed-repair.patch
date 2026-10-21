@@ -1,0 +1,36 @@
+--- outer-rank-stages-direct-2.source.lean
++++ direct-2-proposed-repair.source.lean.txt
+@@ -33,8 +33,8 @@
+ 
+ private theorem equation (budget count mass : Nat) (seed : Seed) :
+     envelope budget count mass seed = finish (fold (row budget (outputs budget count mass)) mass (0,0,seed)) := by
+-  have eta (f : (Nat × Nat) → Seed → Out) :
+-      (fun child (_ : Prod.Lex Nat.lt Nat.lt child (count,mass)) => f child) =
++  have eta {R : (Nat × Nat) → Prop} (f : (Nat × Nat) → Seed → Out) :
++      (fun child (_ : R child) => f child) =
+       (fun child _ => f (child.1,child.2)) := by
+     funext child smaller current
+     cases child
+@@ -97,6 +97,10 @@
+   have rebuilt := SourceCurrentOuterInitialSchedule.rebuild_ge (fold (slot all) post.2.mass (0,0,post)).2.2
+   refine ⟨by omega, by omega, Nat.le_max_left _ _, parent.1.trans (walk.2.2.1.trans rebuilt.1), ?_⟩
+   exact fun _ h => rebuilt.2 (walk.2.2.2 (parent.2 h))
++private theorem row_need (budget : Nat) (all : Seed → List Out) (acc : Out) :
++    SourceCurrentParentUniformEnvelope.fuel budget acc.2.2.1 acc.2.2.2 ≤ (row budget all acc).2.1 := by
++  dsimp only [row]
++  exact Nat.le_trans (Nat.le_max_left _ _) (Nat.le_max_right _ _)
+ private theorem row_walk (budget : Nat) (all : Seed → List Out) (acc : Out) :
+     Kept (fold (slot all) (SourceCurrentOuterInitialSchedule.parent budget acc.2.2).2.mass
+       (0,0,SourceCurrentOuterInitialSchedule.parent budget acc.2.2)) (row budget all acc) := by
+@@ -182,10 +186,7 @@
+     change prior.1 + 1 + walked.1 ≤ completed.1 at work
+     change prior.1 + walked.1 + 2 ≤ 1 + completed.1
+     omega
+-  have need : SourceCurrentParentUniformEnvelope.fuel budget prior.2.2.1 prior.2.2.2 ≤ total.2.1 := by
+-    have lower := rowTotal.2.1
+-    change max prior.2.1 (max (SourceCurrentParentUniformEnvelope.fuel budget prior.2.2.1 prior.2.2.2) walked.2.1) ≤ total.2.1 at lower
+-    omega
++  have need := Nat.le_trans (row_need budget all prior) rowTotal.2.1
+   refine ⟨need, postTotal.2.2.1, postTotal.2.2.2, ?_⟩
+   intro slotIndex slotBound
+   let current := fold slots slotIndex (0,0,post)

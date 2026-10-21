@@ -1,0 +1,7 @@
+  135 noncomputable def fix (hwf : WellFounded r) (F : ∀ x, (∀ y, r y x → C y) → C x) (x : α) : C x :=
+  136   fixF F x (apply hwf x)
+  137 
+  138 -- Well-founded fixpoint satisfies fixpoint equation
+  139 theorem fix_eq (hwf : WellFounded r) (F : ∀ x, (∀ y, r y x → C y) → C x) (x : α) :
+  140     fix hwf F x = F x (fun y _ => fix hwf F y) :=
+  141   fixF_eq F x (apply hwf x)

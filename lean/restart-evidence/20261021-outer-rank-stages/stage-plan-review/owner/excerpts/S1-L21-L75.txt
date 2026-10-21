@@ -1,0 +1,55 @@
+   21 private def candidates (rank : Nat × Nat) (seed : Seed) : List (Nat × Nat) :=
+   22   ((List.range (rank.1 + 1)).flatMap fun a =>
+   23     (List.range (seed.2.mass + 1)).map fun b => (a,b)).filter
+   24       (fun child => decide (child.1 < rank.1 ∨ (child.1 = rank.1 ∧ child.2 < rank.2)))
+   25 
+   26 private theorem candidates_lt (rank : Nat × Nat) (seed : Seed) (child : Nat × Nat)
+   27     (member : child ∈ candidates rank seed) : Prod.Lex Nat.lt Nat.lt child rank := by
+   28   simp only [candidates, List.mem_filter, decide_eq_true_eq] at member
+   29   exact Prod.lex_def.mpr member.2
+   30 
+   31 private def images (rank : Nat × Nat)
+   32     (recurse : ∀ child, Prod.Lex Nat.lt Nat.lt child rank → Seed → Out)
+   33     (seed : Seed) : List Out :=
+   34   (candidates rank seed).attach.map fun child =>
+   35     recurse child.val (candidates_lt rank seed child.val child.property) seed
+   36 
+   37 private def joinSeed (seed : Seed) (outputs : List Out) : Seed :=
+   38   (seed.1 ++ outputs.flatMap (fun output => output.2.2.1),
+   39     cover (outputs.map fun output => output.2.2.2) seed.2)
+   40 
+   41 private def slot (all : Seed → List Out) (acc : Out) (_index : Nat) : Out :=
+   42   let outputs := all acc.2.2
+   43   (acc.1 + 1 + maximum (outputs.map fun output => output.1),
+   44     max acc.2.1 (maximum (outputs.map fun output => output.2.1)),
+   45     joinSeed acc.2.2 outputs)
+   46 
+   47 private noncomputable def row (budget : Nat) (all : Seed → List Out)
+   48     (acc : Out) (_index : Nat) : Out :=
+   49   let post := SourceCurrentOuterInitialSchedule.parent budget acc.2.2
+   50   let walked := (List.range post.2.mass).foldl (slot all) (0,0,post)
+   51   (acc.1 + 1 + walked.1,
+   52     max acc.2.1 (max (SourceCurrentParentUniformEnvelope.fuel budget acc.2.2.1 acc.2.2.2) walked.2.1),
+   53     SourceCurrentOuterInitialSchedule.rebuild walked.2.2)
+   54 
+   55 private noncomputable def recipe (budget : Nat) (rank : Nat × Nat)
+   56     (recurse : ∀ child, Prod.Lex Nat.lt Nat.lt child rank → Seed → Out)
+   57     (seed : Seed) : Out :=
+   58   let completed := (List.range rank.2).foldl (row budget (images rank recurse)) (0,0,seed)
+   59   (1 + completed.1, completed.2.1, SourceCurrentOuterInitialSchedule.rebuild completed.2.2)
+   60 
+   61 /-- Compute finite work, lower fuel, and an output seed from the initial rank and seed. -/
+   62 noncomputable def envelope (budget count mass : Nat)
+   63     (seed : List Guard × Profile) : Nat × Nat × (List Guard × Profile) :=
+   64   WellFounded.fix (C := fun _ : Nat × Nat => Seed → Out)
+   65     (Prod.lex Nat.lt_wfRel Nat.lt_wfRel).wf (recipe budget) (count,mass) seed
+   66 
+   67 private theorem envelope_eq (budget count mass : Nat) (seed : Seed) :
+   68     envelope budget count mass seed = recipe budget (count,mass)
+   69       (fun child _ current => envelope budget child.1 child.2 current) seed := by
+   70   unfold envelope
+   71   rw [WellFounded.fix_eq]
+   72   apply congrArg (fun recurse => recipe budget (count,mass) recurse seed)
+   73   funext child smaller current
+   74   cases child
+   75   rfl

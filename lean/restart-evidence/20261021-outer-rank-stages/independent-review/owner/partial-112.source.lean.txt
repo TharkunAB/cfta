@@ -1,0 +1,112 @@
+import MicroCFTA.SourceCurrentOuterRankEnvelope
+import Init.Data.List.Nat.Range
+
+/-! Numeric bounds at the literal finite row and slot prefixes. -/
+namespace MicroCFTA.SourceCurrentOuterRankEnvelopeStages
+open SourceCurrentAllocatedNativeResourceForecast (Profile Le)
+open SourceCurrentOuterRankEnvelope (envelope)
+open SourceCurrentInitialSelectionForecast (cover cover_ge cover_member maximum maximum_member)
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Seed" => List Guard × Profile
+local notation "Out" => Nat × Nat × Seed
+
+private def ranks (count mass : Nat) (seed : Seed) : List (Nat × Nat) :=
+  ((List.range (count + 1)).flatMap fun a => (List.range (seed.2.mass + 1)).map fun b => (a,b)).filter
+    (fun r => decide (r.1 < count ∨ (r.1 = count ∧ r.2 < mass)))
+private noncomputable def outputs (budget count mass : Nat) (seed : Seed) : List Out :=
+  (ranks count mass seed).map fun r => envelope budget r.1 r.2 seed
+private def fold (step : Out → Out) (n : Nat) (entry : Out) : Out :=
+  (List.range n).foldl (fun acc _ => step acc) entry
+private def slot (all : Seed → List Out) (acc : Out) : Out :=
+  let xs := all acc.2.2
+  (acc.1 + 1 + maximum (xs.map fun x => x.1),
+    max acc.2.1 (maximum (xs.map fun x => x.2.1)),
+    (acc.2.2.1 ++ xs.flatMap (fun x => x.2.2.1), cover (xs.map fun x => x.2.2.2) acc.2.2.2))
+private noncomputable def row (budget : Nat) (all : Seed → List Out) (acc : Out) : Out :=
+  let post := SourceCurrentOuterInitialSchedule.parent budget acc.2.2
+  let walked := fold (slot all) post.2.mass (0,0,post)
+  (acc.1 + 1 + walked.1,
+    max acc.2.1 (max (SourceCurrentParentUniformEnvelope.fuel budget acc.2.2.1 acc.2.2.2) walked.2.1),
+    SourceCurrentOuterInitialSchedule.rebuild walked.2.2)
+private def finish (acc : Out) : Out :=
+  (1 + acc.1, acc.2.1, SourceCurrentOuterInitialSchedule.rebuild acc.2.2)
+
+private theorem equation (budget count mass : Nat) (seed : Seed) :
+    envelope budget count mass seed = finish (fold (row budget (outputs budget count mass)) mass (0,0,seed)) := by
+  have eta (f : (Nat × Nat) → Seed → Out) :
+      (fun child (_ : Prod.Lex Nat.lt Nat.lt child (count,mass)) => f child) =
+      (fun child _ => f (child.1,child.2)) := by
+    funext child smaller current
+    cases child
+    rfl
+  conv_lhs =>
+    unfold envelope
+    rw [WellFounded.fix_eq, eta]
+  change finish (fold (row budget (fun current => (ranks count mass current).attach.map
+    (fun child => envelope budget child.val.1 child.val.2 current))) mass (0,0,seed)) = _
+  simp only [List.attach_map_val, outputs]
+
+private def Kept (first last : Out) : Prop :=
+  first.1 ≤ last.1 ∧ first.2.1 ≤ last.2.1 ∧ Le first.2.2.2 last.2.2.2 ∧ first.2.2.1 ⊆ last.2.2.1
+private theorem kept_refl (entry : Out) : Kept entry entry :=
+  ⟨Nat.le_refl _, Nat.le_refl _, Le.refl _, fun _ h => h⟩
+private theorem kept_trans {first middle last : Out} (one : Kept first middle) (two : Kept middle last) :
+    Kept first last :=
+  ⟨Nat.le_trans one.1 two.1, Nat.le_trans one.2.1 two.2.1,
+    one.2.2.1.trans two.2.2.1, fun _ h => two.2.2.2 (one.2.2.2 h)⟩
+private theorem fold_bounds (step : Out → Out)
+    (one : ∀ acc, acc.1 + 1 ≤ (step acc).1 ∧ Kept acc (step acc)) (n : Nat) (entry : Out) :
+    entry.1 + n ≤ (fold step n entry).1 ∧ Kept entry (fold step n entry) := by
+  induction n with
+  | zero => exact ⟨Nat.le_refl _, kept_refl _⟩
+  | succ n ih =>
+      have next := one (fold step n entry)
+      simp only [fold, List.range_succ, List.foldl_append, List.foldl_cons, List.foldl_nil]
+      exact ⟨by omega, kept_trans ih.2 next.2⟩
+private theorem fold_cut (step : Out → Out) (n k : Nat) (bound : k ≤ n) (entry : Out) :
+    fold step n entry = fold step (n-k) (fold step k entry) := by
+  unfold fold
+  conv_lhs => rw [show n = k + (n-k) by omega, List.range_add, List.foldl_append, List.foldl_map]
+private theorem prefix_kept (step : Out → Out)
+    (one : ∀ acc, acc.1 + 1 ≤ (step acc).1 ∧ Kept acc (step acc))
+    (n k : Nat) (bound : k ≤ n) (entry : Out) : Kept (fold step k entry) (fold step n entry) := by
+  rw [fold_cut step n k bound entry]
+  exact (fold_bounds step one _ _).2
+private theorem next_kept (step : Out → Out)
+    (one : ∀ acc, acc.1 + 1 ≤ (step acc).1 ∧ Kept acc (step acc))
+    (n k : Nat) (bound : k < n) (entry : Out) : Kept (step (fold step k entry)) (fold step n entry) := by
+  have h := prefix_kept step one n (k+1) (by omega) entry
+  simpa only [fold, List.range_succ, List.foldl_append, List.foldl_cons, List.foldl_nil] using h
+private theorem slot_growth (all : Seed → List Out) (acc : Out) :
+    acc.1 + 1 ≤ (slot all acc).1 ∧ Kept acc (slot all acc) := by
+  dsimp only [slot, Kept]
+  exact ⟨Nat.le_add_right _ _, Nat.le_add_right _ _, Nat.le_max_left _ _, cover_ge _ _,
+    fun _ h => List.mem_append_left _ h⟩
+private theorem row_growth (budget : Nat) (all : Seed → List Out) (acc : Out) :
+    acc.1 + 1 ≤ (row budget all acc).1 ∧ Kept acc (row budget all acc) := by
+  dsimp only [row]
+  generalize post_eq : SourceCurrentOuterInitialSchedule.parent budget acc.2.2 = post
+  have parent := SourceCurrentOuterInitialSchedule.parent_ge budget acc.2.2
+  rw [post_eq] at parent
+  have walk := (fold_bounds (slot all) (slot_growth all) post.2.mass (0,0,post)).2
+  have rebuilt := SourceCurrentOuterInitialSchedule.rebuild_ge (fold (slot all) post.2.mass (0,0,post)).2.2
+  refine ⟨by omega, by omega, Nat.le_max_left _ _, parent.1.trans (walk.2.2.1.trans rebuilt.1), ?_⟩
+  exact fun _ h => rebuilt.2 (walk.2.2.2 (parent.2 h))
+private theorem row_walk (budget : Nat) (all : Seed → List Out) (acc : Out) :
+    Kept (fold (slot all) (SourceCurrentOuterInitialSchedule.parent budget acc.2.2).2.mass
+      (0,0,SourceCurrentOuterInitialSchedule.parent budget acc.2.2)) (row budget all acc) := by
+  dsimp only [row, Kept]
+  generalize SourceCurrentOuterInitialSchedule.parent budget acc.2.2 = post
+  have rebuilt := SourceCurrentOuterInitialSchedule.rebuild_ge (fold (slot all) post.2.mass (0,0,post)).2.2
+  exact ⟨by omega, Nat.le_trans (Nat.le_max_right _ _) (Nat.le_max_right _ _), rebuilt.1, rebuilt.2⟩
+private theorem finish_kept (acc : Out) : Kept acc (finish acc) := by
+  have rebuilt := SourceCurrentOuterInitialSchedule.rebuild_ge acc.2.2
+  exact ⟨by dsimp [finish]; omega, Nat.le_refl _, rebuilt.1, rebuilt.2⟩
+private theorem image_bound (all : Seed → List Out) (acc value : Out) (member : value ∈ all acc.2.2) :
+    value.1 + acc.1 + 1 ≤ (slot all acc).1 ∧ Kept value (slot all acc) := by
+  have work := maximum_member (List.mem_map.mpr ⟨value, member, rfl⟩ : value.1 ∈ (all acc.2.2).map (fun x => x.1))
+  have lower := maximum_member (List.mem_map.mpr ⟨value, member, rfl⟩ : value.2.1 ∈ (all acc.2.2).map (fun x => x.2.1))
+  have profile := cover_member acc.2.2.2 (List.mem_map.mpr ⟨value, member, rfl⟩)
+  refine ⟨by dsimp [slot]; omega, by dsimp [slot]; omega, Nat.le_trans lower (Nat.le_max_right _ _), profile, ?_⟩
+  intro guard present
+  exact List.mem_append_right _ (List.mem_flatMap.mpr ⟨value, member, present⟩)
