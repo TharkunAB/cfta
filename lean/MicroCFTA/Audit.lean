@@ -3017,6 +3017,7 @@ import MicroCFTA.SourceCurrentNormalizedChildSeparation
 import MicroCFTA.SourceCurrentMergeEmptySupport
 import MicroCFTA.SourceCurrentRequiredPositivePosition
 import MicroCFTA.SourceCurrentRequiredForestPositive
+import MicroCFTA.SourceCurrentMergePositivePosition
 /-!
 # Proof dependency audit
 
