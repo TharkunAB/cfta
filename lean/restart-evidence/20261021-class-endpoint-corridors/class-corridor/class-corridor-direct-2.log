@@ -1,0 +1,146 @@
+/tmp/mcfta-class-endpoint-corridor-proof/class-corridor-direct-2.source.lean:107:79: error: Application type mismatch: The argument
+  member
+has type
+  row ∈ bs✝
+but is expected to have type
+  row ∈ as✝
+in the application
+  List.mem_cons_of_mem a✝ member
+/tmp/mcfta-class-endpoint-corridor-proof/class-corridor-direct-2.source.lean:122:75: error: Application type mismatch: The argument
+  member
+has type
+  row ∈ bs✝
+but is expected to have type
+  row ∈ as✝
+in the application
+  List.mem_cons_of_mem a✝ member
+/tmp/mcfta-class-endpoint-corridor-proof/class-corridor-direct-2.source.lean:137:8: warning: automatically included section variable(s) unused in theorem `_private._stdin.0.MicroCFTA.SourceCurrentClassEndpointCorridors.placement`:
+  [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/tmp/mcfta-class-endpoint-corridor-proof/class-corridor-direct-2.source.lean:137:0: warning: `placement` does not use the following hypotheses in its type:
+  • [DecidableEq Symbol] (#1)
+  • [DecidableEq (EdgeKey Symbol Guard)] (#2)
+
+Consider removing these hypotheses and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/tmp/mcfta-class-endpoint-corridor-proof/class-corridor-direct-2.source.lean:259:105: error(lean.unknownIdentifier): Unknown identifier `nonempty`
+/tmp/mcfta-class-endpoint-corridor-proof/class-corridor-direct-2.source.lean:261:57: error(lean.unknownIdentifier): Unknown identifier `nonempty`
+/tmp/mcfta-class-endpoint-corridor-proof/class-corridor-direct-2.source.lean:306:86: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+base : Heap
+record✝ : SourceEqualityClassOrder.Record
+originals✝ : List Node
+entries✝ : List (Int × Edits EqualityNormalize.Path)
+offset : Nat
+inputs : List Node
+before : SharedState width
+results : List Node
+after : SharedState width
+memos✝ final : Memos
+actual : EditChildren record✝ originals✝ entries✝ offset inputs before results after
+reads : ChildrenReads formulas solver base actual memos✝ final
+leafCase :
+  ∀ {next : Inventory} {record : SourceEqualityClassOrder.Record} {originals : List Node}
+    {path : EqualityNormalize.Path} {value : Node} {before : SourceCurrentAllocatedSharedTargetState.State width}
+    {result : Node} {after : SourceCurrentAllocatedSharedTargetState.State width} {memos saved : Memos}
+    (receipt :
+      SourceCurrentAllocatedSharedTargetLeaf.Receipt formulas solver next record originals base path value before result
+        after memos saved),
+    NodeGoal ⋯ memos
+emptyCase :
+  ∀ {record : SourceEqualityClassOrder.Record} {originals : List Node}
+    {entries : List (Int × Edits EqualityNormalize.Path)} {state : SharedState width} {memos : Memos}, NodeGoal ⋯ memos
+ordinaryCase :
+  ∀ {record : SourceEqualityClassOrder.Record} {originals : List Node} {memos saved : Memos}
+    {entries : List (Int × Edits EqualityNormalize.Path)} {edges : List Row} {before : SharedState width}
+    {rebuilt : List Row} {middle : SharedState width} {value : Node} {heap : Heap}
+    {entry : Interned InternedBinderProtocol.NodeKey} {depth : Nat} {free : List InternedBinderProtocol.Reference}
+    {actual : EditRows record originals entries edges before rebuilt middle}
+    {built : run (makeNode rebuilt) middle.checked.native.machine.heap = (value, heap)},
+    RowsReads formulas solver base actual memos saved → RowsGoal actual memos → NodeGoal ⋯ memos
+recursiveCase :
+  ∀ {record : SourceEqualityClassOrder.Record} {originals : List Node} {memos current saved : Memos}
+    {entries : List (Int × Edits EqualityNormalize.Path)} {original : Node} {before : SharedState width}
+    {exposed : Node} {heap : Heap} {value : Node} {after : SharedState width}
+    {recursive : SourceEqualityRequiredGraph.Recursive original}
+    {head : SourceEqualityRequiredHead.Head original before.checked.native.machine.heap exposed heap}
+    {body : EditNode record originals (Edits.editBelow entries) exposed (advanceHeap before heap) value after},
+    SourceCurrentRequiredQueryMemos.HeadReads head memos current →
+      SourceCurrentSubsumesQueryMemos.Effect before.checked.native.machine.heap heap memos current →
+        NodeReads formulas solver base body current saved → NodeGoal body current → NodeGoal ⋯ memos
+nilChildren :
+  ∀ {record : SourceEqualityClassOrder.Record} {originals : List Node}
+    {entries : List (Int × Edits EqualityNormalize.Path)} {offset : Nat} {state : SharedState width} {memos : Memos},
+    ChildrenGoal ⋯ memos
+unselectedCase :
+  ∀ {record : SourceEqualityClassOrder.Record} {originals : List Node} {memos saved : Memos}
+    {entries : List (Int × Edits EqualityNormalize.Path)} {values : List Node} {before : SharedState width}
+    {results : List Node} {after : SharedState width} {value : Node} {offset : Nat}
+    {absent : SourceEqualityNeededMap.lookup (↑offset) entries = none}
+    {rest : EditChildren record originals entries (offset + 1) values before results after},
+    ChildrenReads formulas solver base rest memos saved → ChildrenGoal rest memos → ChildrenGoal ⋯ memos
+selectedCase :
+  ∀ {record : SourceEqualityClassOrder.Record} {originals : List Node} {memos current saved : Memos}
+    {entries : List (Int × Edits EqualityNormalize.Path)} {edits : Edits EqualityNormalize.Path} {value : Node}
+    {before : SharedState width} {result : Node} {middle : SharedState width} {values results : List Node}
+    {after : SharedState width} {offset : Nat} {found : SourceEqualityNeededMap.lookup (↑offset) entries = some edits}
+    {first : EditNode record originals edits value before result middle}
+    {rest : EditChildren record originals entries (offset + 1) values middle results after},
+    NodeReads formulas solver base first memos current →
+      ChildrenReads formulas solver base rest current saved →
+        NodeGoal first memos → ChildrenGoal rest current → ChildrenGoal ⋯ memos
+record : SourceEqualityClassOrder.Record
+originals : List Node
+entries : List (Int × Edits EqualityNormalize.Path)
+state : SharedState width
+memos : Memos
+inventory : Inventory
+a✝¹⁰ : SourceEqualityClassOrder.Coherent record
+a✝⁹ : EqualityNormalize.Nontrivial record.paths
+a✝⁸ : Populated (Edits.editBelow entries)
+a✝⁷ : Allowed record (Edits.editBelow entries)
+a✝⁶ : Ready formulas solver inventory record originals base state
+a✝⁵ : Edges state.checked.native.machine.heap []
+a✝⁴ : RowsSafe entries []
+a✝³ : Valid state.checked.native.machine.heap memos
+a✝² : Values base originals
+a✝¹ : Masks record originals
+a✝ : Stored state
+stored : ∀ (row : Row), row ∈ [] → ChildrenAtLeaves entries 0 row.children
+⊢ Stored state ∧ All₂ (fun original result => All₂ Preserves original.children result.children) [] []
+/tmp/mcfta-class-endpoint-corridor-proof/class-corridor-direct-2.source.lean:366:52: error: Application type mismatch: The argument
+  ih
+has type
+  Values before.checked.native.machine.heap tail✝ →
+    ∀ (safe : ListSafe (Edits.editAt x✝) tail✝),
+      (match Edits.editAt x✝, ⋯, ⋯, populated, allowed, safe with
+        | Edits.editAt action, actual, reads, populated, allowed, safe => True
+        | Edits.editBelow entries, actual, reads, populated, allowed, safe => ChildrenAtLeaves entries 0 tail✝) →
+        All₂ Preserves tail✝ tail✝
+but is expected to have type
+  All₂ Preserves tail✝ tail✝
+in the application
+  All₂.cons (fun x raw => raw) ih
+/tmp/mcfta-class-endpoint-corridor-proof/class-corridor-direct-2.source.lean:406:69: error: Application type mismatch: The argument
+  placed
+has type
+  match compiled record with
+  | Edits.editAt action => True
+  | Edits.editBelow entries => ChildrenAtLeaves entries 0 values
+but is expected to have type
+  match compiled record, actual✝, lower, ⋯, ⋯, safe with
+  | Edits.editAt action, actual, reads, populated, allowed, safe => True
+  | Edits.editBelow entries, actual, reads, populated, allowed, safe => ChildrenAtLeaves entries 0 values
+in the application
+  list_law lower inventory coherent active (compiled_populated record) (compiled_allowed record) initialReady available
+    safe valid available masks initialStore placed
