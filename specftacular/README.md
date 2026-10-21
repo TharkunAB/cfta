@@ -43,6 +43,11 @@ representation or capture class dictionaries for them. Use concrete types
 such as `Int` for arithmetic and ordering. Phases 3 and 4 instantiate each
 constant separately. `--checked` retains runtime type checks.
 
+Phases 3 and 4 give each type variable of a constant every type that the
+signature can build. `--type-depth D` keeps only the types with at most D
+levels of constructors and arrows. A small depth makes the large searches
+finish, but the search then loses the laws that need a deeper type.
+
 `--dump-laws` writes each law on stderr, with the type of each subterm.
 
 Use `--diagnostics phases` to trace phase and size/type buckets. Use

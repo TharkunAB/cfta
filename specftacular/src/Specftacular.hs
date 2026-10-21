@@ -284,6 +284,10 @@ data Settings = Settings
     -- ^ The bytes by which the completion of one law may grow the live heap.
     , recheckCount :: Int
     -- ^ The number of extra test cases of a new law (see 'recheckSchedule').
+    , typeDepth :: Maybe Int
+    {- ^ The largest depth of the type of a type variable of the grammar (see
+    'mtauWithin'). 'Nothing' is no limit.
+    -}
     , dumpLaws :: Bool
     -- ^ Whether to write each law with the types of its subterms on stderr.
     , completionAllocLimit :: Word64
@@ -405,6 +409,10 @@ data SearchOptions = SearchOptions
     {- ^ With 'searchStopAfter', the only bucket of the last size, by the
     'show' of its type. Each of its schemas prints its time and its term.
     -}
+    , searchTypeDepth :: Maybe Int
+    {- ^ The largest depth of the type of a type variable of the grammar.
+    'Nothing' is no limit.
+    -}
     , searchDumpLaws :: Bool
     -- ^ Whether to write each law with the types of its subterms on stderr.
     }
@@ -440,6 +448,7 @@ defaultOptions size phase =
         , searchSkeletonTemplates = True
         , searchStopAfter = Nothing
         , searchOnlyBucket = Nothing
+        , searchTypeDepth = Nothing
         , searchDumpLaws = False
         }
 
@@ -480,6 +489,14 @@ parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.p
                     ( O.long "only-bucket"
                         <> O.metavar "TYPE"
                         <> O.help "With --stop-after, run only this bucket at the last size, and time each of its schemas"
+                    )
+                )
+            <*> O.optional
+                ( O.option
+                    O.auto
+                    ( O.long "type-depth"
+                        <> O.metavar "D"
+                        <> O.help "Bound the types that the type variables of the grammar take to depth D"
                     )
                 )
             <*> O.switch (O.long "dump-laws" <> O.help "Write each law with the types of its subterms on stderr")
@@ -674,6 +691,7 @@ searchPhases
         , searchSkeletonTemplates = skeletonTemplatesSetting
         , searchStopAfter = stopSetting
         , searchOnlyBucket = onlySetting
+        , searchTypeDepth = typeDepthSetting
         , searchDumpLaws = dumpLawsSetting
         }
     givenInstances
@@ -702,7 +720,7 @@ searchPhases
                     { compl_sig = compl_sig
                     , arb_insts = arb_insts
                     , sig_ty_cons = sig_ty_cons
-                    } = mkStecta size numTests 0 instances sig False id id
+                    } = mkStecta size numTests 0 typeDepthSetting instances sig False id id
             putStrLn $ "In Scope (" ++ show (Map.size compl_sig) ++ " functions/constants):"
             putStrLn "---------------------------------"
             mapM_ (putStrLn . T.unpack) $ Map.keys compl_sig
@@ -741,6 +759,7 @@ searchPhases
                         , lawSink = sink
                         , stopAfter = stopSetting
                         , onlyBucket = onlySetting
+                        , typeDepth = typeDepthSetting
                         , dumpLaws = dumpLawsSetting
                         }
             runPhases env size (max 1 (min 4 phase)) instances sig
@@ -764,13 +783,14 @@ mkStecta ::
     Int ->
     Int ->
     Int ->
+    Maybe Int ->
     (TypeSkeleton -> Maybe Instance) ->
     Sig ->
     Bool ->
     (TypeSkeleton -> TypeSkeleton) ->
     (TypeSkeleton -> TypeSkeleton) ->
     StEcta
-mkStecta size numTests recheckCount instances sig closed givenTrans skelTrans =
+mkStecta size numTests recheckCount typeDepth' instances sig closed givenTrans skelTrans =
     StEcta
         { any_arg = ag
         , compl_sig = compl_sig
@@ -808,7 +828,7 @@ mkStecta size numTests recheckCount instances sig closed givenTrans skelTrans =
             ngnodes givens ++ gnodes skels
     addSyms st tt = map (Bi.bimap (Symbol . st) (tt . typeToFta))
     ngnodes = addSyms id id
-    gnodes = addSyms id (generalize sc)
+    gnodes = addSyms id (generalize typeDepth' sc)
 
 {- | The phases: the message at the end of the phase, the message at the
 start of the phase, the changes of the types of the generated variables and
@@ -860,7 +880,17 @@ runPhases env size lastPhase instances sig =
                 -- A phase with a skeleton grammar closes its variable types
                 -- under carrier renaming, so each renaming of a typing of a
                 -- skeleton has its variables.
-                stectaWith variableTrans = mkStecta size (numTests env) (recheckCount env) instances sig (isJust skeletonTrans) variableTrans skelTrans
+                stectaWith variableTrans =
+                    mkStecta
+                        size
+                        (numTests env)
+                        (recheckCount env)
+                        (typeDepth env)
+                        instances
+                        sig
+                        (isJust skeletonTrans)
+                        variableTrans
+                        skelTrans
             (laws, s') <- diagnose phaseEnv 0 "" "phase" s $ do
                 result@(_, finishedState) <- runPhase phaseEnv (phaseSize pn) (stectaWith <$> skeletonTrans) (stectaWith givenTrans) s
                 diagnosticEvent phaseEnv "checkpoint" 0 "" "phase" finishedState

@@ -103,6 +103,20 @@ allConstructors comps = nubOrd (concatMap (getConstructors . snd) comps)
 
 type Comps = [(Text, TypeSkeleton)]
 
+{- | The types that a type variable of the grammar can take. With a depth D,
+only the types with at most D levels of constructors and arrows above the
+constants and the type variables. Without a depth, all the types ('mtau').
+-}
+mtauWithin :: Maybe Int -> Comps -> Node Symbol
+mtauWithin Nothing comps = mtau comps
+mtauWithin (Just depth) comps = go depth
+  where
+    go 0 = union (globalTyVars ++ [Node [Edge (Symbol nm) []] | (nm, 0) <- allConstructors comps])
+    go d =
+        let n = go (d - 1)
+         in union
+                ((arrowType n n : globalTyVars) ++ [Node [Edge (Symbol nm) (replicate arity n)] | (nm, arity) <- allConstructors comps])
+
 mtau :: Comps -> Node Symbol
 mtau comps =
     createMu
@@ -121,8 +135,8 @@ mtau comps =
 globalTyVars :: [Node Symbol]
 globalTyVars = [var1, var2, var3, var4, varAcc]
 
-generalize :: Comps -> Node Symbol -> Node Symbol
-generalize comps n@(Node [_]) =
+generalize :: Maybe Int -> Comps -> Node Symbol -> Node Symbol
+generalize typeDepth comps n@(Node [_]) =
     Node
         [mkEdge s ns' (equalityConstraint $ mkEqConstraints $ map pathsForVar vars)]
   where
@@ -131,7 +145,7 @@ generalize comps n@(Node [_]) =
         mapNodes
             ( \x ->
                 if x `elem` vars
-                    then mtau comps
+                    then mtauWithin typeDepth comps
                     else x
             )
             n
@@ -139,7 +153,7 @@ generalize comps n@(Node [_]) =
 
     pathsForVar :: Node Symbol -> [Path]
     pathsForVar v = pathsMatching (== v) n
-generalize _ n = n -- error $ "cannot generalize: " ++ show n
+generalize _ _ n = n -- error $ "cannot generalize: " ++ show n
 
 typeToFta :: TypeSkeleton -> Node Symbol
 typeToFta (TVar "a") = var1
