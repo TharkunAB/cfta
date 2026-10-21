@@ -1,0 +1,58 @@
+-- Proposed statement only. No Lean elaboration or proof check has run.
+-- Alias expansions:
+-- Symbol = SourceObservations.Label FullSyntax.Formula
+-- Guard = SourceSymbolicIndex.Constraint FullSyntax.Formula
+-- Node = Value Symbol Guard, using the same imports and opens as ClassCorridorChronology
+-- Checked = SourceEqualityNativeDemand.State
+-- Heap = InternedConstructorTemplates.State Symbol Guard
+-- Memo = SourceCurrentMemoMergeGraph.Memo Symbol Guard
+-- Memos = EndpointMemoGateTrace.Memos
+-- Plain = fun guard : Guard => SourceMemoGate.plain guard = true
+-- source = SourceMemoGate.unconstrained
+-- reaches = SourceEndpointReachability.reaches source
+-- Current = SourceCurrentConstrainedCapCurrentNative.At Plain
+-- MergeStored = SourceCurrentConstrainedCapMemoMerge.Stored Plain
+-- PhysicalStored = SourceCurrentMemoMergeEffects.Stored
+-- CacheCovers = SourceCurrentMemoMergeLanguage.CacheCovers
+-- SemanticReady = SourceEqualityRequiredSemanticCache.SemanticReady
+-- CostHeap = InternedFreshOrdinaryCostHeap.Heap
+-- Guards = SourceCurrentConstrainedCapGuardHeap.Heap Plain
+-- Values = InternedNestedProvenance.Values
+-- Inventory = SourceCurrentAllocatedNativeInventoryState.Inventory
+-- Pass/PassReads/Receipt = SourceCurrentAllocatedClassPass.Pass/PassReads/Receipt
+-- RawCorridor = SourceCurrentRequiredRawCorridor.RawCorridor
+-- select = SourceEqualityProjectionGraph.select
+
+theorem pass [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    {width : Nat}
+    {selected : EqualityNormalize.Constraints} {originalValues preparedValues results : List Node}
+    {scan : Checked width} {preparedHeap : Heap}
+    (required : SourceCurrentConjunctionRequired.Receipt formulas solver inventory selected
+      originalValues preparedValues scan (SourceCurrentConjunctionClassScan.advanceHeap scan preparedHeap))
+    (semantic : SemanticReady scan.native.machine.heap)
+    (normal : SourceCurrentRequiredUnionNormal.UnionNormal scan.native.machine.heap)
+    (costs : CostHeap scan.native.machine.heap)
+    (available : Values scan.native.machine.heap originalValues)
+    (guards : Guards scan.native.machine.heap)
+    (primary : ∀ paths ∈ selected, EndpointStatefulGateTrace.ClassTrace source reaches
+      originalValues paths scan.native.machine.heap false scan.native.machine.heap)
+    (records : List SourceEqualityClassOrder.Record)
+    (selectedEq : records.map SourceEqualityClassOrder.Record.paths = selected)
+    (coherent : ∀ record ∈ records, SourceEqualityClassOrder.Coherent record)
+    (active : ∀ record ∈ records, EqualityNormalize.Nontrivial record.paths)
+    {memo saved : Memo} {after : Checked width} {memos final : Memos}
+    {actualPass : Pass records preparedValues
+      (SourceCurrentConjunctionClassScan.advanceHeap scan preparedHeap) memo results after saved}
+    (reads : PassReads formulas solver actualPass memos final)
+    (physical : PhysicalStored scan.native.machine.heap memo)
+    (covered : ∀ ambient, CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo)
+    (valid : EndpointMemoGateTrace.Valid preparedHeap memos)
+    (current : Current (SourceCurrentConjunctionClassScan.advanceHeap scan preparedHeap))
+    (merged : MergeStored memo) :
+    ∃ next, Receipt formulas solver next records preparedValues
+      (SourceCurrentConjunctionClassScan.advanceHeap scan preparedHeap) memo results after saved memos final ∧
+      Current after ∧ MergeStored saved ∧
+      Language.All₂ (fun original result => ∀ path : List Int,
+        RawCorridor path original → RawCorridor path result) preparedValues results

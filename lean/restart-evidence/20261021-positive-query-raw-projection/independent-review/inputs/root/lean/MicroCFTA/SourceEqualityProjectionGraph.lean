@@ -1,0 +1,64 @@
+import MicroCFTA.SourceEqualityProjectionUnion
+import MicroCFTA.SourceEqualityRequiredGraph
+import MicroCFTA.SourceEqualityNeededMeaning
+
+/-!
+# General physical getPath graphs
+
+Paths use signed child indexes. Each ordinary step selects a child from each
+row and unions the recursive projections. Mu and union heads use the actual
+head normalization. The forest root has its separate source union branch.
+-/
+namespace MicroCFTA.SourceEqualityProjectionGraph
+open InternedConstructorTemplates SourceEqualityRequiredHead
+open SourceEqualityRequiredGraph (Recursive)
+open SourceEqualityProjectionUnion (Union)
+
+/-- The source signed list lookup returns no value at a negative index. -/
+def select (values : List A) (index : Int) : Option A :=
+  if index < 0 then none else values[index.toNat]?
+
+mutual
+  /-- One complete getPath call with its actual returned constructor cache. -/
+  inductive Project [DecidableEq (EdgeKey Symbol Guard)] :
+      List Int → Value Symbol Guard → State Symbol Guard → Value Symbol Guard → State Symbol Guard → Prop where
+    | root : Project [] value state value state
+    | empty : Project (index :: path) .empty state .empty state
+    | ordinary (rows : ProjectRows path index edges before values middle)
+        (union : Union values middle result after) :
+        Project (index :: path) (.node entry edges depth free) before result after
+    | recursive (recursive : Recursive original) (head : Head original before exposed middle)
+        (body : Project (index :: path) exposed middle result after) :
+        Project (index :: path) original before result after
+
+  /-- Visit rows in order; missing child positions make no recursive call. -/
+  inductive ProjectRows [DecidableEq (EdgeKey Symbol Guard)] :
+      List Int → Int → List (EdgeValue Symbol Guard) → State Symbol Guard →
+        List (Value Symbol Guard) → State Symbol Guard → Prop where
+    | nil : ProjectRows path index [] state [] state
+    | missing (absent : select edge.children index = none)
+        (rest : ProjectRows path index edges before results after) :
+        ProjectRows path index (edge :: edges) before results after
+    | selected (found : select edge.children index = some child)
+        (first : Project path child before result middle)
+        (rest : ProjectRows path index edges middle results after) :
+        ProjectRows path index (edge :: edges) before (result :: results) after
+end
+
+/-- Forest projection keeps the distinct root union and missing-position branches. -/
+inductive Forest [DecidableEq (EdgeKey Symbol Guard)] :
+    List Int → List (Value Symbol Guard) → State Symbol Guard → Value Symbol Guard → State Symbol Guard → Prop where
+  | root (union : Union values before result after) : Forest [] values before result after
+  | missing (absent : select values index = none) : Forest (index :: path) values state .empty state
+  | selected (found : select values index = some value) (body : Project path value before result after) :
+      Forest (index :: path) values before result after
+
+/-- A selected signed position is a member of the original list. -/
+theorem select_member {values : List A} {index : Int} {value : A}
+    (found : select values index = some value) : value ∈ values := by
+  unfold select at found
+  split at found
+  · cases found
+  · exact List.mem_of_getElem? found
+
+end MicroCFTA.SourceEqualityProjectionGraph
