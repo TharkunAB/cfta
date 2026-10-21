@@ -3082,6 +3082,7 @@ import MicroCFTA.SourceCurrentOuterRankEnvelopeResources
 import MicroCFTA.SourceCurrentOuterRankAdequacy
 import MicroCFTA.SourceCurrentColdRankCapacity
 import MicroCFTA.SourceCurrentColdRankSemantic
+import MicroCFTA.SourceCurrentFiniteRoundForecast
 /-!
 # Proof dependency audit
 
