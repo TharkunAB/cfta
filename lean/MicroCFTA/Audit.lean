@@ -3051,6 +3051,7 @@ import MicroCFTA.SourceCurrentNativeCurrentStores
 import MicroCFTA.SourceCurrentGatePublicationHistory
 import MicroCFTA.SourceCurrentConjunctionPublicationHistory
 import MicroCFTA.SourceCurrentAllocatedNativeActualScope
+import MicroCFTA.SourceCurrentScanNativeStores
 /-!
 # Proof dependency audit
 
