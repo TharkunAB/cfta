@@ -1,0 +1,48 @@
+theorem child_reflect
+    (parents : List Record)
+    (coherent : ∀ record ∈ parents, SourceEqualityClassOrder.Coherent record)
+    (fixed : congruenceStep (parents.map Record.paths) = some (parents.map Record.paths))
+    (index : Nat) {left right : Path}
+    (related : Rel (parents.map Record.paths) (index :: left) (index :: right)) :
+    Rel ((SourceEqualityDescend.records index parents).map Record.paths) left right := by
+  rcases SourceCurrentNormalizedChildSeparation.single fixed related with same |
+      ⟨paths, selected, a, aMember, b, bMember, suffix, firstSame, secondSame⟩
+  · have equal := (List.cons.inj same).2
+    rw [equal]
+    exact .refl _
+  by_cases same : a = b
+  · have equal := (List.cons.inj (firstSame.trans (same ▸ secondSame.symm))).2
+    rw [equal]
+    exact .refl _
+  have notPrefix := consistent_subsumption_irreflexive _ (consistent fixed) paths selected
+  cases a with
+  | nil => exact False.elim (notPrefix ⟨[], aMember, b, bMember, ⟨b, rfl⟩, same⟩)
+  | cons firstIndex firstPath =>
+      cases b with
+      | nil => exact False.elim (notPrefix ⟨[], bMember, firstIndex::firstPath, aMember,
+          ⟨firstIndex::firstPath, rfl⟩, Ne.symm same⟩)
+      | cons secondIndex secondPath =>
+          have firstParts := List.cons.inj firstSame
+          have secondParts := List.cons.inj secondSame
+          obtain ⟨parent, parentMember, rfl⟩ := List.mem_map.mp selected
+          have first : index::firstPath ∈ parent.paths := by rw [firstParts.1]; exact aMember
+          have second : index::secondPath ∈ parent.paths := by rw [secondParts.1]; exact bMember
+          have different : firstPath ≠ secondPath := by
+            intro equal
+            apply same
+            rw [← firstParts.1, ← secondParts.1, equal]
+          have known := coherent parent parentMember
+          have valid := EqualityTrie.descend_valid parent.trie known.1 index
+          have pairs := EqualityTrie.descend_exact parent.trie known.1 index
+          have kept := (EqualitySaturation.pathTrieHasAtLeastTwoPaths_nontrivial _ valid).mpr
+            ⟨firstPath, (pairs firstPath).mpr ((known.2.2 _).mpr first),
+              secondPath, (pairs secondPath).mpr ((known.2.2 _).mpr second), different⟩
+          let output := SourceEqualityDescend.fromTrie (EqualityTrie.pathTrieDescend parent.trie index)
+          have found : SourceEqualityDescend.record index parent = some output := by
+            simp only [SourceEqualityDescend.record, kept, ite_true, output]
+          have included := (SourceEqualityDescend.records_perm index parents).mem_iff.mpr
+            (List.mem_filterMap.mpr ⟨parent, parentMember, found⟩)
+          have suffixes := SourceEqualityDescend.record_pairs index parent known output found
+          rw [firstParts.2, secondParts.2]
+          exact .member output.paths (List.mem_map.mpr ⟨output, included, rfl⟩)
+            firstPath secondPath ((suffixes _).mpr first) ((suffixes _).mpr second) suffix

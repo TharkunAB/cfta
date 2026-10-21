@@ -1,0 +1,61 @@
+theorem dispatch {g s r e p h m c n budget fuel slot nextSlot : Nat}
+    {entry : Phase width} {inherited combined : EqValue} {original parented row : Edge}
+    {rest : List Edge} {before afterParent start : Caller width}
+    {earlier : List Node} {anchor value nextAnchor : Node} {records : List Record}
+    (good : Good (caller entry)) (inputs : Inputs entry)
+    (guards : PlainHeap (caller entry).checked.native.machine.heap)
+    (origins : Origins (caller entry))
+    (past : Reached g s r e p h m c n budget entry
+      (.rows (fuel + slot + 2) inherited (original :: rest) before))
+    (parent : edgeCall (fuel + slot + 1) g s r e p h m c n budget
+      ⟨inherited,original⟩ before = .done parented afterParent)
+    (combinedAt : (SourceCurrentAllocatedInheritedPrefix.run parented.entry.key.constraint inherited
+      afterParent.checked.operations).1 = .ok (some combined))
+    (live : combined ≠ .contradiction)
+    (earlierCalls : walk (fuel + slot + 1) g s r e p h m c n budget combined 0
+      (parented.children.take slot) (prefixState afterParent parented inherited) = .done earlier start)
+    (footprint : ∀ originals : List Record,
+      SourceEqualityPhysicalPayload.own original.entry.key.constraint = .ok (some originals) →
+        ∀ record ∈ originals, SourceCurrentClassPositionalFootprints.Unselected record slot nextSlot)
+    (source : original.children[slot]? = some anchor)
+    (selected : parented.children[slot]? = some value)
+    (member : row ∈ nodeEdges value)
+    (positive : SourceEqualityPhysicalPayload.own row.entry.key.constraint = .ok (some records))
+    (nonempty : records ≠ []) (present : row.children[nextSlot]? = some nextAnchor) :
+    Reached g s r e p h m c n budget entry
+      (.node fuel ⟨(descend start combined slot).1,value⟩ (descend start combined slot).2) ∧
+    Origins afterParent ∧
+    SourceCurrentActualRequiredRowOrigins.Link nextSlot anchor value ∧
+    SourceCurrentPositionalOriginChain.Below nextSlot nextAnchor anchor ∧
+    InternedValueMass.value nextAnchor < InternedValueMass.value anchor := by
+  have current := SourceCurrentOuterPrefixInvariants.reached past good inputs
+  have currentGuards := SourceCurrentOuterGuardHeapReturns.reached _ past good inputs guards
+  have currentOrigins := SourceCurrentOuterPositionalOrigins.reached past good inputs guards origins
+  obtain ⟨retained,related⟩ := SourceCurrentOuterPositionalOrigins.edge_call parent current.1
+    ⟨current.2.1,current.2.2 _ List.mem_cons_self⟩ currentGuards currentOrigins
+  have link := related slot nextSlot footprint anchor value source selected
+  have below : SourceCurrentPositionalOriginChain.Below nextSlot nextAnchor anchor :=
+    ⟨value,row,records,link,member,positive,nonempty,present⟩
+  refine ⟨?_,retained,link,below,SourceCurrentPositionalOriginChain.mass_lt below⟩
+  have rowStep : Reached g s r e p h m c n budget
+      (.rows (fuel + slot + 2) inherited (original :: rest) before)
+      (.descendants (fuel + slot + 1) inherited parented afterParent) :=
+    .snoc (.refl _) (.rows_edge parent)
+  have childStep := (past.trans rowStep).snoc (Step.descendants_children combinedAt)
+  have walkStep := childStep.snoc (Step.children_walk live)
+  have entered := walk_prefix earlierCalls selected
+  exact walkStep.trans (by simpa only [Nat.zero_add] using entered)
+
+end Workers
+
+/-- A finite anchor chain consumes mass even when its child indices change at every step. -/
+theorem budget (anchors : Nat → Node) (indices : Nat → Nat) (count : Nat)
+    (steps : ∀ index, index < count →
+      SourceCurrentPositionalOriginChain.Below (indices index) (anchors (index + 1)) (anchors index)) :
+    InternedValueMass.value (anchors count) + count ≤ InternedValueMass.value (anchors 0) := by
+  induction count with
+  | zero => omega
+  | succ count ih =>
+    have earlier := ih (fun index inside => steps index (by omega))
+    have last := SourceCurrentPositionalOriginChain.mass_lt (steps count (by omega))
+    omega

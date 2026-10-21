@@ -1,0 +1,23 @@
+/-- A stopped class skips required children and class editing at its actual Scan return. -/
+noncomputable def classes (g s r e p h m c n budget : Nat) (records : List Record)
+    (values : List (Value Symbol Guard)) (before : Checked width) (fourth : Fourth) (memo : Memo) :
+    Outcome (List (Value Symbol Guard)) width :=
+  (scan g s p h n budget records values before fourth memo).bind fun result middle saved current =>
+    match result.1 with
+    | some _ => .done (EqualityLeafProjectionRuntimeEmpty.erase values) middle saved current
+    | none =>
+        (required r h (SourceEqualitySelectedRequired.paths (result.2.map SourceEqualityClassOrder.Record.paths))
+          values middle saved current).bind fun requiredValues checked next warm =>
+            pass e p h m c n result.2 requiredValues checked next warm
+
+/-- The allocated own accessor and precheck select the literal local continuation. -/
+noncomputable def reduce (g s r e p h m c n budget : Nat) (loaded : Allocated) (inherited : EqValue)
+    (values : List (Value Symbol Guard)) (before : Checked width) (fourth : Fourth) (memo : Memo) :
+    Outcome (List (Value Symbol Guard)) width :=
+  let observed := runPrefix loaded.stored loaded.guard inherited before.operations
+  let middle := SourceCurrentAllocatedQueryMemo.advancePhysical before ⟨before.native.machine.heap, observed.2⟩
+  match observed.1 with
+  | .error message => .failed (.precheck message) middle fourth memo
+  | .ok .unchanged => .done values middle fourth memo
+  | .ok .emptyChildren => .done (EqualityLeafProjectionRuntimeEmpty.erase values) middle fourth memo
+  | .ok (.classes records) => classes g s r e p h m c n budget records values middle fourth memo

@@ -1,0 +1,40 @@
+theorem first_child
+    {g s r e p h m c n budget bodyFuel candidateFuel : Nat}
+    {inherited : EqValue} {ownerEntry ownerDepth ownerFree} {ownerRows : List Edge}
+    {before current : Caller width} {candidate : NodeRequest}
+    (actual : Reached g s r e p h m c n budget
+      (.body bodyFuel ⟨inherited,.node ownerEntry ownerRows ownerDepth ownerFree⟩ before)
+      (.node candidateFuel candidate current)) :
+    ∃ (skippedRows : List Edge) (original parented : Edge) (rest : List Edge)
+      (rowBefore afterParent start : Caller width) (slot childFuel : Nat)
+      (combined : EqValue) (earlier : List Node) (child : Node),
+      ownerRows = skippedRows ++ original :: rest ∧
+      Reached g s r e p h m c n budget
+        (.body bodyFuel ⟨inherited,.node ownerEntry ownerRows ownerDepth ownerFree⟩ before)
+        (.rows (childFuel + slot + 2) inherited (original :: rest) rowBefore) ∧
+      edgeCall (childFuel + slot + 1) g s r e p h m c n budget
+        ⟨inherited,original⟩ rowBefore = .done parented afterParent ∧
+      (SourceCurrentAllocatedInheritedPrefix.run parented.entry.key.constraint
+        inherited afterParent.checked.operations).1 = .ok (some combined) ∧
+      combined ≠ .contradiction ∧
+      walk (childFuel + slot + 1) g s r e p h m c n budget combined 0
+        (parented.children.take slot) (prefixState afterParent parented inherited) = .done earlier start ∧
+      parented.children[slot]? = some child ∧
+      (((.node candidateFuel candidate current : Phase width) =
+          .node childFuel ⟨(descend start combined slot).1,child⟩ (descend start combined slot).2) ∨
+        ∃ (handle : Nat) (captured : NodeRequest) (running : Caller width),
+          beginNode ⟨(descend start combined slot).1,child⟩ (descend start combined slot).2 =
+            (handle,.evaluate captured,running) ∧
+          Reached g s r e p h m c n budget (.body childFuel captured running)
+            (.node candidateFuel candidate current))
+ := by
+  rcases head_cases actual with same | ⟨middle,step,remaining⟩
+  · cases same
+  · cases step with
+    | body_rows ordinary =>
+        obtain ⟨skipped,original,parented,rest,rowBefore,afterParent,start,slot,childFuel,combined,
+          earlier,child,split,cut,parent,combinedAt,live,previous,selected,tail⟩ := rows_first _ remaining
+        have ownerSplit : ownerRows = skipped ++ original :: rest :=
+          (congrArg InternedEdgeResidency.nodeEdges ordinary).trans split
+        exact ⟨skipped,original,parented,rest,rowBefore,afterParent,start,slot,childFuel,combined,
+          earlier,child,ownerSplit,(Reached.snoc (.refl _) (.body_rows ordinary)).trans cut,parent,combinedAt,live,previous,selected,tail⟩

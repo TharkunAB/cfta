@@ -1,0 +1,30 @@
+              obtain ⟨effect, _, known⟩ := SourceCurrentParentOperationInvariants.reduce reduced good stored
+                properties.1 inheritedReady available
+              cases observed : SourceCurrentAllocatedMkEdge.build symbol loaded values middle with
+              | mk built checked =>
+                  cases built with
+                  | error => simp only [SourceCurrentAllocatedParentWorker.build, observed] at last; cases last
+                  | ok value =>
+                      simp only [SourceCurrentAllocatedParentWorker.build, observed] at last
+                      cases last
+                      have fields := SourceCurrentActualParentRowOrigins.build_children observed effect.good
+                        (properties.1.grows effect.operations.constraint_growth) known
+                      cases keep : SourceEqualityMkEdgeAllocation.accepted
+                          (SourceEqualityConjoinAllocation.readback loaded) values.length with
+                      | false =>
+                          simp only [keep, Bool.false_eq_true, ite_false] at fields
+                          exact Or.inr (Or.inr (Or.inl fields))
+                      | true =>
+                          simp only [keep, ite_true] at fields
+                          rcases SourceCurrentActualLocalBranchCases.reduce_cases reduced with originalChildren | erased | selected
+                          · exact Or.inl (fields.trans originalChildren)
+                          · exact Or.inr (Or.inl (fields.trans erased))
+                          · obtain ⟨records, kept, scanned, scanFourth, prepared, preparedHeap,
+                              precheck, scanCall, nonempty, requiredCall, passCall, sameFourth⟩ := selected
+                            refine Or.inr (Or.inr (Or.inr ⟨loaded, middle, records, kept, scanned, scanFourth,
+                              prepared, preparedHeap, rfl, rfl, ?_, ?_, ?_, precheck, scanCall,
+                              nonempty, requiredCall, ?_, sameFourth⟩))
+                            · simpa only [fields] using reduced
+                            · simpa only [fields] using observed
+                            · simpa only [fields] using keep
+                            · simpa only [fields] using passCall

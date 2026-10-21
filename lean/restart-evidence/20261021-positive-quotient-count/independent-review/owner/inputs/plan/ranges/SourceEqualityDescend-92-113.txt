@@ -1,0 +1,22 @@
+theorem record_pairs (index : Nat) (original : Record) (coherent : Coherent original) (output : Record)
+    (found : record index original = some output) :
+    ∀ suffix, suffix ∈ output.paths ↔ index :: suffix ∈ original.paths := by
+  dsimp only [record] at found
+  split at found
+  · have same : fromTrie (pathTrieDescend original.trie index) = output := Option.some.inj found
+    rw [← same]
+    exact fun suffix => (descend_exact original.trie coherent.1 index suffix).trans (coherent.2.2 _)
+  · cases found
+
+/-- Every kept descended record derives coherent fields, ascending maps, and nontrivial suffix paths. -/
+theorem record_wellFormed (index : Nat) (original : Record) (coherent : Coherent original) (ascending : Ascending original.trie)
+    (output : Record) (found : record index original = some output) :
+    Coherent output ∧ Ascending output.trie ∧ Nontrivial output.paths := by
+  dsimp only [record] at found
+  split at found
+  · rename_i kept
+    have same : fromTrie (pathTrieDescend original.trie index) = output := Option.some.inj found
+    rw [← same]
+    have valid := descend_valid original.trie coherent.1 index
+    have sorted := descend_ascending original.trie ascending index
+    exact ⟨fromTrie_coherent _ valid sorted, sorted, (EqualitySaturation.pathTrieHasAtLeastTwoPaths_nontrivial _ valid).mp kept⟩

@@ -1,0 +1,19 @@
+theorem node_evaluate
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (candidate owner : NodeRequest) (before running : Caller width) (handle : Nat)
+    (sound : Sound formulas solver before)
+    (coherent : InternedRecordCoherence.Coherent before.checked.native.machine.heap)
+    (inheritedReady : EqReady before.checked.operations.constraints candidate.inherited)
+    (available : Available before.checked.native.machine.heap candidate.value)
+    (region : Region candidate.value)
+    (started : beginNode candidate before = (handle, .evaluate owner, running)) :
+    owner.value = candidate.value ∧ Region owner.value := by
+  have current := SourceCurrentAllocatedPartialMemoSound.beginNode_evaluate_sound formulas solver candidate before
+    sound inheritedReady available handle owner running started
+  have checked : running.checked = before.checked := by
+    simpa only [started] using (beginNode_components candidate before).1
+  have ownerAvailable : Available before.checked.native.machine.heap owner.value := by
+    simpa only [checked] using current.2.2.1.input
+  have values := SourceEqualityPartialKeyTransport.available_reference_eq _ coherent _ _ ownerAvailable available
+    (congrArg Prod.snd current.2.2.2)
+  exact ⟨values, values.symm ▸ region⟩

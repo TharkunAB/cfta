@@ -1,0 +1,28 @@
+-- PROPOSED, UNPROVED signatures. This text is not a Lean check input.
+-- Native Symbol/Guard/Node/Row aliases are those in the pinned geometry236.
+-- count has the exact mathematical definition given in plan.md, section 3.
+namespace MicroCFTA.SourceCurrentPositiveQuotientCount
+open EqualityNormalize SourceEqualityClassOrder InternedConstructorTemplates
+open SourceCurrentRequiredPositivePosition (PositiveAt)
+open SourceCurrentNormalizedChildSeparation (Rel)
+
+noncomputable def count (inherited : List Record) (value : Node) : Nat
+
+-- The caller does not supply a finite enumeration or a quotient reflection law.
+theorem child_count
+    (parents inherited : List Record)
+    (coherent : ∀ record ∈ parents, SourceEqualityClassOrder.Coherent record)
+    (fixed : congruenceStep (parents.map Record.paths) = some (parents.map Record.paths))
+    (covered : Covers (inherited.map Record.paths) (parents.map Record.paths))
+    (index : Nat) (child : Node) {entry depth free} {rows : List Row}
+    (row : Row) (member : row ∈ rows)
+    (back : ∀ q, PositiveAt child q →
+      ∃ j p original, row.children[j]? = some original ∧ PositiveAt original p ∧
+        Rel (parents.map Record.paths) (index :: q) (j :: p)) :
+    count (SourceEqualityDescend.records index parents) child ≤
+        count inherited (.node entry rows depth free) ∧
+      (SourceMemoGate.plain row.entry.key.constraint = false →
+        count (SourceEqualityDescend.records index parents) child <
+          count inherited (.node entry rows depth free))
+
+end MicroCFTA.SourceCurrentPositiveQuotientCount

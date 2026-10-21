@@ -1,0 +1,11 @@
+--- positive-quotient-count-direct-1.source.lean
++++ SourceCurrentPositiveQuotientCount.lean
+@@ -183,7 +183,7 @@
+     exact sourceEq.symm.trans (domainEq.trans nextEq)
+   have counted := SymbolicDriver.relation_cardinality_le sources (targets.erase (toPath [])) (toPath [])
+     distinct relation total injective
+-  refine ⟨counted.trans List.length_erase_le, ?_⟩
++  refine ⟨Nat.le_trans counted List.length_erase_le, ?_⟩
+   intro nonplain
+   have rootPosition : [] ∈ positivePaths owner := positivePaths_spec.mpr
+     (.root rowIndex row selected nonplain)

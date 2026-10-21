@@ -1,0 +1,24 @@
+private theorem edgeBody_safe (fuel g s r e p h m c n budget : Nat)
+    (request : EdgeRequest) (before : Caller width) (idle : EdgeIdle before) :
+    Safe (edgeBody fuel g s r e p h m c n budget request before) := by
+  unfold edgeBody
+  split
+  · exact idle
+  · trivial
+
+private theorem edgeCall_safe (fuel g s r e p h m c n budget : Nat)
+    (request : EdgeRequest) (before : Caller width) (idle : EdgeIdle before) :
+    Safe (edgeCall fuel g s r e p h m c n budget request before) := by
+  rcases observed : beginEdge request before with ⟨handle, action, after⟩
+  cases action with
+  | ready value =>
+      have ready := ready_idle request before idle value (congrArg (fun result => result.2.1) observed)
+      simpa only [edgeCall, observed, Safe, NoEdgeBusy] using ready
+  | busy => exact (busy_impossible request before idle (congrArg (fun result => result.2.1) observed)).elim
+  | absent => simp only [edgeCall, observed, Safe, NoEdgeBusy]
+  | evaluate owner =>
+      simp only [edgeCall, observed]
+      unfold edgeBody
+      split
+      · simpa only [Outcome.bind, Safe, observed] using finished_idle request before idle _ _ _ _
+      · trivial

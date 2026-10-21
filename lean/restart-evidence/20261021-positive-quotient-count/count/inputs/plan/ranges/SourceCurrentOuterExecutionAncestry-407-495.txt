@@ -1,0 +1,89 @@
+/-- Every actual prefix derives the validity of its reached node table. -/
+theorem Reached.valid (actual : Reached g s r e p h m c n budget first last)
+    (valid : NodeValid (caller first)) : NodeValid (caller last) := by
+  induction actual with
+  | refl => exact valid
+  | snoc earlier last ih => exact (step_forward last ih).1
+
+/-- An enclosing node owner remains exact throughout its unfinished prefix. -/
+theorem Reached.running (actual : Reached g s r e p h m c n budget first last)
+    (valid : NodeValid (caller first)) (handle : Nat) (owner : NodeRequest)
+    (present : (caller first).nodeResults.cells handle = some ⟨owner,.evaluating⟩) :
+    (caller last).nodeResults.cells handle = some ⟨owner,.evaluating⟩ := by
+  induction actual with
+  | refl => exact present
+  | snoc earlier last ih => exact (step_forward last (earlier.valid valid)).2 handle owner ih
+
+private theorem step_owner (step : Step g s r e p h m c n budget first last)
+    (valid : NodeValid (caller first)) (handle : Nat) (owner : NodeRequest)
+    (present : (caller last).nodeResults.cells handle = some ⟨owner, .evaluating⟩) :
+    (caller first).nodeResults.cells handle = some ⟨owner, .evaluating⟩ ∨
+      ∃ fuel request before running,
+        first = .node fuel request before ∧ last = .body fuel owner running ∧
+        beginNode request before = (handle, .evaluate owner, running) := by
+  cases step with
+  | node_evaluate actual =>
+      rename_i request before chosen running original fuel
+      by_cases same : handle = chosen
+      · subst handle
+        have own : running.nodeResults.cells chosen = some ⟨original, .evaluating⟩ :=
+          (start_owner request before valid actual).1
+        have equal : original = owner := by
+          have cells := Option.some.inj (own.symm.trans present)
+          exact congrArg FlatMemoThunk.Cell.request cells
+        subst owner
+        exact Or.inr ⟨fuel, request, before, running, rfl, rfl, actual⟩
+      · apply Or.inl
+        have earlier : (beginNode request before).2.2.nodeResults.cells handle = some ⟨owner, .evaluating⟩ := by
+          rw [actual]
+          exact present
+        have chosenEq : (FlatMemoThunk.lookupOrInsert request.key request before.nodeResults).1 = chosen :=
+          congrArg Prod.fst actual
+        exact FlatMemoThunk.lookup_running_before request.key request before.nodeResults handle owner
+          (FlatMemoThunk.demand_running_before_other _ handle _ owner (by rw [chosenEq]; exact same) earlier)
+  | body_rows => exact Or.inl present
+  | rows_edge done => exact Or.inl ((edge_done done valid).reverse _ _ present)
+  | rows_tail edge children =>
+      have first := edge_done edge valid
+      exact Or.inl (first.reverse _ _ ((descendants_done children first.valid).reverse _ _ present))
+  | descendants_children => exact Or.inl present
+  | children_walk => exact Or.inl present
+  | walk_head => exact Or.inl present
+  | walk_tail done => exact Or.inl ((node_done done valid).reverse _ _ present)
+
+/-- An ancestor retains its exact activation and an unfinished body-to-reader prefix. -/
+def Ancestor (g s r e p h m c n budget : Nat) (entryPhase current : Phase width)
+    (handle : Nat) (owner : NodeRequest) : Prop :=
+  ∃ fuel request before running,
+    Reached g s r e p h m c n budget entryPhase (.node fuel request before) ∧
+    beginNode request before = (handle, .evaluate owner, running) ∧
+    owner.key = request.key ∧ NodeValid running ∧
+    running.nodeResults.cells handle = some ⟨owner, .evaluating⟩ ∧
+    Reached g s r e p h m c n budget (.body fuel owner running) current
+
+private theorem ancestor_extend (ancestor : Ancestor g s r e p h m c n budget entryPhase first handle owner)
+    (step : Step g s r e p h m c n budget first last) :
+    Ancestor g s r e p h m c n budget entryPhase last handle owner := by
+  obtain ⟨fuel,request,before,running,earlier,started,key,valid,present,later⟩ := ancestor
+  exact ⟨fuel,request,before,running,earlier,started,key,valid,present,.snoc later step⟩
+
+/-- Every evaluating node cell comes from an enclosing activation when the entry table is idle. -/
+theorem Reached.owners (actual : Reached g s r e p h m c n budget entryPhase current)
+    (valid : NodeValid (caller entryPhase))
+    (idle : ∀ handle owner, (caller entryPhase).nodeResults.cells handle ≠ some ⟨owner, .evaluating⟩)
+    (handle : Nat) (owner : NodeRequest)
+    (present : (caller current).nodeResults.cells handle = some ⟨owner, .evaluating⟩) :
+    Ancestor g s r e p h m c n budget entryPhase current handle owner := by
+  induction actual with
+  | refl => exact False.elim (idle handle owner present)
+  | snoc earlier last ih =>
+      rcases step_owner last (earlier.valid valid) handle owner present with old | fresh
+      · exact ancestor_extend (ih old) last
+      · obtain ⟨fuel,request,before,running,firstEq,lastEq,started⟩ := fresh
+        cases firstEq
+        cases lastEq
+        have protocol := earlier.valid valid
+        have owned := start_owner request before protocol started
+        have runningValid := start_valid request before protocol
+        rw [started] at runningValid
+        exact ⟨fuel,request,before,running,earlier,started,owned.2,runningValid,owned.1,.refl _⟩

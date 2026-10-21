@@ -1,0 +1,42 @@
+private theorem prefix_data (original : Guard) (identity : Nat)
+    (inherited : List SourceEqualityClassOrder.Record) (before : Operations) (valid : Valid before)
+    (ready : EqReady before.constraints (.live identity inherited))
+    (field : SourceCurrentConjunctionEquality.FieldAvailable before original)
+    (combinedIdentity : Nat) (outputs : List SourceEqualityClassOrder.Record)
+    (actual : (SourceCurrentAllocatedInheritedPrefix.run original (.live identity inherited) before).1 =
+      .ok (some (.live combinedIdentity outputs)))
+    (selected : EqualityNormalize.Constraints)
+    (ownSelected : ∀ paths ∈ selected, paths ∈ (SourceCompactGuards.sourceEqualities original).getD []) :
+    let after := (SourceCurrentAllocatedInheritedPrefix.run original (.live identity inherited) before).2
+    EqReady after.constraints (.live combinedIdentity outputs) ∧ Grows before after ∧
+      EqualityNormalize.congruenceStep (outputs.map SourceEqualityClassOrder.Record.paths) =
+        some (outputs.map SourceEqualityClassOrder.Record.paths) ∧
+      EqualityNormalize.Covers (inherited.map SourceEqualityClassOrder.Record.paths)
+        (outputs.map SourceEqualityClassOrder.Record.paths) ∧
+      EqualityNormalize.Covers selected (outputs.map SourceEqualityClassOrder.Record.paths) := by
+  obtain ⟨own, loaded, accessorValid, ownReady, ownClasses, _ownRead, accessorGrowth⟩ :=
+    SourceCurrentConjunctionEquality.accessor_correct original before valid field
+  obtain ⟨result, computed, _finalValid, resultReady, growth, fixed, covers⟩ :=
+    SourceCurrentOuterOriginDependencies.combine_covers (.live identity inherited) own
+      (SourceCurrentConjunctionEquality.accessor original before).2 accessorValid
+      (ready.grows accessorGrowth.constraint_growth) ownReady
+  have equation : SourceCurrentAllocatedInheritedPrefix.run original (.live identity inherited) before =
+      (.ok (some result), (SourceEqualityConstraintMemoAllocation.combine (.live identity inherited) own
+        (SourceCurrentConjunctionEquality.accessor original before).2).2) := by
+    rw [SourceCurrentAllocatedInheritedPrefix.run_combine original identity inherited before own loaded]
+    simp only [computed, Except.map]
+  have same := Option.some.inj (Except.ok.inj ((congrArg Prod.fst equation).symm.trans actual))
+  subst result
+  refine ⟨?_, ?_, (SourceCurrentEqualityNormalizationFixed.invariants _ (fixed outputs rfl)).2.2.2, ?_, ?_⟩
+  · rw [congrArg Prod.snd equation]
+    exact resultReady
+  · rw [congrArg Prod.snd equation]
+    exact SourceCurrentConjunctionEquality.grows_trans accessorGrowth growth
+  · intro paths member
+    exact covers outputs rfl paths (List.mem_append.mpr (.inl member))
+  · intro paths member
+    apply covers outputs rfl paths
+    apply List.mem_append.mpr
+    apply Or.inr
+    rw [ownClasses]
+    exact ownSelected paths member

@@ -1,0 +1,21 @@
+theorem selected_competing_continuation :
+    ∃ (source : Syntax Symbol Guard) (root first second result next : Node) (heap : State Symbol Guard)
+      (before after : Checked 10) (saved : Memo) (record : SourceEqualityClassOrder.Record) (outputs : List Node)
+      (row nextRow competing : EdgeValue Symbol Guard) (classes : List SourceEqualityClassOrder.Record)
+      (inherited combined : EqValue),
+      InternedFreshOrdinaryConstruction.build source [] empty = .done root heap ∧ children root = [first,second] ∧
+      before.native.machine.heap = heap ∧ SourceCurrentNativeOperationHeap.Good before ∧
+      InternedNestedProvenance.Values heap [first,second] ∧
+      record.paths = [[0],[1]] ∧ SourceEqualityClassOrder.Coherent record ∧ EqualityNormalize.Nontrivial record.paths ∧
+      SourceCurrentAllocatedGateWorker.primary 8 [first,second] record.paths before = .done false before ∧
+      SourceCurrentAllocatedClassWorker.runClass 4 8 8 64 16 128 record [first,second] before
+        SourceCurrentMemoMergeGraph.empty = .done outputs after saved ∧ outputs[0]? = some result ∧
+      row ∈ nodeEdges result ∧ SourceEqualityPhysicalPayload.own row.entry.key.constraint = .ok (some classes) ∧
+      classes ≠ [] ∧ row.children[0]? = some next ∧ nextRow ∈ nodeEdges next ∧
+      SourceEqualityPhysicalPayload.own nextRow.entry.key.constraint = .ok (some classes) ∧
+      competing ∈ nodeEdges second ∧ competing.children[0]? = some next ∧
+      (∀ original ∈ nodeEdges first, original.children[0]? ≠ some next) ∧
+      ¬ SourceCurrentPositionalOriginChain.Below 0 next first ∧ inherited.payload = some [] ∧
+      (SourceCurrentAllocatedInheritedPrefix.run row.entry.key.constraint inherited after.operations).1 = .ok (some combined) ∧
+      (SourceEqualityConstraintMemoAllocation.descend combined 0
+        (SourceCurrentAllocatedInheritedPrefix.run row.entry.key.constraint inherited after.operations).2).1.payload = some [] := witness

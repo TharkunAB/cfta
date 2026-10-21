@@ -1,0 +1,13 @@
+/-- Publish and demand the actual outer request in its own table. -/
+def beginNode (request : NodeRequest) (before : State width) :
+    Nat × (FlatMemoThunk.Observation NodeRequest Node × State width) :=
+  let published := FlatMemoThunk.lookupOrInsert request.key request before.nodeResults
+  let demanded := FlatMemoThunk.demand published.1 published.2
+  (published.1, demanded.1, { before with nodeResults := demanded.2 })
+
+/-- Publish and demand the actual reduced-edge request in its own table. -/
+def beginEdge (request : EdgeRequest) (before : State width) :
+    Nat × (FlatMemoThunk.Observation EdgeRequest Edge × State width) :=
+  let published := FlatMemoThunk.lookupOrInsert request.key request before.edgeResults
+  let demanded := FlatMemoThunk.demand published.1 published.2
+  (published.1, demanded.1, { before with edgeResults := demanded.2 })

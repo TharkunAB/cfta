@@ -1,0 +1,105 @@
+/-- Initial Parent resources derive the certificates at the same actual selected cuts. -/
+theorem selected_certificates
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (budget : Nat) (symbol : Symbol) (original : Guard) (loaded : Allocated) (inherited : EqValue)
+    (values : List Node) (before : Caller (bits + 2)) (memos : Memos)
+    (initial : Context formulas solver inventory before memos) (frame : Frame formulas solver inventory before.checked)
+    (profile : Profile) (fits : Fits profile before.checked)
+    (live : SourceCurrentParentNumeric.LiveInputs original loaded inherited values before)
+    (reserved : SourceCurrentParentForecast.Reserved bits budget values.length original loaded inherited before.checked profile)
+    {g s r e p h m c n : Nat} {result : EdgeValue Symbol Guard} {after : Checked (bits + 2)}
+    {savedFourth : Fourth} {saved : Memo}
+    (observed : SourceCurrentAllocatedParentWorker.edge g s r e p h m c n budget symbol original inherited values
+      before.checked before.fourth before.merge = .done result after savedFourth saved)
+    (noncontradictory : SourceEqualityMkEdgeAllocation.contradictory original = false)
+    {records kept : List SourceEqualityClassOrder.Record} {scanned : Checked (bits + 2)} {scanFourth : Fourth}
+    (precheck : (SourceEqualityPartialPrecheckAllocation.run loaded.stored loaded.guard inherited before.checked.operations).1 =
+      .ok (.classes records))
+    (scanCall : SourceCurrentAllocatedRecordScanWorker.scan g s p h n budget values records
+      (prefixState before.checked loaded inherited) before.fourth = .done (none, kept) scanned scanFourth)
+    {preparedValues : List Node} {preparedHeap : InternedConstructorTemplates.State Symbol Guard}
+    {classAfter : Checked (bits + 2)}
+    (requiredCall : SourceEqualityRequiredExecution.requireAll r h
+      (SourceEqualitySelectedRequired.paths (kept.map SourceEqualityClassOrder.Record.paths)) values
+      scanned.native.machine.heap = .done preparedValues preparedHeap)
+    (passCall : SourceCurrentAllocatedClassWorker.pass e p h m c n kept preparedValues
+      (SourceCurrentConjunctionClassScan.advanceHeap scanned preparedHeap) before.merge =
+      .done result.children classAfter saved)
+    (normal : SourceCurrentRequiredUnionNormal.UnionNormal before.checked.native.machine.heap)
+    (supported : Support before.checked.native.machine.heap before.checked.native)
+    (causal : History empty before.checked.native.machine.heap) :
+    ∃ next final own preparedInventory scanMemos preparedMemos,
+      ∃ numeric : SourceCurrentParentNumeric.Receipt formulas solver next profile budget symbol original loaded inherited values
+        before memos result after savedFourth saved final,
+      ∃ trace : Scan budget SourceMemoGate.unconstrained (SourceEndpointReachability.reaches SourceMemoGate.unconstrained)
+        values (records.map SourceEqualityClassOrder.Record.paths)
+        (prefixState before.checked loaded inherited) before.fourth none
+        (kept.map SourceEqualityClassOrder.Record.paths) scanned scanFourth,
+      ∃ retained : SourceCurrentConjunctionSelectedRecords.Retained trace records kept,
+      ∃ pass : SourceCurrentAllocatedClassPass.Pass kept preparedValues
+        (SourceCurrentConjunctionClassScan.advanceHeap scanned preparedHeap) before.merge result.children classAfter saved,
+      (∃ built : SourceCurrentAllocatedMkEdge.build symbol loaded result.children classAfter = (.ok result, after),
+        savedFourth = scanFourth ∧ HEq numeric.actual (SourceCurrentAllocatedParentEdge.Edge.live noncontradictory
+          (SourceCurrentAllocatedLocalReduction.Reduction.classes precheck
+            (SourceCurrentConjunctionScanClassPass.Reduction.completed trace retained requiredCall pass)) built)) ∧
+      SourceCurrentAllocatedPrecheck.Receipt formulas solver inventory original loaded inherited before.checked own (.classes records) ∧
+      SourceCurrentAllocatedScanSourceReads.ScanReads trace memos scanMemos ∧
+      SourceCurrentRequiredQueryMemos.RequireAllReads
+        (SourceEqualitySelectedRequired.paths (kept.map SourceEqualityClassOrder.Record.paths)) values preparedValues
+        scanned.native.machine.heap preparedHeap scanMemos preparedMemos ∧
+      SourceCurrentAllocatedClassPass.PassReads formulas solver pass preparedMemos final ∧
+      SourceCurrentConjunctionRequired.Receipt formulas solver preparedInventory
+        (kept.map SourceEqualityClassOrder.Record.paths) values preparedValues scanned
+        (SourceCurrentConjunctionClassScan.advanceHeap scanned preparedHeap) ∧
+      EndpointMemoGateTrace.Valid preparedHeap preparedMemos ∧
+      Ready scanned ∧
+      SourceCurrentConjunctionRowsAllocation.Effects
+        (physical (prefixState before.checked loaded inherited)) (physical scanned) ∧
+      SourceRecursiveIntersectionKernel.Extension
+        (prefixState before.checked loaded inherited).native.machine scanned.native.machine ∧
+      Values scanned.native.machine.heap values ∧ Current scanned ∧
+      Support scanned.native.machine.heap scanned.native ∧ Nonempty (History empty scanned.native.machine.heap) ∧
+      SourceCurrentRequiredUnionNormal.UnionNormal scanned.native.machine.heap := by
+  have current : Current before.checked := SourceCurrentConstrainedCapOperandFrame.current frame
+  obtain ⟨next, final, numeric, _selectedScan, scanReady, effects, extension, scanAvailable,
+      scanCurrent, scanSupport, scanHistory⟩ :=
+    SourceCurrentActualParentScanNativeStores.selected_scan formulas solver inventory budget symbol original loaded
+      inherited values before memos initial frame profile fits live reserved observed noncontradictory precheck
+      scanCall current supported causal
+  obtain ⟨scanMemos, preparedMemos, trace, retained, pass, assembled, first, second, last⟩ :=
+    selected_graph numeric.reads noncontradictory precheck scanCall requiredCall passCall
+  obtain ⟨cached, found, inheritedReady, available⟩ := live noncontradictory
+  obtain ⟨own, prefixReceipt⟩ := SourceCurrentAllocatedLocalReductionActual.prefix_verified formulas solver inventory
+    before.checked original loaded inherited initial.ready initial.admitted cached found inheritedReady precheck
+  obtain ⟨proper, _, _, _, _, fields⟩ := prefixReceipt.classes records rfl
+  have active : ∀ paths ∈ records.map SourceEqualityClassOrder.Record.paths, EqualityNormalize.Nontrivial paths := by
+    intro paths member
+    obtain ⟨record, included, rfl⟩ := List.mem_map.mp member
+    exact (fields record included).2.2
+  have prefixFrame : Frame formulas solver inventory (prefixState before.checked loaded inherited) :=
+    ⟨prefixReceipt.ready, prefixReceipt.admitted, frame.context, frame.joint, frame.origins⟩
+  have prefixFits : Fits profile (prefixState before.checked loaded inherited) :=
+    ⟨fits.nodes, fits.edges, fits.domains, fits.stored⟩
+  have classRoom : SourceCurrentClassesForecast.Reserved bits budget values.length records
+      (SourceCurrentConjunctionGuardUniverse.guards before.checked.native.machine.heap) profile := by
+    simpa only [SourceCurrentParentForecast.Reserved, noncontradictory, Bool.false_eq_true, ↓reduceIte,
+      SourceCurrentLocalForecast.Reserved, precheck] using reserved
+  obtain ⟨_, _, _, _, _, boundedScan⟩ := SourceCurrentScanNumeric.complete formulas solver
+    (SourceCurrentConjunctionGuardUniverse.guards before.checked.native.machine.heap) budget values
+    (records.map SourceEqualityClassOrder.Record.paths) (prefixState before.checked loaded inherited) before.fourth
+    inventory prefixFrame profile prefixFits available initial.correct
+    (SourceCurrentConjunctionGuardUniverse.initial _ prefixFrame.ready.semantic.ready.semantic.1.normal.facts)
+    proper classRoom.1 memos initial.globals
+  have scanValid := (SourceCurrentAllocatedScanReadValidity.scan first prefixReceipt.ready available proper
+    formulas solver initial.correct boundedScan.ranges initial.globals).1
+  obtain ⟨preparedInventory, requiredReceipt⟩ := SourceCurrentConjunctionRequiredActual.verified formulas solver
+    inventory trace prefixReceipt.ready prefixReceipt.admitted available proper active initial.correct
+    boundedScan.ranges requiredCall
+  have preparedValid := (SourceCurrentAllocatedRequiredReadValidity.required second scanReady.semantic
+    scanReady.costs scanAvailable scanValid).1
+  have scanNormal := SourceCurrentUnionNormalScan.records g s p h n budget values records
+    (prefixState before.checked loaded inherited) before.fourth normal
+  rw [scanCall] at scanNormal
+  exact ⟨next, final, own, preparedInventory, scanMemos, preparedMemos, numeric, trace, retained, pass,
+    assembled, prefixReceipt, first, second, last, requiredReceipt, preparedValid, scanReady, effects, extension,
+    scanAvailable, scanCurrent, scanSupport, scanHistory, scanNormal⟩

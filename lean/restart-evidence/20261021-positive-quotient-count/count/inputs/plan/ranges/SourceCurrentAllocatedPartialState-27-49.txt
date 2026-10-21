@@ -1,0 +1,23 @@
+/-- Outer requests use the allocated inherited identity and tagged node reference. -/
+abbrev NodeKey := Option Nat × InternedBinderProtocol.NodeRef
+
+/-- Reduced-edge requests use a separate family keyed by the complete edge identity. -/
+abbrev EdgeKey := Option Nat × Nat
+
+/-- Every published node cell retains both complete original arguments. -/
+structure NodeRequest where
+  inherited : EqValue
+  value : Node
+
+/-- Every published edge cell retains both complete original arguments. -/
+structure EdgeRequest where
+  inherited : EqValue
+  value : Edge
+
+/-- Node preparation reads existing identities and allocates no equality value. -/
+def NodeRequest.key (request : NodeRequest) : NodeKey :=
+  (request.inherited.identity, request.value.referenceOf)
+
+/-- Edge preparation reads existing identities and allocates no equality value. -/
+def EdgeRequest.key (request : EdgeRequest) : EdgeKey :=
+  (request.inherited.identity, request.value.entry.identity)

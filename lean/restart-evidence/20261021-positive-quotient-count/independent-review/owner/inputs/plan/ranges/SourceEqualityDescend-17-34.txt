@@ -1,0 +1,18 @@
+/-- The actual source helper retains a descended class only when two suffix paths remain. -/
+def record (index : Nat) (original : Record) : Option Record :=
+  let trie := pathTrieDescend original.trie index
+  if EqualitySaturation.pathTrieHasAtLeastTwoPaths trie then some (fromTrie trie) else none
+
+/-- Source descent sorts retained classes by ascending path sets, with literal empty and singleton cases. -/
+def records (index : Nat) (originals : List Record) : List Record :=
+  let descended := originals.filterMap (record index)
+  match descended with
+  | [] => []
+  | [single] => [single]
+  | others => SourceListSort.sortBy (fun first second => compare first.paths second.paths) others
+
+/-- Contradiction absorbs descent; an empty physical constraint returns immediately. -/
+def descend : SourceEqualityPrecheck.Constraint → Nat → SourceEqualityPrecheck.Constraint
+  | none, _ => none
+  | some [], _ => some []
+  | some originals, index => some (records index originals)

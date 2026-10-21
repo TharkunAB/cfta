@@ -1,0 +1,26 @@
+/-- A real initial busy failure identifies its exact enclosing activation and every active owner. -/
+theorem initial (checked : SourceEqualityNativeDemand.State width)
+    (merge : SourceCurrentMemoMergeGraph.Memo Symbol Guard) (fourth : SourceCurrentEmptinessMemo.Memo)
+    (fuel : Nat) (request : NodeRequest)
+    (actual : nodeCall fuel g s r e p h m c n budget request
+      (SourceCurrentAllocatedPartialState.initial checked merge fourth) = .failed (.nodeMemo handle .busy) after) :
+    ∃ next candidate,
+      Reached g s r e p h m c n budget
+        (.node fuel request (SourceCurrentAllocatedPartialState.initial checked merge fourth)) (.node next candidate after) ∧
+      beginNode candidate after = (handle,.busy,after) ∧
+      ∃ owner, after.nodeResults.cells handle = some ⟨owner,.evaluating⟩ ∧ owner.key = candidate.key ∧
+        Ancestor g s r e p h m c n budget
+          (.node fuel request (SourceCurrentAllocatedPartialState.initial checked merge fourth)) (.node next candidate after) handle owner ∧
+        (∀ other captured, after.nodeResults.cells other = some ⟨captured,.evaluating⟩ →
+          Ancestor g s r e p h m c n budget
+            (.node fuel request (SourceCurrentAllocatedPartialState.initial checked merge fourth)) (.node next candidate after) other captured) := by
+  have valid : NodeValid (SourceCurrentAllocatedPartialState.initial checked merge fourth) :=
+    FlatMemoThunk.empty_valid _ _
+  obtain ⟨next,candidate,reached,busy⟩ := (all_failures fuel).1 _ _ _ _ _ _ _ _ _ _ _ _ _ _ valid actual
+  obtain ⟨_,linked,owner,present⟩ := SourceCurrentOuterBusyOwners.node_busy candidate after after handle busy
+  have current := reached.valid valid
+  obtain ⟨cell,found,key⟩ := current.linked candidate.key handle linked
+  have same := Option.some.inj (found.symm.trans present)
+  subst cell
+  have owners := reached.owners valid (fun _ _ impossible => by cases impossible)
+  exact ⟨next,candidate,reached,busy,owner,present,key,owners handle owner present,owners⟩

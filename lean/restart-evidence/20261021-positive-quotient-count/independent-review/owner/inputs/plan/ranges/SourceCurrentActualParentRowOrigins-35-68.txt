@@ -1,0 +1,34 @@
+/-- Raw rejection has exactly one Empty child without a child availability premise. -/
+theorem reject_children (symbol : Symbol) (before : Checked width) (good : Good before) :
+    (SourceCurrentAllocatedMkEdge.reject symbol before).1.children = [.empty] := by
+  exact (MergedPhysicalGroupEdges.makeEdge_fields before.native.machine.heap
+    good.semantic.ready.semantic.1.normal.facts symbol SourceEqualityConstraintConstructors.top [.empty]
+    (by intro value member; cases List.mem_singleton.mp member; exact empty_available _)).2.2
+
+/-- Actual checked construction retains the input children or the source Empty sentinel. -/
+theorem build_children {symbol loaded children before result after}
+    (actual : SourceCurrentAllocatedMkEdge.build symbol loaded children before = (.ok result,after))
+    (good : Good (width := width) before) (loadedReady : EqReady before.operations.constraints loaded.stored)
+    (available : Values before.native.machine.heap children) :
+    result.children = if SourceEqualityMkEdgeAllocation.accepted (SourceEqualityConjoinAllocation.readback loaded)
+      children.length then children else [.empty] := by
+  have built := SourceEqualityMkEdgeAllocation.build_receipt symbol loaded.stored loaded.guard children
+    before.operations before.native.machine.heap good.operations loadedReady
+  have returned := congrArg Prod.fst actual
+  simp only [SourceCurrentAllocatedMkEdge.build,built.1] at returned
+  cases Except.ok.inj returned
+  cases keep : SourceEqualityMkEdgeAllocation.accepted (SourceEqualityConjoinAllocation.readback loaded) children.length with
+  | true =>
+    have selected : SourceEqualityMkEdgeAllocation.accepted
+        (SourceEqualityAccessorAllocation.constraint loaded.stored loaded.guard) children.length = true := keep
+    simp only [SourceEqualityMkEdgeAllocation.work,selected,ite_true]
+    exact (MergedPhysicalGroupEdges.makeEdge_fields before.native.machine.heap
+      good.semantic.ready.semantic.1.normal.facts symbol (SourceEqualityConjoinAllocation.readback loaded)
+      children available).2.2
+  | false =>
+    have selected : SourceEqualityMkEdgeAllocation.accepted
+        (SourceEqualityAccessorAllocation.constraint loaded.stored loaded.guard) children.length = false := keep
+    simp only [SourceEqualityMkEdgeAllocation.work,selected,Bool.false_eq_true,ite_false]
+    exact (MergedPhysicalGroupEdges.makeEdge_fields before.native.machine.heap
+      good.semantic.ready.semantic.1.normal.facts symbol SourceEqualityConstraintConstructors.top [.empty]
+      (by intro value member; cases List.mem_singleton.mp member; exact empty_available _)).2.2
