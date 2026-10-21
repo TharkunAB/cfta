@@ -48,6 +48,12 @@ signature can build. `--type-depth D` keeps only the types with at most D
 levels of constructors and arrows. A small depth makes the large searches
 finish, but the search then loses the laws that need a deeper type.
 
+`--function-buckets` gives a bucket to each function type between two small
+data types of the signature. Each test case applies the two functions to a
+sample of their argument type and compares the results, as QuickSpec
+observes a function. The search then finds laws between functions, such as
+`take 0 == zipWith f []`.
+
 `--dump-laws` writes each law on stderr, with the type of each subterm.
 
 Use `--diagnostics phases` to trace phase and size/type buckets. Use

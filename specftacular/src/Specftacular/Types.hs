@@ -266,21 +266,30 @@ instanceTypes typeMod sigs = nubOrd $ concatMap addLi $ Set.toList $ Set.unions 
           where
             t' = TCons "[]" [t]
 
-{- | The generated variables, the equalities, and the generators of the
-types of a signature. With 'True', the types also have each renaming of
-their carriers (see 'carrierRenamings'). A renamed type must have an
-instance when its type in the signature has one.
+{- | The generated variables, the equalities, the generators, and the
+function samples of the types of a signature. With the first 'True', the
+types also have each renaming of their carriers (see 'carrierRenamings'). A
+renamed type must have an instance when its type in the signature has one.
+
+With the second 'True' (function buckets), each function between two small
+data types of the signature has the equality of its result type and a
+sample variable of its argument type. The search applies the functions to
+the value of the sample variable in each test case, and compares the
+results, as QuickSpec observes a function. The grammar does not contain the
+sample variables, and the functions get no generated variables.
 -}
 sigGivens ::
+    Bool ->
     Bool ->
     (TypeSkeleton -> TypeSkeleton) ->
     Sig ->
     (TypeSkeleton -> Maybe Instance) ->
-    (Sig, Map TypeSkeleton (Text, Value), Map TypeSkeleton (Text, Func))
-sigGivens closed typeMod sigs instances =
+    (Sig, Map TypeSkeleton (Text, Value), Map TypeSkeleton (Text, Func), Map TypeSkeleton (Text, Func))
+sigGivens closed functionBuckets typeMod sigs instances =
     ( Map.fromList (mapMaybe consName allCons)
     , eq_insts
     , arbs
+    , Map.fromList [(function, sample) | (function, sample, _) <- functionTypes]
     )
   where
     user_eq = mapMaybe g_eq $ Map.assocs sigs
@@ -293,6 +302,17 @@ sigGivens closed typeMod sigs instances =
                 ++ mapMaybe
                     (\c -> (c,) . fmap sfFunc <$> toEqInst c)
                     (filter isCon allCons)
+                ++ [(function, eq) | (function, _, eq) <- functionTypes]
+    functionTypes =
+        [ (TFun a b, sample, (text, sfFunc eq))
+        | functionBuckets
+        , let small = nubOrd [t | t@(TCons _ _) <- allCons, typeSize t <= 2]
+        , a <- small
+        , Just sample <- [sampleOf a]
+        , b <- small
+        , Just (text, eq) <- [toEqInst b]
+        ]
+    sampleOf t = (\inst -> toTup (GivenFun (GivenVar "sample" (inst_text inst) 0 (inst_gen inst)) t)) <$> instanceOf t
     user_arbs = mapMaybe g_arb $ Map.assocs sigs
       where
         g_arb (k, f@(GivenFun (GivenVar{}) tsk)) = Just (tsk, (k, f))
@@ -336,7 +356,7 @@ sigGivens closed typeMod sigs instances =
     consName t = g <$> instanceOf t
       where
         g inst = toTup (GivenFun (GivenVar (inst_prefix inst) (inst_text inst) 0 (inst_gen inst)) t)
-        toTup gf@(GivenFun gv _) = (gvToName gv, gf)
+    toTup gf@(GivenFun gv _) = (gvToName gv, gf)
 
 {- | The types with each renaming of their carriers to distinct carriers
 that the types use.
