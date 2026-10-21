@@ -3016,6 +3016,7 @@ import MicroCFTA.SourceCurrentDelayedCombinedOwnerProgress
 import MicroCFTA.SourceCurrentNormalizedChildSeparation
 import MicroCFTA.SourceCurrentMergeEmptySupport
 import MicroCFTA.SourceCurrentRequiredPositivePosition
+import MicroCFTA.SourceCurrentRequiredForestPositive
 /-!
 # Proof dependency audit
 
