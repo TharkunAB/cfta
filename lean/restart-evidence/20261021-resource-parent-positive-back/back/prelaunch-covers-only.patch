@@ -1,0 +1,76 @@
+--- positive-back-prelaunch-2.source.lean
++++ SourceCurrentResourceParentPositiveBack.lean
+@@ -14,11 +14,9 @@
+ local notation "Node" => Value Symbol Guard
+ local notation "Edge" => EdgeValue Symbol Guard
+ local notation "Record" => SourceEqualityClassOrder.Record
+-local notation "EqValue" => SourceEqualityConstraintAllocation.Value
+ local notation "Operations" => SourceEqualityConstraintMemoAllocation.State
+ local notation "EqReady" => SourceEqualityConstraintAllocation.Ready
+ local notation "Valid" => SourceEqualityConstraintMemoAllocation.Valid
+-local notation "Grows" => SourceEqualityConstraintMemoAllocation.Grows
+ private theorem rel_covers {classes others : EqualityNormalize.Constraints}
+     (covered : EqualityNormalize.Covers classes others) {left right}
+     (related : SourceCurrentNormalizedChildSeparation.Rel classes left right) :
+@@ -39,39 +37,25 @@
+       .ok (some (.live combinedIdentity outputs)))
+     (selected : EqualityNormalize.Constraints)
+     (ownSelected : ∀ paths ∈ selected, paths ∈ (SourceCompactGuards.sourceEqualities original).getD []) :
+-    let after := (SourceCurrentAllocatedInheritedPrefix.run original (.live identity inherited) before).2
+-    EqReady after.constraints (.live combinedIdentity outputs) ∧ Grows before after ∧
+-      EqualityNormalize.congruenceStep (outputs.map SourceEqualityClassOrder.Record.paths) =
+-        some (outputs.map SourceEqualityClassOrder.Record.paths) ∧
+-      EqualityNormalize.Covers (inherited.map SourceEqualityClassOrder.Record.paths)
+-        (outputs.map SourceEqualityClassOrder.Record.paths) ∧
+-      EqualityNormalize.Covers selected (outputs.map SourceEqualityClassOrder.Record.paths) := by
+-  obtain ⟨own, loaded, accessorValid, ownReady, ownClasses, _ownRead, accessorGrowth⟩ :=
++    EqualityNormalize.Covers selected (outputs.map SourceEqualityClassOrder.Record.paths) := by
++  obtain ⟨own,loaded,accessorValid,ownReady,ownClasses,_ownRead,accessorGrowth⟩ :=
+     SourceCurrentConjunctionEquality.accessor_correct original before valid field
+-  obtain ⟨result, computed, _finalValid, resultReady, growth, fixed, covers⟩ :=
++  obtain ⟨result,computed,_finalValid,_resultReady,_growth,_fixed,covers⟩ :=
+     SourceCurrentOuterOriginDependencies.combine_covers (.live identity inherited) own
+       (SourceCurrentConjunctionEquality.accessor original before).2 accessorValid
+       (ready.grows accessorGrowth.constraint_growth) ownReady
+-  have equation : SourceCurrentAllocatedInheritedPrefix.run original (.live identity inherited) before =
+-      (.ok (some result), (SourceEqualityConstraintMemoAllocation.combine (.live identity inherited) own
+-        (SourceCurrentConjunctionEquality.accessor original before).2).2) := by
++  have equation : (SourceCurrentAllocatedInheritedPrefix.run original (.live identity inherited) before).1 =
++      .ok (some result) := by
+     rw [SourceCurrentAllocatedInheritedPrefix.run_combine original identity inherited before own loaded]
+-    simp only [computed, Except.map]
+-  have same := Option.some.inj (Except.ok.inj ((congrArg Prod.fst equation).symm.trans actual))
++    simp only [computed,Except.map]
++  have same := Option.some.inj (Except.ok.inj (equation.symm.trans actual))
+   subst result
+-  refine ⟨?_, ?_, (SourceCurrentEqualityNormalizationFixed.invariants _ (fixed outputs rfl)).2.2.2, ?_, ?_⟩
+-  · rw [congrArg Prod.snd equation]
+-    exact resultReady
+-  · rw [congrArg Prod.snd equation]
+-    exact SourceCurrentConjunctionEquality.grows_trans accessorGrowth growth
+-  · intro paths member
+-    exact covers outputs rfl paths (List.mem_append.mpr (.inl member))
+-  · intro paths member
+-    apply covers outputs rfl paths
+-    apply List.mem_append.mpr
+-    apply Or.inr
+-    rw [ownClasses]
+-    exact ownSelected paths member
++  intro paths member
++  apply covers outputs rfl paths
++  apply List.mem_append.mpr
++  apply Or.inr
++  rw [ownClasses]
++  exact ownSelected paths member
+ 
+ variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Node] {bits : Nat}
+ 
+@@ -217,7 +201,7 @@
+         rw [inheritedShape] at inputReady
+         have computed := currentPrefix
+         rw [inheritedShape] at computed
+-        obtain ⟨_,_,_,_,covered⟩ := prefix_data request.value.entry.key.constraint inheritedIdentity inheritedRecords
++        have covered := prefix_data request.value.entry.key.constraint inheritedIdentity inheritedRecords
+           prefixBefore valid inputReady currentField combinedIdentity classes computed _ ownSelected
+         exact ⟨inputIndex,originalPath,original,originalFound,originalPositive,rel_covers covered related⟩
+ 

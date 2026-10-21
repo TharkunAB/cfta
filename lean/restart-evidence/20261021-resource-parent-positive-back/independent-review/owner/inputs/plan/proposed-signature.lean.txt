@@ -1,0 +1,38 @@
+-- UNPROVED SOURCE-ONLY PROPOSAL. No proof or Lean elaboration.
+namespace MicroCFTA.SourceCurrentResourceParentPositiveBack
+open Cache InternedConstructorTemplates
+open SourceCurrentAllocatedPartialState (EdgeRequest)
+open SourceCurrentRequiredPositivePosition (PositiveAt)
+open SourceCurrentNormalizedChildSeparation (Rel)
+open SourceCurrentAllocatedPartialReturnedDomain (Shape)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Guard
+local notation "Edge" => EdgeValue Symbol Guard
+local notation "Operations" => SourceEqualityConstraintMemoAllocation.State
+local notation "EqReady" => SourceEqualityConstraintAllocation.Ready
+local notation "Valid" => SourceEqualityConstraintMemoAllocation.Valid
+local notation "Record" => SourceEqualityClassOrder.Record
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Node] {bits : Nat}
+
+theorem children
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    {request : EdgeRequest} {returned : Edge}
+    (written : SourceCurrentResourceParentWriters.Written (bits := bits) formulas solver request returned)
+    (prefixBefore : Operations) (valid : Valid prefixBefore)
+    (ready : EqReady prefixBefore.constraints request.inherited)
+    (field : SourceCurrentConjunctionEquality.FieldAvailable prefixBefore returned.entry.key.constraint)
+    (combinedIdentity : Nat) (classes : List Record)
+    (prefixActual : (SourceCurrentAllocatedInheritedPrefix.run returned.entry.key.constraint
+      request.inherited prefixBefore).1 = .ok (some (.live combinedIdentity classes))) :
+    (SourceCompactGuards.sourceEqualities request.value.entry.key.constraint = some [] →
+      Shape request.value returned) ∧
+    ∀ outputIndex child, returned.children[outputIndex]? = some child →
+      ∀ residual, PositiveAt child residual →
+        ∃ inputIndex originalPath original, request.value.children[inputIndex]? = some original ∧
+          PositiveAt original originalPath ∧
+          Rel (classes.map SourceEqualityClassOrder.Record.paths)
+            (outputIndex :: residual) (inputIndex :: originalPath)
+
+end MicroCFTA.SourceCurrentResourceParentPositiveBack

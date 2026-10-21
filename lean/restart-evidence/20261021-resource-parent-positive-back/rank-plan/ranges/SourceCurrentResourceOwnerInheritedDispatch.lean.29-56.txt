@@ -1,0 +1,28 @@
+private theorem reservation [DecidableEq (EdgeKey Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    {inventory : Inventory} {budget : Nat} {request : EdgeRequest}
+    {before : Caller (bits + 2)} {memos : Memos} {profile : Profile} {alphabet : List Guard}
+    (initial : Context formulas solver inventory before memos) (fits : Fits profile before.checked)
+    (known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ alphabet)
+      before.checked.native.machine.heap)
+    (inherited : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited)
+    (resident : InternedEdgeResidency.EdgeResident before.checked.native.machine.heap request.value)
+    (uniform : SourceCurrentParentAlphabetReservation.UniformReserved bits budget alphabet profile) :
+    SourceCurrentEdgeCallNumeric.Reserved bits budget request before profile := by
+  generalize started : beginEdge request before = observation
+  obtain ⟨handle,action,running⟩ := observation
+  cases action with
+  | evaluate captured =>
+      obtain ⟨runningContext,owner,_key,_cell⟩ :=
+        SourceCurrentAllocatedPartialCallSteps.edge_start formulas solver initial inherited resident started
+      have checked := (beginEdge_components request before).1
+      rw [started] at checked
+      dsimp only at checked
+      have bounded : Fits profile running.checked := by simpa only [checked] using fits
+      have carrier : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ alphabet)
+          running.checked.native.machine.heap := by simpa only [checked] using known
+      have room := SourceCurrentParentAlphabetReservation.resident_reserved formulas solver inventory budget alphabet captured
+        running memos runningContext profile bounded carrier owner.inherited owner.input uniform
+      simpa only [SourceCurrentEdgeCallNumeric.Reserved,started] using room
+  | ready | busy | absent => simp only [SourceCurrentEdgeCallNumeric.Reserved,started]

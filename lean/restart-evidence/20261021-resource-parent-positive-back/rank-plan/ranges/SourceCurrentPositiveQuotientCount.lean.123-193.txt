@@ -1,0 +1,71 @@
+/-- Count the inherited-relation classes represented by positive natural child paths. -/
+noncomputable def count (inherited : List Record) (value : Node) : Nat := by
+  classical
+  exact (((positivePaths value).map (Quotient.mk (relationSetoid (inherited.map Record.paths)))).eraseDups).length
+
+/-- Actual descended records bound every backwards-linked child and strictly count a nonplain row. -/
+theorem child_count
+    (parents inherited : List Record)
+    (coherent : ∀ record ∈ parents, SourceEqualityClassOrder.Coherent record)
+    (fixed : congruenceStep (parents.map Record.paths) = some (parents.map Record.paths))
+    (covered : Covers (inherited.map Record.paths) (parents.map Record.paths))
+    (index : Nat) (child : Node) {entry depth free} {rows : List Row}
+    (row : Row) (member : row ∈ rows)
+    (back : ∀ q, PositiveAt child q →
+      ∃ j p original, row.children[j]? = some original ∧ PositiveAt original p ∧
+        Rel (parents.map Record.paths) (index :: q) (j :: p)) :
+    count (SourceEqualityDescend.records index parents) child ≤
+        count inherited (.node entry rows depth free) ∧
+      (SourceMemoGate.plain row.entry.key.constraint = false →
+        count (SourceEqualityDescend.records index parents) child <
+          count inherited (.node entry rows depth free)) := by
+  classical
+  let fromPath : Path → Quotient (relationSetoid
+      ((SourceEqualityDescend.records index parents).map Record.paths)) := Quotient.mk _
+  let toPath : Path → Quotient (relationSetoid (inherited.map Record.paths)) := Quotient.mk _
+  let owner : Node := .node entry rows depth free
+  let sources := ((positivePaths child).map fromPath).eraseDups
+  let targets := ((positivePaths owner).map toPath).eraseDups
+  change sources.length ≤ targets.length ∧
+    (SourceMemoGate.plain row.entry.key.constraint = false → sources.length < targets.length)
+  have distinct : sources.Nodup := SymbolicDriver.eraseDups_nodup _
+  obtain ⟨rowIndex, selected⟩ := List.mem_iff_getElem?.mp member
+  let relation := fun (source : Quotient (relationSetoid
+        ((SourceEqualityDescend.records index parents).map Record.paths)))
+      (target : Quotient (relationSetoid (inherited.map Record.paths))) =>
+    ∃ q ∈ positivePaths child, ∃ t ∈ positivePaths owner,
+      fromPath q = source ∧ toPath t = target ∧ Rel (parents.map Record.paths) (index::q) t
+  have total : ∀ source ∈ sources, ∃ target ∈ targets.erase (toPath []), relation source target := by
+    intro source present
+    obtain ⟨q, qMember, rfl⟩ := List.mem_map.mp (List.mem_eraseDups.mp present)
+    obtain ⟨j, p, original, chosen, positive, related⟩ := back q (positivePaths_spec.mp qMember)
+    have targetMember : j::p ∈ positivePaths owner := positivePaths_spec.mpr
+      (.child rowIndex j row original selected chosen positive)
+    have different : toPath (j::p) ≠ toPath [] := by
+      intro equal
+      have inheritedRelated : Rel (inherited.map Record.paths) [] (j::p) := Quotient.exact equal.symm
+      exact root_separate fixed (by simp) (rel_covers covered inheritedRelated)
+    refine ⟨toPath (j::p), (List.mem_erase_of_ne different).mpr ?_,
+      q, qMember, j::p, targetMember, rfl, rfl, related⟩
+    exact List.mem_eraseDups.mpr (List.mem_map.mpr ⟨j::p, targetMember, rfl⟩)
+  have injective : ∀ first ∈ sources, ∀ second ∈ sources,
+      ∀ target ∈ targets.erase (toPath []), relation first target → relation second target → first = second := by
+    intro first _ second _ target _ firstRelated secondRelated
+    obtain ⟨q, _qMember, t, _tMember, sourceEq, targetEq, firstBack⟩ := firstRelated
+    obtain ⟨r, _rMember, u, _uMember, nextEq, otherEq, secondBack⟩ := secondRelated
+    have equal : toPath t = toPath u := targetEq.trans otherEq.symm
+    have inheritedRelated : Rel (inherited.map Record.paths) t u := Quotient.exact equal
+    have related := Rel.trans firstBack (Rel.trans (rel_covers covered inheritedRelated) (rel_symm secondBack))
+    have domainEq : fromPath q = fromPath r := Quotient.sound
+      (SourceCurrentPositiveInheritedChildSeparation.child_reflect parents coherent fixed index related)
+    exact sourceEq.symm.trans (domainEq.trans nextEq)
+  have counted := SymbolicDriver.relation_cardinality_le sources (targets.erase (toPath [])) (toPath [])
+    distinct relation total injective
+  refine ⟨Nat.le_trans counted List.length_erase_le, ?_⟩
+  intro nonplain
+  have rootPosition : [] ∈ positivePaths owner := positivePaths_spec.mpr
+    (.root rowIndex row selected nonplain)
+  have root : toPath [] ∈ targets := List.mem_eraseDups.mpr (List.mem_map.mpr ⟨[], rootPosition, rfl⟩)
+  have shorter := List.length_erase_of_mem root
+  have nonempty := List.length_pos_of_mem root
+  omega
