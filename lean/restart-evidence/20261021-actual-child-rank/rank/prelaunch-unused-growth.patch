@@ -1,0 +1,38 @@
+--- original250.lean
++++ current248.lean
+@@ -63,14 +63,13 @@
+       .ok (some (.live combinedIdentity outputs))) :
+     let after := (SourceCurrentAllocatedInheritedPrefix.run original (.live identity inherited) before).2
+     SourceEqualityConstraintAllocation.Ready after.constraints (.live combinedIdentity outputs) ∧
+-      SourceEqualityConstraintMemoAllocation.Grows before after ∧
+       EqualityNormalize.congruenceStep (outputs.map SourceEqualityClassOrder.Record.paths) =
+         some (outputs.map SourceEqualityClassOrder.Record.paths) ∧
+       EqualityNormalize.Covers (inherited.map SourceEqualityClassOrder.Record.paths)
+         (outputs.map SourceEqualityClassOrder.Record.paths) := by
+   obtain ⟨own,loaded,accessorValid,ownReady,_ownClasses,_ownRead,accessorGrowth⟩ :=
+     SourceCurrentConjunctionEquality.accessor_correct original before valid field
+-  obtain ⟨result,computed,_finalValid,resultReady,growth,fixed,covers⟩ :=
++  obtain ⟨result,computed,_finalValid,resultReady,_growth,fixed,covers⟩ :=
+     SourceCurrentOuterOriginDependencies.combine_covers (.live identity inherited) own
+       (SourceCurrentConjunctionEquality.accessor original before).2 accessorValid
+       (ready.grows accessorGrowth.constraint_growth) ownReady
+@@ -81,9 +80,8 @@
+     simp only [computed,Except.map]
+   have same := Option.some.inj (Except.ok.inj ((congrArg Prod.fst equation).symm.trans actual))
+   subst result
+-  refine ⟨?_,?_,(SourceCurrentEqualityNormalizationFixed.invariants _ (fixed outputs rfl)).2.2.2,?_⟩
++  refine ⟨?_,(SourceCurrentEqualityNormalizationFixed.invariants _ (fixed outputs rfl)).2.2.2,?_⟩
+   · rw [congrArg Prod.snd equation]; exact resultReady
+-  · rw [congrArg Prod.snd equation]; exact SourceCurrentConjunctionEquality.grows_trans accessorGrowth growth
+   · intro paths member
+     exact covers outputs rfl paths (List.mem_append.mpr (.inl member))
+ 
+@@ -218,7 +216,7 @@
+       cases combined with
+       | contradiction => exact False.elim (live rfl)
+       | live combinedIdentity classes =>
+-          obtain ⟨combinedReady,_prefixGrowth,fixed,covered⟩ := prefix_data parented.entry.key.constraint
++          obtain ⟨combinedReady,fixed,covered⟩ := prefix_data parented.entry.key.constraint
+             inheritedIdentity inheritedRecords afterParent.checked.operations
+             descPost.context.ready.good.operations descInputs.1 field combinedIdentity classes combinedAt
+           obtain ⟨shape,back⟩ := SourceCurrentResourceParentPositiveBack.children formulas solver written

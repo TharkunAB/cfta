@@ -1,0 +1,56 @@
+/-- Contradiction skips the accessor; live inputs combine at its actual return. -/
+noncomputable def run (original : Guard) (inherited : EqValue) (before : Operations) :
+    Except String (Option EqValue) × Operations :=
+  match inherited with
+  | .contradiction => (.ok (some .contradiction), before)
+  | .live _ _ =>
+      let own := SourceCurrentConjunctionEquality.accessor original before
+      match own.1 with
+      | .error message => (.error message, own.2)
+      | .ok none => (.ok none, own.2)
+      | .ok (some value) =>
+          let combined := SourceEqualityConstraintMemoAllocation.combine inherited value own.2
+          (combined.1.map some, combined.2)
+
+/-- Inherited contradiction has no accessor or allocation effect. -/
+theorem run_contradiction (original : Guard) (before : Operations) :
+    run original .contradiction before = (.ok (some .contradiction), before) := rfl
+
+/-- A reached accessor error retains its literal returned operation state. -/
+theorem run_error (original : Guard) (identity : Nat) (records : List SourceEqualityClassOrder.Record)
+    (before : Operations) (message : String)
+    (failed : (SourceCurrentConjunctionEquality.accessor original before).1 = .error message) :
+    run original (.live identity records) before =
+      (.error message, (SourceCurrentConjunctionEquality.accessor original before).2) := by
+  simp only [run, failed]
+
+/-- A reached missing field stays missing without a combination. -/
+theorem run_missing (original : Guard) (identity : Nat) (records : List SourceEqualityClassOrder.Record)
+    (before : Operations)
+    (missing : (SourceCurrentConjunctionEquality.accessor original before).1 = .ok none) :
+    run original (.live identity records) before =
+      (.ok none, (SourceCurrentConjunctionEquality.accessor original before).2) := by
+  simp only [run, missing]
+
+/-- A reached own value enters the source combination in inherited-first order. -/
+theorem run_combine (original : Guard) (identity : Nat) (records : List SourceEqualityClassOrder.Record)
+    (before : Operations) (own : EqValue)
+    (loaded : (SourceCurrentConjunctionEquality.accessor original before).1 = .ok (some own)) :
+    run original (.live identity records) before =
+      ((SourceEqualityConstraintMemoAllocation.combine (.live identity records) own
+        (SourceCurrentConjunctionEquality.accessor original before).2).1.map some,
+       (SourceEqualityConstraintMemoAllocation.combine (.live identity records) own
+        (SourceCurrentConjunctionEquality.accessor original before).2).2) := by
+  simp only [run, loaded]
+
+/-- The prefix installs only its literal operation state at the unchanged heap. -/
+noncomputable def state (before : Checked width) (original : Guard) (inherited : EqValue) : Checked width :=
+  advancePhysical before ⟨before.native.machine.heap, (run original inherited before.operations).2⟩
+
+/-- Both native memo tables, the domain cache, and the constructor heap stay exact. -/
+theorem state_native (before : Checked width) (original : Guard) (inherited : EqValue) :
+    (state before original inherited).native = before.native := rfl
+
+/-- The checked state retains the literal prefix operation result. -/
+theorem state_operations (before : Checked width) (original : Guard) (inherited : EqValue) :
+    (state before original inherited).operations = (run original inherited before.operations).2 := rfl

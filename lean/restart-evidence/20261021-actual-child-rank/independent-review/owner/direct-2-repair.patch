@@ -1,0 +1,12 @@
+--- direct-2.source.lean
++++ current249.lean
+@@ -240,7 +240,8 @@
+           | true =>
+               have ownEmpty : SourceCompactGuards.sourceEqualities original.entry.key.constraint = some [] :=
+                 of_decide_eq_true (Bool.and_eq_true_iff.mp plain).1
+-              have smaller := shape_mass member (shape ownEmpty) (List.mem_of_getElem? selected)
++              have smaller := shape_mass (entry := ownerEntry) (depth := ownerDepth) (free := ownerFree)
++                member (shape ownEmpty) (List.mem_of_getElem? selected)
+               rcases Nat.lt_or_eq_of_le counted.1 with strict | equal
+               · exact Prod.Lex.left _ _ strict
+               · rw [equal]; exact Prod.Lex.right _ smaller

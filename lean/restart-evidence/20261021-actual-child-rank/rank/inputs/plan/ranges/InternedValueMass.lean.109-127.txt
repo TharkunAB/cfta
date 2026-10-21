@@ -1,0 +1,19 @@
+/-- Each retained row occurrence has smaller mass than its containing list. -/
+theorem edge_mem_lt (row : EdgeValue Symbol Guard) (rows : List (EdgeValue Symbol Guard)) (member : row ∈ rows) :
+    edge row < edges rows := by
+  induction rows with
+  | nil => cases member
+  | cons first rest ih =>
+      rcases List.mem_cons.mp member with same | later
+      · subst row; simp only [edges]; omega
+      · have small := ih later; simp only [edges]; omega
+
+/-- An ordinary child's complete payload has smaller mass than its parent. -/
+theorem node_child_lt (entry) (rows : List (EdgeValue Symbol Guard)) (level free)
+    (row : EdgeValue Symbol Guard) (member : row ∈ rows) (child : Value Symbol Guard) (inside : child ∈ row.children) :
+    value child < value (.node entry rows level free) := by
+  have first := value_mem_lt child row.children inside
+  have last := edge_mem_lt row rows member
+  rw [edge_children] at last
+  simp only [value]
+  omega

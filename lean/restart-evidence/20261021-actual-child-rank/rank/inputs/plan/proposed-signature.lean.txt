@@ -1,0 +1,71 @@
+-- UNPROVED SOURCE-ONLY PROPOSAL. Not a Lean input or launch authorization.
+namespace MicroCFTA.SourceCurrentActualChildRank
+open Cache InternedConstructorTemplates
+open SourceCurrentAllocatedPartialState
+open SourceCurrentAllocatedPartialWorker
+open SourceCurrentOuterCopiedWarmHit (Phase)
+open SourceCurrentOuterExecutionAncestry (Reached)
+open SourceCurrentAllocatedPartialInvariant (Context)
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedNativeResourceForecast (Profile Room)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Frame Fits)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Guard
+local notation "Edge" => EdgeValue Symbol Guard
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "EqValue" => SourceEqualityConstraintAllocation.Value
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "caller" => SourceCurrentOuterActiveAncestry.caller
+local notation "prefixState" => SourceCurrentAllocatedPartialGraph.prefixState
+local notation "descend" => SourceCurrentAllocatedPartialGraph.descend
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Node] {bits : Nat}
+
+theorem dispatch
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    {g s r e p h m c n budget fuel slot : Nat}
+    {inherited : EqValue}
+    {first : Phase (bits + 2)} {inventory : Inventory} {memos : Memos}
+    (seed : List Guard × Profile)
+    (initial : Context formulas solver inventory (caller first) memos)
+    (frame : Frame formulas solver inventory (caller first).checked)
+    (fits : Fits seed.2 (caller first).checked)
+    (known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.1)
+      (caller first).checked.native.machine.heap)
+    (inputs : SourceCurrentOuterPrefixInvariants.Inputs first)
+    (room : Room bits (SourceCurrentOuterInitialPrefix.forecast budget first seed).2)
+    (normal : SourceCurrentRequiredUnionNormal.UnionNormal (caller first).checked.native.machine.heap)
+    (supported : SourceCurrentNativeRequestPositivePositions.Support
+      (caller first).checked.native.machine.heap (caller first).checked.native)
+    (causal : SourceCurrentNativeMuPublication.History empty (caller first).checked.native.machine.heap)
+    (merged : SourceCurrentConstrainedCapMemoMerge.Stored
+      (fun guard : Guard => SourceMemoGate.plain guard = true) (caller first).merge)
+    (positiveMemo : SourceCurrentMergePositivePosition.Support (caller first).merge)
+    (origins : SourceCurrentResourceParentWriters.Origins formulas solver (caller first))
+    {ownerEntry ownerDepth ownerFree} {ownerRows : List Edge}
+    {original parented : Edge} {rest : List Edge}
+    {before afterParent start : Caller (bits + 2)} {earlier : List Node}
+    {combined : EqValue} {value : Node}
+    (past : Reached g s r e p h m c n budget first
+      (.rows (fuel + slot + 2) inherited (original :: rest) before))
+    (member : original ∈ ownerRows)
+    (parent : edgeCall (fuel + slot + 1) g s r e p h m c n budget
+      ⟨inherited, original⟩ before = .done parented afterParent)
+    (combinedAt : (SourceCurrentAllocatedInheritedPrefix.run parented.entry.key.constraint
+      inherited afterParent.checked.operations).1 = .ok (some combined))
+    (live : combined ≠ .contradiction)
+    (earlierCalls : walk (fuel + slot + 1) g s r e p h m c n budget combined 0
+      (parented.children.take slot) (prefixState afterParent parented inherited) =
+        .done earlier start)
+    (selected : parented.children[slot]? = some value) :
+    let child := descend start combined slot
+    Reached g s r e p h m c n budget first (.node fuel ⟨child.1,value⟩ child.2) ∧
+      Prod.Lex Nat.lt Nat.lt
+        (SourceCurrentPositiveQuotientCount.count (child.1.payload.getD []) value,
+          InternedValueMass.value value)
+        (SourceCurrentPositiveQuotientCount.count (inherited.payload.getD [])
+            (.node ownerEntry ownerRows ownerDepth ownerFree),
+          InternedValueMass.value (.node ownerEntry ownerRows ownerDepth ownerFree : Node))
+
+end MicroCFTA.SourceCurrentActualChildRank

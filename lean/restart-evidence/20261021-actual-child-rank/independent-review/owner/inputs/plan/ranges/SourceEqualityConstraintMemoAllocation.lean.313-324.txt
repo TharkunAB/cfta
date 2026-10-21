@@ -1,0 +1,12 @@
+theorem descend_correct (input : Value) (index : Nat) (before : State) (valid : Valid before)
+    (inputReady : Ready before.constraints input) :
+    Valid (descend input index before).2 ∧
+      Ready (descend input index before).2.constraints (descend input index before).1 ∧
+      (descend input index before).1.payload = SourceEqualityDescend.descend input.payload index ∧
+      Grows before (descend input index before).2 := by
+  cases input with
+  | contradiction => exact ⟨valid, inputReady, rfl, grows_refl before⟩
+  | live identity records =>
+      cases records with
+      | nil => exact ⟨valid, inputReady, rfl, grows_refl before⟩
+      | cons head tail => exact descendCached_correct _ index before valid inputReady

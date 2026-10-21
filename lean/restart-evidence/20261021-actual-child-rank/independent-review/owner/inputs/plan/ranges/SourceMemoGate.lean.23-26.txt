@@ -1,0 +1,4 @@
+/-- The source edge test requires empty normalized equalities and no residual guard. -/
+noncomputable def plain (constraint : Guard) : Bool :=
+  decide (SourceCompactGuards.sourceEqualities constraint = some []) &&
+    (SourceCompactGuards.positiveNormalized constraint.guard).isSome

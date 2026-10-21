@@ -1,0 +1,19 @@
+theorem accessor_correct (original : Raw Formula) (before : State) (valid : Valid before)
+    (available : FieldAvailable before original) :
+    ∃ result, (accessor original before).1 = .ok (some result) ∧ Valid (accessor original before).2 ∧
+      Ready (accessor original before).2.constraints result ∧
+      SourceEqualityInheritedPayload.classes result.payload = SourceCompactGuards.sourceEqualities original ∧
+      SourceEqualityPhysicalPayload.read (SourceCompactGuards.sourceEqualities original) = .ok result.payload ∧
+      Grows before (accessor original before).2 := by
+  obtain ⟨value, loaded, valueReady, readback, built⟩ := available.receipts valid
+  obtain ⟨result, done, finalValid, resultReady, classes, growth⟩ :=
+    SourceEqualityAccessorAllocation.equalities_correct value.stored value.guard before valid valueReady
+  have own := SourceEqualityAccessorAllocation.own_of_equalities value.stored value.guard before valid valueReady
+    original.equalities available.1 built result done
+  have same : SourceEqualityAccessorAllocation.constraint value.stored value.guard = original := readback
+  simp only [accessor, loaded, done, Except.map]
+  refine ⟨result, rfl, finalValid, resultReady, ?_, ?_, growth⟩
+  · simpa only [same] using classes
+  · simpa only [SourceEqualityPhysicalPayload.own, same] using own
+
+/-- The reached EmptyConstraints base uses the actual canonical constructor. -/

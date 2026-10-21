@@ -1,0 +1,11 @@
+--- direct-4.source.lean
++++ current249.lean
+@@ -234,7 +234,7 @@
+               some (SourceEqualityDescend.records slot classes) := by cases classes <;> rfl
+           have payload : (descend start (.live combinedIdentity classes) slot).1.payload =
+               some (SourceEqualityDescend.records slot classes) := actualDescent.2.2.1.trans records
+-          simp only [payload, SourceEqualityConstraintAllocation.Value.payload, Option.getD_some]
++          rw [payload]; simp only [SourceEqualityConstraintAllocation.Value.payload, Option.getD_some]
+           cases plain : SourceMemoGate.plain original.entry.key.constraint with
+           | false => exact Prod.Lex.left _ _ (counted.2 plain)
+           | true =>

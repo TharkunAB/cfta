@@ -1,0 +1,20 @@
+/-- A successful indexed walk retains the exact forest law and scheduled returned resources. -/
+theorem walk (fuel : Nat) :
+  ∀ {g s r e p h m c n budget : Nat} {combined : EqValue} {index : Nat} {values results : List Node} {before after : Caller (bits+2)}
+    {inventory : Inventory} {memos : Memos} (seed : Seed),
+    Context formulas solver inventory before memos → Frame formulas solver inventory before.checked →
+    Fits seed.2 before.checked → Carrier (fun guard => guard ∈ seed.1) before.checked.native.machine.heap →
+    EqReady before.checked.operations.constraints combined → Values before.checked.native.machine.heap values →
+    Room bits (Schedule.walk fuel budget seed).2 →
+    SourceCurrentAllocatedPartialWorker.walk fuel g s r e p h m c n budget combined index values before = .done results after →
+    ∃ next final, ∃ actual : Walk budget combined index values before results after,
+      WalkReads formulas solver actual memos final ∧
+      Post formulas solver next before after final ∧
+      Frame formulas solver next after.checked ∧ Fits (Schedule.walk fuel budget seed).2 after.checked ∧
+      Carrier (fun guard => guard ∈ (Schedule.walk fuel budget seed).1) after.checked.native.machine.heap ∧
+      Values after.checked.native.machine.heap results ∧ WalkLaw formulas solver actual := by
+  intro g s r e p h m c n budget combined index values results before after inventory memos seed initial frame fits known inheritedReady available room done
+  simpa only [Returned, and_assoc] using
+    ((all_actual formulas solver (bits := bits) fuel).2.2.2.2.2 seed initial frame fits known inheritedReady available room done)
+
+end MicroCFTA.SourceCurrentOuterInitialActual

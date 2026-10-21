@@ -1,0 +1,11 @@
+--- direct-1.source.lean
++++ current248.lean
+@@ -239,7 +239,7 @@
+           | false => exact Prod.Lex.left _ _ (counted.2 plain)
+           | true =>
+               have ownEmpty : SourceCompactGuards.sourceEqualities original.entry.key.constraint = some [] :=
+-                of_decide_eq_true (Bool.and_eq_true.mp plain).1
++                of_decide_eq_true (Bool.and_eq_true_iff.mp plain).1
+               have smaller := shape_mass member (shape ownEmpty) (List.mem_of_getElem? selected)
+               rcases Nat.lt_or_eq_of_le counted.1 with strict | equal
+               · exact Prod.Lex.left _ _ strict
