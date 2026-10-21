@@ -3057,6 +3057,7 @@ import MicroCFTA.SourceCurrentActualOwnerPair
 import MicroCFTA.SourceCurrentActualParentSelectedCertificates
 import MicroCFTA.SourceCurrentActualParentNativeStores
 import MicroCFTA.SourceCurrentOuterNativeStores
+import MicroCFTA.SourceCurrentResourceParentWriters
 /-!
 # Proof dependency audit
 
