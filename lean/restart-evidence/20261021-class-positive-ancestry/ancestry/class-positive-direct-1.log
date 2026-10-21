@@ -1,0 +1,55 @@
+/tmp/mcfta-class-positive-ancestry-proof/class-positive-direct-1.source.lean:118:34: error: Type mismatch: After simplification, term
+  Eq.symm fields.right
+ has type
+  @Eq EqualityNormalize.Path action (id natural)
+but is expected to have type
+  @Eq EqualityNormalize.Path action natural
+/tmp/mcfta-class-positive-ancestry-proof/class-positive-direct-1.source.lean:152:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (run (makeNode outputs) state).fst
+in the target expression
+  PositiveAt result path
+
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+record : SourceEqualityClassOrder.Record
+originals : List Node
+address : List Nat
+entry : Interned InternedBinderProtocol.NodeKey
+inputs outputs : List Row
+depth : Nat
+free : List InternedBinderProtocol.Reference
+state : Heap
+facts : InternedNestedFacts.Facts state
+resident : Edges state outputs
+related :
+  All₂
+    (fun input output =>
+      output.entry.key.constraint = input.entry.key.constraint ∧
+        ChildrenBack record originals address 0 input.children output.children)
+    inputs outputs
+fields : nodeEdges (run (makeNode outputs) state).fst = canonicalEdges (surviving outputs)
+result : Node
+computed : (run (makeNode outputs) state).fst = result
+ordinary : SourceEqualityRequiredCache.Ordinary result
+raw : ∀ (row : Row), row ∈ nodeEdges result → row ∈ outputs
+path : List Nat
+positive : PositiveAt result path
+⊢ PositiveAt (Value.node entry inputs depth free) path ∨
+    ∃ index path_1 original,
+      originals[index]? = some original ∧
+        PositiveAt original path_1 ∧ Rel [record.paths] (address ++ path) (index :: path_1)
+/tmp/mcfta-class-positive-ancestry-proof/class-positive-direct-1.source.lean:333:20: error: Type mismatch: After simplification, term
+  later.right index result found
+ has type
+  @Exists Node fun input =>
+    values[index]? = some input ∧ Back record originals (address ++ [offset + (index + 1)]) input result
+but is expected to have type
+  @Exists Node fun input =>
+    (value :: values)[index + 1]? = some input ∧ Back record originals (address ++ [offset + (index + 1)]) input result
+/tmp/mcfta-class-positive-ancestry-proof/class-positive-direct-1.source.lean:363:20: error: Type mismatch: After simplification, term
+  later.right index output chosen
+ has type
+  @Exists Node fun input =>
+    values[index]? = some input ∧ Back record originals (address ++ [offset + (index + 1)]) input output
+but is expected to have type
+  @Exists Node fun input =>
+    (value :: values)[index + 1]? = some input ∧ Back record originals (address ++ [offset + (index + 1)]) input output

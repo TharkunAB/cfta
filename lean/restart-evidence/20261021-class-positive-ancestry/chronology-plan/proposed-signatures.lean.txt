@@ -1,0 +1,80 @@
+-- Proposed signatures only. No proof is supplied. This text was not compiled.
+-- Aliases have the same meanings as SourceCurrentClassCorridorChronology.
+-- NativeSupport = SourceCurrentNativeRequestPositivePositions.Support.
+-- History = SourceCurrentNativeMuPublication.History.
+-- MergeSupport = SourceCurrentMergePositivePosition.Support.
+-- PositiveAt = SourceCurrentRequiredPositivePosition.PositiveAt.
+-- Rel = SourceCurrentNormalizedChildSeparation.Rel.
+
+theorem fold [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    {records : List SourceEqualityClassOrder.Record} {values results : List Node}
+    {before after : Checked width} {memo saved : Memo} {memos final : Memos}
+    {actual : Fold records values before memo results after saved}
+    (reads : FoldReads formulas solver actual memos final)
+    (coherent : ∀ record ∈ records, SourceEqualityClassOrder.Coherent record)
+    (active : ∀ record ∈ records, EqualityNormalize.Nontrivial record.paths)
+    (ready : Ready before) (admitted : At formulas solver inventory before)
+    (available : Values before.native.machine.heap values)
+    (domains : ∀ record ∈ records, ∀ path ∈ record.paths,
+      ForestClosed (path.map Int.ofNat) values)
+    (physical : PhysicalStored before.native.machine.heap memo)
+    (covered : ∀ ambient, CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo)
+    (valid : EndpointMemoGateTrace.Valid before.native.machine.heap memos)
+    (current : Current before) (merged : MergeStored memo)
+    (masks : ∀ record ∈ records, ∀ index path, index :: path ∈ record.paths →
+      ∀ value, select values (Int.ofNat index) = some value →
+        RawCorridor (path.map Int.ofNat) value)
+    (supported : NativeSupport before.native.machine.heap before.native)
+    (causal : History empty before.native.machine.heap)
+    (positiveMemo : MergeSupport memo) :
+    ∃ next, Receipt formulas solver next records values before memo results after saved memos final ∧
+      Current after ∧ MergeStored saved ∧
+      All₂ (fun original result => ∀ path : List Int,
+        RawCorridor path original → RawCorridor path result) values results ∧
+      NativeSupport after.native.machine.heap after.native ∧
+      Nonempty (History empty after.native.machine.heap) ∧ MergeSupport saved ∧
+      ∀ outputIndex result, results[outputIndex]? = some result →
+        ∀ residual, PositiveAt result residual →
+          ∃ inputIndex originalPath original,
+            values[inputIndex]? = some original ∧ PositiveAt original originalPath ∧
+            Rel (records.map SourceEqualityClassOrder.Record.paths)
+              (outputIndex :: residual) (inputIndex :: originalPath)
+
+theorem pass [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    {records : List SourceEqualityClassOrder.Record} {values results : List Node}
+    {before after : Checked width} {memo saved : Memo} {memos final : Memos}
+    {actual : Pass records values before memo results after saved}
+    (reads : PassReads formulas solver actual memos final)
+    (coherent : ∀ record ∈ records, SourceEqualityClassOrder.Coherent record)
+    (active : ∀ record ∈ records, EqualityNormalize.Nontrivial record.paths)
+    (ready : Ready before) (admitted : At formulas solver inventory before)
+    (available : Values before.native.machine.heap values)
+    (domains : ∀ record ∈ records, ∀ path ∈ record.paths,
+      ForestClosed (path.map Int.ofNat) values)
+    (physical : PhysicalStored before.native.machine.heap memo)
+    (covered : ∀ ambient, CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo)
+    (valid : EndpointMemoGateTrace.Valid before.native.machine.heap memos)
+    (current : Current before) (merged : MergeStored memo)
+    (masks : ∀ record ∈ records, ∀ index path, index :: path ∈ record.paths →
+      ∀ value, select values (Int.ofNat index) = some value →
+        RawCorridor (path.map Int.ofNat) value)
+    (supported : NativeSupport before.native.machine.heap before.native)
+    (causal : History empty before.native.machine.heap)
+    (positiveMemo : MergeSupport memo) :
+    ∃ next, Receipt formulas solver next records values before memo results after saved memos final ∧
+      Current after ∧ MergeStored saved ∧
+      All₂ (fun original result => ∀ path : List Int,
+        RawCorridor path original → RawCorridor path result) values results ∧
+      NativeSupport after.native.machine.heap after.native ∧
+      Nonempty (History empty after.native.machine.heap) ∧ MergeSupport saved ∧
+      ∀ outputIndex result, results[outputIndex]? = some result →
+        ∀ residual, PositiveAt result residual →
+          ∃ inputIndex originalPath original,
+            values[inputIndex]? = some original ∧ PositiveAt original originalPath ∧
+            Rel (records.map SourceEqualityClassOrder.Record.paths)
+              (outputIndex :: residual) (inputIndex :: originalPath)
+
