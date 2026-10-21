@@ -1,0 +1,11 @@
+--- warm-return-proof-verify.original-9444d7d9.py.txt
++++ warm-return-proof-verify.py
+@@ -105,7 +105,7 @@
+         assert not any(token in checked for token in ["_private", "†", "✝", "‡"])
+         assert rest[matches[0].end():].startswith("fun ")
+         axiom = re.search("'" + re.escape(head["head"]) + r"' depends on axioms:\s*\[([^\]]*)\]", rest)
+-        assert axiom and {item.strip() for item in axiom.group(1).split(",")} == standard
++        assert axiom and {re.sub(r"\.\{[^}]*\}", "", item.strip()) for item in axiom.group(1).split(",")} == standard
+ audit = (evidence / "audit-1.log").read_text()
+ assert "Build completed successfully (3619 jobs)." in audit and "75221 MicroCFTA theorems" in audit
+ print(json.dumps(dict(status="PASS", live=args.live, source_jobs=5, audit_jobs=1, actual_jobs=6,

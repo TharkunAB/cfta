@@ -1,0 +1,9 @@
+[2026-10-21 20:22 CEST] Accepted Origins review: CLEAR exact489/cccd170a after root-owned clean strict1 and sole FULL. This audit copies two existing root proof jobs. The reviewer ran no compiler, FULL, runtime, or capped job.
+
+I personally read the complete203-line accepted TYPE and literal actual axiom report. The independent read-only parser verifies raw48520B/29b1dc20, exact TYPEa35b7b33/11247 normalized characters, whole check/print identity, a unique complete TYPE/body boundary, no omissions or diagnostics, and exactly propext, Classical.choice, Quot.sound. No _private, either dagger, double dagger, or any18 current-module private helper name occurs in either TYPE. The15927-character proof body is retained and checked programmatically; this report does not claim a personal reading of every body character.
+
+The accepted TYPE retains the exact entry resources, the same literal nodeCall done equation, and historical Origins before-to-after. It adds no future Room, completion callback, or extra writer witness. The current append reuses the existing private all_origins proof. The entire old465-line source remains recoverable byte for byte. This result transports Origins after an observed completed call; it does not prove repeated warm capacity or completion.
+
+The actual strict input equals reviewed489/cccd and has no limit override. Its raw log is empty. The503/83ee FULL input has the exact source prefix and fourteen diagnostic lines after the module. Both actual receipts exit0, use4GiB max/high, swap0 and5m, and retain fresh30percent usage with age0. No official integration or Audit result is inferred here.
+
+I authored the existing OuterResourceWriters and imported resource foundations. This independent review covers the new public projection, exact source reuse, accepted TYPE, and actual evidence. It does not independently re-prove those authored foundations. All prior source audits and frozen packages remain unchanged.

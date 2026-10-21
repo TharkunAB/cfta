@@ -1,0 +1,28 @@
+private theorem nodeCall_step (fuel : Nat) (bodyAt : NodeBodyAt formulas solver (bits := bits) fuel) :
+    NodeCallAt formulas solver (bits := bits) fuel := by
+  intro g s r e p h m c n budget request before after result inventory memos seed
+    initial frame fits known inherited available room done stores origins
+  rcases started : beginNode request before with ⟨handle,action,running⟩
+  have components := beginNode_components request before
+  rw [started] at components
+  dsimp only at components
+  obtain ⟨checked,merge,_fourth,edges⟩ := components
+  cases action with
+  | ready value =>
+      simp only [nodeCall,started] at done
+      cases done
+      exact same_edges formulas solver edges origins
+  | evaluate captured =>
+      simp only [nodeCall,started] at done
+      obtain ⟨value,middle,first,last⟩ := (bind_done_iff _ _ _ _).mp done
+      cases last
+      obtain ⟨runningContext,owner,_key,_cell⟩ :=
+        SourceCurrentAllocatedPartialCallSteps.node_start formulas solver initial inherited available started
+      have runningFrame : Frame formulas solver inventory running.checked := by simpa only [checked] using frame
+      have runningFits : Fits seed.2 running.checked := by simpa only [checked] using fits
+      have runningKnown : Carrier (fun guard => guard ∈ seed.1) running.checked.native.machine.heap := by simpa only [checked] using known
+      have runningStores : Stores running := by simpa only [Stores,checked,merge] using stores
+      have bodyRoom : Room bits (Schedule.body fuel budget seed).2 := by simpa only [Schedule.node] using room
+      have returned := bodyAt (after := middle) seed runningContext runningFrame runningFits runningKnown
+        owner.inherited owner.input bodyRoom first runningStores (same_edges formulas solver edges origins)
+      exact returned

@@ -1,0 +1,5 @@
+[2026-10-21 20:26 CEST] Source-only FULL preparation CLEAR. Printer503/83ee9b3f is byte-identical to reviewed489/cccd source followed by the complete14-line diagnostic tail. All resource and eight print settings occur after the module. Exactly one public head has check, print, and actual axiom directives.
+
+I read the entire77-line reader a4341291 and its complete template delta. It preserves whole check/print TYPE identity, a unique matching TYPE/body boundary, complete body retention, omission and diagnostic checks, actual standard-three axioms, and the actual receipt exit code. TYPE checks include _private, both dagger spellings, and all18 declared private helper names. Bodies may refer to private helpers. Absence of private TYPE names is a required future result, not a current claim.
+
+I parsed Python syntax and compared the complete printer/template patches. No reader, compiler, or FULL job was executed. One display of the full printer replacement diff was truncated; the complete source was already personally read, and exact prefix/tail plus full diff byte comparisons establish its identity. This is preparation clearance only.

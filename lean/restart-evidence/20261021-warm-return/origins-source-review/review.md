@@ -1,0 +1,9 @@
+[2026-10-21 20:23 CEST] Source-only review: CLEAR489/cccd170af4066f6889c94638d4243470038f2a41022f6965ed9568370e5a1ed8. No compiler, runtime, or official edits were performed. Actual proof and printed TYPE checks remain pending.
+
+I read all489 candidate lines and the complete31-line patch. Independent comparisons verify the exact24-line append before the final namespace end. Its deletion recovers every byte of the original465/50ae source and current official file. Existing public signatures and proof bodies remain unchanged. The extracted19-line new public signature equals frozen91353767 byte for byte. The addition is within the80-line added-source ceiling.
+
+The proof applies the first projection of existing all_origins at the same fuel. Its NodeCallAt contract accepts the exact entry packet, same request, same full before/after caller, and observed done result. The expanded Stores tuple has the required order: native support, Nonempty history, merge stored, merge positive support, union normal. No new helper, import, recurrence, induction, success assumption beyond this observed return, or future Room is added.
+
+Origins retains each edge cell's existing resource-backed historical Written witness. This theorem does not infer a past writer from current resources. The same completed-call theorem already proves the return transport internally. The public signature uses no private helper or predicate; actual printed TYPE names, including imported dagger constants, and axioms still require compiler/FULL evidence. This is not a repeated warm completion or capacity result.
+
+I authored the pre-existing OuterResourceWriters foundation and imported OuterNativeStores and other transitive resource foundations. This review checks the new append, exact reuse, and application contract. It is not an independent re-proof of those authored foundations. The earlier proposal audit and all frozen packages remain unchanged.

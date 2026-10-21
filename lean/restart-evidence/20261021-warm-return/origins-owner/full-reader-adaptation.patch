@@ -1,0 +1,64 @@
+--- accepted-cold-check-full-public.original.py
++++ warm-return-origins-check-full-public.py
+@@ -1,13 +1,13 @@
+-"""Read the full cold constructed-node theorem without running Lean or evaluating the numeric recurrence."""
++"""Read the completed-node Origins theorem without running Lean."""
+ from pathlib import Path
+ import hashlib
+ import json
+ import re
+ 
+ HERE = Path(__file__).resolve().parent
+-PREFIX = "cold-rank-capacity-"
+-NAMESPACE = "MicroCFTA.SourceCurrentColdRankCapacity."
+-source = (HERE / "SourceCurrentColdRankCapacity.lean").read_text()
++PREFIX = "warm-return-origins-"
++NAMESPACE = "MicroCFTA.SourceCurrentOuterResourceWriters."
++source = (HERE / "SourceCurrentOuterResourceWriters.lean").read_text()
+ printer = (HERE / (PREFIX + "public-1.source.lean")).read_text()
+ raw = (HERE / (PREFIX + "public-1.log")).read_bytes()
+ log = raw.decode()
+@@ -17,7 +17,7 @@
+ for option in options:
+     assert printer.count("set_option " + option) == 1, option
+ assert not re.search(r"sorryAx|\b(?:warning|error)(?:\([^)]*\))?:|failed to pretty print|pp\.rawOnError|maximum recursion depth|maximum number of heartbeats|⋯|…|\.\.\.", log)
+-heads = [("constructed_initial_node_call", "theorem")]
++heads = [("node_call", "theorem")]
+ markers = []
+ for head, _ in heads:
+     name = NAMESPACE + head
+@@ -27,7 +27,7 @@
+     assert len(found) == 1, (head, len(found))
+     markers.append(found[0])
+ normalize = lambda text: "".join(text.split())
+-private = []
++private = ['Stores', 'reservation', 'same_edges', 'head_edge', 'NodeCallAt', 'NodeBodyAt', 'RowsAt', 'DescendantsAt', 'ChildrenAt', 'WalkAt', 'nodeCall_step', 'walk_step', 'children_step', 'descendants_step', 'rows_step', 'nodeBody_step', 'all_origins', 'one_step']
+ results = []
+ for index, (head, kind) in enumerate(heads):
+     name = NAMESPACE + head
+@@ -51,7 +51,9 @@
+     split = candidates[0]
+     declared, body = declaration[:split.start()], declaration[split.end():]
+     assert normalize(checked) == normalize(declared), head
+-    assert "_private" not in checked + declared, head
++    public_type = checked + declared
++    for spelling in ["_private", "†", "✝"]:
++        assert spelling not in public_type, (head, "private TYPE spelling", spelling)
+     for helper in private:
+         assert NAMESPACE + helper not in checked + declared, (head, helper)
+     assert body.startswith("fun ") and len(body) > 50, head
+@@ -61,11 +63,12 @@
+         axioms = {re.sub(r"\.\{[^}]*\}", "", item.strip()) for item in report.group(1).split(",") if item.strip()}
+     else:
+         axioms = set()
+-    assert axioms <= {"propext", "Classical.choice", "Quot.sound"}, (head, axioms)
++    assert axioms == {"propext", "Classical.choice", "Quot.sound"}, (head, axioms)
+     results.append(dict(head=name, kind=kind, check_print_type_identity=True,
+         checked_type_characters=len(checked), normalized_type_characters=len(normalize(checked)),
+         unique_complete_type_body_delimiter=True, actual_body_starts_with="fun ", body_characters=len(body),
+-        private_public_type_names=False, actual_axioms=sorted(axioms), actual_axioms_within_standard_allowed=True))
++        private_public_type_names=False, private_type_spellings_checked=["_private", "†", "✝"],
++        private_namespace_helpers_checked=private, actual_axioms=sorted(axioms), actual_standard_three_axioms=True))
+ receipt = json.loads((HERE / (PREFIX + "public-1.json")).read_text())
+ assert receipt["exit_code"] == 0
+ print(json.dumps(dict(source_sha256=hashlib.sha256(source.encode()).hexdigest(), source_lines=len(source.splitlines()),

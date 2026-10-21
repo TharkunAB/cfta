@@ -1,0 +1,19 @@
+private def NodeCallAt (fuel : Nat) : Prop :=
+  ∀ {g s r e p h m c n budget : Nat} {request : NodeRequest} {before after : Caller (bits+2)} {result : Node}
+    {inventory : Inventory} {memos : Memos} (seed : Seed),
+    Context formulas solver inventory before memos → Frame formulas solver inventory before.checked →
+    Fits seed.2 before.checked → Carrier (fun guard => guard ∈ seed.1) before.checked.native.machine.heap →
+    EqReady before.checked.operations.constraints request.inherited → Available before.checked.native.machine.heap request.value →
+    Room bits (Schedule.node fuel budget seed).2 →
+    nodeCall fuel g s r e p h m c n budget request before = .done result after →
+    Stores before → Origins formulas solver before → Origins formulas solver after
+
+private def NodeBodyAt (fuel : Nat) : Prop :=
+  ∀ {g s r e p h m c n budget : Nat} {request : NodeRequest} {before after : Caller (bits+2)} {result : Node}
+    {inventory : Inventory} {memos : Memos} (seed : Seed),
+    Context formulas solver inventory before memos → Frame formulas solver inventory before.checked →
+    Fits seed.2 before.checked → Carrier (fun guard => guard ∈ seed.1) before.checked.native.machine.heap →
+    EqReady before.checked.operations.constraints request.inherited → Available before.checked.native.machine.heap request.value →
+    Room bits (Schedule.body fuel budget seed).2 →
+    nodeBody fuel g s r e p h m c n budget request before = .done result after →
+    Stores before → Origins formulas solver before → Origins formulas solver after

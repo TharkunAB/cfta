@@ -1,0 +1,91 @@
+--- original/SourceCurrentOuterClosedInputs.lean
++++ candidate/SourceCurrentOuterClosedInputs.lean
+@@ -207,7 +207,7 @@
+ export SourceCurrentOuterInitialSchedule (parent node body rows descendants children walk parent_reserved rows_ge descendants_ge rebuild_ge)
+ end Schedule
+ 
+-theorem reached
++private theorem reached_complete
+     (formulas : SourceGuards.Formulas FullSyntax.Formula)
+     (solver : SourceGuards.Entailment FullSyntax.Formula)
+     {g s r e p h m c n budget : Nat} {first last : Phase (bits + 2)}
+@@ -229,7 +229,9 @@
+     (positiveMemo : SourceCurrentMergePositivePosition.Support (caller first).merge)
+     (origins : SourceCurrentResourceParentWriters.Origins formulas solver (caller first))
+     (stored : NodeStored (caller first)) (closed : InputsClosed first) :
+-    NodeStored (caller last) ∧ InputsClosed last := by
++    (NodeStored (caller last) ∧ InputsClosed last) ∧
++      ∀ fuel, NodeCallAt (g := g) (s := s) (r := r) (e := e) (p := p) (h := h)
++        (m := m) (c := c) (n := n) (budget := budget) first fuel := by
+   have resources {phase} (cut : Reached g s r e p h m c n budget first phase) :=
+     SourceCurrentOuterPrefixNativeStores.reached formulas solver seed cut initial frame fits known inputs room normal supported causal merged positiveMemo
+   have ledger {phase} (cut : Reached g s r e p h m c n budget first phase) :=
+@@ -390,6 +392,7 @@
+           have returned := bodies (.snoc cut (.node_evaluate started)) body runningStored (node_start_closed formulas solver post.context ins.1 ins.2 started closed)
+           exact ⟨finish_stored handle result returned.1 returned.2,returned.2⟩
+       exact ⟨nodes,bodies,rowCalls,desc,kids,walks⟩
++  refine ⟨?_, fun fuel => (complete fuel).1⟩
+   induction actual with
+   | refl => exact ⟨stored,closed⟩
+   | snoc earlier step ih =>
+@@ -417,4 +420,60 @@
+       have returned := (complete _).1 (.snoc earlier .walk_head) done stored (closed _ List.mem_cons_self)
+       exact ⟨returned.1,fun _ member => closed _ (List.mem_cons_of_mem _ member)⟩
+ 
++theorem reached
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula)
++    {g s r e p h m c n budget : Nat} {first last : Phase (bits + 2)}
++    {inventory : Inventory} {memos : Memos} (seed : List Guard × Profile)
++    (actual : Reached g s r e p h m c n budget first last)
++    (initial : Context formulas solver inventory (caller first) memos)
++    (frame : Frame formulas solver inventory (caller first).checked)
++    (fits : Fits seed.2 (caller first).checked)
++    (known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.1)
++      (caller first).checked.native.machine.heap)
++    (inputs : SourceCurrentOuterPrefixInvariants.Inputs first)
++    (room : Room bits (SourceCurrentOuterInitialPrefix.forecast budget first seed).2)
++    (normal : SourceCurrentRequiredUnionNormal.UnionNormal (caller first).checked.native.machine.heap)
++    (supported : SourceCurrentNativeRequestPositivePositions.Support
++      (caller first).checked.native.machine.heap (caller first).checked.native)
++    (causal : SourceCurrentNativeMuPublication.History empty (caller first).checked.native.machine.heap)
++    (merged : SourceCurrentConstrainedCapMemoMerge.Stored
++      (fun guard : Guard => SourceMemoGate.plain guard = true) (caller first).merge)
++    (positiveMemo : SourceCurrentMergePositivePosition.Support (caller first).merge)
++    (origins : SourceCurrentResourceParentWriters.Origins formulas solver (caller first))
++    (stored : NodeStored (caller first)) (closed : InputsClosed first) :
++    NodeStored (caller last) ∧ InputsClosed last := by
++  exact (reached_complete formulas solver seed actual initial frame fits known inputs room
++    normal supported causal merged positiveMemo origins stored closed).1
++
++theorem node_call
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula)
++    {g s r e p h m c n budget fuel : Nat}
++    {request : NodeRequest} {before after : Caller (bits + 2)} {result : Node}
++    {inventory : Inventory} {memos : Memos} (seed : List Guard × Profile)
++    (initial : Context formulas solver inventory before memos)
++    (frame : Frame formulas solver inventory before.checked)
++    (fits : Fits seed.2 before.checked)
++    (known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.1)
++      before.checked.native.machine.heap)
++    (inputs : SourceCurrentOuterPrefixInvariants.NodeReady before request)
++    (room : Room bits (SourceCurrentOuterInitialSchedule.node fuel budget seed).2)
++    (normal : SourceCurrentRequiredUnionNormal.UnionNormal before.checked.native.machine.heap)
++    (supported : SourceCurrentNativeRequestPositivePositions.Support
++      before.checked.native.machine.heap before.checked.native)
++    (causal : SourceCurrentNativeMuPublication.History empty before.checked.native.machine.heap)
++    (merged : SourceCurrentConstrainedCapMemoMerge.Stored
++      (fun guard : Guard => SourceMemoGate.plain guard = true) before.merge)
++    (positiveMemo : SourceCurrentMergePositivePosition.Support before.merge)
++    (origins : SourceCurrentResourceParentWriters.Origins formulas solver before)
++    (stored : NodeStored before) (closed : request.value.free = [])
++    (observed : nodeCall fuel g s r e p h m c n budget request before = .done result after) :
++    NodeStored after ∧ result.free = [] := by
++  have returned := reached_complete formulas solver seed
++    (g := g) (s := s) (r := r) (e := e) (p := p) (h := h) (m := m) (c := c) (n := n) (budget := budget)
++    (first := .node fuel request before) (last := .node fuel request before)
++    .refl initial frame fits known inputs room normal supported causal merged positiveMemo origins stored closed
++  exact returned.2 fuel .refl observed returned.1.1 returned.1.2
++
+ end MicroCFTA.SourceCurrentOuterClosedInputs

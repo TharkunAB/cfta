@@ -1,0 +1,53 @@
+      have bodies : NodeBodyAt (g := g) (s := s) (r := r) (e := e) (p := p) (h := h) (m := m) (c := c) (n := n) (budget := budget) first fuel := by
+        intro request before after result cut done stored closed
+        obtain ⟨i,globals,current,_,post,frm,fts,carrier,ins,_,_,rm,_⟩ := resources cut
+        cases request with
+        | mk inherited value =>
+          cases value with
+          | empty =>
+            simp only [nodeBody] at done
+            cases done
+            exact ⟨stored,rfl⟩
+          | union entry members depth free =>
+            simp only [nodeBody] at done
+            cases done
+            exact ⟨stored,closed⟩
+          | reference name => simp only [nodeBody] at done; cases done
+          | mu entry body depth ordinary =>
+            have rebuilt := SourceCurrentAllocatedMuRebuild.resident_rebuild before.checked post.context.ready post.context.probes entry body depth ordinary ins.2
+            simp only [nodeBody,rebuilt.1] at done
+            cases done
+            exact ⟨stored,rebuilt.2.2.1.trans closed⟩
+          | node entry original depth free =>
+            cases fuel with
+            | zero => simp only [nodeBody] at done; cases done
+            | succ fuel =>
+              simp only [nodeBody] at done
+              obtain ⟨results,middle,run,last⟩ := (bind_done_iff _ _ _ _).mp done
+              cases last
+              have originals := MergedColdReaderClosed.node_children_closed before.checked.native.machine.heap post.context.ready.semantic.ready.semantic.1.normal.facts entry original depth free ins.2 closed
+              have returned := (ih fuel (Nat.lt_succ_self _)).2.2.1 (.snoc cut (.body_rows rfl)) run stored originals
+              rw [SourceCurrentOuterInitialPrefix.forecast,Schedule.body] at rm
+              have rowRoom := rm.mono (Schedule.rebuild_ge (Schedule.rows fuel budget current)).1
+              have edges := InternedEdgeResidency.resident_edges _ post.context.ready.semantic.ready.semantic.1.normal.facts.linked _ ins.2.resident
+              obtain ⟨ni,nm,_graph,_reads,rowPost,_frame,_fits,_known,resident,_law⟩ := SourceCurrentOuterInitialActual.rows formulas solver fuel current post.context frm fts carrier ins.1 edges rowRoom run
+              exact ⟨returned.1,modify_closed _ _ _ _ rowPost.context.ready.semantic.ready.semantic.1.normal.facts resident closed returned.2⟩
+      have nodes : NodeCallAt (g := g) (s := s) (r := r) (e := e) (p := p) (h := h) (m := m) (c := c) (n := n) (budget := budget) first fuel := by
+        intro request before after result cut done stored closed
+        obtain ⟨i,globals,current,_,post,_frm,_fts,_known,ins,_⟩ := resources cut
+        rcases started : beginNode request before with ⟨handle,action,running⟩
+        have runningStored := begin_stored request stored
+        rw [started] at runningStored
+        cases action with
+        | ready value =>
+          simp only [nodeCall,started] at done
+          cases done
+          exact ⟨runningStored,node_hit_closed formulas solver post.context ins.1 ins.2 started stored closed⟩
+        | busy | absent => simp only [nodeCall,started] at done; cases done
+        | evaluate captured =>
+          simp only [nodeCall,started] at done
+          obtain ⟨value,middle,body,last⟩ := (bind_done_iff _ _ _ _).mp done
+          cases last
+          have returned := bodies (.snoc cut (.node_evaluate started)) body runningStored (node_start_closed formulas solver post.context ins.1 ins.2 started closed)
+          exact ⟨finish_stored handle result returned.1 returned.2,returned.2⟩
+      exact ⟨nodes,bodies,rowCalls,desc,kids,walks⟩

@@ -1,0 +1,8 @@
+private def relationSetoid (classes : Constraints) : Setoid Path where
+  r := Rel classes
+  iseqv := ⟨Rel.refl, fun related => rel_symm related, fun first second => .trans first second⟩
+
+/-- Count the inherited-relation classes represented by positive natural child paths. -/
+noncomputable def count (inherited : List Record) (value : Node) : Nat := by
+  classical
+  exact (((positivePaths value).map (Quotient.mk (relationSetoid (inherited.map Record.paths)))).eraseDups).length

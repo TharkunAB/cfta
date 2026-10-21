@@ -1,0 +1,17 @@
+# Completed node Origins: independent source-only review
+
+The exact 22-line plan, 19-line public signature and 49-line context are source-clear. I read all seven cited ranges in the three pinned source files. Complete source hashes and every exact excerpt match the live tree. The proposal remains unproved; no implementation or compiler acceptance is claimed.
+
+The existing private NodeCallAt at S1:115–123 already states Origins retention for the same actual successful nodeCall. The first component of all_origins at S1:367–378 supplies that property at the supplied fuel. The proposed public arguments give exactly its seed, Context, Frame, Fits, carrier, inherited readiness, input availability, scheduled Room, actual done equation, initial Stores and initial Origins. No new induction or helper is needed.
+
+Assemble Stores in its existing order: native Support, Nonempty causal History, conditional MergeStored, positive MergeSupport, UnionNormal. The public normality argument appears earlier in the signature; it must enter the last tuple position. The Nonempty history premise matches the private helper exactly. An actual History witness is unnecessary. Local notation aliases expand to existing public predicates; the private Stores and NodeCallAt predicates must stay out of the public TYPE.
+
+The observed equation is a legitimate local past-completion premise. The application must retain the same fuel, lower budgets, request, full before/after caller, seed, inventory and globals. In a cold-return consumer this is the same first-W equation already supplied by the checked producer. It assumes no second successful call, future Room, callback, adequate lower-fuel bound, initial idle or closed input.
+
+Origins is validity of the same final edgeResults table under CellSpec Written. Written contains one correlated historical Parent writer with its own Context, Frame, Fits, actual request, resource reservation and five store laws. The endpoint preserves that existing writer evidence. It does not infer a historical writer from a current reader or choose an unrelated resource witness. Context alone and the five-store NativeStores endpoint do not supply Origins.
+
+Append the new public declaration inside the original module, immediately before its final namespace end at original line 465. That location can use the existing private helper without importing a private name. I verified the type-only insertion patch and that deleting only its inserted block recovers all original bytes. It is not a compilable candidate and contains no proof body. Keep every old declaration, type, proof body and order unchanged. A future append changes the whole-file hash; preserve the old 50ae9ee0 source and its historical live receipts rather than changing frozen packages.
+
+The estimate of 28–34 added rendered lines is credible for a direct projection with a short store tuple. The proposed 80-added-line stop needs no new framework. Future whole-source review must check the exact additive diff, tuple order, same-call parameters, default declaration limits and actual public TYPE names, including dagger spellings. This endpoint alone gives no next-call Room, fixed-width feasibility, convergence or Haskell refinement.
+
+I authored OuterResourceWriters, OuterNativeStores and related transitive foundations. I independently check this new projection and its use of those definitions; I do not claim independent review of my authored foundation proofs. This review made no official edit, candidate, proof body, compiler, capped, runtime or evaluation job.

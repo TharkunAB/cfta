@@ -1,0 +1,8 @@
+/-- Both complete record maps retain a positive common payload bound. -/
+structure Stored (bound : Nat) (state : State Symbol Guard) : Prop where
+  /-- Empty and reference values also fit the bound. -/
+  positive : 1 ≤ bound
+  /-- Every completed node payload fits the bound at its actual key. -/
+  nodes : ∀ key value, state.nodeRecords key = some value → InternedValueMass.value value ≤ bound
+  /-- Every completed edge payload fits the same bound. -/
+  edges : ∀ key edge, state.edgeRecords key = some edge → InternedValueMass.edge edge ≤ bound

@@ -1,0 +1,22 @@
+/-- Every node phase retains its request; a returned phase also retains the proved result. -/
+structure NodeGood (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (checked : Checked width) (cell : FlatMemoThunk.Cell NodeRequest Node) : Prop where
+  inherited : EqReady checked.operations.constraints cell.request.inherited
+  input : Available checked.native.machine.heap cell.request.value
+  returned : ∀ result, cell.status = .returned result →
+    Available checked.native.machine.heap result ∧ NodeLaw formulas solver cell.request result
+
+/-- Every edge phase retains its request; a returned phase also retains the proved result. -/
+structure EdgeGood (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (checked : Checked width) (cell : FlatMemoThunk.Cell EdgeRequest Edge) : Prop where
+  inherited : EqReady checked.operations.constraints cell.request.inherited
+  input : Resident checked.native.machine.heap cell.request.value
+  returned : ∀ result, cell.status = .returned result →
+    Resident checked.native.machine.heap result ∧ EdgeLaw formulas solver cell.request result
+
+/-- Legitimate warm caller cells have exact key links and phase-appropriate source facts. -/
+structure Sound (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (state : Caller width) : Prop where
+  valid : SourceCurrentAllocatedPartialState.Valid state
+  nodes : ∀ handle cell, state.nodeResults.cells handle = some cell → NodeGood formulas solver state.checked cell
+  edges : ∀ handle cell, state.edgeResults.cells handle = some cell → EdgeGood formulas solver state.checked cell

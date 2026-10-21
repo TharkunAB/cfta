@@ -1,0 +1,46 @@
+theorem reached
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    {g s r e p h m c n budget : Nat} {first last : Phase (bits + 2)}
+    {inventory : Inventory} {memos : Memos} (seed : List Guard × Profile)
+    (actual : Reached g s r e p h m c n budget first last)
+    (initial : Context formulas solver inventory (caller first) memos)
+    (frame : Frame formulas solver inventory (caller first).checked)
+    (fits : Fits seed.2 (caller first).checked)
+    (known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.1)
+      (caller first).checked.native.machine.heap)
+    (inputs : SourceCurrentOuterPrefixInvariants.Inputs first)
+    (room : Room bits (SourceCurrentOuterInitialPrefix.forecast budget first seed).2)
+    (normal : SourceCurrentRequiredUnionNormal.UnionNormal (caller first).checked.native.machine.heap)
+    (supported : SourceCurrentNativeRequestPositivePositions.Support
+      (caller first).checked.native.machine.heap (caller first).checked.native)
+    (causal : SourceCurrentNativeMuPublication.History empty (caller first).checked.native.machine.heap)
+    (merged : SourceCurrentConstrainedCapMemoMerge.Stored
+      (fun guard : Guard => SourceMemoGate.plain guard = true) (caller first).merge)
+    (positiveMemo : SourceCurrentMergePositivePosition.Support (caller first).merge)
+    (origins : SourceCurrentResourceParentWriters.Origins formulas solver (caller first))
+    (stored : NodeStored (caller first)) (closed : InputsClosed first) :
+    NodeStored (caller last) ∧ InputsClosed last := by
+  have resources {phase} (cut : Reached g s r e p h m c n budget first phase) :=
+    SourceCurrentOuterPrefixNativeStores.reached formulas solver seed cut initial frame fits known inputs room normal supported causal merged positiveMemo
+  have ledger {phase} (cut : Reached g s r e p h m c n budget first phase) :=
+    SourceCurrentOuterResourceWriters.reached formulas solver seed cut initial frame fits known inputs room normal supported causal merged positiveMemo origins
+  have edgeAt {fuel inherited original rest before narrowed middle}
+      (cut : Reached g s r e p h m c n budget first (.rows (fuel+1) inherited (original::rest) before))
+      (done : edgeCall fuel g s r e p h m c n budget ⟨inherited,original⟩ before = .done narrowed middle)
+      (stored : NodeStored before) (closed : ClosedValues original.children) : NodeStored middle ∧ ClosedValues narrowed.children := by
+    obtain ⟨i,globals,current,_,post,frm,fts,carrier,ins,_,_,rm,_,_,_,sup,⟨his⟩,mer,pos,norm⟩ := resources cut
+    change Room bits (Schedule.rows (fuel+1) budget current).2 at rm
+    rw [Schedule.rows] at rm
+    have parentRoom := rm.mono ((Schedule.descendants_ge fuel budget (Schedule.parent budget current)).1.trans
+      (Schedule.rows_ge fuel budget (Schedule.descendants fuel budget (Schedule.parent budget current))).1)
+    have uniform := Schedule.parent_reserved bits budget current parentRoom
+    have reserved := reservation formulas solver (request := ⟨inherited,original⟩) post.context fts carrier ins.1 (ins.2 _ List.mem_cons_self) uniform
+    obtain ⟨ni,nm,receipt,_fits,_known⟩ := SourceCurrentOuterEdgeGuardAlphabet.edge_call formulas solver i budget current.1
+      ⟨inherited,original⟩ before globals post.context frm current.2 fts carrier ins.1 (ins.2 _ List.mem_cons_self) uniform done
+    have written := SourceCurrentResourceParentWriters.edge_call formulas solver i current.2 globals done post.context frm fts
+      ins.1 (ins.2 _ List.mem_cons_self) reserved (ledger cut) norm sup his mer pos
+    exact ⟨same_nodes receipt.semantic.nodes stored,SourceCurrentResourceParentClosed.children formulas solver written.2 closed⟩
+  have complete : ∀ fuel, NodeCallAt (g := g) (s := s) (r := r) (e := e) (p := p) (h := h) (m := m) (c := c) (n := n) (budget := budget) first fuel ∧ NodeBodyAt (g := g) (s := s) (r := r) (e := e) (p := p) (h := h) (m := m) (c := c) (n := n) (budget := budget) first fuel ∧ RowsAt (g := g) (s := s) (r := r) (e := e) (p := p) (h := h) (m := m) (c := c) (n := n) (budget := budget) first fuel ∧
+      DescendantsAt (g := g) (s := s) (r := r) (e := e) (p := p) (h := h) (m := m) (c := c) (n := n) (budget := budget) first fuel ∧ ChildrenAt (g := g) (s := s) (r := r) (e := e) (p := p) (h := h) (m := m) (c := c) (n := n) (budget := budget) first fuel ∧ WalkAt (g := g) (s := s) (r := r) (e := e) (p := p) (h := h) (m := m) (c := c) (n := n) (budget := budget) first fuel := by
+    intro fuel

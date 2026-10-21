@@ -1,0 +1,36 @@
+mutual
+/-- Node demand reserves its possible body; a warm hit can retain entry bounds. -/
+noncomputable def node (fuel budget : Nat) (seed : List Guard × Profile) : List Guard × Profile :=
+  body fuel budget seed
+termination_by (fuel, 3)
+
+/-- An ordinary body reserves its row pass and one raw node constructor. -/
+noncomputable def body (fuel budget : Nat) (seed : List Guard × Profile) : List Guard × Profile :=
+  match fuel with
+  | 0 => seed
+  | next + 1 => rebuild (rows next budget seed)
+termination_by (fuel, 2)
+
+/-- Rows reserve the head Parent, its descendants and then the original suffix. -/
+noncomputable def rows (fuel budget : Nat) (seed : List Guard × Profile) : List Guard × Profile :=
+  match fuel with
+  | 0 => seed
+  | next + 1 => rows next budget (descendants next budget (parent budget seed))
+termination_by (fuel, 2)
+
+/-- Descendants reserve the child pass and one raw edge constructor. -/
+noncomputable def descendants (fuel budget : Nat) (seed : List Guard × Profile) : List Guard × Profile :=
+  rebuild (children fuel budget seed)
+termination_by (fuel, 2)
+
+/-- The child schedule includes the live walk; contradiction can retain entry bounds. -/
+noncomputable def children (fuel budget : Nat) (seed : List Guard × Profile) : List Guard × Profile :=
+  walk fuel budget seed
+termination_by (fuel, 1)
+
+/-- A walk reserves the selected node and then the original suffix at its returned bounds. -/
+noncomputable def walk (fuel budget : Nat) (seed : List Guard × Profile) : List Guard × Profile :=
+  match fuel with
+  | 0 => seed
+  | next + 1 => walk next budget (node next budget seed)
+termination_by (fuel, 0)

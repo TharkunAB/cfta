@@ -1,0 +1,8 @@
+private def candidates : Nat → Node → List Path
+  | 0, _ => []
+  | fuel + 1, .node _ rows _ _ =>
+      [] :: rows.flatMap (fun row => row.children.zipIdx.flatMap
+        (fun child => (candidates fuel child.1).map (child.2 :: ·)))
+  | fuel + 1, .union _ members _ _ =>
+      [] :: members.flatMap (candidates fuel)
+  | _ + 1, _ => [[]]

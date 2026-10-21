@@ -1,0 +1,9 @@
+  cases value with
+  | empty | reference => simpa only [InternedValueMass.value] using stored.positive
+  | node entry rows depth free | mu entry rows depth free | union entry rows depth free =>
+    exact stored.nodes entry.key _ (known.resident entry rfl)
+
+/-- Exact edge residency supplies the stored edge mass bound. -/
+theorem resident (source : State Symbol Guard) (stored : Stored bound source)
+    (edge : EdgeValue Symbol Guard) (known : EdgeResident source edge) : InternedValueMass.edge edge ≤ bound :=
+  stored.edges edge.entry.key edge known

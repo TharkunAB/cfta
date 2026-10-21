@@ -1,0 +1,50 @@
+local macro "active_induction" recursor:ident actual:ident : tactic => `(tactic|
+  (apply $recursor
+     (motive_1 := fun _ before _ after _ => NoNewActive before after)
+     (motive_2 := fun _ before _ after _ => NoNewActive before after)
+     (motive_3 := fun _ before _ after _ => NoNewActive before after)
+     (motive_4 := fun _ before _ after _ => NoNewActive before after)
+     (motive_5 := fun _ _ before _ after _ => NoNewActive before after)
+     (motive_6 := fun _ _ before _ after _ => NoNewActive before after)
+     (motive_7 := fun _ _ before _ after _ => NoNewActive before after)
+     (motive_8 := fun _ _ _ before _ after _ => NoNewActive before after)
+     (t := $actual)
+   · intro request before handle running result started
+     exact node_hit started
+   · intro request before handle running original result middle started body ih
+     exact node_evaluate result started ih
+   · intro inherited before
+     exact NoNewActive.refl before
+   · intro inherited entry members depth free before
+     exact NoNewActive.refl before
+   · intro entry body depth ordinary result heap inherited before actual
+     exact advance _ _ _ _
+   · intro inherited edges before results middle entry depth free actual ih
+     exact ih.trans (advance _ _ _ _)
+   · intro request before handle running result started
+     exact edge_hit started
+   · intro request before handle running original result middle started body ih
+     exact edge_evaluate result started ih
+   · intro loaded inherited result checked fourth merge edge before field actual
+     exact advance _ _ _ _
+   · intro inherited before
+     exact NoNewActive.refl before
+   · intro inherited original before narrowed middle result afterChildren originals results after edge children rest ihEdge ihChildren ihRest
+     exact (ihEdge.trans ihChildren).trans ihRest
+   · intro inherited payload before edge results middle combined actual ih
+     exact ((advance before _ _ _).trans ih).trans (advance _ _ _ _)
+   · intro values before
+     exact NoNewActive.refl before
+   · intro identity records values before results after actual ih
+     exact ih
+   · intro combined index before
+     exact NoNewActive.refl before
+   · intro before combined index value result middle values results after head rest ihHead ihRest
+     exact ((advance before _ _ _).trans ihHead).trans ihRest))
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Node]
+
+/-- A completed node call leaves no new active owner in either family. -/
+theorem node_call {budget : Nat} {request : NodeRequest} {before after : Caller width} {result : Node}
+    (actual : NodeCall budget request before result after) : NoNewActive before after := by
+  active_induction NodeCall.rec actual

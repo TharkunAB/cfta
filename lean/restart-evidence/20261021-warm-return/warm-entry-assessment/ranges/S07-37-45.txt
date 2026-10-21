@@ -1,0 +1,9 @@
+/-- A complete value has its physical key in the current canonical interner. -/
+def Stored (cache : Cache.State Key) (value : Value) : Prop := Recorded cache value.payload value.identity
+
+/-- A complete recorded value also retains coherent nontrivial ascending records. -/
+def Ready (cache : Cache.State Key) (value : Value) : Prop := Stored cache value ∧ SourceEqualityDescend.WellFormed value.payload
+
+/-- Canonical table growth retains the original complete physical value. -/
+theorem Ready.grows (ready : Ready before value) (growth : Cache.Extends before.table after.table) : Ready after value :=
+  ⟨ready.1.grows growth, ready.2⟩

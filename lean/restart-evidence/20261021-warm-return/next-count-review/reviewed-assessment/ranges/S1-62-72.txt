@@ -1,0 +1,11 @@
+private noncomputable def positivePaths (value : Node) : List Path := by
+  classical
+  exact ((candidates (InternedValueMass.value value + 1) value).filter
+    (fun path => decide (PositiveAt value path))).eraseDups
+
+private theorem positivePaths_spec {value path} :
+    path ∈ positivePaths value ↔ PositiveAt value path := by
+  classical
+  simp only [positivePaths, List.mem_eraseDups, List.mem_filter, decide_eq_true_eq]
+  exact ⟨And.right, fun positive =>
+    ⟨candidates_complete positive _ (by omega), positive⟩⟩

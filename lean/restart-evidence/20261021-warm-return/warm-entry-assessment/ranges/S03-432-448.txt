@@ -1,0 +1,17 @@
+theorem node_call (fuel : Nat) :
+  ∀ {g s r e p h m c n budget : Nat} {request : NodeRequest} {before after : Caller (bits+2)} {result : Node}
+    {inventory : Inventory} {memos : Memos} (seed : Seed),
+    Context formulas solver inventory before memos → Frame formulas solver inventory before.checked →
+    Fits seed.2 before.checked → Carrier (fun guard => guard ∈ seed.1) before.checked.native.machine.heap →
+    EqReady before.checked.operations.constraints request.inherited → Available before.checked.native.machine.heap request.value →
+    Room bits (Schedule.node fuel budget seed).2 →
+    nodeCall fuel g s r e p h m c n budget request before = .done result after →
+    ∃ next final, ∃ actual : NodeCall budget request before result after,
+      NodeCallReads formulas solver actual memos final ∧
+      Post formulas solver next before after final ∧
+      Frame formulas solver next after.checked ∧ Fits (Schedule.node fuel budget seed).2 after.checked ∧
+      Carrier (fun guard => guard ∈ (Schedule.node fuel budget seed).1) after.checked.native.machine.heap ∧
+      Available after.checked.native.machine.heap result ∧ NodeLaw formulas solver request result := by
+  intro g s r e p h m c n budget request before after result inventory memos seed initial frame fits known inherited available room done
+  simpa only [Returned, and_assoc] using
+    ((all_actual formulas solver (bits := bits) fuel).1 seed initial frame fits known inherited available room done)

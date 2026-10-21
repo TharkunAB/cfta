@@ -1,0 +1,23 @@
+/-- A completed node call retains stores through its actual completed siblings. -/
+theorem node_call
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (fuel : Nat) {g s r e p h m c n budget : Nat}
+    {request : NodeRequest} {before after : Caller (bits + 2)} {result : Node}
+    {inventory : Inventory} {memos : Memos} (seed : Seed)
+    (initial : Context formulas solver inventory before memos)
+    (frame : Frame formulas solver inventory before.checked) (fits : Fits seed.2 before.checked)
+    (known : Carrier (fun guard => guard ∈ seed.1) before.checked.native.machine.heap)
+    (inherited : EqReady before.checked.operations.constraints request.inherited)
+    (available : Available before.checked.native.machine.heap request.value)
+    (room : Room bits (SourceCurrentOuterInitialSchedule.node fuel budget seed).2)
+    (normal : UnionNormal before.checked.native.machine.heap)
+    (supported : NativeSupport before.checked.native.machine.heap before.checked.native)
+    (causal : History empty before.checked.native.machine.heap)
+    (merged : MergeStored before.merge) (positiveMemo : MergeSupport before.merge)
+    (observed : SourceCurrentAllocatedPartialWorker.nodeCall fuel g s r e p h m c n budget request before = .done result after) :
+    NativeSupport after.checked.native.machine.heap after.checked.native ∧
+      Nonempty (History empty after.checked.native.machine.heap) ∧
+      MergeStored after.merge ∧ MergeSupport after.merge ∧ UnionNormal after.checked.native.machine.heap := by
+  exact (all_stores formulas solver (bits := bits) fuel).1 seed initial frame fits known inherited available room observed
+    ⟨supported,⟨causal⟩,merged,positiveMemo,normal⟩

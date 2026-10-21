@@ -1,0 +1,24 @@
+theorem node_call
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    {g s r e p h m c n budget fuel : Nat}
+    {request : NodeRequest} {before after : Caller (bits + 2)} {result : Node}
+    {inventory : Inventory} {memos : Memos} (seed : List Guard × Profile)
+    (initial : Context formulas solver inventory before memos)
+    (frame : Frame formulas solver inventory before.checked)
+    (fits : Fits seed.2 before.checked)
+    (known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.1)
+      before.checked.native.machine.heap)
+    (inputs : SourceCurrentOuterPrefixInvariants.NodeReady before request)
+    (room : Room bits (SourceCurrentOuterInitialSchedule.node fuel budget seed).2)
+    (normal : SourceCurrentRequiredUnionNormal.UnionNormal before.checked.native.machine.heap)
+    (supported : SourceCurrentNativeRequestPositivePositions.Support
+      before.checked.native.machine.heap before.checked.native)
+    (causal : SourceCurrentNativeMuPublication.History empty before.checked.native.machine.heap)
+    (merged : SourceCurrentConstrainedCapMemoMerge.Stored
+      (fun guard : Guard => SourceMemoGate.plain guard = true) before.merge)
+    (positiveMemo : SourceCurrentMergePositivePosition.Support before.merge)
+    (origins : SourceCurrentResourceParentWriters.Origins formulas solver before)
+    (stored : NodeStored before) (closed : request.value.free = [])
+    (observed : nodeCall fuel g s r e p h m c n budget request before = .done result after) :
+    NodeStored after ∧ result.free = []

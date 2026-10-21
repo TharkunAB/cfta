@@ -1,0 +1,12 @@
+private theorem all_origins (fuel : Nat) :
+    NodeCallAt formulas solver (bits := bits) fuel ∧ NodeBodyAt formulas solver (bits := bits) fuel ∧
+    RowsAt formulas solver (bits := bits) fuel ∧ DescendantsAt formulas solver (bits := bits) fuel ∧
+    ChildrenAt formulas solver (bits := bits) fuel ∧ WalkAt formulas solver (bits := bits) fuel := by
+  induction fuel using Nat.strongRecOn with
+  | ind fuel ih =>
+      have walks : WalkAt formulas solver (bits := bits) fuel := walk_step formulas solver fuel (fun smaller less => (ih smaller less).1) (fun smaller less => (ih smaller less).2.2.2.2.2)
+      have child : ChildrenAt formulas solver (bits := bits) fuel := children_step formulas solver fuel walks
+      have descendAt : DescendantsAt formulas solver (bits := bits) fuel := descendants_step formulas solver fuel child
+      have rowsAt : RowsAt formulas solver (bits := bits) fuel := rows_step formulas solver fuel (fun smaller less => (ih smaller less).2.2.2.1) (fun smaller less => (ih smaller less).2.2.1)
+      have bodyAt : NodeBodyAt formulas solver (bits := bits) fuel := nodeBody_step formulas solver fuel (fun smaller less => (ih smaller less).2.2.1)
+      exact ⟨nodeCall_step formulas solver fuel bodyAt,bodyAt,rowsAt,descendAt,child,walks⟩

@@ -1,0 +1,11 @@
+private def NodeCallAt (first : Phase (bits+2)) (fuel : Nat) : Prop :=
+  ∀ {request : NodeRequest} {before after : Caller (bits+2)} {result : Node},
+    Reached g s r e p h m c n budget first (.node fuel request before) →
+    nodeCall fuel g s r e p h m c n budget request before = .done result after →
+    NodeStored before → request.value.free = [] → NodeStored after ∧ result.free = []
+
+private def NodeBodyAt (first : Phase (bits+2)) (fuel : Nat) : Prop :=
+  ∀ {request : NodeRequest} {before after : Caller (bits+2)} {result : Node},
+    Reached g s r e p h m c n budget first (.body fuel request before) →
+    nodeBody fuel g s r e p h m c n budget request before = .done result after →
+    NodeStored before → request.value.free = [] → NodeStored after ∧ result.free = []

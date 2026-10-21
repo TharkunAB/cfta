@@ -1,0 +1,19 @@
+private theorem node_evaluate {request owner : NodeRequest} {before running middle : Caller width}
+    {handle : Nat} (result : Node)
+    (started : beginNode request before = (handle, .evaluate owner, running))
+    (body : NoNewActive running middle) : NoNewActive before (finishNode handle result middle) := by
+  have components := beginNode_components request before
+  rw [started] at components
+  dsimp only at components
+  constructor
+  · intro other original found
+    have different : other ≠ handle := by
+      intro same
+      subst other
+      exact FlatMemoThunk.finish_not_running handle result middle.nodeResults original found
+    have earlier := body.nodes other original
+      (FlatMemoThunk.finish_running_before handle result middle.nodeResults other original found)
+    exact node_other request before other original (by simpa only [started] using different)
+      (by simpa only [started] using earlier)
+  · intro other original found
+    simpa only [components.2.2.2] using body.edges other original found

@@ -1,0 +1,26 @@
+  induction actual with
+  | refl => exact ⟨stored,closed⟩
+  | snoc earlier step ih =>
+    obtain ⟨stored,closed⟩ := ih
+    cases step with
+    | @node_evaluate request before handle running original fuel started =>
+      obtain ⟨i,globals,current,_,post,_frm,_fts,_known,ins,_⟩ := resources earlier
+      have retained := begin_stored (before := before) request stored
+      rw [started] at retained
+      exact ⟨retained,node_start_closed formulas solver post.context ins.1 ins.2 started closed⟩
+    | body_rows shape =>
+      obtain ⟨i,globals,current,_,post,_frm,_fts,_known,ins,_⟩ := resources earlier
+      dsimp only [InputsClosed,SourceCurrentOuterPrefixInvariants.Inputs,SourceCurrentOuterPrefixInvariants.NodeReady] at closed ins
+      rw [shape] at closed ins
+      exact ⟨stored,MergedColdReaderClosed.node_children_closed _ post.context.ready.semantic.ready.semantic.1.normal.facts _ _ _ _ ins.2 closed⟩
+    | rows_edge done => exact edgeAt earlier done stored (closed _ List.mem_cons_self)
+    | rows_tail edge children =>
+      have head := edgeAt earlier edge stored (closed _ List.mem_cons_self)
+      have returned := (complete _).2.2.2.1 (.snoc earlier (.rows_edge edge)) children head.1 head.2
+      exact ⟨returned.1,fun _ member => closed _ (List.mem_cons_of_mem _ member)⟩
+    | descendants_children => exact ⟨stored,closed⟩
+    | children_walk => exact ⟨stored,closed⟩
+    | walk_head => exact ⟨stored,closed _ List.mem_cons_self⟩
+    | walk_tail done =>
+      have returned := (complete _).1 (.snoc earlier .walk_head) done stored (closed _ List.mem_cons_self)
+      exact ⟨returned.1,fun _ member => closed _ (List.mem_cons_of_mem _ member)⟩

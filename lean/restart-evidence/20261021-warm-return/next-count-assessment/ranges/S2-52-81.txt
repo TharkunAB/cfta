@@ -1,0 +1,30 @@
+/-- The complete child-list mass determines the edge mass. -/
+theorem edge_children (row : EdgeValue Symbol Guard) : edge row = 1 + values row.children := by
+  cases row
+  simp only [edge, EdgeValue.children]
+
+/-- Appending immutable value lists adds their structural masses. -/
+theorem values_append (first last : List (Value Symbol Guard)) : values (first ++ last) = values first + values last := by
+  induction first with
+  | nil => simp only [List.nil_append, values, Nat.zero_add]
+  | cons first rest ih => simp only [List.cons_append, values, ih]; omega
+
+/-- Appending immutable row lists adds their structural masses. -/
+theorem edges_append (first last : List (EdgeValue Symbol Guard)) : edges (first ++ last) = edges first + edges last := by
+  induction first with
+  | nil => simp only [List.nil_append, edges, Nat.zero_add]
+  | cons first rest ih => simp only [List.cons_append, edges, ih]; omega
+
+/-- Value-list mass is its length plus the sum of the complete value masses. -/
+theorem values_eq_length_sum (nodes : List (Value Symbol Guard)) :
+    values nodes = nodes.length + (nodes.map value).sum := by
+  induction nodes with
+  | nil => simp only [values, List.length_nil, List.map_nil, List.sum_nil, Nat.zero_add]
+  | cons first rest ih => simp only [values, List.length_cons, List.map_cons, List.sum_cons, ih]; omega
+
+/-- Row-list mass is its length plus the sum of the complete edge masses. -/
+theorem edges_eq_length_sum (rows : List (EdgeValue Symbol Guard)) :
+    edges rows = rows.length + (rows.map edge).sum := by
+  induction rows with
+  | nil => simp only [edges, List.length_nil, List.map_nil, List.sum_nil, Nat.zero_add]
+  | cons first rest ih => simp only [edges, List.length_cons, List.map_cons, List.sum_cons, ih]; omega
