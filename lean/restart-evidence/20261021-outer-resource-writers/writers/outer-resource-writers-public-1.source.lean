@@ -1,0 +1,477 @@
+import MicroCFTA.SourceCurrentResourceParentWriters
+import MicroCFTA.SourceCurrentOuterPrefixNativeStores
+
+/-!
+# Resource writer cells through actual outer prefixes
+
+Completed earlier calls retain their actual resource-backed edge writers.
+The reached endpoint uses only the supplied earlier prefix and entry resources.
+-/
+namespace MicroCFTA.SourceCurrentOuterResourceWriters
+open Cache Language InternedConstructorTemplates InternedProbeProvenance
+open InternedNestedProvenance (Values Edges)
+open SourceCurrentAllocatedPartialState SourceCurrentAllocatedPartialGraph
+open SourceCurrentAllocatedPartialWorker
+open SourceCurrentAllocatedPartialInvariant (Context)
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedNativeResourceForecast (Profile Room)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Frame Fits)
+open SourceCurrentAllocatedPartialWorkerStability (bind_done_iff)
+open SourceCurrentOuterCopiedWarmHit (Phase)
+open SourceCurrentOuterExecutionAncestry (Step Reached)
+open SourceCurrentOuterPrefixInvariants (Inputs)
+open SourceCurrentOuterInitialPrefix (forecast)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Guard
+local notation "Edge" => EdgeValue Symbol Guard
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "EqValue" => SourceEqualityConstraintAllocation.Value
+local notation "EqReady" => SourceEqualityConstraintAllocation.Ready
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Carrier" => SourceEqualityAnnotationHeap.Heap
+local notation "Seed" => List Guard × Profile
+local notation "caller" => SourceCurrentOuterActiveAncestry.caller
+local notation "Plain" => (fun guard : Guard => SourceMemoGate.plain guard = true)
+local notation "NativeSupport" => SourceCurrentNativeRequestPositivePositions.Support
+local notation "History" => SourceCurrentNativeMuPublication.History
+local notation "MergeStored" => SourceCurrentConstrainedCapMemoMerge.Stored Plain
+local notation "MergeSupport" => SourceCurrentMergePositivePosition.Support
+local notation "UnionNormal" => SourceCurrentRequiredUnionNormal.UnionNormal
+local notation "Resident" => InternedEdgeResidency.EdgeResident
+local notation "Origins" => SourceCurrentResourceParentWriters.Origins
+namespace Schedule
+export SourceCurrentOuterInitialSchedule
+  (parent node body rows descendants children walk parent_reserved rows_ge descendants_ge walk_ge rebuild_ge)
+end Schedule
+variable {bits : Nat}
+variable (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+
+private def Stores [DecidableEq (EdgeKey Symbol Guard)] (state : Caller (bits+2)) : Prop :=
+  NativeSupport state.checked.native.machine.heap state.checked.native ∧
+    Nonempty (History empty state.checked.native.machine.heap) ∧
+    MergeStored state.merge ∧ MergeSupport state.merge ∧ UnionNormal state.checked.native.machine.heap
+
+private theorem reservation [DecidableEq (EdgeKey Symbol Guard)]
+    {inventory : Inventory} {budget : Nat} {request : EdgeRequest}
+    {before : Caller (bits+2)} {memos : Memos} {profile : Profile} {alphabet : List Guard}
+    (initial : Context formulas solver inventory before memos) (fits : Fits profile before.checked)
+    (known : Carrier (fun guard => guard ∈ alphabet) before.checked.native.machine.heap)
+    (inherited : EqReady before.checked.operations.constraints request.inherited)
+    (resident : Resident before.checked.native.machine.heap request.value)
+    (uniform : SourceCurrentParentAlphabetReservation.UniformReserved bits budget alphabet profile) :
+    SourceCurrentEdgeCallNumeric.Reserved bits budget request before profile := by
+  generalize started : beginEdge request before = observation
+  obtain ⟨handle,action,running⟩ := observation
+  cases action with
+  | evaluate captured =>
+      obtain ⟨runningContext,owner,_key,_cell⟩ :=
+        SourceCurrentAllocatedPartialCallSteps.edge_start formulas solver initial inherited resident started
+      have checked := (beginEdge_components request before).1
+      rw [started] at checked
+      dsimp only at checked
+      have bounded : Fits profile running.checked := by simpa only [checked] using fits
+      have carrier : Carrier (fun guard => guard ∈ alphabet) running.checked.native.machine.heap := by simpa only [checked] using known
+      have room := SourceCurrentParentAlphabetReservation.resident_reserved formulas solver inventory budget alphabet captured
+        running memos runningContext profile bounded carrier owner.inherited owner.input uniform
+      simpa only [SourceCurrentEdgeCallNumeric.Reserved,started] using room
+  | ready | busy | absent => simp only [SourceCurrentEdgeCallNumeric.Reserved,started]
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Node]
+
+private theorem same_edges {before after : Caller (bits+2)}
+    (same : after.edgeResults = before.edgeResults) (origins : Origins formulas solver before) :
+    Origins formulas solver after := by
+  simpa only [SourceCurrentResourceParentWriters.Origins,same] using origins
+
+private theorem head_edge
+    {fuel g s r e p h m c n budget : Nat} {request : EdgeRequest}
+    {before after : Caller (bits+2)} {result : Edge} {inventory : Inventory} {memos : Memos} (seed : Seed)
+    (initial : Context formulas solver inventory before memos)
+    (frame : Frame formulas solver inventory before.checked) (fits : Fits seed.2 before.checked)
+    (known : Carrier (fun guard => guard ∈ seed.1) before.checked.native.machine.heap)
+    (inherited : EqReady before.checked.operations.constraints request.inherited)
+    (resident : Resident before.checked.native.machine.heap request.value)
+    (uniform : SourceCurrentParentAlphabetReservation.UniformReserved bits budget seed.1 seed.2)
+    (observed : edgeCall fuel g s r e p h m c n budget request before = .done result after)
+    (stores : Stores before) (origins : Origins formulas solver before) :
+    ∃ next final, SourceCurrentEdgeCallNumeric.Receipt formulas solver next seed.2 budget request before memos result after final ∧
+      Fits (Schedule.parent budget seed).2 after.checked ∧
+      Carrier (fun guard => guard ∈ (Schedule.parent budget seed).1) after.checked.native.machine.heap ∧
+      Origins formulas solver after ∧ Stores after := by
+  have reserved := reservation formulas solver (request := request) initial fits known inherited resident uniform
+  obtain ⟨next,final,receipt,numeric,carrier⟩ := SourceCurrentOuterEdgeGuardAlphabet.edge_call
+    formulas solver inventory budget seed.1 request before memos initial frame seed.2 fits known
+    inherited resident uniform observed
+  obtain ⟨causal⟩ := stores.2.1
+  have written := SourceCurrentResourceParentWriters.edge_call formulas solver inventory seed.2 memos
+    observed initial frame fits inherited resident reserved origins stores.2.2.2.2 stores.1 causal
+    stores.2.2.1 stores.2.2.2.1
+  have returned := SourceCurrentOuterNativeStores.edge_call formulas solver inventory next budget request
+    before after memos final seed.2 result initial frame fits inherited resident reserved receipt
+    stores.2.2.2.2 stores.1 causal stores.2.2.1 stores.2.2.2.1
+  exact ⟨next,final,receipt,numeric,carrier,written.1,returned⟩
+
+private def NodeCallAt (fuel : Nat) : Prop :=
+  ∀ {g s r e p h m c n budget : Nat} {request : NodeRequest} {before after : Caller (bits+2)} {result : Node}
+    {inventory : Inventory} {memos : Memos} (seed : Seed),
+    Context formulas solver inventory before memos → Frame formulas solver inventory before.checked →
+    Fits seed.2 before.checked → Carrier (fun guard => guard ∈ seed.1) before.checked.native.machine.heap →
+    EqReady before.checked.operations.constraints request.inherited → Available before.checked.native.machine.heap request.value →
+    Room bits (Schedule.node fuel budget seed).2 →
+    nodeCall fuel g s r e p h m c n budget request before = .done result after →
+    Stores before → Origins formulas solver before → Origins formulas solver after
+
+private def NodeBodyAt (fuel : Nat) : Prop :=
+  ∀ {g s r e p h m c n budget : Nat} {request : NodeRequest} {before after : Caller (bits+2)} {result : Node}
+    {inventory : Inventory} {memos : Memos} (seed : Seed),
+    Context formulas solver inventory before memos → Frame formulas solver inventory before.checked →
+    Fits seed.2 before.checked → Carrier (fun guard => guard ∈ seed.1) before.checked.native.machine.heap →
+    EqReady before.checked.operations.constraints request.inherited → Available before.checked.native.machine.heap request.value →
+    Room bits (Schedule.body fuel budget seed).2 →
+    nodeBody fuel g s r e p h m c n budget request before = .done result after →
+    Stores before → Origins formulas solver before → Origins formulas solver after
+
+private def RowsAt (fuel : Nat) : Prop :=
+  ∀ {g s r e p h m c n budget : Nat} {inherited : EqValue} {values results : List Edge} {before after : Caller (bits+2)}
+    {inventory : Inventory} {memos : Memos} (seed : Seed),
+    Context formulas solver inventory before memos → Frame formulas solver inventory before.checked →
+    Fits seed.2 before.checked → Carrier (fun guard => guard ∈ seed.1) before.checked.native.machine.heap →
+    EqReady before.checked.operations.constraints inherited → Edges before.checked.native.machine.heap values →
+    Room bits (Schedule.rows fuel budget seed).2 →
+    rows fuel g s r e p h m c n budget inherited values before = .done results after →
+    Stores before → Origins formulas solver before → Origins formulas solver after
+
+private def DescendantsAt (fuel : Nat) : Prop :=
+  ∀ {g s r e p h m c n budget : Nat} {inherited : EqValue} {value result : Edge} {before after : Caller (bits+2)}
+    {inventory : Inventory} {memos : Memos} (seed : Seed),
+    Context formulas solver inventory before memos → Frame formulas solver inventory before.checked →
+    Fits seed.2 before.checked → Carrier (fun guard => guard ∈ seed.1) before.checked.native.machine.heap →
+    EqReady before.checked.operations.constraints inherited → Resident before.checked.native.machine.heap value →
+    Room bits (Schedule.descendants fuel budget seed).2 →
+    descendants fuel g s r e p h m c n budget inherited value before = .done result after →
+    Stores before → Origins formulas solver before → Origins formulas solver after
+
+private def ChildrenAt (fuel : Nat) : Prop :=
+  ∀ {g s r e p h m c n budget : Nat} {combined : EqValue} {values results : List Node} {before after : Caller (bits+2)}
+    {inventory : Inventory} {memos : Memos} (seed : Seed),
+    Context formulas solver inventory before memos → Frame formulas solver inventory before.checked →
+    Fits seed.2 before.checked → Carrier (fun guard => guard ∈ seed.1) before.checked.native.machine.heap →
+    EqReady before.checked.operations.constraints combined → Values before.checked.native.machine.heap values →
+    Room bits (Schedule.children fuel budget seed).2 →
+    SourceCurrentAllocatedPartialWorker.children fuel g s r e p h m c n budget combined values before = .done results after →
+    Stores before → Origins formulas solver before → Origins formulas solver after
+
+private def WalkAt (fuel : Nat) : Prop :=
+  ∀ {g s r e p h m c n budget : Nat} {combined : EqValue} {index : Nat} {values results : List Node} {before after : Caller (bits+2)}
+    {inventory : Inventory} {memos : Memos} (seed : Seed),
+    Context formulas solver inventory before memos → Frame formulas solver inventory before.checked →
+    Fits seed.2 before.checked → Carrier (fun guard => guard ∈ seed.1) before.checked.native.machine.heap →
+    EqReady before.checked.operations.constraints combined → Values before.checked.native.machine.heap values →
+    Room bits (Schedule.walk fuel budget seed).2 →
+    walk fuel g s r e p h m c n budget combined index values before = .done results after →
+    Stores before → Origins formulas solver before → Origins formulas solver after
+
+private theorem nodeCall_step (fuel : Nat) (bodyAt : NodeBodyAt formulas solver (bits := bits) fuel) :
+    NodeCallAt formulas solver (bits := bits) fuel := by
+  intro g s r e p h m c n budget request before after result inventory memos seed
+    initial frame fits known inherited available room done stores origins
+  rcases started : beginNode request before with ⟨handle,action,running⟩
+  have components := beginNode_components request before
+  rw [started] at components
+  dsimp only at components
+  obtain ⟨checked,merge,_fourth,edges⟩ := components
+  cases action with
+  | ready value =>
+      simp only [nodeCall,started] at done
+      cases done
+      exact same_edges formulas solver edges origins
+  | evaluate captured =>
+      simp only [nodeCall,started] at done
+      obtain ⟨value,middle,first,last⟩ := (bind_done_iff _ _ _ _).mp done
+      cases last
+      obtain ⟨runningContext,owner,_key,_cell⟩ :=
+        SourceCurrentAllocatedPartialCallSteps.node_start formulas solver initial inherited available started
+      have runningFrame : Frame formulas solver inventory running.checked := by simpa only [checked] using frame
+      have runningFits : Fits seed.2 running.checked := by simpa only [checked] using fits
+      have runningKnown : Carrier (fun guard => guard ∈ seed.1) running.checked.native.machine.heap := by simpa only [checked] using known
+      have runningStores : Stores running := by simpa only [Stores,checked,merge] using stores
+      have bodyRoom : Room bits (Schedule.body fuel budget seed).2 := by simpa only [Schedule.node] using room
+      have returned := bodyAt (after := middle) seed runningContext runningFrame runningFits runningKnown
+        owner.inherited owner.input bodyRoom first runningStores (same_edges formulas solver edges origins)
+      exact returned
+  | busy | absent => simp only [nodeCall,started] at done; cases done
+
+private theorem walk_step (fuel : Nat)
+    (nodes : ∀ smaller, smaller < fuel → NodeCallAt formulas solver (bits := bits) smaller)
+    (tails : ∀ smaller, smaller < fuel → WalkAt formulas solver (bits := bits) smaller) :
+    WalkAt formulas solver (bits := bits) fuel := by
+  intro g s r e p h m c n budget combined index values results before after inventory memos seed
+    initial frame fits known inherited available room done stores origins
+  cases values with
+  | nil => simp only [walk] at done; cases done; exact origins
+  | cons value rest =>
+      cases fuel with
+      | zero => simp only [walk] at done; cases done
+      | succ fuel =>
+          rw [Schedule.walk] at room
+          simp only [walk] at done
+          obtain ⟨headValue,middle,first,remaining⟩ := (bind_done_iff _ _ _ _).mp done
+          obtain ⟨restValues,finalState,tail,last⟩ := (bind_done_iff _ _ _ _).mp remaining
+          cases last
+          obtain ⟨descentReceipt,descentFrame,descentFits,descentPost⟩ := SourceCurrentInheritedNumeric.descent
+            formulas solver inventory before memos combined index initial frame seed.2 fits inherited
+          have nodeRoom : Room bits (Schedule.node fuel budget seed).2 :=
+            room.mono (Schedule.walk_ge fuel budget (Schedule.node fuel budget seed)).1
+          have headOrigins := nodes fuel (Nat.lt_succ_self _)
+            (request := ⟨(descend before combined index).1,value⟩) (before := (descend before combined index).2)
+            seed descentPost.context descentFrame descentFits known descentReceipt.inherited
+            (descentPost.effects.keeps.available _ (available value List.mem_cons_self)) nodeRoom first stores origins
+          obtain ⟨headInventory,headMemos,_graph,_reads,headPost,headFrame,headFits,headKnown,_available,_law⟩ :=
+            SourceCurrentOuterInitialActual.node_call formulas solver fuel
+              (request := ⟨(descend before combined index).1,value⟩) (before := (descend before combined index).2) seed descentPost.context descentFrame descentFits known
+              descentReceipt.inherited (descentPost.effects.keeps.available _ (available value List.mem_cons_self)) nodeRoom first
+          obtain ⟨causal⟩ := stores.2.1
+          have headStores := SourceCurrentOuterNativeStores.node_call formulas solver fuel
+            (request := ⟨(descend before combined index).1,value⟩) (before := (descend before combined index).2) seed
+            descentPost.context descentFrame descentFits known descentReceipt.inherited
+            (descentPost.effects.keeps.available _ (available value List.mem_cons_self)) nodeRoom
+            stores.2.2.2.2 stores.1 causal stores.2.2.1 stores.2.2.2.1 first
+          have firstPost := descentPost.trans headPost
+          have tailAvailable : Values middle.checked.native.machine.heap rest := fun child member =>
+            firstPost.effects.keeps.available _ (available child (List.mem_cons_of_mem _ member))
+          exact tails fuel (Nat.lt_succ_self _) (Schedule.node fuel budget seed) headPost.context headFrame headFits headKnown
+            (inherited.grows firstPost.effects.grows.constraint_growth) tailAvailable room tail headStores headOrigins
+
+private theorem children_step (fuel : Nat) (walks : WalkAt formulas solver (bits := bits) fuel) :
+    ChildrenAt formulas solver (bits := bits) fuel := by
+  intro g s r e p h m c n budget combined values results before after inventory memos seed
+    initial frame fits known inherited available room done stores origins
+  cases combined with
+  | contradiction =>
+      simp only [SourceCurrentAllocatedPartialWorker.children] at done
+      cases done
+      exact origins
+  | live identity records =>
+      rw [Schedule.children] at room
+      simp only [SourceCurrentAllocatedPartialWorker.children] at done
+      exact walks seed initial frame fits known inherited available room done stores origins
+
+private theorem descendants_step (fuel : Nat) (child : ChildrenAt formulas solver (bits := bits) fuel) :
+    DescendantsAt formulas solver (bits := bits) fuel := by
+  intro g s r e p h m c n budget inherited value result before after inventory memos seed
+    initial frame fits known inheritedReady resident room done stores origins
+  rw [Schedule.descendants] at room
+  cases observed : SourceCurrentAllocatedInheritedPrefix.run value.entry.key.constraint inherited before.checked.operations with
+  | mk answer operations =>
+      cases answer with
+      | error message => simp only [descendants,observed] at done; cases done
+      | ok answer =>
+          cases answer with
+          | none => simp only [descendants,observed] at done; cases done
+          | some combined =>
+              have prefixSame : prefixState before value inherited = advance before
+                  (SourceCurrentAllocatedQueryMemo.advancePhysical before.checked ⟨before.checked.native.machine.heap,operations⟩)
+                  before.fourth before.merge := by simp only [prefixState,SourceCurrentAllocatedInheritedPrefix.state,observed]
+              simp only [descendants,observed] at done
+              rw [←prefixSame] at done
+              obtain ⟨values,middle,first,last⟩ := (bind_done_iff _ _ _ _).mp done
+              cases last
+              have combinedEquation : (SourceCurrentAllocatedInheritedPrefix.run value.entry.key.constraint inherited
+                  before.checked.operations).1 = .ok (some combined) := by rw [observed]
+              obtain ⟨chosen,prefixReceipt,prefixFrame,prefixFits,prefixPost⟩ :=
+                SourceCurrentInheritedNumeric.resident_complete formulas solver inventory value inherited before memos
+                  initial frame seed.2 fits (fun _ => resident) (fun _ => inheritedReady)
+              have same := Option.some.inj (Except.ok.inj (prefixReceipt.actual.symm.trans combinedEquation))
+              subst chosen
+              have inputs := initial.ready.semantic.ready.semantic.1.normal.facts.cached.edges value.entry.key value resident
+              have childInputs : Values (prefixState before value inherited).checked.native.machine.heap value.children :=
+                fun item member => prefixPost.effects.keeps.available _ (inputs item member)
+              have childRoom : Room bits (Schedule.children fuel budget seed).2 := room.mono (Schedule.rebuild_ge _).1
+              change Origins formulas solver middle
+              exact child seed prefixPost.context prefixFrame prefixFits known prefixReceipt.combinedReady
+                childInputs childRoom first stores origins
+
+private theorem rows_step (fuel : Nat)
+    (descendAt : ∀ smaller, smaller < fuel → DescendantsAt formulas solver (bits := bits) smaller)
+    (tails : ∀ smaller, smaller < fuel → RowsAt formulas solver (bits := bits) smaller) :
+    RowsAt formulas solver (bits := bits) fuel := by
+  intro g s r e p h m c n budget inherited values results before after inventory memos seed
+    initial frame fits known inheritedReady resident room done stores origins
+  cases values with
+  | nil => simp only [rows] at done; cases done; exact origins
+  | cons original rest =>
+      cases fuel with
+      | zero => simp only [rows] at done; cases done
+      | succ fuel =>
+          rw [Schedule.rows] at room
+          simp only [rows] at done
+          obtain ⟨narrowed,middle,first,remaining⟩ := (bind_done_iff _ _ _ _).mp done
+          obtain ⟨edgeResult,current,second,remaining⟩ := (bind_done_iff _ _ _ _).mp remaining
+          obtain ⟨restResults,finalState,tail,last⟩ := (bind_done_iff _ _ _ _).mp remaining
+          cases last
+          let edgeSeed := Schedule.parent budget seed
+          let childSeed := Schedule.descendants fuel budget edgeSeed
+          have edgeRoom : Room bits edgeSeed.2 := room.mono
+            ((Schedule.descendants_ge fuel budget edgeSeed).1.trans (Schedule.rows_ge fuel budget childSeed).1)
+          obtain ⟨edgeInventory,edgeMemos,receipt,edgeFits,edgeKnown,edgeOrigins,edgeStores⟩ :=
+            head_edge formulas solver seed initial frame fits known inheritedReady (resident original List.mem_cons_self)
+              (Schedule.parent_reserved bits budget seed edgeRoom) first stores origins
+          have childRoom : Room bits childSeed.2 := room.mono (Schedule.rows_ge fuel budget childSeed).1
+          have childOrigins := descendAt fuel (Nat.lt_succ_self _) edgeSeed receipt.post.context receipt.frame edgeFits edgeKnown
+            (inheritedReady.grows receipt.post.effects.grows.constraint_growth) receipt.semantic.resident childRoom second edgeStores edgeOrigins
+          obtain ⟨childInventory,childMemos,_graph,_reads,childPost,childFrame,childFits,childKnown,_resident,_law⟩ :=
+            SourceCurrentOuterInitialActual.descendants formulas solver fuel edgeSeed receipt.post.context receipt.frame edgeFits edgeKnown
+              (inheritedReady.grows receipt.post.effects.grows.constraint_growth) receipt.semantic.resident childRoom second
+          obtain ⟨edgeCausal⟩ := edgeStores.2.1
+          have childStores := SourceCurrentOuterNativeStores.descendants formulas solver fuel edgeSeed receipt.post.context
+            receipt.frame edgeFits edgeKnown (inheritedReady.grows receipt.post.effects.grows.constraint_growth)
+            receipt.semantic.resident childRoom edgeStores.2.2.2.2 edgeStores.1 edgeCausal edgeStores.2.2.1 edgeStores.2.2.2.1 second
+          have firstPost := receipt.post.trans childPost
+          have tailResident : Edges current.checked.native.machine.heap rest := fun edge member =>
+            InternedEdgeResidency.edge_grows _ _ firstPost.effects.keeps.growth _ (resident edge (List.mem_cons_of_mem _ member))
+          exact tails fuel (Nat.lt_succ_self _) childSeed childPost.context childFrame childFits childKnown
+            (inheritedReady.grows firstPost.effects.grows.constraint_growth) tailResident room tail childStores childOrigins
+
+private theorem nodeBody_step (fuel : Nat)
+    (rowCalls : ∀ smaller, smaller < fuel → RowsAt formulas solver (bits := bits) smaller) :
+    NodeBodyAt formulas solver (bits := bits) fuel := by
+  intro g s r e p h m c n budget request before after result inventory memos seed
+    initial frame fits known inherited available room done stores origins
+  cases request with
+  | mk inheritedValue value =>
+      cases value with
+      | empty => simp only [nodeBody] at done; cases done; exact origins
+      | union entry members depth free => simp only [nodeBody] at done; cases done; exact origins
+      | reference name => simp only [nodeBody] at done; cases done
+      | mu entry body depth ordinary =>
+          cases computed : SourceEqualityMuReconstruction.rebuild entry body depth ordinary before.checked.native.machine.heap with
+          | done value heap =>
+              simp only [nodeBody,computed] at done
+              cases done
+              exact origins
+          | pending observation heap => simp only [nodeBody,computed] at done; cases done
+      | node entry originals depth free =>
+          cases fuel with
+          | zero => simp only [nodeBody] at done; cases done
+          | succ fuel =>
+              rw [Schedule.body] at room
+              simp only [nodeBody] at done
+              obtain ⟨results,middle,first,last⟩ := (bind_done_iff _ _ _ _).mp done
+              cases last
+              have edges := InternedEdgeResidency.resident_edges _ initial.ready.semantic.ready.semantic.1.normal.facts.linked _ available.resident
+              have rowsRoom : Room bits (Schedule.rows fuel budget seed).2 := room.mono (Schedule.rebuild_ge _).1
+              change Origins formulas solver middle
+              exact rowCalls fuel (Nat.lt_succ_self _) seed initial frame fits known inherited edges rowsRoom first stores origins
+
+private theorem all_origins (fuel : Nat) :
+    NodeCallAt formulas solver (bits := bits) fuel ∧ NodeBodyAt formulas solver (bits := bits) fuel ∧
+    RowsAt formulas solver (bits := bits) fuel ∧ DescendantsAt formulas solver (bits := bits) fuel ∧
+    ChildrenAt formulas solver (bits := bits) fuel ∧ WalkAt formulas solver (bits := bits) fuel := by
+  induction fuel using Nat.strongRecOn with
+  | ind fuel ih =>
+      have walks : WalkAt formulas solver (bits := bits) fuel := walk_step formulas solver fuel (fun smaller less => (ih smaller less).1) (fun smaller less => (ih smaller less).2.2.2.2.2)
+      have child : ChildrenAt formulas solver (bits := bits) fuel := children_step formulas solver fuel walks
+      have descendAt : DescendantsAt formulas solver (bits := bits) fuel := descendants_step formulas solver fuel child
+      have rowsAt : RowsAt formulas solver (bits := bits) fuel := rows_step formulas solver fuel (fun smaller less => (ih smaller less).2.2.2.1) (fun smaller less => (ih smaller less).2.2.1)
+      have bodyAt : NodeBodyAt formulas solver (bits := bits) fuel := nodeBody_step formulas solver fuel (fun smaller less => (ih smaller less).2.2.1)
+      exact ⟨nodeCall_step formulas solver fuel bodyAt,bodyAt,rowsAt,descendAt,child,walks⟩
+
+private theorem one_step {g s r e p h m c n budget : Nat} {first last : Phase (bits+2)}
+    (actual : Step g s r e p h m c n budget first last)
+    {inventory : Inventory} {memos : Memos} (seed : Seed)
+    (initial : Context formulas solver inventory (caller first) memos)
+    (frame : Frame formulas solver inventory (caller first).checked)
+    (fits : Fits seed.2 (caller first).checked)
+    (known : Carrier (fun guard => guard ∈ seed.1) (caller first).checked.native.machine.heap)
+    (inputs : Inputs first) (room : Room bits (forecast budget first seed).2)
+    (stores : Stores (caller first)) (origins : Origins formulas solver (caller first)) :
+    Origins formulas solver (caller last) := by
+  cases actual with
+  | node_evaluate started =>
+      rename_i request before handle running owner fuel
+      have tables := (beginNode_components request before).2.2.2
+      rw [started] at tables
+      dsimp only at tables
+      exact same_edges formulas solver tables origins
+  | body_rows => exact origins
+  | rows_edge done =>
+      rename_i fuel inherited original before narrowed middle rest
+      simp only [forecast,Schedule.rows] at room
+      let parentSeed := Schedule.parent budget seed
+      have parentRoom : Room bits parentSeed.2 := room.mono
+        ((Schedule.descendants_ge fuel budget parentSeed).1.trans
+          (Schedule.rows_ge fuel budget (Schedule.descendants fuel budget parentSeed)).1)
+      obtain ⟨_next,_final,_receipt,_numeric,_carrier,returned,_stores⟩ :=
+        head_edge formulas solver (request := ⟨inherited,original⟩) seed initial frame fits known inputs.1 (inputs.2 _ List.mem_cons_self)
+          (Schedule.parent_reserved bits budget seed parentRoom) done stores origins
+      exact returned
+  | rows_tail edge children =>
+      rename_i fuel inherited original before narrowed middle result after rest
+      simp only [forecast,Schedule.rows] at room
+      let parentSeed := Schedule.parent budget seed
+      let tailSeed := Schedule.descendants fuel budget parentSeed
+      have parentRoom : Room bits parentSeed.2 := room.mono
+        ((Schedule.descendants_ge fuel budget parentSeed).1.trans (Schedule.rows_ge fuel budget tailSeed).1)
+      obtain ⟨next,final,receipt,numeric,carrier,returned,middleStores⟩ :=
+        head_edge formulas solver (request := ⟨inherited,original⟩) seed initial frame fits known inputs.1 (inputs.2 _ List.mem_cons_self)
+          (Schedule.parent_reserved bits budget seed parentRoom) edge stores origins
+      have descendantRoom : Room bits tailSeed.2 := room.mono (Schedule.rows_ge fuel budget tailSeed).1
+      exact (all_origins formulas solver (bits := bits) fuel).2.2.2.1 parentSeed receipt.post.context receipt.frame
+        numeric carrier (inputs.1.grows receipt.post.effects.grows.constraint_growth) receipt.semantic.resident
+        descendantRoom children middleStores returned
+  | descendants_children => exact origins
+  | children_walk => exact origins
+  | walk_head => exact origins
+  | walk_tail done =>
+      rename_i fuel before combined index value result middle rest
+      simp only [forecast,Schedule.walk] at room
+      obtain ⟨receipt,returned,numeric,post⟩ := SourceCurrentInheritedNumeric.descent formulas solver
+        inventory before memos combined index initial frame seed.2 fits inputs.1
+      let nodeSeed := Schedule.node fuel budget seed
+      have nodeRoom : Room bits nodeSeed.2 := room.mono (Schedule.walk_ge fuel budget nodeSeed).1
+      exact (all_origins formulas solver (bits := bits) fuel).1 seed post.context returned numeric known
+        receipt.inherited (post.effects.keeps.available _ (inputs.2 _ List.mem_cons_self)) nodeRoom done stores origins
+
+/-- An actual prefix retains every resource-backed historical edge writer. -/
+theorem reached
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    {g s r e p h m c n budget : Nat} {first last : Phase (bits + 2)}
+    {inventory : Inventory} {memos : Memos} (seed : Seed)
+    (actual : Reached g s r e p h m c n budget first last)
+    (initial : Context formulas solver inventory (caller first) memos)
+    (frame : Frame formulas solver inventory (caller first).checked)
+    (fits : Fits seed.2 (caller first).checked)
+    (known : Carrier (fun guard => guard ∈ seed.1) (caller first).checked.native.machine.heap)
+    (inputs : Inputs first) (room : Room bits (forecast budget first seed).2)
+    (normal : UnionNormal (caller first).checked.native.machine.heap)
+    (supported : NativeSupport (caller first).checked.native.machine.heap (caller first).checked.native)
+    (causal : History empty (caller first).checked.native.machine.heap)
+    (merged : MergeStored (caller first).merge) (positiveMemo : MergeSupport (caller first).merge)
+    (origins : SourceCurrentResourceParentWriters.Origins formulas solver (caller first)) :
+    SourceCurrentResourceParentWriters.Origins formulas solver (caller last) := by
+  induction actual with
+  | refl => exact origins
+  | snoc earlier step ih =>
+      obtain ⟨next,final,current,_trace,post,returned,numeric,carrier,currentInputs,
+          _below,_guards,currentRoom,_bounds,_alphabet,_need,
+          currentSupport,⟨currentCausal⟩,currentMerged,currentPositive,currentNormal⟩ :=
+        SourceCurrentOuterPrefixNativeStores.reached formulas solver seed earlier initial frame fits known inputs room
+          normal supported causal merged positiveMemo
+      exact one_step formulas solver step current post.context returned numeric carrier currentInputs currentRoom
+        ⟨currentSupport,⟨currentCausal⟩,currentMerged,currentPositive,currentNormal⟩ ih
+
+end MicroCFTA.SourceCurrentOuterResourceWriters
+
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+#check @MicroCFTA.SourceCurrentOuterResourceWriters.reached
+#print MicroCFTA.SourceCurrentOuterResourceWriters.reached
+#print axioms MicroCFTA.SourceCurrentOuterResourceWriters.reached

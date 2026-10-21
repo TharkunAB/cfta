@@ -1,0 +1,51 @@
+--- outer-resource-writers-direct-1.source.lean
++++ SourceCurrentOuterResourceWriters.lean
+@@ -228,10 +228,12 @@
+             seed descentPost.context descentFrame descentFits known descentReceipt.inherited
+             (descentPost.effects.keeps.available _ (available value List.mem_cons_self)) nodeRoom first stores origins
+           obtain ⟨headInventory,headMemos,_graph,_reads,headPost,headFrame,headFits,headKnown,_available,_law⟩ :=
+-            SourceCurrentOuterInitialActual.node_call formulas solver fuel seed descentPost.context descentFrame descentFits known
++            SourceCurrentOuterInitialActual.node_call formulas solver fuel
++              (request := ⟨(descend before combined index).1,value⟩) (before := (descend before combined index).2) seed descentPost.context descentFrame descentFits known
+               descentReceipt.inherited (descentPost.effects.keeps.available _ (available value List.mem_cons_self)) nodeRoom first
+           obtain ⟨causal⟩ := stores.2.1
+-          have headStores := SourceCurrentOuterNativeStores.node_call formulas solver fuel seed
++          have headStores := SourceCurrentOuterNativeStores.node_call formulas solver fuel
++            (request := ⟨(descend before combined index).1,value⟩) (before := (descend before combined index).2) seed
+             descentPost.context descentFrame descentFits known descentReceipt.inherited
+             (descentPost.effects.keeps.available _ (available value List.mem_cons_self)) nodeRoom
+             stores.2.2.2.2 stores.1 causal stores.2.2.1 stores.2.2.2.1 first
+@@ -286,6 +288,7 @@
+               have childInputs : Values (prefixState before value inherited).checked.native.machine.heap value.children :=
+                 fun item member => prefixPost.effects.keeps.available _ (inputs item member)
+               have childRoom : Room bits (Schedule.children fuel budget seed).2 := room.mono (Schedule.rebuild_ge _).1
++              change Origins formulas solver middle
+               exact child seed prefixPost.context prefixFrame prefixFits known prefixReceipt.combinedReady
+                 childInputs childRoom first stores origins
+ 
+@@ -358,6 +361,7 @@
+               cases last
+               have edges := InternedEdgeResidency.resident_edges _ initial.ready.semantic.ready.semantic.1.normal.facts.linked _ available.resident
+               have rowsRoom : Room bits (Schedule.rows fuel budget seed).2 := room.mono (Schedule.rebuild_ge _).1
++              change Origins formulas solver middle
+               exact rowCalls fuel (Nat.lt_succ_self _) seed initial frame fits known inherited edges rowsRoom first stores origins
+ 
+ private theorem all_origins (fuel : Nat) :
+@@ -399,7 +403,7 @@
+         ((Schedule.descendants_ge fuel budget parentSeed).1.trans
+           (Schedule.rows_ge fuel budget (Schedule.descendants fuel budget parentSeed)).1)
+       obtain ⟨_next,_final,_receipt,_numeric,_carrier,returned,_stores⟩ :=
+-        head_edge formulas solver seed initial frame fits known inputs.1 (inputs.2 _ List.mem_cons_self)
++        head_edge formulas solver (request := ⟨inherited,original⟩) seed initial frame fits known inputs.1 (inputs.2 _ List.mem_cons_self)
+           (Schedule.parent_reserved bits budget seed parentRoom) done stores origins
+       exact returned
+   | rows_tail edge children =>
+@@ -410,7 +414,7 @@
+       have parentRoom : Room bits parentSeed.2 := room.mono
+         ((Schedule.descendants_ge fuel budget parentSeed).1.trans (Schedule.rows_ge fuel budget tailSeed).1)
+       obtain ⟨next,final,receipt,numeric,carrier,returned,middleStores⟩ :=
+-        head_edge formulas solver seed initial frame fits known inputs.1 (inputs.2 _ List.mem_cons_self)
++        head_edge formulas solver (request := ⟨inherited,original⟩) seed initial frame fits known inputs.1 (inputs.2 _ List.mem_cons_self)
+           (Schedule.parent_reserved bits budget seed parentRoom) edge stores origins
+       have descendantRoom : Room bits tailSeed.2 := room.mono (Schedule.rows_ge fuel budget tailSeed).1
+       exact (all_origins formulas solver (bits := bits) fuel).2.2.2.1 parentSeed receipt.post.context receipt.frame

@@ -1,0 +1,49 @@
+-- SOURCE-ONLY PROPOSAL. This declaration is not elaborated or proved.
+import MicroCFTA.SourceCurrentResourceParentWriters
+import MicroCFTA.SourceCurrentOuterPrefixNativeStores
+
+namespace MicroCFTA.SourceCurrentOuterResourceWriters
+open Cache InternedConstructorTemplates InternedProbeProvenance
+open SourceCurrentAllocatedPartialState
+open SourceCurrentAllocatedPartialInvariant (Context)
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedNativeResourceForecast (Profile Room)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Frame Fits)
+open SourceCurrentOuterCopiedWarmHit (Phase)
+open SourceCurrentOuterExecutionAncestry (Reached)
+open SourceCurrentOuterPrefixInvariants (Inputs)
+open SourceCurrentOuterInitialPrefix (forecast)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Guard
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Carrier" => SourceEqualityAnnotationHeap.Heap
+local notation "Seed" => List Guard × Profile
+local notation "caller" => SourceCurrentOuterActiveAncestry.caller
+local notation "Plain" => (fun guard : Guard => SourceMemoGate.plain guard = true)
+local notation "NativeSupport" => SourceCurrentNativeRequestPositivePositions.Support
+local notation "History" => SourceCurrentNativeMuPublication.History
+local notation "MergeStored" => SourceCurrentConstrainedCapMemoMerge.Stored Plain
+local notation "MergeSupport" => SourceCurrentMergePositivePosition.Support
+local notation "UnionNormal" => SourceCurrentRequiredUnionNormal.UnionNormal
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Node] {bits : Nat}
+
+theorem reached
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    {g s r e p h m c n budget : Nat} {first last : Phase (bits + 2)}
+    {inventory : Inventory} {memos : Memos} (seed : Seed)
+    (actual : Reached g s r e p h m c n budget first last)
+    (initial : Context formulas solver inventory (caller first) memos)
+    (frame : Frame formulas solver inventory (caller first).checked)
+    (fits : Fits seed.2 (caller first).checked)
+    (known : Carrier (fun guard => guard ∈ seed.1) (caller first).checked.native.machine.heap)
+    (inputs : Inputs first) (room : Room bits (forecast budget first seed).2)
+    (normal : UnionNormal (caller first).checked.native.machine.heap)
+    (supported : NativeSupport (caller first).checked.native.machine.heap (caller first).checked.native)
+    (causal : History empty (caller first).checked.native.machine.heap)
+    (merged : MergeStored (caller first).merge) (positiveMemo : MergeSupport (caller first).merge)
+    (origins : SourceCurrentResourceParentWriters.Origins formulas solver (caller first)) :
+    SourceCurrentResourceParentWriters.Origins formulas solver (caller last)
+
+end MicroCFTA.SourceCurrentOuterResourceWriters

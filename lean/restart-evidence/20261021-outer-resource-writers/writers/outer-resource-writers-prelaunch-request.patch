@@ -1,0 +1,11 @@
+--- outer-resource-writers-prelaunch-461.lean
++++ SourceCurrentOuterResourceWriters.lean
+@@ -99,7 +99,7 @@
+       Fits (Schedule.parent budget seed).2 after.checked ∧
+       Carrier (fun guard => guard ∈ (Schedule.parent budget seed).1) after.checked.native.machine.heap ∧
+       Origins formulas solver after ∧ Stores after := by
+-  have reserved := reservation formulas solver initial fits known inherited resident uniform
++  have reserved := reservation formulas solver (request := request) initial fits known inherited resident uniform
+   obtain ⟨next,final,receipt,numeric,carrier⟩ := SourceCurrentOuterEdgeGuardAlphabet.edge_call
+     formulas solver inventory budget seed.1 request before memos initial frame seed.2 fits known
+     inherited resident uniform observed
