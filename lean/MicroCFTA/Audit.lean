@@ -3050,6 +3050,7 @@ import MicroCFTA.SourceCurrentPositiveOwnerPair
 import MicroCFTA.SourceCurrentNativeCurrentStores
 import MicroCFTA.SourceCurrentGatePublicationHistory
 import MicroCFTA.SourceCurrentConjunctionPublicationHistory
+import MicroCFTA.SourceCurrentAllocatedNativeActualScope
 /-!
 # Proof dependency audit
 
