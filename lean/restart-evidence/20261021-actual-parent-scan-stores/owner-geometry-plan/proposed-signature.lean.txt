@@ -1,0 +1,76 @@
+-- PROPOSED TYPE ONLY. This file was not compiled.
+-- All certificates below refer to one selected Parent tuple and its exact source row.
+namespace MicroCFTA.SourceCurrentActualOwnerPair
+open InternedConstructorTemplates InternedProbeProvenance
+open InternedNestedProvenance (Values)
+open SourceCurrentConjunctionClassScan (Scan)
+open SourceCurrentConjunctionSelectedRecords (Retained)
+open SourceCurrentAllocatedClassPass (Pass PassReads)
+open SourceCurrentNativeMuPublication (History)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Guard
+local notation "Row" => EdgeValue Symbol Guard
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "Memo" => SourceCurrentMemoMergeGraph.Memo Symbol Guard
+local notation "Fourth" => SourceCurrentEmptinessMemo.Memo
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Record" => SourceEqualityClassOrder.Record
+local notation "EqValue" => SourceEqualityConstraintAllocation.Value
+local notation "Operations" => SourceEqualityConstraintMemoAllocation.State
+local notation "Inventory" => SourceCurrentAllocatedNativeInventoryState.Inventory
+local notation "Plain" => (fun guard : Guard => SourceMemoGate.plain guard = true)
+local notation "source" => SourceMemoGate.unconstrained
+local notation "reaches" => SourceEndpointReachability.reaches source
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Node] {width : Nat}
+
+theorem required_pair
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (writerInventory preparedInventory : Inventory)
+    {row : Row} {ownerEntry ownerDepth ownerFree} {ownerRows : List Row} {index : Nat}
+    (member : row ∈ ownerRows)
+    {writer : Checked width} {loaded : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula}
+    {inherited own : EqValue} {records kept : List Record}
+    (prefix : SourceCurrentAllocatedPrecheck.Receipt formulas solver writerInventory row.entry.key.constraint
+      loaded inherited writer own (.classes records))
+    {budget : Nat} {scanned prepared after : Checked width} {fourth savedFourth : Fourth}
+    {trace : Scan budget source reaches row.children (records.map Record.paths)
+      (SourceCurrentAllocatedPrecheck.state writer loaded inherited) fourth none
+      (kept.map Record.paths) scanned savedFourth}
+    (retained : Retained trace records kept) (nonempty : kept ≠ [])
+    {preparedValues results : List Node}
+    (required : SourceCurrentConjunctionRequired.Receipt formulas solver preparedInventory
+      (kept.map Record.paths) row.children preparedValues scanned prepared)
+    (semantic : SourceEqualityRequiredSemanticCache.SemanticReady scanned.native.machine.heap)
+    (normal : SourceCurrentRequiredUnionNormal.UnionNormal scanned.native.machine.heap)
+    (costs : InternedFreshOrdinaryCostHeap.Heap scanned.native.machine.heap)
+    (available : Values scanned.native.machine.heap row.children)
+    (primary : ∀ record ∈ kept, EndpointStatefulGateTrace.ClassTrace source reaches row.children record.paths
+      scanned.native.machine.heap false scanned.native.machine.heap)
+    (current : SourceCurrentConstrainedCapCurrentNative.At Plain scanned)
+    (supported : SourceCurrentNativeRequestPositivePositions.Support scanned.native.machine.heap scanned.native)
+    (causal : History empty scanned.native.machine.heap)
+    {memo saved : Memo} {memos final : Memos}
+    {actual : Pass kept preparedValues prepared memo results after saved}
+    (reads : PassReads formulas solver actual memos final)
+    (physical : SourceCurrentMemoMergeEffects.Stored scanned.native.machine.heap memo)
+    (covered : ∀ ambient, SourceCurrentMemoMergeLanguage.CacheCovers
+      (SourceEqualityPCSGuard.holds formulas solver) ambient memo)
+    (valid : EndpointMemoGateTrace.Valid prepared.native.machine.heap memos)
+    (merged : SourceCurrentConstrainedCapMemoMerge.Stored Plain memo)
+    (positiveMemo : SourceCurrentMergePositivePosition.Support memo)
+    (found : results[index]? = some (.node ownerEntry ownerRows ownerDepth ownerFree))
+    (outerBefore : Operations) (outerValid : SourceEqualityConstraintMemoAllocation.Valid outerBefore)
+    (inheritedReady : SourceEqualityConstraintAllocation.Ready outerBefore.constraints inherited)
+    (field : SourceCurrentConjunctionEquality.FieldAvailable outerBefore row.entry.key.constraint)
+    (combined : EqValue)
+    (outerPrefix : (SourceCurrentAllocatedInheritedPrefix.run row.entry.key.constraint inherited outerBefore).1 =
+      .ok (some combined))
+    (outputs : List Record) (payload : combined.payload = some outputs) :
+    SourceMemoGate.plain row.entry.key.constraint = false ∧
+      EqualityNormalize.Covers (kept.map Record.paths) (outputs.map Record.paths) ∧
+      EqualityNormalize.congruenceStep (outputs.map Record.paths) = some (outputs.map Record.paths) ∧
+      ∃ paths ∈ outputs.map Record.paths, ∃ left right,
+        index::left ∈ paths ∧ index::right ∈ paths ∧ left ≠ right
+end MicroCFTA.SourceCurrentActualOwnerPair

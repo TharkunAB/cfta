@@ -1,0 +1,70 @@
+import MicroCFTA.SourceCurrentActualParentSemanticReads
+import MicroCFTA.SourceCurrentScanNativeStores
+import MicroCFTA.SourceCurrentAllocatedRecordScanWorker
+import MicroCFTA.SourceCurrentAllocatedScanWorkerCompletion
+import MicroCFTA.SourceCurrentAllocatedScanWorkerStability
+import MicroCFTA.SourceCurrentAllocatedLocalReductionActual
+
+namespace MicroCFTA.SourceCurrentActualParentScanNativeStores
+open InternedConstructorTemplates InternedProbeProvenance
+open InternedNestedProvenance (Values)
+open SourceCurrentAllocatedNativeEffects (physical)
+open SourceCurrentConjunctionClassScan (Scan Ready)
+open SourceCurrentNativeRequestPositivePositions (Support)
+open SourceCurrentNativeMuPublication (History)
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedNativeResourceForecast (Profile)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Frame Fits)
+open SourceCurrentAllocatedPartialInvariant (Context)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Guard
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Allocated" => SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula
+local notation "EqValue" => SourceEqualityConstraintAllocation.Value
+local notation "Fourth" => SourceCurrentEmptinessMemo.Memo
+local notation "Memo" => SourceCurrentMemoMergeGraph.Memo Symbol Guard
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Plain" => (fun guard : Guard => SourceMemoGate.plain guard = true)
+local notation "Current" => SourceCurrentConstrainedCapCurrentNative.At Plain
+local notation "prefixState" => SourceCurrentAllocatedPrecheck.state
+variable {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Node]
+
+/-- Initial resources derive admission and the native stores at the same selected Scan return. -/
+theorem selected_scan
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (budget : Nat) (symbol : Symbol) (original : Guard) (loaded : Allocated) (inherited : EqValue)
+    (values : List Node) (before : Caller (bits + 2)) (memos : Memos)
+    (initial : Context formulas solver inventory before memos) (frame : Frame formulas solver inventory before.checked)
+    (profile : Profile) (fits : Fits profile before.checked)
+    (live : SourceCurrentParentNumeric.LiveInputs original loaded inherited values before)
+    (reserved : SourceCurrentParentForecast.Reserved bits budget values.length original loaded inherited before.checked profile)
+    {g s r e p h m c n : Nat} {result : EdgeValue Symbol Guard} {after : Checked (bits + 2)}
+    {savedFourth : Fourth} {saved : Memo}
+    (observed : SourceCurrentAllocatedParentWorker.edge g s r e p h m c n budget symbol original inherited values
+      before.checked before.fourth before.merge = .done result after savedFourth saved)
+    (noncontradictory : SourceEqualityMkEdgeAllocation.contradictory original = false)
+    {records kept : List SourceEqualityClassOrder.Record} {scanned : Checked (bits + 2)} {scanFourth : Fourth}
+    (precheck : (SourceEqualityPartialPrecheckAllocation.run loaded.stored loaded.guard inherited before.checked.operations).1 =
+      .ok (.classes records))
+    (scanCall : SourceCurrentAllocatedRecordScanWorker.scan g s p h n budget values records
+      (prefixState before.checked loaded inherited) before.fourth = .done (none, kept) scanned scanFourth)
+    (current : Current before.checked)
+    (supported : Support before.checked.native.machine.heap before.checked.native)
+    (causal : History empty before.checked.native.machine.heap) :
+    ∃ next final,
+      SourceCurrentParentNumeric.Receipt formulas solver next profile budget symbol original loaded inherited values
+        before memos result after savedFourth saved final ∧
+      Scan budget SourceMemoGate.unconstrained (SourceEndpointReachability.reaches SourceMemoGate.unconstrained)
+        values (records.map SourceEqualityClassOrder.Record.paths)
+        (prefixState before.checked loaded inherited) before.fourth none
+        (kept.map SourceEqualityClassOrder.Record.paths) scanned scanFourth ∧
+      Ready scanned ∧
+      SourceCurrentConjunctionRowsAllocation.Effects
+        (physical (prefixState before.checked loaded inherited)) (physical scanned) ∧
+      SourceRecursiveIntersectionKernel.Extension
+        (prefixState before.checked loaded inherited).native.machine scanned.native.machine ∧
+      Values scanned.native.machine.heap values ∧ Current scanned ∧
+      Support scanned.native.machine.heap scanned.native ∧ Nonempty (History empty scanned.native.machine.heap)
