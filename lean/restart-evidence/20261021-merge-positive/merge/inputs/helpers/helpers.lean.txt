@@ -1,0 +1,183 @@
+open InternedEdgeResidency (nodeEdges)
+open InternedNestedFacts (Facts)
+
+private theorem columns_indexed {A : Type} (rows : List (List A)) (arity index : Nat) (column : List A)
+    (selected : (MergedAlternativesGroups.columns rows arity)[index]? = some column) :
+    ∀ value ∈ column, ∃ row ∈ rows, row[index]? = some value := by
+  induction arity generalizing rows index with
+  | zero => simp only [MergedAlternativesGroups.columns, List.getElem?_nil] at selected; cases selected
+  | succ arity ih =>
+      cases index with
+      | zero =>
+          simp only [MergedAlternativesGroups.columns, List.getElem?_cons_zero, Option.some.injEq] at selected
+          subst column
+          intro value member
+          obtain ⟨row, present, found⟩ := List.mem_filterMap.mp member
+          exact ⟨row, present, by cases row <;> exact found⟩
+      | succ index =>
+          have later : (MergedAlternativesGroups.columns (rows.map List.tail) arity)[index]? = some column := by
+            simpa only [MergedAlternativesGroups.columns, List.getElem?_cons_succ] using selected
+          intro value member
+          obtain ⟨tail, included, found⟩ := ih _ index later value member
+          obtain ⟨row, present, rfl⟩ := List.mem_map.mp included
+          refine ⟨row, present, ?_⟩
+          cases row with
+          | nil => simp only [List.tail_nil, List.getElem?_nil] at found; cases found
+          | cons first rest => exact found
+
+section Constructors
+
+private theorem makeNode_positive [DecidableEq (EdgeKey Symbol Guard)] (state : Heap) (facts : Facts state) (rows : List Row)
+    (resident : Edges state rows) {entry depth free path}
+    (positive : PositiveAt (run (makeNode rows) state).1 path) :
+    PositiveAt (.node entry rows depth free) path := by
+  have ordinary := SourceEqualityRequiredCache.node_ordinary rows state facts resident
+  have fields := EqualityLeafProjectionPhysical.makeNode_edges rows state facts.coherent facts.linked resident
+  have raw : ∀ row ∈ nodeEdges (run (makeNode rows) state).1, row ∈ rows := by
+    intro row member
+    exact (List.mem_filter.mp (canonicalEdges_member _ row (fields ▸ member))).1
+  generalize computed : (run (makeNode rows) state).1 = result at positive ordinary raw
+  cases positive with
+  | root rowIndex row selected nonplain =>
+      obtain ⟨sourceIndex, found⟩ := List.mem_iff_getElem?.mp (raw row (List.mem_of_getElem? selected))
+      exact .root sourceIndex row found nonplain
+  | child rowIndex childIndex row child selected chosen rest =>
+      obtain ⟨sourceIndex, found⟩ := List.mem_iff_getElem?.mp (raw row (List.mem_of_getElem? selected))
+      exact .child sourceIndex childIndex row child found chosen rest
+  | member memberIndex child selected rest => cases ordinary
+
+private theorem rows_positive (inputs : List Node) (rows : List Row)
+    (covered : ∀ row ∈ rows, ∃ input ∈ inputs, row ∈ nodeEdges input) {entry depth free path}
+    (positive : PositiveAt (.node entry rows depth free) path) :
+    ∃ input ∈ inputs, PositiveAt input path := by
+  cases positive with
+  | root rowIndex row selected nonplain =>
+      obtain ⟨input, member, present⟩ := covered row (List.mem_of_getElem? selected)
+      cases input with
+      | node source originals level names =>
+          obtain ⟨sourceIndex, found⟩ := List.mem_iff_getElem?.mp present
+          exact ⟨_, member, .root sourceIndex row found nonplain⟩
+      | empty | reference | union | mu => cases present
+  | child rowIndex childIndex row child selected chosen rest =>
+      obtain ⟨input, member, present⟩ := covered row (List.mem_of_getElem? selected)
+      cases input with
+      | node source originals level names =>
+          obtain ⟨sourceIndex, found⟩ := List.mem_iff_getElem?.mp present
+          exact ⟨_, member, .child sourceIndex childIndex row child found chosen rest⟩
+      | empty | reference | union | mu => cases present
+
+private theorem ordinary_edges_rows (inputs : List Node) (rows : List Row)
+    (actual : ordinaryEdges inputs = some rows) :
+    ∀ row ∈ rows, ∃ input ∈ inputs, row ∈ nodeEdges input := by
+  induction inputs generalizing rows with
+  | nil => cases actual; intro row impossible; cases impossible
+  | cons first rest ih =>
+      cases first <;> simp only [ordinaryEdges] at actual <;> try contradiction
+      case node entry originals depth free =>
+        cases later : ordinaryEdges rest with
+        | none => simp only [later, Option.map_none] at actual; cases actual
+        | some outputs =>
+            have same : originals ++ outputs = rows := by simpa only [later, Option.map_some, Option.some.injEq] using actual
+            subst rows
+            intro row member
+            rcases List.mem_append.mp member with here | there
+            · exact ⟨_, List.mem_cons_self, here⟩
+            · obtain ⟨input, present, found⟩ := ih outputs later row there
+              exact ⟨input, List.mem_cons_of_mem _ present, found⟩
+
+private theorem flatten_positive (inputs : List Node) {input path}
+    (member : input ∈ inputs.flatMap unionMembers) (positive : PositiveAt input path) :
+    ∃ original ∈ inputs, PositiveAt original path := by
+  obtain ⟨original, present, chosen⟩ := List.mem_flatMap.mp member
+  cases original with
+  | empty => cases chosen
+  | union entry members depth free =>
+      obtain ⟨index, selected⟩ := List.mem_iff_getElem?.mp chosen
+      exact ⟨_, present, .member index input selected positive⟩
+  | reference | node | mu =>
+      have same := List.mem_singleton.mp chosen
+      exact ⟨_, present, same ▸ positive⟩
+
+private theorem ordinaryUnion_positive [DecidableEq (EdgeKey Symbol Guard)] (state : Heap) (facts : Facts state) (inputs : List Node)
+    (available : Values state inputs) {path}
+    (positive : PositiveAt (run (MergedOrdinaryHeight.ordinaryUnion inputs) state).1 path) :
+    ∃ input ∈ inputs, PositiveAt input path := by
+  have resident : Edges state (inputs.flatMap nodeEdges) := by
+    intro row member
+    obtain ⟨input, present, selected⟩ := List.mem_flatMap.mp member
+    exact InternedEdgeResidency.resident_edges state facts.linked input (available input present).resident row selected
+  have structural := makeNode_positive state facts _ resident
+    (entry := ⟨0, .node []⟩) (depth := 0) (free := []) positive
+  exact rows_positive inputs _ (fun row member => List.mem_flatMap.mp member) structural
+
+private theorem makeUnion_positive [DecidableEq (EdgeKey Symbol Guard)] (state : Heap) (facts : Facts state) (inputs : List Node)
+    (available : Values state inputs) {path}
+    (positive : PositiveAt (run (makeUnion inputs) state).1 path) :
+    ∃ input ∈ inputs, PositiveAt input path := by
+  have retained : Values state (distinctNodes (inputs.flatMap unionMembers)) := by
+    intro input member
+    obtain ⟨original, present, chosen⟩ := List.mem_flatMap.mp (distinctNodes_member _ _ member)
+    exact unionMembers_available original (available original present) input chosen
+  have fromMember : ∀ input ∈ distinctNodes (inputs.flatMap unionMembers), PositiveAt input path →
+      ∃ original ∈ inputs, PositiveAt original path := by
+    intro input member positive
+    exact flatten_positive inputs (distinctNodes_member _ _ member) positive
+  cases normalized : distinctNodes (inputs.flatMap unionMembers) with
+  | nil => simp only [makeUnion, normalized, run] at positive; cases positive
+  | cons first rest =>
+      cases rest with
+      | nil =>
+          exact fromMember first (by rw [normalized]; exact List.mem_singleton_self _) (by simpa only [makeUnion, normalized, run] using positive)
+      | cons second tail =>
+          let members := first :: second :: tail
+          have memberAvailable : Values state members := by simpa only [normalized] using retained
+          cases ordinary : ordinaryEdges members with
+          | some rows =>
+              have rowsResident := InternedEdgeResidency.ordinaryEdges_resident members rows state facts.linked
+                (fun value member => (memberAvailable value member).resident) ordinary
+              have structural := makeNode_positive state facts rows rowsResident
+                (entry := ⟨0, .node []⟩) (depth := 0) (free := [])
+                (by simpa only [makeUnion, normalized, ordinary, members] using positive)
+              obtain ⟨input, present, positive⟩ := rows_positive members rows (ordinary_edges_rows members rows ordinary) structural
+              exact fromMember input (by simpa only [normalized] using present) positive
+          | none =>
+              let key := InternedBinderProtocol.NodeKey.union (members.map Value.referenceOf)
+              let identify := fun entry => Value.union entry members (maximumDepth members) (childFree members)
+              let result := (nodeStep key identify state).1
+              let after := (nodeStep key identify state).2
+              obtain ⟨entry, fields⟩ := InternedGateRank.requested_fields key identify state facts.coherent
+                (fun _ _ => ⟨rfl, rfl, rfl, rfl⟩)
+              change InternedRecordCoherence.NodeFields key entry result at fields
+              have sourceResult : (run (makeUnion inputs) state).1 = result := by
+                simp only [makeUnion, normalized, ordinary, members, run]
+                rfl
+              have sourceAfter : (run (makeUnion inputs) state).2 = after := by
+                simp only [makeUnion, normalized, ordinary, members, run]
+                rfl
+              have completed := makeUnion_available inputs state facts.coherent facts.cached available
+              have resultAvailable : Available after result := by
+                simpa only [makeUnion, normalized, ordinary, members, run] using completed.2.2
+              have afterCoherent : InternedRecordCoherence.Coherent after := by
+                simpa only [makeUnion, normalized, ordinary, members, run] using completed.1
+              cases observed : result with
+              | empty | reference | node | mu => simp [observed, InternedRecordCoherence.NodeFields, key, muKey] at fields
+              | union actual actualMembers depth free =>
+                  simp only [observed, InternedRecordCoherence.NodeFields] at fields
+                  have sameIds : members.map Value.referenceOf = actualMembers.map Value.referenceOf := by
+                    exact InternedBinderProtocol.NodeKey.union.inj fields.2.1
+                  have sameMembers : actualMembers = members := InternedNormalizationFree.value_lists_equal after afterCoherent
+                    actualMembers members
+                    (fun child member => (resultAvailable.children child (by simpa only [observed, children] using member)).resident)
+                    (fun child member => by
+                      rw [← sourceAfter]
+                      exact (available_after_run (makeUnion inputs) state facts.coherent.valid
+                        (memberAvailable child member)).resident)
+                    sameIds.symm
+                  have positiveResult : PositiveAt (.union actual actualMembers depth free) path := by
+                    simpa only [sourceResult, observed] using positive
+                  cases positiveResult with
+                  | member memberIndex child selected rest =>
+                      have present : child ∈ members := sameMembers ▸ List.mem_of_getElem? selected
+                      exact fromMember child (by simpa only [normalized] using present) rest
+
+end Constructors

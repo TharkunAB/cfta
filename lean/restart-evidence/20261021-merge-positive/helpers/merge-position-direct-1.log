@@ -1,0 +1,275 @@
+/tmp/mcfta-merge-position-helpers/merge-position-direct-1.source.lean:65:8: warning: automatically included section variable(s) unused in theorem `_private._stdin.0.MicroCFTA.SourceCurrentMergePositivePosition.rows_positive`:
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/tmp/mcfta-merge-position-helpers/merge-position-direct-1.source.lean:65:0: warning: `rows_positive` does not use the following hypothesis in its type:
+  • [DecidableEq (EdgeKey Symbol Guard)] (#1)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/tmp/mcfta-merge-position-helpers/merge-position-direct-1.source.lean:85:8: warning: automatically included section variable(s) unused in theorem `_private._stdin.0.MicroCFTA.SourceCurrentMergePositivePosition.ordinary_edges_rows`:
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/tmp/mcfta-merge-position-helpers/merge-position-direct-1.source.lean:85:0: warning: `ordinary_edges_rows` does not use the following hypothesis in its type:
+  • [DecidableEq (EdgeKey Symbol Guard)] (#1)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/tmp/mcfta-merge-position-helpers/merge-position-direct-1.source.lean:104:8: warning: automatically included section variable(s) unused in theorem `_private._stdin.0.MicroCFTA.SourceCurrentMergePositivePosition.flatten_positive`:
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/tmp/mcfta-merge-position-helpers/merge-position-direct-1.source.lean:104:0: warning: `flatten_positive` does not use the following hypothesis in its type:
+  • [DecidableEq (EdgeKey Symbol Guard)] (#1)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/tmp/mcfta-merge-position-helpers/merge-position-direct-1.source.lean:126:15: error(lean.unknownIdentifier): Unknown constant `Nat.node`
+
+Note: Inferred this name from the expected resulting type of `.node`:
+  Nat
+/tmp/mcfta-merge-position-helpers/merge-position-direct-1.source.lean:126:25: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  OfNat InternedBinderProtocol.NodeKey 0
+numerals are polymorphic in Lean, but the numeral `0` cannot be used in a context where the expected type is
+  InternedBinderProtocol.NodeKey
+due to the absence of the instance above
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/tmp/mcfta-merge-position-helpers/merge-position-direct-1.source.lean:155:27: error(lean.unknownIdentifier): Unknown constant `Nat.node`
+
+Note: Inferred this name from the expected resulting type of `.node`:
+  Nat
+/tmp/mcfta-merge-position-helpers/merge-position-direct-1.source.lean:155:37: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  OfNat InternedBinderProtocol.NodeKey 0
+numerals are polymorphic in Lean, but the numeral `0` cannot be used in a context where the expected type is
+  InternedBinderProtocol.NodeKey
+due to the absence of the instance above
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/tmp/mcfta-merge-position-helpers/merge-position-direct-1.source.lean:175:46: error: unsolved goals
+case cons.cons.none.empty
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+facts : Facts state
+inputs : List Node
+available : Values state inputs
+path : List Nat
+positive : PositiveAt (run (makeUnion inputs) state).fst path
+retained : Values state (distinctNodes (List.flatMap unionMembers inputs))
+fromMember :
+  ∀ (input : Node),
+    input ∈ distinctNodes (List.flatMap unionMembers inputs) →
+      PositiveAt input path → ∃ original, original ∈ inputs ∧ PositiveAt original path
+first second : Node
+tail : List Node
+normalized : distinctNodes (List.flatMap unionMembers inputs) = first :: second :: tail
+members : List Node := first :: second :: tail
+memberAvailable : Values state members
+ordinary : ordinaryEdges members = none
+key : InternedBinderProtocol.NodeKey := InternedBinderProtocol.NodeKey.union (List.map Value.referenceOf members)
+identify : Interned InternedBinderProtocol.NodeKey → Node :=
+  fun entry => Value.union entry members (maximumDepth members) (childFree members)
+result : Node := (nodeStep key identify state).fst
+after : InternedConstructorTemplates.State Symbol Guard := (nodeStep key identify state).snd
+entry : Interned InternedBinderProtocol.NodeKey
+sourceResult : (run (makeUnion inputs) state).fst = result
+completed :
+  InternedRecordCoherence.Coherent (run (makeUnion inputs) state).snd ∧
+    Cached (run (makeUnion inputs) state).snd ∧
+      Available (run (makeUnion inputs) state).snd (run (makeUnion inputs) state).fst
+resultAvailable : Available after result
+afterCoherent : InternedRecordCoherence.Coherent after
+observed : result = Value.empty
+fields :
+  match (nodeStep (InternedBinderProtocol.NodeKey.union (List.map Value.referenceOf members)) identify state).fst with
+  | Value.node actual edges depth free => False
+  | Value.union actual members_1 depth free =>
+    actual = entry ∧
+      List.map Value.referenceOf members = List.map Value.referenceOf members_1 ∧
+        depth = maximumDepth members_1 ∧ free = childFree members_1
+  | Value.mu actual body depthShape ordinaryShape => False
+  | Value.empty => False
+  | Value.reference name => False
+⊢ ∃ input, input ∈ inputs ∧ PositiveAt input path
+/tmp/mcfta-merge-position-helpers/merge-position-direct-1.source.lean:175:46: error: unsolved goals
+case cons.cons.none.reference
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+facts : Facts state
+inputs : List Node
+available : Values state inputs
+path : List Nat
+positive : PositiveAt (run (makeUnion inputs) state).fst path
+retained : Values state (distinctNodes (List.flatMap unionMembers inputs))
+fromMember :
+  ∀ (input : Node),
+    input ∈ distinctNodes (List.flatMap unionMembers inputs) →
+      PositiveAt input path → ∃ original, original ∈ inputs ∧ PositiveAt original path
+first second : Node
+tail : List Node
+normalized : distinctNodes (List.flatMap unionMembers inputs) = first :: second :: tail
+members : List Node := first :: second :: tail
+memberAvailable : Values state members
+ordinary : ordinaryEdges members = none
+key : InternedBinderProtocol.NodeKey := InternedBinderProtocol.NodeKey.union (List.map Value.referenceOf members)
+identify : Interned InternedBinderProtocol.NodeKey → Node :=
+  fun entry => Value.union entry members (maximumDepth members) (childFree members)
+result : Node := (nodeStep key identify state).fst
+after : InternedConstructorTemplates.State Symbol Guard := (nodeStep key identify state).snd
+entry : Interned InternedBinderProtocol.NodeKey
+sourceResult : (run (makeUnion inputs) state).fst = result
+completed :
+  InternedRecordCoherence.Coherent (run (makeUnion inputs) state).snd ∧
+    Cached (run (makeUnion inputs) state).snd ∧
+      Available (run (makeUnion inputs) state).snd (run (makeUnion inputs) state).fst
+resultAvailable : Available after result
+afterCoherent : InternedRecordCoherence.Coherent after
+name✝ : InternedBinderProtocol.Reference
+observed : result = Value.reference name✝
+fields :
+  match (nodeStep (InternedBinderProtocol.NodeKey.union (List.map Value.referenceOf members)) identify state).fst with
+  | Value.node actual edges depth free => False
+  | Value.union actual members_1 depth free =>
+    actual = entry ∧
+      List.map Value.referenceOf members = List.map Value.referenceOf members_1 ∧
+        depth = maximumDepth members_1 ∧ free = childFree members_1
+  | Value.mu actual body depthShape ordinaryShape => False
+  | Value.empty => False
+  | Value.reference name => False
+⊢ ∃ input, input ∈ inputs ∧ PositiveAt input path
+/tmp/mcfta-merge-position-helpers/merge-position-direct-1.source.lean:175:46: error: unsolved goals
+case cons.cons.none.node
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+facts : Facts state
+inputs : List Node
+available : Values state inputs
+path : List Nat
+positive : PositiveAt (run (makeUnion inputs) state).fst path
+retained : Values state (distinctNodes (List.flatMap unionMembers inputs))
+fromMember :
+  ∀ (input : Node),
+    input ∈ distinctNodes (List.flatMap unionMembers inputs) →
+      PositiveAt input path → ∃ original, original ∈ inputs ∧ PositiveAt original path
+first second : Node
+tail : List Node
+normalized : distinctNodes (List.flatMap unionMembers inputs) = first :: second :: tail
+members : List Node := first :: second :: tail
+memberAvailable : Values state members
+ordinary : ordinaryEdges members = none
+key : InternedBinderProtocol.NodeKey := InternedBinderProtocol.NodeKey.union (List.map Value.referenceOf members)
+identify : Interned InternedBinderProtocol.NodeKey → Node :=
+  fun entry => Value.union entry members (maximumDepth members) (childFree members)
+result : Node := (nodeStep key identify state).fst
+after : InternedConstructorTemplates.State Symbol Guard := (nodeStep key identify state).snd
+entry : Interned InternedBinderProtocol.NodeKey
+sourceResult : (run (makeUnion inputs) state).fst = result
+completed :
+  InternedRecordCoherence.Coherent (run (makeUnion inputs) state).snd ∧
+    Cached (run (makeUnion inputs) state).snd ∧
+      Available (run (makeUnion inputs) state).snd (run (makeUnion inputs) state).fst
+resultAvailable : Available after result
+afterCoherent : InternedRecordCoherence.Coherent after
+entry✝ : Interned InternedBinderProtocol.NodeKey
+edges✝ : List Row
+depth✝ : Nat
+free✝ : List InternedBinderProtocol.Reference
+observed : result = Value.node entry✝ edges✝ depth✝ free✝
+fields :
+  match (nodeStep (InternedBinderProtocol.NodeKey.union (List.map Value.referenceOf members)) identify state).fst with
+  | Value.node actual edges depth free => False
+  | Value.union actual members_1 depth free =>
+    actual = entry ∧
+      List.map Value.referenceOf members = List.map Value.referenceOf members_1 ∧
+        depth = maximumDepth members_1 ∧ free = childFree members_1
+  | Value.mu actual body depthShape ordinaryShape => False
+  | Value.empty => False
+  | Value.reference name => False
+⊢ ∃ input, input ∈ inputs ∧ PositiveAt input path
+/tmp/mcfta-merge-position-helpers/merge-position-direct-1.source.lean:175:46: error: unsolved goals
+case cons.cons.none.mu
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+state : InternedConstructorTemplates.State Symbol Guard
+facts : Facts state
+inputs : List Node
+available : Values state inputs
+path : List Nat
+positive : PositiveAt (run (makeUnion inputs) state).fst path
+retained : Values state (distinctNodes (List.flatMap unionMembers inputs))
+fromMember :
+  ∀ (input : Node),
+    input ∈ distinctNodes (List.flatMap unionMembers inputs) →
+      PositiveAt input path → ∃ original, original ∈ inputs ∧ PositiveAt original path
+first second : Node
+tail : List Node
+normalized : distinctNodes (List.flatMap unionMembers inputs) = first :: second :: tail
+members : List Node := first :: second :: tail
+memberAvailable : Values state members
+ordinary : ordinaryEdges members = none
+key : InternedBinderProtocol.NodeKey := InternedBinderProtocol.NodeKey.union (List.map Value.referenceOf members)
+identify : Interned InternedBinderProtocol.NodeKey → Node :=
+  fun entry => Value.union entry members (maximumDepth members) (childFree members)
+result : Node := (nodeStep key identify state).fst
+after : InternedConstructorTemplates.State Symbol Guard := (nodeStep key identify state).snd
+entry : Interned InternedBinderProtocol.NodeKey
+sourceResult : (run (makeUnion inputs) state).fst = result
+completed :
+  InternedRecordCoherence.Coherent (run (makeUnion inputs) state).snd ∧
+    Cached (run (makeUnion inputs) state).snd ∧
+      Available (run (makeUnion inputs) state).snd (run (makeUnion inputs) state).fst
+resultAvailable : Available after result
+afterCoherent : InternedRecordCoherence.Coherent after
+entry✝ : Interned InternedBinderProtocol.NodeKey
+body✝ depthShape✝ ordinaryShape✝ : Node
+observed : result = Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝
+fields :
+  match (nodeStep (InternedBinderProtocol.NodeKey.union (List.map Value.referenceOf members)) identify state).fst with
+  | Value.node actual edges depth free => False
+  | Value.union actual members_1 depth free =>
+    actual = entry ∧
+      List.map Value.referenceOf members = List.map Value.referenceOf members_1 ∧
+        depth = maximumDepth members_1 ∧ free = childFree members_1
+  | Value.mu actual body depthShape ordinaryShape => False
+  | Value.empty => False
+  | Value.reference name => False
+⊢ ∃ input, input ∈ inputs ∧ PositiveAt input path
+/tmp/mcfta-merge-position-helpers/merge-position-direct-1.source.lean:178:101: error: Invalid projection: Projections extract constructor fields for one-constructor inductive types. The expression
+  fields
+has type
+  match (nodeStep key identify state).fst with
+  | Value.node actual edges depth free =>
+    actual = entry ∧
+      key = InternedBinderProtocol.NodeKey.node (List.map (fun edge => edge.entry.identity) edges) ∧
+        depth = maximumDepth (List.flatMap EdgeValue.children edges) ∧
+          free = childFree (List.flatMap EdgeValue.children edges)
+  | Value.union actual members depth free =>
+    actual = entry ∧
+      key = InternedBinderProtocol.NodeKey.union (List.map Value.referenceOf members) ∧
+        depth = maximumDepth members ∧ free = childFree members
+  | Value.mu actual body depthShape ordinaryShape => actual = entry ∧ key = muKey depthShape ordinaryShape
+  | Value.empty => False
+  | Value.reference name => False
+which is not a one-constructor inductive type.
+/tmp/mcfta-merge-position-helpers/merge-position-direct-1.source.lean:182:41: error: Type mismatch
+  Available.resident (available_after_run (makeUnion inputs) state facts.coherent.valid (memberAvailable child member))
+has type
+  InternedFreshProbeKeys.Resident (run (makeUnion inputs) state).snd child
+but is expected to have type
+  InternedFreshProbeKeys.Resident after child
+/tmp/mcfta-merge-position-helpers/merge-position-direct-1.source.lean:175:55: warning: This simp argument is unused:
+  observed
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [InternedRecordCoherence.NodeFields, key, muKey] at fields
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

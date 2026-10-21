@@ -1,0 +1,2416 @@
+MicroCFTA.SourceCurrentMergePositivePosition.Support : MicroCFTA.SourceCurrentMemoMergeGraph.Memo
+    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+  Prop
+def MicroCFTA.SourceCurrentMergePositivePosition.Support : MicroCFTA.SourceCurrentMemoMergeGraph.Memo
+    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+  Prop :=
+fun memo =>
+  ∀ (key : MicroCFTA.InternedBinderProtocol.NodeRef)
+    (entry :
+      MicroCFTA.SourceCurrentMemoMergeGraph.Entry (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+    @Eq.{1}
+        (Option.{0}
+          (MicroCFTA.SourceCurrentMemoMergeGraph.Entry (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+        (memo key)
+        (@Option.some.{0}
+          (MicroCFTA.SourceCurrentMemoMergeGraph.Entry (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          entry) →
+      ∀ (path : List.{0} Nat),
+        MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt
+            (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry)
+            path →
+          MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt
+            (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.original
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry)
+            path
+'MicroCFTA.SourceCurrentMergePositivePosition.Support' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+MicroCFTA.SourceCurrentMergePositivePosition.support_empty : MicroCFTA.SourceCurrentMergePositivePosition.Support
+  (@MicroCFTA.SourceCurrentMemoMergeGraph.empty (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+theorem MicroCFTA.SourceCurrentMergePositivePosition.support_empty : MicroCFTA.SourceCurrentMergePositivePosition.Support
+  (@MicroCFTA.SourceCurrentMemoMergeGraph.empty (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) :=
+fun key entry found =>
+  @Eq.casesOn.{0, 1}
+    (Option.{0}
+      (MicroCFTA.SourceCurrentMemoMergeGraph.Entry (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+    (@MicroCFTA.SourceCurrentMemoMergeGraph.empty (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) key)
+    (fun a t =>
+      @Eq.{1}
+          (Option.{0}
+            (MicroCFTA.SourceCurrentMemoMergeGraph.Entry
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+          (@Option.some.{0}
+            (MicroCFTA.SourceCurrentMemoMergeGraph.Entry
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            entry)
+          a →
+        @HEq.{0}
+            (@Eq.{1}
+              (Option.{0}
+                (MicroCFTA.SourceCurrentMemoMergeGraph.Entry
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+              (@MicroCFTA.SourceCurrentMemoMergeGraph.empty
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) key)
+              (@Option.some.{0}
+                (MicroCFTA.SourceCurrentMemoMergeGraph.Entry
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                entry))
+            found
+            (@Eq.{1}
+              (Option.{0}
+                (MicroCFTA.SourceCurrentMemoMergeGraph.Entry
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+              (@MicroCFTA.SourceCurrentMemoMergeGraph.empty
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) key)
+              a)
+            t →
+          ∀ (path : List.{0} Nat),
+            MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt
+                (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry)
+                path →
+              MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt
+                (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.original
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry)
+                path)
+    (@Option.some.{0}
+      (MicroCFTA.SourceCurrentMemoMergeGraph.Entry (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      entry)
+    found
+    (fun h =>
+      @False.elim.{0}
+        (@HEq.{0}
+            (@Eq.{1}
+              (Option.{0}
+                (MicroCFTA.SourceCurrentMemoMergeGraph.Entry
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+              (@MicroCFTA.SourceCurrentMemoMergeGraph.empty
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) key)
+              (@Option.some.{0}
+                (MicroCFTA.SourceCurrentMemoMergeGraph.Entry
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                entry))
+            found
+            (@Eq.{1}
+              (Option.{0}
+                (MicroCFTA.SourceCurrentMemoMergeGraph.Entry
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+              (@MicroCFTA.SourceCurrentMemoMergeGraph.empty
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) key)
+              (@MicroCFTA.SourceCurrentMemoMergeGraph.empty
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) key))
+            (@Eq.refl.{1}
+              (Option.{0}
+                (MicroCFTA.SourceCurrentMemoMergeGraph.Entry
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+              (@MicroCFTA.SourceCurrentMemoMergeGraph.empty
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) key)) →
+          ∀ (path : List.{0} Nat),
+            MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt
+                (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry)
+                path →
+              MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt
+                (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.original
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry)
+                path)
+        (@noConfusion_of_Nat.{1}
+          (Option.{0}
+            (MicroCFTA.SourceCurrentMemoMergeGraph.Entry
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+          (@Option.ctorIdx.{0}
+            (MicroCFTA.SourceCurrentMemoMergeGraph.Entry
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+          (@Option.some.{0}
+            (MicroCFTA.SourceCurrentMemoMergeGraph.Entry
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            entry)
+          (@Option.none.{0}
+            (MicroCFTA.SourceCurrentMemoMergeGraph.Entry
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+          h))
+    (@Eq.refl.{1}
+      (Option.{0}
+        (MicroCFTA.SourceCurrentMemoMergeGraph.Entry (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+      (@Option.some.{0}
+        (MicroCFTA.SourceCurrentMemoMergeGraph.Entry (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        entry))
+    (@HEq.refl.{0}
+      (@Eq.{1}
+        (Option.{0}
+          (MicroCFTA.SourceCurrentMemoMergeGraph.Entry (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+        (@MicroCFTA.SourceCurrentMemoMergeGraph.empty (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) key)
+        (@Option.some.{0}
+          (MicroCFTA.SourceCurrentMemoMergeGraph.Entry (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          entry))
+      found)
+'MicroCFTA.SourceCurrentMergePositivePosition.support_empty' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMergePositivePosition.run : ∀
+  [inst :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {Output : Type} (clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool)
+  (top : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula),
+  @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain top) Bool.true →
+    ∀
+      {code :
+        MicroCFTA.SourceCurrentMemoMergeGraph.Code (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Output}
+      {before after :
+        MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+      {memo saved :
+        MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+      {output : Output},
+      @MicroCFTA.SourceCurrentMemoMergeGraph.Run (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (fun a b =>
+            @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula instDecidableEqString
+              MicroCFTA.FormulaExecutable.formulaDecidableEq a b)
+          inst clear top Output code before memo output after saved →
+        ∀
+          (post :
+            MicroCFTA.InternedConstructorTemplates.State
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+              Output → Prop),
+          @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before →
+            @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before →
+              @MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before memo →
+                MicroCFTA.SourceCurrentMergePositivePosition.Support memo →
+                  @MicroCFTA.SourceCurrentMemoMergeEffects.Certified
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Output
+                      (fun a b =>
+                        @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                          instDecidableEqString MicroCFTA.FormulaExecutable.formulaDecidableEq a b)
+                      inst
+                      (fun input previous result current =>
+                        And
+                          (@MicroCFTA.SourceCurrentMemoMergeEffects.Contract
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) input previous
+                            result current)
+                          (∀ (path : List.{0} Nat),
+                            MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt result path →
+                              MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt input path))
+                      clear code before post →
+                    And
+                      (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after)
+                      (And
+                        (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after saved)
+                        (And (MicroCFTA.SourceCurrentMergePositivePosition.Support saved) (post after output)))
+theorem MicroCFTA.SourceCurrentMergePositivePosition.run : ∀
+  [inst :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {Output : Type} (clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool)
+  (top : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula),
+  @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain top) Bool.true →
+    ∀
+      {code :
+        MicroCFTA.SourceCurrentMemoMergeGraph.Code (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Output}
+      {before after :
+        MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+      {memo saved :
+        MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+      {output : Output},
+      @MicroCFTA.SourceCurrentMemoMergeGraph.Run (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (fun a b =>
+            @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula instDecidableEqString
+              MicroCFTA.FormulaExecutable.formulaDecidableEq a b)
+          inst clear top Output code before memo output after saved →
+        ∀
+          (post :
+            MicroCFTA.InternedConstructorTemplates.State
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+              Output → Prop),
+          @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before →
+            @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before →
+              @MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before memo →
+                MicroCFTA.SourceCurrentMergePositivePosition.Support memo →
+                  @MicroCFTA.SourceCurrentMemoMergeEffects.Certified
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Output
+                      (fun a b =>
+                        @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                          instDecidableEqString MicroCFTA.FormulaExecutable.formulaDecidableEq a b)
+                      inst
+                      (fun input previous result current =>
+                        And
+                          (@MicroCFTA.SourceCurrentMemoMergeEffects.Contract
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) input previous
+                            result current)
+                          (∀ (path : List.{0} Nat),
+                            MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt result path →
+                              MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt input path))
+                      clear code before post →
+                    And
+                      (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after)
+                      (And
+                        (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after saved)
+                        (And (MicroCFTA.SourceCurrentMergePositivePosition.Support saved) (post after output))) :=
+fun
+    [inst :
+      DecidableEq.{1}
+        (MicroCFTA.InternedConstructorTemplates.EdgeKey
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    {Output} clear top topPlain {code} {before after} {memo saved} {output} actual =>
+  (@fun x_0 x_1 x_2 =>
+      @MicroCFTA.SourceCurrentMemoMergeGraph.Run.rec (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (fun a b =>
+          @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula instDecidableEqString
+            MicroCFTA.FormulaExecutable.formulaDecidableEq a b)
+        inst x_0 x_1 x_2 fun input before memo output after saved x =>
+        @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before →
+          @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before →
+            @MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before memo →
+              MicroCFTA.SourceCurrentMergePositivePosition.Support memo →
+                @MicroCFTA.InternedProbeProvenance.Available
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before input →
+                  And
+                    (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after)
+                    (And
+                      (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after saved)
+                      (And (MicroCFTA.SourceCurrentMergePositivePosition.Support saved)
+                        (MicroCFTA.SourceCurrentMergePositivePosition.RequestContract input before output after))))
+    clear top
+    (fun {Output} {code} {before} {memo} {output} {after} {saved} actual =>
+      ∀
+        (post :
+          MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+            Output → Prop),
+        @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before →
+          @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before →
+            @MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before memo →
+              MicroCFTA.SourceCurrentMergePositivePosition.Support memo →
+                @MicroCFTA.SourceCurrentMemoMergeEffects.Certified
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Output
+                    (fun a b =>
+                      @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                        instDecidableEqString MicroCFTA.FormulaExecutable.formulaDecidableEq a b)
+                    inst
+                    (fun input previous result current =>
+                      And
+                        (@MicroCFTA.SourceCurrentMemoMergeEffects.Contract
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) input previous result
+                          current)
+                        (∀ (path : List.{0} Nat),
+                          MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt result path →
+                            MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt input path))
+                    clear code before post →
+                  And
+                    (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after)
+                    (And
+                      (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after saved)
+                      (And (MicroCFTA.SourceCurrentMergePositivePosition.Support saved) (post after output))))
+    (fun {Output} value state memo post semantic costs stored support checked =>
+      @And.intro
+        (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) state state)
+        (And
+          (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) state memo)
+          (And (MicroCFTA.SourceCurrentMergePositivePosition.Support memo) (post state value)))
+        (@MicroCFTA.SourceCurrentMemoMergeEffects.effect_refl
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) state semantic costs)
+        (@And.intro
+          (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) state memo)
+          (And (MicroCFTA.SourceCurrentMergePositivePosition.Support memo) (post state value)) stored
+          (@And.intro (MicroCFTA.SourceCurrentMergePositivePosition.Support memo) (post state value) support checked)))
+    (fun {Output} job state memo post semantic costs stored support checked =>
+      @And.intro
+        (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) state
+          (@Prod.snd.{0, 0} Output
+            (MicroCFTA.InternedConstructorTemplates.State
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            (@MicroCFTA.InternedConstructorTemplates.run
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Output inst job state)))
+        (And
+          (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@Prod.snd.{0, 0} Output
+              (MicroCFTA.InternedConstructorTemplates.State
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (@MicroCFTA.InternedConstructorTemplates.run
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Output inst job state))
+            memo)
+          (And (MicroCFTA.SourceCurrentMergePositivePosition.Support memo)
+            (post
+              (@Prod.snd.{0, 0} Output
+                (MicroCFTA.InternedConstructorTemplates.State
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (@MicroCFTA.InternedConstructorTemplates.run
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Output inst job state))
+              (@Prod.fst.{0, 0} Output
+                (MicroCFTA.InternedConstructorTemplates.State
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (@MicroCFTA.InternedConstructorTemplates.run
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Output inst job state)))))
+        (@And.left
+          (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) state
+            (@Prod.snd.{0, 0} Output
+              (MicroCFTA.InternedConstructorTemplates.State
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (@MicroCFTA.InternedConstructorTemplates.run
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Output inst job state)))
+          (post
+            (@Prod.snd.{0, 0} Output
+              (MicroCFTA.InternedConstructorTemplates.State
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (@MicroCFTA.InternedConstructorTemplates.run
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Output inst job state))
+            (@Prod.fst.{0, 0} Output
+              (MicroCFTA.InternedConstructorTemplates.State
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (@MicroCFTA.InternedConstructorTemplates.run
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Output inst job state)))
+          checked)
+        (@And.intro
+          (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@Prod.snd.{0, 0} Output
+              (MicroCFTA.InternedConstructorTemplates.State
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (@MicroCFTA.InternedConstructorTemplates.run
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Output inst job state))
+            memo)
+          (And (MicroCFTA.SourceCurrentMergePositivePosition.Support memo)
+            (post
+              (@Prod.snd.{0, 0} Output
+                (MicroCFTA.InternedConstructorTemplates.State
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (@MicroCFTA.InternedConstructorTemplates.run
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Output inst job state))
+              (@Prod.fst.{0, 0} Output
+                (MicroCFTA.InternedConstructorTemplates.State
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (@MicroCFTA.InternedConstructorTemplates.run
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Output inst job state))))
+          (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored.grows
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) state
+            (@Prod.snd.{0, 0} Output
+              (MicroCFTA.InternedConstructorTemplates.State
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (@MicroCFTA.InternedConstructorTemplates.run
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Output inst job state))
+            memo stored
+            (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect.keeps
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) state
+              (@Prod.snd.{0, 0} Output
+                (MicroCFTA.InternedConstructorTemplates.State
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (@MicroCFTA.InternedConstructorTemplates.run
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Output inst job state))
+              (@And.left
+                (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) state
+                  (@Prod.snd.{0, 0} Output
+                    (MicroCFTA.InternedConstructorTemplates.State
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    (@MicroCFTA.InternedConstructorTemplates.run
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Output inst job state)))
+                (post
+                  (@Prod.snd.{0, 0} Output
+                    (MicroCFTA.InternedConstructorTemplates.State
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    (@MicroCFTA.InternedConstructorTemplates.run
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Output inst job state))
+                  (@Prod.fst.{0, 0} Output
+                    (MicroCFTA.InternedConstructorTemplates.State
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    (@MicroCFTA.InternedConstructorTemplates.run
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Output inst job state)))
+                checked)))
+          (@And.intro (MicroCFTA.SourceCurrentMergePositivePosition.Support memo)
+            (post
+              (@Prod.snd.{0, 0} Output
+                (MicroCFTA.InternedConstructorTemplates.State
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (@MicroCFTA.InternedConstructorTemplates.run
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Output inst job state))
+              (@Prod.fst.{0, 0} Output
+                (MicroCFTA.InternedConstructorTemplates.State
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (@MicroCFTA.InternedConstructorTemplates.run
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Output inst job state)))
+            support
+            (@And.right
+              (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) state
+                (@Prod.snd.{0, 0} Output
+                  (MicroCFTA.InternedConstructorTemplates.State
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (@MicroCFTA.InternedConstructorTemplates.run
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Output inst job state)))
+              (post
+                (@Prod.snd.{0, 0} Output
+                  (MicroCFTA.InternedConstructorTemplates.State
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (@MicroCFTA.InternedConstructorTemplates.run
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Output inst job state))
+                (@Prod.fst.{0, 0} Output
+                  (MicroCFTA.InternedConstructorTemplates.State
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (@MicroCFTA.InternedConstructorTemplates.run
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Output inst job state)))
+              checked))))
+    (fun {inputs} {before} {values} {after} {memo} fuel done post semantic costs stored support checked =>
+      have original :=
+        @MicroCFTA.SourceCurrentMergedHeapEffects.select_effect
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) (fun x => True)
+          (fun a b =>
+            @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula instDecidableEqString
+              MicroCFTA.FormulaExecutable.formulaDecidableEq a b)
+          inst clear fuel inputs before semantic costs
+          (@And.left
+            (@MicroCFTA.InternedNestedProvenance.Values
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before inputs)
+            (And
+              (@MicroCFTA.MergedColdReaderClosedInputs.ClosedValues
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inputs)
+              (∀ (fuel : Nat)
+                (values :
+                  List.{0}
+                    (MicroCFTA.InternedConstructorTemplates.Value
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                (after :
+                  MicroCFTA.InternedConstructorTemplates.State
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                @Eq.{1}
+                    (MicroCFTA.MergedSourceComparison.Result
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                      (List.{0}
+                        (MicroCFTA.InternedConstructorTemplates.Value
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))
+                    (@MicroCFTA.SourceMergedSelection.select
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                      (fun a b =>
+                        @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                          instDecidableEqString MicroCFTA.FormulaExecutable.formulaDecidableEq a b)
+                      inst clear fuel inputs before)
+                    (@MicroCFTA.MergedSourceComparison.Result.done
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                      (List.{0}
+                        (MicroCFTA.InternedConstructorTemplates.Value
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                      values after) →
+                  @MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after →
+                    post after values))
+            checked)
+          values after done;
+      have effect :=
+        @MicroCFTA.SourceCurrentMemoMergeEffects.Effect.mk
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after
+          (@MicroCFTA.SourceCurrentMergedHeapEffects.Effect.keeps
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) (fun x => True) before after original)
+          (@MicroCFTA.SourceCurrentMergedHeapEffects.Effect.semantic
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) (fun x => True) before after original)
+          (@MicroCFTA.SourceCurrentMergedHeapEffects.Effect.costs
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) (fun x => True) before after original);
+      @And.intro
+        (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after)
+        (And
+          (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after memo)
+          (And (MicroCFTA.SourceCurrentMergePositivePosition.Support memo) (post after values)))
+        effect
+        (@And.intro
+          (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after memo)
+          (And (MicroCFTA.SourceCurrentMergePositivePosition.Support memo) (post after values))
+          (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored.grows
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after memo stored
+            (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect.keeps
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after effect))
+          (@And.intro (MicroCFTA.SourceCurrentMergePositivePosition.Support memo) (post after values) support
+            (@And.right
+              (@MicroCFTA.MergedColdReaderClosedInputs.ClosedValues
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inputs)
+              (∀ (fuel : Nat)
+                (values :
+                  List.{0}
+                    (MicroCFTA.InternedConstructorTemplates.Value
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                (after :
+                  MicroCFTA.InternedConstructorTemplates.State
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                @Eq.{1}
+                    (MicroCFTA.MergedSourceComparison.Result
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                      (List.{0}
+                        (MicroCFTA.InternedConstructorTemplates.Value
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))
+                    (@MicroCFTA.SourceMergedSelection.select
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                      (fun a b =>
+                        @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                          instDecidableEqString MicroCFTA.FormulaExecutable.formulaDecidableEq a b)
+                      inst clear fuel inputs before)
+                    (@MicroCFTA.MergedSourceComparison.Result.done
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                      (List.{0}
+                        (MicroCFTA.InternedConstructorTemplates.Value
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                      values after) →
+                  @MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after →
+                    post after values)
+              (@And.right
+                (@MicroCFTA.InternedNestedProvenance.Values
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before inputs)
+                (And
+                  (@MicroCFTA.MergedColdReaderClosedInputs.ClosedValues
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) inputs)
+                  (∀ (fuel : Nat)
+                    (values :
+                      List.{0}
+                        (MicroCFTA.InternedConstructorTemplates.Value
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                    (after :
+                      MicroCFTA.InternedConstructorTemplates.State
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                    @Eq.{1}
+                        (MicroCFTA.MergedSourceComparison.Result
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                          (List.{0}
+                            (MicroCFTA.InternedConstructorTemplates.Value
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))
+                        (@MicroCFTA.SourceMergedSelection.select
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                          (fun a b =>
+                            @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                              instDecidableEqString MicroCFTA.FormulaExecutable.formulaDecidableEq a b)
+                          inst clear fuel inputs before)
+                        (@MicroCFTA.MergedSourceComparison.Result.done
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                          (List.{0}
+                            (MicroCFTA.InternedConstructorTemplates.Value
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                          values after) →
+                      @MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after →
+                        post after values))
+                checked)
+              fuel values after done effect))))
+    (fun {input} {before} {memo} {output} {after} {saved} actual ih post semantic costs stored support checked =>
+      @And.casesOn.{0}
+        (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after)
+        (And
+          (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after saved)
+          (And (MicroCFTA.SourceCurrentMergePositivePosition.Support saved)
+            (MicroCFTA.SourceCurrentMergePositivePosition.RequestContract input before output after)))
+        (fun x =>
+          And
+            (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after)
+            (And
+              (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after saved)
+              (And (MicroCFTA.SourceCurrentMergePositivePosition.Support saved) (post after output))))
+        (ih semantic costs stored support
+          (@And.left
+            (@MicroCFTA.InternedProbeProvenance.Available
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before input)
+            (∀
+              (output :
+                MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (after :
+                MicroCFTA.InternedConstructorTemplates.State
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+              @MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after →
+                (fun input previous result current =>
+                      And
+                        (@MicroCFTA.SourceCurrentMemoMergeEffects.Contract
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) input previous result
+                          current)
+                        (∀ (path : List.{0} Nat),
+                          MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt result path →
+                            MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt input path))
+                    input before output after →
+                  post after output)
+            checked))
+        fun effect right =>
+        @And.casesOn.{0}
+          (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after saved)
+          (And (MicroCFTA.SourceCurrentMergePositivePosition.Support saved)
+            (MicroCFTA.SourceCurrentMergePositivePosition.RequestContract input before output after))
+          (fun x =>
+            And
+              (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after)
+              (And
+                (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after saved)
+                (And (MicroCFTA.SourceCurrentMergePositivePosition.Support saved) (post after output))))
+          right fun retained right =>
+          @And.casesOn.{0} (MicroCFTA.SourceCurrentMergePositivePosition.Support saved)
+            (MicroCFTA.SourceCurrentMergePositivePosition.RequestContract input before output after)
+            (fun x =>
+              And
+                (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after)
+                (And
+                  (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after saved)
+                  (And (MicroCFTA.SourceCurrentMergePositivePosition.Support saved) (post after output))))
+            right fun finalSupport returned =>
+            @And.intro
+              (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after)
+              (And
+                (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after saved)
+                (And (MicroCFTA.SourceCurrentMergePositivePosition.Support saved) (post after output)))
+              effect
+              (@And.intro
+                (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after saved)
+                (And (MicroCFTA.SourceCurrentMergePositivePosition.Support saved) (post after output)) retained
+                (@And.intro (MicroCFTA.SourceCurrentMergePositivePosition.Support saved) (post after output)
+                  finalSupport
+                  (@And.right
+                    (@MicroCFTA.InternedProbeProvenance.Available
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before input)
+                    (∀
+                      (output :
+                        MicroCFTA.InternedConstructorTemplates.Value
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      (after :
+                        MicroCFTA.InternedConstructorTemplates.State
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                      @MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after →
+                        (fun input previous result current =>
+                              And
+                                (@MicroCFTA.SourceCurrentMemoMergeEffects.Contract
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) input previous
+                                  result current)
+                                (∀ (path : List.{0} Nat),
+                                  MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt result path →
+                                    MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt input path))
+                            input before output after →
+                          post after output)
+                    checked output after effect returned))))
+    (fun {x} {code} {before} {memo} {value} {middle} {current} {x_1} {next} {output} {after} {saved} first later ihFirst
+        ihLater post semantic costs stored support checked =>
+      @Exists.casesOn.{1}
+        (MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+          x → Prop)
+        (fun intermediate =>
+          And
+            (@MicroCFTA.SourceCurrentMemoMergeEffects.Certified
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) x
+              (fun a b =>
+                @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                  instDecidableEqString MicroCFTA.FormulaExecutable.formulaDecidableEq a b)
+              inst
+              (fun input previous result current =>
+                And
+                  (@MicroCFTA.SourceCurrentMemoMergeEffects.Contract
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) input previous result
+                    current)
+                  (∀ (path : List.{0} Nat),
+                    MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt result path →
+                      MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt input path))
+              clear code before intermediate)
+            (∀ (value : x)
+              (middle :
+                MicroCFTA.InternedConstructorTemplates.State
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+              @MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before middle →
+                intermediate middle value →
+                  @MicroCFTA.SourceCurrentMemoMergeEffects.Certified
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) x_1
+                    (fun a b =>
+                      @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                        instDecidableEqString MicroCFTA.FormulaExecutable.formulaDecidableEq a b)
+                    inst
+                    (fun input previous result current =>
+                      And
+                        (@MicroCFTA.SourceCurrentMemoMergeEffects.Contract
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) input previous result
+                          current)
+                        (∀ (path : List.{0} Nat),
+                          MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt result path →
+                            MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt input path))
+                    clear (next value) middle post))
+        (fun x =>
+          And
+            (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after)
+            (And
+              (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after saved)
+              (And (MicroCFTA.SourceCurrentMergePositivePosition.Support saved) (post after output))))
+        checked fun intermediate h =>
+        @And.casesOn.{0}
+          (@MicroCFTA.SourceCurrentMemoMergeEffects.Certified
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) x
+            (fun a b =>
+              @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula instDecidableEqString
+                MicroCFTA.FormulaExecutable.formulaDecidableEq a b)
+            inst
+            (fun input previous result current =>
+              And
+                (@MicroCFTA.SourceCurrentMemoMergeEffects.Contract
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) input previous result current)
+                (∀ (path : List.{0} Nat),
+                  MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt result path →
+                    MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt input path))
+            clear code before intermediate)
+          (∀ (value : x)
+            (middle :
+              MicroCFTA.InternedConstructorTemplates.State
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+            @MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before middle →
+              intermediate middle value →
+                @MicroCFTA.SourceCurrentMemoMergeEffects.Certified
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) x_1
+                  (fun a b =>
+                    @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                      instDecidableEqString MicroCFTA.FormulaExecutable.formulaDecidableEq a b)
+                  inst
+                  (fun input previous result current =>
+                    And
+                      (@MicroCFTA.SourceCurrentMemoMergeEffects.Contract
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) input previous result
+                        current)
+                      (∀ (path : List.{0} Nat),
+                        MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt result path →
+                          MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt input path))
+                  clear (next value) middle post)
+          (fun x =>
+            And
+              (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after)
+              (And
+                (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after saved)
+                (And (MicroCFTA.SourceCurrentMergePositivePosition.Support saved) (post after output))))
+          h fun firstChecked nextChecked =>
+          @And.casesOn.{0}
+            (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before middle)
+            (And
+              (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) middle current)
+              (And (MicroCFTA.SourceCurrentMergePositivePosition.Support current) (intermediate middle value)))
+            (fun x =>
+              And
+                (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after)
+                (And
+                  (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after saved)
+                  (And (MicroCFTA.SourceCurrentMergePositivePosition.Support saved) (post after output))))
+            (ihFirst intermediate semantic costs stored support firstChecked) fun firstEffect right =>
+            @And.casesOn.{0}
+              (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) middle current)
+              (And (MicroCFTA.SourceCurrentMergePositivePosition.Support current) (intermediate middle value))
+              (fun x =>
+                And
+                  (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after)
+                  (And
+                    (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after saved)
+                    (And (MicroCFTA.SourceCurrentMergePositivePosition.Support saved) (post after output))))
+              right fun firstStored right =>
+              @And.casesOn.{0} (MicroCFTA.SourceCurrentMergePositivePosition.Support current)
+                (intermediate middle value)
+                (fun x =>
+                  And
+                    (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after)
+                    (And
+                      (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after saved)
+                      (And (MicroCFTA.SourceCurrentMergePositivePosition.Support saved) (post after output))))
+                right fun firstSupport valid =>
+                @And.casesOn.{0}
+                  (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) middle after)
+                  (And
+                    (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after saved)
+                    (And (MicroCFTA.SourceCurrentMergePositivePosition.Support saved) (post after output)))
+                  (fun x =>
+                    And
+                      (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after)
+                      (And
+                        (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after saved)
+                        (And (MicroCFTA.SourceCurrentMergePositivePosition.Support saved) (post after output))))
+                  (ihLater post
+                    (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect.semantic
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before middle firstEffect)
+                    (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect.costs
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before middle firstEffect)
+                    firstStored firstSupport (nextChecked value middle firstEffect valid))
+                  fun laterEffect right =>
+                  @And.casesOn.{0}
+                    (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after saved)
+                    (And (MicroCFTA.SourceCurrentMergePositivePosition.Support saved) (post after output))
+                    (fun x =>
+                      And
+                        (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after)
+                        (And
+                          (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after saved)
+                          (And (MicroCFTA.SourceCurrentMergePositivePosition.Support saved) (post after output))))
+                    right fun laterStored right =>
+                    @And.casesOn.{0} (MicroCFTA.SourceCurrentMergePositivePosition.Support saved) (post after output)
+                      (fun x =>
+                        And
+                          (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after)
+                          (And
+                            (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after saved)
+                            (And (MicroCFTA.SourceCurrentMergePositivePosition.Support saved) (post after output))))
+                      right fun laterSupport returned =>
+                      @And.intro
+                        (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after)
+                        (And
+                          (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after saved)
+                          (And (MicroCFTA.SourceCurrentMergePositivePosition.Support saved) (post after output)))
+                        (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect.trans
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before middle after
+                          firstEffect laterEffect)
+                        (@And.intro
+                          (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after saved)
+                          (And (MicroCFTA.SourceCurrentMergePositivePosition.Support saved) (post after output))
+                          laterStored
+                          (@And.intro (MicroCFTA.SourceCurrentMergePositivePosition.Support saved) (post after output)
+                            laterSupport returned)))
+    (fun {memo} {entry} {input} {before} found a a_1 a_2 a_3 a_4 =>
+      @And.casesOn.{0}
+        (@Eq.{1}
+          (MicroCFTA.InternedConstructorTemplates.Value
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.original
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry)
+          input)
+        (And
+          (@MicroCFTA.InternedProbeProvenance.Available
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before
+            (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry))
+          (@Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@MicroCFTA.InternedConstructorTemplates.Value.free
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) input)
+              (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+            @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@MicroCFTA.InternedConstructorTemplates.Value.free
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry))
+              (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+        (fun x =>
+          And
+            (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before before)
+            (And
+              (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before memo)
+              (And (MicroCFTA.SourceCurrentMergePositivePosition.Support memo)
+                (MicroCFTA.SourceCurrentMergePositivePosition.RequestContract input before
+                  (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry)
+                  before))))
+        (@MicroCFTA.SourceCurrentMemoMergeEffects.hit_original
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (fun a b =>
+            @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula instDecidableEqString
+              MicroCFTA.FormulaExecutable.formulaDecidableEq a b)
+          inst before memo input entry a a_4 a_2 found)
+        fun same right =>
+        @And.casesOn.{0}
+          (@MicroCFTA.InternedProbeProvenance.Available
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before
+            (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry))
+          (@Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@MicroCFTA.InternedConstructorTemplates.Value.free
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) input)
+              (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+            @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+              (@MicroCFTA.InternedConstructorTemplates.Value.free
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry))
+              (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+          (fun x =>
+            And
+              (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before before)
+              (And
+                (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before memo)
+                (And (MicroCFTA.SourceCurrentMergePositivePosition.Support memo)
+                  (MicroCFTA.SourceCurrentMergePositivePosition.RequestContract input before
+                    (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry)
+                    before))))
+          right fun result closed =>
+          have law :=
+            a_3
+              (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) input)
+              entry found;
+          @And.intro
+            (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before before)
+            (And
+              (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before memo)
+              (And (MicroCFTA.SourceCurrentMergePositivePosition.Support memo)
+                (MicroCFTA.SourceCurrentMergePositivePosition.RequestContract input before
+                  (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry)
+                  before)))
+            (@MicroCFTA.SourceCurrentMemoMergeEffects.effect_refl
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before a a_1)
+            (@And.intro
+              (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before memo)
+              (And (MicroCFTA.SourceCurrentMergePositivePosition.Support memo)
+                (MicroCFTA.SourceCurrentMergePositivePosition.RequestContract input before
+                  (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry)
+                  before))
+              a_2
+              (@And.intro (MicroCFTA.SourceCurrentMergePositivePosition.Support memo)
+                (MicroCFTA.SourceCurrentMergePositivePosition.RequestContract input before
+                  (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry)
+                  before)
+                a_3
+                (@And.intro
+                  (@MicroCFTA.SourceCurrentMemoMergeEffects.Contract
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) input before
+                    (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry)
+                    before)
+                  (∀ (path : List.{0} Nat),
+                    MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt
+                        (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry)
+                        path →
+                      MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt input path)
+                  (@And.intro
+                    (@MicroCFTA.InternedProbeProvenance.Available
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before
+                      (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry))
+                    (@Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.free
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) input)
+                        (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+                      @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.free
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                          (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry))
+                        (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                    result closed)
+                  (@Eq.mp.{0}
+                    (∀ (path : List.{0} Nat),
+                      MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt
+                          (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry)
+                          path →
+                        MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt
+                          (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.original
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry)
+                          path)
+                    (∀ (path : List.{0} Nat),
+                      MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt
+                          (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry)
+                          path →
+                        MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt input path)
+                    (@congrArg.{1, 1}
+                      (MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      Prop
+                      (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.original
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry)
+                      input
+                      (fun _a =>
+                        ∀ (path : List.{0} Nat),
+                          MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt
+                              (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry)
+                              path →
+                            MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt _a path)
+                      same)
+                    law)))))
+    (fun {memo} {input} {before} {candidate} {after} {current} absent actual ih a a_1 a_2 a_3 a_4 =>
+      @And.casesOn.{0}
+        (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after)
+        (And
+          (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after current)
+          (And (MicroCFTA.SourceCurrentMergePositivePosition.Support current)
+            (MicroCFTA.SourceCurrentMergePositivePosition.RequestContract input before candidate after)))
+        (fun x =>
+          And
+            (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after)
+            (And
+              (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after
+                (@MicroCFTA.SourceCurrentMemoMergeGraph.remember
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current input candidate))
+              (And
+                (MicroCFTA.SourceCurrentMergePositivePosition.Support
+                  (@MicroCFTA.SourceCurrentMemoMergeGraph.remember
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current input candidate))
+                (MicroCFTA.SourceCurrentMergePositivePosition.RequestContract input before
+                  (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                    (@MicroCFTA.SourceCurrentMemoMergeGraph.winner
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current input candidate))
+                  after))))
+        (ih (fun after output => MicroCFTA.SourceCurrentMergePositivePosition.RequestContract input before output after)
+          a a_1 a_2 a_3
+          (@MicroCFTA.SourceCurrentMergePositivePosition.body_certified inst clear top topPlain input before a a_1 a_4))
+        fun effect right =>
+        @And.casesOn.{0}
+          (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after current)
+          (And (MicroCFTA.SourceCurrentMergePositivePosition.Support current)
+            (MicroCFTA.SourceCurrentMergePositivePosition.RequestContract input before candidate after))
+          (fun x =>
+            And
+              (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after)
+              (And
+                (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after
+                  (@MicroCFTA.SourceCurrentMemoMergeGraph.remember
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current input candidate))
+                (And
+                  (MicroCFTA.SourceCurrentMergePositivePosition.Support
+                    (@MicroCFTA.SourceCurrentMemoMergeGraph.remember
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current input candidate))
+                  (MicroCFTA.SourceCurrentMergePositivePosition.RequestContract input before
+                    (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                      (@MicroCFTA.SourceCurrentMemoMergeGraph.winner
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current input
+                        candidate))
+                    after))))
+          right fun retained right =>
+          @And.casesOn.{0} (MicroCFTA.SourceCurrentMergePositivePosition.Support current)
+            (MicroCFTA.SourceCurrentMergePositivePosition.RequestContract input before candidate after)
+            (fun x =>
+              And
+                (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after)
+                (And
+                  (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after
+                    (@MicroCFTA.SourceCurrentMemoMergeGraph.remember
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current input candidate))
+                  (And
+                    (MicroCFTA.SourceCurrentMergePositivePosition.Support
+                      (@MicroCFTA.SourceCurrentMemoMergeGraph.remember
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current input
+                        candidate))
+                    (MicroCFTA.SourceCurrentMergePositivePosition.RequestContract input before
+                      (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                        (@MicroCFTA.SourceCurrentMemoMergeGraph.winner
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current input
+                          candidate))
+                      after))))
+            right fun currentSupport right =>
+            @And.casesOn.{0}
+              (@MicroCFTA.SourceCurrentMemoMergeEffects.Contract
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) input before candidate after)
+              (∀ (path : List.{0} Nat),
+                MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt candidate path →
+                  MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt input path)
+              (fun x =>
+                And
+                  (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after)
+                  (And
+                    (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after
+                      (@MicroCFTA.SourceCurrentMemoMergeGraph.remember
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current input
+                        candidate))
+                    (And
+                      (MicroCFTA.SourceCurrentMergePositivePosition.Support
+                        (@MicroCFTA.SourceCurrentMemoMergeGraph.remember
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current input
+                          candidate))
+                      (MicroCFTA.SourceCurrentMergePositivePosition.RequestContract input before
+                        (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                          (@MicroCFTA.SourceCurrentMemoMergeGraph.winner
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current input
+                            candidate))
+                        after))))
+              right fun physical law =>
+              have inputAvailable :=
+                @MicroCFTA.SourceEqualityRequiredCache.Keeps.available
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after
+                  (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect.keeps
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after effect)
+                  input a_4;
+              have completed :=
+                @MicroCFTA.SourceCurrentMemoMergeEffects.stored_remember
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after current retained input
+                  candidate inputAvailable
+                  (@And.left
+                    (@MicroCFTA.InternedProbeProvenance.Available
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after candidate)
+                    (@Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.free
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) input)
+                        (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+                      @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.free
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) candidate)
+                        (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                    physical)
+                  (@And.right
+                    (@MicroCFTA.InternedProbeProvenance.Available
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after candidate)
+                    (@Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.free
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) input)
+                        (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+                      @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.free
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) candidate)
+                        (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                    physical);
+              have finalSupport :=
+                @MicroCFTA.SourceCurrentMergePositivePosition.support_remember current currentSupport input candidate
+                  law;
+              @And.casesOn.{0}
+                (@Eq.{1}
+                  (MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.original
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                    (@MicroCFTA.SourceCurrentMemoMergeGraph.winner
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current input candidate))
+                  input)
+                (And
+                  (@MicroCFTA.InternedProbeProvenance.Available
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after
+                    (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                      (@MicroCFTA.SourceCurrentMemoMergeGraph.winner
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current input
+                        candidate)))
+                  (@Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.free
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) input)
+                      (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+                    @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.free
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                        (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                          (@MicroCFTA.SourceCurrentMemoMergeGraph.winner
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current input
+                            candidate)))
+                      (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))
+                (fun x =>
+                  And
+                    (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after)
+                    (And
+                      (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after
+                        (@MicroCFTA.SourceCurrentMemoMergeGraph.remember
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current input
+                          candidate))
+                      (And
+                        (MicroCFTA.SourceCurrentMergePositivePosition.Support
+                          (@MicroCFTA.SourceCurrentMemoMergeGraph.remember
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current input
+                            candidate))
+                        (MicroCFTA.SourceCurrentMergePositivePosition.RequestContract input before
+                          (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                            (@MicroCFTA.SourceCurrentMemoMergeGraph.winner
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current input
+                              candidate))
+                          after))))
+                (@MicroCFTA.SourceCurrentMemoMergeEffects.hit_original
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (fun a b =>
+                    @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula
+                      instDecidableEqString MicroCFTA.FormulaExecutable.formulaDecidableEq a b)
+                  inst after
+                  (@MicroCFTA.SourceCurrentMemoMergeGraph.remember
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current input candidate)
+                  input
+                  (@MicroCFTA.SourceCurrentMemoMergeGraph.winner
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current input candidate)
+                  (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect.semantic
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after effect)
+                  inputAvailable completed
+                  (@MicroCFTA.SourceCurrentMemoMergeGraph.winner_found
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current input candidate))
+                fun same right =>
+                @And.casesOn.{0}
+                  (@MicroCFTA.InternedProbeProvenance.Available
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after
+                    (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                      (@MicroCFTA.SourceCurrentMemoMergeGraph.winner
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current input
+                        candidate)))
+                  (@Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.free
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) input)
+                      (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+                    @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.free
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                        (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                          (@MicroCFTA.SourceCurrentMemoMergeGraph.winner
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current input
+                            candidate)))
+                      (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                  (fun x =>
+                    And
+                      (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after)
+                      (And
+                        (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after
+                          (@MicroCFTA.SourceCurrentMemoMergeGraph.remember
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current input
+                            candidate))
+                        (And
+                          (MicroCFTA.SourceCurrentMergePositivePosition.Support
+                            (@MicroCFTA.SourceCurrentMemoMergeGraph.remember
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current input
+                              candidate))
+                          (MicroCFTA.SourceCurrentMergePositivePosition.RequestContract input before
+                            (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                              (@MicroCFTA.SourceCurrentMemoMergeGraph.winner
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current input
+                                candidate))
+                            after))))
+                  right fun winnerAvailable winnerClosed =>
+                  have winnerSupport :=
+                    finalSupport
+                      (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) input)
+                      (@MicroCFTA.SourceCurrentMemoMergeGraph.winner
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current input candidate)
+                      (@MicroCFTA.SourceCurrentMemoMergeGraph.winner_found
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current input
+                        candidate);
+                  @And.intro
+                    (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after)
+                    (And
+                      (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after
+                        (@MicroCFTA.SourceCurrentMemoMergeGraph.remember
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current input
+                          candidate))
+                      (And
+                        (MicroCFTA.SourceCurrentMergePositivePosition.Support
+                          (@MicroCFTA.SourceCurrentMemoMergeGraph.remember
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current input
+                            candidate))
+                        (MicroCFTA.SourceCurrentMergePositivePosition.RequestContract input before
+                          (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                            (@MicroCFTA.SourceCurrentMemoMergeGraph.winner
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current input
+                              candidate))
+                          after)))
+                    effect
+                    (@And.intro
+                      (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after
+                        (@MicroCFTA.SourceCurrentMemoMergeGraph.remember
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current input
+                          candidate))
+                      (And
+                        (MicroCFTA.SourceCurrentMergePositivePosition.Support
+                          (@MicroCFTA.SourceCurrentMemoMergeGraph.remember
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current input
+                            candidate))
+                        (MicroCFTA.SourceCurrentMergePositivePosition.RequestContract input before
+                          (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                            (@MicroCFTA.SourceCurrentMemoMergeGraph.winner
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current input
+                              candidate))
+                          after))
+                      completed
+                      (@And.intro
+                        (MicroCFTA.SourceCurrentMergePositivePosition.Support
+                          (@MicroCFTA.SourceCurrentMemoMergeGraph.remember
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current input
+                            candidate))
+                        (MicroCFTA.SourceCurrentMergePositivePosition.RequestContract input before
+                          (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                            (@MicroCFTA.SourceCurrentMemoMergeGraph.winner
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current input
+                              candidate))
+                          after)
+                        finalSupport
+                        (@And.intro
+                          (@MicroCFTA.SourceCurrentMemoMergeEffects.Contract
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) input before
+                            (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                              (@MicroCFTA.SourceCurrentMemoMergeGraph.winner
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current input
+                                candidate))
+                            after)
+                          (∀ (path : List.{0} Nat),
+                            MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt
+                                (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                  (@MicroCFTA.SourceCurrentMemoMergeGraph.winner
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current
+                                    input candidate))
+                                path →
+                              MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt input path)
+                          (@And.intro
+                            (@MicroCFTA.InternedProbeProvenance.Available
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after
+                              (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                (@MicroCFTA.SourceCurrentMemoMergeGraph.winner
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current input
+                                  candidate)))
+                            (@Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                (@MicroCFTA.InternedConstructorTemplates.Value.free
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) input)
+                                (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+                              @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                (@MicroCFTA.InternedConstructorTemplates.Value.free
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                  (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                    (@MicroCFTA.SourceCurrentMemoMergeGraph.winner
+                                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current
+                                      input candidate)))
+                                (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                            winnerAvailable winnerClosed)
+                          (@Eq.mp.{0}
+                            (∀ (path : List.{0} Nat),
+                              MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt
+                                  (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                    (@MicroCFTA.SourceCurrentMemoMergeGraph.winner
+                                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current
+                                      input candidate))
+                                  path →
+                                MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt
+                                  (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.original
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                    (@MicroCFTA.SourceCurrentMemoMergeGraph.winner
+                                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current
+                                      input candidate))
+                                  path)
+                            (∀ (path : List.{0} Nat),
+                              MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt
+                                  (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                    (@MicroCFTA.SourceCurrentMemoMergeGraph.winner
+                                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current
+                                      input candidate))
+                                  path →
+                                MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt input path)
+                            (@congrArg.{1, 1}
+                              (MicroCFTA.InternedConstructorTemplates.Value
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                              Prop
+                              (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.original
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                (@MicroCFTA.SourceCurrentMemoMergeGraph.winner
+                                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) current input
+                                  candidate))
+                              input
+                              (fun _a =>
+                                ∀ (path : List.{0} Nat),
+                                  MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt
+                                      (@MicroCFTA.SourceCurrentMemoMergeGraph.Entry.result
+                                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                        (@MicroCFTA.SourceCurrentMemoMergeGraph.winner
+                                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                          current input candidate))
+                                      path →
+                                    MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt _a path)
+                              same)
+                            winnerSupport)))))
+    Output code before memo output after saved actual
+'MicroCFTA.SourceCurrentMergePositivePosition.run' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMergePositivePosition.call : ∀
+  [inst :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool)
+  (top : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula),
+  @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain top) Bool.true →
+    ∀
+      {input output :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+      {before after :
+        MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+      {memo saved :
+        MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)},
+      @MicroCFTA.SourceCurrentMemoMergeGraph.Call (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (fun a b =>
+            @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula instDecidableEqString
+              MicroCFTA.FormulaExecutable.formulaDecidableEq a b)
+          inst clear top input before memo output after saved →
+        @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before →
+          @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before →
+            @MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before memo →
+              MicroCFTA.SourceCurrentMergePositivePosition.Support memo →
+                @MicroCFTA.InternedProbeProvenance.Available
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before input →
+                  And
+                    (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after)
+                    (And
+                      (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after saved)
+                      (And (MicroCFTA.SourceCurrentMergePositivePosition.Support saved)
+                        (And
+                          (@MicroCFTA.SourceCurrentMemoMergeEffects.Contract
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) input before output
+                            after)
+                          (∀ (path : List.{0} Nat),
+                            MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt output path →
+                              MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt input path))))
+theorem MicroCFTA.SourceCurrentMergePositivePosition.call : ∀
+  [inst :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool)
+  (top : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula),
+  @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain top) Bool.true →
+    ∀
+      {input output :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+      {before after :
+        MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+      {memo saved :
+        MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)},
+      @MicroCFTA.SourceCurrentMemoMergeGraph.Call (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (fun a b =>
+            @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula instDecidableEqString
+              MicroCFTA.FormulaExecutable.formulaDecidableEq a b)
+          inst clear top input before memo output after saved →
+        @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before →
+          @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before →
+            @MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before memo →
+              MicroCFTA.SourceCurrentMergePositivePosition.Support memo →
+                @MicroCFTA.InternedProbeProvenance.Available
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before input →
+                  And
+                    (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after)
+                    (And
+                      (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after saved)
+                      (And (MicroCFTA.SourceCurrentMergePositivePosition.Support saved)
+                        (And
+                          (@MicroCFTA.SourceCurrentMemoMergeEffects.Contract
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) input before output
+                            after)
+                          (∀ (path : List.{0} Nat),
+                            MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt output path →
+                              MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt input path)))) :=
+fun
+    [inst :
+      DecidableEq.{1}
+        (MicroCFTA.InternedConstructorTemplates.EdgeKey
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    clear top topPlain {input output} {before after} {memo saved} actual semantic costs stored support available =>
+  @MicroCFTA.SourceCurrentMergePositivePosition.run inst
+    (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+    clear top topPlain
+    (@MicroCFTA.SourceCurrentMemoMergeGraph.Code.request
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) input)
+    before after memo saved output
+    (@MicroCFTA.SourceCurrentMemoMergeGraph.Run.request
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+      (fun a b =>
+        @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula instDecidableEqString
+          MicroCFTA.FormulaExecutable.formulaDecidableEq a b)
+      inst clear top input before memo output after saved actual)
+    (fun after output => MicroCFTA.SourceCurrentMergePositivePosition.RequestContract input before output after)
+    semantic costs stored support
+    (@And.intro
+      (@MicroCFTA.InternedProbeProvenance.Available (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before input)
+      (∀
+        (output :
+          MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        (after :
+          MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+        @MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after →
+          (fun input previous result current =>
+                And
+                  (@MicroCFTA.SourceCurrentMemoMergeEffects.Contract
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) input previous result
+                    current)
+                  (∀ (path : List.{0} Nat),
+                    MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt result path →
+                      MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt input path))
+              input before output after →
+            (fun after output => MicroCFTA.SourceCurrentMergePositivePosition.RequestContract input before output after)
+              after output)
+      available fun x x_1 x_2 returned => returned)
+'MicroCFTA.SourceCurrentMergePositivePosition.call' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMergePositivePosition.worker : ∀
+  [inst :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool)
+  (top : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula),
+  @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain top) Bool.true →
+    ∀ {fuel selectionFuel : Nat}
+      {input :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+      {before :
+        MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+      {memo :
+        MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+      {output :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+      {after :
+        MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+      {saved :
+        MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)},
+      @Eq.{1}
+          (MicroCFTA.SourceCurrentMemoMergeWorker.Outcome
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+          (@MicroCFTA.SourceCurrentMemoMergeWorker.call
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (fun a b =>
+              @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula instDecidableEqString
+                MicroCFTA.FormulaExecutable.formulaDecidableEq a b)
+            inst clear top fuel selectionFuel input before memo)
+          (@MicroCFTA.SourceCurrentMemoMergeWorker.Outcome.done
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            output after saved) →
+        @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before →
+          @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before →
+            @MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before memo →
+              MicroCFTA.SourceCurrentMergePositivePosition.Support memo →
+                @MicroCFTA.InternedProbeProvenance.Available
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before input →
+                  And
+                    (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after)
+                    (And
+                      (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after saved)
+                      (And (MicroCFTA.SourceCurrentMergePositivePosition.Support saved)
+                        (And
+                          (@MicroCFTA.SourceCurrentMemoMergeEffects.Contract
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) input before output
+                            after)
+                          (∀ (path : List.{0} Nat),
+                            MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt output path →
+                              MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt input path))))
+theorem MicroCFTA.SourceCurrentMergePositivePosition.worker : ∀
+  [inst :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool)
+  (top : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula),
+  @Eq.{1} Bool (MicroCFTA.SourceMemoGate.plain top) Bool.true →
+    ∀ {fuel selectionFuel : Nat}
+      {input :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+      {before :
+        MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+      {memo :
+        MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+      {output :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+      {after :
+        MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+      {saved :
+        MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)},
+      @Eq.{1}
+          (MicroCFTA.SourceCurrentMemoMergeWorker.Outcome
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+          (@MicroCFTA.SourceCurrentMemoMergeWorker.call
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (fun a b =>
+              @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula instDecidableEqString
+                MicroCFTA.FormulaExecutable.formulaDecidableEq a b)
+            inst clear top fuel selectionFuel input before memo)
+          (@MicroCFTA.SourceCurrentMemoMergeWorker.Outcome.done
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            output after saved) →
+        @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before →
+          @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before →
+            @MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before memo →
+              MicroCFTA.SourceCurrentMergePositivePosition.Support memo →
+                @MicroCFTA.InternedProbeProvenance.Available
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before input →
+                  And
+                    (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) before after)
+                    (And
+                      (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) after saved)
+                      (And (MicroCFTA.SourceCurrentMergePositivePosition.Support saved)
+                        (And
+                          (@MicroCFTA.SourceCurrentMemoMergeEffects.Contract
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) input before output
+                            after)
+                          (∀ (path : List.{0} Nat),
+                            MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt output path →
+                              MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt input path)))) :=
+fun
+    [inst :
+      DecidableEq.{1}
+        (MicroCFTA.InternedConstructorTemplates.EdgeKey
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    clear top topPlain {fuel selectionFuel} {input} {before} {memo} {output} {after} {saved} actual semantic costs
+    stored support available =>
+  @MicroCFTA.SourceCurrentMergePositivePosition.call inst clear top topPlain input output before after memo saved
+    (@MicroCFTA.SourceCurrentMemoMergeWorkerProofs.call_sound
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+      (fun a b =>
+        @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula instDecidableEqString
+          MicroCFTA.FormulaExecutable.formulaDecidableEq a b)
+      inst clear top input output before after memo saved fuel selectionFuel actual)
+    semantic costs stored support available
+'MicroCFTA.SourceCurrentMergePositivePosition.worker' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentMergePositivePosition.allocated : ∀
+  [inst :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool) {fuel selectionFuel : Nat}
+  {input :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before : MicroCFTA.SourceCurrentAllocatedMergeGraph.State} {memo : MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo}
+  {output :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {after : MicroCFTA.SourceCurrentAllocatedMergeGraph.State} {saved : MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo},
+  @Eq.{1}
+      (MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome
+        (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+      (@MicroCFTA.SourceCurrentAllocatedMergeWorker.call
+        (fun a b =>
+          @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula instDecidableEqString
+            MicroCFTA.FormulaExecutable.formulaDecidableEq a b)
+        inst clear fuel selectionFuel input before memo)
+      (@MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome.done
+        (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        output after saved) →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula before) →
+      @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula before) →
+        @MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula before)
+            memo →
+          MicroCFTA.SourceCurrentMergePositivePosition.Support memo →
+            @MicroCFTA.InternedProbeProvenance.Available
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula before)
+                input →
+              And
+                (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+                    before)
+                  (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+                    after))
+                (And
+                  (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                    (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+                      after)
+                    saved)
+                  (And (MicroCFTA.SourceCurrentMergePositivePosition.Support saved)
+                    (And
+                      (@MicroCFTA.SourceCurrentMemoMergeEffects.Contract
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) input
+                        (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+                          before)
+                        output
+                        (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+                          after))
+                      (∀ (path : List.{0} Nat),
+                        MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt output path →
+                          MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt input path))))
+theorem MicroCFTA.SourceCurrentMergePositivePosition.allocated : ∀
+  [inst :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool) {fuel selectionFuel : Nat}
+  {input :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before : MicroCFTA.SourceCurrentAllocatedMergeGraph.State} {memo : MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo}
+  {output :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {after : MicroCFTA.SourceCurrentAllocatedMergeGraph.State} {saved : MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo},
+  @Eq.{1}
+      (MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome
+        (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+      (@MicroCFTA.SourceCurrentAllocatedMergeWorker.call
+        (fun a b =>
+          @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula instDecidableEqString
+            MicroCFTA.FormulaExecutable.formulaDecidableEq a b)
+        inst clear fuel selectionFuel input before memo)
+      (@MicroCFTA.SourceCurrentAllocatedMergeWorker.Outcome.done
+        (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+        output after saved) →
+    @MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula before) →
+      @MicroCFTA.InternedFreshOrdinaryCostHeap.Heap (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula before) →
+        @MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula before)
+            memo →
+          MicroCFTA.SourceCurrentMergePositivePosition.Support memo →
+            @MicroCFTA.InternedProbeProvenance.Available
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula before)
+                input →
+              And
+                (@MicroCFTA.SourceCurrentMemoMergeEffects.Effect
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                  (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+                    before)
+                  (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+                    after))
+                (And
+                  (@MicroCFTA.SourceCurrentMemoMergeEffects.Stored
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                    (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+                      after)
+                    saved)
+                  (And (MicroCFTA.SourceCurrentMergePositivePosition.Support saved)
+                    (And
+                      (@MicroCFTA.SourceCurrentMemoMergeEffects.Contract
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) input
+                        (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+                          before)
+                        output
+                        (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula
+                          after))
+                      (∀ (path : List.{0} Nat),
+                        MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt output path →
+                          MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt input path)))) :=
+fun
+    [inst :
+      DecidableEq.{1}
+        (MicroCFTA.InternedConstructorTemplates.EdgeKey
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    clear {fuel selectionFuel} {input} {before} {memo} {output} {after} {saved} actual semantic costs stored support
+    available =>
+  @MicroCFTA.SourceCurrentMergePositivePosition.call inst clear
+    (@MicroCFTA.SourceEqualityConstraintConstructors.top MicroCFTA.FullSyntax.Formula)
+    (@rfl.{1} Bool
+      (MicroCFTA.SourceMemoGate.plain
+        (@MicroCFTA.SourceEqualityConstraintConstructors.top MicroCFTA.FullSyntax.Formula)))
+    input output
+    (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula before)
+    (@MicroCFTA.SourceCurrentConjunctionRowsAllocation.State.heap
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) MicroCFTA.FullSyntax.Formula after)
+    memo saved
+    (@MicroCFTA.SourceCurrentAllocatedMergeGraph.Call.graph
+      (fun a b =>
+        @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula instDecidableEqString
+          MicroCFTA.FormulaExecutable.formulaDecidableEq a b)
+      inst clear input output before after memo saved
+      (@MicroCFTA.SourceCurrentAllocatedMergeWorkerSound.call_sound
+        (fun a b =>
+          @instDecidableEqProd.{0, 0} MicroCFTA.SourceGuards.Name MicroCFTA.FullSyntax.Formula instDecidableEqString
+            MicroCFTA.FormulaExecutable.formulaDecidableEq a b)
+        inst clear input output before after memo saved fuel selectionFuel actual))
+    semantic costs stored support available
+'MicroCFTA.SourceCurrentMergePositivePosition.allocated' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
