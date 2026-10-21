@@ -1,0 +1,1 @@
+The LocalFaults author previously wrote ActualParentNativeStores and OuterPrefixNativeStores. These are imported foundations. The current review checks the new local classification and its use of those foundations. It does not claim that every imported proof has a new independent review. The frozen owner report remains unchanged.

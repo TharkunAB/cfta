@@ -1,0 +1,18 @@
+  142 /-- Resident filtered probes derive the exact source reconstruction at the same full native state. -/
+  143 theorem resident_rebuild [DecidableEq (EdgeKey Symbol Guard)]
+  144     (before : Checked width) (ready : Ready before) (probes : ProbeHeap before.native.machine.heap)
+  145     (entry : Cache.Interned InternedBinderProtocol.NodeKey) (body depth ordinary : Value Symbol Guard)
+  146     (available : Available before.native.machine.heap (.mu entry body depth ordinary)) :
+  147     SourceEqualityMuReconstruction.rebuild entry body depth ordinary before.native.machine.heap =
+  148         .done (cleanup (.mu entry body depth ordinary)) before.native.machine.heap ∧
+  149       Available before.native.machine.heap (cleanup (.mu entry body depth ordinary)) ∧
+  150       (cleanup (.mu entry body depth ordinary)).free = (Value.mu entry body depth ordinary).free ∧
+  151       ∀ (holds : Guard → Term Symbol → Bool) (ambient : InternedGuardedLanguage.Env Symbol),
+  152         InternedGuardedLanguage.meaning holds ambient (cleanup (.mu entry body depth ordinary)) =
+  153           InternedGuardedLanguage.meaning holds ambient (.mu entry body depth ordinary) := by
+  154   have clean := InternedFreshOrdinaryProbeHeap.resident before.native.machine.heap probes entry body depth ordinary available
+  155   have coherent := ready.semantic.ready.semantic.1.normal.facts.coherent
+  156   exact ⟨SourceEqualityMuReconstruction.completed entry body depth ordinary before.native.machine.heap coherent available clean,
+  157     InternedConstructionProvenance.cleanup_available _ available,
+  158     InternedNormalizationFree.cleanup_free _, fun holds ambient =>
+  159       InternedGuardedLanguage.cleanup_exact holds ambient _ before.native.machine.heap coherent available⟩

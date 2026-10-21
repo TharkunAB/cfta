@@ -1,0 +1,43 @@
+  500 theorem Step.failed (actual : Step g s r e p h m c n budget first last)
+  501     (failed : run g s r e p h m c n budget last = .failed fault after) :
+  502     run g s r e p h m c n budget first = .failed fault after := by
+  503   cases actual with
+  504   | node_evaluate actual =>
+  505       have actualFailed := erase_failed failed
+  506       simp only [SourceCurrentOuterActiveAncestry.run, nodeCall, actual, actualFailed, Outcome.bind]
+  507   | body_rows actual =>
+  508       have actualFailed := erase_failed failed
+  509       simp only [SourceCurrentOuterActiveAncestry.run, nodeBody, actual, actualFailed, Outcome.bind]
+  510   | rows_edge actual =>
+  511       have actualFailed := erase_failed failed
+  512       simp only [SourceCurrentOuterActiveAncestry.run, rows, actual, actualFailed, Outcome.bind]
+  513   | rows_tail edge children =>
+  514       have actualFailed := erase_failed failed
+  515       simp only [SourceCurrentOuterActiveAncestry.run, rows, edge, children, actualFailed, Outcome.bind]
+  516   | descendants_children actual =>
+  517       have actualFailed := erase_failed failed
+  518       simp only [SourceCurrentAllocatedPartialGraph.prefixState,
+  519         SourceCurrentAllocatedInheritedPrefix.state] at actualFailed
+  520       simp only [SourceCurrentOuterActiveAncestry.run, descendants, actual, actualFailed, Outcome.bind]
+  521   | children_walk live =>
+  522       rename_i combined fuel values before
+  523       simp only [SourceCurrentOuterActiveAncestry.run] at failed ⊢
+  524       cases combined with
+  525       | contradiction => exact False.elim (live rfl)
+  526       | live identity records => simpa only [children] using failed
+  527   | walk_head =>
+  528       have actualFailed := erase_failed failed
+  529       simp only [SourceCurrentOuterActiveAncestry.run, walk, actualFailed, Outcome.bind]
+  530   | walk_tail actual =>
+  531       have actualFailed := erase_failed failed
+  532       simp only [SourceCurrentOuterActiveAncestry.run, walk, actual, actualFailed, Outcome.bind]
+  533 
+  534 /-- Literal failure correspondence holds for the entire derived unfinished prefix. -/
+  535 theorem Reached.failed (actual : Reached g s r e p h m c n budget first last)
+  536     (failed : run g s r e p h m c n budget last = .failed fault after) :
+  537     run g s r e p h m c n budget first = .failed fault after := by
+  538   induction actual with
+  539   | refl => exact failed
+  540   | snoc earlier last ih => exact ih (last.failed failed)
+  541 
+  542 

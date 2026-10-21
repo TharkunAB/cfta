@@ -1,0 +1,21 @@
+theorem failed_cases
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    {g s r e p h m c n budget : Nat} {first : Phase (bits + 2)}
+    {inventory : Inventory} {memos : Memos} (seed : List Guard × Profile)
+    (initial : Context formulas solver inventory (caller first) memos)
+    (frame : Frame formulas solver inventory (caller first).checked)
+    (fits : Fits seed.2 (caller first).checked)
+    (known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.1)
+      (caller first).checked.native.machine.heap)
+    (inputs : SourceCurrentOuterPrefixInvariants.Inputs first)
+    (room : Room bits (SourceCurrentOuterInitialPrefix.forecast budget first seed).2)
+    (fault : SourceCurrentAllocatedPartialWorker.Fault (bits + 2))
+    (after : Caller (bits + 2))
+    (failed : SourceCurrentOuterActiveAncestry.run g s r e p h m c n budget first =
+      .failed fault after) :
+    (∃ limit, fault = .exhausted limit) ∨
+    (∃ handle, fault = .nodeMemo handle .busy ∨ fault = .nodeMemo handle .absent) ∨
+    (∃ handle observation, fault = .edgeMemo handle observation) ∨
+    (∃ name, fault = .unexpectedReference name) ∨
+    (∃ observation, fault = .parent observation)

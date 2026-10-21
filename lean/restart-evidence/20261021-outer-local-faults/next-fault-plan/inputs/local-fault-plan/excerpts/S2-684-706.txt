@@ -1,0 +1,23 @@
+  684 theorem failed (valid : NodeValid (caller phase))
+  685     (actual : run g s r e p h m c n budget phase = .failed (.nodeMemo handle .busy) after) :
+  686     Dispatch g s r e p h m c n budget phase handle after := by
+  687   cases phase with
+  688   | node fuel request before => exact (all_failures fuel).1 _ _ _ _ _ _ _ _ _ _ _ _ _ _ valid (erase_failed actual)
+  689   | body fuel request before => exact (all_failures fuel).2.1 _ _ _ _ _ _ _ _ _ _ _ _ _ _ valid (erase_failed actual)
+  690   | rows fuel inherited values before => exact (all_failures fuel).2.2.1 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ valid (erase_failed actual)
+  691   | descendants fuel inherited value before => exact (all_failures fuel).2.2.2.1 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ valid (erase_failed actual)
+  692   | children fuel combined values before => exact (all_failures fuel).2.2.2.2.1 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ valid (erase_failed actual)
+  693   | walk fuel combined index values before => exact (all_failures fuel).2.2.2.2.2 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ valid (erase_failed actual)
+  694 
+  695 /-- A real initial busy failure identifies its exact enclosing activation and every active owner. -/
+  696 theorem initial (checked : SourceEqualityNativeDemand.State width)
+  697     (merge : SourceCurrentMemoMergeGraph.Memo Symbol Guard) (fourth : SourceCurrentEmptinessMemo.Memo)
+  698     (fuel : Nat) (request : NodeRequest)
+  699     (actual : nodeCall fuel g s r e p h m c n budget request
+  700       (SourceCurrentAllocatedPartialState.initial checked merge fourth) = .failed (.nodeMemo handle .busy) after) :
+  701     ∃ next candidate,
+  702       Reached g s r e p h m c n budget
+  703         (.node fuel request (SourceCurrentAllocatedPartialState.initial checked merge fourth)) (.node next candidate after) ∧
+  704       beginNode candidate after = (handle,.busy,after) ∧
+  705       ∃ owner, after.nodeResults.cells handle = some ⟨owner,.evaluating⟩ ∧ owner.key = candidate.key ∧
+  706         Ancestor g s r e p h m c n budget

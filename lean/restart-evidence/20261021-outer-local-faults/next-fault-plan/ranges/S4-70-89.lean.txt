@@ -1,0 +1,20 @@
+/-- Initial semantics, scheduled capacity and edge idle exclude every edge memo fault in all outer phases. -/
+theorem no_edge_memo_failure {g s r e p h m c n budget : Nat} {phase : Phase (bits+2)}
+    {inventory : Inventory} {memos : Memos} (seed : List Guard × Profile)
+    (initial : Context formulas solver inventory (caller phase) memos)
+    (frame : Frame formulas solver inventory (caller phase).checked)
+    (fits : Fits seed.2 (caller phase).checked)
+    (known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.1) (caller phase).checked.native.machine.heap)
+    (inputs : Inputs phase) (room : Room bits (forecast budget phase seed).2)
+    (idle : EdgeIdle (caller phase)) (handle : Nat)
+    (observation : FlatMemoThunk.Observation EdgeRequest Edge) (after : Caller (bits+2)) :
+    SourceCurrentOuterActiveAncestry.run g s r e p h m c n budget phase ≠
+      .failed (.edgeMemo handle observation) after := by
+  intro failed
+  obtain ⟨fuel,inherited,original,rest,before,actual,edgeFailed⟩ := SourceCurrentOuterEdgeMemoFailure.failed failed
+  obtain ⟨_next,_final,_current,_trace,post,_frame,_fits,_carrier,_ready,_below,_subset,_room,_numeric,_known,_need⟩ :=
+    SourceCurrentOuterInitialPrefix.reached formulas solver seed actual initial frame fits known inputs room
+  have currentIdle := SourceCurrentOuterEdgeIdleReached.reached actual idle
+  exact edge_no_memo_failure fuel g s r e p h m c n budget ⟨inherited,original⟩ before
+    post.context.sound.valid currentIdle handle observation after edgeFailed
+

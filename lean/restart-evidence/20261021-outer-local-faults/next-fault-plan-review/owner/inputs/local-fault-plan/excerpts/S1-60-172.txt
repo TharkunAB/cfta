@@ -1,0 +1,113 @@
+   60 mutual
+   61 /-- The node family demands its cell before inspecting the body recursion bound. -/
+   62 noncomputable def nodeCall (fuel g s r e p h m c n budget : Nat) (request : NodeRequest)
+   63     (before : Caller width) : Outcome Node width :=
+   64   let actual := beginNode request before
+   65   match actual.2.1 with
+   66   | .ready result => .done result actual.2.2
+   67   | .evaluate original =>
+   68       (nodeBody fuel g s r e p h m c n budget original actual.2.2).bind fun result after =>
+   69         .done result (finishNode actual.1 result after)
+   70   | .busy => .failed (.nodeMemo actual.1 .busy) actual.2.2
+   71   | .absent => .failed (.nodeMemo actual.1 .absent) actual.2.2
+   72 termination_by (fuel, 3)
+   73 
+   74 /-- Source terminal and binder branches run literally; ordinary rows consume one recursion step. -/
+   75 noncomputable def nodeBody (fuel g s r e p h m c n budget : Nat) (request : NodeRequest)
+   76     (before : Caller width) : Outcome Node width :=
+   77   match request.value with
+   78   | .empty => .done .empty before
+   79   | value@(.union ..) => .done value before
+   80   | .reference name => .failed (.unexpectedReference name) before
+   81   | .mu entry body depth ordinary =>
+   82       match SourceEqualityMuReconstruction.rebuild entry body depth ordinary before.checked.native.machine.heap with
+   83       | .done result heap => .done result (advance before
+   84           (SourceCurrentAllocatedQueryMemo.advancePhysical before.checked ⟨heap, before.checked.operations⟩)
+   85           before.fourth before.merge)
+   86       | observation@(.pending _ heap) => .failed (.binder observation) (advance before
+   87           (SourceCurrentAllocatedQueryMemo.advancePhysical before.checked ⟨heap, before.checked.operations⟩)
+   88           before.fourth before.merge)
+   89   | value@(.node _ original _ _) =>
+   90       match fuel with
+   91       | 0 => .failed (.exhausted .nodeBody) before
+   92       | next + 1 =>
+   93           (rows next g s r e p h m c n budget request.inherited original before).bind fun results after =>
+   94             let rebuilt := SourceCurrentAllocatedRawRebuild.modify value original results after.checked
+   95             .done rebuilt.1 (advance after rebuilt.2 after.fourth after.merge)
+   96 termination_by (fuel, 2)
+   97 
+   98 /-- The edge family evaluates its stored winner and completes only the selected handle. -/
+   99 noncomputable def edgeCall (fuel g s r e p h m c n budget : Nat) (request : EdgeRequest)
+  100     (before : Caller width) : Outcome Edge width :=
+  101   let actual := beginEdge request before
+  102   match actual.2.1 with
+  103   | .ready result => .done result actual.2.2
+  104   | .evaluate original =>
+  105       (edgeBody fuel g s r e p h m c n budget original actual.2.2).bind fun result after =>
+  106         .done result (finishEdge actual.1 result after)
+  107   | .busy => .failed (.edgeMemo actual.1 .busy) actual.2.2
+  108   | .absent => .failed (.edgeMemo actual.1 .absent) actual.2.2
+  109 
+  110 /-- A parent return advances checked state and warm memos without changing either outer result table. -/
+  111 noncomputable def edgeBody (_fuel g s r e p h m c n budget : Nat) (request : EdgeRequest)
+  112     (before : Caller width) : Outcome Edge width :=
+  113   match SourceCurrentAllocatedParentWorker.edge g s r e p h m c n budget
+  114       request.value.entry.key.symbol request.value.entry.key.constraint request.inherited
+  115       request.value.children before.checked before.fourth before.merge with
+  116   | .done result checked fourth memo => .done result (advance before checked fourth memo)
+  117   | .failed fault checked fourth memo => .failed (.parent fault) (advance before checked fourth memo)
+  118 
+  119 /-- Each original row uses its returned parent edge for descendants before entering the suffix. -/
+  120 noncomputable def rows (fuel g s r e p h m c n budget : Nat) (inherited : EqValue)
+  121     (originals : List Edge) (before : Caller width) : Outcome (List Edge) width :=
+  122   match originals with
+  123   | [] => .done [] before
+  124   | original :: rest =>
+  125       match fuel with
+  126       | 0 => .failed (.exhausted .rows) before
+  127       | next + 1 =>
+  128           (edgeCall next g s r e p h m c n budget ⟨inherited, original⟩ before).bind fun narrowed middle =>
+  129             (descendants next g s r e p h m c n budget inherited narrowed middle).bind fun result after =>
+  130               (rows next g s r e p h m c n budget inherited rest after).bind fun results final =>
+  131                 .done (result :: results) final
+  132 termination_by (fuel, 2)
+  133 
+  134 /-- The inherited prefix runs once and passes its actual operation return into indexed children. -/
+  135 noncomputable def descendants (fuel g s r e p h m c n budget : Nat) (inherited : EqValue)
+  136     (edge : Edge) (before : Caller width) : Outcome Edge width :=
+  137   let actual := SourceCurrentAllocatedInheritedPrefix.run edge.entry.key.constraint inherited before.checked.operations
+  138   let middle := advance before
+  139     (SourceCurrentAllocatedQueryMemo.advancePhysical before.checked ⟨before.checked.native.machine.heap, actual.2⟩)
+  140     before.fourth before.merge
+  141   match actual.1 with
+  142   | .error message => .failed (.inherited message) middle
+  143   | .ok none => .failed .missingInherited middle
+  144   | .ok (some combined) =>
+  145       (children fuel g s r e p h m c n budget combined edge.children middle).bind fun results after =>
+  146         let rebuilt := SourceCurrentAllocatedRawRebuild.edge edge results after.checked
+  147         .done rebuilt.1 (advance after rebuilt.2 after.fourth after.merge)
+  148 termination_by (fuel, 2)
+  149 
+  150 /-- Contradictory inherited constraints erase slots without invoking a child request. -/
+  151 noncomputable def children (fuel g s r e p h m c n budget : Nat) (combined : EqValue)
+  152     (values : List Node) (before : Caller width) : Outcome (List Node) width :=
+  153   match combined with
+  154   | .contradiction => .done (EqualityLeafProjectionRuntimeEmpty.erase values) before
+  155   | .live _ _ => walk fuel g s r e p h m c n budget combined 0 values before
+  156 termination_by (fuel, 1)
+  157 
+  158 /-- Indexed child calls use each actual descent at the current operation state. -/
+  159 noncomputable def walk (fuel g s r e p h m c n budget : Nat) (combined : EqValue) (index : Nat)
+  160     (values : List Node) (before : Caller width) : Outcome (List Node) width :=
+  161   match values with
+  162   | [] => .done [] before
+  163   | value :: rest =>
+  164       match fuel with
+  165       | 0 => .failed (.exhausted .walk) before
+  166       | next + 1 =>
+  167           let actual := SourceCurrentAllocatedPartialGraph.descend before combined index
+  168           (nodeCall next g s r e p h m c n budget ⟨actual.1, value⟩ actual.2).bind fun result middle =>
+  169             (walk next g s r e p h m c n budget combined (index + 1) rest middle).bind fun results after =>
+  170               .done (result :: results) after
+  171 termination_by (fuel, 0)
+  172 end

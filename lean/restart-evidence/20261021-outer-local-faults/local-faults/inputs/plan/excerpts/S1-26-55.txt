@@ -1,0 +1,30 @@
+   26 inductive Limit where
+   27   | nodeBody
+   28   | rows
+   29   | walk
+   30   deriving DecidableEq, Repr
+   31 
+   32 /-- Every incomplete outer observation retains its phase and full underlying diagnostic. -/
+   33 inductive Fault (width : Nat) : Type 1 where
+   34   | exhausted (phase : Limit)
+   35   | nodeMemo (handle : Nat) (observation : FlatMemoThunk.Observation NodeRequest Node)
+   36   | edgeMemo (handle : Nat) (observation : FlatMemoThunk.Observation EdgeRequest Edge)
+   37   | unexpectedReference (name : InternedBinderProtocol.Reference)
+   38   | binder (observation : InternedNestedConstruction.Outcome Symbol Guard Node)
+   39   | parent (observation : SourceCurrentAllocatedParentWorker.Fault width)
+   40   | inherited (message : String)
+   41   | missingInherited
+   42 
+   43 /-- Every outer return retains both complete result tables and all lower-stage state. -/
+   44 inductive Outcome (Output : Type) (width : Nat) : Type 1 where
+   45   | done (value : Output) (state : Caller width)
+   46   | failed (fault : Fault width) (state : Caller width)
+   47 
+   48 def Outcome.state : Outcome Output width → Caller width
+   49   | .done _ state | .failed _ state => state
+   50 
+   51 /-- A failed body retains its evaluating owner and never enters a finish continuation. -/
+   52 def Outcome.bind (first : Outcome A width) (next : A → Caller width → Outcome B width) : Outcome B width :=
+   53   match first with
+   54   | .done value state => next value state
+   55   | .failed fault state => .failed fault state

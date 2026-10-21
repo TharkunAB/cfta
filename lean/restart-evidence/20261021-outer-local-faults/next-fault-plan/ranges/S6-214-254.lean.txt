@@ -1,0 +1,41 @@
+theorem no_reference_or_node_absent
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    {g s r e p h m c n budget : Nat} {first : Phase (bits + 2)}
+    {inventory : Inventory} {memos : Memos} (seed : List Guard × Profile)
+    (initial : Context formulas solver inventory (caller first) memos)
+    (frame : Frame formulas solver inventory (caller first).checked)
+    (fits : Fits seed.2 (caller first).checked)
+    (known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.1)
+      (caller first).checked.native.machine.heap)
+    (inputs : SourceCurrentOuterPrefixInvariants.Inputs first)
+    (room : Room bits (SourceCurrentOuterInitialPrefix.forecast budget first seed).2)
+    (normal : SourceCurrentRequiredUnionNormal.UnionNormal (caller first).checked.native.machine.heap)
+    (supported : SourceCurrentNativeRequestPositivePositions.Support
+      (caller first).checked.native.machine.heap (caller first).checked.native)
+    (causal : SourceCurrentNativeMuPublication.History empty (caller first).checked.native.machine.heap)
+    (merged : SourceCurrentConstrainedCapMemoMerge.Stored
+      (fun guard : Guard => SourceMemoGate.plain guard = true) (caller first).merge)
+    (positiveMemo : SourceCurrentMergePositivePosition.Support (caller first).merge)
+    (origins : SourceCurrentResourceParentWriters.Origins formulas solver (caller first))
+    (stored : SourceCurrentOuterClosedInputs.NodeStored (caller first))
+    (closed : SourceCurrentOuterClosedInputs.InputsClosed first)
+    (name : InternedBinderProtocol.Reference) (handle : Nat) (after : Caller (bits + 2)) :
+    (SourceCurrentOuterActiveAncestry.run g s r e p h m c n budget first ≠
+      .failed (.unexpectedReference name) after) ∧
+    (SourceCurrentOuterActiveAncestry.run g s r e p h m c n budget first ≠
+      .failed (.nodeMemo handle .absent) after) := by
+  constructor
+  · intro failed
+    obtain ⟨fuel,inherited,actual⟩ := failure_cut (kind := true) (name := name) (handle := handle) failed
+    have closedAt := (SourceCurrentOuterClosedInputs.reached formulas solver seed actual initial frame fits known inputs room
+      normal supported causal merged positiveMemo origins stored closed).2
+    change [name] = [] at closedAt
+    cases closedAt
+  · intro failed
+    obtain ⟨fuel,request,before,actual,started⟩ := failure_cut (kind := false) (name := name) (handle := handle) failed
+    have valid : NodeValid (caller first) :=
+      FlatMemoThunk.Valid.keyMap _ _ _ _ initial.sound.valid.nodes (fun _ _ linked => linked.2)
+    exact not_absent request before (actual.valid valid) (congrArg (fun result => result.2.1) started)
+
+end MicroCFTA.SourceCurrentOuterReferenceAbsent

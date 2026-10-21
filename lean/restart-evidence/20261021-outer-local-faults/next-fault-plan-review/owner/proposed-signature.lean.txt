@@ -1,0 +1,34 @@
+theorem done_or_exhausted
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    {g s r e p h m c n budget : Nat} {first : Phase (bits + 2)}
+    {inventory : Inventory} {memos : Memos} (seed : List Guard × Profile)
+    (initial : Context formulas solver inventory (caller first) memos)
+    (frame : Frame formulas solver inventory (caller first).checked)
+    (fits : Fits seed.2 (caller first).checked)
+    (known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.1)
+      (caller first).checked.native.machine.heap)
+    (inputs : SourceCurrentOuterPrefixInvariants.Inputs first)
+    (room : Room bits (SourceCurrentOuterInitialPrefix.forecast budget first seed).2)
+    (normal : SourceCurrentRequiredUnionNormal.UnionNormal (caller first).checked.native.machine.heap)
+    (supported : SourceCurrentNativeRequestPositivePositions.Support
+      (caller first).checked.native.machine.heap (caller first).checked.native)
+    (causal : SourceCurrentNativeMuPublication.History empty (caller first).checked.native.machine.heap)
+    (merged : SourceCurrentConstrainedCapMemoMerge.Stored
+      (fun guard : Guard => SourceMemoGate.plain guard = true) (caller first).merge)
+    (positiveMemo : SourceCurrentMergePositivePosition.Support (caller first).merge)
+    (origins : SourceCurrentResourceParentWriters.Origins formulas solver (caller first))
+    (stored : SourceCurrentOuterClosedInputs.NodeStored (caller first))
+    (closed : SourceCurrentOuterClosedInputs.InputsClosed first)
+    (initialNodeIdle : ∀ chosen owner,
+      (caller first).nodeResults.cells chosen ≠ some ⟨owner, .evaluating⟩)
+    (initialEdgeIdle : SourceCurrentOuterEdgeIdle.EdgeIdle (caller first))
+    (gBound : phaseNeed budget first seed ≤ g) (sBound : phaseNeed budget first seed ≤ s)
+    (rBound : phaseNeed budget first seed ≤ r) (eBound : phaseNeed budget first seed ≤ e)
+    (pBound : phaseNeed budget first seed ≤ p) (hBound : phaseNeed budget first seed ≤ h)
+    (mBound : phaseNeed budget first seed ≤ m) (cBound : phaseNeed budget first seed ≤ c)
+    (nBound : phaseNeed budget first seed ≤ n) :
+    (∃ after, SourceCurrentOuterActiveAncestry.run g s r e p h m c n budget first =
+      .done () after) ∨
+    (∃ limit after, SourceCurrentOuterActiveAncestry.run g s r e p h m c n budget first =
+      .failed (.exhausted limit) after)

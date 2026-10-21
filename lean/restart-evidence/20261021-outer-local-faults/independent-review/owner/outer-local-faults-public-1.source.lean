@@ -1,0 +1,230 @@
+import MicroCFTA.SourceCurrentOuterInitialPrefix
+import MicroCFTA.SourceCurrentAllocatedMuRebuild
+
+namespace MicroCFTA.SourceCurrentOuterLocalFaults
+open Cache InternedConstructorTemplates
+open SourceCurrentAllocatedPartialState SourceCurrentAllocatedPartialWorker
+open SourceCurrentOuterCopiedWarmHit (Phase)
+open SourceCurrentOuterExecutionAncestry (Reached)
+open SourceCurrentAllocatedPartialInvariant (Context)
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedNativeResourceForecast (Profile Room)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Frame Fits)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Guard
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "caller" => SourceCurrentOuterActiveAncestry.caller
+
+private def Cases (fault : Fault width) : Prop :=
+  (∃ limit, fault = .exhausted limit) ∨
+  (∃ handle, fault = .nodeMemo handle .busy ∨ fault = .nodeMemo handle .absent) ∨
+  (∃ handle observation, fault = .edgeMemo handle observation) ∨
+  (∃ name, fault = .unexpectedReference name) ∨
+  (∃ observation, fault = .parent observation)
+
+private theorem erase_failed {actual : Outcome A width}
+    (failed : actual.bind (fun _ after => .done () after) = .failed fault after) :
+    actual = .failed fault after := by
+  cases actual <;> simp_all [Outcome.bind]
+
+private theorem bind_failed (first : Outcome A width) (next : A → Caller width → Outcome B width)
+    (failed : first.bind next = .failed fault after) :
+    first = .failed fault after ∨ ∃ value middle, first = .done value middle ∧ next value middle = .failed fault after := by
+  cases first with
+  | failed =>
+    simp only [Outcome.bind] at failed
+    cases failed
+    exact .inl rfl
+  | done value middle => exact .inr ⟨value, middle, rfl, failed⟩
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Node] {bits : Nat}
+
+/-- Actual local faults retain only outer limits, memo diagnostics, references, or Parent faults. -/
+theorem failed_cases
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    {g s r e p h m c n budget : Nat} {first : Phase (bits + 2)}
+    {inventory : Inventory} {memos : Memos} (seed : List Guard × Profile)
+    (initial : Context formulas solver inventory (caller first) memos)
+    (frame : Frame formulas solver inventory (caller first).checked)
+    (fits : Fits seed.2 (caller first).checked)
+    (known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.1)
+      (caller first).checked.native.machine.heap)
+    (inputs : SourceCurrentOuterPrefixInvariants.Inputs first)
+    (room : Room bits (SourceCurrentOuterInitialPrefix.forecast budget first seed).2)
+    (fault : SourceCurrentAllocatedPartialWorker.Fault (bits + 2))
+    (after : Caller (bits + 2))
+    (failed : SourceCurrentOuterActiveAncestry.run g s r e p h m c n budget first =
+      .failed fault after) :
+    (∃ limit, fault = .exhausted limit) ∨
+    (∃ handle, fault = .nodeMemo handle .busy ∨ fault = .nodeMemo handle .absent) ∨
+    (∃ handle observation, fault = .edgeMemo handle observation) ∨
+    (∃ name, fault = .unexpectedReference name) ∨
+    (∃ observation, fault = .parent observation)
+ := by
+  let resources := fun last (past : Reached g s r e p h m c n budget first last) =>
+    SourceCurrentOuterInitialPrefix.reached formulas solver seed past initial frame fits known inputs room
+  let nodeAt (fuel : Nat) : Prop := ∀ request before,
+    Reached g s r e p h m c n budget first (.node fuel request before) → ∀ fault after,
+      nodeCall fuel g s r e p h m c n budget request before = .failed fault after → Cases fault
+  let bodyAt (fuel : Nat) : Prop := ∀ request before,
+    Reached g s r e p h m c n budget first (.body fuel request before) → ∀ fault after,
+      nodeBody fuel g s r e p h m c n budget request before = .failed fault after → Cases fault
+  let rowsAt (fuel : Nat) : Prop := ∀ inherited originals before,
+    Reached g s r e p h m c n budget first (.rows fuel inherited originals before) → ∀ fault after,
+      rows fuel g s r e p h m c n budget inherited originals before = .failed fault after → Cases fault
+  let descendantsAt (fuel : Nat) : Prop := ∀ inherited edge before,
+    Reached g s r e p h m c n budget first (.descendants fuel inherited edge before) → ∀ fault after,
+      descendants fuel g s r e p h m c n budget inherited edge before = .failed fault after → Cases fault
+  let childrenAt (fuel : Nat) : Prop := ∀ combined values before,
+    Reached g s r e p h m c n budget first (.children fuel combined values before) → ∀ fault after,
+      children fuel g s r e p h m c n budget combined values before = .failed fault after → Cases fault
+  let walkAt (fuel : Nat) : Prop := ∀ combined index values before,
+    Reached g s r e p h m c n budget first (.walk fuel combined index values before) → ∀ fault after,
+      walk fuel g s r e p h m c n budget combined index values before = .failed fault after → Cases fault
+  have edgeCases (fuel : Nat) (request : EdgeRequest) (before : Caller (bits + 2)) fault after
+      (failed : edgeCall fuel g s r e p h m c n budget request before = .failed fault after) : Cases fault := by
+    rcases started : beginEdge request before with ⟨handle, action, running⟩
+    cases action with
+    | ready value => simp only [edgeCall, started] at failed; cases failed
+    | busy | absent =>
+      simp only [edgeCall, started] at failed
+      cases failed
+      exact .inr (.inr (.inl ⟨_, _, rfl⟩))
+    | evaluate original =>
+      simp only [edgeCall, started, edgeBody] at failed
+      split at failed <;> simp only [Outcome.bind] at failed
+      · cases failed
+      · cases failed
+        exact .inr (.inr (.inr (.inr ⟨_, rfl⟩)))
+  have complete : ∀ fuel, nodeAt fuel ∧ bodyAt fuel ∧ rowsAt fuel ∧
+      descendantsAt fuel ∧ childrenAt fuel ∧ walkAt fuel := by
+    intro fuel
+    induction fuel using Nat.strongRecOn with
+    | ind fuel ih =>
+      have walkCases : walkAt fuel := by
+        intro combined index values before past fault after failed
+        cases values with
+        | nil => simp only [walk] at failed; cases failed
+        | cons value rest =>
+          cases fuel with
+          | zero =>
+            simp only [walk] at failed
+            cases failed
+            exact .inl ⟨_, rfl⟩
+          | succ fuel =>
+            simp only [walk] at failed
+            rcases bind_failed _ _ failed with headFailed | ⟨head, middle, headDone, later⟩
+            · exact (ih fuel (Nat.lt_succ_self _)).1 _ _ (past.snoc .walk_head) _ _ headFailed
+            · rcases bind_failed _ _ later with tailFailed | ⟨outputs, final, tailDone, impossible⟩
+              · exact (ih fuel (Nat.lt_succ_self _)).2.2.2.2.2 _ _ _ _
+                  (past.snoc (.walk_tail headDone)) _ _ tailFailed
+              · cases impossible
+      have childrenCases : childrenAt fuel := by
+        intro combined values before past fault after failed
+        cases combined with
+        | contradiction => simp only [children] at failed; cases failed
+        | live identity records =>
+          simp only [children] at failed
+          exact walkCases _ _ _ _ (past.snoc (.children_walk (by intro impossible; cases impossible))) _ _ failed
+      have descendantsCases : descendantsAt fuel := by
+        intro inherited edge before past fault after failed
+        obtain ⟨next, final, current, trace, post, numeric, fits, known, ready, below, subset, room, rest⟩ := resources _ past
+        obtain ⟨combined, receipt⟩ := SourceCurrentAllocatedInheritedPrefix.resident_finite formulas solver next
+          edge inherited before.checked post.context.ready post.context.admitted ready.2 ready.1
+        simp only [descendants, receipt.actual] at failed
+        rcases bind_failed _ _ failed with childFailed | ⟨outputs, middle, childDone, impossible⟩
+        · exact childrenCases _ _ _ (past.snoc (.descendants_children receipt.actual)) _ _ childFailed
+        · cases impossible
+      have rowsCases : rowsAt fuel := by
+        intro inherited originals before past fault after failed
+        cases originals with
+        | nil => simp only [rows] at failed; cases failed
+        | cons original rest =>
+          cases fuel with
+          | zero =>
+            simp only [rows] at failed
+            cases failed
+            exact .inl ⟨_, rfl⟩
+          | succ fuel =>
+            simp only [rows] at failed
+            rcases bind_failed _ _ failed with edgeFailed | ⟨narrowed, middle, edgeDone, later⟩
+            · exact edgeCases _ _ _ _ _ edgeFailed
+            · rcases bind_failed _ _ later with childFailed | ⟨result, returned, childDone, suffix⟩
+              · exact (ih fuel (Nat.lt_succ_self _)).2.2.2.1 _ _ _
+                  (past.snoc (.rows_edge edgeDone)) _ _ childFailed
+              · rcases bind_failed _ _ suffix with tailFailed | ⟨outputs, final, tailDone, impossible⟩
+                · exact (ih fuel (Nat.lt_succ_self _)).2.2.1 _ _ _
+                    (past.snoc (.rows_tail edgeDone childDone)) _ _ tailFailed
+                · cases impossible
+      have bodyCases : bodyAt fuel := by
+        intro request before past fault after failed
+        rcases request with ⟨inherited, value⟩
+        cases value with
+        | empty | union => simp only [nodeBody] at failed; cases failed
+        | reference name =>
+          simp only [nodeBody] at failed
+          cases failed
+          exact .inr (.inr (.inr (.inl ⟨_, rfl⟩)))
+        | mu entry body depth ordinary =>
+          obtain ⟨next, final, current, trace, post, numeric, fits, known, ready, rest⟩ := resources _ past
+          have rebuilt := (SourceCurrentAllocatedMuRebuild.resident_rebuild before.checked post.context.ready
+            post.context.probes entry body depth ordinary ready.2).1
+          simp only [nodeBody, rebuilt] at failed
+          cases failed
+        | node entry originals depth free =>
+          cases fuel with
+          | zero =>
+            simp only [nodeBody] at failed
+            cases failed
+            exact .inl ⟨_, rfl⟩
+          | succ fuel =>
+            simp only [nodeBody] at failed
+            rcases bind_failed _ _ failed with rowsFailed | ⟨outputs, middle, rowsDone, impossible⟩
+            · exact (ih fuel (Nat.lt_succ_self _)).2.2.1 _ _ _ (past.snoc (.body_rows rfl)) _ _ rowsFailed
+            · cases impossible
+      have nodeCases : nodeAt fuel := by
+        intro request before past fault after failed
+        rcases started : beginNode request before with ⟨handle, action, running⟩
+        cases action with
+        | ready value => simp only [nodeCall, started] at failed; cases failed
+        | busy =>
+          simp only [nodeCall, started] at failed
+          cases failed
+          exact .inr (.inl ⟨_, .inl rfl⟩)
+        | absent =>
+          simp only [nodeCall, started] at failed
+          cases failed
+          exact .inr (.inl ⟨_, .inr rfl⟩)
+        | evaluate original =>
+          simp only [nodeCall, started] at failed
+          rcases bind_failed _ _ failed with bodyFailed | ⟨result, middle, bodyDone, impossible⟩
+          · exact bodyCases _ _ (past.snoc (.node_evaluate started)) _ _ bodyFailed
+          · cases impossible
+      exact ⟨nodeCases, bodyCases, rowsCases, descendantsCases, childrenCases, walkCases⟩
+  change Cases fault
+  cases first with
+  | node fuel request before => exact (complete fuel).1 _ _ (.refl _) _ _ (erase_failed failed)
+  | body fuel request before => exact (complete fuel).2.1 _ _ (.refl _) _ _ (erase_failed failed)
+  | rows fuel inherited values before => exact (complete fuel).2.2.1 _ _ _ (.refl _) _ _ (erase_failed failed)
+  | descendants fuel inherited edge before => exact (complete fuel).2.2.2.1 _ _ _ (.refl _) _ _ (erase_failed failed)
+  | children fuel combined values before => exact (complete fuel).2.2.2.2.1 _ _ _ (.refl _) _ _ (erase_failed failed)
+  | walk fuel combined index values before => exact (complete fuel).2.2.2.2.2 _ _ _ _ (.refl _) _ _ (erase_failed failed)
+
+end MicroCFTA.SourceCurrentOuterLocalFaults
+
+set_option maxRecDepth 30000
+set_option maxHeartbeats 0
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+#check @MicroCFTA.SourceCurrentOuterLocalFaults.failed_cases
+#print MicroCFTA.SourceCurrentOuterLocalFaults.failed_cases
+#print axioms MicroCFTA.SourceCurrentOuterLocalFaults.failed_cases

@@ -1,0 +1,58 @@
+   32 private theorem not_absent (request : EdgeRequest) (before : Caller width) (valid : Valid before) :
+   33     (beginEdge request before).2.1 ≠ .absent := by
+   34   cases published : before.edgeResults.table request.key with
+   35   | none => simp only [beginEdge, FlatMemoThunk.lookupOrInsert, published, FlatMemoThunk.demand, put]; simp
+   36   | some handle =>
+   37     obtain ⟨⟨original,status⟩,present,_key⟩ := valid.edges.linked request.key handle published
+   38     cases status <;> simp only [beginEdge,FlatMemoThunk.lookupOrInsert,published,FlatMemoThunk.demand,present] <;> simp
+   39 
+   40 variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Node]
+   41 
+   42 /-- Valid links and an idle edge table exclude every local edge memo observation. -/
+   43 theorem edge_no_memo_failure (fuel g s r e p h m c n budget : Nat) (request : EdgeRequest)
+   44     (before : Caller width) (valid : Valid before) (idle : EdgeIdle before)
+   45     (handle : Nat) (observation : FlatMemoThunk.Observation EdgeRequest Edge) (after : Caller width) :
+   46     SourceCurrentAllocatedPartialWorker.edgeCall fuel g s r e p h m c n budget request before ≠
+   47       .failed (.edgeMemo handle observation) after := by
+   48   intro failed
+   49   rcases started : beginEdge request before with ⟨selected,phase,running⟩
+   50   cases phase with
+   51   | ready value =>
+   52     simp only [SourceCurrentAllocatedPartialWorker.edgeCall,started] at failed
+   53     cases failed
+   54   | evaluate original =>
+   55     simp only [SourceCurrentAllocatedPartialWorker.edgeCall,started,
+   56       SourceCurrentAllocatedPartialWorker.edgeBody] at failed
+   57     split at failed <;> simp only [SourceCurrentAllocatedPartialWorker.Outcome.bind] at failed <;> cases failed
+   58   | busy =>
+   59     have safe := SourceCurrentOuterEdgeIdle.edge_call fuel g s r e p h m c n budget request before idle
+   60     simp only [SourceCurrentAllocatedPartialWorker.edgeCall,started] at failed
+   61     cases failed
+   62     simp only [SourceCurrentAllocatedPartialWorker.edgeCall,started,SourceCurrentOuterEdgeIdle.Safe,
+   63       SourceCurrentOuterEdgeIdle.NoEdgeBusy] at safe
+   64   | absent =>
+   65     exact not_absent request before valid (congrArg (fun result => result.2.1) started)
+   66 
+   67 variable {bits : Nat}
+   68 variable (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+   69 
+   70 /-- Initial semantics, scheduled capacity and edge idle exclude every edge memo fault in all outer phases. -/
+   71 theorem no_edge_memo_failure {g s r e p h m c n budget : Nat} {phase : Phase (bits+2)}
+   72     {inventory : Inventory} {memos : Memos} (seed : List Guard × Profile)
+   73     (initial : Context formulas solver inventory (caller phase) memos)
+   74     (frame : Frame formulas solver inventory (caller phase).checked)
+   75     (fits : Fits seed.2 (caller phase).checked)
+   76     (known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.1) (caller phase).checked.native.machine.heap)
+   77     (inputs : Inputs phase) (room : Room bits (forecast budget phase seed).2)
+   78     (idle : EdgeIdle (caller phase)) (handle : Nat)
+   79     (observation : FlatMemoThunk.Observation EdgeRequest Edge) (after : Caller (bits+2)) :
+   80     SourceCurrentOuterActiveAncestry.run g s r e p h m c n budget phase ≠
+   81       .failed (.edgeMemo handle observation) after := by
+   82   intro failed
+   83   obtain ⟨fuel,inherited,original,rest,before,actual,edgeFailed⟩ := SourceCurrentOuterEdgeMemoFailure.failed failed
+   84   obtain ⟨_next,_final,_current,_trace,post,_frame,_fits,_carrier,_ready,_below,_subset,_room,_numeric,_known,_need⟩ :=
+   85     SourceCurrentOuterInitialPrefix.reached formulas solver seed actual initial frame fits known inputs room
+   86   have currentIdle := SourceCurrentOuterEdgeIdleReached.reached actual idle
+   87   exact edge_no_memo_failure fuel g s r e p h m c n budget ⟨inherited,original⟩ before
+   88     post.context.sound.valid currentIdle handle observation after edgeFailed
+   89 

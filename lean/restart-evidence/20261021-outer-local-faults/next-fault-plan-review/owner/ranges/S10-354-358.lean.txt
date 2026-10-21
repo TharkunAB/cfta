@@ -1,0 +1,5 @@
+/-- Finite node calls execute the same stored owner and exact finish handle. -/
+theorem nodeCall_complete {budget : Nat} {request : NodeRequest} {before after : Caller width} {result : Node}
+    (actual : NodeCall budget request before result after) :
+    StableRun (fun f g s r e p h m c n => nodeCall f g s r e p h m c n budget request before) result after :=
+  (all_complete budget).1 request before result after actual

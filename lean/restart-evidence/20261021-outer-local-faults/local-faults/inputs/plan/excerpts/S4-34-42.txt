@@ -1,0 +1,9 @@
+   34 /-- An outer node request has an allocated inherited payload and an available value. -/
+   35 def NodeReady (before : Caller width) (request : NodeRequest) : Prop :=
+   36   EqReady before.checked.operations.constraints request.inherited ∧
+   37     Available before.checked.native.machine.heap request.value
+   38 
+   39 /-- An outer edge request has an allocated inherited payload and a resident row. -/
+   40 def EdgeReady (before : Caller width) (request : EdgeRequest) : Prop :=
+   41   EqReady before.checked.operations.constraints request.inherited ∧
+   42     EdgeResident before.checked.native.machine.heap request.value

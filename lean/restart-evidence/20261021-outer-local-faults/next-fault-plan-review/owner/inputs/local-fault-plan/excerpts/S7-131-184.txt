@@ -1,0 +1,54 @@
+  131 theorem finite (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  132     (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+  133     (original : Guard) (inherited : EqValue) (before : Checked width)
+  134     (ready : Ready before) (admitted : At formulas solver inventory before)
+  135     (field : FieldAvailable before.operations original)
+  136     (inheritedReady : EqReady before.operations.constraints inherited) :
+  137     ∃ combined, Receipt formulas solver inventory original inherited before combined := by
+  138   cases inherited with
+  139   | contradiction => exact ⟨.contradiction, contradiction formulas solver inventory original before ready admitted⟩
+  140   | live identity records =>
+  141       obtain ⟨own, accessorDone, accessorValid, ownReady, classes, _, accessorGrows⟩ :=
+  142         SourceCurrentConjunctionEquality.accessor_correct original before.operations ready.good.operations field
+  143       obtain ⟨combined, combinedDone, combinedValid, combinedReady, payload, combinedGrows⟩ :=
+  144         SourceEqualityConstraintMemoAllocation.combine_correct (.live identity records) own
+  145           (SourceCurrentConjunctionEquality.accessor original before.operations).2 accessorValid
+  146           (inheritedReady.grows accessorGrows.constraint_growth) ownReady
+  147       have actual : run original (.live identity records) before.operations =
+  148           (.ok (some combined), (SourceEqualityConstraintMemoAllocation.combine (.live identity records) own
+  149             (SourceCurrentConjunctionEquality.accessor original before.operations).2).2) := by
+  150         simp only [run_combine original identity records before.operations own accessorDone, combinedDone, Except.map]
+  151       have growth := SourceCurrentConjunctionEquality.grows_trans accessorGrows combinedGrows
+  152       have nextValid : SourceEqualityConstraintMemoAllocation.Valid
+  153           (state before original (.live identity records)).operations := by
+  154         simpa only [state_operations, actual] using combinedValid
+  155       have nextGrowth : SourceEqualityConstraintMemoAllocation.Grows before.operations
+  156           (state before original (.live identity records)).operations := by
+  157         simpa only [state_operations, actual] using growth
+  158       have nextReady : Ready (state before original (.live identity records)) :=
+  159         SourceCurrentConjunctionAllocatedClassEntry.operations_ready before _ ready nextValid nextGrowth
+  160       have effects : Effects (physical before) (physical (state before original (.live identity records))) :=
+  161         ⟨SourceEqualityRequiredCache.pure_keeps _ ready.semantic.ready,
+  162           ⟨ready.semantic, ready.costs, nextValid, ready.good.fields.grows nextGrowth⟩, nextGrowth⟩
+  163       have extension := SourceCurrentAllocatedQueryMemo.advance_extension before
+  164         ⟨before.native.machine.heap, (run original (.live identity records) before.operations).2⟩ effects
+  165       refine ⟨combined, congrArg Prod.fst actual, rfl, rfl, nextValid, nextGrowth, ?_, nextReady,
+  166         admitted.advance _ extension, effects, extension, ?_⟩
+  167       · simpa only [state_operations, actual] using combinedReady
+  168       · intro term
+  169         have ownExact : SourceEqualityPrecheck.Sat term own.payload ↔
+  170             SourceEqualityGuardReadback.Sat term (SourceCompactGuards.sourceEqualities original) := by
+  171           rw [← classes]
+  172           exact (SourceEqualityInheritedPayload.classes_sat own.payload term).symm
+  173         exact ((SourceEqualityInheritedPayload.combine_exact payload).2 term).trans (and_congr Iff.rfl ownExact)
+  174 
+  175 /-- The returned resident edge supplies its own actual current field load. -/
+  176 theorem resident_finite (formulas : SourceGuards.Formulas FullSyntax.Formula)
+  177     (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+  178     (edge : EdgeValue Symbol Guard) (inherited : EqValue) (before : Checked width)
+  179     (ready : Ready before) (admitted : At formulas solver inventory before)
+  180     (resident : EdgeResident before.native.machine.heap edge)
+  181     (inheritedReady : EqReady before.operations.constraints inherited) :
+  182     ∃ combined, Receipt formulas solver inventory edge.entry.key.constraint inherited before combined :=
+  183   finite formulas solver inventory edge.entry.key.constraint inherited before ready admitted
+  184     (ready.good.fields edge.entry.key edge resident) inheritedReady
