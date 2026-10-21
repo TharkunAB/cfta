@@ -3045,6 +3045,7 @@ import MicroCFTA.SourceCurrentRawCorridorSharedTargetPositivePositions
 import MicroCFTA.SourceCurrentCappedHeadPositivePosition
 import MicroCFTA.SourceCurrentClassPositiveAncestry
 import MicroCFTA.SourceCurrentClassPositiveChronology
+import MicroCFTA.SourceCurrentRequiredPositiveChronology
 /-!
 # Proof dependency audit
 
