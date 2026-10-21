@@ -3074,6 +3074,7 @@ import MicroCFTA.SourceCurrentOlderOwnerBusy
 import MicroCFTA.SourceCurrentResourceParentClosed
 import MicroCFTA.SourceCurrentOuterClosedInputs
 import MicroCFTA.SourceCurrentOuterReferenceAbsent
+import MicroCFTA.SourceCurrentOuterLocalFaults
 /-!
 # Proof dependency audit
 
