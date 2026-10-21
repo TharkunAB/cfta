@@ -3071,6 +3071,7 @@ import MicroCFTA.SourceCurrentResourceParentPositiveBack
 import MicroCFTA.SourceCurrentActualChildRank
 import MicroCFTA.SourceCurrentOlderOwnerLineage
 import MicroCFTA.SourceCurrentOlderOwnerBusy
+import MicroCFTA.SourceCurrentResourceParentClosed
 /-!
 # Proof dependency audit
 
