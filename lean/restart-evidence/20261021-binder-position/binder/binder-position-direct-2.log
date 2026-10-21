@@ -1,0 +1,97 @@
+/tmp/mcfta-binder-free-publication-positions/binder-position-direct-2.source.lean:177:55: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.extra.unnecessarySeqFocus false`
+/tmp/mcfta-binder-free-publication-positions/binder-position-direct-2.source.lean:275:8: error: Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/tmp/mcfta-binder-free-publication-positions/binder-position-direct-2.source.lean:315:8: warning: automatically included section variable(s) unused in theorem `_private._stdin.0.MicroCFTA.SourceCurrentBinderFreePublicationPositions.completed_bind`:
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/tmp/mcfta-binder-free-publication-positions/binder-position-direct-2.source.lean:315:0: warning: `completed_bind` does not use the following hypothesis in its type:
+  • [DecidableEq (EdgeKey Symbol Guard)] (#1)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.extra.unusedDecidableInType false`
+/tmp/mcfta-binder-free-publication-positions/binder-position-direct-2.source.lean:331:13: error: Dependent elimination failed: Failed to solve equation
+  Outcome.done output after = build Syntax.empty first left
+/tmp/mcfta-binder-free-publication-positions/binder-position-direct-2.source.lean:339:33: error: Application type mismatch: The argument
+  index
+has type
+  Nat
+of sort `Type` but is expected to have type
+  Values left as✝
+of sort `Prop` in the application
+  ih index
+/tmp/mcfta-binder-free-publication-positions/binder-position-direct-2.source.lean:340:14: error: Tactic `cases` failed: major premise type is not an inductive type
+  BinderFree (Syntax.binder smart✝ body✝)
+
+Explanation: the `cases` tactic is for constructor-based reasoning as well as for applying custom cases principles with a 'using' clause or a registered '@[cases_eliminator]' theorem. The above type neither is an inductive type nor has a registered theorem.
+
+case binder
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+first second : List Node
+paired : All₂ Same first second
+left right : InternedConstructorTemplates.State Symbol Guard
+ln : Normal left
+rn : Normal right
+la : Values left first
+ra : Values right second
+output result : Node
+after final : InternedConstructorTemplates.State Symbol Guard
+smart✝ : Bool
+body✝ : Syntax Symbol Guard
+free : BinderFree (Syntax.binder smart✝ body✝)
+ld : build (Syntax.binder smart✝ body✝) first left = Outcome.done output after
+rd : build (Syntax.binder smart✝ body✝) second right = Outcome.done result final
+⊢ Same output result
+/tmp/mcfta-binder-free-publication-positions/binder-position-direct-2.source.lean:345:39: error: Application type mismatch: The argument
+  free
+has type
+  BinderFree (Syntax.node edges)
+but is expected to have type
+  EdgesBinderFree edges
+in the application
+  edges_same edges free
+/tmp/mcfta-binder-free-publication-positions/binder-position-direct-2.source.lean:356:40: error: Application type mismatch: The argument
+  free
+has type
+  BinderFree (Syntax.union members)
+but is expected to have type
+  ManyBinderFree members
+in the application
+  many_same members free
+/tmp/mcfta-binder-free-publication-positions/binder-position-direct-2.source.lean:372:11: error: Dependent elimination failed: Failed to solve equation
+  Outcome.done outputs after = buildMany [] first left
+/tmp/mcfta-binder-free-publication-positions/binder-position-direct-2.source.lean:382:35: error: Invalid projection: Projections extract constructor fields for one-constructor inductive types. The expression
+  free
+has type `ManyBinderFree (head :: rest)` which is not a one-constructor inductive type.
+/tmp/mcfta-binder-free-publication-positions/binder-position-direct-2.source.lean:383:24: error: Invalid projection: Projections extract constructor fields for one-constructor inductive types. The expression
+  free
+has type `ManyBinderFree (head :: rest)` which is not a one-constructor inductive type.
+/tmp/mcfta-binder-free-publication-positions/binder-position-direct-2.source.lean:398:11: error: Dependent elimination failed: Failed to solve equation
+  Outcome.done outputs after = buildEdges [] first left
+/tmp/mcfta-binder-free-publication-positions/binder-position-direct-2.source.lean:416:27: error(lean.unknownIdentifier): Unknown identifier `edge_verified`
+/tmp/mcfta-binder-free-publication-positions/binder-position-direct-2.source.lean:441:0: warning: unused `termination_by`, function is not recursive
+/tmp/mcfta-binder-free-publication-positions/binder-position-direct-2.source.lean:458:62: error: Application type mismatch: The argument
+  ih
+has type
+  Values left (Value.reference firstName :: rest) →
+    Values right (Value.reference secondName :: rest) →
+      ((build expression (Value.reference firstName :: rest) left).bind fun value after =>
+            work (withoutSelfReference firstName value) after) =
+          Outcome.done output after →
+        ((build expression (Value.reference secondName :: rest) right).bind fun value after =>
+              work (withoutSelfReference secondName value) after) =
+            Outcome.done result final →
+          build expression (Value.reference firstName :: rest) left = Outcome.done lv middle →
+            build expression (Value.reference secondName :: rest) right = Outcome.done rv current → All₂ Same rest rest
+but is expected to have type
+  All₂ Same rest rest
+in the application
+  All₂.cons ⟨rfl, fun x => Iff.rfl⟩ ih
+/tmp/mcfta-binder-free-publication-positions/binder-position-direct-2.source.lean:474:48: error: unexpected token ':='; expected ')', ',' or ':'
