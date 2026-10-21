@@ -3034,6 +3034,7 @@ import MicroCFTA.SourceCurrentRequiredSharedTargetCap
 import MicroCFTA.SourceCurrentRequiredRawCorridor
 import MicroCFTA.SourceCurrentRawCorridorProjectionCap
 import MicroCFTA.SourceCurrentRawCorridorSharedTargetCap
+import MicroCFTA.SourceCurrentClassEndpointCorridors
 /-!
 # Proof dependency audit
 
