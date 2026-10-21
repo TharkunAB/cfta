@@ -1,0 +1,764 @@
+@MicroCFTA.SourceCurrentPositiveOwnerPair.same_child_pair : ∀ {classes : MicroCFTA.EqualityNormalize.Constraints},
+  @Eq.{1} (Option.{0} MicroCFTA.EqualityNormalize.Constraints) (MicroCFTA.EqualityNormalize.congruenceStep classes)
+      (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints classes) →
+    ∀ (index : Nat) {entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey} {depth : Nat}
+      {free : List.{0} MicroCFTA.InternedBinderProtocol.Reference}
+      {rows :
+        List.{0}
+          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+      (row :
+        MicroCFTA.InternedConstructorTemplates.EdgeValue
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      @Membership.mem.{0, 0}
+          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          (List.{0}
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+          (@List.instMembership.{0}
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+          rows row →
+        @Eq.{1} Bool
+            (MicroCFTA.SourceMemoGate.plain
+              (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.Cache.Interned.key
+                  (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) row))))
+            Bool.false →
+          (∀ (q : List.{0} Nat),
+              MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt
+                  (@MicroCFTA.InternedConstructorTemplates.Value.node
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry rows depth free)
+                  q →
+                @Exists.{1} Nat fun j =>
+                  @Exists.{1} (List.{0} Nat) fun p =>
+                    @Exists.{1}
+                      (MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      fun original =>
+                      And
+                        (@Eq.{1}
+                          (Option.{0}
+                            (MicroCFTA.InternedConstructorTemplates.Value
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                          (@GetElem?.getElem?.{0, 0, 0}
+                            (List.{0}
+                              (MicroCFTA.InternedConstructorTemplates.Value
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                            Nat
+                            (MicroCFTA.InternedConstructorTemplates.Value
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                            (fun as i =>
+                              @LT.lt.{0} Nat instLTNat i
+                                (@List.length.{0}
+                                  (MicroCFTA.InternedConstructorTemplates.Value
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                  as))
+                            (@List.instGetElem?NatLtLength.{0}
+                              (MicroCFTA.InternedConstructorTemplates.Value
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                            (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) row)
+                            j)
+                          (@Option.some.{0}
+                            (MicroCFTA.InternedConstructorTemplates.Value
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                            original))
+                        (And (MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt original p)
+                          (MicroCFTA.SourceCurrentNormalizedChildSeparation.Rel classes (@List.cons.{0} Nat index q)
+                            (@List.cons.{0} Nat j p)))) →
+            @Exists.{1} MicroCFTA.EqualityNormalize.Class fun paths =>
+              And
+                (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Class MicroCFTA.EqualityNormalize.Constraints
+                  (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Class) classes paths)
+                (@Exists.{1} (List.{0} Nat) fun left =>
+                  @Exists.{1} (List.{0} Nat) fun right =>
+                    And
+                      (@Membership.mem.{0, 0} (List.{0} Nat) MicroCFTA.EqualityNormalize.Class
+                        (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths
+                        (@List.cons.{0} Nat index left))
+                      (And
+                        (@Membership.mem.{0, 0} (List.{0} Nat) MicroCFTA.EqualityNormalize.Class
+                          (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths
+                          (@List.cons.{0} Nat index right))
+                        (@Ne.{1} (List.{0} Nat) left right)))
+theorem MicroCFTA.SourceCurrentPositiveOwnerPair.same_child_pair : ∀
+  {classes : MicroCFTA.EqualityNormalize.Constraints},
+  @Eq.{1} (Option.{0} MicroCFTA.EqualityNormalize.Constraints) (MicroCFTA.EqualityNormalize.congruenceStep classes)
+      (@Option.some.{0} MicroCFTA.EqualityNormalize.Constraints classes) →
+    ∀ (index : Nat) {entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey} {depth : Nat}
+      {free : List.{0} MicroCFTA.InternedBinderProtocol.Reference}
+      {rows :
+        List.{0}
+          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+      (row :
+        MicroCFTA.InternedConstructorTemplates.EdgeValue
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      @Membership.mem.{0, 0}
+          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          (List.{0}
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+          (@List.instMembership.{0}
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+          rows row →
+        @Eq.{1} Bool
+            (MicroCFTA.SourceMemoGate.plain
+              (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (@MicroCFTA.Cache.Interned.key
+                  (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) row))))
+            Bool.false →
+          (∀ (q : List.{0} Nat),
+              MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt
+                  (@MicroCFTA.InternedConstructorTemplates.Value.node
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry rows depth free)
+                  q →
+                @Exists.{1} Nat fun j =>
+                  @Exists.{1} (List.{0} Nat) fun p =>
+                    @Exists.{1}
+                      (MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      fun original =>
+                      And
+                        (@Eq.{1}
+                          (Option.{0}
+                            (MicroCFTA.InternedConstructorTemplates.Value
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                          (@GetElem?.getElem?.{0, 0, 0}
+                            (List.{0}
+                              (MicroCFTA.InternedConstructorTemplates.Value
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                            Nat
+                            (MicroCFTA.InternedConstructorTemplates.Value
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                            (fun as i =>
+                              @LT.lt.{0} Nat instLTNat i
+                                (@List.length.{0}
+                                  (MicroCFTA.InternedConstructorTemplates.Value
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                  as))
+                            (@List.instGetElem?NatLtLength.{0}
+                              (MicroCFTA.InternedConstructorTemplates.Value
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                            (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) row)
+                            j)
+                          (@Option.some.{0}
+                            (MicroCFTA.InternedConstructorTemplates.Value
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                            original))
+                        (And (MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt original p)
+                          (MicroCFTA.SourceCurrentNormalizedChildSeparation.Rel classes (@List.cons.{0} Nat index q)
+                            (@List.cons.{0} Nat j p)))) →
+            @Exists.{1} MicroCFTA.EqualityNormalize.Class fun paths =>
+              And
+                (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Class MicroCFTA.EqualityNormalize.Constraints
+                  (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Class) classes paths)
+                (@Exists.{1} (List.{0} Nat) fun left =>
+                  @Exists.{1} (List.{0} Nat) fun right =>
+                    And
+                      (@Membership.mem.{0, 0} (List.{0} Nat) MicroCFTA.EqualityNormalize.Class
+                        (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths
+                        (@List.cons.{0} Nat index left))
+                      (And
+                        (@Membership.mem.{0, 0} (List.{0} Nat) MicroCFTA.EqualityNormalize.Class
+                          (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths
+                          (@List.cons.{0} Nat index right))
+                        (@Ne.{1} (List.{0} Nat) left right))) :=
+fun {classes} fixed index {entry} {depth} {free} {rows} row member nonplain back =>
+  @Classical.byContradiction
+    (@Exists.{1} MicroCFTA.EqualityNormalize.Class fun paths =>
+      And
+        (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Class MicroCFTA.EqualityNormalize.Constraints
+          (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Class) classes paths)
+        (@Exists.{1} (List.{0} Nat) fun left =>
+          @Exists.{1} (List.{0} Nat) fun right =>
+            And
+              (@Membership.mem.{0, 0} (List.{0} Nat) MicroCFTA.EqualityNormalize.Class
+                (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths (@List.cons.{0} Nat index left))
+              (And
+                (@Membership.mem.{0, 0} (List.{0} Nat) MicroCFTA.EqualityNormalize.Class
+                  (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths (@List.cons.{0} Nat index right))
+                (@Ne.{1} (List.{0} Nat) left right))))
+    fun absent =>
+    have dropped := fun paths selected left right first second =>
+      @Classical.byContradiction (@Eq.{1} (List.{0} Nat) left right) fun different =>
+        absent
+          (@Exists.intro.{1} MicroCFTA.EqualityNormalize.Class
+            (fun paths =>
+              And
+                (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Class MicroCFTA.EqualityNormalize.Constraints
+                  (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Class) classes paths)
+                (@Exists.{1} (List.{0} Nat) fun left =>
+                  @Exists.{1} (List.{0} Nat) fun right =>
+                    And
+                      (@Membership.mem.{0, 0} (List.{0} Nat) MicroCFTA.EqualityNormalize.Class
+                        (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths
+                        (@List.cons.{0} Nat index left))
+                      (And
+                        (@Membership.mem.{0, 0} (List.{0} Nat) MicroCFTA.EqualityNormalize.Class
+                          (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths
+                          (@List.cons.{0} Nat index right))
+                        (@Ne.{1} (List.{0} Nat) left right))))
+            paths
+            (@And.intro
+              (@Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Class MicroCFTA.EqualityNormalize.Constraints
+                (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Class) classes paths)
+              (@Exists.{1} (List.{0} Nat) fun left =>
+                @Exists.{1} (List.{0} Nat) fun right =>
+                  And
+                    (@Membership.mem.{0, 0} (List.{0} Nat) MicroCFTA.EqualityNormalize.Class
+                      (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths (@List.cons.{0} Nat index left))
+                    (And
+                      (@Membership.mem.{0, 0} (List.{0} Nat) MicroCFTA.EqualityNormalize.Class
+                        (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths
+                        (@List.cons.{0} Nat index right))
+                      (@Ne.{1} (List.{0} Nat) left right)))
+              selected
+              (@Exists.intro.{1} (List.{0} Nat)
+                (fun left =>
+                  @Exists.{1} (List.{0} Nat) fun right =>
+                    And
+                      (@Membership.mem.{0, 0} (List.{0} Nat) MicroCFTA.EqualityNormalize.Class
+                        (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths
+                        (@List.cons.{0} Nat index left))
+                      (And
+                        (@Membership.mem.{0, 0} (List.{0} Nat) MicroCFTA.EqualityNormalize.Class
+                          (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths
+                          (@List.cons.{0} Nat index right))
+                        (@Ne.{1} (List.{0} Nat) left right)))
+                left
+                (@Exists.intro.{1} (List.{0} Nat)
+                  (fun right =>
+                    And
+                      (@Membership.mem.{0, 0} (List.{0} Nat) MicroCFTA.EqualityNormalize.Class
+                        (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths
+                        (@List.cons.{0} Nat index left))
+                      (And
+                        (@Membership.mem.{0, 0} (List.{0} Nat) MicroCFTA.EqualityNormalize.Class
+                          (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths
+                          (@List.cons.{0} Nat index right))
+                        (@Ne.{1} (List.{0} Nat) left right)))
+                  right
+                  (@And.intro
+                    (@Membership.mem.{0, 0} (List.{0} Nat) MicroCFTA.EqualityNormalize.Class
+                      (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths (@List.cons.{0} Nat index left))
+                    (And
+                      (@Membership.mem.{0, 0} (List.{0} Nat) MicroCFTA.EqualityNormalize.Class
+                        (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths
+                        (@List.cons.{0} Nat index right))
+                      (@Ne.{1} (List.{0} Nat) left right))
+                    first
+                    (@And.intro
+                      (@Membership.mem.{0, 0} (List.{0} Nat) MicroCFTA.EqualityNormalize.Class
+                        (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths
+                        (@List.cons.{0} Nat index right))
+                      (@Ne.{1} (List.{0} Nat) left right) second different))))));
+    let positions :=
+      MicroCFTA.SourceCurrentPositiveOwnerPair.positivePaths
+        (@MicroCFTA.InternedConstructorTemplates.Value.node
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry rows depth free);
+    have distinct :=
+      MicroCFTA.SourceCurrentPositiveOwnerPair.positivePaths_nodup
+        (@MicroCFTA.InternedConstructorTemplates.Value.node
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry rows depth free);
+    @Exists.casesOn.{1} Nat
+      (fun i =>
+        @Eq.{1}
+          (Option.{0}
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+          (@GetElem?.getElem?.{0, 0, 0}
+            (List.{0}
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+            Nat
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            (fun as i =>
+              @LT.lt.{0} Nat instLTNat i
+                (@List.length.{0}
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  as))
+            (@List.instGetElem?NatLtLength.{0}
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+            rows i)
+          (@Option.some.{0}
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            row))
+      (fun x => False)
+      (@Iff.mp
+        (@Membership.mem.{0, 0}
+          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          (List.{0}
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+          (@List.instMembership.{0}
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+          rows row)
+        (@Exists.{1} Nat fun i =>
+          @Eq.{1}
+            (Option.{0}
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+            (@GetElem?.getElem?.{0, 0, 0}
+              (List.{0}
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+              Nat
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (fun as i =>
+                @LT.lt.{0} Nat instLTNat i
+                  (@List.length.{0}
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    as))
+              (@List.instGetElem?NatLtLength.{0}
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+              rows i)
+            (@Option.some.{0}
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              row))
+        (@List.mem_iff_getElem?.{0}
+          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+          row rows)
+        member)
+      fun rowIndex selected =>
+      have root :=
+        @Iff.mpr
+          (@Membership.mem.{0, 0} (List.{0} Nat) (List.{0} (List.{0} Nat)) (@List.instMembership.{0} (List.{0} Nat))
+            (MicroCFTA.SourceCurrentPositiveOwnerPair.positivePaths
+              (@MicroCFTA.InternedConstructorTemplates.Value.node
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry rows depth free))
+            (@List.nil.{0} Nat))
+          (MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt
+            (@MicroCFTA.InternedConstructorTemplates.Value.node
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry rows depth free)
+            (@List.nil.{0} Nat))
+          (@MicroCFTA.SourceCurrentPositiveOwnerPair.positivePaths_spec
+            (@MicroCFTA.InternedConstructorTemplates.Value.node
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry rows depth free)
+            (@List.nil.{0} Nat))
+          (@MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt.root entry rows depth free rowIndex row selected
+            nonplain);
+      have total := fun q present =>
+        @Exists.casesOn.{1} Nat
+          (fun j =>
+            @Exists.{1} (List.{0} Nat) fun p =>
+              @Exists.{1}
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                fun original =>
+                And
+                  (@Eq.{1}
+                    (Option.{0}
+                      (MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                    (@GetElem?.getElem?.{0, 0, 0}
+                      (List.{0}
+                        (MicroCFTA.InternedConstructorTemplates.Value
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                      Nat
+                      (MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      (fun as i =>
+                        @LT.lt.{0} Nat instLTNat i
+                          (@List.length.{0}
+                            (MicroCFTA.InternedConstructorTemplates.Value
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                            as))
+                      (@List.instGetElem?NatLtLength.{0}
+                        (MicroCFTA.InternedConstructorTemplates.Value
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) row)
+                      j)
+                    (@Option.some.{0}
+                      (MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      original))
+                  (And (MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt original p)
+                    (MicroCFTA.SourceCurrentNormalizedChildSeparation.Rel classes (@List.cons.{0} Nat index q)
+                      (@List.cons.{0} Nat j p))))
+          (fun x =>
+            @Exists.{1} (List.{0} Nat) fun target =>
+              And
+                (@Membership.mem.{0, 0} (List.{0} Nat) (List.{0} (List.{0} Nat))
+                  (@List.instMembership.{0} (List.{0} Nat))
+                  (@List.erase.{0} (List.{0} Nat)
+                    (@List.instBEq.{0} Nat (@instBEqOfDecidableEq.{0} Nat instDecidableEqNat)) positions
+                    (@List.nil.{0} Nat))
+                  target)
+                (MicroCFTA.SourceCurrentNormalizedChildSeparation.Rel classes (@List.cons.{0} Nat index q) target))
+          (back q
+            (@Iff.mp
+              (@Membership.mem.{0, 0} (List.{0} Nat) (List.{0} (List.{0} Nat)) (@List.instMembership.{0} (List.{0} Nat))
+                (MicroCFTA.SourceCurrentPositiveOwnerPair.positivePaths
+                  (@MicroCFTA.InternedConstructorTemplates.Value.node
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry rows depth free))
+                q)
+              (MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt
+                (@MicroCFTA.InternedConstructorTemplates.Value.node
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry rows depth free)
+                q)
+              (@MicroCFTA.SourceCurrentPositiveOwnerPair.positivePaths_spec
+                (@MicroCFTA.InternedConstructorTemplates.Value.node
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry rows depth free)
+                q)
+              present))
+          fun j h =>
+          @Exists.casesOn.{1} (List.{0} Nat)
+            (fun p =>
+              @Exists.{1}
+                (MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                fun original =>
+                And
+                  (@Eq.{1}
+                    (Option.{0}
+                      (MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                    (@GetElem?.getElem?.{0, 0, 0}
+                      (List.{0}
+                        (MicroCFTA.InternedConstructorTemplates.Value
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                      Nat
+                      (MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      (fun as i =>
+                        @LT.lt.{0} Nat instLTNat i
+                          (@List.length.{0}
+                            (MicroCFTA.InternedConstructorTemplates.Value
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                            as))
+                      (@List.instGetElem?NatLtLength.{0}
+                        (MicroCFTA.InternedConstructorTemplates.Value
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) row)
+                      j)
+                    (@Option.some.{0}
+                      (MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      original))
+                  (And (MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt original p)
+                    (MicroCFTA.SourceCurrentNormalizedChildSeparation.Rel classes (@List.cons.{0} Nat index q)
+                      (@List.cons.{0} Nat j p))))
+            (fun x =>
+              @Exists.{1} (List.{0} Nat) fun target =>
+                And
+                  (@Membership.mem.{0, 0} (List.{0} Nat) (List.{0} (List.{0} Nat))
+                    (@List.instMembership.{0} (List.{0} Nat))
+                    (@List.erase.{0} (List.{0} Nat)
+                      (@List.instBEq.{0} Nat (@instBEqOfDecidableEq.{0} Nat instDecidableEqNat)) positions
+                      (@List.nil.{0} Nat))
+                    target)
+                  (MicroCFTA.SourceCurrentNormalizedChildSeparation.Rel classes (@List.cons.{0} Nat index q) target))
+            h fun p h =>
+            @Exists.casesOn.{1}
+              (MicroCFTA.InternedConstructorTemplates.Value
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (fun original =>
+                And
+                  (@Eq.{1}
+                    (Option.{0}
+                      (MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                    (@GetElem?.getElem?.{0, 0, 0}
+                      (List.{0}
+                        (MicroCFTA.InternedConstructorTemplates.Value
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                      Nat
+                      (MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      (fun as i =>
+                        @LT.lt.{0} Nat instLTNat i
+                          (@List.length.{0}
+                            (MicroCFTA.InternedConstructorTemplates.Value
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                            as))
+                      (@List.instGetElem?NatLtLength.{0}
+                        (MicroCFTA.InternedConstructorTemplates.Value
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) row)
+                      j)
+                    (@Option.some.{0}
+                      (MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      original))
+                  (And (MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt original p)
+                    (MicroCFTA.SourceCurrentNormalizedChildSeparation.Rel classes (@List.cons.{0} Nat index q)
+                      (@List.cons.{0} Nat j p))))
+              (fun x =>
+                @Exists.{1} (List.{0} Nat) fun target =>
+                  And
+                    (@Membership.mem.{0, 0} (List.{0} Nat) (List.{0} (List.{0} Nat))
+                      (@List.instMembership.{0} (List.{0} Nat))
+                      (@List.erase.{0} (List.{0} Nat)
+                        (@List.instBEq.{0} Nat (@instBEqOfDecidableEq.{0} Nat instDecidableEqNat)) positions
+                        (@List.nil.{0} Nat))
+                      target)
+                    (MicroCFTA.SourceCurrentNormalizedChildSeparation.Rel classes (@List.cons.{0} Nat index q) target))
+              h fun original h =>
+              @And.casesOn.{0}
+                (@Eq.{1}
+                  (Option.{0}
+                    (MicroCFTA.InternedConstructorTemplates.Value
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                  (@GetElem?.getElem?.{0, 0, 0}
+                    (List.{0}
+                      (MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                    Nat
+                    (MicroCFTA.InternedConstructorTemplates.Value
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    (fun as i =>
+                      @LT.lt.{0} Nat instLTNat i
+                        (@List.length.{0}
+                          (MicroCFTA.InternedConstructorTemplates.Value
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          as))
+                    (@List.instGetElem?NatLtLength.{0}
+                      (MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                    (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) row)
+                    j)
+                  (@Option.some.{0}
+                    (MicroCFTA.InternedConstructorTemplates.Value
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    original))
+                (And (MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt original p)
+                  (MicroCFTA.SourceCurrentNormalizedChildSeparation.Rel classes (@List.cons.{0} Nat index q)
+                    (@List.cons.{0} Nat j p)))
+                (fun x =>
+                  @Exists.{1} (List.{0} Nat) fun target =>
+                    And
+                      (@Membership.mem.{0, 0} (List.{0} Nat) (List.{0} (List.{0} Nat))
+                        (@List.instMembership.{0} (List.{0} Nat))
+                        (@List.erase.{0} (List.{0} Nat)
+                          (@List.instBEq.{0} Nat (@instBEqOfDecidableEq.{0} Nat instDecidableEqNat)) positions
+                          (@List.nil.{0} Nat))
+                        target)
+                      (MicroCFTA.SourceCurrentNormalizedChildSeparation.Rel classes (@List.cons.{0} Nat index q)
+                        target))
+                h fun chosen right =>
+                @And.casesOn.{0} (MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt original p)
+                  (MicroCFTA.SourceCurrentNormalizedChildSeparation.Rel classes (@List.cons.{0} Nat index q)
+                    (@List.cons.{0} Nat j p))
+                  (fun x =>
+                    @Exists.{1} (List.{0} Nat) fun target =>
+                      And
+                        (@Membership.mem.{0, 0} (List.{0} Nat) (List.{0} (List.{0} Nat))
+                          (@List.instMembership.{0} (List.{0} Nat))
+                          (@List.erase.{0} (List.{0} Nat)
+                            (@List.instBEq.{0} Nat (@instBEqOfDecidableEq.{0} Nat instDecidableEqNat)) positions
+                            (@List.nil.{0} Nat))
+                          target)
+                        (MicroCFTA.SourceCurrentNormalizedChildSeparation.Rel classes (@List.cons.{0} Nat index q)
+                          target))
+                  right fun positive related =>
+                  have included :=
+                    @Iff.mpr
+                      (@Membership.mem.{0, 0} (List.{0} Nat) (List.{0} (List.{0} Nat))
+                        (@List.instMembership.{0} (List.{0} Nat))
+                        (MicroCFTA.SourceCurrentPositiveOwnerPair.positivePaths
+                          (@MicroCFTA.InternedConstructorTemplates.Value.node
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry rows depth
+                            free))
+                        (@List.cons.{0} Nat j p))
+                      (MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt
+                        (@MicroCFTA.InternedConstructorTemplates.Value.node
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry rows depth free)
+                        (@List.cons.{0} Nat j p))
+                      (@MicroCFTA.SourceCurrentPositiveOwnerPair.positivePaths_spec
+                        (@MicroCFTA.InternedConstructorTemplates.Value.node
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) entry rows depth free)
+                        (@List.cons.{0} Nat j p))
+                      (@MicroCFTA.SourceCurrentRequiredPositivePosition.PositiveAt.child entry rows depth free rowIndex
+                        j row original selected chosen p positive);
+                  @Exists.intro.{1} (List.{0} Nat)
+                    (fun target =>
+                      And
+                        (@Membership.mem.{0, 0} (List.{0} Nat) (List.{0} (List.{0} Nat))
+                          (@List.instMembership.{0} (List.{0} Nat))
+                          (@List.erase.{0} (List.{0} Nat)
+                            (@List.instBEq.{0} Nat (@instBEqOfDecidableEq.{0} Nat instDecidableEqNat)) positions
+                            (@List.nil.{0} Nat))
+                          target)
+                        (MicroCFTA.SourceCurrentNormalizedChildSeparation.Rel classes (@List.cons.{0} Nat index q)
+                          target))
+                    (@List.cons.{0} Nat j p)
+                    (@And.intro
+                      (@Membership.mem.{0, 0} (List.{0} Nat) (List.{0} (List.{0} Nat))
+                        (@List.instMembership.{0} (List.{0} Nat))
+                        (@List.erase.{0} (List.{0} Nat)
+                          (@List.instBEq.{0} Nat (@instBEqOfDecidableEq.{0} Nat instDecidableEqNat)) positions
+                          (@List.nil.{0} Nat))
+                        (@List.cons.{0} Nat j p))
+                      (MicroCFTA.SourceCurrentNormalizedChildSeparation.Rel classes (@List.cons.{0} Nat index q)
+                        (@List.cons.{0} Nat j p))
+                      (@Iff.mpr
+                        (@Membership.mem.{0, 0} (List.{0} Nat) (List.{0} (List.{0} Nat))
+                          (@List.instMembership.{0} (List.{0} Nat))
+                          (@List.erase.{0} (List.{0} Nat)
+                            (@List.instBEq.{0} Nat (@instBEqOfDecidableEq.{0} Nat instDecidableEqNat)) positions
+                            (@List.nil.{0} Nat))
+                          (@List.cons.{0} Nat j p))
+                        (@Membership.mem.{0, 0} (List.{0} Nat) (List.{0} (List.{0} Nat))
+                          (@List.instMembership.{0} (List.{0} Nat)) positions (@List.cons.{0} Nat j p))
+                        (@List.mem_erase_of_ne.{0} (List.{0} Nat)
+                          (@List.instBEq.{0} Nat (@instBEqOfDecidableEq.{0} Nat instDecidableEqNat))
+                          (@List.instLawfulBEq.{0} Nat (@instBEqOfDecidableEq.{0} Nat instDecidableEqNat)
+                            Nat.instLawfulBEq)
+                          (@List.cons.{0} Nat j p) (@List.nil.{0} Nat) positions
+                          (@of_eq_true (Not (@Eq.{1} (List.{0} Nat) (@List.cons.{0} Nat j p) (@List.nil.{0} Nat)))
+                            (@Eq.trans.{1} Prop
+                              (Not (@Eq.{1} (List.{0} Nat) (@List.cons.{0} Nat j p) (@List.nil.{0} Nat))) (Not False)
+                              True
+                              (@congrArg.{1, 1} Prop Prop
+                                (@Eq.{1} (List.{0} Nat) (@List.cons.{0} Nat j p) (@List.nil.{0} Nat)) False Not
+                                (@eq_false' (@Eq.{1} (List.{0} Nat) (@List.cons.{0} Nat j p) (@List.nil.{0} Nat))
+                                  fun h =>
+                                  @False.elim.{0} False
+                                    (@noConfusion_of_Nat.{1} (List.{0} Nat) (@List.ctorIdx.{0} Nat)
+                                      (@List.cons.{0} Nat j p) (@List.nil.{0} Nat) h)))
+                              not_false_eq_true)))
+                        included)
+                      related);
+      have injective := fun first a second a_1 target a_2 firstRelated secondRelated =>
+        @MicroCFTA.SourceCurrentNormalizedChildSeparation.child_separate classes fixed index dropped first second target
+          firstRelated secondRelated;
+      have counted :=
+        @MicroCFTA.SymbolicDriver.relation_cardinality_le.{0, 0} (List.{0} Nat) (List.{0} Nat) positions
+          (@List.erase.{0} (List.{0} Nat) (@List.instBEq.{0} Nat (@instBEqOfDecidableEq.{0} Nat instDecidableEqNat))
+            positions (@List.nil.{0} Nat))
+          (@List.nil.{0} Nat) distinct
+          (fun q target =>
+            MicroCFTA.SourceCurrentNormalizedChildSeparation.Rel classes (@List.cons.{0} Nat index q) target)
+          total injective;
+      have shorter :=
+        @List.length_erase_of_mem.{0} (List.{0} Nat)
+          (@List.instBEq.{0} Nat (@instBEqOfDecidableEq.{0} Nat instDecidableEqNat))
+          (@List.instLawfulBEq.{0} Nat (@instBEqOfDecidableEq.{0} Nat instDecidableEqNat) Nat.instLawfulBEq)
+          (@List.nil.{0} Nat) positions root;
+      have nonempty := @List.length_pos_of_mem.{0} (List.{0} Nat) (@List.nil.{0} Nat) positions root;
+      @MicroCFTA.SourceCurrentPositiveOwnerPair.same_child_pair._proof_1_1 entry depth free rows counted shorter
+        nonempty
+'MicroCFTA.SourceCurrentPositiveOwnerPair.same_child_pair' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
