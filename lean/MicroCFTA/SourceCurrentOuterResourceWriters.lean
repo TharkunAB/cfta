@@ -462,4 +462,28 @@ theorem reached
       exact one_step formulas solver step current post.context returned numeric carrier currentInputs currentRoom
         ⟨currentSupport,⟨currentCausal⟩,currentMerged,currentPositive,currentNormal⟩ ih
 
+/-- A completed node call retains its actual resource-backed historical edge writers. -/
+theorem node_call
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (fuel : Nat) {g s r e p h m c n budget : Nat}
+    {request : NodeRequest} {before after : Caller (bits + 2)} {result : Node}
+    {inventory : Inventory} {memos : Memos} (seed : Seed)
+    (initial : Context formulas solver inventory before memos)
+    (frame : Frame formulas solver inventory before.checked) (fits : Fits seed.2 before.checked)
+    (known : Carrier (fun guard => guard ∈ seed.1) before.checked.native.machine.heap)
+    (inherited : EqReady before.checked.operations.constraints request.inherited)
+    (available : Available before.checked.native.machine.heap request.value)
+    (room : Room bits (SourceCurrentOuterInitialSchedule.node fuel budget seed).2)
+    (normal : UnionNormal before.checked.native.machine.heap)
+    (supported : NativeSupport before.checked.native.machine.heap before.checked.native)
+    (causal : Nonempty (History empty before.checked.native.machine.heap))
+    (merged : MergeStored before.merge) (positiveMemo : MergeSupport before.merge)
+    (observed : SourceCurrentAllocatedPartialWorker.nodeCall fuel g s r e p h m c n budget request before = .done result after)
+    (origins : SourceCurrentResourceParentWriters.Origins formulas solver before) :
+    SourceCurrentResourceParentWriters.Origins formulas solver after
+ := by
+  exact (all_origins formulas solver (bits := bits) fuel).1 seed initial frame fits known
+    inherited available room observed ⟨supported,causal,merged,positiveMemo,normal⟩ origins
+
 end MicroCFTA.SourceCurrentOuterResourceWriters
