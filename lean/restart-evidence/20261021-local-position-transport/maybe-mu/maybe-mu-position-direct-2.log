@@ -1,0 +1,189 @@
+/tmp/mcfta-maybe-mu-positive-position-proof/maybe-mu-position-direct-2.source.lean:285:10: error: Type mismatch: After simplification, term
+  returned
+ has type
+  (run (makeNode rows) middle).fst = result ∧ (run (makeNode rows) middle).snd = after
+but is expected to have type
+  run (makeNode rows) middle = (result, after)
+/tmp/mcfta-maybe-mu-positive-position-proof/maybe-mu-position-direct-2.source.lean:301:10: error: Type mismatch: After simplification, term
+  returned
+ has type
+  (run (makeUnion values) middle).fst = result ∧ (run (makeUnion values) middle).snd = after
+but is expected to have type
+  run (makeUnion values) middle = (result, after)
+/tmp/mcfta-maybe-mu-positive-position-proof/maybe-mu-position-direct-2.source.lean:396:101: error: unsolved goals
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+context : List Node
+environment : Environment Symbol Guard
+state : InternedConstructorTemplates.State Symbol Guard
+facts : Facts state
+captures : Values state context
+replacements : Replacements state environment
+annotations :
+  ∀ (name : Reference) (output : Node),
+    environment name = some output → Annotated (fun guard => SourceMemoGate.plain guard = true) output
+depth : Nat
+stored : MuStored (fun guard => SourceMemoGate.plain guard = true) state
+rows : List Row
+entry : Interned (EdgeKey Symbol Guard)
+children : List Node
+available :
+  ∀ (child : Node),
+    child ∈ List.flatMap EdgeValue.children (EdgeValue.mk entry children :: rows) → Available state child
+covered : ∀ (leaf : Node), leaf ∈ edgeLeaves (EdgeValue.mk entry children :: rows) → leaf ∈ context
+bounded :
+  ∀ (row : Row),
+    row ∈ EdgeValue.mk entry children :: rows →
+      SourceCurrentConstrainedCap.Edge (fun guard => SourceMemoGate.plain guard = true) depth row
+values : List Node
+middle : InternedConstructorTemplates.State Symbol Guard
+called :
+  buildMany (encodeMany context [] children) (List.map (input environment) context) state = Outcome.done values middle
+edge : Row
+next : InternedConstructorTemplates.State Symbol Guard
+built : work (makeEdge entry.key.symbol entry.key.constraint values) middle = Outcome.done edge next
+edges : List Row
+final : InternedConstructorTemplates.State Symbol Guard
+tailDone :
+  buildEdges (encodeEdges context [] rows) (List.map (input environment) context) next = Outcome.done edges final
+actual :
+  ((buildMany (encodeMany context [] children) (List.map (input environment) context) state).bind fun values next =>
+      (work (makeEdge entry.key.symbol entry.key.constraint values) next).bind fun edge afterEdge =>
+        (buildEdges (encodeEdges context [] rows) (List.map (input environment) context) afterEdge).bind
+          fun edges final => Outcome.done (edge :: edges) final) =
+    Outcome.done (edge :: edges) final
+later✝ :
+  ((work (makeEdge entry.key.symbol entry.key.constraint values) middle).bind fun edge afterEdge =>
+      (buildEdges (encodeEdges context [] rows) (List.map (input environment) context) afterEdge).bind
+        fun edges final => Outcome.done (edge :: edges) final) =
+    Outcome.done (edge :: edges) final
+later :
+  ((buildEdges (encodeEdges context [] rows) (List.map (input environment) context) next).bind fun edges final =>
+      Outcome.done (edge :: edges) final) =
+    Outcome.done (edge :: edges) final
+inputs : Values state (List.map (input environment) context)
+physical :
+  InternedNestedFacts.Verified state
+    (buildMany (encodeMany context [] children) (List.map (input environment) context) state) Values
+middleFacts : Facts middle
+outputsAvailable : Values middle values
+current : ∀ (source : Node), Available state source → Available middle source
+childBound : ∀ (child : Node), child ∈ children → Cap (fun guard => SourceMemoGate.plain guard = true) (depth - 1) child
+childCovered : ∀ (leaf : Node), leaf ∈ manyLeaves children → leaf ∈ context
+child : Node
+member : child ∈ children
+⊢ child ∈ (EdgeValue.mk entry children).children ∨ ∃ a, a ∈ rows ∧ child ∈ a.children
+/tmp/mcfta-maybe-mu-positive-position-proof/maybe-mu-position-direct-2.source.lean:402:12: error: Type mismatch: After simplification, term
+  built
+ has type
+  (run (makeEdge entry.key.symbol entry.key.constraint values) middle).fst = edge ∧
+    (run (makeEdge entry.key.symbol entry.key.constraint values) middle).snd = next
+but is expected to have type
+  run (makeEdge entry.key.symbol entry.key.constraint values) middle = (edge, next)
+/tmp/mcfta-maybe-mu-positive-position-proof/maybe-mu-position-direct-2.source.lean:405:44: error: Type mismatch: After simplification, term
+  edgeChecked.facts
+ has type
+  Facts (work (makeEdge entry.key.symbol entry.key.constraint values) middle).state
+but is expected to have type
+  Facts next
+/tmp/mcfta-maybe-mu-positive-position-proof/maybe-mu-position-direct-2.source.lean:407:12: error: Type mismatch: After simplification, term
+  InternedNestedFacts.Verified.available edgeChecked source (current source old)
+ has type
+  Available (work (makeEdge entry.key.symbol entry.key.constraint values) middle).state source
+but is expected to have type
+  Available next source
+/tmp/mcfta-maybe-mu-positive-position-proof/maybe-mu-position-direct-2.source.lean:412:50: error: unsolved goals
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+context : List Node
+environment : Environment Symbol Guard
+state : InternedConstructorTemplates.State Symbol Guard
+facts : Facts state
+captures : Values state context
+replacements : Replacements state environment
+annotations :
+  ∀ (name : Reference) (output : Node),
+    environment name = some output → Annotated (fun guard => SourceMemoGate.plain guard = true) output
+depth : Nat
+stored : MuStored (fun guard => SourceMemoGate.plain guard = true) state
+rows : List Row
+entry : Interned (EdgeKey Symbol Guard)
+children : List Node
+available :
+  ∀ (child : Node),
+    child ∈ List.flatMap EdgeValue.children (EdgeValue.mk entry children :: rows) → Available state child
+covered : ∀ (leaf : Node), leaf ∈ edgeLeaves (EdgeValue.mk entry children :: rows) → leaf ∈ context
+bounded :
+  ∀ (row : Row),
+    row ∈ EdgeValue.mk entry children :: rows →
+      SourceCurrentConstrainedCap.Edge (fun guard => SourceMemoGate.plain guard = true) depth row
+values : List Node
+middle : InternedConstructorTemplates.State Symbol Guard
+called :
+  buildMany (encodeMany context [] children) (List.map (input environment) context) state = Outcome.done values middle
+edge : Row
+next : InternedConstructorTemplates.State Symbol Guard
+built : work (makeEdge entry.key.symbol entry.key.constraint values) middle = Outcome.done edge next
+edges : List Row
+final : InternedConstructorTemplates.State Symbol Guard
+tailDone :
+  buildEdges (encodeEdges context [] rows) (List.map (input environment) context) next = Outcome.done edges final
+actual :
+  ((buildMany (encodeMany context [] children) (List.map (input environment) context) state).bind fun values next =>
+      (work (makeEdge entry.key.symbol entry.key.constraint values) next).bind fun edge afterEdge =>
+        (buildEdges (encodeEdges context [] rows) (List.map (input environment) context) afterEdge).bind
+          fun edges final => Outcome.done (edge :: edges) final) =
+    Outcome.done (edge :: edges) final
+later✝ :
+  ((work (makeEdge entry.key.symbol entry.key.constraint values) middle).bind fun edge afterEdge =>
+      (buildEdges (encodeEdges context [] rows) (List.map (input environment) context) afterEdge).bind
+        fun edges final => Outcome.done (edge :: edges) final) =
+    Outcome.done (edge :: edges) final
+later :
+  ((buildEdges (encodeEdges context [] rows) (List.map (input environment) context) next).bind fun edges final =>
+      Outcome.done (edge :: edges) final) =
+    Outcome.done (edge :: edges) final
+inputs : Values state (List.map (input environment) context)
+physical :
+  InternedNestedFacts.Verified state
+    (buildMany (encodeMany context [] children) (List.map (input environment) context) state) Values
+middleFacts : Facts middle
+outputsAvailable : Values middle values
+current : ∀ (source : Node), Available state source → Available middle source
+childBound : ∀ (child : Node), child ∈ children → Cap (fun guard => SourceMemoGate.plain guard = true) (depth - 1) child
+childCovered : ∀ (leaf : Node), leaf ∈ manyLeaves children → leaf ∈ context
+typed :
+  SourceCurrentConstrainedCapConstruction.ManyTyped (fun guard => SourceMemoGate.plain guard = true) (depth - 1)
+    (encodeMany context [] children) ([] ++ List.map (input environment) context)
+kept : MuStored (fun guard => SourceMemoGate.plain guard = true) middle
+actualEdge : run (makeEdge entry.key.symbol entry.key.constraint values) middle = (edge, next)
+edgeChecked :
+  InternedNestedFacts.Verified middle (work (makeEdge entry.key.symbol entry.key.constraint values) middle)
+    InternedEdgeResidency.EdgeResident
+nextFacts : Facts next
+forward : ∀ (source : Node), Available state source → Available next source
+fields :
+  have result := (edge, next).fst;
+  result.entry.key.symbol = entry.key.symbol ∧
+    result.entry.key.constraint = entry.key.constraint ∧ result.children = values
+child : Node
+member : child ∈ children
+⊢ child ∈ (EdgeValue.mk entry children).children ∨ ∃ a, a ∈ rows ∧ child ∈ a.children
+/tmp/mcfta-maybe-mu-positive-position-proof/maybe-mu-position-direct-2.source.lean:415:12: error: Type mismatch: After simplification, term
+  paired
+ has type
+  @All₂ Node Node Back children values
+but is expected to have type
+  @All₂ Node Node Back (EdgeValue.mk entry children).children values
+/tmp/mcfta-maybe-mu-positive-position-proof/maybe-mu-position-direct-2.source.lean:396:110: warning: This simp argument is unused:
+  member
+
+Hint: Omit it from the simp argument list.
+  [apply] simp
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-maybe-mu-positive-position-proof/maybe-mu-position-direct-2.source.lean:412:59: warning: This simp argument is unused:
+  member
+
+Hint: Omit it from the simp argument list.
+  [apply] simp
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

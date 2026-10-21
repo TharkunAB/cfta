@@ -1,0 +1,17 @@
+# Target operand positive positions
+
+Date: 2026-10-21 03:12 CEST.
+
+The module has two public theorems. `project` derives `PositiveAt original (path ++ residual)` from an actual projection of a Required-related prepared value. The original false primary trace names the original value. It does not name the prepared value. `operand` composes actual fuelled `requireAll`, actual target projection and actual allocated Merge. It preserves the original forest slot and returns Merge support for the actual returned memo.
+
+The proof copies the private safe-projection basis from `SourceCurrentRequiredProjectionOrigins`. This access boundary accounts for most of the 645 source lines. It strengthens the private accepted-row condition. A relevant row has a nonplain root guard or an ordered child with a positive finite path. A hereditary plain read excludes both cases. The Required row map preserves the full guard and the ordered child origins. The proof maps each positive child through that same indexed child origin. It then converts the actual source route to the natural path. It does not construct a new projection graph for changed children.
+
+The literal operand proof derives Required exposure safety from the original false class traces. It derives prepared semantic, cost, availability and guard support from the actual Required return. It splits the actual operand into its projection and Merge calls. Merge support maps each result position to its actual projected input. The forest projection then selects the same prepared index, the same Required origin and the same original false path trace.
+
+The operation starts at the exact prepared heap. This equality is an explicit premise. The theorem does not identify the original forest with the prepared forest. It does not derive a false gate on the prepared forest. It requires initial semantic state, UnionNormal, causal GuardHeap Plain, availability and cost support. It requires the physical Merge table and its positive-position support. These are explicit entry contracts, rather than consequences of arbitrary Good.
+
+Mu bodies and references remain opaque in PositiveAt. The proof uses actual read and Head effects to exclude positive contributions from hereditary plain Mu exposure. It does not prove unrestricted native positive transport, selected class-fold transport, later changed phase-value identity, whole outer chronology or global termination.
+
+Selected strict check: `target-position-direct-3`, terminal exit 0 and a literal empty log. Selected full printer: `target-position-public-1`, terminal exit 0, two complete types and proof bodies, all eight printer settings, no omissions and only propext/Classical.choice/Quot.sound. Both use Lean 4.34.1 with all linters, effective memory.high/max 4 GiB, swap 0 and a five-minute cap. The public log has 1,547,510 bytes.
+
+There are four owned Lean jobs: three strict attempts and one full printer. Two failed strict snapshots remain. The first exposed three local elaboration issues: an induction hypothesis already closed over the positive hypothesis, a reducible Plain application before rewrite, and an unresolved selected-value placeholder. The second exposed that the forest gate is a PathTrace whose child receipt must be inverted before false_selected. The third passes. No proof stubs, extra axioms, native_decide or trustCompiler were used. There are no owned canonical, Audit or constructed-example jobs.
