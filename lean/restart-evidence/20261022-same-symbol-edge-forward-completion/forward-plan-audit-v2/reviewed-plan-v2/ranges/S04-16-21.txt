@@ -1,0 +1,6 @@
+/-- A finite trace retains every actual yielded control and its complete state. -/
+inductive Steps [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] :
+    Nat → Control Output → State width → Control Output → State width → Prop where
+  | refl (control state) : Steps 0 control state control state
+  | cons (control state next after final result fuel)
+      (step : SourceEqualityNativeDemand.step control state = .yielded next after)

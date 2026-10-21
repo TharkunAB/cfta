@@ -1,0 +1,30 @@
+def RankedPair (ranks : Nat → Nat → Lang Symbol) (bound : Nat) (key : Nat × Nat) : Lang Symbol :=
+  fun term => ∃ first second, first + second ≤ bound ∧ ranks key.1 first term ∧ ranks key.2 second term
+
+/-- Every enclosing pair reference accepts only original common terms. -/
+def SoundPairs (languages : Nat → Lang Symbol) (domain : IntersectionFlatMemoKeyDomain.DomainKey)
+    (output : InternedGuardedLanguage.Env Symbol) : Prop :=
+  ∀ key ∈ domain.seen, Included (output (.intersection key.1 key.2)) (PairLanguage languages key)
+
+/-- Every enclosing pair reference accepts all common terms within the rank bound. -/
+def CompletePairs (ranks : Nat → Nat → Lang Symbol) (bound : Nat)
+    (domain : IntersectionFlatMemoKeyDomain.DomainKey) (output : InternedGuardedLanguage.Env Symbol) : Prop :=
+  ∀ key ∈ domain.seen, Included (RankedPair ranks bound key) (output (.intersection key.1 key.2))
+
+/-- An empty seen set imposes no soundness obligation. -/
+theorem sound_empty (languages : Nat → Lang Symbol) (domain : IntersectionFlatMemoKeyDomain.DomainKey)
+    (output : InternedGuardedLanguage.Env Symbol) (empty : domain.seen = []) : SoundPairs languages domain output := by
+  intro key member
+  simp only [empty, List.not_mem_nil] at member
+
+/-- An empty seen set imposes no completeness obligation at any rank bound. -/
+theorem complete_empty (ranks : Nat → Nat → Lang Symbol) (bound : Nat)
+    (domain : IntersectionFlatMemoKeyDomain.DomainKey) (output : InternedGuardedLanguage.Env Symbol)
+    (empty : domain.seen = []) : CompletePairs ranks bound domain output := by
+  intro key member
+  simp only [empty, List.not_mem_nil] at member
+
+/-- The actual empty source domain supplies soundness for every output environment. -/
+theorem sound_empty_domain (languages : Nat → Lang Symbol) (output : InternedGuardedLanguage.Env Symbol) :
+    SoundPairs languages IntersectionEmptyDomain.emptyKey output := sound_empty languages _ output rfl
+

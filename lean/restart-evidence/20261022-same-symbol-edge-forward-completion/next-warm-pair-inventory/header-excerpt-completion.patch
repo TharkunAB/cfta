@@ -1,0 +1,79 @@
+--- original-v1/existing-public-headers.txt
++++ existing-public-headers.txt
+@@ -1,6 +1,6 @@
+-EXISTING DECLARATION PREFIXES ONLY; NO NEW HEADER
++EXISTING COMPLETE DECLARATION PREFIXES ONLY; NO NEW HEADER
+ 
+-R02 both_miss_complete 99-105 SHA256 9680276d9cf23c259f674c385a328de5f8fab7e7c9e123ac061f4334e66f5906
++R02 both_miss_complete 99-146 SHA256 691dc8cae8fdfc4cf02fae2921b16ed1f6827644a0bea07c32c0f25ef8742cf9
+ theorem both_miss_complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+     (source : InternedConstructorTemplates.State Symbol Guard) (facts : InternedNestedFacts.Facts source)
+     (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+@@ -8,6 +8,47 @@
+     (inputRanked : RankedInput (view source (guardHolds formulas solver)) inputModel.valid)
+     (left right : Edge) (before : Wrapper width) :
+     let ordered := if right.entry.identity < left.entry.identity then (right, left) else (left, right)
++    let request : EdgeRequest Symbol Guard := ⟨IntersectionEmptyDomain.emptyDomain, ordered.1, ordered.2⟩
++    ∀ (_memoValid : FlatMemoThunk.Valid
++        (fun (pair : Edge × Edge) (key : Nat × Nat) =>
++          (pair.1.entry.identity, pair.2.entry.identity) = key) (fun _ => True) before.memo)
++      (_missing : before.memo.table (left.entry.identity, right.entry.identity) = none)
++      (_reverseMissing : before.memo.table (right.entry.identity, left.entry.identity) = none)
++      (_scope : EdgeScope source request)
++      (complete : Completes (view source (guardHolds formulas solver))
++        (SourceRecursiveIntersectionNative.edgeSemantic (guardHolds formulas solver) request))
++      (_good : Good before.checked)
++      (_contextual : SourceCurrentAllocatedNativeContextCache.Contextual
++        (view source (guardHolds formulas solver)) inputModel inputRanked
++        (guardHolds formulas solver) before.checked.native)
++      (_semantic : SemanticReady before.checked.native.machine.heap)
++      (_symbols : request.left.entry.key.symbol = request.right.entry.key.symbol)
++      (_ready : EdgeReady before.checked.native.machine request)
++      (_growth : Grows source before.checked.native.machine.heap)
++      (_history : Extends source.nodes.issued before.checked.native.machine.heap.nodes.issued)
++      (_active : SourceRecursiveIntersectionNative.ActiveAbove
++        (view source (guardHolds formulas solver)) (guardHolds formulas solver)
++        (requiredFuel (view source (guardHolds formulas solver))
++          (SourceRecursiveIntersectionNative.edgeSemantic (guardHolds formulas solver) request) complete)
++        before.checked.native)
++      (_ranges : SourceCurrentAllocatedNativeRequestBounds.WordRanges (.edgeBody request .pure) before.checked),
++    ∃ (fuel nativeFuel handle : Nat) (result : Edge) (after : Wrapper width),
++      SourceCurrentSameSymbolEdgeControl.execute fuel (.call (left, right) []) before = .done result after ∧
++      SourceCurrentAllocatedNativeContextualCompletion.Receipt
++        (semanticView := view source (guardHolds formulas solver)) (model := inputModel)
++        (ranked := inputRanked) (semanticHolds := guardHolds formulas solver)
++        nativeFuel (.edgeBody request .pure) before.checked result after.checked
++        (fun final value => EdgeResident final.heap value)
++        (fun _ value => SourceCurrentAllocatedNativeContextCache.EdgeLaw
++          (view source (guardHolds formulas solver)) inputModel inputRanked
++          (guardHolds formulas solver) request value) ∧
++      after.memo.table (left.entry.identity, right.entry.identity) = some handle ∧
++      after.memo.cells handle = some ⟨(left, right), .returned result⟩ ∧
++      FlatMemoThunk.Returned before.memo after.memo ∧
++      (right.entry.identity < left.entry.identity →
++        ∃ reversedHandle, reversedHandle ≠ handle ∧
++          after.memo.table (right.entry.identity, left.entry.identity) = some reversedHandle ∧
++          after.memo.cells reversedHandle = some ⟨(right, left), .returned result⟩) := by
+ 
+ R03 lookup_hit 62-64 SHA256 ef637ba5cc99ce5c9b92ecdd5e1cff12f232aff193ca54f0c0f8200ec38d5856
+ theorem lookup_hit [DecidableEq Key] (key : Key) (request : Request) (state : State Key Request Value)
+@@ -46,15 +87,16 @@
+     (first second : EdgeValue Symbol Guard) (left : EdgeResident state first)
+     (right : EdgeResident state second) (same : first.entry.identity = second.entry.identity) : first = second := by
+ 
+-R13 EdgeProduced.grows 73-76 SHA256 0a0cdf3d97091203254528670f042e3998d681cf0a8fdb9a12b75957c857adab
++R13 EdgeProduced.grows 73-77 SHA256 38a31e22ff597af83b3bfb3c68759647b59d8b3aa52ae58bf27eff6f61ee4d8b
+ theorem EdgeProduced.grows [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+     {holds : Guard → Term Symbol → Bool} {before after : Machine Symbol Guard}
+     {request : EdgeRequest Symbol Guard} {value : EdgeValue Symbol Guard}
+     (produced : EdgeProduced (width := width) holds before request value) (growth : Extension before after) :
++    EdgeProduced (width := width) holds after request value := by
+ 
+-R13 EdgeProduced.spec 93-96 SHA256 d7fa683c87fb58f42587a6db810416f9ecb09068bf3d265916f7cfce9508a341
++R13 EdgeProduced.spec 93-97 SHA256 4e087a23f53bd32ba3d7a19fb0ce6b009acc365654080fe9033956bf0efeab69
+ theorem EdgeProduced.spec [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+     {holds : Guard → Term Symbol → Bool} {machine : Machine Symbol Guard}
+     {request : EdgeRequest Symbol Guard} {value : EdgeValue Symbol Guard}
+     (produced : EdgeProduced (width := width) holds machine request value) :
+-
++    EdgeReady machine request ∧ EdgeResident machine.heap value ∧ EdgeMeaning holds request value := by

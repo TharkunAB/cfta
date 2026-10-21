@@ -1,0 +1,10 @@
+--- author214
++++ preflight215
+@@ -47,6 +47,7 @@
+   induction fuel generalizing body before with
+   | zero =>
+       cases trace
++      simp only [Nat.zero_add]
+       have pureStep : SourceEqualityNativeDemand.step (.code (.pure value)) after = .done value after :=
+         (SourceEqualityNativeDemand.step_done_iff _ _ _ _).2 ⟨rfl, rfl⟩
+       change execute ((pending.length + 1) + 1) (.native (.code (.pure value)) pending) ⟨after, memo⟩ = _

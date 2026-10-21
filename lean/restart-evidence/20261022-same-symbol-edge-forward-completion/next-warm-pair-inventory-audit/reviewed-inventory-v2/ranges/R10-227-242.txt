@@ -1,0 +1,16 @@
+theorem edge_ready_contextual [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (state : Native width Symbol Guard) (physical : SourceEqualityNativeDemandProvenance.Valid holds state)
+    (valid : Contextual view model ranked holds state) (request original : EdgeRequest Symbol Guard)
+    (ready : EdgeReady state.machine request) (key : IntersectionFlatMemoKeyDomain.Triple width)
+    (checked : EdgeKeyOf width request key) (handle : Nat) (published : state.edges.table key = some handle)
+    (result : EdgeValue Symbol Guard) (stored : state.edges.cells handle = some ⟨original, .returned result⟩) :
+    lookupEdge width request state = (handle, state) ∧ demandEdge handle state = (.ready result, state) ∧
+      EdgeLaw view model ranked holds request result := by
+  have same := SourceEqualityNativeDemandProvenance.edge_request_exact state physical request ready key checked
+    handle published _ stored
+  change original = request at same
+  subst original
+  exact ⟨by simp only [lookupEdge, checked.1, FlatMemoThunk.lookupOrInsert, published],
+    by simp only [demandEdge, FlatMemoThunk.demand, stored], valid.edges handle request result stored⟩
+
+

@@ -1,0 +1,161 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261022-same-symbol-edge-forward-completion/same-symbol-edge-forward-strict-2.source.lean:96:99: error: Failed to rewrite using equation theorems for `SourceCurrentSameSymbolEdgeControl.execute`
+
+Hint: Try rewriting with `MicroCFTA.SourceCurrentSameSymbolEdgeControl.execute.eq_def`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261022-same-symbol-edge-forward-completion/same-symbol-edge-forward-strict-2.source.lean:187:63: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  SourceCurrentSameSymbolEdgeControl.execute (nativeFuel + 5 + 2)
+    (SourceCurrentSameSymbolEdgeControl.Control.call (right, left) [before.memo.next]) current
+in the target expression
+  (match
+      SourceCurrentSameSymbolEdgeControl.Outcome.yielded
+        (SourceCurrentSameSymbolEdgeControl.Control.call (right, left) [before.memo.next]) current with
+    | SourceCurrentSameSymbolEdgeControl.Outcome.yielded next after =>
+      SourceCurrentSameSymbolEdgeControl.execute (nativeFuel + 5 + 2) next after
+    | SourceCurrentSameSymbolEdgeControl.Outcome.done value after =>
+      SourceCurrentSameSymbolEdgeControl.Outcome.done value after
+    | SourceCurrentSameSymbolEdgeControl.Outcome.failed reason after =>
+      SourceCurrentSameSymbolEdgeControl.Outcome.failed reason after
+    | SourceCurrentSameSymbolEdgeControl.Outcome.constraintError message after =>
+      SourceCurrentSameSymbolEdgeControl.Outcome.constraintError message after
+    | SourceCurrentSameSymbolEdgeControl.Outcome.blocked reason next after =>
+      SourceCurrentSameSymbolEdgeControl.Outcome.blocked reason next after) =
+    SourceCurrentSameSymbolEdgeControl.Outcome.done value after
+
+case pos
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+source : InternedConstructorTemplates.State Symbol Guard
+facts : InternedNestedFacts.Facts source
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inputModel : InputMeaning (view source (SourceEqualityPCSGuard.holds formulas solver))
+inputRanked : RankedInput (view source (SourceEqualityPCSGuard.holds formulas solver)) inputModel.valid
+left right : Edge
+before : Wrapper width
+memoValid :
+  FlatMemoThunk.Valid (fun pair key => (pair.fst.entry.identity, pair.snd.entry.identity) = key) (fun x => True)
+    before.memo
+missing : before.memo.table (left.entry.identity, right.entry.identity) = none
+reverseMissing : before.memo.table (right.entry.identity, left.entry.identity) = none
+scope :
+  EdgeScope source
+    { domain := IntersectionEmptyDomain.emptyDomain,
+      left := (if right.entry.identity < left.entry.identity then (right, left) else (left, right)).fst,
+      right := (if right.entry.identity < left.entry.identity then (right, left) else (left, right)).snd }
+complete :
+  Completes (view source (SourceEqualityPCSGuard.holds formulas solver))
+    (SourceRecursiveIntersectionNative.edgeSemantic (SourceEqualityPCSGuard.holds formulas solver)
+      { domain := IntersectionEmptyDomain.emptyDomain,
+        left := (if right.entry.identity < left.entry.identity then (right, left) else (left, right)).fst,
+        right := (if right.entry.identity < left.entry.identity then (right, left) else (left, right)).snd })
+good : Good before.checked
+contextual :
+  SourceCurrentAllocatedNativeContextCache.Contextual (view source (SourceEqualityPCSGuard.holds formulas solver))
+    inputModel inputRanked (SourceEqualityPCSGuard.holds formulas solver) before.checked.native
+semantic : SemanticReady before.checked.native.machine.heap
+symbols :
+  (if right.entry.identity < left.entry.identity then (right, left) else (left, right)).fst.entry.key.symbol =
+    (if right.entry.identity < left.entry.identity then (right, left) else (left, right)).snd.entry.key.symbol
+ready :
+  SourceRecursiveIntersectionThunks.EdgeReady before.checked.native.machine
+    { domain := IntersectionEmptyDomain.emptyDomain,
+      left := (if right.entry.identity < left.entry.identity then (right, left) else (left, right)).fst,
+      right := (if right.entry.identity < left.entry.identity then (right, left) else (left, right)).snd }
+growth : Grows source before.checked.native.machine.heap
+history : Extends source.nodes.issued before.checked.native.machine.heap.nodes.issued
+active :
+  SourceRecursiveIntersectionNative.ActiveAbove (view source (SourceEqualityPCSGuard.holds formulas solver))
+    (SourceEqualityPCSGuard.holds formulas solver)
+    (requiredFuel (view source (SourceEqualityPCSGuard.holds formulas solver))
+      (SourceRecursiveIntersectionNative.edgeSemantic (SourceEqualityPCSGuard.holds formulas solver)
+        { domain := IntersectionEmptyDomain.emptyDomain,
+          left := (if right.entry.identity < left.entry.identity then (right, left) else (left, right)).fst,
+          right := (if right.entry.identity < left.entry.identity then (right, left) else (left, right)).snd })
+      complete)
+    before.checked.native
+ranges :
+  SourceCurrentAllocatedNativeRequestBounds.WordRanges
+    (SourceEqualityNativeDemand.Control.edgeBody
+      { domain := IntersectionEmptyDomain.emptyDomain,
+        left := (if right.entry.identity < left.entry.identity then (right, left) else (left, right)).fst,
+        right := (if right.entry.identity < left.entry.identity then (right, left) else (left, right)).snd }
+      Code.pure)
+    before.checked
+ordered : Edge × Edge := if right.entry.identity < left.entry.identity then (right, left) else (left, right)
+request : EdgeRequest Symbol Guard :=
+  { domain := IntersectionEmptyDomain.emptyDomain, left := ordered.fst, right := ordered.snd }
+nativeFuel : Nat
+value : Edge
+nativeAfter : SourceEqualityNativeDemand.State width
+receipt :
+  SourceCurrentAllocatedNativeContextualCompletion.Receipt nativeFuel
+    (SourceEqualityNativeDemand.Control.edgeBody request Code.pure) before.checked value nativeAfter
+    (fun after value => EdgeResident after.heap value) fun x value =>
+    SourceCurrentAllocatedNativeContextCache.EdgeLaw (view source (SourceEqualityPCSGuard.holds formulas solver))
+      inputModel inputRanked (SourceEqualityPCSGuard.holds formulas solver) request value
+current : Wrapper width
+checked : current.checked = before.checked
+table :
+  current.memo.table =
+    put before.memo.table ((left, right).fst.entry.identity, (left, right).snd.entry.identity) before.memo.next
+firstRun :
+  ∀ (fuel : Nat),
+    SourceCurrentSameSymbolEdgeControl.execute (fuel + 2)
+        (SourceCurrentSameSymbolEdgeControl.Control.call (left, right) []) before =
+      SourceCurrentSameSymbolEdgeControl.execute fuel
+        (SourceCurrentSameSymbolEdgeControl.Control.order before.memo.next (left, right) []) current
+reversed : right.entry.identity < left.entry.identity
+different : (right.entry.identity, left.entry.identity) ≠ (left.entry.identity, right.entry.identity)
+missingReverse : current.memo.table (right.entry.identity, left.entry.identity) = none
+next : Wrapper width
+nextChecked : next.checked = current.checked
+left✝ :
+  next.memo.table =
+    put current.memo.table ((right, left).fst.entry.identity, (right, left).snd.entry.identity) current.memo.next
+nextPrefix :
+  ∀ (fuel : Nat),
+    SourceCurrentSameSymbolEdgeControl.execute (fuel + 2)
+        (SourceCurrentSameSymbolEdgeControl.Control.call (right, left) [before.memo.next]) current =
+      SourceCurrentSameSymbolEdgeControl.execute fuel
+        (SourceCurrentSameSymbolEdgeControl.Control.order current.memo.next (right, left) [before.memo.next]) next
+forward : ¬left.entry.identity < right.entry.identity
+orderStep :
+  SourceCurrentSameSymbolEdgeControl.step
+      (SourceCurrentSameSymbolEdgeControl.Control.order before.memo.next (left, right) []) current =
+    SourceCurrentSameSymbolEdgeControl.Outcome.yielded
+      (SourceCurrentSameSymbolEdgeControl.Control.call (right, left) [before.memo.next]) current
+nextStep :
+  SourceCurrentSameSymbolEdgeControl.step
+      (SourceCurrentSameSymbolEdgeControl.Control.order current.memo.next (right, left) [before.memo.next]) next =
+    SourceCurrentSameSymbolEdgeControl.Outcome.yielded
+      (SourceCurrentSameSymbolEdgeControl.Control.native (SourceEqualityNativeDemand.Control.edgeBody request Code.pure)
+        [current.memo.next, before.memo.next])
+      next
+nativeTrace :
+  SourceEqualityNativeDemand.Steps nativeFuel (SourceEqualityNativeDemand.Control.edgeBody request Code.pure)
+    next.checked (SourceEqualityNativeDemand.Control.code (Code.pure value)) nativeAfter
+after : Wrapper width :=
+  { checked := nativeAfter,
+    memo :=
+      List.foldl (fun memo handle => FlatMemoThunk.finish handle value memo) next.memo
+        [current.memo.next, before.memo.next] }
+nativeRun :
+  SourceCurrentSameSymbolEdgeControl.execute (nativeFuel + 4)
+      (SourceCurrentSameSymbolEdgeControl.Control.native (SourceEqualityNativeDemand.Control.edgeBody request Code.pure)
+        [current.memo.next, before.memo.next])
+      next =
+    SourceCurrentSameSymbolEdgeControl.Outcome.done value after
+⊢ (match
+      SourceCurrentSameSymbolEdgeControl.Outcome.yielded
+        (SourceCurrentSameSymbolEdgeControl.Control.call (right, left) [before.memo.next]) current with
+    | SourceCurrentSameSymbolEdgeControl.Outcome.yielded next after =>
+      SourceCurrentSameSymbolEdgeControl.execute (nativeFuel + 5 + 2) next after
+    | SourceCurrentSameSymbolEdgeControl.Outcome.done value after =>
+      SourceCurrentSameSymbolEdgeControl.Outcome.done value after
+    | SourceCurrentSameSymbolEdgeControl.Outcome.failed reason after =>
+      SourceCurrentSameSymbolEdgeControl.Outcome.failed reason after
+    | SourceCurrentSameSymbolEdgeControl.Outcome.constraintError message after =>
+      SourceCurrentSameSymbolEdgeControl.Outcome.constraintError message after
+    | SourceCurrentSameSymbolEdgeControl.Outcome.blocked reason next after =>
+      SourceCurrentSameSymbolEdgeControl.Outcome.blocked reason next after) =
+    SourceCurrentSameSymbolEdgeControl.Outcome.done value after

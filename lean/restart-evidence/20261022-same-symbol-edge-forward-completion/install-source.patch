@@ -1,0 +1,55 @@
+--- H7-install
++++ H8-install
+@@ -4,14 +4,14 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ ROOT = HERE.parents[2]
+-name = 'SourceCurrentSameSymbolEdgeControl'
++name = 'SourceCurrentSameSymbolEdgeForwardCompletion'
+ source = (HERE / (name + '.lean')).read_bytes()
+ sha = hashlib.sha256(source).hexdigest()
+-assert sha == 'dbf416168635ecc34effe17891f557f31ec14df2f7cb368c52863d69a6174559'
+-assert len(source.splitlines()) == 334
+-assert source == (HERE / 'same-symbol-edge-strict-3.source.lean').read_bytes()
+-assert (HERE / 'same-symbol-edge-strict-3.log').read_bytes() == b''
+-assert json.loads((HERE / 'same-symbol-edge-public-1.json').read_text())['exit_code'] == 0
++assert sha == 'c1b7480244632c2cc0454051f0dc7f63649d9ed4cf3c2548edf615ff8647aafd'
++assert len(source.splitlines()) == 216
++assert source == (HERE / 'same-symbol-edge-forward-strict-3.source.lean').read_bytes()
++assert (HERE / 'same-symbol-edge-forward-strict-3.log').read_bytes() == b''
++assert json.loads((HERE / 'same-symbol-edge-forward-public-1.json').read_text())['exit_code'] == 0
+ review = json.loads((HERE / 'root-full-review.json').read_text())
+ assert review['source_sha256'] == sha
+ assert review['complete_public_type_root_review'] == 'CLEAR'
+@@ -21,25 +21,25 @@
+ assert not target.exists()
+ audit = ROOT / 'lean/MicroCFTA/Audit.lean'
+ original = audit.read_bytes()
+-assert hashlib.sha256(original).hexdigest() == '54c43b5a02ca28f66963385976ae3e3846d903b5294d9ecca7dc476d5c137901'
+-assert len(original.splitlines()) == 3112
++assert hashlib.sha256(original).hexdigest() == '8f02e3994f8b7559692a36eab8e4d1ca0afb31f38485d59d0b5e802f376fa75f'
++assert len(original.splitlines()) == 3113
+ archive = HERE / 'original-sources'
+ archive.mkdir()
+ (archive / 'Audit.original.lean.txt').write_bytes(original)
+-addition = b'import MicroCFTA.SourceCurrentSameSymbolEdgeControl\n'
++addition = b'import MicroCFTA.SourceCurrentSameSymbolEdgeForwardCompletion\n'
+ assert addition not in original
+ target.write_bytes(source)
+ audit.write_bytes(original.replace(b'/-!', addition + b'/-!', 1))
+ path = 'lean/MicroCFTA/' + name + '.lean'
+-selected = {path: dict(sha256=sha, lines=334, strict='same-symbol-edge-strict-3', full='same-symbol-edge-public-1')}
++selected = {path: dict(sha256=sha, lines=216, strict='same-symbol-edge-forward-strict-3', full='same-symbol-edge-forward-public-1')}
+ (HERE / 'selected-sources.json').write_text(json.dumps(selected, indent=2) + '\n')
+ (HERE / 'frozen-modules.json').write_text(json.dumps({name: sha}, indent=2) + '\n')
+ snapshots = HERE / 'selected-sources'
+ snapshots.mkdir()
+ (snapshots / (name + '.lean')).write_bytes(source)
+ (HERE / 'selected-source-gate.json').write_text(json.dumps(dict(status='ROOT_ACCEPTED', path=path,
+-    sha256=sha, lines=334, snapshot='selected-sources/' + name + '.lean'), indent=2) + '\n')
++    sha256=sha, lines=216, snapshot='selected-sources/' + name + '.lean'), indent=2) + '\n')
+ (HERE / 'original-source-index.json').write_text(json.dumps({'sources': [dict(path='lean/MicroCFTA/Audit.lean',
+-    snapshot='original-sources/Audit.original.lean.txt', lines=3112,
++    snapshot='original-sources/Audit.original.lean.txt', lines=3113,
+     sha256=hashlib.sha256(original).hexdigest())]}, indent=2) + '\n')
+ print(json.dumps({'status': 'PASS', 'installed_module': path, 'audit_only_new_import': True}))

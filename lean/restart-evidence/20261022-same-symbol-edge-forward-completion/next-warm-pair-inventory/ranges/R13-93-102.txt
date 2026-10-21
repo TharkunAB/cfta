@@ -1,0 +1,10 @@
+theorem EdgeProduced.spec [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    {holds : Guard → Term Symbol → Bool} {machine : Machine Symbol Guard}
+    {request : EdgeRequest Symbol Guard} {value : EdgeValue Symbol Guard}
+    (produced : EdgeProduced (width := width) holds machine request value) :
+    EdgeReady machine request ∧ EdgeResident machine.heap value ∧ EdgeMeaning holds request value := by
+  obtain ⟨first, final, fuel, ready, done, grew, resident, later, meaning⟩ := produced
+  have growth := grew.trans later
+  exact ⟨⟨ready.1.grows _ growth, edge_grows _ _ growth.heap _ ready.2.1,
+    edge_grows _ _ growth.heap _ ready.2.2⟩, edge_grows _ _ later.heap _ resident, meaning⟩
+

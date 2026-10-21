@@ -1,0 +1,8 @@
+/-- A returned law refers to the same actual physical trace and machine. -/
+structure Receipt [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (control : Control A) (before : Checked width) (value : A) (after : Checked width)
+    (post semanticPost : Machine Symbol Guard → A → Prop) : Prop
+    extends SourceCurrentAllocatedNativePhysicalTraceCompletion.Receipt fuel control before value after post where
+  contextual : Contextual after.native
+  semantic : SemanticReady after.native.machine.heap
+  law : semanticPost after.native.machine value

@@ -1,0 +1,9 @@
+/-- Closed native edge results have the independent intersection language. -/
+def EdgeMeaning (holds : Guard → Term Symbol → Bool) (request : EdgeRequest Symbol Guard)
+    (value : EdgeValue Symbol Guard) : Prop :=
+  request.domain = IntersectionEmptyDomain.emptyDomain →
+    MergedColdReaderClosedInputs.ClosedValues request.left.children →
+    MergedColdReaderClosedInputs.ClosedValues request.right.children →
+    ∀ ambient term, InternedGuardedLanguage.edgeMeaning holds ambient value term ↔
+      InternedGuardedLanguage.edgeMeaning holds ambient request.left term ∧
+      InternedGuardedLanguage.edgeMeaning holds ambient request.right term

@@ -1,0 +1,14 @@
+--- original-v1/context.lean.txt
++++ context.lean.txt
+@@ -1,4 +1,5 @@
+ import MicroCFTA.SourceCurrentSameSymbolEdgeControl
++import MicroCFTA.FormulaExecutable
+ import MicroCFTA.SourceCurrentAllocatedNativeContextualCompletion
+ 
+ namespace MicroCFTA.SourceCurrentSameSymbolEdgeForwardCompletion
+@@ -11,4 +12,5 @@
+ local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+ local notation "Edge" => EdgeValue Symbol Guard
+ local notation "Wrapper" => SourceCurrentSameSymbolEdgeControl.State
++local notation "guardHolds" => (@SourceEqualityPCSGuard.holds FullSyntax.Formula FormulaExecutable.formulaDecidableEq)
+ variable {width : Nat}

@@ -1,0 +1,48 @@
+theorem both_miss_complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (source : InternedConstructorTemplates.State Symbol Guard) (facts : InternedNestedFacts.Facts source)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inputModel : InputMeaning (view source (SourceEqualityPCSGuard.holds formulas solver)))
+    (inputRanked : RankedInput (view source (SourceEqualityPCSGuard.holds formulas solver)) inputModel.valid)
+    (left right : Edge) (before : Wrapper width) :
+    let ordered := if right.entry.identity < left.entry.identity then (right, left) else (left, right)
+    let request : EdgeRequest Symbol Guard := ⟨IntersectionEmptyDomain.emptyDomain, ordered.1, ordered.2⟩
+    ∀ (_memoValid : FlatMemoThunk.Valid
+        (fun (pair : Edge × Edge) (key : Nat × Nat) =>
+          (pair.1.entry.identity, pair.2.entry.identity) = key) (fun _ => True) before.memo)
+      (_missing : before.memo.table (left.entry.identity, right.entry.identity) = none)
+      (_reverseMissing : before.memo.table (right.entry.identity, left.entry.identity) = none)
+      (_scope : EdgeScope source request)
+      (complete : Completes (view source (SourceEqualityPCSGuard.holds formulas solver))
+        (SourceRecursiveIntersectionNative.edgeSemantic (SourceEqualityPCSGuard.holds formulas solver) request))
+      (_good : Good before.checked)
+      (_contextual : SourceCurrentAllocatedNativeContextCache.Contextual
+        (view source (SourceEqualityPCSGuard.holds formulas solver)) inputModel inputRanked
+        (SourceEqualityPCSGuard.holds formulas solver) before.checked.native)
+      (_semantic : SemanticReady before.checked.native.machine.heap)
+      (_symbols : request.left.entry.key.symbol = request.right.entry.key.symbol)
+      (_ready : EdgeReady before.checked.native.machine request)
+      (_growth : Grows source before.checked.native.machine.heap)
+      (_history : Extends source.nodes.issued before.checked.native.machine.heap.nodes.issued)
+      (_active : SourceRecursiveIntersectionNative.ActiveAbove
+        (view source (SourceEqualityPCSGuard.holds formulas solver)) (SourceEqualityPCSGuard.holds formulas solver)
+        (requiredFuel (view source (SourceEqualityPCSGuard.holds formulas solver))
+          (SourceRecursiveIntersectionNative.edgeSemantic (SourceEqualityPCSGuard.holds formulas solver) request) complete)
+        before.checked.native)
+      (_ranges : SourceCurrentAllocatedNativeRequestBounds.WordRanges (.edgeBody request .pure) before.checked),
+    ∃ (fuel nativeFuel handle : Nat) (result : Edge) (after : Wrapper width),
+      SourceCurrentSameSymbolEdgeControl.execute fuel (.call (left, right) []) before = .done result after ∧
+      SourceCurrentAllocatedNativeContextualCompletion.Receipt
+        (semanticView := view source (SourceEqualityPCSGuard.holds formulas solver)) (model := inputModel)
+        (ranked := inputRanked) (semanticHolds := SourceEqualityPCSGuard.holds formulas solver)
+        nativeFuel (.edgeBody request .pure) before.checked result after.checked
+        (fun final value => EdgeResident final.heap value)
+        (fun _ value => SourceCurrentAllocatedNativeContextCache.EdgeLaw
+          (view source (SourceEqualityPCSGuard.holds formulas solver)) inputModel inputRanked
+          (SourceEqualityPCSGuard.holds formulas solver) request value) ∧
+      after.memo.table (left.entry.identity, right.entry.identity) = some handle ∧
+      after.memo.cells handle = some ⟨(left, right), .returned result⟩ ∧
+      FlatMemoThunk.Returned before.memo after.memo ∧
+      (right.entry.identity < left.entry.identity →
+        ∃ reversedHandle, reversedHandle ≠ handle ∧
+          after.memo.table (right.entry.identity, left.entry.identity) = some reversedHandle ∧
+          after.memo.cells reversedHandle = some ⟨(right, left), .returned result⟩)

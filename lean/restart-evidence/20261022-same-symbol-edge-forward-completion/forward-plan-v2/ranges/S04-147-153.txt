@@ -1,0 +1,7 @@
+/-- A trace to a pure value completes with that exact result after one further step. -/
+theorem trace_done [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (control : Control Output) (state after : State width) (value : Output)
+    (trace : Steps fuel control state (.code (.pure value)) after) :
+    execute (fuel + 1) control state = .done value after := by
+  rw [execute_add, trace.execute]
+  rfl

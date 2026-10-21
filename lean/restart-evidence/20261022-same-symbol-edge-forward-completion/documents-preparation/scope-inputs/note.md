@@ -1,0 +1,21 @@
+# Forward completion for two absent pair keys
+PROPOSAL ONLY. No theorem body, implementation or compiler run is authorized by this package.
+The exact proposed head is both_miss_complete. It keeps the actual populated Wrapper state, both requested-key misses and the current typed pair-memo validity; it resets no table. [S01,S05]
+Its remaining premises are exactly the current ContextualCompletion.edge_complete packet at the canonical ordered empty-domain request: source Facts/model/ranks, EdgeScope/Completes, Good/Contextual/SemanticReady, symbols/EdgeReady, source growth/history, ActiveAbove and WordRanges. [S02,S06-S07]
+`Completes view call` is `∃ fuel result, IntersectSchedule.execute view fuel call = .ok result`; it is a semantic-interpreter completion premise. [S09:15-16]
+This premise is distinct from the native/wrapper success that the proposed theorem derives. Deriving semantic completion for every cluster pair remains open.
+No observed native/wrapper success, Room, exact-meet callback or historical ready-hit execution is a premise.
+Call edge_complete ONCE at before.checked. Its one Receipt supplies a physical trace of length n to pure result and every native result invariant at its exact full checked after, including operation caches. [S02-S03]
+Plan one private ret helper: executing ret value pending for pending.length+1 steps finishes exactly pending.foldl finish and returns done without changing checked. This follows the literal two ret branches. [S01,S05]
+Plan one private native-trace lift: induction on Receipt.trace.steps preserves the separate memo and pending list at each native yielded step. One native pure-done step then yields ret. It takes n+pending.length+2 steps including the final empty-list return. [S01,S03-S04]
+The original miss publishes h0=before.memo.next, demands its suspended captured pair, then orders it. These THREE yielded wrapper steps retain before.checked. FlatMemoThunk.lookup_miss/lookup_valid and demand supply the literal fresh cell. [S01,S05]
+Without swap, the next control is native orderedBody [h0]. The exact total fuel is n+6. No equal-identity shortcut is added. [S01]
+With swap, strict identity order makes reverseKey different, so original publication preserves reverseMissing. A SECOND call/demand/order publishes h1 and cannot swap again. Pending is [h1,h0]; the exact total is n+10. [S01,S05]
+Build the final Wrapper explicitly from the native Receipt checked after and the LIFO-finished pair memo. This gives wrapper done with the SAME result and full checked after, not merely native.machine equality.
+Only AFTER constructing done, invoke the existing public miss_readback with the original before/misses/validity. Discard its duplicate native trace and reuse its actual original/reversed returned cells plus prior Returned retention. [S01:226-247]
+No completed_unique detour is needed here: native Receipt and wrapper return share checked after by construction. The public Receipt also retains Good, Contextual, SemanticReady, resident result, Extension, Keeps and operation Grows. [S02-S03]
+The proposal does not add unconditional Scoped, Covered or Idle conclusions. Their existing preservation routes require their respective entry packet, as recorded in the separate semantic inventory audit.
+Warm pair hits still need historical writer/residency/law invariants. Whole comparison-sequence admission and numeric ranges, ruleOut, recursive Mu handling and the full public withoutRedundantEdges pipeline remain open.
+The source snapshots include the current checked 334-line H7 control, SHA dbf416168635ecc34effe17891f557f31ec14df2f7cb368c52863d69a6174559. This proposal is new and unproved; the H7 checkpoint is not changed.
+I authored H7 control and related earlier adapters. This is a forward proof plan, not an independent proof review of those foundations. Only source reads, static pins and NEW plan files ran; zero checks, runtime, capped, Git, network, official or restart edits.
+The explicit public guardHolds notation fixes Formula equality through FormulaExecutable.formulaDecidableEq. This is a preventive typing choice; no compiler or private-name leakage failure was observed in v1. [S10-S11]

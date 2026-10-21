@@ -1,0 +1,31 @@
+--- archive-support.py
++++ frozen-v1/archive-support.py
+@@ -7,8 +7,8 @@
+ target = HERE / 'completed-root-support'
+ target.mkdir()
+ files = {}
+-for source in sorted(Path('/tmp').glob('mcfta-same-symbol-edge-forward-*')):
+-    if not source.is_file() or source.name.startswith('mcfta-same-symbol-edge-forward-support-1'):
++for source in sorted(Path('/tmp').glob('mcfta-same-symbol-edge-forward-completion-*')):
++    if not source.is_file() or source.name.startswith('mcfta-same-symbol-edge-forward-completion-support-1'):
+         continue
+     shutil.copyfile(source, target / source.name)
+     files[source.name] = hashlib.sha256(source.read_bytes()).hexdigest()
+--- final-publication.py
++++ frozen-v1/final-publication.py
+@@ -42,12 +42,12 @@
+ assert index==head_entries
+ subprocess.run(['/usr/bin/python3',str(H/'verify-seal.py')],check=True)
+ env={**os.environ,'GIT_SSH_COMMAND':'ssh -p 443 -o Hostname=ssh.github.com -o HostKeyAlias=github.com -o StrictHostKeyChecking=yes -o ConnectTimeout=15 -o ConnectionAttempts=1 -o BatchMode=yes -o ServerAliveInterval=10 -o ServerAliveCountMax=2'}
+-with Path('/tmp/mcfta-same-symbol-edge-forward-final-push.log').open('xb') as log:
++with Path('/tmp/mcfta-same-symbol-edge-forward-completion-final-push.log').open('xb') as log:
+  subprocess.run(['timeout','45s','git','push','origin','HEAD:formalize'],cwd=R,env=env,stdout=log,stderr=subprocess.STDOUT,check=True)
+ remote=subprocess.check_output(['timeout','45s','git','ls-remote','origin','refs/heads/formalize','refs/heads/main'],cwd=R,env=env,text=True)
+-Path('/tmp/mcfta-same-symbol-edge-forward-final-remote.txt').write_text(remote)
++Path('/tmp/mcfta-same-symbol-edge-forward-completion-final-remote.txt').write_text(remote)
+ assert head+'\trefs/heads/formalize' in remote
+ assert '794903b3fbad3becb8b28736fc33463760731fc7\trefs/heads/main' in remote
+ report={'status':'PASS','checkpoint':head,'proof':(H/'proof-commit.txt').read_text().strip(),'work_status':'continuing_at_user_request','filesystem_index_head_equal':True,'tracked_blobs_and_modes':len(index),'all_sealed_paths_in_index':sealed_paths,'clean':not bool(git('status','--porcelain')),'remote':remote,'selected_proof':json.loads((H/'verification.json').read_text()),'preservation':json.loads((H/'preservation-final.json').read_text())}
+-Path('/tmp/mcfta-same-symbol-edge-forward-publication.json').write_text(json.dumps(report,indent=2)+'\n')
++Path('/tmp/mcfta-same-symbol-edge-forward-completion-publication.json').write_text(json.dumps(report,indent=2)+'\n')
+ print(json.dumps({k:v for k,v in report.items() if k not in ['selected_proof','preservation']}))

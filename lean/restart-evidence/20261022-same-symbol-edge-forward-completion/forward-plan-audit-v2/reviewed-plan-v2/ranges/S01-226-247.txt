@@ -1,0 +1,22 @@
+/-- Read the native trace and completed pair cells from a successful miss. -/
+theorem miss_readback [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (left right result : Edge) (before after : State width)
+    (valid : FlatMemoThunk.Valid
+      (fun (request : Edge × Edge) (key : Nat × Nat) =>
+        (request.1.entry.identity, request.2.entry.identity) = key)
+      (fun _ => True) before.memo)
+    (missing : before.memo.table (left.entry.identity, right.entry.identity) = none)
+    (reverseMissing : before.memo.table (right.entry.identity, left.entry.identity) = none)
+    (done : execute fuel (.call (left, right) []) before = .done result after) :
+    let ordered := if right.entry.identity < left.entry.identity then (right, left) else (left, right)
+    ∃ nativeFuel handle,
+      SourceEqualityNativeDemand.Steps nativeFuel
+        (.edgeBody ⟨IntersectionEmptyDomain.emptyDomain, ordered.1, ordered.2⟩ .pure)
+        before.checked (.code (.pure result)) after.checked ∧
+      after.memo.table (left.entry.identity, right.entry.identity) = some handle ∧
+      after.memo.cells handle = some ⟨(left, right), .returned result⟩ ∧
+      FlatMemoThunk.Returned before.memo after.memo ∧
+      (right.entry.identity < left.entry.identity →
+        ∃ reversedHandle, reversedHandle ≠ handle ∧
+          after.memo.table (right.entry.identity, left.entry.identity) = some reversedHandle ∧
+          after.memo.cells reversedHandle = some ⟨(right, left), .returned result⟩) := by

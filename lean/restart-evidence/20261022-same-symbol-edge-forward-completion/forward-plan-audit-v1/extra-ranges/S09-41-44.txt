@@ -1,0 +1,4 @@
+
+/-- Select the least successful bound for this exact semantic request. -/
+def requiredFuel [DecidableEq Symbol] (view : View Symbol) (call : Call Symbol) (complete : Completes view call) : Nat :=
+  Classical.choose (least_successful view call complete)

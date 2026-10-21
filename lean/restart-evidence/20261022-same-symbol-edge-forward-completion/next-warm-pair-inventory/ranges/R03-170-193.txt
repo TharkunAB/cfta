@@ -1,0 +1,24 @@
+/-- Demand starts a suspended thunk without removing its published key. -/
+def demand (handle : Nat) (state : State Key Request Value) : Observation Request Value × State Key Request Value :=
+  match state.cells handle with
+  | none => (.absent, state)
+  | some cell => match cell.status with
+    | .suspended => (.evaluate cell.request, setStatus handle .evaluating state)
+    | .evaluating => (.busy, state)
+    | .returned value => (.ready value, state)
+
+/-- A recursive demand on a running thunk records a busy observation. -/
+theorem demand_busy (handle : Nat) (state : State Key Request Value) (request : Request)
+    (stored : state.cells handle = some ⟨request, .evaluating⟩) : demand handle state = (.busy, state) := by
+  simp only [demand, stored]
+
+/-- Demand on a completed thunk returns its original value without effects. -/
+theorem demand_ready (handle : Nat) (state : State Key Request Value) (request : Request) (value : Value)
+    (stored : state.cells handle = some ⟨request, .returned value⟩) : demand handle state = (.ready value, state) := by
+  simp only [demand, stored]
+
+/-- Completion changes only a thunk whose original request is under evaluation. -/
+def finish (handle : Nat) (value : Value) (state : State Key Request Value) : State Key Request Value :=
+  match state.cells handle with
+  | some ⟨_, .evaluating⟩ => setStatus handle (.returned value) state
+  | _ => state

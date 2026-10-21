@@ -1,0 +1,27 @@
+def EdgeProduced [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (holds : Guard → Term Symbol → Bool) (machine : Machine Symbol Guard)
+    (request : EdgeRequest Symbol Guard) (value : EdgeValue Symbol Guard) : Prop :=
+  ∃ (before after : Checked width), ∃ fuel,
+    EdgeReady before.native.machine request ∧
+    SourceEqualityNativeDemand.execute fuel (.edgeBody request .pure) before = .done value after ∧
+    Extension before.native.machine after.native.machine ∧
+    EdgeResident after.native.machine.heap value ∧
+    Extension after.native.machine machine ∧ EdgeMeaning holds request value
+
+/-- Later physical and domain effects retain the same actual node execution receipt. -/
+theorem NodeProduced.grows [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    {holds : Guard → Term Symbol → Bool} {before after : Machine Symbol Guard}
+    {request : NodeRequest Symbol Guard} {value : Value Symbol Guard}
+    (produced : NodeProduced (width := width) holds before request value) (growth : Extension before after) :
+    NodeProduced (width := width) holds after request value := by
+  obtain ⟨first, final, fuel, ready, done, grew, available, later, meaning⟩ := produced
+  exact ⟨first, final, fuel, ready, done, grew, available, later.trans growth, meaning⟩
+
+/-- Later physical and domain effects retain the same actual edge execution receipt. -/
+theorem EdgeProduced.grows [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    {holds : Guard → Term Symbol → Bool} {before after : Machine Symbol Guard}
+    {request : EdgeRequest Symbol Guard} {value : EdgeValue Symbol Guard}
+    (produced : EdgeProduced (width := width) holds before request value) (growth : Extension before after) :
+    EdgeProduced (width := width) holds after request value := by
+  obtain ⟨first, final, fuel, ready, done, grew, resident, later, meaning⟩ := produced
+  exact ⟨first, final, fuel, ready, done, grew, resident, later.trans growth, meaning⟩

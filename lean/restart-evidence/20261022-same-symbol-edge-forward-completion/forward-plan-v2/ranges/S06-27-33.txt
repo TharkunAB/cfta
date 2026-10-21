@@ -1,0 +1,7 @@
+/-- A row request retains original resident edges, complete original children, and source bindings. -/
+structure EdgeScope (source : InternedConstructorTemplates.State Symbol Guard) (request : EdgeRequest Symbol Guard) : Prop where
+  leftResident : InternedEdgeResidency.EdgeResident source request.left
+  rightResident : InternedEdgeResidency.EdgeResident source request.right
+  left : ∀ child ∈ request.left.children, Original child
+  right : ∀ child ∈ request.right.children, Original child
+  bindings : OriginalBindings source request.domain.key

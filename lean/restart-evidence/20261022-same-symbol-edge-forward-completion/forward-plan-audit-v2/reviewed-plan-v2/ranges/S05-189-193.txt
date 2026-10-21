@@ -1,0 +1,5 @@
+/-- Completion changes only a thunk whose original request is under evaluation. -/
+def finish (handle : Nat) (value : Value) (state : State Key Request Value) : State Key Request Value :=
+  match state.cells handle with
+  | some ⟨_, .evaluating⟩ => setStatus handle (.returned value) state
+  | _ => state

@@ -1,0 +1,20 @@
+--- strict2-input214
++++ yield216
+@@ -93,7 +93,7 @@
+     simp only [running, FlatMemoThunk.setStatus, stored]
+     simp only [published, FlatMemoThunk.lookupOrInsert, missing]
+   · intro fuel
+-    rw [show fuel + 2 = (fuel + 1) + 1 by rfl, SourceCurrentSameSymbolEdgeControl.execute, looked, SourceCurrentSameSymbolEdgeControl.execute, started]
++    simp only [SourceCurrentSameSymbolEdgeControl.execute, looked, started]
+ 
+ /-- Complete the requested absent pair from its semantic schedule and current word plan. -/
+ theorem both_miss_complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+@@ -184,6 +184,8 @@
+       refine ⟨nativeFuel + 10, after, ?_, rfl⟩
+       rw [show nativeFuel + 10 = (nativeFuel + 8) + 2 by omega, firstRun (nativeFuel + 8)]
+       rw [SourceCurrentSameSymbolEdgeControl.execute, orderStep]
++      change SourceCurrentSameSymbolEdgeControl.execute (nativeFuel + 7)
++        (.call (right, left) [before.memo.next]) current = .done value after
+       rw [show nativeFuel + 7 = (nativeFuel + 5) + 2 by omega, nextPrefix (nativeFuel + 5)]
+       rw [SourceCurrentSameSymbolEdgeControl.execute, nextStep]
+       exact nativeRun
