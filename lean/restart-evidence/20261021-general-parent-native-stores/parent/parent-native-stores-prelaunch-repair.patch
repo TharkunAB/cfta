@@ -1,0 +1,14 @@
+--- prelaunch-39d51371
++++ corrected-prelaunch
+@@ -116,7 +116,10 @@
+       rename_i paths selected scan
+       obtain ⟨finalReady, effects, extension, _values, finalCurrent, finalSupport, finalHistory⟩ :=
+         SourceCurrentScanNativeStores.scan formulas solver scan ready available proper current supported causal
+-      exact ⟨inventory, finalReady, admitted.advance _ extension, effects,
++      obtain ⟨next, _ready, finalAdmission, _effects, _originals, _correct, _retained, _sound⟩ :=
++        SourceCurrentConjunctionClassScanSoundness.verified formulas solver inventory scan ready admitted available
++          proper active correct ranges
++      exact ⟨next, finalReady, finalAdmission, effects,
+         (SourceEqualityEmptyPropagation.erased_scope _ values).1, finalCurrent, finalSupport, finalHistory, merged, positive⟩
+   | completed first second last =>
+       rename_i kept requiredValues middle selected heap fuel readFuel scanMemos requiredMemos required scan retained pass

@@ -1,0 +1,43 @@
+-- PROPOSED TYPE ONLY. This file has not been elaborated.
+-- No proof declaration has been added to the repository.
+-- Intended namespace: MicroCFTA.SourceCurrentActualParentNativeStores.
+-- Existing local aliases and open namespaces match ActualParentSemanticReads.
+-- Symbol := SourceObservations.Label FullSyntax.Formula
+-- Guard := SourceSymbolicIndex.Constraint FullSyntax.Formula
+-- Checked := SourceEqualityNativeDemand.State
+-- Caller := SourceCurrentAllocatedPartialState.State
+-- Allocated := SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula
+-- EqValue := SourceEqualityConstraintAllocation.Value
+-- Fourth := SourceCurrentEmptinessMemo.Memo
+-- Memo := SourceCurrentMemoMergeGraph.Memo Symbol Guard
+-- Memos := EndpointMemoGateTrace.Memos
+-- Inventory, Profile, Frame, Fits and Context are the same public types as
+-- SourceCurrentActualParentSemanticReads.parent. The same three instances apply.
+-- bits : Nat
+
+theorem parent
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (budget : Nat) (symbol : Symbol) (original : Guard) (loaded : Allocated) (inherited : EqValue)
+    (values : List (Value Symbol Guard)) (before : Caller (bits + 2)) (memos : Memos)
+    (initial : Context formulas solver inventory before memos) (frame : Frame formulas solver inventory before.checked)
+    (profile : Profile) (fits : Fits profile before.checked)
+    (live : SourceCurrentParentNumeric.LiveInputs original loaded inherited values before)
+    (reserved : SourceCurrentParentForecast.Reserved bits budget values.length original loaded inherited before.checked profile)
+    (normal : SourceCurrentRequiredUnionNormal.UnionNormal before.checked.native.machine.heap)
+    (supported : SourceCurrentNativeRequestPositivePositions.Support
+      before.checked.native.machine.heap before.checked.native)
+    (causal : SourceCurrentNativeMuPublication.History empty before.checked.native.machine.heap)
+    (merged : SourceCurrentConstrainedCapMemoMerge.Stored
+      (fun guard : Guard => SourceMemoGate.plain guard = true) before.merge)
+    (positiveMemo : SourceCurrentMergePositivePosition.Support before.merge)
+    {g s r e p h m c n : Nat} {result : EdgeValue Symbol Guard} {after : Checked (bits + 2)}
+    {savedFourth : Fourth} {saved : Memo}
+    (observed : SourceCurrentAllocatedParentWorker.edge g s r e p h m c n budget symbol original inherited values
+      before.checked before.fourth before.merge = .done result after savedFourth saved) :
+    ∃ next final, SourceCurrentParentNumeric.Receipt formulas solver next profile budget symbol original loaded
+      inherited values before memos result after savedFourth saved final ∧
+      SourceCurrentNativeRequestPositivePositions.Support after.native.machine.heap after.native ∧
+      Nonempty (SourceCurrentNativeMuPublication.History empty after.native.machine.heap) ∧
+      SourceCurrentConstrainedCapMemoMerge.Stored
+        (fun guard : Guard => SourceMemoGate.plain guard = true) saved ∧
+      SourceCurrentMergePositivePosition.Support saved

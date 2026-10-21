@@ -1,0 +1,37 @@
+--- direct-1-ca816e77
++++ current
+@@ -40,10 +40,7 @@
+ local notation "Effects" => SourceCurrentConjunctionRowsAllocation.Effects
+ local notation "prefixState" => SourceCurrentAllocatedPrecheck.state
+ variable {bits : Nat}
+-variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Node]
+-
+-omit [DecidableEq Symbol] [DecidableEq Node] in
+-private theorem constructed
++private theorem constructed [DecidableEq (EdgeKey Symbol Guard)]
+     {width : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+     (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+     (symbol : Symbol) (loaded : Allocated) (children : List Node) (before : Checked width)
+@@ -73,11 +70,13 @@
+       change (SourceEqualityMkEdgeAllocation.build symbol loaded.stored loaded.guard children
+         before.operations before.native.machine.heap).2.2.nodeRecords = _
+       rw [sourceBuild]
+-      cases SourceEqualityMkEdgeAllocation.accepted (SourceEqualityConjoinAllocation.readback loaded) children.length <;> rfl
++      cases SourceEqualityMkEdgeAllocation.accepted (SourceEqualityAccessorAllocation.constraint loaded.stored loaded.guard) children.length <;> rfl
+     simpa only [built] using identity
+   have interval : History before.native.machine.heap after.native.machine.heap :=
+     .retain _ _ (fun key entry body depth ordinary present => by rw [records] at present; exact present)
+   exact ⟨finalSupport, ⟨.trans causal interval⟩⟩
++
++variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Node]
+ 
+ private theorem classes
+     {width budget : Nat} (formulas : SourceGuards.Formulas FullSyntax.Formula)
+@@ -136,6 +135,7 @@
+       obtain ⟨G, S, P, H, N, stable⟩ := SourceCurrentAllocatedScanWorkerCompletion.scan_complete scan
+       have scanDone := stable G S P H N (Nat.le_refl _) (Nat.le_refl _) (Nat.le_refl _)
+         (Nat.le_refl _) (Nat.le_refl _)
++      dsimp only at scanDone
+       have scanNormal := SourceCurrentUnionNormalScan.scan G S P H N budget values
+         (records.map SourceEqualityClassOrder.Record.paths) before fourth normal
+       rw [scanDone] at scanNormal
