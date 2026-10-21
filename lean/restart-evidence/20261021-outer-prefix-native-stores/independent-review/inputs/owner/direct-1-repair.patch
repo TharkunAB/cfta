@@ -1,0 +1,34 @@
+--- strict1-f4d32133
++++ repair-saved-store-bundle
+@@ -77,6 +77,7 @@
+     (known : Carrier (fun guard => guard ∈ seed.1) (caller first).checked.native.machine.heap)
+     (inputs : Inputs first) (room : Room bits (forecast budget first seed).2)
+     (stores : Stores (caller first)) : Stores (caller last) := by
++  have unchanged := stores
+   obtain ⟨supported,⟨causal⟩,merged,positiveMemo,normal⟩ := stores
+   cases actual with
+   | node_evaluate started =>
+@@ -85,8 +86,8 @@
+       rw [started] at components
+       dsimp only at components
+       obtain ⟨checked,merge,_fourth,_edges⟩ := components
+-      simpa only [Stores,SourceCurrentOuterActiveAncestry.caller,checked,merge] using stores
+-  | body_rows => exact stores
++      simpa only [Stores,SourceCurrentOuterActiveAncestry.caller,checked,merge] using unchanged
++  | body_rows => exact unchanged
+   | rows_edge done =>
+       rename_i fuel inherited original before narrowed middle rest
+       simp only [forecast,Schedule.rows] at room
+@@ -125,9 +126,9 @@
+         receipt.frame numeric carrier (inputs.1.grows receipt.post.effects.grows.constraint_growth)
+         receipt.semantic.resident descendantRoom middleNormal middleSupport middleCausal middleMerged
+         middlePositive children
+-  | descendants_children => exact stores
+-  | children_walk => exact stores
+-  | walk_head => exact stores
++  | descendants_children => exact unchanged
++  | children_walk => exact unchanged
++  | walk_head => exact unchanged
+   | walk_tail done =>
+       rename_i fuel before combined index value result middle rest
+       simp only [forecast,Schedule.walk] at room

@@ -1,0 +1,60 @@
+import MicroCFTA.SourceCurrentOuterInitialPrefix
+import MicroCFTA.SourceCurrentOuterNativeStores
+import MicroCFTA.SourceCurrentOuterUnionNormalHistory
+
+namespace MicroCFTA.SourceCurrentOuterPrefixNativeStores
+open Cache InternedConstructorTemplates
+open SourceCurrentAllocatedPartialInvariant (Context Post)
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedNativeResourceForecast (Profile Le Room)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Frame Fits)
+open SourceCurrentOuterCopiedWarmHit (Phase)
+open SourceCurrentOuterExecutionAncestry (Reached)
+open SourceCurrentOuterPrefixInvariants (Inputs)
+open SourceCurrentOuterInitialPrefix (forecast SeedTrace)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Guard
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Carrier" => SourceEqualityAnnotationHeap.Heap
+local notation "Seed" => List Guard × Profile
+local notation "caller" => SourceCurrentOuterActiveAncestry.caller
+local notation "Plain" => (fun guard : Guard => SourceMemoGate.plain guard = true)
+local notation "NativeSupport" => SourceCurrentNativeRequestPositivePositions.Support
+local notation "History" => SourceCurrentNativeMuPublication.History
+local notation "MergeStored" => SourceCurrentConstrainedCapMemoMerge.Stored Plain
+local notation "MergeSupport" => SourceCurrentMergePositivePosition.Support
+local notation "UnionNormal" => SourceCurrentRequiredUnionNormal.UnionNormal
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Node] {bits : Nat}
+
+theorem reached
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    {g s r e p h m c n budget : Nat} {first last : Phase (bits + 2)}
+    {inventory : Inventory} {memos : Memos} (seed : Seed)
+    (actual : Reached g s r e p h m c n budget first last)
+    (initial : Context formulas solver inventory (caller first) memos)
+    (frame : Frame formulas solver inventory (caller first).checked)
+    (fits : Fits seed.2 (caller first).checked)
+    (known : Carrier (fun guard => guard ∈ seed.1) (caller first).checked.native.machine.heap)
+    (inputs : Inputs first) (room : Room bits (forecast budget first seed).2)
+    (normal : UnionNormal (caller first).checked.native.machine.heap)
+    (supported : NativeSupport (caller first).checked.native.machine.heap (caller first).checked.native)
+    (causal : History empty (caller first).checked.native.machine.heap)
+    (merged : MergeStored (caller first).merge) (positiveMemo : MergeSupport (caller first).merge) :
+    ∃ next final current, SeedTrace actual seed current ∧
+      Post formulas solver next (caller first) (caller last) final ∧
+      Frame formulas solver next (caller last).checked ∧ Fits current.2 (caller last).checked ∧
+      Carrier (fun guard => guard ∈ current.1) (caller last).checked.native.machine.heap ∧ Inputs last ∧
+      Le (forecast budget last current).2 (forecast budget first seed).2 ∧
+      (forecast budget last current).1 ⊆ (forecast budget first seed).1 ∧
+      Room bits (forecast budget last current).2 ∧
+      Fits (forecast budget first seed).2 (caller last).checked ∧
+      Carrier (fun guard => guard ∈ (forecast budget first seed).1) (caller last).checked.native.machine.heap ∧
+      SourceCurrentOuterInitialFuel.phaseNeed budget last current ≤
+        SourceCurrentOuterInitialFuel.phaseNeed budget first seed ∧
+      NativeSupport (caller last).checked.native.machine.heap (caller last).checked.native ∧
+      Nonempty (History empty (caller last).checked.native.machine.heap) ∧
+      MergeStored (caller last).merge ∧ MergeSupport (caller last).merge ∧
+      UnionNormal (caller last).checked.native.machine.heap
+end MicroCFTA.SourceCurrentOuterPrefixNativeStores
