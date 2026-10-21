@@ -1,0 +1,19 @@
+-- Proposed sole public geometry endpoint. No proof is supplied or compiled.
+-- Native Symbol/Guard aliases are the same as RequiredPositivePosition.
+-- Node = Value Symbol Guard; Row = EdgeValue Symbol Guard.
+-- PositiveAt = SourceCurrentRequiredPositivePosition.PositiveAt.
+-- Rel = SourceCurrentNormalizedChildSeparation.Rel.
+
+theorem same_child_pair
+    {classes : EqualityNormalize.Constraints}
+    (fixed : EqualityNormalize.congruenceStep classes = some classes)
+    (index : Nat) {ownerEntry ownerDepth ownerFree} {ownerRows : List Row}
+    (row : Row) (member : row ∈ ownerRows)
+    (nonplain : SourceMemoGate.plain row.entry.key.constraint = false)
+    (ancestry : ∀ q,
+      PositiveAt (.node ownerEntry ownerRows ownerDepth ownerFree) q →
+        ∃ sourceIndex sourcePath child,
+          row.children[sourceIndex]? = some child ∧ PositiveAt child sourcePath ∧
+          Rel classes (index :: q) (sourceIndex :: sourcePath)) :
+    ∃ paths ∈ classes, ∃ left right,
+      index :: left ∈ paths ∧ index :: right ∈ paths ∧ left ≠ right

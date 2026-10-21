@@ -1,0 +1,51 @@
+-- Proposed signature only. No proof is supplied. This text was not compiled.
+-- Use the native Symbol/Guard and aliases from RequiredCorridorChronology.
+-- Current = SourceCurrentConstrainedCapCurrentNative.At Plain.
+-- NativeSupport = SourceCurrentNativeRequestPositivePositions.Support.
+-- History = SourceCurrentNativeMuPublication.History.
+-- MergeSupport = SourceCurrentMergePositivePosition.Support.
+-- PositiveAt = SourceCurrentRequiredPositivePosition.PositiveAt.
+-- Rel = SourceCurrentNormalizedChildSeparation.Rel.
+
+theorem pass [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    {width : Nat} {selected : EqualityNormalize.Constraints}
+    {originalValues preparedValues results : List Node}
+    {scan prepared after : Checked width}
+    (required : SourceCurrentConjunctionRequired.Receipt formulas solver inventory selected
+      originalValues preparedValues scan prepared)
+    (semantic : SemanticReady scan.native.machine.heap)
+    (normal : SourceCurrentRequiredUnionNormal.UnionNormal scan.native.machine.heap)
+    (costs : CostHeap scan.native.machine.heap)
+    (available : Values scan.native.machine.heap originalValues)
+    (primary : ∀ paths ∈ selected, EndpointStatefulGateTrace.ClassTrace
+      SourceMemoGate.unconstrained
+      (SourceEndpointReachability.reaches SourceMemoGate.unconstrained)
+      originalValues paths scan.native.machine.heap false scan.native.machine.heap)
+    (current : Current scan)
+    (supported : NativeSupport scan.native.machine.heap scan.native)
+    (causal : History empty scan.native.machine.heap)
+    (records : List SourceEqualityClassOrder.Record)
+    (selectedEq : records.map SourceEqualityClassOrder.Record.paths = selected)
+    (coherent : ∀ record ∈ records, SourceEqualityClassOrder.Coherent record)
+    (active : ∀ record ∈ records, EqualityNormalize.Nontrivial record.paths)
+    {memo saved : Memo} {memos final : Memos}
+    {actual : SourceCurrentAllocatedClassPass.Pass records preparedValues prepared memo results after saved}
+    (reads : SourceCurrentAllocatedClassPass.PassReads formulas solver actual memos final)
+    (physical : PhysicalStored scan.native.machine.heap memo)
+    (covered : ∀ ambient, CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo)
+    (valid : EndpointMemoGateTrace.Valid prepared.native.machine.heap memos)
+    (merged : MergeStored memo) (positiveMemo : MergeSupport memo) :
+    ∃ next, SourceCurrentAllocatedClassPass.Receipt formulas solver next records preparedValues
+      prepared memo results after saved memos final ∧
+      Current after ∧ MergeStored saved ∧
+      All₂ (fun original result => ∀ path : List Int,
+        RawCorridor path original → RawCorridor path result) preparedValues results ∧
+      NativeSupport after.native.machine.heap after.native ∧
+      Nonempty (History empty after.native.machine.heap) ∧ MergeSupport saved ∧
+      ∀ outputIndex result, results[outputIndex]? = some result →
+        ∀ residual, PositiveAt result residual →
+          ∃ inputIndex originalPath original,
+            originalValues[inputIndex]? = some original ∧ PositiveAt original originalPath ∧
+            Rel selected (outputIndex :: residual) (inputIndex :: originalPath)
