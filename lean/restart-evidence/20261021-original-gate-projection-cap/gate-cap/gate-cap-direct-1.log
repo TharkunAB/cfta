@@ -1,0 +1,39 @@
+/tmp/mcfta-original-gate-projection-cap-proof/gate-cap-direct-1.source.lean:80:27: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case nil
+original prepared : Node
+origin : Origin original prepared
+children : ∀ (child : Node), child ∈ [] → Finite child
+child✝ : Node
+child : child✝ ∈ []
+⊢ Finite child✝
+/tmp/mcfta-original-gate-projection-cap-proof/gate-cap-direct-1.source.lean:102:97: error(lean.unknownIdentifier): Unknown identifier `result`
+/tmp/mcfta-original-gate-projection-cap-proof/gate-cap-direct-1.source.lean:104:14: error(lean.unknownIdentifier): Unknown identifier `result`
+/tmp/mcfta-original-gate-projection-cap-proof/gate-cap-direct-1.source.lean:104:8: error: Tactic `cases` failed: major premise type is not an inductive type
+  ?m.326
+
+Explanation: the `cases` tactic is for constructor-based reasoning as well as for applying custom cases principles with a 'using' clause or a registered '@[cases_eliminator]' theorem. The above type neither is an inductive type nor has a registered theorem.
+
+case cons.ordinary.node
+index : Int
+path : List Int
+ih : ∀ {original prepared : Node}, Corridor path original → Origin original prepared → Corridor path prepared
+prepared : Node
+entry : Interned InternedBinderProtocol.NodeKey
+originals : List Row
+level : Nat
+free : List InternedBinderProtocol.Reference
+ordinary : SourceEqualityRequiredCache.Ordinary prepared
+mapped : RowMap originals (nodeEdges prepared)
+children :
+  ∀ (row : Row), row ∈ originals → ∀ (child : Node), select row.children index = some child → Corridor path child
+x✝ : ?m.326
+⊢ Corridor (index :: path) prepared
+/tmp/mcfta-original-gate-projection-cap-proof/gate-cap-direct-1.source.lean:214:97: error: unexpected identifier; expected '⟩'
+/tmp/mcfta-original-gate-projection-cap-proof/gate-cap-direct-1.source.lean:214:45: error: typeclass instance problem is stuck
+  DecidableEq (EdgeKey ?m.123 Guard)
+
+Note: Lean will not try to resolve this typeclass instance problem because the type argument to `DecidableEq` contains metavariables. This argument must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+/tmp/mcfta-original-gate-projection-cap-proof/gate-cap-direct-1.source.lean:243:7: error(lean.unknownIdentifier): Unknown identifier `SourceCurrentConstrainedCapProjectionGuard.rows`
