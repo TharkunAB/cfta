@@ -1,0 +1,81 @@
+--- actual-owner-pair-prelaunch-1.source.lean
++++ SourceCurrentActualOwnerPair.lean
+@@ -55,11 +55,12 @@
+     (outputs : List Record) (payload : combined.payload = some outputs)
+     (selected : EqualityNormalize.Constraints)
+     (ownSelected : ∀ paths ∈ selected, paths ∈ (SourceCompactGuards.sourceEqualities original).getD []) :
+-    EqualityNormalize.Covers selected (outputs.map Record.paths) ∧
+-      EqualityNormalize.congruenceStep (outputs.map Record.paths) = some (outputs.map Record.paths) := by
++    EqualityNormalize.Covers selected (outputs.map SourceEqualityClassOrder.Record.paths) ∧
++      EqualityNormalize.congruenceStep (outputs.map SourceEqualityClassOrder.Record.paths) = some (outputs.map SourceEqualityClassOrder.Record.paths) := by
+   cases inherited with
+   | contradiction =>
+-      change .ok (some (.contradiction : EqValue)) = .ok (some combined) at actual
++      change (Except.ok (some (.contradiction : EqValue)) : Except String (Option EqValue)) =
++        Except.ok (some combined) at actual
+       have same : combined = .contradiction := (Option.some.inj (Except.ok.inj actual)).symm
+       subst combined
+       cases payload
+@@ -95,16 +96,16 @@
+     (member : row ∈ ownerRows)
+     {writer : Checked width} {loaded : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula}
+     {inherited own : EqValue} {records kept : List Record}
+-    (prefix : SourceCurrentAllocatedPrecheck.Receipt formulas solver writerInventory row.entry.key.constraint
++    (precheckReceipt : SourceCurrentAllocatedPrecheck.Receipt formulas solver writerInventory row.entry.key.constraint
+       loaded inherited writer own (.classes records))
+     {budget : Nat} {scanned prepared after : Checked width} {fourth savedFourth : Fourth}
+-    {trace : Scan budget source reaches row.children (records.map Record.paths)
++    {trace : Scan budget source reaches row.children (records.map SourceEqualityClassOrder.Record.paths)
+       (SourceCurrentAllocatedPrecheck.state writer loaded inherited) fourth none
+-      (kept.map Record.paths) scanned savedFourth}
++      (kept.map SourceEqualityClassOrder.Record.paths) scanned savedFourth}
+     (retained : Retained trace records kept) (nonempty : kept ≠ [])
+     {preparedValues results : List Node}
+     (required : SourceCurrentConjunctionRequired.Receipt formulas solver preparedInventory
+-      (kept.map Record.paths) row.children preparedValues scanned prepared)
++      (kept.map SourceEqualityClassOrder.Record.paths) row.children preparedValues scanned prepared)
+     (semantic : SourceEqualityRequiredSemanticCache.SemanticReady scanned.native.machine.heap)
+     (normal : SourceCurrentRequiredUnionNormal.UnionNormal scanned.native.machine.heap)
+     (costs : InternedFreshOrdinaryCostHeap.Heap scanned.native.machine.heap)
+@@ -132,11 +133,11 @@
+       .ok (some combined))
+     (outputs : List Record) (payload : combined.payload = some outputs) :
+     SourceMemoGate.plain row.entry.key.constraint = false ∧
+-      EqualityNormalize.Covers (kept.map Record.paths) (outputs.map Record.paths) ∧
+-      EqualityNormalize.congruenceStep (outputs.map Record.paths) = some (outputs.map Record.paths) ∧
+-      ∃ paths ∈ outputs.map Record.paths, ∃ left right,
++      EqualityNormalize.Covers (kept.map SourceEqualityClassOrder.Record.paths) (outputs.map SourceEqualityClassOrder.Record.paths) ∧
++      EqualityNormalize.congruenceStep (outputs.map SourceEqualityClassOrder.Record.paths) = some (outputs.map SourceEqualityClassOrder.Record.paths) ∧
++      ∃ paths ∈ outputs.map SourceEqualityClassOrder.Record.paths, ∃ left right,
+         index::left ∈ paths ∧ index::right ∈ paths ∧ left ≠ right := by
+-  obtain ⟨_proper, raw, _rawRead, sourceClasses, order, recordFields⟩ := prefix.classes records rfl
++  obtain ⟨_proper, raw, _rawRead, sourceClasses, order, recordFields⟩ := precheckReceipt.classes records rfl
+   have retainedFields := retained.fields
+   have nonplain : SourceMemoGate.plain row.entry.key.constraint = false := by
+     apply Bool.eq_false_iff.mpr
+@@ -151,7 +152,7 @@
+       rfl
+     have keptEmpty : kept = [] := List.sublist_nil.mp (recordsEmpty ▸ retainedFields.1)
+     exact nonempty keptEmpty
+-  have ownSelected : ∀ paths ∈ kept.map Record.paths,
++  have ownSelected : ∀ paths ∈ kept.map SourceEqualityClassOrder.Record.paths,
+       paths ∈ (SourceCompactGuards.sourceEqualities row.entry.key.constraint).getD [] := by
+     intro paths chosen
+     obtain ⟨record, member, rfl⟩ := List.mem_map.mp chosen
+@@ -161,14 +162,14 @@
+     rw [sourceClasses]
+     exact List.mem_map.mpr ⟨record, rawMember, rfl⟩
+   obtain ⟨coveredFamily, fixed⟩ := prefix_family row.entry.key.constraint inherited outerBefore
+-    outerValid inheritedReady field combined outerPrefix outputs payload (kept.map Record.paths) ownSelected
++    outerValid inheritedReady field combined outerPrefix outputs payload (kept.map SourceEqualityClassOrder.Record.paths) ownSelected
+   have coherent : ∀ record ∈ kept, SourceEqualityClassOrder.Coherent record := by
+     intro record member
+     exact (recordFields record (retainedFields.1.subset member)).1
+   have active : ∀ record ∈ kept, EqualityNormalize.Nontrivial record.paths := by
+     intro record member
+     exact (recordFields record (retainedFields.1.subset member)).2.2
+-  have gates : ∀ paths ∈ kept.map Record.paths,
++  have gates : ∀ paths ∈ kept.map SourceEqualityClassOrder.Record.paths,
+       EndpointStatefulGateTrace.ClassTrace source reaches row.children paths
+         scanned.native.machine.heap false scanned.native.machine.heap := by
+     intro paths selected
