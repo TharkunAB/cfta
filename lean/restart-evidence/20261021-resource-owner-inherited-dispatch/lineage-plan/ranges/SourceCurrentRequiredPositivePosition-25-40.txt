@@ -1,0 +1,16 @@
+/-- A nonplain ordinary row occurs at a finite child path with opaque Mu barriers. -/
+inductive PositiveAt : Node → List Nat → Prop where
+  /-- A selected root row has a nonplain full guard. -/
+  | root {entry rows depth free} (rowIndex : Nat) (row : Row)
+      (selected : rows[rowIndex]? = some row)
+      (positive : SourceMemoGate.plain row.entry.key.constraint = false) :
+      PositiveAt (.node entry rows depth free) []
+  /-- An ordinary child retains its natural index while row choice remains explicit. -/
+  | child {entry rows depth free} (rowIndex childIndex : Nat) (row : Row) (child : Node)
+      (selected : rows[rowIndex]? = some row) (chosen : row.children[childIndex]? = some child)
+      {path} (rest : PositiveAt child path) :
+      PositiveAt (.node entry rows depth free) (childIndex :: path)
+  /-- A literal union alternative adds no child-path component. -/
+  | member {entry members depth free} (memberIndex : Nat) (child : Node)
+      (selected : members[memberIndex]? = some child) {path} (rest : PositiveAt child path) :
+      PositiveAt (.union entry members depth free) path

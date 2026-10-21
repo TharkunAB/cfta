@@ -1,0 +1,52 @@
+private def candidates : Nat → Node → List Path
+  | 0, _ => []
+  | fuel + 1, .node _ rows _ _ =>
+      [] :: rows.flatMap (fun row => row.children.zipIdx.flatMap
+        (fun child => (candidates fuel child.1).map (child.2 :: ·)))
+  | fuel + 1, .union _ members _ _ =>
+      [] :: members.flatMap (candidates fuel)
+  | _ + 1, _ => [[]]
+
+private theorem candidates_complete {value path} (positive : PositiveAt value path) :
+    ∀ fuel, InternedValueMass.value value < fuel → path ∈ candidates fuel value := by
+  induction positive with
+  | root rowIndex row selected nonplain =>
+      intro fuel bounded
+      cases fuel with
+      | zero => omega
+      | succ fuel => exact List.mem_cons_self
+  | @child entry rows depth free rowIndex childIndex row child selected chosen path rest ih =>
+      intro fuel bounded
+      cases fuel with
+      | zero => omega
+      | succ fuel =>
+          have smaller := InternedValueMass.node_child_lt entry rows depth free row
+            (List.mem_of_getElem? selected) child (List.mem_of_getElem? chosen)
+          have present := ih fuel (by omega)
+          apply List.mem_cons_of_mem
+          apply List.mem_flatMap.mpr
+          refine ⟨row, List.mem_of_getElem? selected, ?_⟩
+          apply List.mem_flatMap.mpr
+          refine ⟨(child, childIndex), List.mk_mem_zipIdx_iff_getElem?.mpr chosen, ?_⟩
+          exact List.mem_map.mpr ⟨path, present, rfl⟩
+  | @member entry members depth free memberIndex child selected path rest ih =>
+      intro fuel bounded
+      cases fuel with
+      | zero => omega
+      | succ fuel =>
+          have smaller := InternedValueMass.union_member_lt entry members depth free child
+            (List.mem_of_getElem? selected)
+          exact List.mem_cons_of_mem [] (List.mem_flatMap.mpr
+            ⟨child, List.mem_of_getElem? selected, ih fuel (by omega)⟩)
+
+private noncomputable def positivePaths (value : Node) : List Path := by
+  classical
+  exact ((candidates (InternedValueMass.value value + 1) value).filter
+    (fun path => decide (PositiveAt value path))).eraseDups
+
+private theorem positivePaths_spec {value path} :
+    path ∈ positivePaths value ↔ PositiveAt value path := by
+  classical
+  simp only [positivePaths, List.mem_eraseDups, List.mem_filter, decide_eq_true_eq]
+  exact ⟨And.right, fun positive =>
+    ⟨candidates_complete positive _ (by omega), positive⟩⟩

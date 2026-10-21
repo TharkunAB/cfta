@@ -1,0 +1,28 @@
+theorem relation_cardinality_le (left : List Input) (right : List Output) (fallback : Output)
+    (distinct : left.Nodup) (relation : Input → Output → Prop)
+    (total : ∀ input ∈ left, ∃ output ∈ right, relation input output)
+    (injective : ∀ first ∈ left, ∀ second ∈ left, ∀ output ∈ right,
+      relation first output → relation second output → first = second) : left.length ≤ right.length := by
+  classical
+  let choose := fun input => if member : input ∈ left then Classical.choose (total input member) else fallback
+  have selected : ∀ input ∈ left, choose input ∈ right ∧ relation input (choose input) := by
+    intro input member
+    simpa only [choose, dite_eq_left member] using Classical.choose_spec (total input member)
+  have mappedDistinct : (left.map choose).Nodup := by
+    apply List.nodup_iff_eq_of_getElem_eq.mpr
+    intro first second firstBound secondBound same
+    have firstBound' : first < left.length := by simpa only [List.length_map] using firstBound
+    have secondBound' : second < left.length := by simpa only [List.length_map] using secondBound
+    have firstMember := List.getElem_mem firstBound'
+    have secondMember := List.getElem_mem secondBound'
+    have outputSame : choose left[first] = choose left[second] := by simpa only [List.getElem_map] using same
+    have valuesSame := injective left[first] firstMember left[second] secondMember (choose left[first])
+      (selected left[first] firstMember).1 (selected left[first] firstMember).2
+      (by simpa only [outputSame] using (selected left[second] secondMember).2)
+    exact distinct.eq_of_getElem_eq firstBound' secondBound' valuesSame
+  have subset : left.map choose ⊆ right := by
+    intro output member
+    obtain ⟨input, inputMember, same⟩ := List.mem_map.mp member
+    subst output
+    exact (selected input inputMember).1
+  simpa only [List.length_map] using List.Nodup.length_le_of_subset mappedDistinct subset

@@ -1,0 +1,35 @@
+/-- Initial Ready operands construct their own combined value and its original-class coverage. -/
+theorem combine_covers (first second : Value) (before : Operations)
+    (valid : SourceEqualityConstraintMemoAllocation.Valid before)
+    (firstReady : Ready before.constraints first) (secondReady : Ready before.constraints second) :
+    ∃ combined,
+      (SourceEqualityConstraintMemoAllocation.combine first second before).1 = .ok combined ∧
+      let middle := (SourceEqualityConstraintMemoAllocation.combine first second before).2
+      SourceEqualityConstraintMemoAllocation.Valid middle ∧ Ready middle.constraints combined ∧
+      SourceEqualityConstraintMemoAllocation.Grows before middle ∧
+      SourceCurrentEqualityOperationFixed.FixedPayload combined.payload ∧
+      ∀ outputs, combined.payload = some outputs →
+        Covers ((SourceEqualityInheritedPayload.classes first.payload).getD [] ++
+          (SourceEqualityInheritedPayload.classes second.payload).getD []) (outputs.map Record.paths) := by
+  obtain ⟨combined, actual, finalValid, combinedReady, growth, fixed⟩ :=
+    SourceCurrentEqualityOperationFixed.combine first second before valid firstReady secondReady
+  obtain ⟨other, otherActual, _, _, payload, _⟩ :=
+    SourceEqualityConstraintMemoAllocation.combine_correct first second before valid firstReady secondReady
+  have same : other = combined := Except.ok.inj (otherActual.symm.trans actual)
+  subst other
+  refine ⟨combined, actual, finalValid, combinedReady, growth, fixed, ?_⟩
+  intro outputs live
+  have readback := read_classes _ (SourceEqualityGuardReadback.combine_cached _ _) _ payload
+  rw [live] at readback
+  cases first with
+  | contradiction => cases second <;> cases readback
+  | live firstIdentity firstRecords =>
+      cases second with
+      | contradiction => cases readback
+      | live secondIdentity secondRecords =>
+          have active : Active (firstRecords.map Record.paths ++ secondRecords.map Record.paths) := by
+            intro paths member
+            rcases List.mem_append.mp member with member | member
+            · exact ready_active _ _ firstReady paths member
+            · exact ready_active _ _ secondReady paths member
+          exact combined_covers _ _ _ readback.symm active

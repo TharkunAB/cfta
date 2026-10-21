@@ -1,0 +1,3 @@
+## Consumer status addendum — 2026-10-21 11:14 CEST
+
+The historical 11:10 source cue above remains intact. At the 11:14 root cue, the consumer candidate is 241 lines with source prefix `aae1b162`. Its first actual strict check failed on two final inherited-value readback-shape normalizations. The exact two-site repair has no public API change. Strict 2 is running at that cue. No checked consumer theorem is claimed by this plan. Its public proposal remains exactly `9ef7489ee726e0b0eeac4f93bf36a0ade18202ead6c6783c3baf03b36ea368f9`. All consumer jobs belong to that separate component and add zero jobs here.

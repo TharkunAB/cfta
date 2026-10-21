@@ -1,0 +1,43 @@
+/-- A nested full-key return to a nonempty owner requires an actual intervening own-field height gain. -/
+theorem collision {fuel next : Nat} {owner request : NodeRequest} {running after : Caller width}
+    (actual : Reached g s r e p h m c n budget (.body fuel owner running) (.node next request after))
+    (good : Good running) (inputs : NodeReady running owner)
+    (nonempty : ∃ identity records, owner.inherited = .live identity records ∧ records ≠ [])
+    (same : owner.key = request.key) :
+    HeightGain g s r e p h m c n budget (.body fuel owner running) (.node next request after) := by
+  have current := SourceCurrentOuterPrefixInvariants.reached actual good inputs
+  have growth := SourceCurrentOuterExecutionGrowth.reached actual
+  have ownerReady : EqReady after.checked.operations.constraints owner.inherited :=
+    inputs.1.grows growth.constraint_growth
+  have inheritedSame : owner.inherited = request.inherited :=
+    SourceEqualityConstraintMemoAllocation.ready_eq_of_identity _ current.1.checked.operations.constraints
+      _ _ ownerReady current.2.1 (congrArg Prod.fst same)
+  have fixed : FixedPayload owner.inherited.payload := by
+    have atDispatch := dispatch_reached actual good inputs (by trivial)
+    simpa only [DispatchFixed,← inheritedSame] using atDispatch
+  have positive : 0 < pathHeight owner.inherited := by
+    obtain ⟨identity,records,shape,known⟩ := nonempty
+    rw [shape]
+    exact SourceCurrentOuterInheritedDescent.positive identity records known (by simpa only [shape,SourceEqualityConstraintAllocation.Value.payload] using inputs.1.2)
+  have requestPositive : 0 < pathHeight request.inherited := inheritedSame ▸ positive
+  cases actual with
+  | snoc earlier last =>
+    cases last with
+    | walk_head =>
+      rename_i combined index value rest before
+      have atWalk := SourceCurrentOuterPrefixInvariants.reached earlier good inputs
+      have strict : pathHeight (SourceCurrentAllocatedPartialGraph.descend before combined index).1 < pathHeight combined := by
+        cases combined with
+        | contradiction => change 0 < 0 at requestPositive; omega
+        | live identity records =>
+          cases records with
+          | nil => change 0 < 0 at requestPositive; omega
+          | cons first rest =>
+            exact SourceCurrentOuterInheritedDescent.descend_lt identity (first :: rest) index _
+              atWalk.1.checked.operations atWalk.2.1 (by intro impossible; cases impossible)
+      rcases rise_or_le earlier good inputs with rise | decreases
+      · exact rise_gain (rise_suffix rise (.snoc (.refl _) .walk_head)) good inputs fixed
+      · change pathHeight combined ≤ pathHeight owner.inherited at decreases
+        change owner.inherited = (SourceCurrentAllocatedPartialGraph.descend before combined index).1 at inheritedSame
+        rw [← inheritedSame] at strict
+        omega

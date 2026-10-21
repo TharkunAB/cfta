@@ -1,0 +1,27 @@
+theorem reached
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    {g s r e p h m c n budget : Nat} {first last : Phase (bits + 2)}
+    {inventory : Inventory} {memos : Memos} (seed : Seed)
+    (actual : Reached g s r e p h m c n budget first last)
+    (initial : Context formulas solver inventory (caller first) memos)
+    (frame : Frame formulas solver inventory (caller first).checked)
+    (fits : Fits seed.2 (caller first).checked)
+    (known : Carrier (fun guard => guard ∈ seed.1) (caller first).checked.native.machine.heap)
+    (inputs : Inputs first) (room : Room bits (forecast budget first seed).2)
+    (normal : UnionNormal (caller first).checked.native.machine.heap)
+    (supported : NativeSupport (caller first).checked.native.machine.heap (caller first).checked.native)
+    (causal : History empty (caller first).checked.native.machine.heap)
+    (merged : MergeStored (caller first).merge) (positiveMemo : MergeSupport (caller first).merge)
+    (origins : SourceCurrentResourceParentWriters.Origins formulas solver (caller first)) :
+    SourceCurrentResourceParentWriters.Origins formulas solver (caller last) := by
+  induction actual with
+  | refl => exact origins
+  | snoc earlier step ih =>
+      obtain ⟨next,final,current,_trace,post,returned,numeric,carrier,currentInputs,
+          _below,_guards,currentRoom,_bounds,_alphabet,_need,
+          currentSupport,⟨currentCausal⟩,currentMerged,currentPositive,currentNormal⟩ :=
+        SourceCurrentOuterPrefixNativeStores.reached formulas solver seed earlier initial frame fits known inputs room
+          normal supported causal merged positiveMemo
+      exact one_step formulas solver step current post.context returned numeric carrier currentInputs currentRoom
+        ⟨currentSupport,⟨currentCausal⟩,currentMerged,currentPositive,currentNormal⟩ ih

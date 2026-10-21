@@ -1,0 +1,10 @@
+inductive Rel (classes : Constraints) : Path → Path → Prop where
+  /-- Every path is equal to itself. -/
+  | refl (path : Path) : Rel classes path path
+  /-- Two paths in one class retain a common appended suffix. -/
+  | member (paths : Class) (selected : paths ∈ classes)
+      (left right : Path) (first : left ∈ paths) (second : right ∈ paths) (suffix : Path) :
+      Rel classes (left ++ suffix) (right ++ suffix)
+  /-- Two finite equality chains compose at their shared path. -/
+  | trans (first : Rel classes left middle) (second : Rel classes middle right) :
+      Rel classes left right

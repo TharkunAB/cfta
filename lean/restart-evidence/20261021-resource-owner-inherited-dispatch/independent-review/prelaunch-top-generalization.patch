@@ -1,0 +1,125 @@
+--- checked-top-dispatch.source.lean.txt
++++ SourceCurrentResourceOwnerInheritedDispatch.lean
+@@ -1,10 +1,10 @@
+-import MicroCFTA.SourceCurrentResourceOwnerProgress
++import MicroCFTA.SourceCurrentResourceOwnerInheritedProgress
+ import MicroCFTA.SourceCurrentOuterResourceWriters
+ import MicroCFTA.SourceCurrentOuterUntouchedProgress
+ import MicroCFTA.SourceCurrentOuterInitialActual
+ import MicroCFTA.SourceCurrentOuterExecutionGrowth
+ 
+-namespace MicroCFTA.SourceCurrentResourceOwnerDispatch
++namespace MicroCFTA.SourceCurrentResourceOwnerInheritedDispatch
+ open Cache InternedConstructorTemplates
+ open SourceCurrentAllocatedPartialState
+ open SourceCurrentAllocatedPartialWorker
+@@ -57,10 +57,11 @@
+ 
+ variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Node]
+ 
+-theorem key_ne_top
++theorem key_ne_inherited
+     (formulas : SourceGuards.Formulas FullSyntax.Formula)
+     (solver : SourceGuards.Entailment FullSyntax.Formula)
+-    {g s r e p h m c n budget fuel slot handle identity : Nat}
++    {g s r e p h m c n budget fuel slot handle : Nat}
++    {inherited : EqValue}
+     {first : Phase (bits + 2)} {inventory : Inventory} {memos : Memos}
+     (seed : List Guard × Profile)
+     (initial : Context formulas solver inventory (caller first) memos)
+@@ -83,23 +84,23 @@
+     {before afterParent start : Caller (bits + 2)} {earlier : List Node}
+     {combined : EqValue} {value : Node}
+     (past : Reached g s r e p h m c n budget first
+-      (.rows (fuel + slot + 2) (.live identity []) (original :: rest) before))
++      (.rows (fuel + slot + 2) inherited (original :: rest) before))
+     (active : before.nodeResults.cells handle = some
+-      ⟨⟨.live identity [], .node ownerEntry ownerRows ownerDepth ownerFree⟩, .evaluating⟩)
++      ⟨⟨inherited, .node ownerEntry ownerRows ownerDepth ownerFree⟩, .evaluating⟩)
+     (member : original ∈ ownerRows)
+     (parent : edgeCall (fuel + slot + 1) g s r e p h m c n budget
+-      ⟨.live identity [], original⟩ before = .done parented afterParent)
++      ⟨inherited, original⟩ before = .done parented afterParent)
+     (combinedAt : (SourceCurrentAllocatedInheritedPrefix.run parented.entry.key.constraint
+-      (.live identity []) afterParent.checked.operations).1 = .ok (some combined))
++      inherited afterParent.checked.operations).1 = .ok (some combined))
+     (live : combined ≠ .contradiction)
+     (earlierCalls : walk (fuel + slot + 1) g s r e p h m c n budget combined 0
+-      (parented.children.take slot) (prefixState afterParent parented (.live identity [])) =
++      (parented.children.take slot) (prefixState afterParent parented inherited) =
+         .done earlier start)
+     (selected : parented.children[slot]? = some value) :
+     Reached g s r e p h m c n budget first
+       (.node fuel ⟨(descend start combined slot).1, value⟩ (descend start combined slot).2) ∧
+       (NodeRequest.mk (descend start combined slot).1 value).key ≠
+-        (NodeRequest.mk (.live identity []) (.node ownerEntry ownerRows ownerDepth ownerFree)).key
++        (NodeRequest.mk inherited (.node ownerEntry ownerRows ownerDepth ownerFree)).key
+  := by
+   obtain ⟨rowInventory,rowMemos,rowSeed,_rowTrace,rowPost,rowFrame,rowFits,rowKnown,
+       rowInputs,_rowBelow,_rowAlphabet,rowRoom,_rowBounds,_rowCarrier,_rowNeed,
+@@ -117,14 +118,14 @@
+       (SourceCurrentOuterInitialSchedule.rows_ge (fuel + slot + 1) budget
+         (SourceCurrentOuterInitialSchedule.descendants (fuel + slot + 1) budget parentSeed)).1)
+   have uniform := SourceCurrentOuterInitialSchedule.parent_reserved bits budget rowSeed parentRoom
+-  have reserved := reservation formulas solver (request := ⟨.live identity [],original⟩)
++  have reserved := reservation formulas solver (request := ⟨inherited,original⟩)
+     rowPost.context rowFits rowKnown rowInputs.1 (rowInputs.2 _ List.mem_cons_self) uniform
+   have written := (SourceCurrentResourceParentWriters.edge_call formulas solver rowInventory rowSeed.2 rowMemos
+     parent rowPost.context rowFrame rowFits rowInputs.1 (rowInputs.2 _ List.mem_cons_self) reserved
+     rowOrigins rowNormal rowSupport rowCausal rowMerged rowPositive).2
+   have rowStep : Reached g s r e p h m c n budget
+-      (.rows (fuel + slot + 2) (.live identity []) (original :: rest) before)
+-      (.descendants (fuel + slot + 1) (.live identity []) parented afterParent) :=
++      (.rows (fuel + slot + 2) inherited (original :: rest) before)
++      (.descendants (fuel + slot + 1) inherited parented afterParent) :=
+     .snoc (.refl _) (.rows_edge parent)
+   have descReached := past.trans rowStep
+   have walkLocal := (rowStep.snoc (SourceCurrentOuterExecutionAncestry.Step.descendants_children combinedAt)).snoc
+@@ -132,7 +133,7 @@
+   have walkReached := past.trans walkLocal
+   have selectedPrefix := SourceCurrentOuterUntouchedProgress.walk_prefix earlierCalls selected
+   have dispatchLocal : Reached g s r e p h m c n budget
+-      (.rows (fuel + slot + 2) (.live identity []) (original :: rest) before)
++      (.rows (fuel + slot + 2) inherited (original :: rest) before)
+       (.node fuel ⟨(descend start combined slot).1,value⟩ (descend start combined slot).2) := by
+     simpa only [Nat.zero_add] using walkLocal.trans selectedPrefix
+   have dispatchReached := past.trans dispatchLocal
+@@ -151,15 +152,15 @@
+       _startKnown,_startValues,_startLaw⟩ :=
+     SourceCurrentOuterInitialActual.walk formulas solver (fuel + slot + 1)
+       (combined := combined) (index := 0) (values := parented.children.take slot)
+-      (before := prefixState afterParent parented (.live identity [])) (after := start)
++      (before := prefixState afterParent parented inherited) (after := start)
+       walkSeed walkPost.context walkFrame walkFits walkKnown walkInputs.1
+       (fun child member => walkInputs.2 child (List.mem_of_mem_take member)) walkRoom earlierCalls
+   have protocol : SourceCurrentOuterExecutionAncestry.NodeValid before :=
+     FlatMemoThunk.Valid.keyMap _ _ _ _ rowPost.context.sound.valid.nodes (fun _ _ linked => linked.2)
+   have activeAtDispatch := dispatchLocal.running protocol handle
+-    ⟨.live identity [],.node ownerEntry ownerRows ownerDepth ownerFree⟩ active
++    ⟨inherited,.node ownerEntry ownerRows ownerDepth ownerFree⟩ active
+   have activeAtStart : start.nodeResults.cells handle = some
+-      ⟨⟨.live identity [],.node ownerEntry ownerRows ownerDepth ownerFree⟩,.evaluating⟩ := activeAtDispatch
++      ⟨⟨inherited,.node ownerEntry ownerRows ownerDepth ownerFree⟩,.evaluating⟩ := activeAtDispatch
+   refine ⟨dispatchReached,?_⟩
+   intro collision
+   have sameReference : value.referenceOf = (.node ownerEntry ownerRows ownerDepth ownerFree : Node).referenceOf :=
+@@ -174,14 +175,14 @@
+     simpa only [sameValue] using selected
+   have laterGrowth : SourceEqualityConstraintMemoAllocation.Grows
+       (SourceCurrentAllocatedInheritedPrefix.run parented.entry.key.constraint
+-        (.live identity []) afterParent.checked.operations).2 start.checked.operations := startPost.effects.grows
+-  have excluded := SourceCurrentResourceOwnerProgress.key_ne_top formulas solver written member foundOwner
++        inherited afterParent.checked.operations).2 start.checked.operations := startPost.effects.grows
++  have excluded := SourceCurrentResourceOwnerInheritedProgress.key_ne_inherited formulas solver written member foundOwner
+     afterParent.checked.operations descPost.context.ready.good.operations descInputs.1 field combined combinedAt live
+-    start.checked.operations startPost.context.ready.good.operations laterGrowth identity descInputs.1
++    start.checked.operations startPost.context.ready.good.operations laterGrowth
+   have sameKey : (NodeRequest.mk (descend start combined slot).1
+       (.node ownerEntry ownerRows ownerDepth ownerFree)).key =
+-        (NodeRequest.mk (.live identity []) (.node ownerEntry ownerRows ownerDepth ownerFree)).key := by
++        (NodeRequest.mk inherited (.node ownerEntry ownerRows ownerDepth ownerFree)).key := by
+     simpa only [sameValue] using collision
+   exact excluded.2.2.2 sameKey
+ 
+-end MicroCFTA.SourceCurrentResourceOwnerDispatch
++end MicroCFTA.SourceCurrentResourceOwnerInheritedDispatch

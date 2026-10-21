@@ -1,0 +1,23 @@
+def value : Value Symbol Guard → Nat
+  | .empty | .reference _ => 1
+  | .node _ rows _ _ => 1 + edges rows
+  | .union _ members _ _ => 1 + values members
+  | .mu _ body depth ordinary => 1 + value body + value depth + value ordinary
+termination_by node => sizeOf node
+
+/-- Count an edge constructor and its complete ordered child payloads. -/
+def edge : EdgeValue Symbol Guard → Nat
+  | .mk _ children => 1 + values children
+termination_by row => sizeOf row
+
+/-- Count one list constructor and the complete payload at every position. -/
+def values : List (Value Symbol Guard) → Nat
+  | [] => 0
+  | first :: rest => 1 + value first + values rest
+termination_by nodes => sizeOf nodes
+
+/-- Count one list constructor and the complete row payload at every position. -/
+def edges : List (EdgeValue Symbol Guard) → Nat
+  | [] => 0
+  | first :: rest => 1 + edge first + edges rest
+termination_by rows => sizeOf rows

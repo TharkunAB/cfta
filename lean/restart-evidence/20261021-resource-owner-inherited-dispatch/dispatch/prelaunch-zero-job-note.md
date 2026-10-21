@@ -1,0 +1,1 @@
+This source-only draft uses the frozen 68-line proposal. It makes the reviewed inherited-value substitutions in the checked Top dispatch proof. It has zero Lean, Lake, canonical, runtime, and official commands. Compiler checks remain held for the checked dependency and complete source reviews.
