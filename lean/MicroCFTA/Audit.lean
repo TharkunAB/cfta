@@ -1,4 +1,5 @@
 import Lean
+import MicroCFTA.SourceCurrentOriginalRowDeletionSoundness
 import MicroCFTA.SourceCurrentOriginalRowPhysicalMeaning
 import MicroCFTA.SourceCurrentOriginalRowClusterCompletion
 import MicroCFTA.SourceCurrentAllocatedConjunctionMemo
