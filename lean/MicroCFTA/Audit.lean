@@ -3093,6 +3093,7 @@ import MicroCFTA.SourceCurrentSameSymbolEdgeReady
 import MicroCFTA.SourceRecursiveIntersectionOriginalRowCompletion
 import MicroCFTA.SourceCurrentAllocatedDirectEdgeWordRanges
 import MicroCFTA.SourceCurrentSameSymbolEdgeOriginalRows
+import MicroCFTA.SourceCurrentSameSymbolEdgeComparison
 /-!
 # Proof dependency audit
 
