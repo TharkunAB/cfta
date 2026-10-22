@@ -1,0 +1,85 @@
+structure State (width : Nat) : Type 1 where
+  /-- Retain the native machine and all equality operation caches. -/
+  checked : SourceEqualityNativeDemand.State width
+  /-- Store the captured operand pair and its eventual returned edge. -/
+  memo : FlatMemoThunk.State (Nat × Nat) (Edge × Edge) Edge
+
+/-- Each phase retains the handles that must receive the returned edge. -/
+inductive Control : Type 1 where
+  /-- Publish the original pair before demand. -/
+  | call (request : Edge × Edge) (pending : List Nat)
+  /-- Observe the captured cell without replacing its request. -/
+  | demand (handle : Nat) (pending : List Nat)
+  /-- Order the captured operands after publication and demand. -/
+  | order (handle : Nat) (request : Edge × Edge) (pending : List Nat)
+  /-- Execute the existing native body with its complete checked state. -/
+  | native (control : SourceEqualityNativeDemand.Control Edge) (pending : List Nat)
+  /-- Finish each pending pair cell with the actual returned edge. -/
+  | ret (value : Edge) (pending : List Nat)
+
+/-- Pair-memo blockages remain distinct from native blockages. -/
+inductive Blocked where
+  /-- Report a handle with no allocated cell. -/
+  | absent (handle : Nat)
+  /-- Report a cell that is already under evaluation. -/
+  | busy (handle : Nat)
+  /-- Report the original native blockage. -/
+  | native (reason : SourceEqualityNativeDemand.Blocked)
+
+/-- Every outcome retains the actual current state. -/
+inductive Outcome (width : Nat) : Type 1 where
+  /-- Retain the next control and its full state. -/
+  | yielded (control : Control) (state : State width)
+  /-- Return the completed edge and its full state. -/
+  | done (value : Edge) (state : State width)
+  /-- Retain the native failure and its full state. -/
+  | failed (reason : SourceRecursiveIntersectionKernel.Failure) (state : State width)
+  /-- Retain the constraint error and its full state. -/
+  | constraintError (message : String) (state : State width)
+  /-- Retain the blockage, exact remaining control and full state. -/
+  | blocked (reason : Blocked) (control : Control) (state : State width)
+
+/-- Advance one pair-memo or native step without resetting either state. -/
+noncomputable def step [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (control : Control) (state : State width) : Outcome width :=
+  match control with
+  | .call request pending =>
+      let selected := FlatMemoThunk.lookupOrInsert
+        (request.1.entry.identity, request.2.entry.identity) request state.memo
+      .yielded (.demand selected.1 pending) {state with memo := selected.2}
+  | .demand handle pending =>
+      let observed := FlatMemoThunk.demand handle state.memo
+      let after := {state with memo := observed.2}
+      match observed.1 with
+      | .absent => .blocked (.absent handle) control after
+      | .busy => .blocked (.busy handle) control after
+      | .ready value => .yielded (.ret value pending) after
+      | .evaluate request => .yielded (.order handle request pending) after
+  | .order handle request pending =>
+      if request.2.entry.identity < request.1.entry.identity then
+        .yielded (.call (request.2, request.1) (handle :: pending)) state
+      else .yielded (.native (.edgeBody
+        ⟨IntersectionEmptyDomain.emptyDomain, request.1, request.2⟩ .pure) (handle :: pending)) state
+  | .native body pending =>
+      match SourceEqualityNativeDemand.step body state.checked with
+      | .yielded next after => .yielded (.native next pending) {state with checked := after}
+      | .done value after => .yielded (.ret value pending) {state with checked := after}
+      | .failed failure after => .failed failure {state with checked := after}
+      | .constraintError message after => .constraintError message {state with checked := after}
+      | .blocked reason next after =>
+          .blocked (.native reason) (.native next pending) {state with checked := after}
+  | .ret value [] => .done value state
+  | .ret value (handle :: pending) =>
+      .yielded (.ret value pending) {state with memo := FlatMemoThunk.finish handle value state.memo}
+
+/-- Run at most the supplied number of control steps. -/
+noncomputable def execute [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] :
+    Nat → Control → State width → Outcome width
+  | 0, control, state => .yielded control state
+  | fuel + 1, control, state =>
+      match step control state with
+      | .yielded next after => execute fuel next after
+      | .done value after => .done value after
+      | .failed reason after => .failed reason after
+      | .constraintError message after => .constraintError message after
+      | .blocked reason next after => .blocked reason next after

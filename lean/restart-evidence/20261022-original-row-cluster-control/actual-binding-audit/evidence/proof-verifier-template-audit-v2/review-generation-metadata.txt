@@ -1,0 +1,5 @@
+One reviewer read-only static inverse assertion used a global replacement of the fully qualified constructor prefix.
+It failed because original v1 already contains SourceCurrentSameSymbolEdgeControl.Outcome.done.injEq.
+The prepared verifier does not use that faulty inverse. It checks the exact forward replacement of the two originally unqualified terms.
+A corrected reverse check selects only the two qualified done common after terms. It passes and retains the old injEq reference.
+The actual source repair and header erratum reconstruct exactly. No prepared script or repository/source mutation occurred.

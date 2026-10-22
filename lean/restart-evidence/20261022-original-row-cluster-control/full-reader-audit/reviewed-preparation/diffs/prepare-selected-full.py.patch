@@ -1,0 +1,39 @@
+--- H15/prepare-selected-full.py
++++ H16/prepare-selected-full.py
+@@ -5,10 +5,10 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ stem, expected_sha, expected_lines = sys.argv[1:]
+-name = 'SourceCurrentSameSymbolEdgeComparisonDomains'
++name = 'SourceCurrentOriginalRowClusterScan'
+ source = (HERE / (stem + '.source.lean')).read_bytes()
+ assert hashlib.sha256(source).hexdigest() == expected_sha
+-assert len(source.splitlines()) == int(expected_lines) and 1 <= int(expected_lines) <= 250
++assert len(source.splitlines()) == int(expected_lines) and 1 <= int(expected_lines) <= 220
+ assert json.loads((HERE / (stem + '.json')).read_text())['exit_code'] == 0
+ assert (HERE / (stem + '.log')).read_bytes() == b''
+ context = (HERE / 'full-preparation/context.lean.txt').read_bytes()
+@@ -17,13 +17,13 @@
+ assert source.startswith(context)
+ assert source.count(header) == 1
+ assert source.index(header) >= len(context)
+-assert len(context.splitlines()) == 16 and len(header.splitlines()) == 56
++assert len(context.splitlines()) == 12 and len(header.splitlines()) == 19
+ assert source.rstrip().endswith(('end MicroCFTA.' + name).encode())
+ assert b'set_option maxRecDepth' not in source and b'set_option maxHeartbeats' not in source
+ options = ['maxRecDepth 30000', 'maxHeartbeats 0', 'linter.all true', 'pp.explicit true',
+     'pp.fullNames true', 'pp.proofs true', 'pp.proofs.threshold 254', 'pp.universes true',
+     'pp.deepTerms true', 'pp.maxSteps 10000000']
+-head = 'MicroCFTA.' + name + '.original_rows_complete'
++head = 'MicroCFTA.' + name + '.comparison_lift'
+ tail = '\n' + ''.join('set_option ' + option + '\n' for option in options)
+ tail += ''.join(command + head + '\n' for command in ['#check @', '#print ', '#print axioms '])
+ assert len(tail.splitlines()) == 14
+@@ -37,6 +37,6 @@
+ print(json.dumps({'status': 'PASS', 'source_sha256': expected_sha,
+     'printer_sha256': hashlib.sha256(printer.read_bytes()).hexdigest(),
+     'source_lines': int(expected_lines), 'printer_lines': len(printer.read_bytes().splitlines()),
+-    'context_lines': 16, 'actual_header_lines': 56,
++    'context_lines': 12, 'actual_header_lines': 19,
+     'actual_header_sha256': hashlib.sha256(header).hexdigest(),
+     'diagnostic_tail_lines': 14, 'selected_strict': stem}))

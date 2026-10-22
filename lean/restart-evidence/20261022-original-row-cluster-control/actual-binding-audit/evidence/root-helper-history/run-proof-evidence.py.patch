@@ -1,0 +1,18 @@
+--- H15/run-proof-evidence.py
++++ H16/run-proof-evidence.py
+@@ -11,9 +11,10 @@
+     (HERE / ('proof-evidence-' + label + '.stderr')).write_text(result.stderr)
+     assert result.returncode == 0, result.stderr
+     report = json.loads(result.stdout)
+-    assert report['status'] == 'PASS' and report['actual_jobs'] == 3
+-    assert report['source_jobs'] == 2 and report['audit_jobs'] == 1
+-    assert report['failed_jobs'] == report['warned_source_exit_zero_jobs'] == report['rejected_public_type_jobs'] == 0
++    assert report['status'] == 'PASS' and report['actual_jobs'] == 4
++    assert report['source_jobs'] == 3 and report['audit_jobs'] == 1
++    assert report['failed_jobs'] == 1
++    assert report['warned_source_exit_zero_jobs'] == report['rejected_public_type_jobs'] == 0
+     assert report['audit_build_jobs'] > 0 and report['audit_dependencies'] > 0
+-print(json.dumps({'status': 'PASS', 'normal_and_live': True, 'actual_proof_jobs': 3,
+-                  'new_proof_jobs': 0}))
++print(json.dumps({'status': 'PASS', 'normal_and_live': True, 'actual_proof_jobs': 4,
++    'new_proof_jobs': 0}))

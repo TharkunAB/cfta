@@ -1,0 +1,38 @@
+/-- The exact source worker, including promotion of a dominating alternative. -/
+def ruleOut [DecidableEq Edge] (meet : Edge → Edge → Edge) (edge : Edge) :
+    List Edge → Option Edge × List Edge
+  | [] => (none, [])
+  | other :: rest =>
+    let common := meet edge other
+    if common = other then ruleOut meet edge rest
+    else if common = edge then (some other, rest)
+    else let result := ruleOut meet edge rest; (result.1, other :: result.2)
+
+/-- The worker returns no more candidates than its input tail contains. -/
+theorem ruleOut_length [DecidableEq Edge] (meet : Edge → Edge → Edge) (edge : Edge) (edges : List Edge) :
+    (ruleOut meet edge edges).1.toList.length + (ruleOut meet edge edges).2.length ≤ edges.length := by
+  induction edges with
+  | nil => simp [ruleOut]
+  | cons other rest ih =>
+    simp only [ruleOut]
+    split
+    · simpa using Nat.le_succ_of_le ih
+    · split
+      · simp [Nat.add_comm]
+      · simpa [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using Nat.succ_le_succ ih
+
+/-- The complete terminating source cluster reduction. -/
+def reduce [DecidableEq Edge] (meet : Edge → Edge → Edge) (edges : List Edge) : List Edge :=
+  match edges with
+  | [] => []
+  | edge :: rest =>
+    match _result : ruleOut meet edge rest with
+    | (some other, remaining) => reduce meet (other :: remaining)
+    | (none, remaining) => edge :: reduce meet remaining
+termination_by edges.length
+decreasing_by
+  all_goals
+    have bound := ruleOut_length meet edge rest
+    rw [_result] at bound
+    simp at bound ⊢
+    omega

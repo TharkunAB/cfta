@@ -1,0 +1,128 @@
+--- checkpoint-preparation/verify-checkpoint.py
++++ actual-tools-preparation/verify-checkpoint.py
+@@ -4,9 +4,9 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ ROOT = HERE.parents[2]
+-AUDIT_SHA = '__H16_AUDIT_LOG_SHA__'
+-AUDIT_JOBS = int('__H16_AUDIT_BUILD_JOBS__')
+-AUDIT_DEPENDENCIES = int('__H16_AUDIT_DEPENDENCIES__')
++AUDIT_SHA = 'fdbf62f4ee7ce6246c1d604e60c8b886b6da3a62ec4a14cb8082e71f81eadd18'
++AUDIT_JOBS = int('3633')
++AUDIT_DEPENDENCIES = int('75432')
+ for mode, label in [([], 'normal'), (['--live'], 'live')]:
+     result = subprocess.run(['/usr/bin/python3', str(HERE / 'verify-proofs.py'),
+         '--root', str(ROOT), *mode], cwd='/', capture_output=True, text=True)
+@@ -14,12 +14,12 @@
+     (HERE / ('proof-verification-' + label + '.stderr')).write_text(result.stderr)
+     assert result.returncode == 0, result.stderr
+     report = json.loads(result.stdout)
+-    assert report['status'] == 'PASS' and report['actual_jobs'] == int('__H16_ACTUAL_JOBS__') and report['failed_jobs'] == int('__H16_FAILED_JOBS__')
+-    assert report['source_jobs'] == int('__H16_SOURCE_JOBS__') and report['audit_jobs'] == int('__H16_AUDIT_JOBS__') and report['selected_modules'] == 1
++    assert report['status'] == 'PASS' and report['actual_jobs'] == int('4') and report['failed_jobs'] == int('1')
++    assert report['source_jobs'] == int('3') and report['audit_jobs'] == int('1') and report['selected_modules'] == 1
+     assert report['audit_build_jobs'] == AUDIT_JOBS and report['audit_dependencies'] == AUDIT_DEPENDENCIES
+     assert report['audit_log_sha256'] == AUDIT_SHA
+-    assert report['warned_source_exit_zero_jobs'] == int('__H16_WARNED_SOURCE_EXIT_ZERO_JOBS__')
+-    assert report['rejected_public_type_jobs'] == int('__H16_REJECTED_PUBLIC_TYPE_JOBS__')
++    assert report['warned_source_exit_zero_jobs'] == int('0')
++    assert report['rejected_public_type_jobs'] == int('0')
+ result = subprocess.run(['/usr/bin/python3', str(HERE / 'verify-preservation.py')],
+     cwd='/', capture_output=True, text=True)
+ (HERE / 'preservation-final.stderr').write_text(result.stderr)
+--- checkpoint-preparation/commit-proofs.py
++++ actual-tools-preparation/commit-proofs.py
+@@ -5,9 +5,9 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ ROOT = HERE.parents[2]
+-AUDIT_SHA = '__H16_AUDIT_LOG_SHA__'
+-AUDIT_JOBS = int('__H16_AUDIT_BUILD_JOBS__')
+-AUDIT_DEPENDENCIES = int('__H16_AUDIT_DEPENDENCIES__')
++AUDIT_SHA = 'fdbf62f4ee7ce6246c1d604e60c8b886b6da3a62ec4a14cb8082e71f81eadd18'
++AUDIT_JOBS = int('3633')
++AUDIT_DEPENDENCIES = int('75432')
+ def git(*args):
+     return subprocess.check_output(['git', *args], cwd=ROOT, text=True)
+ 
+@@ -22,8 +22,8 @@
+ gate = json.loads((HERE / 'selected-source-gate.json').read_text())
+ assert gate['status'] == 'ROOT_ACCEPTED' and gate['path'] == next(iter(selected))
+ assert selected[gate['path']]['sha256'] == gate['sha256'] == hashlib.sha256((HERE / gate['snapshot']).read_bytes()).hexdigest()
+-assert selected[next(iter(selected))]['strict'] == '__H16_SELECTED_STRICT_STEM__'
+-assert selected[next(iter(selected))]['full'] == '__H16_SELECTED_FULL_STEM__'
++assert selected[next(iter(selected))]['strict'] == 'original-row-cluster-control-strict-2'
++assert selected[next(iter(selected))]['full'] == 'original-row-cluster-control-public-1'
+ assert 'lean/MicroCFTA/SourceCurrentOriginalRowClusterScan.lean' not in json.loads((HERE / 'starting-files.json').read_text())
+ for name, pin in selected.items():
+     data = (ROOT / name).read_bytes()
+@@ -31,8 +31,8 @@
+     assert data == (HERE / (pin['strict'] + '.source.lean')).read_bytes()
+     assert not (HERE / (pin['strict'] + '.log')).read_bytes()
+     assert json.loads((HERE / (pin['full'] + '.json')).read_text())['exit_code'] == 0
+-assert json.loads((HERE / '__H16_AUDIT_STEM__.json').read_text())['exit_code'] == 0
+-audit_raw = (HERE / '__H16_AUDIT_STEM__.log').read_bytes()
++assert json.loads((HERE / 'original-row-cluster-control-audit-1.json').read_text())['exit_code'] == 0
++audit_raw = (HERE / 'original-row-cluster-control-audit-1.log').read_bytes()
+ assert hashlib.sha256(audit_raw).hexdigest() == AUDIT_SHA
+ audit = audit_raw.decode()
+ assert f"Build completed successfully ({AUDIT_JOBS} jobs)." in audit
+--- checkpoint-preparation/update-documents.py
++++ actual-tools-preparation/update-documents.py
+@@ -6,18 +6,18 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ ROOT = HERE.parents[2]
+-SOURCE_SHA = '__H16_SOURCE_SHA__'
+-SOURCE_LINES = int('__H16_SOURCE_LINES__')
+-strict, full, audit_stem = '__H16_SELECTED_STRICT_STEM__', '__H16_SELECTED_FULL_STEM__', '__H16_AUDIT_STEM__'
++SOURCE_SHA = '37bcce3d4b04310f6e3c1e394e27a875baf98547f4078d1b3be7252c47d0a5f7'
++SOURCE_LINES = int('129')
++strict, full, audit_stem = 'original-row-cluster-control-strict-2', 'original-row-cluster-control-public-1', 'original-row-cluster-control-audit-1'
+ metrics = {
+-    'actual_jobs': int('__H16_ACTUAL_JOBS__'),
+-    'source_jobs': int('__H16_SOURCE_JOBS__'),
+-    'audit_jobs': int('__H16_AUDIT_JOBS__'),
+-    'failed_jobs': int('__H16_FAILED_JOBS__'),
+-    'warned_source_exit_zero_jobs': int('__H16_WARNED_SOURCE_EXIT_ZERO_JOBS__'),
+-    'rejected_public_type_jobs': int('__H16_REJECTED_PUBLIC_TYPE_JOBS__'),
+-    'audit_build_jobs': int('__H16_AUDIT_BUILD_JOBS__'),
+-    'audit_dependencies': int('__H16_AUDIT_DEPENDENCIES__'),
++    'actual_jobs': int('4'),
++    'source_jobs': int('3'),
++    'audit_jobs': int('1'),
++    'failed_jobs': int('1'),
++    'warned_source_exit_zero_jobs': int('0'),
++    'rejected_public_type_jobs': int('0'),
++    'audit_build_jobs': int('3633'),
++    'audit_dependencies': int('75432'),
+ }
+ start = (HERE / 'starting-head.txt').read_text().strip()
+ assert start == '4f7a7e064f17a66367618dc2bc360f0755503b1a'
+@@ -35,7 +35,7 @@
+ assert source == (HERE / (strict + '.source.lean')).read_bytes() and (HERE / (strict + '.log')).read_bytes() == b''
+ assert json.loads((HERE / (strict + '.json')).read_text())['exit_code'] == 0
+ raw = (HERE / (full + '.log')).read_bytes()
+-assert hashlib.sha256(raw).hexdigest() == '__H16_FULL_LOG_SHA__'
++assert hashlib.sha256(raw).hexdigest() == '56b16f404a64e92de2943b0dfbb92352498bc4dba0b25560111d02ae6312dac6'
+ assert json.loads((HERE / (full + '.json')).read_text())['exit_code'] == 0
+ readback = json.loads((HERE / 'public-readback/original-row-cluster-control-full-readback.json').read_text())
+ assert readback['source_sha256'] == SOURCE_SHA and readback['source_lines'] == SOURCE_LINES
+@@ -44,7 +44,7 @@
+ review = json.loads((HERE / 'root-full-review.json').read_text())
+ assert review['complete_public_type_root_review'] == review['independent_complete_public_type_review'] == 'CLEAR'
+ head_specs = [
+-    ('comparison_lift', '__H16_COMPARISON_LIFT_TYPE_SHA__', 'public-readback/original-row-cluster-control-comparison_lift-public-type.txt', 'public-readback/original-row-cluster-control-comparison_lift-printed-public-type.txt', '__H16_COMPARISON_LIFT_ACTUAL_AXIOMS_JSON__'),
++    ('comparison_lift', 'dbd38ee0a0aaa0fce6403114f3257eb86a3c77bac91adb273e9c04437b0c1f81', 'public-readback/original-row-cluster-control-comparison_lift-public-type.txt', 'public-readback/original-row-cluster-control-comparison_lift-printed-public-type.txt', '["Classical.choice", "Quot.sound", "propext"]'),
+ ]
+ heads = {head['head'].rsplit('.', 1)[1]: head for head in readback['heads']}
+ assert set(heads) == {spec[0] for spec in head_specs}
+@@ -62,7 +62,7 @@
+ proof_report = json.loads((HERE / 'proof-evidence-normal.json').read_text())
+ assert proof_report['status'] == 'PASS' and all(proof_report[key] == value for key, value in metrics.items())
+ audit = (HERE / (audit_stem + '.log')).read_bytes()
+-assert hashlib.sha256(audit).hexdigest() == proof_report['audit_log_sha256'] == '__H16_AUDIT_LOG_SHA__'
++assert hashlib.sha256(audit).hexdigest() == proof_report['audit_log_sha256'] == 'fdbf62f4ee7ce6246c1d604e60c8b886b6da3a62ec4a14cb8082e71f81eadd18'
+ assert json.loads((HERE / (audit_stem + '.json')).read_text())['exit_code'] == 0
+ assert f"Build completed successfully ({metrics['audit_build_jobs']} jobs).".encode() in audit
+ assert f"{metrics['audit_dependencies']} MicroCFTA theorems".encode() in audit

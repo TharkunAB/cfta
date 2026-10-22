@@ -1,0 +1,77 @@
+--- proof-verifier-preparation-v2/verify-proofs.py
++++ actual-verifier-preparation/verify-proofs.py
+@@ -16,14 +16,14 @@
+ def digest(data):
+     return hashlib.sha256(data).hexdigest()
+ name, head = "SourceCurrentOriginalRowClusterScan", "MicroCFTA.SourceCurrentOriginalRowClusterScan.comparison_lift"
+-selected_sha = "__H16_SELECTED_SOURCE_SHA__"
+-source_lines = int("__H16_SOURCE_LINES__")
+-strict_stem, full_stem, audit_stem = "__H16_SELECTED_STRICT_STEM__", "__H16_SELECTED_FULL_STEM__", "__H16_AUDIT_STEM__"
+-metrics = dict(actual_jobs=int("__H16_ACTUAL_JOBS__"), source_jobs=int("__H16_SOURCE_JOBS__"), audit_jobs=int("__H16_AUDIT_JOBS__"),
+-    failed_jobs=int("__H16_FAILED_JOBS__"), warned_source_exit_zero_jobs=int("__H16_WARNED_SOURCE_EXIT_ZERO_JOBS__"),
+-    rejected_public_type_jobs=int("__H16_REJECTED_PUBLIC_TYPE_JOBS__"))
+-jobs = json.loads('__H16_JOBS_JSON__')
+-rejected = json.loads('__H16_REJECTED_PUBLIC_STEMS_JSON__')
++selected_sha = "37bcce3d4b04310f6e3c1e394e27a875baf98547f4078d1b3be7252c47d0a5f7"
++source_lines = int("129")
++strict_stem, full_stem, audit_stem = "original-row-cluster-control-strict-2", "original-row-cluster-control-public-1", "original-row-cluster-control-audit-1"
++metrics = dict(actual_jobs=int("4"), source_jobs=int("3"), audit_jobs=int("1"),
++    failed_jobs=int("1"), warned_source_exit_zero_jobs=int("0"),
++    rejected_public_type_jobs=int("0"))
++jobs = json.loads('{"original-row-cluster-control-audit-1": [0, null, "fdbf62f4ee7ce6246c1d604e60c8b886b6da3a62ec4a14cb8082e71f81eadd18", null, null], "original-row-cluster-control-public-1": [0, "83a8b99dbebd825c658e65c60e089ad3916c9a7a5b9e01142632b469de147a7c", "56b16f404a64e92de2943b0dfbb92352498bc4dba0b25560111d02ae6312dac6", 0, 0], "original-row-cluster-control-strict-1": [1, "6cd3754ccc6aa63de84b9b56f14d5543dc5e0c8003acf32bd39a074630e4d63a", "7670d2d08e71e125a06a58b256f5996a2136643f47f115472f34912123ad7b92", 2, 0], "original-row-cluster-control-strict-2": [0, "37bcce3d4b04310f6e3c1e394e27a875baf98547f4078d1b3be7252c47d0a5f7", "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", 0, 0]}')
++rejected = json.loads('[]')
+ assert jobs and all(stem.startswith("original-row-cluster-control-") for stem in jobs)
+ assert strict_stem in jobs and full_stem in jobs and audit_stem in jobs
+ assert jobs[strict_stem][0] == jobs[full_stem][0] == jobs[audit_stem][0] == 0
+@@ -120,7 +120,7 @@
+ assert all(printer.decode().splitlines().count(d + head) == 1 for d in ["#check @", "#print ", "#print axioms "])
+ assert source.rstrip().endswith(("end MicroCFTA." + name).encode())
+ assert (report["source_sha256"], report["source_lines"], report["printer_sha256"]) == (selected_sha, source_lines, digest(printer))
+-assert report["log_sha256"] == digest(raw) and report["log_bytes"] == len(raw) == int("__H16_FULL_RAW_BYTES__")
++assert report["log_sha256"] == digest(raw) and report["log_bytes"] == len(raw) == int("646402")
+ assert report["receipt_sha256"] == digest((evidence / (full_stem + ".json")).read_bytes()) and report["owned_public_job_exit"] == 0
+ assert all(report[key] for key in ["all_eight_printer_settings", "exact_module_and_diagnostic_tail", "diagnostic_limits_after_module_only", "no_omissions"])
+ assert len(report["heads"]) == 1 and report["heads"][0]["head"] == head and report["heads"][0]["kind"] == "theorem"
+@@ -142,9 +142,9 @@
+         break
+ assert len(matches) == 1
+ declared, body = declaration[:matches[0].start()], declaration[matches[0].end():]
+-assert checked.encode() == declared.encode() and len(checked) == int("__H16_TYPE_CHARACTERS__") and len(checked.encode()) == int("__H16_TYPE_BYTES__")
+-assert len(checked.splitlines()) == int("__H16_TYPE_LOGICAL_LINES__") and checked.count("\n") == int("__H16_TYPE_LINE_FEEDS__") and not checked.endswith("\n")
+-assert digest(checked.encode()) == "__H16_TYPE_SHA__"
++assert checked.encode() == declared.encode() and len(checked) == int("9943") and len(checked.encode()) == int("9947")
++assert len(checked.splitlines()) == int("136") and checked.count("\n") == int("135") and not checked.endswith("\n")
++assert digest(checked.encode()) == "dbd38ee0a0aaa0fce6403114f3257eb86a3c77bac91adb273e9c04437b0c1f81"
+ assert not any(token in checked for token in ["_private", "✝", "†", "‡"])
+ helpers = re.findall(r"^private (?:noncomputable )?(?:def|theorem|abbrev) (\w+)", source.decode(), re.M)
+ assert helpers == []
+@@ -152,17 +152,17 @@
+ head_report = report["heads"][0]
+ assert all(head_report[key] for key in ["check_print_type_identity", "check_print_type_byte_identity", "unique_complete_type_body_delimiter", "actual_axioms_within_standard_allowed"])
+ assert head_report["private_namespace_helpers_checked"] == helpers and head_report["private_type_spellings_checked"] == ["_private", "✝", "†", "‡"] and head_report["private_public_type_names"] is False
+-assert head_report["checked_type_characters"] == len(checked) and head_report["body_characters"] == len(body) == int("__H16_BODY_CHARACTERS__")
+-assert body.startswith("fun ") and len(body.encode()) == int("__H16_BODY_BYTES__")
++assert head_report["checked_type_characters"] == len(checked) and head_report["body_characters"] == len(body) == int("626147")
++assert body.startswith("fun ") and len(body.encode()) == int("626235")
+ values = re.fullmatch(r"\s*\[([^\]]*)\]\s*", printed[axiom.end():]) if axiom.group(1) == "depends on axioms:" else None
+ assert values or (axiom.group(1) == "does not depend on any axioms" and not printed[axiom.end():].strip())
+ actual_axioms = {re.sub(r"\.\{[^}]*\}", "", item.strip()) for item in values.group(1).split(",") if item.strip()} if values else set()
+-assert actual_axioms == set(head_report["actual_axioms"]) == set(json.loads('__H16_ACTUAL_AXIOMS_JSON__')) and actual_axioms <= {"Classical.choice", "Quot.sound", "propext"}
++assert actual_axioms == set(head_report["actual_axioms"]) == set(json.loads('["Classical.choice", "Quot.sound", "propext"]')) and actual_axioms <= {"Classical.choice", "Quot.sound", "propext"}
+ for suffix, text in [("public-type", checked), ("printed-public-type", declared), ("body", body), ("axioms", axiom_output)]:
+     filename = "original-row-cluster-control-comparison_lift-" + suffix + ".txt"
+     retained = (evidence / "public-readback" / filename).read_bytes()
+     assert retained == text.encode() and report["retained_slices"][filename] == dict(bytes=len(retained), sha256=digest(retained))
+-assert digest((evidence / "full-preparation/check-full-public.py").read_bytes()) == "__H16_FULL_READER_SHA__"
++assert digest((evidence / "full-preparation/check-full-public.py").read_bytes()) == "cdd396e2a04cb0050f205297d83229b489deb5086033dc4dc5d8130a076da702"
+ review = load("root-full-review.json")
+ assert review["status"] == "ROOT_ACCEPTED_FOR_OFFICIAL_INSTALL_AND_AUDIT" and review["source_sha256"] == selected_sha and review["source_lines"] == source_lines
+ assert review["public_theorem"] == head and review["complete_public_type_root_review"] == review["independent_complete_public_type_review"] == "CLEAR"
+@@ -180,6 +180,6 @@
+ build = re.search(r"Build completed successfully \((\d+) jobs\)\.", audit)
+ dependencies = re.search(r"Checked axiom dependencies of (\d+) MicroCFTA theorems", audit)
+ assert build and dependencies and not re.search(r"\berror(?:\([^)]*\))?:", audit)
+-assert int(build.group(1)) == int("__H16_AUDIT_BUILD_JOBS__") and int(dependencies.group(1)) == int("__H16_AUDIT_DEPENDENCIES__")
++assert int(build.group(1)) == int("3633") and int(dependencies.group(1)) == int("75432")
+ print(json.dumps(dict(status="PASS", live=args.live, **metrics, new_lean_lake_jobs=0, selected_modules=1, original_archives=1,
+     audit_build_jobs=int(build.group(1)), audit_dependencies=int(dependencies.group(1)), audit_log_sha256=digest(audit.encode())), indent=2))

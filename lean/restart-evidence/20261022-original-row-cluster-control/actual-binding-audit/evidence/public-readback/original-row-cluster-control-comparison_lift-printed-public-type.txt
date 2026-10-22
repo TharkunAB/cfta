@@ -1,0 +1,136 @@
+ ∀ {width : Nat}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (fuel : Nat)
+  (pivot candidate common :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (tail incomparableReversed keptReversed :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (inner : MicroCFTA.SourceCurrentSameSymbolEdgeControl.Control)
+  (before after : MicroCFTA.SourceCurrentSameSymbolEdgeControl.State width),
+  @Eq.{2} (MicroCFTA.SourceCurrentSameSymbolEdgeControl.Outcome width)
+      (@MicroCFTA.SourceCurrentSameSymbolEdgeControl.execute width inst inst_1 fuel inner before)
+      (@MicroCFTA.SourceCurrentSameSymbolEdgeControl.Outcome.done width common after) →
+    @Exists.{1} Nat fun used =>
+      And (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) used)
+        (And (@LE.le.{0} Nat instLENat used fuel)
+          (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+            (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1 used
+              (MicroCFTA.SourceCurrentOriginalRowClusterScan.Control.comparison pivot candidate tail
+                incomparableReversed keptReversed inner)
+              before)
+            (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.yielded width
+              (@ite.{2} MicroCFTA.SourceCurrentOriginalRowClusterScan.Control
+                (@Eq.{1} Nat
+                  (@MicroCFTA.Cache.Interned.identity
+                    (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) common))
+                  (@MicroCFTA.Cache.Interned.identity
+                    (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) candidate)))
+                (instDecidableEqNat
+                  (@MicroCFTA.Cache.Interned.identity
+                    (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) common))
+                  (@MicroCFTA.Cache.Interned.identity
+                    (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) candidate)))
+                (MicroCFTA.SourceCurrentOriginalRowClusterScan.Control.scan pivot tail incomparableReversed
+                  keptReversed)
+                (@ite.{2} MicroCFTA.SourceCurrentOriginalRowClusterScan.Control
+                  (@Eq.{1} Nat
+                    (@MicroCFTA.Cache.Interned.identity
+                      (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) common))
+                    (@MicroCFTA.Cache.Interned.identity
+                      (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) pivot)))
+                  (instDecidableEqNat
+                    (@MicroCFTA.Cache.Interned.identity
+                      (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) common))
+                    (@MicroCFTA.Cache.Interned.identity
+                      (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) pivot)))
+                  (MicroCFTA.SourceCurrentOriginalRowClusterScan.Control.cluster
+                    (@List.cons.{0}
+                      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      candidate
+                      (@HAppend.hAppend.{0, 0, 0}
+                        (List.{0}
+                          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                        (List.{0}
+                          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                        (List.{0}
+                          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                        (@instHAppendOfAppend.{0}
+                          (List.{0}
+                            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                          (@List.instAppend.{0}
+                            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))
+                        (@List.reverse.{0}
+                          (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          incomparableReversed)
+                        tail))
+                    keptReversed)
+                  (MicroCFTA.SourceCurrentOriginalRowClusterScan.Control.scan pivot tail
+                    (@List.cons.{0}
+                      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      candidate incomparableReversed)
+                    keptReversed)))
+              after)))

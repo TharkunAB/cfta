@@ -1,0 +1,20 @@
+--- full-preparation/prepare-selected-full.py
++++ H16/prepare-selected-full.py
+@@ -12,7 +12,7 @@
+ assert json.loads((HERE / (stem + '.json')).read_text())['exit_code'] == 0
+ assert (HERE / (stem + '.log')).read_bytes() == b''
+ context = (HERE / 'full-preparation/context.lean.txt').read_bytes()
+-proposed = (HERE / 'full-preparation/proposed-signature.lean.txt').read_bytes()
++proposed = (HERE / 'source-repair-v2/proposed-signature.lean.txt').read_bytes()
+ header = proposed.rstrip(b'\n') + b' := by\n'
+ assert source.startswith(context)
+ assert source.count(header) == 1
+@@ -30,7 +30,7 @@
+ assert tail.encode() == (HERE / 'full-preparation/diagnostic-tail.lean.txt').read_bytes()
+ snapshot = HERE / (name + '.lean')
+ printer = HERE / (name + '.full.lean')
+-assert not snapshot.exists() and not printer.exists()
++assert not snapshot.exists() and not printer.exists() and not (HERE / 'actual-header.lean.txt').exists()
+ snapshot.write_bytes(source)
+ printer.write_bytes(source + tail.encode())
+ (HERE / 'actual-header.lean.txt').write_bytes(header)

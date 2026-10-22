@@ -1,0 +1,19 @@
+/-- Lift a completed comparison to the exact scan resume control. -/
+theorem comparison_lift
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (pivot candidate common : Edge)
+    (tail incomparableReversed keptReversed : List Edge)
+    (inner : PairControl) (before after : PairState width)
+    (observed : SourceCurrentSameSymbolEdgeControl.execute fuel inner before =
+      PairOutcome.done common after) :
+    ∃ used : Nat, 0 < used ∧ used ≤ fuel ∧
+      execute used
+        (.comparison pivot candidate tail incomparableReversed keptReversed inner) before =
+        .yielded
+          (if common.entry.identity = candidate.entry.identity then
+             .scan pivot tail incomparableReversed keptReversed
+           else if common.entry.identity = pivot.entry.identity then
+             .cluster (candidate :: (incomparableReversed.reverse ++ tail)) keptReversed
+           else
+             .scan pivot tail (candidate :: incomparableReversed) keptReversed)
+          after

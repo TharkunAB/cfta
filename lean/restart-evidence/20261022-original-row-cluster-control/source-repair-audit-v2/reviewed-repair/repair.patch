@@ -1,0 +1,20 @@
+--- v1/SourceCurrentOriginalRowClusterScan.lean
++++ v2/SourceCurrentOriginalRowClusterScan.lean
+@@ -86,7 +86,7 @@
+     (tail incomparableReversed keptReversed : List Edge)
+     (inner : PairControl) (before after : PairState width)
+     (observed : SourceCurrentSameSymbolEdgeControl.execute fuel inner before =
+-      PairOutcome.done common after) :
++      SourceCurrentSameSymbolEdgeControl.Outcome.done common after) :
+     ∃ used : Nat, 0 < used ∧ used ≤ fuel ∧
+       execute used
+         (.comparison pivot candidate tail incomparableReversed keptReversed inner) before =
+@@ -104,7 +104,7 @@
+       cases one : SourceCurrentSameSymbolEdgeControl.step inner before with
+       | yielded next middle =>
+           have rest : SourceCurrentSameSymbolEdgeControl.execute fuel next middle =
+-              PairOutcome.done common after := by
++              SourceCurrentSameSymbolEdgeControl.Outcome.done common after := by
+             simpa only [SourceCurrentSameSymbolEdgeControl.execute, one] using observed
+           obtain ⟨used, _positive, bound, resumed⟩ := ih next middle rest
+           refine ⟨used + 1, Nat.zero_lt_succ used, Nat.succ_le_succ bound, ?_⟩

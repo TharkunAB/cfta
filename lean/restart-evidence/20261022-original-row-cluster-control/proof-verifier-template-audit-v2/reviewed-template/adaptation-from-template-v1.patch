@@ -1,0 +1,29 @@
+--- v1/verify-proofs.py
++++ v2/verify-proofs.py
+@@ -80,9 +80,23 @@
+ assert digest((evidence / "source-proposal/context.lean.txt").read_bytes()) == "52b67b3ee986878dd27d15788e23641810666dfac6f8e1ad2e3709e0049ecee6"
+ context = (evidence / "source-proposal/context.lean.txt").read_bytes()
+ assert len(context.splitlines()) == 12 and source.startswith(context) and original_draft.startswith(context)
+-header = (evidence / "source-proposal/proposed-signature.lean.txt").read_bytes()
+-assert len(header.splitlines()) == 19 and digest(header) == "b01d01167a0b3df13c9cf6fa3419116b2d0fe3969d7676c04f3fcde765c9ccb4"
+-assert source.count(header.rstrip(b"\n") + b" := by\n") == original_draft.count(header.rstrip(b"\n") + b" := by\n") == 1
++original_header = (evidence / "source-proposal/proposed-signature.lean.txt").read_bytes()
++assert len(original_header.splitlines()) == 19 and digest(original_header) == "b01d01167a0b3df13c9cf6fa3419116b2d0fe3969d7676c04f3fcde765c9ccb4"
++assert original_draft.count(original_header.rstrip(b"\n") + b" := by\n") == 1
++repaired = (evidence / ("source-repair-v2/" + name + ".lean")).read_bytes()
++assert digest(repaired) == "37bcce3d4b04310f6e3c1e394e27a875baf98547f4078d1b3be7252c47d0a5f7" and len(repaired.splitlines()) == 129
++assert original_draft.count(b"PairOutcome.done") == 2
++assert original_draft.replace(b"PairOutcome.done", b"SourceCurrentSameSymbolEdgeControl.Outcome.done") == repaired
++assert digest((evidence / "source-repair-v2/repair.patch").read_bytes()) == "49ee144b72a3091bc6c4fa93d2e1e98bf1a67754d74c6f8ba190b85da60453f7"
++header = (evidence / "source-repair-v2/proposed-signature.lean.txt").read_bytes()
++assert len(header.splitlines()) == 19 and digest(header) == "4356ce96e7673aef7b6598614ae0bc1bdf181f1794b4afeea31a0417e6fb1f85"
++assert original_header.replace(b"PairOutcome.done", b"SourceCurrentSameSymbolEdgeControl.Outcome.done") == header
++assert source.count(header.rstrip(b"\n") + b" := by\n") == repaired.count(header.rstrip(b"\n") + b" := by\n") == 1
++first_stem = "original-row-cluster-control-strict-1"
++assert jobs[first_stem] == [1, digest(original_draft), "7670d2d08e71e125a06a58b256f5996a2136643f47f115472f34912123ad7b92", 2, 0]
++assert (evidence / (first_stem + ".source.lean")).read_bytes() == original_draft
++assert load(first_stem + ".json")["exit_code"] == 1
++assert (evidence / (first_stem + ".log")).read_bytes() == (evidence / ("source-repair-v2/actual-failed-strict-1/" + first_stem + ".log")).read_bytes()
+ schema = (evidence / "source-proposal/declaration-schema.md").read_bytes()
+ assert digest(schema) == "8896d609acf03d7bf69019c9f1cdddaed960e081d6cb074c4d199e9ea0564838"
+ assert re.findall(r"^(?:inductive|noncomputable def|theorem) (\w+)", source.decode(), re.M) == ["Control", "Outcome", "step", "execute", "comparison_lift"]
