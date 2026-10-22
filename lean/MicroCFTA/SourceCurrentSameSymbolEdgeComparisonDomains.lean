@@ -1,0 +1,189 @@
+import MicroCFTA.SourceCurrentSameSymbolEdgeComparison
+import MicroCFTA.SourceCurrentAllocatedRecursivePrefixAdmission
+
+namespace MicroCFTA.SourceCurrentSameSymbolEdgeComparisonDomains
+open Cache Language IntersectSchedule InternedConstructorTemplates InternedEdgeResidency
+open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionThunks SourceRecursiveIntersectionCode
+open SourceRecursiveIntersectionInputView InternedProbeProvenance
+open SourceCurrentAllocatedNativePhysicalCompletion (Good)
+open SourceEqualityRequiredSemanticCache (SemanticReady)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Edge" => EdgeValue Symbol Guard
+local notation "Wrapper" => SourceCurrentSameSymbolEdgeControl.State
+local notation "Stable" => SourceCurrentSameSymbolEdgeStable.Stable
+local notation "NativeIdle" => SourceRecursiveIntersectionNative.Idle
+local notation "guardHolds" => (@SourceEqualityPCSGuard.holds FullSyntax.Formula FormulaExecutable.formulaDecidableEq)
+
+private theorem original_of_readback
+    (source : InternedConstructorTemplates.State Symbol Guard) (facts : InternedNestedFacts.Facts source)
+    (value : Value Symbol Guard) (input : Input) (available : Available source value)
+    (complete : IntersectionFlatMemoKey.input value.referenceOf = some input)
+    (original : OriginalInput source input) : Original value := by
+  obtain ⟨witness, witnessOriginal, witnessAvailable, witnessCodec⟩ := original
+  have witnessRead := payload_readback source facts witness witnessAvailable input witnessCodec
+  have actualRead := payload_readback source facts value available input complete
+  exact witnessRead.symm.trans actualRead ▸ witnessOriginal
+
+private theorem rows_scope
+    (source : InternedConstructorTemplates.State Symbol Guard) (facts : InternedNestedFacts.Facts source)
+    (leftParent rightParent : Value Symbol Guard)
+    (leftOriginal : OriginalInput source (inputOf leftParent))
+    (rightOriginal : OriginalInput source (inputOf rightParent))
+    (leftAvailable : Available source leftParent) (rightAvailable : Available source rightParent)
+    (left right : Edge)
+    (leftMember : left ∈ nodeEdges leftParent) (rightMember : right ∈ nodeEdges rightParent) :
+    EdgeScope source ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩ := by
+  cases leftParent with
+  | empty | reference | union | mu => cases leftMember
+  | node first leftEdges leftDepth leftFree =>
+      cases rightParent with
+      | empty | reference | union | mu => cases rightMember
+      | node second rightEdges rightDepth rightFree =>
+          change left ∈ leftEdges at leftMember
+          change right ∈ rightEdges at rightMember
+          have firstOriginal : Original (.node first leftEdges leftDepth leftFree) :=
+            original_of_readback source facts _ (.node first.identity) leftAvailable rfl leftOriginal
+          have secondOriginal : Original (.node second rightEdges rightDepth rightFree) :=
+            original_of_readback source facts _ (.node second.identity) rightAvailable rfl rightOriginal
+          exact NodeScope.rows source facts IntersectionEmptyDomain.emptyDomain
+            first leftEdges leftDepth leftFree second rightEdges rightDepth rightFree
+            (initial_scope source _ _ firstOriginal secondOriginal leftAvailable rightAvailable)
+            left right leftMember rightMember
+
+/-- Complete a comparison and retain its original domain allocation history. -/
+theorem original_rows_complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (bits : Nat) (source : InternedConstructorTemplates.State Symbol Guard)
+    (facts : InternedNestedFacts.Facts source)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inputModel : InputMeaning (view source (guardHolds formulas solver)))
+    (inputRanked : RankedInput (view source (guardHolds formulas solver)) inputModel.valid)
+    (leftParent rightParent : Value Symbol Guard)
+    (leftOriginal : OriginalInput source (inputOf leftParent))
+    (rightOriginal : OriginalInput source (inputOf rightParent))
+    (leftAvailable : Available source leftParent) (rightAvailable : Available source rightParent)
+    (leftClosed : leftParent.free = []) (rightClosed : rightParent.free = [])
+    (left right : Edge)
+    (leftMember : left ∈ nodeEdges leftParent) (rightMember : right ∈ nodeEdges rightParent)
+    (symbols : left.entry.key.symbol = right.entry.key.symbol)
+    (initialDomains : Cache.State IntersectionFlatMemoKeyDomain.DomainKey)
+    (initialValid : Cache.Valid initialDomains)
+    (before : Wrapper (bits + 2))
+    (stable : Stable (view source (guardHolds formulas solver)) inputModel inputRanked
+      (guardHolds formulas solver) before)
+    (good : Good before.checked)
+    (contextual : SourceCurrentAllocatedNativeContextCache.Contextual
+      (view source (guardHolds formulas solver)) inputModel inputRanked
+      (guardHolds formulas solver) before.checked.native)
+    (semantic : SemanticReady before.checked.native.machine.heap)
+    (growth : Grows source before.checked.native.machine.heap)
+    (history : Extends source.nodes.issued before.checked.native.machine.heap.nodes.issued)
+    (allocations : SourceRecursiveIntersectionDomainAllocation.Trace
+      (SourceRecursiveIntersectionSourceInventory.domains source)
+      initialDomains before.checked.native.machine.domains)
+    (idle : NativeIdle before.checked.native)
+    (room : SourceCurrentAllocatedNativeResourceForecast.Room bits
+      ⟨source.nodes.next, source.edges.next,
+        initialDomains.next + (SourceRecursiveIntersectionSourceInventory.domains source).length, 0⟩) :
+    let ordered := if right.entry.identity < left.entry.identity then (right, left) else (left, right)
+    let request : EdgeRequest Symbol Guard := ⟨IntersectionEmptyDomain.emptyDomain, ordered.1, ordered.2⟩
+    ∃ (fuel : Nat) (result : Edge) (after : Wrapper (bits + 2)),
+      SourceCurrentSameSymbolEdgeControl.execute fuel (.call (left, right) []) before = .done result after ∧
+      EdgeResident after.checked.native.machine.heap result ∧
+      SourceCurrentAllocatedNativeContextCache.EdgeLaw
+        (view source (guardHolds formulas solver)) inputModel inputRanked
+        (guardHolds formulas solver) request result ∧
+      Good after.checked ∧
+      SourceCurrentAllocatedNativeContextCache.Contextual
+        (view source (guardHolds formulas solver)) inputModel inputRanked
+        (guardHolds formulas solver) after.checked.native ∧
+      SemanticReady after.checked.native.machine.heap ∧
+      Extension before.checked.native.machine after.checked.native.machine ∧
+      Stable (view source (guardHolds formulas solver)) inputModel inputRanked
+        (guardHolds formulas solver) after ∧
+      NativeIdle after.checked.native ∧
+      Extends before.memo.table after.memo.table ∧
+      FlatMemoThunk.Returned before.memo after.memo ∧
+      SourceRecursiveIntersectionDomainAllocation.Trace
+        (SourceRecursiveIntersectionSourceInventory.domains source)
+        initialDomains after.checked.native.machine.domains := by
+  dsimp only
+  let inventory := SourceRecursiveIntersectionSourceInventory.domains source
+  let ordered := if right.entry.identity < left.entry.identity then (right, left) else (left, right)
+  let request : EdgeRequest Symbol Guard := ⟨IntersectionEmptyDomain.emptyDomain, ordered.1, ordered.2⟩
+  have sourceScope := rows_scope source facts leftParent rightParent leftOriginal rightOriginal
+    leftAvailable rightAvailable left right leftMember rightMember
+  have leftResident := edge_grows source _ growth left sourceScope.leftResident
+  have rightResident := edge_grows source _ growth right sourceScope.rightResident
+  have currentRoom : SourceCurrentAllocatedNativeResourceForecast.Room bits
+      ⟨source.nodes.next, source.edges.next, before.checked.native.machine.domains.next, 0⟩ :=
+    SourceCurrentAllocatedNativeResourceForecast.Room.mono room
+      ⟨Nat.le_refl _, Nat.le_refl _, allocations.next_le, Nat.le_refl _⟩
+  have resources : SourceCurrentAllocatedRecursivePrefixAdmission.Resources bits source inventory initialDomains :=
+    ⟨facts, SourceCurrentAllocatedRecursiveDomainCode.source_closed source facts, initialValid,
+      room.1, room.2.1, Nat.lt_of_le_of_lt (Nat.le_add_right _ _) room.2.2⟩
+  have current : SourceCurrentAllocatedRecursivePrefixState.Current source inventory initialDomains before.checked :=
+    ⟨good, semantic, growth, history, allocations⟩
+  cases found : before.memo.table (left.entry.identity, right.entry.identity) with
+  | some handle =>
+      obtain ⟨result, after, done, same, resident, law, afterStable, tables, retained⟩ :=
+        SourceCurrentSameSymbolEdgeReady.ready_complete
+          (view source (guardHolds formulas solver)) inputModel inputRanked (guardHolds formulas solver)
+          left right before good.native.machine.1.coherent stable leftResident rightResident
+          (Or.inl ⟨handle, found⟩)
+      refine ⟨7, result, after, done, resident, law, ?_, ?_, ?_, ?_, afterStable, ?_, tables, retained, ?_⟩
+      · simpa only [same] using good
+      · simpa only [same] using contextual
+      · simpa only [same] using semantic
+      · rw [same]
+        exact Extension.refl _
+      · simpa only [same] using idle
+      · simpa only [same] using allocations
+  | none =>
+      cases reverseFound : before.memo.table (right.entry.identity, left.entry.identity) with
+      | some handle =>
+          obtain ⟨result, after, done, same, resident, law, afterStable, tables, retained⟩ :=
+            SourceCurrentSameSymbolEdgeReady.ready_complete
+              (view source (guardHolds formulas solver)) inputModel inputRanked (guardHolds formulas solver)
+              left right before good.native.machine.1.coherent stable leftResident rightResident
+              (Or.inr ⟨handle, reverseFound⟩)
+          refine ⟨7, result, after, done, resident, law, ?_, ?_, ?_, ?_, afterStable, ?_, tables, retained, ?_⟩
+          · simpa only [same] using good
+          · simpa only [same] using contextual
+          · simpa only [same] using semantic
+          · rw [same]
+            exact Extension.refl _
+          · simpa only [same] using idle
+          · simpa only [same] using allocations
+      | none =>
+          have scope : EdgeScope source request := by
+            by_cases swap : right.entry.identity < left.entry.identity
+            · simpa only [request, ordered, swap, ↓reduceIte] using
+                (show EdgeScope source ⟨IntersectionEmptyDomain.emptyDomain, right, left⟩ from
+                  ⟨sourceScope.rightResident, sourceScope.leftResident,
+                    sourceScope.right, sourceScope.left, sourceScope.bindings⟩)
+            · simpa only [request, ordered, swap, ↓reduceIte] using sourceScope
+          have ready : EdgeReady before.checked.native.machine request :=
+            ⟨empty_domain _, edge_grows source _ growth _ scope.leftResident,
+              edge_grows source _ growth _ scope.rightResident⟩
+          have member : request.domain.key ∈ inventory :=
+            SourceRecursiveIntersectionSourceInventory.empty_mem source
+          have certificate := SourceCurrentAllocatedRecursivePrefixControl.edge_body source inventory request
+            before.checked.native.machine scope member ready
+          have fields : SourceCurrentAllocatedNativeFieldClosure.Fields (.edgeBody request .pure) before.checked :=
+            ⟨ready, fun _ => trivial⟩
+          obtain ⟨fuel, nativeFuel, _, result, after, done, receipt, afterStable, afterIdle,
+              tables, retained, _, _, _⟩ :=
+            SourceCurrentSameSymbolEdgeOriginalRows.both_miss_complete bits source facts formulas solver
+              inputModel inputRanked leftParent rightParent leftOriginal rightOriginal
+              leftAvailable rightAvailable leftClosed rightClosed left right leftMember rightMember
+              symbols before stable found reverseFound good contextual semantic growth history idle currentRoom
+          have admitted := SourceCurrentAllocatedRecursivePrefixAdmission.prefixes resources nativeFuel
+            (.edgeBody request .pure) before.checked (.code (.pure result)) after.checked
+            (fun final value => EdgeResident final.heap value) current certificate fields receipt.trace.steps
+          exact ⟨fuel, result, after, done, receipt.result, receipt.law, receipt.good,
+            receipt.contextual, receipt.semantic, receipt.extension, afterStable, afterIdle,
+            tables, retained, admitted.current.domains⟩
+
+end MicroCFTA.SourceCurrentSameSymbolEdgeComparisonDomains
