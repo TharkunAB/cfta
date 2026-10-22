@@ -374,8 +374,9 @@ data SearchOptions = SearchOptions
     , searchSplit :: Maybe Int
     {- ^ The number of levels of applications by which all phases split the
     enumeration into parts of one shape (0: no split). With 'Nothing', phase
-    4 splits the skeletons of size k down to k - 1 levels, so that each part
-    has one shape, and phases 1 to 3 split down to 2 levels.
+    4 with 'searchEnumerateAhead' splits the skeletons of size k down to k - 1
+    levels, so that each part has one shape, and the other phases and phase 4
+    without it split down to 2 levels.
     -}
     , searchBucketTimeout :: Maybe Double
     {- ^ The seconds after which a bucket stops testing its schemas. The
@@ -560,7 +561,7 @@ parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.p
                 ( O.long "split"
                     <> O.metavar "DEPTH"
                     <> O.help
-                        "Split the enumeration of all phases by shape down to DEPTH levels of applications (0 does not split). By default, phase 4 gives each shape of a size its own part, and phases 1 to 3 split down to 2 levels"
+                        "Split the enumeration of all phases by shape down to DEPTH levels of applications (0 does not split). By default, phase 4 with --enumerate-ahead gives each shape of a size its own part, and the other phases split down to 2 levels"
                 )
     bucketTimeout =
         O.option
@@ -939,9 +940,11 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..}
     | parallelBuckets = goSizes [1 .. size]
     | otherwise = go Map.empty [(lvl, tc) | lvl <- [1 .. size], tc <- ordered, kept lvl tc]
   where
-    -- The depth of the split of the phase 4 skeletons of a size: one part for
-    -- each shape, unless the options give a depth (see 'searchSplit').
-    skeletonSplit lvl = fromMaybe (lvl - 1) splitEnumeration
+    -- The depth of the split of the phase 4 skeletons of a size. The
+    -- background threads take one part for each shape. Without them, one
+    -- part for each shape saves no time, and at HugeLists 6-p4 with -N1 it
+    -- exhausted a 14 GiB heap (see 'searchSplit').
+    skeletonSplit lvl = fromMaybe (if enumerateAhead then lvl - 1 else 2) splitEnumeration
     -- The depth of the split of the terms of phases 1 to 3.
     termSplit = fromMaybe 2 splitEnumeration
     kept lvl tc = case (onlyBucket, stopAfter) of
