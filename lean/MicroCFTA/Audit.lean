@@ -3090,6 +3090,7 @@ import MicroCFTA.SourceCurrentSameSymbolEdgeControl
 import MicroCFTA.SourceCurrentSameSymbolEdgeForwardCompletion
 import MicroCFTA.SourceCurrentSameSymbolEdgeStable
 import MicroCFTA.SourceCurrentSameSymbolEdgeReady
+import MicroCFTA.SourceRecursiveIntersectionOriginalRowCompletion
 /-!
 # Proof dependency audit
 
