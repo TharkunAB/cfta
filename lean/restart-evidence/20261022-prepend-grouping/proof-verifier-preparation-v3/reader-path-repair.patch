@@ -1,0 +1,12 @@
+--- V2/verify-proofs.py
++++ V3/verify-proofs.py
+@@ -254,7 +254,8 @@
+         assert retained == text.encode() and report["retained_slices"][filename] == dict(bytes=len(retained), sha256=digest(retained))
+         retained_names.append(filename)
+ assert set(report["retained_slices"]) == set(retained_names)
+-assert digest((evidence / "full-preparation/check-full-public.py").read_bytes()) == "__H21_FULL_READER_SHA__"
++assert digest((evidence / "full-preparation-v2/check-full-public.py").read_bytes()) == "__H21_FULL_READER_SHA__"
++assert digest((evidence / "check-full-public-v2.py").read_bytes()) == "__H21_FULL_READER_SHA__"
+ review = load("root-full-review.json")
+ assert review["status"] == "ROOT_ACCEPTED_FOR_OFFICIAL_INSTALL_AND_AUDIT" and review["source_sha256"] == selected_sha and review["source_lines"] == source_lines
+ assert review["public_heads"] == [namespace + short for short in short_names]

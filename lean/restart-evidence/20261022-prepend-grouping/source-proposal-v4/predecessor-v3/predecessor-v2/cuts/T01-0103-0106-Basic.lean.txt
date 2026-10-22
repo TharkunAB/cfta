@@ -1,0 +1,4 @@
+
+-- As `List.foldl` is defined in `Init.Prelude`, we write the basic simplification lemmas here.
+@[simp, grind =] theorem foldl_nil : [].foldl f b = b := rfl
+@[simp, grind =] theorem foldl_cons {l : List α} {f : β → α → β} {b : β} : (a :: l).foldl f b = l.foldl f (f b a) := rfl

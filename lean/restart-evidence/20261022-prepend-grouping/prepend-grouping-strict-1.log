@@ -1,0 +1,37 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261022-prepend-grouping/prepend-grouping-strict-1.source.lean:52:2: error: Type mismatch: After simplification, term
+  reverse_fold key rows fun x => none
+ has type
+  @Eq (Table Key Item)
+    (reverseTable (List.foldl (fun table row => insertWith table (key row, [row])) (fun x => none) rows))
+    (List.foldl (fun table row => SourceCurrentMergeGrouping.insertWith table (key row, [row]))
+      (reverseTable fun x => none) rows)
+but is expected to have type
+  @Eq (Table Key Item)
+    (reverseTable (List.foldl (fun table row => insertWith table (key row, [row])) (fun x => none) rows))
+    (List.foldl (fun table row => SourceCurrentMergeGrouping.insertWith table (key row, [row])) (fun x => none) rows)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261022-prepend-grouping/prepend-grouping-strict-1.source.lean:60:4: error: Type mismatch: After simplification, term
+  iteration.unique
+ has type
+  @List.Nodup Key (List.map Prod.fst entries)
+but is expected to have type
+  @List.Nodup Key (List.map (Prod.fst ∘ fun entry => (entry.fst, entry.snd.reverse)) entries)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261022-prepend-grouping/prepend-grouping-strict-1.source.lean:69:58: error: Application type mismatch: The argument
+  member
+has type
+  ((storedKey, storedBucket).fst, (storedKey, storedBucket).snd.reverse) ∈
+    List.map (fun entry => (entry.fst, entry.snd.reverse)) entries
+but is expected to have type
+  (storedKey, storedBucket) ∈ entries
+in the application
+  (iteration.lookup storedKey storedBucket).mp member
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261022-prepend-grouping/prepend-grouping-strict-1.source.lean:79:2: error: Type mismatch: After simplification, term
+  Iteration.permutation key rows (List.map (fun entry => (entry.fst, entry.snd.reverse)) entries)
+    (Eq.mp
+      (congrFun' (congrArg Iteration (reverse_fromRows key rows))
+        (List.map (fun entry => (entry.fst, entry.snd.reverse)) entries))
+      (iteration_reverse (fromRows key rows) entries iteration))
+ has type
+  @List.Perm (List Item) (List.map (Prod.snd ∘ fun entry => (entry.fst, entry.snd.reverse)) entries)
+    (Sized.groups key rows)
+but is expected to have type
+  @List.Perm (List Item) (List.map (List.reverse ∘ Prod.snd) entries) (Sized.groups key rows)

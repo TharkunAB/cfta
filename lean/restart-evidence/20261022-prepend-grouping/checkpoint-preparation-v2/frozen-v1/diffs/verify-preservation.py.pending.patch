@@ -1,0 +1,92 @@
+--- H20-pending/verify-preservation.py
++++ H21/verify-preservation.py
+@@ -11,7 +11,7 @@
+     return subprocess.check_output(['git', *args], cwd=ROOT, text=True)
+ 
+ base = json.loads((HERE / 'starting-files.json').read_text())
+-assert len(base) == 91951
++assert len(base) == 93582
+ changed = []
+ for name, pin in base.items():
+     path = ROOT / name
+@@ -25,28 +25,28 @@
+ selected = json.loads((HERE / 'selected-sources.json').read_text())
+ gate = json.loads((HERE / 'selected-source-gate.json').read_text())
+ assert gate['status'] == 'ROOT_ACCEPTED'
+-assert gate['path'] == 'lean/MicroCFTA/SourceCurrentOriginalRowClusterLanguage.lean'
+-assert isinstance(gate['lines'], int) and 0 < gate['lines'] <= 500
++assert gate['path'] == 'lean/MicroCFTA/SourceCurrentPrependGrouping.lean'
++assert isinstance(gate['lines'], int) and 0 < gate['lines'] <= 240
+ assert sha(HERE / gate['snapshot']) == gate['sha256']
+ expected = {gate['path']: (gate['sha256'], gate['lines'])}
+ assert set(selected) == set(expected)
+ for name, (expected_sha, lines) in expected.items():
+     assert selected[name]['sha256'] == expected_sha and sha(ROOT / name) == expected_sha
+     assert len((ROOT / name).read_bytes().splitlines()) == lines
+-new_module = 'lean/MicroCFTA/SourceCurrentOriginalRowClusterLanguage.lean'
++new_module = 'lean/MicroCFTA/SourceCurrentPrependGrouping.lean'
+ assert new_module not in base
+-assert 'lean/notes-current-original-row-cluster-language.md' not in base
+-assert (ROOT / 'lean/notes-current-original-row-cluster-language.md').is_file()
++assert 'lean/notes-current-prepend-grouping.md' not in base
++assert (ROOT / 'lean/notes-current-prepend-grouping.md').is_file()
+ assert json.loads((HERE / 'frozen-modules.json').read_text()) == {
+     Path(name).stem: pin['sha256'] for name, pin in selected.items()}
+ assert set(changed) == set(documents) | (set(selected) & set(base)) | {'lean/MicroCFTA/Audit.lean'}, changed
+ start = (HERE / 'starting-head.txt').read_text().strip()
+-assert start == '21dbf7da7ec880f6d9673213934f764e6fda7999'
++assert start == 'd0cf685f461430a7c608ceb3b76da0fe568e4d84'
+ audit_original = HERE / 'original-sources/Audit.original.lean.txt'
+-assert sha(audit_original) == '7e754f81ab43baeace185b866adaf0a38c61ab347b402752cf83bba73882de5e'
+-assert len(audit_original.read_bytes().splitlines()) == 3125
++assert sha(audit_original) == '69e0e42c6e36fbe4cf9868df0582642fe2bf2a6df7c1ad3af4fae169445f6dd3'
++assert len(audit_original.read_bytes().splitlines()) == 3126
+ audit = (ROOT / 'lean/MicroCFTA/Audit.lean').read_bytes()
+-addition = b'import MicroCFTA.SourceCurrentOriginalRowClusterLanguage\n'
++addition = b'import MicroCFTA.SourceCurrentPrependGrouping\n'
+ assert audit.count(addition) == 1 and audit.replace(addition, b'', 1) == audit_original.read_bytes()
+ assert audit.index(addition) < audit.index(b'/-!')
+ for name in documents:
+@@ -55,13 +55,13 @@
+ marker = '# Current formalization findings\n\n## Haskell fix handoff for external work\n\n'
+ marker += (HERE / 'haskell-repair-index.md').read_text().rstrip() + '\n\n'
+ assert (ROOT / 'FINDINGS.md').read_text().startswith(marker)
+-previous = json.loads((ROOT / 'lean/restart-evidence/20261022-original-row-deletion-soundness/preservation-final.json').read_text())
++previous = json.loads((ROOT / 'lean/restart-evidence/20261022-original-row-cluster-language/preservation-final.json').read_text())
+ archives = dict(previous['frozen_entry_archives'])
+ registries = dict(previous['frozen_manifests'])
+-assert len(registries) == 303 and sum(pin['checked'] for pin in registries.values()) == 1397
++assert len(registries) == 304 and sum(pin['checked'] for pin in registries.values()) == 1398
+ assert len(archives) == 5
+-assert 'lean/restart-evidence/20261022-original-row-deletion-soundness/frozen-modules.json' not in registries
+-registries['lean/restart-evidence/20261022-original-row-deletion-soundness/frozen-modules.json'] = {'checked': 1}
++assert 'lean/restart-evidence/20261022-original-row-cluster-language/frozen-modules.json' not in registries
++registries['lean/restart-evidence/20261022-original-row-cluster-language/frozen-modules.json'] = {'checked': 1}
+ frozen = {}
+ for name in registries:
+     entries = json.loads((ROOT / name).read_text())
+@@ -75,7 +75,7 @@
+             assert entry['sha256'] == expected and sha(ROOT / entry['snapshot']) == expected
+             assert sha(ROOT / source) == entry['current_sha256']
+     frozen[name] = {'checked': len(entries), 'manifest_sha256': sha(ROOT / name)}
+-assert len(frozen) == 304 and sum(pin['checked'] for pin in frozen.values()) == 1398
++assert len(frozen) == 305 and sum(pin['checked'] for pin in frozen.values()) == 1399
+ for name, args in [('starting-stashes.txt', ('stash', 'list', '--format=%gd %H %s')),
+                    ('starting-worktrees.txt', ('worktree', 'list', '--porcelain'))]:
+     actual, expected = git(*args), (HERE / name).read_text()
+@@ -115,13 +115,13 @@
+     and name != 'lean/MicroCFTA/Audit.lean' and name not in selected for name in base)
+ assert older_sources == sum(name.startswith('lean/MicroCFTA/') and name.endswith('.lean')
+     and name != 'lean/MicroCFTA/Audit.lean' for name in base)
+-assert older_sources == 3635
++assert older_sources == 3636
+ report = dict(status='PASS', baseline_files=len(base), changed=sorted(changed),
+               unchanged_haskell_files=len(hs), added_haskell_archive_files=len(added_hs), unchanged_package_files=len(active),
+               unchanged_older_non_audit_sources=older_sources,
+               frozen_registry_count=len(frozen), frozen_entries=sum(item['checked'] for item in frozen.values()),
+               frozen_manifests=frozen, frozen_entry_archives=archives,
+-              audit_only_new_import=True, new_original_row_cluster_language_absent_baseline=True,
++              audit_only_new_import=True, new_prepend_grouping_absent_baseline=True,
+               stashes_preserved=True, other_worktrees_preserved=True,
+               haskell_fix_registry_first_and_retained=True, archived_components=len(components))
+ print(json.dumps(report, indent=2))

@@ -1,0 +1,16 @@
+# H21 actual nine-tool binding audit
+SOURCE CLEAR. I read all805 bound script lines, complete actual binding values, history and contracts. Literal reconstruction is exact for all nine immutable templates; all270 assertions and nonconstant AST nodes remain.
+JSON bindings replace each whole quoted token with the recorded JSON string literal. All nested axiom lists parse, contract insertion order is preserved and no H21 token remains in active scripts.
+The actual receipt ledger is exactly five Lean/Lake jobs: four source jobs and one Audit, with two failed stricts, no warned source pass and no rejected PUBLIC TYPE. No metadata Python command is counted as Lean.
+All actual raw/source hashes, error counts, owned terminal times, default linter commands, fresh usage and effective4GiB max/high,swap0,five-minute caps correlate. Strict3 is literal empty; the sole FULL and Audit exit0.
+The complete actual Audit raw reports3638 jobs/75494 dependencies and only the old inputs warning. Its original3126-line source inverse is exact; the new module is the sole import change.
+Seven recorded source aliases preserve four distinct math drafts and three exact reasoned patches. All51 history artifacts match. The uncompiled V1 is retained; actual failed V2/V3 inputs and diagnostics remain.
+Both reader histories are retained: metadata reader1 failed on pair_fold byte layout, reader2 passed with V2. This is one metadata failure and no second FULL. The six original failed-reader files remain exact.
+Six approved contracts, exact source/header order, three definition equations and the one generalized-table IH remain. Source89/3d293 equals the selected snapshot, clean strict input and live module.
+All nine head metrics and complete retained slices match the independently reviewed actual raw. Seven raw TYPE pairs are byte-identical; pair_fold and reverse_insert_singleton are false. All nine ASCII-whitespace lexical matches and both raw hashes remain explicit.
+Actual axiom sets are empty/proper/standard3 as recorded. All four private markers and helper denials remain. Complete bodies are retained programmatically; no whole manual-body read is claimed.
+Standalone normal and live proof reports remain required before document writes. Nine LF prefix inverses, FINDINGS repair index FIRST, exact source/proof staging, one-shot support and seal-time final rechecks remain.
+Preservation still protects93582 baseline files/modes,3636 older Lean,298 Haskell/207 active package files,305 registries/1399 entries/five overrides, refs, stashes, worktrees and component hashes.
+The publisher remains LOCAL_ONLY, requires an actual future proof gate and seal, and has no network command. It retains scoped stage, all sealed paths indexed, clean filesystem/index/HEAD blob-mode checks; no commit/seal/publication success is claimed here.
+I authored mathematics and related audits, not Required's eight templates, Guard's verifier V3 or root's bindings. This is independent tooling review, not independent reproof of my source.
+No prepared script, compiler, runtime, Git, network or repository write ran. All nine tool execution outcomes remain pending at this cut. No material blocker was found; this external audit is frozen.

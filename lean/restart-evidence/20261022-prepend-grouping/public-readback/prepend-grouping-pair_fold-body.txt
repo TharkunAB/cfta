@@ -1,0 +1,81 @@
+fun {Key Item} [inst : DecidableEq.{1} Key] key rows =>
+  @of_eq_true
+    (@Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+      (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) (Prod.{0, 0} Key (List.{0} Item))
+        (@MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst) (fun x => @Option.none.{0} (List.{0} Item))
+        (@List.map.{0, 0} Item (Prod.{0, 0} Key (List.{0} Item))
+          (fun row => @Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item)))
+          rows))
+      (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+        (fun x y =>
+          @MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst x
+            (@Prod.mk.{0, 0} Key (List.{0} Item) (key y) (@List.cons.{0} Item y (@List.nil.{0} Item))))
+        (fun x => @Option.none.{0} (List.{0} Item)) rows))
+    (@Eq.trans.{1} Prop
+      (@Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+        (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) (Prod.{0, 0} Key (List.{0} Item))
+          (@MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst) (fun x => @Option.none.{0} (List.{0} Item))
+          (@List.map.{0, 0} Item (Prod.{0, 0} Key (List.{0} Item))
+            (fun row => @Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item)))
+            rows))
+        (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+          (fun x y =>
+            @MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst x
+              (@Prod.mk.{0, 0} Key (List.{0} Item) (key y) (@List.cons.{0} Item y (@List.nil.{0} Item))))
+          (fun x => @Option.none.{0} (List.{0} Item)) rows))
+      (@Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+        (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+          (fun x y =>
+            @MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst x
+              (@Prod.mk.{0, 0} Key (List.{0} Item) (key y) (@List.cons.{0} Item y (@List.nil.{0} Item))))
+          (fun x => @Option.none.{0} (List.{0} Item)) rows)
+        (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+          (fun x y =>
+            @MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst x
+              (@Prod.mk.{0, 0} Key (List.{0} Item) (key y) (@List.cons.{0} Item y (@List.nil.{0} Item))))
+          (fun x => @Option.none.{0} (List.{0} Item)) rows))
+      True
+      (@congrFun'.{1, 1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Prop
+        (@Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+          (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) (Prod.{0, 0} Key (List.{0} Item))
+            (@MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst)
+            (fun x => @Option.none.{0} (List.{0} Item))
+            (@List.map.{0, 0} Item (Prod.{0, 0} Key (List.{0} Item))
+              (fun row => @Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item)))
+              rows)))
+        (@Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+          (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+            (fun x y =>
+              @MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst x
+                (@Prod.mk.{0, 0} Key (List.{0} Item) (key y) (@List.cons.{0} Item y (@List.nil.{0} Item))))
+            (fun x => @Option.none.{0} (List.{0} Item)) rows))
+        (@congrArg.{1, 1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+          (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item → Prop)
+          (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) (Prod.{0, 0} Key (List.{0} Item))
+            (@MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst)
+            (fun x => @Option.none.{0} (List.{0} Item))
+            (@List.map.{0, 0} Item (Prod.{0, 0} Key (List.{0} Item))
+              (fun row => @Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item)))
+              rows))
+          (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+            (fun x y =>
+              @MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst x
+                (@Prod.mk.{0, 0} Key (List.{0} Item) (key y) (@List.cons.{0} Item y (@List.nil.{0} Item))))
+            (fun x => @Option.none.{0} (List.{0} Item)) rows)
+          (@Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item))
+          (@List.foldl_map.{0, 0, 0} Item (Prod.{0, 0} Key (List.{0} Item))
+            (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+            (fun row => @Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item)))
+            (@MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst) rows fun x =>
+            @Option.none.{0} (List.{0} Item)))
+        (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+          (fun x y =>
+            @MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst x
+              (@Prod.mk.{0, 0} Key (List.{0} Item) (key y) (@List.cons.{0} Item y (@List.nil.{0} Item))))
+          (fun x => @Option.none.{0} (List.{0} Item)) rows))
+      (@eq_self.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+        (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+          (fun x y =>
+            @MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst x
+              (@Prod.mk.{0, 0} Key (List.{0} Item) (key y) (@List.cons.{0} Item y (@List.nil.{0} Item))))
+          (fun x => @Option.none.{0} (List.{0} Item)) rows)))

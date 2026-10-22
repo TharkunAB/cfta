@@ -1,0 +1,9 @@
+fun {Key Item} [inst : DecidableEq.{1} Key] table entry query =>
+  @ite.{1} (Option.{0} (List.{0} Item)) (@Eq.{1} Key query (@Prod.fst.{0, 0} Key (List.{0} Item) entry))
+    (inst query (@Prod.fst.{0, 0} Key (List.{0} Item) entry))
+    (@Option.some.{0} (List.{0} Item)
+      (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+        (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+        (@Prod.snd.{0, 0} Key (List.{0} Item) entry)
+        (@Option.getD.{0} (List.{0} Item) (table query) (@List.nil.{0} Item))))
+    (table query)

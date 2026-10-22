@@ -1,0 +1,26 @@
+/-- Partition finite members by the first occurrence of each observation key. -/
+def groups [DecidableEq Key] (key : α → Key) (members : List α) : List (List α) :=
+  match members with
+  | [] => []
+  | member :: rest =>
+      (member :: rest.filter (fun other => decide (key other = key member))) ::
+        groups key (rest.filter (fun other => decide (key other ≠ key member)))
+termination_by members.length
+decreasing_by
+  simp only [List.length_unattach]
+  apply Nat.lt_of_le_of_lt (List.length_filter_le _ _)
+  simp
+
+/-- The executable partition retains every source occurrence exactly once. -/
+theorem groups_perm [DecidableEq Key] (key : α → Key) (members : List α) :
+    (groups key members).flatten.Perm members := by
+  induction members using groups.induct key with
+  | case1 => simp [groups]
+  | case2 member rest ih =>
+      rw [List.unattach_filter (g := fun other => decide (key other ≠ key member))
+        (hf := fun _ _ => rfl), List.unattach_attach] at ih
+      rw [groups]
+      simp only [List.flatten_cons, List.cons_append]
+      apply List.Perm.cons
+      have heq : (rest.filter (fun other => decide (key other ≠ key member))) =
+          rest.filter (fun other => !decide (key other = key member)) := by simp

@@ -1,0 +1,64 @@
+--- V1/verify-proofs.py
++++ V2/verify-proofs.py
+@@ -16,6 +16,8 @@
+     return json.loads((evidence / name).read_text())
+ def digest(data):
+     return hashlib.sha256(data).hexdigest()
++def canonical(text):
++    return re.sub(r"[ \t\r\n]+", " ", text).strip(" \t\r\n")
+ name = "SourceCurrentPrependGrouping"
+ namespace = "MicroCFTA." + name + "."
+ specs = [("insertWith", "def"), ("fromRows", "def"), ("reverseTable", "def"),
+@@ -210,27 +212,34 @@
+     assert len(axioms) == 1, short
+     axiom = axioms[0]
+     declaration, axiom_output = printed[:axiom.start()], printed[axiom.start():]
+-    normalized, matches = "".join(checked.split()), []
++    normalized, matches = canonical(checked), []
+     for match in re.finditer(r" :=\n", declaration):
+-        prefix = "".join(declaration[:match.start()].split())
++        prefix = canonical(declaration[:match.start()])
+         if prefix == normalized:
+             matches.append(match)
+         elif len(prefix) > len(normalized):
+             break
+     assert len(matches) == 1, short
+     declared, body = declaration[:matches[0].start()], declaration[matches[0].end():]
+-    assert checked.encode() == declared.encode()
++    raw_identity = checked.encode() == declared.encode()
++    assert canonical(checked) == canonical(declared)
+     metric = head_metrics[short]
+-    assert set(metric) == {"type_bytes", "type_characters", "type_logical_lines", "type_line_feeds", "type_final_newline", "type_sha256", "body_bytes", "body_characters", "body_sha256", "actual_axioms"}
++    assert set(metric) == {"type_bytes", "type_characters", "type_logical_lines", "type_line_feeds", "type_final_newline", "type_sha256", "body_bytes", "body_characters", "body_sha256", "actual_axioms", "printed_type_bytes", "printed_type_sha256", "raw_type_byte_identity"}
+     assert len(checked) == metric["type_characters"] and len(checked.encode()) == metric["type_bytes"]
+     assert len(checked.splitlines()) == metric["type_logical_lines"] and checked.count("\n") == metric["type_line_feeds"] and checked.endswith("\n") == metric["type_final_newline"]
+     assert digest(checked.encode()) == metric["type_sha256"]
+-    assert not any(token in checked for token in ["_private", "✝", "†", "‡"])
+-    assert not any(re.search(re.escape(namespace + helper) + r"(?![\w'])", checked) for helper in helpers)
++    assert len(declared.encode()) == metric["printed_type_bytes"] and digest(declared.encode()) == metric["printed_type_sha256"]
++    assert raw_identity is metric["raw_type_byte_identity"]
++    assert not any(token in checked + declared for token in ["_private", "✝", "†", "‡"])
++    assert not any(re.search(re.escape(namespace + helper) + r"(?![\w'])", checked + declared) for helper in helpers)
+     head_report = report["heads"][index]
+-    assert all(head_report[key] for key in ["check_print_type_identity", "check_print_type_byte_identity", "unique_complete_type_body_delimiter", "actual_axioms_within_standard_allowed"])
++    assert all(head_report[key] for key in ["check_print_type_identity", "check_print_type_lexical_identity", "unique_complete_type_body_delimiter", "actual_axioms_within_standard_allowed"])
++    assert head_report["check_print_type_byte_identity"] is raw_identity
+     assert head_report["private_namespace_helpers_checked"] == helpers and head_report["private_type_spellings_checked"] == ["_private", "✝", "†", "‡"] and head_report["private_public_type_names"] is False
+     assert head_report["checked_type_characters"] == len(checked) and head_report["normalized_type_characters"] == len(normalized)
++    assert head_report["checked_type_bytes"] == len(checked.encode()) and head_report["checked_type_sha256"] == digest(checked.encode())
++    assert head_report["printed_type_bytes"] == len(declared.encode()) and head_report["printed_type_characters"] == len(declared)
++    assert head_report["printed_type_sha256"] == digest(declared.encode()) and head_report["canonical_type_sha256"] == digest(normalized.encode())
+     assert head_report["body_characters"] == len(body) == metric["body_characters"] and len(body.encode()) == metric["body_bytes"]
+     assert body.startswith("fun ") and len(body) > 50 and digest(body.encode()) == metric["body_sha256"]
+     values = re.fullmatch(r"\s*\[([^\]]*)\]\s*", printed[axiom.end():]) if axiom.group(1) == "depends on axioms:" else None
+@@ -250,7 +259,9 @@
+ assert review["status"] == "ROOT_ACCEPTED_FOR_OFFICIAL_INSTALL_AND_AUDIT" and review["source_sha256"] == selected_sha and review["source_lines"] == source_lines
+ assert review["public_heads"] == [namespace + short for short in short_names]
+ assert review["complete_public_type_root_review"] == review["independent_complete_public_type_review"] == "CLEAR"
+-assert review["root_read_complete_public_types"] and review["root_printed_type_byte_identity_verified"] and review["check_print_type_byte_identity"] and review["four_private_markers_and_all_helpers_absent_from_type"]
++assert review["root_read_complete_public_types"] and review["root_printed_type_lexical_identity_verified"] and review["four_private_markers_and_all_helpers_absent_from_type"]
++assert review["raw_type_byte_identity_by_head"] == {short: head_metrics[short]["raw_type_byte_identity"] for short in short_names}
++assert all(review.get(key, all(head_metrics[short]["raw_type_byte_identity"] for short in short_names)) == all(head_metrics[short]["raw_type_byte_identity"] for short in short_names) for key in ["root_printed_type_byte_identity_verified", "check_print_type_byte_identity"])
+ assert review["types_sha256"] == {short: head_metrics[short]["type_sha256"] for short in short_names}
+ assert review["full_raw_sha256"] == digest(raw) and review["actual_axioms_by_head"] == actual_by_head
+ assert review["body_retained_and_programmatically_checked"] and review["whole_body_manual_read_claimed"] is False

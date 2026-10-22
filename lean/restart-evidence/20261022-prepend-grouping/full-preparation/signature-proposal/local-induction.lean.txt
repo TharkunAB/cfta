@@ -1,0 +1,6 @@
+-- Expected induction hypothesis in the cons branch of reverse_fold.
+-- Context: [DecidableEq Key], key : Item → Key, first : Item, rest : List Item.
+ih : ∀ table : Table Key Item,
+    reverseTable (rest.foldl (fun table row => insertWith table (key row, [row])) table) =
+      rest.foldl (fun table row => SourceCurrentMergeGrouping.insertWith table (key row, [row]))
+        (reverseTable table)

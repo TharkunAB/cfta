@@ -1,0 +1,1780 @@
+@MicroCFTA.SourceCurrentPrependGrouping.insertWith : {Key Item : Type} →
+  [DecidableEq.{1} Key] →
+    MicroCFTA.SourceCurrentMergeGrouping.Table Key Item →
+      Prod.{0, 0} Key (List.{0} Item) → MicroCFTA.SourceCurrentMergeGrouping.Table Key Item
+def MicroCFTA.SourceCurrentPrependGrouping.insertWith : {Key Item : Type} →
+  [DecidableEq.{1} Key] →
+    MicroCFTA.SourceCurrentMergeGrouping.Table Key Item →
+      Prod.{0, 0} Key (List.{0} Item) → MicroCFTA.SourceCurrentMergeGrouping.Table Key Item :=
+fun {Key Item} [inst : DecidableEq.{1} Key] table entry query =>
+  @ite.{1} (Option.{0} (List.{0} Item)) (@Eq.{1} Key query (@Prod.fst.{0, 0} Key (List.{0} Item) entry))
+    (inst query (@Prod.fst.{0, 0} Key (List.{0} Item) entry))
+    (@Option.some.{0} (List.{0} Item)
+      (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+        (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+        (@Prod.snd.{0, 0} Key (List.{0} Item) entry)
+        (@Option.getD.{0} (List.{0} Item) (table query) (@List.nil.{0} Item))))
+    (table query)
+'MicroCFTA.SourceCurrentPrependGrouping.insertWith' does not depend on any axioms
+@MicroCFTA.SourceCurrentPrependGrouping.fromRows : {Key Item : Type} →
+  [DecidableEq.{1} Key] → (Item → Key) → List.{0} Item → MicroCFTA.SourceCurrentMergeGrouping.Table Key Item
+def MicroCFTA.SourceCurrentPrependGrouping.fromRows : {Key Item : Type} →
+  [DecidableEq.{1} Key] → (Item → Key) → List.{0} Item → MicroCFTA.SourceCurrentMergeGrouping.Table Key Item :=
+fun {Key Item} [inst : DecidableEq.{1} Key] key rows =>
+  @List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+    (fun table row =>
+      @MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+        (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+    (fun x => @Option.none.{0} (List.{0} Item)) rows
+'MicroCFTA.SourceCurrentPrependGrouping.fromRows' does not depend on any axioms
+@MicroCFTA.SourceCurrentPrependGrouping.reverseTable : {Key Item : Type} →
+  MicroCFTA.SourceCurrentMergeGrouping.Table Key Item → MicroCFTA.SourceCurrentMergeGrouping.Table Key Item
+def MicroCFTA.SourceCurrentPrependGrouping.reverseTable : {Key Item : Type} →
+  MicroCFTA.SourceCurrentMergeGrouping.Table Key Item → MicroCFTA.SourceCurrentMergeGrouping.Table Key Item :=
+fun {Key Item} table query => @Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item) (table query)
+'MicroCFTA.SourceCurrentPrependGrouping.reverseTable' does not depend on any axioms
+@MicroCFTA.SourceCurrentPrependGrouping.pair_fold : ∀ {Key Item : Type} [inst : DecidableEq.{1} Key] (key : Item → Key)
+  (rows : List.{0} Item),
+  @Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+    (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) (Prod.{0, 0} Key (List.{0} Item))
+      (@MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst) (fun x => @Option.none.{0} (List.{0} Item))
+      (@List.map.{0, 0} Item (Prod.{0, 0} Key (List.{0} Item))
+        (fun row => @Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))) rows))
+    (@MicroCFTA.SourceCurrentPrependGrouping.fromRows Key Item inst key rows)
+theorem MicroCFTA.SourceCurrentPrependGrouping.pair_fold : ∀ {Key Item : Type} [inst : DecidableEq.{1} Key]
+  (key : Item → Key) (rows : List.{0} Item),
+  @Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+    (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) (Prod.{0, 0} Key (List.{0} Item))
+      (@MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst) (fun x => @Option.none.{0} (List.{0} Item))
+      (@List.map.{0, 0} Item (Prod.{0, 0} Key (List.{0} Item))
+        (fun row => @Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))) rows))
+    (@MicroCFTA.SourceCurrentPrependGrouping.fromRows Key Item inst key rows) :=
+fun {Key Item} [inst : DecidableEq.{1} Key] key rows =>
+  @of_eq_true
+    (@Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+      (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) (Prod.{0, 0} Key (List.{0} Item))
+        (@MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst) (fun x => @Option.none.{0} (List.{0} Item))
+        (@List.map.{0, 0} Item (Prod.{0, 0} Key (List.{0} Item))
+          (fun row => @Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item)))
+          rows))
+      (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+        (fun x y =>
+          @MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst x
+            (@Prod.mk.{0, 0} Key (List.{0} Item) (key y) (@List.cons.{0} Item y (@List.nil.{0} Item))))
+        (fun x => @Option.none.{0} (List.{0} Item)) rows))
+    (@Eq.trans.{1} Prop
+      (@Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+        (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) (Prod.{0, 0} Key (List.{0} Item))
+          (@MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst) (fun x => @Option.none.{0} (List.{0} Item))
+          (@List.map.{0, 0} Item (Prod.{0, 0} Key (List.{0} Item))
+            (fun row => @Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item)))
+            rows))
+        (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+          (fun x y =>
+            @MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst x
+              (@Prod.mk.{0, 0} Key (List.{0} Item) (key y) (@List.cons.{0} Item y (@List.nil.{0} Item))))
+          (fun x => @Option.none.{0} (List.{0} Item)) rows))
+      (@Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+        (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+          (fun x y =>
+            @MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst x
+              (@Prod.mk.{0, 0} Key (List.{0} Item) (key y) (@List.cons.{0} Item y (@List.nil.{0} Item))))
+          (fun x => @Option.none.{0} (List.{0} Item)) rows)
+        (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+          (fun x y =>
+            @MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst x
+              (@Prod.mk.{0, 0} Key (List.{0} Item) (key y) (@List.cons.{0} Item y (@List.nil.{0} Item))))
+          (fun x => @Option.none.{0} (List.{0} Item)) rows))
+      True
+      (@congrFun'.{1, 1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Prop
+        (@Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+          (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) (Prod.{0, 0} Key (List.{0} Item))
+            (@MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst)
+            (fun x => @Option.none.{0} (List.{0} Item))
+            (@List.map.{0, 0} Item (Prod.{0, 0} Key (List.{0} Item))
+              (fun row => @Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item)))
+              rows)))
+        (@Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+          (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+            (fun x y =>
+              @MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst x
+                (@Prod.mk.{0, 0} Key (List.{0} Item) (key y) (@List.cons.{0} Item y (@List.nil.{0} Item))))
+            (fun x => @Option.none.{0} (List.{0} Item)) rows))
+        (@congrArg.{1, 1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+          (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item → Prop)
+          (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) (Prod.{0, 0} Key (List.{0} Item))
+            (@MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst)
+            (fun x => @Option.none.{0} (List.{0} Item))
+            (@List.map.{0, 0} Item (Prod.{0, 0} Key (List.{0} Item))
+              (fun row => @Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item)))
+              rows))
+          (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+            (fun x y =>
+              @MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst x
+                (@Prod.mk.{0, 0} Key (List.{0} Item) (key y) (@List.cons.{0} Item y (@List.nil.{0} Item))))
+            (fun x => @Option.none.{0} (List.{0} Item)) rows)
+          (@Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item))
+          (@List.foldl_map.{0, 0, 0} Item (Prod.{0, 0} Key (List.{0} Item))
+            (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+            (fun row => @Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item)))
+            (@MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst) rows fun x =>
+            @Option.none.{0} (List.{0} Item)))
+        (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+          (fun x y =>
+            @MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst x
+              (@Prod.mk.{0, 0} Key (List.{0} Item) (key y) (@List.cons.{0} Item y (@List.nil.{0} Item))))
+          (fun x => @Option.none.{0} (List.{0} Item)) rows))
+      (@eq_self.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+        (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+          (fun x y =>
+            @MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst x
+              (@Prod.mk.{0, 0} Key (List.{0} Item) (key y) (@List.cons.{0} Item y (@List.nil.{0} Item))))
+          (fun x => @Option.none.{0} (List.{0} Item)) rows)))
+'MicroCFTA.SourceCurrentPrependGrouping.pair_fold' depends on axioms: [propext]
+@MicroCFTA.SourceCurrentPrependGrouping.reverse_insert_singleton : ∀ {Key Item : Type} [inst : DecidableEq.{1} Key]
+  (table : MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) (rowKey : Key) (row : Item),
+  @Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+    (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+      (@MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+        (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item)))))
+    (@MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst
+      (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table)
+      (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item))))
+theorem MicroCFTA.SourceCurrentPrependGrouping.reverse_insert_singleton : ∀ {Key Item : Type}
+  [inst : DecidableEq.{1} Key] (table : MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) (rowKey : Key)
+  (row : Item),
+  @Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+    (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+      (@MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+        (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item)))))
+    (@MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst
+      (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table)
+      (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item)))) :=
+fun {Key Item} [inst : DecidableEq.{1} Key] table rowKey row =>
+  @funext.{1, 1} Key (fun x => Option.{0} (List.{0} Item))
+    (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+      (@MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+        (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item)))))
+    (@MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst
+      (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table)
+      (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item))))
+    fun query =>
+    @dite.{0}
+      (@Eq.{1} (Option.{0} (List.{0} Item))
+        (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+          (@MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+            (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item))))
+          query)
+        (@MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst
+          (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table)
+          (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item))) query))
+      (@Eq.{1} Key query rowKey) (inst query rowKey)
+      (fun same =>
+        @Eq.mpr.{0}
+          (@Eq.{1} (Option.{0} (List.{0} Item))
+            (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+              (@MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+                (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item))))
+              query)
+            (@MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst
+              (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table)
+              (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item))) query))
+          (@Eq.{1} (Option.{0} (List.{0} Item))
+            (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item)
+              (@Option.some.{0} (List.{0} Item)
+                (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                  (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                  (@List.cons.{0} Item row (@List.nil.{0} Item))
+                  (@Option.getD.{0} (List.{0} Item) (table rowKey) (@List.nil.{0} Item)))))
+            (@Option.some.{0} (List.{0} Item)
+              (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                (@Option.getD.{0} (List.{0} Item)
+                  (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item) (table rowKey))
+                  (@List.nil.{0} Item))
+                (@List.cons.{0} Item row (@List.nil.{0} Item)))))
+          (@id.{0}
+            (@Eq.{1} Prop
+              (@Eq.{1} (Option.{0} (List.{0} Item))
+                (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+                  (@MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+                    (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                  query)
+                (@MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst
+                  (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table)
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item))) query))
+              (@Eq.{1} (Option.{0} (List.{0} Item))
+                (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item)
+                  (@Option.some.{0} (List.{0} Item)
+                    (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                      (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                      (@List.cons.{0} Item row (@List.nil.{0} Item))
+                      (@Option.getD.{0} (List.{0} Item) (table rowKey) (@List.nil.{0} Item)))))
+                (@Option.some.{0} (List.{0} Item)
+                  (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                    (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                    (@Option.getD.{0} (List.{0} Item)
+                      (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item) (table rowKey))
+                      (@List.nil.{0} Item))
+                    (@List.cons.{0} Item row (@List.nil.{0} Item))))))
+            (@congr.{1, 1} (Option.{0} (List.{0} Item)) Prop
+              (@Eq.{1} (Option.{0} (List.{0} Item))
+                (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+                  (@MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+                    (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                  query))
+              (@Eq.{1} (Option.{0} (List.{0} Item))
+                (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item)
+                  (@Option.some.{0} (List.{0} Item)
+                    (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                      (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                      (@List.cons.{0} Item row (@List.nil.{0} Item))
+                      (@Option.getD.{0} (List.{0} Item) (table rowKey) (@List.nil.{0} Item))))))
+              (@MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst
+                (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table)
+                (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item))) query)
+              (@Option.some.{0} (List.{0} Item)
+                (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                  (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                  (@Option.getD.{0} (List.{0} Item)
+                    (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item) (table rowKey))
+                    (@List.nil.{0} Item))
+                  (@List.cons.{0} Item row (@List.nil.{0} Item))))
+              (@congrArg.{1, 1} (Option.{0} (List.{0} Item)) (Option.{0} (List.{0} Item) → Prop)
+                (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+                  (@MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+                    (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                  query)
+                (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item)
+                  (@Option.some.{0} (List.{0} Item)
+                    (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                      (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                      (@List.cons.{0} Item row (@List.nil.{0} Item))
+                      (@Option.getD.{0} (List.{0} Item) (table rowKey) (@List.nil.{0} Item)))))
+                (@Eq.{1} (Option.{0} (List.{0} Item)))
+                (@congrArg.{1, 1} (Option.{0} (List.{0} Item)) (Option.{0} (List.{0} Item))
+                  (@MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+                    (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item))) query)
+                  (@Option.some.{0} (List.{0} Item)
+                    (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                      (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                      (@List.cons.{0} Item row (@List.nil.{0} Item))
+                      (@Option.getD.{0} (List.{0} Item) (table rowKey) (@List.nil.{0} Item))))
+                  (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item))
+                  (@Eq.trans.{1} (Option.{0} (List.{0} Item))
+                    (@ite.{1} (Option.{0} (List.{0} Item))
+                      (@Eq.{1} Key query
+                        (@Prod.fst.{0, 0} Key (List.{0} Item)
+                          (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item)))))
+                      (inst query
+                        (@Prod.fst.{0, 0} Key (List.{0} Item)
+                          (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item)))))
+                      (@Option.some.{0} (List.{0} Item)
+                        (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                          (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                          (@Prod.snd.{0, 0} Key (List.{0} Item)
+                            (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                          (@Option.getD.{0} (List.{0} Item) (table query) (@List.nil.{0} Item))))
+                      (table query))
+                    (@Option.some.{0} (List.{0} Item)
+                      (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                        (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                        (@Prod.snd.{0, 0} Key (List.{0} Item)
+                          (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                        (@Option.getD.{0} (List.{0} Item) (table query) (@List.nil.{0} Item))))
+                    (@Option.some.{0} (List.{0} Item)
+                      (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                        (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                        (@List.cons.{0} Item row (@List.nil.{0} Item))
+                        (@Option.getD.{0} (List.{0} Item) (table rowKey) (@List.nil.{0} Item))))
+                    (@ite_eq_left_of_eq_true.{1} (Option.{0} (List.{0} Item))
+                      (@Eq.{1} Key query
+                        (@Prod.fst.{0, 0} Key (List.{0} Item)
+                          (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item)))))
+                      (inst query
+                        (@Prod.fst.{0, 0} Key (List.{0} Item)
+                          (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item)))))
+                      (@Option.some.{0} (List.{0} Item)
+                        (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                          (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                          (@Prod.snd.{0, 0} Key (List.{0} Item)
+                            (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                          (@Option.getD.{0} (List.{0} Item) (table query) (@List.nil.{0} Item))))
+                      (table query)
+                      (@Eq.trans.{1} Prop (@Eq.{1} Key query rowKey) (@Eq.{1} Key rowKey rowKey) True
+                        (@congrFun'.{1, 1} Key Prop (@Eq.{1} Key query) (@Eq.{1} Key rowKey)
+                          (@congrArg.{1, 1} Key (Key → Prop) query rowKey (@Eq.{1} Key) same) rowKey)
+                        (@eq_self.{1} Key rowKey)))
+                    (@congrArg.{1, 1} (List.{0} Item) (Option.{0} (List.{0} Item))
+                      (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                        (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                        (@Prod.snd.{0, 0} Key (List.{0} Item)
+                          (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                        (@Option.getD.{0} (List.{0} Item) (table query) (@List.nil.{0} Item)))
+                      (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                        (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                        (@List.cons.{0} Item row (@List.nil.{0} Item))
+                        (@Option.getD.{0} (List.{0} Item) (table rowKey) (@List.nil.{0} Item)))
+                      (@Option.some.{0} (List.{0} Item))
+                      (@congrArg.{1, 1} (List.{0} Item) (List.{0} Item)
+                        (@Option.getD.{0} (List.{0} Item) (table query) (@List.nil.{0} Item))
+                        (@Option.getD.{0} (List.{0} Item) (table rowKey) (@List.nil.{0} Item))
+                        (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                          (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                          (@List.cons.{0} Item row (@List.nil.{0} Item)))
+                        (@congrFun'.{1, 1} (List.{0} Item) (List.{0} Item)
+                          (@Option.getD.{0} (List.{0} Item) (table query))
+                          (@Option.getD.{0} (List.{0} Item) (table rowKey))
+                          (@congrArg.{1, 1} (Option.{0} (List.{0} Item)) (List.{0} Item → List.{0} Item) (table query)
+                            (table rowKey) (@Option.getD.{0} (List.{0} Item))
+                            (@congrArg.{1, 1} Key (Option.{0} (List.{0} Item)) query rowKey table same))
+                          (@List.nil.{0} Item)))))))
+              (@Eq.trans.{1} (Option.{0} (List.{0} Item))
+                (@ite.{1} (Option.{0} (List.{0} Item))
+                  (@Eq.{1} Key query
+                    (@Prod.fst.{0, 0} Key (List.{0} Item)
+                      (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item)))))
+                  (inst query
+                    (@Prod.fst.{0, 0} Key (List.{0} Item)
+                      (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item)))))
+                  (@Option.some.{0} (List.{0} Item)
+                    (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                      (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                      (@Option.getD.{0} (List.{0} Item)
+                        (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table query)
+                        (@List.nil.{0} Item))
+                      (@Prod.snd.{0, 0} Key (List.{0} Item)
+                        (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item))))))
+                  (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table query))
+                (@Option.some.{0} (List.{0} Item)
+                  (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                    (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                    (@Option.getD.{0} (List.{0} Item)
+                      (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table query) (@List.nil.{0} Item))
+                    (@Prod.snd.{0, 0} Key (List.{0} Item)
+                      (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item))))))
+                (@Option.some.{0} (List.{0} Item)
+                  (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                    (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                    (@Option.getD.{0} (List.{0} Item)
+                      (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item) (table rowKey))
+                      (@List.nil.{0} Item))
+                    (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                (@ite_eq_left_of_eq_true.{1} (Option.{0} (List.{0} Item))
+                  (@Eq.{1} Key query
+                    (@Prod.fst.{0, 0} Key (List.{0} Item)
+                      (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item)))))
+                  (inst query
+                    (@Prod.fst.{0, 0} Key (List.{0} Item)
+                      (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item)))))
+                  (@Option.some.{0} (List.{0} Item)
+                    (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                      (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                      (@Option.getD.{0} (List.{0} Item)
+                        (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table query)
+                        (@List.nil.{0} Item))
+                      (@Prod.snd.{0, 0} Key (List.{0} Item)
+                        (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item))))))
+                  (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table query)
+                  (@Eq.trans.{1} Prop (@Eq.{1} Key query rowKey) (@Eq.{1} Key rowKey rowKey) True
+                    (@congrFun'.{1, 1} Key Prop (@Eq.{1} Key query) (@Eq.{1} Key rowKey)
+                      (@congrArg.{1, 1} Key (Key → Prop) query rowKey (@Eq.{1} Key) same) rowKey)
+                    (@eq_self.{1} Key rowKey)))
+                (@congrArg.{1, 1} (List.{0} Item) (Option.{0} (List.{0} Item))
+                  (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                    (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                    (@Option.getD.{0} (List.{0} Item)
+                      (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table query) (@List.nil.{0} Item))
+                    (@Prod.snd.{0, 0} Key (List.{0} Item)
+                      (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item)))))
+                  (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                    (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                    (@Option.getD.{0} (List.{0} Item)
+                      (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item) (table rowKey))
+                      (@List.nil.{0} Item))
+                    (@List.cons.{0} Item row (@List.nil.{0} Item)))
+                  (@Option.some.{0} (List.{0} Item))
+                  (@congrFun'.{1, 1} (List.{0} Item) (List.{0} Item)
+                    (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                      (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                      (@Option.getD.{0} (List.{0} Item)
+                        (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table query)
+                        (@List.nil.{0} Item)))
+                    (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                      (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                      (@Option.getD.{0} (List.{0} Item)
+                        (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item) (table rowKey))
+                        (@List.nil.{0} Item)))
+                    (@congrArg.{1, 1} (List.{0} Item) (List.{0} Item → List.{0} Item)
+                      (@Option.getD.{0} (List.{0} Item)
+                        (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table query)
+                        (@List.nil.{0} Item))
+                      (@Option.getD.{0} (List.{0} Item)
+                        (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item) (table rowKey))
+                        (@List.nil.{0} Item))
+                      (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                        (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item)))
+                      (@congrFun'.{1, 1} (List.{0} Item) (List.{0} Item)
+                        (@Option.getD.{0} (List.{0} Item)
+                          (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table query))
+                        (@Option.getD.{0} (List.{0} Item)
+                          (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item) (table rowKey)))
+                        (@congrArg.{1, 1} (Option.{0} (List.{0} Item)) (List.{0} Item → List.{0} Item)
+                          (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table query)
+                          (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item) (table rowKey))
+                          (@Option.getD.{0} (List.{0} Item))
+                          (@congrArg.{1, 1} (Option.{0} (List.{0} Item)) (Option.{0} (List.{0} Item)) (table query)
+                            (table rowKey) (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item))
+                            (@congrArg.{1, 1} Key (Option.{0} (List.{0} Item)) query rowKey table same)))
+                        (@List.nil.{0} Item)))
+                    (@List.cons.{0} Item row (@List.nil.{0} Item)))))))
+          (@Option.casesOn.{0, 0} (List.{0} Item)
+            (fun t =>
+              @Eq.{1} (Option.{0} (List.{0} Item)) (table rowKey) t →
+                @Eq.{1} (Option.{0} (List.{0} Item))
+                  (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item)
+                    (@Option.some.{0} (List.{0} Item)
+                      (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                        (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                        (@List.cons.{0} Item row (@List.nil.{0} Item))
+                        (@Option.getD.{0} (List.{0} Item) (table rowKey) (@List.nil.{0} Item)))))
+                  (@Option.some.{0} (List.{0} Item)
+                    (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                      (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                      (@Option.getD.{0} (List.{0} Item)
+                        (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item) (table rowKey))
+                        (@List.nil.{0} Item))
+                      (@List.cons.{0} Item row (@List.nil.{0} Item)))))
+            (table rowKey)
+            (fun h =>
+              @Eq.ndrec.{0, 1} (Option.{0} (List.{0} Item)) (@Option.none.{0} (List.{0} Item))
+                (fun x =>
+                  @Eq.{1} (Option.{0} (List.{0} Item))
+                    (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item)
+                      (@Option.some.{0} (List.{0} Item)
+                        (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                          (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                          (@List.cons.{0} Item row (@List.nil.{0} Item))
+                          (@Option.getD.{0} (List.{0} Item) x (@List.nil.{0} Item)))))
+                    (@Option.some.{0} (List.{0} Item)
+                      (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                        (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                        (@Option.getD.{0} (List.{0} Item)
+                          (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item) x)
+                          (@List.nil.{0} Item))
+                        (@List.cons.{0} Item row (@List.nil.{0} Item)))))
+                (@of_eq_true
+                  (@Eq.{1} (Option.{0} (List.{0} Item))
+                    (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item)
+                      (@Option.some.{0} (List.{0} Item)
+                        (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                          (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                          (@List.cons.{0} Item row (@List.nil.{0} Item))
+                          (@Option.getD.{0} (List.{0} Item) (@Option.none.{0} (List.{0} Item)) (@List.nil.{0} Item)))))
+                    (@Option.some.{0} (List.{0} Item) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                  (@Eq.trans.{1} Prop
+                    (@Eq.{1} (Option.{0} (List.{0} Item))
+                      (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item)
+                        (@Option.some.{0} (List.{0} Item)
+                          (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                            (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                            (@List.cons.{0} Item row (@List.nil.{0} Item))
+                            (@Option.getD.{0} (List.{0} Item) (@Option.none.{0} (List.{0} Item))
+                              (@List.nil.{0} Item)))))
+                      (@Option.some.{0} (List.{0} Item) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                    (@Eq.{1} (Option.{0} (List.{0} Item))
+                      (@Option.some.{0} (List.{0} Item) (@List.cons.{0} Item row (@List.nil.{0} Item)))
+                      (@Option.some.{0} (List.{0} Item) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                    True
+                    (@congrFun'.{1, 1} (Option.{0} (List.{0} Item)) Prop
+                      (@Eq.{1} (Option.{0} (List.{0} Item))
+                        (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item)
+                          (@Option.some.{0} (List.{0} Item)
+                            (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                              (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                              (@List.cons.{0} Item row (@List.nil.{0} Item))
+                              (@Option.getD.{0} (List.{0} Item) (@Option.none.{0} (List.{0} Item))
+                                (@List.nil.{0} Item))))))
+                      (@Eq.{1} (Option.{0} (List.{0} Item))
+                        (@Option.some.{0} (List.{0} Item) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                      (@congrArg.{1, 1} (Option.{0} (List.{0} Item)) (Option.{0} (List.{0} Item) → Prop)
+                        (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item)
+                          (@Option.some.{0} (List.{0} Item)
+                            (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                              (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                              (@List.cons.{0} Item row (@List.nil.{0} Item))
+                              (@Option.getD.{0} (List.{0} Item) (@Option.none.{0} (List.{0} Item))
+                                (@List.nil.{0} Item)))))
+                        (@Option.some.{0} (List.{0} Item) (@List.cons.{0} Item row (@List.nil.{0} Item)))
+                        (@Eq.{1} (Option.{0} (List.{0} Item)))
+                        (@Eq.trans.{1} (Option.{0} (List.{0} Item))
+                          (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item)
+                            (@Option.some.{0} (List.{0} Item)
+                              (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                                (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                                (@List.cons.{0} Item row (@List.nil.{0} Item))
+                                (@Option.getD.{0} (List.{0} Item) (@Option.none.{0} (List.{0} Item))
+                                  (@List.nil.{0} Item)))))
+                          (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item)
+                            (@Option.some.{0} (List.{0} Item) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                          (@Option.some.{0} (List.{0} Item) (@List.cons.{0} Item row (@List.nil.{0} Item)))
+                          (@congrArg.{1, 1} (Option.{0} (List.{0} Item)) (Option.{0} (List.{0} Item))
+                            (@Option.some.{0} (List.{0} Item)
+                              (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                                (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                                (@List.cons.{0} Item row (@List.nil.{0} Item))
+                                (@Option.getD.{0} (List.{0} Item) (@Option.none.{0} (List.{0} Item))
+                                  (@List.nil.{0} Item))))
+                            (@Option.some.{0} (List.{0} Item) (@List.cons.{0} Item row (@List.nil.{0} Item)))
+                            (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item))
+                            (@congrArg.{1, 1} (List.{0} Item) (Option.{0} (List.{0} Item))
+                              (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                                (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                                (@List.cons.{0} Item row (@List.nil.{0} Item))
+                                (@Option.getD.{0} (List.{0} Item) (@Option.none.{0} (List.{0} Item))
+                                  (@List.nil.{0} Item)))
+                              (@List.cons.{0} Item row (@List.nil.{0} Item)) (@Option.some.{0} (List.{0} Item))
+                              (@List.append_nil.{0} Item (@List.cons.{0} Item row (@List.nil.{0} Item)))))
+                          (@congrArg.{1, 1} (List.{0} Item) (Option.{0} (List.{0} Item))
+                            (@List.reverse.{0} Item (@List.cons.{0} Item row (@List.nil.{0} Item)))
+                            (@List.cons.{0} Item row (@List.nil.{0} Item)) (@Option.some.{0} (List.{0} Item))
+                            (@List.reverse_cons.{0} Item row (@List.nil.{0} Item)))))
+                      (@Option.some.{0} (List.{0} Item) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                    (@eq_self.{1} (Option.{0} (List.{0} Item))
+                      (@Option.some.{0} (List.{0} Item) (@List.cons.{0} Item row (@List.nil.{0} Item))))))
+                (table rowKey)
+                (@Eq.symm.{1} (Option.{0} (List.{0} Item)) (table rowKey) (@Option.none.{0} (List.{0} Item)) h))
+            (fun val h =>
+              @Eq.ndrec.{0, 1} (Option.{0} (List.{0} Item)) (@Option.some.{0} (List.{0} Item) val)
+                (fun x =>
+                  @Eq.{1} (Option.{0} (List.{0} Item))
+                    (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item)
+                      (@Option.some.{0} (List.{0} Item)
+                        (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                          (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                          (@List.cons.{0} Item row (@List.nil.{0} Item))
+                          (@Option.getD.{0} (List.{0} Item) x (@List.nil.{0} Item)))))
+                    (@Option.some.{0} (List.{0} Item)
+                      (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                        (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                        (@Option.getD.{0} (List.{0} Item)
+                          (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item) x)
+                          (@List.nil.{0} Item))
+                        (@List.cons.{0} Item row (@List.nil.{0} Item)))))
+                (@of_eq_true
+                  (@Eq.{1} (Option.{0} (List.{0} Item))
+                    (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item)
+                      (@Option.some.{0} (List.{0} Item)
+                        (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                          (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                          (@List.cons.{0} Item row (@List.nil.{0} Item))
+                          (@Option.getD.{0} (List.{0} Item) (@Option.some.{0} (List.{0} Item) val)
+                            (@List.nil.{0} Item)))))
+                    (@Option.some.{0} (List.{0} Item)
+                      (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                        (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                        (@List.reverse.{0} Item val) (@List.cons.{0} Item row (@List.nil.{0} Item)))))
+                  (@Eq.trans.{1} Prop
+                    (@Eq.{1} (Option.{0} (List.{0} Item))
+                      (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item)
+                        (@Option.some.{0} (List.{0} Item)
+                          (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                            (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                            (@List.cons.{0} Item row (@List.nil.{0} Item))
+                            (@Option.getD.{0} (List.{0} Item) (@Option.some.{0} (List.{0} Item) val)
+                              (@List.nil.{0} Item)))))
+                      (@Option.some.{0} (List.{0} Item)
+                        (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                          (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                          (@List.reverse.{0} Item val) (@List.cons.{0} Item row (@List.nil.{0} Item)))))
+                    (@Eq.{1} (Option.{0} (List.{0} Item))
+                      (@Option.some.{0} (List.{0} Item)
+                        (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                          (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                          (@List.reverse.{0} Item val) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                      (@Option.some.{0} (List.{0} Item)
+                        (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                          (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                          (@List.reverse.{0} Item val) (@List.cons.{0} Item row (@List.nil.{0} Item)))))
+                    True
+                    (@congrFun'.{1, 1} (Option.{0} (List.{0} Item)) Prop
+                      (@Eq.{1} (Option.{0} (List.{0} Item))
+                        (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item)
+                          (@Option.some.{0} (List.{0} Item)
+                            (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                              (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                              (@List.cons.{0} Item row (@List.nil.{0} Item))
+                              (@Option.getD.{0} (List.{0} Item) (@Option.some.{0} (List.{0} Item) val)
+                                (@List.nil.{0} Item))))))
+                      (@Eq.{1} (Option.{0} (List.{0} Item))
+                        (@Option.some.{0} (List.{0} Item)
+                          (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                            (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                            (@List.reverse.{0} Item val) (@List.cons.{0} Item row (@List.nil.{0} Item)))))
+                      (@congrArg.{1, 1} (Option.{0} (List.{0} Item)) (Option.{0} (List.{0} Item) → Prop)
+                        (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item)
+                          (@Option.some.{0} (List.{0} Item)
+                            (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                              (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                              (@List.cons.{0} Item row (@List.nil.{0} Item))
+                              (@Option.getD.{0} (List.{0} Item) (@Option.some.{0} (List.{0} Item) val)
+                                (@List.nil.{0} Item)))))
+                        (@Option.some.{0} (List.{0} Item)
+                          (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                            (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                            (@List.reverse.{0} Item val) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                        (@Eq.{1} (Option.{0} (List.{0} Item)))
+                        (@congrArg.{1, 1} (List.{0} Item) (Option.{0} (List.{0} Item))
+                          (@List.reverse.{0} Item (@List.cons.{0} Item row val))
+                          (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                            (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                            (@List.reverse.{0} Item val) (@List.cons.{0} Item row (@List.nil.{0} Item)))
+                          (@Option.some.{0} (List.{0} Item)) (@List.reverse_cons.{0} Item row val)))
+                      (@Option.some.{0} (List.{0} Item)
+                        (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                          (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                          (@List.reverse.{0} Item val) (@List.cons.{0} Item row (@List.nil.{0} Item)))))
+                    (@eq_self.{1} (Option.{0} (List.{0} Item))
+                      (@Option.some.{0} (List.{0} Item)
+                        (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                          (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                          (@List.reverse.{0} Item val) (@List.cons.{0} Item row (@List.nil.{0} Item)))))))
+                (table rowKey)
+                (@Eq.symm.{1} (Option.{0} (List.{0} Item)) (table rowKey) (@Option.some.{0} (List.{0} Item) val) h))
+            (@Eq.refl.{1} (Option.{0} (List.{0} Item)) (table rowKey))))
+      fun same =>
+      @of_eq_true
+        (@Eq.{1} (Option.{0} (List.{0} Item))
+          (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+            (@MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+              (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item))))
+            query)
+          (@MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst
+            (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table)
+            (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item))) query))
+        (@Eq.trans.{1} Prop
+          (@Eq.{1} (Option.{0} (List.{0} Item))
+            (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+              (@MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+                (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item))))
+              query)
+            (@MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst
+              (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table)
+              (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item))) query))
+          (@Eq.{1} (Option.{0} (List.{0} Item))
+            (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item) (table query))
+            (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item) (table query)))
+          True
+          (@congr.{1, 1} (Option.{0} (List.{0} Item)) Prop
+            (@Eq.{1} (Option.{0} (List.{0} Item))
+              (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+                (@MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                query))
+            (@Eq.{1} (Option.{0} (List.{0} Item))
+              (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item) (table query)))
+            (@MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst
+              (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table)
+              (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item))) query)
+            (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item) (table query))
+            (@congrArg.{1, 1} (Option.{0} (List.{0} Item)) (Option.{0} (List.{0} Item) → Prop)
+              (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+                (@MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                query)
+              (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item) (table query))
+              (@Eq.{1} (Option.{0} (List.{0} Item)))
+              (@congrArg.{1, 1} (Option.{0} (List.{0} Item)) (Option.{0} (List.{0} Item))
+                (@MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item))) query)
+                (table query) (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item))
+                (@ite_eq_right_of_eq_false.{1} (Option.{0} (List.{0} Item))
+                  (@Eq.{1} Key query
+                    (@Prod.fst.{0, 0} Key (List.{0} Item)
+                      (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item)))))
+                  (inst query
+                    (@Prod.fst.{0, 0} Key (List.{0} Item)
+                      (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item)))))
+                  (@Option.some.{0} (List.{0} Item)
+                    (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                      (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                      (@Prod.snd.{0, 0} Key (List.{0} Item)
+                        (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                      (@Option.getD.{0} (List.{0} Item) (table query) (@List.nil.{0} Item))))
+                  (table query) (@eq_false (@Eq.{1} Key query rowKey) same))))
+            (@ite_eq_right_of_eq_false.{1} (Option.{0} (List.{0} Item))
+              (@Eq.{1} Key query
+                (@Prod.fst.{0, 0} Key (List.{0} Item)
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item)))))
+              (inst query
+                (@Prod.fst.{0, 0} Key (List.{0} Item)
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item)))))
+              (@Option.some.{0} (List.{0} Item)
+                (@HAppend.hAppend.{0, 0, 0} (List.{0} Item) (List.{0} Item) (List.{0} Item)
+                  (@instHAppendOfAppend.{0} (List.{0} Item) (@List.instAppend.{0} Item))
+                  (@Option.getD.{0} (List.{0} Item)
+                    (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table query) (@List.nil.{0} Item))
+                  (@Prod.snd.{0, 0} Key (List.{0} Item)
+                    (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item))))))
+              (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table query)
+              (@eq_false (@Eq.{1} Key query rowKey) same)))
+          (@eq_self.{1} (Option.{0} (List.{0} Item))
+            (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item) (table query))))
+'MicroCFTA.SourceCurrentPrependGrouping.reverse_insert_singleton' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentPrependGrouping.reverse_fold : ∀ {Key Item : Type} [inst : DecidableEq.{1} Key]
+  (key : Item → Key) (rows : List.{0} Item) (table : MicroCFTA.SourceCurrentMergeGrouping.Table Key Item),
+  @Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+    (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+      (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+        (fun table row =>
+          @MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+            (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+        table rows))
+    (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+      (fun table row =>
+        @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+          (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+      (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table) rows)
+theorem MicroCFTA.SourceCurrentPrependGrouping.reverse_fold : ∀ {Key Item : Type} [inst : DecidableEq.{1} Key]
+  (key : Item → Key) (rows : List.{0} Item) (table : MicroCFTA.SourceCurrentMergeGrouping.Table Key Item),
+  @Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+    (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+      (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+        (fun table row =>
+          @MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+            (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+        table rows))
+    (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+      (fun table row =>
+        @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+          (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+      (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table) rows) :=
+fun {Key Item} [inst : DecidableEq.{1} Key] key rows table =>
+  @List.rec.{0, 0} Item
+    (fun rows =>
+      ∀ (table : MicroCFTA.SourceCurrentMergeGrouping.Table Key Item),
+        @Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+          (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+            (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+              (fun table row =>
+                @MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+              table rows))
+          (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+            (fun table row =>
+              @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+                (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+            (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table) rows))
+    (fun table =>
+      @Eq.refl.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+        (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+          (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+            (fun table row =>
+              @MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+                (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+            table (@List.nil.{0} Item))))
+    (fun first rest ih table =>
+      @id.{0}
+        (@Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+          (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+            (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+              (fun table row =>
+                @MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+              table (@List.cons.{0} Item first rest)))
+          (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+            (fun table row =>
+              @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+                (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+            (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table) (@List.cons.{0} Item first rest)))
+        (@Eq.mpr.{0}
+          (@Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+            (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+              (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+                (fun table row =>
+                  @MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+                    (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                (@MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) (key first) (@List.cons.{0} Item first (@List.nil.{0} Item))))
+                rest))
+            (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+              (fun table row =>
+                @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+              (@MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst
+                (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table)
+                (@Prod.mk.{0, 0} Key (List.{0} Item) (key first) (@List.cons.{0} Item first (@List.nil.{0} Item))))
+              rest))
+          (@Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+            (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+              (fun table row =>
+                @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+              (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+                (@MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) (key first) (@List.cons.{0} Item first (@List.nil.{0} Item)))))
+              rest)
+            (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+              (fun table row =>
+                @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+              (@MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst
+                (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table)
+                (@Prod.mk.{0, 0} Key (List.{0} Item) (key first) (@List.cons.{0} Item first (@List.nil.{0} Item))))
+              rest))
+          (@id.{0}
+            (@Eq.{1} Prop
+              (@Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+                (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+                  (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+                    (fun table row =>
+                      @MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+                        (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                    (@MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+                      (@Prod.mk.{0, 0} Key (List.{0} Item) (key first)
+                        (@List.cons.{0} Item first (@List.nil.{0} Item))))
+                    rest))
+                (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+                  (fun table row =>
+                    @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+                      (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                  (@MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst
+                    (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table)
+                    (@Prod.mk.{0, 0} Key (List.{0} Item) (key first) (@List.cons.{0} Item first (@List.nil.{0} Item))))
+                  rest))
+              (@Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+                (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+                  (fun table row =>
+                    @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+                      (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                  (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+                    (@MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+                      (@Prod.mk.{0, 0} Key (List.{0} Item) (key first)
+                        (@List.cons.{0} Item first (@List.nil.{0} Item)))))
+                  rest)
+                (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+                  (fun table row =>
+                    @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+                      (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                  (@MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst
+                    (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table)
+                    (@Prod.mk.{0, 0} Key (List.{0} Item) (key first) (@List.cons.{0} Item first (@List.nil.{0} Item))))
+                  rest)))
+            (@congrArg.{1, 1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Prop
+              (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+                (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+                  (fun table row =>
+                    @MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+                      (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                  (@MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+                    (@Prod.mk.{0, 0} Key (List.{0} Item) (key first) (@List.cons.{0} Item first (@List.nil.{0} Item))))
+                  rest))
+              (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+                (fun table row =>
+                  @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+                    (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+                  (@MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+                    (@Prod.mk.{0, 0} Key (List.{0} Item) (key first) (@List.cons.{0} Item first (@List.nil.{0} Item)))))
+                rest)
+              (fun _a =>
+                @Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) _a
+                  (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+                    (fun table row =>
+                      @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+                        (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                    (@MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst
+                      (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table)
+                      (@Prod.mk.{0, 0} Key (List.{0} Item) (key first)
+                        (@List.cons.{0} Item first (@List.nil.{0} Item))))
+                    rest))
+              (ih
+                (@MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) (key first) (@List.cons.{0} Item first (@List.nil.{0} Item)))))))
+          (@Eq.mpr.{0}
+            (@Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+              (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+                (fun table row =>
+                  @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+                    (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+                  (@MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+                    (@Prod.mk.{0, 0} Key (List.{0} Item) (key first) (@List.cons.{0} Item first (@List.nil.{0} Item)))))
+                rest)
+              (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+                (fun table row =>
+                  @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+                    (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                (@MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst
+                  (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table)
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) (key first) (@List.cons.{0} Item first (@List.nil.{0} Item))))
+                rest))
+            (@Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+              (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+                (fun table row =>
+                  @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+                    (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                (@MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst
+                  (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table)
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) (key first) (@List.cons.{0} Item first (@List.nil.{0} Item))))
+                rest)
+              (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+                (fun table row =>
+                  @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+                    (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                (@MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst
+                  (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table)
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) (key first) (@List.cons.{0} Item first (@List.nil.{0} Item))))
+                rest))
+            (@id.{0}
+              (@Eq.{1} Prop
+                (@Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+                  (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+                    (fun table row =>
+                      @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+                        (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                    (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+                      (@MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+                        (@Prod.mk.{0, 0} Key (List.{0} Item) (key first)
+                          (@List.cons.{0} Item first (@List.nil.{0} Item)))))
+                    rest)
+                  (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+                    (fun table row =>
+                      @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+                        (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                    (@MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst
+                      (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table)
+                      (@Prod.mk.{0, 0} Key (List.{0} Item) (key first)
+                        (@List.cons.{0} Item first (@List.nil.{0} Item))))
+                    rest))
+                (@Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+                  (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+                    (fun table row =>
+                      @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+                        (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                    (@MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst
+                      (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table)
+                      (@Prod.mk.{0, 0} Key (List.{0} Item) (key first)
+                        (@List.cons.{0} Item first (@List.nil.{0} Item))))
+                    rest)
+                  (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+                    (fun table row =>
+                      @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+                        (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                    (@MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst
+                      (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table)
+                      (@Prod.mk.{0, 0} Key (List.{0} Item) (key first)
+                        (@List.cons.{0} Item first (@List.nil.{0} Item))))
+                    rest)))
+              (@congrArg.{1, 1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Prop
+                (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+                  (@MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+                    (@Prod.mk.{0, 0} Key (List.{0} Item) (key first) (@List.cons.{0} Item first (@List.nil.{0} Item)))))
+                (@MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst
+                  (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table)
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) (key first) (@List.cons.{0} Item first (@List.nil.{0} Item))))
+                (fun _a =>
+                  @Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+                    (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+                      (fun table row =>
+                        @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+                          (@Prod.mk.{0, 0} Key (List.{0} Item) (key row)
+                            (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                      _a rest)
+                    (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+                      (fun table row =>
+                        @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+                          (@Prod.mk.{0, 0} Key (List.{0} Item) (key row)
+                            (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                      (@MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst
+                        (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table)
+                        (@Prod.mk.{0, 0} Key (List.{0} Item) (key first)
+                          (@List.cons.{0} Item first (@List.nil.{0} Item))))
+                      rest))
+                (@MicroCFTA.SourceCurrentPrependGrouping.reverse_insert_singleton Key Item inst table (key first)
+                  first)))
+            (@Eq.refl.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+              (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+                (fun table row =>
+                  @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+                    (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                (@MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst
+                  (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table)
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) (key first) (@List.cons.{0} Item first (@List.nil.{0} Item))))
+                rest)))))
+    rows table
+'MicroCFTA.SourceCurrentPrependGrouping.reverse_fold' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentPrependGrouping.reverse_fromRows : ∀ {Key Item : Type} [inst : DecidableEq.{1} Key]
+  (key : Item → Key) (rows : List.{0} Item),
+  @Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+    (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+      (@MicroCFTA.SourceCurrentPrependGrouping.fromRows Key Item inst key rows))
+    (@MicroCFTA.SourceCurrentMergeGrouping.fromRows Key Item inst key rows)
+theorem MicroCFTA.SourceCurrentPrependGrouping.reverse_fromRows : ∀ {Key Item : Type} [inst : DecidableEq.{1} Key]
+  (key : Item → Key) (rows : List.{0} Item),
+  @Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+    (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+      (@MicroCFTA.SourceCurrentPrependGrouping.fromRows Key Item inst key rows))
+    (@MicroCFTA.SourceCurrentMergeGrouping.fromRows Key Item inst key rows) :=
+fun {Key Item} [inst : DecidableEq.{1} Key] key rows =>
+  @id.{0}
+    (@Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+      (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+        (@MicroCFTA.SourceCurrentPrependGrouping.fromRows Key Item inst key rows))
+      (@MicroCFTA.SourceCurrentMergeGrouping.fromRows Key Item inst key rows))
+    (@id.{0}
+      (@Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+        (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+          (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+            (fun table row =>
+              @MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+                (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+            (fun x => @Option.none.{0} (List.{0} Item)) rows))
+        (@MicroCFTA.SourceCurrentMergeGrouping.fromRows Key Item inst key rows))
+      (@Eq.mpr.{0}
+        (@Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+          (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+            (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+              (fun table row =>
+                @MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+              (fun x => @Option.none.{0} (List.{0} Item)) rows))
+          (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+            (fun table row =>
+              @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+                (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+            (fun x => @Option.none.{0} (List.{0} Item)) rows))
+        (@Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+          (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+            (fun table row =>
+              @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+                (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+            (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item fun x => @Option.none.{0} (List.{0} Item))
+            rows)
+          (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+            (fun table row =>
+              @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+                (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+            (fun x => @Option.none.{0} (List.{0} Item)) rows))
+        (@id.{0}
+          (@Eq.{1} Prop
+            (@Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+              (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+                (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+                  (fun table row =>
+                    @MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+                      (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                  (fun x => @Option.none.{0} (List.{0} Item)) rows))
+              (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+                (fun table row =>
+                  @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+                    (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                (fun x => @Option.none.{0} (List.{0} Item)) rows))
+            (@Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+              (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+                (fun table row =>
+                  @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+                    (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item fun x =>
+                  @Option.none.{0} (List.{0} Item))
+                rows)
+              (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+                (fun table row =>
+                  @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+                    (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                (fun x => @Option.none.{0} (List.{0} Item)) rows)))
+          (@congrArg.{1, 1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Prop
+            (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+              (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+                (fun table row =>
+                  @MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+                    (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                (fun x => @Option.none.{0} (List.{0} Item)) rows))
+            (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+              (fun table row =>
+                @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+              (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item fun x => @Option.none.{0} (List.{0} Item))
+              rows)
+            (fun _a =>
+              @Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) _a
+                (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+                  (fun table row =>
+                    @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+                      (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                  (fun x => @Option.none.{0} (List.{0} Item)) rows))
+            (@MicroCFTA.SourceCurrentPrependGrouping.reverse_fold Key Item inst key rows fun x =>
+              @Option.none.{0} (List.{0} Item))))
+        (@congrArg.{1, 1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+          (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+          (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item fun x => @Option.none.{0} (List.{0} Item))
+          (fun x => @Option.none.{0} (List.{0} Item))
+          (fun table =>
+            @List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+              (fun table row =>
+                @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+              table rows)
+          (@funext.{1, 1} Key (fun x => Option.{0} (List.{0} Item))
+            (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item fun x => @Option.none.{0} (List.{0} Item))
+            (fun x => @Option.none.{0} (List.{0} Item)) fun query =>
+            @Eq.refl.{1} (Option.{0} (List.{0} Item))
+              (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item (fun x => @Option.none.{0} (List.{0} Item))
+                query)))))
+'MicroCFTA.SourceCurrentPrependGrouping.reverse_fromRows' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentPrependGrouping.iteration_reverse : ∀ {Key Item : Type}
+  (table : MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) (entries : List.{0} (Prod.{0, 0} Key (List.{0} Item))),
+  @MicroCFTA.SourceCurrentMergeGrouping.Iteration Key Item table entries →
+    @MicroCFTA.SourceCurrentMergeGrouping.Iteration Key Item
+      (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table)
+      (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+        (fun entry =>
+          @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+            (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+        entries)
+theorem MicroCFTA.SourceCurrentPrependGrouping.iteration_reverse : ∀ {Key Item : Type}
+  (table : MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) (entries : List.{0} (Prod.{0, 0} Key (List.{0} Item))),
+  @MicroCFTA.SourceCurrentMergeGrouping.Iteration Key Item table entries →
+    @MicroCFTA.SourceCurrentMergeGrouping.Iteration Key Item
+      (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table)
+      (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+        (fun entry =>
+          @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+            (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+        entries) :=
+fun {Key Item} table entries iteration =>
+  @MicroCFTA.SourceCurrentMergeGrouping.Iteration.mk Key Item
+    (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table)
+    (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+      (fun entry =>
+        @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+          (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+      entries)
+    (@Eq.mpr.{0}
+      (@List.Nodup.{0} Key
+        (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) Key (@Prod.fst.{0, 0} Key (List.{0} Item))
+          (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+            (fun entry =>
+              @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+            entries)))
+      (@List.Nodup.{0} Key
+        (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) Key (fun x => @Prod.fst.{0, 0} Key (List.{0} Item) x)
+          entries))
+      (@id.{0}
+        (@Eq.{1} Prop
+          (@List.Nodup.{0} Key
+            (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) Key (@Prod.fst.{0, 0} Key (List.{0} Item))
+              (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+                (fun entry =>
+                  @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                    (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+                entries)))
+          (@List.Nodup.{0} Key
+            (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) Key (fun x => @Prod.fst.{0, 0} Key (List.{0} Item) x)
+              entries)))
+        (@congrArg.{1, 1} (List.{0} Key) Prop
+          (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) Key (@Prod.fst.{0, 0} Key (List.{0} Item))
+            (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+              (fun entry =>
+                @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                  (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+              entries))
+          (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) Key (fun x => @Prod.fst.{0, 0} Key (List.{0} Item) x)
+            entries)
+          (@List.Nodup.{0} Key)
+          (@List.map_map.{0, 0, 0} (Prod.{0, 0} Key (List.{0} Item)) Key (Prod.{0, 0} Key (List.{0} Item))
+            (@Prod.fst.{0, 0} Key (List.{0} Item))
+            (fun entry =>
+              @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+            entries)))
+      (@MicroCFTA.SourceCurrentMergeGrouping.Iteration.unique Key Item table entries iteration))
+    fun query bucket =>
+    @Iff.intro
+      (@Membership.mem.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} (Prod.{0, 0} Key (List.{0} Item)))
+        (@List.instMembership.{0} (Prod.{0, 0} Key (List.{0} Item)))
+        (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+          (fun entry =>
+            @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+              (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+          entries)
+        (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket))
+      (@Eq.{1} (Option.{0} (List.{0} Item)) (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table query)
+        (@Option.some.{0} (List.{0} Item) bucket))
+      (fun included =>
+        @Exists.casesOn.{1} (Prod.{0, 0} Key (List.{0} Item))
+          (fun a =>
+            And
+              (@Membership.mem.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} (Prod.{0, 0} Key (List.{0} Item)))
+                (@List.instMembership.{0} (Prod.{0, 0} Key (List.{0} Item))) entries a)
+              (@Eq.{1} (Prod.{0, 0} Key (List.{0} Item))
+                (@Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) a)
+                  (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) a)))
+                (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket)))
+          (fun x =>
+            @Eq.{1} (Option.{0} (List.{0} Item))
+              (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table query)
+              (@Option.some.{0} (List.{0} Item) bucket))
+          (@Iff.mp
+            (@Membership.mem.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} (Prod.{0, 0} Key (List.{0} Item)))
+              (@List.instMembership.{0} (Prod.{0, 0} Key (List.{0} Item)))
+              (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+                (fun entry =>
+                  @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                    (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+                entries)
+              (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket))
+            (@Exists.{1} (Prod.{0, 0} Key (List.{0} Item)) fun a =>
+              And
+                (@Membership.mem.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} (Prod.{0, 0} Key (List.{0} Item)))
+                  (@List.instMembership.{0} (Prod.{0, 0} Key (List.{0} Item))) entries a)
+                (@Eq.{1} (Prod.{0, 0} Key (List.{0} Item))
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) a)
+                    (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) a)))
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket)))
+            (@List.mem_map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+              (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket)
+              (fun entry =>
+                @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                  (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+              entries)
+            included)
+          fun entry h =>
+          @And.casesOn.{0}
+            (@Membership.mem.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} (Prod.{0, 0} Key (List.{0} Item)))
+              (@List.instMembership.{0} (Prod.{0, 0} Key (List.{0} Item))) entries entry)
+            (@Eq.{1} (Prod.{0, 0} Key (List.{0} Item))
+              (@Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+              (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket))
+            (fun x =>
+              @Eq.{1} (Option.{0} (List.{0} Item))
+                (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table query)
+                (@Option.some.{0} (List.{0} Item) bucket))
+            h fun original same =>
+            @Prod.casesOn.{0, 0, 0} Key (List.{0} Item)
+              (fun t =>
+                @Eq.{1} (Prod.{0, 0} Key (List.{0} Item)) entry t →
+                  @Eq.{1} (Option.{0} (List.{0} Item))
+                    (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table query)
+                    (@Option.some.{0} (List.{0} Item) bucket))
+              entry
+              (fun storedKey storedBucket h =>
+                @Eq.ndrec.{0, 1} (Prod.{0, 0} Key (List.{0} Item))
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket)
+                  (fun entry =>
+                    @Membership.mem.{0, 0} (Prod.{0, 0} Key (List.{0} Item))
+                        (List.{0} (Prod.{0, 0} Key (List.{0} Item)))
+                        (@List.instMembership.{0} (Prod.{0, 0} Key (List.{0} Item))) entries entry →
+                      @Eq.{1} (Prod.{0, 0} Key (List.{0} Item))
+                          (@Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                            (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+                          (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket) →
+                        @Eq.{1} (Option.{0} (List.{0} Item))
+                          (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table query)
+                          (@Option.some.{0} (List.{0} Item) bucket))
+                  (fun original same =>
+                    @Eq.casesOn.{0, 1} (Prod.{0, 0} Key (List.{0} Item))
+                      (@Prod.mk.{0, 0} Key (List.{0} Item)
+                        (@Prod.fst.{0, 0} Key (List.{0} Item)
+                          (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                        (@List.reverse.{0} Item
+                          (@Prod.snd.{0, 0} Key (List.{0} Item)
+                            (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))))
+                      (fun a t =>
+                        @Eq.{1} (Prod.{0, 0} Key (List.{0} Item)) (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket) a →
+                          @HEq.{0}
+                              (@Eq.{1} (Prod.{0, 0} Key (List.{0} Item))
+                                (@Prod.mk.{0, 0} Key (List.{0} Item)
+                                  (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                    (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                  (@List.reverse.{0} Item
+                                    (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                      (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))))
+                                (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket))
+                              same
+                              (@Eq.{1} (Prod.{0, 0} Key (List.{0} Item))
+                                (@Prod.mk.{0, 0} Key (List.{0} Item)
+                                  (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                    (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                  (@List.reverse.{0} Item
+                                    (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                      (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))))
+                                a)
+                              t →
+                            @Eq.{1} (Option.{0} (List.{0} Item))
+                              (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table query)
+                              (@Option.some.{0} (List.{0} Item) bucket))
+                      (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket) same
+                      (fun h =>
+                        @Prod.mk.noConfusion.{0, 0, 0} Key (List.{0} Item)
+                          (@HEq.{0}
+                              (@Eq.{1} (Prod.{0, 0} Key (List.{0} Item))
+                                (@Prod.mk.{0, 0} Key (List.{0} Item)
+                                  (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                    (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                  (@List.reverse.{0} Item
+                                    (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                      (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))))
+                                (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket))
+                              same
+                              (@Eq.{1} (Prod.{0, 0} Key (List.{0} Item))
+                                (@Prod.mk.{0, 0} Key (List.{0} Item)
+                                  (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                    (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                  (@List.reverse.{0} Item
+                                    (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                      (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))))
+                                (@Prod.mk.{0, 0} Key (List.{0} Item)
+                                  (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                    (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                  (@List.reverse.{0} Item
+                                    (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                      (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket)))))
+                              (@Eq.refl.{1} (Prod.{0, 0} Key (List.{0} Item))
+                                (@Prod.mk.{0, 0} Key (List.{0} Item)
+                                  (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                    (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                  (@List.reverse.{0} Item
+                                    (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                      (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))))) →
+                            @Eq.{1} (Option.{0} (List.{0} Item))
+                              (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table query)
+                              (@Option.some.{0} (List.{0} Item) bucket))
+                          query bucket
+                          (@Prod.fst.{0, 0} Key (List.{0} Item)
+                            (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                          (@List.reverse.{0} Item
+                            (@Prod.snd.{0, 0} Key (List.{0} Item)
+                              (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket)))
+                          h fun fst_eq =>
+                          @Eq.ndrec.{0, 1} Key
+                            (@Prod.fst.{0, 0} Key (List.{0} Item)
+                              (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                            (fun query =>
+                              @Membership.mem.{0, 0} (Prod.{0, 0} Key (List.{0} Item))
+                                  (List.{0} (Prod.{0, 0} Key (List.{0} Item)))
+                                  (@List.instMembership.{0} (Prod.{0, 0} Key (List.{0} Item)))
+                                  (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+                                    (fun entry =>
+                                      @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                                        (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+                                    entries)
+                                  (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket) →
+                                ∀
+                                  (same :
+                                    @Eq.{1} (Prod.{0, 0} Key (List.{0} Item))
+                                      (@Prod.mk.{0, 0} Key (List.{0} Item)
+                                        (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                          (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                        (@List.reverse.{0} Item
+                                          (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                            (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))))
+                                      (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket)),
+                                  @HEq.{1} (List.{0} Item) bucket (List.{0} Item)
+                                      (@List.reverse.{0} Item
+                                        (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                          (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))) →
+                                    @HEq.{0}
+                                        (@Eq.{1} (Prod.{0, 0} Key (List.{0} Item))
+                                          (@Prod.mk.{0, 0} Key (List.{0} Item)
+                                            (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                              (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                            (@List.reverse.{0} Item
+                                              (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                                (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))))
+                                          (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket))
+                                        same
+                                        (@Eq.{1} (Prod.{0, 0} Key (List.{0} Item))
+                                          (@Prod.mk.{0, 0} Key (List.{0} Item)
+                                            (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                              (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                            (@List.reverse.{0} Item
+                                              (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                                (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))))
+                                          (@Prod.mk.{0, 0} Key (List.{0} Item)
+                                            (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                              (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                            (@List.reverse.{0} Item
+                                              (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                                (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket)))))
+                                        (@Eq.refl.{1} (Prod.{0, 0} Key (List.{0} Item))
+                                          (@Prod.mk.{0, 0} Key (List.{0} Item)
+                                            (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                              (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                            (@List.reverse.{0} Item
+                                              (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                                (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))))) →
+                                      @Eq.{1} (Option.{0} (List.{0} Item))
+                                        (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table query)
+                                        (@Option.some.{0} (List.{0} Item) bucket))
+                            (fun included same snd_eq =>
+                              @Eq.ndrec.{0, 1} (List.{0} Item)
+                                (@List.reverse.{0} Item
+                                  (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                    (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket)))
+                                (fun bucket =>
+                                  @Membership.mem.{0, 0} (Prod.{0, 0} Key (List.{0} Item))
+                                      (List.{0} (Prod.{0, 0} Key (List.{0} Item)))
+                                      (@List.instMembership.{0} (Prod.{0, 0} Key (List.{0} Item)))
+                                      (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item))
+                                        (Prod.{0, 0} Key (List.{0} Item))
+                                        (fun entry =>
+                                          @Prod.mk.{0, 0} Key (List.{0} Item)
+                                            (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                                            (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+                                        entries)
+                                      (@Prod.mk.{0, 0} Key (List.{0} Item)
+                                        (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                          (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                        bucket) →
+                                    ∀
+                                      (same :
+                                        @Eq.{1} (Prod.{0, 0} Key (List.{0} Item))
+                                          (@Prod.mk.{0, 0} Key (List.{0} Item)
+                                            (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                              (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                            (@List.reverse.{0} Item
+                                              (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                                (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))))
+                                          (@Prod.mk.{0, 0} Key (List.{0} Item)
+                                            (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                              (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                            bucket)),
+                                      @HEq.{0}
+                                          (@Eq.{1} (Prod.{0, 0} Key (List.{0} Item))
+                                            (@Prod.mk.{0, 0} Key (List.{0} Item)
+                                              (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                                (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                              (@List.reverse.{0} Item
+                                                (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                                  (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))))
+                                            (@Prod.mk.{0, 0} Key (List.{0} Item)
+                                              (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                                (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                              bucket))
+                                          same
+                                          (@Eq.{1} (Prod.{0, 0} Key (List.{0} Item))
+                                            (@Prod.mk.{0, 0} Key (List.{0} Item)
+                                              (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                                (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                              (@List.reverse.{0} Item
+                                                (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                                  (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))))
+                                            (@Prod.mk.{0, 0} Key (List.{0} Item)
+                                              (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                                (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                              (@List.reverse.{0} Item
+                                                (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                                  (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket)))))
+                                          (@Eq.refl.{1} (Prod.{0, 0} Key (List.{0} Item))
+                                            (@Prod.mk.{0, 0} Key (List.{0} Item)
+                                              (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                                (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                              (@List.reverse.{0} Item
+                                                (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                                  (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))))) →
+                                        @Eq.{1} (Option.{0} (List.{0} Item))
+                                          (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table
+                                            (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                              (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket)))
+                                          (@Option.some.{0} (List.{0} Item) bucket))
+                                (fun included same h =>
+                                  @congrArg.{1, 1} (Option.{0} (List.{0} Item)) (Option.{0} (List.{0} Item))
+                                    (table storedKey) (@Option.some.{0} (List.{0} Item) storedBucket)
+                                    (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item))
+                                    (@Iff.mp
+                                      (@Membership.mem.{0, 0} (Prod.{0, 0} Key (List.{0} Item))
+                                        (List.{0} (Prod.{0, 0} Key (List.{0} Item)))
+                                        (@List.instMembership.{0} (Prod.{0, 0} Key (List.{0} Item))) entries
+                                        (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                      (@Eq.{1} (Option.{0} (List.{0} Item)) (table storedKey)
+                                        (@Option.some.{0} (List.{0} Item) storedBucket))
+                                      (@MicroCFTA.SourceCurrentMergeGrouping.Iteration.lookup Key Item table entries
+                                        iteration storedKey storedBucket)
+                                      original))
+                                bucket
+                                (@Eq.symm.{1} (List.{0} Item) bucket
+                                  (@List.reverse.{0} Item
+                                    (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                      (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket)))
+                                  (@eq_of_heq.{1} (List.{0} Item) bucket
+                                    (@List.reverse.{0} Item
+                                      (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                        (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket)))
+                                    snd_eq))
+                                included same)
+                            query
+                            (@Eq.symm.{1} Key query
+                              (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                              (@eq_of_heq.{1} Key query
+                                (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                  (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                fst_eq))
+                            included same)
+                      (@Eq.refl.{1} (Prod.{0, 0} Key (List.{0} Item))
+                        (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket))
+                      (@HEq.refl.{0}
+                        (@Eq.{1} (Prod.{0, 0} Key (List.{0} Item))
+                          (@Prod.mk.{0, 0} Key (List.{0} Item)
+                            (@Prod.fst.{0, 0} Key (List.{0} Item)
+                              (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                            (@List.reverse.{0} Item
+                              (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))))
+                          (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket))
+                        same))
+                  entry
+                  (@Eq.symm.{1} (Prod.{0, 0} Key (List.{0} Item)) entry
+                    (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket) h)
+                  original same)
+              (@Eq.refl.{1} (Prod.{0, 0} Key (List.{0} Item)) entry))
+      fun found =>
+      @Exists.casesOn.{1} (List.{0} Item)
+        (fun a =>
+          And (@Eq.{1} (Option.{0} (List.{0} Item)) (table query) (@Option.some.{0} (List.{0} Item) a))
+            (@Eq.{1} (List.{0} Item) (@List.reverse.{0} Item a) bucket))
+        (fun x =>
+          @Membership.mem.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} (Prod.{0, 0} Key (List.{0} Item)))
+            (@List.instMembership.{0} (Prod.{0, 0} Key (List.{0} Item)))
+            (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+              (fun entry =>
+                @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                  (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+              entries)
+            (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket))
+        (@Iff.mp
+          (@Eq.{1} (Option.{0} (List.{0} Item))
+            (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item) (table query))
+            (@Option.some.{0} (List.{0} Item) bucket))
+          (@Exists.{1} (List.{0} Item) fun a =>
+            And (@Eq.{1} (Option.{0} (List.{0} Item)) (table query) (@Option.some.{0} (List.{0} Item) a))
+              (@Eq.{1} (List.{0} Item) (@List.reverse.{0} Item a) bucket))
+          (@Option.map_eq_some_iff.{0, 0} (List.{0} Item) bucket (List.{0} Item) (table query) (@List.reverse.{0} Item))
+          found)
+        fun storedBucket h =>
+        @And.casesOn.{0}
+          (@Eq.{1} (Option.{0} (List.{0} Item)) (table query) (@Option.some.{0} (List.{0} Item) storedBucket))
+          (@Eq.{1} (List.{0} Item) (@List.reverse.{0} Item storedBucket) bucket)
+          (fun x =>
+            @Membership.mem.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} (Prod.{0, 0} Key (List.{0} Item)))
+              (@List.instMembership.{0} (Prod.{0, 0} Key (List.{0} Item)))
+              (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+                (fun entry =>
+                  @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                    (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+                entries)
+              (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket))
+          h fun stored same =>
+          @Iff.mpr
+            (@Membership.mem.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} (Prod.{0, 0} Key (List.{0} Item)))
+              (@List.instMembership.{0} (Prod.{0, 0} Key (List.{0} Item)))
+              (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+                (fun entry =>
+                  @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                    (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+                entries)
+              (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket))
+            (@Exists.{1} (Prod.{0, 0} Key (List.{0} Item)) fun a =>
+              And
+                (@Membership.mem.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} (Prod.{0, 0} Key (List.{0} Item)))
+                  (@List.instMembership.{0} (Prod.{0, 0} Key (List.{0} Item))) entries a)
+                (@Eq.{1} (Prod.{0, 0} Key (List.{0} Item))
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) a)
+                    (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) a)))
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket)))
+            (@List.mem_map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+              (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket)
+              (fun entry =>
+                @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                  (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+              entries)
+            (@Exists.intro.{1} (Prod.{0, 0} Key (List.{0} Item))
+              (fun a =>
+                And
+                  (@Membership.mem.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} (Prod.{0, 0} Key (List.{0} Item)))
+                    (@List.instMembership.{0} (Prod.{0, 0} Key (List.{0} Item))) entries a)
+                  (@Eq.{1} (Prod.{0, 0} Key (List.{0} Item))
+                    (@Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) a)
+                      (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) a)))
+                    (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket)))
+              (@Prod.mk.{0, 0} Key (List.{0} Item) query storedBucket)
+              (@And.intro
+                (@Membership.mem.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} (Prod.{0, 0} Key (List.{0} Item)))
+                  (@List.instMembership.{0} (Prod.{0, 0} Key (List.{0} Item))) entries
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) query storedBucket))
+                (@Eq.{1} (Prod.{0, 0} Key (List.{0} Item))
+                  (@Prod.mk.{0, 0} Key (List.{0} Item)
+                    (@Prod.fst.{0, 0} Key (List.{0} Item) (@Prod.mk.{0, 0} Key (List.{0} Item) query storedBucket))
+                    (@List.reverse.{0} Item
+                      (@Prod.snd.{0, 0} Key (List.{0} Item) (@Prod.mk.{0, 0} Key (List.{0} Item) query storedBucket))))
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket))
+                (@Iff.mpr
+                  (@Membership.mem.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} (Prod.{0, 0} Key (List.{0} Item)))
+                    (@List.instMembership.{0} (Prod.{0, 0} Key (List.{0} Item))) entries
+                    (@Prod.mk.{0, 0} Key (List.{0} Item) query storedBucket))
+                  (@Eq.{1} (Option.{0} (List.{0} Item)) (table query) (@Option.some.{0} (List.{0} Item) storedBucket))
+                  (@MicroCFTA.SourceCurrentMergeGrouping.Iteration.lookup Key Item table entries iteration query
+                    storedBucket)
+                  stored)
+                (@Prod.ext.{0, 0} Key (List.{0} Item)
+                  (@Prod.mk.{0, 0} Key (List.{0} Item)
+                    (@Prod.fst.{0, 0} Key (List.{0} Item) (@Prod.mk.{0, 0} Key (List.{0} Item) query storedBucket))
+                    (@List.reverse.{0} Item
+                      (@Prod.snd.{0, 0} Key (List.{0} Item) (@Prod.mk.{0, 0} Key (List.{0} Item) query storedBucket))))
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket)
+                  (@rfl.{1} Key
+                    (@Prod.fst.{0, 0} Key (List.{0} Item)
+                      (@Prod.mk.{0, 0} Key (List.{0} Item)
+                        (@Prod.fst.{0, 0} Key (List.{0} Item) (@Prod.mk.{0, 0} Key (List.{0} Item) query storedBucket))
+                        (@List.reverse.{0} Item
+                          (@Prod.snd.{0, 0} Key (List.{0} Item)
+                            (@Prod.mk.{0, 0} Key (List.{0} Item) query storedBucket))))))
+                  same)))
+'MicroCFTA.SourceCurrentPrependGrouping.iteration_reverse' depends on axioms: [propext, Quot.sound.{u}]
+@MicroCFTA.SourceCurrentPrependGrouping.iteration_permutation : ∀ {Key Item : Type} [inst : DecidableEq.{1} Key]
+  (key : Item → Key) (rows : List.{0} Item) (entries : List.{0} (Prod.{0, 0} Key (List.{0} Item))),
+  @MicroCFTA.SourceCurrentMergeGrouping.Iteration Key Item
+      (@MicroCFTA.SourceCurrentPrependGrouping.fromRows Key Item inst key rows) entries →
+    @List.Perm.{0} (List.{0} Item)
+      (@List.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item)
+        (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} Item) (@Prod.snd.{0, 0} Key (List.{0} Item))
+          entries))
+      (@MicroCFTA.Sized.groups.{1, 0} Key Item inst key rows)
+theorem MicroCFTA.SourceCurrentPrependGrouping.iteration_permutation : ∀ {Key Item : Type} [inst : DecidableEq.{1} Key]
+  (key : Item → Key) (rows : List.{0} Item) (entries : List.{0} (Prod.{0, 0} Key (List.{0} Item))),
+  @MicroCFTA.SourceCurrentMergeGrouping.Iteration Key Item
+      (@MicroCFTA.SourceCurrentPrependGrouping.fromRows Key Item inst key rows) entries →
+    @List.Perm.{0} (List.{0} Item)
+      (@List.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item)
+        (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} Item) (@Prod.snd.{0, 0} Key (List.{0} Item))
+          entries))
+      (@MicroCFTA.Sized.groups.{1, 0} Key Item inst key rows) :=
+fun {Key Item} [inst : DecidableEq.{1} Key] key rows entries iteration =>
+  @Eq.mpr.{0}
+    (@List.Perm.{0} (List.{0} Item)
+      (@List.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item)
+        (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} Item) (@Prod.snd.{0, 0} Key (List.{0} Item))
+          entries))
+      (@MicroCFTA.Sized.groups.{1, 0} Key Item inst key rows))
+    (@List.Perm.{0} (List.{0} Item)
+      (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} Item)
+        (fun x => @List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) x)) entries)
+      (@MicroCFTA.Sized.groups.{1, 0} Key Item inst key rows))
+    (@id.{0}
+      (@Eq.{1} Prop
+        (@List.Perm.{0} (List.{0} Item)
+          (@List.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item)
+            (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} Item) (@Prod.snd.{0, 0} Key (List.{0} Item))
+              entries))
+          (@MicroCFTA.Sized.groups.{1, 0} Key Item inst key rows))
+        (@List.Perm.{0} (List.{0} Item)
+          (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} Item)
+            (fun x => @List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) x)) entries)
+          (@MicroCFTA.Sized.groups.{1, 0} Key Item inst key rows)))
+      (@congrFun'.{1, 1} (List.{0} (List.{0} Item)) Prop
+        (@List.Perm.{0} (List.{0} Item)
+          (@List.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item)
+            (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} Item) (@Prod.snd.{0, 0} Key (List.{0} Item))
+              entries)))
+        (@List.Perm.{0} (List.{0} Item)
+          (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} Item)
+            (fun x => @List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) x)) entries))
+        (@congrArg.{1, 1} (List.{0} (List.{0} Item)) (List.{0} (List.{0} Item) → Prop)
+          (@List.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item)
+            (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} Item) (@Prod.snd.{0, 0} Key (List.{0} Item))
+              entries))
+          (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} Item)
+            (fun x => @List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) x)) entries)
+          (@List.Perm.{0} (List.{0} Item))
+          (@List.map_map.{0, 0, 0} (List.{0} Item) (List.{0} Item) (Prod.{0, 0} Key (List.{0} Item))
+            (@List.reverse.{0} Item) (@Prod.snd.{0, 0} Key (List.{0} Item)) entries))
+        (@MicroCFTA.Sized.groups.{1, 0} Key Item inst key rows)))
+    (@Eq.mp.{0}
+      (@List.Perm.{0} (List.{0} Item)
+        (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} Item) (@Prod.snd.{0, 0} Key (List.{0} Item))
+          (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+            (fun entry =>
+              @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+            entries))
+        (@MicroCFTA.Sized.groups.{1, 0} Key Item inst key rows))
+      (@List.Perm.{0} (List.{0} Item)
+        (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} Item)
+          (fun x => @List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) x)) entries)
+        (@MicroCFTA.Sized.groups.{1, 0} Key Item inst key rows))
+      (@congrFun'.{1, 1} (List.{0} (List.{0} Item)) Prop
+        (@List.Perm.{0} (List.{0} Item)
+          (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} Item) (@Prod.snd.{0, 0} Key (List.{0} Item))
+            (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+              (fun entry =>
+                @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                  (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+              entries)))
+        (@List.Perm.{0} (List.{0} Item)
+          (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} Item)
+            (fun x => @List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) x)) entries))
+        (@congrArg.{1, 1} (List.{0} (List.{0} Item)) (List.{0} (List.{0} Item) → Prop)
+          (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} Item) (@Prod.snd.{0, 0} Key (List.{0} Item))
+            (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+              (fun entry =>
+                @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                  (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+              entries))
+          (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} Item)
+            (fun x => @List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) x)) entries)
+          (@List.Perm.{0} (List.{0} Item))
+          (@List.map_map.{0, 0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} Item) (Prod.{0, 0} Key (List.{0} Item))
+            (@Prod.snd.{0, 0} Key (List.{0} Item))
+            (fun entry =>
+              @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+            entries))
+        (@MicroCFTA.Sized.groups.{1, 0} Key Item inst key rows))
+      (@MicroCFTA.SourceCurrentMergeGrouping.Iteration.permutation Key Item inst key rows
+        (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+          (fun entry =>
+            @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+              (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+          entries)
+        (@Eq.mp.{0}
+          (@MicroCFTA.SourceCurrentMergeGrouping.Iteration Key Item
+            (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+              (@MicroCFTA.SourceCurrentPrependGrouping.fromRows Key Item inst key rows))
+            (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+              (fun entry =>
+                @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                  (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+              entries))
+          (@MicroCFTA.SourceCurrentMergeGrouping.Iteration Key Item
+            (@MicroCFTA.SourceCurrentMergeGrouping.fromRows Key Item inst key rows)
+            (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+              (fun entry =>
+                @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                  (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+              entries))
+          (@congrFun'.{1, 1} (List.{0} (Prod.{0, 0} Key (List.{0} Item))) Prop
+            (@MicroCFTA.SourceCurrentMergeGrouping.Iteration Key Item
+              (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+                (@MicroCFTA.SourceCurrentPrependGrouping.fromRows Key Item inst key rows)))
+            (@MicroCFTA.SourceCurrentMergeGrouping.Iteration Key Item
+              (@MicroCFTA.SourceCurrentMergeGrouping.fromRows Key Item inst key rows))
+            (@congrArg.{1, 1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+              (List.{0} (Prod.{0, 0} Key (List.{0} Item)) → Prop)
+              (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+                (@MicroCFTA.SourceCurrentPrependGrouping.fromRows Key Item inst key rows))
+              (@MicroCFTA.SourceCurrentMergeGrouping.fromRows Key Item inst key rows)
+              (@MicroCFTA.SourceCurrentMergeGrouping.Iteration Key Item)
+              (@MicroCFTA.SourceCurrentPrependGrouping.reverse_fromRows Key Item inst key rows))
+            (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+              (fun entry =>
+                @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                  (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+              entries))
+          (@MicroCFTA.SourceCurrentPrependGrouping.iteration_reverse Key Item
+            (@MicroCFTA.SourceCurrentPrependGrouping.fromRows Key Item inst key rows) entries iteration))))
+'MicroCFTA.SourceCurrentPrependGrouping.iteration_permutation' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]

@@ -1,0 +1,18 @@
+import MicroCFTA.MergedPhysicalGroupRoot
+import MicroCFTA.Sized
+
+/-!
+# Derived complete symbol and arity groups
+
+The existing executable partition preserves each full key class in input
+order. A source-style append fold has exactly those buckets. Any outer
+permutation retains the structural grouping contract.
+-/
+namespace MicroCFTA.MergedSourceGrouping
+open InternedConstructorTemplates MergedPhysicalGroupRoot
+variable {Key Item : Type}
+
+/-- Each executable partition class is the complete input filter at its first key. -/
+theorem groups_exact [DecidableEq Key] (key : Item → Key) (items : List Item) :
+    ∀ group ∈ Sized.groups key items, ∃ first rest, group = first :: rest ∧
+      group = items.filter (fun item => decide (key item = key first)) := by

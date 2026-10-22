@@ -1,0 +1,123 @@
+fun {Key Item} [inst : DecidableEq.{1} Key] key rows entries iteration =>
+  @Eq.mpr.{0}
+    (@List.Perm.{0} (List.{0} Item)
+      (@List.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item)
+        (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} Item) (@Prod.snd.{0, 0} Key (List.{0} Item))
+          entries))
+      (@MicroCFTA.Sized.groups.{1, 0} Key Item inst key rows))
+    (@List.Perm.{0} (List.{0} Item)
+      (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} Item)
+        (fun x => @List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) x)) entries)
+      (@MicroCFTA.Sized.groups.{1, 0} Key Item inst key rows))
+    (@id.{0}
+      (@Eq.{1} Prop
+        (@List.Perm.{0} (List.{0} Item)
+          (@List.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item)
+            (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} Item) (@Prod.snd.{0, 0} Key (List.{0} Item))
+              entries))
+          (@MicroCFTA.Sized.groups.{1, 0} Key Item inst key rows))
+        (@List.Perm.{0} (List.{0} Item)
+          (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} Item)
+            (fun x => @List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) x)) entries)
+          (@MicroCFTA.Sized.groups.{1, 0} Key Item inst key rows)))
+      (@congrFun'.{1, 1} (List.{0} (List.{0} Item)) Prop
+        (@List.Perm.{0} (List.{0} Item)
+          (@List.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item)
+            (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} Item) (@Prod.snd.{0, 0} Key (List.{0} Item))
+              entries)))
+        (@List.Perm.{0} (List.{0} Item)
+          (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} Item)
+            (fun x => @List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) x)) entries))
+        (@congrArg.{1, 1} (List.{0} (List.{0} Item)) (List.{0} (List.{0} Item) → Prop)
+          (@List.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item)
+            (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} Item) (@Prod.snd.{0, 0} Key (List.{0} Item))
+              entries))
+          (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} Item)
+            (fun x => @List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) x)) entries)
+          (@List.Perm.{0} (List.{0} Item))
+          (@List.map_map.{0, 0, 0} (List.{0} Item) (List.{0} Item) (Prod.{0, 0} Key (List.{0} Item))
+            (@List.reverse.{0} Item) (@Prod.snd.{0, 0} Key (List.{0} Item)) entries))
+        (@MicroCFTA.Sized.groups.{1, 0} Key Item inst key rows)))
+    (@Eq.mp.{0}
+      (@List.Perm.{0} (List.{0} Item)
+        (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} Item) (@Prod.snd.{0, 0} Key (List.{0} Item))
+          (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+            (fun entry =>
+              @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+            entries))
+        (@MicroCFTA.Sized.groups.{1, 0} Key Item inst key rows))
+      (@List.Perm.{0} (List.{0} Item)
+        (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} Item)
+          (fun x => @List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) x)) entries)
+        (@MicroCFTA.Sized.groups.{1, 0} Key Item inst key rows))
+      (@congrFun'.{1, 1} (List.{0} (List.{0} Item)) Prop
+        (@List.Perm.{0} (List.{0} Item)
+          (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} Item) (@Prod.snd.{0, 0} Key (List.{0} Item))
+            (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+              (fun entry =>
+                @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                  (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+              entries)))
+        (@List.Perm.{0} (List.{0} Item)
+          (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} Item)
+            (fun x => @List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) x)) entries))
+        (@congrArg.{1, 1} (List.{0} (List.{0} Item)) (List.{0} (List.{0} Item) → Prop)
+          (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} Item) (@Prod.snd.{0, 0} Key (List.{0} Item))
+            (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+              (fun entry =>
+                @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                  (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+              entries))
+          (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} Item)
+            (fun x => @List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) x)) entries)
+          (@List.Perm.{0} (List.{0} Item))
+          (@List.map_map.{0, 0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} Item) (Prod.{0, 0} Key (List.{0} Item))
+            (@Prod.snd.{0, 0} Key (List.{0} Item))
+            (fun entry =>
+              @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+            entries))
+        (@MicroCFTA.Sized.groups.{1, 0} Key Item inst key rows))
+      (@MicroCFTA.SourceCurrentMergeGrouping.Iteration.permutation Key Item inst key rows
+        (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+          (fun entry =>
+            @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+              (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+          entries)
+        (@Eq.mp.{0}
+          (@MicroCFTA.SourceCurrentMergeGrouping.Iteration Key Item
+            (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+              (@MicroCFTA.SourceCurrentPrependGrouping.fromRows Key Item inst key rows))
+            (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+              (fun entry =>
+                @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                  (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+              entries))
+          (@MicroCFTA.SourceCurrentMergeGrouping.Iteration Key Item
+            (@MicroCFTA.SourceCurrentMergeGrouping.fromRows Key Item inst key rows)
+            (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+              (fun entry =>
+                @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                  (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+              entries))
+          (@congrFun'.{1, 1} (List.{0} (Prod.{0, 0} Key (List.{0} Item))) Prop
+            (@MicroCFTA.SourceCurrentMergeGrouping.Iteration Key Item
+              (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+                (@MicroCFTA.SourceCurrentPrependGrouping.fromRows Key Item inst key rows)))
+            (@MicroCFTA.SourceCurrentMergeGrouping.Iteration Key Item
+              (@MicroCFTA.SourceCurrentMergeGrouping.fromRows Key Item inst key rows))
+            (@congrArg.{1, 1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+              (List.{0} (Prod.{0, 0} Key (List.{0} Item)) → Prop)
+              (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+                (@MicroCFTA.SourceCurrentPrependGrouping.fromRows Key Item inst key rows))
+              (@MicroCFTA.SourceCurrentMergeGrouping.fromRows Key Item inst key rows)
+              (@MicroCFTA.SourceCurrentMergeGrouping.Iteration Key Item)
+              (@MicroCFTA.SourceCurrentPrependGrouping.reverse_fromRows Key Item inst key rows))
+            (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+              (fun entry =>
+                @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                  (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+              entries))
+          (@MicroCFTA.SourceCurrentPrependGrouping.iteration_reverse Key Item
+            (@MicroCFTA.SourceCurrentPrependGrouping.fromRows Key Item inst key rows) entries iteration))))

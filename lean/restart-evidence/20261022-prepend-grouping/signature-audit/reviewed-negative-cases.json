@@ -1,0 +1,37 @@
+{
+  "status": "SOURCE_REASONING_ONLY_NOT_EXECUTED_TESTS_OR_NEW_PROOFS",
+  "cases": [
+    {
+      "case": "absent and present empty",
+      "reason": "Option.map List.reverse maps None to None and Some [] to Some []; lookup equality is preserved without collapsing them through getD."
+    },
+    {
+      "case": "duplicate rows",
+      "reason": "Singleton folds and exact list buckets retain both repeated occurrences; no deduplication or set equality substitutes for exact buckets."
+    },
+    {
+      "case": "arbitrary initial table",
+      "reason": "For rows=[], reverse_fold has reverseTable(initial) on both sides. Starting the right fold at initial or at empty would lose or misorder prior buckets."
+    },
+    {
+      "case": "nonsingleton new entry",
+      "reason": "With an absent bucket and new list [0,1], reversal yields [1,0] while unchanged append insertion yields [0,1]. The one-step public theorem is correctly restricted to singleton entries."
+    },
+    {
+      "case": "unmatched old bucket",
+      "reason": "Query keys other than the inserted key keep their old option, then reverseTable reverses that retained bucket. The append side starts from the reversed table."
+    },
+    {
+      "case": "arbitrary outer iterator order",
+      "reason": "iteration_reverse keeps emitted keys and positions; iteration_permutation proves only permutation of complete canonical buckets, not a fixed HashMap order or equal constructor heaps."
+    },
+    {
+      "case": "same symbol different child counts",
+      "reason": "The later consumer must use symbol alone. MergedSourceGrouping.groupKey adds arity and its specialized grouping theorem is deliberately not used."
+    },
+    {
+      "case": "hash collisions",
+      "reason": "The generic table and DecidableEq Key use key equality. No hash-only equivalence or checked HashMap refinement is claimed."
+    }
+  ]
+}

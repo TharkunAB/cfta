@@ -1,0 +1,76 @@
+/-- Insertion gives the same ordered bucket equation as the existing append fold. -/
+theorem fold_default [DecidableEq Key] (key : Item → Key) (rows : List Item)
+    (table : Table Key Item) (query : Key) :
+    ((rows.foldl (fun table row => insertWith table (key row, [row])) table) query).getD [] =
+      (table query).getD [] ++ rows.filter (fun row => decide (key row = query)) := by
+  induction rows generalizing table with
+  | nil => simp
+  | cons first rest ih =>
+      rw [List.foldl_cons, ih]
+      by_cases same : key first = query
+      · simp [insertWith, same, List.append_assoc]
+      · simp [insertWith, same, Ne.symm same]
+
+/-- A key stays absent exactly when neither the initial table nor a source row supplies it. -/
+theorem fold_none [DecidableEq Key] (key : Item → Key) (rows : List Item)
+    (table : Table Key Item) (query : Key) :
+    (rows.foldl (fun table row => insertWith table (key row, [row])) table) query = none ↔
+      table query = none ∧ query ∉ rows.map key := by
+  induction rows generalizing table with
+  | nil => simp
+  | cons first rest ih =>
+      rw [List.foldl_cons, ih]
+      by_cases same : key first = query
+      · simp [insertWith, same]
+      · simp [insertWith, Ne.symm same]
+
+/-- Reading a completed bucket retains every matching input occurrence in its original order. -/
+theorem lookup_default [DecidableEq Key] (key : Item → Key) (rows : List Item) (query : Key) :
+    (fromRows key rows query).getD [] = rows.filter (fun row => decide (key row = query)) := by
+  simpa only [fromRows, Option.getD_none, List.nil_append] using fold_default key rows (fun _ => none) query
+
+/-- The source map domain is exactly the keys that occur in its input rows. -/
+theorem lookup_none [DecidableEq Key] (key : Item → Key) (rows : List Item) (query : Key) :
+    fromRows key rows query = none ↔ query ∉ rows.map key := by
+  simpa only [fromRows, true_and] using fold_none key rows (fun _ => none) query
+
+/-- A stored lookup has the exact nonempty source bucket, including repeated rows. -/
+theorem lookup_some [DecidableEq Key] (key : Item → Key) (rows : List Item) (query : Key) (bucket : List Item) :
+    fromRows key rows query = some bucket ↔
+      query ∈ rows.map key ∧ bucket = rows.filter (fun row => decide (key row = query)) := by
+  constructor
+  · intro found
+    have member : query ∈ rows.map key := by
+      by_cases present : query ∈ rows.map key
+      · exact present
+      · rw [(lookup_none key rows query).mpr present] at found
+        cases found
+    have contents := lookup_default key rows query
+    rw [found] at contents
+    exact ⟨member, contents⟩
+  · rintro ⟨member, rfl⟩
+    cases found : fromRows key rows query with
+    | none => exact False.elim ((lookup_none key rows query).mp found member)
+    | some bucket =>
+        have contents := lookup_default key rows query
+        rw [found] at contents
+        exact congrArg some contents
+
+/-- Every stored bucket contains a row and thus has a well-defined physical group key. -/
+theorem lookup_nonempty [DecidableEq Key] (key : Item → Key) (rows : List Item) (query : Key)
+    (bucket : List Item) (found : fromRows key rows query = some bucket) : bucket ≠ [] := by
+  obtain ⟨present, contents⟩ := (lookup_some key rows query bucket).mp found
+  obtain ⟨first, member, same⟩ := List.mem_map.mp present
+  have included : first ∈ bucket := by simp [contents, member, same]
+  intro empty
+  rw [empty] at included
+  cases included
+
+/-- Each stored row has its bucket's exact key. -/
+theorem lookup_key [DecidableEq Key] (key : Item → Key) (rows : List Item) (query : Key)
+    (bucket : List Item) (found : fromRows key rows query = some bucket) :
+    ∀ row ∈ bucket, key row = query := by
+  obtain ⟨_, contents⟩ := (lookup_some key rows query bucket).mp found
+  intro row member
+  rw [contents] at member
+  exact of_decide_eq_true (List.mem_filter.mp member).2

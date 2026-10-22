@@ -1,0 +1,491 @@
+fun {Key Item} table entries iteration =>
+  @MicroCFTA.SourceCurrentMergeGrouping.Iteration.mk Key Item
+    (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table)
+    (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+      (fun entry =>
+        @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+          (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+      entries)
+    (@Eq.mpr.{0}
+      (@List.Nodup.{0} Key
+        (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) Key (@Prod.fst.{0, 0} Key (List.{0} Item))
+          (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+            (fun entry =>
+              @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+            entries)))
+      (@List.Nodup.{0} Key
+        (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) Key (fun x => @Prod.fst.{0, 0} Key (List.{0} Item) x)
+          entries))
+      (@id.{0}
+        (@Eq.{1} Prop
+          (@List.Nodup.{0} Key
+            (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) Key (@Prod.fst.{0, 0} Key (List.{0} Item))
+              (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+                (fun entry =>
+                  @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                    (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+                entries)))
+          (@List.Nodup.{0} Key
+            (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) Key (fun x => @Prod.fst.{0, 0} Key (List.{0} Item) x)
+              entries)))
+        (@congrArg.{1, 1} (List.{0} Key) Prop
+          (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) Key (@Prod.fst.{0, 0} Key (List.{0} Item))
+            (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+              (fun entry =>
+                @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                  (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+              entries))
+          (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) Key (fun x => @Prod.fst.{0, 0} Key (List.{0} Item) x)
+            entries)
+          (@List.Nodup.{0} Key)
+          (@List.map_map.{0, 0, 0} (Prod.{0, 0} Key (List.{0} Item)) Key (Prod.{0, 0} Key (List.{0} Item))
+            (@Prod.fst.{0, 0} Key (List.{0} Item))
+            (fun entry =>
+              @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+            entries)))
+      (@MicroCFTA.SourceCurrentMergeGrouping.Iteration.unique Key Item table entries iteration))
+    fun query bucket =>
+    @Iff.intro
+      (@Membership.mem.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} (Prod.{0, 0} Key (List.{0} Item)))
+        (@List.instMembership.{0} (Prod.{0, 0} Key (List.{0} Item)))
+        (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+          (fun entry =>
+            @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+              (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+          entries)
+        (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket))
+      (@Eq.{1} (Option.{0} (List.{0} Item)) (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table query)
+        (@Option.some.{0} (List.{0} Item) bucket))
+      (fun included =>
+        @Exists.casesOn.{1} (Prod.{0, 0} Key (List.{0} Item))
+          (fun a =>
+            And
+              (@Membership.mem.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} (Prod.{0, 0} Key (List.{0} Item)))
+                (@List.instMembership.{0} (Prod.{0, 0} Key (List.{0} Item))) entries a)
+              (@Eq.{1} (Prod.{0, 0} Key (List.{0} Item))
+                (@Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) a)
+                  (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) a)))
+                (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket)))
+          (fun x =>
+            @Eq.{1} (Option.{0} (List.{0} Item))
+              (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table query)
+              (@Option.some.{0} (List.{0} Item) bucket))
+          (@Iff.mp
+            (@Membership.mem.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} (Prod.{0, 0} Key (List.{0} Item)))
+              (@List.instMembership.{0} (Prod.{0, 0} Key (List.{0} Item)))
+              (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+                (fun entry =>
+                  @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                    (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+                entries)
+              (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket))
+            (@Exists.{1} (Prod.{0, 0} Key (List.{0} Item)) fun a =>
+              And
+                (@Membership.mem.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} (Prod.{0, 0} Key (List.{0} Item)))
+                  (@List.instMembership.{0} (Prod.{0, 0} Key (List.{0} Item))) entries a)
+                (@Eq.{1} (Prod.{0, 0} Key (List.{0} Item))
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) a)
+                    (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) a)))
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket)))
+            (@List.mem_map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+              (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket)
+              (fun entry =>
+                @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                  (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+              entries)
+            included)
+          fun entry h =>
+          @And.casesOn.{0}
+            (@Membership.mem.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} (Prod.{0, 0} Key (List.{0} Item)))
+              (@List.instMembership.{0} (Prod.{0, 0} Key (List.{0} Item))) entries entry)
+            (@Eq.{1} (Prod.{0, 0} Key (List.{0} Item))
+              (@Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+              (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket))
+            (fun x =>
+              @Eq.{1} (Option.{0} (List.{0} Item))
+                (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table query)
+                (@Option.some.{0} (List.{0} Item) bucket))
+            h fun original same =>
+            @Prod.casesOn.{0, 0, 0} Key (List.{0} Item)
+              (fun t =>
+                @Eq.{1} (Prod.{0, 0} Key (List.{0} Item)) entry t →
+                  @Eq.{1} (Option.{0} (List.{0} Item))
+                    (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table query)
+                    (@Option.some.{0} (List.{0} Item) bucket))
+              entry
+              (fun storedKey storedBucket h =>
+                @Eq.ndrec.{0, 1} (Prod.{0, 0} Key (List.{0} Item))
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket)
+                  (fun entry =>
+                    @Membership.mem.{0, 0} (Prod.{0, 0} Key (List.{0} Item))
+                        (List.{0} (Prod.{0, 0} Key (List.{0} Item)))
+                        (@List.instMembership.{0} (Prod.{0, 0} Key (List.{0} Item))) entries entry →
+                      @Eq.{1} (Prod.{0, 0} Key (List.{0} Item))
+                          (@Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                            (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+                          (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket) →
+                        @Eq.{1} (Option.{0} (List.{0} Item))
+                          (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table query)
+                          (@Option.some.{0} (List.{0} Item) bucket))
+                  (fun original same =>
+                    @Eq.casesOn.{0, 1} (Prod.{0, 0} Key (List.{0} Item))
+                      (@Prod.mk.{0, 0} Key (List.{0} Item)
+                        (@Prod.fst.{0, 0} Key (List.{0} Item)
+                          (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                        (@List.reverse.{0} Item
+                          (@Prod.snd.{0, 0} Key (List.{0} Item)
+                            (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))))
+                      (fun a t =>
+                        @Eq.{1} (Prod.{0, 0} Key (List.{0} Item)) (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket) a →
+                          @HEq.{0}
+                              (@Eq.{1} (Prod.{0, 0} Key (List.{0} Item))
+                                (@Prod.mk.{0, 0} Key (List.{0} Item)
+                                  (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                    (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                  (@List.reverse.{0} Item
+                                    (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                      (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))))
+                                (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket))
+                              same
+                              (@Eq.{1} (Prod.{0, 0} Key (List.{0} Item))
+                                (@Prod.mk.{0, 0} Key (List.{0} Item)
+                                  (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                    (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                  (@List.reverse.{0} Item
+                                    (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                      (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))))
+                                a)
+                              t →
+                            @Eq.{1} (Option.{0} (List.{0} Item))
+                              (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table query)
+                              (@Option.some.{0} (List.{0} Item) bucket))
+                      (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket) same
+                      (fun h =>
+                        @Prod.mk.noConfusion.{0, 0, 0} Key (List.{0} Item)
+                          (@HEq.{0}
+                              (@Eq.{1} (Prod.{0, 0} Key (List.{0} Item))
+                                (@Prod.mk.{0, 0} Key (List.{0} Item)
+                                  (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                    (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                  (@List.reverse.{0} Item
+                                    (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                      (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))))
+                                (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket))
+                              same
+                              (@Eq.{1} (Prod.{0, 0} Key (List.{0} Item))
+                                (@Prod.mk.{0, 0} Key (List.{0} Item)
+                                  (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                    (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                  (@List.reverse.{0} Item
+                                    (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                      (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))))
+                                (@Prod.mk.{0, 0} Key (List.{0} Item)
+                                  (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                    (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                  (@List.reverse.{0} Item
+                                    (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                      (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket)))))
+                              (@Eq.refl.{1} (Prod.{0, 0} Key (List.{0} Item))
+                                (@Prod.mk.{0, 0} Key (List.{0} Item)
+                                  (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                    (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                  (@List.reverse.{0} Item
+                                    (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                      (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))))) →
+                            @Eq.{1} (Option.{0} (List.{0} Item))
+                              (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table query)
+                              (@Option.some.{0} (List.{0} Item) bucket))
+                          query bucket
+                          (@Prod.fst.{0, 0} Key (List.{0} Item)
+                            (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                          (@List.reverse.{0} Item
+                            (@Prod.snd.{0, 0} Key (List.{0} Item)
+                              (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket)))
+                          h fun fst_eq =>
+                          @Eq.ndrec.{0, 1} Key
+                            (@Prod.fst.{0, 0} Key (List.{0} Item)
+                              (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                            (fun query =>
+                              @Membership.mem.{0, 0} (Prod.{0, 0} Key (List.{0} Item))
+                                  (List.{0} (Prod.{0, 0} Key (List.{0} Item)))
+                                  (@List.instMembership.{0} (Prod.{0, 0} Key (List.{0} Item)))
+                                  (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+                                    (fun entry =>
+                                      @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                                        (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+                                    entries)
+                                  (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket) →
+                                ∀
+                                  (same :
+                                    @Eq.{1} (Prod.{0, 0} Key (List.{0} Item))
+                                      (@Prod.mk.{0, 0} Key (List.{0} Item)
+                                        (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                          (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                        (@List.reverse.{0} Item
+                                          (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                            (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))))
+                                      (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket)),
+                                  @HEq.{1} (List.{0} Item) bucket (List.{0} Item)
+                                      (@List.reverse.{0} Item
+                                        (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                          (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))) →
+                                    @HEq.{0}
+                                        (@Eq.{1} (Prod.{0, 0} Key (List.{0} Item))
+                                          (@Prod.mk.{0, 0} Key (List.{0} Item)
+                                            (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                              (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                            (@List.reverse.{0} Item
+                                              (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                                (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))))
+                                          (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket))
+                                        same
+                                        (@Eq.{1} (Prod.{0, 0} Key (List.{0} Item))
+                                          (@Prod.mk.{0, 0} Key (List.{0} Item)
+                                            (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                              (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                            (@List.reverse.{0} Item
+                                              (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                                (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))))
+                                          (@Prod.mk.{0, 0} Key (List.{0} Item)
+                                            (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                              (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                            (@List.reverse.{0} Item
+                                              (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                                (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket)))))
+                                        (@Eq.refl.{1} (Prod.{0, 0} Key (List.{0} Item))
+                                          (@Prod.mk.{0, 0} Key (List.{0} Item)
+                                            (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                              (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                            (@List.reverse.{0} Item
+                                              (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                                (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))))) →
+                                      @Eq.{1} (Option.{0} (List.{0} Item))
+                                        (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table query)
+                                        (@Option.some.{0} (List.{0} Item) bucket))
+                            (fun included same snd_eq =>
+                              @Eq.ndrec.{0, 1} (List.{0} Item)
+                                (@List.reverse.{0} Item
+                                  (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                    (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket)))
+                                (fun bucket =>
+                                  @Membership.mem.{0, 0} (Prod.{0, 0} Key (List.{0} Item))
+                                      (List.{0} (Prod.{0, 0} Key (List.{0} Item)))
+                                      (@List.instMembership.{0} (Prod.{0, 0} Key (List.{0} Item)))
+                                      (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item))
+                                        (Prod.{0, 0} Key (List.{0} Item))
+                                        (fun entry =>
+                                          @Prod.mk.{0, 0} Key (List.{0} Item)
+                                            (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                                            (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+                                        entries)
+                                      (@Prod.mk.{0, 0} Key (List.{0} Item)
+                                        (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                          (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                        bucket) →
+                                    ∀
+                                      (same :
+                                        @Eq.{1} (Prod.{0, 0} Key (List.{0} Item))
+                                          (@Prod.mk.{0, 0} Key (List.{0} Item)
+                                            (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                              (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                            (@List.reverse.{0} Item
+                                              (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                                (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))))
+                                          (@Prod.mk.{0, 0} Key (List.{0} Item)
+                                            (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                              (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                            bucket)),
+                                      @HEq.{0}
+                                          (@Eq.{1} (Prod.{0, 0} Key (List.{0} Item))
+                                            (@Prod.mk.{0, 0} Key (List.{0} Item)
+                                              (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                                (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                              (@List.reverse.{0} Item
+                                                (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                                  (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))))
+                                            (@Prod.mk.{0, 0} Key (List.{0} Item)
+                                              (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                                (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                              bucket))
+                                          same
+                                          (@Eq.{1} (Prod.{0, 0} Key (List.{0} Item))
+                                            (@Prod.mk.{0, 0} Key (List.{0} Item)
+                                              (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                                (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                              (@List.reverse.{0} Item
+                                                (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                                  (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))))
+                                            (@Prod.mk.{0, 0} Key (List.{0} Item)
+                                              (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                                (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                              (@List.reverse.{0} Item
+                                                (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                                  (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket)))))
+                                          (@Eq.refl.{1} (Prod.{0, 0} Key (List.{0} Item))
+                                            (@Prod.mk.{0, 0} Key (List.{0} Item)
+                                              (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                                (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                              (@List.reverse.{0} Item
+                                                (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                                  (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))))) →
+                                        @Eq.{1} (Option.{0} (List.{0} Item))
+                                          (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table
+                                            (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                              (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket)))
+                                          (@Option.some.{0} (List.{0} Item) bucket))
+                                (fun included same h =>
+                                  @congrArg.{1, 1} (Option.{0} (List.{0} Item)) (Option.{0} (List.{0} Item))
+                                    (table storedKey) (@Option.some.{0} (List.{0} Item) storedBucket)
+                                    (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item))
+                                    (@Iff.mp
+                                      (@Membership.mem.{0, 0} (Prod.{0, 0} Key (List.{0} Item))
+                                        (List.{0} (Prod.{0, 0} Key (List.{0} Item)))
+                                        (@List.instMembership.{0} (Prod.{0, 0} Key (List.{0} Item))) entries
+                                        (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                      (@Eq.{1} (Option.{0} (List.{0} Item)) (table storedKey)
+                                        (@Option.some.{0} (List.{0} Item) storedBucket))
+                                      (@MicroCFTA.SourceCurrentMergeGrouping.Iteration.lookup Key Item table entries
+                                        iteration storedKey storedBucket)
+                                      original))
+                                bucket
+                                (@Eq.symm.{1} (List.{0} Item) bucket
+                                  (@List.reverse.{0} Item
+                                    (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                      (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket)))
+                                  (@eq_of_heq.{1} (List.{0} Item) bucket
+                                    (@List.reverse.{0} Item
+                                      (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                        (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket)))
+                                    snd_eq))
+                                included same)
+                            query
+                            (@Eq.symm.{1} Key query
+                              (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                              (@eq_of_heq.{1} Key query
+                                (@Prod.fst.{0, 0} Key (List.{0} Item)
+                                  (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                                fst_eq))
+                            included same)
+                      (@Eq.refl.{1} (Prod.{0, 0} Key (List.{0} Item))
+                        (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket))
+                      (@HEq.refl.{0}
+                        (@Eq.{1} (Prod.{0, 0} Key (List.{0} Item))
+                          (@Prod.mk.{0, 0} Key (List.{0} Item)
+                            (@Prod.fst.{0, 0} Key (List.{0} Item)
+                              (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))
+                            (@List.reverse.{0} Item
+                              (@Prod.snd.{0, 0} Key (List.{0} Item)
+                                (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket))))
+                          (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket))
+                        same))
+                  entry
+                  (@Eq.symm.{1} (Prod.{0, 0} Key (List.{0} Item)) entry
+                    (@Prod.mk.{0, 0} Key (List.{0} Item) storedKey storedBucket) h)
+                  original same)
+              (@Eq.refl.{1} (Prod.{0, 0} Key (List.{0} Item)) entry))
+      fun found =>
+      @Exists.casesOn.{1} (List.{0} Item)
+        (fun a =>
+          And (@Eq.{1} (Option.{0} (List.{0} Item)) (table query) (@Option.some.{0} (List.{0} Item) a))
+            (@Eq.{1} (List.{0} Item) (@List.reverse.{0} Item a) bucket))
+        (fun x =>
+          @Membership.mem.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} (Prod.{0, 0} Key (List.{0} Item)))
+            (@List.instMembership.{0} (Prod.{0, 0} Key (List.{0} Item)))
+            (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+              (fun entry =>
+                @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                  (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+              entries)
+            (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket))
+        (@Iff.mp
+          (@Eq.{1} (Option.{0} (List.{0} Item))
+            (@Option.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item) (table query))
+            (@Option.some.{0} (List.{0} Item) bucket))
+          (@Exists.{1} (List.{0} Item) fun a =>
+            And (@Eq.{1} (Option.{0} (List.{0} Item)) (table query) (@Option.some.{0} (List.{0} Item) a))
+              (@Eq.{1} (List.{0} Item) (@List.reverse.{0} Item a) bucket))
+          (@Option.map_eq_some_iff.{0, 0} (List.{0} Item) bucket (List.{0} Item) (table query) (@List.reverse.{0} Item))
+          found)
+        fun storedBucket h =>
+        @And.casesOn.{0}
+          (@Eq.{1} (Option.{0} (List.{0} Item)) (table query) (@Option.some.{0} (List.{0} Item) storedBucket))
+          (@Eq.{1} (List.{0} Item) (@List.reverse.{0} Item storedBucket) bucket)
+          (fun x =>
+            @Membership.mem.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} (Prod.{0, 0} Key (List.{0} Item)))
+              (@List.instMembership.{0} (Prod.{0, 0} Key (List.{0} Item)))
+              (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+                (fun entry =>
+                  @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                    (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+                entries)
+              (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket))
+          h fun stored same =>
+          @Iff.mpr
+            (@Membership.mem.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} (Prod.{0, 0} Key (List.{0} Item)))
+              (@List.instMembership.{0} (Prod.{0, 0} Key (List.{0} Item)))
+              (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+                (fun entry =>
+                  @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                    (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+                entries)
+              (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket))
+            (@Exists.{1} (Prod.{0, 0} Key (List.{0} Item)) fun a =>
+              And
+                (@Membership.mem.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} (Prod.{0, 0} Key (List.{0} Item)))
+                  (@List.instMembership.{0} (Prod.{0, 0} Key (List.{0} Item))) entries a)
+                (@Eq.{1} (Prod.{0, 0} Key (List.{0} Item))
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) a)
+                    (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) a)))
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket)))
+            (@List.mem_map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+              (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket)
+              (fun entry =>
+                @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+                  (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+              entries)
+            (@Exists.intro.{1} (Prod.{0, 0} Key (List.{0} Item))
+              (fun a =>
+                And
+                  (@Membership.mem.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} (Prod.{0, 0} Key (List.{0} Item)))
+                    (@List.instMembership.{0} (Prod.{0, 0} Key (List.{0} Item))) entries a)
+                  (@Eq.{1} (Prod.{0, 0} Key (List.{0} Item))
+                    (@Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) a)
+                      (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) a)))
+                    (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket)))
+              (@Prod.mk.{0, 0} Key (List.{0} Item) query storedBucket)
+              (@And.intro
+                (@Membership.mem.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} (Prod.{0, 0} Key (List.{0} Item)))
+                  (@List.instMembership.{0} (Prod.{0, 0} Key (List.{0} Item))) entries
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) query storedBucket))
+                (@Eq.{1} (Prod.{0, 0} Key (List.{0} Item))
+                  (@Prod.mk.{0, 0} Key (List.{0} Item)
+                    (@Prod.fst.{0, 0} Key (List.{0} Item) (@Prod.mk.{0, 0} Key (List.{0} Item) query storedBucket))
+                    (@List.reverse.{0} Item
+                      (@Prod.snd.{0, 0} Key (List.{0} Item) (@Prod.mk.{0, 0} Key (List.{0} Item) query storedBucket))))
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket))
+                (@Iff.mpr
+                  (@Membership.mem.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} (Prod.{0, 0} Key (List.{0} Item)))
+                    (@List.instMembership.{0} (Prod.{0, 0} Key (List.{0} Item))) entries
+                    (@Prod.mk.{0, 0} Key (List.{0} Item) query storedBucket))
+                  (@Eq.{1} (Option.{0} (List.{0} Item)) (table query) (@Option.some.{0} (List.{0} Item) storedBucket))
+                  (@MicroCFTA.SourceCurrentMergeGrouping.Iteration.lookup Key Item table entries iteration query
+                    storedBucket)
+                  stored)
+                (@Prod.ext.{0, 0} Key (List.{0} Item)
+                  (@Prod.mk.{0, 0} Key (List.{0} Item)
+                    (@Prod.fst.{0, 0} Key (List.{0} Item) (@Prod.mk.{0, 0} Key (List.{0} Item) query storedBucket))
+                    (@List.reverse.{0} Item
+                      (@Prod.snd.{0, 0} Key (List.{0} Item) (@Prod.mk.{0, 0} Key (List.{0} Item) query storedBucket))))
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) query bucket)
+                  (@rfl.{1} Key
+                    (@Prod.fst.{0, 0} Key (List.{0} Item)
+                      (@Prod.mk.{0, 0} Key (List.{0} Item)
+                        (@Prod.fst.{0, 0} Key (List.{0} Item) (@Prod.mk.{0, 0} Key (List.{0} Item) query storedBucket))
+                        (@List.reverse.{0} Item
+                          (@Prod.snd.{0, 0} Key (List.{0} Item)
+                            (@Prod.mk.{0, 0} Key (List.{0} Item) query storedBucket))))))
+                  same)))

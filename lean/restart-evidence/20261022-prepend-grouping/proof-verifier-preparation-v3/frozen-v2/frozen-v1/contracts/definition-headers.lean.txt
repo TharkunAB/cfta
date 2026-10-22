@@ -1,0 +1,9 @@
+/-- Combine the new list before the old optional bucket. -/
+def insertWith [DecidableEq Key] (table : Table Key Item)
+    (entry : Key × List Item) : Table Key Item
+
+/-- Insert source rows as singleton lists from an empty table. -/
+def fromRows [DecidableEq Key] (key : Item → Key) (rows : List Item) : Table Key Item
+
+/-- Reverse every stored bucket and retain absent keys. -/
+def reverseTable (table : Table Key Item) : Table Key Item

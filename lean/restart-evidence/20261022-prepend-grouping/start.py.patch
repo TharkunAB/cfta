@@ -1,0 +1,27 @@
+--- H20/start.py
++++ H21/start.py
+@@ -6,7 +6,7 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ ROOT = HERE.parents[2]
+-START = '21dbf7da7ec880f6d9673213934f764e6fda7999'
++START = 'd0cf685f461430a7c608ceb3b76da0fe568e4d84'
+ 
+ 
+ def git(*args):
+@@ -21,7 +21,7 @@
+     subprocess.run(['timeout', '45s', 'git', 'pull', '--ff-only'], cwd=ROOT, env=env,
+                    check=True, stdout=log, stderr=subprocess.STDOUT)
+ assert git('rev-parse', 'HEAD').decode().strip() == START
+-subprocess.run(['git', 'branch', 'codex/backup-original-row-cluster-language-20261022-2144', START], cwd=ROOT, check=True)
++subprocess.run(['git', 'branch', 'codex/backup-prepend-grouping-20261022-2245', START], cwd=ROOT, check=True)
+ baseline = {}
+ for item in git('ls-tree', '-r', '-z', START).split(b'\0'):
+     if not item:
+@@ -44,5 +44,5 @@
+     'starting-worktrees.txt': ('worktree', 'list', '--porcelain'),
+ }.items():
+     (HERE / name).write_bytes(git(*arguments))
+-(HERE / 'previous-local-checkpoint.json').write_bytes(Path('/tmp/mcfta-original-row-deletion-soundness-local-publication.json').read_bytes())
++(HERE / 'previous-local-checkpoint.json').write_bytes(Path('/tmp/mcfta-original-row-cluster-language-local-publication.json').read_bytes())
+ print(json.dumps({'status': 'PASS', 'baseline_files': len(baseline), 'starting_head': START}))

@@ -1,0 +1,21 @@
+/-- Group on the exact source symbol and child-count pair. -/
+def groupKey (edge : EdgeValue Symbol Guard) : Symbol × Nat :=
+  (edge.entry.key.symbol, edge.children.length)
+
+/-- The existing finite partition supplies an executable source grouping. -/
+def groups [DecidableEq Symbol] (edges : List (EdgeValue Symbol Guard)) : List (List (EdgeValue Symbol Guard)) :=
+  Sized.groups groupKey edges
+
+/-- The full source grouping contract follows from executable partitioning. -/
+theorem groups_correct [DecidableEq Symbol] (edges : List (EdgeValue Symbol Guard)) :
+    Grouping edges (groups edges) := by
+  refine ⟨Sized.groups_perm groupKey edges, ?_⟩
+  intro group member
+  obtain ⟨first, rest, same, complete⟩ := groups_exact groupKey edges group member
+  exact ⟨first, rest, same, by simpa only [groupKey, Prod.mk.injEq] using complete⟩
+
+/-- Hash-table iteration can permute whole buckets while retaining exact within-bucket order. -/
+theorem grouping_permutation [DecidableEq Symbol] (edges : List (EdgeValue Symbol Guard))
+    (order : List (List (EdgeValue Symbol Guard))) (permutation : order.Perm (groups edges)) :
+    Grouping edges order :=
+  ⟨permutation.flatten.trans (groups_correct edges).partition,

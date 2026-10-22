@@ -1,0 +1,105 @@
+fun {Key Item} [inst : DecidableEq.{1} Key] key rows =>
+  @id.{0}
+    (@Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+      (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+        (@MicroCFTA.SourceCurrentPrependGrouping.fromRows Key Item inst key rows))
+      (@MicroCFTA.SourceCurrentMergeGrouping.fromRows Key Item inst key rows))
+    (@id.{0}
+      (@Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+        (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+          (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+            (fun table row =>
+              @MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+                (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+            (fun x => @Option.none.{0} (List.{0} Item)) rows))
+        (@MicroCFTA.SourceCurrentMergeGrouping.fromRows Key Item inst key rows))
+      (@Eq.mpr.{0}
+        (@Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+          (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+            (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+              (fun table row =>
+                @MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+              (fun x => @Option.none.{0} (List.{0} Item)) rows))
+          (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+            (fun table row =>
+              @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+                (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+            (fun x => @Option.none.{0} (List.{0} Item)) rows))
+        (@Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+          (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+            (fun table row =>
+              @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+                (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+            (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item fun x => @Option.none.{0} (List.{0} Item))
+            rows)
+          (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+            (fun table row =>
+              @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+                (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+            (fun x => @Option.none.{0} (List.{0} Item)) rows))
+        (@id.{0}
+          (@Eq.{1} Prop
+            (@Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+              (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+                (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+                  (fun table row =>
+                    @MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+                      (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                  (fun x => @Option.none.{0} (List.{0} Item)) rows))
+              (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+                (fun table row =>
+                  @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+                    (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                (fun x => @Option.none.{0} (List.{0} Item)) rows))
+            (@Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+              (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+                (fun table row =>
+                  @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+                    (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item fun x =>
+                  @Option.none.{0} (List.{0} Item))
+                rows)
+              (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+                (fun table row =>
+                  @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+                    (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                (fun x => @Option.none.{0} (List.{0} Item)) rows)))
+          (@congrArg.{1, 1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Prop
+            (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+              (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+                (fun table row =>
+                  @MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+                    (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                (fun x => @Option.none.{0} (List.{0} Item)) rows))
+            (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+              (fun table row =>
+                @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+              (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item fun x => @Option.none.{0} (List.{0} Item))
+              rows)
+            (fun _a =>
+              @Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) _a
+                (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+                  (fun table row =>
+                    @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+                      (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+                  (fun x => @Option.none.{0} (List.{0} Item)) rows))
+            (@MicroCFTA.SourceCurrentPrependGrouping.reverse_fold Key Item inst key rows fun x =>
+              @Option.none.{0} (List.{0} Item))))
+        (@congrArg.{1, 1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+          (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+          (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item fun x => @Option.none.{0} (List.{0} Item))
+          (fun x => @Option.none.{0} (List.{0} Item))
+          (fun table =>
+            @List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+              (fun table row =>
+                @MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst table
+                  (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+              table rows)
+          (@funext.{1, 1} Key (fun x => Option.{0} (List.{0} Item))
+            (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item fun x => @Option.none.{0} (List.{0} Item))
+            (fun x => @Option.none.{0} (List.{0} Item)) fun query =>
+            @Eq.refl.{1} (Option.{0} (List.{0} Item))
+              (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item (fun x => @Option.none.{0} (List.{0} Item))
+                query)))))

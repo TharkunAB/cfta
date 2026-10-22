@@ -1,0 +1,9 @@
+ ∀ {Key Item : Type} [inst : DecidableEq.{1} Key]
+  (table : MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) (rowKey : Key) (row : Item),
+  @Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+    (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+      (@MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+        (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item)))))
+    (@MicroCFTA.SourceCurrentMergeGrouping.insertWith Key Item inst
+      (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table)
+      (@Prod.mk.{0, 0} Key (List.{0} Item) rowKey (@List.cons.{0} Item row (@List.nil.{0} Item))))

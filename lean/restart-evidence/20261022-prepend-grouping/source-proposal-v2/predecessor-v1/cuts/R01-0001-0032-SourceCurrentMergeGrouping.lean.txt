@@ -1,0 +1,32 @@
+import MicroCFTA.MergedSourceGrouping
+
+/-!
+# Ordered merge buckets and finite map iteration
+
+The source inserts singleton rows with `flip (++)`. An old bucket precedes
+its new row. The optional lookup retains the distinction between an absent
+key and a stored list. Finite iteration lists every stored key once.
+
+The iteration contract below is a container boundary. The proofs derive
+bucket permutation from that contract. They do not implement Haskell
+HashMap storage or identify constructor heaps from different bucket orders.
+-/
+namespace MicroCFTA.SourceCurrentMergeGrouping
+open InternedConstructorTemplates
+variable {Key Item : Type}
+
+/-- Optional lookup distinguishes an absent source key from a stored bucket. -/
+abbrev Table (Key Item : Type) := Key → Option (List Item)
+
+/-- Source insertion combines a new list with the old list as old followed by new. -/
+def insertWith [DecidableEq Key] (table : Table Key Item) (entry : Key × List Item) : Table Key Item :=
+  fun query => if query = entry.1 then some ((table query).getD [] ++ entry.2) else table query
+
+/-- Source singleton insertion retains the input traversal order. -/
+def fromRows [DecidableEq Key] (key : Item → Key) (rows : List Item) : Table Key Item :=
+  rows.foldl (fun table row => insertWith table (key row, [row])) (fun _ => none)
+
+/-- The singleton fold is exactly the source pair-list `fromListWith` schedule. -/
+theorem pair_fold [DecidableEq Key] (key : Item → Key) (rows : List Item) :
+    (rows.map (fun row => (key row, [row]))).foldl insertWith (fun _ => none) = fromRows key rows := by
+  simp only [List.foldl_map, fromRows]

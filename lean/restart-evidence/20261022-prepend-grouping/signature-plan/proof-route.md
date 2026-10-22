@@ -1,0 +1,11 @@
+# Proposed proof route
+1. Keep SourceCurrentMergeGrouping unchanged. Import it once and reuse its Table and Iteration. No private declaration or local callback is planned.
+2. Define only the three reviewed equations. The first combines a new list with the old optional bucket. The second starts from absent keys. The third reverses stored lists pointwise.
+3. Prove pair_fold with installed List.foldl_map and the fromRows equation. This connects the literal singleton pair-list schedule, rather than assuming the source uses the append fold.
+4. Prove reverse_insert_singleton by function extensionality, a query-key case split, and a none/some case split on the old lookup. List.reverse_cons or reverse_append/reverse_singleton supplies the matching bucket equation. No Item equality instance is needed.
+5. Prove reverse_fold by ordinary list induction with table generalized. Its entire IH is frozen in local-induction.lean.txt. The cons case uses that IH and the singleton conjugacy. It retains arbitrary prior buckets.
+6. Specialize reverse_fold to the empty table to obtain reverse_fromRows. Pointwise Option.map on none is definitionally none.
+7. Prove iteration_reverse directly from the two existing Iteration fields. The mapped key list is unchanged by List.map_map. For lookup, use List.mem_map and Option.map_eq_some_iff, then List.reverse_reverse for the backward witness. None and some [] are preserved by the exact optional-table equation; no getD equality substitutes for lookup equality.
+8. Rewrite the transported table by reverse_fromRows. Apply existing SourceCurrentMergeGrouping.Iteration.permutation once. List.map_map identifies the emitted bucket list with map reverse (map Prod.snd entries).
+9. There is one list induction and no extra helper API. Expected future source: context/comments10–15, definitions12–18, six theorem statements32 plus proofs65–105, separators/end10–15, total130–185. Reserve up to200; hard stop240 ordinary rendered lines includes all statements/comments/blanks. Compiler feedback may require small local typing annotations.
+10. All headers are declaration proposals with no proof body or sorry. Definition equations are contract text, not runnable implementation. Root and independent complete declaration review, separate body authorization, whole-source review and check authorization remain required.

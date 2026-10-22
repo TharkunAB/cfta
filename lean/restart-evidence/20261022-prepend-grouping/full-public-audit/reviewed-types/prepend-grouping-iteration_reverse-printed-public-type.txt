@@ -1,0 +1,10 @@
+ ∀ {Key Item : Type}
+  (table : MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) (entries : List.{0} (Prod.{0, 0} Key (List.{0} Item))),
+  @MicroCFTA.SourceCurrentMergeGrouping.Iteration Key Item table entries →
+    @MicroCFTA.SourceCurrentMergeGrouping.Iteration Key Item
+      (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item table)
+      (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (Prod.{0, 0} Key (List.{0} Item))
+        (fun entry =>
+          @Prod.mk.{0, 0} Key (List.{0} Item) (@Prod.fst.{0, 0} Key (List.{0} Item) entry)
+            (@List.reverse.{0} Item (@Prod.snd.{0, 0} Key (List.{0} Item) entry)))
+        entries)

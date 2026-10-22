@@ -1,0 +1,49 @@
+import MicroCFTA.SourceCurrentMergeGrouping
+
+namespace MicroCFTA.SourceCurrentPrependGrouping
+open SourceCurrentMergeGrouping (Table Iteration)
+variable {Key Item : Type}
+
+/-- Combine the new list before the old optional bucket. -/
+def insertWith [DecidableEq Key] (table : Table Key Item)
+    (entry : Key × List Item) : Table Key Item
+
+/-- Insert source rows as singleton lists from an empty table. -/
+def fromRows [DecidableEq Key] (key : Item → Key) (rows : List Item) : Table Key Item
+
+/-- Reverse every stored bucket and retain absent keys. -/
+def reverseTable (table : Table Key Item) : Table Key Item
+
+/-- The singleton schedule equals the mapped source pair fold. -/
+theorem pair_fold [DecidableEq Key] (key : Item → Key) (rows : List Item) :
+    (rows.map (fun row => (key row, [row]))).foldl insertWith (fun _ => none) =
+      fromRows key rows
+
+/-- Reversing a singleton prepend gives the existing append insertion. -/
+theorem reverse_insert_singleton [DecidableEq Key] (table : Table Key Item)
+    (rowKey : Key) (row : Item) :
+    reverseTable (insertWith table (rowKey, [row])) =
+      SourceCurrentMergeGrouping.insertWith (reverseTable table) (rowKey, [row])
+
+/-- Bucket reversal commutes with the whole singleton fold from any initial table. -/
+theorem reverse_fold [DecidableEq Key] (key : Item → Key) (rows : List Item)
+    (table : Table Key Item) :
+    reverseTable (rows.foldl (fun table row => insertWith table (key row, [row])) table) =
+      rows.foldl (fun table row => SourceCurrentMergeGrouping.insertWith table (key row, [row]))
+        (reverseTable table)
+
+/-- Final bucket reversal gives the existing empty-table grouping exactly. -/
+theorem reverse_fromRows [DecidableEq Key] (key : Item → Key) (rows : List Item) :
+    reverseTable (fromRows key rows) = SourceCurrentMergeGrouping.fromRows key rows
+
+/-- Reverse each emitted bucket and retain its exact lookup key and iteration order. -/
+theorem iteration_reverse (table : Table Key Item) (entries : List (Key × List Item))
+    (iteration : Iteration table entries) :
+    Iteration (reverseTable table) (entries.map (fun entry => (entry.1, entry.2.reverse)))
+
+/-- Reversed prepend buckets permute the existing complete canonical groups. -/
+theorem iteration_permutation [DecidableEq Key] (key : Item → Key) (rows : List Item)
+    (entries : List (Key × List Item)) (iteration : Iteration (fromRows key rows) entries) :
+    ((entries.map Prod.snd).map List.reverse).Perm (Sized.groups key rows)
+
+end MicroCFTA.SourceCurrentPrependGrouping

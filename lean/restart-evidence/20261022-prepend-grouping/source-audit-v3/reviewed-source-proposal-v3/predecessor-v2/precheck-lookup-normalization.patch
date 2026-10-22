@@ -1,0 +1,11 @@
+--- v1/SourceCurrentPrependGrouping.lean
++++ v2/SourceCurrentPrependGrouping.lean
+@@ -31,7 +31,7 @@
+   funext query
+   by_cases same : query = rowKey
+   · simp only [reverseTable, insertWith, SourceCurrentMergeGrouping.insertWith, same, ↓reduceIte]
+-    cases table query <;> simp
++    cases table rowKey <;> simp
+   · simp only [reverseTable, insertWith, SourceCurrentMergeGrouping.insertWith, same, ↓reduceIte]
+ 
+ /-- Bucket reversal commutes with the whole singleton fold from any initial table. -/

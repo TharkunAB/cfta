@@ -1,0 +1,9 @@
+-- The argument `as : List α` is explicit to allow rewriting from right to left.
+@[simp, grind =] theorem reverse_reverse (as : List α) : as.reverse.reverse = as := by
+  simp only [reverse]; rw [reverseAux_reverseAux_nil]; rfl
+
+theorem reverse_eq_iff {as bs : List α} : as.reverse = bs ↔ as = bs.reverse := by
+  constructor <;> (rintro rfl; simp)
+
+@[simp] theorem reverse_inj {xs ys : List α} : xs.reverse = ys.reverse ↔ xs = ys := by
+  simp [reverse_eq_iff]

@@ -1,0 +1,6 @@
+ ∀ {Key Item : Type} [inst : DecidableEq.{1} Key]
+  (key : Item → Key) (rows : List.{0} Item),
+  @Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+    (@MicroCFTA.SourceCurrentPrependGrouping.reverseTable Key Item
+      (@MicroCFTA.SourceCurrentPrependGrouping.fromRows Key Item inst key rows))
+    (@MicroCFTA.SourceCurrentMergeGrouping.fromRows Key Item inst key rows)

@@ -1,0 +1,15 @@
+Empty domains retain the entire cache. Nonempty domains use sequential interning.
+The static inventory bounds new identities independently of the trace length.
+-/
+
+namespace MicroCFTA.SourceRecursiveIntersectionDomainAllocation
+
+open Cache IntersectionFlatMemoKeyDomain IntersectionEmptyDomain
+
+/-- Empty calls need no inventory entry. Every other call uses an inventory key. -/
+inductive Trace (inventory : List DomainKey) : Cache.State DomainKey → Cache.State DomainKey → Prop where
+  | refl (state : Cache.State DomainKey) : Trace inventory state state
+  | make (earlier : Trace inventory before middle) (key : DomainKey)
+      (member : key = emptyKey ∨ key ∈ inventory) :
+      Trace inventory before (IntersectionEmptyDomain.make middle key).2
+

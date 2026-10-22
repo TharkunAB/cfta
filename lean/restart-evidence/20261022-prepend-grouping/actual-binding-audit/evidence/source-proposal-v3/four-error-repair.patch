@@ -1,0 +1,41 @@
+--- v2/SourceCurrentPrependGrouping.lean
++++ v3/SourceCurrentPrependGrouping.lean
+@@ -49,7 +49,7 @@
+ /-- Final bucket reversal gives the existing empty-table grouping exactly. -/
+ theorem reverse_fromRows [DecidableEq Key] (key : Item → Key) (rows : List Item) :
+     reverseTable (fromRows key rows) = SourceCurrentMergeGrouping.fromRows key rows := by
+-  simpa only [fromRows, SourceCurrentMergeGrouping.fromRows] using
++  simpa only [fromRows, SourceCurrentMergeGrouping.fromRows, reverseTable, Option.map_none] using
+     reverse_fold key rows (fun _ => none)
+ 
+ /-- Reverse each emitted bucket and retain its exact lookup key and iteration order. -/
+@@ -57,16 +57,16 @@
+     (iteration : Iteration table entries) :
+     Iteration (reverseTable table) (entries.map (fun entry => (entry.1, entry.2.reverse))) := by
+   refine ⟨?_, ?_⟩
+-  · simpa only [List.map_map] using iteration.unique
++  · simpa only [List.map_map, Function.comp_def] using iteration.unique
+   · intro query bucket
+     constructor
+-    · intro member
+-      obtain ⟨entry, member, same⟩ := List.mem_map.mp member
++    · intro included
++      obtain ⟨entry, original, same⟩ := List.mem_map.mp included
+       cases entry with
+       | mk storedKey storedBucket =>
+           cases same
+           exact congrArg (Option.map List.reverse)
+-            ((iteration.lookup storedKey storedBucket).mp member)
++            ((iteration.lookup storedKey storedBucket).mp original)
+     · intro found
+       obtain ⟨storedBucket, stored, same⟩ := Option.map_eq_some_iff.mp found
+       exact List.mem_map.mpr ⟨(query, storedBucket),
+@@ -76,7 +76,7 @@
+ theorem iteration_permutation [DecidableEq Key] (key : Item → Key) (rows : List Item)
+     (entries : List (Key × List Item)) (iteration : Iteration (fromRows key rows) entries) :
+     ((entries.map Prod.snd).map List.reverse).Perm (Sized.groups key rows) := by
+-  simpa only [List.map_map] using
++  simpa only [List.map_map, Function.comp_def] using
+     SourceCurrentMergeGrouping.Iteration.permutation key rows
+       (entries.map (fun entry => (entry.1, entry.2.reverse)))
+       (by simpa only [reverse_fromRows] using

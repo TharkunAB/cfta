@@ -1,0 +1,6 @@
+fun {Key Item} [inst : DecidableEq.{1} Key] key rows =>
+  @List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) Item
+    (fun table row =>
+      @MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst table
+        (@Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))))
+    (fun x => @Option.none.{0} (List.{0} Item)) rows

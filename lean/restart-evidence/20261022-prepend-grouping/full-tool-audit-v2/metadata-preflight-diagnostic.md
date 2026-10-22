@@ -1,0 +1,1 @@
+The first inline static-audit comparison expected a list of pins. V2 uses a dictionary. It stopped with TypeError before any preparation copy or evidence extraction. The audit comparison was corrected to use dictionary items. No prepared reader, compiler, Lean or FULL ran, and no input or repository file changed.

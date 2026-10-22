@@ -1,0 +1,17 @@
+--- v3/SourceCurrentPrependGrouping.lean
++++ v4/SourceCurrentPrependGrouping.lean
+@@ -49,8 +49,12 @@
+ /-- Final bucket reversal gives the existing empty-table grouping exactly. -/
+ theorem reverse_fromRows [DecidableEq Key] (key : Item → Key) (rows : List Item) :
+     reverseTable (fromRows key rows) = SourceCurrentMergeGrouping.fromRows key rows := by
+-  simpa only [fromRows, SourceCurrentMergeGrouping.fromRows, reverseTable, Option.map_none] using
+-    reverse_fold key rows (fun _ => none)
++  unfold fromRows SourceCurrentMergeGrouping.fromRows
++  rw [reverse_fold]
++  apply congrArg (fun table : Table Key Item =>
++    rows.foldl (fun table row => SourceCurrentMergeGrouping.insertWith table (key row, [row])) table)
++  funext query
++  rfl
+ 
+ /-- Reverse each emitted bucket and retain its exact lookup key and iteration order. -/
+ theorem iteration_reverse (table : Table Key Item) (entries : List (Key × List Item))

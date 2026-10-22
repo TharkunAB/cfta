@@ -1,0 +1,9 @@
+ ∀ {Key Item : Type} [inst : DecidableEq.{1} Key]
+  (key : Item → Key) (rows : List.{0} Item) (entries : List.{0} (Prod.{0, 0} Key (List.{0} Item))),
+  @MicroCFTA.SourceCurrentMergeGrouping.Iteration Key Item
+      (@MicroCFTA.SourceCurrentPrependGrouping.fromRows Key Item inst key rows) entries →
+    @List.Perm.{0} (List.{0} Item)
+      (@List.map.{0, 0} (List.{0} Item) (List.{0} Item) (@List.reverse.{0} Item)
+        (@List.map.{0, 0} (Prod.{0, 0} Key (List.{0} Item)) (List.{0} Item) (@Prod.snd.{0, 0} Key (List.{0} Item))
+          entries))
+      (@MicroCFTA.Sized.groups.{1, 0} Key Item inst key rows)

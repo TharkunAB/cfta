@@ -1,0 +1,8 @@
+ ∀ {Key Item : Type} [inst : DecidableEq.{1} Key]
+  (key : Item → Key) (rows : List.{0} Item),
+  @Eq.{1} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item)
+    (@List.foldl.{0, 0} (MicroCFTA.SourceCurrentMergeGrouping.Table Key Item) (Prod.{0, 0} Key (List.{0} Item))
+      (@MicroCFTA.SourceCurrentPrependGrouping.insertWith Key Item inst) (fun x => @Option.none.{0} (List.{0} Item))
+      (@List.map.{0, 0} Item (Prod.{0, 0} Key (List.{0} Item))
+        (fun row => @Prod.mk.{0, 0} Key (List.{0} Item) (key row) (@List.cons.{0} Item row (@List.nil.{0} Item))) rows))
+    (@MicroCFTA.SourceCurrentPrependGrouping.fromRows Key Item inst key rows)

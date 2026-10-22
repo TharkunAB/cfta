@@ -1,0 +1,60 @@
+--- template/update-documents.py
++++ actual/update-documents.py
+@@ -7,19 +7,19 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ ROOT = HERE.parents[2]
+-SOURCE_SHA = '__H21_SOURCE_SHA__'
+-SOURCE_LINES = int('__H21_SOURCE_LINES__')
++SOURCE_SHA = '3d293c27b502aa308c8cc05f21796264b18f873221b3343910e77d6bcb6b53ba'
++SOURCE_LINES = int('89')
+ assert 0 < SOURCE_LINES <= 240
+-strict, full, audit_stem = '__H21_SELECTED_STRICT_STEM__', '__H21_SELECTED_FULL_STEM__', '__H21_AUDIT_STEM__'
++strict, full, audit_stem = 'prepend-grouping-strict-3', 'prepend-grouping-public-1', 'prepend-grouping-audit-1'
+ metrics = {
+-    'actual_jobs': int('__H21_ACTUAL_JOBS__'),
+-    'source_jobs': int('__H21_SOURCE_JOBS__'),
+-    'audit_jobs': int('__H21_AUDIT_JOBS__'),
+-    'failed_jobs': int('__H21_FAILED_JOBS__'),
+-    'warned_source_exit_zero_jobs': int('__H21_WARNED_SOURCE_EXIT_ZERO_JOBS__'),
+-    'rejected_public_type_jobs': int('__H21_REJECTED_PUBLIC_TYPE_JOBS__'),
+-    'audit_build_jobs': int('__H21_AUDIT_BUILD_JOBS__'),
+-    'audit_dependencies': int('__H21_AUDIT_DEPENDENCIES__'),
++    'actual_jobs': int('5'),
++    'source_jobs': int('4'),
++    'audit_jobs': int('1'),
++    'failed_jobs': int('2'),
++    'warned_source_exit_zero_jobs': int('0'),
++    'rejected_public_type_jobs': int('0'),
++    'audit_build_jobs': int('3638'),
++    'audit_dependencies': int('75494'),
+ }
+ start = (HERE / 'starting-head.txt').read_text().strip()
+ assert start == 'd0cf685f461430a7c608ceb3b76da0fe568e4d84'
+@@ -37,12 +37,12 @@
+ assert source == (HERE / (strict + '.source.lean')).read_bytes() and (HERE / (strict + '.log')).read_bytes() == b''
+ assert json.loads((HERE / (strict + '.json')).read_text())['exit_code'] == 0
+ raw = (HERE / (full + '.log')).read_bytes()
+-assert hashlib.sha256(raw).hexdigest() == '__H21_FULL_RAW_SHA__'
++assert hashlib.sha256(raw).hexdigest() == '215b81824a227e47375a236476dd83092a5bf1c21a421a85e835bdd3e75e61a8'
+ assert json.loads((HERE / (full + '.json')).read_text())['exit_code'] == 0
+ readback = json.loads((HERE / 'public-readback/prepend-grouping-full-readback.json').read_text())
+ assert readback['source_sha256'] == SOURCE_SHA and readback['source_lines'] == SOURCE_LINES
+ assert readback['log_sha256'] == hashlib.sha256(raw).hexdigest() and readback['log_bytes'] == len(raw)
+-head_specs = json.loads('__H21_HEAD_SPECS_JSON__')
++head_specs = json.loads('[["insertWith", "48d0904f048cbeafc8e95f8b22efc2393f403c1732296c487e69c9bde0e1c2be", "48d0904f048cbeafc8e95f8b22efc2393f403c1732296c487e69c9bde0e1c2be", "2070c90b3a20e08bc6ee18540c8a6c382e22c8cac3dc784571aea6339a6e2029", true, "public-readback/prepend-grouping-insertWith-public-type.txt", "public-readback/prepend-grouping-insertWith-printed-public-type.txt", "[]"], ["fromRows", "094eb0b94d3ffba52ac789f9f51dcbfa5a44f017b4b33e5cf5ac8e165512ae28", "094eb0b94d3ffba52ac789f9f51dcbfa5a44f017b4b33e5cf5ac8e165512ae28", "2de1facfaf02162c1673ff85572a91a23c07ff45ee0bd2e852e5bb9749e0df0b", true, "public-readback/prepend-grouping-fromRows-public-type.txt", "public-readback/prepend-grouping-fromRows-printed-public-type.txt", "[]"], ["reverseTable", "1c8a53b41b8713b00c11021bc6eceb70ac44f344491d7d669fc0f57c9c914528", "1c8a53b41b8713b00c11021bc6eceb70ac44f344491d7d669fc0f57c9c914528", "3ca033ceb30ce55d6e40174e64c6cfa2b7a678145592b624c9a49b75b53b551a", true, "public-readback/prepend-grouping-reverseTable-public-type.txt", "public-readback/prepend-grouping-reverseTable-printed-public-type.txt", "[]"], ["pair_fold", "9dc4d1e79df4da3e0ead7a744b916ab00c8352344aa090cbfe469a9a4988d800", "80591714a25308241133eda0250a552e996f6531f7cbfa031bdf5338640d1061", "c94234bcbd7ae0ee1d53048469a3f8ef616122f57b5cb21f7b80fb97698fe824", false, "public-readback/prepend-grouping-pair_fold-public-type.txt", "public-readback/prepend-grouping-pair_fold-printed-public-type.txt", "[\\"propext\\"]"], ["reverse_insert_singleton", "fd13a4e124d61c37b4c120aab3211187fbe18ab2f5c8a3a355340969daf69f05", "2647b3b5bfd2290c719ba98df5e8537b7afeaf8756b68064ddd23336c092b2bb", "a88381f5ad81acb49e545d34b770ee94b75b4433699d1511a87978265a58eff1", false, "public-readback/prepend-grouping-reverse_insert_singleton-public-type.txt", "public-readback/prepend-grouping-reverse_insert_singleton-printed-public-type.txt", "[\\"Quot.sound\\", \\"propext\\"]"], ["reverse_fold", "e7abc72eb5ae11313b0f756be9443ce3b225a81bf3eedd247face7aaa24db0d3", "e7abc72eb5ae11313b0f756be9443ce3b225a81bf3eedd247face7aaa24db0d3", "4026de9a15f3bdd86402abe720a0d58f3368e46c4ff381243690d5c53426669a", true, "public-readback/prepend-grouping-reverse_fold-public-type.txt", "public-readback/prepend-grouping-reverse_fold-printed-public-type.txt", "[\\"Quot.sound\\", \\"propext\\"]"], ["reverse_fromRows", "3344b088d26e80b94b33956fa84b16cb6af5408602461acb91fda1a3d6b72a30", "3344b088d26e80b94b33956fa84b16cb6af5408602461acb91fda1a3d6b72a30", "de6c752d1da376b684d75a2c5ba95eee50523520c493617dcc1f678335980209", true, "public-readback/prepend-grouping-reverse_fromRows-public-type.txt", "public-readback/prepend-grouping-reverse_fromRows-printed-public-type.txt", "[\\"Quot.sound\\", \\"propext\\"]"], ["iteration_reverse", "15c4e831693315e33e19ee2140d5f757843e1d25833c40ca89f21a425e58a4b6", "15c4e831693315e33e19ee2140d5f757843e1d25833c40ca89f21a425e58a4b6", "094b6bee174403be3e74712d95b8a924924446b2e6241f5efc54f52a2800116c", true, "public-readback/prepend-grouping-iteration_reverse-public-type.txt", "public-readback/prepend-grouping-iteration_reverse-printed-public-type.txt", "[\\"Quot.sound\\", \\"propext\\"]"], ["iteration_permutation", "8c2e931f0f424be14138db69cb52d15859f0cb4928faa4ba90abae6bca0175a9", "8c2e931f0f424be14138db69cb52d15859f0cb4928faa4ba90abae6bca0175a9", "b6696c3f80179ca3c95ac10b10fdbdd6c2180d24b2f3cfdab4b99dde6bc7518b", true, "public-readback/prepend-grouping-iteration_permutation-public-type.txt", "public-readback/prepend-grouping-iteration_permutation-printed-public-type.txt", "[\\"Classical.choice\\", \\"Quot.sound\\", \\"propext\\"]"]]')
+ assert [spec[0] for spec in head_specs] == ['insertWith', 'fromRows', 'reverseTable', 'pair_fold', 'reverse_insert_singleton', 'reverse_fold', 'reverse_fromRows', 'iteration_reverse', 'iteration_permutation']
+ assert head_specs and readback['owned_public_job_exit'] == 0 and readback['no_omissions'] and len(readback['heads']) == len(head_specs)
+ review = json.loads((HERE / 'root-full-review.json').read_text())
+@@ -71,9 +71,9 @@
+     proof_report = json.loads((HERE / ('proof-evidence-' + mode + '.json')).read_text())
+     assert proof_report['status'] == 'PASS' and proof_report['live'] is expected_live
+     assert all(proof_report[key] == value for key, value in metrics.items())
+-    assert proof_report['audit_log_sha256'] == '__H21_AUDIT_SHA__'
++    assert proof_report['audit_log_sha256'] == 'ac7c811b03802079e982a193b2256289c418f7c5449cc52176ddaaa107580fff'
+ audit = (HERE / (audit_stem + '.log')).read_bytes()
+-assert hashlib.sha256(audit).hexdigest() == proof_report['audit_log_sha256'] == '__H21_AUDIT_SHA__'
++assert hashlib.sha256(audit).hexdigest() == proof_report['audit_log_sha256'] == 'ac7c811b03802079e982a193b2256289c418f7c5449cc52176ddaaa107580fff'
+ assert json.loads((HERE / (audit_stem + '.json')).read_text())['exit_code'] == 0
+ assert f"Build completed successfully ({metrics['audit_build_jobs']} jobs).".encode() in audit
+ assert f"{metrics['audit_dependencies']} MicroCFTA theorems".encode() in audit
