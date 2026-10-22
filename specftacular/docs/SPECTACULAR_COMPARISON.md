@@ -217,6 +217,94 @@ phases of the same signature and maximum size at the same limit. Inferred
 rows have no measured costs or law counts. Visible prefixes contain complete
 newline-terminated equations only. Buffered output can omit accepted laws.
 
+### Bounded type variables and function buckets
+
+The type search causes the timeouts above. In phases 3 and 4, each type
+variable of a constant can take any type of `mtau`. Under a head that
+erases its argument type, such as `length :: [a] -> Int`, nothing fixes
+the variable. The search then tries instantiations that no term of the
+remaining size completes. At HugeLists 7-p3, the size-7 `Int` bucket of
+phase 3 listed 19,641 candidates in 2,260 seconds and did not finish. The
+two longest stalls, 84 and 90 seconds, were next to
+`length (xs >>= foldr (>=>) f fs)` and its `foldl` form.
+
+`--type-depth D` keeps only the types with at most D levels of
+constructors and arrows. `--function-buckets` gives a bucket to each
+function type between two small data types of the signature.
+`--recheck N` tests each new law again on N random cases of sizes 1 to 8,
+and drops a law that one of them refutes. All rows use `--recheck 2000`,
+and all rows except the last use one core (`-N1`). Other runs shared the
+machine (load 3 to 10), so compare allocation, not seconds.
+
+| Configuration | Options | Outcome | Seconds | Allocation GB | Peak RSS MiB | Laws | Dropped by recheck | Completion fallbacks |
+| --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| HugeLists-6-p4 | none | complete | 1823.3 | 10,753 | 9729.3 | 686 | 26 | 1 |
+| HugeLists-6-p4 | `--type-depth 2` | complete | 657.3 | 2,337 | 6596.2 | 671 | 22 | 0 |
+| HugeLists-6-p4 | `--type-depth 2 --function-buckets` | complete | 763.3 | 3,130 | 7986.7 | 705 | 22 | 0 |
+| HugeLists-7-p3 | `--type-depth 2` | complete | 1185.3 | 5,243 | 7250.5 | 680 | 100 | 0 |
+| HugeLists-7-p3 | `--type-depth 2 --function-buckets` | complete | 2278.6 | 9,906 | 8245.4 | 686 | 106 | 0 |
+| HugeLists-7-p4 | `--type-depth 2` | T at 7200 s | 7199.9 | — | 13017.5 | 1109 visible | 140 | 61 |
+| HugeLists-7-p4 | `--type-depth 2 --enumerate-ahead`, `-N12` | complete | 40449.7 | 300,080 | 29748.6 | 1945 | 249 | 81 |
+
+The first 7-p4 row used `e8c1e79d5`, whose `--type-depth` code is that of
+`5c168176d`. The other rows used `5c168176d`. The first 7-p4 run stops in
+the size-7 `Int` bucket of phase 4. Completion takes 3,642 of its 7,200
+seconds. The 61 laws whose completion reaches the 256 GiB budget take
+2,997 seconds, and then keep only their own rules. At 7-p3, function
+buckets almost double the allocation.
+
+The second 7-p4 run has no time limit and uses 12 cores
+(`-N12 -qg -A64m`). It completes in 11 hours 14 minutes with 1,945 laws
+(236, 6, 438 and 1,265 in phases 1 to 4). Its maximum residency is
+11.9 GB. Phases 1 to 3 take 1,462 seconds, phase 4 sizes 3 to 6 take
+5,620 seconds, and phase 4 size 7 takes 32,926 seconds. In size 7, the
+tests take about 6,500 seconds. For 26,397 seconds, the thread that tests
+waits for the background enumeration of the next type: 700 seconds before
+`Int`, 3,440 before `[A]`, 1,655 before `[Int]` and 20,602 before
+`[(A,B)]`. Each part of the enumeration is one shape of the left spine
+(`--split 2`), and the last part of `[(A,B)]` runs on one thread at the
+end. Completion takes 8,508 seconds in all, and 6,956 seconds of that go
+to the 80 laws whose completion reaches the 256 GiB budget.
+
+An equational prover checks which laws of the unbounded 6-p4 run follow
+from the laws of a bounded run. The check uses twee 2.7.1. Each subterm
+carries its type, and `A` to `Acc` are type variables, so a law holds at
+each type. Each law gets 10 seconds, and an undecided law gets 60
+seconds more. An undecided law can still follow.
+
+| 6-p4 run | Laws | Unbounded laws that follow | Undecided |
+| --- | ---: | ---: | ---: |
+| `--type-depth 2` | 671 | 676 of 686 | 10 |
+| `--type-depth 2 --function-buckets` | 705 | 673 of 686 | 13 |
+
+Most of the ten undecided laws at depth 2 need an instantiation deeper
+than 2, for example of `map` at `(A -> [A]) -> [A]` in
+`map ((>>=) []) (map (>>=) xss)`. Function buckets do not make these laws
+follow. They replace some data laws with function laws, such as
+`sum == foldl (+) 0`, from which twee does not derive
+`x + sum xs == foldl (+) x xs` within the limit.
+
+With `--function-buckets`, 75 of the 705 laws at 6-p4 are equations
+between functions, such as:
+
+```haskell
+take 0 == zipWith f []
+sum == foldl (+) 0
+(++) [] == drop 0
+f >=> (g >=> h) == (f >=> g) >=> h
+```
+
+A data law cannot state these equations. They also give rules for
+unapplied functions, as in `map (take 0) xss`. Each test case applies both
+functions to its value of a sample variable of the argument type, as
+QuickSpec observes a function. So `--tests` and `--recheck` apply to these
+laws as to the others. A first version compared two functions on eight
+fixed samples of sizes 1 to 6. At 6-p4 it printed the false
+`take 0 == drop 3` and `take 0 == drop 4`, because no sample was longer
+than three elements. No number of tests could refute them. The current
+version prints neither, and rejects `succ == (+) 1`, which fails at
+`maxBound`.
+
 ## Differences in laws
 
 24 completed configurations have a completed b530 reference. All 24 retain
@@ -310,9 +398,13 @@ return x >>= f == f x
 ```
 
 QuickSpec 2's [function observation][qs-observe] can compare functions at
-generated arguments. Specftacular compares applications. The applied
-Kleisli definition and bind associativity imply Kleisli associativity
-pointwise, although that exact function equation is not printed. Counts
+generated arguments. By default, Specftacular compares applications. The
+applied Kleisli definition and bind associativity imply Kleisli
+associativity pointwise, although that exact function equation is not
+printed. With `--function-buckets` (see
+[Bounded type variables and function buckets](#bounded-type-variables-and-function-buckets)),
+ListMonad size 6, phase 4 also prints function laws, among them
+`f == f >=> return` and `f >=> (g >=> h) == (f >=> g) >=> h`. Counts
 alone do not compare the information in these different bases.
 
 ### Regex
@@ -945,6 +1037,12 @@ above state their exact scope. Neither more completed configurations nor
 finite tests prove all printed laws. Predicate indexes with the same residue
 modulo eight remain outside the new pairwise guarantee. Unsupported types
 retain generator-based testing.
+
+`--type-depth` omits the laws that need a deeper instantiation, and the
+completion consequences of those laws. `--function-buckets` covers only the
+function types between data types of size at most two. It compares two
+functions on one sample of the argument type in each test case, so the
+test of a function law depends on the generator of that type.
 
 Validated generalization supports at most five independent type binders and
 keeps the original result type and equality function. Missing generators or

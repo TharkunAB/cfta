@@ -69,7 +69,7 @@ import Data.Char (isAlphaNum)
 import Data.IORef (IORef, atomicModifyIORef', modifyIORef', newIORef, readIORef, writeIORef)
 import Data.Int (Int64)
 import Data.List hiding (union)
-import Data.Maybe (fromMaybe, isJust, mapMaybe)
+import Data.Maybe (fromMaybe, isJust, mapMaybe, maybeToList)
 import qualified Data.Text as T
 import Data.Unique (Unique, newUnique)
 import Data.Word (Word64)
@@ -103,6 +103,10 @@ data StEcta = StEcta
     , inst_sig :: Sig
     {- ^ The complete signature with more variables of each
     type, for the instances of the schemas.
+    -}
+    , function_samples :: Map TypeSkeleton T.Text
+    {- ^ With function buckets, the sample variable of each function type
+    (see 'sigGivens'). The sample variables are in 'inst_sig'.
     -}
     , schema_vars :: Map Symbol [Symbol]
     {- ^ The variables of each type, from the variable with
@@ -284,6 +288,16 @@ data Settings = Settings
     -- ^ The bytes by which the completion of one law may grow the live heap.
     , recheckCount :: Int
     -- ^ The number of extra test cases of a new law (see 'recheckSchedule').
+    , typeDepth :: Maybe Int
+    {- ^ The largest depth of the type of a type variable of the grammar (see
+    'mtauWithin'). 'Nothing' is no limit.
+    -}
+    , functionBuckets :: Bool
+    {- ^ Whether each function type between two small data types of the
+    signature gets a bucket (see 'sigGivens').
+    -}
+    , dumpLaws :: Bool
+    -- ^ Whether to write each law with the types of its subterms on stderr.
     , completionAllocLimit :: Word64
     {- ^ The bytes that the completion of one law may allocate.
     ^ The bytes by which a bucket may grow the live heap.
@@ -403,6 +417,17 @@ data SearchOptions = SearchOptions
     {- ^ With 'searchStopAfter', the only bucket of the last size, by the
     'show' of its type. Each of its schemas prints its time and its term.
     -}
+    , searchTypeDepth :: Maybe Int
+    {- ^ The largest depth of the type of a type variable of the grammar.
+    'Nothing' is no limit.
+    -}
+    , searchFunctionBuckets :: Bool
+    {- ^ Whether each function type between two small data types of the
+    signature gets a bucket. Each test case applies two functions to a
+    sample of their argument type and compares the results.
+    -}
+    , searchDumpLaws :: Bool
+    -- ^ Whether to write each law with the types of its subterms on stderr.
     }
     deriving (Show)
 
@@ -436,6 +461,9 @@ defaultOptions size phase =
         , searchSkeletonTemplates = True
         , searchStopAfter = Nothing
         , searchOnlyBucket = Nothing
+        , searchTypeDepth = Nothing
+        , searchFunctionBuckets = False
+        , searchDumpLaws = False
         }
 
 {- | Read the options from the program arguments: the size, the phase,
@@ -477,6 +505,20 @@ parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.p
                         <> O.help "With --stop-after, run only this bucket at the last size, and time each of its schemas"
                     )
                 )
+            <*> O.optional
+                ( O.option
+                    O.auto
+                    ( O.long "type-depth"
+                        <> O.metavar "D"
+                        <> O.help "Bound the types that the type variables of the grammar take to depth D"
+                    )
+                )
+            <*> O.switch
+                ( O.long "function-buckets"
+                    <> O.help
+                        "Give a bucket to each function type between two small data types, and compare two functions on a sample of their argument type in each test case"
+                )
+            <*> O.switch (O.long "dump-laws" <> O.help "Write each law with the types of its subterms on stderr")
     testsOption =
         O.option
             O.auto
@@ -668,6 +710,9 @@ searchPhases
         , searchSkeletonTemplates = skeletonTemplatesSetting
         , searchStopAfter = stopSetting
         , searchOnlyBucket = onlySetting
+        , searchTypeDepth = typeDepthSetting
+        , searchFunctionBuckets = functionBucketsSetting
+        , searchDumpLaws = dumpLawsSetting
         }
     givenInstances
     givenSig =
@@ -695,7 +740,7 @@ searchPhases
                     { compl_sig = compl_sig
                     , arb_insts = arb_insts
                     , sig_ty_cons = sig_ty_cons
-                    } = mkStecta size numTests 0 instances sig False id id
+                    } = mkStecta size numTests 0 typeDepthSetting functionBucketsSetting instances sig False id id
             putStrLn $ "In Scope (" ++ show (Map.size compl_sig) ++ " functions/constants):"
             putStrLn "---------------------------------"
             mapM_ (putStrLn . T.unpack) $ Map.keys compl_sig
@@ -734,6 +779,9 @@ searchPhases
                         , lawSink = sink
                         , stopAfter = stopSetting
                         , onlyBucket = onlySetting
+                        , typeDepth = typeDepthSetting
+                        , functionBuckets = functionBucketsSetting
+                        , dumpLaws = dumpLawsSetting
                         }
             runPhases env size (max 1 (min 4 phase)) instances sig
 
@@ -756,19 +804,22 @@ mkStecta ::
     Int ->
     Int ->
     Int ->
+    Maybe Int ->
+    Bool ->
     (TypeSkeleton -> Maybe Instance) ->
     Sig ->
     Bool ->
     (TypeSkeleton -> TypeSkeleton) ->
     (TypeSkeleton -> TypeSkeleton) ->
     StEcta
-mkStecta size numTests recheckCount instances sig closed givenTrans skelTrans =
+mkStecta size numTests recheckCount typeDepth' functionBuckets' instances sig closed givenTrans skelTrans =
     StEcta
         { any_arg = ag
         , compl_sig = compl_sig
         , given_sig = givenSig
         , phase_variables = Map.fromList [(sfTypeRep f, Symbol name) | (name, f) <- Map.assocs givenSig]
         , inst_sig = inst_sig
+        , function_samples = fst <$> samples
         , schema_vars = Map.fromList [(Symbol x, map (Symbol . fst) vs) | (x, vs) <- moreVars]
         , sig_ty_cons = Map.keys eq_insts
         , eq_insts = eq_insts
@@ -784,8 +835,8 @@ mkStecta size numTests recheckCount instances sig closed givenTrans skelTrans =
         [ (x, [(gvToName gv, g) | g@(GivenFun gv _) <- take (max variablesPerType size) (moreGenerators f)])
         | (x, f@(GivenFun{given_info = GivenVar{}})) <- Map.assocs compl_sig
         ]
-    inst_sig = Map.fromList (concatMap snd moreVars) <> compl_sig
-    (givenSig, eq_insts, arbs) = sigGivens closed givenTrans sig instances
+    inst_sig = Map.fromList (concatMap snd moreVars) <> Map.fromList (Map.elems samples) <> compl_sig
+    (givenSig, eq_insts, arbs, samples) = sigGivens closed functionBuckets' givenTrans sig instances
     givens = Map.assocs $ givenTrans . sfTypeRep <$> givenSig
     compl_sig = sig <> givenSig
     sc = skels ++ givens
@@ -800,7 +851,7 @@ mkStecta size numTests recheckCount instances sig closed givenTrans skelTrans =
             ngnodes givens ++ gnodes skels
     addSyms st tt = map (Bi.bimap (Symbol . st) (tt . typeToFta))
     ngnodes = addSyms id id
-    gnodes = addSyms id (generalize sc)
+    gnodes = addSyms id (generalize typeDepth' sc)
 
 {- | The phases: the message at the end of the phase, the message at the
 start of the phase, the changes of the types of the generated variables and
@@ -852,7 +903,18 @@ runPhases env size lastPhase instances sig =
                 -- A phase with a skeleton grammar closes its variable types
                 -- under carrier renaming, so each renaming of a typing of a
                 -- skeleton has its variables.
-                stectaWith variableTrans = mkStecta size (numTests env) (recheckCount env) instances sig (isJust skeletonTrans) variableTrans skelTrans
+                stectaWith variableTrans =
+                    mkStecta
+                        size
+                        (numTests env)
+                        (recheckCount env)
+                        (typeDepth env)
+                        (functionBuckets env)
+                        instances
+                        sig
+                        (isJust skeletonTrans)
+                        variableTrans
+                        skelTrans
             (laws, s') <- diagnose phaseEnv 0 "" "phase" s $ do
                 result@(_, finishedState) <- runPhase phaseEnv (phaseSize pn) (stectaWith <$> skeletonTrans) (stectaWith givenTrans) s
                 diagnosticEvent phaseEnv "checkpoint" 0 "" "phase" finishedState
@@ -1283,14 +1345,21 @@ consider env@Settings{..} StEcta{..} lvl full_term s0
     -- arguments, and its equality fits its values, as an application
     -- does (see 'termType').
     testable t = either (const False) (sameUpToCarriers eq_type) (termType inst_sig t)
+    -- A function bucket compares its functions on the value of the sample
+    -- variable in each test case (see 'function_samples').
+    sample = Map.lookup eq_type function_samples
+    observe evaluateTerm = case sample of
+        Nothing -> evaluateTerm
+        Just x -> \vals -> apply (evaluateTerm vals) (vals Map.! x)
     -- The values of a term on the test cases, evaluated when needed.
     values u = case compileTerm inst_sig u of
         Left message -> error message
         Right evaluateTerm ->
-            let required = Map.fromList [(v, inst_sig Map.! v) | Symbol v <- holes isVar u]
+            let variables = [v | Symbol v <- holes isVar u] ++ maybeToList sample
+                required = Map.fromList [(v, inst_sig Map.! v) | v <- variables]
                 evaluateValues
                     | Map.null required = const (evaluateTerm Map.empty)
-                    | otherwise = evaluateTerm
+                    | otherwise = observe evaluateTerm
              in DT.Evaluator required evaluateValues
 
     -- The schema equals the representative schema rep. Test the most
@@ -1367,19 +1436,28 @@ consider env@Settings{..} StEcta{..} lvl full_term s0
         -- The first extra test case on which the instance and w differ. Each
         -- side is compiled once.
         refutingCase w cases = case (compileTerm inst_sig w, compileTerm inst_sig i) of
-            (Right left, Right right) -> firstRefuting left right cases
+            (Right left, Right right) -> firstRefuting (observe left) (observe right) cases
             _ -> return Nothing
         firstRefuting _ _ [] = return Nothing
         firstRefuting left right (c : cs) = do
             equal <- valuesEqual eq_inst (left (caseValues c)) (right (caseValues c))
             if equal == Just False then return (Just c) else firstRefuting left right cs
         discover w = do
-            (lawSig, law) <- generalizeLaw resolveInstance (map caseTest test_cases) inst_sig (eq_type, eq_inst) (lawOf w)
+            (lawSig, law) <-
+                generalizeLaw
+                    resolveInstance
+                    (map caseTest test_cases)
+                    inst_sig
+                    ((\x -> (x, inst_sig Map.! x)) <$> sample)
+                    (eq_type, eq_inst)
+                    (lawOf w)
             let n = law_count s + 1
                 law_str = show n <> ". " <> ppNpTerm (canonicalLaw lawSig law)
             unless deferLaws $ do
                 when progress $ hPutStr stderr "\r\ESC[K"
                 putStrLn law_str
+            when dumpLaws $
+                hPutStrLn stderr ("specftacular-law\t" ++ show n ++ "\t" ++ show (canonicalLaw lawSig law))
             when deferLaws $ modifyIORef' lawSink ((w, i, lawSig, law) :)
             -- With parallel buckets, the merge completes the law, so the
             -- bucket adds the rules of the law alone.

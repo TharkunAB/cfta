@@ -402,11 +402,19 @@ Each independent type binder gets a distinct abstract carrier. Each term
 variable gets its own generator at the inferred type. Missing instances,
 failed inference, and rejected or untestable equations keep the original law.
 The result type and the original equality function must remain the same.
-The signature constants must meet the parametric carrier contract.
+The signature constants must meet the parametric carrier contract. With a
+sample variable (see 'sigGivens'), the two sides are functions, and the
+test applies them to the value of the sample variable.
 -}
 generalizeLaw ::
-    (TypeSkeleton -> Maybe Instance) -> [TestCase] -> Sig -> (TypeSkeleton, Value) -> Term -> IO (Sig, Term)
-generalizeLaw resolve cases sig (equalityType, equalityValue) original@(Term "(==)" [equality, lhs, rhs]) =
+    (TypeSkeleton -> Maybe Instance) ->
+    [TestCase] ->
+    Sig ->
+    Maybe (T.Text, Func) ->
+    (TypeSkeleton, Value) ->
+    Term ->
+    IO (Sig, Term)
+generalizeLaw resolve cases sig sample (equalityType, equalityValue) original@(Term "(==)" [equality, lhs, rhs]) =
     case prepare of
         Nothing -> pure (sig, original)
         Just (newSig, law, required, eq, left, right) -> do
@@ -415,8 +423,9 @@ generalizeLaw resolve cases sig (equalityType, equalityValue) original@(Term "(=
   where
     check _ _ _ _ False _ = pure False
     check required eq left right True testcase = do
-        let values = testCaseValues required testcase
-        result <- valuesEqual eq (left values) (right values)
+        let values = testCaseValues (maybe required (\(x, f) -> Map.insert x f required) sample) testcase
+            observe value = maybe value (\(x, _) -> apply value (values Map.! x)) sample
+        result <- valuesEqual eq (observe (left values)) (observe (right values))
         pure (result == Just True)
     prepare = do
         proposal@(a, b) <- regeneraliseEquation sig (lhs, rhs)
@@ -453,7 +462,7 @@ generalizeLaw resolve cases sig (equalityType, equalityValue) original@(Term "(=
             , Map.insert ty (index + 1) counts
             )
     allocate _ _ = Nothing
-generalizeLaw _ _ sig _ law = pure (sig, law)
+generalizeLaw _ _ sig _ _ law = pure (sig, law)
 
 {- | Whether the known laws prove a law: the two sides of the law have the
 same normal form, or their normal forms are an instance of a rule (see
