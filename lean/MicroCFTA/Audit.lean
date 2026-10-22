@@ -3088,6 +3088,7 @@ import MicroCFTA.SourceCurrentFiniteWarmCalls
 import MicroCFTA.SourceCurrentColdFiniteWarmCalls
 import MicroCFTA.SourceCurrentSameSymbolEdgeControl
 import MicroCFTA.SourceCurrentSameSymbolEdgeForwardCompletion
+import MicroCFTA.SourceCurrentSameSymbolEdgeStable
 /-!
 # Proof dependency audit
 
