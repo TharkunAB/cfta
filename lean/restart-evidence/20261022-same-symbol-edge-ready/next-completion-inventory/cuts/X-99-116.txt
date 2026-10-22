@@ -1,0 +1,18 @@
+/-- Actual closed original records give finite semantic execution and their exact copied product language. -/
+theorem source_schedule_total [DecidableEq Symbol] (state : InternedConstructorTemplates.State Symbol Guard) (facts : Facts state)
+    (holds : Guard → Term Symbol → Bool) (left right : Value Symbol Guard)
+    (leftOriginal : Original left) (rightOriginal : Original right)
+    (leftAvailable : Available state left) (rightAvailable : Available state right)
+    (leftClosed : left.free = []) (rightClosed : right.free = []) :
+    ∃ bound result,
+      (∀ fuel, bound ≤ fuel → IntersectSchedule.run (view state holds) fuel {} (inputOf left) (inputOf right) = .ok result) ∧
+      ∀ environment term, meaning environment result term ↔
+        meaning environment (shape holds left) term ∧ meaning environment (shape holds right) term := by
+  have leftViewClosed : closed (view state holds) (inputOf left) = true := by
+    rw [closed_readback state facts holds left leftOriginal leftAvailable, leftClosed]; rfl
+  have rightViewClosed : closed (view state holds) (inputOf right) = true := by
+    rw [closed_readback state facts holds right rightOriginal rightAvailable, rightClosed]; rfl
+  let leftInput : OriginalInput state (inputOf left) := ⟨left, leftOriginal, leftAvailable, leftOriginal.codec left⟩
+  let rightInput : OriginalInput state (inputOf right) := ⟨right, rightOriginal, rightAvailable, rightOriginal.codec right⟩
+  obtain ⟨bound, result, completed, exactResult⟩ := schedule_total state facts holds (inputOf left) (inputOf right)
+    leftInput rightInput leftViewClosed rightViewClosed

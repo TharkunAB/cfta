@@ -1,0 +1,13 @@
+/-- The semantic schedule terminates with exact product language for actual closed original physical inputs. -/
+theorem schedule_total [DecidableEq Symbol] (state : InternedConstructorTemplates.State Symbol Guard) (facts : Facts state)
+    (holds : Guard → Term Symbol → Bool) (leftRoot rightRoot : Input)
+    (leftOriginal : OriginalInput state leftRoot) (rightOriginal : OriginalInput state rightRoot)
+    (leftClosed : closed (view state holds) leftRoot = true) (rightClosed : closed (view state holds) rightRoot = true) :
+    ∃ bound result,
+      (∀ fuel, bound ≤ fuel → IntersectSchedule.run (view state holds) fuel {} leftRoot rightRoot = .ok result) ∧
+      ∀ environment term, meaning environment result term ↔
+        InputLanguage state holds leftRoot term ∧ InputLanguage state holds rightRoot term :=
+  finite_intersection_total (view state holds)
+    (finiteInput state facts holds leftRoot rightRoot leftOriginal rightOriginal leftClosed rightClosed)
+    (free_correct state facts holds)
+    (inputBounds state facts holds leftRoot rightRoot leftOriginal rightOriginal leftClosed rightClosed)

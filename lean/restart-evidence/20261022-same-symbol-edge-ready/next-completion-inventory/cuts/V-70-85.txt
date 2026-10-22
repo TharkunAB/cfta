@@ -1,0 +1,16 @@
+/-- An input row retains actual ordered child references and the executable physical guard. -/
+def row (holds : Guard → Language.Term Symbol → Bool) (edge : EdgeValue Symbol Guard) : Row Symbol :=
+  ⟨edge.entry.key.symbol, edge.children.map inputOf, holds edge.entry.key.constraint⟩
+
+/-- Construct the semantic input view from actual physical payload reads. -/
+def view (state : InternedConstructorTemplates.State Symbol Guard) (holds : Guard → Language.Term Symbol → Bool) : View Symbol where
+  rows name := match payload state (.node name) with
+    | .node _ edges _ _ => edges.map (row holds)
+    | _ => []
+  body name := match payload state (.mu name) with
+    | .mu _ body _ _ => inputOf body
+    | _ => .empty
+  members name := match payload state (.union name) with
+    | .union _ members _ _ => members.map inputOf
+    | _ => []
+  free input := freeNames (payload state input)

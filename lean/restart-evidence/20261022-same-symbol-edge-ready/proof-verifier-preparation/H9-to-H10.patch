@@ -1,0 +1,165 @@
+--- H9/verify-proofs.py
++++ H10/verify-proofs.py
+@@ -1,4 +1,4 @@
+-"""Check saved same-symbol stable-memo evidence. This script does not run Lean."""
++"""Check saved same-symbol ready-comparison evidence. This script does not run Lean."""
+ import argparse
+ import hashlib
+ import json
+@@ -10,7 +10,7 @@
+ parser.add_argument("--live", action="store_true")
+ args = parser.parse_args()
+ root = args.root.resolve()
+-evidence = root / "lean/restart-evidence/20261022-same-symbol-edge-stable-memo"
++evidence = root / "lean/restart-evidence/20261022-same-symbol-edge-ready"
+ def load(name):
+     return json.loads((evidence / name).read_text())
+ def digest(data):
+@@ -34,17 +34,15 @@
+     assert active
+     return "".join(result + lines[cursor:])
+ 
+-name, head = "SourceCurrentSameSymbolEdgeStable", "MicroCFTA.SourceCurrentSameSymbolEdgeStable.completed_preserves"
+-selected_sha = "6c96e7e8d5cb32d1209818ed65de83a5104b6a409d65b9caffb52d802e874b91"
++name, head = "SourceCurrentSameSymbolEdgeReady", "MicroCFTA.SourceCurrentSameSymbolEdgeReady.ready_complete"
++selected_sha = "68d9ca87569a4bb4ad3d2df6e928c441a4e218bf54154c1da9f4d14de6b2c8aa"
+ jobs = {
+-    "same-symbol-edge-stable-strict-1": (1, "c2fd48c1cc5358f9a3efd1e19096ec1c6333ae14b3c9414dc530409d9ed6b339", "e3f91778d1bd3b0e7cd4e22511f42d00452583bff691fabeed71966ed9397c58", 10, 17),
+-    "same-symbol-edge-stable-strict-2": (1, "35a92ce3bd517baeeccf0df68acf5ed1c7f87eb98e351f59b649cf5fa6777e7b", "363236103f7ebe9d5efdce63155e0114c891c84fc2e6c8d43dfd3cc3a762118a", 4, 2),
+-    "same-symbol-edge-stable-strict-3": (0, "f665ea5c2b6a36cd583796b87e51b563106a5c536a9274cfbe7b633b6d05dc93", "e10faddc5a717142ebcaaa31754197c51bc6d07eabb54af65ca12eb0d1cc444c", 0, 1),
+-    "same-symbol-edge-stable-strict-4": (0, selected_sha, digest(b""), 0, 0),
+-    "same-symbol-edge-stable-public-1": (0, "bdfef58f4970665cb953b00d137a040be4272d88399ef85832060193b766aba3", "d3c35861e47b59aa58b4ee16a68b756c8d6cae70037fcf9292677486f79b0050", 0, 0),
+-    "same-symbol-edge-stable-audit-1": (0, None, "c4b5c7f777ec5c09154b2a0fb383b9b7686aa6a9f0370a7ef272b4739fe8fab9", None, None),
++    "same-symbol-edge-ready-strict-1": (1, "49443e0960e1229fe1fe855215b27ac75979aa7900adbeb4eca31ea69d9a2028", "d28eda9121db785045b347f5cc4b11c46e025525e9d3f0bf4deb753fa22b3063", 4, 0),
++    "same-symbol-edge-ready-strict-2": (0, selected_sha, digest(b""), 0, 0),
++    "same-symbol-edge-ready-public-1": (0, "c2d3fd4a25e6948363496d99e2ec309084319e8a69d7544ac3fddf56d28a66a2", "ffc63200806cbf19fa84666b5b288f39a6f40d8167bf7d886d143a97a7499dfe", 0, 0),
++    "same-symbol-edge-ready-audit-1": (0, None, "18fafb8c4bb0d3de3e0c2b2f2adcbd433c1f3621f2035aaf79847fa80d113688", None, None),
+ }
+-assert (evidence / "same-symbol-edge-stable-audit-1.json").is_file(), "Audit is pending; no complete proof report is available"
++assert (evidence / "same-symbol-edge-ready-audit-1.json").is_file(), "Audit is pending; no complete proof report is available"
+ actual = set()
+ for path in evidence.glob("*.json"):
+     item = json.loads(path.read_text())
+@@ -74,48 +72,44 @@
+             assert not re.search(r"^set_option (?:maxHeartbeats|maxRecDepth|linter\.)", source.decode(), re.M)
+     else:
+         assert Path(receipt["command"][0]).name == "lake" and receipt["command"][-2:] == ["build", "MicroCFTA.Audit"]
+-stricts = [(evidence / ("same-symbol-edge-stable-strict-" + str(i) + ".source.lean")).read_text() for i in [1, 2, 3, 4]]
+-assert [len(source.splitlines()) for source in stricts] == [312, 329, 338, 338]
+-assert undo(stricts[1], (evidence / "source-author-v3/strict-1-repair.patch").read_text()) == stricts[0]
+-assert undo(stricts[2], (evidence / "source-root-v4/sequenced-rewrite.patch").read_text()) == stricts[1]
+-assert undo(stricts[3], (evidence / "source-root-v5/unused-argument.patch").read_text()) == stricts[2]
+-assert (evidence / "same-symbol-edge-stable-strict-4.log").read_bytes() == b""
++stricts = [(evidence / ("same-symbol-edge-ready-strict-" + str(i) + ".source.lean")).read_text() for i in [1, 2]]
++assert [len(source.splitlines()) for source in stricts] == [191, 192]
++assert undo(stricts[1], (evidence / "source-root-v2/unsupported-tactic.patch").read_text()) == stricts[0]
++assert (evidence / "same-symbol-edge-ready-strict-2.log").read_bytes() == b""
+ selection = load("selected-sources.json")
+ source_path = "lean/MicroCFTA/" + name + ".lean"
+-assert selection == {source_path: dict(sha256=selected_sha, lines=338, strict="same-symbol-edge-stable-strict-4", full="same-symbol-edge-stable-public-1")}
++assert selection == {source_path: dict(sha256=selected_sha, lines=192, strict="same-symbol-edge-ready-strict-2", full="same-symbol-edge-ready-public-1")}
+ source = (evidence / (name + ".lean")).read_bytes()
+-assert digest(source) == selected_sha and source.decode() == stricts[3]
++assert digest(source) == selected_sha and source.decode() == stricts[1]
+ gate = load("selected-source-gate.json")
+-assert gate == dict(status="ROOT_ACCEPTED", path=source_path, sha256=selected_sha, lines=338, snapshot="selected-sources/" + name + ".lean")
++assert gate == dict(status="ROOT_ACCEPTED", path=source_path, sha256=selected_sha, lines=192, snapshot="selected-sources/" + name + ".lean")
+ assert (evidence / gate["snapshot"]).read_bytes() == source
+-assert digest((evidence / "stable-plan/context.lean.txt").read_bytes()) == "98865794f3b88d7af726534efddb9f764c8adbf9ec27b6db0d93d30fc8d4441c"
+-assert source.startswith((evidence / "stable-plan/context.lean.txt").read_bytes())
+-header = (evidence / "stable-plan/proposed-signature.lean.txt").read_bytes()
+-assert len(header.splitlines()) == 19 and digest(header) == "78568f85e42a1d445a3b0ab2c6c01d24964837b496a0ed2b2a8b5845207d1001" and source.count(header) == 1
+-stable = b"".join(source.splitlines(keepends=True)[13:37])
+-assert len(stable.splitlines()) == 24 and digest(stable) == "ba6a5f925d1a96cb20435e3d64c62678a61bdc5a4acd103002d9d051a06cac81"
++assert digest((evidence / "ready-plan/context.lean.txt").read_bytes()) == "6f0380cdad1a88b616f08fb963460edc6eb7e0e231372adc765f0f362dcc241b"
++assert source.startswith((evidence / "ready-plan/context.lean.txt").read_bytes())
++header = (evidence / "ready-plan/proposed-signature.lean.txt").read_bytes()
++assert len(header.splitlines()) == 23 and digest(header) == "0e58683c1804a7193a2ede47a0600be1cd8ba73ca2a9338f82cb6725f9763e98" and source.count(header) == 1
+ if args.live:
+     assert (root / source_path).read_bytes() == source
+ original = (evidence / "original-sources/Audit.original.lean.txt").read_bytes()
+-assert digest(original) == "1d082f8610403a8c0fd6f11848020f915ff04f5bf7e60f72ba4bc3615041f5f6" and len(original.splitlines()) == 3114
+-assert load("original-source-index.json")["sources"] == [dict(path="lean/MicroCFTA/Audit.lean", snapshot="original-sources/Audit.original.lean.txt", lines=3114, sha256=digest(original))]
+-addition = b"import MicroCFTA.SourceCurrentSameSymbolEdgeStable\n"
++assert digest(original) == "a36b1f2aefc14b99db041f7b8c40c6c3acc79db4f563b87532fda88b24d392fc" and len(original.splitlines()) == 3115
++assert load("original-source-index.json")["sources"] == [dict(path="lean/MicroCFTA/Audit.lean", snapshot="original-sources/Audit.original.lean.txt", lines=3115, sha256=digest(original))]
++addition = b"import MicroCFTA.SourceCurrentSameSymbolEdgeReady\n"
+ audit_source = (root / "lean/MicroCFTA/Audit.lean").read_bytes()
+ assert audit_source.count(addition) == 1 and audit_source.replace(addition, b"", 1) == original
+ assert audit_source.index(addition) < audit_source.index(b"/-!")
+-report = load("public-readback/same-symbol-edge-stable-full-readback.json")
+-printer = (evidence / "same-symbol-edge-stable-public-1.source.lean").read_bytes()
+-raw = (evidence / "same-symbol-edge-stable-public-1.log").read_bytes()
++report = load("public-readback/same-symbol-edge-ready-full-readback.json")
++printer = (evidence / "same-symbol-edge-ready-public-1.source.lean").read_bytes()
++raw = (evidence / "same-symbol-edge-ready-public-1.log").read_bytes()
+ options = ["maxRecDepth 30000", "maxHeartbeats 0", "linter.all true", "pp.explicit true", "pp.fullNames true", "pp.proofs true",
+     "pp.proofs.threshold 254", "pp.universes true", "pp.deepTerms true", "pp.maxSteps 10000000"]
+ tail = "\n" + "".join("set_option " + option + "\n" for option in options) + "".join(d + head + "\n" for d in ["#check @", "#print ", "#print axioms "])
+-assert printer == source + tail.encode() and len(printer.splitlines()) == 352 and len(tail.splitlines()) == 14
++assert printer == source + tail.encode() and len(printer.splitlines()) == 206 and len(tail.splitlines()) == 14
+ assert all(printer.decode().splitlines().count("set_option " + option) == 1 for option in options)
+ assert all(printer.decode().splitlines().count(d + head) == 1 for d in ["#check @", "#print ", "#print axioms "])
+ assert source.rstrip().endswith(("end MicroCFTA." + name).encode())
+-assert (report["source_sha256"], report["source_lines"], report["printer_sha256"]) == (selected_sha, 338, digest(printer))
+-assert report["log_sha256"] == digest(raw) and report["log_bytes"] == len(raw) == 4469864
+-assert report["receipt_sha256"] == digest((evidence / "same-symbol-edge-stable-public-1.json").read_bytes()) and report["owned_public_job_exit"] == 0
++assert (report["source_sha256"], report["source_lines"], report["printer_sha256"]) == (selected_sha, 192, digest(printer))
++assert report["log_sha256"] == digest(raw) and report["log_bytes"] == len(raw) == 1275208
++assert report["receipt_sha256"] == digest((evidence / "same-symbol-edge-ready-public-1.json").read_bytes()) and report["owned_public_job_exit"] == 0
+ assert all(report[key] for key in ["all_eight_printer_settings", "exact_module_and_diagnostic_tail", "diagnostic_limits_after_module_only", "no_omissions"])
+ assert len(report["heads"]) == 1 and report["heads"][0]["head"] == head and report["heads"][0]["kind"] == "theorem"
+ log = raw.decode()
+@@ -136,38 +130,39 @@
+         break
+ assert len(matches) == 1
+ declared, body = declaration[:matches[0].start()], declaration[matches[0].end():]
+-assert checked.encode() == declared.encode() and len(checked) == 15394 and len(checked.encode()) == 15414
+-assert len(checked.splitlines()) == 201 and checked.count("\n") == 200 and not checked.endswith("\n")
+-assert digest(checked.encode()) == "b77d5025ebff2218f5a4214cfe0027434320a0fd1d10868c5f8602c23a684259"
++assert checked.encode() == declared.encode() and len(checked) == 21938 and len(checked.encode()) == 21954
++assert len(checked.splitlines()) == 275 and checked.count("\n") == 274 and not checked.endswith("\n")
++assert digest(checked.encode()) == "3318dd2a433532c6a7d313cf7b587303358e4f9092fe7d79523ef93ca6c44c69"
+ assert not any(token in checked for token in ["_private", "✝", "†", "‡"])
+ helpers = re.findall(r"^private (?:noncomputable )?(?:def|theorem|abbrev) (\w+)", source.decode(), re.M)
+-assert helpers == ["Memo", "key", "started", "written", "tail_done", "ret_memo", "native_memo", "overwrite_cells", "miss_order", "ready_cell", "finish_started", "finish_two", "call_image", "written_fields"]
++assert helpers == ["read_ready", "reverse_ready"]
+ assert not any(re.search(re.escape("MicroCFTA." + name + "." + helper) + r"(?![\w'])", checked) for helper in helpers)
+ head_report = report["heads"][0]
+ assert all(head_report[key] for key in ["check_print_type_identity", "check_print_type_byte_identity", "unique_complete_type_body_delimiter", "actual_axioms_within_standard_allowed"])
+ assert head_report["private_namespace_helpers_checked"] == helpers and head_report["private_type_spellings_checked"] == ["_private", "✝", "†", "‡"] and head_report["private_public_type_names"] is False
+-assert head_report["checked_type_characters"] == len(checked) and head_report["body_characters"] == len(body) == 4438655
+-assert body.startswith("fun ") and len(body.encode()) == 4438757
++assert head_report["checked_type_characters"] == len(checked) and head_report["body_characters"] == len(body) == 1230987
++assert body.startswith("fun ") and len(body.encode()) == 1231039
+ values = re.fullmatch(r"\s*\[([^\]]*)\]\s*", printed[axiom.end():]) if axiom.group(1) == "depends on axioms:" else None
+ assert values or (axiom.group(1) == "does not depend on any axioms" and not printed[axiom.end():].strip())
+ actual_axioms = {re.sub(r"\.\{[^}]*\}", "", item.strip()) for item in values.group(1).split(",") if item.strip()} if values else set()
+ assert actual_axioms == set(head_report["actual_axioms"]) and actual_axioms <= {"Classical.choice", "Quot.sound", "propext"}
+ for suffix, text in [("public-type", checked), ("printed-public-type", declared), ("body", body), ("axioms", axiom_output)]:
+-    filename = "same-symbol-edge-stable-completed_preserves-" + suffix + ".txt"
++    filename = "same-symbol-edge-ready-ready_complete-" + suffix + ".txt"
+     retained = (evidence / "public-readback" / filename).read_bytes()
+     assert retained == text.encode() and report["retained_slices"][filename] == dict(bytes=len(retained), sha256=digest(retained))
+-assert digest((evidence / "full-preparation/check-full-public.py").read_bytes()) == "745e6d3da68968fcbe715eb5a84bdeeb83a5342a321b1ea1746c19dbd31995c3"
++assert digest((evidence / "full-preparation/check-full-public.py").read_bytes()) == "2505e30bba74438e1f3ca76fd3f5efe7059437a3e2145e2749fd6fbbf1384b59"
+ review = load("root-full-review.json")
+-assert review["status"] == "ROOT_ACCEPTED_FOR_OFFICIAL_INSTALL_AND_AUDIT" and review["source_sha256"] == selected_sha and review["source_lines"] == 338
++assert review["status"] == "ROOT_ACCEPTED_FOR_OFFICIAL_INSTALL_AND_AUDIT" and review["source_sha256"] == selected_sha and review["source_lines"] == 192
+ assert review["public_theorem"] == head and review["complete_public_type_root_review"] == review["independent_complete_public_type_review"] == "CLEAR"
+ assert review["root_read_both_complete_type_files"] and review["check_print_type_byte_identity"] and review["four_private_markers_and_all_helpers_absent_from_type"]
+ assert review["type_sha256"] == digest(checked.encode()) and review["full_raw_sha256"] == digest(raw) and review["actual_axioms"] == sorted(actual_axioms)
+ assert review["body_retained_and_programmatically_checked"] and review["whole_body_manual_read_claimed"] is False
+-audit = (evidence / "same-symbol-edge-stable-audit-1.log").read_text()
++assert review["execution_and_result_law_derived"] and review["entire_checked_state_unchanged"] and review["native_execution_or_result_law_premise"] is False
++audit = (evidence / "same-symbol-edge-ready-audit-1.log").read_text()
+ build = re.search(r"Build completed successfully \((\d+) jobs\)\.", audit)
+ dependencies = re.search(r"Checked axiom dependencies of (\d+) MicroCFTA theorems", audit)
+ assert build and dependencies and not re.search(r"\berror(?:\([^)]*\))?:", audit)
+-assert int(build.group(1)) == 3626 and int(dependencies.group(1)) == 75371
+-print(json.dumps(dict(status="PASS", live=args.live, source_jobs=5, audit_jobs=1, actual_jobs=6,
+-    failed_jobs=2, warned_source_exit_zero_jobs=1, rejected_public_type_jobs=0, new_lean_lake_jobs=0, selected_modules=1, original_archives=1,
++assert int(build.group(1)) == 3627 and int(dependencies.group(1)) == 75377
++print(json.dumps(dict(status="PASS", live=args.live, source_jobs=3, audit_jobs=1, actual_jobs=4,
++    failed_jobs=1, warned_source_exit_zero_jobs=0, rejected_public_type_jobs=0, new_lean_lake_jobs=0, selected_modules=1, original_archives=1,
+     audit_build_jobs=int(build.group(1)), audit_dependencies=int(dependencies.group(1)), audit_log_sha256=digest(audit.encode())), indent=2))

@@ -1,0 +1,10 @@
+/-- Every actual immediate child has a strictly smaller least successful request bound. -/
+theorem immediate_requiredFuel [DecidableEq Symbol] (view : View Symbol) (parent child : Call Symbol)
+    (complete : Completes view parent) (immediate : Immediate view parent child) :
+    ∃ childComplete : Completes view child,
+      requiredFuel view child childComplete < requiredFuel view parent complete := by
+  obtain ⟨result, done⟩ := requiredFuel_success view parent complete
+  have positive := requiredFuel_positive view parent complete
+  have predecessor : requiredFuel view parent complete - 1 + 1 = requiredFuel view parent complete := by omega
+  rw [← predecessor] at done
+  obtain ⟨output, childDone⟩ := immediate_success view _ parent child result done immediate

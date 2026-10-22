@@ -1,0 +1,88 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261022-same-symbol-edge-ready/same-symbol-edge-ready-strict-1.source.lean:160:11: error: unknown tactic
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261022-same-symbol-edge-ready/same-symbol-edge-ready-strict-1.source.lean:159:66: error: unsolved goals
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+semanticView : View Symbol
+model : InputMeaning semanticView
+ranked : RankedInput semanticView model.valid
+holds : Guard → Term Symbol → Bool
+left right : Edge
+before : Wrapper width
+coherent : InternedRecordCoherence.Coherent before.checked.native.machine.heap
+stable : SourceCurrentSameSymbolEdgeStable.Stable semanticView model ranked holds before
+leftResident : EdgeResident before.checked.native.machine.heap left
+rightResident : EdgeResident before.checked.native.machine.heap right
+present :
+  (∃ handle, before.memo.table (left.entry.identity, right.entry.identity) = some handle) ∨
+    ∃ handle, before.memo.table (right.entry.identity, left.entry.identity) = some handle
+found : before.memo.table (left.entry.identity, right.entry.identity) = none
+handle : Nat
+reverse : before.memo.table (right.entry.identity, left.entry.identity) = some handle
+⊢ right.entry.identity < left.entry.identity
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261022-same-symbol-edge-ready/same-symbol-edge-ready-strict-1.source.lean:152:11: error: unsolved goals
+case none
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+semanticView : View Symbol
+model : InputMeaning semanticView
+ranked : RankedInput semanticView model.valid
+holds : Guard → Term Symbol → Bool
+left right : Edge
+before : Wrapper width
+coherent : InternedRecordCoherence.Coherent before.checked.native.machine.heap
+stable : SourceCurrentSameSymbolEdgeStable.Stable semanticView model ranked holds before
+leftResident : EdgeResident before.checked.native.machine.heap left
+rightResident : EdgeResident before.checked.native.machine.heap right
+present :
+  (∃ handle, before.memo.table (left.entry.identity, right.entry.identity) = some handle) ∨
+    ∃ handle, before.memo.table (right.entry.identity, left.entry.identity) = some handle
+found : before.memo.table (left.entry.identity, right.entry.identity) = none
+handle : Nat
+reverse : before.memo.table (right.entry.identity, left.entry.identity) = some handle
+swap : right.entry.identity < left.entry.identity
+⊢ ∃ result after,
+    run 7 (SourceCurrentSameSymbolEdgeControl.Control.call (left, right) []) before =
+        SourceCurrentSameSymbolEdgeControl.Outcome.done result after ∧
+      after.checked = before.checked ∧
+        EdgeResident before.checked.native.machine.heap result ∧
+          let ordered := if right.entry.identity < left.entry.identity then (right, left) else (left, right);
+          SourceCurrentAllocatedNativeContextCache.EdgeLaw semanticView model ranked holds
+            { domain := IntersectionEmptyDomain.emptyDomain, left := ordered.fst, right := ordered.snd } result
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261022-same-symbol-edge-ready/same-symbol-edge-ready-strict-1.source.lean:130:55: error: unsolved goals
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+semanticView : View Symbol
+model : InputMeaning semanticView
+ranked : RankedInput semanticView model.valid
+holds : Guard → Term Symbol → Bool
+left right : Edge
+before : Wrapper width
+coherent : InternedRecordCoherence.Coherent before.checked.native.machine.heap
+stable : SourceCurrentSameSymbolEdgeStable.Stable semanticView model ranked holds before
+leftResident : EdgeResident before.checked.native.machine.heap left
+rightResident : EdgeResident before.checked.native.machine.heap right
+present :
+  (∃ handle, before.memo.table (left.entry.identity, right.entry.identity) = some handle) ∨
+    ∃ handle, before.memo.table (right.entry.identity, left.entry.identity) = some handle
+progress :
+  ∃ result after,
+    run 7 (SourceCurrentSameSymbolEdgeControl.Control.call (left, right) []) before =
+        SourceCurrentSameSymbolEdgeControl.Outcome.done result after ∧
+      after.checked = before.checked ∧
+        EdgeResident before.checked.native.machine.heap result ∧
+          let ordered := if right.entry.identity < left.entry.identity then (right, left) else (left, right);
+          SourceCurrentAllocatedNativeContextCache.EdgeLaw semanticView model ranked holds
+            { domain := IntersectionEmptyDomain.emptyDomain, left := ordered.fst, right := ordered.snd } result
+⊢ ∃ result after,
+    run 7 (SourceCurrentSameSymbolEdgeControl.Control.call (left, right) []) before =
+        SourceCurrentSameSymbolEdgeControl.Outcome.done result after ∧
+      after.checked = before.checked ∧
+        EdgeResident after.checked.native.machine.heap result ∧
+          (let ordered := if right.entry.identity < left.entry.identity then (right, left) else (left, right);
+            SourceCurrentAllocatedNativeContextCache.EdgeLaw semanticView model ranked holds
+              { domain := IntersectionEmptyDomain.emptyDomain, left := ordered.fst, right := ordered.snd } result) ∧
+            SourceCurrentSameSymbolEdgeStable.Stable semanticView model ranked holds after ∧
+              Extends before.memo.table after.memo.table ∧ FlatMemoThunk.Returned before.memo after.memo

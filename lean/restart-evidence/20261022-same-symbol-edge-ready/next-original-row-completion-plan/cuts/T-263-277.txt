@@ -1,0 +1,15 @@
+/-- Execute either worker with one common fuel interface. -/
+def execute [DecidableEq Symbol] (view : View Symbol) (fuel : Nat) : Call Symbol → Except Error (Shape (Payload Symbol))
+  | .node domain left right => run view fuel domain left right
+  | .edge domain left right => edge view fuel domain left right
+
+/-- Each worker carries the structural invariants appropriate to its payload. -/
+def WorkReady (bounds : InputBounds view inputs) (roots : ClosedRoots view inputs) : Call Symbol → Prop
+  | .node domain left right => NodeReady roots domain left right
+  | .edge domain left right => EdgeReady bounds roots domain left right
+
+/-- Every covered source call eventually returns under finite closed-payload bounds. -/
+theorem call_eventual [DecidableEq Symbol] (view : View Symbol) (inputs : FiniteInput view)
+    (freeCorrect : FreeCorrect view) (bounds : InputBounds view inputs)
+    (roots : ClosedRoots view inputs) (call : Call Symbol) (ready : WorkReady bounds roots call) :
+    IntersectEventually (fun fuel => execute view fuel call) := by

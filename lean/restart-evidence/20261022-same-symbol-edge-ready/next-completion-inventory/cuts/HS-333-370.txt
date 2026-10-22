@@ -1,0 +1,38 @@
+
+{- | Remove edges that are subsumed by another edge with the same symbol.
+
+The input is the alternative list of a node, which is already free of
+duplicates. The comparison order within a symbol group follows the input.
+-}
+{-# INLINEABLE dropRedundantEdges #-}
+dropRedundantEdges ::
+    forall symbol.
+    (Hashable symbol, Typeable symbol) => [Edge symbol] -> [Edge symbol]
+dropRedundantEdges origEs = concatMap reduceCluster clusters
+  where
+    clusters = clusterByHash edgeSymbol origEs
+
+    reduceCluster :: [Edge symbol] -> [Edge symbol]
+    reduceCluster [] = []
+    reduceCluster (e : es) = case ruleOut e es of
+        -- Optimization: If e' > e, likely to be greater than other things;
+        -- move it to front and rule out more edges next iteration.
+        --
+        -- No noticeable difference in overall wall clock time (7/2/21),
+        -- but a few % reduction in calls to intersectEdgeSameSymbol. That
+        -- measurement came from the ECTA engine. On the CFTA engine, without
+        -- the move, the instruction counts of micro-bench and of the generator
+        -- benchmark cells change by less than 0.001%.
+        (Just e', es') -> reduceCluster (e' : es')
+        (Nothing, es') -> e : reduceCluster es'
+
+    -- Drop the alternatives that @e@ accepts, or report one that accepts @e@.
+    ruleOut ::
+        Edge symbol -> [Edge symbol] -> (Maybe (Edge symbol), [Edge symbol])
+    ruleOut _ [] = (Nothing, [])
+    ruleOut e (x : xs)
+        | common == x = ruleOut e xs
+        | common == e = (Just x, xs)
+        | otherwise = let (res, notRuledOut) = ruleOut e xs in (res, x : notRuledOut)
+      where
+        common = intersectEdgeSameSymbol e x

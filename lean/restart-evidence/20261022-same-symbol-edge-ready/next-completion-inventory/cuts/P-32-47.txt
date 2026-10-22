@@ -1,0 +1,16 @@
+/-- Every request of the actual physical branch strictly decreases the request's least semantic bound. -/
+theorem physical_child_requiredFuel [DecidableEq Symbol] (state : InternedConstructorTemplates.State Symbol Guard) (facts : Facts state)
+    (holds : Guard → Language.Term Symbol → Bool) (source : DomainKey) (left right : Value Symbol Guard)
+    (leftOriginal : Original left) (rightOriginal : Original right)
+    (leftAvailable : Available state left) (rightAvailable : Available state right)
+    (complete : Completes (view state holds) (.node (domain source) (inputOf left) (inputOf right)))
+    (child : Call Symbol) (member : child ∈ branchCalls (view state holds) (domain source) (inputOf left) (inputOf right)
+      (SourceRecursiveIntersectionControl.decision source left right)) :
+    ∃ childComplete : Completes (view state holds) child,
+      requiredFuel (view state holds) child childComplete <
+        requiredFuel (view state holds) (.node (domain source) (inputOf left) (inputOf right)) complete := by
+  let parent : Call Symbol := Call.node (domain source) (inputOf left) (inputOf right)
+  obtain ⟨result, done⟩ := requiredFuel_success (view state holds) parent complete
+  have positive := requiredFuel_positive (view state holds) parent complete
+  have predecessor : requiredFuel (view state holds) parent complete - 1 + 1 = requiredFuel (view state holds) parent complete := by omega
+  rw [← predecessor] at done

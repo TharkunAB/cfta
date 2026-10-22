@@ -1,0 +1,12 @@
+--- strict-1.source.lean
++++ SourceCurrentSameSymbolEdgeReady.lean
+@@ -157,7 +157,8 @@
+           · exact ⟨handle, reverse⟩
+         obtain ⟨handle, reverse⟩ := reversePresent
+         have swap : right.entry.identity < left.entry.identity := by
+-          by_contra denied
++          apply Classical.byContradiction
++          intro denied
+           obtain ⟨canonical, canonicalPresent⟩ :=
+             stable.canonical right.entry.identity left.entry.identity handle reverse
+           by_cases forward : left.entry.identity < right.entry.identity

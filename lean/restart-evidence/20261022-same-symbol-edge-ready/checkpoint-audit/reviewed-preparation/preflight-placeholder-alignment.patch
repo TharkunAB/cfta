@@ -1,0 +1,13 @@
+--- preflight/verify-checkpoint.py
++++ selected/verify-checkpoint.py
+@@ -18,8 +18,8 @@
+     assert report['source_jobs'] == int('__H10_SOURCE_JOBS__') and report['audit_jobs'] == int('__H10_AUDIT_JOBS__') and report['selected_modules'] == 1
+     assert report['audit_build_jobs'] == AUDIT_JOBS and report['audit_dependencies'] == AUDIT_DEPENDENCIES
+     assert report['audit_log_sha256'] == AUDIT_SHA
+-    assert report['warned_source_exit_zero_jobs'] == int('__H10_WARNED_ZERO_JOBS__')
+-    assert report['rejected_public_type_jobs'] == int('__H10_REJECTED_TYPE_JOBS__')
++    assert report['warned_source_exit_zero_jobs'] == int('__H10_WARNED_SOURCE_EXIT_ZERO_JOBS__')
++    assert report['rejected_public_type_jobs'] == int('__H10_REJECTED_PUBLIC_TYPE_JOBS__')
+ result = subprocess.run(['/usr/bin/python3', str(HERE / 'verify-preservation.py')],
+     cwd='/', capture_output=True, text=True)
+ (HERE / 'preservation-final.stderr').write_text(result.stderr)

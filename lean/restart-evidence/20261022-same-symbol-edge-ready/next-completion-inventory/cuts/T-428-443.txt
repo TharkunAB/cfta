@@ -1,0 +1,16 @@
+  | edge domain left right =>
+    change EdgeReady bounds roots domain left right at ready
+    change IntersectEventually (fun fuel => edge view fuel domain left right)
+    apply intersect_eventually_succ
+    conv => arg 1; ext fuel; rw [edge.eq_def]
+    dsimp only
+    by_cases arity : left.children.length ≠ right.children.length
+    · simp only [ite_eq_left arity]
+      exact intersect_eventually_pure _
+    simp only [ite_eq_right arity]
+    apply intersect_eventually_map
+    apply intersect_eventually_walk
+    intro children member
+    have nextReady := ready_child bounds roots domain left right ready children member
+    have localStep := LocalStep.edgeChild (view := view) (pairs := bounds.pairs) domain left right children member
+    exact call_eventual view inputs freeCorrect bounds roots (.node _ _ _) nextReady

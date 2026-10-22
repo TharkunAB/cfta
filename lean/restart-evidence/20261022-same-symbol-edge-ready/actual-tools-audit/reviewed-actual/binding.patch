@@ -1,0 +1,129 @@
+--- checkpoint-preparation/verify-checkpoint.py
++++ actual-tools-preparation/verify-checkpoint.py
+@@ -4,9 +4,9 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ ROOT = HERE.parents[2]
+-AUDIT_SHA = '__H10_AUDIT_SHA__'
+-AUDIT_JOBS = int('__H10_AUDIT_BUILD_JOBS__')
+-AUDIT_DEPENDENCIES = int('__H10_AUDIT_DEPENDENCIES__')
++AUDIT_SHA = '18fafb8c4bb0d3de3e0c2b2f2adcbd433c1f3621f2035aaf79847fa80d113688'
++AUDIT_JOBS = int('3627')
++AUDIT_DEPENDENCIES = int('75377')
+ for mode, label in [([], 'normal'), (['--live'], 'live')]:
+     result = subprocess.run(['/usr/bin/python3', str(HERE / 'verify-proofs.py'),
+         '--root', str(ROOT), *mode], cwd='/', capture_output=True, text=True)
+@@ -14,12 +14,12 @@
+     (HERE / ('proof-verification-' + label + '.stderr')).write_text(result.stderr)
+     assert result.returncode == 0, result.stderr
+     report = json.loads(result.stdout)
+-    assert report['status'] == 'PASS' and report['actual_jobs'] == int('__H10_ACTUAL_JOBS__') and report['failed_jobs'] == int('__H10_FAILED_JOBS__')
+-    assert report['source_jobs'] == int('__H10_SOURCE_JOBS__') and report['audit_jobs'] == int('__H10_AUDIT_JOBS__') and report['selected_modules'] == 1
++    assert report['status'] == 'PASS' and report['actual_jobs'] == int('4') and report['failed_jobs'] == int('1')
++    assert report['source_jobs'] == int('3') and report['audit_jobs'] == int('1') and report['selected_modules'] == 1
+     assert report['audit_build_jobs'] == AUDIT_JOBS and report['audit_dependencies'] == AUDIT_DEPENDENCIES
+     assert report['audit_log_sha256'] == AUDIT_SHA
+-    assert report['warned_source_exit_zero_jobs'] == int('__H10_WARNED_SOURCE_EXIT_ZERO_JOBS__')
+-    assert report['rejected_public_type_jobs'] == int('__H10_REJECTED_PUBLIC_TYPE_JOBS__')
++    assert report['warned_source_exit_zero_jobs'] == int('0')
++    assert report['rejected_public_type_jobs'] == int('0')
+ result = subprocess.run(['/usr/bin/python3', str(HERE / 'verify-preservation.py')],
+     cwd='/', capture_output=True, text=True)
+ (HERE / 'preservation-final.stderr').write_text(result.stderr)
+--- checkpoint-preparation/commit-proofs.py
++++ actual-tools-preparation/commit-proofs.py
+@@ -5,9 +5,9 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ ROOT = HERE.parents[2]
+-AUDIT_SHA = '__H10_AUDIT_SHA__'
+-AUDIT_JOBS = int('__H10_AUDIT_BUILD_JOBS__')
+-AUDIT_DEPENDENCIES = int('__H10_AUDIT_DEPENDENCIES__')
++AUDIT_SHA = '18fafb8c4bb0d3de3e0c2b2f2adcbd433c1f3621f2035aaf79847fa80d113688'
++AUDIT_JOBS = int('3627')
++AUDIT_DEPENDENCIES = int('75377')
+ def git(*args):
+     return subprocess.check_output(['git', *args], cwd=ROOT, text=True)
+ 
+@@ -22,8 +22,8 @@
+ gate = json.loads((HERE / 'selected-source-gate.json').read_text())
+ assert gate['status'] == 'ROOT_ACCEPTED' and gate['path'] == next(iter(selected))
+ assert selected[gate['path']]['sha256'] == gate['sha256'] == hashlib.sha256((HERE / gate['snapshot']).read_bytes()).hexdigest()
+-assert selected[next(iter(selected))]['strict'] == '__H10_SELECTED_STRICT__'
+-assert selected[next(iter(selected))]['full'] == '__H10_SELECTED_FULL__'
++assert selected[next(iter(selected))]['strict'] == 'same-symbol-edge-ready-strict-2'
++assert selected[next(iter(selected))]['full'] == 'same-symbol-edge-ready-public-1'
+ assert 'lean/MicroCFTA/SourceCurrentSameSymbolEdgeReady.lean' not in json.loads((HERE / 'starting-files.json').read_text())
+ for name, pin in selected.items():
+     data = (ROOT / name).read_bytes()
+@@ -31,8 +31,8 @@
+     assert data == (HERE / (pin['strict'] + '.source.lean')).read_bytes()
+     assert not (HERE / (pin['strict'] + '.log')).read_bytes()
+     assert json.loads((HERE / (pin['full'] + '.json')).read_text())['exit_code'] == 0
+-assert json.loads((HERE / '__H10_AUDIT_STEM__.json').read_text())['exit_code'] == 0
+-audit_raw = (HERE / '__H10_AUDIT_STEM__.log').read_bytes()
++assert json.loads((HERE / 'same-symbol-edge-ready-audit-1.json').read_text())['exit_code'] == 0
++audit_raw = (HERE / 'same-symbol-edge-ready-audit-1.log').read_bytes()
+ assert hashlib.sha256(audit_raw).hexdigest() == AUDIT_SHA
+ audit = audit_raw.decode()
+ assert f"Build completed successfully ({AUDIT_JOBS} jobs)." in audit
+--- checkpoint-preparation/update-documents.py
++++ actual-tools-preparation/update-documents.py
+@@ -6,18 +6,18 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ ROOT = HERE.parents[2]
+-SOURCE_SHA = '__H10_SOURCE_SHA__'
+-SOURCE_LINES = int('__H10_SOURCE_LINES__')
+-strict, full, audit_stem = '__H10_SELECTED_STRICT__', '__H10_SELECTED_FULL__', '__H10_AUDIT_STEM__'
++SOURCE_SHA = '68d9ca87569a4bb4ad3d2df6e928c441a4e218bf54154c1da9f4d14de6b2c8aa'
++SOURCE_LINES = int('192')
++strict, full, audit_stem = 'same-symbol-edge-ready-strict-2', 'same-symbol-edge-ready-public-1', 'same-symbol-edge-ready-audit-1'
+ metrics = {
+-    'actual_jobs': int('__H10_ACTUAL_JOBS__'),
+-    'source_jobs': int('__H10_SOURCE_JOBS__'),
+-    'audit_jobs': int('__H10_AUDIT_JOBS__'),
+-    'failed_jobs': int('__H10_FAILED_JOBS__'),
+-    'warned_source_exit_zero_jobs': int('__H10_WARNED_SOURCE_EXIT_ZERO_JOBS__'),
+-    'rejected_public_type_jobs': int('__H10_REJECTED_PUBLIC_TYPE_JOBS__'),
+-    'audit_build_jobs': int('__H10_AUDIT_BUILD_JOBS__'),
+-    'audit_dependencies': int('__H10_AUDIT_DEPENDENCIES__'),
++    'actual_jobs': int('4'),
++    'source_jobs': int('3'),
++    'audit_jobs': int('1'),
++    'failed_jobs': int('1'),
++    'warned_source_exit_zero_jobs': int('0'),
++    'rejected_public_type_jobs': int('0'),
++    'audit_build_jobs': int('3627'),
++    'audit_dependencies': int('75377'),
+ }
+ start = (HERE / 'starting-head.txt').read_text().strip()
+ assert start == 'f985c09f5b18b740082799e15abc4736b3cbf880'
+@@ -35,15 +35,15 @@
+ assert source == (HERE / (strict + '.source.lean')).read_bytes() and (HERE / (strict + '.log')).read_bytes() == b''
+ assert json.loads((HERE / (strict + '.json')).read_text())['exit_code'] == 0
+ raw = (HERE / (full + '.log')).read_bytes()
+-assert hashlib.sha256(raw).hexdigest() == '__H10_FULL_RAW_SHA__'
++assert hashlib.sha256(raw).hexdigest() == 'ffc63200806cbf19fa84666b5b288f39a6f40d8167bf7d886d143a97a7499dfe'
+ assert json.loads((HERE / (full + '.json')).read_text())['exit_code'] == 0
+ readback = json.loads((HERE / 'public-readback/same-symbol-edge-ready-full-readback.json').read_text())
+ assert readback['source_sha256'] == SOURCE_SHA and readback['source_lines'] == SOURCE_LINES
+ assert readback['log_sha256'] == hashlib.sha256(raw).hexdigest() and readback['log_bytes'] == len(raw)
+ assert readback['owned_public_job_exit'] == 0 and readback['no_omissions'] and len(readback['heads']) == 1
+-assert '__H10_TYPE_REVIEW_STATUS__' == 'ROOT_AND_INDEPENDENT_COMPLETE'
++assert 'ROOT_AND_INDEPENDENT_COMPLETE' == 'ROOT_AND_INDEPENDENT_COMPLETE'
+ head_specs = [
+-    ('ready_complete', '__H10_TYPE_SHA__', 'public-readback/same-symbol-edge-ready-ready_complete-public-type.txt', 'public-readback/same-symbol-edge-ready-ready_complete-printed-public-type.txt', '__H10_ACTUAL_AXIOMS_JSON__'),
++    ('ready_complete', '3318dd2a433532c6a7d313cf7b587303358e4f9092fe7d79523ef93ca6c44c69', 'public-readback/same-symbol-edge-ready-ready_complete-public-type.txt', 'public-readback/same-symbol-edge-ready-ready_complete-printed-public-type.txt', '["Classical.choice", "Quot.sound", "propext"]'),
+ ]
+ heads = {head['head'].rsplit('.', 1)[1]: head for head in readback['heads']}
+ assert set(heads) == {spec[0] for spec in head_specs}
+@@ -61,7 +61,7 @@
+ proof_report = json.loads((HERE / 'proof-evidence-normal.json').read_text())
+ assert proof_report['status'] == 'PASS' and all(proof_report[key] == value for key, value in metrics.items())
+ audit = (HERE / (audit_stem + '.log')).read_bytes()
+-assert hashlib.sha256(audit).hexdigest() == proof_report['audit_log_sha256'] == '__H10_AUDIT_SHA__'
++assert hashlib.sha256(audit).hexdigest() == proof_report['audit_log_sha256'] == '18fafb8c4bb0d3de3e0c2b2f2adcbd433c1f3621f2035aaf79847fa80d113688'
+ assert json.loads((HERE / (audit_stem + '.json')).read_text())['exit_code'] == 0
+ assert f"Build completed successfully ({metrics['audit_build_jobs']} jobs).".encode() in audit
+ assert f"{metrics['audit_dependencies']} MicroCFTA theorems".encode() in audit

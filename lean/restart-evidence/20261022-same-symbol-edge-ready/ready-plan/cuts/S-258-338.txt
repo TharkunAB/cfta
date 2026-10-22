@@ -1,0 +1,81 @@
+/-- Preserve the stable pair memo through the same completed comparison and native effects. -/
+theorem completed_preserves [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (semanticView : View Symbol) (model : InputMeaning semanticView)
+    (ranked : RankedInput semanticView model.valid) (holds : Guard → Term Symbol → Bool)
+    (fuel : Nat) (left right result : Edge) (before after : Wrapper width)
+    (stable : Stable semanticView model ranked holds before)
+    (leftResident : EdgeResident before.checked.native.machine.heap left)
+    (rightResident : EdgeResident before.checked.native.machine.heap right)
+    (done : SourceCurrentSameSymbolEdgeControl.execute fuel (.call (left, right) []) before =
+      .done result after)
+    (growth : Extension before.checked.native.machine after.checked.native.machine)
+    (resultResident : EdgeResident after.checked.native.machine.heap result)
+    (resultLaw :
+      let ordered := if right.entry.identity < left.entry.identity then (right, left) else (left, right)
+      SourceCurrentAllocatedNativeContextCache.EdgeLaw semanticView model ranked holds
+        ⟨IntersectionEmptyDomain.emptyDomain, ordered.1, ordered.2⟩ result) :
+    Stable semanticView model ranked holds after ∧
+      Cache.Extends before.memo.table after.memo.table ∧
+      FlatMemoThunk.Returned before.memo after.memo := by
+  have retained : Stable semanticView model ranked holds {before with checked := after.checked} := by
+    refine ⟨?_, stable.returned, stable.canonical⟩
+    apply FlatMemoThunk.Valid.map before.memo _ _ _ stable.valid
+    rintro ⟨pair, status⟩ ⟨first, second, spec⟩
+    refine ⟨edge_grows _ _ growth.heap _ first, edge_grows _ _ growth.heap _ second, ?_⟩
+    cases status with
+    | suspended | evaluating => trivial
+    | returned answer => exact ⟨edge_grows _ _ growth.heap _ spec.1, spec.2⟩
+  have first := edge_grows _ _ growth.heap _ leftResident
+  have second := edge_grows _ _ growth.heap _ rightResident
+  have structural := FlatMemoThunk.Valid.map before.memo _ _ _ stable.valid (fun _ _ => True.intro)
+  have image := call_image fuel left right result before after structural stable.returned done
+  change Stable semanticView model ranked holds ⟨after.checked, after.memo⟩ ∧ _
+  rcases image with ⟨_, same⟩ | ⟨missing, ordered, same⟩ | ⟨swap, missing, reverse, same⟩
+  · rw [same]
+    exact ⟨retained, extends_refl _, FlatMemoThunk.Returned.refl _⟩
+  · rw [same]
+    obtain ⟨valid, returned, extension, history⟩ := written_fields (left, right) result before.memo _ retained.valid
+      retained.returned missing ⟨first, second, trivial⟩ ⟨first, second, resultResident, resultLaw⟩
+    refine ⟨⟨valid, returned, ?_⟩, extension, history⟩
+    intro a b handle stored
+    by_cases newKey : (a, b) = key (left, right)
+    · rcases Prod.mk.inj newKey with ⟨rfl, rfl⟩
+      by_cases swap : right.entry.identity < left.entry.identity
+      · have present := ordered.resolve_left (fun denied => denied swap)
+        cases found : before.memo.table (key (right, left)) with
+        | none => exact False.elim (present found)
+        | some canonical =>
+            exact ⟨canonical, by simpa only [swap, ↓reduceIte, key] using extension _ _ found⟩
+      · exact ⟨before.memo.next, by simp only [swap, ↓reduceIte, written, key, put]⟩
+    · have old : before.memo.table (a, b) = some handle := by
+        simpa only [written, put, ite_eq_right newKey] using stored
+      obtain ⟨canonical, present⟩ := stable.canonical a b handle old
+      exact ⟨canonical, extension _ _ present⟩
+  · rw [same]
+    obtain ⟨valid, returned, extension, history⟩ := written_fields (left, right) result before.memo _ retained.valid
+      retained.returned missing ⟨first, second, trivial⟩ ⟨first, second, resultResident, resultLaw⟩
+    have different : key (right, left) ≠ key (left, right) := by
+      intro equal; have := congrArg Prod.fst equal; simp only [key] at this; omega
+    have reverseMissing : (written (left, right) result before.memo).table (key (right, left)) = none := by
+      simpa only [written, put, ite_eq_right different] using reverse
+    have forward : ¬ left.entry.identity < right.entry.identity := by omega
+    obtain ⟨finalValid, finalReturned, finalExtension, finalHistory⟩ :=
+      written_fields (right, left) result (written (left, right) result before.memo) _ valid returned reverseMissing
+        ⟨second, first, trivial⟩ (by
+          refine ⟨second, first, resultResident, ?_⟩
+          simpa only [swap, forward, ↓reduceIte] using resultLaw)
+    have tables := extends_trans extension finalExtension
+    refine ⟨⟨finalValid, finalReturned, ?_⟩, tables, history.trans finalHistory⟩
+    intro a b handle stored
+    by_cases reverseKey : (a, b) = key (right, left)
+    · rcases Prod.mk.inj reverseKey with ⟨rfl, rfl⟩
+      exact ⟨before.memo.next + 1, by simp only [forward, ↓reduceIte, written, key, put]⟩
+    · by_cases originalKey : (a, b) = key (left, right)
+      · rcases Prod.mk.inj originalKey with ⟨rfl, rfl⟩
+        exact ⟨before.memo.next + 1, by simp only [swap, ↓reduceIte, written, key, put]⟩
+      · have old : before.memo.table (a, b) = some handle := by
+          simpa only [written, put, ite_eq_right reverseKey, ite_eq_right originalKey] using stored
+        obtain ⟨canonical, present⟩ := stable.canonical a b handle old
+        exact ⟨canonical, tables _ _ present⟩
+
+end MicroCFTA.SourceCurrentSameSymbolEdgeStable

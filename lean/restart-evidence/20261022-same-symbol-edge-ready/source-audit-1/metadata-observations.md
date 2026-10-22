@@ -1,0 +1,1 @@
+An initial read-only pin inspection assumed a map but the author uses a list of file records. Reading the actual schema and repeating the static hash comparisons checked all47 entries. This was audit metadata only; no prepared checker or proof job ran.

@@ -1,0 +1,25 @@
+def branchCalls [DecidableEq Symbol] (view : View Symbol) (domain : Domain) (left right : Input) : Branch → List (Call Symbol)
+  | .reset => [.node {} left right]
+  | .swap => [.node domain right left]
+  | .bothMu => match left, right with
+    | .mu first, .mu second => [.node (extend domain [(first, left), (second, right)] (pair left right)) (view.body first) (view.body second)]
+    | _, _ => []
+  | .leftMu => match left with
+    | .mu first => [.node (extend domain [(first, left)] (pair left right)) (view.body first) right]
+    | _ => []
+  | .rightMu => match right with
+    | .mu second => [.node (extend domain [(second, right)] (pair left right)) left (view.body second)]
+    | _ => []
+  | .leftUnion => match left with
+    | .union first => (view.members first).map (fun member => .node domain member right)
+    | _ => []
+  | .rightUnion => match right with
+    | .union second => (view.members second).map (fun member => .node domain left member)
+    | _ => []
+  | .leftReference => match left with
+    | .ref name => (lookup domain name).toList.map (fun binder => .node domain binder right)
+    | _ => []
+  | .rightReference => match right with
+    | .ref name => (lookup domain name).toList.map (fun binder => .node domain left binder)
+    | _ => []
+  | .ordinary => match left, right with

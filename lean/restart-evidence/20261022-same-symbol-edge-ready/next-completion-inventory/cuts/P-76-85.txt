@@ -1,0 +1,10 @@
+/-- Actual closed original physical roots derive the initial successful semantic request certificate. -/
+theorem initial_complete [DecidableEq Symbol] (state : InternedConstructorTemplates.State Symbol Guard) (facts : Facts state)
+    (holds : Guard → Language.Term Symbol → Bool) (left right : Value Symbol Guard)
+    (leftOriginal : Original left) (rightOriginal : Original right)
+    (leftAvailable : Available state left) (rightAvailable : Available state right)
+    (leftClosed : left.free = []) (rightClosed : right.free = []) :
+    Completes (view state holds) (.node (domain IntersectionEmptyDomain.emptyKey) (inputOf left) (inputOf right)) := by
+  obtain ⟨fuel, result, completed, _⟩ := source_schedule_total state facts holds left right leftOriginal rightOriginal
+    leftAvailable rightAvailable leftClosed rightClosed
+  exact ⟨fuel, result, completed fuel (Nat.le_refl _)⟩
