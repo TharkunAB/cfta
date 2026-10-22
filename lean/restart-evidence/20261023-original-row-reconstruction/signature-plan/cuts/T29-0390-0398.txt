@@ -1,0 +1,9 @@
+
+-- The argument `l : List α` is intentionally explicit,
+-- as a tactic may generate `h` without determining `l`.
+theorem exists_mem_of_ne_nil (l : List α) (h : l ≠ []) : ∃ x, x ∈ l :=
+  exists_mem_of_length_pos (length_pos_iff.2 h)
+
+theorem eq_nil_iff_forall_not_mem {l : List α} : l = [] ↔ ∀ a, a ∉ l := by
+  cases l <;> simp [-not_or]
+

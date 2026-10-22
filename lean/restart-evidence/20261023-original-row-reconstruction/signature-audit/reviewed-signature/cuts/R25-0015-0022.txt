@@ -1,0 +1,8 @@
+
+/-- Actual node normalization retains precisely the independent guarded meanings of its source edges. -/
+theorem makeNode_exact [DecidableEq (EdgeKey Symbol Guard)] (state : State Symbol Guard) (facts : Facts state)
+    (holds : Guard → Term Symbol → Bool) (environment : Env Symbol) (edges : List (EdgeValue Symbol Guard))
+    (resident : Edges state edges) (term : Term Symbol) :
+    meaning holds environment (run (makeNode edges) state).1 term ↔
+      ∃ edge ∈ edges, MergedColdInterpretation.EdgeMeaning (meaning holds environment) holds edge term :=
+  MergedColdInterpretation.makeNode_exact state facts (meaning holds environment) edges resident holds (laws holds environment) term

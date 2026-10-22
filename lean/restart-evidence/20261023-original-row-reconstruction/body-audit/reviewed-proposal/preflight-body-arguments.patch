@@ -1,0 +1,16 @@
+--- drafts/SourceCurrentOriginalRowReconstruction.initial210.lean.txt
++++ SourceCurrentOriginalRowReconstruction.lean
+@@ -32,11 +32,11 @@
+   intro cell cellGood
+   refine ⟨edge_grows _ _ growth _ cellGood.1,
+     edge_grows _ _ growth _ cellGood.2.1, ?_⟩
+-  rcases cell with ⟨request, status⟩
++  rcases cell with ⟨_request, status⟩
+   cases status with
+   | suspended | evaluating => trivial
+   | returned value =>
+-      exact ⟨edge_grows _ _ growth _ cellGood.2.2.1, cellGood.2.2.2⟩
++      exact ⟨edge_grows _ _ growth value cellGood.2.2.1, cellGood.2.2.2⟩
+ 
+ /-- Rebuild an original ordinary parent after its actual symbol-group runs. -/
+ theorem ordinary_complete

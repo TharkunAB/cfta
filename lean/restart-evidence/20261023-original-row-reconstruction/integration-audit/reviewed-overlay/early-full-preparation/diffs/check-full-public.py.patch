@@ -1,0 +1,24 @@
+--- predecessors/check-full-public.py
++++ check-full-public.py
+@@ -14,9 +14,9 @@
+ source_raw, printer_raw, raw = (path.read_bytes() for path in [args.source, args.printer, args.raw])
+ source, printer, log = (item.decode("utf-8") for item in [source_raw, printer_raw, raw])
+ assert hashlib.sha256(source_raw).hexdigest() == args.expected_source_sha256
+-assert 1 <= len(source.splitlines()) <= int("__H23_SOURCE_HARD_STOP__")
+-namespace = "MicroCFTA.__H23_MODULE_NAME__."
+-specs = json.loads("__H23_PUBLIC_SPECS_JSON__")
++assert 1 <= len(source.splitlines()) <= int("350")
++namespace = "MicroCFTA.SourceCurrentOriginalRowReconstruction."
++specs = json.loads('[["ordinary_complete", "theorem"]]')
+ public = re.findall(r"(?m)^\s*(?:(?:noncomputable|unsafe|partial)\s+)?(def|theorem|lemma|abbrev|opaque|instance|structure|inductive)\s+([^\s(\[{:=]+)", source)
+ assert public == [(kind, short) for short, kind in specs]
+ options = ["maxRecDepth 30000", "maxHeartbeats 0", "linter.all true", "pp.explicit true", "pp.fullNames true", "pp.proofs true",
+@@ -24,7 +24,7 @@
+ tail = "\n" + "".join("set_option " + option + "\n" for option in options)
+ for short, _kind in specs:
+     tail += "".join(directive + namespace + short + "\n" for directive in ["#check @", "#print ", "#print axioms "])
+-assert source.rstrip().endswith("end MicroCFTA.__H23_MODULE_NAME__")
++assert source.rstrip().endswith("end MicroCFTA.SourceCurrentOriginalRowReconstruction")
+ assert not re.search(r"(?m)^\s*set_option\s+(?:maxRecDepth|maxHeartbeats)\b", source)
+ assert printer_raw == source_raw + tail.encode("utf-8")
+ for option in options:

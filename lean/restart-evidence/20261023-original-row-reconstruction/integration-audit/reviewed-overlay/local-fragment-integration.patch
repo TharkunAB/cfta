@@ -1,0 +1,35 @@
+--- predecessors/verify-proofs.py
++++ verify-proofs.py
+@@ -134,12 +134,30 @@
+ context = contract_data["context.lean.txt"]
+ assert source.startswith(context)
+ positions = []
+-assert next(iter(contracts)) == "context.lean.txt"
+-for filename in list(contracts)[1:]:
++assert list(contracts) == ["context.lean.txt", "private-header.lean.txt", "public-header.lean.txt", "local-statements.lean.txt"]
++for filename in ["private-header.lean.txt", "public-header.lean.txt"]:
+     header = contract_data[filename].rstrip(b"\n") + b" := by\n"
+     assert source.count(header) == 1 and source.index(header) >= len(context), filename
+     positions.append(source.index(header))
+ assert positions == sorted(set(positions))
++local_types = contract_data["local-statements.lean.txt"].decode()
++local_markers = list(re.finditer(r"(?m)^have ([A-Za-z_][A-Za-z_0-9']*)\b", local_types))
++local_names = ["parentClosed", "residentRows", "closedRows", "rebuilt", "rebuiltSemantic", "rebuildExtension", "rebuiltGood", "rawDone"]
++assert [match.group(1) for match in local_markers] == local_names
++comments = local_types[:local_markers[0].start()].splitlines()
++assert len(comments) == 2 and all(line.startswith("--") for line in comments)
++public_header = contract_data["public-header.lean.txt"].rstrip(b"\n") + b" := by\n"
++body_start = source.index(public_header) + len(public_header)
++body_end = source.rfind(("\nend MicroCFTA." + name).encode())
++assert body_start < body_end
++public_body = source[body_start:body_end].decode()
++local_positions = []
++for index, marker in enumerate(local_markers):
++    end = local_markers[index + 1].start() if index + 1 < len(local_markers) else len(local_types)
++    fragment = local_types[marker.start():end].rstrip("\n") + " := by\n"
++    assert public_body.count(fragment) == 1, marker.group(1)
++    local_positions.append(public_body.index(fragment))
++assert local_positions == sorted(set(local_positions))
+ public = re.findall(r"(?m)^\s*(?:(?:noncomputable|unsafe|partial)\s+)?(def|theorem|lemma|abbrev|opaque|instance|structure|inductive)\s+([^\s(\[{:=]+)", source.decode())
+ assert public == [(kind, short) for short, kind in specs]
+ helpers = []

@@ -1,0 +1,5 @@
+/-- Only returned cells require a relation between the original request and result. -/
+def CellSpec (spec : Request → Value → Prop) (cell : Cell Request Value) : Prop :=
+  match cell.status with
+  | .returned value => spec cell.request value
+  | _ => True

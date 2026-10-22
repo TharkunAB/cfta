@@ -1,0 +1,4 @@
+/-- Free-reference metadata retains every child reference and no other reference. -/
+theorem childFree_member (children : List (Value Symbol Guard)) (reference : Reference) :
+    reference ∈ childFree children ↔ ∃ child ∈ children, reference ∈ child.free := by
+  simp [childFree, canonicalFree]

@@ -1,0 +1,30 @@
+--- predecessors/verify-preservation.py
++++ verify-preservation.py
+@@ -25,15 +25,15 @@
+ selected = json.loads((HERE / 'selected-sources.json').read_text())
+ gate = json.loads((HERE / 'selected-source-gate.json').read_text())
+ assert gate['status'] == 'ROOT_ACCEPTED'
+-assert gate['path'] == 'lean/MicroCFTA/__H23_MODULE_NAME__.lean'
+-assert isinstance(gate['lines'], int) and 0 < gate['lines'] <= int('__H23_SOURCE_HARD_STOP__')
++assert gate['path'] == 'lean/MicroCFTA/SourceCurrentOriginalRowReconstruction.lean'
++assert isinstance(gate['lines'], int) and 0 < gate['lines'] <= int('350')
+ assert sha(HERE / gate['snapshot']) == gate['sha256']
+ expected = {gate['path']: (gate['sha256'], gate['lines'])}
+ assert set(selected) == set(expected)
+ for name, (expected_sha, lines) in expected.items():
+     assert selected[name]['sha256'] == expected_sha and sha(ROOT / name) == expected_sha
+     assert len((ROOT / name).read_bytes().splitlines()) == lines
+-new_module = 'lean/MicroCFTA/__H23_MODULE_NAME__.lean'
++new_module = 'lean/MicroCFTA/SourceCurrentOriginalRowReconstruction.lean'
+ assert new_module not in base
+ assert 'lean/notes-current-original-row-reconstruction.md' not in base
+ assert (ROOT / 'lean/notes-current-original-row-reconstruction.md').is_file()
+@@ -46,7 +46,7 @@
+ assert sha(audit_original) == 'ebcc4770268c142e8fb5370dadcbf9be224276f4c7b0240c9876df55444715de'
+ assert len(audit_original.read_bytes().splitlines()) == 3128
+ audit = (ROOT / 'lean/MicroCFTA/Audit.lean').read_bytes()
+-addition = b'import MicroCFTA.__H23_MODULE_NAME__\n'
++addition = b'import MicroCFTA.SourceCurrentOriginalRowReconstruction\n'
+ assert audit.count(addition) == 1 and audit.replace(addition, b'', 1) == audit_original.read_bytes()
+ assert audit.index(addition) < audit.index(b'/-!')
+ for name in documents:

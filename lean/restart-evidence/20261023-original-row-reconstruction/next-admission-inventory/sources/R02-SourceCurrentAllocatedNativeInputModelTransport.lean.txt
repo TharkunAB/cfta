@@ -1,0 +1,150 @@
+import MicroCFTA.SourceCurrentAllocatedNativeInputInventoryModels
+import MicroCFTA.SourceCurrentAllocatedNativeContextCache
+
+/-!
+# Contextual cache laws under same-source input admission
+
+Finite ranks use the view and physical representative, not the valid domain.
+One source heap therefore gives identical ranks for different root lists.
+Returned requests must already be admitted by the earlier input model.
+This condition prevents transport of a previously vacuous cached law.
+The results do not admit new records from a later constructor heap.
+-/
+namespace MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport
+open Language InternedConstructorTemplates InternedProbeProvenance InternedNestedProvenance
+open IntersectSchedule SourceRecursiveIntersectionInputView
+
+/-- Equal representatives preserve every independent input derivation rank. -/
+theorem ranks_eq (view : View Symbol) (before after : FiniteInput view)
+    (same : before.representative = after.representative) :
+    finiteRanks view before = finiteRanks view after := by
+  unfold finiteRanks
+  rw [same]
+
+/-- Erasing ranks preserves the same languages without a valid-domain premise. -/
+theorem languages_eq (view : View Symbol) (before after : FiniteInput view)
+    (same : before.representative = after.representative) :
+    finiteLanguages view before = finiteLanguages view after := by
+  unfold finiteLanguages
+  rw [ranks_eq view before after same]
+
+/-- Literal root inclusion retains actual reachability in the same source view. -/
+theorem reachable_mono (source : State Symbol Guard) (holds : Guard → Term Symbol → Bool)
+    (before after : List (Value Symbol Guard)) (included : ∀ value ∈ before, value ∈ after)
+    (input : Input) (reachable : SourceCurrentAllocatedNativeInputInventoryModels.Reachable source holds before input) :
+    SourceCurrentAllocatedNativeInputInventoryModels.Reachable source holds after input := by
+  obtain ⟨root, member, reached⟩ := reachable
+  exact ⟨root, included root member, reached⟩
+
+section Inventories
+variable (source : State Symbol Guard) (facts : InternedNestedFacts.Facts source)
+  (holds : Guard → Term Symbol → Bool) (before after : List (Value Symbol Guard))
+  (beforeOriginal : ∀ value ∈ before, Original value) (beforeAvailable : Values source before)
+  (beforeClosed : ∀ value ∈ before, value.free = [])
+  (afterOriginal : ∀ value ∈ after, Original value) (afterAvailable : Values source after)
+  (afterClosed : ∀ value ∈ after, value.free = [])
+local notation "oldInputs" => SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source facts holds
+  before beforeOriginal beforeAvailable beforeClosed
+local notation "newInputs" => SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source facts holds
+  after afterOriginal afterAvailable afterClosed
+
+/-- Actual root inventories read the identical physical representative function. -/
+theorem inventory_representative : (oldInputs).representative = (newInputs).representative := rfl
+
+/-- Enlarging an actual root inventory retains the earlier valid domain. -/
+theorem inventory_valid (included : ∀ value ∈ before, value ∈ after) :
+    ∀ input, (oldInputs).valid input → (newInputs).valid input :=
+  reachable_mono source holds before after included
+
+/-- Actual inventories in one source have equal ranks, including outside their valid domains. -/
+theorem inventory_ranks : finiteRanks (view source holds) oldInputs = finiteRanks (view source holds) newInputs := rfl
+
+/-- Actual inventories in one source have equal rank-erased input languages. -/
+theorem inventory_languages : finiteLanguages (view source holds) oldInputs = finiteLanguages (view source holds) newInputs := rfl
+end Inventories
+
+open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionThunks
+open SourceCurrentAllocatedNativeContextCache
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Native" => SourceRecursiveIntersectionThunks.State
+variable {width : Nat}
+
+/-- Returned cells retain old input admission independently of their result laws. -/
+structure Admitted (view : View Symbol) (model : InputMeaning view) (state : Native width Symbol Guard) : Prop where
+  nodes : Returned (fun request (_ : Value Symbol Guard) => NodeInputs view model request) state.nodes
+  edges : Returned (fun request (_ : EdgeValue Symbol Guard) => EdgeInputs view model request) state.edges
+
+/-- Empty native tables need no old cached-request admission premise. -/
+theorem initial_admitted (view : View Symbol) (model : InputMeaning view) (width : Nat)
+    (machine : Machine Symbol Guard) : Admitted view model (initial width machine) := by
+  constructor <;> intro handle request result absent <;> cases absent
+
+/-- Unchanged returned cells retain the same admitted requests after machine changes. -/
+theorem advance_admitted (view : View Symbol) (model : InputMeaning view) (state : Native width Symbol Guard)
+    (after : Machine Symbol Guard) (admitted : Admitted view model state) :
+    Admitted view model (advance state after) := ⟨admitted.nodes, admitted.edges⟩
+
+/-- Valid-domain inclusion transports actual earlier admission to the larger model. -/
+theorem admitted_mono (view : View Symbol) (before after : InputMeaning view) (state : Native width Symbol Guard)
+    (included : ∀ input, before.valid input → after.valid input) (admitted : Admitted view before state) :
+    Admitted view after state := by
+  constructor
+  · intro handle request result found
+    obtain ⟨leftOriginal, rightOriginal, left, right⟩ := admitted.nodes handle request result found
+    exact ⟨leftOriginal, rightOriginal, included _ left, included _ right⟩
+  · intro handle request result found
+    have old := admitted.edges handle request result found
+    constructor
+    · intro value member
+      exact ⟨(old.1 value member).1, included _ (old.1 value member).2⟩
+    · intro value member
+      exact ⟨(old.2 value member).1, included _ (old.2 value member).2⟩
+
+/-- Old admission makes a returned node law usable under the identical rank interpretation. -/
+theorem node_law (view : View Symbol) (before after : FiniteInput view)
+    (same : before.representative = after.representative) (holds : Guard → Term Symbol → Bool)
+    (request : NodeRequest Symbol Guard) (result : Value Symbol Guard)
+    (admitted : NodeInputs view (finiteInputMeaning view before) request)
+    (law : NodeLaw view (finiteInputMeaning view before) (finiteRankedInput view before) holds request result) :
+    NodeLaw view (finiteInputMeaning view after) (finiteRankedInput view after) holds request result := by
+  have languages : (finiteInputMeaning view before).languages = (finiteInputMeaning view after).languages :=
+    languages_eq view before after same
+  have ranks : (finiteRankedInput view before).languages = (finiteRankedInput view after).languages :=
+    ranks_eq view before after same
+  constructor
+  · intro _
+    simpa only [languages] using law.sound admitted
+  · intro _
+    simpa only [ranks] using law.complete admitted
+
+/-- Old child admission transports both contextual bounds for the exact returned row. -/
+theorem edge_law (view : View Symbol) (before after : FiniteInput view)
+    (same : before.representative = after.representative) (holds : Guard → Term Symbol → Bool)
+    (request : EdgeRequest Symbol Guard) (result : EdgeValue Symbol Guard)
+    (admitted : EdgeInputs view (finiteInputMeaning view before) request)
+    (law : EdgeLaw view (finiteInputMeaning view before) (finiteRankedInput view before) holds request result) :
+    EdgeLaw view (finiteInputMeaning view after) (finiteRankedInput view after) holds request result := by
+  have languages : (finiteInputMeaning view before).languages = (finiteInputMeaning view after).languages :=
+    languages_eq view before after same
+  have ranks : (finiteRankedInput view before).languages = (finiteRankedInput view after).languages :=
+    ranks_eq view before after same
+  constructor
+  · intro _
+    simpa only [languages] using law.sound admitted
+  · intro _
+    simpa only [ranks] using law.complete admitted
+
+/-- The same native tables retain their contextual laws when old requests were admitted. -/
+theorem contextual (view : View Symbol) (before after : FiniteInput view)
+    (same : before.representative = after.representative) (holds : Guard → Term Symbol → Bool)
+    (state : Native width Symbol Guard)
+    (admitted : Admitted view (finiteInputMeaning view before) state)
+    (valid : Contextual view (finiteInputMeaning view before) (finiteRankedInput view before) holds state) :
+    Contextual view (finiteInputMeaning view after) (finiteRankedInput view after) holds state :=
+  ⟨fun handle request result found => node_law view before after same holds request result
+      (admitted.nodes handle request result found) (valid.nodes handle request result found),
+    fun handle request result found => edge_law view before after same holds request result
+      (admitted.edges handle request result found) (valid.edges handle request result found)⟩
+
+end MicroCFTA.SourceCurrentAllocatedNativeInputModelTransport

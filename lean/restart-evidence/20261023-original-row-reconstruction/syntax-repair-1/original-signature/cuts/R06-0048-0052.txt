@@ -1,0 +1,5 @@
+/-- Lift a complete constructor computation without changing the actual domain cache. -/
+def work [DecidableEq (EdgeKey Symbol Guard)] (request : Work Symbol Guard A) (state : Machine Symbol Guard) :
+    Result Symbol Guard A :=
+  let actual := run request state.heap
+  .done actual.1 {state with heap := actual.2}

@@ -1,0 +1,8 @@
+    have semantic := SourceEqualityRequiredSemanticCache.node newRows before.machine.heap ready.semantic resident newClosed
+    have afterHeap := SourceEqualityAnnotationHeap.run annotation _ (SourceEqualityAnnotationHeap.makeNode annotation newRows) before.machine.heap heap
+    refine ⟨ready.advance _ built.1 semantic, built.1, built.2.1, built.2.2.1, afterHeap, ?_⟩
+    intro term
+    apply (InternedGuardedLanguage.makeNode_exact before.machine.heap facts holds ambient newRows resident term).trans
+    apply exists_congr
+    intro edge
+    exact and_congr_right fun _ => (InternedGuardedLanguage.edgeMeaning_all holds ambient edge term).symm

@@ -1,0 +1,11 @@
+--- predecessors/verify-proofs.py
++++ verify-proofs.py
+@@ -174,7 +174,7 @@
+ assert declaration_review.get("local_induction") == json.loads("__H23_LOCAL_INDUCTION_JSON__")
+ assert declaration_review["source_hard_stop"] == int("__H23_SOURCE_HARD_STOP__")
+ assert declaration_review["contract_sha256"] == "__H23_CONTRACT_SHA256__"
+-assert digest((evidence / "signature-plan/contracts.json").read_bytes()) == declaration_review["contract_sha256"]
++assert digest((evidence / "signature-repair/contracts.json").read_bytes()) == declaration_review["contract_sha256"]
+ assert [{key: item[key] for key in ["path", "lines", "sha256"]} for item in declaration_review["contracts"]] == [dict(path=filename, lines=item["lines"], sha256=item["sha256"]) for filename, item in expected_contracts.items()]
+ if args.live:
+     assert (root / source_path).read_bytes() == source

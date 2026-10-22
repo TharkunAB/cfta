@@ -1,0 +1,10 @@
+/-- The stored ordinary node selects exactly the public union of its complete source rows. -/
+theorem node_meaning (holds : Guard → Term Symbol → Bool) (ambient : InternedGuardedLanguage.Env Symbol)
+    (entry : Interned InternedBinderProtocol.NodeKey) (edges : List (EdgeValue Symbol Guard)) (depth : Nat) (free : List InternedBinderProtocol.Reference)
+    (term : Term Symbol) :
+    InternedGuardedLanguage.meaning holds ambient (.node entry edges depth free) term ↔
+      ∃ edge ∈ edges, InternedGuardedLanguage.edgeMeaning holds ambient edge term := by
+  rw [InternedGuardedLanguage.meaning]
+  constructor
+  · rintro ⟨⟨edge, included⟩, accepted⟩; exact ⟨edge, included, accepted⟩
+  · rintro ⟨edge, included, accepted⟩; exact ⟨⟨edge, included⟩, accepted⟩

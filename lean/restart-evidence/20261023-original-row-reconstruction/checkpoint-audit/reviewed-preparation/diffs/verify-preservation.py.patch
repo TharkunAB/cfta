@@ -1,0 +1,92 @@
+--- predecessors/verify-preservation.py
++++ verify-preservation.py
+@@ -11,7 +11,7 @@
+     return subprocess.check_output(['git', *args], cwd=ROOT, text=True)
+ 
+ base = json.loads((HERE / 'starting-files.json').read_text())
+-assert len(base) == 96320
++assert len(base) == 98415
+ changed = []
+ for name, pin in base.items():
+     path = ROOT / name
+@@ -25,28 +25,28 @@
+ selected = json.loads((HERE / 'selected-sources.json').read_text())
+ gate = json.loads((HERE / 'selected-source-gate.json').read_text())
+ assert gate['status'] == 'ROOT_ACCEPTED'
+-assert gate['path'] == 'lean/MicroCFTA/SourceCurrentOriginalRowGroupChain.lean'
+-assert isinstance(gate['lines'], int) and 0 < gate['lines'] <= int('350')
++assert gate['path'] == 'lean/MicroCFTA/__H23_MODULE_NAME__.lean'
++assert isinstance(gate['lines'], int) and 0 < gate['lines'] <= int('__H23_SOURCE_HARD_STOP__')
+ assert sha(HERE / gate['snapshot']) == gate['sha256']
+ expected = {gate['path']: (gate['sha256'], gate['lines'])}
+ assert set(selected) == set(expected)
+ for name, (expected_sha, lines) in expected.items():
+     assert selected[name]['sha256'] == expected_sha and sha(ROOT / name) == expected_sha
+     assert len((ROOT / name).read_bytes().splitlines()) == lines
+-new_module = 'lean/MicroCFTA/SourceCurrentOriginalRowGroupChain.lean'
++new_module = 'lean/MicroCFTA/__H23_MODULE_NAME__.lean'
+ assert new_module not in base
+-assert 'lean/notes-current-original-row-group-chain.md' not in base
+-assert (ROOT / 'lean/notes-current-original-row-group-chain.md').is_file()
++assert 'lean/notes-current-original-row-reconstruction.md' not in base
++assert (ROOT / 'lean/notes-current-original-row-reconstruction.md').is_file()
+ assert json.loads((HERE / 'frozen-modules.json').read_text()) == {
+     Path(name).stem: pin['sha256'] for name, pin in selected.items()}
+ assert set(changed) == set(documents) | (set(selected) & set(base)) | {'lean/MicroCFTA/Audit.lean'}, changed
+ start = (HERE / 'starting-head.txt').read_text().strip()
+-assert start == '70787b95484cb69897bc4075858e07c7f9c22433'
++assert start == '87c0eabce252c0017b1c060750c0a06ebd4fe9b3'
+ audit_original = HERE / 'original-sources/Audit.original.lean.txt'
+-assert sha(audit_original) == '4c54e8f578cc9e12084e7306671e6c6410150811a3868fc128b90805ae5452e1'
+-assert len(audit_original.read_bytes().splitlines()) == 3127
++assert sha(audit_original) == 'ebcc4770268c142e8fb5370dadcbf9be224276f4c7b0240c9876df55444715de'
++assert len(audit_original.read_bytes().splitlines()) == 3128
+ audit = (ROOT / 'lean/MicroCFTA/Audit.lean').read_bytes()
+-addition = b'import MicroCFTA.SourceCurrentOriginalRowGroupChain\n'
++addition = b'import MicroCFTA.__H23_MODULE_NAME__\n'
+ assert audit.count(addition) == 1 and audit.replace(addition, b'', 1) == audit_original.read_bytes()
+ assert audit.index(addition) < audit.index(b'/-!')
+ for name in documents:
+@@ -55,13 +55,13 @@
+ marker = '# Current formalization findings\n\n## Haskell fix handoff for external work\n\n'
+ marker += (HERE / 'haskell-repair-index.md').read_text().rstrip() + '\n\n'
+ assert (ROOT / 'FINDINGS.md').read_text().startswith(marker)
+-previous = json.loads((ROOT / 'lean/restart-evidence/20261022-prepend-grouping/preservation-final.json').read_text())
++previous = json.loads((ROOT / 'lean/restart-evidence/20261022-original-row-group-chain/preservation-final.json').read_text())
+ archives = dict(previous['frozen_entry_archives'])
+ registries = dict(previous['frozen_manifests'])
+-assert len(registries) == 305 and sum(pin['checked'] for pin in registries.values()) == 1399
++assert len(registries) == 306 and sum(pin['checked'] for pin in registries.values()) == 1400
+ assert len(archives) == 5
+-assert 'lean/restart-evidence/20261022-prepend-grouping/frozen-modules.json' not in registries
+-registries['lean/restart-evidence/20261022-prepend-grouping/frozen-modules.json'] = {'checked': 1}
++assert 'lean/restart-evidence/20261022-original-row-group-chain/frozen-modules.json' not in registries
++registries['lean/restart-evidence/20261022-original-row-group-chain/frozen-modules.json'] = {'checked': 1}
+ frozen = {}
+ for name in registries:
+     entries = json.loads((ROOT / name).read_text())
+@@ -75,7 +75,7 @@
+             assert entry['sha256'] == expected and sha(ROOT / entry['snapshot']) == expected
+             assert sha(ROOT / source) == entry['current_sha256']
+     frozen[name] = {'checked': len(entries), 'manifest_sha256': sha(ROOT / name)}
+-assert len(frozen) == 306 and sum(pin['checked'] for pin in frozen.values()) == 1400
++assert len(frozen) == 307 and sum(pin['checked'] for pin in frozen.values()) == 1401
+ for name, args in [('starting-stashes.txt', ('stash', 'list', '--format=%gd %H %s')),
+                    ('starting-worktrees.txt', ('worktree', 'list', '--porcelain'))]:
+     actual, expected = git(*args), (HERE / name).read_text()
+@@ -115,13 +115,13 @@
+     and name != 'lean/MicroCFTA/Audit.lean' and name not in selected for name in base)
+ assert older_sources == sum(name.startswith('lean/MicroCFTA/') and name.endswith('.lean')
+     and name != 'lean/MicroCFTA/Audit.lean' for name in base)
+-assert older_sources == 3637
++assert older_sources == 3638
+ report = dict(status='PASS', baseline_files=len(base), changed=sorted(changed),
+               unchanged_haskell_files=len(hs), added_haskell_archive_files=len(added_hs), unchanged_package_files=len(active),
+               unchanged_older_non_audit_sources=older_sources,
+               frozen_registry_count=len(frozen), frozen_entries=sum(item['checked'] for item in frozen.values()),
+               frozen_manifests=frozen, frozen_entry_archives=archives,
+-              audit_only_new_import=True, new_original_row_group_chain_absent_baseline=True,
++              audit_only_new_import=True, new_original_row_reconstruction_absent_baseline=True,
+               stashes_preserved=True, other_worktrees_preserved=True,
+               haskell_fix_registry_first_and_retained=True, archived_components=len(components))
+ print(json.dumps(report, indent=2))

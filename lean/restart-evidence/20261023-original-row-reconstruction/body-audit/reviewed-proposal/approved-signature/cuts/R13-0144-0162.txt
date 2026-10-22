@@ -1,0 +1,19 @@
+/-- Contextual completed-cell guarantees do not duplicate physical or key validity. -/
+structure Contextual (view : IntersectSchedule.View Symbol) (model : IntersectSchedule.InputMeaning view)
+    (ranked : IntersectSchedule.RankedInput view model.valid) (holds : Guard → Term Symbol → Bool)
+    (state : Native width Symbol Guard) : Prop where
+  nodes : Returned (NodeLaw view model ranked holds) state.nodes
+  edges : Returned (EdgeLaw view model ranked holds) state.edges
+
+section Lifecycle
+variable (view : IntersectSchedule.View Symbol) (model : IntersectSchedule.InputMeaning view)
+  (ranked : IntersectSchedule.RankedInput view model.valid) (holds : Guard → Term Symbol → Bool)
+
+/-- Empty tables need no supplied completed contextual answer. -/
+theorem initial_contextual (width : Nat) (machine : Machine Symbol Guard) :
+    Contextual view model ranked holds (initial width machine) :=
+  ⟨returned_empty _, returned_empty _⟩
+
+/-- The fixed original model is unchanged when only the actual machine advances. -/
+theorem advance_contextual (state : Native width Symbol Guard) (after : Machine Symbol Guard)
+    (valid : Contextual view model ranked holds state) : Contextual view model ranked holds (advance state after) := ⟨valid.nodes, valid.edges⟩

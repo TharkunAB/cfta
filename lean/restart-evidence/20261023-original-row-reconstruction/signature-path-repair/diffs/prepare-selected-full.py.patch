@@ -1,0 +1,13 @@
+--- predecessors/prepare-selected-full.py
++++ prepare-selected-full.py
+@@ -13,8 +13,8 @@
+ assert len(source.splitlines()) == int(expected_lines) and 1 <= int(expected_lines) <= int("350")
+ assert json.loads((HERE / (stem + '.json')).read_text())['exit_code'] == 0
+ assert (HERE / (stem + '.log')).read_bytes() == b''
+-context = (HERE / 'signature-plan/context.lean.txt').read_bytes()
+-proposed = (HERE / 'signature-plan/public-header.lean.txt').read_bytes()
++context = (HERE / 'signature-repair/context.lean.txt').read_bytes()
++proposed = (HERE / 'signature-repair/public-header.lean.txt').read_bytes()
+ assert source.startswith(context)
+ assert hashlib.sha256(context).hexdigest() == expected_context_sha
+ assert hashlib.sha256(proposed).hexdigest() == expected_signature_sha

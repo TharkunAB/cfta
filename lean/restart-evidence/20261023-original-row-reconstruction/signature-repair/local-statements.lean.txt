@@ -1,0 +1,13 @@
+-- These local statements use the witnesses and lets in the public conclusion.
+-- Their proofs are not part of this declaration proposal.
+have parentClosed : childFree (parentRows.flatMap EdgeValue.children) = []
+have residentRows : InternedNestedProvenance.Edges middle.checked.native.machine.heap output
+have closedRows : MergedColdReaderClosedInputs.ClosedEdges output
+have rebuilt : SourceEqualityRequiredCache.Keeps middle.checked.native.machine.heap built.2 ∧
+    Available built.2 built.1 ∧ built.1.free = [] ∧ SourceEqualityRequiredCache.Ordinary built.1
+have rebuiltSemantic : SemanticReady built.2
+have rebuildExtension : Extension middle.checked.native.machine
+    { middle.checked.native.machine with heap := built.2 }
+have rebuiltGood : Good after.checked
+have rawDone : SourceEqualityNativeDemand.execute 2 (.code (.work (makeNode output) .pure))
+    middle.checked = .done built.1 after.checked

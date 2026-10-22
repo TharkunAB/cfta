@@ -1,0 +1,85 @@
+/-- A finite inventory stores actual closed original roots in one source heap. -/
+structure Inventory where
+  source : InternedConstructorTemplates.State Symbol Guard
+  facts : InternedNestedFacts.Facts source
+  roots : List (Value Symbol Guard)
+  originals : ∀ root ∈ roots, Original root
+  available : Values source roots
+  closed : ∀ root ∈ roots, root.free = []
+
+/-- The input interpretation is computed from the stored physical inventory. -/
+def Inventory.inputs (inventory : Inventory) (holds : Guard → Term Symbol → Bool) :
+    FiniteInput (view inventory.source holds) :=
+  SourceCurrentAllocatedNativeInputInventoryModels.finiteInput inventory.source inventory.facts holds
+    inventory.roots inventory.originals inventory.available inventory.closed
+
+/-- One current checked state retains the same model, requests, and original source records. -/
+structure At (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory) (state : Checked width) : Prop where
+  contextual : SourceCurrentAllocatedNativeContextCache.Contextual
+    (view inventory.source (SourceEqualityPCSGuard.holds formulas solver))
+    (finiteInputMeaning (view inventory.source (SourceEqualityPCSGuard.holds formulas solver))
+      (inventory.inputs (SourceEqualityPCSGuard.holds formulas solver)))
+    (finiteRankedInput (view inventory.source (SourceEqualityPCSGuard.holds formulas solver))
+      (inventory.inputs (SourceEqualityPCSGuard.holds formulas solver)))
+    (SourceEqualityPCSGuard.holds formulas solver) state.native
+  covered : SourceCurrentAllocatedNativeAdmissionCache.Covered
+    (inventory.inputs (SourceEqualityPCSGuard.holds formulas solver)) state.native
+  growth : Grows inventory.source state.native.machine.heap
+  history : Extends inventory.source.nodes.issued state.native.machine.heap.nodes.issued
+
+/-- An actual machine extension retains the same native tables and inventory. -/
+theorem At.advanceNative
+    {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {inventory : Inventory} {before : Checked width} (current : At formulas solver inventory before)
+    (machine : Machine Symbol Guard) (extension : Extension before.native.machine machine) :
+    At formulas solver inventory {before with native := advance before.native machine} :=
+  ⟨⟨current.contextual.nodes, current.contextual.edges⟩, ⟨current.covered.nodes, current.covered.edges⟩,
+    grows_trans current.growth extension.heap, extends_trans current.history extension.history⟩
+
+/-- Literal physical advancement retains the same native cells and computed input model. -/
+theorem At.advance
+    {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {inventory : Inventory} {before : Checked width} (current : At formulas solver inventory before)
+    (after : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula)
+    (extension : Extension before.native.machine
+      (SourceCurrentAllocatedQueryMemo.advancePhysical before after).native.machine) :
+    At formulas solver inventory (SourceCurrentAllocatedQueryMemo.advancePhysical before after) :=
+  ⟨⟨current.contextual.nodes, current.contextual.edges⟩, ⟨current.covered.nodes, current.covered.edges⟩,
+    grows_trans current.growth extension.heap, extends_trans current.history extension.history⟩
+
+/-- Empty native tables derive all inventory cache laws at an actual initial machine. -/
+theorem initial (inventory : Inventory) (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (width : Nat) (machine : Machine Symbol Guard)
+    (operations : SourceEqualityConstraintMemoAllocation.State)
+    (growth : Grows inventory.source machine.heap)
+    (history : Extends inventory.source.nodes.issued machine.heap.nodes.issued) :
+    At formulas solver inventory ⟨SourceRecursiveIntersectionThunks.initial width machine, operations⟩ :=
+  ⟨SourceCurrentAllocatedNativeContextCache.initial_contextual _ _ _ _ width machine,
+    SourceCurrentAllocatedNativeAdmissionCache.initial_covered _ width machine, growth, history⟩
+
+/-- A generated query constructs the next inventory and retains its laws at the actual return. -/
+theorem query_complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (inventory : Inventory) (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (state : Checked width) (good : Good state) (current : At formulas solver inventory state)
+    (scopedCache : SourceCurrentAllocatedNativeScopeCache.Scoped state.native)
+    (semantic : SemanticReady state.native.machine.heap) (idle : SourceRecursiveIntersectionNative.Idle state.native)
+    (left right : Value Symbol Guard)
+    (leftAvailable : Available state.native.machine.heap left) (rightAvailable : Available state.native.machine.heap right)
+    (leftClosed : left.free = []) (rightClosed : right.free = [])
+    (ranges : WordRanges (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) state) :
+    ∃ next : Inventory, ∃ fuel value after,
+      next.source = state.native.machine.heap ∧ next.roots = inventory.roots ++ [left, right] ∧
+      SourceCurrentAllocatedNativeCoveredQuery.Receipt next.source formulas solver
+        (next.inputs (SourceEqualityPCSGuard.holds formulas solver)) fuel left right state value after ∧
+      At formulas solver next after := by
+  obtain ⟨available, closed, fuel, value, after, receipt⟩ :=
+    SourceCurrentAllocatedNativeCoveredQuery.generated_complete inventory.source inventory.facts formulas solver
+      inventory.roots inventory.originals inventory.available inventory.closed state good current.contextual current.covered
+      scopedCache semantic idle current.growth current.history left right leftAvailable rightAvailable leftClosed rightClosed ranges
+  let next : Inventory := ⟨state.native.machine.heap, good.native.machine.1, inventory.roots ++ [left, right],
+    SourceCurrentAllocatedNativeGrownInventory.closed_originals state.native.machine.heap good.native.machine.1
+      (inventory.roots ++ [left, right]) available closed, available, closed⟩
+  exact ⟨next, fuel, value, after, rfl, rfl, receipt,
+    receipt.contextual, receipt.covered, receipt.extension.heap, receipt.extension.history⟩

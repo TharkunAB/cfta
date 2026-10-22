@@ -1,0 +1,32 @@
+--- predecessors/verify-checkpoint.py
++++ verify-checkpoint.py
+@@ -4,9 +4,9 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ ROOT = HERE.parents[2]
+-AUDIT_SHA = '__H23_AUDIT_SHA__'
+-AUDIT_JOBS = int('__H23_AUDIT_BUILD_JOBS__')
+-AUDIT_DEPENDENCIES = int('__H23_AUDIT_DEPENDENCIES__')
++AUDIT_SHA = 'f97a5d4ff4987b5276453d67d2c9560aea9de81b315a2a9510ea4165fafa32c9'
++AUDIT_JOBS = int('3640')
++AUDIT_DEPENDENCIES = int('75501')
+ for mode, label in [([], 'normal'), (['--live'], 'live')]:
+     result = subprocess.run(['/usr/bin/python3', str(HERE / 'verify-proofs.py'),
+         '--root', str(ROOT), *mode], cwd='/', capture_output=True, text=True)
+@@ -14,12 +14,12 @@
+     (HERE / ('proof-verification-' + label + '.stderr')).write_text(result.stderr)
+     assert result.returncode == 0, result.stderr
+     report = json.loads(result.stdout)
+-    assert report['status'] == 'PASS' and report['actual_jobs'] == int('__H23_ACTUAL_JOBS__') and report['failed_jobs'] == int('__H23_FAILED_JOBS__')
+-    assert report['source_jobs'] == int('__H23_SOURCE_JOBS__') and report['audit_jobs'] == int('__H23_AUDIT_JOBS__') and report['selected_modules'] == 1
++    assert report['status'] == 'PASS' and report['actual_jobs'] == int('4') and report['failed_jobs'] == int('1')
++    assert report['source_jobs'] == int('3') and report['audit_jobs'] == int('1') and report['selected_modules'] == 1
+     assert report['audit_build_jobs'] == AUDIT_JOBS and report['audit_dependencies'] == AUDIT_DEPENDENCIES
+     assert report['audit_log_sha256'] == AUDIT_SHA
+-    assert report['warned_source_exit_zero_jobs'] == int('__H23_WARNED_SOURCE_EXIT_ZERO_JOBS__')
+-    assert report['rejected_public_type_jobs'] == int('__H23_REJECTED_PUBLIC_TYPE_JOBS__')
++    assert report['warned_source_exit_zero_jobs'] == int('0')
++    assert report['rejected_public_type_jobs'] == int('0')
+ result = subprocess.run(['/usr/bin/python3', str(HERE / 'verify-preservation.py')],
+     cwd='/', capture_output=True, text=True)
+ (HERE / 'preservation-final.stderr').write_text(result.stderr)

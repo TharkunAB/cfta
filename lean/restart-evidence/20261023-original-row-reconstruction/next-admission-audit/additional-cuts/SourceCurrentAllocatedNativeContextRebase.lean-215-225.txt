@@ -1,0 +1,11 @@
+
+/-- Cross-view cache transport retains both coverage certificates with the contextual laws. -/
+theorem rebase (agreement : Agreement before after) (holds : SourceGuard → Term SourceSymbol → Bool)
+    (state : SourceRecursiveIntersectionThunks.State width SourceSymbol SourceGuard)
+    (admitted : Admitted oldView (finiteInputMeaning oldView before) state) (seen : SeenAdmitted before state)
+    (valid : Contextual oldView (finiteInputMeaning oldView before) (finiteRankedInput oldView before) holds state) :
+    Contextual newView (finiteInputMeaning newView after) (finiteRankedInput newView after) holds state ∧
+      Admitted newView (finiteInputMeaning newView after) state ∧ SeenAdmitted after state :=
+  ⟨contextual agreement holds state admitted seen valid, agreement.admitted state admitted, agreement.seen_admitted state seen⟩
+end Cache
+end MicroCFTA.SourceCurrentAllocatedNativeContextRebase

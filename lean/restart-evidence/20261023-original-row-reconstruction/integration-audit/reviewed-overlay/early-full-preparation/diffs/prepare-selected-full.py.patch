@@ -1,0 +1,24 @@
+--- predecessors/prepare-selected-full.py
++++ prepare-selected-full.py
+@@ -7,10 +7,10 @@
+ HERE = Path(__file__).resolve().parent
+ stem, expected_sha, expected_lines, expected_context_sha, expected_context_lines, expected_signature_sha, expected_signature_lines = sys.argv[1:]
+ assert all(len(value) == 64 and set(value) <= set('0123456789abcdef') for value in [expected_sha, expected_context_sha, expected_signature_sha])
+-name = '__H23_MODULE_NAME__'
++name = 'SourceCurrentOriginalRowReconstruction'
+ source = (HERE / (stem + '.source.lean')).read_bytes()
+ assert hashlib.sha256(source).hexdigest() == expected_sha
+-assert len(source.splitlines()) == int(expected_lines) and 1 <= int(expected_lines) <= int("__H23_SOURCE_HARD_STOP__")
++assert len(source.splitlines()) == int(expected_lines) and 1 <= int(expected_lines) <= int("350")
+ assert json.loads((HERE / (stem + '.json')).read_text())['exit_code'] == 0
+ assert (HERE / (stem + '.log')).read_bytes() == b''
+ context = (HERE / 'signature-plan/context.lean.txt').read_bytes()
+@@ -20,7 +20,7 @@
+ assert hashlib.sha256(proposed).hexdigest() == expected_signature_sha
+ assert len(context.splitlines()) == int(expected_context_lines) >= 1
+ assert len(proposed.splitlines()) == int(expected_signature_lines) >= 1
+-specs = [tuple(spec) for spec in json.loads("__H23_PUBLIC_SPECS_JSON__")]
++specs = [tuple(spec) for spec in json.loads('[["ordinary_complete", "theorem"]]')]
+ markers = list(re.finditer(rb'(?m)^/--[^\n]*-/\n(def|theorem) ([^\s(\[{:=]+)', proposed))
+ assert [(m.group(2).decode(), m.group(1).decode()) for m in markers] == specs
+ headers, positions = [], []

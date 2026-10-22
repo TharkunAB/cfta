@@ -1,0 +1,26 @@
+{
+  "status": "FUTURE_SCHEMA_ONLY",
+  "ordered_short_names": [
+    "groups_complete"
+  ],
+  "HEAD_METRICS_JSON": {
+    "groups_complete": {
+      "type_bytes": "actual UTF-8 TYPE bytes",
+      "type_characters": "actual TYPE Unicode characters",
+      "type_logical_lines": "len(TYPE.splitlines())",
+      "type_line_feeds": "TYPE.count(chr(10))",
+      "type_final_newline": "actual boolean",
+      "type_sha256": "actual complete TYPE SHA256",
+      "body_bytes": "actual complete BODY UTF-8 bytes",
+      "body_characters": "actual BODY Unicode characters",
+      "body_sha256": "actual complete BODY SHA256",
+      "actual_axioms": "actual sorted list; empty is valid",
+      "printed_type_bytes": "actual complete printed TYPE UTF-8 byte count",
+      "printed_type_sha256": "actual complete printed TYPE SHA256",
+      "raw_type_byte_identity": "actual boolean; never forced true"
+    }
+  },
+  "slice_pattern": "public-readback/original-row-group-chain-{short}-{public-type,printed-public-type,body,axioms}.txt",
+  "canonicalization": "re.sub(r'[ \\t\\r\\n]+', ' ', text).strip(' \\t\\r\\n')",
+  "identity_rule": "Keep both raw TYPEs unchanged. Require only exact canonical text equality; record actual raw-byte equality per head."
+}

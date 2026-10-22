@@ -1,0 +1,80 @@
+variable (source target : State Symbol Guard)
+  (sourceFacts : InternedNestedFacts.Facts source) (targetFacts : InternedNestedFacts.Facts target)
+  (growth : Grows source target) (history : Extends source.nodes.issued target.nodes.issued)
+  (holds : Guard → Term Symbol → Bool)
+  (roots : List (Value Symbol Guard)) (originals : ∀ root ∈ roots, Original root)
+  (available : Values source roots) (closed : ∀ root ∈ roots, root.free = [])
+  (targetRoots : List (Value Symbol Guard)) (targetAvailable : Values target targetRoots)
+  (targetClosed : ∀ root ∈ targetRoots, root.free = [])
+  (included : ∀ root ∈ roots, root ∈ targetRoots)
+
+local notation "oldInputs" => SourceCurrentAllocatedNativeInputInventoryModels.finiteInput
+  source sourceFacts holds roots originals available closed
+local notation "newInputs" => SourceCurrentAllocatedNativeInputInventoryModels.finiteInput
+  target targetFacts holds targetRoots (closed_originals target targetFacts targetRoots targetAvailable targetClosed)
+    targetAvailable targetClosed
+
+include growth history included
+
+/-- The actual larger target inventory admits every old valid input. -/
+theorem valid_grows (input : Input) (valid : (oldInputs).valid input) : (newInputs).valid input := by
+  obtain ⟨root, member, reached⟩ := reachable_grows
+    source target sourceFacts targetFacts growth history holds roots originals available closed input valid
+  exact ⟨root, included root member, reached⟩
+
+/-- Every old admitted input retains the same rank in the actual target inventory. -/
+theorem rank_exact (input : Input) (valid : (oldInputs).valid input) (rank : Nat) (term : Term Symbol) :
+    inputAt (finiteRanks (view target holds) newInputs) input rank term ↔
+      inputAt (finiteRanks (view source holds) oldInputs) input rank term := by
+  have targetValid := valid_grows source target sourceFacts targetFacts growth history holds
+    roots originals available closed targetRoots targetAvailable targetClosed included input valid
+  rw [finiteRanks_exact (view target holds) newInputs input targetValid rank term,
+    finiteRanks_exact (view source holds) oldInputs input valid rank term]
+  exact SourceCurrentAllocatedNativeInputGrowthModels.derivation_exact oldInputs
+    (SourceCurrentAllocatedNativeInputGrowthModels.inventory_agreement source target sourceFacts targetFacts
+      growth history holds roots originals available closed) input valid rank term
+
+/-- Erasing the rank retains exactly the old admitted input language. -/
+theorem language_exact (input : Input) (valid : (oldInputs).valid input) (term : Term Symbol) :
+    inputLanguage (finiteLanguages (view target holds) newInputs) input term ↔
+      inputLanguage (finiteLanguages (view source holds) oldInputs) input term := by
+  have targetValid := valid_grows source target sourceFacts targetFacts growth history holds
+    roots originals available closed targetRoots targetAvailable targetClosed included input valid
+  rw [finiteLanguages_exact (view target holds) newInputs input targetValid term,
+    finiteLanguages_exact (view source holds) oldInputs input valid term]
+  exact exists_congr fun rank => SourceCurrentAllocatedNativeInputGrowthModels.derivation_exact oldInputs
+    (SourceCurrentAllocatedNativeInputGrowthModels.inventory_agreement source target sourceFacts targetFacts
+      growth history holds roots originals available closed) input valid rank term
+
+/-- The identity of an old admitted nonempty input retains each exact rank. -/
+theorem name_rank_exact (input : Input) (valid : (oldInputs).valid input) (nonempty : input ≠ .empty)
+    (rank : Nat) (term : Term Symbol) :
+    finiteRanks (view target holds) newInputs (identity input) rank term ↔
+      finiteRanks (view source holds) oldInputs (identity input) rank term := by
+  have same := rank_exact source target sourceFacts targetFacts growth history holds
+    roots originals available closed targetRoots targetAvailable targetClosed included input valid rank term
+  cases input with
+  | empty => exact False.elim (nonempty rfl)
+  | ref name | node name | mu name | union name => exact same
+
+/-- The identity of an old admitted nonempty input retains its erased language. -/
+theorem name_language_exact (input : Input) (valid : (oldInputs).valid input) (nonempty : input ≠ .empty)
+    (term : Term Symbol) :
+    finiteLanguages (view target holds) newInputs (identity input) term ↔
+      finiteLanguages (view source holds) oldInputs (identity input) term := by
+  have same := language_exact source target sourceFacts targetFacts growth history holds
+    roots originals available closed targetRoots targetAvailable targetClosed included input valid term
+  cases input with
+  | empty => exact False.elim (nonempty rfl)
+  | ref name | node name | mu name | union name => exact same
+end Inventories
+
+/-- A newly listed closed resident root is admitted by the actual target inventory. -/
+theorem target_root_valid (target : State Symbol Guard) (facts : InternedNestedFacts.Facts target)
+    (holds : Guard → Term Symbol → Bool) (roots : List (Value Symbol Guard))
+    (available : Values target roots) (closed : ∀ root ∈ roots, root.free = [])
+    (root : Value Symbol Guard) (member : root ∈ roots) :
+    (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput target facts holds roots
+      (closed_originals target facts roots available closed) available closed).valid (inputOf root) :=
+  SourceCurrentAllocatedNativeInputInventoryModels.root_valid target facts holds roots
+    (closed_originals target facts roots available closed) available closed root member

@@ -1,0 +1,27 @@
+/-- Preserve the stable pair memo through the same completed comparison and native effects. -/
+theorem completed_preserves [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (semanticView : View Symbol) (model : InputMeaning semanticView)
+    (ranked : RankedInput semanticView model.valid) (holds : Guard → Term Symbol → Bool)
+    (fuel : Nat) (left right result : Edge) (before after : Wrapper width)
+    (stable : Stable semanticView model ranked holds before)
+    (leftResident : EdgeResident before.checked.native.machine.heap left)
+    (rightResident : EdgeResident before.checked.native.machine.heap right)
+    (done : SourceCurrentSameSymbolEdgeControl.execute fuel (.call (left, right) []) before =
+      .done result after)
+    (growth : Extension before.checked.native.machine after.checked.native.machine)
+    (resultResident : EdgeResident after.checked.native.machine.heap result)
+    (resultLaw :
+      let ordered := if right.entry.identity < left.entry.identity then (right, left) else (left, right)
+      SourceCurrentAllocatedNativeContextCache.EdgeLaw semanticView model ranked holds
+        ⟨IntersectionEmptyDomain.emptyDomain, ordered.1, ordered.2⟩ result) :
+    Stable semanticView model ranked holds after ∧
+      Cache.Extends before.memo.table after.memo.table ∧
+      FlatMemoThunk.Returned before.memo after.memo := by
+  have retained : Stable semanticView model ranked holds {before with checked := after.checked} := by
+    refine ⟨?_, stable.returned, stable.canonical⟩
+    apply FlatMemoThunk.Valid.map before.memo _ _ _ stable.valid
+    rintro ⟨pair, status⟩ ⟨first, second, spec⟩
+    refine ⟨edge_grows _ _ growth.heap _ first, edge_grows _ _ growth.heap _ second, ?_⟩
+    cases status with
+    | suspended | evaluating => trivial
+    | returned answer => exact ⟨edge_grows _ _ growth.heap _ spec.1, spec.2⟩

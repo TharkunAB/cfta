@@ -1,0 +1,11 @@
+--- original-signature/private-header.lean.txt
++++ signature-repair/private-header.lean.txt
+@@ -7,6 +7,6 @@
+     (growth : Grows before.checked.native.machine.heap heap) :
+     let after : Wrapper width :=
+       { before with checked :=
+-        { before.checked with native := SourceRecursiveIntersectionThunks.advance
+-          before.checked.native { before.checked.native.machine with heap := heap } } }
++        { before.checked with native := (SourceRecursiveIntersectionThunks.advance
++          before.checked.native { before.checked.native.machine with heap := heap }) } }
+     Stable semanticView model ranked holds after

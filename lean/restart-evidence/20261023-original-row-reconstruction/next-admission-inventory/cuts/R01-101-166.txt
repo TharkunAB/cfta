@@ -1,0 +1,66 @@
+/-- Actual view agreement lifts the old finite interface without widening its valid domain. -/
+def lift (inputs : FiniteInput before) (same : ViewAgreement before after inputs.valid) : FiniteInput after where
+  valid := inputs.valid
+  representative := inputs.representative
+  identity_exact := inputs.identity_exact
+  body_valid := by
+    intro name valid
+    rw [same.body name valid]
+    exact inputs.body_valid name valid
+  reference_valid := inputs.reference_valid
+  row_valid := by
+    intro name valid row member child inside
+    rw [same.rows name valid] at member
+    exact inputs.row_valid name valid row member child inside
+  union_valid := by
+    intro name valid child member
+    rw [same.members name valid] at member
+    exact inputs.union_valid name valid child member
+  copy_exact := by
+    intro input valid isClosed environment
+    have closedBefore : closed before input = true := by
+      have equal : closed after input = closed before input := congrArg List.isEmpty (same.free input valid)
+      exact equal.symm.trans isClosed
+    rw [same.copy input valid, inputs.copy_exact input valid closedBefore environment]
+    funext term
+    exact propext (exists_congr fun rank => (derivation_exact inputs same input valid rank term).symm)
+
+/-- The lifted input ranks retain every old valid input's exact derivation bound. -/
+theorem lifted_rank (inputs : FiniteInput before) (same : ViewAgreement before after inputs.valid)
+    (input : Input) (valid : inputs.valid input) (rank : Nat) (term : Term Symbol) :
+    inputAt (finiteRanks after (lift inputs same)) input rank term ↔
+      inputAt (finiteRanks before inputs) input rank term := by
+  rw [finiteRanks_exact after (lift inputs same) input valid rank term,
+    finiteRanks_exact before inputs input valid rank term]
+  exact derivation_exact inputs same input valid rank term
+
+/-- The lifted input language retains exactly the old accepted finite terms. -/
+theorem lifted_language (inputs : FiniteInput before) (same : ViewAgreement before after inputs.valid)
+    (input : Input) (valid : inputs.valid input) (term : Term Symbol) :
+    inputLanguage (finiteLanguages after (lift inputs same)) input term ↔
+      inputLanguage (finiteLanguages before inputs) input term := by
+  rw [finiteLanguages_exact after (lift inputs same) input valid term,
+    finiteLanguages_exact before inputs input valid term]
+  exact exists_congr fun rank => derivation_exact inputs same input valid rank term
+
+/-- Actual physical growth supplies view agreement on the old closed-root inventory. -/
+theorem inventory_agreement (source target : InternedConstructorTemplates.State Symbol Guard)
+    (sourceFacts : InternedNestedFacts.Facts source) (targetFacts : InternedNestedFacts.Facts target)
+    (growth : Grows source target) (history : Extends source.nodes.issued target.nodes.issued)
+    (holds : Guard → Term Symbol → Bool) (roots : List (Value Symbol Guard))
+    (originals : ∀ root ∈ roots, Original root) (available : Values source roots)
+    (closed : ∀ root ∈ roots, root.free = []) :
+    ViewAgreement (view source holds) (view target holds)
+      (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source sourceFacts holds roots originals available closed).valid := by
+  have same := growthAgreement source target sourceFacts targetFacts growth history holds
+  have original := SourceCurrentAllocatedNativeInputInventoryModels.reachable_original
+    source sourceFacts holds roots originals available closed
+  exact ⟨fun input valid => same.free input (original input valid),
+    fun input valid => same.copy input (original input valid),
+    fun name valid => same.body name (original _ valid),
+    fun name valid => same.rows name (original _ valid),
+    fun name valid => same.members name (original _ valid),
+    (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source sourceFacts holds roots originals available closed).body_valid,
+    (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source sourceFacts holds roots originals available closed).row_valid,
+    (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source sourceFacts holds roots originals available closed).union_valid⟩
+

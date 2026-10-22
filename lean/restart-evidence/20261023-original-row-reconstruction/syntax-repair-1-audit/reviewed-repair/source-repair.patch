@@ -1,0 +1,35 @@
+--- previous-source.lean.txt
++++ SourceCurrentOriginalRowReconstruction.lean
+@@ -23,8 +23,8 @@
+     (growth : Grows before.checked.native.machine.heap heap) :
+     let after : Wrapper width :=
+       { before with checked :=
+-        { before.checked with native := SourceRecursiveIntersectionThunks.advance
+-          before.checked.native { before.checked.native.machine with heap := heap } } }
++        { before.checked with native := (SourceRecursiveIntersectionThunks.advance
++          before.checked.native { before.checked.native.machine with heap := heap }) } }
+     Stable semanticView model ranked holds after := by
+   dsimp only
+   refine ⟨?_, stable.returned, stable.canonical⟩
+@@ -82,8 +82,8 @@
+       let built := run (makeNode output) middle.checked.native.machine.heap
+       let after : Wrapper (bits + 2) :=
+         { middle with checked :=
+-          { middle.checked with native := SourceRecursiveIntersectionThunks.advance
+-            middle.checked.native { middle.checked.native.machine with heap := built.2 } } }
++          { middle.checked with native := (SourceRecursiveIntersectionThunks.advance
++            middle.checked.native { middle.checked.native.machine with heap := built.2 }) } }
+       states 0 = before ∧
+       (∀ index : Fin entries.length,
+         SourceCurrentOriginalRowClusterScan.execute (fuels index)
+@@ -146,8 +146,8 @@
+   let built := run (makeNode output) middle.checked.native.machine.heap
+   let after : Wrapper (bits + 2) :=
+     { middle with checked :=
+-      { middle.checked with native := SourceRecursiveIntersectionThunks.advance
+-        middle.checked.native { middle.checked.native.machine with heap := built.2 } } }
++      { middle.checked with native := (SourceRecursiveIntersectionThunks.advance
++        middle.checked.native { middle.checked.native.machine with heap := built.2 }) } }
+   obtain ⟨midGood, midContextual, midSemantic, midGrowth, midHistory, midStable,
+       midIdle, midTrace⟩ := packets (Fin.last entries.length)
+   have parentClosed : childFree (parentRows.flatMap EdgeValue.children) = [] := by

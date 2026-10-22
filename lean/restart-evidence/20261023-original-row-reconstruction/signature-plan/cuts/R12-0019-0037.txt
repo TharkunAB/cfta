@@ -1,0 +1,19 @@
+/-- All node phases retain original operands. Returned values remain available. -/
+def NodeGood (machine : Machine Symbol Guard)
+    (cell : FlatMemoThunk.Cell (NodeRequest Symbol Guard) (Value Symbol Guard)) : Prop :=
+  NodeReady machine cell.request ∧ match cell.status with
+    | .returned value => Available machine.heap value
+    | _ => True
+
+/-- All edge phases retain original rows. Returned rows remain resident. -/
+def EdgeGood (machine : Machine Symbol Guard)
+    (cell : FlatMemoThunk.Cell (EdgeRequest Symbol Guard) (EdgeValue Symbol Guard)) : Prop :=
+  EdgeReady machine cell.request ∧ match cell.status with
+    | .returned value => EdgeResident machine.heap value
+    | _ => True
+
+/-- Physical validity includes exact original keys, fresh handles, and resident results. -/
+structure Valid (state : Native width Symbol Guard) : Prop where
+  machine : SourceRecursiveIntersectionKernel.Valid state.machine
+  nodes : FlatMemoThunk.Valid (NodeKey width) (NodeGood state.machine) state.nodes
+  edges : FlatMemoThunk.Valid (EdgeKeyOf width) (EdgeGood state.machine) state.edges

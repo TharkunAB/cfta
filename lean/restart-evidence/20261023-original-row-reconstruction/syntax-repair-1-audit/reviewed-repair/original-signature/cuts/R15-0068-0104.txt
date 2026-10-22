@@ -1,0 +1,37 @@
+def Ordinary : Value Symbol Guard → Prop
+  | .empty | .node .. => True
+  | _ => False
+
+/-- Canonical node hits cannot replace a row request by a recursive or union record. -/
+theorem node_ordinary [DecidableEq (EdgeKey Symbol Guard)] (edges : List (EdgeValue Symbol Guard))
+    (state : State Symbol Guard) (facts : Facts state) (resident : Edges state edges) :
+    Ordinary (run (makeNode edges) state).1 := by
+  have selected : Edges state (canonicalEdges (surviving edges)) := by
+    intro edge member
+    exact resident edge (List.mem_filter.mp (canonicalEdges_member _ edge member)).1
+  unfold makeNode
+  dsimp only
+  split
+  · trivial
+  · rename_i first rest same
+    obtain ⟨entry, readback⟩ := identifyNode_readback (first :: rest) state facts.coherent facts.linked
+      (fun edge member => selected edge (by simpa only [same] using member))
+    change Ordinary (nodeStep _ _ state).1
+    rw [readback]
+    trivial
+
+/-- Actual node rebuilding retains readiness, residency, closedness, and its ordinary head. -/
+theorem node [DecidableEq (EdgeKey Symbol Guard)] (edges : List (EdgeValue Symbol Guard))
+    (state : State Symbol Guard) (ready : Ready state) (resident : Edges state edges) (closed : ClosedEdges edges) :
+    Keeps state (run (makeNode edges) state).2 ∧
+      Available (run (makeNode edges) state).2 (run (makeNode edges) state).1 ∧
+      (run (makeNode edges) state).1.free = [] ∧ Ordinary (run (makeNode edges) state).1 := by
+  have facts := ready.semantic.1.normal.facts
+  have checked := InternedNestedFacts.node_verified edges state facts resident
+  refine ⟨⟨⟨SourceRecursiveIntersectionSemanticHeap.node edges state ready.semantic resident,
+    InternedNestedCoverage.run_covered _ state facts.coherent.valid ready.covered,
+    InternedOpenDepthReadback.preserve state _ ready.depth (InternedShallowHeap.makeNode_noNewMu edges state)⟩,
+    checked.growth, checked.history⟩, checked.result _ _ rfl,
+    MergedColdReaderClosedInputs.makeNode_closed edges state facts resident closed,
+    node_ordinary edges state facts resident⟩
+

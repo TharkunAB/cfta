@@ -1,0 +1,12 @@
+/-- Heap growth retains the exact pair memo and its fixed contextual laws. -/
+private theorem stable_heap
+    {width : Nat} (semanticView : View Symbol) (model : InputMeaning semanticView)
+    (ranked : RankedInput semanticView model.valid) (holds : Guard → Term Symbol → Bool)
+    (before : Wrapper width) (heap : InternedConstructorTemplates.State Symbol Guard)
+    (stable : Stable semanticView model ranked holds before)
+    (growth : Grows before.checked.native.machine.heap heap) :
+    let after : Wrapper width :=
+      { before with checked :=
+        { before.checked with native := SourceRecursiveIntersectionThunks.advance
+          before.checked.native { before.checked.native.machine with heap := heap } } }
+    Stable semanticView model ranked holds after

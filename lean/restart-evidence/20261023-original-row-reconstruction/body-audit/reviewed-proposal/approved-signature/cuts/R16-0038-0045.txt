@@ -1,0 +1,8 @@
+/-- Actual row-node reconstruction preserves both semantic heaps without a whole-constructor meaning law. -/
+theorem node [DecidableEq (EdgeKey Symbol Guard)] (edges : List (EdgeValue Symbol Guard))
+    (state : State Symbol Guard) (semantic : SemanticReady state) (resident : Edges state edges)
+    (closed : MergedColdReaderClosedInputs.ClosedEdges edges) : SemanticReady (run (makeNode edges) state).2 :=
+  ⟨(SourceEqualityRequiredCache.node edges state semantic.ready resident closed).1.ready,
+    InternedGuardedProbeHeap.preserve state _ semantic.guarded (InternedShallowHeap.makeNode_noNewMu edges state),
+    InternedGuardedBudgetProbeHeap.preserve state _ semantic.budget (InternedShallowHeap.makeNode_noNewMu edges state)⟩
+

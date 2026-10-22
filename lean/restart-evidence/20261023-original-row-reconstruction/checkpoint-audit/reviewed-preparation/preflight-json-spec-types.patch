@@ -1,0 +1,11 @@
+--- preflight-draft/prepare-selected-full.py
++++ prepare-selected-full.py
+@@ -20,7 +20,7 @@
+ assert hashlib.sha256(proposed).hexdigest() == expected_signature_sha
+ assert len(context.splitlines()) == int(expected_context_lines) >= 1
+ assert len(proposed.splitlines()) == int(expected_signature_lines) >= 1
+-specs = json.loads("__H23_PUBLIC_SPECS_JSON__")
++specs = [tuple(spec) for spec in json.loads("__H23_PUBLIC_SPECS_JSON__")]
+ markers = list(re.finditer(rb'(?m)^/--[^\n]*-/\n(def|theorem) ([^\s(\[{:=]+)', proposed))
+ assert [(m.group(2).decode(), m.group(1).decode()) for m in markers] == specs
+ headers, positions = [], []

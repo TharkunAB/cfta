@@ -1,0 +1,7 @@
+/-- An ordinary resident node has exactly the free names of its actual ordered children. -/
+theorem node_free (state : State Symbol Guard) (coherent : Coherent state)
+    (entry : Interned NodeKey) (edges : List (EdgeValue Symbol Guard)) (depth : Nat) (free : List Reference)
+    (resident : Resident state (.node entry edges depth free)) :
+    free = childFree (edges.flatMap EdgeValue.children) := by
+  obtain ⟨actual, _, fields⟩ := coherent.nodes entry.key _ (resident entry rfl)
+  exact fields.2.2.2

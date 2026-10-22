@@ -1,5 +1,28 @@
 # Current system claim
 
+## Ordinary original-row reconstruction
+
+Updated: 2026-10-23 01:31 CEST. Proof checkpoint: `b315cfaeb3`.
+Start: `87c0eabce2`. Imported main remains `794903b3f`.
+Read `lean/notes-current-original-row-reconstruction.md`.
+
+The checked theorem uses one ordinary original parent in the fixed admitted model.
+It retains the H22 group equations and their exact final populated caller.
+It then runs the existing raw makeNode work at that same returned heap.
+The result is available, ordinary and closed, with physical language iff
+for every ambient environment. The exact current packet and global Trace remain.
+This raw natural-index constructor path adds no fresh-result width safety,
+new-source Room, generated-root admission or model/rank rebase.
+It does not prove an all-group interpreter, generated-parent traversal,
+Mu/full-pass behavior, Haskell refinement, practical width or convergence.
+H6 constructed_node_calls remains strongest combined. The whole goal remains active.
+Preservation covers 98415 baseline files/modes, 298 baseline Haskell files
+and 207 active package files. FINDINGS keeps its repair index FIRST.
+H22 was pushed and remote-verified at87c0eabce252c0017b1c060750c0a06ebd4fe9b3.
+The user authorized further pushes to formalize. H23 seal and push remain future work.
+The local publisher stays LOCAL_ONLY and has no network command.
+Root push follows successful seal and local checkpoint verification.
+
 ## Actual original-row symbol-group chain
 
 Updated: 2026-10-23 00:25 CEST. Proof checkpoint: `1878a9611a`.

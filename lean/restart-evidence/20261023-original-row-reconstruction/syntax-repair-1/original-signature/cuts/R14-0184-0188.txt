@@ -1,0 +1,5 @@
+/-- Ordinary node normalization retains physical same-cache field availability. -/
+theorem makeNode_heap [DecidableEq (EdgeKey Symbol Guard)] (operations : OpState)
+    (edges : List (EdgeValue Symbol Guard)) (state : InternedConstructorTemplates.State Symbol Guard)
+    (heap : SourceCurrentConjunctionEquality.Fields operations state) : SourceCurrentConjunctionEquality.Fields operations (run (makeNode edges) state).2 :=
+  work_heap operations _ state heap (makeNode_fields operations edges)
