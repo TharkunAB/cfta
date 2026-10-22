@@ -1060,7 +1060,7 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..}
             | canPrune && skeletonTemplates = filter annotationFree (pruningTemplates skeletonSig lvl rules)
             | otherwise = []
         typingsOf space =
-            let (pruningRoot, oracleTemplates) = Compile.preparePruning templates (refold space)
+            let (pruningRoot, oracleTemplates) = preparePruning templates (refold space)
              in mapMaybe (generalizeCarriers skeletonSig phase_variables . npTerm') (prunedTerms oracleTemplates pruningRoot)
     bucket lvl typings tc s = do
         bucketStart <- getMonotonicTimeNSec
@@ -1076,7 +1076,7 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..}
                     pure
                         [ canonicalTypes (npTerm' t)
                         | space <- searchSpaceParts splitEnumeration stecta lvl tc
-                        , let (pruningRoot, oracleTemplates) = Compile.preparePruning bucketTemplates (refold space)
+                        , let (pruningRoot, oracleTemplates) = preparePruning bucketTemplates (refold space)
                         , t <- prunedTerms oracleTemplates pruningRoot
                         ]
             Nothing -> do
@@ -1087,7 +1087,7 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..}
                 -- The oracle rejects partial branches before their remaining type
                 -- choices expand. The bucket has one program size. KBO orders its
                 -- ties before testing; smaller sizes have already supplied rules.
-                let (pruningRoot, oracleTemplates) = Compile.preparePruning bucketTemplates folded
+                let (pruningRoot, oracleTemplates) = preparePruning bucketTemplates folded
                 pure [canonicalTypes (npTerm' t) | t <- prunedTerms oracleTemplates pruningRoot]
         let terms = sortBy (kboCompare (isGivenVar compl_sig)) (filter eligible produced)
             -- Apply the checks that are already known before retaining the
@@ -1178,16 +1178,22 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..}
 
 -- 2. The candidate terms.
 
--- | The reduced automaton of the terms of a size and a type.
+-- | The reduced automaton of the terms of a size and a type, with merged type alternatives (see 'mergeTypeAlternatives').
 searchSpace :: StEcta -> Int -> TypeSkeleton -> Node Symbol
 searchSpace StEcta{..} lvl tc =
     let !ecta = filterType (union $ tk any_arg lvl) $ typeToFta tc
-     in fixWithin 100 (withoutRedundantEdges . reducePartially) ecta
+     in mergeTypeAlternatives (fixWithin 100 (withoutRedundantEdges . reducePartially) ecta)
+
+{- | 'Compile.preparePruning', and then 'mergeTypeAlternatives' again,
+because its reduction can make overlapping type alternatives.
+-}
+preparePruning :: [Template Symbol] -> Node Symbol -> (Node Symbol, [Template Symbol])
+preparePruning templates = Bi.first mergeTypeAlternatives . Compile.preparePruning templates
 
 -- | 'searchSpace' in disjoint parts, one for each shape of the left spine (see 'spineParts').
 searchSpaceParts :: Int -> StEcta -> Int -> TypeSkeleton -> [Node Symbol]
 searchSpaceParts splitDepth StEcta{..} lvl tc =
-    [ fixWithin 100 (withoutRedundantEdges . reducePartially) (filterType part (typeToFta tc))
+    [ mergeTypeAlternatives (fixWithin 100 (withoutRedundantEdges . reducePartially) (filterType part (typeToFta tc)))
     | part <- spineParts splitDepth any_arg lvl
     ]
 

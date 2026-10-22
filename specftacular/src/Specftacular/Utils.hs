@@ -4,20 +4,29 @@ module Specftacular.Utils where
 
 import Data.CFTA.Equality (
     Edge (Edge),
-    Node (Node),
+    Node (EmptyNode, Node, Rec),
     Path,
     createMu,
+    edgeChildren,
+    edgeConstraint,
+    edgeSymbol,
     equalityConstraint,
     getPath,
     mapNodes,
     mkEdge,
     mkEqConstraints,
+    noConstraint,
+    nodeEdges,
+    numNestedMu,
     path,
     pathsMatching,
+    setChildren,
     union,
  )
 import Data.CFTA.Symbol (Symbol (Symbol))
 import Data.Containers.ListUtils (nubOrd)
+import Data.List (transpose)
+import qualified Data.Map.Strict as Map
 import Data.Text (Text)
 import Specftacular.Types (TypeSkeleton (..))
 
@@ -91,6 +100,50 @@ mapp n1 n2 =
                     ]
             )
         ]
+
+{- | Merge the alternatives of each type node that have the same symbol, the
+same arity and no constraint. The merged alternative has the union of the
+children, child by child. This occurs below each type position: the
+annotation and the arrow marker of an application, the type of a filter,
+and the children of the other symbols, which are the types of the
+constants and the arguments of the type constructors.
+
+An application annotation is the union of the result types of its
+functions, and the reduction intersects types with unions of types. Thus
+two alternatives of one type node can accept the same type, for example
+@(a, b)@ from @(,)@ and @([a], [b])@ from @unzip@. Each such alternative
+gives a different run of the same term, and the enumeration lists one term
+for each run. After the merge, each term has one run in the merged nodes.
+
+A merged node can accept more types. The equalities of the applications
+and of the filter make each type equal to the type of the program below
+it, so the automaton accepts the same terms. The program symbols must be
+@app@ with four children, @filter@ with two children, and the constants
+with one child. A recursive type node does not change.
+-}
+mergeTypeAlternatives :: Node Symbol -> Node Symbol
+mergeTypeAlternatives = mapNodes atTerm
+  where
+    atTerm n@(Node _) = Node [setChildren e (zipWith ($) (roles e) (edgeChildren e)) | e <- nodeEdges n]
+    atTerm n = n
+    roles e = case (edgeSymbol e, length (edgeChildren e)) of
+        ("app", 4) -> [merged, merged, id, id]
+        ("filter", 2) -> [merged, id]
+        _ -> repeat merged
+    merged n = case n of
+        EmptyNode -> n
+        Rec _ -> n
+        _
+            | numNestedMu n > 0 -> n
+            | otherwise ->
+                let groups = Map.elems (Map.fromListWith (flip (++)) [((edgeSymbol e, length (edgeChildren e)), [e]) | e <- nodeEdges n])
+                 in if all ((== 1) . length) groups
+                        then n
+                        else Node (concatMap mergeGroup groups)
+    mergeGroup group@(e : _ : _)
+        | all ((== noConstraint) . edgeConstraint) group =
+            [Edge (edgeSymbol e) (map (merged . union) (transpose (map edgeChildren group)))]
+    mergeGroup group = group
 
 allConstructors :: Comps -> [(Text, Int)]
 allConstructors comps = nubOrd (concatMap (getConstructors . snd) comps)
