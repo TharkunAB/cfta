@@ -1,0 +1,32 @@
+--- H14/full-preparation/prepare-selected-full.py
++++ H15/full-preparation/prepare-selected-full.py
+@@ -5,10 +5,10 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ stem, expected_sha, expected_lines = sys.argv[1:]
+-name = 'SourceCurrentSameSymbolEdgeComparison'
++name = 'SourceCurrentSameSymbolEdgeComparisonDomains'
+ source = (HERE / (stem + '.source.lean')).read_bytes()
+ assert hashlib.sha256(source).hexdigest() == expected_sha
+-assert len(source.splitlines()) == int(expected_lines) and 1 <= int(expected_lines) <= 180
++assert len(source.splitlines()) == int(expected_lines) and 1 <= int(expected_lines) <= 250
+ assert json.loads((HERE / (stem + '.json')).read_text())['exit_code'] == 0
+ assert (HERE / (stem + '.log')).read_bytes() == b''
+ context = (HERE / 'full-preparation/context.lean.txt').read_bytes()
+@@ -17,7 +17,7 @@
+ assert source.startswith(context)
+ assert source.count(header) == 1
+ assert source.index(header) >= len(context)
+-assert len(context.splitlines()) == 16 and len(header.splitlines()) == 48
++assert len(context.splitlines()) == 16 and len(header.splitlines()) == 56
+ assert source.rstrip().endswith(('end MicroCFTA.' + name).encode())
+ assert b'set_option maxRecDepth' not in source and b'set_option maxHeartbeats' not in source
+ options = ['maxRecDepth 30000', 'maxHeartbeats 0', 'linter.all true', 'pp.explicit true',
+@@ -37,6 +37,6 @@
+ print(json.dumps({'status': 'PASS', 'source_sha256': expected_sha,
+     'printer_sha256': hashlib.sha256(printer.read_bytes()).hexdigest(),
+     'source_lines': int(expected_lines), 'printer_lines': len(printer.read_bytes().splitlines()),
+-    'context_lines': 16, 'actual_header_lines': 48,
++    'context_lines': 16, 'actual_header_lines': 56,
+     'actual_header_sha256': hashlib.sha256(header).hexdigest(),
+     'diagnostic_tail_lines': 14, 'selected_strict': stem}))

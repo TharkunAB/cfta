@@ -1,0 +1,24 @@
+[2026-10-22 05:29:51 CEST] FINAL/FROZEN H15 actual-binding SOURCE review: CLEAR.
+I read all nine complete actual scripts: eight checkpoint tools522 lines plus verifier170 lines,692 total; both binding maps/patches, predecessor adaptations and six complete root helpers with their H14 diffs.
+Exact literal reconstruction matches18 distinct checkpoint keys and25 verifier keys. Every assertion count is unchanged. Four checkpoint tools are byte-identical to their pending templates.
+The exact dynamic top-level proof ledger is clean strict1, sole FULL1 and Audit1: three exit-zero jobs, two source jobs, one Audit, no failed proof, warned source pass or rejected TYPE. Copied metadata does not inflate it.
+Selected source189/8ae94566 matches its frozen proposal, clean strict input, accepted gate/snapshot and installed source. The source ceiling250, context16/header56, actual two private helpers and exact preflight rename remain checked.
+The first189-line draft bc86bb71 and its two-reference prefix-to-admitted repair precede every compiler run. This source-only preflight is not a failed proof check.
+Owned receipts retain default strict declaration limits/linter.all, effective4GiB max/high, swap0, five-minute caps, fresh17% usage and age0. Strict raw is literal empty.
+The203-line FULL printer is source189 plus the exact14 after-module settings/directive lines. Its actual raw5,168,379B/dfd1ec26 and retained slices match the configured receipt and readback.
+TYPE bytes81,492/f5002f8f agree between check and print and occur at the exact reconstructed raw boundaries. The complete TYPE has820 logical lines,819 LF and no final LF.
+The two helpers original_of_readback/rows_scope and all four private markers are denied from TYPE. The actual literal axiom slice is exactly propext, Classical.choice and Quot.sound; standard-subset checks remain.
+Root and Required supplied the preserved complete manual820-line TYPE reviews. I checked their evidence and byte/slice identities here; I do not claim to have manually reread all820 lines. BODY5,005,074B is programmatic-only here.
+Historical root-full-review still says Audit pending at its two-source-job cut. Separate actual Audit0c88b9c5 reports3632 build jobs and75387 dependencies with only the pre-existing inputs warning.
+The retained original Audit3120/fa6c433f matches baseline. Deleting the sole new import from the installed Audit recovers every original byte.
+The preservation code retains85212 baseline bytes/modes,3630 old non-Audit Lean sources,298 baseline Haskell files,207 package files, unchanged stashes/other worktrees, distinct main refs and all five old archive overrides.
+It adds only the H14 registry to298/1392 prior registries/entries, giving299/1393. New Haskell archives must be under H15 and match preserved baseline source hashes and bytes.
+The writer retains all nine old-text deletion inverses and FINDINGS repair-index FIRST. It depends on a standalone saved-proof report and actual future proof commit, without a report cycle.
+The statement/prose keeps SAME fixed source/models, initialDomains, initialValid, global Trace and initial reservation. Trace.next_le derives current Room and final Trace supports the next fixed-source current Room. It does not bound an arbitrary enlarged after-heap profile.
+No actual scan, physical pruning iff, generated Mu parent, post-Room oracle or native Receipt on ready hits is claimed. H6 remains the strongest combined semantic theorem.
+The proof committer gates exact start/backup, empty index, distinct main refs and sole Audit tracked change. It stages exactly the new module and Audit. Accept/install helpers require actual source/FULL and complete root plus independent TYPE review.
+The local publisher retains accepted actual-proof HEAD, LOCAL_ONLY/PENDING_USER_APPROVAL, scoped staging, all sealed paths, clean filesystem/index/HEAD blobs and modes, and seal checks before and after commit. It has zero network commands.
+The binder preserves all literal gates. Activation requires this audit hash and exact nine tool pins. Finalization/run-evidence preserve normal/live checks, actual Audit/preservation prerequisites and honest later seal/publication status.
+The retained archive argument-order failure stopped at its first assertion before copying files; corrected retry succeeded. It is one metadata failure, not a proof failure or rerun. Earlier source preflight variants remain immutable.
+I authored H15 FULL tooling and earlier WarmNextPacket/native-store/H7 tooling; I did not author these nine bound scripts. My one-off static comparison emitted compact-token spacing warnings, preserved separately; all static comparisons passed and no prepared source changed.
+This is readiness clearance, not a claim that prepared saved checks, preservation, commit, docs, seal or publication ran. No prepared tool/compiler/runtime/capped/Git/network execution or repository write occurred. No further audit writes are planned.

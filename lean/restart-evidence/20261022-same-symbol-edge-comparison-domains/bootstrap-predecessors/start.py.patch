@@ -1,0 +1,27 @@
+--- H14/start.py
++++ H15/start.py
+@@ -6,7 +6,7 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ ROOT = HERE.parents[2]
+-START = '1d5a07b762950272e53c9bd2d5f478d7be39dfad'
++START = 'e8a0066c6088d87cc0b0ea9085a07ba2ff44913c'
+ 
+ 
+ def git(*args):
+@@ -21,7 +21,7 @@
+     subprocess.run(['timeout', '45s', 'git', 'pull', '--ff-only'], cwd=ROOT, env=env,
+                    check=True, stdout=log, stderr=subprocess.STDOUT)
+ assert git('rev-parse', 'HEAD').decode().strip() == START
+-subprocess.run(['git', 'branch', 'codex/backup-same-symbol-edge-comparison-20261022-0424', START], cwd=ROOT, check=True)
++subprocess.run(['git', 'branch', 'codex/backup-same-symbol-edge-comparison-domains-20261022-0500', START], cwd=ROOT, check=True)
+ baseline = {}
+ for item in git('ls-tree', '-r', '-z', START).split(b'\0'):
+     if not item:
+@@ -44,5 +44,5 @@
+     'starting-worktrees.txt': ('worktree', 'list', '--porcelain'),
+ }.items():
+     (HERE / name).write_bytes(git(*arguments))
+-(HERE / 'previous-local-checkpoint.json').write_bytes(Path('/tmp/mcfta-same-symbol-edge-original-rows-local-publication.json').read_bytes())
++(HERE / 'previous-local-checkpoint.json').write_bytes(Path('/tmp/mcfta-same-symbol-edge-comparison-local-publication.json').read_bytes())
+ print(json.dumps({'status': 'PASS', 'baseline_files': len(baseline), 'starting_head': START}))

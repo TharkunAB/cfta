@@ -1,0 +1,24 @@
+/-- A supplied raw prefix derives its trace checks, current state, and actual return post. -/
+structure Receipt [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (source : InternedConstructorTemplates.State Symbol Guard)
+    (inventory : List DomainKey) (initial : Cache.State DomainKey)
+    (fuel : Nat) (control : Control A) (before : Checked width)
+    (remaining : Control A) (after : Checked width) (post : Machine Symbol Guard → A → Prop) : Prop where
+  /-- Every executed instruction has its current physical input check. -/
+  trace : Trace fuel control before remaining after
+  /-- The returned full state retains the source and past domain history. -/
+  current : Current source inventory initial after
+  /-- The prefix retains the initial machine records and both identity histories. -/
+  extension : Extension before.native.machine after.native.machine
+  /-- The prefix retains heap readiness and original equality records. -/
+  keeps : SourceEqualityRequiredCache.Keeps before.native.machine.heap after.native.machine.heap
+  /-- The prefix retains every earlier equality-operation entry. -/
+  operations : SourceEqualityConstraintMemoAllocation.Grows before.operations after.operations
+  /-- The exact reached control has its current physical input check. -/
+  inputs : Inputs remaining after
+  /-- The exact reached enter key belongs to the initial finite inventory. -/
+  entered : Entered inventory remaining
+  /-- The reached continuation retains its allocated equality fields. -/
+  fields : Fields remaining after
+  /-- An actual reached pure return supplies the local source postcondition. -/
+  result : ∀ value, remaining = .code (.pure value) → post after.native.machine value

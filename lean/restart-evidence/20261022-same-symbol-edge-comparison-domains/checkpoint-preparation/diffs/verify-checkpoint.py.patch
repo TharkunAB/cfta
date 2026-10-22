@@ -1,0 +1,40 @@
+--- predecessors/verify-checkpoint.py
++++ verify-checkpoint.py
+@@ -4,9 +4,9 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ ROOT = HERE.parents[2]
+-AUDIT_SHA = '7e8be4569d2e14ecf95f0ac83511e8ca6e569dde6c70dbb761c51782f386af0b'
+-AUDIT_JOBS = int('3631')
+-AUDIT_DEPENDENCIES = int('75384')
++AUDIT_SHA = '__H15_AUDIT_SHA__'
++AUDIT_JOBS = int('__H15_AUDIT_BUILD_JOBS__')
++AUDIT_DEPENDENCIES = int('__H15_AUDIT_DEPENDENCIES__')
+ for mode, label in [([], 'normal'), (['--live'], 'live')]:
+     result = subprocess.run(['/usr/bin/python3', str(HERE / 'verify-proofs.py'),
+         '--root', str(ROOT), *mode], cwd='/', capture_output=True, text=True)
+@@ -14,19 +14,19 @@
+     (HERE / ('proof-verification-' + label + '.stderr')).write_text(result.stderr)
+     assert result.returncode == 0, result.stderr
+     report = json.loads(result.stdout)
+-    assert report['status'] == 'PASS' and report['actual_jobs'] == int('3') and report['failed_jobs'] == int('0')
+-    assert report['source_jobs'] == int('2') and report['audit_jobs'] == int('1') and report['selected_modules'] == 1
++    assert report['status'] == 'PASS' and report['actual_jobs'] == int('__H15_ACTUAL_JOBS__') and report['failed_jobs'] == int('__H15_FAILED_JOBS__')
++    assert report['source_jobs'] == int('__H15_SOURCE_JOBS__') and report['audit_jobs'] == int('__H15_AUDIT_JOBS__') and report['selected_modules'] == 1
+     assert report['audit_build_jobs'] == AUDIT_JOBS and report['audit_dependencies'] == AUDIT_DEPENDENCIES
+     assert report['audit_log_sha256'] == AUDIT_SHA
+-    assert report['warned_source_exit_zero_jobs'] == int('0')
+-    assert report['rejected_public_type_jobs'] == int('0')
++    assert report['warned_source_exit_zero_jobs'] == int('__H15_WARNED_SOURCE_EXIT_ZERO_JOBS__')
++    assert report['rejected_public_type_jobs'] == int('__H15_REJECTED_PUBLIC_TYPE_JOBS__')
+ result = subprocess.run(['/usr/bin/python3', str(HERE / 'verify-preservation.py')],
+     cwd='/', capture_output=True, text=True)
+ (HERE / 'preservation-final.stderr').write_text(result.stderr)
+ assert result.returncode == 0, result.stderr
+ preserved = json.loads(result.stdout)
+ (HERE / 'preservation-final.json').write_text(json.dumps(preserved, indent=2) + '\n')
+-assert preserved['status'] == 'PASS' and preserved['baseline_files'] == 84279
++assert preserved['status'] == 'PASS' and preserved['baseline_files'] == 85212
+ baseline = json.loads((HERE / 'starting-files.json').read_text())
+ selected = json.loads((HERE / 'selected-sources.json').read_text())
+ new_modules = sum(name not in baseline for name in selected)

@@ -1,0 +1,12 @@
+/-- Original resident rows supply a demanded body's physical-return continuation. -/
+theorem edge_body (request : EdgeRequest Symbol Guard) (state : Machine Symbol Guard)
+    (scope : EdgeScope source request) (member : request.domain.key ∈ inventory) (ready : EdgeReady state request) :
+    Certified source inventory (.edgeBody request .pure) state (fun after value => EdgeResident after.heap value) :=
+  ⟨scope, member, ready, fun _ _ _ _ _ resident => ⟨resident, trivial, resident⟩⟩
+
+/-- A demanded edge body retains the complete original request before execution. -/
+theorem edge_data (request : EdgeRequest Symbol Guard) (next : EdgeValue Symbol Guard → Code Symbol Guard A)
+    (state : Machine Symbol Guard) (post : Machine Symbol Guard → A → Prop)
+    (certificate : Certified source inventory (.edgeBody request next) state post) :
+    EdgeScope source request ∧ request.domain.key ∈ inventory ∧ EdgeReady state request :=
+  ⟨certificate.1, certificate.2.1, certificate.2.2.1⟩

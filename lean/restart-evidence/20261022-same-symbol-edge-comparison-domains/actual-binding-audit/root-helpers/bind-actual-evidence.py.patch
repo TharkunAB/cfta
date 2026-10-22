@@ -1,0 +1,60 @@
+--- H14/bind-actual-evidence.py
++++ H15/bind-actual-evidence.py
+@@ -6,13 +6,13 @@
+ from pathlib import Path
+ 
+ HERE = Path(__file__).resolve().parent
+-name = 'SourceCurrentSameSymbolEdgeComparison'
++name = 'SourceCurrentSameSymbolEdgeComparisonDomains'
+ source = (HERE / (name + '.lean')).read_bytes()
+ sha = lambda data: hashlib.sha256(data).hexdigest()
+-assert sha(source) == '02d01576ce9e7188342835138452a5163b150e28c264c01782137848e1a1c560'
+-readback = json.loads((HERE / 'public-readback/same-symbol-edge-comparison-full-readback.json').read_text())
+-checked = (HERE / 'public-readback/same-symbol-edge-comparison-original_rows_complete-public-type.txt').read_bytes()
+-body = (HERE / 'public-readback/same-symbol-edge-comparison-original_rows_complete-body.txt').read_bytes()
++assert sha(source) == '8ae94566570cf99ec3eb61ec991d36a1df196c5b9c2bc2fca4aeb88fd6305e15'
++readback = json.loads((HERE / 'public-readback/same-symbol-edge-comparison-domains-full-readback.json').read_text())
++checked = (HERE / 'public-readback/same-symbol-edge-comparison-domains-original_rows_complete-public-type.txt').read_bytes()
++body = (HERE / 'public-readback/same-symbol-edge-comparison-domains-original_rows_complete-body.txt').read_bytes()
+ assert readback['heads'][0]['actual_axioms'] == ['Classical.choice', 'Quot.sound', 'propext']
+ jobs = {}
+ for path in HERE.glob('*.json'):
+@@ -20,7 +20,7 @@
+     if isinstance(item, dict) and 'wrapper' in item and 'exit_code' in item:
+         if Path(item.get('command', [''])[0]).name in {'lean', 'lake'}:
+             jobs[path.stem] = item
+-strict, full, audit_stem = ['same-symbol-edge-comparison-' + suffix
++strict, full, audit_stem = ['same-symbol-edge-comparison-domains-' + suffix
+                           for suffix in ['strict-1', 'public-1', 'audit-1']]
+ assert set(jobs) == {strict, full, audit_stem}
+ assert all(item['exit_code'] == 0 for item in jobs.values())
+@@ -60,8 +60,9 @@
+     'TYPE_LINE_FEEDS': str(checked.count(b'\n')), 'TYPE_BYTES': str(len(checked)),
+     'TYPE_CHARACTERS': str(len(checked.decode())),
+     'BODY_BYTES': str(len(body)), 'BODY_CHARACTERS': str(len(body.decode())),
++    'AXIOMS_JSON': json.dumps(readback['heads'][0]['actual_axioms']),
+     'ACTUAL_AXIOMS_JSON': json.dumps(readback['heads'][0]['actual_axioms']),
+-    'BACKUP_REF': 'codex/backup-same-symbol-edge-comparison-20261022-0424',
++    'BACKUP_REF': 'codex/backup-same-symbol-edge-comparison-domains-20261022-0500',
+     'FULL_READER_SHA': sha((HERE / 'full-preparation/check-full-public.py').read_bytes()),
+ }
+ sets = [
+@@ -80,15 +81,15 @@
+         path = HERE / predecessor / name
+         before = path.read_text()
+         after = before
+-        for key in sorted(set(re.findall(r'__H14_([A-Z_]+)__', before))):
+-            token, value = '__H14_' + key + '__', values[key]
++        for key in sorted(set(re.findall(r'__H15_([A-Z_]+)__', before))):
++            token, value = '__H15_' + key + '__', values[key]
+             if key.endswith('_JSON'):
+                 after = after.replace('"' + token + '"', repr(value)).replace("'" + token + "'", repr(value))
+             else:
+                 after = after.replace(token, value)
+             assert token not in after
+             used[key] = value
+-        assert '__H14_' not in after
++        assert '__H15_' not in after
+         ast.parse(after)
+         assert sum(isinstance(node, ast.Assert) for node in ast.walk(ast.parse(before))) == sum(
+             isinstance(node, ast.Assert) for node in ast.walk(ast.parse(after)))

@@ -1,0 +1,35 @@
+private theorem original_of_readback
+    (source : InternedConstructorTemplates.State Symbol Guard) (facts : InternedNestedFacts.Facts source)
+    (value : Value Symbol Guard) (input : Input) (available : Available source value)
+    (complete : IntersectionFlatMemoKey.input value.referenceOf = some input)
+    (original : OriginalInput source input) : Original value := by
+  obtain ⟨witness, witnessOriginal, witnessAvailable, witnessCodec⟩ := original
+  have witnessRead := payload_readback source facts witness witnessAvailable input witnessCodec
+  have actualRead := payload_readback source facts value available input complete
+  exact witnessRead.symm.trans actualRead ▸ witnessOriginal
+
+private theorem rows_scope
+    (source : InternedConstructorTemplates.State Symbol Guard) (facts : InternedNestedFacts.Facts source)
+    (leftParent rightParent : Value Symbol Guard)
+    (leftOriginal : OriginalInput source (inputOf leftParent))
+    (rightOriginal : OriginalInput source (inputOf rightParent))
+    (leftAvailable : Available source leftParent) (rightAvailable : Available source rightParent)
+    (left right : Edge)
+    (leftMember : left ∈ nodeEdges leftParent) (rightMember : right ∈ nodeEdges rightParent) :
+    EdgeScope source ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩ := by
+  cases leftParent with
+  | empty | reference | union | mu => cases leftMember
+  | node first leftEdges leftDepth leftFree =>
+      cases rightParent with
+      | empty | reference | union | mu => cases rightMember
+      | node second rightEdges rightDepth rightFree =>
+          change left ∈ leftEdges at leftMember
+          change right ∈ rightEdges at rightMember
+          have firstOriginal : Original (.node first leftEdges leftDepth leftFree) :=
+            original_of_readback source facts _ (.node first.identity) leftAvailable rfl leftOriginal
+          have secondOriginal : Original (.node second rightEdges rightDepth rightFree) :=
+            original_of_readback source facts _ (.node second.identity) rightAvailable rfl rightOriginal
+          exact NodeScope.rows source facts IntersectionEmptyDomain.emptyDomain
+            first leftEdges leftDepth leftFree second rightEdges rightDepth rightFree
+            (initial_scope source _ _ firstOriginal secondOriginal leftAvailable rightAvailable)
+            left right leftMember rightMember

@@ -1,0 +1,26 @@
+/-- The resource conditions describe only the fixed source and initial domain supply. -/
+structure Resources (bits : Nat) (source : InternedConstructorTemplates.State Symbol Guard)
+    (inventory : List DomainKey) (initial : Cache.State DomainKey) : Prop where
+  /-- Original operands have complete physical source records. -/
+  facts : Facts source
+  /-- The initial finite inventory is closed under actual original domain entry. -/
+  closed : SourceCurrentAllocatedRecursiveDomainCode.Closed source inventory
+  /-- The initial domain cache has canonical stored identities. -/
+  valid : Cache.Valid initial
+  /-- Original node identities fit the source key field. -/
+  nodes : source.nodes.next < 2 ^ bits
+  /-- Original edge identities fit the source row field. -/
+  edges : source.edges.next ≤ 2 ^ (bits + 2)
+  /-- The complete initial domain inventory fits the remaining identity supply. -/
+  room : initial.next + inventory.length < 2 ^ (bits + 1)
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+variable {bits : Nat} {source : InternedConstructorTemplates.State Symbol Guard}
+variable {inventory : List DomainKey} {initial : Cache.State DomainKey}
+
+/-- Every actual recursive raw prefix derives its physical checks and current source facts. -/
+theorem prefixes (resources : Resources bits source inventory initial) (fuel : Nat) :
+    Admits source inventory initial (bits + 2) fuel := by
+  induction fuel using Nat.strongRecOn with
+  | ind count ih =>
+    intro A control before remaining after post known certificate fields trace

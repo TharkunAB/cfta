@@ -1,0 +1,201 @@
+--- predecessors/update-documents.py
++++ update-documents.py
+@@ -6,28 +6,28 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ ROOT = HERE.parents[2]
+-SOURCE_SHA = '02d01576ce9e7188342835138452a5163b150e28c264c01782137848e1a1c560'
+-SOURCE_LINES = int('112')
+-strict, full, audit_stem = 'same-symbol-edge-comparison-strict-1', 'same-symbol-edge-comparison-public-1', 'same-symbol-edge-comparison-audit-1'
++SOURCE_SHA = '__H15_SOURCE_SHA__'
++SOURCE_LINES = int('__H15_SOURCE_LINES__')
++strict, full, audit_stem = '__H15_STRICT_STEM__', '__H15_FULL_STEM__', '__H15_AUDIT_STEM__'
+ metrics = {
+-    'actual_jobs': int('3'),
+-    'source_jobs': int('2'),
+-    'audit_jobs': int('1'),
+-    'failed_jobs': int('0'),
+-    'warned_source_exit_zero_jobs': int('0'),
+-    'rejected_public_type_jobs': int('0'),
+-    'audit_build_jobs': int('3631'),
+-    'audit_dependencies': int('75384'),
++    'actual_jobs': int('__H15_ACTUAL_JOBS__'),
++    'source_jobs': int('__H15_SOURCE_JOBS__'),
++    'audit_jobs': int('__H15_AUDIT_JOBS__'),
++    'failed_jobs': int('__H15_FAILED_JOBS__'),
++    'warned_source_exit_zero_jobs': int('__H15_WARNED_SOURCE_EXIT_ZERO_JOBS__'),
++    'rejected_public_type_jobs': int('__H15_REJECTED_PUBLIC_TYPE_JOBS__'),
++    'audit_build_jobs': int('__H15_AUDIT_BUILD_JOBS__'),
++    'audit_dependencies': int('__H15_AUDIT_DEPENDENCIES__'),
+ }
+ start = (HERE / 'starting-head.txt').read_text().strip()
+-assert start == '1d5a07b762950272e53c9bd2d5f478d7be39dfad'
++assert start == 'e8a0066c6088d87cc0b0ea9085a07ba2ff44913c'
+ proof = (HERE / 'proof-commit.txt').read_text().strip()
+ assert len(proof) == 40 and all(c in '0123456789abcdef' for c in proof)
+ assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip() == proof
+ assert subprocess.check_output(['git', 'branch', '--show-current'], cwd=ROOT, text=True).strip() == 'formalize'
+ now = datetime.datetime.now().astimezone().strftime('%Y-%m-%d %H:%M %Z')
+ gate = json.loads((HERE / 'selected-source-gate.json').read_text())
+-source_path = 'lean/MicroCFTA/SourceCurrentSameSymbolEdgeComparison.lean'
++source_path = 'lean/MicroCFTA/SourceCurrentSameSymbolEdgeComparisonDomains.lean'
+ assert gate['status'] == 'ROOT_ACCEPTED' and gate['path'] == source_path
+ source = (ROOT / source_path).read_bytes()
+ assert hashlib.sha256(source).hexdigest() == gate['sha256'] == SOURCE_SHA
+@@ -35,23 +35,23 @@
+ assert source == (HERE / (strict + '.source.lean')).read_bytes() and (HERE / (strict + '.log')).read_bytes() == b''
+ assert json.loads((HERE / (strict + '.json')).read_text())['exit_code'] == 0
+ raw = (HERE / (full + '.log')).read_bytes()
+-assert hashlib.sha256(raw).hexdigest() == '61cf4903d08f2d93443807fbb8429b6dbba821cc92910509d74a5404f905334d'
++assert hashlib.sha256(raw).hexdigest() == '__H15_FULL_RAW_SHA__'
+ assert json.loads((HERE / (full + '.json')).read_text())['exit_code'] == 0
+-readback = json.loads((HERE / 'public-readback/same-symbol-edge-comparison-full-readback.json').read_text())
++readback = json.loads((HERE / 'public-readback/same-symbol-edge-comparison-domains-full-readback.json').read_text())
+ assert readback['source_sha256'] == SOURCE_SHA and readback['source_lines'] == SOURCE_LINES
+ assert readback['log_sha256'] == hashlib.sha256(raw).hexdigest() and readback['log_bytes'] == len(raw)
+ assert readback['owned_public_job_exit'] == 0 and readback['no_omissions'] and len(readback['heads']) == 1
+ review = json.loads((HERE / 'root-full-review.json').read_text())
+ assert review['complete_public_type_root_review'] == review['independent_complete_public_type_review'] == 'CLEAR'
+ head_specs = [
+-    ('original_rows_complete', '7fb94c311d5eff9aa93faa2dab7cc235a2e9dffe365b98d2c5ca04c39c49dd8d', 'public-readback/same-symbol-edge-comparison-original_rows_complete-public-type.txt', 'public-readback/same-symbol-edge-comparison-original_rows_complete-printed-public-type.txt', '["Classical.choice", "Quot.sound", "propext"]'),
++    ('original_rows_complete', '__H15_TYPE_SHA__', 'public-readback/same-symbol-edge-comparison-domains-original_rows_complete-public-type.txt', 'public-readback/same-symbol-edge-comparison-domains-original_rows_complete-printed-public-type.txt', '__H15_AXIOMS_JSON__'),
+ ]
+ heads = {head['head'].rsplit('.', 1)[1]: head for head in readback['heads']}
+ assert set(heads) == {spec[0] for spec in head_specs}
+ checked_types = {}
+ for short, type_sha, type_path, printed_path, axioms_json in head_specs:
+     head = heads[short]
+-    assert head['head'] == 'MicroCFTA.SourceCurrentSameSymbolEdgeComparison.' + short
++    assert head['head'] == 'MicroCFTA.SourceCurrentSameSymbolEdgeComparisonDomains.' + short
+     assert head['check_print_type_identity'] and head['check_print_type_byte_identity'] and head['unique_complete_type_body_delimiter']
+     checked = (HERE / type_path).read_bytes()
+     assert checked == (HERE / printed_path).read_bytes() and hashlib.sha256(checked).hexdigest() == type_sha
+@@ -62,7 +62,7 @@
+ proof_report = json.loads((HERE / 'proof-evidence-normal.json').read_text())
+ assert proof_report['status'] == 'PASS' and all(proof_report[key] == value for key, value in metrics.items())
+ audit = (HERE / (audit_stem + '.log')).read_bytes()
+-assert hashlib.sha256(audit).hexdigest() == proof_report['audit_log_sha256'] == '7e8be4569d2e14ecf95f0ac83511e8ca6e569dde6c70dbb761c51782f386af0b'
++assert hashlib.sha256(audit).hexdigest() == proof_report['audit_log_sha256'] == '__H15_AUDIT_SHA__'
+ assert json.loads((HERE / (audit_stem + '.json')).read_text())['exit_code'] == 0
+ assert f"Build completed successfully ({metrics['audit_build_jobs']} jobs).".encode() in audit
+ assert f"{metrics['audit_dependencies']} MicroCFTA theorems".encode() in audit
+@@ -71,55 +71,60 @@
+     f"{short} TYPE: {len(data.splitlines())} logical lines, {data.count(bytes([10]))} LF, {len(data)} bytes, {len(data.decode())} characters.\n"
+     f"{short} actual axioms: {', '.join(heads[short]['actual_axioms']) or 'none'}."
+     for short, data in checked_types.items())
+-update = f'''## Completion across same-symbol pair-cache branches
++update = f'''## Domain history across original-row comparisons
+ 
+ Updated: {now}. Proof checkpoint: `{proof[:10]}`.
+ Start: `{start[:10]}`. Imported main remains `794903b3f`.
+-Read `lean/notes-current-same-symbol-edge-comparison.md`.
++Read `lean/notes-current-same-symbol-edge-comparison-domains.md`.
+ 
+-SourceCurrentSameSymbolEdgeComparison.original_rows_complete derives an
+-actual comparison result for ready and absent pair-cache branches.
+-It keeps the SAME source, models, populated checked state and pair memo.
+-Available closed OriginalInput parents, literal same-symbol rows, Stable,
+-current Good, Contextual, SemanticReady, native Idle, source growth/history
+-and one current Room remain explicit. No cache-branch premise is required.
+-The result retains residency, canonical conditional EdgeLaw, Good, Contextual,
+-SemanticReady, native Extension, Stable, native Idle, table Extends and Returned.
+-A ready hit has no native Receipt claim. No post-Room or future capacity follows.
++SourceCurrentSameSymbolEdgeComparisonDomains.original_rows_complete derives an
++actual comparison result and its SAME global domain allocation history.
++The source, models, populated checked state and pair memo stay correlated.
++Available closed OriginalInput parents and literal same-symbol rows remain explicit.
++The initial domain cache, its Valid witness and actual past allocation Trace stay fixed.
++One initial Room reservation derives current-call Room from the same finite inventory.
++Current Good, Contextual, SemanticReady, Stable, native Idle and source history remain explicit.
++The result retains all comparison outputs and the SAME initial-to-after allocation Trace.
++No cache reset, new per-call history, future Room or successful run is a premise.
++Ready hits have no native Receipt claim. Actual finite-scan control is not proved.
+ 
+ H6 constructed_node_calls remains the strongest combined semantic theorem.
+ Generated-parent provenance, source/model rebase, physical language iff,
+ public Mu/full-pass and Haskell refinement remain open. The goal is incomplete.
+ 
+-Preservation covers 84279 baseline files/modes, 298 baseline Haskell files
++Preservation covers 85212 baseline files/modes, 298 baseline Haskell files
+ and 207 active package files. Only one Audit import and nine additive doc
+ prefixes may change old files. FINDINGS keeps its repair index FIRST.
+-The preceding 1d5a07b7 checkpoint is LOCAL_ONLY. Remote publication remains
++The preceding e8a0066c checkpoint is LOCAL_ONLY. Remote publication remains
+ PENDING_USER_APPROVAL. This tool performs no push or network command.
+ '''
+ findings = update
+-focused = f'''# Completion across same-symbol pair-cache branches
++focused = f'''# Domain history across original-row comparisons
+ 
+ Updated: {now}. Proof checkpoint: `{proof}`. Start: `{start}`.
+ 
+-original_rows_complete derives an actual wrapper comparison result across
+-original-ready, reverse-ready and both-miss pair-cache cases.
++original_rows_complete derives an actual comparison result and the SAME
++fixed-source global domain allocation Trace through every pair-cache branch.
+ The requested edges are literal same-symbol rows of available closed
+-OriginalInput parents in the SAME source. Source Facts, executable guards,
+-view, input model and ranks stay fixed. The populated caller is not reset.
+-Incoming Stable, current Good, Contextual, SemanticReady, native Idle,
+-source growth/history and one current Room remain explicit.
+-Room uses source node/edge counters, current domains.next and mass 0.
+-No cache hit/miss, successful run or desired result law is a premise.
++OriginalInput parents. Source Facts, executable guards, view, model and ranks stay fixed.
++The populated caller is not reset. The initial domain cache and its Valid witness
++stay fixed. The incoming Trace records actual past allocations from that cache.
++Current Good, Contextual, SemanticReady, Stable, native Idle and source history remain explicit.
++Let I be the domains inventory computed from the fixed source.
++The initial Room profile uses source node/edge counters, initialDomains.next + I.length,
++and mass 0. Trace.next_le and Room.mono derive the current-call Room.
++No cache branch, future history, successful run or desired result law is a premise.
+ 
+ The actual execute equation uses the SAME result and full returned state.
+-Its result is resident and has the canonical conditional contextual EdgeLaw.
++The result is resident and has the canonical conditional contextual EdgeLaw.
+ The output retains Good, Contextual, SemanticReady, native-machine Extension,
+-Stable, native Idle, pair-table Extends and Returned.
+-Ready hits retain the exact checked state. No native Receipt is claimed on
+-those paths. Native completion is used only by the both-miss branch.
+-No post-Room, future sequence capacity, reset, model/source rebase,
+-generated-parent provenance or independent physical language iff follows.
++Stable, native Idle, pair-table Extends, Returned and Trace I initialDomains afterDomains.
++The proof retains one global history. It does not restart that history at each call.
++Ready hits retain the exact checked state and assert no native Receipt.
++The miss path uses its actual native receipt and the existing prefix admission theorem.
++The initial reservation supports next-call Room under this retained packet.
++No actual finite scan, generated Mu parent, reset, source/model rebase,
++practical width bound or independent physical language iff is proved.
+ H6 constructed_node_calls remains the strongest combined semantic theorem.
+ Public Mu unfolding/kept-body, full pass, practical width, solver contracts,
+ convergence and Haskell refinement remain open. The goal stays incomplete.
+@@ -144,16 +149,16 @@
+ {metrics['audit_build_jobs']} jobs and {metrics['audit_dependencies']} theorem
+ dependencies. This writer does not claim seal or publication success.
+ 
+-Preservation covers 84279 starting files/modes. The older non-Audit Lean
++Preservation covers 85212 starting files/modes. The older non-Audit Lean
+ count comes from the exact start manifest. All 298 baseline Haskell files,
+ 207 active package files, old proofs, drafts and optimized code remain.
+-Additional H14 Haskell archives must match baseline source bytes under H14.
+-Every old document has an exact inverse. The original Audit has 3119
+-lines and SHA d80480df15a3908dd6c1589b9f6182546d7a4dc09cca9da36098f9289d91c3c6. Its only edit is the new module import.
++Additional H15 Haskell archives must match baseline source bytes under H15.
++Every old document has an exact inverse. The original Audit has 3120
++lines and SHA fa6c433f47dca1a9b5433edd416e98f742592352920ecd5969494e0b977d4d37. Its only edit is the new module import.
+ FINDINGS keeps the external repair index FIRST. PR #65 and PR #97 stay fixed.
+ No Haskell repair or runtime change is added.
+ 
+-The preceding 1d5a07b7 checkpoint is LOCAL_ONLY. Earlier automatic approval
++The preceding e8a0066c checkpoint is LOCAL_ONLY. Earlier automatic approval
+ review rejected pushes. Continuing the goal is not fresh user approval.
+ The local publisher keeps seal, staging and filesystem/index/HEAD checks.
+ It records PENDING_USER_APPROVAL and performs no network command.
+@@ -181,7 +186,7 @@
+     (ROOT / name).write_text(changed)
+ (HERE / 'current-update.md').write_text(update)
+ (HERE / 'findings-update.md').write_text(findings)
+-note = ROOT / 'lean/notes-current-same-symbol-edge-comparison.md'
++note = ROOT / 'lean/notes-current-same-symbol-edge-comparison-domains.md'
+ assert not note.exists()
+ note.write_text(focused)
+ print('Updated nine documents and focused note. All prior text remains.')

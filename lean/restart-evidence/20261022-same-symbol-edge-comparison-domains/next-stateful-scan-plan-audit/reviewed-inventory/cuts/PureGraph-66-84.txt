@@ -1,0 +1,19 @@
+
+/-- Removing redundant identity alternatives at every state preserves cyclic graph languages. -/
+theorem reduce_graph_exact [DecidableEq Identity] (rows : State → List Identity)
+    (edgeOf : Identity → Edge State Symbol) (meet : Identity → Identity → Identity)
+    (intersection : ∀ first second term,
+      edgeMeaning (fun state => (rows state).map edgeOf) edgeOf (meet first second) term ↔
+        edgeMeaning (fun state => (rows state).map edgeOf) edgeOf first term ∧
+        edgeMeaning (fun state => (rows state).map edgeOf) edgeOf second term)
+    (state : State) (term : Term Symbol) :
+    Accepts (fun state => (RedundantEdges.reduce meet (rows state)).map edgeOf) state term ↔
+      Accepts (fun state => (rows state).map edgeOf) state term := by
+  apply rows_preserve_language
+  intro selected tree
+  rw [identity_rows, RedundantEdges.reduce_exact meet _ intersection, ← identity_rows]
+  cases tree with
+  | node symbol children =>
+    simpa only [AcceptsRows] using (accepts_node_iff (fun state => (rows state).map edgeOf) selected symbol children).symm
+
+end MicroCFTA.GraphRewrite

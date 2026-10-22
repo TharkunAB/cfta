@@ -1,0 +1,11 @@
+/-- Equal edge identities determine the complete ordered child payload. -/
+theorem edge_identity_unique (state : State Symbol Guard) (coherent : Coherent state)
+    (first second : EdgeValue Symbol Guard) (left : EdgeResident state first)
+    (right : EdgeResident state second) (same : first.entry.identity = second.entry.identity) : first = second := by
+  have firstStored := (coherent.edges first.entry.key first left).1
+  have secondStored := (coherent.edges second.entry.key second right).1
+  have keys := (Cache.identity_eq_iff_key_eq state.edges coherent.valid.1 firstStored secondStored).mp same
+  unfold EdgeResident at left right
+  rw [← keys] at right
+  exact Option.some.inj (left.symm.trans right)
+

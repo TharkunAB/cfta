@@ -1,0 +1,33 @@
+/-- A finite source scan retains each executed callback and stops at the first decisive result. -/
+inductive Run (continueOn : Bool) (step : Query → State → Bool → State → Prop) :
+    List Query → State → Bool → State → Prop where
+  | nil (state : State) : Run continueOn step [] state continueOn state
+  | stop (first : step query state (!continueOn) after) : Run continueOn step (query :: rest) state (!continueOn) after
+  | next (first : step query state continueOn middle) (tail : Run continueOn step rest middle result after) :
+      Run continueOn step (query :: rest) state result after
+
+/-- Word checks follow actual continuing callbacks and their reached suffixes. -/
+def Ranges (continueOn : Bool) (step : Query → State → Bool → State → Prop) (allowed : Query → State → Prop) :
+    List Query → State → Prop
+  | [], _ => True
+  | query :: rest, state => allowed query state ∧ ∀ after, step query state continueOn after → Ranges continueOn step allowed rest after
+
+/-- Finite actual callbacks give finite exact ordered scans under reached-query range checks. -/
+theorem complete (continueOn : Bool) (step : Query → State → Bool → State → Prop) (allowed : Query → State → Prop)
+    (invariant : State → Prop) (test : Query → Bool)
+    (callbacks : ∀ query state, invariant state → allowed query state →
+      ∃ result after, step query state result after ∧ invariant after ∧ result = test query)
+    (queries : List Query) (state : State) (valid : invariant state) (ranges : Ranges continueOn step allowed queries state) :
+    ∃ result after, Run continueOn step queries state result after ∧ invariant after ∧ result = fold continueOn test queries := by
+  induction queries generalizing state with
+  | nil => exact ⟨continueOn, state, .nil state, valid, rfl⟩
+  | cons query rest ih =>
+      obtain ⟨observed, middle, first, middleValid, expected⟩ := callbacks query state valid ranges.1
+      by_cases same : observed = continueOn
+      · have continuing : step query state continueOn middle := by simpa only [same] using first
+        obtain ⟨result, after, tail, afterValid, correct⟩ := ih middle middleValid (ranges.2 middle continuing)
+        refine ⟨result, after, .next continuing tail, afterValid, ?_⟩
+        simpa only [fold, expected.symm.trans same, ↓reduceIte] using correct
+      · have other : observed = !continueOn := by cases observed <;> cases continueOn <;> simp_all
+        refine ⟨!continueOn, middle, .stop (by simpa only [other] using first), middleValid, ?_⟩
+        simp only [fold, ← expected, ite_eq_right same]

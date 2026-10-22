@@ -1,0 +1,20 @@
+/-- The inventory contains empty and actual extensions of original operands. -/
+structure Closed (source : InternedConstructorTemplates.State Symbol Guard) (inventory : List DomainKey) : Prop where
+  /-- The source empty domain belongs to the inventory. -/
+  empty : IntersectionEmptyDomain.emptyKey ∈ inventory
+  /-- Extending by actual original operands retains inventory membership. -/
+  extend : ∀ domain ∈ inventory, ∀ left right,
+    Available source left → Available source right → ∀ first second,
+    SourceRecursiveIntersectionControl.identity left = some first →
+    SourceRecursiveIntersectionControl.identity right = some second →
+    SourceRecursiveIntersectionDomain.extend domain
+      ((SourceRecursiveIntersectionEnvironment.bindings left right).map Prod.fst)
+      (SourceRecursiveIntersectionControl.pair first second) ∈ inventory
+
+/-- The computed initial source inventory has the required closure. -/
+theorem source_closed (source : InternedConstructorTemplates.State Symbol Guard) (facts : Facts source) :
+    Closed source (SourceRecursiveIntersectionSourceInventory.domains source) :=
+  ⟨SourceRecursiveIntersectionSourceInventory.empty_mem source,
+    fun domain member left right leftAvailable rightAvailable first second leftId rightId =>
+      SourceRecursiveIntersectionSourceInventory.extend_mem source facts domain member left right
+        leftAvailable rightAvailable first second leftId rightId⟩
