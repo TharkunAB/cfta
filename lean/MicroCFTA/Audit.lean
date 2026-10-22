@@ -3102,6 +3102,7 @@ import MicroCFTA.SourceCurrentSameSymbolEdgeComparison
 import MicroCFTA.SourceCurrentSameSymbolEdgeComparisonDomains
 import MicroCFTA.SourceCurrentOriginalRowClusterScan
 import MicroCFTA.SourceCurrentPrependGrouping
+import MicroCFTA.SourceCurrentOriginalRowReconstruction
 /-!
 # Proof dependency audit
 
