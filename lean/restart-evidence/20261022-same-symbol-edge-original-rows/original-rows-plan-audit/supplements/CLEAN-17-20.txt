@@ -1,0 +1,4 @@
+/-- A source control has no explicit driver completion frame in its continuation. -/
+def Clean : Control Output → Prop
+  | .code body => BodyCode body
+  | .edgeBody _ next => ∀ value, BodyCode (next value)

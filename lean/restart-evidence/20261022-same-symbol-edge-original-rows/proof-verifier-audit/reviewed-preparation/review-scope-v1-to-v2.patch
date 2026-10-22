@@ -1,0 +1,20 @@
+--- H13-template-v1/verify-proofs.py
++++ H13-template-v2/verify-proofs.py
+@@ -37,7 +37,7 @@
+             actual.add(path.stem)
+ assert actual == set(jobs), actual
+ assert metrics["actual_jobs"] == len(actual) and metrics["source_jobs"] == sum(bool(row[1]) for row in jobs.values())
+-assert metrics["audit_jobs"] == sum(not row[1] for row in jobs.values()) == 1 and jobs[audit_stem][1] is None
++assert metrics["audit_jobs"] == sum(not row[1] for row in jobs.values()) and jobs[audit_stem][1] is None
+ assert metrics["failed_jobs"] == sum(row[0] != 0 for row in jobs.values())
+ assert metrics["warned_source_exit_zero_jobs"] == sum(row[0] == 0 and bool(row[1]) and bool(row[4]) for row in jobs.values())
+ assert len(rejected) == len(set(rejected)) == metrics["rejected_public_type_jobs"] and full_stem not in rejected
+@@ -148,7 +148,7 @@
+ review = load("root-full-review.json")
+ assert review["status"] == "ROOT_ACCEPTED_FOR_OFFICIAL_INSTALL_AND_AUDIT" and review["source_sha256"] == selected_sha and review["source_lines"] == source_lines
+ assert review["public_theorem"] == head and review["complete_public_type_root_review"] == review["independent_complete_public_type_review"] == "CLEAR"
+-assert review["root_read_both_complete_type_files"] and review["check_print_type_byte_identity"] and review["four_private_markers_and_all_helpers_absent_from_type"]
++assert review["root_read_complete_public_type"] and review["root_printed_type_byte_identity_verified"] and review["check_print_type_byte_identity"] and review["four_private_markers_and_all_helpers_absent_from_type"]
+ assert review["type_sha256"] == digest(checked.encode()) and review["full_raw_sha256"] == digest(raw) and review["actual_axioms"] == sorted(actual_axioms)
+ assert review["body_retained_and_programmatically_checked"] and review["whole_body_manual_read_claimed"] is False
+ assert review["original_closed_parent_rows"] and review["source_scope_and_current_readiness_derived"] and review["semantic_completion_and_word_ranges_derived"]

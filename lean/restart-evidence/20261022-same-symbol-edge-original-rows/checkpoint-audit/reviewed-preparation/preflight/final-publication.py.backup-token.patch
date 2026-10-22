@@ -1,0 +1,11 @@
+--- initial-template/final-publication.py
++++ selected-template/final-publication.py
+@@ -8,7 +8,7 @@
+ assert (H/'starting-head.txt').read_text().strip()=='c49dd66acf3beecbead06219f10f125a43b3925d'
+ assert git('rev-parse','HEAD').decode().strip()==(H/'proof-commit.txt').read_text().strip()==proof
+ assert git('branch','--show-current').decode().strip()=='formalize'
+-assert git('rev-parse','codex/__H13_BACKUP_REF__').decode().strip()==(H/'starting-head.txt').read_text().strip()
++assert git('rev-parse','__H13_BACKUP_REF__').decode().strip()==(H/'starting-head.txt').read_text().strip()
+ assert git('rev-parse','main').decode().strip()=='ed73f5997f1c07e2961d06e6e290d1de38319dad'
+ assert git('rev-parse','origin/main').decode().strip()=='794903b3fbad3becb8b28736fc33463760731fc7'
+ subprocess.run(['/usr/bin/python3',str(H/'verify-seal.py')],check=True)

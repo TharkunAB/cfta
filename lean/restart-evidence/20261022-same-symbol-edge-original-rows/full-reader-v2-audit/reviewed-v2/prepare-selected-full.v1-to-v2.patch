@@ -1,0 +1,13 @@
+--- V1/prepare-selected-full.py
++++ V2/prepare-selected-full.py
+@@ -14,7 +14,9 @@
+ context = (HERE / 'full-preparation/context.lean.txt').read_bytes()
+ proposed = (HERE / 'full-preparation/proposed-signature.lean.txt').read_bytes()
+ header = proposed.rstrip(b'\n') + b' := by\n'
+-assert source.startswith(context + header)
++assert source.startswith(context)
++assert source.count(header) == 1
++assert source.index(header) >= len(context)
+ assert len(context.splitlines()) == 19 and len(header.splitlines()) == 54
+ assert source.rstrip().endswith(('end MicroCFTA.' + name).encode())
+ assert b'set_option maxRecDepth' not in source and b'set_option maxHeartbeats' not in source

@@ -1,0 +1,11 @@
+--- initial-template/commit-proofs.py
++++ selected-template/commit-proofs.py
+@@ -14,7 +14,7 @@
+ assert git('branch', '--show-current').strip() == 'formalize'
+ assert git('rev-parse', 'HEAD').strip() == (HERE / 'starting-head.txt').read_text().strip() == 'c49dd66acf3beecbead06219f10f125a43b3925d'
+ assert not git('diff', '--cached', '--name-only').strip()
+-assert git('rev-parse', 'codex/__H13_BACKUP_REF__').strip() == (HERE / 'starting-head.txt').read_text().strip()
++assert git('rev-parse', '__H13_BACKUP_REF__').strip() == (HERE / 'starting-head.txt').read_text().strip()
+ assert git('rev-parse', 'main').strip() == (HERE / 'starting-local-main.txt').read_text().strip() == 'ed73f5997f1c07e2961d06e6e290d1de38319dad'
+ assert git('rev-parse', 'origin/main').strip() == (HERE / 'starting-main.txt').read_text().strip() == '794903b3fbad3becb8b28736fc33463760731fc7'
+ selected = json.loads((HERE / 'selected-sources.json').read_text())

@@ -1,0 +1,19 @@
+/-- Both source cache families satisfy their complete validity conditions. -/
+def Valid (state : Machine Symbol Guard) : Prop := InternedNestedFacts.Facts state.heap ∧ Cache.Valid state.domains
+
+/-- Later caller states retain physical records, issued identities, and canonical domain entries. -/
+structure Extension (before after : Machine Symbol Guard) : Prop where
+  heap : Grows before.heap after.heap
+  history : Extends before.heap.nodes.issued after.heap.nodes.issued
+  domains : Extends before.domains.table after.domains.table
+
+/-- A call with no cache effect retains every earlier record. -/
+theorem Extension.refl (state : Machine Symbol Guard) : Extension state state :=
+  ⟨grows_refl _, extends_refl _, extends_refl _⟩
+
+/-- Ordered caller effects compose both physical and domain histories. -/
+theorem Extension.trans (first : Extension before middle) (second : Extension middle after) : Extension before after :=
+  ⟨grows_trans first.heap second.heap, extends_trans first.history second.history, extends_trans first.domains second.domains⟩
+
+/-- All earlier complete physical records survive recursive caller effects. -/
+theorem Extension.available {before after : Machine Symbol Guard} (extension : Extension before after) (value : Value Symbol Guard)

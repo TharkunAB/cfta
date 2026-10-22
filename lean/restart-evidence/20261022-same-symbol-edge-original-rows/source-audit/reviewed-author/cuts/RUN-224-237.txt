@@ -1,0 +1,14 @@
+    (fuel : Nat) (control : Control Output) (before after : State width) (value : Output)
+    (done : execute fuel control before = .done value after) (clean : Clean control) (shape : Shape before.native) :
+    Retains after.native before.native := by
+  obtain ⟨count, _, trace⟩ := done_trace fuel control before after value done
+  exact trace_running_before count control before after value trace clean shape
+
+/-- A completed checked source body returns idle native tables from idle native tables. -/
+theorem done_idle [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (control : Control Output) (before after : State width) (value : Output)
+    (clean : Clean control) (shape : Shape before.native) (idle : Idle before.native)
+    (done : execute fuel control before = .done value after) : Idle after.native :=
+  idle.retained (done_running_before fuel control before after value done clean shape)
+
+/-- A checked node body and its own finish restore the cells from before that node demand. -/

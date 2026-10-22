@@ -1,0 +1,49 @@
+import difflib
+import hashlib
+import json
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parents[2]
+name = 'SourceCurrentAllocatedDirectEdgeWordRanges'
+source = (HERE / (name + '.lean')).read_bytes()
+sha = hashlib.sha256(source).hexdigest()
+assert sha == 'de874220ae0aab490300f809c9fa4d2a931030fd69b95efb70deaa9a92a4b440'
+assert len(source.splitlines()) == 44
+assert source == (HERE / 'direct-edge-word-ranges-strict-1.source.lean').read_bytes()
+assert (HERE / 'direct-edge-word-ranges-strict-1.log').read_bytes() == b''
+assert json.loads((HERE / 'direct-edge-word-ranges-public-1.json').read_text())['exit_code'] == 0
+review = json.loads((HERE / 'root-full-review.json').read_text())
+assert review['source_sha256'] == sha
+assert review['complete_public_type_root_review'] == 'CLEAR'
+assert review['independent_complete_public_type_review'] == 'CLEAR'
+assert review['official_install_authorized'] is True
+target = ROOT / ('lean/MicroCFTA/' + name + '.lean')
+assert not target.exists()
+audit = ROOT / 'lean/MicroCFTA/Audit.lean'
+original = audit.read_bytes()
+assert hashlib.sha256(original).hexdigest() == 'eb67f7c671837d434cc443c9bbe48e2a11bd54c66a3ffbd3bb2506884face11e'
+assert len(original.splitlines()) == 3117
+old = (HERE.parent / '20261022-original-row-edge-completion/install-source.py').read_bytes()
+(HERE / 'install-source.H11-original.py.txt').write_bytes(old)
+(HERE / 'install-source.patch').write_text(''.join(difflib.unified_diff(old.decode().splitlines(keepends=True), Path(__file__).read_text().splitlines(keepends=True), fromfile='H11-install', tofile='H12-install')))
+archive = HERE / 'original-sources'
+archive.mkdir()
+(archive / 'Audit.original.lean.txt').write_bytes(original)
+addition = b'import MicroCFTA.SourceCurrentAllocatedDirectEdgeWordRanges\n'
+assert addition not in original
+target.write_bytes(source)
+audit.write_bytes(original.replace(b'/-!', addition + b'/-!', 1))
+path = 'lean/MicroCFTA/' + name + '.lean'
+selected = {path: dict(sha256=sha, lines=44, strict='direct-edge-word-ranges-strict-1', full='direct-edge-word-ranges-public-1')}
+(HERE / 'selected-sources.json').write_text(json.dumps(selected, indent=2) + '\n')
+(HERE / 'frozen-modules.json').write_text(json.dumps({name: sha}, indent=2) + '\n')
+snapshots = HERE / 'selected-sources'
+snapshots.mkdir()
+(snapshots / (name + '.lean')).write_bytes(source)
+(HERE / 'selected-source-gate.json').write_text(json.dumps(dict(status='ROOT_ACCEPTED', path=path,
+    sha256=sha, lines=44, snapshot='selected-sources/' + name + '.lean'), indent=2) + '\n')
+(HERE / 'original-source-index.json').write_text(json.dumps({'sources': [dict(path='lean/MicroCFTA/Audit.lean',
+    snapshot='original-sources/Audit.original.lean.txt', lines=3117,
+    sha256=hashlib.sha256(original).hexdigest())]}, indent=2) + '\n')
+print(json.dumps({'status': 'PASS', 'installed_module': path, 'audit_only_new_import': True}))

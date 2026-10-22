@@ -1,0 +1,25 @@
+private theorem original_of_readback
+    (source : InternedConstructorTemplates.State Symbol Guard) (facts : Facts source)
+    (value : Value Symbol Guard) (input : Input) (available : Available source value)
+    (complete : IntersectionFlatMemoKey.input value.referenceOf = some input)
+    (original : OriginalInput source input) : Original value := by
+  obtain ⟨witness, witnessOriginal, witnessAvailable, witnessCodec⟩ := original
+  have witnessRead := payload_readback source facts witness witnessAvailable input witnessCodec
+  have actualRead := payload_readback source facts value available input complete
+  have same : witness = value := witnessRead.symm.trans actualRead
+  exact same ▸ witnessOriginal
+
+/-- Derive semantic completion for rows of the same source's actual closed original parents. -/
+theorem edge_complete [DecidableEq Symbol]
+    (source : InternedConstructorTemplates.State Symbol Guard) (facts : Facts source)
+    (holds : Guard → Term Symbol → Bool) (leftParent rightParent : Value Symbol Guard)
+    (leftOriginal : OriginalInput source (inputOf leftParent))
+    (rightOriginal : OriginalInput source (inputOf rightParent))
+    (leftAvailable : Available source leftParent) (rightAvailable : Available source rightParent)
+    (leftClosed : leftParent.free = []) (rightClosed : rightParent.free = [])
+    (left right : EdgeValue Symbol Guard)
+    (leftMember : left ∈ InternedEdgeResidency.nodeEdges leftParent)
+    (rightMember : right ∈ InternedEdgeResidency.nodeEdges rightParent) :
+    Completes (view source holds)
+      (SourceRecursiveIntersectionNative.edgeSemantic holds
+        ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩) := by

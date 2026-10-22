@@ -1,0 +1,12 @@
+  obtain ⟨result, after, done, same, resident, law⟩ := progress
+  have resultResident : EdgeResident after.checked.native.machine.heap result := by
+    simpa only [same] using resident
+  have growth : Extension before.checked.native.machine after.checked.native.machine := by
+    rw [same]
+    exact Extension.refl _
+  obtain ⟨finalStable, extension, history⟩ :=
+    SourceCurrentSameSymbolEdgeStable.completed_preserves semanticView model ranked holds 7 left right result
+      before after stable leftResident rightResident done growth resultResident law
+  exact ⟨result, after, done, same, resultResident, law, finalStable, extension, history⟩
+
+end MicroCFTA.SourceCurrentSameSymbolEdgeReady

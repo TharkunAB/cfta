@@ -1,0 +1,26 @@
+def OriginalBindings (source : InternedConstructorTemplates.State Symbol Guard) (domain : DomainKey) : Prop :=
+  ∀ name ∈ SourceRecursiveIntersectionDomain.names domain, OriginalInput source (.mu name)
+
+/-- A node request retains original available operands and original source bindings. -/
+structure NodeScope (source : InternedConstructorTemplates.State Symbol Guard) (request : NodeRequest Symbol Guard) : Prop where
+  left : Original request.left
+  right : Original request.right
+  leftAvailable : Available source request.left
+  rightAvailable : Available source request.right
+  bindings : OriginalBindings source request.domain.key
+
+/-- A row request retains original resident edges, complete original children, and source bindings. -/
+structure EdgeScope (source : InternedConstructorTemplates.State Symbol Guard) (request : EdgeRequest Symbol Guard) : Prop where
+  leftResident : InternedEdgeResidency.EdgeResident source request.left
+  rightResident : InternedEdgeResidency.EdgeResident source request.right
+  left : ∀ child ∈ request.left.children, Original child
+  right : ∀ child ∈ request.right.children, Original child
+  bindings : OriginalBindings source request.domain.key
+
+/-- Actual closed original roots start with empty original binder scope. -/
+theorem initial_scope (source : InternedConstructorTemplates.State Symbol Guard) (left right : Value Symbol Guard)
+    (leftOriginal : Original left) (rightOriginal : Original right) (leftAvailable : Available source left)
+    (rightAvailable : Available source right) : NodeScope source ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩ := by
+  refine ⟨leftOriginal, rightOriginal, leftAvailable, rightAvailable, ?_⟩
+  intro name member
+  cases member
