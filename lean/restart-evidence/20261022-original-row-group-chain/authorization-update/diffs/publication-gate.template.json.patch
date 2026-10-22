@@ -1,0 +1,38 @@
+--- frozen-original-preparation/publication-gate.template.json
++++ publication-gate.template.json
+@@ -2,20 +2,28 @@
+   "status": "PENDING_ROOT_ACTUAL_BINDING",
+   "proof_commit": "__H22_PROOF_COMMIT__",
+   "publication_scope": "LOCAL_ONLY",
+-  "network_publication": "PENDING_USER_APPROVAL",
+-  "publisher_sha256": "b014c3fd70f6746d0ab63087e7bc32cefa8568b9725a1228b83cb07e7100b430",
+-  "reason": "Newer local work after the directly approved pushed tip requires fresh exact-payload approval.",
++  "network_publication": "AUTHORIZED_PENDING_ROOT_PUSH",
++  "publisher_sha256": "a6d8a595cf9c889540bd9589bfc8e2c34d89a23cc82efa784cb5f8b64e3d34f7",
++  "reason": "The user authorized pushes to formalize. Root push follows successful seal and local checkpoint verification.",
+   "previous_directly_approved_payload_commits": 12,
+   "previous_directly_approved_remote_tip": "562120d456ea5836dc0f3cc718dafd25323521c3",
+   "previous_directly_approved_payload_status": "PUSHED_AND_REMOTE_VERIFIED_ROOT_REPORTED",
+-  "pending_exact_payload": "NOT_SELECTED_REQUIRES_FRESH_APPROVAL",
++  "pending_exact_payload": "AUTHORIZED_FUTURE_ROOT_PUSH_AFTER_VERIFIED_LOCAL_CHECKPOINT",
+   "destination": "git@github.com:TharkunAB/cfta.git",
+   "branch": "formalize",
+   "whole_goal_complete": false,
+   "earlier_pending_exact_eight_commit_question": {
+     "first": "2cc495ab5e39ae603880acd56f17122595242699",
+     "through": "d0cf685f461430a7c608ceb3b76da0fe568e4d84",
+-    "approval": "PENDING",
+-    "includes_h21_or_h22": false
+-  }
++    "approval": "PUSHED_AND_REMOTE_VERIFIED",
++    "includes_h21_or_h22": false,
++    "verified_remote_tip": "d0cf685f461430a7c608ceb3b76da0fe568e4d84"
++  },
++  "previous_h21_publication": {
++    "status": "PUSHED_AND_REMOTE_VERIFIED",
++    "verified_remote_tip": "70787b95484cb69897bc4075858e07c7f9c22433",
++    "commit_count": 2
++  },
++  "standing_authorization": "Keep going. You are explicitly authorized to push to the formalize branch",
++  "standing_authorization_branch": "formalize"
+ }

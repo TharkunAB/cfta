@@ -1,0 +1,20 @@
+--- preflight/update-documents.initial-201.py
++++ update-documents.py
+@@ -39,7 +39,7 @@
+ raw = (HERE / (full + '.log')).read_bytes()
+ assert hashlib.sha256(raw).hexdigest() == '__H22_FULL_RAW_SHA__'
+ assert json.loads((HERE / (full + '.json')).read_text())['exit_code'] == 0
+-readback = json.loads((HERE / 'public-readback/prepend-grouping-full-readback.json').read_text())
++readback = json.loads((HERE / 'public-readback/original-row-group-chain-full-readback.json').read_text())
+ assert readback['source_sha256'] == SOURCE_SHA and readback['source_lines'] == SOURCE_LINES
+ assert readback['log_sha256'] == hashlib.sha256(raw).hexdigest() and readback['log_bytes'] == len(raw)
+ head_specs = json.loads('__H22_HEAD_SPECS_JSON__')
+@@ -151,7 +151,7 @@
+ {metrics['failed_jobs']} failures, {metrics['warned_source_exit_zero_jobs']}
+ warned source exit-zero commands and {metrics['rejected_public_type_jobs']}
+ rejected PUBLIC TYPE commands. All actual inputs, raw logs and repair history remain.
+-No first-pass result, failed job or metadata failure is assumed in this template.
++Retained evidence records every actual source and metadata outcome.
+ Metadata work creates no proof command. Audit has {metrics['audit_build_jobs']}
+ jobs and {metrics['audit_dependencies']} theorem dependencies.
+ This writer claims no seal or local publication success.

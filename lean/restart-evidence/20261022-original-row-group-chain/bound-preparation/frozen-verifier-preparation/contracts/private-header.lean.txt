@@ -1,0 +1,9 @@
+/-- Read each reversed iterator bucket as the complete original symbol filter. -/
+private theorem bucket_readback [DecidableEq Symbol]
+    (parent : Value Symbol Guard) (entries : List (Symbol × List Edge))
+    (iteration : SourceCurrentMergeGrouping.Iteration
+      (SourceCurrentPrependGrouping.fromRows (fun edge : Edge => edge.entry.key.symbol)
+        (nodeEdges parent)) entries)
+    (entry : Symbol × List Edge) (included : entry ∈ entries) :
+    entry.2.reverse = (nodeEdges parent).filter
+      (fun edge => decide (edge.entry.key.symbol = entry.1))

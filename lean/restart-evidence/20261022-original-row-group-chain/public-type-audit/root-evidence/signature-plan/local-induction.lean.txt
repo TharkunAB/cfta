@@ -1,0 +1,48 @@
+  have complete : ∀ (remaining : List (Symbol × List Edge)) (current : Wrapper (bits + 2)),
+      (∀ entry ∈ remaining, entry ∈ entries) →
+      Stable (view source (guardHolds formulas solver)) inputModel inputRanked
+        (guardHolds formulas solver) current → Good current.checked →
+      SourceCurrentAllocatedNativeContextCache.Contextual
+        (view source (guardHolds formulas solver)) inputModel inputRanked
+        (guardHolds formulas solver) current.checked.native →
+      SemanticReady current.checked.native.machine.heap →
+      Grows source current.checked.native.machine.heap →
+      Extends source.nodes.issued current.checked.native.machine.heap.nodes.issued →
+      SourceRecursiveIntersectionDomainAllocation.Trace
+        (SourceRecursiveIntersectionSourceInventory.domains source)
+        initialDomains current.checked.native.machine.domains → NativeIdle current.checked.native →
+      ∃ (fuels : Fin remaining.length → Nat) (kept : Fin remaining.length → List Edge)
+        (states : Fin (remaining.length + 1) → Wrapper (bits + 2)),
+        let after := states (Fin.last remaining.length)
+        let output := (List.ofFn kept).flatten
+        let input := (remaining.map (fun entry => entry.2.reverse)).flatten
+        states 0 = current ∧
+        (∀ index : Fin remaining.length,
+          SourceCurrentOriginalRowClusterScan.execute (fuels index)
+            (.cluster (remaining.get index).2.reverse []) (states index.castSucc) =
+            .done (kept index) (states index.succ) ∧
+          (∀ edge ∈ kept index, edge ∈ (remaining.get index).2.reverse) ∧
+          (kept index).length ≤ (remaining.get index).2.reverse.length) ∧
+        (∀ index : Fin (remaining.length + 1),
+          Good (states index).checked ∧
+          SourceCurrentAllocatedNativeContextCache.Contextual
+            (view source (guardHolds formulas solver)) inputModel inputRanked
+            (guardHolds formulas solver) (states index).checked.native ∧
+          SemanticReady (states index).checked.native.machine.heap ∧
+          Grows source (states index).checked.native.machine.heap ∧
+          Extends source.nodes.issued (states index).checked.native.machine.heap.nodes.issued ∧
+          Stable (view source (guardHolds formulas solver)) inputModel inputRanked
+            (guardHolds formulas solver) (states index) ∧
+          NativeIdle (states index).checked.native ∧
+          SourceRecursiveIntersectionDomainAllocation.Trace
+            (SourceRecursiveIntersectionSourceInventory.domains source)
+            initialDomains (states index).checked.native.machine.domains) ∧
+        Extension current.checked.native.machine after.checked.native.machine ∧
+        Extends current.memo.table after.memo.table ∧
+        FlatMemoThunk.Returned current.memo after.memo ∧
+        (∀ edge ∈ output, edge ∈ input) ∧ output.length ≤ input.length ∧
+        ∀ ambient : InternedGuardedLanguage.Env Symbol, ∀ term : Term Symbol,
+          (∃ edge ∈ output, InternedGuardedLanguage.edgeMeaning
+            (guardHolds formulas solver) ambient edge term) ↔
+          ∃ edge ∈ input, InternedGuardedLanguage.edgeMeaning
+            (guardHolds formulas solver) ambient edge term

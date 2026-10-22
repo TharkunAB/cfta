@@ -1,0 +1,33 @@
+@[simp] theorem succ_last (n : Nat) : (last n).succ = last n.succ := rfl
+
+@[simp] theorem succ_eq_last_succ {n : Nat} {i : Fin n.succ} :
+    i.succ = last (n + 1) ↔ i = last n := by rw [← succ_last, succ_inj]
+
+@[simp] theorem castSucc_castLT (i : Fin (n + 1)) (h : (i : Nat) < n) :
+    (castLT i h).castSucc = i := rfl
+
+@[simp] theorem castLT_castSucc {n : Nat} (a : Fin n) (h : (a : Nat) < n) :
+    castLT a.castSucc h = a := rfl
+
+@[simp] theorem castSucc_lt_castSucc_iff {a b : Fin n} :
+    a.castSucc < b.castSucc ↔ a < b := .rfl
+
+theorem castSucc_inj {a b : Fin n} : a.castSucc = b.castSucc ↔ a = b := by simp [Fin.ext_iff]
+
+theorem castSucc_lt_last (a : Fin n) : a.castSucc < last n := a.is_lt
+
+@[simp] theorem castSucc_zero [NeZero n] : castSucc (0 : Fin n) = 0 := rfl
+
+@[simp] theorem castSucc_one {n : Nat} : castSucc (1 : Fin (n + 2)) = 1 := rfl
+
+/-- `castSucc i` is positive when `i` is positive -/
+theorem castSucc_pos [NeZero n] {i : Fin n} (h : 0 < i) : 0 < i.castSucc := by
+  simpa [lt_def] using h
+
+@[simp] theorem castSucc_eq_zero_iff [NeZero n] {a : Fin n} : a.castSucc = 0 ↔ a = 0 := by simp [Fin.ext_iff]
+
+theorem castSucc_ne_zero_iff [NeZero n] {a : Fin n} : a.castSucc ≠ 0 ↔ a ≠ 0 :=
+  not_congr <| castSucc_eq_zero_iff
+
+@[simp, grind _=_]
+theorem castSucc_succ (i : Fin n) : i.succ.castSucc = i.castSucc.succ := rfl

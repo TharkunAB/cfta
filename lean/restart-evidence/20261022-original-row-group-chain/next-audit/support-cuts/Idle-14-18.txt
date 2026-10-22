@@ -1,0 +1,5 @@
+/-- Neither native memo family has an evaluating cell between calls. -/
+def Idle (state : SourceRecursiveIntersectionThunks.State width Symbol Guard) : Prop :=
+  (∀ handle request, state.nodes.cells handle ≠ some ⟨request, .evaluating⟩) ∧
+  (∀ handle request, state.edges.cells handle ≠ some ⟨request, .evaluating⟩)
+

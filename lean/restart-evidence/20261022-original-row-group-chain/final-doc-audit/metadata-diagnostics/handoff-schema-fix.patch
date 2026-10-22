@@ -1,0 +1,64 @@
+--- handoff-before
++++ handoff-after
+@@ -1,6 +1,8 @@
+ import datetime
++import difflib
+ import hashlib
+ import json
++import shutil
+ import subprocess
+ from pathlib import Path
+ 
+@@ -8,10 +10,32 @@
+ HERE = ROOT / 'lean/restart-evidence/20261022-original-row-group-chain'
+ for name in ['next-inventory','next-audit']:
+     path = Path('/tmp/mcfta-original-row-group-chain-' + name)
+-    for pin in json.loads((path / 'pins.json').read_text()):
++    manifest = json.loads((path / 'pins.json').read_text())
++    pins = [dict(path=relative,**pin) for relative,pin in manifest.items()] if isinstance(manifest,dict) else manifest
++    for pin in pins:
+         data = (path / pin['path']).read_bytes()
+         assert len(data) == pin['bytes'] and hashlib.sha256(data).hexdigest() == pin['sha256']
+-    subprocess.run(['/usr/bin/python3',str(HERE / 'archive-extra.py'),str(path),name],check=True)
++    if (HERE / name).exists():
++        saved = json.loads((HERE / 'archived-components.json').read_text())[name]
++        actual = {str(p.relative_to(HERE / name)):hashlib.sha256(p.read_bytes()).hexdigest() for p in (HERE / name).rglob('*') if p.is_file()}
++        assert saved == actual
++        assert all((HERE / name / relative).read_bytes() == (path / relative).read_bytes() for relative in saved)
++    else:
++        subprocess.run(['/usr/bin/python3',str(HERE / 'archive-extra.py'),str(path),name],check=True)
++
++failed = Path('/tmp/mcfta-original-row-group-chain-finish-handoff-1.source.py')
++fixed = Path(__file__)
++diagnostics = HERE / 'metadata-diagnostics'
++shutil.copyfile(failed,diagnostics / 'handoff-failed-source.py')
++shutil.copyfile(fixed,diagnostics / 'handoff-fixed-source.py')
++(diagnostics / 'handoff-schema-fix.patch').write_text(''.join(difflib.unified_diff(failed.read_text().splitlines(True),fixed.read_text().splitlines(True),fromfile='handoff-before',tofile='handoff-after')))
++with (diagnostics / 'note.md').open('a') as out:
++    out.write('\nThe first handoff archiver also failed on a manifest schema.\nIt copied the next inventory, then failed before any next route or publication gate write.\nThe independent next audit uses a direct path dictionary.\nThe correction reads that dictionary and verifies the already copied immutable inventory.\nBoth sources and their exact diff remain. The total is two root metadata job failures.\nAll three Lean/Lake results remain unchanged.\n')
++metrics_path = HERE / 'actual-job-metrics.json'
++metrics = json.loads(metrics_path.read_text())
++assert metrics['metadata_failures'] == 1
++metrics['metadata_failures'] = 2
++metrics_path.write_text(json.dumps(metrics,indent=2)+'\n')
+ 
+ inventory = HERE / 'next-inventory'
+ audit = HERE / 'next-audit'
+@@ -53,7 +77,7 @@
+ The257-line source has SHA45ee19aba69aec9339203917841052791a389fe46f511ab9574105c8f3d254bb.
+ Strict1, sole FULL1 and Audit1 pass. Audit has3639 jobs and75499 dependencies.
+ The complete1156-line public TYPE and actual standard-three axioms are reviewed.
+-The one metadata installer failure and its exact schema repair remain retained.
++Both metadata packaging failures and their exact schema repairs remain retained.
+ 
+ Read next-inventory/note.md and proposed-contract.txt, then next-audit/review.md.
+ Read the twelve supplemental cuts in next-audit/reviewed-source-scope.json.
+@@ -88,7 +112,7 @@
+ (HERE / 'NEXT-TARGET.md').write_text(next_text)
+ focused = ROOT / 'lean/notes-current-original-row-group-chain.md'
+ with focused.open('a') as out:
+-    out.write('\nOne root metadata installer failed on a manifest schema before any tool installation.\nThe failed input, corrected input and exact repair remain in metadata-diagnostics.\nThe auxiliary Audit warning count is corrected from0 to1; source warnings remain0.\nAll three Lean/Lake results remain unchanged.\n\n')
++    out.write('\nTwo root metadata packaging jobs failed on manifest schemas.\nTheir failed inputs, corrected inputs and exact repairs remain in metadata-diagnostics.\nThe first failed before tool installation. The second failed after the inventory copy.\nBoth corrected jobs pass. The auxiliary Audit warning count is corrected from0 to1.\nSource warnings remain0. All three Lean/Lake results remain unchanged.\n\n')
+     out.write('Next target: read lean/restart-evidence/20261022-original-row-group-chain/NEXT-TARGET.md.\nThe next ordinary reconstruction contract remains source-only.\nFresh exact declaration review must precede any new body.\n')
+ publication = json.loads((HERE / 'bound-preparation/publication-gate.template.json').read_text())
+ assert publication['proof_commit'] == '__H22_PROOF_COMMIT__'

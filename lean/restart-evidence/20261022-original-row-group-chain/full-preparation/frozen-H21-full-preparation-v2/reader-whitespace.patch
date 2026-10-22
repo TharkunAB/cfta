@@ -1,0 +1,36 @@
+--- frozen-v1/check-full-public.py
++++ check-full-public.py
+@@ -55,7 +55,7 @@
+     assert len(found) == 1, short
+     starts.append(found[0])
+ assert starts == sorted(starts, key=lambda match: match.start()) and not log[:starts[0].start()].strip()
+-normalize = lambda text: "".join(text.split())
++normalize = lambda text: re.sub(r"[ \t\r\n]+", " ", text).strip(" \t\r\n")
+ allowed = {"propext", "Classical.choice", "Quot.sound"}
+ artifacts, heads = {}, []
+ for index, (short, kind) in enumerate(specs):
+@@ -79,7 +79,8 @@
+     assert len(candidates) == 1, short
+     split = candidates[0]
+     declared, body = declaration[:split.start()], declaration[split.end():]
+-    assert checked.encode("utf-8") == declared.encode("utf-8"), short
++    assert normalize(checked) == normalize(declared), short
++    byte_identity = checked.encode("utf-8") == declared.encode("utf-8")
+     for spelling in ["_private", "✝", "†", "‡"]:
+         assert spelling not in checked + declared, ("private TYPE spelling", short, spelling)
+     for helper in private:
+@@ -97,8 +98,12 @@
+     stem = "prepend-grouping-" + short
+     artifacts.update({stem + "-public-type.txt": checked, stem + "-printed-public-type.txt": declared,
+         stem + "-body.txt": body, stem + "-axioms.txt": axiom_output})
+-    heads.append(dict(head=name, kind=kind, check_print_type_identity=True, check_print_type_byte_identity=True,
+-        checked_type_characters=len(checked), normalized_type_characters=len(expected),
++    heads.append(dict(head=name, kind=kind, check_print_type_identity=True, check_print_type_byte_identity=byte_identity,
++        check_print_type_lexical_identity=True, checked_type_characters=len(checked), normalized_type_characters=len(expected),
++        checked_type_bytes=len(checked.encode("utf-8")), checked_type_sha256=hashlib.sha256(checked.encode("utf-8")).hexdigest(),
++        printed_type_characters=len(declared), printed_type_bytes=len(declared.encode("utf-8")),
++        printed_type_sha256=hashlib.sha256(declared.encode("utf-8")).hexdigest(),
++        canonical_type_sha256=hashlib.sha256(expected.encode("utf-8")).hexdigest(),
+         unique_complete_type_body_delimiter=True, actual_body_starts_with="fun ", body_characters=len(body),
+         private_public_type_names=False, private_type_spellings_checked=["_private", "✝", "†", "‡"],
+         private_namespace_helpers_checked=private, actual_axioms=sorted(axioms),

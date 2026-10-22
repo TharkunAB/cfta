@@ -1,0 +1,6 @@
+theorem Perm.length_eq {l₁ l₂ : List α} (p : l₁ ~ l₂) : length l₁ = length l₂ := by
+  induction p with
+  | nil => rfl
+  | cons _ _ ih => simp only [length_cons, ih]
+  | swap => rfl
+  | trans _ _ ih₁ ih₂ => simp only [ih₁, ih₂]

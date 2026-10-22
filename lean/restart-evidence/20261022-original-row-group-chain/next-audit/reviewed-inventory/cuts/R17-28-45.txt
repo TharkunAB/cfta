@@ -1,0 +1,18 @@
+/-- Node publication uses the original tagged key and explicit machine bounds. -/
+def NodeKey (width : Nat) (request : NodeRequest Symbol Guard) (key : Triple width) : Prop :=
+  SourceRecursiveIntersectionMemo.requestKey width request.domain request.left request.right = some key ∧
+    SourceRecursiveIntersectionMemo.KeySafe width request.domain request.left request.right
+
+/-- Edge publication uses raw row identities and explicit machine bounds. -/
+def EdgeKeyOf (width : Nat) (request : EdgeRequest Symbol Guard) (key : Triple width) : Prop :=
+  SourceRecursiveIntersectionEdgeMemo.requestKey width request.domain request.left request.right = key ∧
+    SourceRecursiveIntersectionEdgeMemo.KeySafe width request.domain request.left request.right
+
+/-- Original node inputs stay available while the thunk is suspended or running. -/
+def NodeReady (machine : Machine Symbol Guard) (request : NodeRequest Symbol Guard) : Prop :=
+  Domain machine request.domain ∧ Available machine.heap request.left ∧ Available machine.heap request.right
+
+/-- Original edge inputs retain their complete resident row records. -/
+def EdgeReady (machine : Machine Symbol Guard) (request : EdgeRequest Symbol Guard) : Prop :=
+  Domain machine request.domain ∧ EdgeResident machine.heap request.left ∧ EdgeResident machine.heap request.right
+

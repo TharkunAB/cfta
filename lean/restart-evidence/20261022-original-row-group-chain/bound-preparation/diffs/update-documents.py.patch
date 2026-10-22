@@ -1,0 +1,72 @@
+--- predecessors/update-documents.py
++++ update-documents.py
+@@ -7,19 +7,19 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ ROOT = HERE.parents[2]
+-SOURCE_SHA = '__H22_SOURCE_SHA__'
+-SOURCE_LINES = int('__H22_SOURCE_LINES__')
+-assert 0 < SOURCE_LINES <= int('__H22_SOURCE_HARD_STOP__')
+-strict, full, audit_stem = '__H22_SELECTED_STRICT_STEM__', '__H22_SELECTED_FULL_STEM__', '__H22_AUDIT_STEM__'
++SOURCE_SHA = '45ee19aba69aec9339203917841052791a389fe46f511ab9574105c8f3d254bb'
++SOURCE_LINES = int('257')
++assert 0 < SOURCE_LINES <= int('350')
++strict, full, audit_stem = 'original-row-group-chain-strict-1', 'original-row-group-chain-public-1', 'original-row-group-chain-audit-1'
+ metrics = {
+-    'actual_jobs': int('__H22_ACTUAL_JOBS__'),
+-    'source_jobs': int('__H22_SOURCE_JOBS__'),
+-    'audit_jobs': int('__H22_AUDIT_JOBS__'),
+-    'failed_jobs': int('__H22_FAILED_JOBS__'),
+-    'warned_source_exit_zero_jobs': int('__H22_WARNED_SOURCE_EXIT_ZERO_JOBS__'),
+-    'rejected_public_type_jobs': int('__H22_REJECTED_PUBLIC_TYPE_JOBS__'),
+-    'audit_build_jobs': int('__H22_AUDIT_BUILD_JOBS__'),
+-    'audit_dependencies': int('__H22_AUDIT_DEPENDENCIES__'),
++    'actual_jobs': int('3'),
++    'source_jobs': int('2'),
++    'audit_jobs': int('1'),
++    'failed_jobs': int('0'),
++    'warned_source_exit_zero_jobs': int('0'),
++    'rejected_public_type_jobs': int('0'),
++    'audit_build_jobs': int('3639'),
++    'audit_dependencies': int('75499'),
+ }
+ start = (HERE / 'starting-head.txt').read_text().strip()
+ assert start == '70787b95484cb69897bc4075858e07c7f9c22433'
+@@ -37,13 +37,13 @@
+ assert source == (HERE / (strict + '.source.lean')).read_bytes() and (HERE / (strict + '.log')).read_bytes() == b''
+ assert json.loads((HERE / (strict + '.json')).read_text())['exit_code'] == 0
+ raw = (HERE / (full + '.log')).read_bytes()
+-assert hashlib.sha256(raw).hexdigest() == '__H22_FULL_RAW_SHA__'
++assert hashlib.sha256(raw).hexdigest() == '936e45b4a31049d6ea43cb1f2bd9756fabef7af92922ff5c0fa294b74442c502'
+ assert json.loads((HERE / (full + '.json')).read_text())['exit_code'] == 0
+ readback = json.loads((HERE / 'public-readback/original-row-group-chain-full-readback.json').read_text())
+ assert readback['source_sha256'] == SOURCE_SHA and readback['source_lines'] == SOURCE_LINES
+ assert readback['log_sha256'] == hashlib.sha256(raw).hexdigest() and readback['log_bytes'] == len(raw)
+-head_specs = json.loads('__H22_HEAD_SPECS_JSON__')
+-assert [spec[0] for spec in head_specs] == json.loads('__H22_PUBLIC_HEAD_NAMES_JSON__')
++head_specs = json.loads('[["groups_complete", "7fcdbdb51a0578b4bb359d7ef1648799cbf188cf7bdda79c1ac0d58f7b4b5410", "7fcdbdb51a0578b4bb359d7ef1648799cbf188cf7bdda79c1ac0d58f7b4b5410", "0cbeb28c7e97fe169376f9d14cdcbc10593e3d10edc55eb93e6b48e0c012e601", true, "public-readback/original-row-group-chain-groups_complete-public-type.txt", "public-readback/original-row-group-chain-groups_complete-printed-public-type.txt", "[\\"Classical.choice\\", \\"Quot.sound\\", \\"propext\\"]"]]')
++assert [spec[0] for spec in head_specs] == json.loads('["groups_complete"]')
+ assert head_specs and readback['owned_public_job_exit'] == 0 and readback['no_omissions'] and len(readback['heads']) == len(head_specs)
+ review = json.loads((HERE / 'root-full-review.json').read_text())
+ assert review['complete_public_type_root_review'] == review['independent_complete_public_type_review'] == 'CLEAR'
+@@ -71,9 +71,9 @@
+     proof_report = json.loads((HERE / ('proof-evidence-' + mode + '.json')).read_text())
+     assert proof_report['status'] == 'PASS' and proof_report['live'] is expected_live
+     assert all(proof_report[key] == value for key, value in metrics.items())
+-    assert proof_report['audit_log_sha256'] == '__H22_AUDIT_SHA__'
++    assert proof_report['audit_log_sha256'] == 'e203450759dce90167537f93f88e37be32bc0663f062883775e61d1da88164f3'
+ audit = (HERE / (audit_stem + '.log')).read_bytes()
+-assert hashlib.sha256(audit).hexdigest() == proof_report['audit_log_sha256'] == '__H22_AUDIT_SHA__'
++assert hashlib.sha256(audit).hexdigest() == proof_report['audit_log_sha256'] == 'e203450759dce90167537f93f88e37be32bc0663f062883775e61d1da88164f3'
+ assert json.loads((HERE / (audit_stem + '.json')).read_text())['exit_code'] == 0
+ assert f"Build completed successfully ({metrics['audit_build_jobs']} jobs).".encode() in audit
+ assert f"{metrics['audit_dependencies']} MicroCFTA theorems".encode() in audit
+@@ -137,7 +137,7 @@
+ Selected source: {SOURCE_LINES} lines, SHA `{SOURCE_SHA}`.
+ Selected clean strict: `{strict}`. Selected FULL: `{full}`.
+ Strict has a literal-empty log. Default declaration limits and all linters remain.
+-The source hard stop is {int('__H22_SOURCE_HARD_STOP__')} lines. Diagnostics follow the complete module.
++The source hard stop is {int('350')} lines. Diagnostics follow the complete module.
+ FULL retains {len(raw)} raw bytes. Complete check/print TYPEs agree after ASCII whitespace normalization.
+ {type_summary}
+ Root and an independent reviewer read each complete checked public TYPE.

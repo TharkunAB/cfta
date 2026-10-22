@@ -1,0 +1,73 @@
+--- frozen-v1/update-documents.py
++++ update-documents.py
+@@ -1,6 +1,7 @@
+ import datetime
+ import hashlib
+ import json
++import re
+ import subprocess
+ from pathlib import Path
+ 
+@@ -46,19 +47,26 @@
+ assert head_specs and readback['owned_public_job_exit'] == 0 and readback['no_omissions'] and len(readback['heads']) == len(head_specs)
+ review = json.loads((HERE / 'root-full-review.json').read_text())
+ assert review['complete_public_type_root_review'] == review['independent_complete_public_type_review'] == 'CLEAR'
++assert review['root_printed_type_lexical_identity_verified'] is True
++normalize = lambda text: re.sub(r'[ \t\r\n]+', ' ', text).strip(' \t\r\n')
+ heads = {head['head'].rsplit('.', 1)[1]: head for head in readback['heads']}
+ assert set(heads) == {spec[0] for spec in head_specs}
+-checked_types = {}
+-for short, type_sha, type_path, printed_path, axioms_json in head_specs:
++checked_types, printed_types = {}, {}
++for short, type_sha, printed_sha, canonical_sha, raw_identity, type_path, printed_path, axioms_json in head_specs:
+     head = heads[short]
+     assert head['head'] == 'MicroCFTA.SourceCurrentPrependGrouping.' + short
+-    assert head['check_print_type_identity'] and head['check_print_type_byte_identity'] and head['unique_complete_type_body_delimiter']
++    assert head['check_print_type_identity'] and head['check_print_type_lexical_identity'] and head['unique_complete_type_body_delimiter']
+     checked = (HERE / type_path).read_bytes()
+-    assert checked == (HERE / printed_path).read_bytes() and hashlib.sha256(checked).hexdigest() == type_sha
++    printed = (HERE / printed_path).read_bytes()
++    assert hashlib.sha256(checked).hexdigest() == type_sha == head['checked_type_sha256'] and len(checked) == head['checked_type_bytes']
++    assert hashlib.sha256(printed).hexdigest() == printed_sha == head['printed_type_sha256'] and len(printed) == head['printed_type_bytes']
++    assert normalize(checked.decode()) == normalize(printed.decode()) and hashlib.sha256(normalize(checked.decode()).encode()).hexdigest() == canonical_sha == head['canonical_type_sha256']
++    assert type(raw_identity) is bool and raw_identity == (checked == printed) and head['check_print_type_byte_identity'] is raw_identity
++    assert review['raw_type_byte_identity_by_head'][short] is raw_identity
+     assert not any(marker in checked.decode() for marker in ['_private', '✝', '†', '‡']) and head['private_public_type_names'] is False
+     assert head['actual_axioms'] == json.loads(axioms_json)
+     assert head['actual_axioms_within_standard_allowed'] and set(head['actual_axioms']) <= {'Classical.choice', 'Quot.sound', 'propext'}
+-    checked_types[short] = checked
++    checked_types[short], printed_types[short] = checked, printed
+ for mode, expected_live in [('normal', False), ('live', True)]:
+     proof_report = json.loads((HERE / ('proof-evidence-' + mode + '.json')).read_text())
+     assert proof_report['status'] == 'PASS' and proof_report['live'] is expected_live
+@@ -72,6 +80,8 @@
+ 
+ type_summary = '\n'.join(
+     f"{short} TYPE: {len(data.splitlines())} logical lines, {data.count(bytes([10]))} LF, {len(data)} bytes, {len(data.decode())} characters.\n"
++    f"{short} raw checked SHA `{heads[short]['checked_type_sha256']}`; printed {len(printed_types[short])} bytes, SHA `{heads[short]['printed_type_sha256']}`.\n"
++    f"{short} raw byte identity: {heads[short]['check_print_type_byte_identity']}; lexical identity: {heads[short]['check_print_type_lexical_identity']}; canonical SHA `{heads[short]['canonical_type_sha256']}`.\n"
+     f"{short} actual axioms: {', '.join(heads[short]['actual_axioms']) or 'none'}."
+     for short, data in checked_types.items())
+ update = f'''## Ordered symbol buckets for later group traversal
+@@ -124,10 +134,10 @@
+ Selected clean strict: `{strict}`. Selected FULL: `{full}`.
+ Strict has a literal-empty log. Default declaration limits and all linters remain.
+ The source has a hard240-line limit. Diagnostics follow the complete module.
+-FULL retains {len(raw)} raw bytes. Complete check/print TYPE bytes agree for every selected head.
++FULL retains {len(raw)} raw bytes. Complete check/print TYPEs agree after ASCII whitespace normalization.
+ {type_summary}
+ Root and an independent reviewer read each complete checked public TYPE.
+-Printed TYPE bytes agree. No second manual TYPE read is claimed.
++Both raw TYPE views remain. Per-head byte identity is reported above. No second manual TYPE read is claimed.
+ All four private markers and recorded helper names are absent from TYPE.
+ Whole bodies remain retained and checked programmatically, not wholly read by hand.
+ 
+@@ -136,6 +146,8 @@
+ {metrics['failed_jobs']} failures, {metrics['warned_source_exit_zero_jobs']}
+ warned source exit-zero commands and {metrics['rejected_public_type_jobs']}
+ rejected PUBLIC TYPE commands. All inputs, raw logs and repair history remain.
++The first reader stopped on TYPE wrapping. Its failed metadata artifacts remain.
++The revised reader retains both raw views. No second FULL is run.
+ Metadata work creates no proof command. Audit has {metrics['audit_build_jobs']}
+ jobs and {metrics['audit_dependencies']} theorem dependencies.
+ This writer claims no seal or local publication success.

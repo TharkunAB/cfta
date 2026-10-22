@@ -1,0 +1,7 @@
+These are finite-function construction equations for later proof review, not definition or theorem bodies.
+In the cons case, n is rest.length. The tail witnesses have laterStates : Fin (n + 1) → Wrapper (bits + 2), laterFuels : Fin n → Nat, and laterKept : Fin n → List Edge.
+The new functions satisfy states = Fin.cases current laterStates, fuels = Fin.cases headFuel laterFuels, and kept = Fin.cases headKept laterKept.
+Thus states 0 = current; states index.succ = laterStates index; fuels 0 = headFuel; fuels index.succ = laterFuels index; kept 0 = headKept; kept index.succ = laterKept index.
+The tail witness supplies laterStates 0 = middle. Fin.succ_last identifies the final new state with the final tail state. Fin.castSucc_succ aligns every later group's before index.
+The output list satisfies List.ofFn kept = headKept :: List.ofFn laterKept, by ofFn_succ. Its flattened form is headKept ++ (List.ofFn laterKept).flatten.
+No new top-level definition or type is proposed.

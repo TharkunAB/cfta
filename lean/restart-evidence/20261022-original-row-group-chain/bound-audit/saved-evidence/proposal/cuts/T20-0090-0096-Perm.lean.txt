@@ -1,0 +1,7 @@
+theorem Perm.mem_iff {a : α} {l₁ l₂ : List α} (p : l₁ ~ l₂) : a ∈ l₁ ↔ a ∈ l₂ := by
+  induction p with
+  | nil => rfl
+  | cons _ _ ih => simp only [mem_cons, ih]
+  | swap => simp only [mem_cons, or_left_comm]
+  | trans _ _ ih₁ ih₂ => simp only [ih₁, ih₂]
+

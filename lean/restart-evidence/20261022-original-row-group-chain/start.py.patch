@@ -1,0 +1,41 @@
+--- H21/start.py
++++ H22/start.py
+@@ -1,12 +1,11 @@
+ import hashlib
+ import json
+-import os
+ import subprocess
+ from pathlib import Path
+ 
+ HERE = Path(__file__).resolve().parent
+ ROOT = HERE.parents[2]
+-START = 'd0cf685f461430a7c608ceb3b76da0fe568e4d84'
++START = '70787b95484cb69897bc4075858e07c7f9c22433'
+ 
+ 
+ def git(*args):
+@@ -16,12 +15,12 @@
+ assert git('rev-parse', 'HEAD').decode().strip() == START
+ assert git('branch', '--show-current').decode().strip() == 'formalize'
+ assert not git('diff', '--name-only') and not git('diff', '--cached', '--name-only')
+-env = dict(os.environ, GIT_SSH_COMMAND='ssh -p 443 -o Hostname=ssh.github.com -o HostKeyAlias=github.com -o StrictHostKeyChecking=yes -o ConnectTimeout=15 -o ConnectionAttempts=1 -o BatchMode=yes -o ServerAliveInterval=10 -o ServerAliveCountMax=2')
+-with (HERE / 'pull.log').open('xb') as log:
+-    subprocess.run(['timeout', '45s', 'git', 'pull', '--ff-only'], cwd=ROOT, env=env,
+-                   check=True, stdout=log, stderr=subprocess.STDOUT)
++pull = Path('/tmp/mcfta-original-row-group-chain-initial-pull-1.json')
++assert json.loads(pull.read_text())['exit_code'] == 0
++(HERE / 'initial-pull-receipt.json').write_bytes(pull.read_bytes())
++(HERE / 'pull.log').write_bytes(Path('/tmp/mcfta-original-row-group-chain-initial-pull.log').read_bytes())
+ assert git('rev-parse', 'HEAD').decode().strip() == START
+-subprocess.run(['git', 'branch', 'codex/backup-prepend-grouping-20261022-2245', START], cwd=ROOT, check=True)
++subprocess.run(['git', 'branch', 'codex/backup-original-row-group-chain-20261022-2345', START], cwd=ROOT, check=True)
+ baseline = {}
+ for item in git('ls-tree', '-r', '-z', START).split(b'\0'):
+     if not item:
+@@ -44,5 +43,5 @@
+     'starting-worktrees.txt': ('worktree', 'list', '--porcelain'),
+ }.items():
+     (HERE / name).write_bytes(git(*arguments))
+-(HERE / 'previous-local-checkpoint.json').write_bytes(Path('/tmp/mcfta-original-row-cluster-language-local-publication.json').read_bytes())
++(HERE / 'previous-local-checkpoint.json').write_bytes(Path('/tmp/mcfta-prepend-grouping-local-publication.json').read_bytes())
+ print(json.dumps({'status': 'PASS', 'baseline_files': len(baseline), 'starting_head': START}))

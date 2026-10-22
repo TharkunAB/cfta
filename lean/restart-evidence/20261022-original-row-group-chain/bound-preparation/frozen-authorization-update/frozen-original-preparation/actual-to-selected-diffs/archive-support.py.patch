@@ -1,0 +1,13 @@
+--- predecessors/H21-actual-sealed/archive-support.py
++++ archive-support.py
+@@ -7,8 +7,8 @@
+ target = HERE / 'completed-root-support'
+ target.mkdir()
+ files = {}
+-for source in sorted(Path('/tmp').glob('mcfta-prepend-grouping-*')):
+-    if not source.is_file() or source.name.startswith('mcfta-prepend-grouping-support-1'):
++for source in sorted(Path('/tmp').glob('mcfta-original-row-group-chain-*')):
++    if not source.is_file() or source.name.startswith('mcfta-original-row-group-chain-support-1'):
+         continue
+     shutil.copyfile(source, target / source.name)
+     files[source.name] = hashlib.sha256(source.read_bytes()).hexdigest()

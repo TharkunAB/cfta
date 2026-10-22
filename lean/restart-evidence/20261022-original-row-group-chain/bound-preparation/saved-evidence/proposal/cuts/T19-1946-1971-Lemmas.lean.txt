@@ -1,0 +1,26 @@
+/-! ### flatten -/
+
+@[simp, grind _=_] theorem length_flatten {L : List (List α)} : L.flatten.length = (L.map length).sum := by
+  induction L with
+  | nil => rfl
+  | cons =>
+    simp [flatten, length_append, *]
+
+@[grind =] theorem flatten_singleton {l : List α} : [l].flatten = l := by simp
+
+@[simp] theorem mem_flatten : ∀ {L : List (List α)}, a ∈ L.flatten ↔ ∃ l, l ∈ L ∧ a ∈ l
+  | [] => by simp
+  | _ :: _ => by simp [mem_flatten, or_and_right, exists_or]
+
+@[simp] theorem flatten_eq_nil_iff {L : List (List α)} : L.flatten = [] ↔ ∀ l ∈ L, l = [] := by
+  induction L <;> simp_all
+
+theorem nil_eq_flatten_iff {L : List (List α)} : [] = L.flatten ↔ ∀ l ∈ L, l = [] := by
+  simp
+
+theorem flatten_ne_nil_iff {xss : List (List α)} : xss.flatten ≠ [] ↔ ∃ xs, xs ∈ xss ∧ xs ≠ [] := by
+  simp
+
+theorem exists_of_mem_flatten : a ∈ flatten L → ∃ l, l ∈ L ∧ a ∈ l := mem_flatten.1
+
+theorem mem_flatten_of_mem (lL : l ∈ L) (al : a ∈ l) : a ∈ flatten L := mem_flatten.2 ⟨l, lL, al⟩

@@ -1,0 +1,5 @@
+    ∃ value, cell.status = .returned value
+  /-- Every published pair has its canonical ordered key. -/
+  canonical : ∀ first second handle, state.memo.table (first, second) = some handle →
+    ∃ orderedHandle, state.memo.table
+      (if second < first then (second, first) else (first, second)) = some orderedHandle

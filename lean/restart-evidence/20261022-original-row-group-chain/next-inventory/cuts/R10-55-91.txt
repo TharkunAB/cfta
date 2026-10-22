@@ -1,0 +1,37 @@
+/-- Physical and domain growth retain original node inputs and returned availability. -/
+theorem NodeGood.grows
+    {before after : Machine Symbol Guard}
+    {cell : FlatMemoThunk.Cell (NodeRequest Symbol Guard) (Value Symbol Guard)}
+    (good : NodeGood before cell) (growth : Extension before after) :
+    NodeGood after cell := by
+  refine ⟨⟨good.1.1.grows _ growth, growth.available _ good.1.2.1, growth.available _ good.1.2.2⟩, ?_⟩
+  cases phase : cell.status with
+  | suspended | evaluating => trivial
+  | returned value =>
+      have available := good.2
+      rw [phase] at available
+      exact growth.available _ available
+
+/-- Physical and domain growth retain complete original rows and returned residency. -/
+theorem EdgeGood.grows
+    {before after : Machine Symbol Guard}
+    {cell : FlatMemoThunk.Cell (EdgeRequest Symbol Guard) (EdgeValue Symbol Guard)}
+    (good : EdgeGood before cell) (growth : Extension before after) :
+    EdgeGood after cell := by
+  refine ⟨⟨good.1.1.grows _ growth, edge_grows _ _ growth.heap _ good.1.2.1,
+    edge_grows _ _ growth.heap _ good.1.2.2⟩, ?_⟩
+  cases phase : cell.status with
+  | suspended | evaluating => trivial
+  | returned value =>
+      have resident := good.2
+      rw [phase] at resident
+      exact edge_grows _ _ growth.heap _ resident
+
+/-- Actual machine growth retains both checked memo families and their original inputs. -/
+theorem advance_valid
+    (state : Native width Symbol Guard) (valid : Valid state)
+    (after : Machine Symbol Guard) (checked : SourceRecursiveIntersectionKernel.Valid after)
+    (growth : Extension state.machine after) : Valid (advance state after) :=
+  ⟨checked, FlatMemoThunk.Valid.map _ _ _ _ valid.nodes (fun _ good => good.grows growth),
+    FlatMemoThunk.Valid.map _ _ _ _ valid.edges (fun _ good => good.grows growth)⟩
+

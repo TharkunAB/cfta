@@ -1,0 +1,8 @@
+theorem get_cons_zero : get (a::l) (0 : Fin (l.length + 1)) = a := rfl
+
+theorem get_cons_succ {as : List α} {h : i + 1 < (a :: as).length} :
+  (a :: as).get ⟨i+1, h⟩ = as.get ⟨i, Nat.lt_of_succ_lt_succ h⟩ := rfl
+
+theorem get_cons_succ' {as : List α} {i : Fin as.length} :
+  (a :: as).get i.succ = as.get i := rfl
+

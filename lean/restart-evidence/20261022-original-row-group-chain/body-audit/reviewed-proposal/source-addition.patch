@@ -1,0 +1,139 @@
+--- approved-declarations.lean.txt
++++ SourceCurrentOriginalRowGroupChain.lean
+@@ -22,7 +22,20 @@
+         (nodeEdges parent)) entries)
+     (entry : Symbol × List Edge) (included : entry ∈ entries) :
+     entry.2.reverse = (nodeEdges parent).filter
+-      (fun edge => decide (edge.entry.key.symbol = entry.1))
++      (fun edge => decide (edge.entry.key.symbol = entry.1)) := by
++  have reversed := SourceCurrentPrependGrouping.iteration_reverse
++    (SourceCurrentPrependGrouping.fromRows (fun edge : Edge => edge.entry.key.symbol)
++      (nodeEdges parent)) entries iteration
++  have member : (entry.1, entry.2.reverse) ∈
++      entries.map (fun stored => (stored.1, stored.2.reverse)) :=
++    List.mem_map.mpr ⟨entry, included, rfl⟩
++  have found := (reversed.lookup entry.1 entry.2.reverse).mp member
++  rw [SourceCurrentPrependGrouping.reverse_fromRows] at found
++  exact ((SourceCurrentMergeGrouping.lookup_some
++    (fun edge : Edge => edge.entry.key.symbol) (nodeEdges parent) entry.1 entry.2.reverse).mp found).2
++
++/- The chain retains one fixed source and the full caller at each boundary.
++   The literal modeled Mu row list is empty. No outer interpreter is added. -/
+ 
+ /-- Complete the supplied symbol buckets through one evolving caller and preserve their union. -/
+ theorem groups_complete
+@@ -94,8 +107,7 @@
+         (∃ edge ∈ output, InternedGuardedLanguage.edgeMeaning
+           (guardHolds formulas solver) ambient edge term) ↔
+         ∃ edge ∈ nodeEdges parent, InternedGuardedLanguage.edgeMeaning
+-          (guardHolds formulas solver) ambient edge term
+-
++          (guardHolds formulas solver) ambient edge term := by
+   have complete : ∀ (remaining : List (Symbol × List Edge)) (current : Wrapper (bits + 2)),
+       (∀ entry ∈ remaining, entry ∈ entries) →
+       Stable (view source (guardHolds formulas solver)) inputModel inputRanked
+@@ -143,4 +155,103 @@
+           (∃ edge ∈ output, InternedGuardedLanguage.edgeMeaning
+             (guardHolds formulas solver) ambient edge term) ↔
+           ∃ edge ∈ input, InternedGuardedLanguage.edgeMeaning
+-            (guardHolds formulas solver) ambient edge term
++            (guardHolds formulas solver) ambient edge term := by
++    intro remaining
++    induction remaining with
++    | nil =>
++        intro current _members currentStable currentGood currentContextual currentSemantic
++          currentGrowth currentHistory currentTrace currentIdle
++        refine ⟨(fun index => Fin.elim0 index), (fun index => Fin.elim0 index),
++          (fun _ => current), rfl, ?_, ?_, Extension.refl _, extends_refl _,
++          FlatMemoThunk.Returned.refl _, ?_, ?_, ?_⟩
++        · intro index
++          exact Fin.elim0 index
++        · intro _index
++          exact ⟨currentGood, currentContextual, currentSemantic, currentGrowth,
++            currentHistory, currentStable, currentIdle, currentTrace⟩
++        · simp
++        · simp
++        · intro _ambient _term
++          simp
++    | cons entry rest ih =>
++        intro current members currentStable currentGood currentContextual currentSemantic
++          currentGrowth currentHistory currentTrace currentIdle
++        have contents := bucket_readback parent entries iteration entry (members entry List.mem_cons_self)
++        obtain ⟨headFuel, headKept, middle, headDone, headMembers, headLength, midGood,
++            midContextual, midSemantic, extension, midStable, midIdle, tables, retained,
++            midTrace, headMeaning⟩ :=
++          SourceCurrentOriginalRowClusterLanguage.cluster_complete bits source facts formulas solver
++            inputModel inputRanked parent original available closed admitted entry.1
++            initialDomains initialValid current currentStable currentGood currentContextual
++            currentSemantic currentGrowth currentHistory currentTrace currentIdle room
++        rw [← contents] at headDone headMembers headLength headMeaning
++        obtain ⟨tailFuels, tailKept, tailStates, tailStart, tailSteps, tailPackets,
++            laterExtension, laterTables, laterReturned, tailMembers, tailLength, tailMeaning⟩ :=
++          ih middle (fun stored member => members stored (List.mem_cons_of_mem entry member))
++            midStable midGood midContextual midSemantic
++            (grows_trans currentGrowth extension.heap)
++            (extends_trans currentHistory extension.history) midTrace midIdle
++        let fuels : Fin (rest.length + 1) → Nat := Fin.cases headFuel tailFuels
++        let kept : Fin (rest.length + 1) → List Edge := Fin.cases headKept tailKept
++        let states : Fin (rest.length + 1 + 1) → Wrapper (bits + 2) :=
++          Fin.cases current tailStates
++        have outputShape : (List.ofFn kept).flatten =
++            headKept ++ (List.ofFn tailKept).flatten := by
++          simp only [kept, List.ofFn_succ, Fin.cases_zero, Fin.cases_succ, List.flatten_cons]
++        refine ⟨fuels, kept, states, rfl, ?_, ?_, extension.trans laterExtension,
++          extends_trans tables laterTables, retained.trans laterReturned, ?_, ?_, ?_⟩
++        · intro index
++          refine Fin.cases ?_ (fun next => ?_) index
++          · change SourceCurrentOriginalRowClusterScan.execute headFuel
++                (.cluster entry.2.reverse []) current = .done headKept (tailStates 0) ∧
++              (∀ edge ∈ headKept, edge ∈ entry.2.reverse) ∧
++              headKept.length ≤ entry.2.reverse.length
++            rw [tailStart]
++            exact ⟨headDone, headMembers, headLength⟩
++          · change SourceCurrentOriginalRowClusterScan.execute (tailFuels next)
++                (.cluster (rest.get next).2.reverse []) (tailStates next.castSucc) =
++                .done (tailKept next) (tailStates next.succ) ∧
++              (∀ edge ∈ tailKept next, edge ∈ (rest.get next).2.reverse) ∧
++              (tailKept next).length ≤ (rest.get next).2.reverse.length
++            exact tailSteps next
++        · intro index
++          refine Fin.cases ?_ (fun next => ?_) index
++          · exact ⟨currentGood, currentContextual, currentSemantic, currentGrowth,
++              currentHistory, currentStable, currentIdle, currentTrace⟩
++          · exact tailPackets next
++        · rw [outputShape]
++          intro edge member
++          rcases List.mem_append.mp member with inHead | inTail
++          · exact List.mem_append.mpr (Or.inl (headMembers edge inHead))
++          · exact List.mem_append.mpr (Or.inr (tailMembers edge inTail))
++        · rw [outputShape]
++          simpa only [List.map_cons, List.flatten_cons, List.length_append] using
++            Nat.add_le_add headLength tailLength
++        · intro ambient term
++          rw [outputShape]
++          simpa only [List.map_cons, List.flatten_cons, List.mem_append, or_and_right,
++            exists_or] using or_congr (headMeaning ambient term) (tailMeaning ambient term)
++  obtain ⟨fuels, kept, states, start, steps, packets, extension, tables, retained,
++      members, lengthBound, meaning⟩ :=
++    complete entries before (fun _ member => member) stable good contextual semantic
++      growth history allocations idle
++  have coverage : (entries.map (fun entry => entry.2.reverse)).flatten.Perm (nodeEdges parent) := by
++    have grouped : (entries.map (fun entry => entry.2.reverse)).flatten.Perm
++        (Sized.groups (fun edge : Edge => edge.entry.key.symbol) (nodeEdges parent)).flatten := by
++      simpa only [List.map_map, Function.comp_def] using
++        (SourceCurrentPrependGrouping.iteration_permutation
++          (fun edge : Edge => edge.entry.key.symbol) (nodeEdges parent) entries iteration).flatten
++    exact grouped.trans (Sized.groups_perm (fun edge : Edge => edge.entry.key.symbol) (nodeEdges parent))
++  refine ⟨fuels, kept, states, start, steps, packets, extension, tables, retained, ?_, ?_, ?_⟩
++  · intro edge member
++    exact coverage.mem_iff.mp (members edge member)
++  · simpa only [coverage.length_eq] using lengthBound
++  · intro ambient term
++    refine (meaning ambient term).trans ?_
++    constructor
++    · rintro ⟨edge, member, accepted⟩
++      exact ⟨edge, coverage.mem_iff.mp member, accepted⟩
++    · rintro ⟨edge, member, accepted⟩
++      exact ⟨edge, coverage.mem_iff.mpr member, accepted⟩
++
++end MicroCFTA.SourceCurrentOriginalRowGroupChain

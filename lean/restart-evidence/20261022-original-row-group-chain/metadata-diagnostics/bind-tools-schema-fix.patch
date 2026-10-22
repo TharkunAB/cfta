@@ -1,0 +1,41 @@
+--- bind-tools-before
++++ bind-tools-after
+@@ -15,7 +15,9 @@
+ assert hashlib.sha256((audit / 'review.md').read_bytes()).hexdigest() == sys.argv[1]
+ for name, path in [('bound-preparation',package),('bound-audit',audit)]:
+     assert (path / 'FROZEN.json').is_file()
+-    for pin in json.loads((path / 'pins.json').read_text()):
++    manifest = json.loads((path / 'pins.json').read_text())
++    pins = [dict(path=name,**pin) for name,pin in manifest['files'].items()] if isinstance(manifest,dict) else manifest
++    for pin in pins:
+         data = (path / pin['path']).read_bytes()
+         assert len(data) == pin['bytes'] and hashlib.sha256(data).hexdigest() == pin['sha256'], pin['path']
+     subprocess.run(['/usr/bin/python3',str(HERE / 'archive-extra.py'),str(path),name],check=True)
+@@ -68,12 +70,20 @@
+ assert metrics['jobs']['original-row-group-chain-audit-1'][4] == 0
+ assert (HERE / 'original-row-group-chain-audit-1.log').read_text().count('\nwarning:') == 1
+ metrics['jobs']['original-row-group-chain-audit-1'][4] = 1
++metrics['metadata_failures'] = 1
+ after = json.dumps(metrics,indent=2) + '\n'
+ diagnostics = HERE / 'metadata-diagnostics'
+ diagnostics.mkdir()
+ (diagnostics / 'actual-job-metrics-before-warning-fix.json').write_text(before)
+ (diagnostics / 'actual-job-metrics-warning-count.patch').write_text(''.join(difflib.unified_diff(before.splitlines(True),after.splitlines(True),fromfile='before',tofile='after')))
+ (diagnostics / 'note.md').write_text('# Audit warning count correction\n\nThe auxiliary root ledger used the source diagnostic format for Audit.\nAudit uses one warning prefix before its source location.\nCorrect its warning count from0 to1. Keep both bytes and the exact diff.\nThe bound verifier ledger already has the correct count.\nSource warnings, proof job totals and every proof result stay unchanged.\nNo prepared tool or proof command failed.\n')
++failed = Path('/tmp/mcfta-original-row-group-chain-bind-tools-1.source.py')
++fixed = Path(__file__)
++shutil.copyfile(failed,diagnostics / 'bind-tools-failed-source.py')
++shutil.copyfile(fixed,diagnostics / 'bind-tools-fixed-source.py')
++(diagnostics / 'bind-tools-schema-fix.patch').write_text(''.join(difflib.unified_diff(failed.read_text().splitlines(True),fixed.read_text().splitlines(True),fromfile='bind-tools-before',tofile='bind-tools-after')))
++with (diagnostics / 'note.md').open('a') as out:
++    out.write('\nThe first root metadata installer failed before any package archive or tool installation.\nIt treated the bound package files dictionary as a list of pin rows.\nThe correction reads that dictionary and keeps the list schema for the independent audit.\nThe failed source, fixed source and exact diff remain. This is one metadata job failure.\nIt is not a Lean or prepared verifier failure.\n')
+ metrics_path.write_text(after)
+ assert metrics['jobs'] == bindings['__H22_JOBS_JSON__']['value']
+ for name in summary['scripts']:
+@@ -88,4 +98,6 @@
+     local_checkpoint_execution_authorized=True,network_commands_in_publisher=0,
+     root_formalize_push_authorized=True,whole_goal_complete=False)
+ (HERE / 'bound-tools-review.json').write_text(json.dumps(gate,indent=2)+'\n')
++with (HERE / 'current-progress.md').open('a') as out:
++    out.write('\n## Bound metadata tools\n\nThe first root installer failed on the manifest schema before any archive or tool installation.\nThe corrected installer retains both sources and their exact diff.\nThe auxiliary Audit warning count is corrected from0 to1. Source warnings remain0.\nThe actual three proof jobs remain passed and unchanged.\n')
+ print(json.dumps(gate))

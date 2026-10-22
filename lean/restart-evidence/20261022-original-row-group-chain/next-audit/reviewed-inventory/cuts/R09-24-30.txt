@@ -1,0 +1,7 @@
+  SourceEqualityPCSNativeEdge.guardDecidableEq
+
+/-- Initial physical caches and loaded fields contain no semantic result receipt. -/
+structure Good (state : CheckedState width) : Prop where
+  native : SourceCurrentAllocatedNativePhysicalCache.Valid state.native
+  heap : SourceEqualityRequiredCache.Ready state.native.machine.heap
+  operations : SourceEqualityConstraintMemoAllocation.Valid state.operations

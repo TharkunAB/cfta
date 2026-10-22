@@ -1,0 +1,20 @@
+
+/-- Ordinary reconstruction retains residency and every semantic heap for open resident rows. -/
+theorem node [DecidableEq (EdgeKey Symbol Guard)] (edges : List (EdgeValue Symbol Guard))
+    (before : State Symbol Guard) (semantic : SemanticReady before) (resident : Edges before edges) :
+    Keeps before (run (makeNode edges) before).2 ∧
+      SemanticReady (run (makeNode edges) before).2 ∧
+      Available (run (makeNode edges) before).2 (run (makeNode edges) before).1 ∧
+      Ordinary (run (makeNode edges) before).1 := by
+  have facts := semantic.ready.semantic.1.normal.facts
+  have checked := InternedNestedFacts.node_verified edges before facts resident
+  have ready : Ready (run (makeNode edges) before).2 :=
+    ⟨SourceRecursiveIntersectionSemanticHeap.node edges before semantic.ready.semantic resident,
+      InternedNestedCoverage.run_covered _ before facts.coherent.valid semantic.ready.covered,
+      InternedOpenDepthReadback.preserve before _ semantic.ready.depth
+        (InternedShallowHeap.makeNode_noNewMu edges before)⟩
+  exact ⟨⟨ready, checked.growth, checked.history⟩,
+    ⟨ready,
+      InternedGuardedProbeHeap.preserve before _ semantic.guarded (InternedShallowHeap.makeNode_noNewMu edges before),
+      InternedGuardedBudgetProbeHeap.preserve before _ semantic.budget (InternedShallowHeap.makeNode_noNewMu edges before)⟩,
+    checked.result _ _ rfl, SourceEqualityRequiredCache.node_ordinary edges before facts resident⟩

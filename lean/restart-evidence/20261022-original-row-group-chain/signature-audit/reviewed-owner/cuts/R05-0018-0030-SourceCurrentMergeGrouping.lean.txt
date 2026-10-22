@@ -1,0 +1,13 @@
+/-- Optional lookup distinguishes an absent source key from a stored bucket. -/
+abbrev Table (Key Item : Type) := Key → Option (List Item)
+
+/-- Source insertion combines a new list with the old list as old followed by new. -/
+def insertWith [DecidableEq Key] (table : Table Key Item) (entry : Key × List Item) : Table Key Item :=
+  fun query => if query = entry.1 then some ((table query).getD [] ++ entry.2) else table query
+
+/-- Source singleton insertion retains the input traversal order. -/
+def fromRows [DecidableEq Key] (key : Item → Key) (rows : List Item) : Table Key Item :=
+  rows.foldl (fun table row => insertWith table (key row, [row])) (fun _ => none)
+
+/-- The singleton fold is exactly the source pair-list `fromListWith` schedule. -/
+theorem pair_fold [DecidableEq Key] (key : Item → Key) (rows : List Item) :

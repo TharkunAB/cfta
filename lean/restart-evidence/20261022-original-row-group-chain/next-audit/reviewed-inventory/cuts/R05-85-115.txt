@@ -1,0 +1,31 @@
+
+/-- One instruction retains native publication and demand while replacing the eager edge body. -/
+noncomputable def step [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (control : Control Output) (state : State width) : Outcome width Output :=
+  match control with
+  | .edgeBody request next => body request next state
+  | .code (.edge request next) =>
+      let selected := lookupEdge width request state.native
+      let demanded := demandEdge selected.1 selected.2
+      let after := {state with native := demanded.2}
+      match demanded.1 with
+      | .absent => .blocked (.native (.absentEdge selected.1)) control after
+      | .busy => .blocked (.native (.edgeBusy selected.1)) control after
+      | .ready value => .yielded (.code (next value)) after
+      | .evaluate actual =>
+          .yielded (.edgeBody actual (fun value => .finishEdge selected.1 value (next value))) after
+  | .code code => lift state.operations
+      (SourceRecursiveIntersectionNative.step SourceEqualityConstraintConstructors.top SourceEqualityPCSNativeEdge.conjoin code state.native)
+
+/-- A finite bound retains the exact remaining control and every current cache. -/
+noncomputable def execute [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] :
+    Nat → Control Output → State width → Outcome width Output
+  | 0, control, state => .yielded control state
+  | fuel + 1, control, state =>
+      match step control state with
+      | .yielded next after => execute fuel next after
+      | .done value after => .done value after
+      | .failed failure after => .failed failure after
+      | .constraintError message after => .constraintError message after
+      | .blocked reason next after => .blocked reason next after
+

@@ -1,0 +1,19 @@
+--- frozen-original-preparation/final-publication.py
++++ final-publication.py
+@@ -3,7 +3,7 @@
+ R=Path('/home/tritlo/Code/mcfta');H=R/'lean/restart-evidence/20261022-original-row-group-chain'
+ def git(*a):return subprocess.check_output(['git',*a],cwd=R)
+ publication=json.loads((H/'publication-gate.json').read_text());assert publication['status']=='ROOT_ACCEPTED'
+-assert publication['publication_scope']=='LOCAL_ONLY' and publication['network_publication']=='PENDING_USER_APPROVAL'
++assert publication['publication_scope']=='LOCAL_ONLY' and publication['network_publication']=='AUTHORIZED_PENDING_ROOT_PUSH'
+ proof=publication['proof_commit'];assert len(proof)==40 and set(proof)<=set('0123456789abcdef')
+ assert (H/'starting-head.txt').read_text().strip()=='70787b95484cb69897bc4075858e07c7f9c22433'
+ assert git('rev-parse','HEAD').decode().strip()==(H/'proof-commit.txt').read_text().strip()==proof
+@@ -42,6 +42,6 @@
+  meta,name=raw.split(b'\t',1);mode,blob,stage=meta.decode().split();assert stage=='0';index[name.decode()]=(mode,blob)
+ assert index==head_entries
+ subprocess.run(['/usr/bin/python3',str(H/'verify-seal.py')],check=True)
+-report={'status':'LOCAL_PASS','checkpoint':head,'proof':(H/'proof-commit.txt').read_text().strip(),'work_status':'continuing_at_user_request','filesystem_index_head_equal':True,'tracked_blobs_and_modes':len(index),'all_sealed_paths_in_index':sealed_paths,'clean':not bool(git('status','--porcelain')),'publication':'PENDING_USER_APPROVAL','network_commands_executed':0,'selected_proof':json.loads((H/'verification.json').read_text()),'preservation':json.loads((H/'preservation-final.json').read_text())}
++report={'status':'LOCAL_PASS','checkpoint':head,'proof':(H/'proof-commit.txt').read_text().strip(),'work_status':'continuing_at_user_request','filesystem_index_head_equal':True,'tracked_blobs_and_modes':len(index),'all_sealed_paths_in_index':sealed_paths,'clean':not bool(git('status','--porcelain')),'publication':'AUTHORIZED_PENDING_ROOT_PUSH','network_commands_executed':0,'selected_proof':json.loads((H/'verification.json').read_text()),'preservation':json.loads((H/'preservation-final.json').read_text())}
+ Path('/tmp/mcfta-original-row-group-chain-local-publication.json').write_text(json.dumps(report,indent=2)+'\n')
+ print(json.dumps({k:v for k,v in report.items() if k not in ['selected_proof','preservation']}))

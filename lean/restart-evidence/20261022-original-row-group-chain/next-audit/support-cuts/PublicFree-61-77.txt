@@ -1,0 +1,17 @@
+/-- Actual node readback stores the free names of the exact surviving edge children. -/
+theorem makeNode_free [DecidableEq (EdgeKey Symbol Guard)] (edges : List (EdgeValue Symbol Guard))
+    (state : State Symbol Guard) (coherent : Coherent state) (linked : Linked state)
+    (resident : ∀ edge ∈ edges, EdgeResident state edge) :
+    (run (makeNode edges) state).1.free = childFree ((canonicalEdges (surviving edges)).flatMap EdgeValue.children) := by
+  have selected : ∀ edge ∈ canonicalEdges (surviving edges), EdgeResident state edge := by
+    intro edge member
+    exact resident edge (List.mem_filter.mp (canonicalEdges_member _ edge member)).1
+  unfold makeNode
+  dsimp only
+  split
+  · rename_i same
+    simp [run, Value.free, same, childFree, canonicalFree]
+  · rename_i first rest same
+    obtain ⟨entry, exactResult⟩ := identifyNode_readback (first :: rest) state coherent linked
+      (by simpa [same] using selected)
+    simp only [run, exactResult, identifyNode, Value.free, same]

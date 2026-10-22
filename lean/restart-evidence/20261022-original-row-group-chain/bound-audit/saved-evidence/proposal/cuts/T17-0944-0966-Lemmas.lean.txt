@@ -1,0 +1,23 @@
+
+The two cases are:
+ * `zero`, used when the value is of the form `(0 : Fin (n + 1))`
+ * `succ`, used when the value is of the form `(j : Fin n).succ`
+
+The corresponding induction principle is `Fin.induction`.
+-/
+@[elab_as_elim] def cases {motive : Fin (n + 1) → Sort _}
+    (zero : motive 0) (succ : ∀ i : Fin n, motive i.succ) :
+    ∀ i : Fin (n + 1), motive i := induction zero fun i _ => succ i
+
+@[simp, grind =] theorem cases_zero {n} {motive : Fin (n + 1) → Sort _} {zero succ} :
+    @Fin.cases n motive zero succ 0 = zero := rfl
+
+@[simp, grind =] theorem cases_succ {n} {motive : Fin (n + 1) → Sort _} {zero succ} (i : Fin n) :
+    @Fin.cases n motive zero succ i.succ = succ i := rfl
+
+@[simp, grind =] theorem cases_succ' {n} {motive : Fin (n + 1) → Sort _} {zero succ}
+    {i : Nat} (h : i + 1 < n + 1) :
+    @Fin.cases n motive zero succ ⟨i.succ, h⟩ = succ ⟨i, Nat.lt_of_succ_lt_succ h⟩ := rfl
+
+theorem forall_fin_succ {P : Fin (n + 1) → Prop} : (∀ i, P i) ↔ P 0 ∧ ∀ i : Fin n, P i.succ :=
+  ⟨fun H => ⟨H 0, fun _ => H _⟩, fun ⟨H0, H1⟩ i => Fin.cases H0 H1 i⟩

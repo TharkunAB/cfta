@@ -1,0 +1,10 @@
+--- first-complete/update-documents.py
++++ selected/update-documents.py
+@@ -42,6 +42,7 @@
+ assert readback['source_sha256'] == SOURCE_SHA and readback['source_lines'] == SOURCE_LINES
+ assert readback['log_sha256'] == hashlib.sha256(raw).hexdigest() and readback['log_bytes'] == len(raw)
+ head_specs = json.loads('__H21_HEAD_SPECS_JSON__')
++assert [spec[0] for spec in head_specs] == ['insertWith', 'fromRows', 'reverseTable', 'pair_fold', 'reverse_insert_singleton', 'reverse_fold', 'reverse_fromRows', 'iteration_reverse', 'iteration_permutation']
+ assert head_specs and readback['owned_public_job_exit'] == 0 and readback['no_omissions'] and len(readback['heads']) == len(head_specs)
+ review = json.loads((HERE / 'root-full-review.json').read_text())
+ assert review['complete_public_type_root_review'] == review['independent_complete_public_type_review'] == 'CLEAR'

@@ -1,0 +1,74 @@
+/- The chain retains one fixed source and the full caller at each boundary.
+   The literal modeled Mu row list is empty. No outer interpreter is added. -/
+
+/-- Complete the supplied symbol buckets through one evolving caller and preserve their union. -/
+theorem groups_complete
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (bits : Nat) (source : InternedConstructorTemplates.State Symbol Guard)
+    (facts : InternedNestedFacts.Facts source)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inputModel : InputMeaning (view source (guardHolds formulas solver)))
+    (inputRanked : RankedInput (view source (guardHolds formulas solver)) inputModel.valid)
+    (parent : Value Symbol Guard)
+    (original : OriginalInput source (inputOf parent))
+    (available : Available source parent) (closed : parent.free = [])
+    (admitted : inputModel.valid (inputOf parent))
+    (entries : List (Symbol × List Edge))
+    (iteration : SourceCurrentMergeGrouping.Iteration
+      (SourceCurrentPrependGrouping.fromRows (fun edge : Edge => edge.entry.key.symbol)
+        (nodeEdges parent)) entries)
+    (initialDomains : Cache.State IntersectionFlatMemoKeyDomain.DomainKey)
+    (initialValid : Cache.Valid initialDomains)
+    (before : Wrapper (bits + 2))
+    (stable : Stable (view source (guardHolds formulas solver)) inputModel inputRanked
+      (guardHolds formulas solver) before)
+    (good : Good before.checked)
+    (contextual : SourceCurrentAllocatedNativeContextCache.Contextual
+      (view source (guardHolds formulas solver)) inputModel inputRanked
+      (guardHolds formulas solver) before.checked.native)
+    (semantic : SemanticReady before.checked.native.machine.heap)
+    (growth : Grows source before.checked.native.machine.heap)
+    (history : Extends source.nodes.issued before.checked.native.machine.heap.nodes.issued)
+    (allocations : SourceRecursiveIntersectionDomainAllocation.Trace
+      (SourceRecursiveIntersectionSourceInventory.domains source)
+      initialDomains before.checked.native.machine.domains)
+    (idle : NativeIdle before.checked.native)
+    (room : SourceCurrentAllocatedNativeResourceForecast.Room bits
+      ⟨source.nodes.next, source.edges.next,
+        initialDomains.next + (SourceRecursiveIntersectionSourceInventory.domains source).length, 0⟩) :
+    ∃ (fuels : Fin entries.length → Nat) (kept : Fin entries.length → List Edge)
+      (states : Fin (entries.length + 1) → Wrapper (bits + 2)),
+      let after := states (Fin.last entries.length)
+      let output := (List.ofFn kept).flatten
+      states 0 = before ∧
+      (∀ index : Fin entries.length,
+        SourceCurrentOriginalRowClusterScan.execute (fuels index)
+          (.cluster (entries.get index).2.reverse []) (states index.castSucc) =
+          .done (kept index) (states index.succ) ∧
+        (∀ edge ∈ kept index, edge ∈ (entries.get index).2.reverse) ∧
+        (kept index).length ≤ (entries.get index).2.reverse.length) ∧
+      (∀ index : Fin (entries.length + 1),
+        Good (states index).checked ∧
+        SourceCurrentAllocatedNativeContextCache.Contextual
+          (view source (guardHolds formulas solver)) inputModel inputRanked
+          (guardHolds formulas solver) (states index).checked.native ∧
+        SemanticReady (states index).checked.native.machine.heap ∧
+        Grows source (states index).checked.native.machine.heap ∧
+        Extends source.nodes.issued (states index).checked.native.machine.heap.nodes.issued ∧
+        Stable (view source (guardHolds formulas solver)) inputModel inputRanked
+          (guardHolds formulas solver) (states index) ∧
+        NativeIdle (states index).checked.native ∧
+        SourceRecursiveIntersectionDomainAllocation.Trace
+          (SourceRecursiveIntersectionSourceInventory.domains source)
+          initialDomains (states index).checked.native.machine.domains) ∧
+      Extension before.checked.native.machine after.checked.native.machine ∧
+      Extends before.memo.table after.memo.table ∧
+      FlatMemoThunk.Returned before.memo after.memo ∧
+      (∀ edge ∈ output, edge ∈ nodeEdges parent) ∧
+      output.length ≤ (nodeEdges parent).length ∧
+      ∀ ambient : InternedGuardedLanguage.Env Symbol, ∀ term : Term Symbol,
+        (∃ edge ∈ output, InternedGuardedLanguage.edgeMeaning
+          (guardHolds formulas solver) ambient edge term) ↔
+        ∃ edge ∈ nodeEdges parent, InternedGuardedLanguage.edgeMeaning
+          (guardHolds formulas solver) ambient edge term := by
