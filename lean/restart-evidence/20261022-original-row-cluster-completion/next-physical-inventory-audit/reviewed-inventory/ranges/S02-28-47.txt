@@ -1,0 +1,20 @@
+
+/-- Original edge children belong to the same fixed input domain. -/
+def EdgeInputs (view : IntersectSchedule.View Symbol) (model : IntersectSchedule.InputMeaning view)
+    (request : EdgeRequest Symbol Guard) : Prop :=
+  (∀ child ∈ request.left.children, SourceRecursiveIntersectionInputView.Original child ∧
+    model.valid (SourceRecursiveIntersectionInputView.inputOf child)) ∧
+  (∀ child ∈ request.right.children, SourceRecursiveIntersectionInputView.Original child ∧
+    model.valid (SourceRecursiveIntersectionInputView.inputOf child))
+
+/-- A physical row uses its actual symbol, complete guard, and ordered original children. -/
+def RowLanguage (holds : Guard → Term Symbol → Bool) (languages : Nat → Lang Symbol)
+    (edge : EdgeValue Symbol Guard) : Lang Symbol := fun term =>
+  ∃ terms, term = .node edge.entry.key.symbol terms ∧
+    All₂ (fun child part => IntersectSchedule.inputLanguage languages
+      (SourceRecursiveIntersectionInputView.inputOf child) part) edge.children terms ∧
+    holds edge.entry.key.constraint term = true
+
+/-- One input rank bounds every child of the physical row. -/
+def RowAt (holds : Guard → Term Symbol → Bool) (ranks : Nat → Nat → Lang Symbol)
+    (rank : Nat) (edge : EdgeValue Symbol Guard) : Lang Symbol := fun term =>

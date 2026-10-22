@@ -1,0 +1,10 @@
+    List Edge → Option Edge × List Edge
+  | [] => (none, [])
+  | other :: rest =>
+    let common := meet edge other
+    if common = other then ruleOut meet edge rest
+    else if common = edge then (some other, rest)
+    else let result := ruleOut meet edge rest; (result.1, other :: result.2)
+
+/-- The worker returns no more candidates than its input tail contains. -/
+theorem ruleOut_length [DecidableEq Edge] (meet : Edge → Edge → Edge) (edge : Edge) (edges : List Edge) :

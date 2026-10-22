@@ -1,0 +1,8 @@
+/-- Both source cache families satisfy their complete validity conditions. -/
+def Valid (state : Machine Symbol Guard) : Prop := InternedNestedFacts.Facts state.heap ∧ Cache.Valid state.domains
+
+/-- Later caller states retain physical records, issued identities, and canonical domain entries. -/
+structure Extension (before after : Machine Symbol Guard) : Prop where
+  heap : Grows before.heap after.heap
+  history : Extends before.heap.nodes.issued after.heap.nodes.issued
+  domains : Extends before.domains.table after.domains.table

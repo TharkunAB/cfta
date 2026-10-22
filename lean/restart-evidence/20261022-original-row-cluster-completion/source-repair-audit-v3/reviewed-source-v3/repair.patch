@@ -1,0 +1,19 @@
+--- original-v2/SourceCurrentOriginalRowClusterCompletion.lean
++++ SourceCurrentOriginalRowClusterCompletion.lean
+@@ -153,7 +153,7 @@
+         refine ⟨used + 1, candidate :: (incomparableReversed.reverse ++ tail),
+           keptReversed, middle, by omega, ?_, ?_, ?_, ?_, keptMembers, midGood,
+           midContextual, midSemantic, extension, midStable, midIdle, tables, retained, midTrace⟩
+-        · simpa only [notDropped, promoted, ↓reduceIte] using prefixRun
++        · simpa only [ite_eq_right notDropped, ite_eq_left promoted] using prefixRun
+         · simp only [List.length_cons, List.length_append, List.length_reverse]
+           omega
+         · simp only [List.length_cons, List.length_append, List.length_reverse]
+@@ -303,6 +303,7 @@
+               currentIdle, extends_refl _, FlatMemoThunk.Returned.refl _, currentTrace⟩
+             · simpa only [List.mem_reverse] using keptMembers
+             · simp only [List.length_reverse, List.length_nil, Nat.zero_add]
++              exact Nat.le_refl _
+         | cons pivot tail =>
+             obtain ⟨used, next, newKept, middle, _positive, scanned, shorter, total,
+                 nextMembers, newKeptMembers, midGood, midContextual, midSemantic,

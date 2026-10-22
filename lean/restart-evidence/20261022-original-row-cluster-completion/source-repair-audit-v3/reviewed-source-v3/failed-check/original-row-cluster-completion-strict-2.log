@@ -1,0 +1,123 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261022-original-row-cluster-completion/original-row-cluster-completion-strict-2.source.lean:156:10: error: Type mismatch: After simplification, term
+  prefixRun
+ has type
+  SourceCurrentOriginalRowClusterScan.execute (used + 1)
+      (SourceCurrentOriginalRowClusterScan.Control.scan pivot (candidate :: tail) incomparableReversed keptReversed)
+      before =
+    SourceCurrentOriginalRowClusterScan.Outcome.yielded
+      (if pivot.entry.identity = candidate.entry.identity then
+        SourceCurrentOriginalRowClusterScan.Control.scan pivot tail incomparableReversed keptReversed
+      else
+        SourceCurrentOriginalRowClusterScan.Control.cluster (candidate :: (incomparableReversed.reverse ++ tail))
+          keptReversed)
+      middle
+but is expected to have type
+  SourceCurrentOriginalRowClusterScan.execute (used + 1)
+      (SourceCurrentOriginalRowClusterScan.Control.scan pivot (candidate :: tail) incomparableReversed keptReversed)
+      before =
+    SourceCurrentOriginalRowClusterScan.Outcome.yielded
+      (SourceCurrentOriginalRowClusterScan.Control.cluster (candidate :: (incomparableReversed.reverse ++ tail))
+        keptReversed)
+      middle
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261022-original-row-cluster-completion/original-row-cluster-completion-strict-2.source.lean:305:12: error: unsolved goals
+case ind.nil.refine_2
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+bits : Nat
+source : InternedConstructorTemplates.State Symbol Guard
+facts : InternedNestedFacts.Facts source
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inputModel : InputMeaning (view source (SourceEqualityPCSGuard.holds formulas solver))
+inputRanked : RankedInput (view source (SourceEqualityPCSGuard.holds formulas solver)) inputModel.valid
+parent : Value Symbol Guard
+original : OriginalInput source (inputOf parent)
+available : Available source parent
+closed : parent.free = []
+symbol : Symbol
+initialDomains : Cache.State IntersectionFlatMemoKeyDomain.DomainKey
+initialValid : Cache.Valid initialDomains
+before : Wrapper (bits + 2)
+stable :
+  Stable (view source (SourceEqualityPCSGuard.holds formulas solver)) inputModel inputRanked
+    (SourceEqualityPCSGuard.holds formulas solver) before
+good : Good before.checked
+contextual :
+  SourceCurrentAllocatedNativeContextCache.Contextual (view source (SourceEqualityPCSGuard.holds formulas solver))
+    inputModel inputRanked (SourceEqualityPCSGuard.holds formulas solver) before.checked.native
+semantic : SemanticReady before.checked.native.machine.heap
+growth : Grows source before.checked.native.machine.heap
+history : Extends source.nodes.issued before.checked.native.machine.heap.nodes.issued
+allocations :
+  SourceRecursiveIntersectionDomainAllocation.Trace (SourceRecursiveIntersectionSourceInventory.domains source)
+    initialDomains before.checked.native.machine.domains
+idle : NativeIdle before.checked.native
+room :
+  SourceCurrentAllocatedNativeResourceForecast.Room bits
+    { nodes := source.nodes.next, edges := source.edges.next,
+      domains := initialDomains.next + (SourceRecursiveIntersectionSourceInventory.domains source).length, mass := 0 }
+rows : List Edge := List.filter (fun edge => decide (edge.entry.key.symbol = symbol)) (nodeEdges parent)
+size : Nat
+ih :
+  ∀ (m : Nat),
+    m < size →
+      ∀ (candidates keptReversed : List Edge) (current : Wrapper (bits + 2)),
+        candidates.length = m →
+          (∀ (edge : Edge), edge ∈ candidates → edge ∈ rows) →
+            (∀ (edge : Edge), edge ∈ keptReversed → edge ∈ rows) →
+              Stable (view source (SourceEqualityPCSGuard.holds formulas solver)) inputModel inputRanked
+                  (SourceEqualityPCSGuard.holds formulas solver) current →
+                Good current.checked →
+                  SourceCurrentAllocatedNativeContextCache.Contextual
+                      (view source (SourceEqualityPCSGuard.holds formulas solver)) inputModel inputRanked
+                      (SourceEqualityPCSGuard.holds formulas solver) current.checked.native →
+                    SemanticReady current.checked.native.machine.heap →
+                      Grows source current.checked.native.machine.heap →
+                        Extends source.nodes.issued current.checked.native.machine.heap.nodes.issued →
+                          SourceRecursiveIntersectionDomainAllocation.Trace
+                              (SourceRecursiveIntersectionSourceInventory.domains source) initialDomains
+                              current.checked.native.machine.domains →
+                            NativeIdle current.checked.native →
+                              ∃ fuel kept after,
+                                SourceCurrentOriginalRowClusterScan.execute fuel
+                                      (SourceCurrentOriginalRowClusterScan.Control.cluster candidates keptReversed)
+                                      current =
+                                    SourceCurrentOriginalRowClusterScan.Outcome.done kept after ∧
+                                  (∀ (edge : Edge), edge ∈ kept → edge ∈ rows) ∧
+                                    kept.length ≤ candidates.length + keptReversed.length ∧
+                                      Good after.checked ∧
+                                        SourceCurrentAllocatedNativeContextCache.Contextual
+                                            (view source (SourceEqualityPCSGuard.holds formulas solver)) inputModel
+                                            inputRanked (SourceEqualityPCSGuard.holds formulas solver)
+                                            after.checked.native ∧
+                                          SemanticReady after.checked.native.machine.heap ∧
+                                            Extension current.checked.native.machine after.checked.native.machine ∧
+                                              Stable (view source (SourceEqualityPCSGuard.holds formulas solver))
+                                                  inputModel inputRanked (SourceEqualityPCSGuard.holds formulas solver)
+                                                  after ∧
+                                                NativeIdle after.checked.native ∧
+                                                  Extends current.memo.table after.memo.table ∧
+                                                    FlatMemoThunk.Returned current.memo after.memo ∧
+                                                      SourceRecursiveIntersectionDomainAllocation.Trace
+                                                        (SourceRecursiveIntersectionSourceInventory.domains source)
+                                                        initialDomains after.checked.native.machine.domains
+keptReversed : List Edge
+current : Wrapper (bits + 2)
+keptMembers : ∀ (edge : Edge), edge ∈ keptReversed → edge ∈ rows
+currentStable :
+  Stable (view source (SourceEqualityPCSGuard.holds formulas solver)) inputModel inputRanked
+    (SourceEqualityPCSGuard.holds formulas solver) current
+currentGood : Good current.checked
+currentContextual :
+  SourceCurrentAllocatedNativeContextCache.Contextual (view source (SourceEqualityPCSGuard.holds formulas solver))
+    inputModel inputRanked (SourceEqualityPCSGuard.holds formulas solver) current.checked.native
+currentSemantic : SemanticReady current.checked.native.machine.heap
+currentGrowth : Grows source current.checked.native.machine.heap
+currentHistory : Extends source.nodes.issued current.checked.native.machine.heap.nodes.issued
+currentTrace :
+  SourceRecursiveIntersectionDomainAllocation.Trace (SourceRecursiveIntersectionSourceInventory.domains source)
+    initialDomains current.checked.native.machine.domains
+currentIdle : NativeIdle current.checked.native
+sized : [].length = size
+members : ∀ (edge : Edge), edge ∈ [] → edge ∈ rows
+⊢ keptReversed.length ≤ keptReversed.length

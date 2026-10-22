@@ -1,0 +1,7 @@
+/-- Compose a yielded scan prefix with the remaining scan fuel. -/
+private theorem execute_yielded_add
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (used rest : Nat) (control next : ScanControl) (before middle : Wrapper width)
+    (observed : SourceCurrentOriginalRowClusterScan.execute used control before = .yielded next middle) :
+    SourceCurrentOriginalRowClusterScan.execute (used + rest) control before =
+      SourceCurrentOriginalRowClusterScan.execute rest next middle

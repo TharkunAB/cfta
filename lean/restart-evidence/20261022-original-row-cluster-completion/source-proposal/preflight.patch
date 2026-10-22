@@ -1,0 +1,57 @@
+--- draft-1/SourceCurrentOriginalRowClusterCompletion.lean
++++ SourceCurrentOriginalRowClusterCompletion.lean
+@@ -29,13 +29,14 @@
+         simpa only [SourceCurrentOriginalRowClusterScan.execute,
+           SourceCurrentOriginalRowClusterScan.Outcome.yielded.injEq] using observed
+       rcases same with ⟨rfl, rfl⟩
+-      rfl
++      simp only [Nat.zero_add]
+   | succ used ih =>
+       cases one : SourceCurrentOriginalRowClusterScan.step control before <;>
+         simp only [SourceCurrentOriginalRowClusterScan.execute, one] at observed
+       case yielded following after =>
+         simpa only [Nat.succ_add, SourceCurrentOriginalRowClusterScan.execute, one] using
+           ih following after observed
++      all_goals cases observed
+ 
+ /-- Complete the current scan to a smaller cluster boundary with the same global history. -/
+ private theorem scan_boundary_complete
+@@ -103,7 +104,7 @@
+   revert stable good contextual semantic growth history allocations idle
+   induction remaining generalizing incomparableReversed keptReversed before with
+   | nil =>
+-      intro stable good contextual semantic growth history allocations idle
++      intro stable good contextual semantic _growth _history allocations idle
+         pivotMember _remainingMembers incomparableMembers keptMembers
+       refine ⟨1, incomparableReversed.reverse, pivot :: keptReversed, before, by omega,
+         rfl, ?_, ?_, ?_, ?_, good, contextual, semantic, Extension.refl _, stable, idle,
+@@ -120,7 +121,7 @@
+   | cons candidate tail ih =>
+       intro stable good contextual semantic growth history allocations idle
+         pivotMember remainingMembers incomparableMembers keptMembers
+-      have candidateMember := remainingMembers candidate (List.mem_cons_self ..)
++      have candidateMember := remainingMembers candidate List.mem_cons_self
+       have tailMembers := fun edge member =>
+         remainingMembers edge (List.mem_cons_of_mem candidate member)
+       have symbols : pivot.entry.key.symbol = candidate.entry.key.symbol :=
+@@ -176,7 +177,10 @@
+             · exact incomparableMembers edge member
+         have nextLength : nextIncomparable.length ≤ incomparableReversed.length + 1 := by
+           dsimp only [nextIncomparable]
+-          split <;> simp only [List.length_cons] <;> omega
++          split
++          · omega
++          · simp only [List.length_cons]
++            omega
+         have resumedScan : SourceCurrentOriginalRowClusterScan.execute (used + 1)
+             (.scan pivot (candidate :: tail) incomparableReversed keptReversed) before =
+             .yielded (.scan pivot tail nextIncomparable keptReversed) middle := by
+@@ -307,7 +311,7 @@
+                 parent original available closed symbol initialDomains initialValid
+                 pivot tail [] keptReversed current currentStable currentGood currentContextual
+                 currentSemantic currentGrowth currentHistory currentTrace currentIdle room
+-                (members pivot (List.mem_cons_self ..))
++                (members pivot List.mem_cons_self)
+                 (fun edge member => members edge (List.mem_cons_of_mem pivot member))
+                 (by simp only [List.not_mem_nil, false_implies, implies_true]) keptMembers
+             have smaller : next.length < size := by

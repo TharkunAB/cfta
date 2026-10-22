@@ -1,0 +1,28 @@
+import MicroCFTA.SourceEqualityNativeDemandOpenMeaning
+import MicroCFTA.SourceRecursiveIntersectionGuardedInput
+
+/-!
+# One-sided contexts for checked recursive pair references
+
+Original languages and derivation ranks are fixed before output binders are
+interpreted. Soundness tests a new binder at the original pair language.
+Completeness uses a bound on the sum of two original derivation ranks.
+The local containment premise in `complete_extend` is a context lemma.
+A full Mu proof must derive it by smaller input ranks. This module does
+not prove recursive checked meaning or validity of warm open memo entries.
+-/
+namespace MicroCFTA.SourceCurrentAllocatedNativePairContexts
+open Language BinderLanguage InternedBinderProtocol
+open InternedConstructorTemplates InternedProbeProvenance InternedNestedFacts
+
+variable {Symbol : Type}
+
+/-- The common language of two independently interpreted original identities. -/
+def PairLanguage (languages : Nat → Lang Symbol) (key : Nat × Nat) : Lang Symbol :=
+  fun term => languages key.1 term ∧ languages key.2 term
+
+/-- Two original derivations fit within the bound on their combined ranks. -/
+def RankedPair (ranks : Nat → Nat → Lang Symbol) (bound : Nat) (key : Nat × Nat) : Lang Symbol :=
+  fun term => ∃ first second, first + second ≤ bound ∧ ranks key.1 first term ∧ ranks key.2 second term
+
+/-- Every enclosing pair reference accepts only original common terms. -/

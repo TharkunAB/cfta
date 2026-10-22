@@ -1,0 +1,21 @@
+--- frozen-v1/verify-proofs.py
++++ verify-proofs.py
+@@ -106,10 +106,16 @@
+ for stem, item in rejections.items():
+     assert item["raw_sha256"] == jobs[stem][2] and item["reason"] and item["artifacts"]
+     assert all(path in artifacts for path in item["artifacts"])
+-contracts = {'context.lean.txt': (17, '030321d534ea36df66458e3cfba14e0cf183c9e6c85e2930252c93dabaf127b3'), 'private-prefix-signature.lean.txt': (7, '36f9082d97a6b46ec650e7f23ecc8746a5b0500125f01d2484e7aaea1a7af758'), 'private-scan-signature.lean.txt': (62, '3de19f0087e5ed03597db0bce974ee0eed0d09f388f8381df1d0eb2b230ebc87'), 'proposed-signature.lean.txt': (51, '8783abbab974ac01cedc351d3363e0540405fa2b40064e68baefe77d659deb47')}
++failed_stem = "original-row-cluster-completion-strict-1"
++assert jobs[failed_stem] == [1, "aa72ddb54eeb5a06123af80983c269e5c8aef1bded4f446e65de99fa80e69ec0", "6def86a8b3726593c81c9ed715d7853a288bb4bd8356e8af8059b70a01c4bc67", 13, 0]
++original_context = (evidence / "signature-plan/context.lean.txt").read_bytes()
++assert digest(original_context) == "030321d534ea36df66458e3cfba14e0cf183c9e6c85e2930252c93dabaf127b3" and len(original_context.splitlines()) == 17
++assert (evidence / (failed_stem + ".source.lean")).read_bytes().startswith(original_context)
++contracts = {'context.lean.txt': (17, 'b33ff6c3d1d1a727389ef150fbde8516e9d622c43901e900a7a08d82658c9f3a'), 'private-prefix-signature.lean.txt': (7, '36f9082d97a6b46ec650e7f23ecc8746a5b0500125f01d2484e7aaea1a7af758'), 'private-scan-signature.lean.txt': (62, '3de19f0087e5ed03597db0bce974ee0eed0d09f388f8381df1d0eb2b230ebc87'), 'proposed-signature.lean.txt': (51, '8783abbab974ac01cedc351d3363e0540405fa2b40064e68baefe77d659deb47')}
+ positions = []
+ for filename, (lines, expected_hash) in contracts.items():
+-    declaration = (evidence / "signature-plan" / filename).read_bytes()
++    path = "source-repair-v2/context.lean.txt" if filename == "context.lean.txt" else "signature-plan/" + filename
++    declaration = (evidence / path).read_bytes()
+     assert digest(declaration) == expected_hash and len(declaration.splitlines()) == lines
+     if filename == "context.lean.txt":
+         assert source.startswith(declaration)

@@ -1,0 +1,10 @@
+def Returned (before after : State Key Request Value) : Prop :=
+  ∀ handle request value, before.cells handle = some ⟨request, .returned value⟩ →
+    after.cells handle = some ⟨request, .returned value⟩
+
+/-- An unchanged table retains each returned cell. -/
+theorem Returned.refl (state : State Key Request Value) : Returned state state := fun _ _ _ stored => stored
+
+/-- Returned-cell retention composes through consecutive states. -/
+theorem Returned.trans (first : Returned before middle) (second : Returned middle after) : Returned before after :=
+  fun handle request value stored => second handle request value (first handle request value stored)

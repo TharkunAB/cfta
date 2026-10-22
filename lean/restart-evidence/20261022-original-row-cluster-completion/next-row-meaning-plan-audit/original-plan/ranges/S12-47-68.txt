@@ -1,0 +1,22 @@
+/-- Physical row copying retains the exact ordered independent child languages. -/
+theorem row_forest (holds : Guard → Term Symbol → Bool)
+    (relation : IntersectSchedule.Input → Term Symbol → Prop) (edge : EdgeValue Symbol Guard) (terms : List (Term Symbol)) :
+    All₂ relation (row holds edge).children terms ↔ All₂ (fun child term => relation (inputOf child) term) edge.children terms :=
+  SymbolicGraphView.all₂_map_iff relation inputOf edge.children terms
+
+/-- Fixed original node language is exactly the language of its physical stored rows. -/
+theorem node_language (source : InternedConstructorTemplates.State Symbol Guard) (facts : Facts source)
+    (holds : Guard → Term Symbol → Bool) (model : IntersectSchedule.InputMeaning (view source holds))
+    (entry : Interned InternedBinderProtocol.NodeKey) (edges : List (EdgeValue Symbol Guard)) (depth : Nat) (free : List Reference)
+    (available : Available source (.node entry edges depth free)) (valid : model.valid (.node entry.identity)) (term : Term Symbol) :
+    IntersectSchedule.inputLanguage model.languages (inputOf (.node entry edges depth free)) term ↔
+      ∃ edge ∈ edges, RowLanguage holds model.languages edge term := by
+  change model.languages entry.identity term ↔ _
+  rw [model.row_exact entry.identity valid term, rows_readback source facts holds entry edges depth free available]
+  constructor
+  · rintro ⟨_, present, terms, shape, forest, guard⟩
+    obtain ⟨edge, inside, rfl⟩ := List.mem_map.mp present
+    exact ⟨edge, inside, terms, shape, (row_forest holds _ edge terms).mp forest, guard⟩
+  · rintro ⟨edge, present, terms, shape, forest, guard⟩
+    exact ⟨row holds edge, List.mem_map.mpr ⟨edge, present, rfl⟩, terms, shape,
+      (row_forest holds _ edge terms).mpr forest, guard⟩

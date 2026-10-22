@@ -1,0 +1,8 @@
+def identPrec  := leading_parser ident >> optPrecedence
+def notationItem := withAntiquot (mkAntiquot "notationItem" decl_name% (isPseudoKind := true)) (strLit <|> Syntax.unicodeAtom <|> identPrec)
+/--
+`prefix:prec "op" => f` is equivalent to `notation:prec "op" x:prec => f x`.
+-/
+def «prefix»   := leading_parser "prefix"
+/--
+`infix:prec "op" => f` is equivalent to `notation:prec x:prec1 "op" y:prec1 => f x y`, where `prec1 := prec + 1`.

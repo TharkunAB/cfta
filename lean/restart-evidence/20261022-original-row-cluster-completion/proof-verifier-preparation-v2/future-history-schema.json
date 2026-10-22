@@ -1,0 +1,43 @@
+{
+  "file": "source-history-gate.json",
+  "status_required": "ROOT_ACCEPTED",
+  "selected_source_sha256": "Must equal the selected source binding.",
+  "variants": {
+    "type": "list; nonempty; unique relative paths",
+    "row_fields": {
+      "path": "relative saved source path under evidence",
+      "sha256": "exact source bytes SHA256",
+      "lines": "positive actual line count at most 350"
+    }
+  },
+  "patches": {
+    "type": "list; empty when no source delta exists",
+    "row_fields": {
+      "path": "path of a pinned artifact",
+      "sha256": "artifact SHA256",
+      "before": "variant path",
+      "after": "variant path",
+      "fromfile": "literal unified diff from-file label",
+      "tofile": "literal unified diff to-file label"
+    }
+  },
+  "artifacts": {
+    "type": "list; unique relative paths disjoint from variants",
+    "row_fields": {
+      "path": "relative evidence path",
+      "sha256": "exact bytes SHA256",
+      "bytes": "actual byte count, including zero for retained empty outputs"
+    }
+  },
+  "rejected_public_types": {
+    "type": "list; stems must equal rejected PUBLIC binding exactly",
+    "row_fields": {
+      "stem": "actual successful Lean public job rejected at TYPE review",
+      "raw_sha256": "actual job raw-log SHA256",
+      "reason": "nonempty precise rejection reason",
+      "artifacts": "nonempty list of pinned artifact paths"
+    }
+  },
+  "coverage": "Every actual non-public source input must byte-match a variant. Every repair patch must reconstruct its two variants by its exact recorded labels. Every failed or warned command remains in JOBS_JSON. Every rejected PUBLIC job remains in both its binding and history list. Unsubmitted drafts and metadata diagnostics remain pinned variants or artifacts without adding jobs.",
+  "immutability": "The entire actual gate must equal __H17_SOURCE_HISTORY_JSON__. No history event is invented by this template."
+}

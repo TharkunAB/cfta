@@ -1,0 +1,59 @@
+--- checkpoint-preparation/update-documents.py
++++ update-documents.py
+@@ -6,18 +6,18 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ ROOT = HERE.parents[2]
+-SOURCE_SHA = '__H17_SOURCE_SHA__'
+-SOURCE_LINES = int('__H17_SOURCE_LINES__')
+-strict, full, audit_stem = '__H17_SELECTED_STRICT_STEM__', '__H17_SELECTED_FULL_STEM__', '__H17_AUDIT_STEM__'
++SOURCE_SHA = 'c6e8e0f7f819d1c595ff6d56c160558bff837a86196ad2c951524d93a70c9a9b'
++SOURCE_LINES = int('345')
++strict, full, audit_stem = 'original-row-cluster-completion-strict-3', 'original-row-cluster-completion-public-1', 'original-row-cluster-completion-audit-1'
+ metrics = {
+-    'actual_jobs': int('__H17_ACTUAL_JOBS__'),
+-    'source_jobs': int('__H17_SOURCE_JOBS__'),
+-    'audit_jobs': int('__H17_AUDIT_JOBS__'),
+-    'failed_jobs': int('__H17_FAILED_JOBS__'),
+-    'warned_source_exit_zero_jobs': int('__H17_WARNED_SOURCE_EXIT_ZERO_JOBS__'),
+-    'rejected_public_type_jobs': int('__H17_REJECTED_PUBLIC_TYPE_JOBS__'),
+-    'audit_build_jobs': int('__H17_AUDIT_BUILD_JOBS__'),
+-    'audit_dependencies': int('__H17_AUDIT_DEPENDENCIES__'),
++    'actual_jobs': int('5'),
++    'source_jobs': int('4'),
++    'audit_jobs': int('1'),
++    'failed_jobs': int('2'),
++    'warned_source_exit_zero_jobs': int('0'),
++    'rejected_public_type_jobs': int('0'),
++    'audit_build_jobs': int('3634'),
++    'audit_dependencies': int('75451'),
+ }
+ start = (HERE / 'starting-head.txt').read_text().strip()
+ assert start == '562120d456ea5836dc0f3cc718dafd25323521c3'
+@@ -35,7 +35,7 @@
+ assert source == (HERE / (strict + '.source.lean')).read_bytes() and (HERE / (strict + '.log')).read_bytes() == b''
+ assert json.loads((HERE / (strict + '.json')).read_text())['exit_code'] == 0
+ raw = (HERE / (full + '.log')).read_bytes()
+-assert hashlib.sha256(raw).hexdigest() == '__H17_FULL_LOG_SHA__'
++assert hashlib.sha256(raw).hexdigest() == '499c648f0ac8f0e69fa9bd78e16d7c95dd39d3c4442ee5a07188404260518ac5'
+ assert json.loads((HERE / (full + '.json')).read_text())['exit_code'] == 0
+ readback = json.loads((HERE / 'public-readback/original-row-cluster-completion-full-readback.json').read_text())
+ assert readback['source_sha256'] == SOURCE_SHA and readback['source_lines'] == SOURCE_LINES
+@@ -44,7 +44,7 @@
+ review = json.loads((HERE / 'root-full-review.json').read_text())
+ assert review['complete_public_type_root_review'] == review['independent_complete_public_type_review'] == 'CLEAR'
+ head_specs = [
+-    ('cluster_complete', '__H17_CLUSTER_COMPLETE_TYPE_SHA__', 'public-readback/original-row-cluster-completion-cluster_complete-public-type.txt', 'public-readback/original-row-cluster-completion-cluster_complete-printed-public-type.txt', '__H17_CLUSTER_COMPLETE_ACTUAL_AXIOMS_JSON__'),
++    ('cluster_complete', '89d3dbda3fc24202f94a9126aa10d9022226455cb91817365798aa1875d128fa', 'public-readback/original-row-cluster-completion-cluster_complete-public-type.txt', 'public-readback/original-row-cluster-completion-cluster_complete-printed-public-type.txt', '["Classical.choice", "Quot.sound", "propext"]'),
+ ]
+ heads = {head['head'].rsplit('.', 1)[1]: head for head in readback['heads']}
+ assert set(heads) == {spec[0] for spec in head_specs}
+@@ -62,7 +62,7 @@
+ proof_report = json.loads((HERE / 'proof-evidence-normal.json').read_text())
+ assert proof_report['status'] == 'PASS' and all(proof_report[key] == value for key, value in metrics.items())
+ audit = (HERE / (audit_stem + '.log')).read_bytes()
+-assert hashlib.sha256(audit).hexdigest() == proof_report['audit_log_sha256'] == '__H17_AUDIT_LOG_SHA__'
++assert hashlib.sha256(audit).hexdigest() == proof_report['audit_log_sha256'] == 'aa655ae2759fb973a0e3846f04c00f96c8bf7d8b105817e29a6d899d1d558e74'
+ assert json.loads((HERE / (audit_stem + '.json')).read_text())['exit_code'] == 0
+ assert f"Build completed successfully ({metrics['audit_build_jobs']} jobs).".encode() in audit
+ assert f"{metrics['audit_dependencies']} MicroCFTA theorems".encode() in audit

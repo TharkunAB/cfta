@@ -1,0 +1,29 @@
+import MicroCFTA.SourceCurrentAllocatedNativePairContexts
+import MicroCFTA.SourceEqualityNativeDemandRequestExact
+
+/-!
+# Contextual laws for completed native memo cells
+
+The input model and its ranks remain fixed across heap effects. Returned
+cells retain soundness and bounded completeness in one-sided pair contexts.
+Physical validity remains a separate invariant. A new completion needs its
+local contextual law. This file does not derive that law for recursive Mu
+bodies, prove native completion, or model GHC thunk publication.
+-/
+namespace MicroCFTA.SourceCurrentAllocatedNativeContextCache
+open Language BinderLanguage InternedConstructorTemplates InternedProbeProvenance
+open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionThunks
+open SourceCurrentAllocatedNativePairContexts
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Native" => SourceRecursiveIntersectionThunks.State
+
+/-- Context laws apply to complete original operands in the fixed input domain. -/
+def NodeInputs (view : IntersectSchedule.View Symbol) (model : IntersectSchedule.InputMeaning view)
+    (request : NodeRequest Symbol Guard) : Prop :=
+  SourceRecursiveIntersectionInputView.Original request.left ∧
+    SourceRecursiveIntersectionInputView.Original request.right ∧
+    model.valid (SourceRecursiveIntersectionInputView.inputOf request.left) ∧
+    model.valid (SourceRecursiveIntersectionInputView.inputOf request.right)
+
+/-- Original edge children belong to the same fixed input domain. -/

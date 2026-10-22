@@ -1,0 +1,26 @@
+/-- The independent forest relation has exactly the ordinary ordered child-run meaning. -/
+theorem forest_all (holds : Guard → Term Symbol → Bool) (environment : Env Symbol)
+    (children : List (Value Symbol Guard)) (terms : List (Term Symbol)) :
+    forest holds environment children terms ↔ All₂ (meaning holds environment) children terms := by
+  induction children generalizing terms with
+  | nil => cases terms <;> simp only [forest] <;> constructor <;> intro accepted <;> first | exact .nil | trivial | cases accepted
+  | cons child rest ih =>
+      cases terms with
+      | nil => simp only [forest]; constructor <;> intro accepted <;> cases accepted
+      | cons term terms =>
+          rw [forest]
+          constructor
+          · rintro ⟨head, tail⟩
+            exact .cons head ((ih terms).mp tail)
+          · intro accepted
+            cases accepted with
+            | cons head tail => exact ⟨head, (ih terms).mpr tail⟩
+
+/-- Each independent edge meaning retains exactly the ordinary constructor edge law. -/
+theorem edgeMeaning_all (holds : Guard → Term Symbol → Bool) (environment : Env Symbol)
+    (edge : EdgeValue Symbol Guard) (term : Term Symbol) :
+    edgeMeaning holds environment edge term ↔ MergedColdInterpretation.EdgeMeaning (meaning holds environment) holds edge term := by
+  cases edge with
+  | mk entry children =>
+      simp only [edgeMeaning, MergedColdInterpretation.EdgeMeaning, EdgeValue.entry, EdgeValue.children]
+      exact exists_congr (fun terms => and_congr Iff.rfl (and_congr (forest_all holds environment children terms) Iff.rfl))

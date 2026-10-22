@@ -1,0 +1,51 @@
+/-- Complete one original symbol group and retain its current packet and domain history. -/
+theorem cluster_complete
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (bits : Nat) (source : InternedConstructorTemplates.State Symbol Guard)
+    (facts : InternedNestedFacts.Facts source)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inputModel : InputMeaning (view source (guardHolds formulas solver)))
+    (inputRanked : RankedInput (view source (guardHolds formulas solver)) inputModel.valid)
+    (parent : Value Symbol Guard)
+    (original : OriginalInput source (inputOf parent))
+    (available : Available source parent) (closed : parent.free = [])
+    (symbol : Symbol)
+    (initialDomains : Cache.State IntersectionFlatMemoKeyDomain.DomainKey)
+    (initialValid : Cache.Valid initialDomains)
+    (before : Wrapper (bits + 2))
+    (stable : Stable (view source (guardHolds formulas solver)) inputModel inputRanked
+      (guardHolds formulas solver) before)
+    (good : Good before.checked)
+    (contextual : SourceCurrentAllocatedNativeContextCache.Contextual
+      (view source (guardHolds formulas solver)) inputModel inputRanked
+      (guardHolds formulas solver) before.checked.native)
+    (semantic : SemanticReady before.checked.native.machine.heap)
+    (growth : Grows source before.checked.native.machine.heap)
+    (history : Extends source.nodes.issued before.checked.native.machine.heap.nodes.issued)
+    (allocations : SourceRecursiveIntersectionDomainAllocation.Trace
+      (SourceRecursiveIntersectionSourceInventory.domains source)
+      initialDomains before.checked.native.machine.domains)
+    (idle : NativeIdle before.checked.native)
+    (room : SourceCurrentAllocatedNativeResourceForecast.Room bits
+      ⟨source.nodes.next, source.edges.next,
+        initialDomains.next + (SourceRecursiveIntersectionSourceInventory.domains source).length, 0⟩) :
+    let rows := (nodeEdges parent).filter (fun edge => decide (edge.entry.key.symbol = symbol))
+    ∃ (fuel : Nat) (kept : List Edge) (after : Wrapper (bits + 2)),
+      SourceCurrentOriginalRowClusterScan.execute fuel (.cluster rows []) before = .done kept after ∧
+      (∀ edge ∈ kept, edge ∈ rows) ∧
+      kept.length ≤ rows.length ∧
+      Good after.checked ∧
+      SourceCurrentAllocatedNativeContextCache.Contextual
+        (view source (guardHolds formulas solver)) inputModel inputRanked
+        (guardHolds formulas solver) after.checked.native ∧
+      SemanticReady after.checked.native.machine.heap ∧
+      Extension before.checked.native.machine after.checked.native.machine ∧
+      Stable (view source (guardHolds formulas solver)) inputModel inputRanked
+        (guardHolds formulas solver) after ∧
+      NativeIdle after.checked.native ∧
+      Extends before.memo.table after.memo.table ∧
+      FlatMemoThunk.Returned before.memo after.memo ∧
+      SourceRecursiveIntersectionDomainAllocation.Trace
+        (SourceRecursiveIntersectionSourceInventory.domains source)
+        initialDomains after.checked.native.machine.domains

@@ -1,0 +1,12 @@
+/-- Every closed available original record has exactly the finite derivations of the actual tagged input view. -/
+theorem input_exact (state : State Symbol Guard) (facts : Facts state) (holds : Guard → Term Symbol → Bool)
+    (value : Value Symbol Guard) (original : Original value) (available : Available state value)
+    (closed : value.free = []) (ambient : InternedGuardedLanguage.Env Symbol) :
+    InternedGuardedLanguage.meaning holds ambient value = InputLanguage state holds (inputOf value) := by
+  have viewClosed : IntersectSchedule.closed (view state holds) (inputOf value) = true := by
+    rw [closed_readback state facts holds value original available, closed]
+    rfl
+  have originalInput : OriginalInput state (inputOf value) := ⟨value, original, available, original.codec value⟩
+  have copied := copy_exact_original state facts holds (inputOf value) originalInput viewClosed (internedEnv ambient)
+  rw [copy_readback state facts holds value available _ (original.codec value)] at copied
+  exact (original_meaning holds value original ambient).trans copied

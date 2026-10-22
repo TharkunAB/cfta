@@ -1,0 +1,14 @@
+/-- A finite operand inventory derives one model, one rank family, and every listed source readback law. -/
+theorem source_input_models (source : InternedConstructorTemplates.State Symbol Guard) (facts : Facts source)
+    (holds : Guard → Term Symbol → Bool) (roots : List (Value Symbol Guard))
+    (originals : ∀ root ∈ roots, Original root) (available : Values source roots)
+    (closed : ∀ root ∈ roots, root.free = []) :
+    ∃ (model : InputMeaning (view source holds)) (ranked : RankedInput (view source holds) model.valid),
+      (∀ root ∈ roots, model.valid (inputOf root)) ∧
+      (∀ name term, model.languages name term ↔ ∃ rank, ranked.languages name rank term) ∧
+      (∀ root ∈ roots, ∀ ambient term, InternedGuardedLanguage.meaning holds ambient root term ↔
+        inputLanguage model.languages (inputOf root) term) := by
+  let inputs := finiteInput source facts holds roots originals available closed
+  exact ⟨finiteInputMeaning (view source holds) inputs, finiteRankedInput (view source holds) inputs,
+    root_valid source facts holds roots originals available closed, fun _ _ => Iff.rfl,
+    root_language source facts holds roots originals available closed⟩

@@ -1,0 +1,66 @@
+
+mutual
+/-- A finite source input derivation with an explicit binder-unfolding bound. -/
+inductive InputDerivation (view : View Symbol) : Input → Nat → Term Symbol → Prop where
+  | node (row : Row Symbol) (member : row ∈ view.rows name) (terms : List (Term Symbol))
+      (children : InputForestDerivation view rank row.children terms)
+      (guard : row.guard (.node row.label terms) = true) :
+      InputDerivation view (.node name) rank (.node row.label terms)
+  | binder (body : InputDerivation view (view.body name) smaller term) (less : smaller < rank) :
+      InputDerivation view (.mu name) rank term
+  | reference (body : InputDerivation view (view.body name) smaller term) (less : smaller < rank) :
+      InputDerivation view (.ref name) rank term
+  | union (member : child ∈ view.members name) (body : InputDerivation view child smaller term) (less : smaller ≤ rank) :
+      InputDerivation view (.union name) rank term
+
+/-- Ordered child derivations share an upper bound on binder unfolding. -/
+inductive InputForestDerivation (view : View Symbol) : Nat → List Input → List (Term Symbol) → Prop where
+  | nil : InputForestDerivation view rank [] []
+  | cons (head : InputDerivation view child smaller term) (bounded : smaller ≤ rank)
+      (tail : InputForestDerivation view rank children terms) :
+      InputForestDerivation view rank (child :: children) (term :: terms)
+end
+
+/-- The mutual forest relation contains exactly the bounded ordered child derivations. -/
+theorem input_forest_exact (view : View Symbol) (rank : Nat) (children : List Input) (terms : List (Term Symbol)) :
+    InputForestDerivation view rank children terms ↔
+      All₂ (fun child term => ∃ smaller, smaller ≤ rank ∧ InputDerivation view child smaller term) children terms := by
+  constructor
+  · intro accepted
+    induction children generalizing terms with
+    | nil => cases accepted; exact .nil
+    | cons child children ih =>
+      cases accepted with
+      | cons head bounded tail => exact .cons ⟨_, bounded, head⟩ (ih _ tail)
+  · intro accepted
+    induction accepted with
+    | nil => exact .nil
+    | cons head tail ih => obtain ⟨smaller, bounded, derivation⟩ := head; exact .cons derivation bounded ih
+
+/-- Increasing a bound preserves the same finite input derivation. -/
+theorem input_derivation_mono (view : View Symbol) (input : Input) (before after : Nat)
+    (bounded : before ≤ after) (term : Term Symbol) (accepted : InputDerivation view input before term) :
+    InputDerivation view input after term := by
+  cases accepted with
+  | node row member terms children guard =>
+    exact .node row member terms
+      ((input_forest_exact view after _ _).mpr
+        (All₂.imp (fun _ _ ⟨rank, smaller, derivation⟩ => ⟨rank, Nat.le_trans smaller bounded, derivation⟩)
+          ((input_forest_exact view before _ _).mp children))) guard
+  | binder body less => exact .binder body (Nat.lt_of_lt_of_le less bounded)
+  | reference body less => exact .reference body (Nat.lt_of_lt_of_le less bounded)
+  | union member body less => exact .union member body (Nat.le_trans less bounded)
+
+/-- A recursive occurrence has exactly its binder's finite derivations. -/
+theorem input_derivation_reference (view : View Symbol) (name rank : Nat) (term : Term Symbol) :
+    InputDerivation view (.ref name) rank term ↔ InputDerivation view (.mu name) rank term := by
+  constructor
+  · intro accepted; cases accepted with | reference body less => exact .binder body less
+  · intro accepted; cases accepted with | binder body less => exact .reference body less
+
+/-- The binder tag is the canonical representative of a recursive identity. -/
+def inputRepresentative : Input → Input
+  | .ref name => .mu name
+  | input => input
+
+/-- Valid payloads and canonical identities give independent least input semantics. -/

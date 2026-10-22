@@ -1,0 +1,26 @@
+  cases original <;> rfl
+
+/-- Coherent cached free fields contain only interned names for original payload syntax. -/
+theorem Original.free_interned (state : InternedConstructorTemplates.State Symbol Guard) (facts : Facts state)
+    (value : Value Symbol Guard) (original : Original value) (available : Available state value) :
+    ∀ reference ∈ value.free, ∃ name, reference = .interned name := by
+  induction original with
+  | empty => simp [Value.free]
+  | reference name => intro reference member; simp only [Value.free, List.mem_singleton] at member; exact ⟨name, member⟩
+  | node entry edges depth free children ih =>
+      intro reference member
+      rw [Value.free, InternedNormalizationFree.node_free state facts.coherent entry edges depth free available.resident,
+        childFree_member] at member
+      obtain ⟨child, inside, named⟩ := member
+      obtain ⟨edge, present, inChild⟩ := List.mem_flatMap.mp inside
+      exact ih edge present child inChild (available.children child inside) reference named
+  | union entry members depth free children ih =>
+      intro reference member
+      rw [Value.free, InternedNormalizationFree.union_free state facts.coherent entry members depth free available.resident,
+        childFree_member] at member
+      obtain ⟨child, present, named⟩ := member
+      exact ih child present (available.children child present) reference named
+  | mu entry body depth ordinary original ih =>
+      intro reference member
+      exact ih (available.children body (by simp [children])) reference (List.mem_filter.mp member).1
+

@@ -1,0 +1,83 @@
+ := by
+  dsimp only
+  let rows := (nodeEdges parent).filter (fun edge => decide (edge.entry.key.symbol = symbol))
+  have complete : ∀ size (candidates keptReversed : List Edge) (current : Wrapper (bits + 2)),
+      candidates.length = size →
+      (∀ edge ∈ candidates, edge ∈ rows) → (∀ edge ∈ keptReversed, edge ∈ rows) →
+      Stable (view source (guardHolds formulas solver)) inputModel inputRanked
+        (guardHolds formulas solver) current → Good current.checked →
+      SourceCurrentAllocatedNativeContextCache.Contextual
+        (view source (guardHolds formulas solver)) inputModel inputRanked
+        (guardHolds formulas solver) current.checked.native →
+      SemanticReady current.checked.native.machine.heap →
+      Grows source current.checked.native.machine.heap →
+      Extends source.nodes.issued current.checked.native.machine.heap.nodes.issued →
+      SourceRecursiveIntersectionDomainAllocation.Trace
+        (SourceRecursiveIntersectionSourceInventory.domains source)
+        initialDomains current.checked.native.machine.domains → NativeIdle current.checked.native →
+      ∃ (fuel : Nat) (kept : List Edge) (after : Wrapper (bits + 2)),
+        SourceCurrentOriginalRowClusterScan.execute fuel (.cluster candidates keptReversed) current =
+          .done kept after ∧
+        (∀ edge ∈ kept, edge ∈ rows) ∧ kept.length ≤ candidates.length + keptReversed.length ∧
+        Good after.checked ∧
+        SourceCurrentAllocatedNativeContextCache.Contextual
+          (view source (guardHolds formulas solver)) inputModel inputRanked
+          (guardHolds formulas solver) after.checked.native ∧
+        SemanticReady after.checked.native.machine.heap ∧
+        Extension current.checked.native.machine after.checked.native.machine ∧
+        Stable (view source (guardHolds formulas solver)) inputModel inputRanked
+          (guardHolds formulas solver) after ∧ NativeIdle after.checked.native ∧
+        Extends current.memo.table after.memo.table ∧
+        FlatMemoThunk.Returned current.memo after.memo ∧
+        SourceRecursiveIntersectionDomainAllocation.Trace
+          (SourceRecursiveIntersectionSourceInventory.domains source)
+          initialDomains after.checked.native.machine.domains := by
+    intro size
+    induction size using Nat.strongRecOn with
+    | ind size ih =>
+        intro candidates keptReversed current sized members keptMembers currentStable currentGood
+          currentContextual currentSemantic currentGrowth currentHistory currentTrace currentIdle
+        cases candidates with
+        | nil =>
+            refine ⟨1, keptReversed.reverse, current, rfl, ?_, ?_, currentGood,
+              currentContextual, currentSemantic, Extension.refl _, currentStable,
+              currentIdle, extends_refl _, FlatMemoThunk.Returned.refl _, currentTrace⟩
+            · simpa only [List.mem_reverse] using keptMembers
+            · simp only [List.length_reverse, List.length_nil, Nat.zero_add]
+        | cons pivot tail =>
+            obtain ⟨used, next, newKept, middle, _positive, scanned, shorter, total,
+                nextMembers, newKeptMembers, midGood, midContextual, midSemantic,
+                extension, midStable, midIdle, tables, retained, midTrace⟩ :=
+              scan_boundary_complete bits source facts formulas solver inputModel inputRanked
+                parent original available closed symbol initialDomains initialValid
+                pivot tail [] keptReversed current currentStable currentGood currentContextual
+                currentSemantic currentGrowth currentHistory currentTrace currentIdle room
+                (members pivot (List.mem_cons_self ..))
+                (fun edge member => members edge (List.mem_cons_of_mem pivot member))
+                (by simp only [List.not_mem_nil, false_implies, implies_true]) keptMembers
+            have smaller : next.length < size := by
+              simp only [List.length_cons, List.length_nil] at shorter sized
+              omega
+            obtain ⟨fuel, kept, after, done, finalMembers, finalLength, afterGood,
+                afterContextual, afterSemantic, laterExtension, afterStable, afterIdle,
+                laterTables, laterReturned, afterTrace⟩ :=
+              ih next.length smaller next newKept middle rfl nextMembers newKeptMembers
+                midStable midGood midContextual midSemantic (grows_trans currentGrowth extension.heap)
+                (extends_trans currentHistory extension.history) midTrace midIdle
+            have prefix : SourceCurrentOriginalRowClusterScan.execute (used + 1)
+                (.cluster (pivot :: tail) keptReversed) current =
+                .yielded (.cluster next newKept) middle := by
+              simpa only [SourceCurrentOriginalRowClusterScan.execute,
+                SourceCurrentOriginalRowClusterScan.step] using scanned
+            refine ⟨used + 1 + fuel, kept, after, ?_, finalMembers, ?_, afterGood,
+              afterContextual, afterSemantic, extension.trans laterExtension, afterStable,
+              afterIdle, extends_trans tables laterTables, retained.trans laterReturned, afterTrace⟩
+            · rw [execute_yielded_add (used + 1) fuel _ _ _ _ prefix]
+              exact done
+            · simp only [List.length_cons, List.length_nil] at total ⊢
+              omega
+  obtain ⟨fuel, kept, after, done, members, bound, packet⟩ :=
+    complete rows.length rows [] before rfl (fun _ member => member)
+      (by simp only [List.not_mem_nil, false_implies, implies_true])
+      stable good contextual semantic growth history allocations idle
+  exact ⟨fuel, kept, after, done, members, by simpa only [List.length_nil, Nat.add_zero] using bound, packet⟩

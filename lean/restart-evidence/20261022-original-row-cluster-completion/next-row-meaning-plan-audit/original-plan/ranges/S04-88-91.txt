@@ -1,0 +1,4 @@
+/-- The complete source codec gives the exact input selected by physical readback. -/
+theorem inputOf_codec (value : Value Symbol Guard) (input : Input)
+    (complete : IntersectionFlatMemoKey.input value.referenceOf = some input) : inputOf value = input := by
+  simp only [inputOf, complete, Option.getD_some]

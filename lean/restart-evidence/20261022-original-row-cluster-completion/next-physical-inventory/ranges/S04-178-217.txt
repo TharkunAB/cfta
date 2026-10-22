@@ -1,0 +1,40 @@
+/-- Actual closed original roots derive fixed input models and their physical languages.
+These models describe only the original inputs. They do not assert a checked result law. -/
+theorem source_input_models (source : InternedConstructorTemplates.State Symbol Guard) (facts : Facts source)
+    (holds : Guard → Term Symbol → Bool) (left right : Value Symbol Guard)
+    (leftOriginal : SourceRecursiveIntersectionInputView.Original left)
+    (rightOriginal : SourceRecursiveIntersectionInputView.Original right)
+    (leftAvailable : Available source left) (rightAvailable : Available source right)
+    (leftClosed : left.free = []) (rightClosed : right.free = []) :
+    ∃ (model : IntersectSchedule.InputMeaning (SourceRecursiveIntersectionInputView.view source holds))
+      (ranked : IntersectSchedule.RankedInput (SourceRecursiveIntersectionInputView.view source holds) model.valid),
+      model.valid (SourceRecursiveIntersectionInputView.inputOf left) ∧
+      model.valid (SourceRecursiveIntersectionInputView.inputOf right) ∧
+      (∀ name term, model.languages name term ↔ ∃ rank, ranked.languages name rank term) ∧
+      (∀ ambient term, InternedGuardedLanguage.meaning holds ambient left term ↔
+        IntersectSchedule.inputLanguage model.languages (SourceRecursiveIntersectionInputView.inputOf left) term) ∧
+      (∀ ambient term, InternedGuardedLanguage.meaning holds ambient right term ↔
+        IntersectSchedule.inputLanguage model.languages (SourceRecursiveIntersectionInputView.inputOf right) term) := by
+  let view := SourceRecursiveIntersectionInputView.view source holds
+  let first := SourceRecursiveIntersectionInputView.inputOf left
+  let second := SourceRecursiveIntersectionInputView.inputOf right
+  have firstOriginal : SourceRecursiveIntersectionInputView.OriginalInput source first :=
+    ⟨left, leftOriginal, leftAvailable, leftOriginal.codec left⟩
+  have secondOriginal : SourceRecursiveIntersectionInputView.OriginalInput source second :=
+    ⟨right, rightOriginal, rightAvailable, rightOriginal.codec right⟩
+  have firstClosed : IntersectSchedule.closed view first = true := by
+    rw [SourceRecursiveIntersectionInputView.closed_readback source facts holds left leftOriginal leftAvailable, leftClosed]
+    rfl
+  have secondClosed : IntersectSchedule.closed view second = true := by
+    rw [SourceRecursiveIntersectionInputView.closed_readback source facts holds right rightOriginal rightAvailable, rightClosed]
+    rfl
+  let inputs := SourceRecursiveIntersectionInputView.finiteInput source facts holds first second
+    firstOriginal secondOriginal firstClosed secondClosed
+  refine ⟨IntersectSchedule.finiteInputMeaning view inputs, IntersectSchedule.finiteRankedInput view inputs,
+    Or.inl (.root), Or.inr (.root), fun _ _ => Iff.rfl, ?_, ?_⟩
+  · intro ambient term
+    rw [SourceRecursiveIntersectionGuardedInput.input_exact source facts holds left leftOriginal leftAvailable leftClosed ambient]
+    exact (IntersectSchedule.finiteLanguages_exact view inputs first (Or.inl .root) term).symm
+  · intro ambient term
+    rw [SourceRecursiveIntersectionGuardedInput.input_exact source facts holds right rightOriginal rightAvailable rightClosed ambient]
+    exact (IntersectSchedule.finiteLanguages_exact view inputs second (Or.inr .root) term).symm

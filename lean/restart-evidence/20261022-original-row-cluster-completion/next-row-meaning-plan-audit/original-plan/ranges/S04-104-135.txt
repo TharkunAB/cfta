@@ -1,0 +1,32 @@
+/-- Complete available values read back their original payload through the actual maps. -/
+theorem payload_readback (state : InternedConstructorTemplates.State Symbol Guard) (facts : Facts state)
+    (value : Value Symbol Guard) (available : Available state value) (input : Input)
+    (complete : IntersectionFlatMemoKey.input value.referenceOf = some input) : payload state input = value := by
+  cases value with
+  | empty => cases complete; rfl
+  | reference name =>
+      cases name <;> simp only [Value.referenceOf, IntersectionFlatMemoKey.input, reduceCtorEq] at complete
+      cases complete
+      rfl
+  | node entry edges depth free | union entry edges depth free | mu entry edges depth free =>
+      cases complete
+      have found := SourcePreparedSharedRows.read_identity state facts _ available entry.identity rfl
+      simp only [payload, found]
+      rw [ite_eq_left (inputOf_codec _ _ rfl)]
+
+/-- Cached interned free fields read back exactly, including placeholder defaults. -/
+theorem free_readback (state : InternedConstructorTemplates.State Symbol Guard) (facts : Facts state)
+    (holds : Guard → Language.Term Symbol → Bool) (value : Value Symbol Guard) (available : Available state value) :
+    (view state holds).free (inputOf value) = freeNames value := by
+  cases value with
+  | empty => rfl
+  | reference name => cases name <;> rfl
+  | node entry edges depth free | union entry edges depth free | mu entry edges depth free =>
+      exact congrArg freeNames (payload_readback state facts _ available _ rfl)
+
+/-- Exact physical readback retains the copied payload syntax and its original guard. -/
+theorem copy_readback (state : InternedConstructorTemplates.State Symbol Guard) (facts : Facts state)
+    (holds : Guard → Language.Term Symbol → Bool) (value : Value Symbol Guard) (available : Available state value)
+    (input : Input) (complete : IntersectionFlatMemoKey.input value.referenceOf = some input) :
+    (view state holds).copy input = shape holds value :=
+  congrArg (shape holds) (payload_readback state facts value available input complete)

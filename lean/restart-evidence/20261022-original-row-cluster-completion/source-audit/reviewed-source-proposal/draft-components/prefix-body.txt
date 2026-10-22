@@ -1,0 +1,14 @@
+ := by
+  induction used generalizing control before with
+  | zero =>
+      have same : control = next ∧ before = middle := by
+        simpa only [SourceCurrentOriginalRowClusterScan.execute,
+          SourceCurrentOriginalRowClusterScan.Outcome.yielded.injEq] using observed
+      rcases same with ⟨rfl, rfl⟩
+      rfl
+  | succ used ih =>
+      cases one : SourceCurrentOriginalRowClusterScan.step control before <;>
+        simp only [SourceCurrentOriginalRowClusterScan.execute, one] at observed
+      case yielded following after =>
+        simpa only [Nat.succ_add, SourceCurrentOriginalRowClusterScan.execute, one] using
+          ih following after observed

@@ -1,0 +1,27 @@
+/-- One comparison worker preserves its pivot's combined language. -/
+theorem ruleOut_exact [DecidableEq Edge] (meet : Edge → Edge → Edge) (meaning : Edge → Term → Prop)
+    (intersection : ∀ first second term, meaning (meet first second) term ↔ meaning first term ∧ meaning second term)
+    (edge : Edge) (edges : List Edge) (term : Term) :
+    Denotes meaning ((ruleOut meet edge edges).1.getD edge :: (ruleOut meet edge edges).2) term ↔
+      Denotes meaning (edge :: edges) term := by
+  induction edges with
+  | nil => rfl
+  | cons other rest ih =>
+    by_cases covered : meet edge other = other
+    · have implies : meaning other term → meaning edge term := by
+        intro accepted
+        exact ((intersection edge other term).mp (by simpa [covered] using accepted)).1
+      simp only [ruleOut, ite_eq_left covered]
+      simp only [denotes_cons] at *
+      grind
+    · by_cases dominates : meet edge other = edge
+      · have implies : meaning edge term → meaning other term := by
+          intro accepted
+          exact ((intersection edge other term).mp (by simpa [dominates] using accepted)).2
+        simp only [ruleOut, ite_eq_right covered, ite_eq_left dominates, Option.getD_some]
+        simp only [denotes_cons]
+        grind
+      · simp only [ruleOut, ite_eq_right covered, ite_eq_right dominates]
+        simp only [denotes_cons] at *
+        grind
+

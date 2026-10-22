@@ -1,0 +1,45 @@
+/-- Old admission makes a returned node law usable under the identical rank interpretation. -/
+theorem node_law (view : View Symbol) (before after : FiniteInput view)
+    (same : before.representative = after.representative) (holds : Guard → Term Symbol → Bool)
+    (request : NodeRequest Symbol Guard) (result : Value Symbol Guard)
+    (admitted : NodeInputs view (finiteInputMeaning view before) request)
+    (law : NodeLaw view (finiteInputMeaning view before) (finiteRankedInput view before) holds request result) :
+    NodeLaw view (finiteInputMeaning view after) (finiteRankedInput view after) holds request result := by
+  have languages : (finiteInputMeaning view before).languages = (finiteInputMeaning view after).languages :=
+    languages_eq view before after same
+  have ranks : (finiteRankedInput view before).languages = (finiteRankedInput view after).languages :=
+    ranks_eq view before after same
+  constructor
+  · intro _
+    simpa only [languages] using law.sound admitted
+  · intro _
+    simpa only [ranks] using law.complete admitted
+
+/-- Old child admission transports both contextual bounds for the exact returned row. -/
+theorem edge_law (view : View Symbol) (before after : FiniteInput view)
+    (same : before.representative = after.representative) (holds : Guard → Term Symbol → Bool)
+    (request : EdgeRequest Symbol Guard) (result : EdgeValue Symbol Guard)
+    (admitted : EdgeInputs view (finiteInputMeaning view before) request)
+    (law : EdgeLaw view (finiteInputMeaning view before) (finiteRankedInput view before) holds request result) :
+    EdgeLaw view (finiteInputMeaning view after) (finiteRankedInput view after) holds request result := by
+  have languages : (finiteInputMeaning view before).languages = (finiteInputMeaning view after).languages :=
+    languages_eq view before after same
+  have ranks : (finiteRankedInput view before).languages = (finiteRankedInput view after).languages :=
+    ranks_eq view before after same
+  constructor
+  · intro _
+    simpa only [languages] using law.sound admitted
+  · intro _
+    simpa only [ranks] using law.complete admitted
+
+/-- The same native tables retain their contextual laws when old requests were admitted. -/
+theorem contextual (view : View Symbol) (before after : FiniteInput view)
+    (same : before.representative = after.representative) (holds : Guard → Term Symbol → Bool)
+    (state : Native width Symbol Guard)
+    (admitted : Admitted view (finiteInputMeaning view before) state)
+    (valid : Contextual view (finiteInputMeaning view before) (finiteRankedInput view before) holds state) :
+    Contextual view (finiteInputMeaning view after) (finiteRankedInput view after) holds state :=
+  ⟨fun handle request result found => node_law view before after same holds request result
+      (admitted.nodes handle request result found) (valid.nodes handle request result found),
+    fun handle request result found => edge_law view before after same holds request result
+      (admitted.edges handle request result found) (valid.edges handle request result found)⟩

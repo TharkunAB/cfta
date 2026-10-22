@@ -1,0 +1,35 @@
+/-- All listed roots share one finite input interface and the actual physical representative. -/
+def finiteInput (source : InternedConstructorTemplates.State Symbol Guard) (facts : Facts source)
+    (holds : Guard → Term Symbol → Bool) (roots : List (Value Symbol Guard))
+    (originals : ∀ root ∈ roots, Original root) (available : Values source roots)
+    (closed : ∀ root ∈ roots, root.free = []) : FiniteInput (view source holds) where
+  valid := Reachable source holds roots
+  representative := SourceRecursiveIntersectionInputView.representative source
+  identity_exact := by
+    rintro input ⟨root, member, reached⟩ nonempty
+    exact closed_representative source facts holds (inputOf root) input
+      (listed_original source roots originals available root member)
+      (listed_closed source facts holds roots originals available closed root member) reached nonempty
+  body_valid := by
+    rintro name ⟨root, member, reached⟩
+    exact ⟨root, member, .body reached⟩
+  reference_valid := by
+    rintro name ⟨root, member, reached⟩
+    exact ⟨root, member, .reference reached⟩
+  row_valid := by
+    rintro name ⟨root, member, reached⟩ row present child inside
+    exact ⟨root, member, .child reached present inside⟩
+  union_valid := by
+    rintro name ⟨root, member, reached⟩ child inside
+    exact ⟨root, member, .member reached inside⟩
+  copy_exact input reached isClosed environment :=
+    copy_exact_original source facts holds input
+      (reachable_original source facts holds roots originals available closed input reached) isClosed environment
+
+/-- Every listed original root belongs to this same fixed input interface. -/
+theorem root_valid (source : InternedConstructorTemplates.State Symbol Guard) (facts : Facts source)
+    (holds : Guard → Term Symbol → Bool) (roots : List (Value Symbol Guard))
+    (originals : ∀ root ∈ roots, Original root) (available : Values source roots)
+    (closed : ∀ root ∈ roots, root.free = []) (root : Value Symbol Guard) (member : root ∈ roots) :
+    (finiteInput source facts holds roots originals available closed).valid (inputOf root) :=
+  ⟨root, member, .root⟩

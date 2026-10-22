@@ -1,0 +1,21 @@
+/-- A nonempty input reads its language through its globally unique identity. -/
+def inputLanguage (languages : Nat → Lang Symbol) : Input → Lang Symbol
+  | .empty => fun _ => False
+  | input => languages (identity input)
+
+/-- Independent input equations describe only valid interned node tags. -/
+structure InputMeaning (view : View Symbol) where
+  valid : Input → Prop
+  languages : Nat → Lang Symbol
+  body_valid : ∀ name, valid (.mu name) → valid (view.body name)
+  body_exact : ∀ name, valid (.mu name) → languages name = inputLanguage languages (view.body name)
+  reference_valid : ∀ name, valid (.ref name) → valid (.mu name)
+  row_valid : ∀ name, valid (.node name) → ∀ row ∈ view.rows name, ∀ child ∈ row.children, valid child
+  row_exact : ∀ name, valid (.node name) → ∀ term, languages name term ↔
+    ∃ row ∈ view.rows name, ∃ terms, term = .node row.label terms ∧
+      All₂ (inputLanguage languages) row.children terms ∧ row.guard term = true
+  union_valid : ∀ name, valid (.union name) → ∀ child ∈ view.members name, valid child
+  union_exact : ∀ name, valid (.union name) → ∀ term, languages name term ↔
+    ∃ child ∈ view.members name, inputLanguage languages child term
+  copy_exact : ∀ input, valid input → closed view input = true → ∀ environment,
+    meaning environment (view.copy input) = inputLanguage languages input

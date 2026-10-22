@@ -1,0 +1,27 @@
+/-- The reachable domain of closed original roots retains actual original physical records. -/
+theorem reachable_original (state : InternedConstructorTemplates.State Symbol Guard) (facts : Facts state)
+    (holds : Guard → Term Symbol → Bool) (leftRoot rightRoot : Input)
+    (leftOriginal : OriginalInput state leftRoot) (rightOriginal : OriginalInput state rightRoot)
+    (leftClosed : closed (view state holds) leftRoot = true) (rightClosed : closed (view state holds) rightRoot = true)
+    (input : Input) (reachable : Reachable state holds leftRoot rightRoot input) : OriginalInput state input := by
+  rcases reachable with left | right
+  · exact closed_reach_original state facts holds leftRoot input leftOriginal leftClosed left
+  · exact closed_reach_original state facts holds rightRoot input rightOriginal rightClosed right
+
+/-- Actual closed original roots supply every structural and semantic field of the finite input interface. -/
+def finiteInput (state : InternedConstructorTemplates.State Symbol Guard) (facts : Facts state)
+    (holds : Guard → Term Symbol → Bool) (leftRoot rightRoot : Input)
+    (leftOriginal : OriginalInput state leftRoot) (rightOriginal : OriginalInput state rightRoot)
+    (leftClosed : closed (view state holds) leftRoot = true) (rightClosed : closed (view state holds) rightRoot = true) :
+    FiniteInput (view state holds) where
+  valid := Reachable state holds leftRoot rightRoot
+  representative := representative state
+  identity_exact := reachable_identity state facts holds leftRoot rightRoot leftOriginal rightOriginal leftClosed rightClosed
+  body_valid := Reachable.body state holds leftRoot rightRoot
+  reference_valid := Reachable.reference state holds leftRoot rightRoot
+  row_valid := Reachable.child state holds leftRoot rightRoot
+  union_valid := Reachable.member state holds leftRoot rightRoot
+  copy_exact input reachable isClosed environment :=
+    copy_exact_original state facts holds input
+      (reachable_original state facts holds leftRoot rightRoot leftOriginal rightOriginal leftClosed rightClosed input reachable)
+      isClosed environment

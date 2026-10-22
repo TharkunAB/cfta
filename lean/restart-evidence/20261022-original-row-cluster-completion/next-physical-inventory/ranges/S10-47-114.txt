@@ -1,0 +1,68 @@
+/-- Physical row copying retains the exact ordered independent child languages. -/
+theorem row_forest (holds : Guard → Term Symbol → Bool)
+    (relation : IntersectSchedule.Input → Term Symbol → Prop) (edge : EdgeValue Symbol Guard) (terms : List (Term Symbol)) :
+    All₂ relation (row holds edge).children terms ↔ All₂ (fun child term => relation (inputOf child) term) edge.children terms :=
+  SymbolicGraphView.all₂_map_iff relation inputOf edge.children terms
+
+/-- Fixed original node language is exactly the language of its physical stored rows. -/
+theorem node_language (source : InternedConstructorTemplates.State Symbol Guard) (facts : Facts source)
+    (holds : Guard → Term Symbol → Bool) (model : IntersectSchedule.InputMeaning (view source holds))
+    (entry : Interned InternedBinderProtocol.NodeKey) (edges : List (EdgeValue Symbol Guard)) (depth : Nat) (free : List Reference)
+    (available : Available source (.node entry edges depth free)) (valid : model.valid (.node entry.identity)) (term : Term Symbol) :
+    IntersectSchedule.inputLanguage model.languages (inputOf (.node entry edges depth free)) term ↔
+      ∃ edge ∈ edges, RowLanguage holds model.languages edge term := by
+  change model.languages entry.identity term ↔ _
+  rw [model.row_exact entry.identity valid term, rows_readback source facts holds entry edges depth free available]
+  constructor
+  · rintro ⟨_, present, terms, shape, forest, guard⟩
+    obtain ⟨edge, inside, rfl⟩ := List.mem_map.mp present
+    exact ⟨edge, inside, terms, shape, (row_forest holds _ edge terms).mp forest, guard⟩
+  · rintro ⟨edge, present, terms, shape, forest, guard⟩
+    exact ⟨row holds edge, List.mem_map.mpr ⟨edge, present, rfl⟩, terms, shape,
+      (row_forest holds _ edge terms).mpr forest, guard⟩
+
+/-- Each original ranked node derivation selects one actual physical stored row. -/
+theorem node_rank (source : InternedConstructorTemplates.State Symbol Guard) (facts : Facts source)
+    (holds : Guard → Term Symbol → Bool) (model : IntersectSchedule.InputMeaning (view source holds))
+    (ranked : IntersectSchedule.RankedInput (view source holds) model.valid)
+    (entry : Interned InternedBinderProtocol.NodeKey) (edges : List (EdgeValue Symbol Guard)) (depth : Nat) (free : List Reference)
+    (available : Available source (.node entry edges depth free)) (valid : model.valid (.node entry.identity))
+    (rank : Nat) (term : Term Symbol)
+    (accepted : IntersectSchedule.inputAt ranked.languages (inputOf (.node entry edges depth free)) rank term) :
+    ∃ edge ∈ edges, RowAt holds ranked.languages rank edge term := by
+  obtain ⟨_, present, terms, shape, forest, guard⟩ := ranked.row entry.identity valid rank term accepted
+  rw [rows_readback source facts holds entry edges depth free available] at present
+  obtain ⟨edge, inside, rfl⟩ := List.mem_map.mp present
+  exact ⟨edge, inside, terms, shape, (row_forest holds _ edge terms).mp forest, guard⟩
+
+/-- An actual ordinary node pair supplies the original scope of every joined edge request. -/
+theorem joined_inputs [DecidableEq Symbol]
+    (source : InternedConstructorTemplates.State Symbol Guard) (facts : Facts source)
+    (holds : Guard → Term Symbol → Bool) (model : IntersectSchedule.InputMeaning (view source holds))
+    (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey)
+    (first : Interned InternedBinderProtocol.NodeKey) (left : List (EdgeValue Symbol Guard)) (leftDepth : Nat) (leftFree : List Reference)
+    (second : Interned InternedBinderProtocol.NodeKey) (right : List (EdgeValue Symbol Guard)) (rightDepth : Nat) (rightFree : List Reference)
+    (leftAvailable : Available source (.node first left leftDepth leftFree))
+    (rightAvailable : Available source (.node second right rightDepth rightFree))
+    (inputs : NodeInputs (view source holds) model
+      ⟨domain, .node first left leftDepth leftFree, .node second right rightDepth rightFree⟩)
+    (pair : Pair) (member : pair ∈ pairs left right) :
+    EdgeInputs (view source holds) model ⟨domain, pair.1, pair.2⟩ := by
+  have inside := (SourceRecursiveIntersectionKernel.pairs_member left right pair).mp member
+  constructor
+  · intro child present
+    have original : Original child := by
+      cases inputs.1 with
+      | node _ _ _ _ originals => exact originals pair.1 inside.1 child present
+    refine ⟨original, model.row_valid first.identity inputs.2.2.1 (row holds pair.1) ?_ (inputOf child) ?_⟩
+    · rw [rows_readback source facts holds first left leftDepth leftFree leftAvailable]
+      exact List.mem_map.mpr ⟨pair.1, inside.1, rfl⟩
+    · exact List.mem_map.mpr ⟨child, present, rfl⟩
+  · intro child present
+    have original : Original child := by
+      cases inputs.2.1 with
+      | node _ _ _ _ originals => exact originals pair.2 inside.2.1 child present
+    refine ⟨original, model.row_valid second.identity inputs.2.2.2 (row holds pair.2) ?_ (inputOf child) ?_⟩
+    · rw [rows_readback source facts holds second right rightDepth rightFree rightAvailable]
+      exact List.mem_map.mpr ⟨pair.2, inside.2.1, rfl⟩
+    · exact List.mem_map.mpr ⟨child, present, rfl⟩

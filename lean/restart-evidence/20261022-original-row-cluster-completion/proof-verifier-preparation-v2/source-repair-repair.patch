@@ -1,0 +1,60 @@
+--- original/SourceCurrentOriginalRowClusterCompletion.lean
++++ SourceCurrentOriginalRowClusterCompletion.lean
+@@ -2,7 +2,7 @@
+ import MicroCFTA.SourceCurrentSameSymbolEdgeComparisonDomains
+ 
+ namespace MicroCFTA.SourceCurrentOriginalRowClusterCompletion
+-open Cache Language IntersectSchedule InternedConstructorTemplates
++open Cache Language IntersectSchedule InternedConstructorTemplates InternedEdgeResidency
+ open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionInputView InternedProbeProvenance
+ open SourceCurrentAllocatedNativePhysicalCompletion (Good)
+ open SourceEqualityRequiredSemanticCache (SemanticReady)
+@@ -137,7 +137,7 @@
+       obtain ⟨used, _positive, _bound, resumed⟩ :=
+         SourceCurrentOriginalRowClusterScan.comparison_lift fuel pivot candidate common tail
+           incomparableReversed keptReversed (.call (pivot, candidate) []) before middle done
+-      have prefix : SourceCurrentOriginalRowClusterScan.execute (used + 1)
++      have prefixRun : SourceCurrentOriginalRowClusterScan.execute (used + 1)
+           (.scan pivot (candidate :: tail) incomparableReversed keptReversed) before =
+           .yielded
+             (if common.entry.identity = candidate.entry.identity then
+@@ -153,7 +153,7 @@
+         refine ⟨used + 1, candidate :: (incomparableReversed.reverse ++ tail),
+           keptReversed, middle, by omega, ?_, ?_, ?_, ?_, keptMembers, midGood,
+           midContextual, midSemantic, extension, midStable, midIdle, tables, retained, midTrace⟩
+-        · simpa only [notDropped, promoted, ↓reduceIte] using prefix
++        · simpa only [notDropped, promoted, ↓reduceIte] using prefixRun
+         · simp only [List.length_cons, List.length_append, List.length_reverse]
+           omega
+         · simp only [List.length_cons, List.length_append, List.length_reverse]
+@@ -185,10 +185,10 @@
+             (.scan pivot (candidate :: tail) incomparableReversed keptReversed) before =
+             .yielded (.scan pivot tail nextIncomparable keptReversed) middle := by
+           by_cases dropped : common.entry.identity = candidate.entry.identity
+-          · simpa only [dropped, ↓reduceIte, nextIncomparable] using prefix
++          · simpa only [dropped, ↓reduceIte, nextIncomparable] using prefixRun
+           · have notPromoted : common.entry.identity ≠ pivot.entry.identity :=
+               fun equal => promoted ⟨dropped, equal⟩
+-            simpa only [dropped, notPromoted, ↓reduceIte, nextIncomparable] using prefix
++            simpa only [dropped, notPromoted, ↓reduceIte, nextIncomparable] using prefixRun
+         obtain ⟨more, next, newKept, after, _positive, scanned, shorter, total,
+             nextMembers, newKeptMembers, afterGood, afterContextual, afterSemantic,
+             laterExtension, afterStable, afterIdle, laterTables, laterReturned, afterTrace⟩ :=
+@@ -323,7 +323,7 @@
+               ih next.length smaller next newKept middle rfl nextMembers newKeptMembers
+                 midStable midGood midContextual midSemantic (grows_trans currentGrowth extension.heap)
+                 (extends_trans currentHistory extension.history) midTrace midIdle
+-            have prefix : SourceCurrentOriginalRowClusterScan.execute (used + 1)
++            have prefixRun : SourceCurrentOriginalRowClusterScan.execute (used + 1)
+                 (.cluster (pivot :: tail) keptReversed) current =
+                 .yielded (.cluster next newKept) middle := by
+               simpa only [SourceCurrentOriginalRowClusterScan.execute,
+@@ -331,7 +331,7 @@
+             refine ⟨used + 1 + fuel, kept, after, ?_, finalMembers, ?_, afterGood,
+               afterContextual, afterSemantic, extension.trans laterExtension, afterStable,
+               afterIdle, extends_trans tables laterTables, retained.trans laterReturned, afterTrace⟩
+-            · rw [execute_yielded_add (used + 1) fuel _ _ _ _ prefix]
++            · rw [execute_yielded_add (used + 1) fuel _ _ _ _ prefixRun]
+               exact done
+             · simp only [List.length_cons, List.length_nil] at total ⊢
+               omega

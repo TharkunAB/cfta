@@ -1,0 +1,15896 @@
+# cfta formal model
+
+## Original-row cluster control
+
+Updated: 2026-10-22 06:27 CEST. Proof checkpoint: `272cb31f5f`.
+Start: `4f7a7e064f`. Imported main remains `794903b3f`.
+Read `lean/notes-current-original-row-cluster-control.md`.
+
+SourceCurrentOriginalRowClusterScan defines cluster, scan and comparison phases.
+It reuses the complete populated H7 State and forwards its exact outcomes.
+comparison_lift consumes one observed H7 done equation.
+It derives a positive consumed prefix bounded by the supplied H7 fuel.
+At that prefix, execute yields the inline resume at the SAME returned state.
+The candidate identity test comes first. Promotion retains the reconstruction order.
+Generated common results never become later operands.
+No genuine-input cluster completion, new semantic law or resource law is proved.
+H7 and this control are noncomputable. No compiled program or Haskell refinement is claimed.
+
+H15 remains the checked comparison and domain-capacity foundation.
+H6 constructed_node_calls remains the strongest combined semantic theorem.
+Physical pruning, generated parents, grouping, Mu, full traversal and the public pass remain open.
+The overall goal is incomplete.
+
+Preservation covers 86577 baseline files/modes, 298 baseline Haskell files
+and 207 active package files. Only one Audit import and nine additive doc
+prefixes may change old files. FINDINGS keeps its repair index FIRST.
+The preceding 4f7a7e064 checkpoint is LOCAL_ONLY. Remote publication remains
+PENDING_USER_APPROVAL. This tool performs no push or network command.
+
+## Domain history across original-row comparisons
+
+Updated: 2026-10-22 05:34 CEST. Proof checkpoint: `1dfbb4feec`.
+Start: `e8a0066c60`. Imported main remains `794903b3f`.
+Read `lean/notes-current-same-symbol-edge-comparison-domains.md`.
+
+SourceCurrentSameSymbolEdgeComparisonDomains.original_rows_complete derives an
+actual comparison result and its SAME global domain allocation history.
+The source, models, populated checked state and pair memo stay correlated.
+Available closed OriginalInput parents and literal same-symbol rows remain explicit.
+The initial domain cache, its Valid witness and actual past allocation Trace stay fixed.
+One initial Room reservation derives current-call Room from the same finite inventory.
+Current Good, Contextual, SemanticReady, Stable, native Idle and source history remain explicit.
+The result retains all comparison outputs and the SAME initial-to-after allocation Trace.
+No cache reset, new per-call history, future Room or successful run is a premise.
+Ready hits have no native Receipt claim. Actual finite-scan control is not proved.
+
+H6 constructed_node_calls remains the strongest combined semantic theorem.
+Generated-parent provenance, source/model rebase, physical language iff,
+public Mu/full-pass and Haskell refinement remain open. The goal is incomplete.
+
+Preservation covers 85212 baseline files/modes, 298 baseline Haskell files
+and 207 active package files. Only one Audit import and nine additive doc
+prefixes may change old files. FINDINGS keeps its repair index FIRST.
+The preceding e8a0066c checkpoint is LOCAL_ONLY. Remote publication remains
+PENDING_USER_APPROVAL. This tool performs no push or network command.
+
+## Completion across same-symbol pair-cache branches
+
+Updated: 2026-10-22 04:52 CEST. Proof checkpoint: `8f6c9efc6d`.
+Start: `1d5a07b762`. Imported main remains `794903b3f`.
+Read `lean/notes-current-same-symbol-edge-comparison.md`.
+
+SourceCurrentSameSymbolEdgeComparison.original_rows_complete derives an
+actual comparison result for ready and absent pair-cache branches.
+It keeps the SAME source, models, populated checked state and pair memo.
+Available closed OriginalInput parents, literal same-symbol rows, Stable,
+current Good, Contextual, SemanticReady, native Idle, source growth/history
+and one current Room remain explicit. No cache-branch premise is required.
+The result retains residency, canonical conditional EdgeLaw, Good, Contextual,
+SemanticReady, native Extension, Stable, native Idle, table Extends and Returned.
+A ready hit has no native Receipt claim. No post-Room or future capacity follows.
+
+H6 constructed_node_calls remains the strongest combined semantic theorem.
+Generated-parent provenance, source/model rebase, physical language iff,
+public Mu/full-pass and Haskell refinement remain open. The goal is incomplete.
+
+Preservation covers 84279 baseline files/modes, 298 baseline Haskell files
+and 207 active package files. Only one Audit import and nine additive doc
+prefixes may change old files. FINDINGS keeps its repair index FIRST.
+The preceding 1d5a07b7 checkpoint is LOCAL_ONLY. Remote publication remains
+PENDING_USER_APPROVAL. This tool performs no push or network command.
+
+## Completion for absent same-symbol original-row comparisons
+
+Updated: 2026-10-22 04:18 CEST. Proof checkpoint: `7814e367b3`.
+Start: `c49dd66acf`. Imported main remains `794903b3f`.
+Read `lean/notes-current-same-symbol-edge-original-rows.md`.
+
+SourceCurrentSameSymbolEdgeOriginalRows.both_miss_complete derives native
+and wrapper completion for absent original and reversed pair keys.
+It keeps the SAME source, models, populated checked state and pair memo.
+The inputs are actual available closed original parents and literal rows,
+same symbols, Stable, current Good, Contextual, SemanticReady and native Idle,
+source growth/history and Room for the exact current domain/source counters.
+It derives the SAME returned Receipt, result residency, canonical contextual
+EdgeLaw, final pair Stable, native Idle, table extension and returned cells.
+No successful run, result law or post-Room is assumed.
+
+H6 constructed_node_calls remains the strongest combined semantic theorem.
+Generated-parent provenance, source/model rebase, future capacity, physical
+language iff, public Mu/full-pass and Haskell refinement remain open.
+The whole formalization goal stays active and incomplete.
+
+Preservation covers 83325 baseline files/modes, 298 baseline Haskell files
+and 207 active package files. Only one Audit import and nine additive doc
+prefixes may change old files. FINDINGS keeps its repair index FIRST.
+The preceding c49dd66a checkpoint is LOCAL_ONLY. Remote publication remains
+PENDING_USER_APPROVAL. This tool performs no push or network command.
+
+## Word ranges for direct edge-body prefixes
+
+Updated: 2026-10-22 03:41 CEST. Proof checkpoint: `3ad63b6b39`.
+Start: `108bc09e80`. Imported main remains `794903b3f`.
+Read `lean/notes-current-direct-edge-word-ranges.md`.
+
+SourceCurrentAllocatedDirectEdgeWordRanges.edge_body derives WordRanges
+for every raw Steps prefix of the exact empty-domain edgeBody request.
+It uses the SAME Checked(bits+2) state, fixed source Facts, current Good,
+SemanticReady, Grows, source history, exact EdgeScope and current EdgeReady.
+Room uses source.nodes.next, source.edges.next, current domains.next and
+literal mass 0. It does not supply runtime completion or a semantic law.
+
+H11 semantic Completes remains a separate theorem. H6 constructed_node_calls
+remains the strongest combined semantic result. Native completion, practical
+host width, public Mu/full-pass and Haskell refinement remain open.
+The whole formalization goal stays active and incomplete.
+
+Preservation covers 82469 baseline files/modes, 298 baseline Haskell files,
+207 active package files and all old evidence. Only the Audit import and
+nine additive doc prefixes may change old files. FINDINGS retains its
+Haskell repair index FIRST. Any new Haskell archive must match baseline bytes.
+The preceding 108bc09e checkpoint is local only. Remote publication remains
+PENDING_USER_APPROVAL after automatic review rejected earlier pushes.
+This checkpoint publication tool performs no push or network command.
+
+## Semantic completion for original parent rows
+
+Updated: 2026-10-22 03:09 CEST. Proof checkpoint: `26a01918be`.
+Start: `47c597a8e3`. Imported main remains `794903b3f`.
+Read `lean/notes-current-original-row-edge-completion.md`.
+
+SourceRecursiveIntersectionOriginalRowCompletion.edge_complete derives
+Completes for the exact empty-domain edgeSemantic request. Its two literal
+rows belong to actual available closed OriginalInput parents in the SAME
+source heap with Facts. The theorem is generic in Symbol and Guard, with
+arbitrary holds. The parents may coincide. No equal-symbol premise is used.
+It assumes no semantic or native success and no FreeCorrect oracle.
+
+Completes is existence of semantic interpreter fuel and an ok result.
+This result does not produce native admission, WordRanges, a physical
+language iff, the public Mu unfolding and kept-body branch, or the full public pass.
+H6 constructed_node_calls remains the strongest combined semantic result.
+Convergence, practical host bounds, external solver composition and
+Haskell refinement remain open. The whole formalization goal stays active.
+
+All old proofs, drafts, counterexamples and optimized code remain.
+Preservation covers 81460 baseline files/modes, 298 unchanged baseline
+Haskell files and 207 package files. Any new H11 Haskell archive copies
+must match baseline bytes. Only the Audit import and additive doc prefixes
+may change old files. FINDINGS retains its Haskell repair index FIRST.
+
+## Ready same-symbol comparisons
+
+Updated: 2026-10-22 02:39 CEST. Proof checkpoint: `3dfc7e9cd1`.
+Start: `f985c09f5b`. Imported main remains `794903b3f`.
+Read `lean/notes-current-same-symbol-edge-ready.md`.
+
+SourceCurrentSameSymbolEdgeReady.ready_complete derives execution from an
+incoming Stable packet, current heap coherence, both requested resident
+edges and presence of the original or reversed pair key. It returns the
+actual value and full state at fixed execute fuel 7. The full checked state
+is unchanged. The result is resident and satisfies the exact canonical
+emptyDomain contextual EdgeLaw. Final Stable, table Extends and Returned
+retain the pair memo. Original hits stop in 3 steps; reverse-only hits use 7.
+
+The fixed view, model, ranks and holds remain unchanged. Captured operand
+identity follows from resident records and coherence. No execution or
+semantic symmetry, native Receipt or native admission is assumed on hits.
+Both-miss native admission and completion remain separate H8 obligations.
+H6 constructed_node_calls remains the strongest combined semantic result.
+Full public-pass behavior, convergence, practical host bounds, external
+solver composition and Haskell refinement remain open.
+
+All old proofs, drafts, counterexamples and optimized code remain.
+Preservation covers 80323 baseline files/modes, 292 unchanged baseline
+Haskell files and 207 package files. New H10 Haskell archive copies must
+match baseline bytes. Only the Audit import and additive doc prefixes may
+change old files. FINDINGS keeps its Haskell repair index FIRST. Work continues.
+
+## Stable same-symbol pair memo
+
+Updated: 2026-10-22 02:08 CEST. Proof checkpoint: `de1bd315e9`.
+Start: `3c20d92660`. Imported main remains `794903b3f`.
+Read `lean/notes-current-same-symbol-edge-stable-memo.md`.
+
+SourceCurrentSameSymbolEdgeStable.completed_preserves is completed-past
+preservation. It consumes an incoming Stable packet and the SAME observed
+.call pair [] done equation. Operand residency and actual native growth,
+result residency and canonical contextual EdgeLaw remain explicit inputs.
+It derives final Stable, exact key links, captured operand residency,
+all-returned cells, canonical presence, table extension and Returned.
+It produces neither execution nor a result law, admission or WordRanges.
+H8 supplies the native facts on both-miss calls. Hit-law identification
+and actual stable-packet rebasing remain separate obligations.
+
+EdgeLaw keeps the fixed view, model, ranks and holds. The independent
+EdgeMeaning contract is not assigned a formal implication ordering here.
+H6 constructed_node_calls remains the strongest combined semantic result.
+Full public-pass behavior, convergence, practical host bounds, external
+solver composition and Haskell refinement remain open.
+
+All old proofs, drafts, counterexamples and optimized code remain.
+Preservation covers 78951 baseline files/modes, 292 Haskell and 207 package
+files. Only the Audit import and additive doc prefixes may change old
+files. FINDINGS keeps the existing Haskell repair index FIRST. Work continues.
+
+## Same-symbol edge forward completion
+
+Updated: 2026-10-22 00:57 CEST. Proof checkpoint: `c041d27688`.
+Start: `20f4181948`. Imported main remains `794903b3f`.
+Read `lean/notes-current-same-symbol-edge-forward-completion.md`.
+
+SourceCurrentSameSymbolEdgeForwardCompletion.both_miss_complete derives
+native and wrapper completion for two absent ordered pair keys.
+It uses an explicit genuine current packet. This includes semantic-
+interpreter Completes and WordRanges. It assumes neither native nor
+wrapper success. The pair memo remains separate from native memo tables.
+One Receipt retains the SAME result and full checked before/after state.
+The original captured pair returns that result. A strict reversal also
+returns it in a distinct reversed cell. Earlier returned cells remain.
+
+The strongest combined semantic theorem remains constructed_node_calls.
+This edge theorem does not add unconditional Scoped, Covered or Idle.
+Warm hits, all-pair admission, sequence capacity, the complete public
+withoutRedundantEdges pass and convergence remain separate obligations.
+Practical host width, solver composition and Haskell refinement remain open.
+
+All old proofs, counterexamples, marked drafts and optimized code remain.
+All 292 Haskell and 207 active package files remain unchanged.
+The only old Lean edit is one Audit import. FINDINGS retains the external
+Haskell repair index FIRST. Work continues.
+
+## Same-symbol comparison control
+
+Updated: 2026-10-22 00:21 CEST. Proof checkpoint: `a1bc2fada4`.
+Start: `e03b78047a`. Imported main remains `794903b3f`.
+Read `lean/notes-current-same-symbol-edge-control.md`.
+
+SourceCurrentSameSymbolEdgeControl.miss_readback proves the provenance of
+an observed successful comparison when BOTH ordered pair keys were absent.
+Its state retains the complete checked native state and a separate typed
+pair memo. It publishes the original pair before demand and operand order.
+A reversed call publishes a second pair and retains the original handle.
+Explicit return steps finish the inner cell and then the original cell.
+
+The theorem returns an actual direct native edgeBody trace at emptyDomain
+from the SAME before.checked to after.checked. The original captured cell
+contains the result. A strict reversal also has a distinct reversed cell
+with that same result. All earlier returned cells remain. Unrelated memo
+entries and the native tables may already be populated.
+Premises are structural memo validity, both missing keys and observed
+completion. No semantic meet, Room or future-success premise is added.
+This theorem does not produce completion or a warm-hit historical law.
+
+The module has 334 lines and one public theorem. Strict3 passes at default
+declaration limits with linter.all and a literal empty log. Sole FULL1 has
+449 logical TYPE lines, 448 LF characters and no final LF. Its checked and
+printed TYPE bytes match: 34826 bytes and 34814 Unicode characters.
+All eight private helpers and four private markers are absent from TYPE.
+Actual axioms are the standard three. FULL1 retains 6247397 raw bytes.
+Root and independent review covered the complete TYPE. The 6177481-byte
+body is retained and checked programmatically; no whole manual read is claimed.
+Audit passes: 3624 jobs /75337 theorem dependencies.
+
+Five actual Lean/Lake commands remain: strict1 failed with six errors and
+two warnings; strict2 exited zero with one deprecation warning; strict3
+is clean; FULL1 and Audit1 pass. Audit only repeats the old inputs warning.
+The six proof repairs and one deprecated-lemma replacement remain as exact
+deltas. Earlier drafts, the inequality correction and added documentation
+remain. The stopped first FULL materializer is metadata, not a FULL run.
+Root corrected its premature empty-log commentary about strict2.
+
+The strongest combined semantic theorem remains constructed_node_calls:
+any chosen finite number of actual modeled partial reductions from a
+constructed covered input, with successful continuous state and exact
+finite-term language under the formalized guard semantics.
+The complete withoutRedundantEdges pass is not included.
+
+The next direct-edge semantic inventory and its independent audit are
+source-only. Existing receipts retain the result and complete checked
+after-state. Resident-edge growth and empty_domain derive readiness for
+the next original cluster pair. Current admission, completion certificates,
+sequence fuel/width/WordRanges and separate pair-memo hit history remain.
+The actual ruleOut scan, cluster reconstruction, recursive Mu mapping,
+whole public pass, convergence, practical fixed width, external solver
+composition and Haskell refinement remain open.
+
+All old proofs, counterexamples, marked drafts and optimized code remain.
+The only old Lean edit is one Audit import. All 268 Haskell files and 207
+active package files remain unchanged. No Haskell repair or runtime change
+is claimed. FINDINGS retains the external Haskell repair index FIRST.
+Work continues.
+
+## Finite calls from a constructed source
+
+Updated: 2026-10-21 23:25 CEST. Proof checkpoint: `15da5fe564`.
+Start: `93f3d0ad7a`. Imported main remains `794903b3f`.
+Read `lean/notes-current-cold-finite-warm-calls.md`.
+
+SourceCurrentColdFiniteWarmCalls.constructed_node_calls now starts from
+a genuine covered source expression, its actual allocation history and a
+valid initial cache. It constructs the heap ONCE. It chooses one finite-N
+mathematical width and ten common fuel arguments BEFORE the fresh caller.
+It invokes the checked finite-call producer once. Zero rounds are included.
+
+The theorem returns the literal SAME actual caller trace and final heap
+availability. Every round uses the previous full returned caller, with
+the SAME empty inherited value from the final source interner. Its final
+finite-tree language is equivalent to the original constructed value for
+every ambient environment and finite term. Empty inherited constraints discharge Sat.
+The result has no initial caller-packet, future Room or success premise.
+It does not reset or widen an existing caller.
+Each trace point retains its actual inventory and global memos under the corresponding stage seed.
+No C monotonicity across seeds or
+Room for the common-outer-fuel schedule is assumed.
+
+This is the strongest combined COLD finite-N semantic theorem. Its source
+has 157 lines and one public theorem. Selected ordinary strict2 passes at
+default declaration limits with an empty raw log. Accepted FULL2 has 268
+logical public TYPE lines: 267 LF characters and no final newline, 21099
+Unicode characters and 21121 bytes. Complete check/print TYPE bytes match.
+The TYPE has two public FormulaExecutable.formulaDecidableEq occurrences.
+All four private/dagger markers are absent. Actual axioms are the standard
+three. FULL2 raw has 731663 bytes; SHA256
+d84c0cdcd3e399a5f75fea97834a3d651ac25003dce70615e5cc3781edcbce9d.
+Audit passes: 3623 jobs /75263 theorem dependencies.
+
+Five actual ROOT Lean/Lake commands are retained: strict1, FULL1, strict2,
+FULL2 and Audit1. All exit zero. FULL1 was PUBLIC-TYPE REJECTED despite its
+kernel success: two private Formula equality instances remained in its
+TYPE, and reader1 metadata failed. Four explicit public instance arguments
+fix two header and two matching proof-goal occurrences. The old 153-line
+source and 30-line header, corrected 157-line source and 32-line header,
+both FULL variants and failed reader output remain. Each source variant
+has one FULL. Copies and metadata add no proof jobs. Only the old Audit
+inputs warning remains.
+
+The next withoutRedundantEdges inventory is SOURCE-ONLY. It has no public
+Lean header or implementation. Root has read its note, contract outline
+and some source cuts. Detailed range review and independent review remain
+pending. Finite partial nodeCall rounds do not include that public pass.
+Practical fixed-width feasibility, public-pass composition, convergence,
+solver-contract/exported-table composition and Haskell refinement remain
+open. Mathematical reservation bounds do not prove those results.
+
+All old proofs, counterexamples, marked drafts and optimized core remain.
+The only old Lean edit is one Audit import. All 268 Haskell files and 207
+active package files remain unchanged. No Haskell fix or runtime change
+is claimed. FINDINGS keeps the external Haskell repair index FIRST.
+Work continues.
+
+## Finite calls through a populated caller
+
+Updated: 2026-10-21 22:41 CEST. Proof checkpoint: `a33536a752`.
+Start: `8adf2d4aca`. Imported main remains `794903b3f`.
+Read `lean/notes-current-finite-warm-calls.md`.
+
+SourceCurrentFiniteWarmCalls.node_calls now proves an actual trace of any
+finite number N of modeled nodeCall rounds. One mathematical width from
+stage N and ten common fuel arguments are chosen before the first call.
+Each next caller is the previous actual full return. The SAME arbitrary
+ready inherited Value and allocation identity remain fixed in every round.
+
+The initial genuine Context, resources, stores, closed value, Origins,
+NodeStored and both idle conditions are explicit premises. There is no
+future Room or success premise, caller reset or width change. Fits.stored
+and actual availability bound mass. count_le_mass bounds the actual
+inherited quotient count. The finite forecast supplies joined case Room
+and common outer and nine lower-fuel ceilings at each exact stage seed.
+
+Adequacy gives success at each base W and the SAME result and full after
+at common outer fuel. WarmNextPacket uses only that base-W equation.
+Its actual Post supplies the next inventory and global memos. A second
+forecast use at i+1 promotes scheduled Fits and the guard carrier to the
+exact next seed. No C monotonicity across seeds or Room for the common-F
+schedule is used. One prefix induction retains the actual entry packet.
+
+The final value is Available in the final caller's heap. Its cumulative
+NodeLaw is relative to the INITIAL value and the SAME arbitrary inherited
+Value. It gives unconditional language narrowing. Language equivalence
+holds ONLY when the term satisfies that inherited payload. It is not an
+unconditional equivalence theorem for arbitrary inherited values.
+
+The new module has 236 lines and one public theorem. Selected ordinary
+strict3 passes at default declaration limits with an empty raw log.
+The sole FULL passes. Root and independent review read all 365 logical
+public TYPE lines: 364 LF characters and no final newline, 31480 Unicode
+characters and 31520 bytes. Complete check/print TYPEs are byte-identical.
+All four private/dagger markers and Entry/advance_entry are absent from
+those TYPEs. Actual axioms are the standard three.
+FULL raw: 2183150 bytes; SHA256
+d436796fb8f90561c1dc0c97a4c8944e24fd2ae84bd7d38027df551f6ac01393.
+Audit passes: 3622 jobs /75262 theorem dependencies.
+
+Five actual ROOT Lean/Lake commands are retained. Strict1 failed with a
+type error and 46 warnings at the original source. Four private lines
+fixed Entry's bits+2 type and ite lemma names. Strict2 exited zero with
+15 unused-public-binder warnings. Alpha-only underscore names removed
+those warnings for strict3. The old 35-line f064b85a header and corrected
+35-line fa50a08f header remain. Sole FULL and Audit pass. Only the old
+Audit inputs warning remains. Copies and metadata add no proof jobs.
+
+The next cold finite source-construction wrapper is a reviewed SOURCE-ONLY
+plan. It is not implemented. It must choose the final width before the
+fresh caller and use one eventual finite producer invocation. The strongest
+combined COLD semantic theorem still covers one constructed node call.
+Practical fixed-width feasibility, the public withoutRedundantEdges pass,
+convergence, solver-contract/exported-table composition and Haskell
+refinement remain open. This trace theorem does not prove those results.
+
+All old proofs, counterexamples, marked drafts and optimized core remain.
+The only old Lean edit is one Audit import. All 268 Haskell files and 207
+active package files remain unchanged. No Haskell fix or runtime result
+is claimed. FINDINGS keeps the external Haskell repair index FIRST.
+Work continues.
+
+## Warm returned-entry packet
+
+Updated: 2026-10-21 21:46 CEST. Proof checkpoint: `00c626f3db`.
+Start: `0e0d372f5f`. Imported main remains `794903b3f`.
+Read `lean/notes-current-warm-next-packet.md`.
+
+SourceCurrentWarmNextPacket.node_call now assembles the entry facts after
+one observed completed node call. It retains the SAME full after caller,
+returned inventory and global memos. Its actual Post supplies the returned
+Context. Frame, Fits and the guard carrier use that call's own oldSchedule
+profile and alphabet. The original inherited equality value remains ready.
+
+The packet includes all five native store laws, resource writer Origins,
+NodeStored, result closure and BOTH node and edge idle conditions.
+InitialActual supplies one actual NodeCall graph for the same observed
+return. NoNewActive maps output evaluating cells back to forbidden input
+cells. The proof composes existing completed-return laws without a new
+induction, table reset, width change or private helper.
+
+This is a completed-past result. Its premises include the actual successful
+equation and the genuine initial Context, resources, stores, closed input
+and both idles. It proves no next-call success or capacity. Use a base-W
+return from Adequacy before applying this packet; stability already fixes
+the same result and full caller at larger fuel. No larger-fuel Room is
+required for that use. The actual finite-N consumer remains SOURCE-ONLY
+planning work. Its stage-index invariant and common-fuel composition are
+not supplied by this packet theorem.
+
+The new source has 117 lines and one public theorem. Ordinary strict
+checking passes with default declaration limits and an empty raw log.
+One sole FULL passes. Root and independent review read all 518 logical
+public TYPE lines (517 newline characters, final line without a newline).
+Complete check/print TYPEs are byte-identical. No private or dagger name
+occurs in those TYPEs. Actual axioms are the standard three.
+FULL raw: 717427 bytes; SHA256
+68cd5d5bf82cfb8fa7d0d1877c5ec78bcd9fff18052735354ba6a61ec6cbfc48.
+Audit passes: 3621 jobs /75253 theorem dependencies.
+Three actual Lean/Lake commands pass. Only the old Audit warning remains.
+Source review, metadata review and copied evidence add no proof jobs.
+
+The strongest combined cold semantic theorem remains unchanged: one
+source-built cold node call succeeds at sufficient mathematical width and
+preserves exact finite-term language relative to the guard evaluator.
+Practical fixed-width bounds, the actual finite-N consumer, full public
+pass composition and convergence, solver-contract/exported-table
+composition, and Haskell refinement remain open. The new packet alone
+does not prove any of those results.
+
+All earlier proofs, counterexamples and marked drafts remain. No old proof
+source is rewritten. Audit adds only the WarmNextPacket import. No Haskell
+source, package, repair or runtime result changes. FINDINGS keeps the
+external Haskell repair index FIRST. Work continues.
+
+## Finite-round numeric reservations
+
+Updated: 2026-10-21 21:17 CEST. Proof checkpoint: `93224c12e0`.
+Start: `99f2b2f9b6`. Imported main remains `794903b3f`.
+Read `lean/notes-current-finite-round-forecast.md`.
+
+SourceCurrentPositiveQuotientCount.count_le_mass proves the unconditional
+count bound for every value and every inherited constraint list.
+Its candidate-path bound holds for every fuel. Mapping, filtering and
+duplicate removal cannot increase the list length. The 62-line addition
+preserves every byte of the original 195-line module and its public API.
+
+SourceCurrentFiniteRoundForecast supplies stage, fuelBounds and stage_bounds.
+For any finite round count, each stage joins every count/mass grid case at
+that exact stage entry. Each case retains BOTH the C output and its
+own-work old schedule, including both profiles and both guard alphabets.
+The final profile supplies one mathematical width for all selected cases.
+Finite maxima bound outer work and nodeNeed at the same stage entries.
+The theorem covers stage retention, alphabet inclusion, Room and both fuels.
+It includes zero rounds and endpoint ranks. The new module has 160 lines.
+
+No C monotonicity across seeds is assumed. Keep every exact stage seed.
+Do not recompute an earlier C case at the final seed. A future consumer
+must obtain a completed call at its own base W, then use Adequacy stability
+to identify the SAME result and full after state at a common larger fuel.
+This avoids a Room premise for the schedule at that larger common fuel.
+
+Selected strict checks and one sole FULL per module pass. Root and
+independent review read all 145 public TYPE lines across four declarations.
+Their complete check/print types agree. No private helper or dagger name
+occurs in those TYPEs. Actual axioms are the standard three in each case.
+Declaration limits remain unchanged. Audit adds only the new module import.
+Audit passes: 3620 jobs /75252 theorem dependencies.
+Eight actual Lean/Lake commands include three failed strict checks.
+Selected strict logs are empty. Only the old Audit warning remains.
+All failed sources, raw logs, exact repairs and metadata failures remain.
+The finite reader needs exact directive-line counts for stage/stage_bounds.
+That metadata repair causes no FULL repeat. Copies add no proof jobs.
+
+These are pure mathematical reservations. The completed-return packet
+assembler and the finite-N actual execution consumer remain unproved.
+The saved source-only packet plan can use InitialActual once, its actual
+Post/context and NodeCall graph, then existing stores, closure, Origins,
+Ready growth and NoNewActive. It needs no extra RankResources premise.
+It must retain the SAME populated caller, inventory and global memos.
+The reviewed plan and exact proposed header remain restart evidence.
+
+The strongest combined execution theorem remains the checked cold theorem:
+one source-built cold node call succeeds at sufficient mathematical width
+and preserves exact finite-term language relative to the guard evaluator.
+Practical fixed widths, full repeated-pass composition and convergence,
+solver-contract and exported-table composition, and Haskell refinement
+remain open. Counts do not measure whole-library completion.
+
+All earlier proofs, counterexamples, marked drafts and optimized interned
+sources remain. Older constructor and equality work remains secondary.
+No Haskell source, package, repair or runtime result changes.
+FINDINGS keeps the external Haskell repair index FIRST. Work continues.
+
+## Completed reduction return invariants
+
+Updated: 2026-10-21 20:27 CEST. Proof checkpoint: `b4cc7978bc`.
+Start: `571fd630a3`. Imported main remains `794903b3f`.
+Read `lean/notes-current-warm-return.md`.
+
+SourceCurrentOuterClosedInputs.node_call proves that the SAME completed
+nodeCall retains NodeStored and returns a closed result from a closed input.
+It uses the original entry resources and actual done equation.
+One private stronger reached lemma exposes the existing complete induction.
+The original public reached signature stays byte-for-byte unchanged.
+The local complete proof and original cut induction remain unchanged.
+
+SourceCurrentOuterResourceWriters.node_call retains Origins in the SAME
+final edgeResults table. It preserves each stored edge's correlated
+historical Parent writer and resources. Its proof projects all_origins.
+It adds no induction, import or private helper.
+Both endpoints use past completion. Neither assumes a future successful
+call, future Room, callback law or enclosing ancestor.
+
+The selected sources have 479 and 489 lines. Net additions are 59 and 24.
+Both original sources, exact headers, failed input and repair remain.
+The closure wrapper needed two explicit Reached.refl phase arguments.
+Selected strict checks are clean. One sole FULL per module verifies all
+three public TYPEs, check/print identity and the actual standard axioms.
+Root and independent review read every printed TYPE line.
+Private helper names and dagger spellings are absent from these TYPEs.
+Proof declaration limits and the existing Audit imports stay unchanged.
+Audit passes: 3619 jobs /75221 theorem dependencies.
+Six actual Lean/Lake commands include one failed closure check.
+Only the old Audit warning remains. Copies add no proof jobs.
+
+Existing public results already retain both idle result tables, Context,
+Frame, Fits, carrier and the five native-store laws.
+The two missing completed-return projections are now public.
+The complete next-entry packet still needs assembly.
+The next resource task is finite repeated calls through the SAME populated
+caller and global stores at one width chosen before initialization.
+
+The count/mass assessment is source-only. Its proposed pure count bound
+would cover each available entry by a finite count/mass grid.
+A finite join of C outputs and old schedules at each precomputed stage
+could reserve several calls without C monotonicity or caller widening.
+The count bound and finite-call reservation are not proved here.
+Keep every stage's exact seed. Do not recompute C at the final seed.
+
+The strongest combined execution result remains the checked cold theorem:
+one source-built cold node call succeeds at sufficient mathematical width
+and preserves exact finite-term language relative to the guard evaluator.
+Practical fixed widths, repeated-pass composition and convergence,
+solver-contract and exported-table composition, and concrete Haskell
+refinement remain open. Counts do not measure whole-library completion.
+
+All earlier proofs, counterexamples, marked drafts and optimized interned
+sources remain. Older constructor and equality work remains secondary.
+No Haskell source, package, repair or runtime result changes.
+FINDINGS keeps the external Haskell repair index FIRST.
+Work continues at the user's request.
+
+## Cold node termination and exact stored language
+
+Updated: 2026-10-21 19:59 CEST. Proof checkpoint: `92992e96a2`.
+Start: `5f83ae44e6`. Imported main remains `794903b3f`.
+Read `lean/notes-current-cold-rank-semantics.md`.
+
+ColdRankCapacity.constructed_initial_node_call constructs a genuine cold
+initial packet at a sufficient mathematical width. Its inputs are a valid
+initial constraint cache, actual guard-allocation History, literal source
+syntax whose guards occur in that History, formula operations, a solver,
+and a budget. It assumes no Room, Fits, Context or successful outer call.
+
+The actual source build supplies one value and heap. Their counters,
+literal guard alphabet and stored mass supply the initial seed. The
+unchanged finite envelope C supplies W and an output profile. A join
+covers that profile and the old schedule at W. roomBits supplies sufficient
+mathematical width before the fresh cold caller is constructed. Actual
+initialization supplies the remaining initial facts. phaseNeed supplies
+all nine lower fuels. The initial constraint interner is retained.
+
+For every outer fuel F at least W, the literal nodeCall returns the SAME
+result and complete final caller. The initial state and nine lower fuels
+stay fixed. Successful execution is a conclusion, not a premise.
+
+ColdRankSemantic.constructed_initial_node_call adds availability of that
+SAME result in its actual final heap and exact independent stored-value
+language equivalence for every ambient and finite ordered term. It uses
+the producer once. Its success at W supplies the existing semantic theorem.
+The actual inherited equality payload is empty, so its satisfaction
+condition holds. No second successful call or source build is assumed.
+The language uses SourceEqualityPCSGuard.holds formulas solver. It remains
+relative to the supplied guard evaluator.
+
+The selected sources have 139 and 120 lines, each below its 250-line stop.
+Their original 25- and 30-line headers remain retained. Each header has
+one explicit alpha correction from built to _built. Types, order, lets
+and conclusions are unchanged. All failed and warned inputs, raw logs,
+namespace placement and two SAME-heap goal corrections remain retained.
+No linter exception or declaration proof-limit increase is used.
+
+Author/root strict checks, one sole complete FULL per module, independent
+review and Audit pass: 3619 jobs /75218 dependencies.
+There are 10 actual Lean/Lake commands, including 1 failure.
+One earlier producer check passed with a warning. Selected strict logs
+are empty. Whole checked/printed type identity, all eight printer
+settings, public type scope and actual standard axioms pass. Only the
+old Audit warning remains. No runtime or reviewer proof job ran.
+Counts do not measure completion of the whole-library goal.
+
+The semantic TYPE contains one existing imported private Formula equality
+instance. The original reader missed its dagger spelling. An additive
+scope erratum records that instance and corrects the broad metadata field.
+No new private helper, premise or axiom is introduced. The original
+reader, its actual output and the complete FULL remain retained.
+
+The envelope remains noncomputable in Lean. These theorems give finite
+mathematical bounds, not an executable fuel calculator or practical host
+width. The coarse-capacity obstruction remains a source-only argument.
+No populated warm caller is widened. Practical fixed-width feasibility,
+warm-state capacity, repeated-pass convergence, declarative solver-contract
+evidence, exported-table composition and concrete Haskell refinement
+remain separate work. One whole-library theorem is not established.
+
+The next target is bounded public reduction with the SAME warm caches.
+The generator uses at most 30 rounds. Specftacular uses 100 rounds.
+Unbounded TermSearch convergence is a separate obligation. Read the
+source-only next-gap-assessment/note.md in this checkpoint. It identifies
+actual memo/thunk correspondence and the next warm entry and reservation
+producer. It proves no new repeated-pass theorem. Do not reset caches or
+assume a future successful call or capacity packet.
+
+All earlier proofs, counterexamples, marked drafts and optimized interned
+sources remain. Older constructor and equality targets remain secondary
+targets. All Haskell and package files remain unchanged. No new Haskell
+defect or repair is claimed. FINDINGS keeps its external Haskell repair
+index FIRST. Work continues at the user's request.
+
+## Conditional outer fuel adequacy
+
+Updated: 2026-10-21 19:20 CEST. Proof checkpoint: `d226271b11`.
+Start: `f680a52e95`. Imported main remains `794903b3f`.
+Read `lean/notes-current-outer-rank-adequacy.md`.
+
+OuterRankAdequacy.initial_node_call proves successful return of the SAME
+modeled outer node call from its full initial packet. It computes the
+existing finite envelope C and its outer work bound W before it reserves
+the old schedule at W. One joint Room premise covers both reservations.
+All nine lower-fuel bounds remain explicit. The root supplies Context,
+Frame, Fits, guard carrier, Inputs, union normality, native support, causal
+history, Merge stores and support, Parent origins, stored and closed
+inputs, and idle initial node and edge tables. These are initial facts.
+The theorem does not assume successful return or a future callback.
+
+For every outer fuel at least W, the literal nodeCall returns the SAME
+result and complete final caller. Lower fuels and the initial state stay
+fixed. The proof classifies the original root once. It carries each
+actual failure back to that root. A strict-rank induction then excludes
+exhaustion. Child fuel retains the exact +3+rowIndex+slotIndex offset.
+Positive walk fuel is proved before child reachability or strict rank.
+The conditional resource theorem is used only after successful child
+return. It bounds the actual checked state for the next slot or row.
+
+The selected source has 517 lines below the 650-total-line stop.
+The 36-line public header retains every planned assumption, type, order,
+let, and conclusion. An additive naming correction prefixes exactly 25
+unused premise labels with underscores. The entire proof body is unchanged.
+The original header, complete failed inputs, raw logs, and every repair
+remain archived. No linter exception or proof-limit increase is used.
+
+Author/root strict checks, the sole complete FULL, independent review,
+and Audit pass: 3617 jobs /75216 dependencies.
+There are 11 actual Lean/Lake commands, including 6 failures.
+The author checks include one warned success before the naming correction
+and one clean success after it. Selected strict logs are empty. Whole
+checked/printed type identity, all eight printer settings, public type
+scope, and actual standard axioms pass. Only the old Audit warning remains.
+No runtime, canonical, constructed, or reviewer proof job ran.
+Counts do not measure completion of the whole-library goal.
+
+Capacity remains a substantive premise. The frozen cold-capacity source
+assessment proposes construction of a genuine initial packet at a
+computed width. It is not a proof or a constructed example. Warm-state
+and cache widening remain open. A separate source-only argument finds
+C(0,1).nodes at least 183, which requires bits at least 33672 for Room.
+This is a limit of the coarse sufficient forecast. It is not a checked
+Lean theorem, actual allocation count, Haskell-width claim, runtime
+defect, or termination counterexample. Practical fixed-width feasibility
+and bounds for every intermediate Parent peak remain open.
+
+A complete 137-line cold-entry candidate is retained in this checkpoint's
+future-cold-capacity-draft directory. Whole source and namespace-placement
+review pass. The exact 25-line proposed statement remains unchanged.
+No compiler or runtime job has checked that candidate. It must pass its
+own ordinary check before a separate FULL or publication. It constructs
+a fresh cold caller. It does not transport a populated warm caller.
+
+The envelope remains noncomputable in Lean. This theorem supplies a finite
+mathematical outer bound under its stated packet. It does not supply an
+executable fuel calculator or unrestricted whole-library termination.
+Finite renewals, final retention, repeated-pass convergence, broader
+resources, and concrete Haskell refinement remain open.
+The broadest semantic result remains exact finite-term language
+preservation for a supported successful traversal with empty inherited
+constraints and explicit semantic/resource assumptions. General inherited
+constraints give narrowing, with exactness under inherited satisfaction.
+This language uses SourceEqualityPCSGuard.holds formulas solver.
+Declarative solver-contract evidence and exact finite-table readback
+remain separate obligations. A source-only integration assessment in
+future-cold-semantics identifies ConstructedOuterInitial.node_call as the
+same-result semantic consumer at W. It proves no new corollary.
+One whole-library theorem combining these results is not established.
+
+All earlier proofs, counterexamples, marked drafts, and optimized interned
+sources remain. Older constructor and equality targets remain secondary
+targets. All Haskell and package files remain unchanged. No new Haskell
+defect or repair is claimed. FINDINGS keeps its external Haskell repair
+index FIRST. Work continues at the user's request.
+
+## Conditional resources for the finite rank envelope
+
+Updated: 2026-10-21 18:03 CEST. Proof checkpoint: `e3a5c5b13e`.
+Start: `14330e4620`. Imported main remains `794903b3f`.
+Read `lean/notes-current-outer-rank-resources.md`.
+
+OuterRankEnvelopeResources.node_call proves that a successful node call
+returns a checked state within the SAME finite envelope's output profile
+and guard alphabet. The literal call must be reached from the original
+global root. That root supplies its stated Context, Frame, Fits, carrier,
+Inputs, old ScheduleF Room, union normality, native support, causal history,
+Merge stores and support, and Parent origins. The local entry supplies
+Fits and carrier for its exact seed, plus Room for the envelope output.
+Both resource predicates concern the checked component of the SAME
+actual returned caller.
+It assumes successful return. It does not establish successful return.
+
+The 37-line public header keeps every original premise. The proof uses
+induction on actual node fuel and chronological row and child-list
+inductions. The selected Parent receipt bounds its returned child list
+by its fixed returned profile mass. Finite retention carries each child
+image through the remaining slots and rows. Raw constructors consume
+states padded to the complete slot or row profile before construction.
+The public envelope and its numeric stage theorem remain unchanged.
+The proof adds no future resource callback or replacement envelope.
+Original global ScheduleF resources stay separate from local C resources.
+
+The selected source has 481 lines below the 500-total-line stop.
+Author/root strict checks, the sole complete FULL, independent review,
+and Audit pass: 3616 jobs /75178 dependencies.
+There are 10 actual Lean/Lake commands, including 6 failures.
+Every actual input, complete raw log, and exact repair remains archived.
+Whole checked/printed type identity, all eight printer settings, public
+type scope, and actual axioms pass. Default proof limits stay unchanged.
+Only the old Audit warning remains. No runtime, canonical, constructed,
+infrastructure, or reviewer proof job ran. Counts are not completion.
+
+The largest execution gap is adequate OUTER fuel for the SAME actual run.
+The strongest outer execution theorem remains DoneOrExhausted under its
+FULL initial packet and nine lower-fuel bounds. Its run erases phase
+output to Unit. This conditional resource theorem does not remove the
+exhausted alternative. General envelope bounds at every execution prefix
+and every intermediate Parent peak are not established here.
+
+A source-only adequacy plan computes C and W first, then reserves the old
+Schedule at W. It classifies the original root once and lifts any reached
+failure to that root. It needs a strict-rank induction and the exact child
+offset +3+rowIndex+slotIndex. It must prove positive walk fuel before it
+uses child reachability or rank. It can use the conditional resource
+theorem only after it proves the selected child returns successfully.
+This plan and any later header remain unproved source assessments.
+
+A separate manual source argument finds a fixed-width limitation:
+C at numeric rank (0,1) has output nodes at least 183 for every seed.
+Its Room premise therefore requires bits at least 33672. The raw rebuild
+bound h(b)=b*b+b+1 gives the lower-bound sequence 1, 3, 13, 183.
+The literal empty value has this rank, but its actual worker skips the
+virtual work reserved by C. This is a limit of the coarse forecast.
+It is not a checked Lean theorem, actual allocation count, Haskell fault,
+machine-word-size claim, or termination counterexample. See the frozen
+`capacity-assessment` note and its source index in this checkpoint.
+Joint initial capacity, useful fixed-width feasibility, and state/cache
+widening remain open. Larger mathematical widths are not ruled out.
+
+Finite renewals, final retention, general successful completion,
+convergence, broader resources and Haskell refinement remain open.
+Whole-library termination is not proved. The broadest semantic result
+remains exact finite-term language preservation for a supported
+successful traversal with empty inherited constraints. General inherited
+constraints give narrowing, with exactness under inherited satisfaction.
+
+All earlier proofs, failures and counterexamples remain. All Haskell and
+package files remain unchanged. No new Haskell defect or repair is claimed.
+FINDINGS keeps its external Haskell repair index FIRST.
+Work continues at the user's request.
+
+## Current numeric bounds for every finite envelope stage
+
+Updated: 2026-10-21 16:37 CEST. Proof checkpoint: `cbd5abfabd`.
+Start: `696159839e`. Imported main remains `794903b3f`.
+Read `lean/notes-current-outer-rank-stages.md`.
+
+OuterRankEnvelopeStages.stage_bounds proves the original all-stage numeric
+statement for the SAME checked finite envelope. It adds no premise.
+The 34-line public header keeps each literal row and slot prefix. It
+bounds the selected Parent fuel, Parent seed, every slot prefix, and every
+allowed child envelope by the total result. Bounds include work, lower
+fuel, all profile fields, and the raw guard alphabet.
+The child work bound keeps the exact +3+rowIndex+slotIndex offset.
+The complete slot prefix is included. Child selection requires a strict
+slot bound. The row's post-Parent mass fixes the slot limit throughout.
+
+The separate module imports the original concrete envelope. That original
+definition and its entry-retention theorem stay unchanged. The new proof
+unfolds one public envelope layer and proves finite fold bounds. It adds
+no replacement envelope, imported private-name call, recursive output law,
+seed-monotonicity premise, physical-state oracle, or completion callback.
+The calculation remains noncomputable in Lean. No runtime evaluation ran.
+
+The selected source has 242 lines below the 250-total-line stop.
+Author and root strict checks, sole complete FULL, independent review,
+and Audit pass: 3615 jobs /75149 dependencies.
+There are 8 actual Lean/Lake commands and 4 failed commands.
+All actual inputs, complete raw logs, and exact repairs remain in the
+checkpoint. Whole checked/printed type identity, all eight printer
+settings, no private names in the public type, and actual axioms pass.
+Only the old Audit warning remains. No canonical, infrastructure,
+constructed, runtime, or reviewer proof job ran. Counts are not completion.
+
+The first four strict checks failed. Their exact inputs and full raw
+logs remain. Repairs use core conversion syntax, one explicit fold
+successor equation, correct let introductions, a general local eta proof,
+and an arbitrary-accumulator Parent fuel lemma. The next repair gives
+the attachment map its exact function and factors the finite proof into
+a private lemma and a short public proof. Its 47 moved proof lines keep
+exact bytes. Final type annotations align the same arithmetic terms.
+Per-declaration proof limits stay unchanged. The original 200-line draft
+and uncompiled 212-line separator draft remain. The 256-line diagnostic
+printer contains the unchanged 242-line module plus 14 printing commands.
+
+The largest gap remains sufficient OUTER fuel with noncircular INITIAL
+capacity for the SAME actual run. Numeric stage coverage is now checked.
+Physical correspondence and fuel adequacy are not. The strongest outer
+execution result remains DoneOrExhausted under its FULL stated initial
+packet and nine lower-fuel bounds. The actual run erases phase output
+to Unit. This numeric result does not strengthen that execution claim yet.
+
+The source-only physical inventory identifies the next resource bridge:
+actual row-entry Fits and carrier for the EXACT envelope row-prefix seed.
+The existing Parent receipt then bounds every unchanged child input and
+the child-list width by the fixed post-Parent mass. Literal slot retention
+can carry that mass bound to the current numeric seed. A fresh physical
+mass invariant at every slot is not needed for membership alone.
+Completed-child and completed-row state resources still need proofs.
+
+Keep original ScheduleF Prefix resources separate from envelope resources.
+The old global prefix can supply Context, support and strict child rank
+under its genuine root Room. It does not identify its seed with the new
+numeric accumulator. Do not assume whole-schedule domination, child Prefix
+Room, a future success, or a per-future reservation callback.
+Use genuine cache readiness and coherent heap laws to identify a captured
+owner with the selected request; node-key equality alone is insufficient.
+
+Joint initial Room, actual intermediate Parent peaks, all actual nested
+lower fuels, fixed-width feasibility and state widening remain open.
+Finite renewals, final retention, successful completion, convergence,
+broader resources and Haskell refinement also remain open. Whole-library
+termination is not proved. The broadest semantic result remains exact
+finite-term language preservation for a supported successful traversal
+with empty inherited constraints. General inherited constraints give
+narrowing, with exactness under inherited satisfaction.
+
+All earlier proofs, failures and counterexamples remain. Haskell, packages,
+imported main, stashes and other worktrees stay unchanged. No new Haskell
+defect or repair. FINDINGS keeps its external repair index FIRST.
+Work continues at the user's request.
+
+## Current finite rank envelope and entry retention
+
+Updated: 2026-10-21 15:39 CEST. Proof checkpoint: `ccaa8719d3`.
+Start: `d44f7a36c0`. Imported main remains `794903b3f`.
+Read `lean/notes-current-outer-rank-envelope.md`.
+
+OuterRankEnvelope.envelope now defines a finite numeric prediction from
+budget, count, mass, raw guard alphabet and numeric profile. It returns
+work W, a lower-fuel maximum L, and an output alphabet/profile.
+It uses strict Lex(count,mass) recursion with the seed as a further input.
+Each slot evaluates every bounded smaller rank at THAT current seed.
+It joins candidate outputs, then passes the joined seed to the next slot.
+Each row starts with the existing Parent forecast and fixes its returned
+mass as the slot count. Original mass bounds the number of numeric rows.
+The row and final body use the existing raw-constructor forecast.
+The function is noncomputable in Lean. No runtime evaluation is claimed.
+
+OuterRankEnvelope.retains proves only mass+1 <= W and retention of the
+ENTRY profile and alphabet. It has no physical or completion premise.
+The concrete recurrence is internal; callers supply no recursive callback.
+The exact eight-line public type has one definition and one theorem.
+The selected source has 157 lines, below the 250-total-line stop.
+
+The original all-stage theorem remains UNPROVED. This first result does
+not prove child-work offsets, candidate-output coverage, intermediate
+Parent peaks, or the lower maximum at all numeric stages. It also does
+not prove correspondence with actual states or adequate outer fuel.
+The preserved 42-line original proposal and exact equations specify that
+next target. They are unelaborated source evidence, not a compiled API.
+The original 215-265 estimate did not support its claimed 250 upper target.
+The corrected two-head scope, original bytes and separate correction remain.
+
+Selected author strict4 and root strict have empty logs. The sole complete
+FULL covers BOTH declarations. Whole type identity, all eight settings,
+no private names in either public type, and actual per-head axioms pass.
+Audit passes: 3616 jobs /75112 dependencies.
+There are 7 actual Lean/Lake commands and 3 failed commands.
+The three failed strict checks and complete raw diagnostics remain.
+Strict1 exposed a decider, pair eta, and a normalization timeout. The next
+two checks retained the timeout. Strict4 names the ACTUAL Parent seed,
+keeps its defining equality and rewrites the real retention fact with it.
+This prevents deep forecast normalization. The strict proof budget did not
+increase. All actual selected checks have no new warning. The old Audit
+warning remains. No canonical, infrastructure, constructed, runtime or
+reviewer proof job ran. Counts are not completion.
+
+The strongest outer execution result remains DoneOrExhausted: the actual
+formalized outer run returns normally or fails only with outer-fuel
+exhaustion under its FULL stated initial packet and nine lower-fuel bounds.
+That run erases successful output to Unit. The new pure calculation does
+not strengthen this execution result yet.
+
+The largest execution gap remains sufficient OUTER fuel jointly with
+noncircular INITIAL capacity for the SAME run. A concrete numeric work
+value now exists. Its adequacy remains unproved. Next prove all numeric
+stage laws, then connect them to actual reached cuts under ONE original
+initial packet. Retain current mass bounds after earlier sibling growth.
+Cover all intermediate Parent profiles and all nested lower fuels.
+Prove root-schedule domination or reserve an initial finite join and prove
+its coverage. Do not assume future success or a per-future Room callback.
+A child Prefix restart still needs extra unproved child-schedule Room.
+Fixed-width feasibility and state widening remain separate open issues.
+Existing request-coherence laws can relate a selected request to its
+captured owner; key equality alone does not state full request equality.
+
+Finite renewals, final retention, successful completion, convergence,
+broader resources and Haskell refinement remain open. Whole-library
+termination is not proved. The broadest semantic result remains exact
+finite-term language preservation for a supported successful traversal
+with empty inherited constraints. General inherited constraints give
+narrowing, with exactness under inherited satisfaction.
+
+All earlier proofs, failures and counterexamples remain. Haskell, packages,
+imported main, stashes and other worktrees stay unchanged. No new Haskell
+defect or repair. FINDINGS keeps its external repair index FIRST.
+Work continues at the user's request.
+
+## Current formalized outer worker returns or exhausts outer fuel
+
+Updated: 2026-10-21 14:41 CEST. Proof checkpoint: `65fd1c3e0b`.
+Start: `7466f1c9d3`. Imported main remains `794903b3f`.
+Read `lean/notes-current-outer-done-or-exhausted.md`.
+
+OuterDoneOrExhausted.done_or_exhausted now proves that the actual formalized
+outer run either returns normally or reports outer-fuel exhaustion.
+It excludes every other modeled failure under its stated initial packet.
+Both alternatives retain the same chosen phase, nine lower-worker fuels,
+conjunction budget and actual returned Caller. ActiveAncestry.run erases
+only successful phase output. This theorem records the resulting Unit
+and state. It does not separately return that erased node or child list.
+
+The exact 34-line public type keeps genuine initial Context, Frame, Fits,
+annotation carrier, phase Inputs, chosen-fuel forecast Room, UnionNormal,
+native positive Support, causal History, both Merge laws, writer Origins,
+NodeStored, InputsClosed, initialNodeIdle and initial EdgeIdle. It also
+keeps all nine phaseNeed inequalities. These remain hypotheses. Empty
+outer tables are permitted but not required. Appropriate warm suspended
+and returned cells remain permitted. No future success or supplied cut
+is assumed, and no sufficient OUTER fuel is assumed or constructed.
+
+The 83-line proof makes one actual Outcome split. It calls the checked
+LocalFaults.failed_cases once. Existing Parent, edgeMemo, busy-node,
+reference and absent-node exclusions consume that SAME failed equation
+and Caller. Exhaustion remains as the only possible failed branch.
+No new induction, helper predicate or fault datatype is introduced.
+The complete source passed unchanged below the 150-total-line ceiling.
+
+Author strict1 and root strict logs are empty. The sole complete FULL,
+independent review and Audit pass: 3615 jobs /75096 dependencies.
+Four actual Lean/Lake commands all pass. No new warning or compiler repair.
+The old Audit warning remains. Whole checked/printed type identity,
+all eight printer settings and actual standard three axioms pass.
+No private names occur in the public type. No canonical, infrastructure,
+constructed, runtime or reviewer proof job ran. Counts are not completion.
+All earlier failed checks, counterexamples and sealed evidence remain.
+
+The largest execution gap is now SOME sufficient OUTER fuel together with
+noncircular INITIAL capacity for that SAME run. Chosen-fuel scheduling,
+classification and stability of an existing success do not supply it.
+The reviewed next survey finds existing one-Parent numeric producers
+sufficient for local growth bounds. A duplicate wrapper adds no result.
+It proposes a concrete rank envelope over Lex(count,mass), with the evolving
+guard alphabet and numeric profile as additional input. A count decrease
+can increase mass. Sequential siblings must carry the predicted growth.
+
+That envelope C is UNDEFINED and unproved. No fuel F is constructed by the
+survey, and no public adequacy header or implementation is proposed.
+Finite rank images, joined profiles and alphabets, retained intermediate
+Parent peaks, cumulative worker-fuel arithmetic and same-cut physical
+coverage still need proofs. Initial Room for the root schedule must also
+cover every controlled Parent reservation. Prove profile domination or
+check an initial finite join with C.output and prove its coverage.
+The lower fuels need analogous domination or an accumulated initial-only
+maximum L. Preserve the same global initial packet and literal Reached
+cuts; restarting Prefix at a controlled child needs extra unproved Room.
+The ten-source, twenty-range survey makes these open obligations explicit.
+NativeWidthTrace bounds a supplied trace. It does not widen state.
+
+General finite renewals, final retention, successful completion, convergence,
+broader resources and Haskell refinement remain open. Whole-library
+termination is not proved. The broadest semantic claim remains exact
+finite-term language preservation for a supported successful traversal
+with empty inherited constraints. General inherited constraints give
+narrowing, with exactness under inherited satisfaction.
+
+Haskell, packages, imported main, stashes and other worktrees stay unchanged.
+No new Haskell defect or repair. FINDINGS keeps its external repair index
+FIRST. Work continues at the user's request.
+
+## Current actual outer failures have five precise alternatives
+
+Updated: 2026-10-21 14:17 CEST. Proof checkpoint: `738d7f476a`.
+Start: `99f7ce462e`. Imported main remains `794903b3f`.
+Read `lean/notes-current-outer-local-faults.md`.
+
+OuterLocalFaults.failed_cases classifies the literal failed outer run as
+exhausted, nodeMemo with busy or absent, edgeMemo, unexpectedReference,
+or Parent failure. It excludes binder, inherited-error and missing-field
+faults. It also proves that nodeMemo cannot carry ready/evaluate payloads.
+Those payloads exist in the datatype but are never emitted by this worker.
+
+The exact 21-line public type keeps genuine initial Context, Frame, Fits,
+annotation carrier, phase Inputs and chosen-fuel forecast Room. It adds no
+closure, idle-cache, native Support, History or lower-fuel premise.
+One local six-phase induction retains the SAME initial packet and actual
+Reached cuts. Existing InitialPrefix.reached supplies current operands
+and Context at those cuts. Existing resident_rebuild forces the SAME Mu
+rebuild to finish. Existing resident_finite forces the SAME descendants
+prefix to return ok(some combined). Literal updated operations and failed
+callers remain distinct. Completed earlier siblings supply their actual
+done equations. Node demand supplies busy/absent provenance directly.
+No enclosing future completion or desired output callback is assumed.
+
+Author strict1 and root strict logs are empty. The sole complete FULL,
+independent review and Audit pass: 3614 jobs /75095 dependencies.
+Four actual Lean/Lake commands all pass without new warnings. The old
+Audit warning remains. The selected source has 216 lines and needed no
+compiler repair. The original 218-line draft and exact removal of two
+unused aliases remain. All eight printer settings, whole checked/printed
+type identity and actual standard three axioms pass. No private Cases
+predicate occurs in the public type. No canonical, infrastructure,
+constructed, runtime or reviewer proof job ran. Counts are not completion.
+
+The next source-only plan combines this producer with the checked Parent,
+edgeMemo, busy-node, reference and absent-node exclusions. Its exact
+34-line public type retains the full resource and closure packet, both
+initial idle laws, NodeStored/InputsClosed and all nine phaseNeed bounds.
+It proposes an actual done()Caller equation OR an actual exhausted(limit)
+Caller equation at the SAME chosen phase and numeric arguments. It erases
+only the success value. This composition remains proposed work here.
+The plan stops at 150 total source lines before any compiler or further
+implementation. Later activation requires an officially compiled
+LocalFaults dependency and complete root and independent source review.
+Historical pending cues remain unchanged with separate later status notes.
+
+The largest gap remains a first sufficient OUTER fuel jointly with a
+noncircular INITIAL capacity envelope. The chosen phaseNeed bounds only
+lower workers. Room for one fuel does not imply Room for larger fuel.
+Stability of an existing success does not construct the first success.
+Finite renewals, final retention, completion, convergence, broader resources
+and Haskell refinement remain open. Whole-library termination is not proved.
+The broadest semantic claim remains exact finite-term language preservation
+for a supported successful traversal with empty inherited constraints.
+General inherited constraints give narrowing, with exactness under
+inherited satisfaction.
+
+All earlier proof, failure and counterexample evidence remains. Haskell,
+packages, imported main, stashes and other worktrees stay unchanged.
+No new Haskell defect or repair. FINDINGS keeps its external repair index
+FIRST. Work continues at the user's request.
+
+## Current outer execution excludes reference and absent-node faults
+
+Updated: 2026-10-21 14:02 CEST. Proof checkpoint: `f721bf5c4c`.
+Start: `d27dcebaec`. Imported main remains `794903b3f`.
+Read `lean/notes-current-outer-reference-absent.md`.
+
+OuterReferenceAbsent.no_reference_or_node_absent excludes both literal
+diagnostics from the actual outer run. It keeps the reviewed initial
+Context, resources, native and Merge laws, writer Origins, conditional
+NodeStored law and InputsClosed. It adds no initial idle-cache premise,
+sufficient-fuel assumption or future completion fact. Closed means
+Value.free=[]. Bound references inside an opaque Mu remain permitted.
+
+One private six-phase failure inversion derives the actual reached body
+or node-demand cut with the same failed caller. It follows literal binds
+and completed earlier siblings through the existing eight transitions.
+At the reference body, checked reached closure contradicts [name]=[].
+At the absent demand, reached node-table validity gives an existing linked
+cell on a hit. A miss publishes a suspended cell. Both exclude absence.
+The public 27-line type remains exact to the frozen proposal.
+
+Selected strict2 and root strict logs are empty. Complete FULL, independent
+review and Audit pass: 3613 jobs /75090 dependencies. Five actual Lean/Lake
+commands retain one failed author strict check. Its one missing argument
+was fixed by one extra placeholder. The full 558-byte diagnostic and exact
+repair remain. There are no new warnings. Only the old Audit warning remains.
+The selected source has 254 lines. The four-line scope overflow, original
+recipe, original source and seven prelaunch corrections remain recorded.
+Whole checked/printed type identity, all eight printer settings and actual
+standard three axioms pass. No canonical, infrastructure, constructed,
+runtime or reviewer proof job ran. Counts are not completion.
+
+The next source-only plan removes binder, inherited and missing faults
+using existing same-cut local completion results. It must also prove that
+actual nodeMemo faults have only busy or absent observations. It proposes
+one failed_cases theorem and retains the genuine initial scheduled Room.
+Its exact 21-line type and all 17 ranges in 11 sources were reviewed.
+The plan stops at 250 total source lines before any compiler or further
+implementation. No new implementation is claimed by that plan.
+
+Combining that producer with existing fault exclusions would classify an
+actual run as done or exhausted, with every required initial assumption
+and all nine lower-fuel bounds explicit. This composition is still open.
+The largest gap remains a first sufficient outer fuel jointly with a
+noncircular INITIAL capacity envelope. Chosen-fuel scheduling and stability
+of an existing success do not supply one. Finite renewals, final retention,
+completion, convergence, broader resources and Haskell refinement remain.
+Whole-library termination is not proved. The broadest semantic claim
+remains exact finite-term language preservation for a supported successful
+traversal with empty inherited constraints. General inherited constraints
+give narrowing, with exactness under inherited satisfaction.
+
+All earlier proof and failure evidence remains. Haskell, packages, imported
+main, stashes and other worktrees stay unchanged. No new Haskell defect or
+repair. FINDINGS keeps its external repair index FIRST. Work continues.
+
+## Current outer prefixes preserve closed inputs and node results
+
+Updated: 2026-10-21 13:44 CEST. Proof checkpoint: `7bbc88f746`.
+Start: `671fd6df46`. Imported main remains `794903b3f`.
+Read `lean/notes-current-outer-closed-inputs.md`.
+
+OuterClosedInputs.reached now preserves BOTH conditional node-result
+closure and closure of the literal inputs at every actual outer prefix.
+The exact public API contains NodeStored, InputsClosed, initial and reached.
+Closed means Value.free=[]. Bound references inside an opaque Mu remain
+permitted. Availability alone does not imply closure. The initial theorem
+supplies NodeStored from the actual empty outer node table.
+
+The theorem keeps the genuine initial Context, Frame, Fits, carrier,
+ready inputs, scheduled Room, native/Merge laws and resource writer Origins.
+It adds initial NodeStored and InputsClosed. It needs no initial node-idle
+premise. Unused open cells remain permitted. A returned node cell requires
+closed captured input to imply a closed result. This conditional store law
+is preserved by actual lookup, demand and finish operations.
+
+The same coherent current heap identifies the complete captured value
+with the candidate at ready and evaluate observations. A cache hit uses
+its actual stored conditional result law. Evaluation derives closure of
+the same captured input before entering its body. The actual closed body
+result supplies the finish law at the literal handle. Parent children use
+the same historical Written witness and the checked ParentClosed theorem.
+No new edge-cache ledger or desired returned-closure callback is supplied.
+
+One local completed-call induction covers all six concrete phases. The
+same initial packet stays in scope. Existing resource and Origins producers
+are applied to each SAME global Reached cut. Earlier completed siblings
+supply their actual done equations. Real returned availability supports
+physical node and edge reconstruction. Existing Mu cleanup preserves free
+references. The final eight-case prefix induction uses those actual
+completed-call facts. No future enclosing return is assumed.
+
+The next failure consumer must extract the actual reference-body or absent
+node-demand cut from a literal failed run. These inverse cuts are still
+unproved. At the reference cut, reached closure would contradict the
+singleton free-reference list. At the absent cut, existing reached table
+validity suffices: a hit has a cell and a miss publishes a suspended cell.
+One combined public consumer and one local joint inverse are reviewed.
+Its source plan requires an official compiled closure dependency, separate
+activation, and a stop at 250 total lines before ANY compiler or further
+implementation. Whole source review precedes a separate check activation.
+The frozen plan retains its historical pending-dependency statement.
+
+Every-active-node busy exclusion remains checked under initial idleness.
+The largest completion gap remains a first sufficient outer fuel jointly
+with a noncircular INITIAL capacity envelope. Chosen-fuel scheduling and
+stability of an existing success do not construct one. Finite renewals,
+final retention, completion, convergence, broader initial resources and
+Haskell refinement remain open. Whole-library termination is not proved.
+The broadest semantic claim remains exact finite-term language preservation
+for a supported SUCCESSFUL traversal with empty inherited constraints.
+General inherited constraints give narrowing, with exactness under
+inherited satisfaction.
+
+Selected strict6 and root strict have empty logs. Complete FULL, independent
+review and Audit pass: 3612 jobs /75069 dependencies. Nine actual Lean/Lake
+commands retain five failed author strict checks. Strict1 alone has two
+warning diagnostics. Every raw input, log and exact repair remains. The
+selected source has 420 lines; all four public shapes remain unchanged.
+Original 231/386/417-line prelaunch sources and zero-job patches remain.
+Whole public type identities and all eight printer settings pass. Actual
+axioms are propext for NodeStored and initial, none for InputsClosed, and
+the standard three for reached. No canonical, infrastructure, constructed,
+runtime or reviewer proof job ran. Only the old Audit warning remains.
+Counts are not completion. Four frozen proof/review/next-plan components
+have portable and mandatory live verification. All older evidence remains.
+
+Haskell, packages, imported main, stashes and other worktrees stay unchanged.
+No new Haskell defect or repair. FINDINGS keeps its external repair index
+FIRST. Work continues as requested.
+
+## Current historical Parent writers preserve closed child inputs
+
+Updated: 2026-10-21 13:06 CEST. Proof checkpoint: `1866f15537`.
+Start: `79f99e48c5`. Imported main remains `794903b3f`.
+Read `lean/notes-current-resource-parent-closed.md`.
+
+ResourceParentClosed.children now proves that closed captured children
+give closed returned children for the SAME historical Parent writer.
+The inputs are one resource-backed Written request returned and
+ClosedValues request.value.children. The result is ClosedValues
+returned.children. Closed means Value.free=[]. Bound references inside
+an opaque Mu remain permitted. Availability alone does not imply closure.
+
+The writer retains its genuine historical caller, exact Parent return,
+Context, resources, native laws and Merge laws. No current reader heap,
+inherited-prefix equation, later growth interval, positive output or
+new edge-cache law is required. The unchanged, erased and sentinel cases
+follow their literal shapes. The selected case reuses ONE certificate
+for the SAME Required execution and class pass. Existing Required
+completion and actual uniqueness identify the exact prepared closed list.
+The same Pass receipt preserves its whole-forest closure at path [].
+The existing physical Merge Stored law already carries conditional closure;
+only actual Scan and Required Keeps transport it to the prepared heap.
+No native, projection, edit or exposure induction is added.
+
+This supplies the local closure fact for warm edge results through the
+existing writer Origins. The next joint invariant must preserve conditional
+closed results in outer NODE cells and closed inputs at actual unfinished
+prefixes. The frozen plan uses existing Valid/CellSpec, lookup, demand,
+protected finish, actual completed sibling calls and the SAME global
+resource cuts. Empty node tables supply its proposed initial store law.
+The exact proposed API has two definitions and two theorems. It is not
+checked here. Its original pending-dependency cue remains historical.
+The scope addendum requires a stop at 250 source lines before any compiler
+or further implementation. Root and independent review must read the
+complete partial source before an explicit justified continuation to 420.
+No new framework or public head is authorized by that addendum.
+
+Every-active-node busy exclusion remains checked under initial idleness
+and genuine resources. General closed-prefix transport is still separate.
+The largest completion gap remains a first sufficient outer fuel with a
+noncircular INITIAL capacity envelope. Chosen-fuel scheduling and stability
+of an existing success do not construct one. Finite renewals, final
+retention, completion, convergence, broader initial resources and Haskell
+refinement remain open. Whole-library termination is not proved.
+
+Strict, complete FULL, independent review and Audit pass. Audit has
+3611 jobs /75059 dependencies. Four actual Lean/Lake commands all pass.
+The unchanged 101-line source and exact eight-line public header needed
+no correction. Selected/root strict logs are empty. Whole checked/printed
+type identity, all eight printer settings and actual standard three axioms
+pass. No canonical, infrastructure, constructed, runtime or reviewer proof
+job ran. Only the old Audit warning remains. Counts are not completion.
+
+The final completion-audit review and next closure-plan review are also
+archived with portable and mandatory live verification. Earlier sealed
+bytes stay unchanged. Haskell, packages, imported main, stashes and other
+worktrees stay unchanged. No new Haskell defect or repair. FINDINGS keeps
+its external repair index FIRST. Work continues as requested.
+
+## Current outer execution excludes every active node-owner collision
+
+Updated: 2026-10-21 12:42 CEST. Proof checkpoint: `841fe6e4c9`.
+Start: `04983c1956`. Imported main remains `794903b3f`.
+Read `lean/notes-current-older-owner-busy.md`.
+
+OlderOwnerBusy.no_node_busy now excludes nodeMemo(handle,busy) from the
+literal outer run against ANY enclosing active node ancestor. It works
+from an arbitrary initial Phase with the genuine initial semantic and
+resource packet, writer Origins and explicit initialNodeIdle. No node
+cell may be evaluating at entry. State.initial has empty outer tables and
+satisfies this boundary. Warm suspended or returned cells remain permitted.
+Context alone does not imply initial idleness. No edge-idle premise is
+needed for this node-only result.
+
+Existing InitialBusy.busy derives the exact reached fault request and the
+evaluating cell containing that SAME complete request. The same prefix's
+owners theorem derives its actual activation and unfinished body prefix.
+One body_rank_lt call then gives strict decrease from this request to
+itself. Either Lex constructor contradicts Nat.lt_irrefl. The proof adds
+no induction, canonical equality helper, selected-owner oracle or future
+return. This closes arbitrary older-node-owner busy exclusion.
+
+The largest remaining progress gap is a first adequate outer fuel together
+with an initial resource envelope. InitialFuel.phaseNeed and forecast Room
+bound a CHOSEN fuel. They do not construct a sufficient fuel. Existing
+done-stability results start from a success. The current generic NodeReady
+also means allocated and available, not closed: issued bare references
+are available, while nodeBody rejects a bare reference. A supported-input
+closure condition and its actual-prefix transport remain to be established.
+This is a source contract boundary, not a constructed execution counterexample
+or Haskell defect. Existing available-Mu and inherited-prefix completion
+producers must be reused. Finite-ordinary completion already has a genuine
+initial-resource result on its narrower Domain and quantitative profiles.
+
+Busy exclusion does not itself bound fresh renewals or prove successful
+completion. Final retention, outer completion, convergence, broader initial
+resource production and Haskell refinement remain open. The broadest
+semantic claim remains exact finite-term language preservation for a
+supported SUCCESSFUL traversal with empty inherited constraints. General
+inherited constraints give narrowing, with exactness under inherited
+satisfaction. Whole-library termination and implementation refinement are
+not proved.
+
+Strict, complete FULL, independent review and Audit pass. Audit has
+3610 jobs /75057 dependencies. Four actual Lean/Lake commands all pass.
+The unchanged 69-line source needed no repair. Its sole public header
+matches the exact approved proposal. Selected/root strict logs are empty.
+Whole checked/printed type identity, all eight printer settings and actual
+standard three axioms pass. No canonical, infrastructure, constructed,
+runtime or reviewer proof job ran. Only the old Audit warning remains.
+Counts are not completion.
+
+All older proof/evidence bytes and version exceptions remain. Haskell,
+packages, imported main, stashes and other worktrees stay unchanged.
+No new Haskell defect or repair. FINDINGS keeps its external repair index
+FIRST. Work continues as requested.
+
+## Current request measure decreases through every actual body prefix
+
+Updated: 2026-10-21 12:28 CEST. Proof checkpoint: `e42411b3c5`.
+Start: `9d4df6aae3`. Imported main remains `794903b3f`.
+Read `lean/notes-current-older-owner-lineage.md`.
+
+OlderOwnerLineage.body_rank_lt now composes the checked child decrease.
+A node request reached inside an earlier entered body has strictly smaller
+inherited positive-class count followed by structural mass than that
+body's complete request. Both actual prefixes remain explicit: initial
+phase to body entry, then that body to the candidate node. Genuine initial
+resources, native laws, Merge laws and resource writer Origins remain.
+No desired activation chain, future return or rank premise is supplied.
+
+The literal prefix derives its ordinary body and same source row. Each
+induction step uses that hop's own row membership and actual Parent,
+inherited prefix, earlier walk and selected child. ActualChildRank.dispatch
+gives the direct decrease. On a fresh activation, the current Context,
+readiness, canonical identity primitives and literal unchanged checked
+state identify the full captured request with the dispatched request.
+The remaining actual body prefix then composes by strict lexicographic
+transitivity. Smaller body fuel is only an induction index, not the rank.
+
+This closes the older-body composition target. The next busy-fault consumer
+must derive that each evaluating cell belongs to an activation in this
+run. Initial node-cache idleness is essential for that ancestry boundary.
+Existing InitialBusy.busy already derives the same full fault request.
+Combining it with ancestry and this theorem is a separate next proof.
+Finite fresh renewal bounds, final retention, outer completion, convergence,
+broader initial resources and Haskell refinement remain open. This theorem
+does not establish successful completion or whole-library termination.
+
+Strict, complete FULL, independent review and Audit pass. Audit has
+3609 jobs /75056 dependencies. Five actual Lean/Lake commands retain one
+failed strict with five diagnostics and no warnings. The two-site repair
+uses explicit Lex constructor cases and unfolds NodeReady for the same
+checked-state equality. The sole 39-line public header stays unchanged.
+Selected/root strict logs are empty. Whole checked/printed type identity,
+all eight printer settings and actual standard three axioms pass. Original
+166-line prelaunch sources and the zero-job Nat.le_trans patch remain.
+Final source has 172 lines. Every failed input, raw log and patch remains.
+No canonical, infrastructure, constructed, runtime or reviewer proof job
+ran. Only the old Audit warning remains. Counts are not completion.
+
+All older proof/evidence bytes and version exceptions remain. Haskell,
+packages, imported main, stashes and other worktrees stay unchanged.
+No new Haskell defect or repair. FINDINGS keeps its external repair index
+FIRST. Work continues as requested.
+
+## Current actual child dispatch strictly decreases a request measure
+
+Updated: 2026-10-21 12:21 CEST. Proof checkpoint: `0b3e63e486`.
+Start: `38ff331a62`. Imported main remains `794903b3f`.
+Read `lean/notes-current-actual-child-rank.md`.
+
+ActualChildRank.dispatch now proves strict lexicographic decrease for an
+actual recursive child request. The first component counts inherited
+positive-path equality classes. The second component is structural mass.
+The same literal ordinary container must contain the original source row.
+The theorem returns the selected child's actual Reached prefix as well.
+It needs no evaluating owner cell, copied-owner equality or collision.
+
+Genuine initial resources, laws and writer Origins remain explicit. The
+actual row, Parent, live inherited prefix and earlier child walk identify
+the same current states. One resource-backed Written supplies full positive
+Back and conditional Shape. The checked quotient count gives a weak bound
+for every child and a strict bound for a nonplain source row. A plain row
+has empty own equalities. Its returned original child or Empty has strictly
+smaller mass. The actual late descent identifies the inherited payload,
+including a cached winning result. No future child completion is assumed.
+
+This proves one actual call transition. The archived next plan composes
+these transitions through an older owner's body prefix. Each hop must use
+its own row membership. Actual activation must identify the complete
+captured request from the same current canonical store. That composition
+is a separate target. Older-owner exclusion, finite renewal bounds, final
+retention, outer completion, convergence, broader initial resources and
+Haskell refinement remain open. Whole-library termination is not proved.
+
+Strict, complete FULL, independent review and Audit pass. Audit has
+3608 jobs /75033 dependencies. Eight actual Lean/Lake commands retain four
+failed strict checks. Strict4 also contains one unused-simp warning.
+The four repairs select the Bool lemma, specify existing container fields
+and order the exact payload rewrite before wrapper reduction. The sole
+71-line public header remains unchanged. Selected/root strict logs are
+empty. Whole checked/printed type identity, all eight printer settings and
+the actual standard three axioms pass. The 250-line prelaunch draft and
+private unused-output trim to 248 lines remain zero-job evidence. Final
+source has 249 lines. Full raw errors, patches and lossless root review
+metadata remain. No canonical, infrastructure, constructed, runtime or
+reviewer proof job ran. Only the old Audit warning remains in the Audit.
+Counts are not completion.
+
+All older proof/evidence bytes and version exceptions remain. Haskell,
+packages, imported main, stashes and other worktrees stay unchanged.
+No new Haskell defect or repair. FINDINGS keeps its external repair index
+FIRST. Work continues as requested.
+
+## Current actual Parent supplies positive ancestry for every returned child
+
+Updated: 2026-10-21 12:02 CEST. Proof checkpoint: `67db715f66`.
+Start: `635de249eb`. Imported main remains `794903b3f`.
+Read `lean/notes-current-resource-parent-positive-back.md`.
+
+ResourceParentPositiveBack.children now derives the FULL backwards positive
+path relation for every returned child from ONE historical resource-backed
+Written and the actual live inherited-prefix result. Each positive child
+path relates to a positive path in a literal original row child under the
+SAME combined class family. No copied-owner lookup or containing-owner
+membership is required. The caller does not supply Back or a new memo law.
+
+The four actual Parent branches remain separate. Original children retain
+index and path. Erased and sentinel children have no positive paths. Selected
+work keeps the same Parent, Scan, Required and class pass. One certificate
+producer, actual ORIGINAL false gates and one chronology pass derive Back.
+Only a positive child is used to exclude sentinel construction and derive
+returned-guard equality. The actual prefix then transports the whole class
+relation into its same combined result. Past resources come from Written.
+
+The theorem also derives conditional Shape when the original effective own
+equalities are empty. This gives original children, erased slots or Empty.
+plain=true implies that empty-own test. The converse is not assumed.
+This supplies the missing actual premise of the checked quotient-count law.
+The next actual dispatch theorem will combine count and structural mass.
+It is still a separate proof. Older-ancestor composition, finite renewal
+bounds, final retention, completion, convergence, broader initial resources
+and Haskell refinement remain open. No global rank or termination is proved.
+
+Strict, complete FULL, independent review and Audit pass. Audit has
+3607 jobs /75028 dependencies. Four actual Lean/Lake commands all pass.
+The exact 38-line public header stays unchanged. Selected/root strict logs
+are empty. Whole checked/printed type identity, all eight printer settings
+and the actual standard three axioms pass. Original 223/224-line prelaunch
+sources, alias patch and private-only reduction to 208 lines remain as
+zero-job artifacts. No source repair followed a compiler failure.
+No canonical, infrastructure, constructed, runtime example or reviewer
+proof job ran. Only the old Audit warning remains. Counts are not completion.
+
+All older proof/evidence bytes and version exceptions remain. Haskell,
+packages, imported main, stashes and other worktrees stay unchanged.
+No new Haskell defect or repair. FINDINGS keeps its external repair index
+FIRST. Work continues as requested.
+
+## Current positive-path quotient count bounds every backwards-linked child
+
+Updated: 2026-10-21 11:50 CEST. Proof checkpoint: `4a006e135f`.
+Start: `7c0fc000b6`. Imported main remains `794903b3f`.
+Read `lean/notes-current-positive-quotient-count.md`.
+
+PositiveQuotientCount.count now defines the finite number of positive
+natural child-path classes under the inherited equality relation.
+child_count proves that a backwards-linked child has no more such classes
+than its ordinary parent. The bound is strict when the same source row is
+nonplain. The child's relation is the actual descended combined relation;
+the parent's relation is the original inherited relation. They can differ.
+
+Coherent fixed combined records, inherited class coverage, literal source-row
+membership and the FULL backwards positive-path relation are explicit pure
+premises. No inherited fixedness, nonemptiness, positive support closure,
+caller enumeration or supplied reflection law is required. One injective
+relation into parent classes with the root class erased proves both bounds.
+It uses checked child_reflect rather than constructing a new reflection rule.
+
+This is a checked mathematical count law. It does not yet derive Back from
+arbitrary actual Parent work or prove a runtime rank. The reviewed all-child
+Back/conditional plain Shape plan is frozen. Its separate implementation
+is under source review. After that producer is checked, actual child-rank
+integration and older-ancestor graph composition remain. Finite renewals,
+final retention, outer completion, convergence, broader initial resources
+and Haskell refinement remain open. Whole-library termination is not proved.
+
+Strict, complete two-head FULL, independent review and Audit pass. Audit has
+3606 jobs /75025 dependencies. Five actual Lean/Lake commands include one
+retained failed strict. Its one-line repair names Nat.le_trans explicitly.
+Both public headers and the mathematical proof stay unchanged. Selected/root
+strict logs are empty. Definition and theorem each have exact checked/printed
+types, all eight settings and the actual standard three axioms.
+No canonical, infrastructure, runtime example, constructed or reviewer
+proof job ran. Only the old Audit warning remains. Counts are not completion.
+
+All earlier proof/evidence bytes and version exceptions remain. Haskell,
+packages, imported main, stashes and other worktrees stay unchanged.
+No new Haskell defect or repair. FINDINGS keeps its external repair index
+FIRST. Work continues as requested.
+
+## Current immediate owner dispatch handles every inherited value
+
+Updated: 2026-10-21 11:39 CEST. Proof checkpoint: `2cf2747891`.
+Start: `ad1ead9684`. Imported main remains `794903b3f`.
+Read `lean/notes-current-resource-owner-inherited-dispatch.md`.
+
+ResourceOwnerInheritedDispatch.key_ne_inherited now derives the literal
+immediate child dispatch and excludes its active ordinary owner's complete
+request key for arbitrary inherited values. The actual row must belong to
+that same owner and use that owner's inherited value. This removes the old
+Top-only restriction. A copied full node remains possible when its inherited
+payload changes. The theorem excludes the repeated complete request key.
+
+Initial resources, native/Merge laws and writer Origins remain genuine
+contracts. Actual row, descendants and walk prefix producers supply current
+resources. ONE edge_call supplies the SAME historical Written. The actual
+earlier-slot walk supplies validity and growth. Under a hypothetical key
+collision, coherent available readback forces the selected full owner value.
+ONE new consumer call then excludes that collision. Full-owner lookup,
+current readiness and Back are derived rather than extra public inputs.
+
+This closes immediate same-row dispatch for arbitrary inherited values.
+It does not exclude arbitrary older active ancestors. Adjacent inequalities
+alone do not compose into that result. The next source-only plan examines
+positive-path quotient counts and all returned-child backwards producers.
+It proves no rank theorem here. Older lineage, finite renewal bounds, final
+retention, outer completion, convergence, broader initial resources and
+Haskell refinement remain open. Whole-library termination is not proved.
+
+Strict, complete FULL, independent review and Audit pass. Audit has
+3605 jobs /75008 dependencies. Four actual Lean/Lake commands all pass.
+There is no source repair. The sole 68-line public header matches the frozen
+proposal. Selected/root strict logs are empty. The full public type matches,
+all eight printer settings are present and actual axioms are the standard
+three. No canonical, infrastructure, constructed or reviewer proof job ran.
+Only the old Audit warning remains. Counts do not measure completion.
+
+All older proof/evidence bytes and version exceptions remain. Haskell,
+packages, imported main, stashes and other worktrees stay unchanged.
+No new Haskell defect or repair. FINDINGS keeps its external repair index
+FIRST. Work continues as requested.
+
+## Current saved-writer proof excludes every inherited owner key
+
+Updated: 2026-10-21 11:26 CEST. Proof checkpoint: `41efb1378f`.
+Start: `00cd040dcf`. Imported main remains `794903b3f`.
+Read `lean/notes-current-resource-owner-inherited-progress.md`.
+
+ResourceOwnerInheritedProgress.key_ne_inherited now consumes ONE historical
+resource-backed Written and the actual current prefix and delayed descent.
+The original row must belong to the same ordinary owner. The same full
+owner must occur at the returned child index. The result gives original
+guard equality, original-row nonplainness, full inherited-payload inequality
+and full node-key inequality against that same request.inherited.
+The theorem needs no Top identity or inherited nonempty/fixed assumption.
+
+The same saved Parent supplies one OwnerSelection and SelectedCertificates.
+One RequiredPositiveChronology.pass retains the full backwards relation.
+One actual combine_covers supplies both inherited and kept coverage at the
+same live prefix. The pure geometry theorem then excludes an equal payload.
+Actual descend_correct and canonical ready readback give key separation.
+No caller Back relation, desired rank or new resource oracle is an input.
+
+This closes the saved-writer consumer for arbitrary inherited values.
+The actual dispatch generalization has separate strict/FULL checks. It is
+not a selected source in this checkpoint. Original-row membership and the
+full-owner lookup remain explicit in the selected consumer. Older ancestor
+lineage across intervening activations, renewed-key bounds, retention,
+completion, convergence, broader initial resources and Haskell refinement
+remain open. Immediate same-row separation does not prove termination.
+
+Root strict, complete FULL and independent review pass. Audit passes
+3604 jobs /75006 dependencies. Five actual Lean/Lake commands include one
+retained failed strict. Its two-site repair aligns existing inherited-value
+proofs after dependent case rewriting. The public type stays unchanged.
+Selected/root strict logs are empty. The sole public type is exact. All
+eight printer settings and the standard three axioms are present.
+Two independent range-field schema diagnostics are metadata only. All
+original metadata and diagnostics remain. No canonical, infrastructure,
+constructed or reviewer proof job ran. Only the old Audit warning remains.
+Counts do not measure completion.
+
+All old sources/evidence/version exceptions remain. Haskell/packages/main,
+stashes and other worktrees stay unchanged. No new Haskell defect or repair.
+FINDINGS keeps the external repair index FIRST. Work continues as requested.
+
+## Current copied-owner geometry separates every inherited payload
+
+Updated: 2026-10-21 11:14 CEST. Proof checkpoint: `67521a3ef9`.
+Start: `2fb29ba69f`. Imported main remains `794903b3f`.
+Read `lean/notes-current-positive-inherited-child-separation.md`.
+
+PositiveInheritedChildSeparation now proves child_reflect and
+same_child_payload_ne. Coherent completed physical records reflect a
+same-child relation into their literal descended records. The second
+theorem uses one literal positive owner row, its member proof, inherited
+class coverage and the full backwards positive-path relation. It proves
+that descent cannot return that inherited payload. Inherited nonemptiness
+and fixedness are not required. The backwards relation is an explicit
+premise of this pure geometry theorem.
+
+The proof counts finite positive paths modulo the SAME inherited relation
+on both sides. Coverage and combined consistency isolate the root class.
+Exact reflection makes the actual backwards relation injective into the
+same finite list with that root class erased. It requires no positive-set
+closure, global target choice, desired rank or supplied reflection oracle.
+Mu and references remain opaque in this positive-path relation.
+
+The existing actual Required chronology producer supplies the full relation
+under genuine native/Merge support and causal contracts. The next frozen
+consumer plan retains it from ONE saved writer and SAME class pass. That
+consumer has a separately reviewed draft; it is not a selected theorem in
+this checkpoint. General inherited execution/dispatch integration, older
+ancestor lineage, renewal bounds, retention, completion, convergence,
+broader initial resources and Haskell refinement remain open.
+
+Root strict, complete two-head FULL and independent review pass. Audit
+passes 3603 jobs /75003 dependencies. Four actual Lean/Lake commands all
+pass. Selected/root strict logs are empty. Both public types are exact,
+all eight settings are present and actual axioms are the standard three.
+The optional-@ readback parser repair is metadata only, zero proof jobs.
+The approved private enumeration reuse keeps its used 52 lines; an unused
+helper was removed before launch. Original 240 and exact cleanup remain.
+No canonical, infrastructure, constructed or reviewer proof job ran.
+Only the old Audit warning remains. Counts do not measure completion.
+
+All old sources/evidence/version exceptions remain. Haskell/packages/main,
+stashes and other worktrees stay unchanged. No new Haskell defect or repair.
+FINDINGS keeps the external repair index FIRST. The full goal stays active.
+
+## Current ordinary-owner prefix derives its first child dispatch
+
+Updated: 2026-10-21 11:02 CEST. Proof checkpoint: `ebc0915e02`.
+Start: `a8aa27d7b5`. Imported main remains `794903b3f`.
+Read `lean/notes-current-owner-prefix-decomposition.md`.
+
+OuterOwnerPrefix.first_child now inverts a literal ordinary-body to node
+Reached prefix. It derives the SAME owner's source-row split and membership,
+the actual row cut, Parent return, live inherited prefix, completed earlier
+take(slot) walk and exact selected child. It requires only that Reached
+proof. It needs no Context, heap law, resource forecast or future return.
+
+The candidate is either that exact immediate node phase or lies below its
+actual captured node activation. The latter keeps the captured request;
+the graph alone does not equate it with the dispatched request. The first
+explicit child on this unfinished chain can follow completed earlier calls.
+It is not claimed to be the first chronological node call.
+
+This supplies a missing graph producer for SAME-owner membership. It does
+not prove exclusion of older ancestors. The next mathematical plan derives
+child relation reflection and counts positive paths modulo the inherited
+relation. A separate draft has strict/FULL checks, but it is not an installed
+or audited source in this checkpoint. Its actual saved-writer consumer is
+still pending. Non-Top execution exclusion, intervening-activation lineage,
+renewal bounds, final retention, completion, convergence, broader initial
+resources and Haskell refinement remain. Counts are not completion.
+
+Root strict, complete FULL and independent review pass. Audit passes 3602
+jobs /74985 dependencies. Six actual Lean/Lake commands include two retained
+failed stricts. Repairs use surviving dependent-case names, qualify an
+accessor and inline one untyped local prefix proof. Forty diagnostics in
+the second failure are one job. Exact public header stays unchanged.
+Selected/root strict logs are empty. One public head has full identical
+checked/printed types, all eight settings and standard axioms. No canonical,
+infrastructure, constructed or reviewer proof job ran. Both mathematical
+plan audits run zero proof jobs. Only the old Audit warning remains.
+
+All old sources/evidence/version exceptions remain. Haskell/packages/main,
+stashes and other worktrees stay unchanged. No new Haskell defect or repair.
+FINDINGS keeps the external repair index FIRST. The full goal stays active.
+
+## Current actual child dispatch excludes its same Top owner
+
+Updated: 2026-10-21 10:36 CEST. Proof checkpoint: `33fd2c99fa`.
+Start: `b122b562a7`. Imported main remains `794903b3f`.
+Read `lean/notes-current-resource-owner-dispatch.md`.
+
+ResourceOwnerDispatch.key_ne_top now derives an actual indexed node cut
+and excludes the key of the same evaluating ordinary Top owner. It starts
+from a literal reached own-row phase, the actual Parent return, the live
+inherited-prefix equation, completed earlier take(slot) siblings and the
+selected child. Original row membership in that SAME owner remains an
+explicit input. Arbitrary deeper ancestry does not imply this membership.
+
+Initial Context/Frame/Fits/Carrier/Inputs/scheduledRoom, five store laws and
+resource Origins remain genuine contracts. Actual prefix endpoints derive
+current resources. ONE local edge call supplies its correlated Written.
+The SAME earlier sibling walk supplies returned Context, validity, growth
+and child availability. Running-cell retention keeps the active owner.
+Under a hypothetical key collision, current coherent availability forces
+the full child value to equal that owner. The checked saved-writer consumer
+then excludes the collision. No full-owner lookup, current Ready oracle,
+desired path pair or unrelated historical resources are public inputs.
+
+This closes the immediate same-row Top dispatch integration. The frontier
+audit shows that it and untouched-position descent are not an exhaustive
+progress argument. Non-Top owner copies, older ancestors across intervening
+node activations and fresh renewals after touched edits remain. The actual
+competing-source example refutes unconditional descent from one chosen
+anchor. It does not refute termination. General owner exclusion, renewal
+bounds, final retention, outer completion, convergence, broader initial
+resources and Haskell refinement remain open. Counts are not completion.
+
+Root strict, complete FULL and independent review pass. Audit passes 3601
+jobs /74976 dependencies. Five actual Lean/Lake jobs include one retained
+strict failure for a private constructor's missing expected type. The sole
+repair adds a Node annotation. The exact frozen public header is unchanged.
+Selected/root strict logs are empty. The one public head has complete
+identical checked/printed types, all eight settings and standard axioms.
+No canonical, infrastructure, constructed or reviewer proof job ran.
+Only the old Audit warning remains. The frontier audit runs zero proof jobs.
+
+All old sources/evidence/version exceptions remain. Haskell/packages/main,
+stashes and other worktrees stay unchanged. No new Haskell defect or repair.
+FINDINGS keeps the external repair index FIRST. The full goal stays active.
+
+## Current delayed Top owner key separation from one saved writer
+
+Updated: 2026-10-21 10:26 CEST. Proof checkpoint: `0763054cc6`.
+Start: `f6e6e0a0fe`. Imported main remains `794903b3f`.
+Read `lean/notes-current-resource-owner-progress.md`.
+
+ResourceOwnerProgress.key_ne_top now consumes ONE joint historical Written
+and derives actual delayed-child payload nonemptiness and Top owner key
+separation. It also derives returned-row guard equality and original-row
+nonplainness. Original row membership in the ordinary owner and exact full
+owner lookup in returned.children remain inputs. No desired path pair,
+ancestry relation or independent historical resource witness is supplied.
+
+The same saved Parent execution supplies OwnerSelection and the existing
+SelectedCertificates producer. Its numeric construction and same loaded
+field derive returned.guard = original.guard, including warm constructors.
+The same selected Scan/Required/pass bundles and original false gates feed
+ActualOwnerPair. Its actual combined-component pair feeds DelayedCombined
+at the SAME index. No resident replay wrapper or historical heap interval
+is introduced. Current prefix validity/readiness/field, live combined branch,
+later Valid/Grows and initially ready Top remain genuine premises.
+
+The stronger writer ledger already propagates through actual recursive
+workers and unfinished prefixes. The next frozen dispatch plan derives the
+consumer's current facts and full-owner lookup at one real row child walk.
+That integration is not a selected theorem here. This result excludes only
+an immediate ready Top ordinary owner key. Non-Top exclusion, renewal,
+fresh-call bounds, final retention, general outer completion, convergence,
+broader initial resources and Haskell refinement remain open.
+
+Root strict, complete FULL and independent review pass. Audit passes 3600
+jobs /74974 dependencies. Six actual Lean/Lake commands retain two failed
+stricts. Repairs qualify a notation, apply existing native invariant
+conversions and order the guard rewrite. Original unelaborated proposal,
+corrected exact qualified proposal and all failures remain. Selected/root
+strict logs are empty. One public head has complete identical checked/
+printed types, all eight settings and standard axioms. A readback delimiter
+correction is metadata only; it adds no failed Lean job. No canonical,
+infrastructure, constructed or reviewer proof job ran. Only the old Audit
+warning remains. Counts do not measure completion.
+
+All old sources/evidence/version exceptions remain. Haskell/packages/main,
+stashes and other worktrees stay unchanged. No new Haskell defect or repair.
+FINDINGS keeps the external repair index FIRST. The full goal stays active.
+
+## Current original writer resources through unfinished outer calls
+
+Updated: 2026-10-21 10:06 CEST. Proof checkpoint: `8125bd9705`.
+Start: `56c59f4e09`. Imported main remains `794903b3f`.
+Read `lean/notes-current-outer-resource-writers.md`.
+
+OuterResourceWriters.reached now preserves the stronger resource-backed
+Origins ledger through literal unfinished outer phases. Each returned edge
+cell retains ONE original Parent execution and its correlated historical
+caller, globals, inventory, profile, reservation and store laws. The initial
+empty-table theorem and local cold/warm writer producer were already proved.
+This theorem adds their actual recursive and unfinished-prefix transport.
+
+Six private completed phases follow actual earlier calls. Each row uses
+the local joint writer producer, ONE old numeric edge receipt and the
+existing completed-store endpoint at the SAME return. Actual descendants
+and node heads supply updated resources and seeds for their tails. Other
+operations preserve Origins by literal edgeResults identity. No heap law
+is copied to prove this table property. Each prefix snoc uses ONE combined
+resource/store tuple at that SAME earlier Reached proof.
+
+Genuine initial Context/Frame/Fits/Carrier/Inputs/scheduledRoom, five store
+laws and initial Origins remain explicit. Certified warm tables are allowed.
+No future enclosing return, per-sibling Ready oracle, old weak writer plus
+unrelated resource existential or current-to-past resource inference is used.
+
+The frozen next consumer audit connects ONE saved writer directly through
+OwnerSelection and SelectedCertificates to the actual delayed Top-key
+exclusion result. Returned guard equality must be derived from its same
+numeric construction and field readback. This separate consumer is not a
+selected theorem here. Actual reader/dispatch integration, non-Top owner
+exclusion, renewal, fresh-call bounds, final retention, general outer
+completion, convergence, broader initial resources and Haskell refinement
+remain open. The whole-library termination target is unchanged.
+
+Root strict, complete FULL and independent review pass. Audit passes 3599
+jobs /74973 dependencies. Five actual Lean/Lake commands include one retained
+strict failure with six inference errors. The exact repair supplies actual
+requests and intermediate table-state goals. Public premises/types stay.
+Selected/root strict logs are empty. The sole public head has all eight
+settings, identical complete checked/printed types and standard axioms.
+No canonical, infrastructure, constructed or reviewer proof job ran.
+Only the old Audit warning remains. Counts do not measure completion.
+
+All old sources/evidence/version exceptions remain. Haskell/packages/main,
+stashes and other worktrees stay unchanged. No new Haskell defect or repair.
+FINDINGS keeps the external repair index FIRST. The full goal stays active.
+
+## Current native stores at unfinished outer prefixes
+
+Updated: 2026-10-21 09:44 CEST. Proof checkpoint: `3a69a13963`.
+Start: `49661106c3`. Imported main remains `794903b3f`.
+Read `lean/notes-current-outer-prefix-native-stores.md`.
+
+OuterPrefixNativeStores.reached retains the complete old same-cut resource
+tuple and adds native positive Support, causal Mu History from empty,
+conditional Merge Stored Plain, positive Merge Support and UnionNormal.
+It follows literal ExecutionAncestry.Reached. It needs neither stronger
+ActiveAncestry sibling graphs nor a future enclosing return.
+
+A private store-only induction reuses public OuterInitialPrefix.reached
+at each SAME earlier prefix. Actual completed row heads use ONE numeric
+receipt. The row tail then uses actual descendants at the returned Parent
+seed and middle caller. Walk tails use the actual indexed descent and
+completed node. Other cuts retain native state and Merge literally.
+Initial Context/Frame/Fits/Carrier/Inputs/scheduledRoom and five store laws
+remain genuine requirements. No old resource induction is copied.
+
+ResourceParentWriters already proves the separate joint historical writer
+record for local cold and warm edge calls. Transport of that new Origins
+through recursive completed workers and unfinished prefixes is next. Its
+frozen one-head plan reuses these resource/store endpoints. Owner exclusion,
+renewal, final retention, general outer completion, convergence, broader
+initial-resource production and Haskell refinement remain open.
+
+Root strict, complete FULL and independent review pass. Audit passes 3598
+jobs /74960 dependencies. Five actual Lean/Lake commands include one retained
+strict failure; it cleared the store bundle name. The reviewed repair saves
+the SAME proof before destructuring. Selected/root strict logs are empty.
+The sole public head has complete identical checked/printed types, all eight
+settings and standard axioms. No canonical, infrastructure, constructed or
+reviewer proof job ran. Only the old Audit warning remains.
+
+All old sources/evidence/version exceptions remain. Haskell/packages/main,
+stashes and other worktrees stay unchanged. No new Haskell defect or repair.
+FINDINGS keeps the external repair index FIRST. Counts are not completion.
+The full goal stays active.
+
+## Current original Parent writer resources
+
+Updated: 2026-10-21 09:35 CEST. Proof checkpoint: `d7eb21f3bc`.
+Start: `b050f3a014`. Imported main remains `794903b3f`.
+Read `lean/notes-current-resource-parent-writers.md`.
+
+ResourceParentWriters now records one complete historical Parent entry.
+Written keeps the actual caller, literal Parent execution, inventory,
+profile, global memo bundle, Context, Frame, Fits, request readiness and
+residency, field/child availability, numeric reservation and five store
+laws together in ONE existential. Origins attaches this joint witness to
+the captured request and complete value in each returned edge cell.
+
+initial proves Origins for empty edge tables. edge_call preserves Origins
+and returns Written for its actual request/result. Cold calls use the same
+captured owner and running caller. Warm hits recover the old stored witness;
+current readiness/coherence identifies the full request. The reader does
+not supply facts about the old writer. Generic memo lifecycle laws protect
+the actual evaluating handle. No old weak writer record is conjoined with
+an unrelated stronger existential.
+
+This is one local completed-call theorem. Its integration through recursive
+outer workers and unfinished prefixes remains. Completed outer store laws
+are already proved; their unfinished-prefix extension has a frozen exact
+plan. Initial semantic, numeric and store contracts remain genuine inputs.
+Owner exclusion, renewal, final retention, general outer completion,
+convergence, broader initial-resource production and Haskell refinement
+remain open. The whole-library termination target is unchanged.
+
+Root strict, complete FULL and independent review pass. Audit passes 3597
+jobs /74955 dependencies. Five actual Lean/Lake commands include one retained
+strict failure with three eliminated-name references. Selected/root strict
+logs are empty. All four public heads have identical complete checked and
+printed types, all eight settings and only standard axioms. No canonical,
+infrastructure, constructed or reviewer proof job ran. Only the old Audit
+warning remains. Counts do not measure completion.
+
+All old sources, evidence and version exceptions remain. Haskell/packages/
+main, stashes and other worktrees stay unchanged. No new Haskell defect or
+repair. FINDINGS keeps the external repair index FIRST. Goal active.
+
+## Current native stores through completed recursive outer calls
+
+Updated: 2026-10-21 09:19 CEST. Proof checkpoint: `fbf7f9f412`.
+Start: `bba9f2a1bf`. Imported main remains `794903b3f`.
+Read `lean/notes-current-outer-native-stores.md`.
+
+OuterNativeStores.edge_call keeps one supplied numeric edge receipt and
+adds positive native Support, causal Mu History, conditional Merge Stored
+Plain, positive Merge Support and UnionNormal at its exact returned caller.
+node_call and descendants preserve these laws through all six internal
+recursive phases. The proof follows actual completed earlier siblings.
+Existing public producers supply their Post, Frame, updated Fits, Carrier
+and exact global memo bundles. No old inventory or profile is reused after
+real allocation. The new laws depend on the same returned caller; separate
+existential global bundles need not be equated.
+
+Cold edge calls use the same captured owner and actual Parent graph.
+Ready hits keep the caller. Actual raw edge/node reconstruction supplies
+Extension and unchanged native cells for SupportAdvance. Actual NoNewMu
+supplies causal History.retain. Resident Mu cleanup keeps the entire caller
+under the existing probe invariant. No unrestricted Mu ancestry law is added.
+
+Genuine entry Context/Frame/Fits, finite guard Carrier, scheduled Room,
+phase inputs, normality and initial store laws remain. A successful return
+does not create these premises. The result proves preservation, not general
+termination. Existing OuterInitialPrefix.reached already supplies ordinary
+resources at unfinished prefixes without a future enclosing return. Adding
+the new store laws there and integrating the same-writer resource ledger
+remain next. Owner exclusion, renewal, final retention, outer completion,
+convergence, broader initial resources and Haskell refinement remain open.
+
+Root strict, complete FULL and independent review pass. Audit passes
+3596 jobs /74948 dependencies. Seven actual Lean/Lake commands include
+three retained failed stricts; the second includes warnings. Selected and
+root strict logs are empty. All three public heads have complete identical
+checked/printed types, all eight settings and standard axioms. No canonical,
+infrastructure or constructed job. Only the old Audit warning remains.
+Counts do not measure completion. Prelaunch and failed source versions stay.
+
+All old sources/evidence and version exceptions remain. Haskell/packages/
+main, stashes and other worktrees stay unchanged. No new Haskell defect or
+repair. FINDINGS keeps the external repair index FIRST. Goal active.
+
+## Current native stores through every completed Parent branch
+
+Updated: 2026-10-21 08:58 CEST. Proof checkpoint: `f7bea7da44`.
+Start: `baadd6c647`. Imported main remains `794903b3f`.
+Read `lean/notes-current-general-parent-native-stores.md`.
+
+ActualParentNativeStores.parent retains ONE numeric Parent receipt and
+proves positive native Support, causal Mu History, conditional Merge
+Stored Plain and positive Merge Support at that exact returned state.
+It covers raw rejection, unchanged children, early erasure, stopped Scan,
+completed Required/pass, and both final constructor outcomes. Internal
+class children remain separate from the sentinel's returned children.
+
+The proof inverts the same receipt's source reads. Stopped Scan derives
+its actual new inventory from existing ScanSoundness on that SAME Scan.
+Completed work uses the same Scan/Retained/Required/Pass cuts, exact global
+memo bundles, original false primary gates and RequiredPositiveChronology.
+The constructor uses actual nodeRecords equality for causal retention.
+Growth or native table equality alone does not create this History.
+
+Genuine initial Context/Frame/Fits/Live/Reserved, normality, native
+positive Support, causal History and both additional Merge laws remain.
+Current comes from Frame. Numeric reservation derives entry Scan Ranges.
+The theorem adds no caller graph, Ranges or future-return oracle.
+
+Strict, complete FULL and independent review pass. Audit passes 3595
+jobs /74934 dependencies. 6 actual Lean/Lake commands
+include 2 retained failed commands: author strict1 and root Audit1.
+Audit1 had a misplaced import; Audit2 passes with it correctly placed.
+The prelaunch stopped-inventory
+correction is separately preserved and ran no failed proof command.
+Selected checks are clean; the old Audit warning remains. Counts do not
+measure completion. No canonical or constructed job is added.
+
+The audit further narrows the next work. Existing OuterInitialActual
+already supplies unrestricted completed-sibling Post/Frame/Fits/Carrier.
+Existing OuterInitialPrefix.reached also supplies exact current resources,
+SeedTrace and scheduled Room at UNFINISHED prefixes, from genuine initial
+Room and inputs, without a future outer return. Existing normality laws
+cover all Parent and outer stopping outcomes. Reuse these APIs unchanged.
+The new four-law completed outer transport, its prefix extension and the
+same-writer resource ledger remain. Establishing the broader initial
+resource contract, owner exclusion, renewal, retention, outer completion,
+convergence and Haskell refinement remain open.
+
+All old sources and version exceptions remain. Haskell/packages/main,
+stashes and other worktrees stay unchanged. No new Haskell defect or repair.
+FINDINGS keeps its repair index FIRST. The full goal stays active.
+
+## Current selected certificates from one actual Parent receipt
+
+Updated: 2026-10-21 08:38 CEST. Proof checkpoint: `1379dd498f`.
+Start: `a85fe5bbcc`. Imported main remains `794903b3f`.
+Read `lean/notes-current-actual-parent-selected-certificates.md`.
+
+ActualParentSelectedCertificates.selected_certificates now derives the
+exact Retained records, Required receipt, PassReads and prepared global
+memo validity from ONE resource-backed Parent receipt. The same receipt's
+read graph supplies every selected stage and intermediate memo bundle.
+Record uniqueness retains full records, trie fields, order and multiplicity.
+Required and Pass uniqueness align their complete actual returns.
+
+The result keeps that numeric receipt, actual MkEdge suffix, explicit
+savedFourth = scanFourth, and HEq to the assembled live/classes/completed
+graph. It also keeps all seven scanned state laws and scanned UnionNormal.
+Entry Current comes from the existing OperandFrame.current theorem.
+The initial numeric Scan producer supplies its entry-indexed Ranges.
+Its separate completion witnesses are discarded. No caller Ranges,
+Retained, Required receipt, PassReads or prepared-validity oracle remains.
+
+Genuine Context/Frame/Fits/Live/Reserved and initial positive native
+Support, causal History and UnionNormal remain. Context retains its
+ordinary semantic memo laws. The later owner-pair consumer still needs
+genuine conditional and positive Merge laws at that same writer entry.
+
+Root strict, complete FULL and independent review pass. Audit passes
+3594 jobs /74931 dependencies. Four actual Lean/Lake commands all pass.
+FULL has 6419396 bytes, all eight settings, identical checked/printed
+types, complete proof and standard axioms. No canonical, infrastructure
+or constructed job. Only the old ClosedCompletion Audit warning remains.
+The independent prelaunch correction fixed an ill-typed homogeneous graph
+equality by returning explicit fourth equality and HEq. The original plan
+and unexecuted draft remain. The corrected source passed without changes.
+
+The sibling audit narrows the remaining work. Existing EdgeCallNumeric
+and unrestricted OuterInitialActual node/descendants/rows/children/walk
+APIs already return exact Post/Frame/updated Fits under real entry seed,
+Carrier and Room contracts. Reuse them. Warm edge hits retain the complete
+caller state. The new all-branch Parent positive Support/History and
+required Merge preservation remain unproved, followed by the completed
+node/descendants induction and same-writer ledger. Initial resource
+contracts must still connect to the full outer proof. Owner exclusion,
+renewal, retention, outer completion, convergence and Haskell refinement
+remain open. Counts do not measure completion.
+
+All old proofs, evidence and version exceptions remain. Haskell/packages/
+main, stashes and other worktrees stay unchanged. No new Haskell defect
+or repair. FINDINGS keeps its repair index FIRST. The goal stays active.
+
+## Current same-owner pair in the actual combined equality classes
+
+Updated: 2026-10-21 08:09 CEST. Proof checkpoint: `c0ba63be06`.
+Start: `97f3df8f3a`. Imported main remains `794903b3f`.
+Read `lean/notes-current-actual-owner-pair.md`.
+
+ActualOwnerPair.required_pair now derives two distinct suffixes through
+the SAME child in one class of the actual combined inherited constraint.
+The original owner row, original child forest, selected precheck/Scan,
+Required return, pass output and positive ancestry remain correlated.
+Nonempty retained records derive that SAME member row is nonplain.
+No nonplain, backwards relation or common-anchor oracle is supplied.
+
+The actual inherited-first prefix supplies one live combined payload.
+Its genuine operation validity, inherited readiness and available field
+derive fixedness and whole-class Covers. Both endpoints of each old class
+relation enter one covering component with the SAME suffix. Individual
+path membership is insufficient. RequiredPositiveChronology.pass runs
+once; PositiveOwnerPair then uses the exact original row.children lookup.
+No finite enumeration or runtime rank is a caller premise.
+
+The theorem consumes actual Precheck/Retained/Required/PassReads
+certificates and genuine historical native, Merge and global memo laws.
+It does not yet derive those certificates from the literal Parent worker
+or store the laws in a cold/warm writer ledger. The live combined-payload
+branch is explicit. Contradiction and delayed descent remain separate.
+
+Root strict, complete FULL and independent review pass. Audit passes 3593 jobs /74929 dependencies. Five actual Lean/Lake commands include one retained strict failure.
+The source-only reserved binder was renamed before the first proof job.
+The failed strict found projection notation and Except type inference.
+The final mechanical fix changes no mathematical premise or conclusion.
+Selected checks are clean. FULL uses all eight settings, identical public
+types and standard axioms. No canonical, infrastructure or constructed job.
+Only the old ClosedCompletion Audit warning remains. Counts do not measure
+completion. A separate pinned erratum corrects a usage-report sentence;
+raw samples are 52, 52 and 51 percent. All passed the fresh usage gate.
+
+The next local plan obtains exact selected Required/pass certificates
+from ONE numeric Parent receipt. Existing record-worker completion and
+full-result uniqueness retain complete records, trie fields and order.
+Path projection need not be injective. Historical native entry production,
+unfinished prefix resources, actual owner exclusion, renewal, retention,
+outer completion, convergence and Haskell refinement remain open.
+
+All older sources, evidence and controlled version exceptions remain.
+Haskell/packages/main, stashes and other worktrees stay unchanged.
+No new Haskell defect or repair. FINDINGS keeps its repair index FIRST.
+The full goal stays active.
+
+## Current native state at the actual selected Parent Scan
+
+Updated: 2026-10-21 07:58 CEST. Proof checkpoint: `ee0b18d8ba`.
+Start: `fbfbd87d8d`. Imported main remains `794903b3f`.
+Read `lean/notes-current-actual-parent-scan-stores.md`.
+
+ActualParentScanNativeStores.selected_scan derives the admitted Scan and
+its native state laws at the SAME observed historical Parent Scan cut.
+It calls the existing numeric Parent producer once. It retains that same
+receipt in the conclusion. Successful worker determinism aligns outcome,
+selected paths, complete checked state and fourth memo with the literal
+RecordScan return. The numeric graph is not an input oracle.
+
+The actual precheck receipt supplies Ready and proper original paths.
+Its complete native state is literally unchanged. Entry Values, Current,
+positive native Support and causal History therefore apply at that prefix.
+ScanNativeStores then supplies full Ready, physical Effects, machine
+Extension, original Values, Current, Support and History at the SAME cut.
+No cap, future enclosing return or per-sibling Ready is a new premise.
+
+Genuine initial Context, Frame, Profile, Fits, LiveInputs and Reserved
+remain explicit resource premises. Initial native laws also remain.
+This local producer does not create resources at every unfinished outer
+prefix or retain them in the cold/warm historical writer table.
+
+Root strict, complete FULL and independent review pass. Audit passes 3592 jobs /74926 dependencies. There are 4 actual Lean/Lake commands and 0 retained nonzero commands.
+Selected checks are clean. Only the old ClosedCompletion Audit warning
+remains. Every actual proof command has fresh usage and effective 4 GiB
+max/high, swap zero and five-minute limits. Counts do not measure completion.
+
+The frozen next geometry plan derives the actual source row is nonplain
+from nonempty retained records. The actual inherited-first combination
+gives whole-class Covers and fixedness for the same combined family.
+Its proposed consumer lifts actual Required/pass positive ancestry through
+that coverage and calls the finite same-child pair theorem. That consumer
+is not proved in this checkpoint. Historical writer-entry production,
+unfinished prefix resources, owner exclusion, renewal, retention, outer
+completion, convergence and Haskell refinement remain open.
+
+All older source/evidence and controlled version exceptions remain.
+Haskell/packages/main, stashes and other worktrees stay unchanged.
+No new Haskell defect or repair. FINDINGS keeps its repair index FIRST.
+The full goal stays active.
+
+## Current native state through one completed Scan graph
+
+Updated: 2026-10-21 07:39 CEST. Proof checkpoint: `bd0c13df34`.
+Start: `3f4e16c6ac`. Imported main remains `794903b3f`.
+Read `lean/notes-current-scan-native-stores.md`.
+
+SourceCurrentScanNativeStores.scan now preserves full Ready, physical
+Effects, machine Extension, original forest availability, Current native
+laws, positive native Support and actual causal History through the SAME
+supplied completed Scan graph. Both stopping and continuing outcomes work.
+Genuine entry Ready includes Scoped and Idle. Original classes must have
+proper nonempty paths. Initial Current/Support/History remain premises.
+
+Actual primary/secondary gates supply exact intervals and causal guard
+observations. Secondary FALSE supplies support at its SAME returned anchor.
+The seeded fold projects the head, executes its actual tail, then runs
+the SAME admitted native Trace. Uncapped store preservation, actual scope,
+physical effects and result availability all concern that same return.
+The actual conjunction hit/miss uses physical Effects without Memo.Correct.
+The original forest remains available through those exact effects.
+
+No input cap, whole-forest closure, supplied future range plan or semantic
+memo oracle is a premise. The theorem consumes an admitted physical graph.
+Bare literal worker success still needs genuine admission/resource facts.
+Machine word bounds are a real contract; success alone may not imply them.
+No new Haskell defect follows from that source-only boundary.
+
+Root strict is empty. Complete FULL1, independent review and default Audit
+pass: 3591 jobs /74919 dependencies. The public head uses standard axioms.
+Five actual Lean/Lake commands include one retained elaboration failure.
+Two local fixes correct a constructor pattern and request-record inference.
+Selected strict/FULL checks are clean. No canonical or infrastructure
+attempt ran. Only the old ClosedCompletion Audit warning remains.
+Counts do not measure completion. All sealed raw logs must be indexed.
+
+The next writer receipt must keep ONE actual historical writer tuple and
+its genuine entry native laws. Current reader facts cannot supply past
+writer facts. Existing Frame/Profile/Fits/Reserved and semantic Context
+can produce admitted Parent reads at the SAME literal return. Connecting
+those receipts is next. Completed class receipts ALREADY return full Ready,
+including Scoped/Idle. No new class scope induction is needed there.
+Unfinished prefix resources, actual source-row/normalized Covers, owner
+exclusion, renewal, retention, outer completion, convergence and Haskell
+refinement remain open. Earlier counterexamples and version exceptions stay.
+
+All older source/evidence, Haskell/package files, stashes, other worktrees
+and main remain. No Haskell source, runtime result or external repair changes.
+Keep the Haskell repair index FIRST in FINDINGS. The full goal stays active.
+
+## Current actual Scan publication intervals and native scope
+
+Updated: 2026-10-21 07:24 CEST. Proof checkpoint: `2c8c6d4d00`.
+Start: `148b5cb5cb`. Imported main remains `794903b3f`.
+Read `lean/notes-current-scan-publication-intervals.md`.
+
+Actual primary and secondary gate class traces now derive their own causal
+publication intervals for both Boolean results. The actual conjunction
+memo call also derives its interval from physical readiness and query
+availability. Neither result needs an earlier History, a guard predicate,
+a finite root cap or semantic correctness of the warm emptiness memo.
+
+A completed physically admitted native Trace now derives WordRanges over
+all CHECKED yielded prefixes. Physical Inputs give the exact word checks.
+Determinism aligns prefix controls and complete states; pure cannot yield.
+The same actual query therefore retains Scoped, Idle and a closed result
+from genuine entry scope/idle, Good, semantic and closed available inputs.
+Existing scope completion and actual Step.unique align the SAME return.
+No word-range forecast or desired result closure is a caller premise.
+
+All three root strict logs are empty. Complete FULL readbacks cover five
+public heads, all eight printer settings and only standard axioms.
+Independent reviews and default Audit pass: 3590 jobs /74902 dependencies.
+Fourteen actual Lean/Lake commands include two retained failures: mutual
+instance inference and a reserved binder name. Two earlier conjunction
+successes have private binder warnings. Selected checks are clean.
+Two separate bus-denied attempts launched no worker or Lean. Their exact
+logs, receipts and absent limits remain explicit. No canonical job ran.
+Copies add no jobs. Only the old ClosedCompletion Audit warning remains.
+
+All old proof sources, registries, evidence, Haskell/package files, stashes,
+other worktrees and main remain. The earlier additive native-query source
+exception stays explicit. All sealed raw logs must be indexed.
+No Haskell source, runtime result or external repair changes.
+
+The next step composes these checked prerequisites through the SAME
+completed Scan graph from genuine entry Ready/Current/positive Support/
+causal History and proper original classes. This whole Scan producer is
+still unproved. Literal worker success alone does not give physical Inputs;
+that worker-to-admission boundary remains separate. Historical writer
+entry laws, actual source-row/normalized-family Covers, unfinished cuts,
+owner exclusion, renewal, retention, outer completion, convergence and
+Haskell refinement remain open. Counts do not measure completion.
+The goal remains active. Keep the Haskell repair index FIRST in FINDINGS.
+
+## Current conditional native stores through completed queries
+
+Updated: 2026-10-21 07:09 CEST. Proof checkpoint: `a3c6496f97`.
+Start: `343dd1f9d0`. Imported main remains `794903b3f`.
+Read `lean/notes-current-native-query-stores.md`.
+
+Two actual completed-query endpoints now preserve conditional native
+stores without finite caps on the current operands. call_stores retains
+old-source positive Support, the SAME public joint Return and actual
+causal History. step rebases those SAME returned cells to their actual
+return heap through origins captured at the OLD entry source.
+
+The actual query still needs closed available operands and genuine entry
+Current, positive Support, causal History, Good and semantic facts.
+The finite pair inventory uses an internal constant interpretation only
+to certify its inputs. It adds no result language, cap or positive OR law.
+The opaque-Mu counterexample still refutes an unrestricted result OR.
+
+Both root strict logs are empty. Complete FULL2, independent review and
+default Audit pass: 3587 jobs and 74879 dependencies. Both heads use only
+the standard three axioms. All eight actual Lean/Lake commands pass.
+One author temporary canonical artifact supplies the changed dependency
+for adapter checking. Root reuses it through an external merged import
+directory. The final Audit builds the official modules. Copies add no jobs.
+Only the old ClosedCompletion Audit warning remains.
+
+The old 1193-line query module is an explicit additive version exception.
+Removing ONLY the new 32-line theorem and inserted newline reproduces
+every old byte. Its original source and historical manifests remain.
+The combined source has 1226 lines. The new adapter has 75 lines.
+All other old proof sources, registries, evidence, Haskell/package files,
+stashes, other worktrees and main remain. All sealed raw logs are indexed.
+
+This closes one store transition needed by Scan. It does not produce
+Scan's actual gate/conjunction causal intervals, scoped closure/cache
+facts or historical writer-entry laws. The finite positive-path pair
+theorem still needs actual ancestry, a literal source row and normalized
+class-family Covers. Unfinished cuts, actual owner exclusion, renewal,
+retention, outer completion, convergence and Haskell refinement remain open.
+Counts do not measure completion. The full goal remains active.
+Keep the Haskell repair index FIRST in FINDINGS. No new Haskell repair.
+
+## Current same-child pairs from finite positive paths
+
+Updated: 2026-10-21 06:52 CEST. Proof checkpoint: `b3e56e2f05`.
+Start: `82cf1af388`. Imported main remains `794903b3f`.
+Read `lean/notes-current-positive-owner-pair.md`.
+
+The pure same_child_pair theorem now derives one fixed equality class with
+two distinct suffixes through the chosen child. It consumes positive
+ancestry from a literal ordinary owner to one SAME member row's child
+forest. The row has a nonplain guard. No common anchor, finite enumeration,
+choice map or count bound is supplied by the caller.
+
+A private exact list deduplicates PositiveAt PATHS across rows and unions.
+The nonplain row gives its positive root. Every source child path lifts
+through that SAME row to a nonempty positive owner path. If every class
+dropped at the chosen child, child_separate would make the total ancestry
+relation injective into the same finite path set with its root removed.
+The checked finite-relation cardinality theorem gives a contradiction.
+Structural mass bounds only private enumeration. It is not a runtime rank.
+
+Root strict is empty. Complete FULL1, independent review and default Audit
+pass: 3586 jobs and 74877 dependencies. The sole head uses the standard
+three axioms. Five actual Lean/Lake commands include one retained unknown-
+tactic failure. Two explicit contradiction introductions fix that failure.
+Copies add no jobs. Only the old ClosedCompletion Audit warning remains.
+Counts do not measure completion. All older sources, registries, evidence,
+Haskell/package files, stashes, other worktrees and main remain.
+All sealed raw logs must be indexed.
+
+This is a geometry CONSUMER. Actual execution must supply its ancestry,
+SAME source row and normalized class-family Covers. Historical writer/Scan
+native stores and causal History remain missing execution producers.
+The next plan isolates native store preservation for actual uncapped
+Scan queries. Their PRIMARY gate can be true while SECONDARY is false.
+Later kept primary-false gates do not cap those query inputs. Conditional
+cache laws can remain valid without a result cap or unrestricted OR law.
+A small public interface to the existing conditional induction is planned.
+It remains unproved. Unfinished cuts, actual owner exclusion, renewal,
+retention, outer completion, convergence and Haskell refinement remain open.
+
+Keep the Haskell repair index FIRST in FINDINGS. Insert proof updates AFTER it.
+No new Haskell source, runtime result or external repair. All earlier repair
+entries remain. The full goal is active. Regular formalize pushes are authorized.
+
+## Current original-forest ancestry through Required and class passes
+
+Updated: 2026-10-21 06:37 CEST. Proof checkpoint: `1b6fbb0245`.
+Start: `8c84cf8719`. Imported main remains `794903b3f`.
+Read `lean/notes-current-required-positive-chronology.md`.
+
+The SAME actual Required receipt and completed class pass now trace every
+positive output to a positive position in the ORIGINAL pre-Required forest
+under Rel selected. The pass's exact prepared source lookup and path feed
+the checked Required positive observer. Only the relation family changes
+by selectedEq. Original, prepared and returned forests remain distinct.
+
+Genuine scan Current, positive native Support and causal History are entry
+premises. The SAME actual RequireChildren graph derives prepared guard
+profiles and a real causal interval. Receipt extension and complete native
+table equalities derive prepared Current and Support. No redundant prepared
+laws or all-edges-Plain premise is added. Original false gates derive the
+actual prepared masks. Memo validity at the prepared heap remains genuine.
+
+The sole public pass returns its exact Receipt, final cap stores, forward
+raw corridors from PREPARED values, final positive stores and causal History.
+Root strict is empty. Complete FULL1, independent review and default Audit
+pass: 3585 jobs and 74864 dependencies. The sole head uses the standard
+three axioms. All four actual Lean/Lake commands pass without source changes.
+Copies add no jobs. Only the old ClosedCompletion Audit warning remains.
+Counts do not measure completion. All older sources, registries, evidence,
+Haskell/package files, stashes, other worktrees and main remain.
+All sealed raw logs must be indexed.
+
+The next plan tests finite positive PATH counts for a same-child pair.
+A nonplain owner has a positive root. Original row-child source paths lift
+to nonempty positive owner paths. Under a fixed class family with no
+same-child pair, child_separate would make ancestry injective into this
+strictly smaller finite set. This is a geometry consumer of the checked
+ancestry law. It is not yet a proved owner-exclusion theorem.
+Actual class-family coverage, historical writer-entry and Scan laws,
+unfinished cuts, owner exclusion, renewal, retention, outer completion,
+convergence and Haskell correspondence remain open. Opaque-Mu examples remain.
+
+Keep the Haskell repair index FIRST in FINDINGS. Insert proof updates AFTER it.
+No new Haskell source, runtime result or external repair. All earlier repair
+entries remain. The full goal is active. Regular formalize pushes are authorized.
+
+## Current positive ancestry through completed class passes
+
+Updated: 2026-10-21 06:29 CEST. Proof checkpoint: `013d47f7e3`.
+Start: `9bd422d2b2`. Imported main remains `794903b3f`.
+Read `lean/notes-current-class-positive-chronology.md`.
+
+Actual completed class folds and passes now trace every positive output
+position to a positive position in the whole fold's literal entry forest.
+The relation uses records.map Record.paths and complete natural forest
+paths. Each head captures its actual tail return. The tail induction derives
+native positive Support, causal History and Merge positive Support at that
+SAME entry cut. The caller supplies only the genuine initial store laws.
+
+The SAME tail receipt supplies physical facts and domains. Ordered raw
+corridors transfer original masks to each changed capture. The head's
+exact positive source lookup feeds the tail's ancestry law. Private Rel
+weakening embeds the actual head and tail families. Rel.trans composes
+at their identical intermediate path. Final empty propagation creates
+no positive occurrence and changes no state or cache.
+
+Both public heads retain the SAME actual Receipt, current/Merge cap laws,
+forward raw corridors, final positive stores and causal History.
+Root strict has an empty log. Complete FULL2, independent review and default
+Audit pass: 3584 jobs and 74863 dependencies. Both heads use only the
+standard three axioms. All four actual Lean/Lake commands pass without
+source changes. Copies add no jobs. Only the old ClosedCompletion Audit
+warning remains. Counts do not measure completion. All older sources,
+registries, evidence, Haskell/package files, stashes, worktrees and main remain.
+All sealed raw logs must be indexed.
+
+The archived next plan is one actual Required-entry adapter. It must derive
+prepared Current, positive native Support and causal History from genuine
+scan entry laws and that SAME Required receipt. Original false gates and
+the checked Required positive observer can then trace the pass's source
+to the SAME slot/path in the ORIGINAL forest. This adapter remains unproved.
+Common anchors, unfinished cuts, historical writer-entry stores, owner
+exclusion, renewal, retention, outer completion, convergence and Haskell
+correspondence remain open. Opaque-Mu counterexamples remain.
+
+Keep the Haskell repair index FIRST in FINDINGS. Insert proof updates AFTER it.
+No new Haskell source, runtime result or external repair. All earlier repair
+entries remain. The full goal is active. Regular formalize pushes are authorized.
+
+## Current positive ancestry through one completed class
+
+Updated: 2026-10-21 06:22 CEST. Proof checkpoint: `ebb8b3af57`.
+Start: `e3c7a92734`. Imported main remains `794903b3f`.
+Read `lean/notes-current-class-positive-ancestry.md`.
+
+The SAME actual completed class now traces every positive output position
+to a positive position in its literal input forest under Rel [record.paths].
+The proof retains exact forest indices, full values and natural paths.
+It also returns the SAME class Receipt, forward raw corridors, current
+native and Merge cap laws, positive native and Merge stores, and causal
+publication History. Entry support and history remain genuine premises.
+
+The private joint induction derives local same-path ancestry OR captured
+ancestry. Exact compiled leaf pairs identify the action token with its
+absolute address. Actual Force supplies the exact stored target law.
+The SAME native query preserves its positive suffix. Ordered full rows
+retain guards and child indices through constructor normalization.
+An actual recursive Head uses the finite cap from a retained leaf corridor.
+Constructor publication intervals use actual NoNewMu. No desired output
+ancestry is supplied by the caller.
+
+Root strict has an empty log. Complete FULL1, independent review and default
+Audit pass: 3583 jobs and 74854 dependencies. The sole public theorem uses
+only the standard three axioms. Five actual Lean/Lake commands include one
+retained elaboration failure. Selected strict and FULL checks are clean.
+Copies add no jobs. Only the old ClosedCompletion Audit warning remains.
+Counts do not measure completion. All older sources, registries, evidence,
+Haskell/package files, stashes, other worktrees and main remain.
+All sealed raw logs must be indexed.
+
+The next plan is positive chronology through the actual completed class
+fold and pass. Each class captures its actual tail-produced forest.
+The induction must compose Rel witnesses and derive entry support/history
+at that same tail return. It must not assert old false gates on changed
+values. Separate existential sources do not give two witnesses to ONE
+common anchor. Unfinished cuts, historical writer-entry stores, common
+anchors, owner exclusion, renewal, retention, outer completion, convergence
+and Haskell correspondence remain open. Opaque-Mu counterexamples remain.
+
+Keep the Haskell repair index FIRST in FINDINGS. Insert proof updates AFTER it.
+No new Haskell source, runtime result or external repair. All earlier repair
+entries remain. The full goal is active. Regular formalize pushes are authorized.
+
+## Current positive paths through actual capped Head
+
+Updated: 2026-10-21 06:08 CEST. Proof checkpoint: `d8c7e42e8e`.
+Start: `c34745cbc2`. Imported main remains `794903b3f`.
+Read `lean/notes-current-capped-head-positive.md`.
+
+The SAME actual Head return now has a public positive-path inverse under
+its genuine input finite cap and guard heap. The proof retains the actual
+underlying Read and its full rows. Actual makeNode readback maps each
+positive returned row to a SAME surviving raw read row. Root guards and
+ordered child/residual paths remain exact. Public capped observers use
+Project.root and that SAME underlying Read at the ORIGINAL reader heap.
+No nodeEdges Mu substitution or recursive-exposure framework is added.
+
+Root strict has an empty log. Complete FULL1, independent review and default
+Audit pass: 3582 jobs and 74833 dependencies. The sole public theorem uses
+only the standard three axioms. All four actual Lean/Lake commands pass.
+Copies add no jobs. Only the old ClosedCompletion Audit warning remains.
+Counts do not measure completion. All older sources, registries, evidence,
+Haskell/package files, stashes, other worktrees and main remain.
+All sealed raw logs must be indexed.
+
+The archived rel-plan specifies the next ONE completed-class endpoint.
+Its private joint induction must return same-q local input ancestry OR
+a source in the SAME class capture with Rel at the exact absolute path.
+The new slot theorem supplies the target branch; this Head inverse supplies
+the recursive input branch. Exact compiled leaf token/address equality,
+actual stores, causal History and constructor NoNewMu remain necessary.
+That class theorem is still an unproved implementation. Later positive
+chronology, unfinished cuts, historical writer-entry stores, common anchors,
+owner exclusion, renewal, retention, outer completion, convergence and
+Haskell correspondence remain open. Opaque-Mu counterexamples remain.
+
+Keep the Haskell repair index FIRST in FINDINGS. Insert proof updates AFTER it.
+No new Haskell source, runtime result or external repair. All earlier repair
+entries remain. The full goal is active. Regular formalize pushes are authorized.
+
+## Current exact positive ancestry in class target slots
+
+Updated: 2026-10-21 06:01 CEST. Proof checkpoint: `65e1b3596d`.
+Start: `40a6f9bfd3`. Imported main remains `794903b3f`.
+Read `lean/notes-current-class-target-positive-slots.md`.
+
+One actual completed Force now retains positive ancestry for EVERY present
+class target slot. For each positive suffix q in a stored target, the law
+returns a competing class path, the SAME captured forest index and value,
+and positivity there at the remaining path ++ q. The forest index is not
+inserted into a Node path. The class capture stays fixed throughout.
+
+Actual projection and the SAME Merge winner derive each operand's cap
+and positive source. The joint Fold follows head operand, recursive tail,
+then the SAME checked query. Its OR law keeps q unchanged. Returned native
+Support, causal publication History and both Merge laws pass to the next
+actual call. A miss installs the law for its exact result. A hit reuses
+the exact earlier slot certificate. Initial empty slots satisfy the entry
+law by absence. Genuine prior warm stores and causal History remain.
+
+Root strict has an empty log. Complete FULL1, independent review and default
+Audit pass: 3581 jobs and 74832 dependencies. The sole public theorem uses
+only the standard three axioms. Seven actual Lean/Lake commands include
+three retained elaboration failures. Selected strict and FULL are clean.
+Copies add no jobs. Only the old ClosedCompletion Audit warning remains.
+Counts do not measure completion. All older sources, registries, evidence,
+Haskell/package files, stashes, other worktrees and main remain.
+All sealed raw logs must be indexed.
+
+Next, compose positive ancestry through ONE actual completed class edit
+into Rel for its exact record and captured forest. Recursive Head needs
+a small cap-backed positive inverse. Changed-capture chronology, genuine
+unfinished cuts, historical Parent writer-entry stores and a common
+anchor for normalized child separation remain separate obligations.
+Owner exclusion, renewal, retention, outer completion, convergence and
+Haskell correspondence remain open. Opaque-Mu counterexamples remain.
+
+Keep the Haskell repair index FIRST in FINDINGS. Insert proof updates AFTER it.
+No new Haskell source, runtime result or external repair. All earlier repair
+entries remain. The full goal is active. Regular formalize pushes are authorized.
+
+## Current positive support and projected-value bridges
+
+Updated: 2026-10-21 05:52 CEST. Proof checkpoint: `e4aface14c`.
+Start: `12f12fb057`. Imported main remains `794903b3f`.
+Read `lean/notes-current-positive-slot-bridges.md`.
+
+Two small additive modules supply the missing local bridges for actual
+target operands. NativePositiveSupportAdvance.advance retains positional
+Support through literal unchanged native tables and an actual machine
+extension. It transports the SAME captured Origins and Support at the
+OLD source, then rebases them at the actual later heap. It supplies no
+causal History or new-cell law from growth alone.
+
+RawCorridorPositiveValue.project traces a positive returned value to its
+SAME captured input at projectionPath ++ positiveSuffix. An empty PROJECT
+path is literal identity, including unions. A nonempty actual projection
+returns an ordinary value. Its actual zero-fuel read and exact row/child
+use the checked raw observers. No full cap on unrelated input branches,
+closure premise or new recursive-exposure framework is added.
+
+Both root strict logs are empty. Complete FULL1/FULL1, independent review
+and default Audit pass: 3580 jobs and 74824 dependencies.
+Both public theorems use only the standard three axioms.
+Eight actual Lean/Lake commands include one retained elaboration failure.
+It was fixed by two explicit private header types. Public shapes remain.
+Copies add no jobs. Only the old ClosedCompletion Audit warning remains.
+Counts do not measure completion. All older sources, registries, evidence,
+Haskell/package files, stashes, other worktrees and main remain.
+All sealed raw logs must be indexed.
+
+The archived slot-plan now specifies the exact fixed-capture target law.
+A completed Force must install positive ancestry at each actual miss and
+retain the SAME earlier slot law at a hit. Its operand/Fold/Target joint
+induction must produce intermediate caps, both positive stores and actual
+causal History. That slot theorem is still an unproved implementation.
+Class Rel/common-anchor ancestry, unfinished cuts, historical writer-entry
+support, owner exclusion, renewal, retention, outer completion, convergence
+and Haskell correspondence remain open. Opaque-Mu counterexamples remain.
+
+Keep the Haskell repair index FIRST in FINDINGS. Insert proof updates AFTER it.
+No new Haskell source, runtime result or external repair. All earlier repair
+entries remain. The full goal is active. Regular formalize pushes are authorized.
+
+## Current positive query and raw projection ancestry
+
+Updated: 2026-10-21 05:41 CEST. Proof checkpoint: `0fa3c039f2`.
+Start: `f07896ff14`. Imported main remains `794903b3f`.
+Read `lean/notes-current-positive-query-raw-projection.md`.
+
+Three additive modules supply four public theorems. The SAME actual checked
+query now returns positive native Support at its actual returned heap,
+causal publication History, its finite cap and same-path OR-input ancestry.
+The proof derives captured Origins at the OLD entry source from that SAME
+trace before it rebases the SAME returned cells. Genuine past Support,
+causal History, warm cap stores and closed finite operands remain premises.
+
+The raw-corridor root and child observers now invert the SAME actual
+projection and selected complete read row. A full corridor reuses the
+existing capped observer. An ordinary corridor follows the exact raw
+selected child and actual ordered projection/read intervals. Unrelated
+opaque siblings need no whole-input cap. A positive child under a plain
+row retains its exact child index and residual path.
+
+The Required-entry adapter derives the initial class masks and path
+domains from the SAME actual Required receipt and ORIGINAL false gates.
+It then uses the chronological class pass once. It returns that exact
+pass Receipt, current native/Merge laws and ordered corridor relation.
+Prepared Current and conditional Merge stores remain genuine premises.
+No false gate is asserted on changed phase values.
+
+All three root strict logs are empty. Complete FULL1/FULL2/FULL1 readbacks,
+independent review and default Audit pass: 3578 jobs and 74820 dependencies.
+All four public heads use only the standard three axioms.
+Ten actual Lean/Lake commands pass. Copies add no jobs. Only the old
+ClosedCompletion Audit warning remains. Counts do not measure completion.
+All older sources, registries, evidence, Haskell/package files, stashes,
+other worktrees and main remain. All sealed raw logs must be indexed.
+
+Next, derive positive ancestry for SAME class target slots through actual
+operands, Merge winners and native folds. Install the law at a literal
+miss and reuse that SAME earlier slot on a hit. Then compose actual class
+edits into Rel with the required common anchor. Genuine unfinished class
+cuts and historical writer-entry positive stores remain separate gaps.
+Owner exclusion, renewal, final retention, outer completion, convergence
+and Haskell correspondence remain open. Opaque-Mu counterexamples remain.
+
+Keep the Haskell repair index FIRST in FINDINGS. Insert proof updates AFTER it.
+No new Haskell source, runtime result or external repair. All earlier repair
+entries remain. The full goal is active. Regular formalize pushes are authorized.
+
+## Current chronological raw endpoint preservation
+
+Updated: 2026-10-21 05:25 CEST. Proof checkpoint: `8526aaf069`.
+Start: `48bf6e8217`. Imported main remains `794903b3f`.
+Read `lean/notes-current-class-corridor-chronology.md`.
+
+The SAME actual successful class right fold now preserves every incoming
+raw corridor in its corresponding returned value, plus current native and
+stored Merge laws. A head uses its literal tail-produced phaseValues.
+The tail's SAME Receipt supplies readiness, admission, availability, domains,
+physical stores, coverage and global validity. Its ordered All₂ relation
+transfers the head's ORIGINAL entry mask at the SAME selected forest index.
+The actual class theorem produces the next laws. Relations compose in order.
+
+Public fold and pass retain the complete SAME Receipt. Final Empty
+propagation keeps the checked state and Merge table. Public indexed_phase
+retains the exact source occurrence, actual tail/call/later graphs and all
+three reads with their drop/take schedules. Its SAME tail receipt, phase
+Current/Merge laws and All₂ relation concern those exact phaseValues.
+No native History premise or output is added. Initial all-record masks,
+domains and genuine warm current/Merge laws remain explicit.
+
+Root strict has an empty log. Complete FULL3, independent review and default
+Audit pass: 3575 jobs and 74813 dependencies.
+All three public theorems use only the standard three axioms.
+Five actual Lean/Lake jobs include one retained failed elaboration.
+Selected strict and FULL logs are clean. Only the old ClosedCompletion
+Audit warning remains. Copies add no jobs. Counts do not measure completion.
+All older sources, registries, evidence, Haskell/package files, stashes,
+other worktrees and main remain. All sealed raw logs must be indexed.
+
+Next, integrate the actual selected Required entry producers and carry
+positive native Support with SAME-cell Origins and causal publication
+History through actual query returns. Completed fold/phase preservation
+does not certify an unfinished class or a pending native cut.
+Chronological positive ancestry, retained pair/owner exclusion, renewal,
+final retention, outer completion, convergence and Haskell correspondence
+remain open. Unrestricted opaque-Mu counterexamples remain.
+
+Keep the Haskell repair index FIRST in FINDINGS. Insert proof updates AFTER it.
+No new Haskell source, runtime result or external repair. All earlier repair
+entries remain. The full goal is active. Regular formalize pushes are authorized.
+
+## Current raw endpoint preservation through actual class edits
+
+Updated: 2026-10-21 05:13 CEST. Proof checkpoint: `3725d808e8`.
+Start: `143f08a023`. Imported main remains `794903b3f`.
+Read `lean/notes-current-class-endpoint-corridors.md`.
+
+The SAME actual successful class edit now preserves EVERY incoming raw
+corridor in the corresponding returned value. Its ordered All₂ relation
+covers paths above, below and outside each edited path. Exact compiled leaf
+pairs derive placement in the immutable original input. A leaf obtains a
+finite whole input cap, then uses its SAME actual target Force and checked
+query. Actual row/child reconstruction and canonical survivors retain the
+same path positions. A recursive HasLeaf supplies a whole finite input;
+actual open Head transport and the body edit derive its whole output cap.
+
+The theorem returns the SAME class Receipt, current native laws and stored
+Merge laws. It derives leaf results through actual calls. No output callback,
+whole-root cap or changed-value false gate is supplied. Genuine entry
+readiness, admission, projection domains, availability, physical Merge
+storage, coverage, global memo validity, current native/Merge laws and raw
+masks for the captured class remain explicit. Coherence and Nontrivial remain.
+
+Root strict has an empty log. Complete public readback, independent review
+and default Audit pass: 3574 jobs and 74805 dependencies.
+The sole public theorem uses only the standard three axioms.
+Seven actual Lean/Lake jobs include two retained failed elaborations and
+one unselected warning-only success. Selected strict and FULL logs are clean.
+Only the old ClosedCompletion Audit warning remains. Copies add no jobs.
+Counts do not measure completion. All older sources, registries, evidence,
+Haskell/package files, stashes, other worktrees and main remain.
+All sealed raw logs must be indexed.
+
+Next, compose this ordered preservation through the actual tail-first class
+fold. Each head must use its literal tail-produced phaseValues and receipt.
+Original false gates remain on the original forest. Chronological positive
+ancestry, retained pair/owner exclusion, renewal, final retention, outer
+completion, convergence and Haskell correspondence remain open.
+Unrestricted opaque-Mu counterexamples remain.
+
+Keep the Haskell repair index FIRST in FINDINGS. Insert proof updates AFTER it.
+No new Haskell source, runtime result or external repair. All earlier repair
+entries remain. The full goal is active. Regular formalize pushes are authorized.
+
+## Current raw endpoint conditions and target caps
+
+Updated: 2026-10-21 05:06 CEST. Proof checkpoint: `9a85ac2d94`.
+Start: `ac54a9c6bf`. Imported main remains `794903b3f`.
+Read `lean/notes-current-raw-corridor-target-caps.md`.
+
+Three additive modules now connect actual Required, raw endpoint conditions,
+actual projection and shared target forcing. RawCorridor bounds a whole
+region or checks the SAME selected child in EVERY raw ordinary row.
+Literal requireAll and ORIGINAL false class gates derive every selected
+prepared corridor, with the SAME original forest slot and ordered Origin.
+Unrelated siblings need no supplied whole-value cap.
+
+The SAME actual open Project derives a finite Plain cap from its raw
+corridor. Its proper forest wrapper checks only the actual selected root.
+Actual open reads, chronological guard heaps, max bounds and normalized
+unions retain the output cap. No closedness premise is added.
+The generic actual Force now consumes raw corridors on its literal capture.
+It reuses the existing native/Merge/finite-slot invariant. It preserves the
+actual Merge winner, checked fold, miss certificate and SAME earlier hit.
+Its captured values can be later phaseValues once their corridors are proved.
+Native/Merge entry laws and actual readiness remain explicit.
+
+Root strict logs are empty. FULL4/FULL2/FULL1, independent review and default
+Audit pass: 3573 jobs and 74785 dependencies. One inductive and
+six theorems are public. Each reports only the standard three axioms.
+Fourteen actual Lean/Lake jobs include three temporary canonical builds and
+one retained import-layout failure. One earlier successful pass has two
+constructor documentation warnings. One approval-tool timeout started no
+process and adds no Lean job. Only the old ClosedCompletion Audit warning
+remains. Copies and theorem counts do not measure completion.
+All older sources, registries, evidence, Haskell/package files, stashes,
+other worktrees and main remain. All sealed raw logs must be indexed.
+
+Next, derive raw-condition preservation through the SAME actual class edit.
+Its 390-line draft has root review; it is not part of this checkpoint.
+Chronological class composition must then retain corridors on each actual
+tail-produced phaseValues. Original gates remain on original values.
+Positive-path transport, retained pair/owner exclusion, renewal, final
+retention, outer completion, convergence and Haskell correspondence remain
+open. Unrestricted opaque-Mu counterexamples remain.
+
+Keep the Haskell repair index FIRST in FINDINGS. Insert proof updates AFTER it.
+No new Haskell source, runtime result or external repair. All earlier repair
+entries remain. The full goal is active. Regular formalize pushes are authorized.
+
+## Current finite caps through actual target misses and hits
+
+Updated: 2026-10-21 04:48 CEST. Proof checkpoint: `00112452db`.
+Start: `2edb0b776b`. Imported main remains `794903b3f`.
+Read `lean/notes-current-required-shared-target-cap.md`.
+
+The SAME actual target Force now preserves current native and Merge laws
+and a finite cap for every exact present slot value. A miss derives each
+competing operand cap from its own actual Required-forest projection and
+the ORIGINAL false class gates. The actual Merge returned law covers warm
+winners. The fold raises the two depths to their maximum at the SAME checked
+native query. It stores the cap of that exact returned target. A hit uses
+the old certificate of the SAME slot value. Empty slots start vacuously.
+Current native and stored Merge laws remain genuine entry premises.
+Coherence and Nontrivial derive proper competing paths. The actual prepared
+capture stays fixed; unrelated prepared roots need no whole-value cap.
+
+Root strict has an empty log. Full three-head readback, independent review
+and default Audit pass: 3570 jobs and 74761 dependencies.
+The structure and both theorems each use only the standard three axioms.
+Only the old ClosedCompletion warning remains. Five actual Lean/Lake jobs
+include one retained failed elaboration. Copies add no jobs. Counts do not
+measure completion. All older sources, evidence, frozen registries,
+Haskell/package files, stashes, other worktrees and main remain.
+All sealed raw logs must be indexed.
+
+Next, preserve raw endpoint conditions for ALL selected paths through
+overlapping class edits. The exact compiler leaf path equals its recorded
+class path. Completed projected caps alone do not cap raw edit inputs:
+projection can remove dead rows. Later classes capture actual tail results,
+so fixed prepared captures cannot stand in for changed phaseValues.
+Original false gates do not automatically transfer to changed values.
+Chronological positive-path transport, retained pair/owner exclusion,
+renewal, final retention, outer completion, convergence and Haskell
+correspondence remain open. Unrestricted opaque-Mu counterexamples remain.
+
+Keep the Haskell repair index FIRST in FINDINGS; insert proof updates AFTER it.
+No new Haskell source, runtime result or external repair. All earlier repair
+entries remain. The full goal is active. Regular formalize pushes are authorized.
+
+## Current projected caps from the actual Required forest
+
+Updated: 2026-10-21 04:37 CEST. Proof checkpoint: `b531f25a7f`.
+Start: `044e5dded6`. Imported main remains `794903b3f`.
+Read `lean/notes-current-required-forest-projection-cap.md`.
+
+Literal requireAll, ORIGINAL false class gates and the SAME actual selected
+forest projection now derive a finite cap for that projected endpoint.
+The proof derives ChildrenSafe and ordered Origin from the actual Required
+receipt ONCE. It retains the SAME original forest index and natural path.
+Actual Required effects and forward Keeps derive prepared availability at
+the later projection heap. A missing forest slot returns Empty.
+No supplied cap, caller Origin, closedness, Merge/native/slot law, current
+normality or changed-value false gate is required. Original normality remains
+genuine for the Required domain producer. The prepared capture stays fixed.
+
+Root strict has an empty log. Full one-head readback, independent review
+and default Audit pass: 3569 jobs and 74740 dependencies.
+The theorem uses only the standard three axioms. Only the old ClosedCompletion
+warning remains. Four actual Lean/Lake jobs pass. One separate user-bus
+launcher failure never started Lean; its exact evidence is retained.
+Copies add no jobs. Counts do not measure completion. All older sources,
+evidence, frozen registries, Haskell/package files, stashes, other worktrees
+and main remain. All sealed raw logs must be indexed.
+
+Next, derive actual Operand caps from this SAME projection and Merge's
+conditional returned law, then retain finite target-slot certificates at
+their actual Force misses and hits. The compiler places actual edit leaves
+at their recorded class paths. Deriving whole native-input caps there still
+requires preserved endpoint/corridor conditions across overlapping edits.
+Changed phaseValues cannot inherit original false gates without proof.
+Chronological class transport, retained pair/owner exclusion, renewal,
+final retention, outer completion, convergence and Haskell correspondence
+remain open. Unrestricted opaque-Mu counterexamples remain.
+
+Keep the Haskell repair index FIRST in FINDINGS; insert proof updates AFTER it.
+No new Haskell source, runtime result or external repair. All earlier repair
+entries remain. The full goal is active. Regular formalize pushes are authorized.
+
+## Current local caps from original false gates
+
+Updated: 2026-10-21 04:26 CEST. Proof checkpoint: `ae42e89cde`.
+Start: `fe7b4ac65e`. Imported main remains `794903b3f`.
+Read `lean/notes-current-original-gate-projection-cap.md`.
+
+The ORIGINAL false gate and actual Required Origin now derive a finite cap
+for the SAME actual projected endpoint. No supplied input cap, closedness,
+initial UnionNormal or changed-value false gate is required. Original and
+prepared values, exact path, gate scan, projection and heaps stay explicit.
+The proof uses endpoint_cap at an empty path, zero_clear/reaches_cap for
+the finite shortcut, and actual annotations for accepted Mu corridors.
+Ordered Origin maps retain each selected child. Actual open ReadAll/Union
+and Head effects retain caps and guards. Unrelated siblings may remain opaque.
+
+Root strict has an empty log. Full one-head readback, independent review
+and default Audit pass: 3568 jobs and 74739 dependencies.
+The public theorem uses only the standard three axioms. Only the old
+ClosedCompletion warning remains. Five actual Lean/Lake jobs include one
+retained failed attempt. Copies add no jobs. Counts do not measure completion.
+Older proofs, registries, Haskell/package files, stashes, other worktrees
+and main are preserved. All sealed raw logs must be indexed.
+
+Next, the literal Required forest wrapper must derive the SAME Origin from
+its actual preparation receipt and retain its selected original slot.
+Its 88-line candidate is separate and not part of this checkpoint.
+Changed phaseValues still need actual endpoint/corridor preservation across
+all later class paths. SAME native continuation composition, chronological
+class edits, retained pair/owner exclusion, general renewal, final retention,
+outer completion, convergence and Haskell correspondence remain open.
+The unrestricted opaque-Mu counterexample remains valid.
+
+FINDINGS now starts with a short external repair index. Keep that index
+before proof updates. Insert later proof updates AFTER the repair index.
+No new Haskell source, runtime result or repair changes. All historical
+repairs, reproductions and validation remain. Goal active; pushes authorized.
+
+## Current positive paths through actual projection and reads
+
+Updated: 2026-10-21 04:13 CEST. Proof checkpoint: `a6a233865c`.
+Start: `c7d5e7e875`. Imported main remains `794903b3f`.
+Read `lean/notes-current-capped-projection-position.md`.
+
+For one actual finite-cap projection and the SAME later complete read,
+a selected nonplain row comes from the SAME original natural child path.
+A selected positive child under a possibly plain row retains the full path
+including that ordered child index and its residual path. Both root and child
+theorems retain the exact project, read, full row and row index. Root row
+indices do not enter child paths. Nullary positive roots are covered.
+No input closedness or reader-cost premise is required.
+
+The proof follows the actual read worklist and indexed projection spine.
+A union Head can be nonplain; its actual member provenance is retained.
+A finite Plain cap forces hereditary Plain only in the Mu case. The proof
+excludes positive rows and descendants there using actual full read annotations.
+It does not replace a Mu read with empty nodeEdges. Entry semantic readiness,
+costs, availability and guard store, reader semantic readiness and guard store,
+forward Keeps, and the finite input cap remain explicit.
+
+Root strict has an empty log. Complete two-head readback, independent review
+and default Audit pass: 3567 jobs and 74724 dependencies.
+Both public heads use only the standard three axioms. Only the old
+ClosedCompletion warning remains. Eight actual Lean/Lake jobs include four
+retained failed attempts. Copies add no jobs. Counts do not measure completion.
+Older proofs, frozen registries, Haskell/package files, stashes, other
+worktrees and main remain unchanged. All sealed raw logs must be indexed.
+
+Next, derive the projected endpoint cap from the ORIGINAL false gate and
+actual Required Origin. The existing empty-path endpoint_cap supplies its
+base case. A nonempty false gate does not cap unrelated sibling branches.
+Then compose this inverse with the SAME actual native request and continuation.
+The native Return must derive the result cap; no callback ancestry premise
+can replace that producer. Source-growth Support is already proved separately.
+Selected observations across classes, endpoint barrier preservation,
+chronological edits, the retained pair or owner exclusion, general renewal,
+final retention, outer completion, convergence and Haskell refinement remain.
+The unrestricted opaque-Mu counterexample remains valid.
+The full goal stays active. Regular formalize pushes remain authorized.
+
+No Haskell source, runtime result or external repair changes. FINDINGS keeps
+the repair registry first and retains every earlier fix and reproducer.
+
+## Current positive native support at later source heaps
+
+Updated: 2026-10-21 04:01 CEST. Proof checkpoint: `7785c82074`.
+Start: `5304fb8953`. Imported main remains `794903b3f`.
+Read `lean/notes-current-native-support-rebase.md`.
+
+Positive native memo Support now rebases to a later source heap.
+The native state, full captured requests, results, child indices and paths
+stay the SAME. Actual per-cell Origins move legitimate later bindings and
+inputs back to the old source. The old Support law then applies directly.
+Both table bounds and links stay unchanged. Source facts, Grows, issued
+identity extension and the SAME-cell Origins remain explicit.
+
+This removes the source-growth obstruction for this invariant. It does not
+derive Origins from Support or growth, or prove that a generated request
+finishes. The fixed-source call/request theorem still consumes an actual
+completed trace. A consumer must obtain Origins and the old store from the
+SAME actual trace or current Frame and keep actual causal history.
+
+Root strict has an empty log. Complete one-head readback, independent review
+and default Audit pass: 3566 jobs and 74713 dependencies.
+The public theorem uses only the standard three axioms. Only the old
+ClosedCompletion warning remains. Four actual Lean/Lake jobs have no
+failures. Copies add no jobs. Counts do not measure completion.
+Older proofs, frozen registries, Haskell/package files, stashes, other
+worktrees and main remain unchanged. All sealed raw logs must be indexed.
+
+The next substantial gap is selected-observation transport across actual
+Head/native class continuations. A finite-cap projection/read inversion is
+a proposed local subcase. It is not yet proved here. Finite OR-input support
+alone cannot recover observations hidden by opaque Mu. Across classes the
+phaseValues capture changes; original false gates remain on original values.
+Chronological edits, the retained pair or owner exclusion, general renewal,
+final retention, outer completion, convergence and Haskell refinement remain.
+The unrestricted opaque-Mu counterexample stays valid.
+The full goal stays active. Regular formalize pushes remain authorized.
+
+No Haskell source, runtime result or external repair changes. FINDINGS keeps
+the repair registry first and retains every earlier fix and reproducer.
+
+## Current actual native requests preserve positive paths
+
+Updated: 2026-10-21 03:55 CEST. Proof checkpoint: `c5055d40de`.
+Start: `c940e153f1`. Imported main remains `794903b3f`.
+Read `lean/notes-current-native-request-position.md`.
+
+For an actual completed closed finite-cap native request at a fixed source,
+each positive result occurrence comes from one input at the SAME child path.
+Different occurrences can come from different inputs. Both returned native
+memo tables retain this law for their full captured requests. The proof uses
+the actual trace, actual guard loads, ordered children, causal Mu history,
+and the SAME body and result at each memo finish. Ready hits use full
+captured-request equality from the physical cache and key-safety facts.
+
+Public Support states the past returned-cell invariant. Public call preserves
+Support and derives the result law for an actual supported warm request.
+Public request derives both entry cache laws from empty native tables.
+Entry Good, source facts, source-resident closed operands, finite Plain caps,
+source/current inventory, context and actual causal history remain explicit
+where required. The old physical and cap Return is retained. No future
+result law or callback is assumed. The theorem consumes a completed trace;
+it does not prove that all requests finish.
+
+Root strict has an empty log. Complete three-head readback, independent
+review and default Audit pass: 3565 jobs and 74712 dependencies.
+All three public heads use only the standard three axioms. Only the old
+ClosedCompletion warning remains. Eleven actual Lean/Lake jobs include five
+retained failed attempts. Copies add no jobs. Counts do not measure completion.
+Older proofs, frozen registries, Haskell/package files, stashes, other
+worktrees and main remain unchanged. All sealed raw logs must be indexed.
+
+Next, rebase Support to a later source using actual SAME-cell origins.
+A 49-line candidate is separate and is not part of this checkpoint.
+Then prove selected-observation transport across actual Head/native class
+continuations. Finite OR-input positive support alone is insufficient through
+opaque Mu. Across classes the captured phaseValues change; original false
+gates cannot be applied to changed captures without proof. The unrestricted
+opaque-Mu counterexample remains valid outside this finite-cap theorem.
+Chronological class edits, the retained pair or owner exclusion, general
+renewal, final retention, outer completion, convergence and Haskell refinement
+remain open. The full goal stays active. Regular formalize pushes remain authorized.
+
+No Haskell source, runtime result or external repair changes. FINDINGS keeps
+the repair registry first and retains every earlier fix and reproducer.
+
+## Current target positions at later supported heaps
+
+Updated: 2026-10-21 03:27 CEST. Proof checkpoint: `b1ba4c1c99`.
+Start: `0e8d34147e`. Imported main remains `794903b3f`.
+Read `lean/notes-current-target-later-position.md`.
+
+The literal allocated Target operand can now start at a later supported
+heap while reading the SAME prepared forest. Keeps retains physical records
+and issued identities. Actual Required effects and Keeps derive current
+prepared availability. Current SemanticReady, CostHeap and GuardHeap Plain,
+physical Stored and Merge Support remain explicit. A positive returned
+occurrence at q retains the SAME original forest index and `path ++ q`.
+The saved Merge memo retains Support. The theorem consumes the actual
+requireAll return and ORIGINAL false class gates. No prepared false gate,
+current UnionNormal or exact prepared-heap equality is assumed.
+
+Root strict has an empty log. Complete one-head readback, independent review
+and default Audit pass: 3564 jobs and 74624 theorem dependencies.
+Only the old ClosedCompletion warning remains. Four actual Lean/Lake jobs
+have no failures. Copies add no jobs. Counts do not measure completion.
+Older proofs, frozen registries, Haskell/package files, stashes, other
+worktrees and main remain unchanged. All sealed raw logs must be indexed.
+
+Within one class the capture stays fixed while heaps advance. Across classes
+the captured tail-return forest changes. The theorem does not identify that
+changed forest with prepared. Actual native request/cache positional support
+still needs causal Mu history through child returns and actual finish-derived
+warm laws. A bounded finite-cap source-scoped proof is underway separately.
+Complete class transport also needs SAME selected-observation/native/Head
+continuations through opaque Mu. Finite OR-input support alone is insufficient.
+Original gates cannot be applied to changed phaseValues without proof.
+Chronological edits, the retained pair or owner exclusion, general renewal,
+final retention, outer completion, convergence and Haskell refinement remain.
+
+No Haskell source, runtime result or external repair changes. FINDINGS keeps
+the repair registry first and retains every earlier fix and reproducer.
+The full goal stays active. Regular formalize pushes remain authorized.
+
+## Current local positive-position transport
+
+Updated: 2026-10-21 03:18 CEST. Proofs: `e0732a6e63` and `6fe564c4a6`.
+Start: `b6895d1b24`. Imported main remains `794903b3f`.
+Read `lean/notes-current-local-position-transport.md`.
+
+Actual stored substitution and actual maybeMu now retain each positive
+result occurrence at the SAME natural child path in the input or body.
+Finite Cap Plain, physical facts and conditional Mu stores remain explicit.
+The maybeMu endpoint uses the actual earlier publication history. It covers
+open nested binders and earlier warm winners. It uses ONE actual readback
+with the CURRENT ordinary callback. It never equates a warm winner's body
+with the incoming body. No PlainDomain or desired positional law is assumed.
+
+Actual prepared projection and the literal allocated Target operand now
+retain the SAME original forest slot and full path `path ++ residual`.
+The operand consumes the literal requireAll return, a selected nonempty
+forest path and ORIGINAL false primary gates. It starts at the EXACT prepared
+heap. Semantic readiness, normality, costs, GuardHeap Plain, physical Stored
+and Merge Support remain explicit. Positive children beneath plain parents
+are included. No false gate on the prepared forest is assumed.
+
+Root strict logs are empty. Complete four-head proof readback, separate
+independent reviews and default Audit pass: 3563 jobs and 74623
+theorem dependencies. Only the old ClosedCompletion warning remains.
+Fourteen actual Lean/Lake jobs include seven retained elaboration failures.
+Copies add no jobs. Counts do not measure completion.
+An additive import-order fix `2f1294bca2` places maybeMu before the Audit
+command. The publication script and checkpoint verifier now enforce that order.
+
+The main local gap is actual native request/cache positive-source transport.
+It needs causal publication history through child returns and a positional
+cache law from actual earlier writes. The generic checked-joint Context
+does not supply that history. Later Target operands also need transport
+from the exact prepared heap through actual intervening calls. Chronological
+class edits must then imply the proved normalized path relation and retain
+a child pair or exclude owner copying. Original gates cannot be replayed as
+prepared gates. General renewal, final retention, outer completion,
+convergence and production Haskell refinement remain open.
+
+No Haskell source, runtime result or external fix changes. FINDINGS retains
+the repair registry first and all earlier repairs and reproducers.
+The full goal stays active. Regular formalize pushes remain authorized.
+Publish every sealed path, including ignored raw logs.
+
+## Current exact positive positions after stored Mu readback
+
+Updated: 2026-10-21 02:57 CEST. Proof checkpoint: `e4b2683f5`.
+Start: `b464c6d1d`. Imported main remains `794903b3f`.
+Read `lean/notes-current-stored-mu-position.md`.
+
+For the SAME full Mu cell at an actual native trace endpoint, PositiveAt
+of its finish at path p is equivalent to all three facts: smart is true,
+the stored probes decode no deep local, and the ordinary probe has
+PositiveAt at that SAME p. The source endpoint derives the current semantic
+heap, depth law and publication history from the actual initial source
+build state and an admitted trace. Nested syntax and earlier warm winners
+are included. No caller-supplied unused flag or desired position law is
+required. The reached endpoint uses explicit initial semantic/history facts.
+
+This law concerns the selected stored cell's finish. It does not assert
+that the cell is the actual whole native output, nor that a query completes.
+It does not prove raw body/probe equivalence or recover incoming maybeMu
+body positions. The unrestricted opaque-Mu input counterexample remains.
+
+Root strict checking has an empty log. Complete two-head proof readback and
+independent review pass. Default Audit passes: 3561 jobs and 74571 theorem
+dependencies, only the old ClosedCompletion warning. Five actual Lean/Lake
+jobs include one elaboration failure. Copies add no jobs. Failed attempts
+remain. Counts do not measure completion.
+
+Actual Merge support, unfinished outer-prefix preservation and the stronger
+same-historical-Parent entry certificate are already proved. The next local
+bridge is from the stored ordinary probe's positive path back to the
+incoming maybeMu body under genuine Cap and binding assumptions. It must
+follow actual encode, captures and callbacks, including open nested binders.
+Then actual native request/cache transport and chronological selected edits
+must imply the normalized path relation and a retained child pair or owner
+exclusion. Renewal, final retention, outer completion, convergence and
+production Haskell refinement remain open. No Haskell source, runtime
+result or external fix changes. FINDINGS retains the repair registry first.
+The full goal stays active. Regular formalize pushes remain authorized.
+Publish every sealed path, including ignored raw logs.
+
+## Current support at the same historical Parent writer
+
+Updated: 2026-10-21 02:52 CEST. Proof checkpoint: `918026f98`.
+Start: `9b8aeb351`. Imported main remains `794903b3f`.
+Read `lean/notes-current-supported-parent.md`.
+
+A returned outer edge cell now retains Support, UnionNormal and GuardHeap
+Plain at the entry of its SAME literal historical Parent writer. Cold
+publication, warm hits and actual unfinished outer prefixes preserve this
+stronger certificate. Empty edge tables supply its initial history.
+The selected-owner endpoint calls the new edge recovery once, then uses
+THAT writer's Parent equation. It retains the same Scan, Required and pass,
+false primary gates on the original forest, and normality and guard profiles
+at the actual final Scan heap. No independent writer is selected.
+Current Support is not used to infer past Support. GuardHeap Plain compares
+Mu body/probe profiles; it does not require all raw guards to be plain.
+
+Root strict checking has an empty log. Complete readback of all six public
+heads and independent review pass. Default Audit passes: 3560 jobs and
+74567 dependencies, with only the old ClosedCompletion warning. Six actual
+Lean/Lake jobs include two elaboration failures. Copies add no jobs.
+Failed attempts remain. Counts do not measure completion.
+
+Important prior-art correction: NativePublicationTrace.source_unused already
+relates unused smart cleanup to the SAME ordinary probe, up to bare-reference
+erasure, along an actual source-started trace. It covers nested syntax and
+earlier warm winners. A full new positional heap is not required for this
+unused-return consumer. The older binder-position note proposed a stronger
+route than needed. Existing depth facts retain the opaque boundary when
+used. The small exact position composition is not yet published here.
+Full raw body/probe equivalence for used payloads remains a separate goal.
+
+Actual native positional transport and chronological selected edits must
+still connect these receipts to the proved normalized path relation and
+retain a child pair or exclude owner copying. General renewal, final
+retention, outer completion, convergence and Haskell refinement remain open.
+No Haskell source, runtime result or external fix changes. FINDINGS retains
+the repair registry first. The full goal stays active. Regular formalize
+pushes remain authorized. Publish every sealed path, including raw logs.
+
+## Current positive positions in actual binder-free publications
+
+Updated: 2026-10-21 02:46 CEST. Proof checkpoint: `581847e72`.
+Start: `e642e1eea`. Imported main remains `794903b3f`.
+Read `lean/notes-current-binder-position.md`.
+
+A fixed actual Mu Publication now has positive occurrences at exactly the
+same natural child paths in its stored body and ordinary probe, when its
+callback expression is BinderFree. The proof compares the actual callback
+executions with the SAME captures. Captures can contain opaque Mu values.
+No desired position law, extra Good fact or future result is a premise.
+The private relation also retains matching Empty decisions, so corresponding
+source rows survive together. Warm constructor readback retains exact full
+rows and children. Root filters remove only bare reference alternatives.
+
+This theorem concerns that publication's body and ordinary probe. It does
+not automatically identify the earlier keepFirst winner. BinderFree excludes
+all nested binder syntax. The full nested publication law, positional heap
+from actual empty source construction and arbitrary native support remain
+open. The published unrestricted opaque-Mu counterexample remains valid.
+
+Root strict checking has an empty log. Complete public proof readback and
+independent review pass. Default Audit passes: 3559 jobs and 74546 theorem
+dependencies, with only the old ClosedCompletion warning. Seven actual
+Lean/Lake jobs include three elaboration failures. Copies add no jobs.
+Failed attempts remain. Counts do not measure completion.
+
+Actual Merge support and unfinished outer-prefix preservation are already
+proved. The stronger same-historical-Parent writer certificate is not yet
+published here. Its draft retains writer-entry Support, UnionNormal and
+GuardHeap Plain with the same selected Scan/Required/pass receipts.
+Chronological selected edits, retained child pairs, general renewal, final
+retention, outer completion, convergence and Haskell refinement remain open.
+No Haskell source, runtime result or external fix changes. FINDINGS retains
+the repair registry first. The whole-library goal remains active.
+Regular formalize pushes remain authorized. Publish every sealed path.
+
+## Current Merge position support through unfinished outer prefixes
+
+Updated: 2026-10-21 02:40 CEST. Proof checkpoint: `255bb7192`.
+Start: `48e0db44f`. Imported main remains `794903b3f`.
+Read `lean/notes-current-outer-merge-support.md`.
+
+Actual completed Parent calls now preserve the Merge Support invariant.
+Actual unfinished outer Reached prefixes preserve it as well. Empty Merge
+initialization derives the initial law without a future whole-call return.
+The proof follows actual projected operands, allocated Merge calls,
+ordered targets and edits, classes, Parent calls and completed earlier
+outer siblings. Native leaves, Scan, Required and constructors retain the
+same Merge memo where their literal definitions do so.
+
+These are OUTER phase prefixes. Reached crosses completed edge/node calls.
+The theorem does not cover states inside partial failed Parent or Merge
+execution. Support relates each cache result to its captured original;
+that original can already be prepared or edited. It does not establish
+positive support for every result of the entire Parent operation.
+
+Root strict checking has an empty log. Complete readback covers all three
+public endpoints. Independent review found no material issue.
+Default Audit passes: 3558 jobs and 74497 dependencies,
+with only the old ClosedCompletion warning. Seven actual Lean/Lake jobs include two elaboration failures.
+Copies add no jobs. Failed attempts remain. Counts do not measure completion.
+
+The next history gap is support at the entry of the SAME earlier Parent
+writer recovered for a warm edge hit. Old Written retains physical Stored
+but omits that entry's Support. Current Support does not imply past Support.
+Existing OuterUnionNormalHistory and OuterGuardHeapReturns already carry
+union normality and guard profiles through actual outer prefixes. They
+also need to be retained at that same historical writer where used.
+Native exposure needs a genuine positional body/probe law. Scalar guard
+profiles do not supply positions. The BinderFree publication proposal is
+still unproved; the full nested and warm binder case remains separate.
+Actual chronological selected edits, retained child pairs, general renewal,
+final retention, outer completion, convergence and Haskell refinement remain
+open. No Haskell source, runtime result or external fix changes.
+FINDINGS keeps the repair registry first. The full goal remains active.
+Regular formalize pushes remain authorized. Publish every sealed path.
+
+## Current positive support through actual Merge calls
+
+Updated: 2026-10-21 02:35 CEST. Proof checkpoint: `f5f52285c`.
+Start: `4ca9816e6`. Imported main remains `794903b3f`.
+Read `lean/notes-current-merge-positive.md`.
+
+Actual completed Merge calls now preserve each positive ordinary-row
+occurrence backwards at the SAME natural child path. The new Support
+invariant relates each stored result to its exact full captured original.
+It holds for an empty table. Actual Run, cache hits, body execution,
+first-winner completion and the allocated worker preserve it.
+Semantic readiness, costs, physical Stored and input availability remain
+explicit premises. The graph and worker contracts also require plain Top.
+The allocated theorem consumes the literal full-state return and derives
+the law for its exact before and after heap projections. It does not
+assert equality-state identity. No finite Cap premise is required.
+
+Root strict checking has an empty log. Complete readback of all six
+public heads and independent review pass. Default Audit passes:
+3557 jobs and 74448 theorem dependencies, only the old ClosedCompletion
+warning. Eight actual Lean/Lake jobs include three elaboration failures.
+Copies add no jobs. Failed attempts remain. Counts do not measure completion.
+
+The next gap is Support through actual outer prefixes and at the same
+historical selected Parent writer. Existing Written history retains
+physical Stored but does not retain Support at that writer's entry.
+The selected Required forest theorem still needs its normality and Plain
+guard adapters. Native Mu exposure needs a genuine positional source law:
+the published empty-table counterexample excludes an unrestricted law
+for the opaque-Mu observer. Scalar guard profiles do not supply positions.
+Chronological selected edits must then imply the proved normalized path
+relation and retain a child pair or exclude owner copying.
+General renewal, final retention, outer completion, convergence and
+production Haskell refinement remain open. No Haskell source, runtime
+result or external fix changes. FINDINGS retains the repair registry first.
+The full goal stays active. Regular formalize pushes remain authorized.
+Publish every sealed path, including ignored raw logs.
+
+## Current positive support through selected Required forests
+
+Updated: 2026-10-21 02:20 CEST. Proof checkpoint: `e81a18667`.
+Start: `eee0184f7`. Imported main remains `794903b3f`.
+Read `lean/notes-current-positive-flow.md`.
+
+The actual selected requireAll return now preserves each positive output
+occurrence backwards at the SAME forest slot and natural child path.
+Original false primary traces derive the exposure safety. No false gate
+is imposed on the prepared forest. Heap normality, semantic readiness,
+costs, availability and Plain guard support remain explicit premises.
+They are not all derived from arbitrary outer Good.
+
+A constructed native counterexample now excludes unrestricted support
+for this opaque-Mu observer. Two actual closed source Mu inputs have no
+PositiveAt occurrence. Native execution from empty result tables returns
+a positive ordinary row. Native support needs genuine exposure premises
+or a stronger observer. This is not a Haskell runtime defect.
+
+Root strict and complete component readback pass. Default Audit passes:
+3556 jobs and 74423 theorem dependencies, only the old ClosedCompletion
+warning. Failed checks remain. Counts do not measure completion.
+The pure normalized child-separation and delayed combined-pair lemmas
+remain proved. The main gap is actual Merge/native positional support,
+its warm-cache invariant from empty, and chronological selected edits.
+General renewal, final retention, outer completion, convergence and
+production Haskell refinement remain open. Haskell sources retain bytes.
+FINDINGS keeps all external repairs first. The full goal stays active.
+Regular formalize pushes remain authorized. Publish every sealed path.
+
+## Current support foundations
+
+Updated: 2026-10-21 02:08 CEST. Proof checkpoint: `ad4a957c9`.
+Verified start: `df5168049`. Imported main remains `794903b3f`.
+Read `lean/notes-current-support-foundations.md`.
+
+The pure child-separation lemma is now proved. At an actual normalization
+fixed point, any finite chain of class-prefix equalities reduces to one
+replacement with a common suffix. If each completed class has at most
+one path through a child, distinct paths in that child cannot be equal
+to the same path under this generated relation.
+
+A supplied pair in the actual COMBINED payload now implies nonTop literal
+descent after later operation growth and a different full node key from
+any initially ready Top owner. The pair may arise from normalization.
+Actual completed Merge Run/Call also preserves EmptySafe from an empty
+table: Empty input returns Empty. This closes the specific fabricated
+Empty cache case under that additional invariant.
+
+Actual safe Required success now preserves each positive ordinary-row
+occurrence backwards at the SAME natural child-index path. Row choices
+may change. Literal unions add no path component. Mu bodies and references
+remain opaque. The theorem consumes the actual fuelled return equation.
+
+All four root strict checks have empty logs. Component FULL readbacks
+and independent review pass. Default Audit passes: 3555 jobs and 74422
+theorem dependencies, with only the old ClosedCompletion warning.
+The auxiliary finite search is evidence separate from the Lean proof.
+The three elaboration failures and one prelaunch failure remain.
+Counts do not measure completion.
+
+The main missing link is actual positive-position support through Required,
+Merge, native operations, warm cache cells and chronological selected edits.
+The proved path relation does not yet describe those edits.
+EmptySafe alone does not supply general structural support.
+General renewal, final retention, outer completion, convergence and
+production Haskell refinement remain open. All Haskell files retain bytes.
+FINDINGS retains the external repair registry first. The full goal stays
+active. Regular formalize pushes remain authorized.
+Publication checks must include every sealed path in the Git index.
+
+## Current selected owner history and delayed descent
+
+Updated: 2026-10-21 01:54 CEST. Proof checkpoint: `50580b1d2`.
+Verified start: `e14d4739e`. Imported main remains `794903b3f`.
+Read `lean/notes-current-selected-owner-history.md`.
+
+An actual successful edge call now retains a literal Parent execution
+for its same captured request. Initial empty result tables, cold writes,
+warm hits and unfinished outer prefixes preserve this history.
+An actual return of the active ordinary owner selects that writer's
+nonempty Scan, Required and chronological class pass. It retains every
+false primary gate on the original forest at the same final scan heap.
+Owner availability at the writer entry is not a premise. The history
+does not export a chronological writer-to-reader interval or uniqueness.
+
+A same-child pair in an effective own class now survives literal descent
+after later operation growth. Its child payload is nonTop. Its full node
+key differs from any initially ready Top owner's key.
+The new warm example publishes from empty tables before owner activation,
+then reads the same ready cell and retains all selected receipts.
+The owner value itself is already available before that activation.
+
+Physical Stored alone permits a fabricated Empty-to-owner merge entry.
+The actual warm Merge call accepts it and returns the owner unchanged.
+This is a proof-contract countermodel. Reachability from empty tables
+and a Haskell runtime defect are not claimed.
+
+Selected strict and complete public readbacks pass. Default Audit passes:
+3551 jobs and 74404 theorem dependencies, with only the old
+ClosedCompletion warning. Earlier warning-bearing successes and failed
+attempts remain. Counts do not measure completion.
+The main gap is actual positive support through Required, native merge,
+warm cells and chronological edits. Use the actual combined normalized
+equalities and coverage, not equality with the precheck record list.
+Selected copying must force a retained child pair or be excluded.
+General renewal, final retention, outer completion, convergence and
+production Haskell refinement remain open. No Haskell source changes.
+FINDINGS retains all external repairs first. The full goal stays active.
+Regular pushes to formalize remain authorized.
+
+## Current plain row owner exclusion and actual branch classification
+
+Updated: 2026-10-21 01:30 CEST. Proof checkpoint: `7e4228593`.
+Verified start: `b514e9409`. Imported main remains `794903b3f`.
+Read `lean/notes-current-outer-plain-owner.md`.
+
+An actual plain row dispatch now excludes its active ordinary owner's
+value reference and complete cache key. The owner can have any ready
+inherited constraint. Actual cold writes and warm hits retain the same
+captured row's original, erased or sentinel children. Actual earlier
+siblings can return before the selected dispatch. No enclosing return
+or selected child return is required.
+
+Actual local and Parent successes now supply their branch classification.
+The selected arm retains the same field load, precheck, Scan, Required,
+class pass and accepted constructor, with their exact states and memos.
+An empty selected list can propagate Empty. It need not return unchanged.
+
+A closed binary example creates an actual cold edge cell, activates its
+owner, reads that same warm cell, completes slot zero and reaches slot
+one. It retains the generic reference and key inequalities. Strict and
+complete public readbacks pass. Aggregate Audit passes: 3546 jobs and
+74380 theorem dependencies, with only the old ClosedCompletion warning.
+Earlier checks and failed attempts remain. Counts do not measure completion.
+
+The main gap is constrained copying: an actual copy of the active Top
+owner must retain a same-child equality after descent, or be excluded.
+The new classifiers expose that execution but do not prove this claim.
+Causal selected receipts at warm readers, general renewal, final retention,
+outer completion, convergence and production Haskell correspondence remain
+open. Native initial_complete keeps its existing closed syntax scope.
+No Haskell source or runtime result changes. FINDINGS retains all external
+repairs first. The whole-library goal stays active. Pushes remain authorized.
+
+## Current warm build row origins
+
+Updated: 2026-10-21 01:11 CEST. Proof checkpoint: `6478734b7`.
+Verified start: `288f3ac27`. Imported main remains `794903b3f`.
+Read `lean/notes-current-warm-build-row-origins.md`.
+
+One actual completed warm build now supplies a common publication path.
+Final full Mu cells and cells present before an indexed completion retain
+their exact entry-cell or same-path writer alternatives. A new target
+selects its writer from that same path without assuming an event identity.
+
+Strong induction on the same publication index resumes new binder cells.
+Each complete stored row reaches an actual node RowCall, an exact original
+input capture, or a binder-selected full Mu already present at build entry.
+The result keeps the same raw source row, full selected payload, actual
+probes and request, producer-relative syntax bound and exact union descent.
+It also keeps callback-to-terminal physical and issued growth, exact input
+equality, and suffixes to the raw and filtered return heaps.
+
+The reused warm source example selects its target from that same path.
+Its actual missing target cell excludes the entry-cell arm. The returned
+row forces the nested binder. Actual path and terminal prefixes transport
+its entry full cell to the same returned cut. The same request hits that
+cell and leaves the cut unchanged. All generic clauses remain.
+Independent strict and complete constructed readbacks pass.
+No native execution prefix or unfold is run by this example.
+
+Strict checks, complete public readbacks and the aggregate Audit pass.
+Audit checks 3542 jobs and 74348 theorem dependencies. The only warning is
+the existing ClosedCompletion input. Earlier weaker and warning-bearing
+checks remain preserved and unselected. Counts do not measure completion.
+The original trace module gains two theorems. Its prior declarations keep
+their exact bytes. Its full prior source remains archived. Every other
+older proof source, repair, counterexample and draft remains unchanged.
+
+The main remaining target is outer reduction renewal and active cache key
+exclusion. Native initial_complete already covers closed Original operands,
+an idle cache and checked resources. Original is a payload syntax predicate;
+it is not original-program ancestry. Generated ancestry, complete residual
+readers, final retention, outer completion, convergence and production
+Haskell correspondence remain open. No Haskell source or runtime result
+changes. FINDINGS retains the external repair registry first.
+The whole-library goal stays active. Regular formalize pushes are authorized.
+
+
+## Current generated-row full-Mu capture ancestry
+
+Updated: 2026-10-21 00:42 CEST. Proof checkpoint: `57fe78e0e`.
+Verified start: `0dab9a59d`. Imported main remains `794903b3f`.
+Read `lean/notes-current-native-generated-row-capture-backedge.md`.
+
+An actual native optional execution and its generated Observed receipt
+now fix one publication event and raw callback before all stored rows
+and actual successful unfold anchors. Each same complete row has an
+actual nonunion terminal build. Its node, binder and capture alternatives
+retain Context, Reached, a syntax bound and both callback suffixes.
+A capture retains its exact terminal lookup, active source Path, original
+slot offset and exact leaves occurrence. A row-bearing capture is closed.
+
+For a full-Mu capture, actual body availability supplies the same full
+resident cell before this optional operation. Its key differs from the
+new target key. One lower capture proof gives the same complete row an
+original indexed node SourceRow/build/RowCall or an actual generated
+producer at a strictly earlier native prefix. Both arms retain their
+complete receipts. The initial arm fixes the same indexed original path
+before all generic rows. The earlier generated arm stays unchanged.
+No input-pool nonemptiness, writer identity or decreasing rank is assumed.
+
+An actual successful unfold keeps its stored-row anchor, symbol,
+constraint and arity, plus identity or actual ordered child Calls.
+The new ancestry result applies to that stored anchor. Changed returned
+children need not equal the stored children or original node output.
+
+The new union-body example runs an actual admitted native prefix of
+60 steps. Its actual optional operation creates a new used outer Mu.
+The same returned callback row forces variable slot two, original pool
+slot one and one binder crossing. The captured full Mu was in the
+original heap. Its same returned earlier-generation arm contradicts
+actual prefix growth and its missing-cell receipt. The initial arm
+retains the same original indexed path and ultimate node RowCall for
+the complete tag17/Top/nullary stored row. All generic clauses remain.
+No actual unfold is run by this example.
+
+One public and one constructed full readback pass with standard axioms.
+Selected root strict logs are empty. Canonical and default Audit pass:
+3541 jobs and 74341 theorem dependency checks. Only the existing
+ClosedCompletion warning remains. All 51 actual capped Lean/Lake commands
+and 34 failed commands remain. One zero-exit incomplete public
+printer is rejected. Successful predecessor checks remain unselected.
+Counts do not measure completion. Exact large logs use verified lossless
+archives. Every earlier proof, draft, repair and counterexample remains.
+
+Generated node and non-Mu capture ancestry, warm binder reuse, self
+replacement and residual observations remain open. Global owner renewal,
+active-owner exclusion, final retention, general outer completion,
+convergence and production Haskell refinement also remain open.
+All 268 Haskell and 207 active package files keep their bytes.
+FINDINGS retains the external repair registry first. No new Haskell fix
+or runtime result is claimed. The full goal stays active. Pushes to
+formalize remain authorized.
+
+## Current actual native capture to original node rows
+
+Updated: 2026-10-20 23:40 CEST. Proof checkpoint: `de1791f45`.
+Verified start: `499357bf4`. Imported main remains `794903b3f`.
+Read `lean/notes-current-native-original-captured-node-rows.md`.
+
+An actual checked native prefix now connects an initial captured Mu to
+the original node calls for its stored rows and successful unfold rows.
+The exact initial full cell selects one indexed publication in one
+original build path. That path and publication stay fixed before all
+stored rows and all actual successful unfolds. The result retains the
+full payload, original Reached, missing cell, prefix and three callback
+paths, physical and issued suffixes, and all generic stored-row origins.
+Current semantic support and causal publication history follow from
+the actual source build, checked Trace and exact leaves occurrence.
+
+Each literal row of an actual successful unfold keeps its stored-row
+anchor, symbol, constraint and arity. It keeps row identity or actual
+ordered Calls from stored children to returned children. The same path
+supplies an ultimate original node SourceRow/build/RowCall for that
+stored anchor. Its producer index is at most the selected outer index.
+The result retains producer-relative SyntaxBound/UnionDescent, original
+Context/Reached, buildEdges/makeNode and the complete stored RowCall.
+Changed returned children need not equal the original stored children.
+The later-generated capture arm retains its complete existing receipt.
+
+The existing shared-inner source family runs an actual native prefix
+to an outer optional site. Leaf occurrence one selects the initial Mu.
+Its actual unfold returns a rec/Top/arity1 row with a full Mu child.
+The stored row has a reference child. Their inequality forces actual
+child Calls. The same stored anchor keeps its original node RowCall.
+All generic clauses remain. No independent source family is added.
+
+One public and one constructed full readback pass with standard axioms.
+Root strict logs are empty. Canonical and default Audit pass: 3540 jobs
+and 74337 theorem dependency checks. Only the older ClosedCompletion
+warning remains. All 10 actual capped Lean/Lake commands and
+1 failed attempt remain. Counts do not measure completion.
+Every earlier proof, draft, repair and counterexample remains.
+
+Original ancestry for later-generated nonempty captures and complete
+residual Mu observations remain open. These are inputs to the remaining
+global renewal and active-owner exclusion, final retention, general
+outer completion and convergence proofs. Production Haskell refinement
+also remains open. All 268 Haskell and 207 active package files keep
+their bytes. FINDINGS retains the external repair registry first.
+No new Haskell fix or runtime result is claimed. The full goal stays
+active. Pushes to formalize remain authorized.
+
+## Current ultimate original node-row provenance
+
+Updated: 2026-10-20 23:25 CEST. Proof checkpoint: `6489bddee`.
+Verified start: `d425c2942`. Imported main remains `794903b3f`.
+Read `lean/notes-current-native-original-node-row-origins.md`.
+
+Every full structural row stored in an indexed Mu publication of one
+actual original build from empty now has an actual original node call.
+One indexed-resumption producer fixes the same path for the whole proof.
+Strong induction on its publication index eliminates repeated binder
+stops. Each binder step carries the complete same row to an earlier
+body at i < j. The result retains an indexed producer k <= j, exact
+UnionDescent and generic SyntaxBound relative to that producer, original
+Context and Reached, actual node SourceRow/build/buildEdges/makeNode,
+distinct source/output indices and full RowCall output equality.
+Physical and issued suffixes end at the selected outer.afterBody.
+No child premise, writer identity or requester-size decrease is assumed.
+
+The same warm source example reaches its actual nullary tag17 node
+RowCall. It derives strict k < j in the same returned path. Equal indices
+would force equal events by their same list lookup. The actual outer
+callback and node UnionDescent exclude that case. No manually selected
+creator identity is assumed. All generic node-origin clauses remain.
+This example runs no unfold or native execution prefix.
+
+One public and one constructed full readback pass with standard axioms.
+Root strict logs are empty. Canonical and default Audit pass: 3539 jobs
+and 74335 theorem dependency checks. Only the older ClosedCompletion
+warning remains. All 9 actual capped Lean/Lake commands and
+1 failed attempts remain. Counts do not measure completion.
+Every earlier proof, draft, repair and counterexample remains.
+
+The next bridge must connect actual initial captures and successful
+unfolds to these original full rows. Preserve the generated-capture arm
+and the unfold's original stored-row anchor and actual child Calls.
+Changed output children need not equal original stored children.
+Global native renewal and active-owner exclusion, final retention,
+general outer completion, convergence, generated ancestry, residual
+observations and production Haskell refinement remain open.
+All 268 Haskell and 207 active package files keep their bytes. FINDINGS
+retains the external repair registry first. No new Haskell fix or runtime
+result is claimed. The full goal stays active. Pushes remain authorized.
+
+## Current indexed source-row binder resumption
+
+Updated: 2026-10-20 23:15 CEST. Proof checkpoint: `65dc7bbf5`.
+Verified start: `1c613eabe`. Imported main remains `794903b3f`.
+Read `lean/notes-current-native-original-indexed-resumption.md`.
+
+One actual completed original build from empty fixes one publication path.
+Each indexed outer writer fixes its actual raw callback before all stored
+rows. A joint source-row induction keeps the same terminal call and
+original union descent. A node terminal retains its actual RowCall.
+A binder terminal keeps its probes, request, complete selected payload,
+smart finish and selected stored row. That same full cell reaches only
+the enclosing outer.afterBody. The same path then supplies an earlier
+writer at index i < j. Its exact event, complete payload, prefix, three
+callback paths, physical and issued suffixes remain together. Its actual
+raw callback stays fixed before all rows of the selected stored body.
+No independent Stored or Observed event is selected or equated.
+
+The same warm source example consumes this producer once. Its own source
+route and actual filter force the already-returned terminal to nested.
+It removes only that terminal's node alternative. It retains the complete
+earlier indexed binder receipt and actual tag17 raw SourceRow. The public
+example also retains all generic clauses. It runs no unfold or native
+execution prefix and adds no independent source family.
+
+One public and one constructed full readback pass with standard axioms.
+Root strict logs are empty. Canonical and default Audit pass: 3538 jobs
+and 74334 theorem dependency checks. Only the older ClosedCompletion
+warning remains. All 10 actual capped Lean/Lake commands and
+1 failed attempts remain. Counts do not measure completion.
+Every earlier proof, draft, repair and counterexample remains.
+
+The next proof must iterate the same indexed row transition to an actual
+original node RowCall. Strong induction on its same publication index is
+the proposed route. That endpoint theorem remains unproved here.
+Source chronology does not give global native owner-renewal progress.
+Generated-capture ancestry, residual observations, active-owner exclusion,
+final retention, general outer completion, convergence and production
+Haskell refinement remain open. All 268 Haskell and 207 active package
+files keep their bytes. FINDINGS retains the external repair registry
+first. No new Haskell fix or runtime result is claimed. The full goal
+stays active. Pushes to formalize remain authorized.
+
+## Current common original-build publication trace
+
+Updated: 2026-10-20 23:03 CEST. Proof checkpoint: `def05b051`.
+Verified start: `cf36913f0`. Imported main remains `794903b3f`.
+Read `lean/notes-current-native-original-publication-trace.md`.
+
+An actual completed source build now supplies one rooted issued path.
+Its postorder publication list is shared by all returned clauses.
+Every final full Mu cell has an indexed writer in that same list.
+Every full Mu cell present before an indexed outer publication has a
+writer at a strictly smaller index. Both clauses keep the exact key and
+full payload, original Reached, missing cell, actual prefix and three
+callback paths, plus physical and issued suffixes to their exact readers.
+The theorem requires genuine entry Context and no initial full Mu cells.
+The closed empty-heap example derives both conditions from initial data.
+
+The existing warm source family now derives two strict indexed events
+in that same returned trace. It selects the outer writer from a computed
+final full cell. Actual callback availability puts the inner full cell
+at that same recovered outer.afterBody. The precompletion clause then
+derives the earlier writer. It assumes no event identity or desired order.
+This example runs no unfold or native execution prefix.
+
+Two public and one constructed full readbacks pass. Independent root
+strict checks have empty logs. Canonical and default Audit pass: 3537
+jobs and 74326 theorem dependency checks. Only the older ClosedCompletion
+warning remains. All 14 actual capped Lean/Lake commands and
+4 failed attempts remain. Auxiliary helper readbacks add no official
+public pairs. Counts do not measure completion. All older work remains.
+
+The next proof must select its enclosing writer from this same trace
+before it derives source rows and binder resumption. An independently
+recovered existential writer cannot be assigned an index by assumption.
+This source chronology is not a global native owner-renewal rank.
+Generated-capture ancestry, residual observations, global renewal and
+active-owner exclusion, final retention, general outer completion,
+convergence and production Haskell refinement remain open.
+FINDINGS retains all external Haskell repairs first. The imported
+Typing.hs documentation repair passes fourmolu and cabal-gild checks.
+No new Haskell runtime result is claimed. All 268 Haskell and 207 active
+package files keep their bytes. The full goal stays active. Pushes to
+formalize remain authorized.
+
+## Current upstream documentation integration
+
+Updated: 2026-10-20 22:50 CEST. Merge checkpoint: `b7ba16ca3`.
+Main `794903b3f` and PR #97 are now imported into formalize.
+The latest proof checkpoint remains `0b533a718`.
+Read `lean/notes-current-upstream-binders-documentation.md`, then
+`lean/notes-current-native-original-union-descent.md` for the proof.
+
+The imported Typing.hs, README and CHANGELOG patch qualifies Binders
+size ordering by a subterm rule. It advises upToSize for finite acyclic
+languages. The Haskell code outside Haddock comments is unchanged.
+No fresh Haskell runtime validation is claimed. FINDINGS records the
+merged repair first and preserves the earlier unvalidated local example.
+
+Every Lean source and prior evidence file retains its bytes. The latest
+strict, full-printer and default Audit results remain valid for those
+same sources: 3536 jobs and 74283 theorem dependency checks. No Lean build
+is repeated for the imported comments. The preservation check reruns
+the existing selected-proof evidence verifier.
+
+The next proof must derive one rooted actual build trace with common
+publication indices. Earlier selected writers must occur at smaller
+indices within that same trace. This source chronology remains unproved.
+It is separate from global native renewal and active-owner exclusion,
+final retention, outer completion, convergence and Haskell refinement.
+The full goal stays active. Pushes to formalize remain authorized.
+
+## Current correlated source-union descent
+
+Updated: 2026-10-20 22:37 CEST. Proof checkpoint: `0b533a718`.
+Verified start: `533db5d24`. Main remains `9769fe3e9`.
+Read `lean/notes-current-native-original-union-descent.md`.
+
+One original observed writer now retains union-only syntax descent to
+the same actual terminal call. A joint SourceRow induction constructs
+the descent and all five terminal witnesses together. It uses the same
+original union indices and actual prefix, member and suffix effects.
+One base Observed supplies a fixed publication and raw callback before
+all stored rows and all successful unfold calls. The actual node RowCall
+or selected binder payload resumption remains under that same tuple.
+Unfolds retain their original stored anchor when output children change.
+
+The same warm source family now forces the returned nested binder arm.
+Finite original Reached paths classify every possible enclosing writer.
+Its same raw SourceRow and actual filter exclude the wrong node callback.
+Its returned union descent and kind then force that same terminal to the
+nested binder. The proof excludes only its node alternative and keeps
+its full binder receipt. It assumes no writer identity or desired origin.
+This source-only example executes no unfold or native prefix.
+
+Two public and one constructed full readbacks pass. Root module and
+independent fixture strict logs are empty. Canonical and default Audit
+pass: 3536 jobs and 74283 theorem dependency checks. The sole warning is
+the older ClosedCompletion input. All 9 actual capped Lean/Lake commands
+remain, including 1 failed elaboration attempts. Counts do not measure
+completion. Every earlier proof, repair, counterexample and draft remains.
+
+Global renewal and active-owner exclusion, final retention, general outer
+completion, convergence, generated-capture original ancestry, residual
+observations and Haskell refinement remain open. Source descent is not a
+runtime rank across historical winners. The proposed next plan inspects
+causal publication order and states its missing links explicitly.
+FINDINGS records external documentation repair 7469183 first. Its branch
+is not imported here; the local runtime reproduction stays unvalidated.
+All 268 Haskell and 207 active package files retain their bytes. The full
+goal stays active. Pushes to formalize remain authorized.
+
+## Current observed source node and binder returns
+
+Updated: 2026-10-20 22:24 CEST. Proof checkpoint: `9cff855cf`.
+Verified start: `296d6f99c`. Main remains `9769fe3e9`.
+Read `lean/notes-current-native-original-observed-resume.md`.
+
+One observed original writer now retains an actual indexed node call or
+an exact selected binder payload for each stored row and actual unfold
+anchor. Its publication and raw callback stay fixed before all rows and
+all successful unfold calls. Each same terminal keeps its source build,
+Context, original-root Reached, generic syntax bound and both suffixes.
+The node arm retains source and canonical output indices and RowCall.
+The binder arm derives original-root Written and Stored for the same full
+selected Mu. Its resumed writer can differ from the enclosing writer.
+Separate Written and Stored Props do not equate their hidden events.
+
+The same actual warm source family now derives the outer full record,
+Written, Stored and Observed from its completed original build. The
+consumer retains every stored-row and conditional unfold clause, plus a
+concrete nullary tag row at that same callback. It keeps the node-or-binder
+disjunction. It does not identify an opaque terminal with the manually
+selected union member. No unfold or native execution prefix is run here.
+
+Two public and one constructed full readbacks pass. The root module and
+independent fixture strict logs are empty. Canonical build and default
+audit pass: 3535 jobs and 74276 theorem dependency checks. Only the older
+ClosedCompletion warning remains. All 10 actual capped Lean/Lake
+commands remain, including 2 failed elaboration attempts.
+
+The next local step must retain union-only syntax descent inside the same
+terminal existential. Global Reached and a size bound do not expose that
+route. The proposed plan is unproved. Global renewal and active-owner
+exclusion, final retention, outer completion, convergence, general
+generated-capture ancestry, residual observations and Haskell refinement
+remain open. The largest gap is still general outer completion. Counts
+do not measure completion. All 268 Haskell and 207 active package files
+keep their bytes. FINDINGS keeps external repairs first. The full goal
+stays active. Pushes to formalize remain authorized.
+
+## Current original binder payload resumption
+
+Updated: 2026-10-20 22:09 CEST. Proof checkpoint: `d3fa19c6a`.
+Verified start: `936a67774`. Main remains `9769fe3e9`.
+Read `lean/notes-current-native-original-binder-resume.md`.
+
+An actual binder terminal now derives an original-source writer for its
+same selected full Mu. The proof moves its complete record forward through
+the actual raw filter and publication to the exact original build return.
+It retains the terminal probes, request, selected stored body, smart finish,
+full row and both physical and issued suffixes. Stored fixes one resumed
+publication and raw callback before all rows of that same selected body.
+The resumed writer can differ from the requesting or enclosing binder.
+Written and Stored are separate existential receipts. Their public
+conjunction does not equate their hidden publication witnesses.
+
+An actual original box first publishes a nullary tagged nested Mu. A later
+outer binder's union callback requests it again. Its actual key and full
+record force the warm branch. The same union member call and terminal row
+supply one resume application. Its recovered callback retains every
+stored row and the concrete nullary tag row. No child premise is needed.
+This example uses source construction. It has no native execution prefix.
+
+Two public and one constructed full readbacks pass. Two root module
+strict logs and the independent fixture strict log are empty. Default
+audit: 3534 jobs and 74274 theorem dependency checks. Only the older
+ClosedCompletion warning remains. All 17 actual capped Lean/Lake
+commands remain, including 5 failed elaboration attempts.
+
+The next step is to compose this resumption with the same actual terminal
+witnesses of the original Observed row producer. Keep its event and raw
+callback fixed before all observations. Keep the generic syntax-size
+bound. Its reader must be the original source heap or retain the exact
+suffix to that heap. Global progress across historical writers remains
+open. Generated-capture ancestry, residual observations, active-owner
+exclusion, final retention, outer completion, convergence and Haskell
+refinement remain open. All 268 Haskell and 207 active package files keep
+their bytes. FINDINGS retains external fixes first. The full goal is active.
+
+## Current original captured Mu rows and source terminals
+
+Updated: 2026-10-20 21:46 CEST. Proof checkpoint: `99e0023e7`.
+Verified start: `ad8ee370b`. Main remains `9769fe3e9`.
+Read `lean/notes-current-native-original-captured-rows.md`.
+
+An initially captured full Mu now derives its original source publication
+from the actual closed build that returns exactly the native entry heap.
+The generated alternative retains its same earlier optional producer.
+One publication and raw callback stay fixed across all stored rows and
+all actual successful unfolds. Each original stored anchor row now retains
+an actual node or binder terminal, the same SourceRow and build, Context,
+original-root Reached and physical and issued suffix to that raw return.
+The empty original input pool excludes a row-bearing variable terminal.
+
+The actual example uses two distinct outer binders with the same used
+inner Mu. That initial full Mu occurs at outer optional leaf one. One
+capture application excludes the generated arm by its same-prefix absence.
+Actual unfold changes a bare self-reference child to the full Mu. The
+same original callback retains the changed row's ordered Calls and its
+stored anchor's terminal. Both proof versions are one example. The outer
+optional has not executed.
+
+Five public and one selected constructed full readbacks pass. Four root
+module strict logs and the independent final fixture strict log are empty.
+Default audit: 3532 jobs and 74272 theorem dependency checks. Only the old
+ClosedCompletion unused-input warning remains. All 24 actual capped
+Lean/Lake commands remain, including 4 failed elaboration attempts.
+Receipt copies add no commands. All selected axioms are standard.
+
+Warm binder winners still need forward transport of their selected full
+cell through the actual callback, filter and publication to the original
+build return. The next local plan is explicit and unproved. General
+generated-capture ancestry, residual Mu observation chains, global renewal,
+active-owner exclusion, final owner retention, outer completion, convergence
+and Haskell refinement remain open. Past-producer descent is not a future
+runtime rank. Conditional root-language and Sized laws are unchanged.
+All 268 Haskell and 207 active package files retain their bytes. FINDINGS
+keeps external repairs first. No new Haskell repair or runtime validation
+is claimed. The full-library goal stays active. Pushes remain authorized.
+
+## Current captured Mu stored rows and actual unfold provenance
+
+Updated: 2026-10-20 21:23 CEST. Proof checkpoint: `e9d4bbcc4`.
+Verified start: `64b5195e0`. Main remains `9769fe3e9`.
+Read `lean/notes-current-native-captured-stored-rows.md`.
+
+An indexed captured full Mu now retains its exact initial cell or its same
+earlier optional producer with one fixed publication and raw body callback.
+Every structural stored-body row retains that callback's actual source
+route. Literal rows of each successful unfold at the current reader keep
+an original stored row, full fields, arity and actual ordered child calls.
+One publication and raw callback are fixed before all these observations.
+Initial causal publication history and the actual prefix derive history
+at the active reader. The actual unfold derives history at its own return.
+
+The actual nested capture example now executes an unfold. Its rec/Top row
+has a full Mu child. The stored row has a bare self reference. Row inequality
+forces the actual child-call alternative. The same historical callback's
+SourceRow is retained. No desired writer or row ancestry is supplied.
+The initial-cell arm still needs connection to its original program.
+Generated rows are rooted in the actual encoded parent program.
+
+Nine public and one constructed full declaration readbacks pass. Three
+module strict logs and the independent fixture strict log are empty.
+Default build: 3528 jobs and 74267 axiom checks. Only the earlier
+ClosedCompletion unused-input warning remains. All 19 capped Lean/Lake
+commands are retained, including three elaboration failures, one successful
+unselected warning attempt and one weaker successful unselected draft.
+Duplicate receipt copies add no commands. All selected axioms are standard.
+
+Original user-program binding ancestry, residual Mu observation chains,
+global renewal, global active-owner exclusion, final owner retention,
+outer completion, convergence and Haskell refinement remain open.
+Past-producer fuel descent is not a future runtime rank. Conditional
+root-language and Sized laws are unchanged. All 268 Haskell files and
+207 active package files retain their bytes. FINDINGS keeps external
+repairs first. No new Haskell repair or runtime validation is claimed.
+The full-library goal stays active. Pushes to formalize are authorized.
+
+## Current native leaf and captured Mu row producers
+
+Updated: 2026-10-20 21:02 CEST. Proof checkpoint: `fd7f9ab1f`.
+Verified start: `a35455762`. Main remains `9769fe3e9`.
+Read `lean/notes-current-native-capture-leaf-producers.md`.
+
+An indexed leaf of an ordinary returned node now retains the collector's
+closed-root stopping case or its actual flattened row and child origins.
+Paired row origins retain both source row indices and the exact returned
+edge cell and writer. Nullary rows require no child-existence premise.
+Active terminal row production covers self, ordinary, Mu, union and
+reference branches. It preserves the supplied historical writer and uses
+same-reader maps instead of History at the active reader.
+
+One actual optional owner and entered child retain that same terminal
+writer and a producer receipt for each selected raw nodeEdges row.
+An indexed captured full Mu retains its exact initial cell or its strictly
+earlier actual optional producer with those same row receipts. Row fragments
+do not identify a closed whole leaf with either original operand.
+Rows through a Mu's stored body and unfold still need causal readback.
+
+One actual nested source family reaches an outer optional instruction
+whose body contains a new used inner Mu at leaf occurrence one. Its cell
+is absent initially. One capture application recovers its earlier producer
+and expands the same owner, child, terminal writer and raw row receipts.
+The older and stronger proof versions are retained as one example.
+Eighteen public and one constructed full declaration readbacks pass.
+Seven module strict logs and the fixture strict log are empty. Default
+build: 3525 jobs and 74259 axiom checks. Only the earlier ClosedCompletion
+unused-input warning remains. All 39 capped Lean/Lake commands are retained,
+including six elaboration failures and one five-minute timeout. Receipt
+copies add no commands. All selected readbacks use only standard axioms.
+
+Original program binding ancestry, selected Mu stored-body row alignment,
+global renewal, global active-owner exclusion, final owner retention,
+outer completion, convergence and Haskell refinement remain open.
+Strict descent through past producers is not a future runtime rank.
+Conditional root-language and Sized laws are unchanged. All 268 Haskell
+files and 207 active package files retain their bytes. FINDINGS keeps
+external repairs first. No new Haskell repair or runtime validation is
+claimed. The full-library goal stays active. Pushes to formalize are authorized.
+
+## Current terminal writers and earlier captured Mu producers
+
+Updated: 2026-10-20 20:33 CEST. Proof checkpoint: `1dfc025cc`.
+Verified start: `eb13a888d`. Main remains `9769fe3e9`.
+Read `lean/notes-current-native-active-result-lineage.md`.
+
+A new full Mu in bounded checked node execution now retains its same
+optional instruction, queried evaluating owner and actual entered child.
+That child's nonempty result retains a terminal returned cell and strong
+historical writer at the same site. The terminal handle differs from that
+owner's evaluating handle. Blocked nested construction remains covered.
+The terminal writer produces the child result, not the generated stored body.
+
+Actual prefix writer maps now support active row and Mu body origins
+without History at the active reader. The row theorem preserves actual
+source row and child indices. The Mu theorem preserves its supplied
+historical writer. Warm forwarding can use historical compiler traces.
+It does not assert that all forwarding hops ran in the current child call.
+
+An indexed full Mu in the actual captured leaf pool is present at entry
+or has a strictly earlier generating optional instruction in the same
+prefix. That earlier instruction retains its generated source writer and
+terminal child origin. The index is a leaf occurrence, not encode.slot.
+The original-source interpretation of the initial arm requires the actual
+closed build to return exactly the native entry heap. A separate source-scope
+theorem retains original execution writers under that exact equality.
+
+One compiled example derives its source construction, guard allocation,
+Good, History and checked schedule. Two distinct recursive operands produce
+a new used Mu. One generation application retains the same full owner,
+child, terminal cell and writer tuple. Eleven public and one constructed
+full declaration readbacks pass. Seven selected module strict logs and
+the fixture strict log are empty. Default build: 3518 jobs and 74224 axiom
+checks. Only the earlier ClosedCompletion unused-input warning remains.
+All 42 capped Lean/Lake commands and 5 failed attempts are retained.
+Two successful warning attempts remain unselected. Receipt copies add no jobs.
+
+Closed NODE capture producers and original program ancestry remain open.
+The strict decrease orders actual past producers. It is not an outer runtime
+rank. Global renewal, global active-owner exclusion, final owner retention,
+general completion, convergence and Haskell refinement remain open.
+Conditional root-language and Sized laws are unchanged. All 268 Haskell
+files and all 207 active package files retain their bytes. FINDINGS keeps
+external repairs first. No new Haskell repair or runtime validation is claimed.
+The full-library goal stays active. Publication to formalize is authorized.
+
+## Current queried owners, child writers and fixed-input scope
+
+Updated: 2026-10-20 20:05 CEST. Proof checkpoint: `9e4646d02`.
+Verified start: `5be668e2e`. Main remains `9769fe3e9`.
+Read `lean/notes-current-native-owner-source-scope.md`.
+
+Initial physical cache validity and an actual checked optional prefix now
+derive the queried owner itself. The same handle remains evaluating at the
+exact optional state. Initial Good and History also derive the actual
+completed child's direct compiler trace or returned cell and historical
+writer at that state. No History at the active site is assumed.
+
+Actual raw prefixes retain reached request scope in the fixed input heap.
+For closed empty-domain inputs, the combined optional theorem attaches that
+scope to the same recovered owner tuple. Initial validity, loaded fields,
+semantic readiness, history and explicit capacity bounds remain premises.
+The scope applies to owner operands and bindings. It does not identify the
+returned body's captures with paths in the original program.
+
+Bounded node execution now retains the queried owner and child origin with
+the same new Mu generation tuple, including blocked construction. The exact
+initial-full-cell alternative remains. An actual source-built example
+allocates its Top field and derives startup Good and History. Its four
+checked steps retain the same evaluating owner and keyed child writer.
+Its optional instruction has not executed and creates no new Mu in this example.
+
+Nine public declaration readbacks and one constructed readback pass.
+Seven selected module strict logs and the selected fixture strict log are
+empty. Default build: 3511 jobs and 74198 axiom checks. The sole warning is
+the earlier ClosedCompletion unused input. The checkpoint retains 40 capped
+Lean/Lake commands and ten elaboration failures. Reused receipt copies do
+not add commands. One successful first-head-only draft remains unselected.
+
+Original program ancestry of generated bodies and captures, global renewal,
+active-owner exclusion, final owner retention, general outer completion,
+convergence and Haskell refinement remain open. Conditional root-language
+and Sized laws are unchanged. All 268 Haskell files and all 207 active
+package files retain their bytes. FINDINGS keeps external repairs first.
+No new Haskell repair or runtime validation is claimed. The full-library
+goal stays active. Publication to formalize is authorized.
+
+## Current captured native optional owners
+
+Updated: 2026-10-20 19:22 CEST. Proof checkpoint: `db94389dc`.
+Verified start: `bfce6c471`. Main remains `9769fe3e9`.
+Read `lean/notes-current-native-optional-owner.md`.
+Every physically checked prefix from an unbound node request to an
+optional binder now derives that same instruction's captured compiler
+owner. The receipt retains the actual memoized query and demand, full
+captured cells, entered domain, exact child return and finish continuation.
+The proof supplies no owner or future completion premise.
+
+Every selected new full Mu in bounded node-request execution now keeps
+that owner with its same generating optional operation, done or pending
+call, actual prefix, generated source build and rooted writer. The exact
+initial-full-cell alternative remains. The proof uses one stopping-generation
+application and recovers the owner from its same returned prefix.
+
+Twelve public declaration readbacks pass. The nine selected module strict
+logs are empty. Default build: 3504 jobs and 74153 axiom checks.
+Only the earlier ClosedCompletion unused-input warning remains.
+One actual source-built compiled-root example passes its full readback
+and empty strict check. Its four checked steps reach the compiler's own
+optional instruction before that instruction executes or the owner returns.
+The scope retains 62 capped Lean/Lake commands and 17 failed commands.
+Sixteen failures are elaboration failures. One build failed before Lean
+because its new source was not installed. Two successful warning attempts
+remain unselected. Receipt copies in reviews do not add command counts.
+
+The owner cell is evaluating at compiler entry. This result does not prove
+that it remains evaluating at the optional site or final heap. It does not
+identify the captured request with its query. Original program binding
+ancestry, global renewal, active-owner exclusion, outer completion,
+convergence and Haskell refinement remain open. Conditional root-language
+and Sized laws are unchanged. All 268 Haskell files and 207 active package
+files retain their bytes. FINDINGS keeps external repairs first.
+No new Haskell repair or runtime validation is claimed.
+The full-library goal stays active. Publication is authorized.
+
+## Current stopping native generation and physical prefixes
+
+Updated: 2026-10-20 18:38 CEST. Proof checkpoint: `5c75cab54`.
+Verified start: `a893ec920`. Main remains `9769fe3e9`.
+Read `lean/notes-current-native-stopping-generation.md`.
+Every bounded physically checked native outcome now derives the exact
+initial full Mu cell or its actual generating optional instruction.
+The same tuple retains its prefix, nested done or pending call, checked
+advance, count/resume equation, generated source build and rooted writer.
+Terminal blocked heap effects are covered. No future return is assumed.
+
+Physical prefix splits now derive the unfinished inner call or its exact
+return and continuation. Ordered walks retain the original input index,
+actual earlier calls, ordered results and remaining input tail. These
+results do not attach a captured compileMu owner to a compiled root call.
+
+An actual warm reservation example checks a new used nested Mu created
+inside the sole final blocked optional call. Its key is absent at entry
+and present at the pending stop. The reserved outer key stays without a
+body record. One generation application retains its same returned tuple.
+Four public and one constructed full statement/proof/standard-axiom checks
+pass. All five selected strict logs are empty. Default build: 3495 jobs
+and 74100 axiom checks. Only the earlier unused-input warning remains.
+The scope archives 27 Lean jobs and four real failed attempts. Three jobs
+are reused from the earlier stopping-site prototype; 24 jobs are fresh.
+
+Captured-owner recovery is the next provenance obligation. Original
+program binding ancestry, global renewal, active-owner exclusion, outer
+completion, convergence and Haskell refinement remain open. Conditional
+root-language and Sized laws are unchanged. All 268 Haskell files and
+207 active package files retain their bytes. FINDINGS keeps external
+repairs first. No new Haskell repair or runtime validation is claimed.
+The full-library goal stays active. Publication is authorized.
+
+## Current stopping source writers and native generation
+
+Updated: 2026-10-20 18:13 CEST. Proof checkpoint: `ca5cee0cf`.
+Verified start: `666ce1358`. Main remains `9769fe3e9`.
+Read `lean/notes-current-native-mu-generation.md`.
+Actual source construction now derives a rooted selected writer at every
+stopping heap, including pending, or the exact initial full cell. The
+same publication retains its original source route and issued intervals.
+Every optional-binder outcome derives the same initial-cell alternative
+or its actual generated source build and rooted writer. Completion is not a premise for these heads.
+
+An actual checked yielded native trace now recovers the exact optional
+instruction that installs any selected new full Mu. The same prefix,
+instruction, checked advance and suffix retain that operation's generated
+build, Context and rooted writer. No operation or writer is supplied.
+The captured compileMu owner remains a separate provenance obligation.
+
+Four public declarations and two actual examples pass full statement,
+proof and standard-axiom readback. All five selected strict logs are empty.
+The examples check a real reserved-key pending source and a three-step
+native program that creates a Mu. Default build: 3491 jobs and 74079 axiom
+checks. Only the earlier ClosedCompletion unused-input warning remains.
+The selected scope has 23 Lean jobs and five retained failed attempts.
+
+A separately archived stopping-native prototype passes three Lean jobs
+with one retained failure. It covers terminal blocked heap effects and is
+not imported or counted as a current public pair. Its integration and an
+actual blocked-native example remain next. All 26 jobs stay archived.
+Captured-owner recovery, original program ancestry, global renewal,
+active-owner exclusion, outer completion, convergence and Haskell refinement
+remain open. Conditional root-language and Sized laws are unchanged.
+All 268 Haskell files and 207 active package files retain their bytes.
+FINDINGS keeps external repairs first. No new Haskell repair or validation
+is claimed. The full-library goal stays active. Publication is authorized.
+
+## Current actual Head Mu generation
+
+Updated: 2026-10-20 17:43 CEST. Proof checkpoint: `31de18f2c`.
+Verified start: `729c894df`. Main remains `9769fe3e9`.
+Read `lean/notes-current-head-mu-generation.md`.
+An actual completed Head now derives the generating stored unfold for any
+selected complete Mu cell, or the exact initial full cell. The same actual
+operation retains its available parent, generated source Context and build,
+rooted selected writer, entry absence, return presence, issued prefix and
+physical and issued suffix. No generating operation is supplied as a premise.
+
+The proof follows the actual ordered exposure. It keeps the initial unfold
+and the later fallback on the original Mu as separate calls. The generated
+root is encode of the stored parent body under its actual mapped self inputs.
+This is operation provenance. Original program binding ancestry remains open.
+
+One public declaration and one actual nested-recursion example pass complete
+statement, proof and standard-axiom readback. Both selected strict logs are
+empty. The example forces the new-cell branch and retains its same returned
+generation tuple. A later actual warm Head is also checked. The default build
+passes 3488 jobs and 74053 axiom checks. Its sole warning is the earlier
+ClosedCompletion unused-input warning.
+
+Native maybeMu generation is the next obligation. Its successful and blocked
+calls can install nested full cells. A generic optionalBinder instruction
+also needs its actual captured compileMu owner. Original-root ancestry,
+global renewal, active-owner exclusion, outer completion, convergence and
+Haskell refinement remain open. Conditional root-language and Sized laws
+are unchanged. All 268 Haskell files and all 207 active package files retain
+their bytes. FINDINGS keeps external repairs first. No new Haskell repair
+or validation is claimed. The full-library goal stays active. Publication
+to formalize is authorized.
+
+## Current historical binder children and actual source suffixes
+
+Updated: 2026-10-20 17:21 CEST. Proof checkpoint: `f10895e3d`.
+Verified start: `7471f93f8`. Main remains `9769fe3e9`.
+Read `lean/notes-current-selected-binder-source-suffix.md`.
+An actual completed source build now derives its selected complete Mu's
+historical rooted publication and raw source-child Origin, or the exact
+initial complete cell. The same event retains its payload, key, actual
+raw callback, self filter, Context, Reached and all issued intervals.
+No caller-supplied writer or current-callback identity is assumed.
+
+The same SourceRow now derives a nonunion terminal source receipt with
+its Context, rooted entry, generic structural Syntax bound, and physical
+and issued suffix to the supplied source return. Actual union tails and
+makeUnion work derive that suffix. A terminal binder's selected full cell
+can move forward by its nodeRecords retention. Any later reader interval
+must still come from its actual call receipts.
+
+Two public declarations and two actual examples pass complete statement,
+proof and standard-axiom readback. All four selected strict logs are empty.
+The default build passes 3487 jobs and 74042 axiom checks. Its sole warning is the
+earlier ClosedCompletion unused-input warning. The examples check a
+different-syntax warm requester and two source unions with later allocation.
+Returned existential receipts stay separate from computed witness identities.
+
+The next gap is the original-root ancestry of native encoded builds with
+nonempty initial leaf captures and prior full Mu cells. A closed leaf or
+whole self Mu is not itself an original binding certificate. General
+ancestry, global renewal, active-owner exclusion, outer completion,
+convergence and Haskell refinement remain open. Conditional root-language
+and Sized laws are unchanged. All 268 Haskell files and all 207 active package files
+retain their bytes. FINDINGS keeps external repairs first. No new Haskell
+repair or validation is claimed. The full-library goal stays active.
+Publication to formalize is authorized.
+
+## Current rooted indexed source children and exact stops
+
+Updated: 2026-10-20 17:00 CEST. Proof checkpoint: `3e69e40a1`.
+Verified start: `29afe07fc`. Main remains `9769fe3e9`.
+Read `lean/notes-current-rooted-indexed-source-children.md`.
+An actual RowCall now derives its exact indexed original child call,
+ordered prefix and suffix, joint Context, and forward physical and issued
+growth. Its source result can be closed. The strict bound counts original
+Syntax with default Symbol/Guard sizes, not generated physical values.
+
+The same rooted SourceRow now derives either that actual child call and
+Reached at its entry, an exact variable capture, or an exact selected Mu
+body stop. Actual source-union prefixes carry the rooted route forward.
+The same full parent row and ordered child index remain throughout.
+No desired child ancestry or historical writer receipt is a premise.
+
+Three public declarations pass complete statement, proof and standard-axiom
+readback. Both official strict logs are empty. The default build passes
+3485 jobs and 74039 axiom checks. Its sole warning is the earlier
+ClosedCompletion unused-input warning. An actual closed source node in an
+open normalized union retains repeated equal children at distinct indices.
+Its selected child keeps the actual rooted call and source syntax bound.
+
+The next step must recover a selected binder's own historical publication.
+An exact initial full cache cell remains an alternative. A binder stop's
+local return heap is not the enclosing return heap. Their actual suffix
+growth still needs a producer before the selected cell can move forward.
+General ancestry, global renewal, active-owner exclusion, outer completion,
+convergence and Haskell refinement remain open. Conditional root-language
+and Sized laws are unchanged. All 268 Haskell files and all 207 active
+package files retain their bytes. FINDINGS keeps external repairs first.
+No new Haskell repair or validation is claimed. The full-library goal stays
+active. Publication to formalize is authorized.
+
+## Current indexed first ordinary-child cuts and source rows
+
+Updated: 2026-10-20 16:49 CEST. Proof checkpoint: `e2175de1e`.
+Verified start: `f9c6d7ea6`. Main remains `9769fe3e9`.
+Read `lean/notes-current-indexed-first-ordinary-cut.md`.
+An exact indexed row-bearing leaf now gives either its structural row in
+the raw root or the first ordinary parent row and child crossing. The cut
+retains the actual stored union member, open Mu body, child index, inner
+leaf index and prefix offsets. Closed values stop at the whole value.
+
+The same actual completed source build and rich Context derive SourceRow
+for that same selected row or cut parent row. The cut and source receipt
+share the full parent row. No source ancestry receipt is a premise.
+Stored union membership does not identify an original source-union call.
+Normalization can change the leaf lists of original source members.
+
+Four public declarations pass complete statement, proof and standard-axiom
+readback. Both official strict logs are empty. The default build passes
+3483 jobs and 74034 axiom checks. Its sole warning is the earlier
+ClosedCompletion unused-input warning. An actual union and open Mu example
+retains repeated equal leaves at indices1/4. The returned cut keeps the
+same SourceRow. Its parent row differs from the selected leaf's row.
+
+The next producer must follow SourceRow to an actual indexed original child
+call or an exact capture/binder stop. Its child extractor must also accept
+closed source node results. Historical Mu writers retain their own events.
+General ancestry, global renewal, active-owner exclusion, outer completion,
+convergence and Haskell refinement remain open. Conditional root-language
+and Sized laws are unchanged. All 268 Haskell files and all 207 active
+package files retain their bytes. FINDINGS keeps external repairs first.
+No new Haskell repair or validation is claimed. The full-library goal stays
+active. Publication to formalize is authorized.
+
+## Current indexed open ordinary source-child calls
+
+Updated: 2026-10-20 16:19 CEST. Proof checkpoint: `4233fbd72`.
+Verified start: `d6cdc4442`. Main remains `9769fe3e9`.
+Read `lean/notes-current-open-ordinary-leaf-source-calls.md`.
+An indexed leaf of an actual completed open ordinary node now derives its
+canonical row and child, exact inner leaf index and flattened offset.
+The same full row derives its original source RowCall. Its actual indexed
+child build retains the joint lexical Context and ordered prefix and suffix.
+The input Context and completed source build are explicit. That build
+derives the child call. Source row and canonical row indices stay distinct.
+
+The derived child syntax is strictly smaller in the theorem's generic
+structural Syntax measure. That measure uses default Symbol and Guard
+sizes. It does not count their concrete payload size. This is a bound on
+the supplied source syntax. Generated values and whole-Mu self replacements
+have no smaller-size conclusion. A generated encode expression still needs
+its link to the original program syntax.
+
+The public endpoint passes complete statement, proof and standard-axiom
+readback. Its official strict log is empty. The default build passes
+3481 jobs and 74021 axiom checks. Its sole warning is the earlier
+ClosedCompletion unused-input warning. An actual Depth callback example
+retains reordered canonical rows, duplicate source rows and repeated equal
+closed leaves. Selected leaf occurrence1 differs from encoder slot0. Its
+single theorem application retains the full actual child-call certificate.
+
+General source-leaf ancestry still needs closed-root stopping, normalized
+unions, captures and selected historical Mu writers. Leaf lists can change
+across union normalization. The next general producer must retain a full
+row path and the first ordinary-child crossing. These results add no global
+renewal bound, general active-owner exclusion, outer completion, convergence
+or Haskell refinement. Conditional root-language and Sized laws are unchanged.
+All 268 Haskell files and all 207 active package files retain their bytes.
+FINDINGS keeps every external repair first. No new Haskell repair or
+validation is claimed. The full-library goal stays active. Publication
+to formalize is authorized.
+
+## Current historical publication rows and exact native capture slots
+
+Updated: 2026-10-20 15:57 CEST. Proof checkpoint: `8aeab876b`.
+Verified start: `9b10b6d3c`. Main remains `9769fe3e9`.
+Read `lean/notes-current-publication-native-capture.md`.
+A fixed selected publication now derives its actual historical raw body
+build and self filter. The same event supplies the original Reached route,
+allocated lexical Context and exact structural row. The raw build derives
+its SourceRow alternative. The rooted Written corollary keeps that same
+event's complete payload and all issued intervals.
+
+A row-bearing native capture at an exact leaf slot is either that same
+closed leaf or the complete selected Mu substituted for its own reference.
+Other references remain literal and cannot contain a structural row.
+Canonical slot lookup gives this split under its explicit coherent heap,
+available leaves and membership premises. It does not identify a repeated
+leaf occurrence index with the first canonical slot.
+
+Four public declarations pass complete statement, proof and standard-axiom
+checks. Both official strict logs are empty. The default build passes
+3480 jobs and 74011 axiom checks. Its sole warning is the earlier
+ClosedCompletion unused-input warning. The source-built native example
+exercises both arms and an actual successful Mu unfold. Its exact generic
+source prefix is preserved separately from the official canonical checks.
+
+Closed leaves still need ancestry through actual ordinary child builds.
+The next producer must retain the selected leaf occurrence, canonical row,
+original source row and actual child call. A closed root can itself be the
+whole captured leaf. An earlier warm writer remains distinct from the
+current callback. These results supply no general recursive decrease,
+renewal bound, active-owner exclusion, outer completion, convergence or
+Haskell refinement. Conditional root-language and Sized laws are unchanged.
+All 268 Haskell files and all 207 active package files retain their bytes.
+FINDINGS keeps every external repair first. No new Haskell repair or
+validation is claimed. The whole-library goal stays active. Publication
+to formalize is authorized.
+
+## Current completed source writer routes and original capture slots
+
+Updated: 2026-10-20 15:34 CEST. Proof checkpoint: `b6fa22f73`.
+Verified start: `0197b0001`. Main remains `9769fe3e9`.
+Read `lean/notes-current-completed-rooted-writers.md`.
+Actual completed construction now derives a rooted receipt for each new
+selected Mu writer. The same publication witness keeps its original Reached
+route, exact key and full payload, first-write absence, actual issued callback
+intervals and final heap retention. An arbitrary issued Path supplies no root.
+
+At warm startup the exact selected cell can instead be an initial cell.
+That alternative remains explicit. If the initial heap has no Mu records,
+the actual build derives a rooted writer. This includes winners created by
+earlier callbacks in that construction. No supplied winner ancestry is needed.
+
+A row-bearing captured lookup along a rooted source Path retains its exact
+original slot. Its current slot equals the callback-prefix length plus that
+original slot. Crossed callback inputs are literal references and have no
+structural row. Empty original inputs therefore exclude such a capture.
+The rooted Path remains explicit in this lookup theorem.
+
+Five public declarations pass complete statement, proof and standard-axiom
+checks. Both strict production logs are empty. The default build passes
+3478 jobs and 74006 axiom checks. Its sole warning is the earlier
+ClosedCompletion unused-input warning.
+
+Two constructed declarations check a different-syntax warm Mu hit and an
+actual Depth callback capture at slot1 with original slot0. The Mu example
+keeps the same event's rooted route and issued receipt. The capture example
+includes the exact generic source bytes. Both strict and full proof checks
+pass. No unique source writer or new warm publication is assumed.
+
+This recovers source routes inside one actual construction. Later native
+reconstruction can start with whole captured values and prior Mu records.
+Their ancestry to earlier source roots remains open. No global syntax
+measure, renewal bound, general active-owner exclusion, outer completion,
+convergence or Haskell refinement is added. The conditional root-language
+and Sized laws are unchanged. All 268 Haskell files and all 207 active
+package files retain their bytes. FINDINGS retains every external repair
+first. No new Haskell repair or validation is claimed. The whole-library
+goal stays active. Publication to formalize is authorized.
+
+## Current structural rows from actual source builds
+
+Updated: 2026-10-20 15:14 CEST. Proof checkpoint: `330e6fd55`.
+Verified start: `d7dc85792`. Main remains `9769fe3e9`.
+Read `lean/notes-current-build-structural-row-origins.md`.
+Completed source execution now derives a source alternative for each exact
+structural row. An ordinary row retains its original EdgeSyntax, ordered
+child build, full allocated row and actual call interval. A union retains
+one actual indexed member and its exact prefix, call and suffix.
+
+A variable retains its exact captured slot and value. A binder retains the
+actual selected stored Mu and smart finish, including a warm winner whose
+body can differ from the current callback. Smart-unused cleanup retains
+that selected body. The source occurrence is existential. Canonical and
+source indices have separate roles; duplicate rows need no unique preimage.
+
+The producer assumes the initial lexical Context, actual completed build
+and structural RowAt. It derives the alternatives from those facts. Two
+public declarations pass full statement, proof and standard-axiom checks.
+Strict production elaboration has an empty log. The default build passes
+3476 jobs and 73986 axiom checks. Its sole warning is the earlier
+ClosedCompletion unused-input warning.
+
+One constructed theorem checks five actual call families: canonical row
+reordering and duplicate removal, a union member, a captured slot, a used
+warm Mu from different syntax, and smart-unused ordinary cleanup. Its strict
+log is empty. Its full proof and standard-axiom readback pass.
+
+This classifies actual source calls. It does not yet trace captured values
+or selected stored winners back to their original source bindings. It adds
+no strict syntax bound across those alternatives. Global renewal, general
+active-owner exclusion, outer completion, convergence and Haskell refinement
+remain open. The conditional root-language law is unchanged. All 268 Haskell
+files and all 207 active package files retain their bytes. FINDINGS retains
+every external repair first. No new Haskell repair or validation is claimed.
+The full-library goal is active. Publication to formalize is authorized.
+
+## Current upstream persistent row updates and resumed proof work
+
+Updated: 2026-10-20 14:53 CEST. Main: `9769fe3e9`.
+Merge `7ac4534cb` retains published checkpoint `2a90c2318` and all older work.
+FINDINGS records the source change before import. Ten upstream paths change.
+Three Haskell files change exactly as upstream. No local Haskell repair is
+added. All Lean production sources, prior evidence and marked drafts remain.
+The constructor-probe changelog note and new replaceRows entry are retained.
+
+Data.CFTA.replaceRows adds persistent row insertion, replacement and deletion.
+A nonempty batch validates its complete final graph. mkFTA uses that same
+validator. An empty batch returns the input. Input rows remain available.
+No Lean refinement for this public operation is claimed. Typed size-order
+documentation states the route-specific size model. The language-tower plan
+is not an implemented document, persistence or checkpoint API.
+Read `lean/notes-current-upstream-persistent-rows.md`.
+
+Source inspection also found a route-dependent Typing documentation
+follow-up. The unconditional Binders size-major statement can include an
+acyclic graph, which takes the finite route. A valid external-field rank
+candidate is recorded in FINDINGS. Its cached-dependency executable aborted
+before rank output; no runtime counterexample is claimed. An external agent
+must verify it with a fresh matching toolchain before choosing a correction.
+
+The user resumed the full-library goal. Publication of `2a90c2318` is verified;
+the old approval restriction is historical. The next proof task remains raw
+callback source ancestry, with explicit capture and retained-Mu alternatives.
+General renewal, active-owner exclusion, outer completion, convergence and
+Haskell refinement remain open. No Haskell build or test result is claimed.
+
+## Current stored callback child contexts
+
+Updated: 2026-10-19 15:01 CEST. Proof checkpoint: `88dd8902c`.
+Verified start: `b0a7954c3`. Source main remains `184bba662`.
+Read `lean/notes-current-head-stored-callbacks.md`.
+Actual self filtering now preserves structural RowAt, including rows beneath
+opaque stored Mu bodies. The proof retains the exact original full row.
+A supported child keeps that row, original child index and actual lexical
+call interval when its source anchor moves to the raw callback value.
+Its original child is strictly smaller than that raw value.
+
+The selected issued-name writer supplies the actual historical raw build
+and root filter for the same stored Mu payload. At the final Head reader,
+it supplies the original lexical Context, available raw result, actual
+heap retention and exact warm build/filter replay. Completed Head derives
+reader readiness. Its empty-to-entry Path and initial semantic, cost and
+availability assumptions remain explicit. No raw execution or raw-value
+availability is inferred at the earlier stored-unfold call entry.
+
+Four public declarations pass complete proof and standard-axiom checks.
+Strict production elaboration has an empty log. The full default build
+passes 3475 jobs and 73974 axiom checks. The only warning is the earlier
+ClosedCompletion unused-input warning.
+
+This links the selected stored child to a genuine raw source callback.
+That raw value can contain captures or stored Mu bodies. Their ancestry
+back to the initial source expression and a global renewal bound remain
+open. No generated-child size bound or current-callback identity is added.
+General active-owner exclusion, outer completion, convergence and Haskell
+refinement remain open. The conditional root-language law is unchanged.
+All 268 Haskell files and all 207 active package files retain their bytes.
+FINDINGS retains every external repair first. No new Haskell repair is
+added. Publication awaits direct approval. No push or board write occurs.
+The user requested a pause after this handoff. The full-library scope remains.
+
+## Current issued-name paths through Head evaluation
+
+Updated: 2026-10-19 14:54 CEST. Proof checkpoint: `5930f0fe0`.
+Verified start: `574f1e1e1`. Source main remains `184bba662`.
+Read `lean/notes-current-head-issued-paths.md`.
+Actual unfolding, row collection, completed row reads and completed Head
+now derive issued-name Path through their actual heap intervals.
+Head node construction retains both physical cells and issued names.
+Semantic readiness, costs and input availability remain explicit.
+No Path is inferred from arbitrary cache growth or physical History.
+
+With an actual empty-to-entry Path, the selected Head child retains the
+strong issued-name writer for the same chosen stored Mu. The proof derives
+that Mu's final resident cell from its prior Chain, actual unfolding and
+literal suffix. It keeps the same body, row, child index and supported Child
+context. The initial Path remains explicit. The stored body can itself be
+generated. It is not identified with the current compiler callback.
+
+Four public declarations pass complete proof and standard-axiom checks.
+The strict production and constructed logs are empty. The two-Mu example
+derives closed construction, actual completed Head, its final issued-name
+Path and the stronger selected-child writer. It excludes an initial literal
+row. It asserts no unique chosen Mu identity or nonidentity child alternative.
+The full default build passes 3474 jobs and 73966 axiom checks.
+
+This supplies the actual Head path required by the stronger writer API.
+Original binding ancestry and a global renewal bound remain open. General
+active-owner exclusion, outer completion, convergence and Haskell refinement
+remain open. The conditional root-language guarantee is unchanged.
+All 268 Haskell files and all 207 active package files retain their bytes.
+FINDINGS retains every external repair first. No new Haskell repair is
+added. Publication awaits direct approval. No push or board write occurs.
+The full-library goal stays active.
+
+## Current Head child contexts through the last branch Mu
+
+Updated: 2026-10-19 14:40 CEST. Proof checkpoint: `b9ced29b0`.
+Verified start: `b517bc5e7`. Source main remains `184bba662`.
+Read `lean/notes-current-head-last-mu-child.md`.
+Actual chronological Head branches now split into a suffix with no explicit
+Mu call, or an actual last Mu call on the selected branch and that suffix.
+The suffix retains literal union choices and actual cache effects.
+Other collector branches can allocate Mu records during those effects.
+No globally last physical publication or unique branch is asserted.
+
+A selected Head row is literal in the starting value, or has that selected
+stored Mu call. Its prior Chain derives semantic and availability facts at
+the exact call entry. Its literal returned row derives the stored writer
+and supported original-child context. The same full row and child index
+are retained. The caller supplies empty-start publication History at the
+final Head heap. Cache growth alone supplies no publication History.
+
+Five public declarations pass complete proof and standard-axiom checks.
+The production and two-Mu constructed strict logs are empty. The constructed
+check derives actual closed construction, two Mu unfolds and completed Head.
+Neither the initial value nor the first returned retained Mu has a literal
+row. The Head producer therefore returns its Mu provenance alternative.
+It asserts no unique chosen Mu identity or nonidentity child alternative.
+The full default build passes 3473 jobs and 73958 axiom checks.
+
+This closes selected Head-row readback through further Mu exposure.
+The selected stored body can itself be generated. Its original binding
+ancestry and a global renewal bound remain open. General active-owner
+exclusion, outer completion, convergence and Haskell refinement remain
+open. The conditional root-language guarantee is unchanged.
+All 268 Haskell files and all 207 active package files retain their bytes.
+FINDINGS retains every external repair first. No new Haskell repair is
+added. Publication awaits direct approval. No push or board write occurs.
+The full-library goal stays active.
+
+## Current recursive event sites and stored Mu child contexts
+
+Updated: 2026-10-19 14:24 CEST. Proof checkpoint: `8a62bd5e7`.
+Verified start: `4486d9ce6`. Source main remains `184bba662`.
+Read `lean/notes-current-recursive-event-publications.md`.
+Actual selected recursive Entry now derives its physical publication
+prefix. The stronger producer derives the same observation and its Site
+together. Site follows actual ordinary projection frames. It does not
+assert that all proofs or frames have a unique site.
+
+The original false gate, preparation and class-fold support now derive
+an ordinary final Route or a recursive observation with that Site, exact
+row/path origin and the same captured event's publication histories.
+The initial publication prefix remains explicit. Native receipts stay
+at their captured checked reader. The later physical row view is separate.
+No publication history is inferred across an arbitrary reader Keeps gap.
+
+Actual stored Mu unfolding now derives its source writer and supported
+child readback for each selected LITERAL result row. The original row
+retains its full fields and indexed original child. That child has strict
+smaller size than the stored body. A changed child retains its actual
+lexical execute, semantic and availability facts, replacements, and both
+growth and issued-name intervals. The generated child has no size bound.
+The stored body is not identified with the current compiler callback.
+
+The default full build passes 3472 jobs. Audit checks 73953 axiom
+dependencies. Six public declarations pass complete proof and standard
+axiom checks. All four production strict logs are empty.
+Two constructed checks pass strict, complete proof and axiom checks.
+They verify a changed nested child and a non-root publication site.
+The latter retains the same observation, a concrete earlier Mu
+publication, and both local and empty-start writer receipts.
+
+Further epsilon Mu observations and lexical backedges remain open.
+Physical publication History supplies no issued allocation Path.
+Full source binding ancestry, renewal bounds, active-owner exclusion,
+outer completion, convergence and Haskell refinement remain open.
+The root-language guarantee is unchanged. All 268 Haskell files retain
+their bytes. FINDINGS retains every repair first. Publication awaits
+direct approval. No push or board write is attempted. The full-library
+objective remains active.
+
+## Current physical publication histories through class events
+
+Updated: 2026-10-19 13:31 CEST. Proof checkpoint: `bf90e5e3e`.
+Verified start: `54edece9c`. Source main remains `184bba662`.
+Read `lean/notes-current-event-publication-history.md`.
+Actual stored unfolds, Required reads, Head, projections, comparison
+selection and memo Merge now derive their physical publication intervals.
+Actual parent edits and chronological class folds compose those intervals
+at their exact returned heaps. Initial original-value availability stays
+explicit. No publication history is inferred from heap growth.
+
+A selected event retains its same actual native or Head execution heap.
+Under the stated support and supplied initial publication history, that
+heap has both the initial prefix and the suffix into the final fold heap.
+Later extensions require an actual publication interval plus Keeps.
+Native memo history stays separate. An empty initial prefix allows the
+existing stored-writer theorem to recover actual source publications.
+This does not derive the complete outer startup or scan chronology.
+
+The default full build passes 3468 jobs. Audit checks 73931 axiom
+dependencies. Thirty public declarations and one constructed check pass
+complete proof and standard-axiom checks. Six production strict logs and
+the constructed strict log are empty. The check exposes a nested used Mu,
+adds a new completed Mu record, and derives its actual publication writer.
+It does not exercise a complete class fold or outer reduction.
+
+The next gap is selected stored-Mu row and child readback with lexical
+backedges. The stored winner is not identified with the current compiler
+callback. Binding ancestry, renewal bounds, active-owner exclusion,
+outer completion, convergence and Haskell correspondence remain open.
+The root-language guarantee is unchanged. All 268 Haskell files retain
+their bytes. FINDINGS retains every repair first. Publication awaits
+direct approval. No push or board write is attempted. The full-library
+objective remains active.
+
+## Current native child writers through historical edge calls
+
+Updated: 2026-10-19 13:07 CEST. Proof checkpoint: `904d230ff`.
+Verified start: `1862b2fc6`. Source main remains `184bba662`.
+Read `lean/notes-current-native-edge-child-retention.md`.
+Actual causal History now derives the same earlier edge writer with
+native returned-cell retention from its captured body return into the
+checked reader. Its actual makeEdge and child-Walk suffixes retain the
+selected child return into that same reader. Surviving children cannot
+be Empty. Their actual Forwarded receipts therefore derive exact returned
+node cells and writers without History at internal active child entries.
+
+The ordinary-origin adapter keeps both original input row indices,
+the selected child index, full row fields and paired child call. It
+retains both strict original input-child mass bounds. It places no such
+bound on the generated output child and needs no positivity premise.
+All native receipts stay at the captured checked reader. The physical
+Origin view remains separate. Stored Mu winners and current callbacks
+are not identified. No native History is assigned to the physical view.
+
+The default full build passes 3462 jobs. Audit checks 73854 axiom
+dependencies. Eight public declarations and one constructed check pass
+complete proof and standard-axiom checks. All three production strict
+logs and the constructed strict log are empty. The check exercises an
+actual warm edge hit and its surviving child's returned writer. It makes
+no recursive-child or changed-child claim. General source renewal,
+active-owner exclusion, outer completion, convergence and Haskell
+correspondence remain open. The root-language guarantee is unchanged.
+All 268 Haskell files retain their bytes in this proof checkpoint.
+The current upstream ordered, template and subsumption paths still need
+implementation proofs. FINDINGS retains every repair first. Publication
+awaits direct approval. No push or board write is attempted. The
+full-library objective remains active.
+
+## Current event path origins and separate native views
+
+Updated: 2026-10-19 12:52 CEST. Proof checkpoint: `776875701`.
+Start: `8282cca55`. Source main is `184bba662`, merged at `a3cf692cb`.
+Read `lean/notes-current-recursive-event-source-read.md` and the current system claim.
+Actual Project, selected Read and Spine now derive full row PathOrigin
+at the completed read heap or an actual later view. Each step retains an
+epsilon-origin row and its exact child index. Literal event occurrences
+prepend their residual path. The class-fold producer derives this same
+path ancestry for its recursive event alternative. It keeps the original
+false gate, actual Required/Fold support and captured event execution.
+No whole-event Project or complete outer chronology is inferred.
+
+Native row origins now use a separate physical view. Actual native
+cells, history and writers stay at their captured checked reader.
+Ordinary origins derive paired child calls and both strict input-child
+mass bounds without a positivity premise. Union and reference branches
+retain their exact calls and the same-view complete row. Mu exposure
+retains its chosen captured body and its separate physical unfolding.
+These two Mu executions are not identified. No native history is assigned
+to the physical view. Ordinary internal child memo provenance remains a
+further step before repeated writer normalization.
+
+Full default build passes 3459 jobs. Audit checks 73817 axiom dependencies.
+Nine public declarations and two constructed checks pass complete proof
+and standard-axiom checks. All three production strict logs are empty.
+One check retains exact event path [0,0] while excluding a root Origin
+for the deep row. Another derives a captured native writer and an actual
+row origin at a distinct later heap. Neither asserts the complete
+false-gate outer execution or finite productivity. Source-origin renewal,
+active-owner exclusion, general outer completion, convergence and Haskell
+refinement remain open. The conditional root-language guarantee is
+unchanged. Upstream changes six earlier Haskell files and adds one;
+the other 261 earlier files retain their bytes. Its new ordered cursor,
+template and subsumption paths still need implementation proofs. No local
+Haskell repair is added. FINDINGS retains every repair first. Publication
+awaits direct approval. No push or board write is attempted. The
+full-library objective remains active.
+
+## Current captured event executions at recursive observations
+
+Updated: 2026-10-19 12:25 CEST. Proof checkpoint: `d153d37d7`.
+Start: `60403eced`. Source main is `b45051e3e`, merged at `fec741514`.
+Read `lean/notes-current-recursive-event-observation.md` and the current system claim.
+An actual selected recursive Entry now derives its completed remaining
+projection and selected full row read. Actual ordinary prefixes and
+suffixes derive support and both surrounding heap intervals. Its internal
+row index can differ from the outer selected index.
+
+Actual node, child and chronological class-fold events now derive their
+captured native or Head execution. Native events retain the exact Force,
+query, checked trace and returned native cell with its writer receipt.
+That cell and native history belong to the captured query return. Later
+heap retention alone does not transfer native memo history.
+
+The composed endpoint takes actual Required preparation, the original
+false gate, actual FoldReads and the selected Project/Read. A nonplain row
+has an ordinary Route in the FINAL value, or an earlier actual event
+contains its exact first recursive value with the supported remaining
+observation. Actual heap intervals connect that event to the observation.
+The separate read adapter derives an epsilon row Origin, or an actual
+Head source row with its selected child continuation. That Head row can
+differ from the final selected row. No deep-row Origin is invented.
+Preparation and fold share a returned forest, with separate heap support.
+No complete outer execution or whole-event projection is proved.
+
+Full default build passes 3456 jobs. Audit checks 73793 axiom dependencies.
+Ten public declarations and two constructed checks pass complete proof
+and standard-axiom checks. All five production strict logs are empty.
+The checks exercise distinct outer/internal row indices and an actual
+edit event with its original true gate. They assert no false-gate
+outer-driver execution or finite productivity. Whole-event residual
+handoff, renewal bounds, active-owner exclusion, general outer completion,
+convergence and Haskell refinement remain open. The conditional root
+language guarantee is unchanged. All 242 earlier Haskell files retain
+their bytes. Upstream adds 25 Haskell files in Specftacular packages;
+their public interfaces have no refinement proof. No local Haskell repair
+is added. FINDINGS retains every repair first. Publication awaits direct
+approval. No push or board write is attempted. The full-library objective
+remains active.
+
+## Current original-source exclusion in recursive observations
+
+Updated: 2026-10-19 11:54 CEST. Proof checkpoint: `e619dc99a`.
+Start: `cec4415b`. Source main remains `c0cc8a05`.
+Read `lean/notes-current-recursive-source-plain.md` and the current system claim.
+Required origins retain an exact recursive value at the same ordinary
+child path or make that value plain. The original false gate makes every
+such recursive prefix plain. Actual signed projection and later complete
+row reads preserve its annotation, including Mu unfolding. The exact
+first Entry derives all selected ordinary prefix and suffix support.
+No false gate on the prepared or edited value is assumed.
+
+The composed endpoint takes actual Required preparation, actual FoldReads,
+and the literal Project and selected Read. It derives Required origins
+and fold effects. A nonplain selected row has an ordinary Route in the
+FINAL fold value, or an actual earlier native/Head event contains its
+exact first recursive value. Preparation safety, initial fold support,
+final causal guard heaps, reader semantics and forward Keeps remain
+explicit. The graphs share the same returned forest. This is not a
+proof of a complete chronological outer execution or a projection of
+the unchanged whole event value through later edits.
+
+Full default build passes 3451 jobs. Audit checks 73748 axiom dependencies.
+All eight new public theorem heads pass complete proof and standard-axiom
+checks. All four production strict logs are empty. Two constructed checks
+exercise original false-gate Required exposure and actual used-Mu root
+and Head observations. They assert no outer-driver selection or finite
+productivity. Native residual handoff, renewal bounds, active-owner
+exclusion, general outer completion, convergence and Haskell refinement
+remain open. Fresh modeled construction already always finishes. The
+conditional root-language claim is unchanged. No Haskell bytes change or
+repair request is added. FINDINGS retains every repair first. Field-pool
+fix `b9219b9e` remains in main `c0cc8a05`. Publication awaits direct
+approval. No push or board write is attempted. The full-library objective
+remains active.
+
+## Current exact recursive reader ancestry
+
+Updated: 2026-10-19 11:32 CEST. Proof checkpoint: `300c7b37`.
+Start: `ffe380d3`. Source main remains `c0cc8a05`.
+Read `lean/notes-current-recursive-value-ancestry.md` and the current system claim.
+A recursive value below literal ordinary children now retains its exact
+identity and child path in the original input, or an actual native/Head
+event contains that same value. This composes through the chronological
+class fold at the same forest slot. It needs no false gate or Required
+Origin on changed forests. Existing indexed event receipts are reused.
+
+The actual selected Project and complete row Read now derive their first
+Mu or union entry, its exact ordinary prefix and remaining read history.
+An initial observation path domain passes through the fold. Actual fold
+effects derive projection support and the selected Spine. The composed
+producer traces this reader's exact recursive value to the initial input
+or an earlier event. Its ordinary alternative is a Route in the FINAL
+fold value. It does not assert an initial source row for that alternative
+or a completed projection of an unchanged whole event value.
+
+Full default library build passes 3447 jobs. Audit checks 73728 axiom
+dependencies. Ten public declarations pass full proof checks: two relation
+types and eight theorems. All three production strict logs are empty.
+One constructed used-Mu example forces the actual node and fold event
+arms and excludes every initial ordinary-child source of that exact Mu.
+It asserts no outer-driver gate selection or finite-tree productivity.
+Native residual handoff, renewal bounds, active-owner exclusion, general
+outer completion, convergence and Haskell refinement remain open.
+Fresh modeled construction already always finishes. The conditional
+root-language claim is unchanged. No Haskell bytes change or repair
+request is added. FINDINGS retains every repair first. Field-pool fix
+`b9219b9e` remains in main `c0cc8a05`. Publication awaits direct approval.
+No push or board write is attempted. The full-library objective remains
+active.
+
+## Current selected observations through class node edits
+
+Updated: 2026-10-19 01:59 CEST. Proof checkpoint: `e8235cd6`.
+Start: `2a6783571`. Source main remains `c0cc8a05`.
+Read `lean/notes-current-class-observation-spines.md` and the current system claim.
+An actual projection and selected complete row read now retain the same
+recursive read history. This includes Mu unfolding. A completed class
+node edit derives either an ordinary source at the same path in the
+original input, with the same symbol, full guard and arity, or an actual
+native/Head cut with its remaining projection and read. Ordinary steps
+retain the exact signed child position and actual edit/read intervals.
+Head cuts observe the body edit's returned value.
+
+The producer constructs path safety from the original false gate and
+Required Origin. It derives projection support from the actual edit
+return. It does not assume source ancestry or a false prepared gate.
+Initial shared readiness, edit safety, memo validity, native history,
+reader semantic support, forward Keeps and the reader guard heap remain
+explicit. This result covers one node edit. It does not yet compose
+observations across an entire class fold or bound renewed recursive calls.
+
+Full default library build passes 3444 jobs. Audit checks 73712 axiom
+dependencies. Six public declarations pass full proof checks. Four are
+receipt types; two are theorems. Both production strict logs are empty.
+One constructed Mu example passes strict and complete proof checks.
+Its original primary gate is true; it tests the leaf continuation directly.
+General outer completion, empty-owner exclusion, convergence and Haskell
+refinement remain open. Fresh modeled construction already always
+finishes. The conditional root-language claim is unchanged. No Haskell
+bytes change or repair request is added. FINDINGS retains every repair
+first. Field-pool fix `b9219b9e` remains in main `c0cc8a05`. Publication
+awaits direct approval. No push or board write is attempted. The
+full-library objective remains active.
+
+## Current structural class fold and actual worker sources
+
+Updated: 2026-10-19 01:14 CEST. Proof checkpoint: `55873f7f9`.
+Start: `69e2d9c9`. Source main remains `c0cc8a05`.
+Read `lean/notes-current-class-fold-structural.md` and the current system claim.
+Every descendant structural output row in a completed class fold now
+retains an initial source in the same forest slot, or an actual native/Head
+event in an earlier class phase. Sources retain full row fields. Events
+retain residual structural occurrences, exact child slices and actual
+chronology. Each phase derives physical support and native writer history
+from its actual completed tail. Child identity is not asserted.
+
+A literal bounded-worker return now derives this read graph from initial
+Frame, Fits and numeric reservations. It also retains the final Frame,
+Fits and forest length. The theorem applies to a completed tail without
+a future enclosing traversal return. Initial physical memo support,
+coverage, global validity and native history remain explicit.
+
+Full default library build passes 3442 jobs. Audit checks 73634 axiom
+dependencies. Eight public declarations pass full proof checks. Three are
+event types; five are theorems. Both selected production strict logs are
+empty. Structural sources do not yet explain observational Mu reads or
+bound renewed recursive requests. General outer completion, empty-owner
+exclusion, convergence and Haskell refinement remain open. Fresh modeled
+construction already always finishes. The conditional root-language
+claim is unchanged. No Haskell bytes change or repair request is added.
+FINDINGS retains every repair first. Field-pool fix `b9219b9e` remains in
+main `c0cc8a05`. Publication awaits direct approval. No push or board write
+is attempted. The full-library objective remains active.
+
+## Current Required projection and structural class sources
+
+Updated: 2026-10-19 00:58 CEST. Proof checkpoint: `fb6abfd9a`.
+Start: `c6b1c479`. Source main remains `c0cc8a05`.
+Read `lean/notes-current-required-projection.md` and the current system claim.
+Actual Required followed immediately by a literal target operand now
+retains original row fields and ordered child origins. Any recursive Merge
+Run uses the prepared children. The prepared gate need not remain false.
+Original source children have smaller source mass. Generated prepared
+children have no asserted mass bound. Initial Merge history stays explicit.
+A source-built raw-path example checks unequal child lists. It is not a
+normalized active-class example and asserts no finite-language productivity.
+
+A completed node edit now retains descendant structural row sources or
+actual native/Head events with residual occurrences and indexed child slices.
+This does not yet compose an entire class fold or observational Mu read.
+Full default library build passes 3440 jobs. Audit checks 73626 axiom
+dependencies. Six public declarations and one constructed head pass full
+proof checks. All four selected strict logs are empty. Three public heads
+are event types; the other three are theorems. General outer completion,
+renewal bounds, empty-owner exclusion, convergence and Haskell refinement
+remain open. The strongest conditional root-language claim is unchanged.
+No Haskell bytes change or repair request is added. FINDINGS retains every
+repair first. Field-pool fix `b9219b9e` remains in main `c0cc8a05`.
+Publication awaits direct approval. No push or board write is attempted.
+The full-library objective remains active.
+
+## Current open native and Required source handoffs
+
+Updated: 2026-10-19 00:31 CEST. Proof checkpoint: `8985a90ac`.
+Start: `a0ab02e2a`. Source main remains `c0cc8a05`.
+Read `lean/notes-current-mu-source-handoff.md` and the current system claim.
+Open union and reference writers now supply exact historical child calls
+and complete row origins at the same reader. Union members have smaller
+source mass. Reference resolution has no mass assertion. A selected Mu
+writer now separates a literal body row from the first opaque published
+Mu. Only the literal case derives an observational Origin. The opaque case
+retains its actual publication and raw callback. It supplies no initial
+query-operand ancestry. Initial causal histories remain explicit.
+
+Actual unfinished outer prefixes now retain union normality without a
+future whole-call return. Every bounded stopping outcome also retains it.
+A source-built normalized active two-path class changes from primary-false
+to primary-true after actual Required. Both output endpoints remain closed.
+Thus false-primary retention cannot connect the original and prepared
+forests. Direct row fields and ordered child-origin relations must supply
+that connection. Existing structural Required origins remain valid.
+
+Full Audit passes 3435 jobs and 73598 dependency checks. Eight public
+declarations and three constructed heads pass complete proof and standard
+axiom checks. All seven selected strict logs are empty. Fresh construction
+from empty caches already has a completion theorem in the model. General
+outer completion, renewal bounds, empty-owner exclusion, convergence and
+Haskell correspondence remain open. No Haskell defect or repair request
+is added. No Haskell bytes change. FINDINGS retains all repairs first.
+Field-pool fix `b9219b9e` remains in main `c0cc8a05`. No push or board write
+is attempted. The full-library goal remains active.
+
+## Current selected and native source origins
+
+Updated: 2026-10-19 00:06 CEST. Proof checkpoint: `2364e745d`.
+Start: `741ae3c56`. Source main remains `c0cc8a05`.
+Read `lean/notes-current-native-renewal.md` and the current system claim.
+Actual record scans now derive false primary certificates for their selected
+records at the exact final heap. Existing scan normality supplies the
+separate union invariant from initial normality. Nonempty forest projection
+and actual target operand returns retain exact source rows and smaller
+source children. An actual ordinary native result retains both source rows,
+a positive source side, smaller source children and its actual child query.
+Causal writer and physical input premises remain explicit.
+
+A source-built class example imports its positive continuation from the
+competing input. It refutes a positional anchor confined to the selected original.
+An empty forest path can expose a constrained Mu continuation equal to its
+source. This is an unrestricted forest boundary. Existing live-path facts
+remain available for actual precheck entries. Neither example establishes
+an infinite run or a Haskell defect. General renewal bounds, completion,
+empty-owner exclusion, convergence and Haskell correspondence remain open.
+The strongest constructed root language claim is unchanged and conditional
+on modeled completion. Full Audit passes 3431 jobs and 73492 dependency
+checks. All eight public and four constructed heads pass complete proof
+and standard-axiom checks. No Haskell bytes change or repair is added.
+FINDINGS retains all Haskell repairs first. Field-pool fix `b9219b9e`
+remains fixed in main `c0cc8a05`. No push or board write is attempted.
+The full-library goal remains active.
+
+## Current actual outer Merge writer history
+
+Updated: 2026-10-18 23:38 CEST. Proof checkpoint: `5f5565efd`.
+Start: `8795abdf9`. Source main remains `c0cc8a05`.
+Read `lean/notes-current-writer-history.md` and the current system claim.
+Actual target, class and Parent returns now retain causal Merge writers.
+Actual outer returns, unfinished phase prefixes and busy node dispatches
+retain the same history. Logical empty Merge initialization supplies it.
+Initial physical Good, probe and input-readiness facts remain explicit.
+No future whole traversal return is used for the prefix endpoint.
+Arbitrary initial warm Merge tables still require their causal history.
+No claim covers every terminal lower-operation failure state.
+
+The strongest root language claim remains conditional on modeled completion.
+The main mathematical gap remains a bound on renewed constraint origins
+through actual selected edits, native queries and Mu reconstruction.
+General completion, empty-owner exclusion, convergence and Haskell
+correspondence remain open. No Haskell bytes change or repair is added.
+FINDINGS keeps every existing Haskell repair first. The field-pool fix
+`b9219b9e` remains present in main `c0cc8a05`. No push or board write is
+attempted. The full-library goal remains active.
+
+## Current selected target row provenance
+
+Updated: 2026-10-18 23:17 CEST. Proof checkpoint is `3739234c6`.
+Starting checkpoint is `e11607d4`. Source main remains `c0cc8a05`.
+Read `lean/notes-current-selected-renewal.md` and the current system claim.
+Actual projection scans retain exact indexed source rows and causal union
+reads. Actual cold and warm Merge calls derive historical physical writers.
+Returned non-Top rows retain original full fields and ordered recursive
+child Merge calls. Literal allocated target operands supply these sources
+at their exact projected values. Arbitrary initial warm tables still need
+the causal writer certificate. The whole outer caller does not yet derive it.
+
+An accepted joined-guard example loses a live accessor equality pair when
+its whole guard is outside the positive parser. The Same atom remains.
+No Haskell defect is established. Existing positive-class coverage is reused.
+The remaining primary producer must compose these projected sources with
+native queries and selected edits to bound renewal of dropped origins.
+General completion, empty-owner exclusion, convergence and Haskell
+correspondence remain open. Root language and exact size-query claims
+remain unchanged. Full Audit passes 3421 jobs and 73193 checks.
+
+No Haskell bytes change or new repair is requested. FINDINGS retains all
+repairs first. Field-pool repair `b9219b9e` remains fixed in `c0cc8a05`.
+No push or board write is attempted. The full-library goal remains active.
+
+## Current effective inherited gains and untouched dispatch progress
+
+Updated: 2026-10-18 22:55 CEST. Proof checkpoint is `4b6f581d`.
+Starting checkpoint is `9e11fad5`. Source main remains `c0cc8a05`.
+Read `lean/notes-current-effective-outer-progress.md` and the current
+system claim. Covered own classes now preserve the complete fixed
+inherited value in actual cold/warm operations. Every actual strict
+height gain has a distinct own pair absent from the inherited components.
+The exact original row, Parent call and active-owner receipts remain.
+The initial busy endpoint still requires a nonempty captured owner.
+
+An unfinished walk derives exact dispatch from completed earlier siblings.
+Untouched positive continuations have strict source-anchor mass descent.
+Finite chains can change child indices. The untouched footprint remains
+explicit. No enclosing walk or node return is assumed.
+
+The next primary producer is constraint-origin renewal through actual
+selected edits and native queries. Dropped classes can be reintroduced.
+Local absorption and a finite field alphabet do not bound these events.
+General completion, empty-owner exclusion, convergence and Haskell
+correspondence remain open. The broad root language and exact size-query
+claims remain unchanged. Full Audit passes 3417 jobs and 73140 checks.
+All twelve public heads pass complete proof and standard-axiom checks.
+Four production strict logs are empty. Three canonical targets replay only
+the known old unused-input warning. Actual checks cover covered nonempty
+own fields, new-pair production and source-built untouched dispatch.
+
+No Haskell bytes change or new repair is requested. FINDINGS retains all
+repairs first. Field-pool repair `b9219b9e` stays fixed in `c0cc8a05`.
+No push or board write is attempted. The full-library goal remains active.
+
+## Current constructed root correctness and cross-local publication
+
+Updated: 2026-10-18 22:34 CEST. Proof checkpoint is `bf3014ae`.
+Starting checkpoint is `bf12022d`. Source main remains `c0cc8a05`.
+Read `lean/notes-current-constructed-root-and-cross-local.md` and
+`lean/notes-current-system-claim.md`. This assessment supersedes the
+older statements that name Generated simulation or guard initialization
+as a missing premise of intrinsic construction and reduction correctness.
+
+Actual completed closed FreshOrdinary construction already has its exact
+independent least finite-tree language, including nested Mu and cache hits.
+The new constructed root endpoint derives logical initial Context, the
+recursive guard certificate, root availability and empty inheritance.
+A completed root call then accepts exactly the trees specified by the
+original expression. Actual field-allocation history, valid interning,
+source guard coverage, Fits, carrier, scheduled Room and both completed
+calls remain explicit. No global Generated/Directed premise is needed.
+The logical empty cache state does not assert a reset of Haskell CAFs.
+
+For nonempty inheritance, the broad reduction guarantee remains
+`L(input) intersect Sat(inherited) <= L(result) <= L(input)`.
+It does not assert that every returned tree satisfies inherited constraints.
+The exact returned size-query laws retain their separate construction and
+annotation assumptions. General recursive completion, active-owner
+exclusion, fresh-call bounds, repeated-pass convergence and Haskell
+correspondence remain open. The next primary proof target is general
+outer progress, as described in `lean/notes-current-outer-progress.md`.
+An initial-input measure must survive actual native edits and same-key
+memo-owner reuse. Do not assume a future successful call to prove progress.
+
+The auxiliary observation route gains actual cross-local writer generators,
+sequential completed reconstructions and a variable clause theorem.
+The latter still consumes semantic lexical clauses for reference slots.
+A source-built open used Mu exercises ordered recursive children.
+A second nested Mu witness allocates a value unavailable in the original
+reader. Its next old-reader unfold still completes. Neither witness proves
+language failure, unequal causal Generated endpoints or a Haskell defect.
+All-Generated fixed-reader simulation remains an open auxiliary contract.
+
+Full Audit passes 3413 jobs and 73115 dependency checks. Five production
+strict logs and three constructed strict logs are empty. All seven new
+public heads and three constructed heads pass full proof and standard-axiom
+checks. All five canonical builds pass. The two constructed-entry builds
+replay only the known old unused-input warning. Evidence is in
+`lean/restart-evidence/20261018-cross-local-publication/`.
+No Haskell bytes change or new repair is requested. FINDINGS retains every
+repair first. Field-pool repair `b9219b9e` remains fixed in `c0cc8a05`.
+No push is retried. The full-library goal remains active.
+
+## Current fixed-reader row alignment and union clauses
+
+Updated: 2026-10-18 22:11 CEST. Proof checkpoint is `aed9deb8`.
+Starting checkpoint is `4af95a7b`. Source main remains `c0cc8a05`.
+Read `lean/notes-current-fixed-reader-row-clauses.md` and
+`lean/notes-current-system-claim.md`.
+
+Actual row calls now derive the same historical source row index, complete
+symbol and guard equality, and ordered mutual Generated children. Causal
+history derives equal child Empty tests and exact row-survival parity.
+Neither whole ordinary subgroup needs a warm stored call.
+
+An actual union theorem now assembles its literal clauses at the original
+reader. Each strict-member obligation receives its exact expression index
+and both historical source calls. The atom obligation returns an actual
+opposite retained atom call and endpoint clauses. The row obligation
+returns actual opposite RowCalls, survival and a full row match.
+These semantic fragment obligations remain premises. No all-source Law or
+global Directed instance is claimed. No arbitrary source chain is used.
+
+Full Audit passes 3408 jobs and 73092 dependency checks. Three production
+modules have empty strict logs and clean canonical builds. Four public
+heads and two constructed heads pass complete proof and standard-axiom
+checks. The actual integrations cover a warm parent with cold subgroup
+calls and a union with a retained reference and a full false-guard row.
+Both fixtures use nullary rows. Evidence is in
+`lean/restart-evidence/20261018-fixed-reader-row-clauses/`.
+
+Next prove a source-fragment law from the actual parent call families.
+Pass the outer parent's exact bare-self selector into every strict member.
+The node-row case is now available. Reference slots still need semantic
+lexical induction. Used and smart-unused binders need actual writer and
+unfolding clauses with a justified progress argument at the same reader.
+The requester source size does not bound an older selected writer.
+General completion, convergence and Haskell correspondence remain open.
+The broad reduction and exact size-query guarantees are unchanged.
+No Haskell bytes change and no repair request is added. FINDINGS retains
+every repair first. Field-pool repair `b9219b9e` remains fixed in `c0cc8a05`.
+No push is retried. The full-library goal remains active.
+
+## Current causal Mu generators and original-reader union fragments
+
+Checked on 2026-10-18 at proof checkpoint `f312f254`.
+Actual stored reconstruction retains complete issued publication paths.
+The selected writer derives both body/probe generators under arbitrary
+common outer and local replacements. Actual Mu unfolding constructs both
+epsilon endpoints and final warm calls. No guarded observation law is
+supplied. An actual warm union parent derives indexed literal-atom calls
+and full RowCalls at its original reader without warm subgroup calls.
+A source-built warm-parent/cold-subgroup case checks that distinction.
+
+The new sound normalization rule permits literal inclusion around at most
+one source pair. Full per-source literal clauses remain explicit.
+It does not validate arbitrary source-pair transitive closure.
+Full Audit passes 3405 jobs and 73071 checks. All 12 public and two
+constructed heads pass complete proof and standard-axiom checks. Five
+strict module logs and both strict fixture logs are empty. General source
+clauses, used-Mu semantic progress, completion, convergence and Haskell
+correspondence remain open. The broad system claim is unchanged.
+No Haskell bytes change. Read `notes-current-causal-writer-generators.md`.
+
+## Current causal union schedules and conditional literal clauses
+
+Checked on 2026-10-18 at proof checkpoint `fff568a7`.
+Actual union preparation derives two ordered schedules with causal history
+at one produced common reader. Both original parent results remain exact.
+Indexed literal fragments retain original member indices and the exact
+bare-self rule. Strict member literal laws give a conditional one-way
+parent clause at that reader. This does not prove the source Law at the
+original reader or for all syntax. Actual Mu successors, full guards and
+ordered mutual child relations remain explicit.
+
+A checked source-built counterexample rules out arbitrary weak simulation
+up to transitive closure, even with causal Ready, available nonempty
+values and physical Empty agreement. It does not refute actual Generated
+or establish a Haskell defect. A justified progress argument is required.
+Full Audit passes 3400 jobs and 73046 checks. Five strict module logs and
+two strict construction logs are empty. All 14 public and two constructed
+heads pass complete proof and standard-axiom checks. General fixed-reader
+simulation, recursive completion, convergence and Haskell correspondence
+remain open. The broad reduction law is unchanged. No Haskell bytes change.
+Read `notes-current-causal-union-local.md` for exact scope and evidence.
+
+## Current causal Empty agreement and node simulation
+
+Checked on 2026-10-18 at proof checkpoint `20cd2d78`.
+Causal filtered Empty fusion now covers all source syntax. Actual histories
+derive the payload contract. The recursive Generated relation preserves
+physical Empty flags. Selected Mu readback constructs both calls with
+arbitrary common replacements. Historical node calls derive both local
+simulation clauses with full guards and ordered mutual child generators.
+No child result law or supplied semantic payload heap is assumed.
+Full Audit passes 3395 jobs and 73023 dependency checks. Six modules,
+13 public full proofs and exact construction fixtures are checked.
+Filtered union and used-Mu clauses at one fixed reader remain open.
+General source Directed, completion, convergence and Haskell correspondence
+remain open. No Haskell bytes change. The broad reduction law is unchanged.
+Read `notes-current-causal-empty-fusion.md` for exact scope and evidence.
+
+## Current full causal source comparison and payload initialization
+
+Updated: 2026-10-18 20:44 CEST. Proof checkpoint is `43859cfd`.
+Read `lean/notes-current-causal-source-comparison.md`.
+All source syntax now has assigned root-profile and original-cut comparison.
+Actual histories from empty tables derive both stored payload contracts,
+including exact bare tags. No supplied semantic payload heap remains in
+that history-only source endpoint. Eight actual nested cases cover changing
+captures and cold/warm calls. Full Audit passes 3389 jobs and 72984 checks.
+All 29 public and two constructed heads pass complete proof and axiom checks.
+Next prove causal filtered Empty fusion, then the actual source-generated
+Mu/row/ordered-child Directed certificate. Deeper guarded observations,
+general completion, convergence and full Haskell correspondence stay open.
+The broad reduction guarantee is unchanged. No Haskell bytes change.
+FINDINGS retains all repairs. The full-library goal remains active.
+
+## Current original root deletion and actual unused binders
+
+Updated: 2026-10-18 20:14 CEST. Proof checkpoint is `2e24eca5`.
+Read `lean/notes-current-root-deletion-observations.md`.
+Normal-only constructor laws preserve original root deletion. The stronger
+root payload interface is checked. Actual smart-unused return observations
+reduce to the current strict body without an assumed payload contract.
+The later-reader theorem uses forward record retention and actual reader
+history. Publication induction now supplies each actual history prefix.
+General fixed-reader source comparison, retained open-Mu comparison and
+semantic publication preservation remain open. Full Audit passes 3378 jobs
+and 72915 checks. All 31 public and seven constructed heads pass complete
+proof and standard-axiom checks. No Haskell bytes change. The broad claim
+remains conditional valid-input preservation and input-language inclusion.
+It does not establish returned-constraint satisfaction, general completion
+or full Haskell correspondence. The full-library goal remains active.
+
+## Current original root filtering and source comparison
+
+Updated: 2026-10-18 19:33 CEST. Proof checkpoint is `9ed6c398`.
+Read `lean/notes-current-filtered-source-comparison.md` and
+`lean/notes-current-system-claim.md`.
+The pure root-filter function retains original root members before assigned
+profiles. Equal complete substitution profiles alone do not preserve this
+filter. A checked source-built local witness establishes the obstruction.
+It does not establish a Haskell defect. General filtered source comparison
+and causal publication preservation remain open. The next invariant needs
+original root-reference alternatives for external and local names.
+The exact broad reduction law is valid-input preservation plus input-language
+inclusion. Returned-constraint satisfaction remains a separate direction.
+Full Audit passes 3368 jobs and 72824 checks. No Haskell bytes change.
+The full-library goal remains active.
+
+## Current scoped profiles and complete actual binder readback
+
+Updated: 2026-10-18 19:16 CEST. Proof checkpoint is `d2c57674`.
+Read `lean/notes-current-scoped-profile-comparison.md`.
+Seven new modules give support-scoped input extensions, independent pure
+capture contexts, actual node/union profile composition, all Mu finish
+branches, and actual current-probe readback for completed binders.
+The final parametric payload invariant remains explicit. The new contract
+rejects the exact earlier artificial cache. General filtered source
+comparison and actual publication preservation remain open.
+Full Audit passes 3367 jobs and 72814 dependency checks. All 25 public and
+six integration/exclusion heads pass full proof and standard-axiom checks.
+No Haskell bytes change. The strongest broad theorem remains conditional
+finite-tree preservation. General termination, semantic initialization,
+and full Haskell correspondence remain open. FINDINGS keeps repairs first.
+
+## Current stored profiles and causal publication induction
+
+Updated: 2026-10-18 18:48 CEST. Proof checkpoint is `9a840a6c`.
+Read `lean/notes-current-causal-profile-invariant.md`.
+StoredProfileFunction gives actual substitution profiles and exact free-name
+support. PublicationHeapInduction retains payload predicates through actual
+issued histories. StoredMuProfileContract transfers the proposed pure
+body/probe invariant to actual completed calls in independent ready readers.
+General source publication must still derive that invariant. The previous
+unrestricted Fusion contracts remain refuted. No Haskell bytes change.
+Full Audit passes 3360 jobs and 72733 dependency checks. The strongest broad
+claim remains conditional finite-tree preservation for successful reduction.
+General completion, semantic initialization, and Haskell correspondence
+remain open. Root FINDINGS retains the Haskell fix registry first.
+
+## Current binder contract counterexample and derived marker premises
+
+Updated: 2026-10-18 18:28 CEST. Proof checkpoint is `eac5f260`.
+Starting checkpoint is `c81461ba`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-tracked-binder-fusion.md`.
+
+A checked counterexample refutes both unrestricted bounded and tracked
+binder Fusion at original raw depth0. Its strict ordinary source body law
+is proved. One artificial resident Mu has the actual probes node7[x,y]
+but a stored body with rows node7[x] and node7[y]. All stated Context,
+Ready, aliases, slot, availability, growth and warm-call premises hold.
+Replacing x with Empty and y with bare30 retains one row on the artificial
+side and returns Empty on the genuine side. The cache is admitted by the
+summary invariants. No actual source-history or Haskell defect is proved.
+
+The checked no_uniform consequence rules out the current uniform all-source
+Fusion hypothesis at every positive bound. Thus the existing uniform writer
+endpoint cannot be instantiated under that contract. Its particular-body
+publication lemma remains useful. All earlier checked theorems remain.
+A second obstruction concerns the induction measure: smart-unused finish
+can return depth0 while the selected Mu has depth1 and its body has depth0.
+Actual causal support alone does not give the missing strict raw-depth bound.
+
+The next main step needs actual publication provenance and a different
+induction route. Derive a body/probe substitution invariant through real
+source construction, or use a chronological writer induction that covers
+smart-unused hits. Preserve every source form and arbitrary nested Mu.
+Do not silently add provenance to the refuted old definitions. Do not
+assume the missing comparison as an initial fact without deriving it.
+
+Three new modules derive finite fresh markers from actual resolved input
+profiles, extend tracked paired lexical slots and fresh local bindings,
+and transport actual strict-body comparisons through root marker erasure.
+They add no future-result freshness premise. Actual fixtures retain visible
+outer markers, opaque node bodies and literal local reference executions.
+These valid input and erasure laws do not repair the refuted binder contract.
+
+The strongest broad theorem remains conditional finite-tree preservation
+for successful checked-model constraint reduction. It adds no input-external
+tree and retains each input tree that satisfies inherited constraints.
+Inherited payload some [] gives exact language equality. Initial semantic
+cache facts, recursive guard-profile agreement and computed resource bounds
+remain explicit. General termination and full Haskell correspondence stay open.
+
+Full Audit passes 3357 jobs and 72708 dependency checks.
+Nine new public heads, three integration fixtures, the exact counterexample
+and its uniform-bound consequence pass complete proof/standard-axiom checks.
+Eight selected strict logs are empty. Three canonical builds are warning-free.
+Audit retains only its existing ClosedCompletion warning. Seven manifests
+pin 281 entries. Independent slot and contract review finds no proof issue.
+Evidence is in `lean/restart-evidence/20261018-tracked-binder-fusion/`.
+
+No Haskell patch or executable defect is added. FINDINGS retains the repair
+registry first. Field-pool repair b9219b9e remains fixed in c0cc8a05.
+Publication still awaits the existing direct approval. No push is retried.
+The full-library goal remains active.
+
+## Current finite tracked profiles and recursive marker removal
+
+Updated: 2026-10-18 18:01 CEST. Proof checkpoint is `c1426cf2`.
+Starting checkpoint is `cf787b1b`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-tracked-profile-fusion.md`.
+
+Filtered Fusion now compares finite tracked root profiles. A pure root
+reference set is visible only when all its names are tracked. Every other
+nonempty root is opaque. The relation preserves Empty and bare tracked
+names for actual available normalized results. With no tracked names,
+to_empty recovers the exact prior bounded Empty contract under its original
+Paired Empty premise. No lexical availability assumption is added.
+
+Node and union cases compose strict source child laws at the same original
+raw depth bound. Union composition retains root opacity and the exact
+tracked name set. Actual earlier writers compare tracked callback outputs
+under arbitrary outer maps, including Empty. Their uniform smaller-depth
+source induction hypothesis remains explicit and unproved.
+
+The actual open-Mu bridge now gives the complete unmasked root profile:
+the whole result equals the strict marker-body profile after removing the
+fresh local marker, up to reference-set equivalence. complete constructs
+that body call. A checked nested used-Mu body has both a local marker and
+an outer marker at its root. Removing the local marker retains the outer
+marker. An ordinary node containing the local marker remains opaque.
+Finite freshness over actual resolved original leaves remains explicit.
+
+The next main obligation is the complete source binder clause and its
+uniform depth induction. Derive fresh-marker absence and extended Paired
+slots from the actual inputs, apply the earlier-writer step at strict body
+depth, and retain exact finish/lower behavior. The new profile rules do
+not establish these remaining obligations. Changing-capture semantic
+observations and the initial recursive guard-profile certificate stay open.
+
+The strongest broad theorem remains conditional correctness of the
+checked Lean constraint-reduction model. Successful bounded reduction adds
+no finite tree and loses no input tree that satisfies inherited constraints.
+With inherited payload some [], the input and output finite-tree languages
+are equal. Initial semantic cache facts, recursive guard-profile agreement
+and computed resource bounds remain explicit. General termination and
+full public Haskell correspondence remain open.
+
+Full Audit passes 3354 jobs and 72699 dependency checks.
+All 26 new public and 6 constructed heads pass complete statement, proof
+and standard-axiom checks. Twelve selected strict logs are empty. All six
+canonical builds are warning-free. Audit retains only its existing
+ClosedCompletion warning. Seven manifests pin 391 entries. Independent
+root/base/writer review finds no material issue. It reuses existing checks
+and adds no proof pairs. Earlier failed and warning-bearing attempts remain.
+Evidence is in `lean/restart-evidence/20261018-tracked-profile-fusion/`.
+
+No Haskell patch or new executable defect is added. FINDINGS retains the
+repair registry first. Field-pool repair b9219b9e remains fixed in c0cc8a05.
+Publication awaits the existing direct approval. No push is retried.
+The full-library goal remains active.
+
+## Current bounded source fusion and actual recursive marker tests
+
+Updated: 2026-10-18 17:29 CEST. Proof checkpoint is `e739f66a`.
+Starting checkpoint is `9efb49c5`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-rank-bounded-fusion.md`.
+
+Filtered Fusion now has a contract restricted by both original raw result
+depths. Replacement values and reconstructed outputs remain unrestricted.
+Node and union cases compose strict source child laws at that same bound.
+Actual surviving node rows derive each child bound. Actual union calls
+derive every original member bound, including normalized members. Source
+syntax can contain arbitrary binders under the explicit child hypotheses.
+
+An actual selected writer now applies source Fusion at a strictly smaller
+original depth to its body and ordinary callbacks. Historical verification
+and Keeps derive the full lexical reader Contexts and warm calls. A shared
+replacement map permits arbitrary outer replacements, including Empty.
+The uniform smaller-depth source induction hypothesis remains explicit.
+The proof compares unlowered callback Empty tests. It does not complete
+general source binder Fusion or remove the enclosing symbolic self.
+
+A fresh available marker now gives an actual strict original-body call.
+For an open stored Mu, its whole result is Empty exactly when that body
+result is Empty or the bare marker reference. Initial data constructs the
+body call and its Keeps. Marker freshness over finite resolved body leaves
+remains explicit. Checked nested used-Mu and ordinary f[marker] cases
+distinguish bare marker cleanup from a marker inside a node child.
+
+The next main obligation is bare-marker reflection between the selected
+writer body and ordinary probe, together with the Empty comparison. A
+stronger recursive relation must retain that information through nested
+source binders. Complete induction, changing-capture semantic observations
+and the initial recursive guard-profile certificate remain open.
+
+The strongest broad theorem remains conditional correctness of the
+checked Lean constraint-reduction model. Successful bounded reduction adds
+no finite tree and loses no input tree that satisfies inherited constraints.
+With inherited payload some [], the input and output finite-tree languages
+are equal. Initial semantic cache facts, recursive guard-profile agreement
+and computed resource bounds remain explicit. General termination and
+full public Haskell correspondence remain open.
+
+Full Audit passes 3348 jobs and 72580 dependency checks.
+All 12 new public and 5 constructed heads pass complete statement, proof
+and standard-axiom checks. Ten selected strict logs are empty. All five
+canonical builds are warning-free. Audit retains only its existing
+ClosedCompletion warning. Six manifests pin 287 entries. Independent
+writer review identified a redundant-instance linter warning. It was
+removed and rechecked. No mathematical issue remains in that review.
+Evidence is in `lean/restart-evidence/20261018-rank-bounded-fusion/`.
+
+No Haskell patch or new executable defect is added. FINDINGS retains the
+repair registry first. Field-pool repair b9219b9e remains fixed in c0cc8a05.
+Publication awaits the existing direct approval. No push is retried.
+The full-library goal remains active.
+
+## Current recursive writer histories and symbolic Empty plans
+
+Updated: 2026-10-18 17:05 CEST. Proof checkpoint is `0ac270a2`.
+Starting checkpoint is `cda0d9e5`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-binder-empty-fusion.md`.
+
+Actual source paths now retain every issued node name at every stopping
+state, including pending calls. Selected first writers retain their exact
+callback paths and a forward issued-name suffix. At a Ready reader, those
+histories derive both complete original lexical Contexts and literal warm
+raw source/filter calls. Unused lexical captures are included. Existing
+four-table Grows and older history contracts remain unchanged.
+
+Actual selected-writer raw callbacks have equal original physical depth.
+Both depths are strictly below the selected Mu record. Actual source node
+calls bound children of surviving rows by the raw parent depth. Actual
+union calls bound every original member, including normalized members.
+These bounds concern original values, not later reconstructed outputs.
+
+Open stored Mu execution now has an exact symbolic-self body plan. Its
+final lower operation removes the local self. A checked used/open nested
+Mu has a nonempty unlowered body profile but returns Empty after lower.
+The proof must retain this distinction when comparing the original writer
+body with its ordinary probe. That general comparison remains open.
+
+One focused earlier-writer changing-capture case now passes kernel checks
+for completed computations, exact probe reference keys, retained handles
+and two Empty results. The complete historical Context/Aliases/final-warm
+fixture remains incomplete. This case proves no general Fusion law and
+establishes no counterexample. General binder Fusion and changing-capture
+semantic observations remain the main local obligations.
+
+The strongest broad theorem is conditional correctness of the checked
+Lean constraint-reduction model. A successful bounded traversal adds no
+finite tree and loses no input tree that satisfies inherited constraints.
+With inherited payload some [], the input and output finite-tree languages
+are equal. Initial semantic cache facts, recursive guard-profile agreement
+and computed resource bounds remain explicit assumptions. General
+termination and full public Haskell correspondence remain open.
+
+Full Audit passes 3343 jobs and 72509 dependency checks.
+All 21 new public and 6 constructed heads pass complete statement, proof
+and standard-axiom checks. Eleven selected strict logs are empty. All five
+canonical builds are warning-free. Audit retains only its existing
+ClosedCompletion warning. Seven manifests pin 345 entries. Independent
+issued-history review finds no material issue. Evidence is in
+`lean/restart-evidence/20261018-binder-empty-fusion/`.
+
+No Haskell patch or new executable defect is added. FINDINGS retains the
+repair registry first. Field-pool repair b9219b9e remains fixed in c0cc8a05.
+Publication awaits the existing direct approval. No push is retried.
+The full-library goal remains active.
+
+## Current general filtered source cases and binder-free composition
+
+Updated: 2026-10-18 16:32 CEST. Proof checkpoint is `0744fbc7`.
+Starting checkpoint is `6b7e1261`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-general-filtered-fusion.md`.
+
+One general Fusion contract now uses independent historical raw source
+Contexts and actual warm root filters and stored calls at the reader.
+Varying reference slots need only equal resolved physical Empty tests.
+Fixed captures retain equal replacement maps on their free names.
+Scoped aliases and self tests remain explicit. Empty and variable cases
+are proved. Nonempty replacement maps derive a separate full-source law.
+
+Node fusion now follows from strict source child Fusion under that same
+contract. Actual indexed rows derive both child schedules and opposite
+stored-row survival. Union fusion follows from strict source members.
+Finite actual preparation derives cold subgroup calls at a later reader.
+Exact bare-self parity gives equal retention decisions. No parent output
+law, lexical Generated-to-Empty law or reader-wide lexical availability
+is assumed. Original historical source Contexts remain unchanged.
+
+Strong induction composes all four cases for every BinderFree source
+expression. This restriction applies to source syntax. Fixed captured
+values can still contain arbitrary open nested Mu values. General new
+source binder fusion and changing-capture observations remain open.
+
+The strongest broad claim concerns the checked Lean model. Given the
+stated initial semantic cache and recursive-heap invariants and computed
+resource bounds, a successful constraint-reduction traversal adds no
+finite tree and loses no input tree that satisfies inherited constraints.
+With inherited payload some [], its output accepts exactly the input
+finite-tree language. Payload none denotes contradiction. Initial cache
+soundness and guard-profile agreement are substantive remaining premises.
+General termination and full public Haskell correspondence remain open.
+
+Full Audit passes 3338 jobs and 72416 dependency checks.
+All 8 new public and 4 constructed heads pass complete statement, proof
+and standard-axiom checks. Eight selected strict logs are empty. All four
+canonical builds are warning-free. Audit retains only its existing
+ClosedCompletion warning. Six manifests pin 295 entries. Independent
+node and binder-free review finds no material issue. Both adversarial
+searches timed out. Zero paired cases completed. No counterexample or
+general binder validation is claimed from those searches. Evidence is in
+`lean/restart-evidence/20261018-general-filtered-fusion/`.
+
+No Haskell patch or new executable defect is added. FINDINGS retains the
+repair registry first. Field-pool repair b9219b9e remains fixed in c0cc8a05.
+Publication awaits the existing direct approval. No push is retried.
+The full-library goal remains active.
+
+## Current recursive Empty fusion and exact union coverage
+
+Updated: 2026-10-18 16:07 CEST. Proof checkpoint is `ac73c4cd`.
+Starting checkpoint is `0b1a176b`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-filtered-empty-fusion.md`.
+
+Actual source builds, root filters and stored calls now derive physical
+Empty agreement under nonempty resolved replacements. The publication
+and binder endpoints recover the selected earlier writer and derive
+Empty agreement for its actual body and ordinary reconstructions. They
+retain the real calls, Keeps, availability and both Generated directions.
+The used-Mu example selects an earlier writer with different source syntax.
+
+Node reconstruction now derives opposite stored-row survival and parent
+Empty agreement from fusion of strict source children. The complete row
+symbol, guard and ordered child Empty tests are retained. Child schedules
+and live aliases come from the actual parent calls. The proof needs no
+reader-wide lexical availability or desired parent output law.
+
+An actual source return followed by Keeps now derives the original
+lexical Context at the later reader. Union preparation retains that
+Context and all adjacent source, filter and stored calls at its final
+heap. The existing Generated.filtered constructor is used unchanged.
+An unused issued capture and a cold subgroup filter are checked. Plain
+Grows still does not supply the older writer's issued-name suffix.
+
+Filtered union reconstruction now has exact literal-atom and full-row
+coverage by retained original source members. The parent is physically
+Empty exactly when every retained member reconstruction is Empty. A bare
+self member is retained only when the entire parent is that bare self.
+A source-built example has an Empty parent and an excluded self member
+whose reconstruction is a nonempty used Mu. Both new laws are applied.
+
+The strongest broad theorem remains conditional finite-language
+preservation for a successful supported checked-model traversal with an
+empty list of inherited constraints. Initial semantic cache and recursive
+heap assumptions, plus computed resource bounds, remain explicit. General
+two-sided source/filter/stored fusion and changing-capture simulation
+remain open. So do arbitrary older-writer issued-history transport,
+recursive completion, repeated convergence and public Haskell correspondence.
+
+Full Audit passes 3334 jobs and 72359 dependency checks.
+All 10 new public and 4 constructed heads pass full statement, proof and
+standard-axiom checks. Eight selected strict logs are empty. All four
+canonical builds are warning-free. Audit retains only the existing
+ClosedCompletion warning. Five selected manifests pin 238 entries.
+Independent union-coverage review finds no material issue. Evidence is
+in `lean/restart-evidence/20261018-filtered-empty-fusion/`.
+
+No Haskell patch or new executable defect is added. FINDINGS retains the
+repair registry first. Field-pool repair b9219b9e remains fixed in c0cc8a05.
+Publication awaits the existing direct approval. No push is retried.
+The full-library goal remains active.
+
+## Current stored Empty transport and cold union preparation
+
+Updated: 2026-10-18 15:45 CEST. Proof checkpoint is `c4c058c2`.
+Starting checkpoint is `4df4242f`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-stored-empty-transport.md`.
+
+For the same original stored value, equal resolved physical Empty tests
+on its original free names imply equal actual returned Empty tests.
+Replacement records, entry heaps and returned heaps can differ. The proof
+restricts both maps to original free support before comparing the full
+encoded plan. Internal bound names need no external map agreement.
+
+Arbitrary nonempty replacements on original free names now preserve the
+original physical Empty test. Positive occurrence costs prove identity
+retention through the full stored plan. Actual Mu unfolding therefore has
+the same physical Empty test as its stored body. This result includes
+arbitrary open nested Mu values. Physical Empty is the constructor test.
+It is not the semantic claim that the accepted finite language is empty.
+
+Generated pairs and lexical Inputs now transport through actual Keeps
+growth. Their original historical receipts remain unchanged. Every warm
+source, filter and stored call replays at the later reader. This proves
+membership transport, not observation equality or Directed simulation.
+
+Actual historical union calls now recover complete availability of all
+original raw source members at a Ready reader. Finite preparation runs
+each member filter and stored call, then the parent calls. It derives
+the final Keeps, availability and warm replays. No initial warm subgroup
+filter or caller-supplied child schedule is required. The generated
+relation still requires historical build-to-filter adjacency. The new
+forward schedules alone do not supply that receipt.
+
+The strongest broad statement remains conditional partial correctness:
+under the stated initial semantic, heap and resource assumptions, a
+successful checked model traversal with an empty list of inherited
+constraints accepts exactly the same finite trees as its input. General termination and full
+public Haskell correspondence remain open. General source/filter/stored
+fusion and changing-capture binder simulation remain the main local gap.
+Initial operands, active-owner exclusion, fresh bounds, repeated
+convergence, equality resources and host Int adequacy remain separate.
+
+Full Audit passes 3330 jobs and 72328 dependency checks.
+All 10 new public and 4 constructed heads pass full
+statement, proof and standard-axiom checks. Eight selected strict logs
+are empty. All four canonical builds are warning-free. Audit retains
+only the existing ClosedCompletion warning. Five manifests pin 242
+entries. Independent review checks the nonempty replacement proof.
+Evidence is in `lean/restart-evidence/20261018-stored-empty-transport/`.
+
+No Haskell patch or new executable defect is added. FINDINGS retains the
+repair registry first. Field-pool repair b9219b9e remains fixed in c0cc8a05.
+Publication awaits the existing direct approval. No push is retried.
+The full-library goal remains active.
+
+## Current source Empty abstraction and derived child schedules
+
+Updated: 2026-10-18 15:23 CEST. Proof checkpoint is `89f0bfd3`.
+Starting checkpoint is `58ab02d5`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-execution-empty-fusion.md`.
+
+The physical Empty result of one full source expression now depends only
+on its ordered lexical Empty tests. A pure projection makes external roots
+opaque and retains every fresh binder local. Its proof covers all source
+constructors. Actual source calls derive returned Empty agreement from
+initial Contexts and matching input tests. No alias premise is needed.
+This law compares the same full source expression, not different encodings.
+
+A pure stored Empty interpreter now evaluates the complete encoded plan.
+Actual execution derives its exact physical Empty result. Closed literals,
+resolved references and open-Mu smart reconstruction have explicit rules.
+The checked equal-shape example has different predicted Empty results.
+Decoded original shape is not substituted for the full stored plan.
+
+The filtered variable case now derives both Generated memberships and
+physical Empty agreement. Its Empty hypothesis applies only to the
+selected resolved reference pair. Fixed unions and open Mu captures need
+no output-law hypothesis. Scoped self tests derive equal actual filters.
+
+Historical parent node calls now derive indexed source rows, opposite raw
+row survival, all warm child source calls, both stored row schedules and
+ordered mutual Generated child memberships. The proof derives fresh
+filter absence from available raw results and historical live support.
+It needs no reader-wide lexical availability or supplied child schedules.
+Survival of the opposite stored row still needs the general Empty proof.
+
+General source/filter/stored Empty fusion, union subgroup preparation and
+nested used-binder simulation remain open. The proof must retain the
+actual earlier writer's body and causal history. Membership alone is not
+Directed. Automatic arbitrary open-Mu reader support remains open.
+
+The strongest broad claim is unchanged: a supported successful top-level
+model traversal with empty inherited constraints, initial semantic facts
+and scheduled resources preserves exactly the accepted finite terms.
+General termination and complete public Haskell correspondence remain
+open. Initial query operands, active-owner exclusion, fresh bounds,
+repeated convergence, equality resources and host Int adequacy remain.
+
+Full Audit passes 3326 jobs and 72311 dependency checks.
+All 10 new public and 4 constructed heads pass complete
+statement, proof and standard-axiom checks. Eight selected strict logs
+are empty. All four canonical builds are warning-free. Audit retains
+only the existing ClosedCompletion warning. Five component manifests pin
+253 entries. Independent source-abstraction review finds no material
+issue. Evidence is in `lean/restart-evidence/20261018-execution-empty-fusion/`.
+
+No Haskell patch or new executable defect is added. FINDINGS retains the
+repair registry first. Field-pool repair b9219b9e remains fixed in c0cc8a05.
+Publication awaits the existing direct approval. No push is retried.
+The full-library goal remains active.
+
+## Current generated lexical, node and union cases
+
+Updated: 2026-10-18 15:01 CEST. Proof checkpoint is `6fdc493e`.
+Starting checkpoint is `c1346edb`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-generated-local-rules.md`.
+
+The generated lexical spine now supplies the ordered resolved slot
+relation. Actual variable reconstruction derives both Generated directions
+and equal output heaps. It does not include root self filtering.
+
+Actual warm source and stored calls now derive both Generated directions
+with fresh absent root filters. An actual live source-node row derives
+each selected child's aliases and membership from its own actual calls.
+No child observation or parent output relation is assumed. General row
+survival and the complete node Local law remain open.
+
+Actual union selection, exact bare-self retention and warm stored calls
+preserve literal inclusion. A source-built counterexample has a warm
+parent filter and a child union whose filter still allocates at the same
+Ready reader. A separate source-built example has two available used Mu
+values with equal decoded shapes. One substitution returns Empty; the
+other does not. These are proof-contract boundaries. They do not refute
+Generated or establish a Haskell defect.
+
+The main recursive obligation remains source/filter/stored Empty fusion
+and the local reference, row and epsilon rules, including nested used
+binders and changing captures. Raw shape equality does not supply this
+fusion. Earlier writer provenance and common reader support remain
+necessary proof work. No general Generated simulation is claimed.
+
+The strongest broad claim remains conditional partial correctness of the
+checked implementation model. A supported successful top-level traversal
+with empty inherited constraints, initial semantic facts and scheduled
+resources preserves exactly the accepted finite terms. General termination
+and complete public Haskell correspondence remain open. The required
+source semantic instances remain explicit.
+
+Full Audit passes 3322 jobs and 72240 dependency checks.
+All 7 new public and 3 constructed heads pass complete
+statement, proof and standard-axiom checks. All 6 selected strict
+logs are empty. All three canonical builds are warning-free. Audit
+retains only the existing ClosedCompletion warning. 5 component
+manifests pin 183 entries. Independent review finds no material issue.
+Evidence is in `lean/restart-evidence/20261018-generated-local-rules/`.
+
+No Haskell patch or new executable defect is added. FINDINGS retains the
+repair registry first. Field-pool repair b9219b9e remains fixed in c0cc8a05.
+Publication awaits the existing direct approval. No push is retried.
+The full-library goal remains active.
+
+## Current source-generated binder pairs
+
+Updated: 2026-10-18 14:42 CEST. Proof checkpoint is `0ee80d3e`.
+Starting checkpoint is `9f6230d5`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-source-binder-generators.md`.
+
+An actual source binder and causal reader history now derive both
+comparison-generator directions for the selected earlier writer's body
+and ordinary reconstruction. Generated contains equality and genuine
+filtered source calls. It assumes no desired output Same, Directed or
+BodyIH law. Its lexical reference slots retain both generated directions.
+Historical contexts, live aliases, self-filter tests, actual calls,
+availability, forward growth and warm replay remain explicit. The earlier
+writer can have different syntax from the requester.
+
+An actual node-body Mu unfold now extends WarmSupport from indexed strict
+original stored-child support. Each child must return old support or the
+same recursive Mu. The producer constructs the unfolding, final Keeps,
+availability and warm replay. A checked source-built open used Mu with
+positive stored-plan depth grows the node cache and gains this support.
+This does not prepare arbitrary open Mu records or solve all child cases.
+
+Finite reflexive transitive closure and disjunction preserve genuine
+Directed simulations. Complete guards and ordered mutual child relations
+remain present. These closure laws do not prove an unproved generator.
+
+A productive source-built example uses two distinct equivalent captures.
+The same open binder source returns distinct used outer Mu values at one
+Ready reader. Each nested used Mu captures its own distinct outer Mu.
+A finite actual simulation proves all finite observations for both input
+captures and returned values. It gives exact finite language for every
+guard interpretation. A nullary accepted tree proves productivity. This
+is one example, not a general changing-capture source theorem.
+
+The main remaining proof must establish local source and self-filter
+simulation rules for Generated, including physical row-survival alignment
+and nested used binders. Membership extraction alone is not Directed.
+Automatic arbitrary open-Mu support remains open. General termination,
+initial query operands, active-owner exclusion, fresh-call bounds,
+repeated convergence, equality resources, host Int adequacy and complete
+public Haskell correspondence remain separate obligations.
+
+The strongest broad claim remains conditional partial correctness of the
+checked implementation model. A supported successful traversal with
+empty inherited constraints, initial semantic facts and scheduled
+resources preserves exactly the accepted finite trees. The required
+source semantic instances remain explicit.
+
+Full Audit passes 3319 jobs and 72224 dependency checks.
+All 18 new public and 3 constructed heads pass complete
+statement, proof and standard-axiom checks. Seven selected strict logs
+are empty. All four canonical builds are warning-free. Audit replays only
+the existing ClosedCompletion warning. Six component manifests pin
+288 entries. Independent review finds no material issue. Evidence is
+in `lean/restart-evidence/20261018-source-binder-generators/`.
+
+No Haskell patch or new executable defect is added. FINDINGS retains the
+repair registry first. Field-pool repair b9219b9e remains fixed in c0cc8a05.
+Publication awaits the existing direct approval. No push is retried.
+The full-library goal remains active.
+
+## Current supported source simulation
+
+Updated: 2026-10-18 14:09 CEST. Proof checkpoint is `faca56de`.
+Starting checkpoint is `4ac2365d`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-supported-source-simulation.md`.
+
+The strongest broad result is conditional partial correctness of the
+checked implementation model. A supported successful top-level traversal,
+empty inherited constraints, initial semantic facts and scheduled
+resources give exact equality of the input and returned finite tree
+languages. This does not prove general termination or full public Haskell
+correspondence. The required source semantic instances remain explicit.
+
+Actual closed-Mu preparation now also supports all available values with
+zero stored-plan binder depth. These include open ordinary nodes, unions
+and references with closed recursive Mu components. A source-built example
+has a cold closed Mu in an open node and union. Actual preparation changes
+the heap, retains both open values and makes the recursive unfold warm.
+This does not prepare arbitrary open Mu values or transport observations
+from the cold reader.
+
+Actual source execution and causal reader history now derive the selected
+writer, exact current probes and both reconstruction schedules. The seed
+assumes no Same, Directed, BodyIH, selected writer or output endpoint.
+Earlier writer syntax remains separate from requester syntax. Literal
+normalization inclusion has an actual Directed instance. Actual source
+node calls derive both local directions from indexed strict-child cases.
+These results do not yet construct the general source relation or its
+changing-capture used-binder local clause.
+
+A source-built counterexample strengthens the reader boundary. Both heaps
+are Ready. Inputs and replacement values are available at both heaps.
+The returned Mu pair still fails depth-one agreement at the separate
+reader. One compared output is explicitly unavailable there. The two heaps
+allocate independently. This does not refute a common later reader,
+output availability or WarmSupport. It is not a Haskell defect.
+
+Full Audit passes 3315 jobs and 72078 dependency checks.
+All 15 new public and 3 constructed heads pass complete
+statement, proof and standard-axiom checks. All seven selected strict logs
+are empty. Three canonical builds have no warnings. The boundary canonical
+build and Audit retain only the existing ClosedCompletion warning.
+Seven component manifests pin 298 entries. Independent review finds
+no material issue. Evidence is in
+`lean/restart-evidence/20261018-supported-source-simulation/`.
+
+General changing-capture used-binder simulation and reader support remain
+the main source gap. Initial query-operand ancestry, all active node-owner
+exclusions, fresh-call bounds, recursive completion, repeated convergence,
+equality resources and host Int adequacy remain separate obligations.
+No Haskell patch or new executable defect is added. FINDINGS retains the
+repair registry first. Field-pool repair b9219b9e remains fixed in c0cc8a05.
+Publication awaits the existing direct approval. No push is retried.
+The full-library goal remains active.
+
+## Current recursive unfolding and finite-tree language
+
+Updated: 2026-10-18 13:38 CEST. Proof checkpoint is `49ffeaef`.
+Starting checkpoint is `7f2fdb63`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-open-binder-source-induction.md`.
+
+Actual node and union source clauses now derive the strict publication
+body hypothesis. Node clauses use indexed strict-child alignment. Union
+clauses use indexed strict-member raw root matching, with actual entry
+and return heaps and growth. The general active binder clause remains open.
+
+An actual selected Mu writer now constructs its original-reader unfolding
+and the sequential ordinary reconstruction. Strict body cases derive
+finite agreement. Cases at every depth give one fixed actual schedule
+with agreement at all depths. A node writer derives its case from indexed
+children. Physical Empty agreement applies to the two reconstructed
+results. It is not claimed between a Mu and its unfolding.
+
+A new directional simulation keeps one relation direction through epsilon
+steps and mutual membership at ordered row children. Mutual roots give
+all finite observations. An actual closed source constructs two canonical
+grouped unions with identical observations. No relation containing that
+pair satisfies both old global Forward laws. The same pair has a checked
+positive instance of the new directional rule. This is a proof-interface
+limit. The old conditional theorem remains sound.
+
+Finite observations through a tree's height now determine exact acceptance
+for every guard interpretation. Symbols, full guards and child order
+remain present. Epsilon paths use actual unfolding at the same reader.
+The actual nested-Mu writer example gives one fixed stored schedule whose
+ordinary result accepts exactly the same finite trees as the Mu. Its
+later requester has different syntax. Its nested used child is closed.
+It does not prove general changing-capture binder alignment.
+
+A checked open active-binder counterexample refutes unrestricted separate
+readers. All four source and stored calls are warm at one Ready execution
+heap. Paired leaf replacements agree at depth zero. The separate reader
+has Valid identity caches but explicitly lacks Coherent and Ready. Its
+changed node payload makes only one result expose a bare reference. This
+does not refute a supported Ready-reader rule or prove that rule sufficient.
+
+The next source proof must construct the directional relation and its
+reader support. It must handle nested used binders with changing outer
+captures without assuming their desired same-depth result. Earlier writer
+syntax stays separate from current requester syntax. Preparation for closed
+values does not supply general open support or cold-reader equivalence.
+
+The strongest broad claim concerns the checked implementation model.
+A supported successful top-level traversal, empty inherited constraints,
+initial semantic facts and scheduled resources give exact equality of the
+input and returned finite tree languages. This is partial correctness.
+General recursive termination and complete public Haskell correspondence
+remain open. Initial query-operand ancestry, all active node-owner
+exclusions, fresh-call bounds, repeated convergence, equality resources
+and host Int adequacy remain separate obligations.
+
+Full Audit passes 3311 jobs and 71863 dependency checks.
+All 16 new public and 3 constructed heads pass complete
+statement, proof and standard-axiom checks. All 7 selected strict
+logs are empty. Four canonical builds have no warnings. The boundary
+canonical build and Audit retain only the existing ClosedCompletion
+warning. 6 component manifests pin 275 entries. Independent
+review finds no material issue. Evidence is in
+`lean/restart-evidence/20261018-open-binder-source-induction/`.
+
+No Haskell patch or new executable defect is added. FINDINGS retains the
+external repair registry first. Field-pool repair b9219b9e remains fixed
+in c0cc8a05. Publication awaits the existing direct approval. No push is
+retried. The full-library goal remains active.
+
+## Current filtered finite source reconstruction
+
+Updated: 2026-10-18 12:55 CEST. Proof checkpoint is `39a5a673`.
+Starting checkpoint is `9f4d66f2`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-filtered-finite-reconstruction.md`.
+
+An actual warm stored parent now constructs every selected literal atom
+call and ordered ordinary-row call. Rejected rows remain available to the
+proof before survival filtering. Finite root reconstruction derives both
+physical Empty agreement and finite observations. It retains full symbols,
+guards and child order. Reference resolution and literal Mu execution at
+the full observation depth remain explicit induction obligations. Ordinary
+children use one lower observation depth.
+
+Actual ordinary source calls now derive raw RootMatch from strict indexed
+source-child cases. Both source calls may start and return at different
+heaps. Matching rows retain the same original source index. The local
+reference may differ; the captured values remain the same. Observation
+uses one fixed reader separate from the common execution heap.
+
+An actual publication now constructs both sequential stored calls, their
+final execution heap, warm replays, Keeps, availability and histories.
+The shared sparse map gives the original two callback outcomes. Both raw
+callback return heaps must grow into that execution heap. The
+induction premise covers only the actual immediate binder body. It does
+not quantify all smaller syntax. An earlier draft omitted the raw-return
+growth link. That draft remains as unselected historical evidence. The
+installed-writer theorem requires the actual selected record. It retains
+that record at the final heap.
+
+The general nested used binder with a changing outer capture remains open.
+The body hypothesis still needs a source proof for that case. Literal Mu
+atoms need full-depth agreement; lower-depth row-child agreement cannot
+discharge it. General self alignment also needs a noncircular epsilon
+argument. The prior rootErase counterexample and original-reader epsilon
+tails remain in force.
+
+The strongest broad claim concerns the checked implementation model.
+Initial semantic facts and scheduled resources, plus a supported successful
+top-level traversal with empty inherited constraints, give exact equality
+of the input and returned finite tree languages. This is partial
+correctness. General recursive termination and complete public Haskell
+correspondence remain open. Initial query-operand ancestry, all active
+node-owner exclusions, fresh-call bounds, repeated convergence, equality
+resources and host Int adequacy remain separate obligations.
+
+Full Audit passes 3306 jobs and 71667 dependency checks. Eleven new
+public heads and one constructed head pass complete statement,
+proof and axiom checks. All 5 selected strict logs are empty.
+All four canonical module builds have no warnings. Audit retains only
+the existing ClosedCompletion warning. Four component manifests pin
+213 entries. Independent review finds no material issue.
+Evidence is in `lean/restart-evidence/20261018-filtered-finite-reconstruction/`.
+
+No Haskell patch or new executable defect is added. FINDINGS retains the
+external repair registry first. Field-pool repair b9219b9e remains fixed
+in c0cc8a05. Publication awaits the existing direct approval. No push is
+retried. The full-library goal remains active.
+
+## Current fixed-reader reconstruction and actual support
+
+Updated: 2026-10-18 12:21 CEST. Proof checkpoint is `03f0f57b`.
+Starting checkpoint is `ac6fbc08`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-reader-support-reconstruction.md`.
+
+Finite observation agreement now uses a reader separate from the actual
+execution heap. Indexed strict ordinary-child hypotheses retain complete
+row fields and ordered children. Indexed strict union-member hypotheses
+quantify the execution heaps. Actual member completion and replay can
+allocate missing grouped nodes while the observation reader stays fixed.
+No input observation relation is transported through those effects.
+
+Initial Ready data now constructs both raw source calls and both stored
+reconstructions for an established cross-execution source case. Actual
+calls, final execution heap, Keeps, availability and histories are derived.
+Strict syntax induction derives the case for every BinderFree source,
+with distinct finitely related recursive replacements. A separate closed
+source clause permits arbitrary nested used binders with no external input
+dependencies. The general varying-capture active binder clause stays open.
+
+Generic WarmSupport is closed under epsilon successors and ordered row
+children and requires actual effect-free unfolding. It derives exact row
+and reference origins and finite Same comparison equivalence after growth.
+A finite actual preparation now produces such support for every closed
+available value at its final reader. Its well-founded unfinished-degree
+vector covers newly allocated lower-degree Mu records. No BinderFree or
+finite ordinary Cap condition is added to preparation. This does not prove
+observation equivalence between the cold and prepared readers. Generic
+support permits open values; automatic preparation covers closed values.
+
+Checked source examples show why these distinctions are required. A warm
+normalized union can have a cold original ordinary subgroup. A nested used
+Mu unfolding returns an ordinary successor and a nested used Mu child that
+are available only at its returned heap. Unrelated edge allocation can also
+change exact physical row origins of a cold unfolding. This last example
+does not refute finite Same transport. Actual preparation and later support
+transport are checked on two distinct related recursive values.
+
+The general binder proof still needs source-derived literal root matching
+for the callback filters and a noncircular recursive epsilon argument.
+It cannot assume its self values related at the same depth. The full
+actual-source Forward instance, initial query-operand ancestry, all active
+node-owner exclusions, fresh-call bounds and general recursive completion
+remain open. Repeated convergence, equality-operation resources, host Int
+adequacy and public Haskell correspondence remain separate obligations.
+The strongest general outer language theorem assumes a supported successful
+run. The full-library goal remains active.
+
+Full Audit passes 3304 jobs and 71623 checks. Eighteen new public
+heads include the two Preparation constructors. Four constructed heads
+also pass full statement, proof and axiom checks. All seven selected strict
+logs are empty. All four new canonical builds are warning-free. Audit
+retains only the old ClosedCompletion warning. Four component manifests
+pin 257 entries. Independent review finds no material issue.
+Evidence is in `lean/restart-evidence/20261018-reader-support-reconstruction/`.
+
+No Haskell patch or new executable defect is added. FINDINGS retains the
+external repair registry first. Field-pool repair b9219b9e remains fixed
+in c0cc8a05. Publication awaits the existing direct approval. No push is
+retried.
+
+## Current actual selected writer node-body induction
+
+Updated: 2026-10-18 11:57 CEST. Proof checkpoint is `e012e2f7`.
+Starting checkpoint is `16382903`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-writer-source-induction.md`.
+
+Actual filtered publication callbacks now exclude each other's local name.
+One shared sparse replacement map therefore gives both original stored
+execution outcomes. It pairs arbitrary captured values without requiring
+the ordinary marker to be fresh in unused captures. Distinct replacements
+need the supplied relation only at the current fixed reader.
+
+An actual selected writer with a node source body now constructs both
+stored reconstructions and their final reader. Indexed strict-child
+hypotheses at depth n derive output agreement at depth n+1 there. Children
+can contain used Mu syntax. The initial producer uses one common replacement
+and reflexivity at its actual final reader. It does not transport a
+distinct-replacement relation through growth or assume the parent result.
+Closed source history recovers the chosen writer before this step is used.
+
+A separate actual union-source step derives both raw and filtered RootMatch
+from indexed strict-member hypotheses. Both source calls can start and
+return at different heaps. The proof derives the actual member calls and
+their entry contexts. Live alias tests derive the bare-self filter cases.
+This result does not assume a whole-parent RootMatch or warm-only calls.
+
+A checked integration has an outer used Mu with a nested used Mu child.
+A later requester permutes and duplicates rows and selects the same earlier
+writer despite different source syntax. Proper variable and closed nested
+child proofs discharge every indexed child hypothesis. The actual recursive
+Mu result is the replacement. The node-writer producer gives ReconstructionAt
+at every finite depth. The writer body is not BinderFree.
+
+General nested-binder result alignment and the full actual-source Forward
+instance remain open. The node theorem covers a node source root. The
+union theorem compares raw source/filter parts, not stored reconstruction.
+Reader support, initial query-operand ancestry, all active node-owner
+exclusions, fresh-call bounds and general recursive completion still need
+proof. Repeated convergence, equality-operation resources, host Int adequacy
+and public Haskell correspondence remain separate obligations. The strongest
+general outer language theorem still assumes a successful supported run.
+
+Full Audit passes 3298 jobs and 71564 checks. All ten new public
+declarations and one constructed integration pass complete statement,
+proof and axiom checks in four groups. All four selected strict logs are
+empty. All three new canonical builds have no warnings. Audit retains
+only the existing ClosedCompletion warning. Four component manifests
+pin 170 entries. Independent review finds no material issue.
+Evidence is in `lean/restart-evidence/20261018-writer-source-induction/`.
+
+No Haskell patch or new executable defect is added. FINDINGS retains the
+external repair registry first. Field-pool repair b9219b9e remains fixed
+in c0cc8a05. Publication awaits the existing direct approval. No push is
+retried. The full-library goal stays active.
+
+## Current finite epsilon simulation and ordinary induction
+
+Updated: 2026-10-18 11:31 CEST. Proof checkpoint is `8b4f669f`.
+Starting checkpoint is `fdb04450`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-finite-recursive-induction.md`.
+
+Every actual row or bare-reference origin now has a finite witness that
+counts front epsilon steps. Union and Mu exposure each remove one step.
+The Mu case derives its successful actual stored execution. A valid reader
+also derives returned validity and growth. The shorter tail keeps the
+original reader. Row and reference induction use this strict decrease.
+The count concerns one observed path. It does not bound all execution.
+
+A new weak-simulation theorem derives all finite observations from local
+laws for bare references, physical rows and immediate epsilon steps.
+The matching path may have any finite length. Two directions give Same
+at every row depth. Physical Empty agreement remains a separate premise.
+The local laws do not assume all-depth output equivalence.
+
+A general ordinary-source step now derives depth n+1 from depth n child
+hypotheses. Each child hypothesis uses actual source row and child indices
+and a strict syntax-size bound. Actual warm raw and stored calls remain
+explicit at the same reader. The proof retains full guards, symbols,
+ordered children and row survival. Children can contain nested used Mu.
+No BinderFree or finite ordinary Cap condition is added.
+
+The next comparison must instantiate the local laws for actual arbitrary
+stored Mu results. It must derive root matching, physical Empty agreement,
+reader support and the selected writer. These remain open. Initial
+query-operand ancestry, all active node-owner exclusions, fresh-call
+bounds and general recursive completion also remain open. Repeated
+convergence, equality-operation resources, host Int adequacy and public
+Haskell correspondence remain separate obligations.
+
+The strongest general outer claim is unchanged: supported successful
+top-level runs preserve exactly the accepted finite terms, with empty
+inherited constraints and the stated initial semantic and scheduled
+resource assumptions. General recursive termination is not established.
+
+Full Audit passes 3295 jobs and 71549 checks. All 24 new public
+declarations and one constructed native Mu integration pass complete
+statement, proof and axiom checks in four groups. All four selected strict
+logs are empty. All three new canonical builds have no warnings. Audit
+retains only the existing ClosedCompletion warning. Four component
+manifests pin 161 entries. Independent review finds no material issue.
+Evidence is in `lean/restart-evidence/20261018-finite-recursive-induction/`.
+
+No Haskell patch or new executable defect is added. FINDINGS retains the
+external repair registry first. Field-pool repair b9219b9e remains fixed
+in c0cc8a05. Publication awaits the existing direct approval. No push is
+retried. The full-library goal stays active.
+
+## Current distinct recursive replacements at one reader
+
+Updated: 2026-10-18 11:14 CEST. Proof checkpoint is `9594afff`.
+Starting checkpoint is `a9bf1fe3`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-reader-relative-replacements.md`.
+
+The new relation compares physical Empty tests and every finite row
+observation at one fixed reader heap. Actual node and union construction
+preserve it when their input rows or members match. The slot interface
+accepts a supplied relation between distinct resolved reference values.
+It supports finite observation approximations. Opaque captures still keep
+their exact value and equal bindings on their free names.
+
+Actual publications now derive fresh local bindings for two distinct
+related replacements. The result keeps both literal raw body callbacks,
+both filters and their own growth receipts. Actual variable reconstruction
+preserves the supplied reflexive relation and returns equal output heaps.
+Neither law compares the completed binder outputs.
+
+A constructed integration derives matching observations at every finite
+depth for two actual distinct used Mu values: mu x. f[x] and mu y. f[f[y]].
+It uses simultaneous depth induction at its own Ready reader. It then
+uses those distinct values in the actual publication and variable laws.
+The relation is derived from actual unfold calls. It is not a supplied
+output law. This example does not prove finite language inhabitation.
+
+General retained used-Mu alignment still needs source-derived matching
+through nested binders, literal root filtering and the selected earlier
+writer. A relation at one reader does not supply support at a later reader.
+A finite epsilon-witness measure is a proposed proof method only.
+Initial query-operand ancestry and general recursive completion remain
+open. All active node-owner exclusions, fresh-call bounds, repeated
+convergence, equality-operation resources, host Int adequacy and public
+Haskell correspondence remain open.
+
+The strongest general outer claim remains conditional language preservation:
+a supported successful run preserves exactly the accepted finite terms
+at the top level, with empty inherited constraints and the stated initial
+semantic and scheduled resource assumptions. It does not establish that
+every recursive run finishes. The complete ordinary completion domain
+still excludes Mu, references and explicit unions in every descendant.
+
+Full Audit passes 3292 jobs and 71488 checks. All 13 production public
+declarations and the constructed integration pass complete statement,
+proof and axiom checks in three groups. All three selected strict logs
+are empty. Both new canonical builds have no warnings. Audit retains
+only the existing ClosedCompletion warning. Four component manifests
+pin 163 entries. Independent review finds no material issue.
+Evidence is in `lean/restart-evidence/20261018-reader-relative-replacements/`.
+
+No Haskell patch or new executable defect is added. FINDINGS retains the
+external repair registry first. Field-pool repair b9219b9e remains fixed
+in c0cc8a05. Publication awaits the existing direct approval. No push is
+retried. The full-library goal stays active.
+
+## Current retained Mu row survival and epsilon exposure
+
+Updated: 2026-10-18 10:52 CEST. Proof checkpoint is `c265edc4`.
+Node row proof is `bd1f5ea3`. Starting checkpoint is `31710e19`.
+Main source remains `c0cc8a05`. Read
+`lean/notes-current-used-mu-row-alignment.md`.
+
+A selected actual stored body row now derives a surviving ordinary callback
+row at the same original source position. Both actual RowCall receipts keep
+full symbols, full guards and ordered child executions. Their child Empty
+tests agree. Node-body children can contain arbitrary nested Mu syntax.
+No BinderFree, Cap or unused-local premise is added. This is the node branch
+of the general alignment argument. Nonempty child values are not equated.
+
+A full epsilon row Origin now derives the actual query codecs and terminal
+writer. The Mu body receipt uses that same captured writer interval.
+A retained Mu Origin derives its actual stored unfolding and exact body
+substitution at the reader. The origin tail keeps the original reader
+view. It is not rebased to the grown unfolding heap.
+
+The general binder proof must relate replacement values when each retained
+Mu substitutes itself. The existing equal-slot invariant is insufficient.
+The relation must specify admissible reader heaps. A relation at one valid
+common reader does not establish the existing relation at every arbitrary view.
+A checked nested-binder example also shows that rootErase cannot replace
+the BinderFree premise in source_parts. Its warm context and freshness
+hold, but root filtering removes a bare outer reference that the unchanged
+source still exposes. This is a proof boundary, not a Haskell defect.
+
+Initial query-operand ancestry, general retained used-Mu alignment and
+recursive completion remain open. The strongest general outer claim is
+still exact language preservation on supported successful returns with
+empty inherited constraints. All active node-owner exclusions, fresh-call
+bounds, repeated convergence, equality-operation resources, host Int
+adequacy and public Haskell correspondence remain open.
+
+Full Audit passes 3290 jobs and 71462 checks. All nine production public
+declarations, two integrations and the proof counterexample pass complete
+statement, proof and axiom checks in five groups. All five selected strict
+logs are empty. One integration has nested used binders. The other executes
+an actual query on two distinct used Mu operands. Its retained Mu result
+has no physical row but has a complete epsilon Origin. Four component
+manifests pin 240 entries. The node canonical build has no warning.
+The origin build and Audit retain only the existing ClosedCompletion
+warning. Independent source review finds no material issue.
+Evidence is in `lean/restart-evidence/20261018-used-mu-row-alignment/`.
+
+No Haskell patch or new executable defect is added. FINDINGS retains the
+external repair registry first. Field-pool repair b9219b9e remains fixed
+in c0cc8a05. Publication awaits the existing direct approval. No push is
+retried. The full-library goal stays active.
+
+## Current actual open query row origins
+
+Updated: 2026-10-18 10:30 CEST. Proof checkpoint is `80e7b363`.
+Generic proof checkpoint is `047afcae`. Starting checkpoint is `ec0ba6dd`.
+Main source remains `c0cc8a05`. Read
+`lean/notes-current-open-query-row-origins.md`.
+
+Every actual successful native query with a selected physical ordinary
+result row now derives its terminal writer and branch origin. The theorem
+covers self, ordinary joins, all three Mu cases, both union sides and both
+reference sides. It assumes initial Good and causal writer and publication
+histories. It needs no closedness, Original or supplied input codecs.
+A selected row derives the codecs. A successful unkeyed call returns Empty.
+
+Ordinary origins retain both indexed input rows, their actual guard
+conjunction and the ordered child pair Walk. Union origins retain an
+indexed actual member call and its full Origin. Reference origins retain
+the same captured writer's exact domain read and ordered child trace.
+Mu origins retain an anchor in their own generated input body.
+
+This proves terminal provenance. Initial query-operand source ancestry
+remains open. A union member Origin can use epsilon paths and need not be
+a physical member row. Generated Mu bodies can be child results. The next
+general bridge must align the actual earlier retained used-Mu body with
+the current callback under a common replacement. It must preserve full
+row fields and actual child calls. General recursive completion remains
+open. The strongest general outer claim is still exact language
+preservation on supported successful returns with empty inherited
+constraints. All active node-owner exclusions, fresh-call bounds,
+repeated convergence, equality-operation resources, host Int adequacy and
+public Haskell correspondence remain open.
+
+Full Audit passes 3288 jobs and 71452 checks. All 11 production public
+declarations and three constructed examples pass full statement, proof
+and axiom checks in seven groups. All seven selected strict logs are
+empty. One source-built example returns exactly f[leaf]. Its actual open
+warm internal call returns leaf and uses the new request theorem without
+supplied codecs. Other examples cover an ordinary join with a used-Mu
+child and an unkeyed direct Empty result. Seven component manifests pin
+293 entries. Canonical builds and Audit retain only the existing
+ClosedCompletion warning. Independent review finds no material issue.
+Evidence is in `lean/restart-evidence/20261018-open-query-row-origins/`.
+
+No Haskell patch or new executable defect is added. FINDINGS retains the
+external repair registry first. Field-pool repair b9219b9e remains fixed
+in c0cc8a05. Publication awaits the existing direct approval. No push is
+retried. The full-library goal stays active.
+
+## Current actual open Mu body and reference origins
+
+Updated: 2026-10-18 10:04 CEST. Proof checkpoint is `cf2dc597`.
+Starting checkpoint is `5d321e71`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-open-domain-reference-origins.md`.
+
+Successful reference compiler traces now derive actual domain membership,
+the exact binding read and the ordered child request at the unchanged
+checked entry. Final reader history supplies the actual earlier child
+writer. Unresolved direct calls keep their actual compiler trace instead.
+No internal active-owner history or closed-operands premise is assumed.
+
+Actual Mu traces now derive full Good at the entered open body state and
+its actual return. The same body receipt keeps the entered domain, exact
+child call, optional binder result and final reader provenance. The Mu
+query theorem derives a memo key from its selected branch without closed
+operands. Its body preserves the direct-or-returned split.
+
+General query ancestry still needs composition across all actual branches.
+Ordinary joins must keep paired operand rows, actual guard conjunction
+and ordered child pair calls. Earlier retained used-Mu alignment and Mu
+exposure remain open. The strongest general outer claim remains language
+preservation at supported successful returns with empty inherited
+constraints. General termination, all active node-owner exclusions,
+fresh-call bounds, repeated convergence, equality-operation resources,
+host Int adequacy and public Haskell correspondence remain open.
+
+Full Audit passes 3283 jobs and 71419 checks. All nine production public
+pairs pass complete statement, proof and axiom checks. Both selected
+production strict logs are empty. Two constructed examples pass the same
+full checks in three groups. One closed Mu call enters an actual open
+reference lookup. One unresolved placeholder call executes directly.
+Both return Empty. Their integration strict log is empty. Canonical builds
+and Audit retain only the existing ClosedCompletion warning. Independent
+review finds no issue.
+Evidence is in `lean/restart-evidence/20261018-open-domain-reference-origins/`.
+
+No Haskell patch or new executable defect is added. FINDINGS preserves the
+external repair registry first. Field-pool repair b9219b9e remains fixed
+in c0cc8a05. Publication awaits the existing direct approval. No push is
+retried. The full-library goal stays active.
+
+## Current generated-body source rows at actual native Mu writers
+
+Updated: 2026-10-18 09:47 CEST. Proof checkpoint is `68d6afe7`.
+Starting checkpoint is `ef76edaa`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-native-mu-source-anchors.md` for exact boundaries.
+
+An actual completed closed native query now derives an indexed ordinary
+transition in its terminal Mu writer's generated input body. The same
+witness retains the actual body callback, entered domain, fuel, optional
+binder execution, stored winner and earlier row readback. The anchor keeps
+the full symbol, guard, arity and either identity or actual ordered lexical
+child calls. Initial publication history moves forward through the actual
+query trace. The self, ordinary join and union cases remain available.
+
+This body can be a generated child result. Initial query-operand ancestry
+is still open. Its ordinary case must retain both operand rows, actual
+guard conjunction and ordered child pair traces. Open Mu body requests
+also need domain-aware reference provenance. Interned references can have
+memo keys; other placeholders can bypass memoization. General retained
+used-Mu alignment still needs a relation between the actual earlier stored
+body and the current callback. Literal rows keep retained Mu opaque.
+
+The strongest recursive outer claim remains partial correctness: under
+the stated initial semantic and resource conditions, a successful run
+preserves exactly the accepted terms when inherited constraints are empty.
+All-owner node-key exclusion, fresh-call bounds, general recursive outer
+completion, repeated convergence, equality-operation resources, host Int
+adequacy and public Haskell correspondence remain open.
+
+Full Audit passes 3281 jobs and 71406 checks. All seven production public
+pairs pass complete statements, proofs and axioms. Both production strict
+logs are empty. Two complete closed query examples and one auxiliary
+private Claim pass the same full checks in four groups. The Mu example
+uses the pair-absent branch. Its integration strict log is empty.
+Canonical builds and Audit retain only the existing ClosedCompletion
+warning. Independent review finds no material issue.
+Evidence is in `lean/restart-evidence/20261018-native-mu-source-anchors/`.
+
+No Haskell patch or new executable defect is added. FINDINGS retains the
+external repair registry first. Field-pool repair b9219b9e remains fixed
+in c0cc8a05. Publication awaits the existing direct approval. No push is
+retried. The full-library goal stays active.
+
+## Current original stored transitions from actual result rows
+
+Updated: 2026-10-18 09:31 CEST. Proof checkpoint is `83199114`.
+Generic lineage proof is `f226dc0a`. Starting checkpoint is `9e1e57f3`.
+Main source remains `c0cc8a05`. Read
+`lean/notes-current-stored-literal-row-lineage.md` for exact boundaries.
+
+Actual stored substitution now derives a finite source trace for every
+literal ordinary result row. It follows indexed original union members
+and strict original Mu bodies. It retains closed identity and external
+replacement origins separately. Source anchors retain full symbols,
+guards, arity and either identical rows or actual ordered lexical child
+calls. Reference-only and Empty replacements cannot supply row origins.
+Each anchored original child is strictly smaller than the original input.
+Generated output children have no such size bound.
+
+Initial semantic inputs, coverage, replacement availability and global
+publication history construct successful substitution with every row trace.
+The scope retains arbitrary nested Mu values. It adds no BinderFree or
+finite ordinary Cap condition. Literal rows follow root unions and keep
+retained Mu opaque.
+
+Actual native smart construction now consumes this trace. Its selected
+physical row has an indexed row in that construct's input body. The proof
+derives the exact post-depth semantic entry and uses final reader history
+with forward growth. That input body can be a generated native child
+result. Original query-operand or public-source ancestry is not yet proved.
+Compose those anchors through native writers, class folds, Parent and walks.
+Retained used-Mu epsilon exposure, all-owner node-key exclusion, fresh-call
+bounds, general recursive outer completion and repeated convergence remain
+open. Equality-operation resources, host Int adequacy and public Haskell
+correspondence remain separate obligations.
+
+Full Audit passes 3279 jobs and 71402 checks. All thirteen production public
+pairs and both constructed pairs pass full statements, proofs and axioms
+in six groups. Four production and two integration strict logs are empty.
+The examples cover mixed-union output with open nested Mu, and an actual
+used-pair construct with a changed reader and warm replay. Independent
+reviews find no material issue. Evidence is in
+`lean/restart-evidence/20261018-stored-literal-row-lineage/`.
+
+No Haskell patch or new executable defect is added. FINDINGS keeps the
+external repair registry first. Field-pool repair b9219b9e remains fixed
+in c0cc8a05. Publication awaits the existing direct approval. No push is
+retried. The full-library goal stays active.
+
+## Current stored Mu rows from the original body execution
+
+Updated: 2026-10-18 09:09 CEST. Proof checkpoint is `32ea01b1`.
+Starting local checkpoint is `b91e4dd6`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-stored-mu-row-origins.md` for exact boundaries.
+
+A physical ordinary row returned by actual stored Mu substitution now
+occurs in the raw result of executing the original stored body. The local
+binding shadows the exact original binder name. The proof derives body
+availability and replacement availability at the actual post-depth heap.
+It retains the exact current callback, actual stored winner and full row.
+Initial semantic inputs and publication history construct the successful
+substitution and its final history. No future successful return is assumed.
+The input scope retains arbitrary nested Mu values, without BinderFree or
+finite ordinary Cap conditions.
+
+The row occurrence is literal. It follows root unions and does not unfold
+a retained Mu. It is an occurrence in the executed original body's result.
+It is not yet an occurrence of an original ordinary source transition.
+General source descent must compose ordinary, union, Mu and replacement
+origins. It then must pass through class folds, Parent and actual walks.
+All-ancestor node-key exclusion, a finite fresh-call bound, recursive outer
+completion, repeated convergence, equality-operation resources, host Int
+adequacy and public Haskell correspondence remain open.
+
+The strongest existing outer semantic claim remains conditional: a
+successful modeled normalization preserves accepted terms that satisfy
+its inherited constraints and adds no accepted terms. Empty inherited
+constraints give exact language equality. Initial semantic memo and heap
+conditions and scheduled capacity remain explicit. This does not establish
+general recursive termination or public Haskell execution correspondence.
+
+Full Audit passes 3275 jobs and 71366 checks. All eight new production
+public definitions and theorems pass full statement, proof and axiom checks.
+All three production strict logs and the integration strict log are empty.
+A source-built example reconstructs open outer and nested Mu values to an
+ordinary leaf. Its complete constructed proof passes the same full checks.
+Independent review finds no material issue. Evidence is in
+`lean/restart-evidence/20261018-stored-mu-row-origins/`.
+
+No Haskell patch or new executable defect is added. The corrected sparse
+replacement premise is a proof contract correction. Field-pool repair
+b9219b9e remains fixed in c0cc8a05. FINDINGS keeps the repair registry first.
+Publication awaits the existing direct approval. No push is retried.
+The full-library goal stays active.
+
+## Current Mu rows from actual binder readback
+
+Updated: 2026-10-18 08:54 CEST. Proof checkpoint is `ed544648`.
+Starting local checkpoint is `2a1c488f`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-native-mu-row-readback.md` for exact boundaries.
+
+A selected physical ordinary Mu result now derives its actual full row
+readback. The absent-pair branch retains the literal body and heap. The
+constructed branch retains current probes, raw ordinary substitution,
+root filtering, the exact stored winner and the same indexed body row.
+It derives unused-local cleanup and full raw row origins at every view.
+
+The proof carries that stored winner forward to the final reader. The
+reader's causal publication history supplies the cleanup law. An actual
+query trace derives this history from initial history. No publication
+history is inferred backwards at an earlier optional-binder entry.
+
+The selected-row split needs the actual probe invariant Correct. The
+constructor derives it for its exact stored winner. The implication is
+false for arbitrary unrelated body and probe fields. No new Haskell defect
+follows. This is a corrected proof premise, not an implementation repair.
+
+The composed terminal theorem retains all closed recursive inputs. It
+adds no BinderFree or finite ordinary Cap condition. Its selected root row
+is physical. It does not cover epsilon exposure of a retained used Mu.
+Arbitrary stored-Mu substitution still needs row-to-original-source lineage.
+Then compose the actual source anchors through class folds, Parent and
+walk dispatch. All-ancestor node-key exclusion, a finite fresh-call bound,
+recursive outer completion, repeated convergence, equality-operation
+resources, host Int adequacy and public Haskell correspondence remain open.
+
+Full Audit passes 3272 jobs and 71349 checks. Three production strict logs
+and both integration strict logs are empty. All nine public, three
+constructed and one private full pairs pass in six groups with all eight
+settings and standard axioms. Actual native Mu/union queries and a present
+pair constructor with changed reader and warm replay supply the integration.
+Independent production review finds no material issue. Jobs use 4 GiB
+maximum/high and zero swap. Successful root peaks are at most 391 MiB.
+Evidence is in `lean/restart-evidence/20261018-native-mu-row-readback/`.
+
+No Haskell patch or new executable defect is added. Field-pool repair
+b9219b9e remains fixed in c0cc8a05. FINDINGS keeps the external repair
+registry first. The full-library goal stays active. Publication awaits
+the existing direct approval. No push is attempted or retried.
+
+## Current native terminal origins from actual captured writers
+
+Updated: 2026-10-18 08:36 CEST. Proof checkpoint is `e66b49b7`.
+Starting local checkpoint is `f85e3e98`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-native-terminal-origins.md` for exact boundaries.
+
+Closed root forwarding now preserves both operand closures. It excludes
+bare-reference branches at the terminal writer. Actual union writers
+supply their selected ordered member call and the same full returned row.
+Actual Mu writers supply the entered domain, body trace, available body,
+literal maybeMu result and exact internal fuel. The same captured owner
+remains evaluating until its finish. Completed closed queries construct
+this classification from their actual final history and selected row.
+
+The Mu case records the executed schedule. It does not prove that its
+selected row occurs in an original source body. General used-Mu writer
+alignment remains open. No source-publication history is inferred backwards
+from a final native history. These history types have different contracts.
+
+The next source-anchor obligation is row reconstruction at the actual Mu
+writer. Then compose these origins through class folds, Parent and actual
+walk dispatch. All-ancestor node-key exclusion, a finite fresh-call bound,
+recursive outer completion, repeated convergence, equality-operation
+resources, host Int adequacy and public Haskell correspondence remain open.
+
+Full Audit passes 3269 jobs and 71342 checks. Four production strict logs
+and the actual integration strict log are empty. All twelve public, two
+constructed and one private full pairs pass in six groups with all eight
+settings and standard axioms. The source-built right-Mu and right-union
+queries derive their own complete traces and expected selected leaf row.
+They use unused binders. Independent production review finds no material
+issue. Jobs use 4 GiB maximum/high and zero swap. Successful root peaks are
+at most 381 MiB. Evidence is in
+`lean/restart-evidence/20261018-native-terminal-origins/`.
+
+No Haskell patch or new executable defect is added. Field-pool repair
+b9219b9e remains fixed in c0cc8a05. FINDINGS keeps the external repair
+registry first. The full-library goal stays active. Publication awaits
+the existing direct approval. No push is attempted or retried.
+
+## Current initial facts exclude every edge memo diagnostic
+
+Updated: 2026-10-18 08:14 CEST. Proof checkpoint is `dce1e970`.
+Starting local checkpoint is `cf7d6049`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-outer-edge-idle.md` for exact boundaries.
+
+An initially idle edge table now stays idle at every literal reached outer
+phase entry. Earlier siblings contribute their actual completed equations.
+The existing edge-busy exclusion is retained. Valid current key links also
+exclude absent edge cells. Every edge memo fault supplies its exact reached
+row entry. Initial Context, physical bounds, one scheduled Room condition
+and edge idle therefore exclude all edge memo diagnostics in all six phases.
+No lower-fuel ceiling or successful enclosing call is assumed.
+
+The recursive integration has idle reached entries and a terminal Parent
+fault with its exact edge owner still evaluating. The proof keeps these
+two state scopes distinct. It does not assert idle at every failed endpoint.
+Its initial history, Context, Frame, carrier and computed Room are derived.
+
+The remaining node gap needs actual reconstructed source anchors for every
+runtime child request. Native query Mu and union residual branches still
+need exact captured-writer rows and ordered children. Then compose through
+class folds, Parent and actual walks. Current positional descent does not
+supply this handoff. All-ancestor node-key exclusion and a fresh-call bound
+remain open. General used-writer alignment, repeated convergence, equality
+resources, host Int adequacy and public Haskell correspondence remain open.
+
+Full Audit passes 3265 jobs and 71327 checks. Three production strict logs
+and the integration strict log are empty. All 5 public, 1 constructed and
+1 private full pairs pass in 5 groups with all eight settings and standard
+axioms. Jobs use 4 GiB maximum/high and zero swap. Closing peaks are at most
+381 MiB. Evidence is in `lean/restart-evidence/20261018-outer-edge-idle/`.
+
+No Haskell patch or new executable defect is added. Field-pool repair
+b9219b9e remains fixed in c0cc8a05. FINDINGS keeps the external repair
+registry first. The full-library goal stays active. Publication awaits
+the existing direct approval. No push is attempted or retried.
+
+## Current initial bounds exclude outer Parent faults
+
+Updated: 2026-10-18 08:01 CEST. Proof checkpoint is `6c0e42bc`.
+Starting local checkpoint is `b5df6a39`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-outer-parent-failure.md` for exact boundaries.
+
+Every reported Parent fault now constructs its exact reached row entry
+and failing edge call. Initial semantic facts, one scheduled Room condition
+and nine lower-fuel bounds exclude all such faults in every outer phase.
+The proof completes the actual captured edge owner. It needs no successful
+outcome of the enclosing run, future semantic read or reached-entry oracle.
+
+A source-built constrained recursive example fails in Parent at zero lower
+fuel. At the same root, initial computed bounds exclude every Parent fault.
+The example derives its own initial Context and physical facts. Its recursive
+child lies outside every finite Plain Cap. No full successful run is claimed.
+
+Outer fuel exhaustion, node and edge memo faults, domain errors and binder
+outcomes remain separate diagnostics. General recursive completion still
+needs all-owner collision exclusion and a bound on fresh recursive calls.
+Used-writer alignment, repeated convergence, equality-operation resources,
+host Int adequacy and public Haskell correspondence remain open.
+
+Full Audit passes 3262 jobs and 71302 checks. Three production strict logs
+and the actual integration strict log are empty. All 3 public, 1 constructed
+and 1 private statement pairs pass in 5 groups, with full proofs, all eight
+settings and standard axioms. All jobs use 4 GiB maximum/high and zero swap.
+The closing Audit and integration jobs peak at no more than 376 MiB.
+Evidence is in `lean/restart-evidence/20261018-outer-parent-failure/`.
+
+No Haskell patch or new executable defect is added. Field-pool repair
+b9219b9e remains fixed in c0cc8a05. FINDINGS retains the external repair
+registry first. The full-library goal stays active. Publication awaits the
+existing direct approval. No push is attempted or retried.
+
+## Current semantic and fuel bounds at unfinished outer prefixes
+
+Updated: 2026-10-18 07:49 CEST. Proof checkpoint is `2f5e5209`.
+Starting local checkpoint is `91642bc6`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-outer-prefix-schedule.md` for exact boundaries.
+
+Literal unfinished outer prefixes now derive their semantic Post, current
+Context, Frame, physical Fits, raw guard carrier and ready inputs from
+initial facts. The proof needs no successful outcome of the whole call.
+Each completed earlier sibling supplies its own graph, strict Reads and
+semantic result through the existing successful-call theorem.
+
+The proof retains an exact seed trace at the same literal Reached witness.
+Each original row or child suffix uses its preceding actual returned
+context and its exact predicted resource seed. The remaining phase forecast
+fits the original forecast. One initial scheduled Room condition therefore
+covers every reached phase. No future entry or semantic read oracle is used.
+
+Six pure lower-fuel recurrences follow that same exact phase order. Parent
+contributes its uniform nine-stage ceiling. Raw reconstruction and inherited
+operations consume no lower-worker fuel. The exact seed trace derives the
+current phase ceiling below the initial ceiling. No monotonicity in profile
+or alphabet is assumed. This is a fuel bound, not a successful-run producer.
+
+An actual node-busy failure constructs its own reached dispatch. The new
+prefix theorem supplies full semantic and resource facts at that exact
+fault caller. Current key links, inherited readiness and resident identity
+injectivity identify the complete evaluating request. This does not exclude
+the collision. Semantic Context permits evaluating cells.
+
+The scope is outer phase entries and actual completed earlier summaries.
+It does not cover arbitrary interior states of a failing Parent or native
+instruction. Initial Context, Frame, Fits, raw carrier, ready inputs and
+the initial Room condition remain explicit. Equality-operation resource
+accounting and host Int identity adequacy remain separate obligations.
+
+Full Audit passes 3259 jobs and 71290 checks.
+Three production and two constructed strict logs are empty. All
+23 public, 3 constructed and 2 private statement pairs pass in 6 groups.
+The constructed pairs cover two actual calls and one pure schedule example.
+All eight settings and standard axioms pass. Audit peak is
+376 MiB under 4 GiB maximum/high and zero swap.
+Four selected component manifests pin 278 entries. Evidence is in
+`lean/restart-evidence/20261018-outer-prefix-schedule/`.
+
+General recursive completion, all-owner collision exclusion, fresh-call
+bounds, lower-worker failure classification, equality-operation accounting,
+used-writer alignment, repeated convergence and public Haskell correspondence
+remain open. The strongest complete ordinary outer domain is unchanged.
+No Haskell patch or new production defect is added. Field-pool repair
+b9219b9e remains fixed in c0cc8a05. Keep FINDINGS first. The full-library
+goal stays active. Publication awaits the existing direct approval.
+No push is attempted or retried.
+
+## Current recursive outer correctness at successful returns
+
+Updated: 2026-10-18 07:24 CEST. Proof checkpoint is `fdd5c553`.
+Starting local checkpoint is `2c7c9f14`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-outer-initial-schedule.md` for exact boundaries.
+
+Successful supported outer runs now derive their complete semantic and
+physical return from initial facts. One mutual proof covers node calls,
+node bodies, rows, descendants, children and indexed walks. The returned
+graph, strict semantic Reads, Post, Frame, physical Fits, raw guard carrier
+and available result use the same actual returned state and memo bundle.
+
+The pure phase schedule follows the source order. It feeds each predicted
+Parent return into descendants and the original row suffix. It feeds each
+predicted child return into the original walk suffix. One Room condition
+at the final scheduled profile derives each reached Parent reservation.
+Skipped, empty, terminal and warm branches use retained bounds. The proof
+does not assume monotonicity of Parent forecasts.
+
+Initial Context, Frame, Fits, finite raw guard carrier, inherited readiness
+and resident inputs remain explicit. The literal successful bounded worker
+equation also remains explicit. Future semantic reads, WorkerRanges,
+WorkerChecks, returned invariants and reached-entry capacity callbacks are
+not inputs. Each suffix receives the preceding actual returned context.
+
+The node law always excludes new accepted terms. Its reverse implication
+applies to terms that satisfy the inherited constraints. Empty inherited
+constraints therefore give exact language equality at the top-level call.
+This is recursive partial correctness. It does not prove that an arbitrary
+recursive call reaches a successful return.
+
+The physical Profile bounds four allocation quantities. It does not bound
+equality-operation tables or establish adequacy of host Int identities.
+These remain separate refinement obligations. No new Haskell defect follows.
+
+Full Audit passes 3256 jobs and 71215 checks.
+Four production and three constructed strict logs are empty. All
+27 public and 3 constructed full pairs pass in 8 groups.
+The extra private pair prints the complete recursive example statement.
+All eight settings and standard axioms pass. Audit peak is
+361 MiB under 4 GiB maximum/high and zero swap.
+Six component manifests pin 342 entries. Evidence is in
+`lean/restart-evidence/20261018-outer-initial-schedule/`.
+
+General recursive outer completion, all-owner separation, fresh-call bounds,
+unfinished-prefix semantic transport, used-writer alignment, repeated
+convergence and public Haskell correspondence remain open. The strongest
+complete ordinary outer domain is unchanged. Recursive language preservation
+is now derived at supported successful returns. No Haskell patch or new
+production defect is added. Field-pool repair b9219b9e remains fixed in
+c0cc8a05. Keep FINDINGS first. The full-library goal stays active.
+Publication awaits the existing direct approval. No push is attempted or retried.
+
+## Current finite guard carriers through complete Parent
+
+Updated: 2026-10-18 06:59 CEST. Proof checkpoint is `651cb065`.
+Starting local checkpoint is `666c15c3`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-parent-full-guard-carrier.md` for exact boundaries.
+
+Finite raw guard carriers now compose through complete local Classes,
+Local reduction and Parent construction. Preparation, the actual selected
+class pass and the final constructor retain their original full receipts.
+The returned Frame/Fits, semantic reads, Post and carrier share the same
+result, complete Checked state and memo bundle. All nine lower fuels can
+increase independently at that same return.
+
+The class forecast enumerates initial ordered ambient guard words and
+positional selections of the original records. The uniform Parent carrier
+then enumerates exact own-record images and original counts through initial
+mass. It retains the entry alphabet and Top. Initial Context/Fits, raw
+carrier membership, inherited readiness and resident input derive the
+actual case. The existing common Parent output profile and fuel ceiling
+remain unchanged. Frame and the initial pure reservation stay explicit.
+
+Raw contradiction constructs the Top sentinel without child, stored-field,
+inherited-readiness or Room premises. The live constructor retains either
+its exact original full guard or the Top sentinel. No hereditary guard
+domain, whole-forest closure, finite Cap, future result or entry-capacity
+callback is supplied.
+
+The remaining outer bridge is a mutual successful-call proof through
+rows_tail and walk_tail. It must carry the returned semantic context,
+Frame, scheduled Fits and carrier into the next sibling. Prefix and descent
+adapters already supply their local facts. Parent-call counts still exclude
+other outer constructors. Separate equality-operation accounting is outside
+the four-field physical Profile. The Lean operations use unbounded Nat
+identities. The host Int equality supply needs its own adequacy argument.
+This is a refinement obligation, not evidence of a new Haskell defect.
+
+Full Audit passes 3252 jobs and 71136 checks.
+Four production and three constructed strict logs are empty. All
+15 public and 3 constructed full pairs pass in 7 groups.
+All eight settings and standard axioms pass. Audit peak is
+382 MiB under 4 GiB maximum/high and zero swap.
+Six component manifests pin 282 entries. Evidence is in
+`lean/restart-evidence/20261018-parent-full-guard-carrier/`.
+
+General recursive outer progress, all-owner separation, fresh-call bounds,
+recursive language preservation, used-writer alignment, repeated convergence
+and public Haskell correspondence remain open. The strongest complete
+ordinary outer domain is unchanged. No Haskell patch or new production
+defect is added. Field-pool repair b9219b9e remains fixed in c0cc8a05.
+Keep FINDINGS first. The full-library goal stays active. Publication awaits
+the existing direct approval. No push is attempted or retried.
+
+## Current finite guard composition through edits and classes
+
+Updated: 2026-10-18 06:44 CEST. Proof checkpoint is `92ddd8ff`.
+Starting local checkpoint is `adcca3af`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-parent-guard-composition.md` for exact boundaries.
+
+Finite guard carriers now compose through actual Force, Leaf, whole node
+edits, compiled equality classes and their tail-first fold and pass. Each
+producer constructs its own graph, semantic reads, full receipt, returned
+Frame/Fits and worker equation at the same result and complete state.
+Recursive Mu and union Head exposure is included in the supported editor
+domain. Only selected subtrees need closure. Unselected siblings can be open.
+
+The new pure edit budget uses one initial final-profile ceiling. Strict
+edit-trie descent discharges the internal node induction hypothesis. No
+future execution, result, guard range or capacity callback is supplied.
+Initial semantic cache laws, supported selected domains, Frame/Fits and
+sufficient Room remain explicit. This is a raw physical guard carrier.
+It does not assert hereditary guard ancestry or exact source occurrences.
+
+Preparation also constructs its finite returned carrier. It enumerates
+ordered initial guard words for Scan and aligns the complete actual state.
+Required preserves that raw carrier. FullClasses, Local and Parent still
+need the composition of preparation with the selected class pass.
+
+Separate local bounds cover raw outer edge and node reconstruction, descent,
+prefix state and resident Mu cleanup. Original widths follow from stored
+mass and literal worker lengths. Raw reconstruction adds at most one record
+and retains the original full guard. These are constructor-entry bounds.
+Whole outer execution still needs their chronological composition. The
+physical profile does not bound equality-operation caches.
+
+Full Audit passes 3248 jobs and 71103 checks.
+Seven production and five constructed strict logs are empty. All
+37 public and 5 constructed full pairs pass in 12 groups.
+All eight settings and standard axioms pass. Audit peak is
+390 MiB under 4 GiB maximum/high and zero swap.
+Seven component manifests pin 375 entries. Evidence is in
+`lean/restart-evidence/20261018-parent-guard-composition/`.
+
+General recursive outer progress, all-owner separation, fresh-call bounds,
+recursive language preservation, used-writer alignment, repeated convergence
+and public Haskell correspondence remain open. The strongest complete
+ordinary outer domain is unchanged. No Haskell patch or new production
+defect is added. Field-pool repair b9219b9e remains fixed in c0cc8a05.
+Keep FINDINGS first. The full-library goal stays active. Publication awaits
+the existing direct approval. No push is attempted or retried.
+
+## Current finite Parent envelopes and outer Parent call budgets
+
+Updated: 2026-10-18 06:22 CEST. Proof checkpoint is `e43db322`.
+Starting local checkpoint is `b05e4891`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-parent-uniform-envelope.md` for exact boundaries.
+
+The exact finite initial guard alphabet now determines a common Parent
+output profile and one ceiling for all nine lower worker fuels. Initial
+Context/Fits and resident input facts bound the actual selected forecast.
+The completion theorem constructs the full Parent receipt and returns
+Fits at that common profile. No future entry-state callback is supplied.
+
+One Room test at the finite joined class profile derives UniformReserved.
+A mathematical width also computes sufficient Room for every finite
+profile. A source-built constrained recursive Parent uses that computed
+width, common output profile and common lower fuel. This proves no capacity
+claim at a fixed host width. Fixed-width calls still need sufficient Room.
+
+A separate producer constructs the actual Target return and a finite guard
+carrier together. It includes Operand Top, recursive tail order and each
+predicted native instruction bound. Full edit/class/Scan/Parent guard-carrier
+composition remains open. A source-built Target includes repeated paths and
+an unrelated open sibling. No whole-forest closure or finite Cap is added.
+
+The bounded outer replay now retains the ordered entered Parent requests
+and complete entry callers. Its outcome equals the literal worker on every
+outcome. The Parent count is at most B(0)=1, B(f+1)=3*B(f)+1. This bound needs
+no semantic domain or successful-completion premise. It excludes other
+reconstruction and descent allocations. Whole bounded outer numeric and
+semantic scheduling therefore remains open.
+
+Full Audit passes 3241 jobs and 71037 checks.
+Four production and three constructed strict logs are empty. All
+25 public and 3 constructed full pairs pass in 7 groups.
+All eight settings and standard axioms pass. Audit peak is
+401 MiB under 4 GiB maximum/high and zero swap.
+Six component manifests pin 264 entries. Evidence is in
+`lean/restart-evidence/20261018-parent-uniform-envelope/`.
+
+General recursive outer progress, all-owner separation, fresh-call bounds,
+recursive language preservation, used-writer alignment, repeated convergence
+and public Haskell correspondence remain open. The strongest complete
+ordinary outer domain is unchanged. No Haskell patch or new production
+defect is added. Field-pool repair b9219b9e remains fixed in c0cc8a05.
+Keep FINDINGS first. The full-library goal stays active. Publication awaits
+the existing direct approval. No push is attempted or retried.
+
+## Current initial guard envelopes and finite Parent reservations
+
+Updated: 2026-10-18 06:09 CEST. Proof checkpoint is `1f9c135c`.
+Starting local checkpoint is `9964fe28`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-native-guard-envelopes.md` for exact boundaries.
+
+The finite physical guard alphabet now computes a common raw guard vector.
+Actual resident prechecks derive their own class, path and step bounds.
+Initial native query support constructs the actual receipt and transports
+the raw vector through its literal finite alphabet extension schedule.
+No hereditary ordinary domain, finite Cap or inherited-size premise is added.
+
+The four raw limits do not bound child-index values. Current Required/Edit
+forecasts include those values in sizeOf. A separate exact finite alphabet
+reservation now covers the complete own Record syntax, original child counts
+through the mass bound, and all ordered ambient words through the initial
+edge-counter bound. Context/Fits, flat membership, inherited readiness and
+residency derive the actual Parent reservation. No full Frame is needed for
+this numeric transfer. No future entry-state callback or result is assumed.
+
+A literal query on two distinct closed resident Mu operands produces a
+nonempty result and actual native node and edge work. Its initial facts and
+guard bounds are derived internally. The returned bounds align to the exact
+literal result and full Checked state. A separate live recursive Parent
+fixture derives its own finite UniformReserved and constructs the actual
+body. A raw rejection fixture uses zero lower fuel and no class Room.
+
+Full Audit passes 3237 jobs and 70923 checks. Three production and two
+constructed strict logs are empty. All 12 public and 3 constructed full
+pairs pass in 5 groups with all eight settings and standard axioms.
+Audit peak is 382 MiB under 4 GiB maximum/high and zero swap.
+Six component manifests pin 235 entries. Evidence is in
+`lean/restart-evidence/20261018-native-guard-envelopes/`.
+
+Next compose the single-Parent resource and guard schedules across the
+fixed outer fuel/phase call tree. Derive semantic Reads/Post/Frame through
+rows_tail and walk_tail. Initial recursive completion, all-owner separation,
+fresh-call bounds, recursive outer language preservation, used-writer
+alignment, repeated convergence and public Haskell correspondence remain
+open. The strongest complete ordinary outer domain is unchanged.
+No Haskell patch or new production defect is added. Field-pool repair
+b9219b9e remains fixed in c0cc8a05. Keep FINDINGS first. The full-library
+goal stays active. Publication awaits the existing direct approval.
+No push is attempted or retried.
+
+## Current semantic context at actual Parent and outer edge returns
+
+Updated: 2026-10-18 05:52 CEST. Proof checkpoint is `b82efb10`.
+Starting local checkpoint is `002f0a7d`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-parent-semantic-reads.md` for exact boundaries.
+
+Initial numeric Parent support now derives the full semantic receipt at
+any literal successful Parent return. Uniqueness identifies the complete
+edge Value, Checked state, fourth memo and Merge memo. The outer body
+adapter also derives strict Reads on its supplied actual graph.
+
+An actual successful outer edge call now derives its complete old receipt,
+Post, returned Frame/Fits, language law and strict Reads from initial entry
+support. The observed success excludes the initial busy alternative.
+No notBusy or observed-fuel lower-bound premise is supplied. Both cold
+captured-owner evaluation and warm returned cells are included.
+
+Parent numeric completion already derives the internal precheck, Scan,
+Required and class contexts and selected domains. No future class Reads,
+whole-forest closure, finite ordinary domain or finite Cap is added.
+Initial full semantic Context, Frame/Fits, warm laws and pure numeric
+reservation remain explicit. Weak physical Good does not imply these laws.
+
+This supplies the semantic endpoint for one actual rows_edge summary.
+The general induction across rows_tail and walk_tail remains open.
+Mu cleanup already returns at the unchanged complete caller. It is not
+the first missing Frame transition. A future-entry range callback does
+not establish a genuinely initial general recursive resource schedule.
+
+Full Audit passes 3234 jobs and 70904 checks. Two production and one
+constructed strict logs are empty. All 3 public and 1 constructed full
+pairs pass in 3 groups with all eight settings and standard axioms.
+Audit peak is 360 MiB under 4 GiB maximum/high and zero swap.
+Four component manifests pin 171 entries. Evidence is in
+`lean/restart-evidence/20261018-parent-semantic-reads/`.
+
+General recursive progress, all-owner separation, fresh-call bounds,
+recursive language preservation, used-writer alignment, repeated convergence
+and public Haskell correspondence remain open. The strongest complete
+ordinary outer domain is unchanged. No Haskell patch or new production
+defect is added. Field-pool repair b9219b9e remains fixed in c0cc8a05.
+Keep FINDINGS first. The full-library goal stays active. Publication awaits
+the existing direct approval. No push is attempted or retried.
+
+## Current semantic reads at actual target and class returns
+
+Updated: 2026-10-18 05:38 CEST. Proof checkpoint is `af9a413d`.
+Starting local checkpoint is `6a01228d`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-actual-semantic-reads.md` for exact boundaries.
+
+Initial numeric target completion now aligns its own semantic Reads and
+full receipt with any literal successful target call. Uniqueness identifies
+the complete Value, Checked state and Merge memo. The observed fuel tuple
+needs no lower bound from the forecast. A historical target can then produce
+the full semantic SlotReceipt with explicit later Keeps and Merge Extends.
+
+Whole-class and tail-first fold adapters now derive semantic Reads, full
+receipts, returned Frame/Fits and length at the literal worker endpoints.
+Initial causal native history also derives the actual selected-call relation
+with ordered prefix/suffix reads and histories. No future Reads are supplied.
+The whole-class route derives historical target contexts internally.
+
+Initial Frame/Fits, semantic warm-cache and global validity, selected
+ForestClosed domains, physical storage and pure numeric reservations stay
+explicit. Frame includes idle native execution at entry. Warm returned and
+suspended entries are permitted. Untouched roots can stay open. No finite
+input Cap is added. Target receipts give one-way common-subterm inclusion.
+They do not assert exact target intersection language.
+
+Full selected Audit2 passes 3232 jobs and 70901 checks. Two production and
+two constructed strict logs are empty. All 5 public and 2 constructed
+full pairs pass in 4 groups with all eight settings and standard axioms.
+Selected Audit peak is 87 MiB under 4 GiB maximum/high and zero swap.
+The earlier 360 MiB Audit is retained. Four component manifests pin 213
+entries. Evidence is in `lean/restart-evidence/20261018-actual-semantic-reads/`.
+
+Next establish this semantic context and reservation at the actual outer
+class/fold entry. Then compose the produced selected/native lineage.
+General recursive progress, all-owner separation, fresh-call bounds,
+recursive language preservation, used-writer alignment, repeated convergence
+and public Haskell correspondence remain open. The strongest complete
+ordinary outer domain is unchanged. No Haskell patch is added. Field-pool
+repair b9219b9e remains fixed in c0cc8a05. Keep FINDINGS first. The full-library
+goal stays active. Publication awaits the existing direct approval.
+No push is attempted or retried.
+
+## Current target-slot writers and initial native admission
+
+Updated: 2026-10-18 05:27 CEST. Proof checkpoint is `99a1ddb3`.
+Starting local checkpoint is `136989d9`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-selected-read-producers.md` for exact boundaries.
+
+Actual selected edits now derive target-table histories from their literal
+successful equations. An initially absent target slot recovers its earlier
+target call, complete captured class and forest, checked and merge states,
+and both surrounding target histories. Each class starts fresh local slots.
+Native and merge tables can already be warm. Target history alone asserts
+no physical reachability, heap growth or semantic target receipt.
+
+Initial exact native key validity, closed resident operands and original
+numeric headroom now derive a checked Trace from actual raw Steps. A literal
+completed request extracts its own steps. Initial causal native history
+then derives the exact returned node cell and earlier full request writer.
+No future Trace, WordRanges, InputsThrough or writer law is supplied.
+Weak physical cells do not supply the stronger initial key invariant.
+
+Source-built checks cover repeated target paths across actual ordered rows,
+a recursive source admission, and a cold distinct-operand recursive request
+with actual native node and edge work. Existing numeric semantic target
+producers can align their bounded returns with literal completed workers.
+Their Frame, Fits, domains, global validity and capacity must still be
+derived at the recovered historical writer entry.
+
+Full Audit passes 3230 jobs and 70896 checks. Three production and three
+constructed strict logs are empty. All 18 public and 3 constructed
+full pairs pass in 6 groups with all eight settings and standard axioms.
+Audit peak is 380 MiB under 4 GiB maximum/high and zero swap. Five component
+manifests pin 285 entries. Evidence is in
+`lean/restart-evidence/20261018-selected-read-producers/`.
+
+Next compose historical writer entry facts with semantic target receipts.
+Carry native admission and global validity through actual earlier class
+work. General recursive progress, all-owner separation, fresh-call bounds,
+recursive language preservation, used-writer alignment, repeated convergence
+and public Haskell correspondence remain open. The strongest complete
+ordinary outer domain is unchanged. No Haskell patch is added. Field-pool
+repair b9219b9e remains fixed in c0cc8a05. Keep FINDINGS first. The full-library
+goal stays active. Publication awaits the existing direct approval.
+No push is attempted or retried.
+
+## Current selected class dispatch and literal native leaf events
+
+Updated: 2026-10-18 05:12 CEST. Proof checkpoint is `aed82624`.
+Starting local checkpoint is `6ce48bcd`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-selected-edit-events.md` for exact boundaries.
+
+Every present slot of an actual coherent active class now supplies its
+exact input, earlier siblings, selected call and later siblings. The slot
+is unchanged, executes its whole-slot leaf, or edits below it. A whole-slot
+callback retains the exact complete original path. No unselected guard
+footprint or future semantic read law is supplied.
+
+Actual shared leaves derive their target force, native intersection request,
+intermediate state and literal final advance. A target hit retains the full
+state. A miss derives the actual target call and store. Initial physical
+facts derive intermediate and final validity and residency. The native steps
+are raw execution steps. Semantic traces and historical writer origins
+remain separate obligations. Successful worker equations stay explicit.
+
+A checked closed source passes actual primary selection and Parent reduction.
+Its ordinary child height rises from 1 to 3 when unions count as zero.
+The analogous positive count rises from 0 to 1. This refutes those proposed
+measures at an accepted selected operation. It establishes no infinite
+execution or Haskell defect. General recursive progress remains open.
+
+Full Audit passes 3227 jobs and 70874 checks. Two production and three
+constructed strict logs are empty. All 7 public and 3 constructed
+full pairs pass in 5 groups with all eight settings and standard axioms.
+Audit peak is 404 MiB under 4 GiB maximum/high and zero swap. Four component
+manifests pin 206 entries. Evidence is in
+`lean/restart-evidence/20261018-selected-edit-events/`.
+
+Next derive semantic read and writer facts along the literal selected
+schedule. Complete the recursive below-edit case and chronological target
+writers. Establish all-owner separation and a fresh-call bound or a global
+well-founded measure. General recursive completion, recursive language
+preservation, used-writer alignment, repeated convergence and public Haskell
+correspondence remain open. The strongest complete ordinary outer domain
+is unchanged. No Haskell patch is added. Field-pool repair b9219b9e remains
+fixed in c0cc8a05. Keep FINDINGS first. The full-library goal stays active.
+Publication awaits the existing direct approval. No push is attempted.
+
+## Current outer memo origins and exact indexed dispatch
+
+Updated: 2026-10-18 04:58 CEST. Proof checkpoint is `1fde7bb0`.
+Starting local checkpoint is `61c6891e`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-outer-positional-dispatch.md` for exact boundaries.
+
+Actual cold outer edge calls now derive the indexed Parent relation and
+store it at their exact evaluating handle. Warm hits recover the actual
+returned cell and its complete captured request. Ready equality identities
+and coherent resident edge identity derive request equality. Initial empty
+tables need no supplied result law. Actual completed node calls and unfinished
+prefixes preserve the memo-origin invariant from those initial tables.
+
+The literal indexed walk now exposes its exact earlier sibling calls,
+inherited descent, selected node call, returned slot, suffix and reached
+prefix. Actual Parent and live walk calls compose this dispatch with the
+indexed origin. A positive row of that dispatched input has an exact
+continuation child below its explicit source anchor in structural mass.
+Source footprints, positivity and successful worker equations stay explicit.
+This is one actual scheduled step. General consecutive chains remain open.
+
+A checked raw guard example refutes unrestricted closure of effective-own
+footprints under conjunction. Its first input is also checked rejected at
+arity two. It is not an accepted-input counterexample or a Haskell defect.
+Actual global footprint producers and mixed-index progress remain open.
+
+Full Audit passes 3225 jobs and 70857 checks. Two production and three
+constructed strict logs are empty. All 8 public and 3 constructed
+full pairs pass in 5 groups with all eight settings and standard axioms.
+Audit peak is 396 MiB under 4 GiB maximum/high and zero swap. Four component
+manifests pin 210 entries. Evidence is in
+`lean/restart-evidence/20261018-outer-positional-dispatch/`.
+
+Next derive consecutive actual anchor steps with their needed footprints,
+or another global well-founded measure. Handle other indexes, plain rows,
+sibling work and native earlier writers. General recursive completion,
+all-owner separation, fresh-call bounds, recursive language preservation,
+used-writer alignment, repeated convergence and public Haskell correspondence
+remain open. The strongest complete ordinary outer domain is unchanged.
+No Haskell patch is added. Field-pool repair b9219b9e remains fixed in c0cc8a05.
+Keep FINDINGS first. The full-library goal stays active. Publication awaits
+the existing direct approval. No push is attempted or retried.
+
+## Current Parent origins and finite positive continuation chains
+
+Updated: 2026-10-18 04:46 CEST. Proof checkpoint is `e1b8b58e`.
+Starting local checkpoint is `1145bcd0`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-parent-native-lineage.md` for exact boundaries.
+
+The actual Parent worker now retains indexed complete source rows and exact
+unselected continuation children. Literal local returns derive intermediate
+physical facts. Both raw and checked rejection derive the Empty sentinel.
+Raw rejection needs no input child availability. Initial raw guard footprints
+and successful worker equations remain explicit. No future row law is supplied.
+
+A fixed-index positive continuation relation is now well-founded. Each next
+anchor is the exact preserved child of a positive linked row. Reconstructed
+results can differ arbitrarily from their anchors. Final anchor mass plus
+chain length is at most initial anchor mass. Such a chain cannot be infinite.
+This conditional result needs no initial-source occurrence map.
+
+Actual outer execution still needs a producer for those consecutive chain
+steps. It first dispatches the reconstructed node. A later Parent uses that
+node's row child at its actual slot. Source-built evidence proves that an
+enclosing guard footprint does not imply the nested row guard footprint.
+Other indexes, plain rows, sibling work and native reconstruction remain.
+This is a proof boundary, not a new Haskell defect or an infinite execution.
+
+Full Audit passes 3223 jobs and 70834 checks. Two production and three
+constructed strict logs are empty. All 8 public and 4 constructed
+full pairs pass in 5 groups with all eight settings and standard axioms.
+Audit peak is 392 MiB under 4 GiB maximum/high and zero swap. Four component
+manifests pin 208 entries. Evidence is in
+`lean/restart-evidence/20261018-parent-native-lineage/`.
+
+Next derive actual consecutive anchor handoff and the needed row footprints,
+or establish another well-founded global rank. General recursive completion,
+all-owner separation, fresh-call bounds, recursive language preservation,
+used-writer alignment, repeated convergence and public Haskell correspondence
+remain open. The strongest complete finite ordinary outer domain is unchanged.
+No Haskell patch is added. Field-pool repair b9219b9e remains fixed in c0cc8a05.
+Keep the FINDINGS repair registry first. The full-library goal stays active.
+Publication awaits the existing direct approval. No push is attempted.
+
+## Current selected local row origins and immediate descent
+
+Updated: 2026-10-18 04:35 CEST. Proof checkpoint is `479741b4`.
+Starting local checkpoint is `ff10965d`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-selected-local-lineage.md` for exact boundaries.
+
+Actual retained Scan records now supply their original selected Root from
+literal false primary returns. No heap, memo or replay law is needed for
+that value property. Original source paths derive actual Required compiler
+absence through canonical selected-path sorting and duplicate removal.
+
+The complete actual local class worker now derives indexed row origins
+without a supplied Root or compiled-absence premise. Selected slots use
+actual primary support. Untouched slots retain their complete value through
+Required and the class fold, or become Empty during final propagation.
+Constrained recursive inputs are permitted in the untouched branch.
+
+The full allocated local reducer now derives the same result through actual
+field lookup, accessor, precheck, Scan, Required and class passes. The raw
+input guard's unselected footprint and successful worker equation remain
+explicit. Positive surviving rows retain the full indexed input row and the
+exact continuation child. That child has strictly smaller mass than its
+explicit immediate source node. The source node can be reconstructed;
+proper initial-source occurrence and a global decreasing rank remain open.
+
+Full Audit passes 3221 jobs and 70817 checks. Five production and five
+constructed strict logs are empty. All 11 public and 7 constructed
+full pairs pass in 10 groups with all eight settings and standard
+axioms. Audit peak is 375 MiB under 4 GiB maximum/high and zero swap.
+Evidence is in `lean/restart-evidence/20261018-selected-local-lineage/`.
+
+Next lift the local origin through actual Parent construction and native
+optional-binder/writer reconstruction. Prove proper original occurrences,
+all-owner separation and a finite fresh-call bound or a well-founded rank.
+General recursive completion, recursive outer language preservation,
+used-writer alignment, repeated convergence and public Haskell correspondence
+remain open. The complete finite ordinary outer domain is unchanged.
+No Haskell patch or new production defect is added. Field-pool b9219b9e
+remains fixed in c0cc8a05. Keep the FINDINGS repair registry first.
+Publication awaits the pending direct approval. Do not retry or bypass it.
+
+## Current actual positional lineage and primary support
+
+Updated: 2026-10-18 04:17 CEST. Proof checkpoint is `fe68c2e9`.
+Starting local checkpoint is `57ac518c`. Main source remains `c0cc8a05`.
+Read `lean/notes-current-actual-positional-lineage.md` for exact boundaries.
+
+Actual Required preparation and the subsequent literal class right fold now
+compose indexed row origins from entry facts. A surviving row with a nonempty
+own field retains a complete indexed input row and the exact child at each
+unselected continuation index. The proof includes final Empty propagation.
+The ordinary Edit law derives intermediate physical facts from actual calls.
+It no longer needs supplied semantic row reads or future preservation laws.
+Accepted recursive Head produces empty-own rows in a causal Plain heap.
+
+Actual false primary selection now supplies the selected original value's
+Root condition. Ordinary roots permit arbitrary constraints. Recursive roots
+must pass the actual plain gate. Public smart Mu can contain constraints;
+Root is not unconditional for all public inputs. The class law retains Root
+through later selected below edits. Original selection and later edited
+values remain distinct. Compiler coherence and the unselected footprint,
+initial physical facts, and actual successful worker equations stay explicit.
+
+Full Audit passes 3216 jobs and 70791 dependency checks. All 6
+production and 6 constructed strict logs are empty. All 31
+public and 6 constructed full pairs pass in 12 groups with
+all eight settings and standard axioms. Audit peak is 541 MiB under
+4 GiB maximum/high and zero swap. Evidence is in
+`lean/restart-evidence/20261018-actual-positional-lineage/`.
+
+The origins refer to the immediate input forest. Proper initial-source
+occurrences through recursive reconstruction and native writers remain open.
+All-owner separation and a bound on fresh calls or a well-founded measure
+remain open. General recursive completion, recursive outer language
+preservation, repeated convergence and full public Haskell correspondence
+remain open. The complete finite ordinary outer domain is unchanged.
+No Haskell patch or new production defect is added. Field-pool repair
+`b9219b9e` remains fixed in `c0cc8a05`. Keep the FINDINGS repair registry first.
+Publication awaits the pending direct approval. Do not retry or bypass it.
+
+## Current outer guard transport and positional rows
+
+Updated: 2026-10-18 03:54 CEST. Proof commit is `b4fcc918`.
+Starting local checkpoint is `827b6fd6`. Source main remains `c0cc8a05`.
+Read `lean/notes-current-outer-guard-transport.md` for exact boundaries.
+
+Actual successful lower, Parent and outer calls now retain arbitrary
+causal Mu body/probe guard profiles from their entry facts. Actual unfinished
+outer prefixes and node-busy dispatches retain the same law. No future
+preservation callback, checked Trace or finite Cap is supplied. A given
+successful worker equation or actual finite prefix remains explicit.
+
+Surviving Required and ordinary Edit rows now retain an indexed source row,
+its full fields, and the exact child at each unselected child index.
+The Edit endpoint keeps explicit semantic reads and readiness premises.
+Compiler equalities check the exact fixed-own footprint below child 1.
+They do not prove global all-1 exclusion or proper initial-source lineage.
+A separate correction removes the earlier mistaken interpretation that
+causal GuardHeap Plain requires every raw edge guard to be plain. The old
+frozen review remains unchanged. Mixed positive heaps can satisfy this law.
+
+Full Audit passes 3210 jobs and 70736 dependency checks. Four production
+and four constructed strict logs are empty. All 34 public and 4 constructed
+full pairs pass in 8 groups with all eight settings and standard axioms.
+Audit peak is 361 MiB under effective 4 GiB maximum/high and zero swap.
+Evidence is in `lean/restart-evidence/20261018-outer-guard-transport/`.
+
+Next compose positional provenance through Required, the class right fold,
+recursive Head exposure and native writers. Prove proper source occurrences,
+all-owner separation, and finite fresh-call bounds or a well-founded measure.
+General recursive completion, recursive global language preservation,
+used-writer alignment, convergence and public Haskell correspondence remain
+open. The complete outer-pass domain is unchanged. Keep the full goal active.
+No Haskell patch or new production defect is added. Repair `b9219b9e` stays
+fixed at source `c0cc8a05`. Keep the external FINDINGS repair registry first.
+Publication awaits the pending direct approval. Do not retry or bypass it.
+
+## Current fixed guard carriers and native guard heaps
+
+Updated: 2026-10-18 03:37 CEST. Proof commit is `a400849c`.
+Starting local checkpoint is `9c3442e5`. Source main remains `c0cc8a05`.
+Read `lean/notes-current-global-guard-progress.md` for exact boundaries.
+
+Actual successful native calls now retain arbitrary-predicate causal Mu
+guard profiles from initial physical facts. A checked Trace, InputsThrough
+or final result law is not supplied. Successful return remains a premise.
+Actual checked native prefixes also retain a fixed finite original alphabet
+of derived edge constraints without an instruction-count ceiling. Their
+checked Trace and initial field checks remain explicit. The two theorems
+retain different invariants. Neither bounds inherited payloads or fresh calls.
+
+Full Audit passes 3208 jobs and 70665 dependency checks. Two production and
+two constructed strict logs are empty. All 11 public and 2 constructed full
+pairs pass under all eight settings and standard axioms. Audit peak is
+355 MiB under effective 4 GiB maximum/high and zero swap.
+Evidence is in `lean/restart-evidence/20261018-global-progress-review/`.
+
+Next compose causal guard retention through current lower, Parent and
+unfinished outer calls. Derive positional original-row lineage through
+Required, edits, Mu exposure and native writers. Prove all-owner separation
+and a finite fresh-call bound or a well-founded measure. The fixed-own
+path-growth example is not an actual infinite outer trace.
+General recursive progress, used-writer alignment, convergence and public
+Haskell correspondence remain open. Keep the full-library goal active.
+No Haskell patch or new production defect is added. The field-pool repair
+`b9219b9e` remains fixed. Keep the external FINDINGS repair registry first.
+Publication awaits the pending direct approval. Do not retry or bypass it.
+
+## Current actual outer row fields and initial path domains
+
+Updated: 2026-10-18 03:20 CEST. Starting checkpoint is `a1270b81`.
+Proof commit is `1324bb38`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-parent-row-trace.md` for exact results.
+Read `lean/notes-proof-status-20261017.md` for the target and strongest claim.
+
+Actual cold outer edge evaluation and warm hits now retain the captured
+request's complete symbol and guard, or the literal Top rejection field.
+All completed outer workers and actual unfinished prefixes preserve this
+law. Initially empty result tables derive it without a returned-cell premise.
+An actual busy failure with a nonempty inherited owner now identifies the
+exact earlier row and completed edge call for its height-increasing event.
+The nonempty own field excludes Top, so the complete earlier guard is equal.
+This is an immediate reached-row origin. It is not yet a proper occurrence
+in the initial recursive source or a decreasing rank.
+
+Each actual equality combination and inherited prefix now derives a finite
+path domain and numeric height bound from its initial operands. The bound
+uses initial gaps, anchors and child indexes. A checked actual accessor
+example combines fixed heights 2 and 1 into height 3. Thus neither the
+maximum input height nor the own-field height alone supplies the required
+global measure. A global bound across new row additions remains open.
+
+Actual closed Mu exposure with a union body now derives earlier indexed
+rows and full ordered child calls for its literal source-node alternatives.
+Other member forms retain explicit actual origins. General body-root Mu
+fusion and alignment with an earlier selected writer remain open. The
+used-source review identifies a further relation lift: unordered root
+alternatives, ordered children, lexical Mu bodies and exact closed captures
+must compose with a causal retained-writer law. No new closed used-binder
+congruence theorem is claimed.
+
+Full pinned Audit passes 3206 jobs and 70634 dependency checks.
+Only the unchanged old warning remains. Three strict production logs are
+empty. All 20 public and 3 constructed full signature/proof/axiom pairs
+pass in 6 groups with all eight settings and only the standard axioms.
+Effective caps are 4 GiB maximum/high and zero swap. Audit peak is 352 MiB.
+Evidence is in `lean/restart-evidence/20261018-parent-row-trace/`.
+
+The complete outer-pass domain remains finite ordinary sources without Mu,
+references or explicit unions in descendants. General recursive termination,
+proper initial-source row lineage, all-ancestor collision exclusion, finite
+fresh-call bounds, recursive global language preservation, repeated convergence,
+and public Haskell correspondence remain open. Keep the full-library goal
+active. No Haskell patch or new production defect is added. Field-pool repair
+`b9219b9e` remains merged in `c0cc8a05`. Keep the root FINDINGS repair registry
+first. Record every later fix with failure, executable reproducer, paths,
+commit, checks and upstream status. Preserve all older sources, evidence,
+repairs and drafts. Keep the optimized interned core.
+
+## Current class row chains and recursive inherited gain
+
+Updated: 2026-10-18 03:00 CEST. Starting checkpoint is `3f3890f9`.
+Proof commit is `c6dd2c74`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-class-row-chain.md` for exact results.
+Read `lean/notes-proof-status-20261017.md` for the target and strongest claim.
+
+Actual completed class edits now derive individual surviving-row chains.
+The chains retain the full symbol and guard, exact source row, ordered child
+reads, initial and final memos, and literal class right-fold order. They
+include final Empty propagation. Native query and recursive Head events
+remain explicit sources. General Head exposure now follows arbitrary Mu and
+union roots to chronological terminal ordinary rows. It does not identify
+every reconstructed row with an earlier nested stored body or original operand.
+
+A repeated full request below a nonempty inherited owner now requires an
+actual own-field event that strictly increases inherited path height.
+Initial physical facts and literal busy execution produce the ancestry.
+The event has a nonempty effective own equality accessor. A constructed
+example shows that height gain followed by inherited identity reuse is
+possible. Its node value is a proper child. It is not a full-key recurrence
+or a termination counterexample.
+
+Actual source outputs now agree on bare-reference and Empty tags under the
+stated lexical relations, including nested used binders. A strict source-body
+induction hypothesis constructs matching actual filtered callbacks. The
+induction step is proved. The general closed induction and alignment with an
+earlier retained writer remain open.
+
+Full pinned Audit passes 3203 jobs and 70592 dependency checks.
+Only the unchanged old warning remains. Four strict production logs are
+empty. All 54 public and 8 constructed full signature/proof/axiom pairs
+pass in 9 groups with all eight settings and only the standard axioms.
+Effective caps are 4 GiB maximum/high and zero swap. Audit peak is 355 MiB.
+Evidence is in `lean/restart-evidence/20261018-class-row-chain/`.
+
+The complete outer-pass domain remains finite ordinary sources without Mu,
+references or explicit unions in descendants. General recursive termination,
+all-ancestor collision exclusion, finite fresh-call bounds, recursive global
+language preservation, repeated convergence, and public Haskell correspondence
+remain open. Keep the full-library goal active. No Haskell patch or new
+production defect is added. Field-pool repair `b9219b9e` remains merged in
+`c0cc8a05`. Keep the root FINDINGS repair registry first. Record every later
+fix with failure, executable reproducer, paths, commit, checks and upstream
+status. Preserve all older sources, evidence, repairs and drafts. Keep the
+optimized interned core.
+
+## Current outer prefix invariants and recursive probe preservation
+
+Updated: 2026-10-18 02:42 CEST. Starting checkpoint is `b49d8add`.
+Proof commit is `e9430fe3`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-outer-prefix-invariants.md` for exact results.
+Read `lean/notes-proof-status-20261017.md` for the target and strongest claim.
+
+Initial weak native Good and physical filtered probes now derive probe
+preservation through actual completed native, lower and Parent calls.
+Successful outer calls and actual unfinished execution prefixes now derive
+full physical validity and input readiness from entry facts. No future
+Ranges, InputsThrough, completed graph or per-prefix invariant is supplied.
+An actual busy failure identifies the complete captured request of its active
+owner and derives readiness plus activation growth for all active owners.
+This identifies a possible collision. It does not exclude that collision or
+bound fresh recursive requests.
+
+An initially resident Mu now constructs its exact smart cleanup and retains
+the entire caller in nodeBody at every bound, including zero. Literal-node
+stored bodies construct indexed original Head rows with full ordered warm
+child calls at the final reader. Nested Mu children are included. Actual
+used publication inputs now derive alias and filtered free-name transport,
+including the actual earlier retained writer. General used-binder output
+RootMatch, retained-Mu lineage and individual class row survival remain open.
+
+Full pinned Audit passes 3199 jobs and 70491 dependency checks.
+Only the unchanged old warning remains. Seven strict production logs are
+empty. All 69 public and 11 constructed full signature/proof/axiom pairs
+pass in 13 groups with all eight settings and only the standard axioms.
+Effective caps are 4 GiB maximum/high and zero swap. Audit peak is 353 MiB.
+Evidence is in `lean/restart-evidence/20261018-outer-prefix-invariants/`.
+
+The complete outer-pass domain remains finite ordinary sources without Mu,
+references or explicit unions in descendants. General recursive termination,
+all-ancestor collision exclusion, fresh-call bounds, recursive language
+preservation, repeated convergence and public Haskell correspondence remain
+open. Keep the full-library goal active. No Haskell patch or new production
+defect is added. Field-pool repair `b9219b9e` remains merged in `c0cc8a05`.
+Keep the root FINDINGS repair registry first. Record every later fix with
+failure, executable reproducer, paths, commit, checks and upstream status.
+Preserve all older sources, evidence, repairs and drafts. Keep the optimized
+interned core.
+
+## Current Parent invariants and class guard origins
+
+Updated: 2026-10-18 02:21 CEST. Starting checkpoint is `55b2e1f3`.
+Proof commit is `445e5a73`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-parent-invariants-head-origins.md` for exact results.
+Read `lean/notes-proof-status-20261017.md` for the target and strongest claim.
+
+Actual completed lower and Parent workers now derive physical heap, field,
+probe, cost and full equality-operation invariants from initial facts. No
+Ranges, InputsThrough, Cap or future state invariant is a premise. Completion
+is still an explicit premise. Outer-prefix invariant composition stays open.
+
+Initial closed inputs construct actual recursive Head exposure and stored-body
+row descriptors. Full guard occurrences now compose through actual indexed
+edits, class right folds and final empty propagation. This does not derive an
+individual row-survival chain. Checked native query Inputs and retained-Mu
+body reconstruction residuals remain explicit. A general root-alternative
+relation is preserved by actual union normalization and self filtering.
+General used-local source binder and retained-writer induction stay open.
+
+Full pinned Audit passes 3190 jobs and 70310 dependency checks.
+Only the unchanged old warning remains. Seven strict production logs are
+empty. All 86 public declaration and 9 constructed signature/proof/axiom
+pairs pass with all eight settings and only the three standard axioms.
+Actual caps are 4 GiB maximum/high and zero swap. Audit peak is 402 MiB.
+Evidence is in `lean/restart-evidence/20261018-parent-invariants-head-origins/`.
+
+The complete outer-pass domain is still finite ordinary sources without Mu,
+references or explicit unions in descendants. General recursive progress,
+all-ancestor key exclusion, fresh-call bounds, repeated convergence and
+complete public Haskell correspondence remain open. Keep the whole goal active.
+No Haskell behavior patch or new production defect is added. Keep the root
+FINDINGS repair registry first. Repair `b9219b9e` stays merged and validated.
+Record each later fix with its failure, reproducer, paths, commit, checks and
+upstream status. Preserve all earlier sources, evidence, repairs and drafts.
+Keep the optimized interned core.
+
+## Current native invariants and nested inert binders
+
+Updated: 2026-10-18 01:56 CEST. Starting checkpoint is `69992df2`.
+Proof commit is `381a4115`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-actual-invariants-binders.md` for exact results.
+Read `lean/notes-proof-status-20261017.md` for the target and strongest claim.
+
+Actual completed native node and edge calls now derive full equality-operation
+validity, heap Ready, allocated fields and result residency from initial facts.
+They need no reached range or future-invariant certificate. Their native cell
+invariant retains physical operands and results without a semantic key law.
+Actual inherited descent then derives new payload Ready. Full Parent and outer
+invariant composition remain open.
+
+Nested source binders now construct full smart execution and exact publication
+reconstructions when their own lexical slot is absent from static live support.
+Bodies and captures can contain arbitrary nested Mu. Actual history handles
+earlier retained writers. General used-local body alignment remains open.
+Positive guards now derive raw-class coverage through actual staged normalization
+and local child-key separation from Top owners. Later class phases remain open.
+Actual checked native query traces also derive swap/reset forwarding and terminal
+self or ordinary joined-row origins. Mu/union/reference Head exposure remains
+explicit. These query traces still include per-step physical Inputs checks.
+
+Full pinned Audit passes 3183 jobs and 70163 dependency checks.
+Only the unchanged old warning remains. Four selected strict production logs
+are empty. All 39 public declaration and 7 constructed signature/proof/axiom
+pairs pass with all eight settings and the three standard axioms. Effective
+caps are 4 GiB maximum/high and zero swap. Evidence is in
+`lean/restart-evidence/20261018-actual-invariants-binders/`.
+
+The complete outer-pass domain remains finite ordinary sources with no Mu,
+references or explicit unions in descendants. General recursive progress,
+all-ancestor key exclusion, fresh-call bounds, convergence and complete public
+Haskell correspondence remain open. Keep the full-library goal active.
+No Haskell patch or new production defect is added. FINDINGS keeps the external
+repair registry first. Field-pool repair `b9219b9e` remains merged and validated.
+Record every later repair there with failure, reproducer, paths, commit, checks
+and upstream status. Preserve every older source, failed attempt, repair and
+draft. Keep the optimized interned core.
+
+## Current actual ancestor growth and retained writer origins
+
+Updated: 2026-10-18 01:36 CEST. Starting checkpoint is `e1323137`.
+Proof commit is `c517b225`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-active-growth-lineage.md` for exact results.
+Read `lean/notes-proof-status-20261017.md` for the target and strongest claim.
+
+Literal lower and outer workers now derive operation growth on every outcome.
+An actual initial node-busy failure produces every active owner's exact
+activation and growth into the busy reader. Initial Ready values and full
+field loads persist. Structural constraint-cache validity persists. Full
+operation-memo validity, all-ancestor key exclusion, and finite bounds on
+fresh recursive requests remain open. Busy exclusion alone is not termination.
+
+Actual source construction recovers first writers of selected Mu records,
+callback histories, and growth plus issued-reference transport. Later warm
+requests retain the same selected record. BinderFree of that recovered writer
+constructs both filtered reconstructions. Other publications and captures can
+contain Mu. Arbitrary nested writer bodies and full smart cleanup remain open.
+Actual native writers derive raw stored-class coverage through full joined
+fields. Same-index splits separate computed child obligations from Top keys.
+New guard-only and later class-phase origins remain open.
+
+Full pinned Audit passes 3179 jobs and 70083 dependency checks. Only the old
+unchanged warning remains. Five selected strict production logs are empty.
+All 31 public and five constructed signature/proof/axiom pairs pass with the
+standard axioms and all eight settings. Effective caps are 4 GiB maximum/high
+and zero swap. Evidence is in
+`lean/restart-evidence/20261018-active-growth-lineage/`.
+
+The complete finite ordinary outer-pass domain is unchanged. General recursive
+progress, repeated-pass convergence, nested writer alignment, and complete
+public Haskell correspondence remain open. Keep the full-library goal active.
+No Haskell patch or new production defect is added. FINDINGS keeps the repair
+registry first. Field-pool repair `b9219b9e` remains merged and validated.
+Preserve all older proofs, failures, repairs and marked drafts. One large
+failed log is preserved losslessly as gzip with a checked archival receipt.
+Keep the optimized interned core.
+
+## Current filtered publication alignment and actual busy ancestry
+
+Updated: 2026-10-18 01:13 CEST. Starting checkpoint is `98254f5d`.
+Proof commit is `0dbe7e4e`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-filter-owner-execution.md` for exact results.
+Read `lean/notes-proof-status-20261017.md` for the target and strongest claim.
+
+Every actual publication with a BinderFree source body now constructs both
+filtered body and ordinary-probe reconstructions. Union roots are included.
+Captured values can contain arbitrary recursive Mu records. Actual root
+filtering and source root erasure derive exact root parts. Stored
+reconstruction preserves those parts. Actual callbacks derive matching
+bare-self cases with the repaired ordinaryLevel. No desired result relation
+or future completion is a producer premise. Nested source binders, smart
+cleanup composition, and chronological earlier winners remain open.
+
+An actual bounded worker node-busy failure now constructs its exact
+same-state busy dispatch, enclosing key-equal activation, and ancestry of
+all active node owners. It requires no supplied prefix, completed-call graph,
+range certificate, or future completion. This identifies a possible collision;
+it does not exclude it. General recursive outer progress remains open.
+
+A selected own class with two distinct paths under one child index derives
+an actual nonempty child payload and separation from every initially Ready
+Top owner key. A normalized crossing-class example loses its constraints at
+both immediate children. General all-ancestor key exclusion still needs a
+stronger argument with actual class-edit provenance.
+
+Full pinned Audit passes 3174 jobs and 69812 dependency checks. Only the
+unchanged old unused-variable warning remains. Seven new strict source logs
+are empty. Selected checks use the standard axioms and effective 4 GiB
+maximum/high memory limits with zero swap. Evidence is in
+`lean/restart-evidence/20261018-filter-owner-execution/`.
+Preserve all earlier proofs, counterexamples, repairs, drafts, and raw attempts.
+
+The complete finite ordinary outer-pass domain is unchanged. General
+recursive progress, repeated-pass convergence, retained-binder and earlier
+winner alignment, and complete public Haskell correspondence remain open.
+Keep the full-library goal active. No Haskell patch or new production defect
+is added. FINDINGS keeps the repair registry first. Field-pool repair
+`b9219b9e` remains merged and validated. Record each later Haskell fix there
+with its failure, reproducer, paths, commit, checks, and status.
+Keep the optimized interned core.
+
+## Current union source induction and active owner ancestry
+
+Updated: 2026-10-18 00:55 CEST. Starting checkpoint is `b4741c6e`.
+Proof commit is `a2b9b924`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-union-source-induction.md` for exact results.
+Read `lean/notes-proof-status-20261017.md` for the target and strongest claim.
+
+Initial Ready inputs now construct both raw source calls and both stored
+reconstructions for every BinderFree source. This includes Empty, variables,
+nodes, and unions. Captured values can contain arbitrary recursive Mu
+records. The live-support variant permits incompatible unused captures.
+Actual row liveness derives the child compatibility needed by node induction.
+The results retain full guards, ordered children, exact sequential heaps,
+common-reader replays, publication histories, physical Empty agreement,
+and observations at every finite depth and fixed view.
+
+An actual node-root binder publication now constructs both filtered body
+and ordinary-probe reconstructions. A static BinderFree body supplies all
+child cases. Union-root filtering, nested source binders, smart cleanup
+composition, and chronological earlier winners remain open.
+
+Literal unfinished outer prefixes now derive every evaluating node owner's
+exact enclosing activation. Actual busy dispatch identifies the same-key
+ancestor and leaves the full caller unchanged. This does not exclude a key
+collision or extract such a prefix from every failed worker automatically.
+Completed earlier calls retain both their graph and same-bound worker call.
+
+Full pinned Audit passes 3167 jobs and 69679 dependency checks. Only the
+unchanged old unused-variable warning remains. Five new strict source logs
+are empty. All 39 public declaration pairs have full proof output and only
+the three standard axioms. Effective caps are 4 GiB maximum/high and zero swap.
+Evidence is in `lean/restart-evidence/20261018-union-source-induction/`.
+Preserve all earlier proofs, counterexamples, repairs, drafts, and raw attempts.
+
+The strongest complete outer-pass theorem still excludes Mu, references,
+and explicit unions in every descendant. General recursive outer progress,
+physical-key compatibility with every active ancestor, repeated-pass
+convergence, and complete public Haskell correspondence remain open.
+Keep the full-library goal active. No Haskell patch or new production defect
+is added. FINDINGS keeps the external repair registry first. Field-pool
+repair `b9219b9e` remains merged and validated. Record each later Haskell fix
+there with its failure, reproducer, paths, commit, checks, and status.
+Keep the optimized interned core.
+
+## Current paired ordinary induction and retained native readers
+
+Updated: 2026-10-18 00:36 CEST. Starting checkpoint is `0a5fe3b7`.
+Proof commit is `2d59402e`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-paired-source-induction.md` for exact results.
+Read `lean/notes-proof-status-20261017.md` for the target and strongest claim.
+
+Ordinary-node source induction now accepts arbitrary paired lexical lists.
+Bare references can differ at any slot, including captured tails. Actual raw
+row-empty tests follow from one derived symbolic input presentation. Strict
+source-child induction retains full guards and ordered reconstructed children.
+Initial Ready data constructs both stored calls, their exact sequential states,
+common-reader replays, and local publication histories. The nested binder,
+union-source, root-filter, and chronological winner cases remain open.
+
+Actual ordinary probe names are fresh on live source support. Unused captures
+can still contain those names. A separate live-alias condition controls Depth
+extension. These lexical laws do not yet produce arbitrary binder-result
+alignment or a general execution law from support compatibility alone.
+
+Actual target, force, leaf, edit, and class reads retain completed native cells.
+The selected leaf's exact cell and captured writer now persist to the full
+class reader. The actual child and class suffixes also derive its reader
+history. Historical target slots remain at the leaf return. Swap and reset
+recover their exact forwarded query; self returns its literal input unchanged.
+Unresolved direct requests remain explicit.
+
+Full pinned Audit passes 3162 jobs and 69585 dependency checks. Only the
+unchanged old unused-variable warning remains. New strict source logs are
+empty. Full public signatures, proofs, and axiom reports use only the three
+standard axioms. Effective caps are 4 GiB maximum/high and zero swap.
+Evidence is in `lean/restart-evidence/20261018-paired-source-induction/`.
+Preserve all earlier proofs, counterexamples, repairs, drafts, and raw attempts.
+
+General recursive outer progress, compatibility with every active physical
+memo key, repeated-pass convergence, and full public Haskell correspondence
+remain open. Keep the full-library goal active. No Haskell patch or new
+production defect is added. FINDINGS retains the external repair registry
+first. Field-pool repair `b9219b9e` remains merged and validated. Record every
+later Haskell fix there with its reproducer, paths, commit, checks, and status.
+Keep the optimized interned core.
+
+## Current class-to-native lineage and paired binder inputs
+
+Updated: 2026-10-18 00:20 CEST. Starting checkpoint is `05610fde`.
+Proof commit is `5daed6fb`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-class-native-lineage.md` for exact results.
+Read `lean/notes-proof-status-20261017.md` for the target and strongest claim.
+
+Actual class reads now produce exact selected-child call receipts. Original
+selected path domains derive closedness at a leaf. Actual leaf reads retain
+the historical target on both slot misses and hits, the following native
+query, and its exact returned cell and captured writer. Class-fold phases
+retain that call and growth into the actual full-fold reader. For the
+ordinary native branch, the same captured writer derives its row compiler,
+full joined guards, source indices, and ordered historical child calls.
+Native cells and Lineage are retained at the actual leaf return. The later
+full-fold reader receives heap growth; final cell retention is not claimed.
+
+A paired lexical-input relation now supports unequal outer-reference tails.
+Actual publication misses and issued-reference facts derive fresh reserved
+names for both binder bodies. Extending both replacement maps retains the
+paired inputs and exact raw body/filter calls. Indexed references have equal
+repaired executions. The old ordinary Aligned hypothesis still uses identical
+capture tails. General paired ordinary induction, support-scoped probe names,
+smart cleanup, and chronological warm winners remain open. This does not
+prove complete binder-result equivalence.
+
+Full pinned Audit passes 3158 jobs and 69534 dependency checks. Four new
+strict source logs are empty. All 19 public declaration proof and axiom
+checks pass. Only the unchanged old unused-variable warning remains.
+Verified caps are 4 GiB maximum/high and zero swap. Audit peak is 375 MiB.
+Evidence is in `lean/restart-evidence/20261018-native-node-lineage/`.
+Preserve every older proof, counterexample, repair, draft, and raw attempt.
+
+These are completed-execution results. General recursive outer progress,
+physical-key compatibility with all active ancestors, repeated-pass
+convergence, frontend/runtime adapters, and complete public Haskell
+correspondence remain open. Keep the full-library goal active.
+No Haskell patch or new production defect is added. FINDINGS retains the
+external repair registry first. Field-pool repair `b9219b9e` remains merged
+and validated. Record each later Haskell fix with its failure, reproducer,
+paths, commit, checks, and upstream status. Keep the optimized interned core.
+
+## Current selected children and retained native writers
+
+Updated: 2026-10-18 00:01 CEST. Starting checkpoint is `26b30c7e`.
+Proof commit is `5f88f078`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-selected-child-lineage.md` for exact results.
+Read `lean/notes-proof-status-20261017.md` for the target and strongest claim.
+
+Actual selected edits retain the exact preceding and following child calls,
+captured states, memo bundles, Ready data, native histories, and heap growth.
+Actual normalized row survivors retain the same source row and child indices,
+full fields, and selected call. Actual class right folds retain each selected
+class occurrence between its completed tail and later head schedule.
+These laws describe completed executions. They do not prove outer progress.
+
+Current returned native node cells retain their actual captured compiled body
+and protected finish. Actual steps retain ready cells from the body return
+to the final reader. The reader's history then supplies earlier edge writers
+without requiring history at an internal active owner. Actual surviving rows
+retain full joined guards and ordered historical child calls. A warm writer's
+child call can precede the current body; current-body ancestry is not claimed.
+
+Stored substitution now has the active-reference base case and ordinary-node
+induction step. The latter uses an explicit hypothesis for actual strict
+source children. Initial Ready data constructs both sequential stored calls
+and derives physical Empty agreement and observations at every depth and
+fixed view. Nested binders, smart erasure, and chronological warm winners
+still need alignment. This is not a complete retained-Mu theorem.
+
+Full pinned Audit passes 3154 jobs and 69499 dependency checks. Six new strict
+source logs are empty. All 23 public declaration proof and axiom checks pass.
+Only the unchanged old unused-variable warning remains. Verified caps are
+4 GiB maximum/high and zero swap. Audit peak is 366 MiB. Evidence is in
+`lean/restart-evidence/20261017-selected-child-lineage/`. Preserve all older
+proofs, counterexamples, repairs, drafts, and raw attempts. Keep the goal active.
+
+The largest gap remains general recursive outer progress with physical-key
+compatibility against all active ancestors. Repeated-pass convergence,
+retained-Mu binder alignment, frontend/runtime adapters, and complete public
+Haskell correspondence remain open. No Haskell patch or new production defect
+is added. FINDINGS retains the external repair registry first. Field-pool
+repair `b9219b9e` remains merged and validated. Record each later Haskell fix
+with its failure, reproducer, paths, commit, checks, and upstream status.
+
+## Current parent histories and indexed rows
+
+Updated: 2026-10-17 23:39 CEST. Starting checkpoint is `97451269`.
+Proof commit is `c1be0445`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-parent-row-lineage.md` for exact results.
+Read `lean/notes-proof-status-20261017.md` for the full target and plain-English claim.
+
+Actual completed Parent execution retains native writer history through
+Scan, Required, class edits, local reduction, and construction. The existing
+Parent range plan remains explicit. Actual edit and class-pass history
+transport do not add that range premise or a future history law.
+
+Raw edited rows retain their original index, full symbol and guard, exact
+ordered child reads, and the execution of preceding rows. Actual normalized
+survivors retain an indexed live source. Initial native history follows that
+exact execution to the same captured row start and constructor states.
+Their heaps grow into the actual final reader. These are completed-graph
+results. They do not establish general outer completion or owner exclusion.
+
+Independent callback children now construct equal sequential stored results
+under replacement maps that agree on fixed source support. Arbitrary nested
+Mu values remain included. Active-child alignment remains open. General
+outer progress, all-active key compatibility, repeated-pass convergence,
+frontend/runtime adapters, and full public Haskell correspondence remain open.
+
+Full pinned Audit passes 3148 jobs and 69431 dependency checks. All four new
+strict source logs are empty. Thirteen full public proof and axiom checks
+pass. The Audit replays one unchanged old unused-variable warning. Verified
+caps are 4 GiB maximum/high and zero swap; Audit peak is 383 MiB. Evidence is
+in `lean/restart-evidence/20261017-parent-row-lineage/`. Preserve all older
+proofs, counterexamples, repairs, drafts, and raw attempts. Keep the goal active.
+
+No Haskell behavior patch or new production defect is added. FINDINGS keeps
+the external repair registry first. Field-pool repair `b9219b9e` remains
+merged and validated. Record each later Haskell fix with its failure,
+reproducer, paths, commit, checks, and upstream status. Keep optimized code.
+
+## Current actual row lineage and inherited dependencies
+
+Updated: 2026-10-17 23:15 CEST. Starting checkpoint is `5286227c`.
+Proof commit is `d41ba9ab`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-active-row-progress.md` for exact results.
+Read `lean/notes-proof-status-20261017.md` for the complete target and gaps.
+
+Actual completed native row compilation now derives source row and child
+indices, the exact captured writer, full joined guards, and earlier ordered
+child calls. The call heaps grow into the actual final reader. Actual warm
+lookup and cold completion retain their complete original requests.
+
+Initial equality and field data construct the actual inherited accessor,
+prefix, and indexed descent. Original class constituents remain inside
+normalized components. Strict-prefix-related constituents cannot collapse
+into one consistent component. Retained child records preserve dependency.
+These facts still need source-row occurrence labels and all-active key
+compatibility. A decreasing causal label alone does not exclude aliasing.
+
+For actual ordinary-node Mu callback publications, source-indexed raw rows
+retain both schedules, full fields, common-reader growth, equal child Empty
+tests, and equal row-drop decisions. Nonempty child and literal Mu alignment
+remain open. General outer node progress, repeated-pass convergence,
+frontend/runtime adapters, and full public Haskell correspondence remain open.
+The existing edge-idle result already excludes outer edge-busy faults.
+
+Full pinned Audit passes 3144 jobs and 69399 dependency checks. All three
+new strict source logs are empty. Canonical and full public checks pass.
+The Audit replays one unchanged old unused-variable warning. Verified caps
+are 4 GiB maximum/high and zero swap; Audit peak is 385 MiB. Evidence is in
+`lean/restart-evidence/20261017-active-row-progress/`. Preserve every older
+proof, counterexample, repair, draft, and raw attempt. Keep the full goal active.
+
+No Haskell behavior patch or new production defect is added. FINDINGS keeps
+the external repair registry first. Field-pool repair `b9219b9e` remains
+merged and validated. Record every later Haskell fix there with its failure,
+reproducer, paths, commit, checks, and upstream status. Keep optimized code.
+
+## Current native writer growth and repeated original nodes
+
+Updated: 2026-10-17 22:55 CEST. Starting checkpoint is `7b300b93`.
+Proof commit is `0f995a42`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-native-causal-growth.md` for exact results.
+Read `lean/notes-proof-status-20261017.md` for the full target and gaps.
+
+Persistent native histories now retain the exact captured owner handle and
+both writer heaps through growth into the current reader. Actual traces
+produce these facts. Initial numeric query inputs construct completion and
+history with all earlier resource bounds. A separate initial conjunction
+entry constructs the physical advance and its required growth. Their input
+domains remain separate; semantic query-to-conjunction composition is open.
+
+Initial Ready data also constructs reconstruction after literal self
+filtering and ordered calls on retained original alternatives. The results
+have the same exact literal atoms and ordinary rows. Bare self remains;
+a self alternative at a union root is removed. Different Mu callback
+alignment remains open.
+
+A new checked source reaches the exact original B as its own returned child
+while B's root owner evaluates. The inherited class changes from empty to
+[[0],[1]], so the complete request key differs. The actual local precheck
+returns empty children. Both the repeated call and the root return Empty.
+This rejects strict descent by whole physical value. It does not reject
+proper row-origin measures or exhibit a busy-key recurrence or divergence.
+
+General recursive outer progress, all-active-ancestor exclusion, repeated
+passes, retained-Mu callback alignment, frontend/runtime adapters, and full
+public Haskell correspondence remain open. Keep the complete goal active.
+
+Full pinned Audit passes 3141 jobs and 69349 dependency checks. All four
+new strict logs are empty. Sixteen public and four constructed checks pass
+in eight groups. Four component manifests verify 180 entries. Actual limits
+are 4 GiB maximum/high and zero swap. Audit peak is 376 MiB. Evidence is in
+`lean/restart-evidence/20261017-native-causal-growth/`. Failed attempts and
+all earlier proof and evidence bytes remain preserved.
+
+No Haskell behavior patch or new production defect is added. FINDINGS keeps
+the external repair registry first. Field-pool repair `b9219b9e` remains
+merged and validated. Record later fixes with the failure, reproducer,
+paths, commit, checks, and upstream status. Preserve all previous work and
+optimized interned code.
+
+## Current causal progress and persistent writer histories
+
+Updated: 2026-10-17 22:26 CEST. Starting checkpoint is `dd193cce`.
+Proof commit is `d16b63a3`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-outer-causal-progress.md` for the exact results.
+Read `lean/notes-proof-status-20261017.md` for the whole-library target and gaps.
+
+Actual child descent preserves strict dependencies between retained classes
+of one normalized payload. Retention of a source class produces the actual
+retained dependent class. A checked unsaturated payload loses the dependency,
+so well-formedness alone is insufficient.
+
+A source-built copied child can require fresh work before its original
+sibling is visited. The exact reached prefix has two active ancestor owners
+and no copied-key entry. Both the copied call and full root call complete.
+The final returned entry supports a warm hit at every fuel. This rejects
+the universal ready-copy and tau-only-origin shortcuts, not termination.
+
+Persistent native histories now retain actual earlier edge writers across
+completed queries and exact physical advances. Each surviving compileRows
+row has indexed input origins and the exact full joined guard. Actual ready
+lookup identifies the complete captured request. These results concern past
+execution; they do not produce future completion or chronological heap growth.
+A separate accepted guard example shows why effective own equalities alone
+cannot represent every raw guard origin. It establishes no Haskell defect.
+
+General outer progress still needs an order for fresh calls and exclusion
+of all active ancestor keys. Repeated-pass convergence, retained-Mu writers,
+frontend/runtime adapters, and full public Haskell correspondence remain open.
+Keep the complete goal active.
+
+Full pinned Audit passes 3137 jobs and 68963 dependency checks. All four
+new strict logs are empty. Twelve public and four constructed checks pass.
+Checks use verified 4 GiB maximum/high and zero swap. Audit peak is 381 MiB.
+Evidence is in `lean/restart-evidence/20261017-outer-causal-progress/`.
+The output checker now rejects proof-printer failures. The corrected copied
+proof retains its exact statement and proof body through a private witness.
+All failed attempts and all earlier evidence remain preserved.
+
+No Haskell behavior patch or new production defect is added. FINDINGS keeps
+the external repair registry first. Field-pool repair `b9219b9e` remains
+merged and validated. Record later fixes with the reproducer, paths, commit,
+checks, and upstream status. Preserve all previous work and optimized code.
+
+## Current inherited normalization and actual prefix progress
+
+Updated: 2026-10-17 22:01 CEST. Starting checkpoint is `eb18c2a5`.
+Proof commit is `85fd098d`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-inherited-normalization.md` for exact results.
+Read `lean/notes-proof-status-20261017.md` for the whole-library target and gaps.
+
+Actual normalization produces an exact ordered fixed point. Exact physical
+readback retains WellFormed payloads. The actual source sorter supplies
+ordered output, and actual trie descent preserves normalization fixedness.
+The full allocated accessor/prefix/descent sequence derives this invariant
+from initial operation validity, inherited readiness, and field availability.
+It needs no Fixed input, empty-own field, or future completed call.
+
+An actual empty-own prefix retains an initially normalized complete inherited
+value. Nonempty descent then strictly lowers path height and changes its
+identity. Actual initial raw normalization supplies the fixed-point premise.
+Cold and warm cases retain exact full operation effects. A constructed case
+also starts with Ready but unsaturated overlapping classes and derives the
+fixed child through the actual prefix and descent.
+
+General outer progress still needs a causal order for nonempty local classes
+and exclusion of all active ancestor keys. Repeated-pass convergence,
+retained-Mu writer correspondence, frontend/runtime adapters, and complete
+public Haskell correspondence remain open. Keep the full goal active.
+
+Full pinned Audit passes 3133 jobs and 68560 dependency checks. All seven new
+strict logs are empty. Thirty-three public and eleven constructed checks pass.
+Checks use verified 4 GiB maximum/high and zero swap. The Audit peak is at most
+363 MiB. Evidence is in `lean/restart-evidence/20261017-inherited-normalization/`.
+All earlier proofs, counterexamples, repairs, drafts, evidence, stashes,
+other worktrees, and optimized code remain preserved.
+
+No Haskell behavior patch or new production defect is added. FINDINGS retains
+the external repair registry first. Field-pool repair `b9219b9e` remains
+merged and validated. Record each later repair with its reproducer, paths,
+commit, checks, and upstream status.
+
+## Current literal union provenance and inherited descent
+
+Updated: 2026-10-17 21:38 CEST. Starting checkpoint is `82823d78`.
+Proof commit is `c8272004`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-literal-union-provenance.md` for exact results.
+Read `lean/notes-proof-status-20261017.md` for the whole-library target and gaps.
+
+Initial Ready, original availability, and replacement availability now
+construct both union-normalization/substitution orders with exact literal
+reference and Mu atoms and complete ordinary rows. Physical empty agreement
+and all finite observations remain. For every name, actual self filtering
+preserves equal literal parts. Both filters start independently in the
+derived final heap. No future output relation or completed call is assumed.
+
+Actual descent of a Ready live nonempty inherited payload strictly lowers
+its maximum class-path length and changes its canonical identity. This law
+covers cold and warm operations and separates immediate requests for the
+same node. New local combination and all active ancestors remain outside
+this local result. General outer progress and repeated-pass convergence
+remain the largest mathematical gap. The actual retained-Mu writer relation,
+smart cleanup, frontend/runtime adapters, and whole Haskell correspondence
+also remain open. Keep the full goal active.
+
+Full pinned Audit passes 3126 jobs and 68475 dependency checks under verified
+4 GiB maximum, 4 GiB high, zero swap, and 374 MiB peak. All seven new strict
+source logs are empty. Public checks and constructed cases are retained in
+`lean/restart-evidence/20261017-literal-union-provenance/`.
+All earlier proofs, counterexamples, repairs, drafts, evidence, stashes,
+other worktrees, and optimized code remain preserved.
+
+No Haskell behavior patch or new production defect is added. FINDINGS keeps
+the external repair registry first. Field-pool repair `b9219b9e` remains
+merged and validated. Record every later repair with its reproducer, paths,
+commit, checks, and upstream status.
+
+## Current physical empty agreement and parent construction
+
+Updated: 2026-10-17 21:15 CEST. Starting checkpoint is `dc9504dc`.
+Proof commit is `17b9e2fe`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-constructor-observations.md` for the exact results.
+Read `lean/notes-proof-status-20261017.md` for the whole-library target and gaps.
+
+Initial Ready, original availability, and replacement availability now
+construct both union-normalization/substitution orders with physical empty
+agreement as well as all finite open observations. All actual heaps, four
+Keeps facts, and both final available results remain. The proof handles
+closed and open unions and arbitrary nested Mu values. It does not assume
+a future completed call or output relation.
+
+The new Related predicate combines physical empty agreement and observations
+at every depth and fixed view. Actual ordinary nodes derive row survival
+from their original related rows. Actual union construction preserves the
+relation. A separate initial theorem constructs both sequential parent
+edges and nodes, including exact guards and ordered children. Its integration
+starts from the physically unequal union results and derives Related parents.
+
+A checked source shows that Related, equal free/deep-name lists, equal depth,
+and equal nonbare root classification still do not make self filtering
+congruent. A literal reference member can be removed while the same reference
+exposed through Mu remains. Preserve literal immediate member provenance.
+The actual retained-Mu writer relation, smart cleanup, and binder composition
+remain open. General outer progress, convergence, frontend/runtime adapters,
+and complete public Haskell correspondence also remain open.
+
+Full pinned Audit passes 3119 jobs and 68380 dependency checks under verified
+4 GiB MemoryMax, 4 GiB MemoryHigh, zero swap, and 378 MiB peak. All five new
+strict source logs are empty. Canonical builds and eleven public declaration
+checks pass. Selected constructed checks and preservation evidence are in
+`lean/restart-evidence/20261017-constructor-observations/`.
+Earlier proofs, evidence, repairs, counterexamples, drafts, optimized code,
+stashes, and other worktrees remain preserved. Keep the full goal active.
+
+No Haskell behavior patch or new production defect is added. FINDINGS keeps
+the external repair registry first. Field-pool repair `b9219b9e` remains
+merged and validated. Record every later repair there with its reproducer,
+paths, commit, checks, and upstream status.
+
+## Current stored reconstruction and union normalization
+
+Updated: 2026-10-17 21:03 CEST. Starting checkpoint is `5f6d6f3b`.
+Proof commit is `ca91ab34`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-mu-observation-fusion.md` for the exact result.
+Read `lean/notes-proof-status-20261017.md` for the whole-library target and gaps.
+
+Initial Ready, available original values, and available replacements now
+construct both union-normalization and stored-substitution orders in one
+growing cache. All actual intermediate heaps, four Keeps facts, and both
+final available results are retained. The results have equal finite open
+observations at every depth and every fixed view. The theorem permits
+closed and open roots and arbitrary nested Mu values. No future completed
+call or desired output relation is an input.
+
+Actual child replay identifies exact rebuilt rows through ordinary merging.
+Closed nodes retain their literal rows; Ready does not imply canonical
+row order. Flattening and distinct-node selection derive actual member
+calls. A source-built integration retains the physical inequality between
+union[A, B, z] and union[AB, z] while applying the new initial theorem.
+Another checked case shows that even all-depth observations do not imply
+physical empty agreement. Keep exact child survival facts.
+
+The actual retained-Mu writer relation remains open. Connect selected body
+and ordinary-probe histories through recursive reconstruction, unused raw
+Mu cleanup, and warm winners. General outer progress, convergence, current
+frontend/runtime adapters, and complete public Haskell correspondence also
+remain open. Keep the whole-library goal active.
+
+Full pinned Audit passes 3114 jobs and 68344 dependency checks under verified
+4 GiB MemoryMax, 4 GiB MemoryHigh, zero swap, and 379 MiB peak. All nine new
+strict source logs are empty. Canonical builds, 19 public checks, and 13
+constructed checks pass. Evidence is in
+`lean/restart-evidence/20261017-mu-observation-fusion/`.
+Earlier proofs, evidence, repairs, counterexamples, drafts, optimized code,
+stashes, and other worktrees remain preserved.
+
+No Haskell behavior patch or new production defect is added. FINDINGS keeps
+the external repair registry first. Field-pool repair `b9219b9e` remains
+merged and validated. Record every later repair there with its reproducer,
+paths, commit, checks, and upstream status.
+
+## Current recursive normalized construction and stored substitution
+
+Updated: 2026-10-17 20:43 CEST. Starting checkpoint is `10894d61`.
+Proof commit is `6cef8154`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-recursive-plan-congruence.md` for the exact results.
+Read `lean/notes-proof-status-20261017.md` for the whole-library target and gaps.
+
+Node rows can now differ in order and multiplicity at every nested depth.
+The pure plan relation retains full symbols and guards, ordered children
+and union members, and binder bodies under each common reference.
+Actual warm stages expose both raw probes and their filters. Equal probes
+select the same actual stored winner. Initial Ready and available captures
+construct both plans in sequence with one exact returned Value and both
+Keeps histories. The stored-value adapter derives this result from a pure
+lexical relation. It covers closed captures and nested open Mu values.
+
+The actual-writer producer remains open. It must connect causal source
+histories to the retained-Mu recursive row and ordered-child relation.
+Prior union normalization, ordinary merging, raw unused Mu cleanup, and
+earlier warm winners still need an adequate relation. A checked source
+refutes general physical union-normalization/substitution commutation:
+`union[A, B, z]` and `union[AB, z]` differ physically but have the same open
+observations at every depth. This does not refute the specific retained-Mu
+claim or establish a Haskell defect. Separate cold runs can also give
+different payloads with the same numeric identity.
+General outer progress, convergence, current frontend/runtime adapters,
+and complete public Haskell correspondence remain open. Keep the full goal.
+
+Full pinned Audit passes 3105 jobs and 68281 dependency checks under verified
+4 GiB MemoryMax, 4 GiB MemoryHigh, zero swap, and 366 MiB peak. All five final
+strict source logs are empty. Canonical builds pass. Exact selected checks
+and preservation reports are in
+`lean/restart-evidence/20261017-recursive-plan-congruence/`.
+Earlier proofs, evidence, repairs, counterexamples, drafts, optimized code,
+stashes, and other worktrees remain preserved.
+
+No Haskell behavior patch or new production defect is added. FINDINGS keeps
+the external repair registry first. Field-pool repair `b9219b9e` remains
+merged and validated. Record every later repair there with its reproducer,
+paths, commit, checks, and upstream status.
+
+## Current stored alpha reconstruction and node congruence
+
+Updated: 2026-10-17 20:29 CEST. Starting checkpoint is `d3486d3b`.
+Proof commit is `df79f802`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-mu-congruence.md` for the exact results.
+Read `lean/notes-proof-status-20261017.md` for the whole-library target and gaps.
+
+A pure lexical Alpha relation now gives exact complete stored execution
+at a common heap. Actual row calls replay at a common later heap.
+Equivalent node rows can have different orders and duplicate counts.
+Initial Ready and available captures construct both sequential node calls
+with one identical canonical value. A stored-node adapter derives those
+calls from pure RowsAlpha. Nested Mu children are included when their
+ordered Alpha relation holds. Both stored roots must be open nodes.
+
+The main missing producer must derive normalized reconstruction relations
+from actual causal Mu writers. Nested row normalization, union filtering,
+unused raw Mu cleanup, and earlier warm winners remain part of that task.
+The new relation does not permit arbitrary mixed-union permutation.
+Open observations alone do not imply physical empty-child agreement.
+A checked used-local example reconstructs to a bare reference, so retain
+reference and epsilon cases. General retained-used Mu row correspondence,
+outer progress, convergence, frontend/runtime adapters, and full public
+Haskell correspondence remain open. Keep the whole-library goal active.
+
+Full pinned Audit passes 3100 jobs and 68149 dependency checks under verified
+4 GiB MemoryMax, 4 GiB MemoryHigh, zero swap, and 364 MiB peak. All five final
+strict source logs are empty. Canonical builds, 25 public checks, and ten
+constructed checks pass. Evidence is in
+`lean/restart-evidence/20261017-mu-congruence/`.
+Earlier proofs, evidence, repairs, counterexamples, drafts, optimized code,
+stashes, and other worktrees remain preserved.
+
+No Haskell behavior patch or new production defect is added. FINDINGS keeps
+the external repair registry first. Field-pool repair `b9219b9e` remains
+merged and validated. The Chain reproducer returns
+`Left (FieldAtomOnDatatype "Next" 0)`. Record every later repair there with
+its reproducer, paths, commit, checks, and upstream status.
+
+## Current retained Mu reconstruction and actual writer growth
+
+Updated: 2026-10-17 20:11 CEST. Starting checkpoint is `5ce4cca1`.
+Proof commit is `7a441d2d`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-retained-mu-reconstruction.md` for the exact results.
+Read `lean/notes-proof-status-20261017.md` for the whole-library target and gaps.
+
+Initial Ready and available data now construct both sequential selected-Mu
+reconstructions. Both calls replay with their own results at the common
+final heap. Actual source execution also produces causal paths with real
+cache growth at every stopping outcome. The selected first writer retains
+its original callback paths, and both raw callback heaps grow into the
+actual reader heap. NoNewMu alone does not supply this growth. Four-table
+Grows does not supply issued-reference extension; derive that separately.
+
+Open observations retain bare references, exact row symbols and full guards,
+and ordered child relations. Actual Mu unfolding preserves all finite depths
+in its exact entry view. This is not transport between different view heaps.
+Forty finite trials and two full-value kernel examples support the proposed
+two-reconstruction equality. The general equality and retained-used Mu
+recursive row relation remain open. Prove reconstruction congruence through
+actual selected writers next. General outer progress, convergence, current
+frontend/runtime adapters, and full Haskell correspondence also remain open.
+
+Full pinned Audit passes 3095 jobs and 68057 dependency checks under verified
+4 GiB MemoryMax, 4 GiB MemoryHigh, zero swap, and 376 MiB peak. All six final
+source logs are empty. Canonical builds, 37 public checks, and eight
+constructed checks pass. Evidence is in
+`lean/restart-evidence/20261017-retained-mu-reconstruction/`.
+Earlier proofs, evidence, repairs, counterexamples, drafts, optimized code,
+stashes, and other worktrees remain preserved. Keep the whole-library goal active.
+
+No Haskell behavior patch or new production defect is added. The source
+explicitly documents smart cleanup of open unused raw Mu during substitution.
+FINDINGS keeps the external repair registry first. Field-pool repair b9219b9e
+remains merged and validated. Record every later repair there with its
+reproducer, paths, commit, checks, and upstream status.
+
+## Current stored substitution row origins
+
+Updated: 2026-10-17 19:58 CEST. Starting checkpoint is `89a9a512`.
+Proof commit is `a4b6e12d`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-substitution-row-origins.md` for the exact result.
+Read `lean/notes-proof-status-20261017.md` for the whole-library target and gaps.
+
+Independent capture layouts now give equivalent complete stored plans.
+Each shared encoded child call equals that child's own stored substitution
+at its actual heap, with the same original replacement environment.
+Ordinary reconstruction retains indexed source rows, full guards, symbols,
+arity, and ordered actual child calls. Union reconstruction retains exact
+epsilon origins of its substituted member returns. Initial semantic heaps,
+coverage, and source/replacement availability construct both root returns
+and their causal publication histories. Closed roots return unchanged.
+Children can contain arbitrary nested Mu records.
+
+The retained-Mu source row relation remains open. A checked closed source
+refutes literal stored-body-to-ordinary-probe equality: smart reconstruction
+can remove an unused raw inner Mu that the ordinary probe retained. The
+same example retains its root fields and ordered child correspondence after
+actual unfolding. A possible next law compares both actual reconstructed
+values in sequence. Its reconstruction-fusion and first-writer proof is
+still missing. Carry real execution growth; History.retain alone has none.
+General outer progress, convergence, frontend/runtime adapters, and complete
+public Haskell correspondence remain open. Keep the full goal active.
+
+The full pinned Audit passes 3089 jobs and 67978 dependency checks under
+verified 4 GiB MemoryMax, 4 GiB MemoryHigh, zero swap, and 367 MiB peak.
+All five final source logs are empty. Canonical builds, 27 public checks,
+and six constructed checks pass. Evidence is in
+`lean/restart-evidence/20261017-substitution-row-origins/`.
+Earlier proofs, artifacts, repairs, counterexamples, drafts, optimized code,
+stashes, and other worktrees remain preserved.
+
+No Haskell behavior patch or new production defect is added. The new
+counterexample limits a formal correspondence claim; it does not justify
+a Haskell repair. FINDINGS keeps the external repair registry first.
+Field-pool repair `b9219b9e` remains merged and validated. Record every
+later repair there with its reproducer, paths, commit, checks, and status.
+
+## Current native callback histories and row readback
+
+Updated: 2026-10-17 19:43 CEST. Starting checkpoint is `84f47113`.
+Proof commit is `b9434f53`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-native-callback-history.md` for the exact results.
+Read `lean/notes-proof-status-20261017.md` for the whole-library target and gaps.
+
+Actual native callbacks and optional binders now produce causal Mu publication
+histories. Checked native steps and bounded execution retain those histories
+on every stopping outcome. Physical traces derive their own heap inputs.
+An actual closed source start supplies the initial semantic heap and history.
+The reached unused-Mu law needs no desired stored comparison law.
+
+Actual native construction retains its current raw ordinary substitution and
+the selected physical winner. For an unused local binder, the return equals
+the current erased ordinary callback. Its complete row origins equal those
+of the current raw ordinary substitution at every fixed view. Initial Ready,
+Available, and causal History construct the actual optional return and this
+readback. The caller supplies no future successful return.
+
+The next gap is row occurrence transport through the actual substitution.
+Preserve the exact source guard, symbol, and arity. Relate children in order.
+Do not assert physical edge identity with the pre-substitution body: replacing
+a child reference changes that identity. Nested retained Mu records still
+need their actual writer relation. General outer progress, convergence,
+frontend/runtime adapters, and full public Haskell correspondence remain open.
+
+The full pinned Audit passes 3084 jobs and 67897 dependency checks under
+verified 4 GiB MemoryMax, 4 GiB MemoryHigh, zero swap, and 383 MiB peak.
+All four final strict source logs are empty. All canonical targets pass.
+Evidence is in `lean/restart-evidence/20261017-native-callback-history/`.
+Earlier proofs, counterexamples, repairs, drafts, optimized interned code,
+stashes, and other worktrees remain preserved. The whole-library goal is active.
+
+No Haskell behavior patch or new production defect is added. FINDINGS keeps
+the external repair registry first. Field-pool repair `b9219b9e` is merged
+and validated. Record every later repair there with its failure, reproducer,
+affected paths, commit, checks, and upstream status.
+
+## Current normalized source comparison and causal Mu readback
+
+Updated: 2026-10-17 19:31 CEST. Starting checkpoint is `87a430e2`.
+Proof commit is `179b5a09`. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+Read `lean/notes-current-normalized-callback-comparison.md` for the exact
+results and `lean/notes-proof-status-20261017.md` for the whole-library map.
+
+The general normalized source comparison and stored unused-Mu law are now
+proved. Actual source publication histories derive the law before each
+keep-first update. Warm reads use the exact earlier winner and its complete
+current probe pair. No desired stored comparison law is a public input.
+`closed_compared` compares actual completed raw calls in a common heap from
+closed source construction. It retains finite input coverage, both live
+fixed-support freshness conditions, actual growth and issued history, and
+first-result noDeep. Varying assignments can alias. Equality concerns the
+ordered alternatives after stripping; it need not be raw value equality.
+
+UnionNormal also passes through every bounded mutual outer worker from the
+initial invariant alone. This covers every stopping outcome. It does not
+prove general outer completion. Compose the new source comparison with the
+actual recursive native callback and row histories next. General recursive
+outer progress, convergence, current frontend/runtime adapters, and complete
+public Haskell correspondence remain open. The whole-library goal stays active.
+
+The full pinned Audit passes 3080 jobs and 67877 dependency checks. Its actual
+limits are 4 GiB MemoryMax, 4 GiB MemoryHigh, zero swap, and 399 MiB peak.
+All 17 final strict source logs are empty. All canonical targets pass.
+Evidence is in `lean/restart-evidence/20261017-normalized-callback-comparison/`.
+All earlier proofs, artifacts, repairs, counterexamples, marked drafts,
+optimized interned code, stashes, and other worktrees remain preserved.
+
+No Haskell behavior patch or new production defect is added. FINDINGS keeps
+the external repair registry first. Field-pool repair `b9219b9e` is merged
+and validated. Record every later repair there with its failure, reproducer,
+affected paths, commit, checks, and upstream status.
+
+
+## Current callback normalization and causal native histories
+
+Updated: 2026-10-17 18:33 CEST. Starting checkpoint is 430332f6.
+Proof commit is c86f75c0. Source main remains c0cc8a05, merged at 896b0a1c.
+Read lean/notes-current-callback-normalization.md for the exact new results.
+Read lean/notes-proof-status-20261017.md for the whole-library proof map.
+
+Actual union and record erasure now include bare self, ordinary merging,
+and replay across cache histories. Actual Depth callbacks and missing-key
+reservations derive freshness for live fixed captures. The general nested
+source comparison and stored-Mu body-to-ordinary law remain open.
+
+Completed checked native traces now derive literal earlier edge bodies
+and protected finishes from empty native tables. Live results retain the
+full source conjunction guard and ordered child calls. Warm demands recover
+the same request's writer. Actual request entries derive compiler checks
+internally. These results do not construct general query completion.
+
+Union normality now passes through the literal native compiler, projections,
+gates, Merge, conjunction, targets, edits, Scan, Local.reduce, and Parent.edge.
+The endpoint laws need only the initial invariant and actual worker inputs.
+They cover every stopping outcome. They assume no future preservation law.
+
+Audit passes 3063 jobs and 67649 dependency checks under verified 4 GiB
+MemoryMax, 4 GiB MemoryHigh, zero swap, and 375 MiB peak memory.
+All 12 final strict source logs are empty. All canonical targets pass.
+Evidence is in lean/restart-evidence/20261017-callback-normalization/.
+Earlier proofs, evidence, repairs, counterexamples, drafts, optimized code,
+stashes, and other worktrees remain preserved.
+
+General recursive outer progress, repeated-pass convergence, current frontend
+and runtime adapters, and complete public Haskell correspondence remain open.
+No Haskell behavior patch or new production defect is added. FINDINGS keeps
+the external repair registry first. Field-pool repair b9219b9e is merged and
+validated. Record later repairs there with reproducer, paths, commit, checks,
+and upstream status.
+
+
+## Current native row histories and invariant transport
+
+Updated: 2026-10-17 17:55 CEST. Starting checkpoint is 0068ade6.
+Proof commit is f1f77bf1. Source main remains c0cc8a05, merged at 896b0a1c.
+Read lean/notes-current-native-row-origins.md for the new results and their
+exact boundaries. Read lean/notes-proof-status-20261017.md for the updated
+whole-library target, proof map, and missing areas.
+
+Actual ordinary native execution now retains indexed paired source rows,
+ordered child requests, and each complete input and output state. Accepted
+edge bodies retain the literal conjunction guard. Union output epsilon rows
+retain indexed member calls and their literal cache states. A warm edge hit
+retains its actual request. Its full earlier guard provenance remains open.
+
+Raw returned free-name absence now constructs a changed original-input run
+with the same value in a later complete semantic cache. Fixed captured
+values can contain nested Mu. Normalized callback no-deep absence does not
+imply this raw absence premise. Root self alternatives and the general warm
+body-to-ordinary relation still need a normalization argument.
+
+Actual checked native execution, row reads, Head, and Required retain the
+source-derived union-normality invariant on every stopping outcome. These
+laws need no closure, cap, semantic-readiness, or future output invariant.
+Physical instruction admission remains explicit for arbitrary Work code.
+Local Scan and class-editing transport remain outside these new modules.
+
+General outer-node progress, nonempty live walks, ordered rows, full mutual
+completion, and repeated-pass convergence remain open. Progress must respect
+actual request keys or prove disjointness from active owners. Current
+frontend/error adapters, lazy forcing and publication, concrete host effects,
+total capacity, and full public Haskell correspondence remain open.
+
+Full Audit passes 3051 jobs and 67320 dependency checks under verified
+4 GiB MemoryMax, 4 GiB MemoryHigh, zero swap, and 410 MiB peak memory.
+All four final source strict logs are empty. All four canonical targets pass.
+Evidence is in lean/restart-evidence/20261017-native-row-origins/.
+Its README and checkpoint-validation.json record exact final probe counts.
+Earlier proofs, evidence, counterexamples, repairs, drafts, optimized interned
+code, stashes, and other worktrees remain preserved.
+
+No Haskell behavior change or new production defect is added. Root FINDINGS
+keeps the external repair registry first. Field-pool repair b9219b9e remains
+merged and validated in source c0cc8a05. The Chain example returns
+Left (FieldAtomOnDatatype "Next" 0). Standalone holds retains opaque pools.
+Record every later repair there with its failure, executable reproducer,
+affected paths, commit, checks, and upstream status.
+
+
+## Current complete Required origins and callback erasure
+
+Updated: 2026-10-17 17:31 CEST. Starting checkpoint is e4b949a5.
+Proof commit is bebaf1ed. Source main remains c0cc8a05, merged at 896b0a1c.
+Read lean/notes-current-required-origins.md for the whole-library target,
+proof map, exact support, and remaining obligations. Evidence is in
+lean/restart-evidence/20261017-node-origins/.
+
+Actual false primary certificates now produce structural exposure safety
+for the compiled Required trie. Actual source construction derives the
+union normalization needed by the finite shortcut. SemanticReady alone
+does not state that an ordinary-only union was merged. No plain-guard,
+whole-forest closure, future Cap, or future output-origin law is assumed.
+
+Completed Required returns retain indexed original row origins and ordered
+child origins. Every nonplain or positive physical equality row projects
+to an original structural occurrence with its exact guard, symbol, and
+arity. Row normalization can remove or reorder rows. The map is not
+injective and does not preserve row numbers. Semantic Mu-body addresses
+exclude both probes. Empty requirements retain arbitrary subtrees.
+
+The complete source entry constructs the actual Required return with both
+its structural origins and exact guarded-language receipt. Readiness, cost, guard, and union-normality facts follow from repaired
+construction. Operand availability and the earlier false primary class
+remain explicit inputs. No future Required result is supplied.
+This does not complete the outer recursive pass.
+
+Actual normalized callback output with no deep local occurrence has no
+free local name after bare-self erasure. Its later stored reconstruction
+has the same complete outcome for any two replacements. Native callbacks
+retain the same law. This does not exchange the original callback inputs
+or equate a warm stored body with its ordinary probe. General native row
+provenance through callback and warm selection remains open.
+
+Next compose native products, Required origins, inherited combine/descent,
+and actual parent returns into causal progress for fresh node evaluations.
+The measure must agree with actual request keys or prove owner disjointness.
+Ordinary height and maximum constrained depth are not decreasing measures.
+Do not supply a future returned-child rank, successful graph, or globally
+idle node table as a producer premise. Then finish nonempty live walks,
+ordered rows, ordinary nodes, full mutual completion, and repeated-pass
+convergence. Current frontend/error adapters, lazy forcing, publication,
+concrete memo events, host capacity, public composition, and full Haskell
+correspondence remain open. The whole-library goal stays active.
+
+Full Audit passes 3049 jobs and 67263 dependency checks under verified
+4 GiB MemoryMax, 4 GiB MemoryHigh, zero swap, and 355 MiB peak memory.
+All seven final strict source logs are empty. Final canonical targets pass.
+Public proof and constructed checks permit only standard kernel axioms.
+Read checkpoint-validation.json and README for exact final probe counts.
+Earlier proofs, counterexamples, repairs, marked drafts, optimized interned
+code, stashes, and other worktrees remain preserved.
+
+No Haskell patch or new production defect is added. FINDINGS keeps the
+external repair registry first. Field-pool repair b9219b9e remains merged
+and validated in unchanged source c0cc8a05. The Chain example returns
+Left (FieldAtomOnDatatype "Next" 0). Standalone holds retains opaque-pool
+evaluation. Record later repairs there with failure, executable reproducer,
+affected paths, commit, checks, and upstream status.
+
+
+## Current outer owner identity, internal reuse, and edge busy exclusion
+
+Updated: 2026-10-17 16:53 CEST. Starting checkpoint is 4e4f0d60.
+Proof commit is ba6639ec. Source main remains c0cc8a05, merged at 896b0a1c.
+Read lean/notes-current-outer-owners.md for the whole-library target,
+proof map, exact support, and remaining obligations. Evidence is in
+lean/restart-evidence/20261017-owner-progress/.
+
+Equal actual keys identify complete ready available node requests and
+ready resident edge requests. Actual evaluation captures that exact
+request. Ready includes coherent canonical inherited metadata. Stored
+alone is insufficient. Any rank on those literal arguments is therefore
+key-compatible under the stated physical premises. Historical occurrence
+labels still need a separate compatibility argument.
+
+Every bounded mutual worker retains an evaluating owner cell for any
+reported outer busy fault. This is existential cell retention, not query
+identity for malformed tables or a general busy-exclusion theorem.
+A caller with no evaluating edge cells cannot report an outer edge-busy
+fault. Success preserves that condition. Node owners may remain active.
+A failed parent can leave its selected edge owner evaluating, but its
+failure propagates immediately. Initial empty edge tables suffice.
+
+The source-built copied-B fixture now reaches its INTERNAL ready hit
+while root and wrapper owners remain active. It proves full inherited
+value equality, same key, exact returned B cell, and unchanged hit caller.
+Its prefix relation has checked failure transport through literal phases.
+This is not a full event trace, successful-continuation simulation, host
+demand correspondence, or general completion theorem. A separate actual
+native product proves constrained-level counts 1,1 -> 2. Maximum
+preservation for that count is false. Existing Cap profiles remain valid.
+
+Next derive causal progress for fresh node evaluations after actual
+parent returns and warm owner selection. Account for native products,
+inherited combine/descent, unequal-length copying, and ready hits.
+Then finish nonempty live walks, rows, ordinary nodes, and full mutual
+completion. Repeated-pass convergence, current Haskell adapters, lazy
+forcing and publication, concrete memo events, host capacity, public
+pipeline composition, and complete Haskell correspondence remain open.
+Do not assume a future result, graph, returned-child rank, or globally
+idle node table. The whole-library goal stays active.
+
+Audit passes 3040 jobs and 67182 dependency checks under 4 GiB MemoryMax,
+4 GiB MemoryHigh, zero swap, and 608 MiB peak memory. All five final strict
+source logs are empty. All five final canonical targets pass. Public and
+constructed probes allow only standard kernel axioms. Read the evidence
+README and checkpoint-validation.json for exact probe and manifest counts.
+All earlier proofs, counterexamples, repairs, marked drafts, optimized
+interned code, stashes, and other worktrees remain preserved.
+
+No Haskell patch or new behavior defect is added. FINDINGS keeps the
+external repair registry first. Field-pool repair b9219b9e is merged and
+validated in unchanged source c0cc8a05. The Chain example returns
+Left (FieldAtomOnDatatype "Next" 0). Standalone holds retains opaque-pool
+evaluation. Record every later Haskell repair there with its failure,
+executable reproducer, affected paths, commit, checks, and upstream status.
+
+
+## Current guard origins, selected endpoint bounds, and actual parent growth
+
+Updated: 2026-10-17 16:28 CEST. Starting checkpoint is 76dcdddc.
+Proof commits are 2d63272f and a68b3c9b. Source main remains c0cc8a05,
+merged at 896b0a1c. Read lean/notes-current-outer-progress.md for the
+whole-library target, proof map, exact support, and remaining obligations.
+Evidence is in lean/restart-evidence/20261017-outer-progress/.
+
+The actual visited source gate now derives hereditary local plain
+annotations and empty own equality fields from Coherent and Available.
+It adds no global plain-heap or closure condition. Initial endpoint
+descendant exclusion derives a finite selected-value Cap at complete
+payload mass. The actual false primary endpoint trace supplies that
+exclusion. No input Cap or whole-forest closure is assumed. Secondary
+endpoint checks admit constrained Mu and do not imply this primary fact.
+
+Ordinary Required returns retain original root-row guards, symbols, and
+arities. Actual accepted plain unfolding, Head, and Required retain empty
+own fields at the same returned heaps. Causal Mu body/probe observations
+remain explicit. These are actual-read preservation laws. They do not
+construct general outer completion or replace its missing initial producer.
+
+A source-built, primary-admitted parent now proves actual edge-height
+growth from 2 to 3. Its returned second child has height 3, equal to the
+original parent node. The literal worker retains the raw outer guard,
+both slots, and the constrained finite child's physical reference at a
+deeper position. This refutes strict ordinary-height descent on that
+transition. It proves no cycle, divergence, or Haskell behavior defect.
+The same fixture completes a literal outer call with returned height 4.
+A post-return B demand observes ready B and retains the exact caller.
+The internal copied-B hit event is not separately isolated.
+
+Next prove causal progress for actual returned children and captured
+owners. The certificate must distinguish origin occurrences, account for
+inherited combine/descent and unequal-length edits, and respect actual
+memo keys. Keys omit historical occurrence labels. Ghost-label descent
+alone cannot exclude a busy physical cell. Do not replace this producer
+with a desired future returned-child rank or globally idle tables.
+General live walks, ordered rows, ordinary nodes, mutual completion,
+repeated-pass convergence, current Haskell adapters, lazy forcing and
+publication, concrete memo events, host capacity, and full public Haskell
+correspondence remain open. The whole-library goal stays active.
+
+Audit passes 3035 jobs and 66550 dependency checks under 4 GB MemoryMax,
+4 GB MemoryHigh, zero swap, and 361 MiB peak memory. All four final strict
+logs are empty. All four canonical targets pass. Final probes check 15
+public declarations and five constructed integrations. Only standard
+kernel axioms are permitted. Read checkpoint-validation.json and README
+for exact final signature, axiom, component, and hash counts.
+The parent proof uses a private witness to permit complete public proof
+printing. Its public statement is byte-identical to the earlier version.
+All failed and terminated attempts retain their source and raw output.
+The optional native-product draft is unverified and is not counted.
+Preservation retains 16657 starting files, 3030 older non-Audit sources,
+239 Haskell files, 206 active-package files, both stashes, three other
+worktrees, and 101 frozen module manifests with 792 entries. Audit adds
+four imports. Older proof and evidence bytes stay preserved.
+
+No Haskell patch or new behavior defect is added. FINDINGS keeps the
+external repair registry first. Field-pool repair b9219b9e is merged and
+validated in unchanged source c0cc8a05. The Chain reproducer returns
+Left (FieldAtomOnDatatype "Next" 0). Standalone holds retains opaque-pool
+evaluation. Record every later Haskell repair there with its failure,
+executable reproducer, affected paths, commit, checks, and upstream status.
+Preserve all earlier proofs, counterexamples, repairs, marked drafts,
+stashes, worktrees, and the optimized interned core.
+
+
+## Current initial outer branches and recursive height boundary
+
+Updated: 2026-10-17 15:55 CEST. Starting checkpoint is 48fdc955.
+Proof commit is 85ba15b0. Source main remains c0cc8a05, merged at 896b0a1c.
+Read lean/notes-current-outer-branches.md for the whole-library target,
+proof map, exact support, and remaining obligations. Evidence is in
+lean/restart-evidence/20261017-initial-outer/.
+
+Initial Context, Frame, Fits, availability, inherited readiness, and pure
+initial branch conditions now construct raw rebuilds, inherited prefixes
+and descents, terminal node bodies, terminal node memo calls, and terminal
+descendants. Their actual returns retain strict reads, reached checks,
+same-inventory Post, Frame, Fits, availability, and guarded language.
+The terminal outer branches accept all ten worker fuels, including zero.
+
+Ready node hits support every input shape and retain the exact caller.
+Fresh terminal calls run their actual captured owner and finish that exact
+cell. Successful terminal completion excludes only the queried initial
+busy observation. It does not require globally idle tables. Empty, explicit
+Union, and resident Mu are terminal bodies. Open Union alternatives remain
+permitted. General ordinary node evaluation remains open.
+
+Descendants construct their own inherited prefix and raw rebuild. They
+complete when the initial prefix yields contradiction or the original
+child list is empty. The contradiction branch erases child slots. The live
+empty branch uses the empty walk. No future graph, successful worker,
+returned invariant, finite input Cap, or whole-forest closedness is a
+producer premise. General nonempty live child walks remain open.
+
+A source-constructed accepted plain Mu increases ordinary height from
+zero to one under actual Head and Required execution. This refutes a
+general Required height nonincrease lemma. It does not prove an outer
+cycle, divergence, a full Parent height counterexample, or a Haskell defect.
+The old finite-ordinary theorem retains its stated shape domain. The old
+OuterCallerCycle input is repaired by the current endpoint gate.
+
+Next prove causal progress for actual returned children and captured warm
+owners. A candidate rank must account for constraint origins, pending path
+work, and unequal-length edits that can move constrained values deeper.
+This rank is not yet proved. Then complete nonempty live walks, ordered
+rows, ordinary node bodies, and full mutual recursion. Logical resource
+majorants do not supply a decreasing outer rank or concrete host capacity.
+Repeated-pass convergence, current Haskell adapters, lazy forcing and
+publication, concrete memo events, runtime capacity, and complete public
+Haskell correspondence remain open. The whole-library goal remains active.
+
+Audit passes 3031 jobs and 66145 dependency checks under 4 GB MemoryMax,
+4 GB MemoryHigh, zero swap, and 367 MiB peak memory. All six final strict
+logs are empty. All six canonical targets pass. Public probes cover 17
+handwritten declarations and 27 Receipt projections. Constructed probes
+cover twelve integrations. Read checkpoint-validation.json and README for
+exact signature, axiom, component, and hash counts. Failed attempts retain
+their source and raw logs. Only standard kernel axioms are permitted.
+Preservation retains 16493 starting files, 3024 older non-Audit sources,
+239 Haskell files, 206 active-package files, both stashes, three other
+worktrees, and 100 frozen module manifests with 788 entries. Audit adds
+six imports. Older proofs and evidence retain their bytes.
+
+No Haskell patch or new behavior defect is added. FINDINGS keeps the
+external repair registry first. Field-pool repair b9219b9e is merged and
+validated in unchanged source c0cc8a05. The Chain reproducer returns
+Left (FieldAtomOnDatatype "Next" 0). Standalone holds retains opaque-pool
+evaluation. Record every later Haskell repair there with its failure,
+executable reproducer, affected paths, commit, checks, and upstream status.
+Preserve all earlier proofs, counterexamples, repairs, marked drafts,
+stashes, worktrees, and the optimized interned core.
+
+
+## Current initial parent and outer edge calls
+
+Updated: 2026-10-17 15:20 CEST. Starting checkpoint is 6adf1878.
+Proof commit is 5899990d. Source main remains c0cc8a05, merged at 896b0a1c.
+Read lean/notes-current-parent-numeric.md for the whole-library target,
+proof map, exact support, and remaining obligations. Evidence is in
+lean/restart-evidence/20261017-initial-parent/.
+
+Initial Context, full Frame, Fits, live cached fields and availability,
+and pure initial reservations now construct the actual checked parent,
+outer edge body, and first-writer edge result call. The parent runs its
+complete local producer and the constructor at the actual returned state.
+Raw rejection skips fields, inherited readiness, children, and query Room.
+The resident endpoint derives the live field and availability facts.
+
+The initial outer demand selects the actual stored owner and post-demand
+caller. Only evaluation reserves parent work. Ready hits retain the whole
+caller without a parent reservation. Busy cells retain their exact fault
+for every fuel choice. Successful completion excludes only the queried
+initial busy observation. It does not require every table cell to be idle.
+The finish publishes the exact returned result in the selected owner cell.
+
+The same execution retains actual source graphs, strict reads, complete
+old semantic receipts, same-inventory Frame/Post, forecast Fits, guarded
+language, physical stores, and saved memo laws. All nine lower worker fuels
+can increase independently. Edge bodies and edge calls accept any outer
+fuel, including zero, because they do not consume that fuel. No future
+graph, reached range, worker success, returned invariant, finite input Cap,
+or whole-forest closedness is an initial producer premise. No finite
+output Cap is claimed. Pure majorants are partly noncomputable. They do
+not establish extracted Haskell budgets or concrete host capacity.
+
+Next compose node calls, rows, descendants, inherited prefixes, and full
+mutual recursion. Progress, convergence, general constrained Mu and
+supported open inputs, current Haskell adapters, lazy forcing, publication,
+concrete memo events, runtime capacity, and complete public Haskell
+correspondence remain open. Keep exactness, inclusion, and representative
+restriction as distinct contracts. The whole-library goal remains active.
+
+Audit passes 3025 jobs and 66039 dependency checks under 4 GB MemoryMax,
+4 GB MemoryHigh, zero swap, and 361 MiB peak memory. All five final strict
+logs are empty. All five canonical targets pass. Read checkpoint-validation.json
+and README for exact signature, axiom, component, and hash counts.
+Failed attempts retain immutable source and raw logs. Only standard kernel
+axioms are permitted. Preservation retains 16349 starting files, 3019 older
+non-Audit sources, 239 Haskell files, 206 active-package files, both stashes,
+three other worktrees, and 99 frozen module manifests with 782 entries.
+Audit adds five imports. Older proof and evidence bytes remain preserved.
+
+No Haskell patch or new behavior defect is added. FINDINGS keeps the
+external repair registry first. Field-pool repair b9219b9e is merged and
+validated in unchanged source c0cc8a05. The Chain reproducer returns
+Left (FieldAtomOnDatatype "Next" 0). Standalone holds retains opaque-pool
+evaluation. Record every later Haskell repair there with its failure,
+executable reproducer, affected paths, commit, checks, and upstream status.
+Preserve all earlier proofs, counterexamples, repairs, marked drafts,
+stashes, worktrees, and the optimized interned core.
+
+## Current complete initial allocated local reduction
+
+Updated: 2026-10-17 14:55 CEST. Starting checkpoint is 8c80f5d5.
+Proof commit is 25726a34. Source main remains c0cc8a05, merged at 896b0a1c.
+Read lean/notes-current-local-numeric.md for the whole-library target,
+proof map, exact support, and remaining obligations. Evidence is in
+lean/restart-evidence/20261017-uncapped-class/.
+
+Initial cached fields, inherited readiness, Context, Frame, Fits, available
+values, and pure reservations now construct the complete literal allocated
+local reduction. The actual precheck derives its own branch and original
+records. Its live branch executes exact record Scan, selected Required,
+and the tail-first class pass at their actual returned caller states.
+Unchanged and contradictory branches omit native query reservations.
+
+The same return retains the existing complete graph, strict source reads,
+full old semantic receipt, same-inventory Frame and caller Post, forecast
+Fits, original and returned availability, arity, guarded language, and
+all nine independently larger source worker fuels. Both outer result tables
+stay exact. The saved fourth and Merge memo laws use that same caller.
+Force, Leaf, editors, and Class/Fold/Pass remove their finite input Cap
+and semantic Cap-Merge sidecars. No output finite Cap is claimed.
+
+No future branch, graph, reached range, worker success, returned invariant,
+or whole-forest closedness is an initial premise. Lower-level editors keep
+legitimate selected domains and safe finite edit syntax. The complete
+local producer derives these from its own reached stages. Pure majorants
+are partly noncomputable. They are not extracted Haskell budgets or host
+capacity. The complete public library theorem remains open.
+
+Next lift the complete local producer through parent edge reconstruction.
+Derive initial constructor and numeric reservations from source fields.
+Then compose the outer node/edge memo calls, descendants, and mutual
+recursion. General constrained Mu and supported open inputs, progress,
+convergence, current Haskell adapters, lazy forcing, publication order,
+concrete memo events, runtime, capacity, and full public Haskell
+correspondence remain open. Keep exactness, inclusion, and representative
+restriction as distinct public contracts. The whole-library goal stays active.
+
+Audit passes 3020 jobs and 65987 dependency checks. All fourteen final
+strict logs are empty. All fourteen canonical targets pass. Ten probe
+groups check 36 handwritten public declarations, fourteen Receipt
+projections, nine reused pure forecast aliases, and thirteen constructed
+integrations. Eight component manifests retain 325 entries and 325 hash
+references. Read checkpoint-validation.json and README for exact
+signature, axiom, component, and hash counts. Failed attempts keep their
+immutable source and raw logs. Only standard kernel axioms are permitted.
+Preservation retains 16131 starting files, 3005 older non-Audit sources,
+239 Haskell files, 206 active-package files, both stashes, three other
+worktrees, and 98 frozen module manifests with 777 entries. Audit adds
+fourteen imports. All older proof and evidence bytes remain preserved.
+
+No Haskell patch or new behavior defect is added. FINDINGS keeps the
+external repair registry first. Field-pool repair b9219b9e is merged and
+validated in unchanged source c0cc8a05. The Chain reproducer returns
+Left (FieldAtomOnDatatype "Next" 0). Standalone holds retains opaque-pool
+evaluation. Record every later Haskell repair there with its failure,
+executable reproducer, affected paths, commit, checks, and upstream status.
+Preserve all earlier proofs, counterexamples, repairs, marked drafts,
+stashes, worktrees, and the optimized interned core.
+
+## Current complete uncapped Scan and Required preparation
+
+Updated: 2026-10-17 14:33 CEST. Starting checkpoint is 612aeec2.
+Proof commit is 565b99ed. Source main remains c0cc8a05, merged at 896b0a1c.
+Read lean/notes-current-scan-required.md for the whole-library target,
+proof map, exact support, and remaining obligations. Evidence is in
+lean/restart-evidence/20261017-local-scan-required/.
+
+Initial caller invariants, coherent active original records, and pure Scan
+reservations now construct exact record Scan and uncapped Required
+preparation. Positional retention preserves original record occurrences.
+The actual Scan return derives selected false primary certificates.
+Required starts at that exact return. The initial original record list
+joins forecasts for every possible positional selection. No future
+selection, graph, reached ranges, worker success, finite input Cap, or
+whole-forest closedness is a producer premise.
+
+The same preparation retains strict source reads, full Frame, forecast
+Fits, same-inventory caller Post, original and returned availability,
+equal length, selected path domains, stopped-class refutation, and
+conditional language preservation. Both outer tables and Merge remain
+exact. The saved fourth memo remains correct with Extends. Six preparation
+fuels can increase independently with the same complete return. Its
+continuation factors the original local classes worker on successes and
+failures. Required guard retention and the initial Target producer also
+remove their finite Cap premises. No finite output Cap is claimed.
+
+The public target remains that valid and explicitly supported initial
+inputs terminate and satisfy each operation's intended contract. These
+are logical, partly noncomputable majorants, not extracted Haskell budgets
+or host capacity. Next lift the uncapped Target through Force, Leaf,
+editors, and the class pass. Then compose the class continuation and
+initial allocated precheck. Outer recursion, arbitrary constrained Mu and
+open recursive inputs, convergence, current adapters, lazy forcing,
+runtime, capacity, and full public Haskell correspondence remain open.
+Do not restore a whole-forest Cap to bypass the remaining editor work.
+The complete library goal stays active.
+
+Audit passes 3006 jobs and 65912 dependency checks. All eight final strict
+logs are empty and all eight canonical targets pass. Thirteen probe groups
+check 46 handwritten public declarations, fourteen Receipt projections,
+four explicit constructors, and fourteen constructed integrations. Only
+propext, Classical.choice, and Quot.sound occur in successful probes.
+Eight component manifests retain 269 entries and 269 hash references.
+Read checkpoint-validation.json and README for exact hashes, component
+counts, constructed witnesses, and evidence boundaries.
+Preservation retains 15941 starting files, 2997 older non-Audit sources,
+239 Haskell files, 206 active-package files, both stashes, three other
+worktrees, and 97 frozen module manifests with 763 entries. Audit adds
+eight imports. All older proof and evidence bytes remain preserved.
+
+No Haskell patch or new behavior defect is added. FINDINGS keeps the
+external repair registry first. Field-pool repair b9219b9e is merged and
+validated in unchanged source c0cc8a05. The Chain reproducer returns
+Left (FieldAtomOnDatatype "Next" 0). Standalone holds retains opaque-pool
+evaluation. Record every later Haskell repair there with its failure,
+executable reproducer, affected paths, commit, checks, and upstream status.
+Preserve all earlier proofs, counterexamples, repairs, marked drafts,
+stashes, worktrees, and the optimized interned core.
+
+## Current complete initial Scan resources
+
+Updated: 2026-10-17 14:14 CEST. Starting checkpoint is ba44d54f.
+Proof commit is d82a0f7e. Source main remains c0cc8a05, merged at 896b0a1c.
+Read lean/notes-current-scan-numeric.md for the whole-library target,
+proof map, exact support, and remaining obligations. Evidence is in
+lean/restart-evidence/20261017-scan-guard-resources/.
+
+Initial guard and profile schedules now construct the complete current
+Scan. Actual native instructions advance a finite guard carrier. Actual
+false secondary returns derive selected PathSupport. Supported open
+projections retain that carrier. The seeded fold constructs its own native
+queries and the current conjunction memo at their actual returned heaps.
+Selected, skipped, continued, and stopped branches retain source order.
+The original class suffix uses the actual prior return. A true memo answer
+stops before the suffix. SeededRanges and ClassScanCompletion.Ranges are
+now derived outputs of the initial producers.
+
+The same Scan retains full Frame, forecast Fits, finite guard carrier,
+physical effects, original available values, correct saved fourth memo,
+and Extends. The same literal result holds at every independently larger
+choice of five worker fuels. The complete caller constructs strict logical
+source reads, same-inventory Post, selected Sublist, and sound stopped-class
+refutation. Both outer result tables and Merge remain exact. Initial
+assumptions are Frame, Fits, valid memos, proper paths, pure query
+reservations, and active classes for refutation. No future graph, reached
+ranges, worker success, finite input Cap, or whole-forest closedness is a
+producer premise. False memo answers do not establish nonemptiness.
+
+The public target remains valid and explicitly supported initial inputs
+terminate and satisfy each operation's intended contract. These are logical,
+partly noncomputable bounds. They do not establish extracted Haskell budgets
+or host capacity. Next compose Scan, Required preparation, and the numeric
+class caller in the original source control flow. Remaining Required caps,
+outer parent and mutual recursion, arbitrary constrained Mu and open
+recursive inputs, convergence, current adapters, lazy forcing, runtime,
+and complete public Haskell correspondence remain open. The goal stays active.
+
+Audit passes 2998 jobs and 65859 dependency checks. All fifteen final strict
+logs are empty and all fifteen canonical targets pass. Twenty-five groups
+check 85 handwritten public declarations, ten Receipt field projections,
+and 27 constructed integrations. Only propext, Classical.choice, and
+Quot.sound occur in successful probes. Fifteen component manifests retain
+479 entries and 479 hash references. Read checkpoint-validation.json and
+README for exact hashes and evidence boundaries.
+Preservation retains 15587 starting files, 2982 older non-Audit sources,
+239 Haskell files, 206 active-package files, both stashes, three other
+worktrees, and 96 frozen module manifests with 755 entries. Audit adds
+fifteen imports. All older proof and evidence bytes remain preserved.
+
+No Haskell patch or new behavior defect is added. FINDINGS keeps the
+external repair registry first. Field-pool repair b9219b9e is merged and
+validated in unchanged source c0cc8a05. The Chain reproducer returns
+Left (FieldAtomOnDatatype "Next" 0). Standalone holds retains opaque-pool
+evaluation. Record every later Haskell repair there with its failure,
+executable reproducer, affected paths, commit, checks, and upstream status.
+Preserve all earlier proofs, counterexamples, repairs, marked drafts,
+stashes, worktrees, and the optimized interned core.
+
+## Current initial conjunction numeric resources
+
+Updated: 2026-10-17 13:40 CEST. Starting checkpoint is 2d7b0fa2.
+Proof commit is 75348c57. Source main remains c0cc8a05, merged at 896b0a1c.
+Read lean/notes-current-conjunction-numeric.md for the whole-library target,
+proof map, exact support, and remaining obligations. Evidence is in
+lean/restart-evidence/20261017-conjunction-resources/.
+
+Initial conjunction rows, worklist, Decision, and Memo.Call now construct
+their own complete returns at an initial numeric forecast. The actual
+entry heap supplies its finite raw guard list. Ordered guard words bound
+normalized class shape. Original row widths and operand occurrences bound
+the Cartesian tuples. Actual projection jobs, class requirements, and
+pending conjunction widths fit the forecast. Admission consumes budget.
+Skip and empty branches retain the physical state. The same result holds
+at every independently larger projection and reader fuel.
+
+The same call retains full Frame, complete caller Post, forecast Fits,
+causal guards and probes, global memo validity, and the actual saved
+fourth memo with Extends. Both outer result tables and Merge remain exact.
+Native cells and domain supplies remain exact. The producer requires no
+future graph, worker success, reached resource callback, finite input Cap,
+or whole-input closedness. AnswerSound is one-sided: true proves emptiness;
+false does not prove nonemptiness. These are logical majorants. Some pure
+bounds are noncomputable. No extracted Haskell budget or capacity follows.
+
+The full public target remains: valid and explicitly supported initial
+inputs terminate and satisfy each operation's intended contract. Next
+forecast guards across native queries and compose the complete Scan at
+actual returned heaps. Native queries can synthesize guards. The current
+memo forecast depends on its own entry heap. An earlier scalar alone does
+not close that gap. Selected support must follow the false secondary trace.
+Full source control flow, remaining Required caps, outer descent, arbitrary
+recursive callers, convergence, current adapters, lazy Haskell forcing,
+runtime, capacity, and complete public correspondence remain open.
+
+Audit passes 2983 jobs and 65714 dependency checks. All twelve final strict
+logs are empty and all twelve canonical targets pass. Seventeen groups
+check all 116 public declarations and fourteen constructed integrations.
+Nine manifests retain 305 entries and 305 hash references. Only propext,
+Classical.choice, and Quot.sound occur in successful probes. Read
+checkpoint-validation.json and README for hashes and evidence boundaries.
+Preservation retains 15353 starting files, 2970 older non-Audit sources,
+239 Haskell files, 206 active-package files, both stashes, three other
+worktrees, and 95 frozen module manifests with 740 entries. Audit adds
+twelve imports. All older proof and evidence bytes remain preserved.
+
+No Haskell patch or new behavior defect is added. FINDINGS keeps the
+external repair registry first. Field-pool repair b9219b9e is merged and
+validated in unchanged source c0cc8a05. The Chain reproducer returns
+Left (FieldAtomOnDatatype "Next" 0). Standalone holds retains opaque-pool
+evaluation. Record every later Haskell repair there with its failure,
+executable reproducer, affected paths, commit, checks, and upstream status.
+Preserve all earlier proofs, counterexamples, repairs, marked drafts,
+stashes, worktrees, and the optimized interned core. The goal stays active.
+
+## Current initial gate and seeded query resources
+
+Updated: 2026-10-17 13:06 CEST. Starting checkpoint is 50abb08b.
+Proof commits are 9468af32 and c36639a1. Source main remains c0cc8a05,
+merged at 896b0a1c. Read lean/notes-current-initial-gates-seeded.md for the
+whole-library target, proof map, exact support, and remaining obligations.
+Evidence is in lean/restart-evidence/20261017-initial-scan-resources/.
+
+Initial primary and secondary class gates now construct their own actual
+traces, full query Frame, forecast Fits, and exact worker result at every
+larger computed fuel. Causal GuardHeap retention follows those same traces.
+The gates add no closedness, finite Cap, or WarmHead premise. Native tables
+and domain supplies remain exact at their returned heaps.
+
+The initial first-seeded producer constructs its own selected projections
+and native queries in source order. Anchored selected PathSupport permits
+open WarmHead exposure. No whole-forest closedness or finite input Cap is
+required. Pure initial reservations supply query Room. The same return
+retains actual reads, full receipt, Frame, caller Post, forecast Fits,
+closed available result, global memos, probes, and nonempty-path Includes.
+Both outer result tables, fourth memo, and Merge remain exact. Projection,
+reader, and native fuels can increase independently with the same result.
+The native query Frame adapter also covers closed constrained Mu operands
+outside every finite Cap. Includes remains one-way.
+
+The full public target remains: valid and explicitly supported initial
+inputs terminate and satisfy each operation's intended contract. These
+logical majorants do not establish extracted Haskell budgets or capacity.
+Next construct numeric conjunction Decision/Memo resources, then compose
+the complete Scan at actual returned heaps. The old Scan still uses reached
+ClassScanCompletion.Ranges and SeededRanges. Selected support must connect
+to the false secondary trace. Full source control flow, remaining Required
+caps, outer descent, arbitrary constrained Mu, convergence, current adapters,
+runtime, and complete public Haskell correspondence remain open.
+
+Audit passes 2971 jobs and 65537 dependency checks. All ten final strict
+logs are empty and all ten canonical targets pass. Earlier warning-bearing
+attempts retain their bytes. Read checkpoint-validation.json for all final
+hashes, complete signature/axiom pairs, integrations, and component counts.
+Ten groups check all 87 public declarations and ten constructed integrations.
+Eight manifests retain 299 entries and 299 hash references. Only propext,
+Classical.choice, and Quot.sound occur in successful probes.
+Preservation retains 15137 starting files, 2960 older non-Audit sources,
+239 Haskell files, 206 active-package files, both stashes, three other
+worktrees, and 94 frozen module manifests with 728 entries. Audit adds
+ten imports. All older proof and evidence bytes remain preserved.
+
+No Haskell patch or new behavior defect is added. FINDINGS keeps the
+external repair registry first. Field-pool repair b9219b9e is merged and
+validated in unchanged source c0cc8a05. The Chain reproducer returns
+Left (FieldAtomOnDatatype "Next" 0). Standalone holds retains opaque-pool
+evaluation. Record every later Haskell repair there with its failure,
+executable reproducer, affected paths, commit, checks, and upstream status.
+Preserve all earlier proofs, counterexamples, repairs, marked drafts,
+stashes, worktrees, and the optimized interned core. The goal stays active.
+
+## Current complete initial Required numeric resources
+
+Updated: 2026-10-17 12:39 CEST. Starting checkpoint is 415b2c9c.
+Proof commits are cb79c288 and 8c0d36b4. Source main remains c0cc8a05,
+merged at 896b0a1c. Read lean/notes-current-required-numeric.md for the
+whole-library target, proof map, exact support, and remaining obligations.
+Evidence is in lean/restart-evidence/20261017-required-numeric/.
+
+The initial selected Required endpoints now construct their own complete
+return at both computed fuel bounds and a forecast from the initial trie,
+literal forest count, and profile. The same return retains the complete
+Required receipt, actual reads, full query Frame, memo effect, output
+caps, equal forest length, and complete caller Post. Both outer result
+tables, fourth memo, and Merge remain exact. Every independently larger
+worker and reader fuel gives that same result. No future graph, worker
+success, reached bound, output profile, cap, or domain law is an input.
+
+Actual node, child, and row graphs now fit the pure profile schedule.
+Original widths and offsets are fixed before each scan. Selected child
+returns feed the original suffix. Rejected rows execute no child work.
+Kept rows retain the complete raw guard and actual edge constructor.
+Smaller Needed requirements discharge the child callback. Supported open
+Head exposure uses the same initial stage before the ordinary phase.
+Whole-forest closedness is not added. Open unselected siblings remain
+permitted. Empty selection retains unresolved references unchanged.
+
+Both bounds are logical majorants. The sizeOf instance is noncomputable.
+They are not extracted Haskell API budgets or concrete capacity proofs.
+All-root caps remain stronger than the live source refusal gate. Next
+construct initial gate, seeded-query, and full Scan resources. Reached
+ClassScanCompletion.Ranges and SeededRanges remain open. Then compose the
+source gate and outer descent. Arbitrary constrained Mu, convergence,
+current adapters, runtime, capacity, and full public Haskell correspondence
+remain open. The complete library goal stays active.
+
+Audit passes 2961 jobs and 65367 dependency checks. All five final strict
+logs are empty and all canonical targets pass. Nine groups check 52 full
+pairs: 44 distinct public declarations, two repeated public declarations,
+and six integrations. Five component manifests retain 122 entries and
+123 hash references. Read checkpoint-validation.json for exact hashes
+and successful logs. Only propext, Classical.choice, and Quot.sound occur.
+Preservation retains 15021 starting files, 2955 older non-Audit sources,
+239 Haskell files, 206 active-package files, both stashes, three other
+worktrees, and 93 frozen module manifests with 718 entries. Audit adds
+five imports. All older proof and evidence bytes remain preserved.
+
+No Haskell patch or new behavior defect is added. FINDINGS keeps the
+external repair registry first. Field-pool repair b9219b9e is merged and
+validated in unchanged source c0cc8a05. The Chain reproducer returns
+Left (FieldAtomOnDatatype "Next" 0). Standalone holds still uses opaque
+pool evaluation. Record every later Haskell repair there with its failure,
+executable reproducer, affected paths, commit, checks, and upstream status.
+Preserve all earlier proofs, counterexamples, repairs, marked drafts,
+stashes, worktrees, and the optimized interned core.
+
+## Current initial Required worker and supported reader resources
+
+Updated: 2026-10-17 12:18 CEST. Starting checkpoint is b55a9f3b.
+Proof commits are 7e5892e2 and 33f1a580. Source main remains c0cc8a05, merged
+at 896b0a1c. Read lean/notes-current-required-forecast.md for the whole
+library target, exact support, new bounds, and remaining composition.
+Evidence is in lean/restart-evidence/20261017-required-forecast/.
+
+The initial selected Required endpoints now use a worker bound computed
+only from the original Needed trie. Their own initial completion retains
+the full Required receipt, actual reads, Frame, caps, forest length, and
+caller Post. Both outer tables, fourth memo, and Merge remain exact.
+Reader fuel remains existential in those full initial endpoints.
+
+A separate initial open-reader producer uses WarmHead support. Each open
+Mu prefix unfolds at the same heap. Fresh issued identities bound that
+prefix before an ordinary, empty, or closed tail. The producer constructs
+its own numeric read, heap-growth bound, literal output width, and replay.
+The actual Head adapter retains numeric Fits and its read certificate.
+Existing selected NodeSupport derives WarmHead. Arbitrary open recursion
+is not covered. Whole-forest closedness is not added.
+
+The pure Required profile uses this new open Head envelope. Fixed row and
+child scans follow the original widths and source order. Profile and level
+monotonicity retain every scheduled prefix. These arithmetic laws do not
+yet prove actual complete Required Fits. Next compose selected calls with
+the numeric profiles, one initial reader ceiling, and the same full caller
+return. Then construct initial gates, seeded queries, and Scan resources.
+Reached Scan and SeededRanges remain open. The full source gate, outer
+descent, arbitrary constrained Mu, convergence, adapters, runtime, capacity,
+and full public Haskell correspondence remain open. The goal stays active.
+
+Audit passes 2956 jobs and 65296 dependency checks. All four final
+strict logs are empty and canonical targets pass. Eight groups check
+55 full pairs: 46 distinct public declarations, two repeated public
+declarations, and seven integrations. Four component manifests retain
+154 entries and 155 hash references. Read checkpoint-validation.json
+for hashes and exact successful logs. Only propext, Classical.choice,
+and Quot.sound occur.
+Preservation retains 14892 starting files, 2951 older non-Audit sources,
+239 Haskell files, 206 active-package files, both stashes, three other
+worktrees, and 92 frozen module manifests with 713 entries. Audit adds
+four imports. All older proof and evidence bytes remain preserved.
+
+No Haskell patch or new behavior defect is added. FINDINGS keeps the repair
+registry first. Field-pool repair b9219b9e is merged and validated in source
+c0cc8a05. The Chain reproducer returns Left (FieldAtomOnDatatype "Next" 0).
+Record each later repair there with its failure, executable reproducer,
+affected paths, commit, checks, and upstream status. Preserve all earlier
+proofs, counterexamples, repairs, marked drafts, and the optimized core.
+
+## Current full class caller and selected Required
+
+Updated: 2026-10-17 12:02 CEST. This checkpoint starts at published b3651b49.
+Proof commits are fc6a3d4b and 4a01d59c. Source main remains c0cc8a05,
+merged at 896b0a1c. Read lean/notes-current-caller-required.md for the
+complete library contract, proof map, support, and next numeric obligations.
+Evidence is in lean/restart-evidence/20261017-initial-caller-required/.
+
+The initial numeric class pass now returns the full caller Post at the
+same inventory as its query Frame. Its own actual reads derive probes.
+Both outer result tables and the fourth memo remain exact. The same
+return retains Fits, caps, semantic Merge laws, forest length, exact
+common-six-fuel execution, and replay at independently enlarged fuels.
+The concrete caller starts with a legitimate evaluating node cell,
+returned edge cell, actual warm fourth entry, and valid equality descent.
+Two constructed class calls retain those cells and their laws.
+
+Successful open row exposure now retains causal stores and local caps
+without a closed-input premise. Selected Required verifies its actual
+node, child, and row graphs without whole-forest closure. It retains
+unselected open children, raw guards, output caps, guard heaps, and length.
+A separate initial producer constructs its own Required call from original
+false primary certificates, proper selected paths, Frame, availability,
+and finite root caps. Its same return retains the full old receipt,
+actual global reads, query Frame, output caps, and complete caller Post.
+No future Required graph, successful worker, output bound, cap, or domain
+law is an input to that producer.
+
+Required completion returns existential sufficient worker and read fuel.
+It does not give an initial numeric Required forecast or forecasted Fits.
+Next construct that forecast for the same selected-open support. Then
+construct initial gate, seeded-query, and Scan resources. Reached Scan
+and SeededRanges remain open. Compose the full source gate and callers
+before active/stored outer descent, arbitrary constrained Mu, convergence,
+current adapters, and full public Haskell correspondence. Finite all-root
+caps remain stronger than the live source gate. The goal stays active.
+
+The pinned Audit passes 2952 jobs and 65208 dependency checks. All four
+final production strict logs are empty. Their canonical builds pass.
+All 16 complete signature and axiom pairs pass in eight groups. They
+check 10 distinct public declarations, one repeated public declaration,
+and five constructed integrations. Four component manifests retain
+126 entries and 128 hash references. Read checkpoint-validation.json
+for hashes and exact successful logs. Only propext, Classical.choice,
+and Quot.sound occur. Preservation retains 14784 starting files, 2947
+older non-Audit proofs, all 239 Haskell files, all 206 active-package files,
+both stashes, and three other worktrees. All 91 frozen module manifests
+retain 709 entries. All older proof and evidence bytes remain preserved.
+
+No Haskell patch or new behavior defect is added. FINDINGS keeps the
+external repair registry first. Field-pool repair b9219b9e is merged and
+validated in unchanged source c0cc8a05. The Chain reproducer returns
+Left (FieldAtomOnDatatype "Next" 0). Record every later Haskell fix there
+with its failure, executable reproducer, affected paths, commit, checks,
+and upstream status. Preserve older proofs, counterexamples, repairs,
+drafts, stashes, worktrees, and the optimized interned core.
+
+## Current complete initial class pass
+
+Updated: 2026-10-17 11:46 CEST. This checkpoint starts at published 9c614fe4.
+Proof commit is e60bbec0. Source main remains c0cc8a05, merged at 896b0a1c.
+Read lean/notes-current-initial-class-pass.md for the complete library
+contract, proof map, exact support, and next outer caller obligations.
+Evidence is in lean/restart-evidence/20261017-initial-class-resources/.
+
+Three additive modules construct a complete class, literal right fold,
+and final empty propagation from initial support and one numeric forecast.
+The tail executes before the head captures its actual returned forest.
+Its Frame, Fits, physical and semantic Merge laws, global memos, and caps
+feed the head. Actual transport proves equal forest length. This equality
+justifies the fixed original count in every forecast. Each class clears
+its own local target slots and retains native and equality state.
+The same complete return contains actual graphs and reads, full receipts,
+a matching-inventory Frame, forecast Fits, output caps, equal forest length,
+and an exact common-six-fuel worker result. No supplied future graph,
+successful worker, ClassRanges, ClassPass.Ranges, reached resource bound,
+or callback resource law is an input.
+
+The concrete integrations construct their own initial word widths. They
+edit a genuinely open parent with a nonempty equality guard, outside Cap 0,
+with selected paths [[0,0],[0,1]] and an unselected recursion reference.
+They construct one class and two actual class returns in source order.
+The second class captures the first return before literal final empty
+propagation. Both retain a valid stored equality descent record. A separate
+empty-pass check needs no numeric room and returns the exact input state
+and Merge memo at every fuel tuple.
+
+Selected path domains, all-root caps, initial query Frame, and valid warm
+Merge laws remain explicit. Target inclusion is still one-way for nonempty
+proper paths. Class and pass language laws retain narrowing and preservation
+for terms that satisfy the class constraints. Size-based fuels and depth
+caps remain logical definitions. Haskell lazy demand, memo publication,
+equality-table size, and concrete capacity remain separate obligations.
+
+Next compose this initial pass with the full caller context, its fourth
+memo, probes, actual inventory, Frames, and resources. Then construct
+required-child preparation, refused-class checks, active and stored outer
+descent, and the complete source gate. Arbitrary constrained Mu,
+convergence, current frontend and runtime adapters, and full public Haskell
+correspondence remain open. The complete library goal stays active.
+
+The pinned Audit passes 2948 jobs and 65194 dependency checks. All three
+final production strict logs are empty. Their canonical builds pass.
+All 36 full signature and axiom pairs pass in seven groups: 30 public
+and six constructed declarations. Four component manifests verify 98 entries.
+Only propext, Classical.choice, and Quot.sound occur. Read
+checkpoint-validation.json for hashes and exact successful logs. Preservation retains
+14690 starting files, 2944 older non-Audit proofs, all 239 Haskell files,
+all 206 active-package files, both stashes, and three other worktrees.
+All 90 frozen module manifests retain 705 entries. All older baseline
+bytes remain preserved, including the prior editor's documented early-log
+gap. New checks execute immutable source snapshots under unique prefixes.
+
+No Haskell patch or new behavior defect is added. FINDINGS keeps the
+external repair registry first. Field-pool repair b9219b9e is merged and
+validated in unchanged source c0cc8a05. The Chain reproducer returns
+Left (FieldAtomOnDatatype "Next" 0). Record every later Haskell fix there
+with its failure, executable reproducer, affected paths, commit, checks,
+and upstream status. Preserve all older proofs, counterexamples, repairs,
+drafts, stashes, worktrees, and the optimized interned core.
+
+## Current complete initial mixed editor
+
+Updated: 2026-10-17 11:33 CEST. This checkpoint starts at published 0c76ba40.
+Proof commits are c7c3b4e8 and 65cf78ee. Source main remains c0cc8a05,
+merged at 896b0a1c. Read lean/notes-current-initial-editor.md for the
+complete library contract, proof map, exact support, and next ClassPass
+obligations. Evidence is in
+lean/restart-evidence/20261017-initial-editor-resources/.
+
+Eight additive modules construct complete supported mixed node, forest,
+and compiled signed edits from initial class facts and numeric reservations.
+Fixed original row and child limits determine the ordered profile scans.
+Actual selected returns feed the remaining children and rows. Recursive
+inputs expose Head before the same trie resumes. Raw reconstruction keeps
+the original full guard and derives equal arity from the actual child graph.
+The complete return retains actual graphs and reads, full receipts, Frame,
+inventory, forecast Fits, cap, Merge table, target-slot histories, and
+all global memos. The forest endpoint proves one common-six-fuel worker
+return. No future completed graph, successful worker, reached bound,
+NodeRanges, ChildrenRanges, RowsRanges, ListRanges, or callback resource
+law is an input. Size-based levels and fuels are logical definitions;
+they do not establish an executable Haskell budget or host instruction count.
+
+The concrete integrations derive their own finite width from the initial
+forecast. They build a parent with a nonempty equality guard, prove it open
+and outside Cap 0, and retain an unselected open recursion reference.
+They construct an actual node edit and compiled forest edit at signed pair
+[([0,0],[0])]. Both retain a valid stored equality descent record.
+Selected Safe domains, initial input and all-captured-root caps, valid warm
+slots, and semantic Merge laws remain explicit. Target language inclusion
+is still one-way for nonempty proper paths. Existing editor narrowing and
+conditional preservation remain separate from an unconditional language
+equality claim. Equality-table size, concrete capacity, lazy demand,
+and memo publication remain separate obligations.
+
+Next construct one complete class from the compiled editor and its initial
+Frame, captured forest, caps, selected domains, and reservation. Then
+forecast ClassPass in literal source order. A later class must capture its
+actual input and retain the preceding full return. Initial complete
+ClassPass, outer descent, arbitrary constrained Mu, convergence, current
+frontend and runtime adapters, and full public Haskell correspondence
+remain open. The complete library goal stays active.
+
+The pinned Lean Audit passes 2947 jobs and 65152 dependency checks.
+All eight final production strict logs are empty. All 127 complete signature
+and axiom pairs pass in 13 groups: 116 public declarations and 11 constructed
+checks. Only propext, Classical.choice, and Quot.sound occur. Eight component
+manifests verify 234 entries. Preservation retains 14484 starting files,
+2936 older non-Audit proofs, all 239 Haskell files, all 206 active-package
+files, both stashes, and three other worktrees. All 89 frozen module
+manifests retain 702 entries. Read checkpoint-validation.json for hashes.
+
+One new concrete attempt's source and raw log were overwritten by a filename
+collision. Its source reconstruction is marked; its original raw log is
+unavailable. Final concrete attempt 14 executes an immutable snapshot and
+passes independently. Read edit-numeric-evidence-recovery.md. All older
+checkpoint bytes remain preserved. Do not claim that every new failed
+attempt log survived.
+
+No Haskell patch or new behavior defect is added. FINDINGS keeps the
+external repair registry first. Field-pool repair b9219b9e is merged and
+validated in unchanged source c0cc8a05. The Chain reproducer returns
+Left (FieldAtomOnDatatype "Next" 0). Record every later Haskell fix there
+with its failure, executable reproducer, affected paths, commit, checks,
+and upstream status. Preserve all older proofs, counterexamples, repairs,
+drafts, stashes, worktrees, and the optimized interned core.
+
+## Current complete initial shared Force and Leaf
+
+Updated: 2026-10-17 11:00 CEST. This checkpoint starts at published 7b774272.
+Proof commit is 4f815db0. Source main remains c0cc8a05, merged at 896b0a1c.
+Read lean/notes-current-initial-force-leaf.md for the complete library
+contract, proof map, support, and next mixed Edit/ClassPass obligations.
+Evidence is in lean/restart-evidence/20261017-initial-force-leaf/.
+
+Three additive modules construct complete shared Force and Leaf from
+initial class facts and pure numeric reservations. Force uses the actual
+initial slot branch. A hit returns the identical full shared state at
+zero fuel. A miss constructs Target and installs its actual historical
+receipt. Existing universal slot laws derive the new cap certificate.
+Leaf passes the actual Force target and returned state to the checked
+query. The same return retains complete receipts, Frame, inventory,
+Merge and global memos, target-slot histories, forecast Profile, cap,
+and exact common-five-fuel worker result. No ForceRanges, Leaf.Ranges,
+future completed graph, successful fuel, reached bound, or callback
+resource law is an input.
+
+The concrete integrations derive their own finite width from one initial
+forecast. They construct a missing-slot Force and exact zero-fuel warm
+reuse. They also construct a missing-slot Leaf followed by a result-fed
+Leaf at the complete returned state. Its second Force uses the produced
+slot. They retain an open unselected sibling and a valid stored equality
+descent operation. They do not claim a native query hit or an unchanged
+second checked state.
+
+Selected ForestClosed domains, all-original-root caps, valid warm-slot
+laws, and initial input caps remain explicit. Target language inclusion
+is still one-way for nonempty proper paths. Leaf retains its existing
+narrowing and preservation contract. Equality-table size and instruction
+counts, concrete capacity, Haskell lazy demand, and memo publication
+remain separate boundaries.
+
+Next construct complete mixed Edit from initial forecasts in source
+head, child, and row order. Derive Force/Leaf reservations and literal
+width and reconstruction bounds at each actual returned state. Then
+compose the class fold in source order. General Edit/ClassPass, outer
+descent, arbitrary constrained Mu, convergence, current adapters, capacity,
+and full public Haskell correspondence remain open. The library goal
+stays active.
+
+The pinned Audit passes 2939 jobs and 65012 dependency checks. All three
+final production strict logs are empty. All 33 complete signature and
+axiom pairs pass in six groups: 27 public declarations and six constructed
+checks. Only propext, Classical.choice, and Quot.sound occur. Four component
+manifests verify 101 entries. Preservation retains 14399 starting files,
+2933 older non-Audit proofs, all 239 Haskell files, all 206 active-package
+files, both stashes, and three other worktrees. All 88 frozen module
+manifests retain 694 entries. Read checkpoint-validation.json for hashes.
+
+No Haskell patch or new behavior defect is added. FINDINGS keeps the
+external repair registry first. Field-pool repair b9219b9e is merged and
+validated in unchanged source c0cc8a05. The Chain reproducer returns
+Left (FieldAtomOnDatatype "Next" 0). Record every later Haskell fix there
+with its failure, executable reproducer, affected paths, commit, checks,
+and upstream status. Preserve all older proofs, counterexamples, repairs,
+drafts, stashes, worktrees, and the optimized interned core.
+
+## Current complete initial Target execution
+
+Updated: 2026-10-17 10:40 CEST. This checkpoint starts at published c0cccd79.
+Proof commit is adf8c036. Source main remains c0cc8a05, merged at 896b0a1c.
+Read lean/notes-current-initial-target-fuel.md for the complete library
+contract, proof map, exact support, and next Force/Leaf obligations.
+Evidence is in lean/restart-evidence/20261017-initial-target-complete/.
+
+Two additive modules construct the actual complete interleaved Target
+from initial resources and pure reservations. The full Operand worker
+retains its allocated equality state. The Fold executes head Operand,
+recursive tail, then checked query. The same return retains the complete
+receipt, Frame, inventory, Merge memo, global memos, forecast Profile,
+cap, and common five-fuel worker result. Empty Target retains the exact
+initial state and memo at zero fuel. Existing stability gives larger-fuel
+replay. No future completion, returned heap bound, successful fuel,
+FoldRanges, TargetRanges, or callback resource law is an input.
+
+Selected ForestClosed paths still permit unselected open ordinary roots
+and siblings. The separate all-root cap premise remains explicit.
+Target language inclusion still requires nonempty proper selected paths.
+Do not claim exact Target intersection language or arbitrary constrained
+Mu support. Equality-state instruction counts, concrete capacity,
+Haskell lazy demand, and memo publication remain separate boundaries.
+
+Next replace SharedTargetForce's callback range premise with the initial
+Target reservation. Preserve warm slot receipts, caps, full Frames,
+resources, actual Merge tables, global memos, and computed inventories.
+Then compose Leaf in Force-then-query order. General mixed Edit/ClassPass,
+outer descent, arbitrary constrained Mu, convergence, current adapters,
+capacity, and full public Haskell correspondence remain open.
+The complete library goal stays active.
+
+The pinned Audit passes 2936 jobs and 64988 dependency checks. Both final
+production strict logs are empty. All eight full signature and axiom pairs
+pass in four groups: four public declarations and four constructed checks.
+Only propext, Classical.choice, and Quot.sound occur. Four component
+manifests verify 92 entries. Read checkpoint-validation.json for exact
+hashes and successful logs. Preservation retains 14320 starting files, 2931
+older non-Audit proofs, all 239 Haskell files, all 206 active-package files,
+both stashes, and three other worktrees. All 87 frozen module manifests
+retain 691 entries.
+
+No Haskell patch or new behavior defect is added. FINDINGS keeps the
+external repair registry first. Field-pool repair b9219b9e is merged and
+validated in unchanged source c0cc8a05. The Chain reproducer returns
+Left (FieldAtomOnDatatype "Next" 0). Record every later Haskell fix there
+with its failure, executable reproducer, affected paths, commit, checks,
+and upstream status. Preserve all older proofs, counterexamples, repairs,
+drafts, stashes, worktrees, and the optimized interned core.
+
+## Current initial Target prerequisites
+
+Updated: 2026-10-17 10:28 CEST. This checkpoint starts at published f7494679.
+Proof commit is a52aeb5f. Source main remains c0cc8a05, merged at 896b0a1c.
+Read lean/notes-current-target-forecast.md for the complete top-level
+contract, established components, and missing work. Evidence is in
+lean/restart-evidence/20261017-initial-target-forecast/.
+
+Three additive modules prove exact full allocated Merge numeric replay,
+a pure source-order Target profile and fuel schedule, and complete Target
+receipt composition from actual components. The forecast follows head
+Operand, recursive tail, then checked query order. All five worker fuels
+have one computed ceiling. Actual receipt composition retains complete
+states, inventories, Merge tables, global memos, and language inclusion.
+The complete initial multi-path Target execution theorem remains open.
+A schedule and composition of actual receipts do not establish that theorem.
+
+Next construct the actual Target from its initial Frame, forest, paths,
+resources, caps, memo laws, and numeric reservations. Derive each reached
+Profile and full allocated worker observation. Do not assume a future
+completed call, returned bound, successful fuel, or callback range law.
+General Force, Edit/ClassPass, outer descent, arbitrary constrained Mu,
+convergence, current adapters, capacity, and full public Haskell
+correspondence remain open. The complete library goal stays active.
+
+The pinned Lean Audit passes 2934 jobs and 64980 dependency checks.
+All three final production strict logs are empty. All 64 complete signature
+and axiom pairs pass in six groups: 55 public declarations and nine
+constructed checks. Only propext, Classical.choice, and Quot.sound occur.
+Three component manifests verify 69 entries. Preservation retains 14247
+starting files, 2928 older non-Audit proof sources, all 239 Haskell files,
+all 206 active-package files, both stashes, and three other worktrees.
+All 86 frozen module manifests retain 689 entries. Read
+checkpoint-validation.json for exact hashes and successful logs.
+
+No Haskell patch or new behavior defect is added. FINDINGS retains the
+external repair registry first. Field-pool repair b9219b9e is merged and
+validated in source c0cc8a05. The Chain reproducer returns
+Left (FieldAtomOnDatatype "Next" 0). Record each later Haskell repair in
+FINDINGS with its failure, executable reproducer, affected paths, commit,
+checks, and upstream status. Preserve all earlier proofs, counterexamples,
+repairs, drafts, stashes, worktrees, and the optimized interned core.
+
+## Current initial complete selected Operand budgets
+
+Updated: 2026-10-17 10:15 CEST. This checkpoint starts at published 4ba9f2f4.
+Proof commits are 3d98c59e and 8a132c64. Source main remains c0cc8a05,
+merged locally at 896b0a1c. Read lean/notes-current-initial-operand-fuel.md
+for the complete library target, proof map, and missing areas. Evidence is
+in lean/restart-evidence/20261017-selected-operand-initial-bounds/.
+
+Seven additive modules construct complete selected projection and general
+Merge from initial forest count, signed path, counters, and causal mass.
+Static projection work fuel is 2 * path.length + 1. Actual recursive reads
+supply separate literal row widths. Ordered row growth derives every
+shared read certificate and resource bound. A scalar-only Merge bound is
+computed before its future projected argument exists. The complete Operand
+endpoint constructs its own actual graph, full allocated receipts, exact
+worker observations, returned resources, and complete query Frame.
+It takes no future completion, projected value, reached heap, or bound.
+The selected domain still permits unrelated open ordinary roots and siblings.
+Both computed schedules replay the same complete heaps and memos at larger
+fuels. Allocated equality state remains valid; its internal instruction and
+machine capacity bounds remain separate.
+
+Next compose Target in actual head Operand, recursive tail, then checked
+query order. Convert Operand resources to the next numeric query Profile
+and derive every reached range from the whole initial schedule. General
+Force, Edit/ClassPass, outer active and stored descent, arbitrary constrained
+Mu, convergence, current adapters, capacity, and full public Haskell
+correspondence remain open. The complete library goal stays active.
+
+The pinned Audit passes 2929 jobs and 64924 dependency checks. All seven
+production strict logs are empty. All 120 complete signature and axiom pairs
+pass in ten groups: 100 public declarations and 20 constructed checks.
+Four component manifests verify 153 immutable entries. Read
+checkpoint-validation.json for exact hashes. Preservation retains 14099 starting files,
+2921 older non-Audit proofs, all 239 Haskell files, all 206 active-package
+files, both stashes, and three other worktrees. All 85 frozen module
+manifests retain 686 entries.
+
+This increment adds no Haskell change or new behavior defect. Root FINDINGS
+keeps the external repair registry first. Field-pool repair b9219b9e is
+merged and validated; the Chain reproducer returns
+Left (FieldAtomOnDatatype "Next" 0). Reuse unchanged strict Nix,
+798 examples plus golden, Fourmolu, and Cabal-gild evidence. Record each
+later Haskell repair in FINDINGS with its failure, executable reproducer,
+affected paths, commit, checks, and upstream state. Preserve all older
+proofs, counterexamples, repairs, marked drafts, and the optimized interned core.
+
+## Current initial general Merge budgets
+
+Updated: 2026-10-17 09:58 CEST. This checkpoint starts at published 5d0f928f.
+Proof commits are acc448b4, c103620e, and efd8a685. Source main remains
+c0cc8a05, merged locally at 896b0a1c. Read
+lean/notes-current-initial-merge-fuel.md for the complete library target,
+proof map, and missing areas. Evidence is in
+lean/restart-evidence/20261017-general-merge-body-resources/.
+
+Six additive modules construct complete general memo-aware Merge at pure
+computable work and selection fuels. Initial input height, node and edge
+counters, and causal stored mass determine those fuels. Literal widths,
+exact direct costs, smaller-height requests, allocating selection, and
+actual reached heaps derive every resource bound. The endpoint constructs
+its own Call and exact Worker return. It retains the full heap, populated
+memo, actual winners, physical laws, output mass, and larger-fuel replay.
+No future completed call, final bound, or callback resource law is an input.
+The full source body remains present. Independent language laws retain
+their cache and guard hypotheses. Haskell lazy publication and concrete
+finite capacity are separate boundaries.
+
+Next forecast complete selected Operand from initial forest and path data.
+Compose projection then Merge. Retain support for unrelated open ordinary
+roots. Then compose Target in head Operand, recursive tail, then query order.
+General Force, Edit/ClassPass, outer active and stored descent, arbitrary
+constrained Mu, convergence, current adapters, capacity, and full public
+Haskell correspondence remain open. The complete library goal stays active.
+
+The pinned Audit passes 2922 jobs and 64788 dependency checks. All six
+production strict logs are empty. All 66 full signature and axiom pairs
+pass in eight groups: 53 public declarations and 13 constructed checks.
+Only propext, Classical.choice, and Quot.sound occur. Four component manifests
+verify 127 immutable entries. Preservation retains 13973 starting files,
+2915 older non-Audit proofs, all 239 Haskell files, all 206 active-package
+files, both stashes, and three other worktrees. All 84 frozen module
+manifests retain 679 entries. Read checkpoint-validation.json for hashes.
+
+This increment adds no Haskell change or new behavior defect. Root FINDINGS
+keeps the external repair registry first. Field-pool repair b9219b9e is
+merged and validated. The Chain reproducer returns
+Left (FieldAtomOnDatatype "Next" 0). Reuse the unchanged strict Nix,
+798 examples plus golden, Fourmolu, and Cabal-gild evidence. Record every
+later Haskell repair in FINDINGS with its reproducer, affected paths,
+commit, checks, and upstream state. Preserve all older proofs, counterexamples,
+repairs, marked drafts, and the optimized interned core.
+
+## Current general Merge accounting and local resources
+
+Updated: 2026-10-17 09:32 CEST. This checkpoint starts at published db0ec2b6.
+Proof commits are c28e7cb4, b725b091, 17fcca53, and 9dba8b45. Source main
+remains c0cc8a05, merged locally at 896b0a1c. Read
+lean/notes-current-general-merge-resources.md for the complete library target,
+proof map, and missing areas. Evidence is in
+lean/restart-evidence/20261017-general-merge-resources/.
+
+Four additive modules prove controlled-majorant monotonicity, exact current
+heap transfers for literal constructors and allocating selection, additive
+completed-graph costs, and exact worker replay with one shared selection
+certificate. A body with original full input mass at most q has at most
+100 * (q + 1)^3 direct instructions. This direct bound excludes nested
+request bodies and selection internals. Every direct request retains its
+actual Call and strict ordinary-height decrease under initial physical facts.
+The source domain, complete heaps, populated memos, first-winner rereads,
+both group branches, and ordinary-union requests remain present.
+
+These are prerequisites for a whole initial Merge budget. Measured replay
+still takes a completed measured graph and a shared selection certificate.
+Local resource transfers still need current-heap bounds and literal widths.
+No complete initial Merge forecast is claimed. Next classify actual Work
+widths and compose local growth over direct counts and smaller-height calls.
+Derive all reached bounds and shared selection fuel from initial resources.
+Then forecast complete selected Operand work and compose Target in head,
+tail, then query order. General Force, Edit/ClassPass, outer active and stored
+descent, arbitrary constrained Mu, convergence, current adapters, capacity,
+and full public Haskell correspondence remain open. Keep support for unrelated
+open ordinary roots. The complete library goal stays active.
+
+The pinned Audit passes 2916 jobs and 64684 dependency checks. All four
+production strict logs are empty. All 58 full signature and axiom pairs pass
+in eight groups: 48 public declarations and ten constructed checks. Only
+propext, Classical.choice, and Quot.sound occur. Four component manifests
+verify 106 immutable entries. Read checkpoint-validation.json for exact hashes.
+Preservation retains 13856 starting files, 2911 older non-Audit proofs,
+all 239 Haskell files, all 206 active-package files, both stashes, and three
+other worktrees. All 83 frozen module manifests retain 673 entries.
+
+This increment adds no Haskell change or new behavior defect. Root FINDINGS
+keeps the external repair registry first. Field-pool repair b9219b9e is merged
+and validated; the Chain reproducer returns Left (FieldAtomOnDatatype "Next" 0).
+Reuse the unchanged strict Nix, 798 examples plus golden, Fourmolu, and
+Cabal-gild evidence. Record every later Haskell fix in FINDINGS with its
+reproducer, affected paths, commit, checks, and upstream state. Preserve all
+older proofs, counterexamples, repairs, marked drafts, and the optimized
+interned core, including older constructor and equality work.
+
+## Current initial computable comparison and selection bounds
+
+Updated: 2026-10-17 09:12 CEST. This checkpoint starts at published b7b01355.
+Proof commits are d81f7b8e, 27b4031f, and 46485ba9. Source main remains
+c0cc8a05, merged locally at 896b0a1c. Read
+lean/notes-current-comparison-history.md for the complete target, proof map,
+and missing areas. Evidence is in
+lean/restart-evidence/20261017-comparison-history/.
+
+Seven additive modules construct actual repaired comparison and selection
+at pure computable fuel from initial node and edge counters and causal
+stored payload mass. Exact unfolding histories bound every reached heap.
+Heap-changing events consume unfinished Mu degrees. Exact heap replays do
+not increase the control. The resulting finite identity universe bounds
+fresh ancestors on each recursive comparison path. Ordered replay retains
+failed cover effects, child order, and every original intermediate full heap.
+
+Selection uses one fuel computed at the original entry for its complete
+scan. Its literal input length enters the outer resource envelope. Both
+complete endpoints construct their own successful execution. They return
+physical effects, absolute heap bounds, initial numeric resource envelopes,
+and exact larger-fuel replay. No future successful fuel, returned heap, or
+per-callback resource law is an input. The majorants do not measure practical
+runtime, solver work, or Haskell bytes.
+
+The pinned Audit passes 2912 jobs and 64550 dependency checks. All seven
+production strict logs are empty. All 62 full signature and axiom pairs
+pass in 14 groups: 49 public declarations and 13 constructive integrations.
+Only propext, Classical.choice, and Quot.sound occur. Seven proof component
+manifests verify 159 entries. The next-Merge survey adds 25 entries.
+Aggregate validation checks eight manifests with 184 entries. Read
+checkpoint-validation.json for exact hashes. Preservation retains 13694 starting files,
+2904 older non-Audit proofs, all 239 Haskell files, all 206 active-package
+files, and 82 frozen module manifests with 669 entries. Stashes and three
+other worktrees retain their initial state.
+
+Next derive initial work and selection budgets for general memo-aware Merge.
+Then forecast complete selected Operand work and compose Target in head,
+tail, then query order. General Target, Force, Edit/ClassPass, outer active
+and stored descent, arbitrary constrained Mu, convergence, current adapters,
+concrete capacity, and full public Haskell correspondence remain open.
+Preserve selected support that permits unrelated open ordinary roots.
+Source gates and all-root cap assumptions need separate coverage.
+The whole library goal stays active.
+
+No Haskell change or new behavior defect occurs. FINDINGS keeps the external
+repair registry first. Field-pool repair b9219b9e is merged and validated.
+The Chain reproducer returns Left (FieldAtomOnDatatype "Next" 0). Reuse
+unchanged strict Nix, 798 examples plus golden, Fourmolu, and Cabal-gild
+evidence. Record each later Haskell repair there for external work. Preserve
+all older proofs, counterexamples, repairs, marked drafts, and the optimized
+interned core, including older constructor and equality work.
+
+## Current initial computable recursive reader bounds
+
+Updated: 2026-10-17 08:57 CEST. This checkpoint starts at published cb91c41e.
+Proof commits are c00bff2c, 9bba0158, and bd5c4fcc. Source main remains
+c0cc8a05, merged locally at 896b0a1c. Read
+lean/notes-current-initial-reader-fuel.md for the complete target, proof map,
+and missing areas. Evidence is in
+lean/restart-evidence/20261017-initial-reader-fuel/.
+
+Six additive modules construct complete closed recursive collection and row
+reads at a pure computable fuel. Initial node and edge counters, causal
+stored payload mass, and literal worklist occurrence count determine this
+fuel. Actual fresh Mu unfolding, union expansion, visited skips, lower-degree
+allocation, exact returned heaps, and larger-fuel replay remain present.
+No successful future fuel, final counter bound, or completed read is an input.
+
+A controlled lexicographic majorant permits lower coordinates to grow after
+a higher coordinate decreases. Initial causal mass fixes the degree dimension.
+The operational bridge counts actual consumed collector steps. The row-read
+wrapper also pays its direct Mu unfold before fallback on the original root.
+Logical bounds do not measure Haskell bytes, solver work, or practical runtime.
+
+The pinned Audit passes 2905 jobs and 64482 dependency checks. All six
+production strict logs are empty. All 71 imported full signature and axiom
+pairs pass in nine groups: 55 distinct public declarations, seven independent
+repeat checks, and nine constructive integrations. Only propext,
+Classical.choice, and Quot.sound occur. Six proof component manifests verify
+136 entries. The next-comparison survey adds 26 entries. Aggregate validation
+checks seven manifests with 162 entries. Read checkpoint-validation.json for
+exact hashes. Preservation retains 13551 starting files, 2898 older
+non-Audit proofs, all 239 Haskell files, all 206 active-package files, and
+81 frozen module manifests with 662 entries. Stashes and three other
+worktrees retain their initial state.
+
+Next derive initial computable comparison fuel. Then bound general Merge,
+forecast complete selected Operand work, and compose Target in head, tail,
+then query order. General Target, Force, Edit/ClassPass, outer active/stored
+descent, arbitrary constrained Mu, convergence, current adapters, concrete
+capacity, and full public Haskell correspondence remain open. Retain the
+selected domain that permits unrelated open ordinary roots. Source gates
+and all-root cap assumptions need separate coverage. The library goal stays active.
+
+No Haskell change or new behavior defect occurs. Root FINDINGS keeps the
+external repair registry first. Field-pool repair b9219b9e is merged and
+validated. The Chain reproducer returns Left (FieldAtomOnDatatype "Next" 0).
+Reuse unchanged strict Nix, 798 examples plus golden, Fourmolu, and Cabal-gild
+evidence. Record each later Haskell repair there for external work. Preserve
+all older proofs, counterexamples, repairs, marked drafts, and the optimized
+interned core, including older constructor and equality work.
+
+## Current selected Operand frames and recursive resource bounds
+
+Updated: 2026-10-17 08:36 CEST. This checkpoint starts at published b0bd69c6.
+Proof commits are 8440539c and 3152aaf8. Source main remains c0cc8a05,
+merged locally at 896b0a1c. Read
+lean/notes-current-selected-operand-resources.md for the complete target,
+proof map, and missing areas. Evidence is in
+lean/restart-evidence/20261017-selected-operand-resources/.
+
+Five additive modules retain the full generated-query Frame through actual
+selected Operand work. The complete endpoint constructs its own Operand,
+receipt, and returned Frame from initial selected support. It permits
+unrelated open ordinary roots. The mixed endpoint retains its cap and Merge
+laws. Integration constructs a generated query and passes its exact result
+to an Operand while retaining the same native cells and global validity.
+
+Full stored substitution, unfolding, recursive row reads, comparisons, and
+selection derive causal mass and node/edge bounds. Reader and comparison
+transfers use explicit proof fuel. Selection completion constructs its own
+return with a fuel-indexed envelope. It does not derive a sufficient fuel or
+complete Operand forecast from initial forest and path data. A current causal
+store bounds the actual memo winner even when a different candidate is smaller.
+
+The pinned Audit passes 2899 jobs and 64377 dependency checks. All five
+production strict logs are empty. All 49 imported full signature and axiom
+pairs pass in nine groups: 35 distinct public declarations, five independent
+repeat checks, and nine constructive integrations. Only propext,
+Classical.choice, and Quot.sound occur. Six component manifests verify
+169 entries. Read checkpoint-validation.json for the exact source and log hashes. Preservation retains 13393 starting files,
+2893 older non-Audit proofs, all 239 Haskell files, all 206 active-package
+files, and 80 frozen module manifests with 656 entries. Stashes and three
+other worktrees retain their initial state.
+
+Next derive an initial computable bound for dynamic Mu-degree reader descent.
+Then bound general Merge, forecast complete selected Operand work, and
+compose Target in its actual head, tail, then query order. General Target,
+Force, Edit/ClassPass, outer active/stored descent, arbitrary constrained Mu,
+convergence, current adapters, concrete capacity, and full public Haskell
+correspondence remain open. Source gates and all-root cap assumptions need
+separate coverage. The complete library goal stays active.
+
+No Haskell change or new behavior defect occurs. Root FINDINGS records the
+merged and validated field-pool repair b9219b9e first. The Chain reproducer
+returns Left (FieldAtomOnDatatype "Next" 0). Reuse unchanged strict Nix,
+798 examples plus golden, Fourmolu, and Cabal-gild evidence. Record each later
+Haskell fix there for external work. Preserve all older proofs, counterexamples,
+repairs, marked drafts, and the optimized interned core.
+
+## Current finite result-fed query resources
+
+Updated: 2026-10-17 08:18 CEST. This checkpoint starts at published `c7949534`.
+Proof commits are `84e353ad` and `61c48e57`. Source main remains `c0cc8a05`,
+merged locally at `896b0a1c`. Read
+`lean/notes-current-generated-query-resources.md` for the full target,
+proof map, and missing areas. Evidence is in
+`lean/restart-evidence/20261017-generated-query-resources/`.
+
+Four additive modules construct supported finite indexed native-query
+programs from one initial numeric forecast. Each query appends its exact
+result for later selection. Initial index checks and computed entry
+reservations derive every later admission. The same joint physical trace
+retains exact language, full readiness, inventory admission, captured native
+origins, populated native/equality state, global-table validity, and resource
+bounds. No future trace, WordRanges, later counter, or output law is supplied.
+
+The pinned Audit passes 2894 jobs and 64310 dependency checks. All four
+production strict logs are empty. All 46 imported full signature and axiom
+pairs pass: 39 public checks and seven integrations in seven groups. Only
+propext, Classical.choice, and Quot.sound occur. Four proof component
+manifests verify 118 entries. The next-target survey adds 24 entries.
+Aggregate validation checks five manifests with 142 entries.
+Preservation retains 13268 starting files, 2889 older non-Audit proofs,
+all 239 Haskell files, all 206 active-package files, and 79 frozen manifests
+with 651 entries. Stashes and three other worktrees retain their initial state.
+
+The concrete two-query integration creates singleton node 3 outside the
+original source and every original input model. The second call consumes
+that exact result at the first call's complete returned state. Final native
+node/edge cells and a valid nonempty equality descent record remain present.
+A separate three-query integration proves the composed exact language law.
+
+Next derive initial resource bounds and Frame retention through actual
+selected Operand projection and general Merge, including selection and
+warm winners. Compose Target in its head, tail, then query order. The new
+contiguous query program does not discharge FoldRanges across Operand work.
+General Target/Force/Edit/ClassPass, outer active/stored descent, arbitrary
+constrained Mu, convergence, remaining callers, current adapters, concrete
+capacity, and full public Haskell correspondence remain open. Source gates
+and all-root cap assumptions need separate coverage. Logical mass is not
+bytes. The full library goal stays active. Read next-initial-operand-resources.md
+and next-constrained-survey.md in the evidence directory.
+
+No Haskell change or new behavior defect occurs. Root FINDINGS keeps all
+repair status first. Field-pool repair `b9219b9e` is merged and validated.
+Reuse unchanged strict Nix, 798 examples plus golden, Fourmolu, and
+Cabal-gild evidence. Record later fixes here for external work. Preserve all
+earlier proofs, counterexamples, repairs, marked drafts, and the optimized
+interned core, including older constructor and equality work.
+
+## Current computed native query budgets
+
+Updated: 2026-10-17 07:58 CEST. This checkpoint starts at published `50c8132a`.
+Proof commits are `318feeea`, `20f9b603`, and `feedd09e`.
+Source main remains `c0cc8a05`, merged locally at `896b0a1c`.
+Read `lean/notes-current-computable-query-rank.md` for the top-level target,
+proof map, and missing areas. Evidence is in
+`lean/restart-evidence/20261017-computable-query-rank/`.
+
+Six additive modules derive a computable natural rank from full recursive
+source mass and its literal input inventory. Stable semantic success takes
+no completed execution premise. Initial node and edge counts and causal
+Stored mass bound branching and total yielded instructions. Closed original
+roots, Good, SemanticReady, Idle, and initial headroom construct their own
+checked physical receipt. That same trace, exact execute, result, stores,
+and identity supplies fit the computed instruction schedule. The resource
+producer uses the supplied causal mass directly. It does not recompute a
+larger initialBound. Idle permits populated completed native tables.
+
+The pinned Audit passes 2890 jobs and 64246 dependency checks. All six strict
+production logs are empty. All 50 imported full signature and axiom pairs
+pass: 39 public checks and eleven constructive integrations in ten groups.
+Only propext, Classical.choice, and Quot.sound occur. Preservation retains
+13113 starting files, 2883 older non-Audit proofs, all 239 Haskell files,
+all 206 active-package files, and 78 frozen manifests with 647 entries.
+Stashes and three other worktrees retain their initial state.
+
+Next compose complete queries that consume their actual preceding results.
+Forecast all later counters and causal mass from initial numbers and call
+count. Retain populated native, equality, and global caches. General Target
+and Force misses, mixed Edit/ClassPass, outer active/stored descent,
+arbitrary constrained Mu bodies, convergence, remaining callers, current
+frontend/runtime adapters, concrete capacity, and full public Haskell
+correspondence remain open. Logical mass is not bytes. Internal constructor
+and solver work need separate measures. The full library goal stays active.
+Read next-generated-query-resources.md and generated-query-survey.md in the
+evidence directory. Preserve all earlier proofs and marked drafts.
+
+No Haskell change or new behavior defect occurs. Root FINDINGS keeps the
+repair registry first. Repair `b9219b9e` is merged and validated. The older
+recursive field-pool failure is now explicitly historical. Reuse unchanged
+strict Nix, 798 examples plus golden, Fourmolu, and Cabal-gild evidence.
+Record each later Haskell repair here for external work.
+
+## Current complete native instruction and payload budgets
+
+Updated: 2026-10-17 07:39 CEST. This checkpoint starts at published `59884b14`.
+The proof commits are `1580eb22`, `d2b7ca41`, and `d224177b`.
+Source main remains `c0cc8a05`, merged locally at `896b0a1c`.
+Read `lean/notes-current-native-instruction-budget.md` for the full target,
+current proof map, and missing areas. Evidence is in
+`lean/restart-evidence/20261017-native-instruction-budget/`.
+
+Eight additive modules derive whole-query instruction credit from initial
+source branching and semantic rank. All node compiler branches and both
+checked edge branches produce their own credit. Every actual yielded step
+spends at least one credit. Cold publication, checked bodies, warm returns,
+and both captured native finish frames retain their exact continuations.
+
+Closed original roots, initial numeric headroom, Good, SemanticReady, and
+Idle now construct their own complete checked physical receipt. Idle permits
+populated completed tables. That same trace fits the initial instruction
+budget. Exact execute, returned mass, current stores, and both constructor
+identity supplies use that budget. The initial endpoint takes no physical
+trace, future WordRanges, later entry counters, or desired result law.
+
+The budget is an initial-source mathematical value based on noncomputable
+semantic requiredFuel. It is not a computed syntax-only bound. Work and
+optionalBinder each count as one checked instruction. Internal constructor
+work, solver work, bytes, and total memory capacity need separate measures.
+The new initial endpoint gives physical and resource results. Compose the
+existing contextual language laws on the same trace for serial semantics.
+
+The pinned Audit passes 2884 jobs and 64123 dependency checks. Only propext,
+Classical.choice, and Quot.sound occur. All eight final strict logs are empty.
+All 74 imported complete signature and axiom pairs pass in twelve groups.
+These comprise 63 public checks and eleven constructive integration proofs.
+Six proof component manifests verify 166 entries. The next-target source
+survey adds 23 entries. Aggregate validation checks seven manifests with
+189 entries.
+Read checkpoint-validation.json for complete imported signatures, constructive
+kernels, component manifests, and hashes. Preservation retains 12943 starting
+files, 2875 older non-Audit proofs, all 239 Haskell files, all 206 active-package
+files, and 77 frozen manifests with 641 entries. Stashes and three other
+worktrees retain their initial state.
+
+Next derive a computed initial semantic rank bound. Then forecast resources
+for complete queries that consume their actual preceding results. Preserve
+populated native, equality, and global caches. General Target and Force
+misses, editor/class completion, outer active/stored producers, arbitrary
+constrained Mu bodies, convergence, remaining callers, current frontend and
+runtime adapters, concrete capacity, and full public Haskell correspondence
+remain open. The full library goal stays active.
+
+No Haskell change or new defect occurs. Root FINDINGS keeps the repair
+registry first. Field-pool repair `b9219b9e` is merged and validated. Reuse
+unchanged strict Nix, 798 examples plus golden, Fourmolu, and Cabal-gild
+evidence. Preserve all earlier artifacts and the optimized interned core.
+Read next-computable-rank-and-result-fed-queries.md in the evidence directory.
+
+## Current initial native widths and checked trace resources
+
+Updated: 2026-10-17 07:18 CEST. This checkpoint starts at published `64d8b43d`.
+The proof commits are `12846952` and `ffb195b2`.
+Source main remains `c0cc8a05`, merged locally at `896b0a1c`.
+Read `lean/notes-current-native-width-producer.md` for the top-level target,
+current proof map, and missing areas. Evidence is in
+`lean/restart-evidence/20261017-native-width-producer/`.
+
+Five additive modules derive quantitative code safety from initial physical
+inputs. All node dispatcher branches and accepted/rejected checked edge code
+produce their own width certificate. Ordered walks retain exact original
+counts and current physical results. Actual direct and warm requests, native
+misses, and protected finish frames retain the same code certificate.
+
+Initial ready node and edge requests now derive every reached Work width
+check on an actual physical trace. The original heap computes its own common
+payload bound. Numeric store and allocation budgets follow on the same trace.
+No future width or intermediate store certificate is supplied. Completed
+return endpoints also derive exact execute and returned mass. The actual
+physically checked trace and its length remain inputs. Complete query
+existence, an initial instruction bound, and raw-prefix word/owner admission
+remain separate. This is not a complete generated-query resource theorem.
+
+The pinned Audit passes 2876 jobs and 63991 dependency checks. Only propext,
+Classical.choice, and Quot.sound occur. All five final strict logs are empty.
+All 48 imported complete signature and axiom pairs pass in ten groups.
+These comprise 38 public checks and ten constructive integration proofs.
+Five component manifests verify 142 entries.
+Read checkpoint-validation.json for imported full signatures, constructive
+kernels, component manifests, and hashes. Preservation retains 12796 starting
+files, 2870 older non-Audit proofs, all 239 Haskell files, all 206 active-package
+files, and 76 frozen manifests with 633 entries. Stashes and three other
+worktrees retain their initial state.
+
+Next derive the complete instruction count from initial semantic recursion
+and original-source row/member/child profiles. Derive raw-prefix physical
+checks and WordRanges from initial headroom. Construct the complete trace.
+Then compose queries that consume their actual preceding results. General
+Target and Force misses, editor/class completion, outer active/stored
+producers, arbitrary constrained Mu bodies, convergence, remaining callers,
+current frontend/runtime adapters, concrete capacity, and complete public
+Haskell correspondence remain open. Mass does not measure bytes.
+
+No Haskell change or new defect occurs. Root FINDINGS keeps the repair
+registry first. Field-pool repair `b9219b9e` is merged and validated. Reuse
+unchanged strict Nix, 798 examples plus golden, Fourmolu, and Cabal-gild
+evidence. Preserve all earlier artifacts and the optimized interned core.
+The full library goal stays active. Read next-initial-query-instruction-budget.md
+in the evidence directory.
+
+## Current native worker mass and numeric checked prefixes
+
+Updated: 2026-10-17 06:59 CEST. This checkpoint starts at published `3d1c966a`.
+The proof commits are `de18ec41`, `7f435218`, and `f8efa29a`.
+Source main remains `c0cc8a05`, merged locally at `896b0a1c`.
+Read `lean/notes-current-native-mass-resources.md` for the top-level target,
+current proof map, and missing areas. Evidence is in
+`lean/restart-evidence/20261017-native-mass-resources/`.
+
+Seven additive modules connect causal mass to literal native query workers.
+Current physical validity derives captured and returned payload bounds for
+both populated native memo families and every phase. Exact current reads
+and resident child lists inherit the same bound. Actual checked accepted
+edges, rejected sentinels, row hash joins, and union suffixes construct their
+own final constructor results from their actual earlier ordered prefixes.
+Original operand mass and literal walk length derive emitted Work widths.
+
+A numeric recurrence now bounds every checked instruction's constructor
+store and both identity supplies. It covers every stopping outcome. Actual
+certified prefixes use the original computed source mass and step count.
+Their domain allocations are at most the step count. The source compiler
+must still produce every reached Work width certificate and a complete-query
+instruction bound. Current-prefix Stored and completed ordered walks remain
+explicit local assembler inputs. These are not whole-query resource results.
+
+The pinned Audit passes 2871 jobs and 63915 dependency checks. Only propext,
+Classical.choice, and Quot.sound occur. All seven final strict logs are empty.
+All 75 imported signature and axiom pairs pass in ten groups.
+Five component manifests verify 161 entries.
+Read checkpoint-validation.json for imported full signatures, constructive
+kernels, component manifests, and hashes. Preservation retains 12629 starting
+files, 2863 older non-Audit proofs, all 239 Haskell files, all 206 active-package
+files, and 75 frozen manifests with 628 entries. Stashes and three other
+worktrees retain their initial state.
+
+Next produce the quantitative Code and protected-frame invariant for a
+complete generated query. Derive all prefix widths, stores, and the complete
+step count from initial inputs. Compose queries that consume their actual
+earlier results. General Target and Force misses, editor/class completion,
+outer active/stored producers, arbitrary constrained Mu bodies, convergence,
+remaining callers, current frontend/runtime adapters, concrete capacity,
+and complete public Haskell correspondence remain open. Mass is not bytes.
+
+No Haskell change or new defect occurs. Root FINDINGS keeps the repair
+registry first. Field-pool repair `b9219b9e` is merged and validated. Reuse
+unchanged strict Nix, 798 examples plus golden, Fourmolu, and Cabal-gild
+evidence. Preserve all earlier artifacts and the optimized interned core.
+The full library goal stays active. Read next-complete-query-width-producer.md
+in the evidence directory.
+
+## Current causal payload bounds and generated checked binders
+
+Updated: 2026-10-17 06:42 CEST. This checkpoint starts at published `1a8e5b7b`.
+The proof commits are `2f7a3bc1`, `aa3cb202`, `33387176`, and `5166ffde`.
+Source main remains `c0cc8a05`, merged locally at `896b0a1c`.
+Read `lean/notes-current-causal-result-mass.md` for the top-level proof target,
+current proof map, and missing areas. Evidence is in
+`lean/restart-evidence/20261017-causal-result-mass/`.
+
+Ten additive modules count complete structural payload mass, including every
+Mu body and both probes. Successful initial source reads produce a common
+store bound. Full actual constructor execution retains causal store and
+result bounds through nested Mu, unions, filtering, warm winners, candidate
+publication, and pending outcomes. Encoded widths and original constructor
+charges give a conservative numeric ceiling from initial payload mass.
+
+One initial computed source bound now constructs serial optional binders
+that consume their literal preceding results. Every later mass ceiling and
+allocation credit follows from the original number and call count. Actual
+checked physical traces retain both populated native tables, domains, and
+equality operations exactly. Initial semantic context and physical validity
+construct the complete return. No later-entry counters, future WordRanges,
+supplied execution, or desired result-law premise is used.
+
+This sequence contains only optionalBinder instructions. Other native query
+instructions, full generated-query resources, general Target and Force
+misses, editor/class completion, outer active/stored producers, arbitrary
+constrained Mu bodies, convergence, remaining recursive callers, current
+frontend/runtime adapters, concrete capacity, and complete public Haskell
+correspondence remain open. Mass is not a byte count. Conservative ceilings
+do not establish useful machine-word headroom or total memory capacity.
+
+The pinned Audit passes 2864 jobs and 63784 dependency checks. Only propext,
+Classical.choice, and Quot.sound occur. All ten final strict logs are empty.
+All 134 imported axiom/signature pairs pass in fifteen groups.
+Seven component manifests verify 247 entries.
+Read checkpoint-validation.json for complete imported signatures, constructive
+kernels, component manifests, and hashes. Preservation retains 12398 starting
+files, 2853 older non-Audit proofs, all 239 Haskell files, all 206 active-package
+files, and 74 frozen manifests with 621 entries. Stashes and three other
+worktrees retain their initial state.
+
+No Haskell source change or new Haskell defect occurs. Root FINDINGS keeps
+the external repair registry first. Field-pool repair `b9219b9e` is merged
+and validated. Reuse unchanged strict Nix, 798 examples plus golden,
+Fourmolu, and Cabal-gild evidence. Preserve all earlier work and the optimized
+interned core. The full library goal stays active. Read
+next-full-query-mass-resources.md in the evidence directory.
+
+## Current recursive allocation and initial source profiles
+
+Updated: 2026-10-17 06:17 CEST. This checkpoint starts at published `8883b39a`.
+The proof commits are `c4d0108b`, `2771817b`, and `9461e672`.
+Source main remains `c0cc8a05`, merged locally at `896b0a1c`.
+Read `lean/notes-current-generated-resource-profiles.md` for the top-level
+proof target, current proof map, and missing areas. Evidence is in
+`lean/restart-evidence/20261017-generated-resource-profiles/`.
+
+Five additive modules bound full repaired constructor allocation, stored
+substitution, and optional binders. Literal initial syntax pays for both
+probes, the fresh body, normalization, and Mu reservation. All outcomes,
+including pending readback, retain the bounds. Open nested Mu and unions
+remain supported. Checked prefixes accumulate actual Work and body charges.
+Successful original payload reads retain finite branching and logical size
+profiles through record and issued-key growth. Size helpers use the caller's
+SizeOf instances. An absent earlier identity has no readback guarantee.
+
+The prefix charges still depend on reached instructions and bodies. They
+are not an initial root resource bound for generated-query sequences.
+Derive causal result-size bounds and then bound every reached charge from
+the original inputs. Fixed-original-source serial resources remain proved.
+General first Target and Force misses, editor/class completion, outer active
+and stored producers, arbitrary constrained Mu bodies, convergence,
+remaining recursive callers, current frontend/runtime adapters, concrete
+capacity, and complete public Haskell correspondence remain open.
+
+The pinned Audit passes 2854 jobs and 63392 dependency checks. Only propext,
+Classical.choice, and Quot.sound occur. All five strict checks are clean.
+All 70 imported axiom/signature pairs pass in ten groups. Five component
+manifests verify 174 entries. Preservation retains
+12226 starting files, 2848 older non-Audit proofs, all 239 Haskell files,
+all 206 active-package files, and 73 frozen manifests with 611 entries.
+Stashes and three other worktrees retain their initial state.
+
+No Haskell source change or new Haskell defect occurs. Root FINDINGS keeps
+the external repair handoff first. Field-pool repair `b9219b9e` is merged and
+validated; the Chain example returns `FieldAtomOnDatatype "Next" 0`.
+Reuse unchanged strict Nix, 798 examples plus golden, Fourmolu, and Cabal-gild
+evidence. Preserve all earlier work and the optimized interned core.
+The full library goal stays active. Read next-causal-generated-resources.md
+in the evidence directory. Do not infer whole-library completion from the
+component validation or the measured prefix charges.
+
+## Current mixed editor depths and original-source serial resources
+
+Updated: 2026-10-17 06:00 CEST. This checkpoint starts at published `bf306940`.
+The proof commits are `c0876d1a`, `181f668f`, and `140f5c7a`.
+Source main remains `c0cc8a05`, merged locally at `896b0a1c`.
+Read `lean/notes-current-mixed-editor-class.md` for the top-level target,
+current proof map, and missing areas. Evidence is in
+`lean/restart-evidence/20261017-mixed-editor-class/`.
+
+Five additive modules retain mixed stores and caps through actual node,
+child, row, and list editor reads, compiled classes, and the tail-first
+class pass. Selected path domains suffice. Unrelated captured roots can
+stay open. Each head captures its literal tail result. Depth follows an
+explicit conservative syntax transformer. This noncomputable logical size
+bound is not an executable allocation estimate. Actual warm-slot integration
+constructs its own finite nonplain leaf edit from initial entry counters.
+General first target misses and class completion remain open.
+
+A separate endpoint constructs arbitrary finite serial queries over one
+fixed original source from one initial numeric resource budget. Actual past
+domain allocation retains the same missing-key credit across every call.
+It preserves populated native tables, equality operations, and global tables.
+No later-entry counters or future WordRanges are supplied. This result does
+not admit newly produced operands outside that original source.
+
+The pinned Audit passes 2849 jobs and 63208 dependency checks. Only propext,
+Classical.choice, and Quot.sound occur. All five strict checks are clean.
+All 28 imported pairs pass in eight groups. Four component manifests verify
+98 entries. Read checkpoint-validation.json for signatures and hashes.
+Preservation retains 12120 starting files, 2843 older non-Audit proofs,
+all 239 Haskell files, and 72 frozen production manifests with 606 entries.
+Stashes and three other worktrees retain their initial state.
+
+Next derive initial serial resources for newly produced operands. Construct
+general Target and Force misses, then mixed editor and class completion.
+Produce outer active and stored certificates. General constrained descent,
+arbitrary constrained Mu bodies, convergence, remaining recursive callers,
+frontend/runtime adapters, concrete capacity, and full public composition
+remain open. Completed graph proofs do not establish Haskell lazy publication
+or runtime forcing. The full library goal stays active. Read
+next-generated-resources-and-class-completion.md in the evidence directory.
+
+No Haskell change or new defect occurs. Root FINDINGS keeps the external
+repair handoff first. Field-pool repair `b9219b9e` is merged and validated.
+Reuse unchanged strict Nix build, 798 examples plus golden, Fourmolu, and
+Cabal-gild evidence. Preserve all earlier work and the optimized interned core.
+
+## Current mixed Merge caps and selected target callers
+
+Updated: 2026-10-17 05:46 CEST. This checkpoint starts at published `5b0c56a8`.
+The proof commits are `0f90ca80`, `8dfef438`, and `0a10b057`.
+Source main remains `c0cc8a05`, merged locally at `896b0a1c`.
+Read `lean/notes-current-mixed-merge-caps.md` for the top-level target,
+current proof map, and missing areas. Evidence is in
+`lean/restart-evidence/20261017-mixed-merge-caps/`.
+
+Nine additive modules derive universal finite-depth caps through the actual
+mutual memo-aware Merge. Candidate certificates precede publication. Exact
+earlier winners retain their complete captured originals. Actual comparison,
+selection, projection, and Merge retain guard heaps and current joint stores.
+Initial selected-path domains construct finite Operands. Unrelated ordinary
+siblings and captured roots can stay open. Supplied Target reads follow
+literal head, tail, and checked-query order with explicit maximum depths.
+Force misses establish universal slot certificates for the captured forest
+before storage. Leaf retains those stores and uses the maximum input depth.
+A warm-slot kernel constructs its own full Leaf from initial entry counters.
+General first misses and full editor/class completion remain open.
+
+The pinned Audit passes 2844 jobs and 63176 dependency checks. Only propext,
+Classical.choice, and Quot.sound occur. All nine strict checks are clean.
+All 80 imported pairs pass in 13 groups. Six component manifests verify
+151 entries. Read checkpoint-validation.json for signatures and hashes.
+Preservation retains 11952 starting files, 2834 older non-Audit proofs,
+all 239 Haskell files, and 71 frozen production manifests with 601 entries.
+Stashes and three other worktrees retain their initial state.
+
+Next lift explicit depths through Edit and tail-first ClassPass. Construct
+general Target, Force miss, and class execution from initial resources.
+Derive cumulative serial allocation bounds. The ordinary source gate admits
+closed no-Mu endpoints independently of their own guard. General constrained
+descent, arbitrary constrained Mu bodies, convergence, remaining recursive
+callers, frontend/runtime adapters, capacity, and complete public composition
+remain open. Completed graph proofs do not establish Haskell lazy publication
+or runtime forcing. The full library goal stays active. Read
+next-editor-class-and-serial-resources.md in the evidence directory.
+
+No Haskell change or new defect occurs. Root FINDINGS keeps the external
+repair handoff first. Field-pool repair `b9219b9e` is merged and validated.
+Reuse unchanged strict Nix build, 798 examples plus golden, Fourmolu, and
+Cabal-gild evidence. Preserve all earlier work and the optimized interned core.
+
+## Current source rebase and finite generated checked queries
+
+Updated: 2026-10-17 05:28 CEST. This checkpoint starts at published `f08ebe13`.
+The proof commits are `ba847c76`, `2a2ee885`, and `42d08285`.
+Source main remains `c0cc8a05`, merged locally at `896b0a1c`.
+Read `lean/notes-current-joint-source-rebase.md` for the top-level target,
+current proof map, and missing areas. Evidence is in
+`lean/restart-evidence/20261017-joint-source-rebase/`.
+
+Eight additive modules retain represented source weights and captured
+original requests. Actual physical traces produce origins for all memo
+phases. Those origins recover the old antecedents of conditional joint laws.
+The laws rebase at the same populated native state. Concrete input models
+retain exact contextual laws and admit newly produced closed operands.
+Initial entry counters construct finite cold and generated warm queries.
+The same receipt retains exact language, cap, ranked occurrences, scope,
+Context, semantic admission, and captured origins. No future WordRanges,
+supplied completed execution, or desired result-law premise is required.
+Independent integration feeds the actual cold result into the next query.
+Each later entry still needs its own numeric capacity bounds.
+
+The pinned Audit passes 2835 jobs and 63081 dependency checks. Only propext,
+Classical.choice, and Quot.sound occur. All eight strict checks are clean.
+All 67 imported pairs pass in ten groups. Five component manifests verify
+123 entries. Read checkpoint-validation.json for signatures and hashes.
+Preservation retains 11815 starting files,
+2826 older non-Audit proofs, all 239 Haskell files, and 70 frozen production
+manifests with 592 entries. Stashes and three other worktrees are unchanged.
+
+Next prove universal finite-depth caps through actual memo-aware Merge.
+Compose projection, Target, Leaf, editor, and tail-first class callers with
+an explicit depth transformer. The ordinary source gate does not imply the
+older hereditary AtLeaves premise. Derive cumulative serial allocation bounds.
+General constrained descent, convergence, remaining recursive callers,
+frontend/runtime adapters, capacity, and complete public composition remain
+open. The full library goal stays active. Read
+next-merge-caps-and-serial-resources.md in the evidence directory.
+
+No Haskell change or new defect occurs. Root FINDINGS keeps the external
+repair handoff first. Field-pool repair `b9219b9e` is merged and validated.
+Reuse unchanged strict Nix build, 798 examples plus golden, Fourmolu, and
+Cabal-gild evidence. Preserve all earlier work and the optimized interned core.
+
+## Current checked joint execution from initial numeric resources
+
+Updated: 2026-10-17 05:14 CEST. This checkpoint starts at published `0ea50f68`.
+The proof commits are `a041f192`, `c1156f5e`, `22fb0df2`, and `eecce203`.
+Source main remains `c0cc8a05`, merged locally at `896b0a1c`.
+Read `lean/notes-current-checked-joint-initial-resources.md` for the top-level
+target, current proof map, and missing areas. Evidence is in
+`lean/restart-evidence/20261017-native-initial-resources/`.
+
+Eleven additive modules prove joint structural laws through the current
+checked equality worker, every node branch, and exact memo owner finishes.
+The full physical trace induction derives cap, ranked occurrence, scope,
+Context, and returned-cell laws. Existing initial counter admission and
+finite contextual completion construct that same cold result. The endpoint
+takes no WordRanges, supplied execution, or desired result-law premise.
+It retains the earlier exact intersection language and current allocation
+history. Same-source warm calls construct their own result from actual past
+stores and warm-entry counters. Mixed cold integration derives an exact
+two-step warm repeat with the full checked state unchanged.
+
+The pinned Audit passes 2827 jobs and 63006 dependency checks. Only propext,
+Classical.choice, and Quot.sound occur. All eleven strict source checks are
+clean. All 85 imported pairs pass in 16 groups. Ten component manifests
+verify 157 entries. Read checkpoint-validation.json for hashes and groups.
+Preservation retains 11605 starting files, 2815 older non-Audit proofs, all
+239 Haskell files, and 69 frozen production manifests with 584 entries.
+
+Next rebase laws for newly produced operands and derive cumulative serial
+allocation bounds. Integrate full Target, Leaf, editor, and class callers.
+General constrained descent, repeated convergence, remaining recursive
+callers, frontend/runtime adapters, capacity, and complete public composition
+remain open. The complete library goal stays active. Read
+next-source-rebase-and-constrained-callers.md in the evidence directory.
+
+No Haskell change or new defect occurs. Root FINDINGS keeps the external
+repair handoff first. Field-pool repair `b9219b9e` is merged and validated.
+Reuse unchanged strict Nix build, 798 examples plus golden, Fourmolu, and
+Cabal-gild evidence. Preserve all earlier work and the optimized interned core.
+
+## Current joint source laws and generic native composition
+
+Updated: 2026-10-17 04:55 CEST. This checkpoint starts at published `0ebb832d`.
+The proof commits are `ad5c409b`, `bd85cd40`, `86d2c5f1`, and `1a0ad30e`.
+Source main remains `c0cc8a05`, merged locally at `896b0a1c`.
+Read `lean/notes-current-joint-source-native-laws.md` for the top-level target,
+current proof map, and missing areas. Evidence is in
+`lean/restart-evidence/20261017-joint-native-producer/`.
+
+Eleven additive modules prove the joint cap, ranked occurrence, scope,
+semantic heap, and guard heap laws through every actual source branch.
+The proof uses source fuel. Pair rank alone need not decrease at Mu entry.
+Exact generic native meaning transfers these laws to the same machine.
+Closed inputs construct finite generic cold execution under WordRanges.
+An actual warm return derives the same laws. General WordRanges still
+constrains future prefixes; initial numerical range production remains open.
+The current checked equality-cache Control worker also needs the joint lift.
+
+The pinned Audit passes 2816 jobs and 62897 dependency checks. Only propext,
+Classical.choice, and Quot.sound occur. All eleven strict source checks are
+clean. All 83 imported pairs pass in 17 groups. Eight component manifests
+verify 198 entries. Read checkpoint-validation.json for hashes and groups.
+Failed attempts remain recorded. Preservation
+retains 11398 starting files, 2804 older non-Audit proofs, all 239 Haskell
+files, and 68 frozen production manifests with 573 entries.
+
+Next derive initial numerical ranges and lift the laws through current
+checked equality control. Finite general warm callers, constrained descent,
+repeated convergence, remaining recursive callers, frontend/runtime adapters,
+capacity, serial public pipelines, and complete public composition remain
+open. The full library goal stays active. Read
+next-native-ranges-and-checked-control.md in the evidence directory.
+
+No Haskell change or new defect occurs. Root FINDINGS keeps the external
+repair handoff first. Field-pool repair `b9219b9e` is merged and validated.
+Reuse unchanged strict Nix build, 798 examples plus golden, Fourmolu, and
+Cabal-gild evidence. Preserve all earlier work and the optimized interned core.
+
+## Current causal source guard production and finite optional binders
+
+Updated: 2026-10-17 04:31 CEST. This checkpoint starts at published `5ce2c90f`.
+The proof commits are `69f576ae`, `df35e4cd`, and `b72ecdc9`.
+Source main remains `c0cc8a05`, merged locally at `896b0a1c`.
+Read `lean/notes-current-causal-guard-producer.md` for the top-level target,
+current proof map, and missing areas. Evidence is in
+`lean/restart-evidence/20261017-causal-guard-profile/`.
+
+Eight additive modules derive exact guard profiles through full actual source
+syntax. Fresh writes establish body/probe equality before publication.
+Warm hits retain the actual earlier writer's certificate. Stored substitution
+and optional binders retain that guard heap. Positive ranked optional binders
+construct finite capped and classified returns, including earlier winners.
+Their initial probe-freshness and ranked conditions remain explicit.
+
+The pinned Audit passes 2805 jobs and 62806 dependency checks. Only propext,
+Classical.choice, and Quot.sound occur. All eight strict source checks are
+clean. All 134 imported pairs pass in 14 groups. Seven component manifests
+verify 181 entries. Failed attempts and timeout scopes remain recorded.
+Preservation retains 11200 starting files, 2796 older non-Audit proofs,
+all 239 Haskell files, and 67 frozen manifests with 562 production entries.
+
+Next complete the joint recursive native producer from initial inputs.
+General warm callers, constrained descent, repeated convergence, remaining
+recursive callers, frontend/runtime adapters, capacity, serial public
+pipelines, and complete public composition remain open. The full library
+goal stays active. Read next-joint-native-producer.md in the evidence directory.
+
+No Haskell change or new defect occurs. Root FINDINGS keeps the external
+repair handoff first. Field-pool repair `b9219b9e` is merged and validated.
+Reuse unchanged strict Nix build, 798 examples plus golden, Fourmolu, and
+Cabal-gild evidence. Preserve all earlier work and the optimized interned core.
+
+## Current guard profiles and ranked native local laws
+
+Updated: 2026-10-17 04:07 CEST. This checkpoint starts at published `58262ba5`.
+The proof commits are `445f33d7`, `26dd76ec`, and `88be2ba6`.
+Source main remains `c0cc8a05`, merged locally at `896b0a1c`. Read
+`lean/notes-current-native-guard-profiles.md` for the top-level target,
+current proof map, and remaining areas. Evidence is in
+`lean/restart-evidence/20261017-mu-cap-readback/`.
+
+Six additive modules prove exact structural guard-depth observation and
+source-supported ranked native local laws. The profile reads literal guards
+and stored bodies. Its finite bound is equivalent to Cap. Original syntax,
+availability, and domain coverage supply the ranked law's input boundary.
+Closed inputs derive these facts. Actual domain extension and later reads
+retain the same original source Mu witnesses.
+
+Actual memo lookup, demand, and captured finish retain conditional cap and
+occurrence laws. Literal row, child, and union code derives both laws from
+its smaller request laws. Budgets use the actual ordered child zip. These
+are local continuation certificates. They do not prove arbitrary native
+completion or the missing joint recursive induction.
+
+A source-built empty-language example proves that language observations
+cannot recover literal guard caps. It is a proof-interface obstruction,
+not a Haskell defect. Exact causal positive-depth readback for earlier Mu
+winners remains open. Historical semantic origins do not already retain
+the required earlier depth/profile invariants. Read next-causal-guard-profile.md
+in the new evidence directory. Do not repeat the pure observer or local cache laws.
+
+The pinned Audit passes 2797 jobs and 62661 dependency checks. Only propext,
+Classical.choice, and Quot.sound occur. All six production sources pass
+absolute-path strict checks without diagnostics. All 96 imported pairs pass
+in eight groups. Five component manifests verify 147 entries. Failed raw
+attempts remain preserved. Canonical replay retains one older unused-input
+warning. Preservation retains
+11053 starting files, 2790 older non-Audit proofs, all 239 Haskell files,
+and 66 frozen production manifests with 554 entries. Stashes and three
+other worktrees remain unchanged.
+
+General mixed native closure, finite warm callers, constrained recursive
+descent, repeated convergence, remaining recursive callers, frontend and
+runtime adapters, capacity, serial public pipelines, and complete public
+composition remain open. The final source gate remains broader than the
+current supported family. The complete library goal stays active.
+
+No Haskell change or new defect occurs. Root FINDINGS keeps the external
+repair handoff first. Recursive field-pool repair `b9219b9e` is merged and
+validated. Reuse unchanged strict Nix build, 798 examples plus golden,
+Fourmolu, and Cabal-gild evidence. Preserve the optimized interned core and
+every earlier proof, counterexample, repair, and marked draft.
+
+## Current general native marker and cap transport
+
+Updated: 2026-10-17 03:52 CEST. This checkpoint starts at published `91ea29d3`.
+The proof commits are `443106e4`, `5912ff25`, and `e5dd8505`.
+Source main remains `c0cc8a05`, merged locally at `896b0a1c`. Read
+`lean/notes-current-general-native-callbacks.md` for the top-level target,
+current proof map, and remaining areas. Evidence is in
+`lean/restart-evidence/20261017-general-marker-transport/`.
+
+Six additive modules prove general stored marker and finite-cap transport.
+They cover arbitrary available capped bodies, including open nested Mu
+reconstruction and earlier nested winners. Selective lexical typing permits
+unused constrained captures. Complete initial caches construct actual
+normalized callbacks and retain the same cap, marked classification,
+MuStored, Ready, availability, and histories. Exact warm outer Mu reads
+now derive occurrence bounds from their actual probes.
+
+Separate callback certificates permit an unfinished outer reservation.
+They derive actual returned laws without a successful-callback premise.
+Initial Ready has Covered []; a fresh outer reservation normally has
+Covered [key]. Keep these interfaces distinct. Literal candidate cleanup
+does not certify the guard cap of an earlier keep-first outer Mu winner.
+That readback and joint native result-cell classification are the next target.
+Read next-outer-mu-cap-readback.md in the new evidence directory.
+
+The pinned Audit passes 2791 jobs and 62515 dependency checks. Only propext,
+Classical.choice, and Quot.sound occur. All six new production sources pass
+absolute-path strict checks without diagnostics. All 61 imported pairs pass
+in 16 groups. Seven component manifests verify 155 entries. Failed sources
+and raw logs remain preserved. One older warning remains in canonical replay.
+Preservation retains 10871 starting files, 2784 older non-Audit proofs,
+all 239 Haskell files, and 65 frozen production manifests with 548 entries.
+Stashes and three other worktrees remain unchanged.
+
+General mixed native closure, finite warm callers, constrained recursive
+descent, repeated convergence, remaining recursive callers, current frontend
+and runtime adapters, capacity, serial public pipelines, and complete public
+composition remain open. The final source gate remains broader than the
+current supported family. The complete library goal stays active.
+
+No Haskell change or new defect occurs. Root FINDINGS keeps the external
+repair handoff first. Recursive field-pool repair `b9219b9e` is merged and
+validated. Reuse unchanged strict Nix build, 798 examples plus golden,
+Fourmolu, and Cabal-gild evidence. Preserve the optimized interned core and
+every earlier proof, counterexample, repair, and marked draft.
+
+## Current ranked native occurrences and captured finishes
+
+Updated: 2026-10-17 03:33 CEST. This checkpoint starts at published `4e4f59e9`.
+The proof commits are `c68841ef`, `9787e349`, and `2d828a42`.
+Source main remains `c0cc8a05`, merged locally at `896b0a1c`. Read
+`lean/notes-current-native-occurrence-support.md` for the top-level target,
+current proof map, and remaining areas. Evidence is in
+`lean/restart-evidence/20261017-native-cap-producer/`.
+
+Eight additive modules derive closed-input scope, source Mu coverage,
+strict ordinary child descent, and compatibility with actual numeric pairs.
+Exact source reads derive the pair weights. Local construction retains
+free/deep occurrence bounds. A direct-union callback marks its actual fresh
+reference with the old pair's positive weight and produces its exact result.
+Captured body receipts publish already-derived laws at the same actual cache
+owner. These results do not prove general nested callback transport or
+arbitrary mixed native completion. The source gate remains broader.
+
+The full pinned Audit passes 2785 jobs and 62415 dependency checks. Only
+propext, Classical.choice, and Quot.sound occur. All eight production sources
+pass absolute-path strict checks without diagnostics. Exact imported checks
+and component hashes are in checkpoint-validation.json. Failed sources and
+raw logs remain preserved. Canonical replay retains one older warning.
+Preservation retains 10705 starting files, 2776 older non-Audit proof sources,
+all 239 Haskell files, and 64 frozen production manifests with 542 entries.
+Stashes and three other worktrees remain unchanged.
+
+Next prove general marker and cap transport through actual stored
+substitution and normalized callbacks, including populated Mu keys. Existing
+semantic readiness supplies repaired free/deep readback; selected-body cap
+transport remains open. Then derive joint native laws, finite warm callers,
+and general constrained descent. Repeated convergence, remaining recursive
+callers, frontend/runtime adapters, capacity, serial public pipelines, and
+complete composition remain open. Read next-general-marker-transport.md
+in the new evidence directory. The complete library goal stays active.
+
+No Haskell change or new defect occurs. Root FINDINGS keeps the external
+handoff and merged field-pool repair `b9219b9e` first. The Chain example is
+already repaired and returns `Left (FieldAtomOnDatatype "Next" 0)`.
+Reuse unchanged strict Nix build, 798 examples plus golden, Fourmolu, and
+Cabal-gild evidence. Preserve the optimized interned core and every earlier
+proof, counterexample, repair, and marked draft.
+
+## Current native cap laws and normalized binder producer
+
+Updated: 2026-10-17 03:14 CEST. This checkpoint starts at published `6428bd23`.
+The proof commits are `d60a4fbd`, `70401f89`, and `e3b4c09d`.
+Source main remains `c0cc8a05`, merged locally at `896b0a1c`. Read
+`lean/notes-current-native-cap-laws.md` for the top-level target, current
+proof map, and remaining areas. Evidence is in
+`lean/restart-evidence/20261017-native-cap-laws/`.
+
+Seven additive modules retain conditional finite caps in actual native memo
+cells, local source Mu bindings, ordinary/union code, and checked edge code.
+Recursive subcall laws remain explicit in these local code certificates.
+A bounded normalized self-union binder constructs its own finite result
+from an initially absent canonical key. It retains the actual probes and
+returns the original constrained ordinary record. The produced result
+replays at the exact later heap. Independent integration constructs a cold
+constrained self-query and its next exact warm query from initial facts.
+These results do not prove arbitrary mixed recursive cap closure or warm
+completion. The full source gate remains broader than the current family.
+
+The full pinned Audit passes 2777 jobs and 62293 dependency checks. Only
+propext, Classical.choice, and Quot.sound occur. All seven production sources
+pass absolute-path strict checks without diagnostics. Exact imported checks
+and hashes are in checkpoint-validation.json. Earlier failed sources and raw
+logs remain preserved. One older warning remains in canonical replay.
+Preservation retains 10557 starting files, 2769 older non-Audit proof sources,
+all 239 Haskell files, and 63 frozen production manifests with 534 entries.
+Stashes and three other worktrees remain unchanged.
+
+Next prove the normalized pair-occurrence invariant and joint causal native
+producer laws. Then construct finite warm callers and constrained recursive
+descent. Repeated convergence, remaining recursive callers, current frontend
+and runtime adapters, machine capacity, serial public pipelines, and complete
+public composition remain open. Read next-mixed-native-producer.md in the
+new evidence directory. The complete library goal stays active.
+
+No Haskell change or new defect occurs. Root FINDINGS keeps the external
+handoff and merged field-pool repair `b9219b9e` first. The Chain example is
+already repaired and returns `Left (FieldAtomOnDatatype "Next" 0)`.
+Reuse unchanged strict Nix build, 798 examples plus golden, Fourmolu, and
+Cabal-gild evidence. Preserve the optimized interned core and every earlier
+proof, counterexample, repair, and marked draft.
+
+## Current rich editor and successive class support
+
+Updated: 2026-10-17 03:00 CEST. This checkpoint starts at published `be6a0dc1`.
+The proof commits are `92df4c9c`, `6e65aeca`, and `ef663832`.
+Source main remains `c0cc8a05`, merged locally at `896b0a1c`. Read
+`lean/notes-current-rich-editor-support.md` for the top-level target,
+current proof map, and remaining areas. Evidence and the next target are in
+`lean/restart-evidence/20261017-rich-editor-support/`.
+
+Eight additive modules connect actual leaf producers to whole-editor reads.
+Actual constructor and head work retain the richer native, Merge, and captured
+slot certificates. The editor derives each leaf law at its literal reached
+state. No LeafCertificate, NodeLeaves, future callback law, or desired result
+is a public premise. It retains every original signed mask and the same cap.
+The actual class right fold transports those masks to each changed captured
+forest. Different classes can overlap. Final source empty propagation retains
+the same rich laws. Full physical and language receipts remain intact.
+
+An initial-only theorem constructs arbitrary signed Required execution and
+its own stable bound, actual global reads, checked readiness, effects,
+causal stores, masks, cap, availability, closedness, and exact length.
+The composed Required/class theorem retains these laws from the original
+pre-Required forest through the supplied actual whole pass. Independent
+integration constructs the prefix and its prepared global validity itself.
+It does not construct arbitrary finite class execution.
+
+The final pinned Audit passes 2770 jobs and 62228 dependency checks. Only
+propext, Classical.choice, and Quot.sound occur. All eight current sources
+pass strict checks without diagnostics. Current imported probe totals and
+component hashes are in checkpoint-validation.json. Earlier frozen review
+inputs and failed sources remain preserved. Final probes use the corrected
+Forest helper without an unnecessary equality instance. Historical snapshot
+resolution retains the exact older reviewed source. Canonical replay retains
+one older dependency warning. Preservation retains 10360 starting files,
+2761 older non-Audit proofs, all 239 Haskell files, and 62 frozen production
+manifests with 527 entries. Stashes and three other worktrees remain unchanged.
+
+The current closed captured hereditary-leaf family is smaller than the source
+gate. Next prove general positive native cap support and finite warm callers,
+then constrained recursive descent. Actual pair cutoff and normalized binder
+cleanup need a stronger invariant than blanket no recurrence. Read
+next-general-native-cap.md and general-native-cap-boundary.md in the new
+evidence directory. Repeated convergence, remaining recursive callers,
+current frontend/runtime adapters, serial warm public pipelines, machine
+capacity, and complete public composition remain explicit boundaries.
+The full-library goal stays active.
+
+No Haskell change or new defect occurs. FINDINGS keeps merged recursive
+field-pool repair b9219b9e and the external handoff first. Reuse unchanged
+strict Nix build, 798 examples plus golden, Fourmolu, and Cabal-gild evidence.
+Preserve the optimized interned core and every older proof, counterexample,
+repair, and marked draft.
+
+## Current mixed-node completion and actual target support
+
+Updated: 2026-10-17 02:42 CEST. This checkpoint starts at published `6458c610`.
+The proof commits are `5ba18097`, `a2626e12`, `741a40dd`, and `6cb08c47`.
+Source main remains `c0cc8a05`, merged locally at `896b0a1c`. Read
+`lean/notes-current-mixed-node-support.md` for the top-level target, current
+proof map, and remaining areas. Evidence and the next target are in
+`lean/restart-evidence/20261017-mixed-node-support/`.
+
+Fifteen additive modules extend the component proofs. Whole plain nodes and
+descendant walks now construct their own finite execution in certified mixed
+outer tables. Other constrained owners remain permitted. The same actual
+return retains strict reads, checks, full Post, stores, and semantic laws.
+Conditional-store verification covers all eight actual outer families.
+Plain continuations construct their next call after an actual past prefix.
+The hereditary node wrapper proves input Region, not a hereditary output
+for arbitrary warm node cells.
+
+Actual warm native queries retain causal stores and hereditary laws at
+arbitrary width. These results verify supplied traces. They add no future
+range or capacity premise and do not prove arbitrary warm-query existence.
+Captured Operand, Target, Force, and Leaf reads derive their local laws from
+causal native, Merge, and exact target-slot certificates. Conditional editor
+reads retain every original signed path. A cap is equivalent to support at
+all paths of its depth. Thus the all-path relation also retains that cap.
+Reached-leaf certificates remain explicit until whole-editor richer-store
+retention is proved.
+
+The final pinned Audit passes 2762 jobs and 62204 dependency checks. Only
+propext, Classical.choice, and Quot.sound occur. All fifteen current sources
+pass strict checks without diagnostics. All 191 imported public/integration
+pairs pass in 21 groups. Component hashes and manifests are recorded in
+checkpoint-validation.json. Canonical replay retains one older unused-input
+warning. Preservation retains 10098 starting files, 2746 older non-Audit
+proofs, all 239 Haskell files, and 61 frozen production manifests with 519
+entries. Stashes and three other worktrees remain unchanged.
+
+Next retain the richer causal stores through the whole actual editor and
+successive classes. Then cover general nonhereditary ordinary endpoints and
+prove constrained recursive descent. The source gate is broader than the
+current hereditary leaf-placement family. Do not reduce the final scope.
+Read next-rich-editor-support.md and source-support-boundary.md in the new
+evidence directory. Repeated convergence, remaining recursive callers,
+current frontend/runtime adapters, serial warm public pipelines, machine
+capacity, and complete public composition remain explicit boundaries.
+The full-library goal stays active.
+
+No Haskell change or new defect occurs. FINDINGS keeps merged recursive
+field-pool repair b9219b9e and the external handoff first. The retained Chain
+reproducer returns `Left (FieldAtomOnDatatype "Next" 0)`. Reuse unchanged
+strict Nix build, 798 examples plus golden, Fourmolu, and Cabal-gild evidence.
+Preserve the optimized core and every older proof, repair, counterexample,
+and marked draft.
+
+## Current finite positional closure and mixed-table edge completion
+
+Updated: 2026-10-17 02:17 CEST. This checkpoint starts at published `f83da569`.
+The proof commits are `e3a2f22e`, `8b0a06eb`, and `506d0843`.
+Source main remains `c0cc8a05`. Read
+`lean/notes-current-recursive-positional-closure.md` for the top-level target,
+current proof map, and remaining work. Evidence and the next target are in
+`lean/restart-evidence/20261017-recursive-positional/`.
+
+Thirteen additive modules prove finite constrained-cap construction and
+actual head, Required, and path closure. Exact positional support also
+permits safe paths shorter than the uniform cap depth. SupportedProjection
+constructs its own finite actual endpoint. RequiredSupport constructs its
+own finite Required call and retains every original supported path at that
+same return. Ordered child relations retain the original signed positions.
+Conditional cache and active-owner laws permit other constrained owners.
+Plain edge producers construct their own finite call in those certified
+mixed tables, with strict reads, full Post, shape, and the semantic law.
+No caller supplies a completed enclosing query or future result law.
+
+The full pinned Audit passes 2747 jobs and 62089 dependency checks. Only
+propext, Classical.choice, and Quot.sound occur. All thirteen current sources
+pass strict checks without diagnostics. All 144 imported public/integration
+pairs pass in 23 groups. Nine component manifests retain 233 verified entries.
+Canonical replay retains one older unused-variable warning. Preservation
+retains 9862 starting files, 2733 older non-Audit proofs, all 239 Haskell files,
+and 60 frozen production manifests with 504 entries. Stashes and three other
+worktrees remain unchanged.
+
+General Target/edit/class-mask closure, mixed whole-node completion, and
+constrained recursive descent remain open. Next read
+`next-constrained-support-descent.md` in the new evidence directory.
+Repeated convergence, remaining recursive callers, current frontend/runtime
+adapters, serial warm public pipelines, machine capacity, and complete public
+composition remain explicit boundaries. The full-library goal stays active.
+
+No Haskell change or new defect occurs. FINDINGS keeps merged recursive
+field-pool repair b9219b9e and the external handoff first. Reuse unchanged
+strict Nix build, 798 examples plus golden, Fourmolu, and Cabal-gild evidence.
+Preserve the optimized core and every older proof, repair, counterexample,
+and marked draft.
+
+## Current hereditary laws through actual native execution
+
+Updated: 2026-10-17 01:54 CEST. This checkpoint starts at published `883467c8`.
+The proof commits are `bc981cd2`, `cf5262d1`, and `e52570f5`.
+Source main remains `c0cc8a05`. Read
+`lean/notes-current-hereditary-execution.md` and
+`lean/restart-evidence/20261017-hereditary-execution/`.
+
+Eleven additive modules retain the causal Mu store through actual comparison,
+selection, current memo-aware Merge, and completed checked native traces.
+Strictly smaller body returns supply each captured finish law. Exact warm
+readback supplies the conditional law for the original requested operands.
+The strengthened cold theorem constructs one finite exact closed intersection.
+That same contextual receipt also supplies the output annotation, causal Mu
+store, native returned-cell laws, and literal unconstrained source gate.
+No caller supplies a completed query or future prefix checks to that theorem.
+Unrelated constrained heap records remain permitted.
+
+The full pinned Audit passes 2734 jobs and 61966 dependency checks. Only
+propext, Classical.choice, and Quot.sound occur. All eleven current sources
+pass strict checks without diagnostics. Imported public and integration
+checks are recorded in checkpoint-validation.json. Canonical replay retains
+one older unused-variable warning. Preservation retains 9659 starting files,
+2722 older non-Audit proofs, all 239 Haskell files, and 59 frozen production
+manifests with 491 entries. Stashes and three other worktrees remain unchanged.
+
+Next prove positional constrained-cap closure and active-owner descent for
+recursive selected paths. This checkpoint does not prove their general
+termination. Repeated convergence, remaining recursive callers, current
+frontend and runtime adapters, warm public pipelines, and complete public
+composition remain open. Initial machine capacity remains an explicit condition.
+The full-library goal stays active.
+
+No Haskell change or new defect occurs. FINDINGS keeps the merged recursive
+field-pool repair b9219b9e and the external handoff first. Reuse unchanged
+strict Nix build, 798 examples plus golden, Fourmolu, and Cabal-gild evidence.
+Preserve the optimized core and every older proof, repair, counterexample,
+and marked draft.
+
+## Current local hereditary recursive endpoint laws
+
+Updated: 2026-10-17 01:37 CEST. This checkpoint starts at published `bc6d63ae`.
+The proof commits are `1e5c48fd`, `14591265`, `1cd5596a`, and `eabd9168`.
+Source main remains `c0cc8a05`. Read
+`lean/notes-current-hereditary-recursive-endpoints.md` and
+`lean/restart-evidence/20261017-recursive-selected-closure/`.
+
+Twelve additive modules derive local hereditary annotation laws through actual
+constructors, stored substitution, unfolding, closed head and Required reads,
+and current memo-aware Merge results. A causal MuStored invariant relates a
+stored body to its exact probes. Actual allowed construction produces it.
+Unrelated constrained heap records remain permitted. Native source bindings,
+actual checked edge bodies, all node compiler branches, and exact warm memo
+readback have local certificates. The causal store discharges optional binding.
+
+The full pinned Audit passes 2723 jobs and 61833 dependency checks. Only
+propext, Classical.choice, and Quot.sound occur. All twelve new sources pass
+strict checks. All 160 public and integration pairs pass. Ten component
+manifests retain 224 entries. Canonical replay retains one older unused-variable warning.
+Preservation retains 9405 starting files, 2710 older non-Audit proofs, all
+239 Haskell files, and 58 frozen production manifests with 480 entries.
+All earlier production proofs, repairs, counterexamples, and drafts remain.
+
+Whole native annotation and causal-store execution induction remains open.
+Current Merge comparison effects must also retain MuStored before composition.
+Then prove positional constraint closure and active-owner descent for recursive
+selected paths. The local certificates do not prove general selected progress.
+Read next-native-hereditary-execution.md in the new evidence directory.
+Repeated convergence, frontend/runtime adapters, warm public pipelines, and
+complete public composition remain open. The full-library goal stays active.
+
+No Haskell change or new defect occurs. FINDINGS keeps merged b9219b9e and
+the external repair handoff first. Reuse unchanged strict Nix build, 798
+examples plus golden, Fourmolu, and Cabal-gild evidence. Preserve the optimized
+interned core and every older constructor and equality proof.
+
+Current proof overview: [top-level target and remaining work](notes-proof-status-20261017.md).
+Cold recursive native completion now follows from initial source and domain
+key capacity. General recursive selected narrowing remains open. The finite
+ordinary root resource bridge is closed.
+
+## Current recursive native completion from initial resources
+
+Updated: 2026-10-17 01:17 CEST. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+This checkpoint starts at published `3c8bc858`. Proof commits are
+`495ecd7c`, `0d4f89b0`, and `16a888d1`. Read
+`lean/notes-current-recursive-initial-ranges.md` and
+`lean/restart-evidence/20261017-recursive-prefix-admission/`.
+
+Eleven additive modules close the whole-query raw-prefix admission gap.
+Strong induction derives physical checks, current Good and SemanticReady,
+original operand scope, actual past domain allocation, and exact captured
+finish inputs. The caller supplies no future Prefixes, WordRanges, physical
+trace, or completed body. RecursiveInitialRanges.initial_ranges derives
+both range predicates from initial original counters and domain headroom.
+Its cold_complete returns the exact closed recursive intersection at the
+same actual checked result. Mu, references, and explicit unions are included.
+This section supersedes older statements that leave this cold range gap open.
+
+The full pinned Audit passes 2711 jobs and 61656 dependency checks. Only
+propext, Classical.choice, and Quot.sound occur. Strict current-source checks
+and all 114 imported public/integration axiom and full-signature pairs pass.
+Ten component manifests retain 200 entries. Independent reviews find no
+material defect. Preservation retains 9182 starting files, 2699 older
+non-Audit proofs, all 239 Haskell files, and 57 frozen production manifests
+with 468 entries. All earlier repairs, counterexamples, and drafts remain.
+
+The coarse domain inventory can exceed fixed machine capacity. This is a
+sufficient initial condition, not coverage of every practical input. Output
+allocation and concrete runtime bounds remain separate. Serial warm-query
+pipelines still need their own certificate producers and composition.
+Next extend general constrained recursive selected-path progress. Read
+next-recursive-selected-progress.md in the new evidence directory. Repeated
+convergence, frontend and runtime adapters, and complete public pipelines
+remain open. The full-library goal stays active.
+
+No Haskell change or new defect occurs. FINDINGS keeps merged b9219b9e and
+the external repair handoff first. Reuse unchanged strict Nix validation:
+798 examples plus golden, Fourmolu, and Cabal-gild. Preserve the optimized core.
+
+## Current recursive domain inventory and allocation
+
+Updated: 2026-10-17 00:58 CEST. Source main remains `c0cc8a05`.
+This checkpoint starts at published `3d1ad127`. Proof commits are
+`84312e12`, `e1ede72e`, `e6732039`, and `ef8f7b56`. Read
+`lean/notes-current-recursive-domain-capacity.md` and
+`lean/restart-evidence/20261017-recursive-capacity/`.
+
+Seven additive modules prove finite canonical Typed domain inventories, actual
+sequential allocation bounds, fixed-source request key bounds, current checked
+domain history transport, and local recursive source compiler certificates.
+Repeated hits consume no identities. Actual empty domains preserve the cache.
+Mu entry, reference lookup, unions, and checked edge bodies retain the exact
+original heap scope and current domain membership. The current checked prefix
+split also retains exact inner returns, continuation prefixes, and full states.
+The full Audit passes
+2700 jobs and 61554 dependency checks with only the permitted axioms.
+All 131 public/integration axiom and signature pairs pass. Nine component
+manifests retain 179 entries. Independent reviews find no material defect.
+
+Whole-query raw-prefix admission is still open. DomainTrace.Prefixes remains
+an explicit premise. Derive a simultaneous invariant with physical validity,
+original operands, actual allocation history, and protected finish frames.
+Then derive current WordRanges from initial resources and reuse existing
+recursive native completion. The coarse issued-range inventory may exceed
+fixed machine capacity; it is not a practical guarantee for all source inputs.
+General constrained recursive outer progress, convergence, frontend/runtime
+correspondence, and complete public pipelines remain open. The full-library
+goal stays active. No Haskell change or new defect occurs. FINDINGS keeps
+merged repair b9219b9e and the external handoff first. Preserve all older work.
+
+## Current universal raw-reach capacity and ordinary root
+
+Updated: 2026-10-17 00:25 CEST. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+This checkpoint starts at published `7427d4c7`. Proof commits are
+`7200f2ec`, `4be6bc09`, and `3450be52`.
+Read `lean/notes-current-raw-reach-capacity.md` and
+`lean/restart-evidence/20261017-outer-raw-reach-capacity/`.
+
+Six additive modules derive initial resource admission over the complete
+original raw Reach relation. Supplied bare prefixes align with independently
+constructed executions by exact result and whole-caller uniqueness. All ten
+original entry transitions retain profiles, causal stores, active-owner caps,
+and remaining supplies. The original universal numeric Plan and older parent
+machine-range Plan now follow from initial resources. The preserved conditional
+root theorem receives that derived Plan and retains its complete same-return
+execution, semantic, quantitative, and language laws. Source preparation uses
+only initial computed headroom. No Reach domain or caller Plan is substituted.
+This section supersedes older statements that leave the raw-reach bridge open.
+
+The full pinned Audit passes 2693 jobs and 61393 dependency checks.
+All 44 axiom/full-signature pairs pass. Only propext, Classical.choice,
+and Quot.sound occur. Preservation retains 8851 starting files, 2686 older
+non-Audit proofs, 234 Haskell files, and 55 frozen production manifests with
+450 entries. All earlier repairs, counterexamples, and drafts remain.
+Canonical builds replay one pre-existing unused-variable warning.
+
+Next address the recursive progress boundary beyond finite ordinary inputs.
+Read next-recursive-source-progress.md. General constrained Mu/reference/union
+progress, recursive selected narrowing, repeated-pass convergence, current
+frontend and concrete runtime correspondence, and complete public pipelines
+remain open. The full-library goal stays active. No Haskell change or new
+defect occurs. FINDINGS keeps merged repair b9219b9e and the external handoff
+first. Reuse unchanged strict Nix validation: 798 examples plus golden,
+Fourmolu, and Cabal-gild. Preserve the optimized core and all earlier evidence.
+
+## Current ordinary root execution from initial resources
+
+Updated: 2026-10-17 00:11 CEST. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+This checkpoint starts at published `02fd5af7`. Proof commits are
+`f65b0d46`, `81eeeba1`, `de8e09e6`, and `e076324b`.
+Read `lean/notes-current-initial-outer-resources.md` and
+`lean/restart-evidence/20261016-outer-initial-headroom/`.
+
+Sixteen additive modules derive uniform parent capacity and actual constructor
+Work through all eight outer families. Strong node-rank and ordered-list
+induction construct the finite ordinary outer root from initial computed
+profiles and constructor headroom. Its constructed_root and prepared_root
+endpoints assume no reached-entry Plan or completed outer graph. The same
+return retains exact full guarded-language equality, every earlier strong
+store, universal output profiles, actual Work, and both final supply bounds.
+This section supersedes older statements that require Plan for root existence.
+The old universal raw Reach NumericPlan bridge remains a separate obligation.
+
+The full pinned Audit passes 2687 jobs and 61361 dependency checks.
+Only propext, Classical.choice, and Quot.sound occur. Strict new-module and
+imported public probes pass. Preservation retains 8627 starting files,
+2670 older non-Audit proofs, 234 Haskell files, and 54 frozen production
+manifests with 444 entries. Older repairs, counterexamples, and drafts remain.
+The canonical build replays one pre-existing unused-variable warning.
+No earlier proof is changed to suppress it.
+
+Next derive the old universal raw Reach numeric capacity invariant from
+initial resources without circular admission. Read next-raw-reach-capacity.md.
+General recursive progress, constrained recursive narrowing, convergence,
+current frontend and concrete runtime correspondence, and complete public
+pipelines remain open. The full-library goal stays active. No Haskell change
+or new defect occurs. FINDINGS keeps merged repair b9219b9e and the external
+handoff first. Reuse unchanged strict Nix validation: 798 examples plus golden,
+Fourmolu, and Cabal-gild. Preserve the optimized core and all earlier evidence.
+
+## Current quantitative outer owner certificates
+
+Updated: 2026-10-16 23:43 CEST. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+This checkpoint starts at published `5c629f72`. Proof commits are
+`ab06fc12`, `38d45835`, `6751e604`, and `1ee825f2`.
+Read `lean/notes-current-quantitative-prefixes.md` and
+`lean/restart-evidence/20261016-quantitative-prefixes/`.
+
+Thirteen additive modules derive quantitative profiles from supplied actual
+Target, Shared, Edit, Class/Pass, Stage/Local/Parent reads without constructor
+headroom. Exact outer owners receive produced universal row, arity, and guard
+certificates before finish. Warm hits use complete coherent owner readback.
+All eight actual outer read families and the same constructed root retain
+these laws and every earlier strong store. The root numeric Plan remains an
+explicit input. Next derive cumulative initial Work, remaining headroom,
+ParentInitialCapacity, and that Plan. Read next-initial-outer-headroom.md.
+
+The full pinned Audit passes 2671 jobs and 61168 dependency checks.
+All 58 public axiom/full-signature pairs and 12 integration pairs pass.
+Only propext, Classical.choice, and Quot.sound occur. Independent reviews
+find no material defect. Preservation retains 8465 starting files, 2657
+older non-Audit proofs, 234 Haskell files, and 53 frozen manifests with
+428 entries. One earlier reviewed draft is resolved by its exact snapshot.
+
+General recursive progress, constrained recursive narrowing, convergence,
+current frontend and concrete runtime correspondence, and complete public
+pipelines remain open. The full-library goal stays active. No Haskell change
+or new defect occurs. FINDINGS keeps merged repair b9219b9e and the external
+handoff first. Reuse unchanged strict Nix validation: 798 examples plus golden,
+Fourmolu, and Cabal-gild. Preserve the optimized core and all earlier evidence.
+
+## Current shared and outer guard certificate retention
+
+Updated: 2026-10-16 23:21 CEST. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+This checkpoint starts at published `56edaf31`. Proof commits are
+`35b7d962`, `d5fd539c`, `9c1d3d38`, `07607c71`, and `ac44d4c5`.
+Read `lean/notes-current-shared-guards.md` and
+`lean/restart-evidence/20261016-shared-guards/`.
+
+Twelve additive modules retain causal guard certificates through shared
+Force/Leaf slots, actual edits, the tail-first class pass, Scan/Required,
+local reduction, parents, and all eight outer read families. Actual own
+records derive class, path, and total guard-step limits from the initial
+raw vector. Parent finite resources derive their own path-depth obligation
+and retain every earlier resource conclusion at the same returned state.
+Uniform numeric parent row and sentinel-aware arity envelopes are proved.
+The root retains the entire earlier strong store and both lower guard tables.
+Its reached numeric capacity Plan remains an explicit premise.
+
+The full pinned Audit passes 2658 jobs and 61077 dependency checks.
+All 75 public axiom/full-signature pairs and 12 integration pairs pass.
+Only propext, Classical.choice, and Quot.sound occur. Independent reviews
+find no material defect. Preservation retains 8313 starting files, 2645
+older non-Audit proofs, 234 Haskell files, and 52 frozen manifests with
+415 entries. Older source, evidence, repairs, counterexamples, and drafts remain.
+
+Next derive quantitative row and arity producers for actual completed
+prefixes without resource headroom. Then produce quantitative outer owner
+certificates before finish and through exact warm readback. Derive cumulative
+initial headroom and the root Plan. Lower guard-store retention does not
+supply those outer output laws. General recursive progress, convergence,
+current frontend and runtime adapters, and complete public pipelines remain
+open. The full-library goal stays active.
+
+No Haskell change or new Haskell defect. FINDINGS keeps repair b9219b9e and
+the external handoff first. Reuse unchanged strict Nix validation: 798
+examples plus golden, Fourmolu, and Cabal-gild. Preserve the optimized core.
+
+## Current hereditary native, Merge, and Target guards
+
+Updated: 2026-10-16 23:02 CEST. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+This checkpoint starts at published `84dbcd1d`. Proof commits are
+`b61737c8`, `9c0704de`, `bc891744`, `7437f286`, and `baa017cf`.
+Read `lean/notes-current-hereditary-guards.md` and
+`lean/restart-evidence/20261016-hereditary-guards/`.
+
+Sixteen additive modules derive initial hereditary raw guard limits,
+retain them through actual constructors, signed projections, and Required,
+and produce universal native and Merge returned-cell certificates.
+Native uses one monotone conjunction step at every nested edge per query.
+Merge retains the original guard bound, including its literal Top branch.
+Both producers derive candidate laws before the exact actual finish.
+The finite native adapter keeps the entire earlier receipt and resource
+conclusion. Target derives its bound in actual head, tail, query order.
+Its nonempty n-operand fold charges n minus one native guard steps.
+
+The full pinned Audit passes 2646 jobs and 60976 dependency checks.
+All 145 public axiom/full-signature pairs and 16 integration pairs pass.
+Only propext, Classical.choice, and Quot.sound occur. Independent reviews
+find no material defect. Preservation retains 8145 starting files, 2629
+older proofs, 234 Haskell files, and 51 frozen manifests with 403 entries.
+
+Next retain these new guard stores through shared Force/Leaf slots, edits,
+class passes, local/parent calls, and all outer families. Derive quantitative
+warm outer certificates and cumulative initial headroom, then the root Plan.
+General recursive progress, convergence, current frontend and runtime
+adapters, and complete public pipelines remain open. The full-library goal
+stays active. No Haskell change or new defect. FINDINGS keeps repair
+`b9219b9e` and the external Haskell handoff first. Reuse unchanged strict
+Nix validation: 798 examples plus golden, Fourmolu, and Cabal-gild.
+
+## Current outer profile retention and proof boundary
+
+Updated: 2026-10-16 22:41 CEST. Source main remains `c0cc8a05`, merged at `896b0a1c`.
+This checkpoint starts at published `b3801702`. Proof commits are
+`f1c23cf2`, `a125732a`, and `be7b86da`. Read
+`lean/notes-current-proof-state.md` and
+`lean/restart-evidence/20261016-constrained-outer-profiles/`.
+
+Six additive modules retain native output and Merge profile certificates
+through actual Edit, Class/Pass, Stage/Local/Parent, and all eight outer
+read families. Each public outer endpoint derives its own reached Checks.
+The root constructs its own graph and retains these certificates at that
+same return. Its numeric capacity Plan remains an explicit premise.
+A separate guard module derives actual raw and effective conjunction
+bounds from initial stored-field and guard-syntax vectors. It does not
+establish hereditary guard bounds through native or outer execution.
+
+The full pinned Audit passes 2630 jobs and 60745 dependency checks.
+Only propext, Classical.choice, and Quot.sound occur. These component
+proofs do not establish whole-library verification. Next derive hereditary
+guard and quantitative warm outer certificates, then cumulative initial
+headroom and the root Plan. General recursive progress, repeated-pass
+convergence, current frontend adapters, concrete Haskell execution, and
+complete public pipelines remain open. The full-library goal stays active.
+
+No Haskell change or new Haskell defect. Repair `b9219b9e` is merged by
+PR #65. The Chain reproducer returns `Left (FieldAtomOnDatatype "Next" 0)`.
+Root FINDINGS keeps the external repair handoff first. Record later fixes
+there with failure, reproducer, paths, commit, checks, and upstream status.
+Reuse unchanged strict Nix validation: 798 examples plus golden, six-file
+Fourmolu, and four-package Cabal-gild and metadata checks.
+
+## Current supporting outer resource proofs
+
+Three additive modules prove raw outer rebuild Work and profiles, strong
+lower-store retention through supplied Target/Force/Leaf reads, and actual
+normalization/payload/precheck path bounds. Read
+[the current note](notes-current-outer-resource-components.md) and
+`restart-evidence/20261016-constrained-outer-resources/`.
+The pinned Audit passes 2624 jobs and 60653 dependency checks.
+The initial-only outer Plan still needs hereditary guard bounds, stronger
+warm return certificates, all-eight-family retention, and cumulative headroom.
+General recursion, convergence, frontend/runtime correspondence, and full
+public pipelines remain open. No Haskell change or new defect is reported.
+Root FINDINGS keeps the merged repair handoff first. The full-library goal
+stays active.
+
+## Current initial resources for local reduction and parent calls
+
+Audited main is `c0cc8a05`, merged at `896b0a1c`. This checkpoint starts
+at published `02b94fcd`. Proof commits are `c830cde5`, `84831149`,
+`3a6ea273`, and `86fe4ef1`. Read lean/notes-current-local-resources.md
+and lean/restart-evidence/20261016-constrained-local-resources/.
+This section supersedes older statements that leave initial local or
+parent constructor resources, or their existing prefix plans, open.
+
+Eleven additive modules derive the existing edit, class, pass, stage,
+local, and resident-parent capacity predicates from initial profiles and
+cumulative headroom. Each universal earlier-prefix obligation identifies
+its supplied earlier return through exact literal worker uniqueness.
+No enclosing completion or future capacity plan is an input.
+
+Stage constructs allocation-free Scan, Required, then Pass at the same
+actual Required return. Local reads the deterministic initial precheck.
+Unchanged and erased branches make no constructor request. Live classes
+start at the exact returned equality operations and retained native state.
+Parent constructs that local return, then its checked edge. Raw rejection
+makes zero node requests and one sentinel edge request. Its separate
+endpoint needs no field, inherited readiness, or child facts.
+
+ParentCaller retains the same graph as the actual outer EdgeBody. It
+returns strict Reads, the full edge and caller receipts, language law,
+ProbeHeap, warm outer-cell Sound, global memos, and stable literal execution.
+All resources retain causal output profiles, actual Work, constructor
+request bounds, final capacity, and both final supply bounds. Rejection
+can return one Empty child, so output arity need not equal input arity.
+
+The full Audit passes 2621 jobs and 60599 dependency checks. All 35 public
+axiom/full-signature pairs and 20 integration pairs pass. Combined probes
+have no diagnostic or signature truncation. Only propext, Classical.choice,
+and Quot.sound occur. Independent reviews find no material component
+defect. Preservation retains 7721 starting files, 2609 older non-Audit
+proofs, all 234 Haskell files, 48 frozen manifests with 378 module entries,
+stashes, other worktrees, repairs, counterexamples, and marked drafts.
+
+Next prove cumulative outer resources and discharge the root's reached
+parent Plan. Its existing Context and structural Stored do not provide
+row/arity profiles, lower output certificates, constraint envelopes, or
+remaining headroom at all reached entries. Preserve native OutputStored
+and Merge profiles through the actual outer families. Add causal output
+certificates for warm outer returns, bound normalized constraint/path
+growth, and pay for every parent and raw descendant/node rebuild. Read
+next-outer-resources.md in the evidence directory. General recursive
+progress, repeated-pass convergence, other resource families, current
+frontends, concrete Haskell, and complete public pipelines remain open.
+The full-library goal stays active.
+
+No Haskell change or new verified Haskell defect. Repair `b9219b9e` is merged
+by PR #65. Root FINDINGS keeps the external repair handoff first. Record
+later repairs with failure, reproducer, paths, commit, checks, and upstream
+status. Reuse unchanged strict Nix validation, 798 examples plus golden,
+six-file Fourmolu, and four-package Cabal-gild and metadata checks.
+
+## Current initial resources for edits and the class pass
+
+Audited main is `c0cc8a05`, merged at `896b0a1c`. This checkpoint starts
+at published `86c0416e`. Proof commits are `d36739d9`, `2c293a11`, and
+`5912b634`. Read lean/notes-current-edit-resources.md and
+lean/restart-evidence/20261016-constrained-edit-resources/.
+This section supersedes older statements that leave actual edit callback
+counts or initial edit, class, and class-pass constructor resources open.
+
+Five additive modules count callbacks on the actual execution graph,
+including Empty and repeated input positions. They derive conservative
+constructor budgets from original profiles. Edit constructs its own shared
+Leaf callbacks, ordered children, original guarded rows, and node rebuilds.
+Class derives compiled edit safety and fresh target slots while retaining
+warm native, Merge, and global tables. The tail-first class pass captures
+the exact forest returned by its tail. Its numeric recurrence uses that
+tail's derived profile. Final propagation makes no constructor request.
+
+All resource endpoints retain the same constructed graph, strict Reads,
+full existing receipt, stable literal worker, profiles, ordered narrowing,
+actual Work trace, request bounds, and final supplies. Initial total
+headroom pays for each actual prefix. No future callback, returned profile,
+completed class, or supplied capacity plan is an initial premise. Costs
+conservatively charge a full target miss at each literal value position.
+They do not assert one miss per distinct path or a total runtime bound.
+
+The full Audit passes 2610 jobs and 60501 dependency checks. All 55 declared
+public pairs, 11 constructor pairs, and 14 integration pairs pass. Combined
+probes print full explicit signatures without truncation. Only propext,
+Classical.choice, and Quot.sound occur. Independent reviews find no material
+component defect. Preservation retains 7553 starting files, 2604 older
+non-Audit proofs, all 234 Haskell files, 47 frozen manifests with 367 module
+entries, stashes, other worktrees, repairs, counterexamples, and drafts.
+
+Next compose Required and Pass at the same actual returned state, then
+local and parent resources. Derive the universal earlier-prefix capacity
+predicates through exact literal return uniqueness. The finite-ordinary
+Scan is already allocation-free and selects every original class. The
+whole outer traversal still needs quantitative warm-cache certificates,
+constraint bounds, and cumulative initial headroom. Its root numeric plan
+remains an explicit premise. Read next-parent-resources.md in the evidence
+directory. General Mu/reference/union progress, repeated-pass convergence,
+other resource families, current frontends, concrete Haskell, and complete
+public pipeline composition remain open. The full-library goal stays active.
+
+No Haskell change or new verified Haskell defect. Repair `b9219b9e` is merged
+by PR #65. Root FINDINGS keeps the external repair handoff first. Record
+later repairs with failure, reproducer, paths, commit, checks, and upstream
+status. Reuse unchanged strict Nix validation, 798 examples plus golden,
+six-file Fourmolu, and four-package Cabal-gild and metadata checks.
+
+## Current initial resources for shared targets and leaves
+
+Audited main is `c0cc8a05`, merged at `896b0a1c`. This checkpoint starts
+at published `0f1c72f7`. Proof commits are `882c4eb8` and `dd1e246d`.
+Read lean/notes-current-shared-resources.md and
+lean/restart-evidence/20261016-constrained-shared-resources/.
+This section supersedes older statements that leave shared Force and Leaf
+constructor resources or their existing numeric capacity plans open.
+
+Six additive modules retain causal profiles for actual class-local slots,
+derive the exact selected operand count, count literal values including
+Empty, construct shared Force and Leaf, and derive the existing capacity
+plans. A hit returns its exact state with zero Work. A miss constructs its
+own Target and stores the actual returned profile. Leaf then constructs
+its native intersection at that exact state. Initial total headroom derives
+the query entry and final supply capacity. Both stages retain the complete
+existing receipts, inventories, slots, Merge table, and global read effects.
+Captured originals and the current edited input have separate profiles.
+
+Stable literal Force uniqueness identifies every raw returned value and
+complete Shared state. It derives the existing universal ForceCapacity and
+LeafCapacity from initial force headroom. LeafCapacity certifies query-entry
+capacity. The separate Leaf resource endpoint bounds the actual query Work.
+The value-position count includes Empty and repeated identities or rows.
+The bound on actual edit callback occurrences is still an obligation.
+
+The full Audit passes 2605 jobs and 60357 dependency checks. All 43 public
+axiom/full-signature pairs and 15 integration pairs pass. Integration
+constructs a first Target miss and exact same-state hit, derives old range
+and finite endpoints without an initial plan, and constructs two serial
+Leaves from initial total headroom. Only propext, Classical.choice, and
+Quot.sound occur. Independent review finds no material component defect.
+Preservation retains 7423 starting files, 2598 older non-Audit proofs,
+all 234 Haskell files, 46 frozen manifests with 362 module entries,
+stashes, other worktrees, older repairs, counterexamples, and drafts.
+
+Next prove the actual edit callback count and cumulative edit resources.
+Then compose class and pass resources, local and parent calls, and the outer
+root. Derive its remaining numeric plan from initial inputs. General
+Mu/reference/union progress, repeated-pass convergence, other resource
+families, current frontends, concrete Haskell, and complete public pipeline
+composition remain open. The full-library goal stays active.
+
+No Haskell change or new verified Haskell defect. Repair `b9219b9e` is merged
+by PR #65. Root FINDINGS keeps the external repair handoff first. Record
+later repairs with failure, reproducer, paths, commit, checks, and upstream
+status. Reuse unchanged strict Nix validation, 798 examples plus golden,
+six-file Fourmolu, and four-package Cabal-gild and metadata checks.
+
+## Current Target resources and derived prefix capacity
+
+Audited main is `c0cc8a05`, merged at `896b0a1c`. This checkpoint starts
+at published `db01dbc3`. Read lean/notes-current-target-resources.md
+and lean/restart-evidence/20261016-constrained-target-resources/.
+This section supersedes older statements that leave Target resources open.
+
+Six additive modules construct the complete Target from initial forest
+limits and cumulative constructor headroom. The actual head Operand runs
+before the tail and their checked intersection. Every stage uses the same
+returned heaps, inventories, Merge table, and global memo bundles.
+Output profiles and later query capacity follow from preceding returns.
+The endpoint retains the full Receipt, TargetReads, stable literal worker,
+actual Work trace, request bounds, and final supply capacity. Empty targets
+have zero cost. Target retains common-subtree inclusion on proper paths.
+No unconditional exact Target language equality is asserted.
+
+The exact native prefix journal follows the same checked Steps. Non-Work
+instructions preserve the whole constructor heap. Native structural and
+output certificates survive physical Operand changes and actual queries.
+Pure numeric recurrences are monotone in all original limits and path count.
+
+TargetInitialCapacity identifies arbitrary raw completed Operand and Fold
+returns through stable literal worker uniqueness. It derives the EXISTING
+universal FoldCapacity and TargetCapacity from initial total headroom.
+The Target plan is no longer a supplied future-capacity premise. This does
+not discharge the whole outer root's reached-parent numeric capacity plan.
+
+The full Audit passes 2599 jobs and 60278 dependency checks. All 47 declared
+public axiom/full-signature pairs pass. Integration checks construct serial
+full queries and two three-path Targets from initial total headroom.
+Only propext, Classical.choice, and Quot.sound occur. Preservation retains
+7315 starting files, 2592 older proof sources, all 234 Haskell files,
+45 frozen manifests with 356 entries, stashes, and other worktrees.
+
+Next compose shared edits, class passes, local and parent calls, then outer
+cumulative resources. Derive the root numeric plan from initial inputs.
+General Mu/reference/union progress, repeated-pass convergence, current
+frontends, concrete Haskell, and full-pipeline composition remain open.
+Retain separate language, transformation, exact size/count/order/rank,
+generator, and probability contracts. The full-library goal stays active.
+
+No Haskell change or new verified Haskell defect. Repair `b9219b9e` is merged
+by PR #65. Root FINDINGS keeps the external handoff first. Record each later
+repair with failure, reproducer, paths, commit, checks, and upstream status.
+Reuse unchanged strict Nix validation, 798 examples plus golden, six-file
+Fourmolu, and four-package Cabal-gild and metadata checks.
+
+## Current Merge and Operand constructor budgets
+
+Audited main is `c0cc8a05`, merged at `896b0a1c`. This checkpoint starts
+at published `490f7509`. Read lean/notes-current-merge-reservations.md
+for the top-level objective, current proof map, and remaining obligations.
+Evidence is in lean/restart-evidence/20261016-constrained-merge-reservations/.
+This section supersedes older statements that leave Merge reservations open.
+
+Six additive modules prove initial-profile Merge constructor budgets and
+compose the actual checked Operand. Merge counts its complete recursive
+body, including a candidate that loses to the current first winner.
+Its finite endpoint constructs the allocated and stable literal return.
+Its full caller retains the same semantic Post and language inclusion.
+Operand constructs Projection followed by Merge. Their Work traces meet
+at the actual intermediate heap. No future result profile, completion,
+capacity, body contract, or supplied request count is an initial premise.
+
+The resource conclusion constructs a WorkTrace witness for the actual
+returned heaps and bounds final node and edge supplies. It does not bound
+all instructions, host evaluations, or total memory. Other resource
+families, concurrent losers, lazy forcing, and signed counters stay separate.
+
+The full Audit passes 2593 jobs and 60187 dependency checks. All 45 declared
+public axiom/full-signature pairs and 11 component integration pairs pass.
+Only propext, Classical.choice, and Quot.sound occur. Independent review
+finds no material defect within this component scope. Preservation retains
+7233 starting files, 2586 older proof sources, all 234 Haskell files,
+44 frozen manifests with 350 module entries, stashes, and other worktrees.
+
+Next compose Target's rotated right fold and native queries. Then compose
+edits, class passes, local and parent calls, and the outer pass. The numeric
+root capacity plan is still an explicit premise. Derive it from initial
+inputs and resources. General Mu/reference/union progress, repeated-pass
+convergence, current frontend adapters, concrete Haskell, and full-pipeline
+correspondence remain open. There is no completed whole-library theorem.
+Keep language, transformations, exact size/count/order/rank, generator,
+and probability contracts separate. The full-library goal remains active.
+
+No Haskell change or new verified Haskell defect. Repair `b9219b9e` is merged
+by PR #65. Root FINDINGS keeps the external handoff first. The Chain
+reproducer now returns `Left (FieldAtomOnDatatype "Next" 0)`. Standalone
+`holds` still treats pools as opaque. Record each later repair with failure,
+reproducer, paths, commit, checks, and upstream status. Reuse unchanged
+strict Nix validation, 798 examples plus golden, six-file Fourmolu,
+and four-package Cabal-gild and metadata checks.
+
+## Current recursive Merge profile production
+
+Audited source main is `c0cc8a05`, merged at `896b0a1c`. This checkpoint
+starts at published `b3df5b08`. Read lean/notes-current-merge-profiles.md
+and lean/restart-evidence/20261016-constrained-merge-profile-producer/.
+Five additive modules close the general recursive Merge profile producer
+gap from the previous checkpoint. Proof commits are `56e098f9` and `a6756768`.
+This section supersedes older statements that list that producer as open.
+
+MergeProfileCode strengthens each recursive request with its complete
+physical contract and a universal original-relative profile certificate.
+Its ordered All₂ map retains each input/result position and exact length.
+Actual edge and node Work derive profiles and heights, including coherent
+cache hits. MergeProfileBody proves every small, column, large, group, root,
+and body certificate from the literal current code. Selection retains
+original profiles and multiplicities. A column union can require R*R rows.
+The height-indexed envelope includes that larger lower recursive input.
+
+MergeProfileProducer follows the ACTUAL mutually recursive Run and Call.
+A miss first derives physical effects and both returned storage invariants.
+The SAME smaller body Run then derives the candidate certificate for every
+input row, arity, and height limit. Completion rereads the current memo and
+certifies its actual first winner. That winner can differ from the candidate.
+No future body law, supplied result profile, or uncached worker is an input.
+The universal certificate is conditional on a finite ordinary input profile.
+It makes no profile claim for Mu, reference, or explicit union inputs.
+
+MergeProfileFinite constructs its own allocated call, stable literal return,
+result profile, height bound, and retained physical and profile tables.
+Its cold endpoint derives both initial storage invariants from empty tables.
+Its caller endpoint retains the full existing Post and language inclusion
+at the SAME returned output, heap, and completed merge table. Merge remains
+an over-approximation. No language equality is asserted for Merge.
+Imported kernels construct serial generated profiles, derive a next native
+query budget, and replay the constructed completed owner at work fuel one.
+MergeSelection proves exact ordinary selection at every comparison fuel,
+including zero. It returns distinct original inputs and the unchanged heap.
+
+The full Audit passes 2587 jobs and 60115 dependency checks. All 23 declared
+public axiom/full-signature pairs and 18 integration pairs pass. Only
+propext, Classical.choice, and Quot.sound occur. Final imported probes have
+no diagnostics or placeholders. The canonical build retains the older
+unused-input warning. Preservation retains 7144 starting files and 2581
+older non-Audit sources. Forty-three frozen manifests check 344 entries.
+All older repairs, counterexamples, drafts, stashes, and worktrees remain.
+
+Next prove Merge constructor request and reservation bounds. The ordinary
+selection identity removes its constructor-effect gap. Count all actual
+recursive body Work and preserve the actual intermediate heaps. Then
+compose Operand, Target's rotated right fold, edits, class passes, local and
+parent calls, and outer cumulative budgets. The numeric root plan is still
+an explicit premise. Read next-merge-reservations.md in this evidence directory.
+
+General Mu/reference/union progress, repeated-pass convergence, current
+frontend adapters, concrete Haskell execution, and full-pipeline composition
+remain open. The completed sequential graph does not model early lazy memo
+publication, pending ancestors, host HashMap iteration, concurrency, or GHC
+forcing. Other resource families and signed host counters remain separate.
+Retain language, transformation, exact size/count/order/rank, generator,
+and probability contracts. The full-library goal remains active.
+
+No Haskell change or new verified Haskell defect. Repair `b9219b9e` is
+already merged by PR #65. Root FINDINGS keeps its external handoff first.
+Record each later repair there with failure, reproducer, paths, commit,
+checks, and upstream status. Reuse unchanged strict Nix validation, 798
+examples plus golden, six-file Fourmolu, and four-package metadata checks.
+
+## Current caller profiles and initial serial reservations
+
+Audited source main is `c0cc8a05`, merged at `896b0a1c`. This checkpoint
+starts at published `e0476c52`. Read lean/notes-current-caller-profiles.md
+for the top-level objective, current proof map, and remaining areas.
+Evidence is in lean/restart-evidence/20261016-constrained-caller-profiles/.
+Twelve additive modules are checked. Proof commits are `221787aa`,
+`b2e23854`, `c9863c2d`, and `3d4ad799`.
+
+Required retains the original row and arity profile, exact forest length,
+and height bound. Projection derives a descendant profile with row bound
+max(1,count) * max(1,R)^(depth+1), unchanged arity A, and bounded height.
+The proofs follow actual reads and constructors, including coherent hits.
+Ordinary occurrences count every literal node and edge occurrence. Repeated
+identities retain their multiplicity. ConstructorWorkTrace records actual
+Work at each intermediate heap. It bounds both supply increments by actual
+request counts and counts a cache hit as a request with no reservation.
+
+RequiredReservations and ProjectionReservations bound actual Work by the
+original occurrences. CallerResources constructs its own finite returns.
+OccurrenceBounds derives uniform occurrence limits from R, A, count, and H.
+SerialCallerResources constructs Required followed by Projection. Its
+initial node budget is 2*count*nodeCount(R,A,H)+1. Its initial edge budget is
+count*edgeCount(R,A,H). The second stage uses the first returned profile,
+height, length, and readiness. No intermediate or final profile, completion,
+or actual request-count premise is supplied. Imported kernels derive final
+packed-layout bounds and remaining headroom for a later native query.
+The headroom kernel does not construct that third query.
+
+MergeProfileBounds, MergeProfileCache, and MergeProfileSelection prove
+column envelopes, exact-owner certificates, keep-first winner retention,
+selection profiles, and actual group counts. These are foundations.
+The general recursive Merge profile producer remains OPEN. The next step
+is its local Body certificate and mutual actual Run/Call induction. A miss
+must derive a universal candidate certificate before rereading the current
+memo and certifying its actual winner. Read next-merge-producer-review.md
+and merge-profile-producer-next.md in this evidence directory.
+
+Then prove Merge reservations and compose Operand, the rotated Target right
+fold, edits, class passes, local/parent calls, and outer cumulative budgets.
+The ordinary root numeric plan remains an explicit premise. The earlier
+ordinary completion theorem admits arbitrary guards and equality classes,
+including unequal path lengths. Its finite domain excludes Mu, references,
+and explicit unions. General recursive progress and repeated-pass
+convergence remain separate open obligations.
+
+There is no completed whole-library theorem. Current frontend adapters,
+concrete Haskell execution, and full-pipeline composition remain open.
+Keep language, transformation, exact size/count/order/rank, generator, and
+probability contracts separate. Exact ranks use the original sorted graph
+rows. The optimized interned core and older constructor/equality work remain.
+Equality, sidecar, and thunk resources, host interleavings, losing concurrent
+candidates, lazy forcing, and signed host counters need separate bounds.
+
+The full Audit passes 2582 jobs and 60083 dependency checks. All 86 declared
+public axiom/full-signature pairs pass. The final kernel inventory records
+27 integration pairs and three repeated public checks. Only propext,
+Classical.choice, and Quot.sound occur. Preservation retains 6977 starting
+files and 2569 older non-Audit sources. Forty-two frozen manifests check
+339 module entries. Older repairs, counterexamples, drafts, stashes, and
+other worktrees remain unchanged.
+
+No Haskell change. The recursive field-pool repair `b9219b9e` is merged by
+PR #65 and locally validated. The original reproducer returns
+`Left (FieldAtomOnDatatype "Next" 0)`. Standalone `holds` retains its opaque
+pool behavior. Root FINDINGS keeps the external repair handoff first.
+Record each later repair there with failure, reproducer, paths, commit,
+checks, and upstream status. Reuse strict Nix validation, 798 examples plus
+golden, six-file Fourmolu, and four-package Cabal-gild/metadata checks.
+The full-library goal remains active.
+
+## Current native output profiles and serial reservations
+
+Audited source main is `c0cc8a05`, merged at `896b0a1c`. This checkpoint
+starts at published `a3db345a`. Read lean/notes-current-output-profile.md
+and lean/restart-evidence/20261016-constrained-output-profile/.
+Eight additive modules prove native output profiles and serial reservations.
+Proof commits are `1c24089f` and `5f2bf869`.
+
+OutputStored relates each returned result to its own captured request.
+Empty-seen operands with uniform profile R,A give result profile
+R*R,max(A,1), at every ordinary descendant. Empty tables derive the invariant.
+Lookup, demand, advance, exact-owner finish, and warm hits preserve it.
+OutputConstructors proves actual makeNode/makeEdge profiles, including
+coherent cache hits, filtering, canonicalization, and positional All₂ lists.
+
+OutputCode, OutputNode, and OutputEdge prove the literal dispatcher, joined
+rows, accepted child zip, rejected sentinel, and checked-body yield obey
+their local certificates. OutputExecution interprets the ACTUAL checked
+trace. Shorter body traces derive their profiles before exact-owner finish.
+No final profile, recursive callback law, or eager execution is supplied.
+The node and edge endpoints retain OutputStored at the same returned state.
+The sentinel has one Empty child even when input arity is zero.
+
+ProfileBudget proves computed limits fit any uniform input profile and
+complete query budgets are monotone in rows, arity, and height.
+OutputFinite constructs its own receipt, both stored invariants, Idle,
+semantic readiness, output profile, height bounds, and final capacity from
+initial headroom. Its cold endpoint derives the stored invariants from empty
+tables. Its serial endpoint constructs two queries, where the second uses
+the first result. Reserve N(R,A,H)+N(R*R,max(A,1),H) before either query.
+The second result profile and completion are derived from the first return.
+
+The full Audit passes 2570 jobs and 59925 dependency checks. All 54 declared
+public axiom/full-signature pairs and 21 integration pairs pass. Coverage
+retains Unicode All₂ names and named sections. Only the permitted foundations occur. Preservation
+retains 6867 starting files and 2561 older non-Audit sources. Forty-one
+frozen manifests check 327 module entries. Older proofs, repairs, drafts,
+counterexamples, stashes, other worktrees, and the optimized core remain.
+
+The native returned-profile gap is closed. Next prove Projection forest
+profile/height/count bounds, Required profile retention, and memo-aware Merge
+producer profiles and reservations. Merge columns can enlarge descendant
+row limits. Keep-first finish must retain the actual winner's certificate.
+Then compose Operand, the rotated Target right fold, edits, class passes,
+local/parent calls, and outer cumulative budgets. The root numeric plan is
+still an explicit premise. Read next-cumulative-profile-review.md.
+
+Mu/reference/union progress, repeated-pass convergence, current frontends,
+concrete runtime, and full-pipeline composition remain open. Keep separate
+language, transformation, exact size/count/order/rank, generator, and
+probability contracts. Equality/sidecar/thunk resources, host interleavings,
+concurrent losing candidates, lazy forcing, and signed host counters remain
+separate from these two constructor supplies.
+
+No Haskell change. Reuse strict Nix validation, 798 examples plus golden,
+six-file Fourmolu, and four-package Cabal-gild/metadata checks. Repair
+`b9219b9e` is already merged by PR #65. Root FINDINGS keeps the external
+Haskell fix handoff first. Add every later repair there with failure,
+reproducer, paths, commit, checks, and upstream status. The full-library
+goal remains active.
+
+## Current input-derived native reservation budgets
+
+Audited source main is `c0cc8a05`, merged at `896b0a1c`. This checkpoint
+starts at published `fcb5fdeb`. Read lean/notes-current-native-budget.md
+and lean/restart-evidence/20261016-constrained-native-budget/.
+Six additive modules derive static budgets for one ordinary native query.
+Proof commits are `6f53e07d` and `9f985068`.
+
+NativeProfile computes uniform row and arity limits for all original operand
+occurrences. With limits R and A, N(0)=1,
+N(h+1)=1+R*R*(1+A*N(h)), and E(h)=1+A*N(h). Node and edge budgets use the
+maximum original operand height. They contain no query execution or actual
+request-count premise. The full expansion counts repeated subproblems.
+Memo hits can skip their work. A swap retains the same budget.
+
+NativeBudgetCode composes literal Work, recursive calls, ordered walks,
+and finish frames. NativeBudgetCompile proves the actual node dispatcher,
+joined rows, accepted child zip, and rejected sentinel fit their budgets.
+NativeBudgetExecution retains remaining budget through every actual yielded
+prefix. Fixed-source Origins identify the exact captured evaluating owner.
+Only literal Work consumes the two constructor request counters.
+
+Principal node/edge theorems derive the code certificates from initial
+Good, resident finite ordinary operands, and initial Capacity. They bound
+total actual constructor requests and both supply increments. Initial supply
+plus the computed budget fitting the two key layouts derives Capacity at
+EVERY yielded prefix. No completed query, future readiness, future capacity,
+returned result law, or bound on the actual request list is supplied.
+This result counts constructor requests. It does not bound instruction steps.
+
+Next derive output row and arity envelopes at the same actual returned
+state, including warm result hits. The existing domain/height certificates
+are insufficient. The rejected sentinel has one Empty child even when the
+input arity is zero. Then compose required, projection, merge, edit, class,
+and outer cumulative budgets. Read next-outer-budget-review.md.
+The root numeric plans remain explicit until that composition is proved.
+
+The full Audit passes 2562 jobs and 59773 dependency checks. All 75 declared
+public axiom/full-signature pairs and 20 integration pairs pass. Coverage
+resolves nested Bound and ControlBound namespaces. Only permitted
+foundations occur. Preservation retains 6768 starting files and 2555 older
+non-Audit sources. Forty frozen manifests check 319 module entries. All
+older repairs, drafts, counterexamples, stashes, other worktrees, and the
+optimized interned core remain.
+
+The current domain admits arbitrary guards and equality classes. It excludes
+Mu, references, and explicit unions. General recursive progress, repeated
+passes, current frontends, concrete Haskell execution, and full-pipeline
+composition remain open. Retain the separate language, transformation, size,
+count, order, both rank inverses, generator, and probability contracts.
+Equality/sidecar/thunk supplies, host interleavings, losing concurrent
+candidates, lazy forcing, and signed host counters remain separate.
+
+No Haskell changes. Reuse strict Nix validation, 798 examples plus golden,
+six-file Fourmolu, and four-package Cabal-gild and metadata checks. Repair
+`b9219b9e` is already merged by PR #65. Root FINDINGS keeps the external
+Haskell repair handoff first. Record every later repair there with failure,
+reproducer, paths, commit, checks, and upstream status. The full-library
+goal remains active.
+
+## Current numeric ordinary root admission
+
+Audited source main is `c0cc8a05`, merged at `896b0a1c`. This checkpoint
+starts at published `8b0a9fc1`. Read lean/notes-current-outer-admission.md
+and lean/restart-evidence/20261016-constrained-outer-admission/.
+Five additive modules lift numeric capacity plans through the whole
+ordinary root. Proof commits are `9217348e` and `efb4338c`.
+
+OuterNumericEntries.Plan contains only parent capacity at actual raw reached
+edge bodies. Admission records the current Context, Stored, inherited
+readiness, and resident domain inputs. Its inventory and global bundle can
+change after an earlier prefix. Neither predicate assumes a completed
+current or enclosing root.
+
+OuterParentReads aligns a supplied parent return with its own constructed
+strict producer. Whole-return uniqueness retains the result and every state
+component. OuterRawReads constructs strict reads for all eight supplied raw
+families. Mutual induction verifies smaller earlier graphs in literal order.
+Their exact Post, domains, and structural certificates supply later entries.
+
+OuterAdmission proves admission through the unchanged raw Step/Reach
+relation. Only then does it derive the old OuterEntries.Plan from numeric
+parent capacity. OuterNumericRoot uses the frozen strong rank theorem to
+construct its own complete root graph, reads, Checks, full Post, structural
+bound, independent language law, and stable literal execution. Constructed
+and prepared roots derive their own source root and initial Context.
+Static syntax counts add INITIAL capacity at that same constructed heap.
+The imported warm-reuse kernel returns the same result and complete caller
+at all ten zero worker bounds.
+
+Numeric plans for later queries remain explicit. This closes the raw-Reach
+admission gap. It does not derive a priori total reduction reservation
+budgets from initial resources. Next bound native query requests from a fixed
+input operand inventory. Then compose Target, merge, leaf, and rebuild
+budgets. Count losing and intervening reservations. Keep equality-interner,
+modeled packed-key, signed host-counter, and lazy forcing bounds separate.
+Read next-budget-review.md in the evidence directory.
+
+The full Audit passes 2556 jobs and 59607 dependency checks. All 22 declared
+public axiom/full-signature pairs and 12 imported integration pairs pass.
+Only the permitted foundations occur. Preservation retains 6682 starting
+files and 2550 older non-Audit proof sources. Thirty-nine frozen manifests
+check 313 module entries. All older repairs, drafts, counterexamples,
+stashes, other worktrees, and the optimized interned core remain.
+
+The finite ordinary domain admits arbitrary guards, equality classes, and
+unequal path lengths. It excludes Mu, references, and explicit unions.
+General recursive progress, repeated-pass convergence, current frontends,
+concrete Haskell execution, and full-pipeline composition remain open.
+Retain separate exact language, transformation, size, count, order, both
+rank inverses, generator, and probability contracts.
+
+No Haskell changes. Reuse strict Nix validation, 798 examples plus golden,
+six-file Fourmolu, and four-package Cabal-gild and metadata checks. The
+recursive field-pool repair `b9219b9e` is already merged by PR #65. Root
+FINDINGS.md keeps the external repair handoff first. Add every later repair
+there with failure, executable reproducer, paths, commit, checks, and
+upstream status. The full-library goal remains active.
+
+## Current numeric query capacity and reservation bounds
+
+Audited source main is `c0cc8a05`, merged at `896b0a1c`. This checkpoint
+starts at published `a86c09dd`. Read lean/notes-current-constrained-capacity.md
+and lean/restart-evidence/20261016-constrained-query-capacity/.
+Thirteen additive modules derive causal numeric query plans and reservation
+bounds. Proof commits are `baffd471`, `a66edeb5`, and `bb913e55`.
+
+Capacity contains only current node/edge supply inequalities at width bits+2.
+Target, Force, Leaf, simultaneous edits, Class, Pass, Scan stage, precheck,
+and Parent derive existing range checks from numeric plans. Each suffix uses
+only an earlier actual prefix return. Shorter-prefix induction derives its
+checks before constructing or verifying that prefix. Complete worker
+uniqueness identifies the same output and every returned state component.
+Finite endpoints construct their own graphs, reads, receipts, domains, and
+structural bounds. Numeric outer edge calls retain full Post, independent
+language law, causal certificates, and stable literal execution.
+
+Primitive Work observations count actual requests and cache misses. Exact
+counter equations count every reservation, including losing atomic
+candidates. Raw yielded native prefixes retain those equations without a
+completed receipt or query. Their request-budget adapter still takes a
+bound on the ACTUAL prefix request count. It is not a static total-work
+bound for reduction. Equality-interner and host reservations remain separate.
+
+Ordinary source construction has STATIC input-only bounds: node occurrences
+bound node reservations and row occurrences bound edge reservations. It
+constructs its own successful return from any heap and environment. Initial
+Facts and resident domain inputs add the same result domain and residency.
+Closed construction and field preparation derive complete initial Context,
+three structural certificates, actual empty inherited identity, and initial
+Capacity whenever the syntax counts fit. Later query capacity remains open.
+
+The earlier whole-root endpoint still requires OuterEntries.Plan. Its raw
+Reach relation needs a separate admission proof at every entry. Next verify
+earlier raw graphs through all eight outer families, construct their reads,
+and derive Context, domains, and Stored at each reached parent. Only then
+can numeric parent plans imply the frozen global range plan. Read
+outer-capacity-next-review.md. Do not use enclosing root completion or
+future readiness to prove its own plan. Derive total reduction reservation
+budgets from initial resources after that numeric composition.
+
+The full Audit passes 2551 jobs and 59587 dependency checks. All 88 declared
+public axiom/full-signature pairs and 39 imported integration pairs pass.
+Public coverage includes indented mutual and noncomputable declarations.
+Only the permitted foundations occur. Preservation retains 6528 starting
+files and 2537 older non-Audit proof sources. Thirty-eight frozen manifests
+check 308 module entries. Historical repairs, drafts, stashes, other
+worktrees, and the optimized interned core remain.
+
+General Mu/reference/union progress, repeated-pass convergence, current
+frontends, concrete Haskell execution, and full-pipeline composition remain
+open. Retain separate exact language, transformation, size, count, order,
+rank/inverse, generator, and sampling contracts. No Haskell file changes.
+Reuse strict Nix validation, 798 examples plus golden, six-file Fourmolu,
+and four-package Cabal-gild and metadata checks. Root FINDINGS.md keeps
+the external Haskell repair handoff first. Record every later repair there
+with failure, executable reproducer, affected paths, commit, checks, and
+upstream status. The full-library goal remains active.
+
+## Current finite ordinary query word bounds
+
+Source main remains `c0cc8a05`, merged at `896b0a1c`. This checkpoint
+starts at published `1bbb75c4`. Read lean/notes-current-constrained-query-words.md
+for the current top-level objective, proof map, and missing areas. Evidence
+is in lean/restart-evidence/20261016-constrained-query-words/.
+Seven additive modules remove future word checks from one native query.
+Proof commits are `ae8b53b5` (initial keys and raw actual prefixes) and
+`ee54b123` (Scan checks, supplied reads, and bounded finite completion).
+
+Recursive key certificates derive from initial resident ordinary records
+and initial node/edge supplies. The static actual code requests only original
+operand subrecords. Fixed-source memo origins retain captured operands in
+all phases and place no condition on returned identities. Raw actual
+Demand.Steps derive every reached word check without a completed physical
+Trace, future readiness, or a final result premise.
+
+Words.node/edge derive checked WordRanges from initial Good and recursive
+operand keys. Their domain adapters use only initial supply bounds at width
+bits+2. BoundedFinite constructs its own complete native Receipt and retains
+final physical invariants, semantic readiness, structural tables, domain,
+and both original height bounds. Initial Good, SemanticReady, Stored, Idle,
+and resident domain operands remain explicit. No future WordRanges is input.
+
+ScanRanges derives ordinary Scan-only checks. OuterVerification derives
+Checks, full Post, structural bounds, and independent language laws for all
+eight supplied actual strict read families. It verifies a supplied graph;
+it does not construct the graph. The earlier constructed finite ordinary
+root still requires its independently reached parent entry range plan.
+
+Next derive numeric capacity at actual Target/Leaf query entries, then bound
+primitive reservations from initial resources. Generated earlier results
+need fresh identity bounds when used as later operands. Height and domain
+alone do not give those bounds. General Mu/reference/union progress,
+repeated-pass convergence, current frontends, concrete Haskell execution,
+and full-pipeline composition remain open. Exact size, count, ordered rank,
+both inverses, transformations, and sampling retain separate contracts.
+
+The full Audit passes 2538 jobs and 59423 dependency checks. All 76 declared
+public axiom/full-signature pairs pass. Imported kernels retain raw prefixes,
+complete warm owners, initial counter boundaries, actual supplied-read
+prefixes, and two constructed queries at the same actual warm return.
+Only the permitted foundations occur. Preservation retains 6422 starting
+files and 2530 older non-Audit proof sources. Thirty-seven frozen manifests
+check 295 module entries. Older repairs, drafts, stashes, other worktrees,
+and the optimized interned core remain.
+
+No Haskell file changes. Reuse strict Nix validation, 798 examples plus
+golden, six-file Fourmolu, and four-package Cabal-gild and metadata checks.
+The field-pool repair b9219b9e is already merged by PR #65 and validated.
+Root FINDINGS.md keeps the external Haskell repair handoff first. Record
+every later repair there with failure, executable reproducer, affected paths,
+commit, checks, and upstream status. The full-library goal remains active.
+
+## Current constrained finite ordinary outer completion
+
+Source main remains `c0cc8a05`, merged at `896b0a1c`. This checkpoint
+starts at published `f5a20d96`. Read lean/notes-current-constrained-outer-completion.md
+and lean/restart-evidence/20261016-constrained-outer-structure/.
+Eleven additive modules construct conditional finite ordinary root execution.
+Proof commits are `4cd272b3` (source construction and causal admission),
+`c7d0529e` (all eight completed structural families and finite edge calls),
+and `bfa5504c` (entry checks, strong node induction, and constructed roots).
+
+Source syntax constructs its own successful root and finite ordinary domain.
+Actual field preparation derives history, full Context, the actual empty
+inherited identity, and cold native/merge/outer structural certificates.
+Warm callers retain their separate causal certificates and complete owners.
+All eight actual strict read families retain domain and input-relative height
+bounds at the SAME actual returned caller. Rows use narrowed parent results.
+
+Entry controls require no result or enclosing completed graph. The range
+plan checks each independently reached parent entry BEFORE its execution.
+Completed earlier prefixes reach later siblings at their actual warm states.
+This avoids the old success-conditioned WorkerRanges gap. Native machine
+and allocation range checks remain explicit. No future readiness, successful
+body, result law, or finite future-key inventory is supplied.
+
+Strong Nat node-rank induction discharges the smaller-node interface.
+The parent height bound makes each generated child strictly smaller than
+its ORIGINAL edge. Node.finite constructs its own graph, strict reads,
+Checks, full Post, structural certificates, and independent language law.
+Root.constructed_root/prepared_root compose source construction and actual
+preparation with stable literal root execution and full language equality.
+Every larger tuple of all ten worker bounds returns the same result and
+complete caller. This covers one ordinary constrained pass, conditional on
+the entry range plan. Guards, equality classes, and unequal path lengths
+remain unrestricted in this domain. Mu, references, and explicit unions
+remain outside it. The old plain Region remains a separate proof domain.
+
+Next derive the entry plan from concrete key/allocation bounds and machine
+capacity. Read next-capacity-review.md in this evidence directory. General
+Mu/union/reference progress, repeated-pass convergence, current frontends,
+concrete Haskell execution, and full-pipeline composition remain open.
+Retain all separate language, transformation, Sized, rank/inverse, generator,
+and probability contracts and the older constructor/equality work.
+
+The full Audit passes 2531 jobs and 59275 dependency checks. All 50 declared
+public axiom/full-signature pairs pass. Imported integration probes retain
+actual prefixes, cold admission, exact language/structure composition, and
+all-zero-bound warm reuse. Only the permitted foundations occur.
+Preservation retains 6259 starting files and 2519 older non-Audit proof
+sources, with only named restart-authority changes and additive Audit imports.
+Thirty-six frozen manifests check 288 module entries. Historical repairs,
+stashes, other worktrees, drafts, and the optimized interned core remain.
+
+No Haskell file changes. Reuse strict Nix validation, 798 examples plus
+golden, six-file Fourmolu, and four-package Cabal-gild and metadata checks.
+Root FINDINGS.md keeps the external Haskell repair handoff first. Record
+every later repair there with failure, executable reproducer, paths, commit,
+checks, and upstream status. The full-library goal remains active.
+
+## Current constrained finite ordinary parent bounds
+
+Source main remains `c0cc8a05`, merged at `896b0a1c`. This checkpoint
+starts at published `9bff0326`. Read lean/notes-current-constrained-parent-bounds.md
+and lean/restart-evidence/20261016-constrained-class-structure/.
+Twelve additive modules prove actual class, local, and parent bounds.
+Proof commits are `00484d33` (narrowing and owner certificates),
+`373dd9cd` (metadata, Scan, receipts, and edits), `ea8b2e1a` (Class/Pass),
+and `095e5f71` (actual local and stable parent composition).
+
+Coherent finite ordinary records derive zero cached Mu depth and empty
+free names. Every actual primary Scan is false at the same heap. The Scan
+selects the complete source class list, returns no rejected class, and
+retains the exact checked state and fourth memo. Strict reads retain the
+same global bundle. No seeded query occurs on this domain.
+
+Actual target/leaf receipts derive structural certificates without a
+uniform future range plan. Shared-edit induction retains native results,
+merge results, target slots, and positional Language.All₂ height bounds.
+Class starts fresh slots. Its right fold captures the ACTUAL tail forest
+and warm tables. Required paths and final propagation retain positional
+bounds. Full guards, nonempty equality classes, and unequal path lengths
+remain admitted by this finite ordinary stage.
+
+Stage and Local derive their structural results at exact actual prefixes.
+Parent.finite constructs its own graph, strict reads, full receipt, and
+stable literal execution. Every larger nine-bound tuple returns the same
+edge, full checked state, fourth memo, and merge memo. The returned edge
+has domain children and height bounded by the ORIGINAL edge. Initial
+readiness, semantic admission, causal warm tables, and reached ranges
+remain explicit. No future body, successful worker, or result law is input.
+Raw rejected_finite needs no original domain, child availability, field,
+inherited readiness, or range plan.
+
+Returned.Stored gives both outer result families conditional domain and
+height certificates tied to their actual captured owners. Exact begin,
+demand, advance, finish, warm readback, and strict returned-child rank
+lemmas pass. Next prove structural preservation through all eight actual
+outer families, then construct strong-rank finite recursion. Read
+next-outer-completion-review.md. Lifecycle laws and stable parent execution
+do not yet complete the outer caller. Machine-range derivation, general
+Mu/union/reference progress, repeated passes, current frontends, concrete
+Haskell runtime, and full-pipeline composition remain open. All separate
+language, Sized, rank/inverse, probability, and transformation contracts
+and older constructor/equality work stay in the full-library objective.
+
+The full Audit passes 2520 jobs and 59190 dependency checks. Preservation
+retains all 6103 starting files and 2507 older non-Audit proof sources.
+Thirty-five frozen manifests check 277 module entries. Historical repairs,
+stashes, other worktrees, and the optimized interned core remain.
+No Haskell file changes. Reuse strict Nix validation, 798 examples plus
+golden, six-file Fourmolu, and four-package Cabal-gild and metadata checks.
+Root FINDINGS.md keeps the external Haskell repair handoff first. Record
+each later repair there with failure, reproducer, paths, commit, checks,
+and upstream status. This is progress; the full goal remains active.
+
+## Current finite ordinary target domains and shared leaves
+
+Source main remains `c0cc8a05`, merged at `896b0a1c`. This checkpoint
+starts at published `c47ad331`. Read lean/notes-current-constrained-target-domain.md
+for the top-level proof objective, proved contracts, and remaining areas.
+Evidence is in lean/restart-evidence/20261016-constrained-target-domain/.
+Eight additive modules close the current target-domain prerequisites.
+Commits are `d9d86a5e` (actual memo-aware merge and literal worker),
+`522a037a` (projection, required paths, and targets), and `7b60eca2`
+(shared Force/Leaf and Audit imports).
+
+Actual merge calls retain physical and structural cache certificates.
+Each hit identifies its complete captured original. Each miss proves its
+actual memo-aware body before it remembers and rereads the current winner.
+Finite merge constructs literal success and every larger work/selection
+bound at the same output, full physical state, and memo. It has no supplied
+success, future body, or result-domain premise.
+
+Actual projection and target folds derive finite ordinary result domain.
+Target derives signed path support from its available captured forest.
+Its finite endpoint constructs its own actual graph and full receipt.
+Native and merge structural certificates survive every actual prefix.
+Required paths preserve domain and height at each child position; rows can
+be deleted. Guards and equality classes remain unrestricted in the finite
+ordinary domain. Mu, references, and explicit unions are outside that domain.
+
+Shared.Stored tracks native results, merge results, and target slots.
+Actual Force derives domain from its warm slot or actual target miss.
+Actual Leaf derives NodeNarrow relative to INPUT from the native bound for
+its second operand. No target-height or equal-path-length premise is needed.
+Finite Force/Leaf construct their own complete receipts and preserve all
+three tables at the same returned state. Initial readiness, semantic
+admission, domain facts, and reached WordRanges remain explicit.
+
+Next compose positional bounds through actual shared edits, Class/Pass,
+Scan, local reduction, and parent construction. Then construct a new finite
+ordinary outer recursion proof with a certificate tied to each captured
+node/edge owner. First derive zero cached Mu depth and the primary scan
+fast branch. General refused scans need a separate seeded structural proof.
+Read next-class-stage-review.md in the evidence directory.
+The old plain Shape is too strong for generated intersected children.
+General Mu constraint migration, unequal-length classes, repeated-pass
+convergence, current frontend adapters, concrete Haskell runtime transfer,
+and full-pipeline composition remain open. The full-library objective also
+retains exact size classes, finite execution, counts, ordered ranks, both
+inverses, probability, transformations, and older constructor/equality work.
+
+The full Audit passes 2508 jobs and 59107 dependency checks. Preservation
+retains all 5965 starting files and 2499 older non-Audit proof sources.
+Thirty-four frozen manifests check 265 module entries. Historical repairs,
+stashes, other worktrees, and the optimized interned core remain.
+No Haskell file changes. Reuse strict Nix validation, 798 examples plus
+golden, six-file Fourmolu, and four-package Cabal-gild and metadata checks.
+Root FINDINGS.md keeps the external Haskell repair handoff first. Record
+each later repair there with failure, reproducer, paths, commit, checks,
+and upstream status. This checkpoint is progress; the full goal stays active.
+
+## Current constrained finite ordinary native structure
+
+Source main remains `c0cc8a05`, merged at `896b0a1c`. This checkpoint
+starts at published `d7ce6713`. Read lean/notes-current-constrained-structure.md
+and lean/restart-evidence/20261016-constrained-structure/.
+Eight additive modules prove finite ordinary native structural results.
+Commits are `106e4123` (domain, warm certificates, local code), `5d54241d`
+(compiled bodies), `a4506576` (actual traces and exact finish frames), and
+`62f30089` (finite completion).
+
+The domain includes Empty and ordinary nodes with all actual row children.
+Guards and normalized equality classes have no restriction. Mu, reference,
+and explicit union records remain outside it. Pure domain metadata is
+unrestricted. Coherent available readback derives original syntax and
+empty cached free-name lists.
+
+Execution.node_trace and edge_trace derive domain closure and height
+bounded by EACH original operand from their literal completed physical
+trace. Strong trace induction proves each smaller body result before its
+own finish. Full physical key readback identifies captured owners. The
+exact evaluating cell survives to its original finish. Stored tracks
+conditional certificates for actual returned cells in both memo families.
+Empty seen lists are required. Nonempty seen lists can return recursive
+placeholders, even for ordinary inputs. Arbitrary Code with unchecked
+finish instructions cannot preserve this certificate.
+
+Finite.finite constructs its own finite checked receipt and retains Idle,
+SemanticReady, Stored, result domain, both height bounds, and closedness at
+the SAME actual returned state. Initial physical Good, SemanticReady,
+Stored, Idle, available domain operands, and reached WordRanges remain
+explicit. Original syntax and operand closedness are derived. There is no
+future body, successful execution, result law, or final invariant premise.
+Cold tables derive Stored; arbitrary warm tables still need admission.
+
+Next compose these structural bounds through actual target edits, shared
+edits, class folds, and a generalized local/parent certificate. Warm class
+slots and merge results need causal domain certificates. Closedness and
+language narrowing do not imply finite ordinary structure. Read
+next-class-progress-review.md in the evidence directory. This checkpoint
+does not prove general constrained outer completion. Mu constraint
+migration, unequal-length classes, and repeated-pass convergence remain
+open. The full-library scope retains languages, transformations, exact
+size classes, finite execution, counts, ordered ranks and both inverses,
+probability, frontends, runtime, and full-pipeline composition. Preserve
+all older constructor/equality work and the optimized interned core.
+
+The full Audit passes 2500 jobs and 59028 dependency checks. Preservation
+retains all 5837 starting files and 2491 older non-Audit proof sources.
+Thirty-three frozen manifests check 257 module entries. Historical repair
+records, stashes, and the three other worktrees remain. No Haskell file
+changes. Reuse current source validation: strict Nix build, 798 examples
+plus golden, six-file Fourmolu, and four-package Cabal-gild and metadata.
+Root FINDINGS.md keeps the external Haskell repair handoff first. Record
+every later repair there with failure, executable reproducer, paths,
+commit, checks, and upstream status. Earlier sections are historical
+checkpoints. This is progress; the full objective remains active.
+
+## Current finite plain recursion and constructed root execution
+
+Source main remains `c0cc8a05`, merged at `896b0a1c`. This checkpoint
+starts at published `8f063c09`. Read lean/notes-current-plain-recursion.md
+and lean/restart-evidence/20261016-plain-recursion/.
+Seven additive modules construct plain recursive execution. Commits are
+`39a2925a` (induction interfaces), `99296e30` (exact prefixes), `57d517ce`
+(terminals), `c2c3f694` (child loops), `99de70a4` (rows/descendants),
+`06d7a970` (strong node induction), and `00abe685` (exact root composition).
+
+PlainNode.finite constructs stable literal node execution, its own graph,
+strict Reads, Checks, full Post, output availability, Stored after, and
+NodeLaw from initial Context, inherited Ready, available Region input,
+Stored, and active order. Strong node-rank induction discharges every
+smaller-call callback. Each actual prefix derives the next Context and
+Stored. Completed frames restore the original ancestor bound before each
+suffix. Warm calls retain their exact captured owners and finish handles.
+
+PlainRoot.constructed_root derives initial Context, Stored, and active
+order from covered construction. It returns finite literal execution and
+full language equivalence without a worker-success or future-range premise.
+prepared_root also derives its actual ordered field History and Receipt.
+Construction success and Region remain explicit inputs. Region stops at
+Mu and union. Traversed rows use the complete effective own accessor.
+Mu cleanup can remove its binder, so no returned-node Region is promised.
+
+Next address general constrained progress outside Region. Read
+next-general-review.md in the evidence directory. First prove constrained
+finite-ordinary native domain closure and height bounds for each operand,
+including structural certificates for actual warm producers. Then compose
+class edits and a generalized parent certificate. This is an intermediate
+stage; Mu constraint migration remains separate. Nonempty own classes can
+change children beyond the plain Shape. Derive actual reached range checks
+and an independent progress measure. Do not assume future
+execution, future semantic answers, or a finite inventory of future keys.
+Unequal-length classes and repeated-pass convergence remain open.
+The full-library scope still includes languages, transformations, exact
+size classes, finite execution, counts, ordered ranks and both inverses,
+probability, frontends, runtime, and full-pipeline composition. Preserve
+all older constructor/equality work and the optimized interned core.
+
+The full Audit passes 2492 jobs and 58889 dependency checks. Preservation
+retains all 5730 starting files and 2484 older non-Audit proof sources.
+Thirty-two frozen manifests check 249 module entries. Historical repair
+records, stashes, and the three other worktrees remain. No Haskell file
+changes. Reuse current source validation: strict Nix build, 798 examples
+plus golden, six-file Fourmolu, and four-package Cabal-gild and metadata.
+Root FINDINGS.md keeps the external Haskell repair handoff first. Add each
+later repair there with failure, executable reproducer, paths, commit,
+checks, and upstream status. Earlier sections are historical checkpoints.
+This is progress; the full objective remains active.
+
+## Current plain parent and outer edge-call completion
+
+Source main remains `c0cc8a05`, merged at `896b0a1c`. This checkpoint
+starts at published `8906d5e6`. Five additive modules derive complete
+plain parent ranges, returned-edge structural support, exact warm-owner
+input transport, and finite literal outer EdgeCall execution.
+Read lean/notes-current-plain-edge-completion.md and
+lean/restart-evidence/20261016-parent-plain/.
+Proof commits are `db438c0b` (full ranges), `b7fd0ee5` (returned domain),
+`3f817e89` (parent completion), `96a1afee` (owner inputs), and
+`6bbf2ee0` (outer edge-call completion).
+
+ParentPlain derives its own stable parent execution, strict Reads, full
+Post, and three-way child Shape from initial caller facts and the live
+effective-own-empty condition. Shape allows original children, erased
+slots, or the singleton Empty sentinel. It preserves child Region and
+bounds height; it does not preserve arity. Stored tracks this Shape for
+actual returned edge owners through begin, advance, and exact finish.
+
+PartialPlainEdgeCall.finite constructs literal completion from initial
+Context, inherited readiness, resident input, Plain, Stored, and the
+active-owner bound. It returns its own graph, strict Reads, reached Checks,
+full Post, result residency, Stored after, Shape, and EdgeLaw. A ready hit
+uses its captured owner. A new evaluation finishes the selected handle
+before descendants. No literal success, future body, range plan, or desired
+result law is a public input.
+
+Next construct node, rows, descendants, children, and walk completion in
+plain Region. Thread actual returned Context and Stored through every
+prefix. Read region-next-review.md in the evidence directory and the
+node-rank induction outline in the note. The constructed-root exact theorem
+still needs literal worker success. General constrained completion,
+unequal-length classes, and repeated-pass convergence remain open.
+The full-library objective includes languages, transformation contracts,
+exact size classes, finite execution, counts, ordered ranks and inverses,
+probability, current frontends, runtime, and full-pipeline composition.
+Keep all older constructor/equality work and the optimized interned core.
+
+The full Audit passes 2485 jobs and 58868 dependency checks. Preservation
+retains all 5648 starting files and 2479 older non-Audit proof sources.
+Thirty-one frozen manifests check 242 module entries. Historical repair
+records, stashes, and the three other worktrees remain. No Haskell file
+changes. Reuse current source validation: strict Nix build, 798 examples
+plus golden, six-file Fourmolu, and four-package Cabal-gild and metadata.
+Root FINDINGS.md keeps the external Haskell repair handoff first. Record
+any later repair there with its failure, executable reproducer, paths,
+commit, checks, and upstream status. Earlier sections are historical
+checkpoints. This is progress; the full objective remains active.
+
+## Current constructed root entry and active-owner progress
+
+Source main remains `c0cc8a05`, merged at `896b0a1c`. The starting
+published checkpoint is `a3b275f3`. Five additive modules derive the root
+caller from construction and establish current progress prerequisites.
+Initialization is `8443666c`; exact root composition is `083ad542`;
+active-owner order is `fc31eae4`; completed active frames are `199965d5`;
+and literal empty-own local completion is `6abcd365`.
+Read lean/notes-current-constructed-root.md and the evidence in
+lean/restart-evidence/20261016-root-entry/.
+
+Covered allocation history and actual fresh original construction derive
+all eight initial Context fields and a computed singleton inventory.
+Empty inherited allocation uses the retained interner's actual canonical
+identity and returned cache. constructed_root supplies the initial facts
+to the existing literal successful-worker theorem. prepared_root derives
+its own ordered field History and retains the actual preparation Receipt.
+The same result has its own graph, strict Reads, reached Checks, full Post,
+output support, and exact full-language law. Reached machine checks and
+literal worker success remain explicit.
+
+Current node/edge height ranks exclude busy and absent demand below active
+owners. Actual begin protects other owners and admits smaller bounds.
+Actual finish restores ancestor order. Every completed graph in all eight
+families leaves no new evaluating owner. Its reverse frame transports
+arbitrary active bounds and excluded handles after completed prefixes.
+Separate forward frames retain protected earlier owners.
+
+The current local worker completes at ALL bounds when the complete source
+own accessor has empty effective equalities. It returns original or erased
+children at the exact allocated prefix state with unchanged fourth/merge
+memos. Positive guard extraction is part of that accessor. Empty stored
+payload alone is insufficient. No historical execution is transferred.
+
+Next derive current parent returned-height and structural support, then
+construct actual outer completion with the active-owner order. Read
+next-completion-review.md in the current evidence directory. The plain
+Region is an intermediate domain, not the full objective. General
+constrained completion, unequal-length classes, and repeated-pass
+convergence remain open. Concrete runtime and shared warm initialization,
+frontends, Sized, generators, rank/probability, solvers, random sources,
+callbacks, codecs, full-pipeline composition, and older constructor/equality
+work remain in scope. Preserve the optimized interned core.
+
+The full Audit passes 2480 jobs and 58830 dependency checks. Preservation
+retains all 5561 starting files and 2474 older non-Audit proof sources.
+Thirty frozen manifests check 237 module entries. Historical repairs,
+stashes, and the three other worktrees remain. No Haskell file changes.
+Reuse the strict Nix build, 798 examples plus golden, six-file Fourmolu,
+and four-package Cabal-gild and metadata checks for source `c0cc8a05`.
+Root FINDINGS.md keeps the Haskell repair handoff first. Earlier sections
+are historical checkpoints. This is progress; the full goal remains active.
+
+## Current literal outer correctness and root language preservation
+
+Source main remains `c0cc8a05`, merged at `896b0a1c`. The preceding
+published checkpoint is `9d70eeff`. Four additive modules connect the
+literal outer worker to its own strict source receipt. Supporting proof
+commit is `695c6fb3`; the full Actual proof is `9dbafced`.
+Read lean/notes-current-outer-actual.md and the current evidence in
+lean/restart-evidence/20261016-outer-actual/.
+
+Executable range predicates follow actual successful prefixes and returned
+states. They contain only reached machine checks. Check composition covers
+all sixteen raw constructors and aligns existential physical states through
+finite graph realization and whole-return uniqueness. The parent leaf derives
+its exact full caller and existing receipt from the literal parent observation.
+
+All eight Actual endpoints derive the successful worker's SAME graph, strict
+Reads, reached Checks, computed next inventory, full Post, output support,
+and independent language law. Strong fuel induction threads each derived
+prefix Context into the next actual call. No future graph, result law, final
+invariant, or body completion callback is a public input.
+PartialWorkerActual.root_exact applies the existing semantic root theorem
+to that derived trace. Its execution premise is literal worker success,
+not a supplied completed graph.
+
+General completion is still open. Context permits evaluating owners, so
+Context and reached ranges alone cannot imply success. Next derive public
+root initialization and an independent progress domain with active-owner
+exclusion. Read root-entry-review.md and progress-domain-review.md in the
+current evidence directory. Unequal-length classes and repeated-pass
+convergence remain open. Current reducePartially performs one pass.
+Concrete runtime, frontend, Sized, generator, rank/probability, solver,
+random-source, callback, codec, full-pipeline, and older constructor/equality
+obligations remain in scope. Preserve the optimized interned core.
+
+The full Audit passes 2475 jobs and 58753 dependency checks. Preservation
+retains all 5484 starting files and 2470 older proof sources. Twenty-nine
+frozen manifests check 232 module entries. Historical repairs, stashes, and
+the three other worktrees remain. No Haskell file changes. Reuse the strict
+Nix build, 798 examples plus golden, six-file Fourmolu, and four-package
+Cabal-gild and metadata checks. Root FINDINGS.md keeps Haskell repairs first.
+Earlier sections are historical checkpoints. The full objective stays active.
+
+## Current literal parent and mutual outer execution
+
+Source main remains `c0cc8a05`, merged at `896b0a1c`. The preceding
+published checkpoint is `ade9584d`. Read lean/notes-current-parent-worker.md.
+Seven additive modules implement literal checked parent execution and the
+eight mutual outer worker families. Parent proofs are in `155da673`;
+the outer definition is in `849d1509`, and completion/stability is in
+`7d9d503d`. The current evidence directory is
+lean/restart-evidence/20261016-parent-worker/.
+
+Parent Actual constructs stable execution, its same graph, strict Reads,
+language Receipt, and full caller Post from legitimate initial facts and
+reached ranges. Resident input derives the actual field and child support.
+Raw rejection needs no field or child premise. The outer worker retains
+the stored winning request, exact finish handle, returned-edge descendants,
+ordered rows, indexed child descent, literal Mu reconstruction, and every
+failure's complete caller and lower diagnostic.
+
+Completion derives ten sufficient stable bounds from every finite supplied
+outer graph. Stability preserves successful output and the entire caller
+under larger bounds; arbitrary successful bounds have the same full return.
+These results do not prove that every intended call has a finite graph.
+Next connect literal outer success to its same graph and strict Reads under
+initial Context and reached checks, then apply the existing PartialActual
+endpoints. root_exact still assumes a completed strict-read call.
+Read outer-actual-next.md in the current evidence directory.
+
+The full objective is implementation correspondence for languages,
+transformations, exact size classes, finite execution, counts, ordered ranks
+and both inverses, and probability laws. General constrained termination,
+unequal-length path classes, repeated-pass convergence, current frontend
+adapters, full-pipeline composition, and concrete runtime transfers remain.
+Logical Reads do not establish GHC demand, publication, or the noConstraint
+CAF. Preserve all older constructor/equality work and the optimized core.
+
+The pinned full Audit passes 2471 jobs and 58623 dependency checks. Only
+the permitted foundations and old unused-input warning remain. Preservation
+checks retain all 5383 starting files and 2463 older proof sources.
+Twenty-eight frozen manifests check 228 module entries. Historical repair
+text, stashes, and the three other worktrees remain unchanged.
+
+No Haskell file changes. Reuse the current source's strict Nix build,
+798 examples plus golden, six-file Fourmolu, and four-package Cabal-gild
+and metadata checks. Root FINDINGS.md keeps Haskell repair details first.
+Earlier sections are historical checkpoints. The full goal remains active.
+
+## Current literal local reduction and validated field-pool repair
+
+Audited source main is `c0cc8a05`, merged at `896b0a1c`. The preceding
+published checkpoint is `66013b03`. Eight additive modules implement
+original-record Scan, required-path success stability, and the literal local
+reducer with full caller receipts. Proof commits are `7f9db45e`, `ececc503`,
+and `9e3f6174`. Read lean/notes-current-local-worker.md.
+
+RecordScan projects to the frozen path Scan for every outcome, including
+failures. It retains original records, order, and repeated occurrences.
+Each reached gate/query runs once. Actual Retained graphs supply stable
+literal bounds; supplied success derives that same positional receipt.
+RequiredWorkerStability preserves successful literal requireAll results and
+their complete constructor heaps under larger bounds without physical or
+future callback premises.
+
+LocalWorker runs precheck once with its actual returned operations. Early
+unchanged and contradiction branches skip Scan and class work. Live Scan
+stops before required children on a true emptiness answer. A no-stop return
+requires the selected original paths on original children at the Scan heap,
+then executes the existing literal class right fold and empty propagation.
+Nine stage bounds remain distinct from the fixed conjunction budget.
+Every failure retains its complete observation and state, including failed
+class local slots. Success stability and whole-return uniqueness identify
+the forest, Checked, fourth memo, and merge memo unconditionally.
+
+LocalWorkerActual.finite derives stable literal execution, the same actual
+graph, strict Reads, language Receipt, and full caller Post from initial
+Context, actual same-cache field load, inherited EqReady, resident children,
+and reached range plans. Receipt and Post share the computed inventory.
+Final probes come from those same reads. verified handles any supplied
+literal success. Unconditional narrowing and guard/inherited conditional
+language equivalence remain explicit. No future graph, body law, or final
+invariant is a public premise.
+
+PR #64 adds drawn typing fields. PR #65 repair `b9219b9e` now rejects the
+recursive field-pool example with `FieldAtomOnDatatype "Next" 0`. The
+unchanged historical reproducer confirms that error. Standalone holds
+still treats the pool as opaque. Root FINDINGS.md records the repair and
+its actual validation first. No additional local Haskell patch is added.
+New drawn-field states/errors, validation order, and generator-specific
+rank order still need source adapters.
+
+The pinned full Audit passes 2464 jobs and 58403 dependency checks. Only
+the permitted foundations and old unused-input warning remain. The strict
+Nix build, 798 examples plus golden, six-file Fourmolu, and four-package
+Cabal-gild and metadata checks pass. Preservation retains all 5274 starting
+files, 2455 older proof sources, the six historical repair entries, stashes,
+and three other worktrees. Twenty-seven frozen manifests check 221 module
+entries. Evidence is in
+lean/restart-evidence/20261016-drawn-fields-local-worker/.
+
+The full objective remains active. Read parent-worker-next.md in that
+directory. Next implement literal parent construction, then the eight
+mutual outer families. Raw parent rejection precedes field lookup and all
+child work. root_exact still assumes a completed strict-read outer call.
+General constrained termination, unequal-length path classes, and repeated
+pass convergence remain open. Current reducePartially performs one pass.
+Logical serial Reads do not prove GHC demand, host table events, lazy
+publication, or the noConstraint CAF. All frontend, Sized, rank/probability,
+solver, random-source, callback, codec, runtime, full-pipeline, and older
+constructor/equality obligations remain. Preserve the optimized interned
+core and every proof, counterexample, repair, and draft. No board posts or
+deployments. Push verified formalize checkpoints regularly. Earlier sections
+record historical checkpoints. This checkpoint is progress, not completion.
+
+## Current literal seeded queries and class scanning
+
+Audited source main is `5399d310`, merged at `82d47236`. The starting
+published checkpoint is `e75e8c5c`. Twelve additive modules implement
+literal first-seeded queries, current primary and secondary gates, and Scan
+with full caller receipts. Proof commits are `8978d180`, `19f90e9c`, and
+`2b26e442`. PR #63 adds qualified typing do-notation. No local Haskell
+behavior repair occurs. Root FINDINGS.md keeps the external repair registry
+first, including the confirmed, unfixed recursive field-pool contract gap.
+
+Read lean/notes-current-scan-worker.md. SeededWorker projects without
+mergeAlternatives. Head projection precedes the tail, then checked native
+intersection uses the exact tail return. Three stage bounds remain distinct.
+Completion derives stable bounds from finite graphs. Success stability and
+whole-state uniqueness need no physical premise. Initial selected support
+derives the same graph, physical facts, probes, and full caller Post at the
+computed inventory. The language law preserves common selected subtrees.
+
+GateWorker runs literal current policies with concrete source predicates.
+Strict primary reads use the actual queried node. Scan retains five stage
+bounds and a fixed conjunction budget. Primary false selects; secondary true
+skips; a true current conjunction answer stops before the suffix. False uses
+its exact returned checked state and fourth memo. Failed selected suffixes
+retain their selected prefix. Order and repeated classes remain.
+
+ScanCompletion constructs stable literal execution from every finite current
+graph. ScanStability identifies the complete Result, Checked, and fourth memo
+across successful bounds. ScanWorkerActual.finite derives execution and full
+caller facts from initial Context, resident values, proper nontrivial classes,
+and reached word bounds. verified derives the same facts for a supplied
+literal return. Strict Reads, probes, original values, and stopped-class
+exclusion belong to that same return. No future graph, body law, or final
+invariant is a public premise. Only a no-stop completion reads the full class
+partition. A stopped result retains the selected prefix it reached.
+
+The pinned full Audit passes 2456 jobs and 58268 theorem dependency checks.
+Only the permitted foundations and old unused-input warning remain. Current
+strict Nix build, 793 examples plus golden, three-file Fourmolu, four-package
+Cabal-gild and metadata checks pass. Preservation checks retain all 5135
+starting files, 2443 older proof sources, six repair/counterexample entries,
+stashes, and three other worktree records. Twenty-six frozen manifests check
+213 module entries. Evidence is in
+lean/restart-evidence/20261016-typing-do-seeded-worker/.
+
+The full library objective remains active. Read local-worker-next.md in that
+directory. Next compose literal local precheck/reduction, required children,
+and class passes, then parent construction and the mutual outer worker.
+root_exact still assumes a completed strict-read outer call. General
+constrained termination, unequal-length path classes, and repeated-pass
+convergence remain open. Current reducePartially performs one pass. Logical
+global reads do not prove host demand, table events, lazy publication, or the
+noConstraint CAF. All frontend, Sized, generator, rank, probability, solver,
+callback, codec, concrete-runtime, and older constructor/equality obligations
+remain. Preserve the optimized interned core and every proof, counterexample,
+repair, and draft. No board posts or deployments. Push verified formalize
+checkpoints regularly. This checkpoint is progress, not goal completion.
+
+## Current generator node views and source refresh
+
+Publication readback at 13:14 CEST found remote main `5399d310` (PR #63,
+qualified typing do-notation). It is fetched but not merged or validated.
+The audited source below remains `999c04a5`; formalize checkpoint `27a4722c`
+is published. Inspect and refresh that five-file frontend delta before the
+next implementation. Read lean/restart-evidence/20261016-typing-do-pending.md.
+
+
+Source main is `999c04a5`, merged at `9aaffc95`. The preceding published
+checkpoint is `b931bcc6`. PR #60 adds field-specific atoms; PR #61 writes
+typing rules through node views; PR #62 rejects negative typing bounds.
+Root FINDINGS.md keeps the external Haskell repair registry first and records
+`443e3458` there. No local Haskell behavior repair is added by this refresh.
+
+Read lean/notes-frontend-node-view-refresh.md. All 2443 older non-Audit proof
+sources and Audit retain their bytes. The pinned full Audit passes 2444 jobs
+and 58082 dependency checks. This preserves component proofs; it does not
+prove the new node-view, field-pool, typing-validation, or codec adapters.
+Current strict Nix build, suites, format, metadata, source audits, and
+preservation evidence are in
+lean/restart-evidence/20261016-frontend-node-view-refresh/.
+
+The full objective remains correspondence between the specified constrained
+languages and generators and the current Haskell library. Exact size classes,
+finite execution, counts, ordered ranks and both inverses, probability laws,
+and transformation semantics remain separate contracts. No whole-library
+theorem is complete. root_exact still assumes a completed strict-read outer
+call. Serial graphs do not prove concrete host demand or memo publication.
+
+Next implement the literal first-seeded checked query and Scan. Read
+scan-worker-next.md in the preceding conjunction evidence directory; its
+next target remains current. Then compose local reduction, required children,
+parent construction, and the mutual outer worker. General constrained
+termination, unequal-length path classes, and repeated-pass convergence remain
+open. Current reducePartially performs one pass. Preserve all frontend,
+Sized, generator, probability, host-runtime, and older constructor/equality
+obligations, the optimized interned core, and all proofs, counterexamples,
+repairs, and drafts. No board posts or deployments. Push verified formalize
+checkpoints regularly. This checkpoint is progress; keep the full goal active.
+
+## Current literal conjunction execution and full caller receipts
+
+Source main remains `ccebf0f7`. The preceding published checkpoint is
+`ebf92715`. Ten additive modules implement current serial conjunction rows,
+worklist, decision, fourth-memo calls, and the full checked caller lift.
+Proof commits are `d9e77a20`, `5600e0da`, and `34b6519f`.
+No Haskell implementation or test changes occur. Root FINDINGS.md keeps the
+external Haskell fix registry first. Record every later repair there with
+failure, reproducer, files, commit, checks, and upstream status.
+
+Read lean/notes-current-conjunction-worker.md. The full objective remains
+correspondence between the specified constrained languages and generators
+and the current Haskell library. Exact size classes, finite execution, counts,
+ordered ranks and both inverses, probability laws, and each transformation's
+semantics remain separate contracts. No whole-library theorem is complete.
+
+RowsWorker executes operand exposures, row-major projections, equality folds,
+canonical child columns, and class requirements. Two bounds control projection
+and reads. Contradiction retains equality allocations and skips requirements.
+Errors, missing equality fields, pending, unresolved, and exhaustion remain
+distinct at their actual returned physical states. Completion derives stable
+bounds from finite graphs. Stability proves unconditional success preservation
+and whole-state uniqueness. Actual reconstructs successful row graphs without
+a physical premise; matching tuples derive arities without a new worker check.
+Legitimate initial facts derive finite execution, effects, rows, and probes.
+
+ConjunctionWorker.explore implements the actual dynamic worklist. Only
+admission decreases the algorithmic budget. Its definition terminates by
+budget and pending length; it adds no recursion fuel. Rows precede insertion,
+and generated requirements precede the pending suffix. Failure retains the
+physical state and local table/pending context. decision checks open input,
+then executes actual exploration, Boolean grow, and answer. call looks up the
+fourth memo before the open guard and inserts only completed misses.
+
+Completion derives the same Run/Decision/Call from literal success and stable
+bounds from finite graphs. Initial physical Ready and query availability
+construct finite calls. Stability preserves exact answers, tables, physical
+states, and saved memos under larger lower-stage bounds with budget fixed.
+AllocatedConjunctionWorker retains the full checked state, native cells, and
+domain cache. Failures retain the initial fourth memo. Warm hits retain the
+identical checked state and ignore both bounds.
+
+AllocatedConjunctionWorkerActual.finite constructs stable literal execution
+and the full caller Post from initial Context and query residency. Both outer
+result families, warm merge table, and input inventory remain. The returned
+fourth memo, probe heap, and global receipts remain valid. verified derives
+the same endpoint facts for a supplied literal success. True excludes every
+accepted finite term. False does not prove nonemptiness; valid open answers
+are false. No future body result or final invariant is a public premise.
+
+The row graph completes all operand exposures. Haskell can skip operand reads
+when an earlier tuple prefix is empty. These serial graphs do not establish
+that demand schedule, host global-table event replay, lazy publication, or
+the noConstraint CAF. Global Reads remain logical evidence at the aligned
+return. root_exact still assumes a completed source-aligned outer call.
+
+Pinned Lean 4.34.1 passes the complete Audit: 2444 jobs and 58082 theorem
+dependency checks. Only the permitted three foundations and old unused-input
+warning remain. Raw logs, public probes, integration kernels, independent
+reviews, frozen sources, and preservation checks are in
+lean/restart-evidence/20261016-current-conjunction-worker/.
+All Haskell files remain unchanged. Reuse the strict Nix build, 788 examples
+plus golden, 15-file Fourmolu, and four-package Cabal-gild and metadata checks.
+
+Next implement the literal first-seeded checked query and current Scan, then
+local reduction, parent construction, and the mutual outer worker. Read
+scan-worker-next.md in the evidence directory. General constrained outer
+termination, unequal-length path classes, and repeated-pass convergence remain
+open. Current reducePartially performs one pass. All frontend and generator
+adapters, separate Sized and probability contracts, concrete host execution,
+containers, identities, concurrency, machine bounds, solver IO, random draws,
+callbacks, codecs, full pipeline composition, and older constructor/equality
+work remain active. Preserve the optimized interned core and all local proofs,
+counterexamples, repairs, and drafts. No board posts or deployments. Push
+verified formalize checkpoints regularly. This checkpoint is progress.
+
+## Current literal checked edits and class passes
+
+Source main remains `ccebf0f7`. The preceding published checkpoint is
+`67f2b5d0`. Nine additive modules implement current structural edits and
+compiled class passes. Proof commits are `87ad619b`, `2cbebf92`, `2f1af1cf`,
+and `ca2fe823`. No Haskell implementation or test changes occur.
+Root FINDINGS.md keeps the external Haskell fix registry first. Record each
+later repair there with failure, reproducer, files, commit, checks, and
+upstream status.
+
+Read lean/notes-current-edit-worker.md for the full objective and proof map.
+The goal is correspondence between the specified constrained tree languages
+and generators and the current Haskell library. Exact size classes, finite
+execution, counts, rank inverses, probability laws, and each transformation's
+semantics remain distinct contracts. There is no completed whole-library
+correspondence theorem.
+
+SharedEditWorker interprets current EditNode, Children, Rows, and List with
+six separate stage bounds. Head exposure retains pending, unresolved, and
+exhausted outcomes. A failed prefix retains the complete reached checked
+state, local slots, merge memo, and diagnostic. Unselected children retain
+their values. Raw same-arity reconstruction retains the original full guard.
+It does not allocate a new equality field for the raw edge rebuild.
+
+Completion constructs stable sufficient bounds from finite current graphs.
+Target and edit success stability is unconditional. Whole-state uniqueness
+aligns any supplied successful return with the graph constructed from initial
+selected support. Actual derives the same graph, Reads, physical receipt,
+probe heap, and computed inventory. list_language derives narrowing and
+preservation of class-satisfying selected terms. Unrelated open siblings
+need not satisfy selected path closure.
+
+ClassWorker runs compiled edits with empty class-local slots over the full
+supplied checked state and warm merge table. The right fold executes the
+tail first; the head captures that tail's actual forest, state, and merge.
+Final propagation follows only a completed fold. Failures retain all reached
+slots. Class completion derives stable six-stage bounds. Stability proves
+unconditional success monotonicity and exact forest/Checked/memo uniqueness.
+
+ClassWorkerActual.caller_finite constructs stable literal pass execution and
+the full caller Post at the computed next inventory from legitimate initial
+Context, resident values, coherent nontrivial records, selected domains, and
+actual-prefix ranges. Both outer result families and the fourth memo remain
+valid. Supplied success receives the same endpoint facts. Language narrows;
+membership agrees with the input for forests satisfying every class. No
+future body law or completed pass is a premise of caller_finite.
+
+The outer root_exact theorem remains conditional on a completed strict-read
+recursive call and its legitimate initial facts. Global-query read receipts
+remain logical evidence. These workers do not execute concrete host global
+tables or prove GHC forcing, lazy publication, or the noConstraint CAF.
+
+Pinned Lean 4.34.1 passes the full Audit: 2434 jobs and 57891 theorem dependency
+checks. Only the permitted three foundations and old unused-input warning
+remain. Public probes, integration kernels, independent reviews, frozen
+sources, and preservation evidence are in
+lean/restart-evidence/20261016-current-edit-worker/.
+All Haskell package sources remain unchanged. Reuse the strict Nix build,
+788 examples plus golden, 15-file Fourmolu, and four-package Cabal-gild and
+metadata checks from the preceding source refresh.
+
+Next implement dynamic conjunction rows/worklists, its decision and fourth
+memo, Scan, local reduction, parent construction, and the mutual outer worker.
+Read conjunction-worker-next.md in the evidence directory. General constrained
+outer termination, unequal-length path classes, and repeated-pass convergence
+remain open. The public reducePartially performs one pass. Concrete host
+runtime, containers, identities, concurrency, machine bounds, solvers,
+random draws, callbacks, codecs, frontend and generator adapters, separate
+Sized contracts, and older constructor/equality work remain active. Preserve
+the optimized interned core and all local proofs, counterexamples, repairs,
+and drafts. No board posts or deployments. Push verified formalize
+checkpoints regularly. This checkpoint is progress toward the full objective.
+
+## Current literal checked targets and shared leaves
+
+Source main remains `ccebf0f7`. The preceding published checkpoint is
+`740c6e5c`. Proof commits are `817e4459`, `0d636786`, and `2a8afe4d`.
+Eight additive modules implement current allocated Target,
+shared Force, and checked Leaf execution. No Haskell implementation or test
+changes occur. Root FINDINGS.md keeps the external Haskell fix registry first.
+Record each later repair there with failure, reproducer, files, commit,
+validation, and upstream status.
+
+Read lean/notes-current-target-worker.md. TargetWorker retains the complete
+NativeDemand.State and allocated merge memo. Projection precedes merge.
+The source seed executes at the fold base. Each head precedes the tail;
+checked intersection uses that tail's returned state. Five stage bounds
+remain separate. Failed prefixes retain their exact observations and full
+states and skip continuations. Empty targets return the identical state.
+
+TargetWorkerNative derives physical Step at a supplied native done from
+initial Good, idle cells, closed resident operands, and reached word ranges.
+It independently constructs the physical trace and aligns the whole return
+by success uniqueness. Arbitrary native success does not imply those checks.
+TargetWorkerSound derives actual fold prefixes from legitimate initial
+Ready/At, available captured values, selected path domains, warm merge laws,
+actual-prefix ranges, and initial global validity. No future body law is
+a public premise.
+
+TargetWorkerCompletion derives stable sufficient bounds from every finite
+current graph. It also proves unconditional successful execution stability
+and whole-return uniqueness under different bounds. TargetWorkerActual
+derives each supplied success's own checked receipt and probes. Its finite
+endpoint constructs stable literal execution from initial selected support.
+caller and caller_finite retain both outer result families and the fourth
+memo in a full Post at the computed next inventory.
+
+SharedTargetWorker executes literal ready hits, target misses, and checked
+leaf requests. A hit ignores every bound and retains the complete state.
+A miss stores only a completed target. Failure retains its returned checked
+state and merge table without installing a slot. Completion and Actual
+derive stable execution, actual graphs and reads, full receipts, probes,
+narrowing, and preservation of class-satisfying selected subterms.
+Target language is inclusion, not exact equality. Global query receipts
+remain logical evidence; these workers do not execute concrete host tables.
+
+Pinned Lean 4.34.1 passes the full Audit: 2425 jobs and 57723 theorem dependency
+checks. Only the permitted three foundations and old unused-input warning
+remain. Public probes, integration kernels, independent reviews, frozen
+sources, and preservation evidence are in
+lean/restart-evidence/20261016-current-target-worker/.
+All Haskell package sources remain unchanged. Reuse the strict Nix build,
+788 examples plus golden, 15-file Fourmolu, and four-package Cabal-gild and
+metadata checks from the preceding refresh.
+
+Next implement literal checked EditNode/Children/Rows/List, compiled class
+editing, and the class right fold with final empty propagation. Preserve
+actual Head exposure, same-arity raw rebuilding, full guards, selected path
+positions, and unrelated open siblings. Each class resets only local slots.
+Read checked-edits-next.md in the evidence directory. Then implement dynamic
+conjunction, Scan, local reduction, parent construction, and the outer worker.
+
+General constrained outer termination, unequal-length path classes, and
+repeated-pass convergence remain open. Current reducePartially performs
+one pass. Host forcing, publication, noConstraint CAF, containers, identities,
+concurrency, machine bounds, solver IO, random draws, callbacks, codecs,
+all frontend and generator adapters, separate Sized contracts, and older
+constructor/equality work remain active. Preserve the optimized interned
+core and every local proof, counterexample, repair, and draft. No board posts
+or deployments. Push verified formalize checkpoints regularly. This
+checkpoint is progress toward the full-library objective.
+
+## Current source refresh and literal merge execution
+
+Source main is `ccebf0f7`, merged into formalize at `44ba7bf1`. The previous
+published checkpoint is `10b58c54`. Proof commits are `03c50a7d`, `cb2f4061`,
+and `03b48a40`. This increment adds five Lean modules.
+It changes no local Haskell behavior or test. Root FINDINGS.md retains the
+external Haskell repair registry first. Record every later repair there with
+its failure, reproducer, files, commit, checks, and upstream status.
+
+Read lean/notes-current-merge-worker.md for the current top-level proof map.
+The full objective is correspondence between the specified constrained tree
+languages and generators and the current Haskell library. Exact size classes,
+finite execution, counts, size order, both rank inverses, probability laws,
+and each transformation's stated semantics remain distinct contracts.
+There is no completed whole-library correspondence theorem.
+
+The existing Sized Exact record proves finite modeled classes, distinct
+accepted terms, exact counts, signed errors, both inverses, and ordered
+prefixes on validated original row maps under the stated guard contracts.
+The completed current outer root_exact theorem proves independent language
+equality and the full returned physical/memo invariant. It still requires a
+completed strict-read call, legitimate initial Context, allocated empty
+inherited readiness, input availability, and reached checks.
+
+SourceCurrentAllocatedMergeWorker now interprets the current allocated Code.
+It retains the exact heap, equality operations, and merge memo on success
+and failure. Top rows allocate emptyField at the reached state. Work and
+selection fuel remain separate. A positive-work ready hit needs no body fuel.
+Sound derives the same actual Run or Call. Completion derives stable bounds
+from finite graphs and proves both graph equivalences and success stability.
+
+WorkerActual.finite constructs a finite literal merge return from legitimate
+warm Context and input availability. It derives stable execution and the full
+caller Post at the same output, heap, operations, and memo. Both outer result
+families, native tables/domain cache, and fourth memo remain. The language
+law is inclusion: merge is an over-approximation. Logical global-query read
+receipts are constructed; the worker does not execute concrete host tables.
+
+SourceCurrentCurriedDefaulting models current narrowHeads with ?any priority.
+The historical filter agrees only when ?any is absent. The actual two-row
+counterexample shows an adapter boundary, not a Haskell bug. The upstream
+refresh adds root typing inputs, Binders, type domains, and deriveLTAOn.
+Broader row/closure, GHC pruning, LTA contract/codec, and generator rank
+adapters remain open. No cfta core or Sized source changes upstream.
+
+The full pinned Audit passes 2417 jobs and 57607 theorem dependency checks.
+Only the three permitted foundations and the old unused-input warning remain.
+The strict Nix all-component build passes. All six current suites pass:
+788 examples plus golden. All 15 changed Haskell files pass Fourmolu; all
+four active packages pass Cabal-gild and metadata checks. The first GMP
+linker failure is an environment PATH issue, corrected without source edits.
+Raw logs, public probes, integration kernels, independent reviews, frozen
+sources, and preservation checks are in
+lean/restart-evidence/20261016-typing-refresh-merge-worker/.
+
+Next implement literal checked Target and shared Force/Leaf, followed by
+edits, Class/Pass, conjunction, Scan, local reduction, parent, and the outer
+two-family worker. Read target-current-next.md in the evidence directory.
+Their strongest current endpoints remain relations. Retain exact failed
+states and strict source reads. Do not supply a future body success oracle.
+
+General constrained outer termination, unequal-length path classes, and
+repeated-pass convergence remain open. Current reducePartially is one pass.
+Host forcing, lazy publication, noConstraint CAF, concrete containers,
+identity lifetime, concurrency, machine bounds, solvers, random draws,
+callbacks, codecs, broader frontends, separate Sized contracts, and all older
+constructor/equality targets remain active. Preserve the optimized interned
+core and all local proofs, counterexamples, repairs, and drafts. Push verified
+formalize checkpoints regularly. No board posts or deployments. This is
+progress toward the full objective.
+
+## Current mutual recursive reduction correctness
+
+Source main remains `8f85ddb6`. The preceding published checkpoint is
+`7fedbcd7`. Proof commits are `3192fe1b` and `3a86f40e`. Six additive modules
+prove the full mutual physical and language invariant for completed current
+recursive calls. No Haskell implementation or test changes occur. The
+external Haskell fix registry remains first in root FINDINGS.md. Record each
+later repair there with its failure case, files, commit, checks, and
+upstream status.
+
+PartialInvariant.Context retains checked Ready, inventory At, warm caller
+Sound, merge Stored and CacheCovers, fourth Correct, actual global Valid,
+and explicit ProbeHeap. Input requests retain ready inherited values and
+resident inputs. Post describes the same actual returned caller and globals.
+Its inventory can change. No warm table is reset.
+
+PartialChecks stores physical graph indices as data. Direct and Reach
+follow actual completed constructors. Checks contains only reached live
+edge-body Scan word plans. It has no result law, future invariant, child
+completion callback, or general completion claim. It covers the permitted
+completed graph decompositions, not a chosen host forcing trace.
+
+StepEffects derives the literal inherited prefix, indexed descent, raw
+same-arity rebuild, and ordered-identity modifyNode contexts and probes.
+ForestLanguage composes ordered row unions and returned-edge descendants.
+CallSteps derives first-owner input facts, retains its exact evaluating
+cell through the actual body frame, finishes its derived result, and
+transports the law by the physical key. Resident Mu reconstruction derives
+its literal same-heap cleanup from the explicit probe invariant.
+
+PartialActual follows all eight strict source-read recursors. NodeCall,
+NodeBody, EdgeCall, EdgeBody, Rows, Descendants, Children, and Walk derive
+their own availability or residency, independent language law, and full
+Post at their supplied result, state, and global endpoints. The smaller
+actual node induction result supplies each indexed child law. Ordinary
+rows use the RETURNED parent edge's child list and full guard. No recursive
+body law is a public premise.
+
+root_exact proves exact independent language preservation for a completed
+call with an allocated empty inherited payload. It retains the same actual
+physical and memo Post. Initial Context, input and inherited readiness,
+strict Reads, and reached checks remain explicit. This does not prove the
+Haskell noConstraint CAF or universal outer completion.
+
+Pinned Lean 4.34.1 passes the complete Audit: 2412 jobs and 57527 theorem
+dependency checks. Only the standard three foundations and the old
+unused-input warning remain. Public probes, integration kernels, independent
+reviews, source hashes, and raw logs are retained in
+lean/restart-evidence/20261016-current-mutual-caller/.
+All 4571 starting files remain. All 2405 older non-Audit proof sources retain
+their bytes. Twenty-one frozen manifests, stashes, other worktree records,
+and the first Haskell registry remain. Earlier unavailable external drafts
+are not claimed recovered or reverified. Reuse unchanged-source strict Nix
+build, 777 examples plus golden, five-file Fourmolu, and four-package
+Cabal-gild.
+
+Read lean/notes-current-mutual-caller.md and bounded-current-next.md in the
+evidence directory. Next add the literal bounded outer executable worker,
+with complete reached states, body-free hits, errors, missing fields,
+unexpected Rec, busy or absent cells, and exhausted outer fuel. The local
+checked budget is separate from outer recursion fuel. Implement the current lower Scan, class-pass, local, and parent workers
+before outer composition; their present endpoints are relations. Connect
+success to the strict graph and prove sufficient stable bounds only on a
+justified domain. Do not substitute a body completion oracle.
+
+General constrained outer termination, unequal-length path classes, and
+repeated-pass convergence remain open. Serial graphs do not prove GHC
+forcing, lazy IntMap/list demand, or pending publication. The full-library
+goal, all frontend and recursive-generator adapters, separate Sized
+contracts, noConstraint CAF, concrete containers, concurrency, identity
+lifetime, machine limits, solver IO, random draws, callbacks, codecs, and
+older constructor and equality work remain active. Preserve the optimized
+interned core. No board posts or deployments. Push verified formalize
+checkpoints regularly. This checkpoint is progress.
+
+
+## Current source-aligned reads and caller prerequisites
+
+Source main remains `8f85ddb6`. The preceding published checkpoint is
+`abd6a170`. Proof commits are `6f300927`, `5b391983`, `2e3f0fd4`, and
+`4b2995ee`. This checkpoint adds 35 Lean modules. No Haskell implementation
+or test file changes. The external Haskell fix registry remains first in
+root FINDINGS.md. Record every later repair there with its failure case,
+affected files, commit, checks, and upstream status.
+
+The old primary closed-endpoint read relation can query a different node
+from its pure trace input. A kernel counterexample starts from actual closed
+construction, a resident gate input, and valid three-table memos. The old
+receipt queries an uninstalled node with identity 999 and returns invalid
+tables. This is a Lean receipt defect, not a demonstrated Haskell defect.
+The strict primary relation ties the query to the actual source node.
+Completed execution constructs it. Erasure retains the old receipt;
+the old relation alone does not supply the refinement.
+
+Required, Projection, Gate, Seeded, Query, Conjunction, and Scan validity
+now follow their supplied actual reads and literal returned tables.
+Uniqueness is used only at a recorded fixed exposure budget. Equal returned
+heaps do not identify different schedules. Strict Scan, local, and parent
+schedules are constructed from legitimate initial invariants and reached
+range checks. The new actual receipt endpoints describe the supplied result,
+state, and globals. Rejected parents need no live child or range premise.
+
+Thirteen Probe modules retain the explicit filtered-probe heap through
+current gates, queries, native merges, Scan, required paths, target folds,
+structural edits, class passes, local reduction, and parent construction.
+The strict supplied-parent endpoint proves probes at that same actual return.
+Independent kernels combine its full receipt and literal resident Mu cleanup
+on the same heap. Initial ProbeHeap remains explicit; original construction
+derives it. Ready, Effects, and Keeps alone do not imply it.
+
+Current caller frames retain both result families' protected evaluating and
+returned cells through all eight mutual graphs. Indexed descent derives its
+literal payload. Walk and Children language lemmas compose smaller actual
+call laws at their exact source offsets. These are induction steps.
+Strict outer reads retain the source-aligned parent schedule and erase to
+the old graph. Actual reduced-edge calls derive their full receipt, probes,
+owner body law, exact finish cell, and candidate law through physical keys.
+No future result law or final validity is supplied.
+
+Pinned Lean 4.34.1 passes the complete Audit: 2406 jobs and 57445 theorem
+dependency checks. Only the standard three foundations and the existing
+unused-input warning remain. Public probes, integration kernels, independent
+reviews, source hashes, and raw logs are retained in
+lean/restart-evidence/20261016-current-caller-invariants/.
+All 4276 starting files remain. All 2370 older non-Audit proof sources retain
+their bytes. Twenty frozen manifests, stashes, other worktree records, and
+the first Haskell registry remain. Earlier unavailable external drafts are
+not claimed recovered or reverified. Reuse unchanged-source strict Nix build,
+777 examples plus golden, five-file Fourmolu, and four-package Cabal-gild.
+
+Read lean/notes-current-caller-invariants.md and mutual-current-next.md in
+the evidence directory. Next prove the full mutual physical and language
+invariant for current NodeCall, NodeBody, Rows, Descendants, Children, and Walk.
+Use the new strict reads, actual smaller calls, protected frames, actual edge
+receipts, probes, inherited descent, raw rebuilding, and modifyNode.
+Do not supply a callback that assumes the desired recursive body law.
+
+General constrained outer completion, unequal-length path classes, and the
+literal bounded executable worker remain open. Serial graphs do not prove
+GHC forcing, lazy IntMap/list demand, or pending publication. The full-library
+goal, all frontend and recursive-generator adapters, separate Sized contracts,
+noConstraint CAF, concrete containers, concurrency, identity lifetime, machine
+limits, solver IO, random draws, callbacks, codecs, and older constructor and
+equality work remain active. Preserve the optimized interned core.
+No board posts or deployments. Push verified formalize checkpoints regularly.
+This checkpoint is progress.
+
+## Current inherited descent and reduced-edge result memos
+
+Source main remains `8f85ddb6`. The preceding published checkpoint is
+`a15d6143`. Proof commits are `e5714c8d`, `0af22f98`, `e37b311b`, and
+`1226b1f3`. No Haskell implementation or test changes occur. The external
+Haskell fix registry remains first in root FINDINGS.md. Record each later
+fix there with its failure case, affected files, commit, checks, and
+upstream status.
+
+Eight additive modules retain the CURRENT inherited prefix, raw rebuilding,
+both caller result families, ordered recursive graph, actual read schedule,
+Mu reconstruction, warm result laws, and reduced-edge wrapper. Inherited
+combination runs once on the RETURNED edge, inherited FIRST. Contradiction
+short circuits before its own accessor. Each child receives its actual
+indexed allocated descent. Raw same-arity setChildren and literal modifyNode
+retain their distinct source operations. Warm tables are not reset.
+
+Both result families retain their complete first published requests. A
+suspended hit starts its stored owner. A completed hit reuses that owner's
+proved law through the actual physical key and keeps the whole caller state.
+Equal key transport derives inherited satisfaction equivalence; it does not
+assume identical metadata or a candidate result law. Actual physical effects
+retain all warm cell facts. Empty families derive Sound without answers.
+
+The current reduced-edge wrapper is composed with the actual ParentEdge
+finite theorem. It derives the owner body law, retains its exact running
+cell, finishes that cell, and derives the candidate's law. Fresh keys construct
+their own prefix. Ready hits need no parent range plan. finite_or_busy covers
+all valid starts: actual busy observation or an actual completed call and
+full physical, language, inventory, merge, fourth, and global receipt.
+Validity excludes absence. No busy cell becomes a result. Ranges inspect
+only reached evaluated owners and actual field loads; no future successful
+body, readiness oracle, or result-language law is an input.
+
+Mu reconstruction uses an explicit filtered-probe heap derived by original
+construction. Actual constructor work, optional binders, and checked native
+execution retain it. A resident binder then rebuilds to its smart cleanup
+with unchanged heap and exact independent meaning. Current Ready does not
+imply that probe heap. Its transport through all high-level current graphs
+remains open. The raw outer graph and Reads alone prove neither its physical
+invariants nor its full recursive language law.
+
+The pinned full Audit passes 2371 jobs and 57099 theorem dependency checks.
+Only standard foundations and the old unused-input warning remain. Public
+probes, external integration kernels, and independent reviews are retained
+in lean/restart-evidence/20261016-current-inherited/. All 4146 starting files
+remain. All 2362 older non-Audit proof sources retain their bytes. Nineteen
+frozen manifests, stashes, other worktree records, and the first Haskell fix
+registry remain. Earlier unavailable external drafts are not claimed recovered
+or reverified. Reuse unchanged-source strict Nix all-component build,
+777 examples plus golden, five-file Fourmolu, and four-package Cabal-gild.
+
+Read lean/notes-current-inherited-caller.md and outer-current-next.md in the
+evidence directory. Next prove protected running-cell frames and the mutual
+physical/language invariant for the CURRENT recursive calls, descendants,
+ordered rows, and modifyNode. Derive child laws from smaller actual calls.
+Do not assume the desired body law through a callback. Preserve the explicit
+probe heap through current operations before using the Mu receipt globally.
+General constrained outer completion, unequal-length path classes, and the
+literal bounded executable worker remain open. Serial graphs do not prove
+GHC forcing, lazy IntMap/list demand, or pending publication.
+
+The full-library goal, broader frontend and recursive-generator adapters,
+all separate Sized contracts, noConstraint CAF, concrete containers,
+concurrency, identity lifetime, machine capacity, solver IO, random draws,
+callbacks, codecs, and older constructor and equality work stay active.
+Preserve the optimized interned core. No board posts or deployments. Push
+verified formalize checkpoints regularly. This checkpoint is progress.
+
+## Current warm local reduction and checked parent construction
+
+Source main remains `8f85ddb6`. The preceding published checkpoint is
+`af0b0fa9`. Proof commits are `cb5232fe`, `8f38d731`, `9432d30d`, and
+`c2cfe5c8`. No Haskell implementation or test changes occur. The external
+Haskell fix registry remains first in root FINDINGS.md. Record each later
+fix there with its failure case, affected files, commit, checks, and
+upstream status.
+
+Five additive modules compose the CURRENT warm local child reduction and
+its checked parent constructor. The actual allocated precheck retains its
+literal returned equality operations and complete native state. It derives
+all three source branches and the live original records. The unchanged
+child branch can still retain accessor allocation; it is not a whole-state
+no-op theorem. No initial closed forest or cold cache reset is required.
+
+One actual current Scan selects erasure or the literal required worker and
+checked class right fold. Exact selected records, global read receipts,
+fourth answers, merge entries, and returned inventories remain connected.
+Ranges inspect only reached raw precheck, Scan, required, and class prefixes.
+No future completion, readiness, admission oracle, or result-language law
+is an input. Initial legitimate warm invariants and actual machine checks
+remain explicit.
+
+The complete local receipt narrows the input forest. It gives equal membership
+for terms satisfying the original full guard and inherited equalities. The
+parent checks raw contradiction BEFORE local child reduction. Rejection needs
+no field load, inherited readiness, child availability, or local ranges.
+Its sentinel derives Top allocation at the actual current cache. The live
+branch calls the actual checked mkEdge at the literal local return. Both
+constructor acceptance and rejection have exact independent PCS edge meaning.
+The parent language narrows the original raw edge and is equal under inherited
+satisfaction. No unconditional output-class-satisfaction law is claimed.
+
+Local child count is preserved. A rejected constructor can instead return
+one empty child and Top; final-edge arity is not unconditionally preserved.
+The next inherited stage must read THAT returned guard and child list.
+Its inherited-FIRST combination differs from the local precheck's own-FIRST
+key. Final same-arity setChildren remains a separate raw interning operation.
+
+The pinned full Audit passes 2363 jobs and 56924 theorem dependency checks.
+Only standard foundations and the old unused-input warning occur. Public
+probes, independent reviews, and a two-edge warm integration pass. The latter
+derives source field loads and child availability, then constructs the second
+edge at the first edge's actual returned state and all returned memo tables.
+Evidence is in lean/restart-evidence/20261016-current-local-reduction/.
+All 4060 starting files remain. All 2357 older non-Audit proof sources retain
+identical bytes. Eighteen frozen manifests, stashes, other worktree records,
+and the first Haskell registry remain. Earlier unavailable external drafts
+are not claimed recovered or reverified. Reuse unchanged-source strict Nix
+build, 777 examples plus golden, five-file Fourmolu, and four-package Cabal-gild.
+
+Read lean/notes-current-local-reduction.md and inherited-current-next.md in
+the evidence directory. Next port the returned-edge inherited prefix, its
+indexed descents and CURRENT recursive requests, then ordered rows and the
+literal modifyNode reconstruction. Combine the parent payload once. Do not
+map an old helper that repeats combination at every child. Keep the source
+contradiction short circuit before an otherwise demanded own accessor.
+General constrained outer completion and its actual outer/edge result caches
+remain open. Completed serial graphs do not establish the literal bounded
+worker, GHC forcing, IntMap demand order, or pending cache publication.
+The pure selection noConstraint CAF adapter remains explicit.
+
+The full library goal, broader frontend and recursive-generator adapters,
+all separate Sized contracts, concrete containers, concurrency, identity
+lifetime, machine capacity, solver IO, random draws, callbacks, and codecs
+stay active. Preserve the optimized interned core and every older constructor
+and equality proof. No board posts or deployments. Push verified formalize
+checkpoints regularly. This checkpoint is progress.
+
+## Current checked structural edits and full class pass
+
+Source main remains `8f85ddb6`. The preceding published checkpoint is
+`b992e324`. Proof commits are `63310da4`, `251fa392`, `1e54e3cb`,
+`9cdb80c5`, and `7f00cf8e`. No Haskell implementation or test changes occur.
+The external Haskell fix registry remains first in root FINDINGS.md. Add each
+later fix there with its failure case, files, commit, checks, and upstream status.
+
+Nine additive modules connect CURRENT checked leaf narrowing to structural
+edits, compiled classes, the complete right fold, and final empty propagation.
+Finite endpoints construct actual read annotations from initial invariants
+and reached raw-prefix ranges. No future successful edit, readiness, model,
+admission oracle, or result-language law is supplied. Each returned inventory,
+checked state, and global bundle enters the next selected call. Positional
+child edits preserve arity. Raw same-arity setChildren retains the original
+complete guard and operation state. Other original siblings can remain open.
+
+Each class captures its actual tail-returned forest. Only its local slots
+start empty. Both native tables, domain cache, equality operations, warm merge
+entries, and global receipts remain. Full-pass language narrows the input and
+has identical membership for terms satisfying all selected classes. Final
+literal empty propagation preserves exact forest language and the full state.
+No unconditional output-class-satisfaction claim follows.
+
+The current Required receipt derives every selected class domain. Its actual
+return feeds the new finite pass. Merge Stored grows from the pre-required
+heap. Class satisfaction derives the required paths. Therefore class-satisfying
+terms have identical membership before required preparation and after the full
+pass. Composed effects retain original values and fourth-memo correctness.
+Initial legitimate warm coverage, selected-record coherence, actual-prefix
+machine checks, and global validity at the actual required return remain inputs.
+The earlier RequiredGlobalMemos endpoint derives that global validity.
+
+The pinned full Audit passes 2358 jobs and 56817 theorem dependency checks.
+Only standard foundations and the old unused-input warning occur. Public
+probes, integration kernels, and independent reviews pass. Evidence and
+frozen sources are in lean/restart-evidence/20261016-checked-edits/.
+All 3948 starting files remain. All 2348 older non-Audit proof sources retain
+identical bytes. Seventeen frozen manifests, stashes, other worktree records,
+and the Haskell registry remain. Earlier unavailable external drafts are not
+claimed recovered or reverified. Reuse unchanged-source strict Nix build,
+777 examples plus golden, five-file Fourmolu, and four-package Cabal-gild.
+
+Read lean/notes-current-checked-class-pass.md and checked-outer-entry-next.md
+in the evidence directory. Next compose actual allocated precheck and Scan
+with Required and this pass. Parent reconstruction uses mkEdge, whose early
+contradiction test can skip the child thunk. FieldAvailable alone does not
+prove constructor acceptance. Later inherited descent reads the RETURNED edge
+and combines inherited constraints first. Final setChildren is a separate raw
+same-arity step. General constrained outer completion and its literal worker
+transfer remain open. Completed sequential graphs do not establish GHC or
+IntMap demand order. Keep the pure selection noConstraint CAF adapter explicit.
+
+The full library goal, broader frontend and recursive-generator adapters,
+all separate Sized contracts, concrete containers, publication, concurrency,
+identity lifetime, machine capacity, solver IO, random draws, callbacks, and
+codecs stay active. Preserve the optimized interned core and every older
+constructor and equality proof. No board posts or deployments. Push verified
+formalize checkpoints regularly. This checkpoint is progress.
+
+## Current checked target folds, historical slots, and leaf narrowing
+
+Source main remains `8f85ddb6`. The preceding published checkpoint is
+`8df6baa2`. Proof commits are `49ae70ae`, `5f547424`, and `94a5c1b1`.
+No Haskell implementation or test changes occur. The external Haskell fix
+registry remains first in root FINDINGS.md. Add each later fix there with
+its failure case, files, commit, checks, and upstream status.
+
+Seven additive modules construct the first-seeded target fold in the CURRENT
+checked state. Each actual query computes its next inventory at its literal
+entry heap. Projection, allocated merge, recursive tail, and checked native
+query retain source order, live equality operations, both native tables,
+domain cache, warm merge entries, and global receipts. Only selected path
+domains must be closed. Other original siblings can remain open.
+
+Class-specific target inclusion follows from class satisfaction. Shared slots
+retain historical target receipts independently of the current inventory.
+A hit returns the identical complete state and global bundle without a new
+range plan. A miss constructs the target once. The actual leaf then queries
+target/input at the force return and retains all slots across the computed
+next inventory. Its language narrows the input and preserves the selected
+subterm of an original class-satisfying forest. No future successful native
+call, final model, admission oracle, or result-language law is supplied.
+Initial legitimate warm invariants and reached machine checks remain explicit.
+
+The pinned full Audit passes 2349 jobs and 56708 theorem dependency checks.
+Only standard foundations and the old unused-input warning occur. Public
+probes, integration kernels, and independent reviews pass. Evidence and
+frozen sources are in lean/restart-evidence/20261016-checked-target/.
+All 3864 starting files remain. All 2341 older non-Audit proof sources retain
+identical bytes. Sixteen frozen manifests, stashes, other worktree records,
+and the Haskell registry remain. Earlier unavailable external drafts are not
+claimed recovered or reverified. Reuse unchanged-source strict Nix build,
+777 examples plus golden, five-file Fourmolu, and four-package Cabal-gild.
+
+Read lean/notes-current-checked-targets.md and checked-class-edit-next.md in
+the evidence directory. Next port structural edits with a returned current
+inventory, then the compiled class and right-folded class pass. Same-arity
+source setChildren reuses raw internEdge and the original guard. Positional
+edits preserve child count. Each class captures the actual preceding tail
+and clears only its class-local slots. Final empty propagation, inherited
+constraints, and the general constrained outer caller remain open.
+
+The full goal still requires exact generation, count/rank inverses,
+probability laws, each optimization's stated semantics, and correspondence
+with the current Haskell. Broader frontend and runtime-family adapters and
+all separate Sized contracts stay active. The pure selection noConstraint
+CAF allocation and GHC forcing adapter remain open. Containers, publication,
+concurrency, identity lifetime, machine capacity, solver IO, random draws,
+callbacks, and codecs retain explicit boundaries. Preserve the optimized
+interned core and every older constructor and equality proof. No board posts
+or deployments. Push verified formalize checkpoints regularly. The full goal
+remains active; this checkpoint is progress.
+
+## Current checked allocated merge and selected target operands
+
+Source main remains `8f85ddb6`. The preceding published checkpoint is
+`b7510ec5`. Proof commits are `784b2168`, `6938c72f`, and
+`4d9ea213`. No Haskell implementation or test changes occur.
+The external Haskell fix registry remains first in root FINDINGS.md.
+Record each later fix there with its failure case, files, commit, checks,
+and upstream status.
+
+Five additive modules connect selected target projection and merging to the
+CURRENT checked state. Large-row construction demands its canonical empty
+equality field at the reached constructor step. Small rows and completed
+hits add no such row demand. Dynamic field proofs and constructive lifts
+derive physical readiness without an initial Top-available premise.
+The same allocated call derives its heap-only graph. Existing finite merge,
+language, and global receipt proofs apply to that derived graph.
+
+The full checked wrapper retains both native tables and the domain cache,
+allows actual equality-operation growth, and retains concrete Inventory.At.
+Initial warm merge Stored and uniform ambient CacheCovers remain explicit.
+The literal source subsumption test compares a raw field with Top. It is
+different from the broader normalized SourceMemoGate.plain test: an empty
+And guard is a checked witness. Independent PCS truth discharges the literal
+test's semantic law. This is a proof adapter correction, not a Haskell fix.
+
+Selected support constructs projection followed by the allocated merge.
+Other captured siblings can remain open. The result is closed and available.
+It retains original values, warm tables, input inventory, loaded fields, and
+global receipts. Proper paths give selected-subterm inclusion. Projection
+discards ancestor guards and merging can add terms, so no general inverse
+language claim is made. An independent kernel composes this operand with
+the NEXT generated native query and derives its expanded inventory and
+result law from reached ranges.
+
+The pinned full Audit passes 2342 jobs and 56610 theorem dependency checks.
+Only standard foundations and the old unused-input warning occur.
+Public probes, kernel integrations, and independent reviews pass.
+Evidence is in lean/restart-evidence/20261016-checked-merge/.
+All 3792 starting files remain. All 2336 older non-Audit proof sources
+retain identical bytes.
+Earlier frozen proofs, stashes, other worktree records, and the Haskell
+registry remain. Earlier unavailable external drafts are not claimed
+recovered or reverified. Reuse unchanged-source strict Nix build, 777 examples
+plus golden, five-file Fourmolu, and four-package Cabal-gild.
+
+Read lean/notes-current-checked-merge.md and the checked-target-fold-next.md
+evidence note. Next port the first-seeded target fold, class-local target
+slots, force and leaf edits, then the class pass, final empty propagation,
+and general constrained outer caller. Keep merge and native tables warm.
+The pure selection graph still needs its literal noConstraint CAF allocation
+and GHC forcing adapter. Final-row allocation alone does not establish that
+runtime trace. Containers, publication, concurrency, machine capacity, solver
+IO, random draws, codecs, broader full-library targets, and each separate
+Sized contract remain active. Preserve the optimized interned core and
+every older constructor and equality proof. No board posts or deployments.
+Push verified formalize checkpoints regularly. The full goal remains active.
+
+## Current checked Scan global memos and selected required execution
+
+Source main remains `8f85ddb6`. The preceding published checkpoint is
+`ca0b8697`. Proof commits are `e715f34c`, `bc99fc26`, `2ce01ce2`, and
+`aad5d624`. No Haskell implementation or test changes occur. The external
+Haskell fix registry remains first in root FINDINGS.md. Record each later
+fix there with its failure case, files, commit, checks, and upstream status.
+
+Ten additive modules connect all three global gate memo tables to CURRENT
+checked execution. Actual checked native steps derive constructor event
+traces and NoGlobal. Projection and seeded receipts retain exact source
+order. CURRENT conjunction exposure, allocated tuples, requirements,
+projections, Worklist, Decision, and fourth-memo Call derive their own
+physical inputs and returned global tables. No historical Decision/Call
+or unchecked whole-engine execution substitutes for these source branches.
+
+The actual current Scan threads those receipts through its reached prefix.
+A stop needs no suffix read or range plan. Its semantic endpoint also derives
+final Inventory.At and original-class refutation on the SAME Scan. Actual
+History, construction, resident load, and live precheck derive cold native
+entry and physical facts while retaining the returned equality operations.
+Initial legitimate global tables, fourth Correct, source coverage, inherited
+stored readiness, and reached ranges remain explicit. No global GHC cache
+reset is claimed.
+
+Current selected records retain exact original positions, order, and
+multiplicity. Primary certificates replay at the Scan-final heap and derive
+finite requireAll execution. Required work retains the SAME equality
+operations, both native tables, domain cache, input inventory, and loaded
+fields. Its language is exactly the original forest filtered by selected
+required paths. It derives every selected path domain without closing
+unrelated original siblings. The constructed finite endpoint produces Scan,
+then its required worker and global receipts on outcome=none. No completed
+Scan, required worker, or future result-law premise is supplied.
+
+The pinned full Audit passes 2337 jobs and 56426 theorem dependency checks.
+Only standard foundations and the old unused-input warning occur.
+Independent public axiom/signature checks, kernel integrations, and source
+reviews pass. Evidence and frozen sources are in
+lean/restart-evidence/20261016-current-scan-memos/.
+All 3712 starting files remain. All 2326 older non-Audit proof sources
+retain identical bytes. Prior frozen proofs, stashes, other worktree records,
+and the Haskell registry remain. Earlier unavailable external drafts are
+not claimed recovered or reverified. Reuse unchanged-source strict Nix build,
+777 examples plus golden, five-file Fourmolu, and four-package Cabal-gild.
+
+Read lean/notes-current-checked-scan-memos.md and the next-class-edit boundary
+note in the evidence directory. Next port actual shared targets and class
+edits to the checked state, with Inventory.At and live equality operations.
+The older target Fold and leaf use unchecked native Step. Derive Top's
+same-cache field only at actual allocating merge branches; do not supply a
+universal old-cache Top premise or fabricate allocation on hits/small groups.
+Then compose the class pass, empty propagation, and general constrained
+outer caller. Keep every other full-library and separate Sized contract
+active. Preserve the optimized interned core and all older constructor and
+equality proofs. Runtime, containers, allocation, machine, solver, and
+callback boundaries remain explicit. No board posts or deployments. Push
+verified formalize checkpoints regularly. The full goal remains active.
+
+## Current seeded-query language and sound allocated class scans
+
+Source main remains `8f85ddb6`. The preceding published proof checkpoint is
+`34066d33`. New proof commits are `20a9336e` and `57ead43f`.
+No Haskell implementation or test changes occur. The external Haskell fix
+registry stays at the top of FINDINGS.md. Add each later Haskell fix there
+with its failure case, affected files, commit, checks, and upstream status.
+
+Seven additive modules carry the actual finite input inventory through the
+whole checked seeded fold. Projection retains the same warm native tables.
+Each checked native request constructs its next inventory at its actual
+entry heap and derives final admission and contextual laws. The induction
+retains head projection, tail fold, final native query, and the exact source
+rotation `rest ++ [seed]`. Selected path support permits unrelated original
+siblings to remain open. Empty input returns literal empty and the unchanged
+state. No future model, completed callback, or result-language law is given.
+
+Independent term facts derive a common proper subtree for every satisfied
+active original class. The actual checked query retains that subtree.
+The CURRENT conjunction memo's true answer therefore refutes the class.
+The actual current Scan threads final inventory, physical readiness, loaded
+fields, original values, and fourth-memo correctness through its visited
+prefix. Every stopped original class has a uniform rejection theorem.
+No unvisited suffix is required after a true answer.
+
+The constructed endpoint starts after the actual allocated live precheck.
+Original allocation History, source construction, and resident field readback
+derive initial Ready, original child Values, active classes, and proper paths.
+Literal cold native tables derive initial At without a supplied cache law.
+The returned precheck operations remain. Finite Scan, final inventory At,
+and stopped-class soundness are conclusions. History, origin coverage,
+build, inherited stored readiness, initial fourth-memo Correct, and reached
+Ranges remain explicit. Empty fourth tables derive Correct. No global GHC
+cache reset or general constrained caller theorem is claimed.
+
+The pinned full Audit passes 2327 jobs and 56369 theorem dependency checks.
+Only standard foundations and the old unused-input warning occur.
+Public axiom/signature probes, kernel integrations, and independent source
+reviews pass. Evidence and frozen sources are in
+lean/restart-evidence/20261016-seeded-language/.
+All 3638 baseline files remain. All 2319 older non-Audit proof sources retain
+identical bytes. Prior frozen proofs, stashes, other worktree records, and
+the root Haskell registry remain. Earlier unavailable external drafts are
+not claimed recovered or reverified. Reuse unchanged-source strict Nix build,
+777 examples plus golden, five-file Fourmolu, and four-package Cabal-gild.
+
+Read lean/notes-current-seeded-language.md. Next compose all three global
+gate memo receipts with CURRENT checked Scan, selected required paths and
+later edits, then the general constrained outer caller. Keep every other
+full-library and separate Sized contract active. Preserve the optimized
+interned core and every older constructor and equality proof. Runtime,
+container, allocation, machine, solver, and callback boundaries remain
+explicit. No board posts or deployments. Push verified formalize checkpoints
+regularly. The full goal remains active; this checkpoint is progress.
+
+## Current causal memo admission through exact native queries
+
+Source main remains `8f85ddb6`. The preceding published proof checkpoint is
+`6ba5d18b`. New proof commits are `f2e119b9`, `4b1d8e25`, and `49184f18`.
+Audit and scope note commit is `ff561e50`.
+No Haskell implementation or test changes occur. The external Haskell fix
+registry remains at the top of FINDINGS.md. Add every later Haskell fix
+there with its failure case, affected files, commit, checks, and upstream status.
+
+Nine additive modules derive causal admission for every native memo phase.
+Exact source requests derive model membership and captured seen-pair
+coverage before lookup publishes them. Demand, finish, and machine effects
+retain the same original requests. The invariant transports through actual
+input-model growth and derives returned-only Admitted and SeenAdmitted.
+
+Local certificates cover the literal node compiler and actual checked-edge
+prefix. Union members, Mu bodies, row pairs, zipped children, and grown-heap
+binder reads derive admission from source scope and finite-input closure.
+Recursive continuations supply only physical resident-value facts. No child
+result law or completed callback supplies membership. The actual trace
+simulation derives each reached publication check and every final cell's
+coverage. Its static branch families are concretely instantiated.
+
+The exact query endpoint now derives coverage of newly returned internal
+requests. The generated-operand endpoint exposes the actual expanded root
+inventory and its finiteInput, retains the same warm tables, and returns
+that coverage for later model expansion. The preceding one-next-query
+coverage gap is closed under the stated initial invariants and word checks.
+Initial Good, Contextual, all-cell Covered, Scoped, SemanticReady, Idle,
+source growth/history, and reached WordRanges remain explicit for a warm
+entry. Empty modeled tables derive initial Covered. No Haskell global reset
+or complete generated-history theorem is claimed.
+
+The pinned full Audit passes 2320 jobs and 56321 theorem dependency checks.
+Only standard foundations and the old unused-input warning occur.
+Independent source reviews found no material defect. Focused checks pass
+68 public axiom reports, 78 public signatures, and 46 kernel integrations.
+Eight named kernels have additional axiom and signature checks. All use
+only the permitted foundations.
+A two-generated-query kernel uses the first actual receipt for every second
+cache invariant; only its next reached WordRanges is new. Reuse the
+unchanged-source strict Nix build, 777 examples plus golden, five-file
+Fourmolu, and four-package Cabal-gild.
+
+Read lean/notes-current-native-admission-history.md. Evidence and frozen
+sources are in lean/restart-evidence/20261016-admission-history/.
+All 3538 baseline files remain. All 2310 older non-Audit proof sources
+retain identical bytes. Prior frozen proofs, stashes, other worktree
+records, and the root Haskell registry remain. Earlier unavailable external
+drafts are not claimed recovered or reverified.
+
+Next carry the concrete expanded inventory and admission through the
+complete source seeded fold. Derive common-subtree inclusion, the actual
+checked class witness, and current stopped-class rejection soundness.
+Compose actual allocated precheck state, all gate memo receipts, selected
+required paths, and the general constrained outer caller. Keep every other
+full-library and separate Sized contract active. Preserve the optimized
+interned core and every older constructor and equality proof. Runtime,
+container, allocation, machine, solver, and callback boundaries remain
+explicit. No board posts or deployments. Push verified formalize checkpoints
+regularly. The full goal remains active; this checkpoint is progress.
+
+## Current semantic input admission and actual allocated Scan entry
+
+Source main remains `8f85ddb6`. The preceding published proof checkpoint is
+`f37a8fe5`. New proof commits are `953f3b1a`, `61ce6cff`, and `048d9fce`.
+Audit and scope note commit is `3b02d00c`.
+No Haskell implementation or test changes occur. The external Haskell fix
+registry stays at the top of FINDINGS.md. Add every later Haskell fix there
+with its failure case, affected files, commit, checks, and upstream status.
+
+Six additive modules derive exact old-domain rank and language agreement
+through actual heap growth. An enlarged current inventory admits newly
+listed closed resident operands. Cross-view transport retains the same
+returned native cells and their contextual laws. It needs explicit old
+returned-request admission and coverage of both names in every captured
+seen pair. Conditional contextual laws alone do not establish that coverage.
+
+The next-query theorem constructs `oldRoots ++ [left, right]` at the actual
+current heap. It derives target Original syntax, input membership, and warm
+cache transport, then completes the same checked query with a closed
+resident result and exact physical intersection language. No target model,
+target contextual law, future return, or desired result law is supplied.
+This proves one next query. Causal admission of newly returned internal
+cells remains open, so an arbitrary generated-query history and the whole
+seeded class fold do not follow yet.
+
+The allocated class-entry adapter uses the precheck's actual returned
+operation state. It derives physical Scan.Ready, original proper paths,
+actual child availability, ordered original records, and finite current
+Scan with fourth memo correctness. No completed historical Scan is a
+premise. Original-class rejection soundness remains separate.
+
+The pinned full Audit passes 2311 jobs and 56189 theorem dependency checks.
+Focused validation passes 57 public axiom reports, 57 full signatures,
+and 34 kernel examples. Only standard foundations and the old unused-input
+warning occur. Independent reviews found no material defect. Reuse the
+unchanged-source strict Nix build, 777 examples plus golden, five-file
+Fourmolu, and four-package Cabal-gild.
+
+Read lean/notes-current-native-semantic-admission.md. Evidence and frozen
+sources are in lean/restart-evidence/20261016-semantic-admission/.
+All 3463 baseline files remain. All 2304 older non-Audit proof sources
+retain identical bytes. Earlier unavailable external drafts are not
+claimed recovered or reverified.
+
+Next derive returned-request and seen-pair admission from actual execution,
+then iterate the bridge through the seeded fold. Derive common-subtree
+inclusion, the checked class witness, and current stopped-class soundness.
+Compose actual allocated precheck state, all gate memo receipts, selected
+required paths, and the general constrained outer caller. Keep every other
+full-library and separate Sized contract active. Retain explicit runtime,
+container, allocation, machine-range, solver, and callback boundaries.
+Preserve the optimized interned core and every older constructor and equality
+proof. No board posts or deployments. Push verified formalize checkpoints
+regularly. The full goal remains active; this checkpoint is progress.
+
+## Current finite conjunction class scans and constructed entry
+
+Source main remains `8f85ddb6`. The preceding published proof checkpoint is
+`2805ce87`. Proof commits are `79a00157`, `14fcff90`, `d03bced1`, and
+`e103bb55`. Audit and scope note commit is `b5d30312`. No Haskell
+implementation or test changes occur. The Haskell fix handoff at the top
+of FINDINGS.md remains current for external agents.
+
+Six additive modules connect the CURRENT conjunction decision and memo to
+finite checked class Scan. Actual projections retain the same operation
+state. The source first-seeded right fold uses the actual checked native
+engine. Closed available operands derive Original syntax at each actual
+returned heap. Scope completion and actual physical traces derive final
+Good, loaded fields, stored costs, Scoped, Idle, and closed resident queries.
+No native memo table is reset between queries.
+
+The whole finite Scan derives its own gates, seeded queries, and current
+memo calls. It retains source order, repeated selected occurrences, fourth
+memo correctness, and earlier entries. A true answer stops before the suffix.
+Reached ranges supply machine checks, not future successful callbacks.
+No completed historical Scan, desired result law, or final invariant is a
+premise. A covered original field history and actual source build derive
+initial Scan.Ready. The cold wrapper also derives empty fourth correctness.
+Available forest values, proper paths, coverage, and reached ranges remain
+explicit. Only modeled native/domain/operation tables start cold over the
+retained equality interner. No Haskell global reset is claimed.
+
+This is finite PHYSICAL completion. Original-class rejection soundness still
+needs common-subtree inclusion in the actual seeded query. Closed residency
+and Original syntax do not admit a generated operand to a fixed semantic
+model or revalidate old warm-cell laws after model expansion.
+
+The pinned full Audit passes 2305 jobs and 56121 theorem dependency checks.
+Focused validation passes 29 public axiom reports, 29 signatures, 28 kernel
+examples, and one named kernel theorem with its additional axiom report.
+Only standard foundations and the old unused-input warning occur.
+Independent reviews found no material defect. Reuse unchanged-source strict
+Nix build, 777 examples plus golden, five-file Fourmolu, and four-package
+Cabal-gild.
+
+Read lean/notes-current-conjunction-class-scan.md. Evidence and frozen source
+copies are repository-local in lean/restart-evidence/20261016-conjunction-scan/.
+All 3401 baseline files remain. All 2298 older non-Audit proof sources and
+prior frozen modules retain identical bytes. Earlier unavailable external
+drafts are not claimed recovered or reverified.
+
+Next derive semantic input-model admission and warm-cache law transport for
+generated operands, then an actual checked class_witness and stopped-class
+soundness. Compose actual allocated precheck records/state, the three global
+gate memo receipts, selected required paths, and the general constrained
+outer caller. Do not infer semantic cache validity from physical scope.
+Arbitrary warm operation tables, GHC forcing and publication, allocation
+order, concurrency, concrete containers, and machine capacity retain explicit
+boundaries. Every other full-library and separate Sized contract remains
+active. Preserve the optimized interned core and every older constructor and
+equality proof. No board posts or deployments. Push verified formalize
+checkpoints regularly. The full goal remains active; this checkpoint is progress.
+
+## Current native entry from original allocation and construction histories
+
+Source main remains `8f85ddb6`. The preceding published proof checkpoint is
+`8ec2983b`. Proof commits are `07ef6169`, `13950ca4`, and `c585a6d3`.
+Audit and scope note commit is `6591e383`. No Haskell implementation or test
+changes occur. The Haskell fix handoff at the top of FINDINGS.md remains
+current for external agents.
+
+Five additive modules derive initial checked native invariants from one
+covered original allocation history and actual source construction.
+History events retain normalization checks. Coverage derives normalized
+syntax and existing same-cache field loads. Physical Good, SemanticReady,
+availability, closedness, and Original syntax are conclusions.
+
+Literal serial field preparation derives its own finite History, atomic
+steps, final validity, retained entries, and ordered field readback.
+The complete native query history starts at that actual returned interner.
+Its entry needs no supplied Good, SemanticReady, Original, model membership,
+parent law, future native result, or completed preparation. Normalized
+literal fields, initial equality-cache validity, actual source build,
+closed available query operands, and reached WordRanges remain explicit.
+Final ordered exact languages, closed resident results, and unchanged
+cacheable historical repeats follow from the same actual checked walk.
+
+Only the modeled completed operation tables start empty over the retained
+interner. No Haskell global reset or GHC eager field-demand order is claimed.
+The allocated class-entry adapter also derives exact finite precheck behavior.
+Its Scan endpoints retain completed historical Scan as a premise; they do
+not transfer the later conjunction decision or prove general termination.
+
+The pinned full Audit passes 2299 jobs and 56075 theorem dependency checks.
+Focused validation passes 18 public axiom reports, 18 signatures, 26 kernel
+examples, one named kernel theorem, and three executable evaluations.
+Only standard foundations and the old unused-input warning occur.
+Independent reviews found no material defect. Reuse unchanged-source strict
+Nix build, 777 examples plus golden, five-file Fourmolu, and four-package
+Cabal-gild.
+
+Read lean/notes-current-native-original-entry.md. Evidence and frozen source
+copies are repository-local in lean/restart-evidence/20261016-original-entry/.
+All 3347 baseline files remain. All 2293 older non-Audit proof sources and
+prior frozen modules retain identical bytes. Earlier unavailable external
+draft bytes are not claimed recovered or reverified.
+
+Next connect the CURRENT conjunction decision and its memo/worklist effects
+to class Scan. Then compose current checked native callbacks, selected
+required paths, and the general constrained outer caller. Do not replace
+this obligation with the historical completed Scan premise. Warm operation
+tables, new generated operands, cross-model admission, runtime/GHC forcing
+and publication, allocation order, concurrency, concrete containers, and
+machine capacity retain explicit boundaries. Every other full-library and
+separate Sized contract remains active. Preserve the optimized interned
+core and every older constructor/equality proof. No board posts or
+deployments. Push verified formalize checkpoints regularly.
+The full goal remains active; this checkpoint is progress.
+
+## Current exact serial native histories and retained warm answers
+
+Source main remains `8f85ddb6`. The preceding published proof checkpoint is
+`3e84dab7`. Proof commits are `ef5bbc8e`, `2bdf6641`, and `c8fe3b9f`.
+Audit and scope note commit is `133ffb69`. No Haskell implementation or test
+changes occur. The Haskell fix handoff at the top of FINDINGS.md remains
+current for external agents.
+
+Five additive modules derive one input model for the complete finite list
+of closed Original available operands, then complete the literal serial
+Code.walk in that same fixed model. Every actual head receipt supplies the
+tail's physical, contextual, scope, and semantic invariants. Whole-walk
+WordRanges derives each head and tail plan through actual reached traces.
+There is no per-query future-success or result-law callback.
+
+The final receipt retains ordered exact intersection languages, closed
+resident values, and actual final returned cells for every cacheable query.
+Each such historical query repeats in two checked steps with the whole
+final checked state unchanged. Requests without a key retain their direct
+body path and have no warm-hit claim. Empty and duplicate histories are
+covered. The cold endpoint derives initial Contextual, Scoped, Idle, and
+all operand model membership from the finite source inventory. Initial
+Good, SemanticReady, and actual-prefix WordRanges remain explicit.
+
+The pinned full Audit passes 2294 jobs and 56040 theorem dependency checks.
+Focused validation passes 21 public axiom reports, 21 signatures, 37 kernel
+examples, and two named kernel theorems. Only standard foundations and the
+old unused-input warning occur. Independent reviews found no material
+defect. Reuse unchanged-source strict Nix build, 777 examples plus golden,
+five-file Fourmolu, and four-package Cabal-gild.
+
+Read lean/notes-current-native-warm-history.md. Evidence and frozen source
+copies are repository-local in lean/restart-evidence/20261016-warm-history/.
+All 3291 baseline files remain. All 2288 older non-Audit proof sources and
+the preceding frozen modules retain identical bytes. Earlier missing
+external draft bytes remain unavailable. They are not claimed recovered
+or reverified.
+
+Next derive initial Good and SemanticReady from complete original allocation,
+normalization, and loaded-field histories at the actual caller boundary.
+Compose with the current class Scan and constrained outer caller. The new
+history uses a fixed source and listed original operands; new allocations,
+generated operands, and cross-model cache admission remain separate.
+Runtime/GHC forcing and publication, concurrency, concrete containers, and
+machine ranges retain explicit boundaries. Every other full-library and
+separate Sized contract remains active. Preserve the optimized interned
+core and every older constructor/equality proof. No board posts or
+deployments. Push verified formalize checkpoints regularly.
+The full goal remains active; this checkpoint is progress.
+
+## Current actual result scope and closed exact cold returns
+
+Source main remains `8f85ddb6`. The preceding published proof checkpoint is
+`9fab9f35`. No Haskell implementation or test changes in this update. The
+Haskell fix handoff near the top of FINDINGS.md remains current.
+Proof commits are `6d6f142e`, `bf2669ee`, and `db8f6efa`.
+
+Seven additive modules derive scope through actual checked execution.
+Returned node and edge cells retain the scope of their original request.
+The paired independent request induction derives each local scope before
+its actual protected finish. Static certificates follow all actual source
+branches and guarded edge prefixes. They require no input-language model.
+
+The cold scope endpoint derives initial scoped tables and Idle, then proves
+result.free = []. ColdClosedExact combines this with the independent language
+proof by completed-result uniqueness. Both the literal value and complete
+checked state are equal. The same contextual Receipt therefore carries
+scoped tables, final Idle, an empty result free list, and exact original
+intersection language. No parent law, parent scope, completed child callback,
+final invariant, or future physical plan is a public premise.
+Initial Good, SemanticReady, and actual-prefix WordRanges remain explicit.
+
+The pinned full Audit passes 2289 jobs and 55998 theorem dependency checks.
+Focused validation passes 40 public axiom reports, 40 signatures, 32 kernel
+examples, and one named kernel theorem. Only standard foundations and the old
+unused-input warning occur. Independent reviews found no material defect.
+Reuse unchanged-source strict Nix build, 777 examples plus golden, five-file
+Fourmolu, and four-package Cabal-gild.
+
+Read lean/notes-current-native-closed-scope.md. Evidence and frozen source
+copies are repository-local. All 3229 baseline files remain. All 2281 older
+non-Audit proof sources and the preceding nineteen frozen modules retain
+identical bytes. Earlier missing external draft bytes remain unavailable and
+are not claimed recovered or reverified.
+
+Next admit warm caches from actual serial histories in one fixed model.
+A model for two initial roots need not validate later roots. Source residency
+alone is insufficient; derive coverage of the full finite query inventory.
+Then compose complete original allocation, normalization, and loaded-field
+histories with the current class Scan and constrained outer caller. Keep
+runtime/GHC forcing and publication, concurrency, concrete containers, and
+machine ranges explicit. Every other full-library and separate Sized target
+remains active. Preserve the optimized interned core and every older proof.
+No board posts or deployments. Push verified formalize checkpoints regularly.
+The full goal remains active; this checkpoint is progress.
+
+## Current actual contextual completion and cold root exactness
+
+Source main remains `8f85ddb6`. The preceding published proof checkpoint is
+`4d74d00c`. No Haskell implementation or test changes in this update. The
+Haskell fix handoff near the top of FINDINGS.md remains current.
+Proof commits are `551371b0`, `809fa691`, and `4b14d7be`.
+
+Nine additive modules prove actual paired contextual completion. The strong
+independent request induction discharges both node and edge body obligations.
+Local source certificates derive every node branch and actual checked edge
+prefix. A miss derives its local language law before its actual finish. A
+warm hit recovers the exact requested law from both cache invariants.
+
+cold_complete derives fixed original input models and ranks from closed,
+available Original operands. Empty native memo tables derive initial
+Contextual and Idle. Initial Good, SemanticReady, and actual-prefix WordRanges
+remain explicit. It returns one actual checked Receipt with physical effects,
+final Contextual and SemanticReady, result availability, final Idle, and exact
+original intersection language for every output environment and term.
+No own-root finish law, completed body callback, final validity, or future
+physical input plan is a premise. The older FinishThrough endpoints retain
+their conditional scope; this cold endpoint independently derives root meaning.
+
+The full pinned Audit passes 2282 jobs and 55887 theorem dependency checks.
+Only standard foundations and the old unused-input warning occur. Focused validation passes 66 public axiom reports, 66 signatures, and
+43 kernel examples across all nine modules. Each has saved logs.
+Reuse the unchanged-source strict Nix build, 777 examples plus golden,
+five-file Fourmolu, and four-package Cabal-gild results.
+
+Read lean/notes-current-native-contextual-root.md. New evidence and frozen
+source copies are repository-local. All 3147 baseline files remain. All 2272
+older non-Audit proof sources and the previous ten frozen modules retain
+identical bytes. Earlier missing external draft bytes remain unavailable and
+are not claimed recovered or reverified.
+
+Next derive result Scope and cached free-list closedness, admit warm caches
+from real histories, and compose complete original allocation and annotation
+history with the current class Scan and constrained outer caller. Runtime/GHC
+forcing and publication, concurrency, concrete containers, and machine ranges
+remain explicit. All other full-library and separate Sized targets remain
+active. Keep the optimized interned core and every older constructor/equality
+proof. No board posts or deployments. Push verified formalize checkpoints
+regularly. The full goal remains active; this checkpoint is progress.
+
+## Current paired physical completion and actual Mu/reference meaning
+
+Source main stays `8f85ddb6`, merged at `7dccd588`. Checkpoint `554a116f`
+is published on formalize. Haskell source and tests stay unchanged. The fix
+handoff near the top of FINDINGS.md remains current for external work.
+Proof commits `bcc1165d` and `60e83ee8` add general checked physical
+completion and actual bound-reference/Mu branch composition.
+
+The strong independent request induction now discharges both node and edge
+body completion hypotheses internally. Constructed traces derive the reached
+physical input plan. Closed Original available roots complete from initial
+Good and Idle, returning physical invariants, exact effects, availability,
+and final Idle. Actual-prefix WordRanges remains explicit. Good includes
+physical cache validity, ready heap, operation validity, and loaded fields.
+No own-body completion or future InputsThrough premise remains at this endpoint.
+This is checked-model physical completion under those contracts.
+
+Reference resolution derives original bound scope and actual readback. The
+selected Mu bodies derive middle SemanticReady from their child trace, then
+complete the actual optional binder and derive the parent contextual law.
+Only the exact child's local NodeLaw and physical trace/effects remain as
+recursive semantic hypotheses. The global contextual semantic/cache induction,
+result closedness, and independent root language correctness remain open.
+Do not treat the older FinishThrough endpoint as an independent root proof.
+
+The full audit passes 2275 jobs and 55741 theorem dependency checks.
+Focused validation passes 104 public axiom reports, 62 signatures, 70 examples,
+and one named kernel theorem across this update and the preceding seven modules.
+Only standard foundations and the old unused-input warning occur. Independent
+reviews found no material defect. Reuse the unchanged-source Nix build,
+777 examples plus golden, five-file Fourmolu, and four-package Cabal-gild.
+
+Read lean/notes-current-native-paired-physical-completion.md, then the two
+preceding physical/source notes. All ten frozen module hashes and new evidence
+are repository-local. The 3052-file baseline has no missing file; all 2262 older
+non-Audit proof sources remain byte-identical. Earlier missing external draft
+bytes remain unavailable and are not claimed recovered or reverified.
+
+Next combine actual recursive returns with contextual child laws, preserve
+Contextual at each actual finish, derive result scope/closedness and admissible
+warm-cache use, and prove root exactness without its own finish-law premise.
+Then compose original allocation histories, the current class Scan, and the
+constrained outer caller. All other full-library and separate Sized targets
+remain active. Runtime capacity, GHC forcing/publication, concurrency, frontend,
+and graph/synthesis adapters retain their recorded boundaries. Keep the
+optimized interned core and every older constructor/equality proof. No board
+posts or deployments. Push verified formalize checkpoints regularly.
+The full goal remains active; this checkpoint is progress.
+
+## Current physical checked execution and actual branch meaning
+
+Source main `8f85ddb6` is merged at `7dccd588`. PR #54 retains named child
+measure terms over `every`. PR #55 exposes explicit typing automata and the
+`Typing` record API. Native intersection, equality, constructors, and Sized
+source bodies stay unchanged. The Haskell repair handoff at the top of
+FINDINGS.md records files, failures, commits, checks, and upstream status.
+The optimized interned core and all older constructor/equality proofs remain.
+
+Proof commits `3ca57b91` and `7d9d433b` add seven new modules. Physical native
+cache validity and actual checked execution need no semantic Produced receipt.
+Exact current operands, key bounds, running cells, and returned residency
+supply physical checks. Operation/field preservation and strict request bounds
+now derive actual yielded transitions. Pure body misses complete. The general
+recursive completion induction and reached physical plan remain open.
+
+Local node laws cover empty, repeated-reference, self, swap, reset, and unions.
+Actual checked edge, selected union, and ordinary-node bodies derive their
+parent contextual laws from exactly the reached child laws and effects.
+Original input models stay fixed. All exact returned states retain the actual
+operation cache and both native tables. Costs are not derived by these branch
+laws. Recursive child completion and semantic laws remain induction obligations.
+The existing FinishThrough endpoint includes its own root finish law; it is
+conditional transfer, not independent root correctness.
+
+The full audit passes 2272 jobs and 55698 dependency checks. Focused probes
+pass 81 public axiom checks, 47 signatures, 53 examples, and one named kernel
+theorem. Only standard foundations and the old unused-input warning occur.
+Strict Nix build, all six suites with 777 examples plus golden, five-file
+Fourmolu, and four-package Cabal-gild pass. No local test file changes.
+
+Read lean/notes-current-native-physical-meaning.md and
+lean/notes-main-8f85ddb6.md. Evidence is repository-local under
+lean/restart-evidence/20261016-physical/ and the recorded new files in
+lean/restart-evidence/20261016-recursive/. The 3052-file starting baseline and
+new frozen module hashes record preservation. Earlier missing external draft
+bytes remain unavailable after the documented temporary-directory reset.
+They are not recovered or claimed reverified.
+
+Next construct protected-frame actual traces through bind and finish. Close
+the joint node/edge completion and semantic induction from initial invariants.
+Then compose original allocation histories, the current class Scan, and the
+constrained outer caller. Keep every other full-library target and every
+separate Sized contract active. No old eager execution or historical Scan
+substitution. No board posts or deployments. Push verified formalize
+checkpoints regularly. This checkpoint is progress; the full goal stays active.
+
+## Current contextual Mu components and source main d44b2a0f
+
+Source main `d44b2a0f` is merged at `b09f4ebb`. Upstream adopts the finite
+needed-type repair from `ca0e9a65`. Typing.hs now matches main. New synthesis
+uses reduction-round order and refold edge mappings. The optimized interned
+core and all older proofs remain. The package delta from main contains only
+the historical constructor changelog entry and the equality reproducer comment.
+The Haskell fix handoff near the top of FINDINGS.md records failure cases,
+paths, commits, checks, and upstream status for external work.
+
+Proof commits are `1ce04615`, `dc64812b`, `43b910be`, `22b5e0fc`, and
+`06a73330`. Actual maybeMu least language and unfolding now support local
+soundness and rank-sum completeness. The induction derives fresh candidate
+containment. Literal source bindings, domain entry, pair codecs, and stored
+body inputs derive the Mu adapter from a contextual law for the actual child.
+Child completion and that child law remain recursive obligations.
+
+Stronger returned-cell NodeLaw/EdgeLaw invariants survive lookup, demand,
+physical advance, and actual checked execution when reached finishes supply
+their local laws. Closed input models and rank erasure construct exact closed
+receipts from actual body traces and physical effects, with no final native
+validity premise. Initial Original closed operands derive physical code
+certificates, independent request bounds, and actual checked edge prefixes.
+
+The actual query endpoint is conditional readback and cache transfer. For a
+started query, FinishThrough includes its own root finish law. The names
+query_law_of_finish_laws and query_exact_of_finish_laws make this explicit.
+Do not use that plan as an independent derivation of root language correctness.
+Prove the actual body law before its finish step. General checked completion,
+recursive semantic body induction, reached input/finish plans, and adequate
+initial warm contextual-cache admission remain open.
+
+The new birth-order component proves first observed rounds, min transport,
+injective key-renaming lookup, fallback bounds, and a supplied-total-step
+history bound of thirty-one. It does not prove process-history independence.
+Actual traversal/refolding, empty-history rejection, identity/counter bounds,
+IntMap, Double, and canonical enumeration order remain source adapters.
+
+The full audit passes 2,265 jobs and 55,567 dependency checks. Ninety-seven
+public axiom checks, seventy-two signatures, sixty proof examples, and one
+additional named kernel theorem pass. Only standard foundations and the old
+unused-input warning occur. Independent reviews found no proof defect and
+made the root-finish premise explicit. Strict Nix all-component build, all
+six suites with 770 examples plus golden, ten-file Fourmolu, and four-package
+Cabal-gild pass. No local test file is changed.
+
+Read lean/notes-current-native-contextual-completion.md and
+lean/notes-main-d44b2a0f.md. Fresh evidence is repository-local at
+lean/restart-evidence/20261016-recursive/. The execution environment reset
+its temporary directory. Before the reset, 2,981 baseline files and nineteen
+external drafts were verified. Their temporary snapshots and external bytes
+are unavailable afterward. Do not claim those missing bytes were reverified
+or recovered. All 2,981 tracked baseline files remain; older non-Audit proof
+sources are byte-identical. No missing draft is reconstructed.
+
+Next prove paired actual checked body completion and result semantics from
+initial invariants. Preserve running frames, loaded fields, semantic heaps,
+and costs at the same returned state. Then compose original whole allocation
+history, the new current class Scan, and the actual constrained outer caller.
+Keep every other full-library target and each separate Sized contract active.
+No old eager execution or historical Scan substitution. No board posts or
+deployments. Push verified formalize checkpoints regularly. The full goal
+remains active. This turn is progress: source refresh, eight proof modules,
+Haskell fix handoff, source validation, and repository-local evidence.
+
+## Current recursive pair contexts and finite typing order
+
+Source main is `885a446e`, merged at `aa981389`. Upstream fixes ordinary
+helper declaration order. The preserved Z/A reproduction now agrees with
+fromDatatype. Local repair `ca0e9a65` prevents unused type-growing descriptions
+from blocking finite typing ranks. It restricts metadata discovery to actual
+row constructor types, while retaining complete local declaration indices.
+The two-leaf non-regular reproduction now returns exactly Right [One,Two].
+Standard Bool remains False before True; its documentation is corrected.
+The optimized interned core and all older proofs and repairs remain intact.
+
+Proof commits are `24a5358c` and `a911bd69`. Audit and notes are in `28636822`.
+Actual closed original inputs derive independent InputMeaning and RankedInput
+without a desired output law. New SoundPairs and rank-bounded CompletePairs
+support fresh typed pair overrides and actual repeated-reference laws.
+The exact arbitrary-candidate SeenContext extension is formally refuted.
+Complete extension has a local candidate-containment obligation. Derive it
+inside the full Mu proof by smaller original input ranks; do not export it
+as an assumed parent-result law. General Mu semantics and warm open-cache
+admissibility remain open. Closed NodeProduced alone does not supply them.
+
+The historical helper-position phase retains exact local indices, source
+order, last-label-winner lookup, and zero fallback. The repaired executable
+walk derives its complete traversal from a finite needed inventory. Its
+measure is unseen needed occurrences followed by pending length. It works
+with an infinite-key description function and skips the unused growing chain.
+The actual needed row-symbol inventory, sufficient needed-only ancestor
+coverage, Generic/label coherence, containers, Int bounds, and full value/rank
+correspondence remain adapters. Atomic literal-domain order remains separate.
+
+The full audit passes 2,257 jobs and 55,353 dependency checks. Thirty-two
+public axiom probes, twenty-three signatures, and twenty-eight literal kernel
+examples pass. Only standard foundations and the old unused-input warning
+occur. Independent reviews found no context or relevant-filter defect under
+the stated source coherence boundary. Upstream strict all-component build
+and 225 generator examples pass. After the local repair, the focused strict
+generator build, all 225 generator examples, exact growing/Z-A/Bool probes,
+and Fourmolu pass. Other five suites are reused from the unchanged preceding
+source: combined 768 examples plus golden. Package files retain Cabal-gild.
+No local test file is changed.
+
+Next derive general checked completion and recursive finish receipts through
+the actual checked traces. Prove the Mu containment/rank induction and a
+stronger warm open-cache or causal-history invariant. Compose original whole
+allocation history, the new current class Scan, and the physical outer caller.
+Do not substitute the historical Scan or old eager execution. Continue every
+other full-library target and every separate Sized contract. Full scope stays
+active. Read lean/notes-current-native-pair-contexts.md and
+lean/notes-typing-relevant-order.md.
+
+Start: /tmp/mcfta-allocated-query-checkpoint-20261016-0357/ (2,976 files).
+Closing: /tmp/mcfta-pair-helper-checkpoint-20261016-0415/.
+Script: /tmp/mcfta-preserve-pair-helper-20261016.py. Evidence uses
+/tmp/mcfta-pair-helper-*, pair-context validation, helper-order validation,
+and the marked Bool/growing source reproductions. All sixteen prior external
+drafts stay. Three new marked source drafts bring the total to nineteen.
+Stashes and other worktrees stay. No board posts or deployments.
+Push verified formalize checkpoints regularly. The last allowance observation
+was 81 percent and is stale. Stop owned work at 1 percent or less.
+The full-library goal remains active.
+
+## Current checked query composition and completion prerequisites
+
+Source main is `78618ea2`, merged at `45475383`. It adds rooted refinement
+conditions, polymorphic literals, and positional node-view name checks.
+Native intersection, conjunction emptiness, and Typing source stay unchanged.
+Proof commits are `ae797af8`, `2cfa0e21`, `ef14ad04`, and `541ae1cd`.
+Audit and scope notes are in `c5440696`. The optimized interned core and
+all older constructor/equality proofs remain. Full library scope stays active.
+
+Actual checked finite execution now preserves SemanticReady and stored
+CostHeap from current physical inputs. All outcomes retain their actual
+states. The combined endpoint derives readiness, fields, native validity,
+and both histories at that same returned state. CostHeap is an unfolding
+invariant, not a runtime complexity bound.
+
+The completed checked query now enters the new conjunction memo with the
+actual constructor heap and equality cache. It derives result availability,
+checked provenance, final idle/valid native tables, correct saved entries,
+old-entry retention, and conservative answer soundness. Advancing the memo
+result retains both full native tables and the domain cache. A true answer
+excludes common original terms for closed operands in the exact empty domain.
+The actual query completion and reached input plan remain explicit premises.
+That plan includes semantic NodeProduced/EdgeProduced checks at finish cells.
+
+New actual checked running proofs restore enclosing active bounds. New child
+bounds use only the independent original-input requiredFuel measure. Checked
+rejection skips child requests and effects. Actual-prefix Words/WordRanges
+preserve exact full states. They do not generate range or completion proofs.
+The new derive name phase proves exact positional prefixes, first-error
+order, diagnostic text, and earlier shape-error precedence. It does not
+supply Generic/schema/codec or rooted measure correspondence laws.
+
+Next derive general checked query completion and its reached input receipts.
+The recursive Mu proof needs open-context soundness and rank-bounded
+completeness. Exact SeenContext cannot extend to arbitrary binder candidates.
+Warm returned cells currently carry only closed/empty-domain language laws;
+derive a stronger open-cache invariant or adequate causal-history proof.
+Compose initial whole-heap allocation histories, then define the new current
+Scan and complete the physical class/outer caller. Do not substitute the
+historical intersection Scan or an old eager native execution. Continue all
+other full-library and separate Sized targets. Typing helper-order disagreement
+remains in main; the fetched fix branch is unmerged.
+
+The full pinned audit passes 2,254 jobs and 55,292 dependency checks.
+Forty-eight public axiom probes, thirty-six signatures, and fifty literal
+kernel examples pass. Two extra named kernel theorems are counted separately.
+Only standard foundations and the old unused-input warning occur. Independent
+review found no state-threading or conservative-soundness defect. The refreshed
+strict Nix build and all six suites pass: 767 examples plus golden. Fourmolu
+checks four changed Haskell files with the new fixities. Cabal-gild checks
+four active packages. No new test file is committed.
+
+Read lean/notes-current-allocated-query-memo.md and
+lean/notes-main-78618ea2.md. Start preservation is
+/tmp/mcfta-allocated-fields-checkpoint-20261016-0331/ (2,967 files).
+Closing preservation is /tmp/mcfta-allocated-query-checkpoint-20261016-0357/.
+The script is /tmp/mcfta-preserve-allocated-query-20261016.py. Evidence uses
+/tmp/mcfta-allocated-query-*, native semantic/cost/running/request validation,
+and /tmp/mcfta-derive-78618ea2-*. Sixteen prior external marked drafts,
+stashes, and other worktrees remain. No board posts or deployments.
+Push verified formalize checkpoints regularly. The last allowance observation
+was 81 percent and is stale. Stop owned work at 1 percent or less.
+The full-library goal remains active.
+
+## Current loaded-field closure through checked native execution
+
+Source main stays `894a74af`. No Haskell source changes. Proof commits are
+`ec36d774`, `1b035257`, `0f6968e2`, and `d77c8389`. Audit and scope note are
+in `86171cb4`. The optimized interned core and all older proof definitions
+stay. Full library scope remains active.
+
+Actual constructor, conjunction, ready intersection, and sentinel allocation
+receipts now derive successful field loads in the exact returned operation
+cache. Normalized Top alone has a verified cold-cache miss. No universal
+conjoin-cache closure is assumed. Allocation-aware compiled continuations
+retain their loads through actual cache growth and raw constructor effects.
+
+The checked body derives its original loads from resident initial Fields.
+Ready and sentinel branches derive new annotations from their actual
+allocation receipts. Every native step retains loaded fields at its returned
+cache. Finite execution derives the reached field checks, full physical and
+operation histories, and the actual yielded continuation. Errors and blocked
+outcomes keep their real states. Blocked continuations are not certified by
+the OutcomeFields predicate. The source guard equality instance stays pinned.
+
+Actual primary/secondary gates, nodeEdges, heads, and supported projections
+retain the same loaded fields with unchanged operation state. A false class
+trace derives finite projection for a selected proper path at its exact
+anchor. Unrelated original siblings can remain open.
+
+The execution plan still includes reached word checks and actual finish-cell
+NodeProduced/EdgeProduced receipts. This is field closure, not a general
+checked native completion proof. Initial whole-heap allocation history still
+needs composition. The older scoped Fold/Seeded has no operation-cache state.
+Do not erase its execution differences or reuse the historical Scan body.
+Next define the reached allocation-aware query. Derive its completion, input
+receipts, independent language, SemanticReady, and CostHeap at the same final
+heap. Then enter the new conjunction memo and define the current Scan.
+Continue general constrained outer completion and every other full-library
+and separate Sized target. Keep older constructor and equality work.
+
+The full audit passes 2,247 jobs and 55,211 dependency checks. Thirty-nine
+public axiom probes, twenty-one endpoint signatures, and thirty-one kernel
+examples pass. Only the standard foundations and old unused-input warning
+occur. Independent review found no cache-indexing or circularity defect.
+Haskell is unchanged, so the prior strict Nix build, six suites with 763
+examples plus golden, post-repair 224 generator examples, Fourmolu, and
+Cabal-gild are reused. Read lean/notes-current-allocated-native-fields.md.
+
+Start: /tmp/mcfta-typing-checkpoint-20261016-0318/ (2,961 files).
+Closing: /tmp/mcfta-allocated-fields-checkpoint-20261016-0331/ (2,967 files).
+Script: /tmp/mcfta-preserve-allocated-fields-20261016.py. Evidence uses
+/tmp/mcfta-allocated-*, /tmp/mcfta-current-allocated-*, and
+/tmp/mcfta-conjunction-field-allocation-*. Sixteen external marked drafts,
+stashes, and other worktrees are preserved. No board posts or deployments.
+Push verified formalize checkpoints regularly. The last allowance observation
+was 81 percent and is stale. Stop owned work at 1 percent or less.
+The full-library goal stays active.
+
+## Current typed-rule graph exactness and source repair
+
+Source main is `894a74af`. It includes the typing API from `c52d5c3e` and
+merges the same recursive-field repair as local `2e25be03`. Merges `727fa870`
+and `73475670` retain both histories. All generator files have identical
+bytes before and after the second merge. The optimized interned core stays.
+Proof commits are `7871a676`, `23fa596d`, and `d1f62e7b`.
+Audit and scoped notes are in `0908f20c`. Full library scope stays active.
+
+Independent typing judgments now describe ordinary rules, exact matching
+environment positions, binder order, and positive Subterm nesting. The finite
+visited-map traversal derives exact final rows and child-key closure. The
+computed root graph accepts exactly independent empty-environment derivations
+under the stated fixed-field law. No completed graph oracle is supplied.
+The unconditional endpoint has permissive fixed-tree semantics. This proves
+supplied-rule semantics. Datatype typing and callback index fidelity still
+need constructor, schema, and codec laws. Global LawfulFixed is stronger
+than reached-only source checks. The direct field predicate does not imply it.
+
+The source repair rejects fixed values in fields of the target datatype.
+Both ill-scoped and over-bound recursive fixed-tree reproductions now return
+FieldMismatch. The existing field-mismatch example covers both cases.
+A separate reproduction still shows helper declaration-order disagreement:
+fromDatatype returns Lit Z before Lit A; fromTypingRules reverses them.
+This order defect is unresolved. Preserve the shared rank-order target.
+
+The aggregate audit passes 2,242 jobs and 55,122 dependency checks. Forty-five
+public axiom probes, nine endpoint signatures, and thirty kernel examples
+pass. Only the standard foundations and the existing unused-input warning
+occur. Strict Nix build and all six suites pass at the source refresh: 763
+examples plus golden. After repair, all 224 generator examples pass again.
+Other suites are reused because only Typing changed. Fourmolu checks three
+changed Haskell files. Cabal-gild checks four packages. Upstream then merges
+byte-identical generator files, so these source checks remain applicable.
+
+Next continue actual native query and checked constraint allocation to derive
+equality-cache Fields. Connect the new conjunction memo to a new current Scan.
+Do not supply future Fields or reuse the historical Scan as current execution.
+General constrained outer completion, lazy demand and publication, machine
+identities/capacity, concrete containers, broad API integration, and all separate
+Sized contracts remain open where recorded. Preserve older constructor and
+equality work. Read lean/notes-typing-rules.md and lean/notes-main-c52d5c3e.md.
+
+Start snapshot: /tmp/mcfta-conjunction-worklist-checkpoint-20261016-0250/
+(2,953 files). Closing: /tmp/mcfta-typing-checkpoint-20261016-0318/ (2,961 files).
+Script: /tmp/mcfta-preserve-typing-20261016.py. Evidence uses /tmp/mcfta-typing-*.
+Sixteen external marked drafts, stashes, and other worktrees are preserved.
+No board posts or deployments. Push verified formalize checkpoints regularly.
+The last allowance observation was 81 percent and is stale. Stop owned work
+at 1 percent or less. The full-library goal remains active.
+
+## Current allocated conjunction worklist and completed memo
+
+Source main remains `a4f38cbb`. The refresh found no new source change.
+Proof commits are `692b5efb`, `fc19ceeb`, `8796bf90`, `d4162cc7`,
+`71af830d`, `5995899d`, `2829037a`, and `78f0c1c7`.
+Full library scope stays active. Earlier sections retain historical scopes.
+
+Actual physical tuples now retain source order and accepted-edge coverage.
+The equality fold loads original fields, runs actual allocated accessors,
+stops at a contradictory head, and derives canonical combination receipts.
+Requirements construct child columns and row-major class projections.
+Common-heap coherence derives the identity-map key law.
+One row graph threads both returned heaps and derives smaller accepted witnesses.
+
+The dynamic worklist constructs every reached row from initial invariants.
+Only admission decreases its budget. Open pending operands can be skipped.
+Actual Run derives returned readiness, resident table domains, and local
+coverage for each stored entry. Literal Boolean grow completes in at most
+budget plus one comparisons. A true verdict excludes every accepted finite term.
+No fixed edge/project/row supplier or future invariant is supplied.
+The new Decision derives the open shortcut or completed closed worklist.
+SourceCurrentConjunctionMemo.finite constructs valid completed hits/misses
+using this new Decision. The historical intersection-based Call is not used.
+
+The schedule completes rows before logical insertion. Haskell stores lazy
+rows and can demand or skip prefixes differently. This is not a proof of GHC
+forcing, equal source heaps/Booleans under reordered reads, pending publication,
+or runtime allocation order. Initial Ready includes equality-cache Fields.
+Next derive that invariant through actual native query and checked constraint
+allocation, then connect the new memo to the current class prefix and new Scan.
+Do not substitute a future Fields premise or the historical Scan body.
+Continue general constrained completion and every other full-library target,
+including all separate Sized contracts and older constructor/equality work.
+
+The pinned full audit passes 2,238 jobs and 54,980 dependency checks.
+Seventy-five public axiom probes and 62 kernel examples pass.
+Only standard foundations and the preexisting unused-input warning occur.
+Thirteen new modules and one note preserve all earlier non-Audit proof files.
+Audit gains one import. No Haskell/package source changes. The prior strict
+Nix build, six suites with 755 examples plus golden, Fourmolu, and Cabal-gild
+checks remain applicable and were not repeated for this proof-only increment.
+
+Read `lean/notes-current-conjunction-worklist.md` for the exact proof boundary.
+Start: `/tmp/mcfta-general-scan-checkpoint-20261016-0228/` (2,939 files).
+Closing: `/tmp/mcfta-conjunction-worklist-checkpoint-20261016-0250/` (2,953 files).
+Script: `/tmp/mcfta-preserve-conjunction-worklist-20261016.py`.
+Evidence uses `/tmp/mcfta-conjunction-*` and `/tmp/mcfta-current-conjunction-*`.
+Fourteen external marked drafts, stashes, and other worktrees remain.
+The last weekly allowance was 81%; it is stale. Stop owned work at 1% or less.
+No board posts or deployments. Push verified formalize checkpoints regularly.
+The full-library goal stays active. HANDOFF.md records per-command SSH port443.
+
+## Current finite class prefixes and conjunction read completion
+
+Audited source main is `a4f38cbb`, merged at `a140c37b`.
+It changes CI scheduling only. Haskell semantics remain at the prior source
+checkpoint. Proof commits are `25165c9c`, `a57bc0b7`, `abc52af9`,
+`14422982`, and `00c44f26`. Audit and notes are in `0b865a79`.
+Full library scope stays active. Earlier sections retain historical scopes.
+
+Both current class gates now derive finite stable traces directly from
+initial semantic readiness, costs, and available inputs. The false-secondary
+seeded query derives its actual projections, native calls, and returned
+physical invariants under reached range checks. The composed per-class
+prefix constructs selected, skipped, or queried outcomes from the initial
+invariants. It stops before provablyEmpty and assumes no completed gate/query.
+
+The literal conjunction map now has exact overwrite, last-winner, ascending
+readback, and faithful-key canonical sequence proofs. Actual finite nodeEdges
+and row-major getPath reads derive resident closed outputs and retained
+semantic, cost, and annotation heaps. Accepted-edge and selected-subtree
+language laws follow from the actual reads.
+
+Source boundary: SourceCurrentEmptinessDecision.closed still embeds the
+historical native-intersection TaskTrace body. Its memo Call and Scan consume
+that body. Those proofs remain valid for their definitions. They do not
+establish the post-4101 conjunction source algorithm's Boolean or heap result.
+Conservative soundness alone cannot equate the two bodies. Earlier sections
+that use these Decision/Scan names retain this historical body boundary.
+
+Next thread actual reads through literal tuples, equality accessor/combine
+allocation, child columns, class projections, identity-map canonicalization,
+and the dynamic pending worklist. Then define current Decision, memo Call,
+and Scan, and connect the scan to the executable physical class pass.
+Preserve reached word checks, native constraint-allocation transfer, pending
+publication, GHC demand, machine identity, and concrete container boundaries.
+Continue general constrained completion and every other full-library target,
+including all separate Sized contracts and older constructor/equality work.
+
+The full pinned audit passes 2,225 jobs and 54,843 dependency checks.
+Only permitted foundations and the existing unused-input warning occur.
+Forty public axiom probes and 23 kernel examples pass. The prior strict Nix
+build, 755 examples plus golden, Fourmolu, and Cabal-gild results remain valid.
+Haskell checks were not repeated for this CI-only and proof-only increment.
+Five new modules, two notes, and three additive Audit imports preserve every
+older non-Audit proof file. Only the upstream CI file changes outside proofs/docs.
+
+Read `lean/notes-current-conjunction-completion.md` and
+`lean/notes-main-a4f38cbb.md`. Start snapshot has 2,932 files:
+`/tmp/mcfta-memo-target-workers-checkpoint-20261016-0213/`.
+Closing: `/tmp/mcfta-general-scan-checkpoint-20261016-0228/` (2,939 files).
+Script: `/tmp/mcfta-preserve-general-scan-20261016.py`.
+Evidence uses `/tmp/mcfta-general-scan-*`, `/tmp/mcfta-current-class-*`,
+`/tmp/mcfta-seeded-query-*`, `/tmp/mcfta-conjunction-map-*`, and
+`/tmp/mcfta-conjunction-completion-reads-*`. Fourteen external drafts, stashes,
+and other worktrees remain. The last weekly allowance was 81%; it is stale.
+Stop owned work at 1% or less. No board posts or deployments. Push verified
+formalize checkpoints regularly. The full-library goal stays active.
+
+## Current executable memo-aware class completion
+
+Audited source main is `6baa0e25`, merged at `416f0f39`.
+Proof commits are `e6cd7144`, `ed4d2a22`, `939612a9`, `ebc925e8`,
+and `91724f7b`. Audit and scope notes are in `6be321b2`.
+Full library scope stays active. Earlier sections retain their historical
+source definitions and proof boundaries.
+
+Executable memo-aware target, shared leaf, signed edit, row, and class
+workers now have successful graph correspondence and stable completion.
+Actual finite graphs derive sufficient bounds for the same results and
+full returned native, target-slot, and completed merge-table states.
+Initial physical invariants and selected domains construct finite targets
+and class passes. No future cache validity or recursive completion is supplied.
+Unselected original siblings can remain open.
+
+`SourceCurrentMemoPhysicalClassWorker.live_scan_pass` composes live entry,
+actual successful Scan, finite required execution, and one executable class
+pass under its reached range plan. The same pass supplies six-stage stable
+completion, a sufficient common bound, normalized fields, physical readiness,
+producer histories, selected domains, fourth-memo correctness, ordered global
+receipts, and independent original-forest language bounds. Only its completed
+merge table starts empty. The exact caller still checks original constraints.
+
+Successful Scan and actual-prefix native range checks remain premises.
+These bounds instrument logical execution. They do not measure runtime work.
+The sequential worker order does not prove literal lazy GHC forcing or
+cache-allocation order. Pending publication, runtime identities, concurrency,
+and concrete host representation remain separate obligations.
+
+Main adds conditional measures and derived-field diagnostics. The new
+measure evaluator follows chosen-only Ite and complete Option traversal for
+Boolean lists. The folding proof preserves full denotation and existing
+lowering interpretations under explicit integer laws. Label maps, substitution,
+sort preparation, onlyPoint, derived-type discovery, and diagnostic compilation
+remain frontend bridges. Static missing-child scans include both Ite branches.
+The derived-field precheck does not guarantee every named measure exists.
+
+The full pinned audit passes 2,220 jobs and 54,792 dependency checks.
+Only permitted foundations and the existing unused-input warning occur.
+Seventy-four public axiom probes and 43 kernel examples pass.
+Strict Nix build and all six suites pass: 755 examples plus golden.
+Fourmolu passes eight changed Haskell files. Cabal-gild passes four packages.
+Fifteen new modules, two notes, and three additive Audit imports preserve
+every earlier non-Audit proof file. Upstream changes eleven existing files.
+
+Read `lean/notes-current-memo-class-workers.md` and
+`lean/notes-main-6baa0e25.md`. Next continue general Scan and outer constrained
+completion, native allocation and checked semantic transfer, pending lazy
+publication and GHC demand, literal HashMap iteration and allocation order,
+import trim/DFS/SCC, whole enumeration and waiting counts, templates and typed
+refinements, heterogeneous generators, decision-model, curried/GHC, synthesis,
+normal forms, and every separate Sized contract. Keep the optimized interned
+core and all older constructor and equality work.
+
+Start: `/tmp/mcfta-memo-workers-checkpoint-20261016-0149/` (2,915 files).
+Closing: `/tmp/mcfta-memo-target-workers-checkpoint-20261016-0213/` (2,932 files).
+Script: `/tmp/mcfta-preserve-memo-target-workers-20261016.py`.
+Evidence uses `/tmp/mcfta-memo-target-workers-*` and `/tmp/mcfta-measure-choice-*`.
+Fourteen external drafts, stashes, and other worktrees remain. The last weekly
+allowance was 81%; it is stale. Stop owned work at 1% or less. No board posts
+or deployments. Push verified formalize checkpoints regularly. The full-library
+goal stays active. HANDOFF.md records the per-command SSH port 443 fallback.
+
+## Current executable memo merge and physical class entry
+
+Audited source main is `4101746a`, merged at `0fca52f8`.
+Proof commits are `d86eb552`, `4854718c`, `b990ff2d`, `2f2575ef`,
+and `5cbb09b7`. Audit and notes are in `f1a27d46`.
+Full library scope stays active. Earlier sections retain
+their historical source definitions and proof boundaries.
+
+The memo-aware merge now has an executable interpreter and both directions
+of completed graph correspondence. Actual finite graphs derive sufficient
+work and selection bounds. Every larger pair returns the same output,
+heap, and completed merge table. A common bound follows from the local
+selection receipts. Work fuel bounds interpreter depth, not total work.
+The physical finite/cold endpoints derive their own actual call.
+The same call supplies language coverage, producers, and global receipts.
+
+Actual merge, target, leaf, edit, row, class, and pass graphs now preserve
+normalized physical equality fields. No future field heap or old/new graph
+equality is supplied. Unselected siblings can remain open.
+
+`SourceCurrentMemoPhysicalClassPass.live_scan_pass` composes the live
+physical entry, actual successful Scan, finite required execution, and one
+finite memo-aware class pass under its reached range plan. The same pass
+supplies readiness, costs, fields, stored merge records, producer histories,
+selected domains, original/result availability, fourth-memo correctness,
+ordered global receipts, and independent original-forest language bounds.
+Only its completed merge table starts empty. Original constraint checks
+remain necessary. Successful Scan and reached ranges remain premises.
+
+The new conjunction emptiness proof derives literal tuple coverage, smaller
+requirements, finite exploration, exact source Boolean growth, and fixed-point
+soundness. Completed resident exposure, getPath readback, key faithfulness,
+and actual IntMap/lazy-runtime correspondence remain adapters.
+The new solver command model derives one scope declaration batch per process,
+local cleanup, replacement redeclaration, and unchanged logical requests.
+External SMT/process/bracket/IO behavior remains explicit.
+
+The fit-ranking component proves preservation with complete score vectors
+and no new fits for all vectors. Short vectors lose the unscored pool suffix.
+Failure returns partition order. The recorded pool is an intended request,
+not an IO receipt. A verified zero-timeout source probe makes no model call.
+Score order/stability, Double laws, and server/timeout IO remain open.
+
+The full pinned audit passes 2,206 jobs and 54,469 dependency checks.
+Only permitted foundations and the existing unused-input warning occur.
+Strict Nix build and all six suites pass: 749 examples plus golden.
+Fourmolu passes eight changed Haskell files. Cabal-gild passes four packages.
+Eleven new modules, two notes, and five additive Audit imports preserve every
+earlier non-Audit proof file. Upstream changes twelve source/package files.
+
+Read `lean/notes-current-memo-workers.md` and `lean/notes-main-4101746a.md`.
+Next connect executable target, shared leaf, edit, and class workers to the
+new memo-aware graphs. Continue general Scan/outer constrained completion,
+whole-pass pending publication and GHC demand, checked allocation/native and
+machine bridges, literal HashMap allocation order, import trim/DFS/SCC,
+whole enumeration/waiting counts, templates/refinements, heterogeneous
+generators, decision-model, curried/GHC, synthesis, normal forms, and all
+distinct Sized contracts. Keep the optimized interned core and older proofs.
+
+Start: `/tmp/mcfta-memo-shared-checkpoint-20261016-0128/` (2,901 files).
+Closing: `/tmp/mcfta-memo-workers-checkpoint-20261016-0149/` (2,915 files).
+Script: `/tmp/mcfta-preserve-memo-workers-20261016.py`.
+Evidence and closing preservation use `/tmp/mcfta-memo-workers-*`,
+`/tmp/mcfta-conjunction-emptiness-*`, `/tmp/mcfta-declare-once-*`, and
+`/tmp/mcfta-ghc-ranking-*`. Fourteen external drafts, stashes, and other
+worktrees remain. The last weekly allowance was 81%; it is stale. Stop owned
+work at 1% or less. No board posts or deployments. Push verified formalize
+checkpoints regularly. The full-library goal stays active.
+
+## Current memo-aware shared class pass
+
+Audited source main is `0696b48d`, merged at `f780009a`.
+Proof commits are `24d8eb31`, `aa3e90c0`, `311cb8ac`, `3c1237be`,
+`aa4cdd35`, `60ad3b5f`, and `9e59450c`. Full library scope stays active.
+Earlier sections retain their historical proof and source scopes.
+
+Shared target slots now retain actual memo-aware construction histories.
+A hit reuses its exact stored value and full state. A miss executes the new
+Target and stores its returned native state and completed merge table.
+Actual leaves, signed edits, rows, and classes thread that same table.
+The right fold captures each actual tail forest and table, then starts only
+its class-local target slots empty. Unselected siblings can remain open.
+
+`SourceCurrentMemoClassPassComplete.source_cold` composes one finite Pass
+with physical readiness, stored costs and merge records, available results,
+selected path domains, producer histories, independent language bounds,
+and its exact ordered three-global-table receipt. The physical heap and
+global tables can be warm. Only the completed merge table starts empty.
+Guard laws, original selected domains, and actual-prefix range plans remain
+explicit. Output terms belong to the input language. Input terms that
+satisfy all retained original classes survive. The exact caller must still
+check those original constraints.
+
+Main adds preorder-prefix exclusion in three files. Its new monitor proof
+establishes literal word-prefix rejection, strict active depth descent,
+and unique ordered child boundaries. Minimal DAG extraction, endsOf/copies/
+walk, and the source run-copy bijection remain open. The advertised template
+equivalence needs valid partial preorders: the preserved malformed a0,b0
+source example retains leaf a through the new route and removes it through
+the template route. No source behavior was changed for this domain caveat.
+
+The full pinned Lean build passes 2,195 jobs and 54,154 dependency checks.
+Only permitted foundations and the existing unused-input warning occur.
+Strict Nix validation passes all six suites: 745 examples plus golden.
+Fourmolu passes both changed Haskell files. Cabal-gild passes four packages.
+Seventeen new modules, two notes, and two additive Audit imports retain every
+earlier non-Audit proof file. This refresh changes only the three upstream files.
+
+Read `lean/notes-current-memo-shared-class-pass.md` and
+`lean/notes-main-0696b48d.md`. Next connect executable memo-aware workers,
+physical annotation fields, and the current Scan/required entry to this pass.
+Continue general constrained completion, allocation/native/machine bridges,
+whole-pass lazy publication and GHC demand, source group allocation order,
+import trim/DFS/SCC, enumeration and waiting counts, templates/refinements,
+heterogeneous generators, decision-model, curried/GHC, synthesis, normal
+forms, and every distinct Sized contract. Keep the optimized interned core.
+
+Start: `/tmp/mcfta-published-merge-checkpoint-20261016-0104/` (2,882 files).
+Closing: `/tmp/mcfta-memo-shared-checkpoint-20261016-0128/` (2,901 files).
+Script: `/tmp/mcfta-preserve-memo-shared-20261016.py`.
+Evidence: `/tmp/mcfta-memo-shared-*` and `/tmp/mcfta-prefix-exclusion-*`.
+All prior proofs, repros, repairs, 14 external drafts, stashes, and other
+worktrees remain. The last weekly allowance was 81%; it is stale. Stop
+owned work at 1% or less. No board posts or deployments. Push verified
+formalize checkpoints regularly. The full-library goal stays active.
+
+## Current serial publication and memo-aware targets
+
+Source main remains `a4dd678f`, merged at `1a421c7d`. Proof commits are
+`5662dbad`, `c6f18d2a`, `8ec392bc`, `f90e201d`, and `e93d0190`.
+Full library scope stays active. Earlier sections keep their historical scope.
+
+The new serial graph publishes a captured producer before its body runs.
+Completed maps are proof state for thunk evaluation, not another production
+cache. Actual request bounds derive strict ordinary-height descent and
+exclude running ancestor keys by resident identity. Finite public endpoints
+take no ancestor-exclusion, future-validity, or winner-equality premise.
+The actual completed body leaves its parent lookup unchanged. An absent
+parent stays absent, so an actual miss returns its computed candidate.
+
+Lifting and projection retain the same output, constructor heap, and completed
+memo. Warm captured-record, completed-key, and cache-coverage invariants remain
+explicit. Empty tables derive them. PublishedComplete.native_cold composes
+one finite early-publication history with native state, independent language,
+producer history, and its exact three-global-table receipts. Tickets are
+abstract labels. Concurrent forcing, runtime identities, actual GHC demand,
+and host cache operations remain open.
+
+The new native merge retains native tables and domains. Selected operands
+project the captured original forest, then call that merge. They allow open
+unrelated siblings. The new first-seeded target fold threads its actual
+returned merge table through operands and native intersections. It derives
+readiness, costs, physical entries, common selected-subterm coverage, and
+ordered receipts for that same trace. Multiple native intersections can
+populate native tables. Finite targets still assume actual-prefix word-range
+plans. Original constraint checks remain necessary for the exact caller.
+
+The literal singleton-map insertion fold now derives ordered bucket contents.
+Unique emitted keys and exact lookup membership derive the canonical-group
+permutation. Actual HashMap iteration still needs that finite-map contract.
+The recursive body still uses canonical outer groups. No equal-heap or
+allocation-order theorem follows from a group permutation.
+
+The full pinned Lean build passes 2,178 jobs and 53,977 dependency checks.
+Only permitted foundations and the existing unused-input warning occur.
+Eleven new modules and four additive Audit imports retain every earlier
+non-Audit proof file. Haskell and CI are unchanged. The source-refresh strict
+Nix build, 743 examples plus golden, Fourmolu, and Cabal-gild checks remain
+valid. They were not repeated for these proof-only changes.
+
+Read `lean/notes-current-published-merge.md`. Next thread this merge table
+through shared target closures, leaves, edits, and the full class pass.
+Continue general Scan/outer completion, allocation and checked native transfer,
+machine bounds, import trim/DFS/SCC, enumeration and waiting counts, templates,
+typed refinements, heterogeneous generators, decision-model, curried/GHC,
+state search, normal forms, and all distinct Sized contracts. Keep the
+optimized interned core and older constructor and equality work.
+
+Start: `/tmp/mcfta-memo-aware-checkpoint-20261016-0045/` (2,870 files).
+Closing: `/tmp/mcfta-published-merge-checkpoint-20261016-0104/` (2,882 files).
+Script: `/tmp/mcfta-preserve-published-merge-20261016.py`.
+Evidence: `/tmp/mcfta-published-merge-*`, `/tmp/mcfta-memo-merge-*`,
+`/tmp/mcfta-memo-target-*`, `/tmp/mcfta-memo-demand-target-*`, and
+`/tmp/mcfta-current-merge-grouping-*`. All previous proofs, repros, repairs,
+14 external drafts, stashes, and other worktrees remain. The last weekly
+allowance was 81%; it is stale. Stop owned work at 1% or less. No board posts
+or deployments. Push verified formalize checkpoints. The full goal stays active.
+
+## Current recursive memo-aware merge completion
+
+Source main remains `a4dd678f`, merged at `1a421c7d`. Proof commits are
+`72df670f`, `85c424ea`, `dda75cf4`, and `4514b014`. Full library scope stays
+active. Earlier sections retain their historical proof and source scopes.
+
+The new mutual instruction and call graphs use literal result-cache requests
+for every recursive small child and retained ordinary union. Hits skip the
+body. Misses execute the memo-aware body and reread the first stored winner.
+Actual induction derives physical effects, available results, conditional
+closedness, independent language coverage, and ordered global memo receipts.
+Warm result tables require initial stored-record and coverage invariants.
+Empty result tables derive both invariants and actual producer histories.
+
+Finite completion uses strict ordinary-height descent of request inputs
+before lookup. Cached result height needs no bound. Each actual selection
+has its own finite comparison bound. No recursive callback completion law,
+future validity, old uncached producer, or whole-forest closedness is supplied.
+`SourceCurrentMemoMergeComplete.source_cold` fixes the current plain/Top
+guards. One actual finite call supplies the language result, physical state,
+stored original producer, and coherent final three-table receipt. The initial
+physical heap can be warm. Guard interpretation laws remain explicit.
+
+The body uses canonical source groups. Literal HashMap outer iteration and
+allocation order still need an adapter. Completed sequential calls do not
+prove lazy thunk publication, pending ancestor forcing, concurrency, or GHC
+correspondence. Existing shared targets and class passes still use the older
+body boundary. Their receipts must be connected to the new requests.
+
+The full pinned Lean build passes 2,167 jobs and 53,797 dependency checks.
+Only the three permitted foundations and the existing unused-input warning
+occur. Nine new modules and one additive Audit import preserve all earlier
+non-Audit proof files. Haskell and CI are unchanged. The strict Nix build,
+six suites with 743 examples plus golden, Fourmolu, and Cabal-gild results
+from the source refresh remain valid and were not repeated.
+
+Read `lean/notes-current-memo-aware-merge.md`. Continue publication/forcing
+and memo-aware target integration, general Scan/outer completion, allocation
+history and checked native transfer, machine bounds, import trim/DFS/SCC,
+whole enumeration, waiting counts, templates, typed refinements, heterogeneous
+generators, decision-model, curried/GHC adequacy, state search, normal forms,
+and all distinct Sized contracts. Keep the optimized interned core and all
+older constructor and equality work.
+
+Start: `/tmp/mcfta-class-language-checkpoint-20261016-0019/` (2,860 files).
+Closing: `/tmp/mcfta-memo-aware-checkpoint-20261016-0045/` (2,870 files).
+Script: `/tmp/mcfta-preserve-memo-aware-20261016.py`.
+Evidence: `/tmp/mcfta-memo-aware-*`, `/tmp/mcfta-memo-merge-*`, and
+`/tmp/mcfta-current-memo-merge-*`. All earlier proofs, repros, repairs,
+13 prior external drafts, stashes, and other worktrees remain. One new marked
+optional proof draft is also retained. The last weekly allowance was 81%;
+that value is stale. Stop owned work at 1% or less. No board posts or
+deployments. Push verified formalize checkpoints. The full goal stays active.
+
+## Current class-pass language, physical heaps, and actual global memos
+
+Source main `a4dd678f` is merged at `1a421c7d`. Proof commits are
+`a6137293`, `d5059da3`, `58bdb112`, `785fabb0`, and `4fff37a2`.
+Full library scope stays active. Older sections retain their historical
+source and proof scopes.
+
+The actual shared class pass now derives independent language bounds with
+open unrelated siblings. Output terms belong to the input language.
+Accepted terms that satisfy all retained original classes survive.
+Nontrivial class satisfaction derives required term path existence.
+This is conditional exactness. Narrowing alone need not enforce each class.
+Original constraint checks remain part of the exact caller.
+
+Actual shared targets, first forces, stored hits, leaves, edits, right folds,
+and final propagation now retain stored costs and physical annotations.
+Ordered actual global receipts derive all three final tables' validity,
+retain earlier unfolding entries, and preserve the scan-final query tables
+through required and class execution. Each head captures the actual tail's
+forest and returned memo bundle. No future coherence or whole-forest
+closedness is supplied. CostHeap is a stored cost invariant, not wall time.
+
+`SourceCurrentPhysicalClassPassLanguage.live_scan_pass` composes computed
+physical entry, actual successful Scan, finite required execution, and a
+range-checked finite class Pass. The same returned Pass has literal StableRun,
+final IdleReady, CostHeap, FieldHeap, original/result availability, retained
+entries, fourth emptiness-memo correctness, all selected path domains,
+independent language bounds, and its exact final three-table receipt.
+Successful Scan and reached range checks remain premises. General current
+Scan and outer constrained caller completion remain open. The existing
+scoped native state still needs checked allocation/runtime transfer.
+
+The separate merge-result memo now has completed hit/miss provenance,
+resident results, retained entries, global effects, and language coverage.
+An independent publication graph follows lookup, first-writer thunk insert,
+and winner reread. Publication-to-completion/GHC forcing and recursive
+memo-aware merge bodies remain open. Target receipts still use the existing
+body graph; a cache hit is not a new body execution.
+
+Upstream adds state-based synthesis, automaton enumeration per size, caller
+fit deduplication, explicit outcomes, and shared normal-form work fuel.
+New source components prove exact positive size compositions, retained split
+size/length/accounting, strict child-size descent, shared quotation budget
+accounting and sequencing, beta-loop rejection, and the separate output-size
+check. Complete argument partitions, host refinement, cached state builds,
+automaton/search, Core/value exposure, and current Walk/Fits runtime remain.
+The equality/Sized/import/interned source bodies and local repair are unchanged.
+
+The aggregate audit passes 2,158 jobs and 53,642 dependency checks with
+only permitted foundations and no new warning. Eleven new modules and four
+additive Audit imports retain every earlier non-Audit proof file. Required
+strict Nix build and all six suites pass 743 examples plus the golden check.
+Fourmolu passes nine changed Haskell files; Cabal-gild passes four packages.
+The source delta is exactly the 13-file upstream merge.
+
+Read `lean/notes-current-class-pass-language.md`,
+`lean/notes-current-merge-result-memo.md`, and `lean/notes-main-a4dd678f.md`.
+
+Next derive actual memo-aware recursive merge requests and connect published
+thunks to completed producers. Continue general Scan/outer completion,
+allocation history and checked native transfer, machine bounds, import
+trim/DFS/SCC and language/run bridges, whole enumeration, waiting counts,
+template exclusion, typed refinements, heterogeneous generators and
+decision-model, curried/GHC adequacy, state search and all distinct Sized
+contracts. Keep the optimized interned core and older constructor/equality work.
+
+Start: `/tmp/mcfta-shared-paths-checkpoint-20261015-2354/` (2,843 files).
+Closing: `/tmp/mcfta-class-language-checkpoint-20261016-0019/` (2,860 files).
+Script: `/tmp/mcfta-preserve-class-language-20261016.py`.
+Evidence: `/tmp/mcfta-class-language-*` plus the physical class pass, heap,
+class memo, merge-result memo and normal-form budget validation notes.
+All previous proofs, repros, repairs, 13 external drafts, stashes and other
+worktrees remain. The last observed weekly allowance was 81%; it is not a
+fresh reading. Stop owned work at 1% or less. No board posts or deployments.
+Push verified formalize checkpoints. The full-library goal remains active.
+
+## Current finite shared class pass and actual merge memo effects
+
+Source main remains `45d6538c`, merged at `0694b6f9`. Proof commits are
+`22a33ecf`, `284e05ef`, `8b6f9a22`, `b3498f92`, and `3deb645f`.
+This checkpoint changes no Haskell or CI file. Full library scope stays active.
+Earlier sections retain their historical source and proof scopes.
+
+Shared targets now complete from selected ForestClosed path domains, while
+unrelated captured siblings can remain open. Actual projection derives closed
+merge operands. Actual target, fold, stored receipt, first force, and hit reuse
+retain the existing source graphs and full native state.
+
+The actual edit compiler derives populated child subtrees. Actual shared
+node/child/row edits preserve every arbitrary tracked signed path domain.
+Original class domains derive safe recursive-prefix reads and concrete native
+leaves. Range plans derive finite class execution and literal-worker StableRun.
+The actual right fold derives each head's captured domains from the actual
+tail output. Final empty propagation retains all tracked domains.
+
+live_scan_pass composes computed live physical entry, an actual successful
+Scan, finite exact requireAll, retained original records, and a finite class
+Pass under the existing reached-prefix word-range plan. Final native readiness,
+retained entries, available output, fourth emptiness-memo correctness, and
+EVERY selected path domain follow. This theorem assumes successful Scan and
+word-range checks. It does not prove the whole outer caller or fixpoint.
+Its exact language, cost/field facts, and global call receipts stop at required
+execution. The source graph still uses the existing scoped native state;
+transfer to the newer checked allocation state and GHC demand remains open.
+
+Actual comparison, child selection, and general merging now retain stored
+cost and physical annotation invariants on available open or closed inputs.
+The separate global memo proofs derive ordered exposure and constructor
+receipts through the complete merge body. All three final tables are valid;
+old unfolding entries remain and both query tables are unchanged. Literal
+constructor Work has a checked silent primitive trace. Native Merge receipts
+retain the exact returned state and unchanged native tables/domains.
+The separate genericMergeAlternativesCache hit/miss/publication model remains
+open. Completed merge-worker execution remains a premise of its effects.
+
+Next prove independent language bounds for the new open-sibling class pass.
+Use actual target inclusion and shared leaf semantics. Compose all actual
+global memos, cost/field effects and separate merge-result memo through target
+forcing, class edits and the full current caller. Continue actual allocation
+history and checked native/runtime transfer, machine bounds, general current
+Scan/outer completion, import trim/DFS/SCC and language/run bridges, whole
+enumeration, waiting counts, full template exclusion, typed refinements,
+broader generators and decision-model, curried/GHC adequacy, and all distinct
+Sized contracts. Keep the optimized interned core and older constructor work.
+
+The full audit passes 2,147 jobs and 53,338 dependency checks with only the
+permitted foundations and no new warning. Ten new modules and two additive
+Audit imports preserve every older non-Audit proof file. Current-source strict
+Nix build, six suites (736 examples plus golden), Fourmolu and Cabal-gild
+results remain valid. They were not repeated for this proof-only increment.
+
+Read `lean/notes-current-shared-paths.md`,
+`lean/notes-current-merge-effects.md`, and `lean/notes-current-merge-memos.md`.
+
+Start: `/tmp/mcfta-required-endpoints-checkpoint-20261015-2337/` (2,830 files).
+Closing: `/tmp/mcfta-shared-paths-checkpoint-20261015-2354/` (2,843 files).
+Script: `/tmp/mcfta-preserve-shared-paths-20261015.py`.
+Evidence: `/tmp/mcfta-shared-paths-*` and the target, class-edit, class-fold,
+merged-cost and merged-query-memos validation notes in /tmp. All prior proofs,
+repros, repairs, 13 external drafts, stashes, and other worktrees remain.
+Weekly allowance was 81% at the source refresh. Stop owned work at 1% or less.
+No board posts or deployments. Push verified formalize checkpoints.
+
+## Current required endpoints, physical effects, and global memo composition
+
+Main `45d6538c` is merged at `0694b6f9`. Proof commits are `168ef9ed`,
+`c10e6b1c`, `168802b3`, and `82144334`. Full library scope stays active.
+Earlier sections retain their historical source and proof scopes.
+
+Actual requireAll now retains the projection domain of EVERY original
+selected path, including shorter nonmaximal paths and terminal suffixes.
+The proof uses full original primary certificates and actual demanded child
+lookups. It does not infer original whole-Mu closedness from a false gate.
+Unselected siblings can remain open. Path safety does not imply existence
+of a missing root position; accepted original path witnesses remain separate.
+
+Actual completed required graphs now derive semantic readiness, retained
+entries, stored cost and physical annotation invariants, available results,
+and ordered global memo receipts. The final three tables are valid. Earlier
+scan-final unfolding entries remain. Query tables are unchanged. The fourth
+emptiness memo remains correct through constructor retention.
+scan_required_ready composes these effects with an actual successful Scan,
+finite exact requireAll, every selected endpoint domain, and native IdleReady
+using advanceHeap. Native warm tables are retained. General Scan and outer
+caller completion are not consequences of a supplied successful trace.
+
+Next carry the required result domains through actual shared targets and
+class edits with open unselected siblings. Continue fallback merge/subsumes
+reads, separate merge memo and physical effects, full current caller and
+constrained completion, actual allocation history and checked native/runtime
+transfer, word bounds, whole enumeration, representative waiting counts,
+whole template exclusion, typed refinement frontends, broader generators,
+decision-model, curried/GHC adequacy, and every distinct Sized contract.
+Keep the optimized interned core and all older constructor/equality proofs.
+The fromRows trim/DFS/SCC, constructor, imported-language, and runtime bridges
+remain open. The new endpoint theorem does not close later edit preservation.
+
+Upstream adds child root-shape pruning to template edge copies and changes
+CI scheduling. SourceTemplateShapeSplits proves the exact ordered filtered
+split list, accepted-child preservation, and impossible killed-part removal.
+The full exclusion pipeline and physical inventory bridge remain open.
+Equality, Sized, import, GHC, and curried production bodies are unchanged.
+
+The full audit passes 2,137 jobs and 53,195 dependency checks with only the
+permitted foundations and no new warning. Six new modules and two additive
+Audit imports preserve every older non-Audit proof file. The strict Nix
+build and six suites pass 736 examples plus the golden check. Fourmolu passes
+the two changed Haskell files. Cabal-gild passes all four active packages.
+The Haskell and CI delta is exactly the upstream merge. The local equality
+repair is unchanged.
+
+Read `lean/notes-current-required-endpoints.md`,
+`lean/notes-current-required-memos.md`, and `lean/notes-main-45d6538c.md`.
+
+Start: `/tmp/mcfta-required-language-checkpoint-20261015-2322/` (2,821 files).
+Closing: `/tmp/mcfta-required-endpoints-checkpoint-20261015-2337/` (2,830 files).
+Script: `/tmp/mcfta-preserve-required-endpoints-20261015.py`.
+Evidence: `/tmp/mcfta-required-endpoints-*`. All prior proofs, repros,
+repairs, 13 marked external drafts, stashes, and other worktrees remain.
+Weekly allowance was 81% at the source refresh. Stop owned work at 1% or less.
+No board posts or deployments. Push verified formalize checkpoints.
+
+## Exact current scan/required composition and reconstructed result domains
+
+Main `9a2f9bea` is merged at `d8beb7f5`. Proofs are `b0725b6f`,
+`bfccb6cb`, `5fc66c36`, `3bf2b23c`, and `f5a95755`. Full library scope
+stays active. Earlier sections retain historical source and proof scopes.
+
+Actual primary replay now retains every selected original class at the
+same actual scan-final heap. The canonical selected path union derives
+its original-child required domain. The literal requireAll worker has
+finite stable execution and exact independent conditional filter language.
+Original accepted forests with the original class paths are retained.
+Unselected original siblings can remain open.
+
+All maximal tips, including terminal suffixes, retain original endpoint
+certificates. Actual required-node, child, and row graphs derive structural
+output domains. New open ordinary records need no residency in the earlier
+gate heap. Every proper maximal output tip has the existing closed-path
+projection domain. scan_required_complete composes all these results from
+an actual successful current Scan. Scan memo, cost, and field invariants
+still end at its scan heap. The later required/fallback effects remain open.
+
+Next retain original selected paths that stop being maximal when another
+path extends them. The structural tip domain alone does not imply their
+shorter endpoint closedness. Use actual original endpoint certificates and
+conditional closed-node preservation. Then carry these domains through
+shared targets and class edits. Continue the full current caller, required/
+fallback merge and subsumes memos, costs/fields, actual allocation history,
+checked native/runtime transfer, word bounds, general constrained completion,
+whole enumeration, representative waiting counts, templates, typed refinement
+frontends, heterogeneous generators, decision-model, and every distinct
+Sized contract. Keep the optimized interned core and all older proofs.
+
+Upstream adds curried synthesis, type-variable domains/defaulting, a run-edge
+narrowing hook, and typed-run counters. New source models prove physical
+marker filtering after weighted lookup, exact optional program occurrences,
+first-occurrence deduplication, Walk marker packing and next-program tails.
+Complete curried typing, GHC erasure/instance/domain/defaulting adequacy,
+whole Walk/enumerator scheduling, demand, and machine counters remain open.
+The current fromRows schedule proof retains its separate trim/DFS/SCC,
+constructor, language/run, physical sharing, capacity, and runtime boundaries.
+
+The aggregate audit passes 2,131 jobs and 53,126 dependency checks with only
+the permitted Lean foundations and no new warning. Eleven new modules and
+three additive Audit imports preserve every older non-Audit proof file.
+Required strict Nix build and all six suites pass 735 examples plus the
+golden check. Fourmolu passes all 13 changed Haskell files. Cabal-gild passes
+all four active packages. Haskell changes are exactly the upstream merge;
+the previous equality repair remains intact.
+
+Read `lean/notes-current-required-language.md`,
+`lean/notes-current-required-results.md`, and `lean/notes-main-9a2f9bea.md`.
+The prior Sized, allocation-history, and ordered-import notes remain relevant.
+
+Start: `/tmp/mcfta-required-support-checkpoint-20261015-2257/` (2,807 files).
+Closing: `/tmp/mcfta-required-language-checkpoint-20261015-2322/` (2,821 files).
+Script: `/tmp/mcfta-preserve-required-language-20261015.py`.
+Evidence: `/tmp/mcfta-required-language-*`. All prior proofs, repros,
+repairs, 13 marked external drafts, stashes, and other worktrees remain.
+Weekly allowance is 81%. Stop owned work at 1% or less.
+No board posts or deployments. Push verified formalize checkpoints.
+
+## Open required-path completion and ordered source import
+
+Main `5c53de80` is merged at `ea7d8b05`. Proofs are `676fd247`,
+`68eebcb8`, `fff6ef45`, `63598858`, and `e89aa110`. Full library scope
+stays active. Earlier sections retain historical source and proof scopes.
+
+One causal constructor/interleave history now derives original field
+origins, final interner validity, and valid cold operation tables. Actual
+GHC history, initial validity, and literal coverage remain explicit.
+
+Maximal tips of the actual Needed trie derive path-local required domains.
+Actual false primary ClassTrace derives that domain and finite StableRun
+of the existing requireAll worker. Unselected original siblings can remain
+open. No completed callback, whole-forest closedness, result Support, or
+future validity is supplied. Head language is exact. Whole-worker filter
+language, common scan-final support for all selected classes, rebuilt/output
+support, later class edits, global memo effects, costs, and fields remain.
+
+Source fromRows now uses ordered binder contexts and one post-body memo.
+New proofs cover exact dispatch, ordered rows/children, old-entry retention,
+a finite key inventory, and a real same-component rank. A combined component/
+context rank derives finite Build/root schedules from finite positional
+child closure and strict cross-component height descent. Actual trim/DFS/SCC
+readback and height derivation, constructor semantics, complete imported
+language/runs, physical sharing/counts, capacity, and GHC demand remain.
+Old induced-cycle BinderSchedule/BinderCycles correspondence is historical.
+
+Next prove the new required-worker language and combine selected primary
+receipts at the actual scan-final anchor. Then retain path-local support
+through shared targets and edits. Continue actual allocation provenance,
+full caller branches, fallback merge/subsumes memos, checked native/runtime
+transfer, word bounds, general completion, whole enumeration, waiting counts,
+templates, typed refinements, broader APIs, and every distinct Sized contract.
+Keep the optimized interned core and every older constructor/equality proof.
+
+The aggregate audit passes 2,120 jobs and 52,960 dependency checks with only
+the permitted Lean foundations and no new warning. Six new modules and
+three additive Audit imports preserve every older non-Audit proof file.
+Required strict Nix build and six suites pass 724 examples plus golden
+checks. Fourmolu passes all four changed Haskell files; all Cabal-gild checks
+pass. GHC production normal-key filtering and Sized bodies are unchanged.
+
+Read `lean/notes-original-allocation-history.md`,
+`lean/notes-current-required-support.md`, and `lean/notes-main-5c53de80.md`.
+
+## Original allocation origins, primary support, and GHC fit filtering
+
+Source main `e16f3b50` is merged at `50f21a5f`. Proof commits are
+`2aab2f05`, `8ba5ad13`, and `e3be9dd6`. Full library scope stays active.
+Earlier sections retain historical source and proof scopes.
+
+Earlier literal equality constructors and retained canonical table entries
+now derive read-only field lookup for EVERY resident original edge after
+actual graph construction. Current cold entry derives ready loaded fields
+and exact original readback. The scan soundness interface first supplies
+that loaded value; it no longer assumes successful lookup. Actual GHC
+construction must still supply the earlier allocation inventory. Valid
+operation tables, ready inherited storage, actual live prefix, and completed
+Scan remain explicit. No field is allocated at the request site.
+
+Actual false primary node/path/class traces now derive projection support
+at their exact returned heaps. This conversion adds no source gate or memo
+call. Unrelated original siblings can remain open. Support through requireAll,
+rebuilt class forests, shared targets, and edits remains open.
+
+The GHC source adds normal-key fit filtering. Its new completed-fit model
+checks seen insertion BEFORE part checks/callbacks, duplicate skip, unknown
+keys, callback stop/suffix, merge accounting, quota, and stable output order.
+It does not prove Core normalization, whole Walk/GHC execution, or Haskell
+contextual equality. Pair eta has a documented partial-value exception;
+sizeAtMost 20000 is no reduction-fuel or termination bound.
+
+Next derive synchronized physical original-allocation history and compose
+the full current caller. Retain scan-final original children/selected records
+and path-local open-sibling fallback support. Merge/subsumes global reads,
+separate merge memo, costs/fields, checked native/word/runtime transfer,
+general completion, whole enumeration, waiting counts, templates, typed
+refinements, broader APIs, and all distinct Sized contracts remain open.
+
+The aggregate audit passes 2,114 jobs and 52,819 dependency checks with only
+the permitted Lean foundations and no new warning. Four new modules and
+three additive Audit imports preserve every older non-Audit proof file.
+Required strict Nix build and all six suites pass 723 examples plus golden
+checks. Changed-file Fourmolu and all four active Cabal-gild checks pass.
+
+Read `lean/notes-original-field-origins.md`,
+`lean/notes-current-primary-support.md`, and `lean/notes-main-e16f3b50.md`.
+
+## Physical accessor and original cold scan entry
+
+Source main remains `2ca1644c`. Proofs `dae67292`, `a5b760f1`, and `abe70af7`
+derive actual allocated precheck entry and original source native/cost/field
+invariants. Public accepted original edges cannot reach rejection in the
+completed cold Scan. Exact positional receipts retain selected original
+records. Read [the construction and remaining caller scope](notes-current-physical-entry.md).
+
+Equality-interner coverage, inherited storage, actual live precheck, and
+completed execution remain explicit. The full caller and open-sibling
+required/edit fallback remain open. Merge/subsumes memo effects, runtime,
+general completion, broader APIs, and all distinct Sized contracts remain.
+The full audit passes 2,110 jobs and 52,720 dependencies, permitted axioms
+only, no new warning. Five new modules and two additive Audit imports
+preserve older definitions. Haskell is unchanged; its preceding required
+checks passed 720 examples plus golden. Full library scope stays active.
+Earlier sections retain historical source and proof scopes.
+
+## Global memo composition at normalized current entry
+
+Source main `2ca1644c` is merged at `a7134ecb`. Proofs `36545747`,
+`143985fb`, `0845cfa6`, and `37efaa55` pass the SAME global gate tables
+through actual folds, delayed tasks, Decision, fourth-memo calls, and the
+current reached Scan. Initial invariants derive final coherence. Cached
+accessor readback and live precheck derive proper paths. Read
+[the memo composition and remaining caller work](notes-query-global-memos.md).
+Physical entry, caller initialization, selected fallback, runtime, and
+general completion remain open. Full library scope stays active.
+
+Current source adapters cover allocated-prefix IntMap slot laws and exact
+root-map/fallback closure order. Whole enumeration, actual canonicalClasses,
+containers, machine capacity, representative waiting counts, grouped template
+exclusion, and typed derived refinements remain open. Read
+[the source comparison](notes-main-2ca1644c.md).
+
+The aggregate audit passes 2,105 jobs and 52,700 dependencies, permitted
+axioms only, no new warning. Eight new modules and four additive Audit
+imports preserve older definitions. Required Nix checks pass 720 examples
+plus golden across all six suites. Formatting passes. Keep every separate
+exact Sized contract. Earlier sections retain historical scopes.
+
+Current source: `TharkunAB/cfta`, `origin/main` at `88998669`, merged at `6d1462c7`.
+Continue on `formalize`; push verified checkpoints to `origin/formalize`.
+The former remote remains as `microecta-legacy`. The Haskell packages are
+`cfta`, `cfta-generator`, `cfta-ghc`, and `decision-model`. Public `Data.CFTA.*`
+modules and Lean namespace `MicroCFTA` retain their names. The Lake package is
+`cfta`. Root [HANDOFF.md](../HANDOFF.md) supersedes historical descriptions below.
+
+## Current complete secondary and memoized class scan
+
+Source main `7fdebd07` is merged at `a3e68610`. Proofs `0992b336`,
+`3e797a74`, and `3be3967c` add complete current secondary execution,
+ranked completion, replay, effects, memo receipts, and supported projection.
+Actual query/fourth-memo/Scan proofs derive sound early rejection with
+unrelated original siblings open. Ordered entry reaches accessor refutation.
+Read [the proof scope](notes-current-secondary.md) and
+[the typed refinement source boundary](notes-main-7fdebd07.md).
+The three global gate tables still need whole-query/Scan composition.
+Physical entry, fallback, runtime, completion, and broader obligations remain.
+The typed NodeView/MeasureRecord public translation is uncovered. Its two
+Internal backends replace the previous public string interface.
+The full audit passes 2,097 jobs and 52,633 dependencies, permitted axioms
+only, no new warning. Nineteen new modules and two additive Audit imports.
+Required Nix checks pass 714 examples plus golden; formatting passes.
+Earlier sections retain historical source and proof scopes.
+
+## Current main 88998669: endpoint and emptiness transfer
+
+Read [the source update and proof limits](notes-main-88998669.md).
+Proofs `a9eea20e`, `86f70026`, and `60c96c89` retain exact primary gate
+behavior and prove the new closed constrained-Mu endpoint rule and receipt.
+Closed selected endpoints derive a current query-refutation subclass.
+Current guarded emptiness, actual row compatibility, a separate fourth memo,
+and ordered merge-pruning soundness are checked. matchesNowhere has exact
+independent subterm-path semantics. General current secondary/Scan transfer,
+shared helper memos through enumeration, complete exclusion/fromRows, and
+all broader library obligations remain. Earlier sections are historical.
+The full audit passes 2,078 jobs and 52,456 dependency checks with no new
+warning or axiom. Strict Nix build and six suites pass 713 examples plus
+golden. Changed-file Fourmolu and active-package Cabal-gild pass. All older
+proof definitions remain; the upstream source delta is eight files.
+
+## Current native instruction unfolding events
+
+Proof checkpoint `97c525f4`, source main `525d722e`. Read
+[the native event transfer and its limits](notes-source-native-events.md).
+Actual physical primitives include a real unfolding-memo action. Expanded
+Work, fresh construction, and fixed native callbacks derive exact erasure,
+actual primitive traces, and no global unfolding calls. Native execution
+retains original fuel and all outcomes, continuations, heaps, and memo cells.
+Completed scoped requests derive actual silent receipts and coherence of
+the same three gate tables. GHC producer demand remains a separate boundary.
+Query/Scan memo composition, concrete entry, selected fallback, checked
+state/runtime transfer, general completion, broader library work, and all
+distinct Sized contracts remain open. The full audit passes 2,070 jobs and
+52,331 dependency checks with no new warning or axiom. Five new modules and
+one additive Audit import contain the proof change. Older definitions and
+all four Haskell package trees remain unchanged. Earlier sections are historical.
+
+## Current query memo receipts and ordered entry
+
+Proof checkpoint `60a8d3eb`, source main `525d722e`. Read
+[the query memo receipts and remaining composition](notes-source-query-memos.md).
+Actual exposure, completed projection, and scoped Operand now derive global
+unfolding calls, final three-table coherence, and retained earlier entries.
+The exact ordered Active class entry and accessor satisfaction follow from
+successful Precheck with coherent original records and cached readback.
+Native physical record extraction remains explicit. Native global-event
+instrumentation, query/Scan memo composition, selected fallback, GHC delayed
+demand, checked-state/runtime transfer, and general completion remain open.
+The full audit passes 2,065 jobs and 52,088 dependency checks with no new
+warning or axiom. Five new modules and two additive Audit imports contain
+the change. All older definitions and all four Haskell package trees remain
+unchanged. Full scope and distinct Sized contracts remain. Earlier sections
+are historical.
+
+## Current reached-prefix rejection proof
+
+Proof checkpoint `3ca8c0c4`, source main `525d722e`. Read
+[the reached-prefix proof and remaining caller work](notes-source-lazy-class-prefix.md).
+The current enabled primary and secondary modes have exact class-worker
+equations. Scan retains original selected order/multiplicity and stops before
+later primary checks. verified derives intermediate readiness and heap
+invariants under independent acceptance and all original active class
+conditions. stopped_refutes proves sound early rejection without a semantic
+oracle or completed fallback. Global gate memo composition, original entry
+extraction, selected fallback, GHC demand, checked-state/runtime transfer,
+and general completion remain open. The full audit passes 2,060 jobs and
+52,058 dependency checks with no new warning or axiom. Five new modules and
+two additive Audit imports contain the change. All older definitions and
+all four Haskell package trees remain unchanged. Full library scope and
+distinct Sized contracts remain. Earlier sections are historical.
+
+## Current query cost and primary class proofs
+
+Proof checkpoint `09cfb640`, source main `525d722e`. Read
+[the actual cost proofs and caller limits](notes-source-native-costs.md).
+CostHeap now passes through actual native requests, open exposure/projection,
+class folds, delayed task exploration, and every Decision branch. Under the
+existing anchored support, seeded_decision_ready derives the next gate's
+Ready, IdleReady, costs, histories, and normalized fields after either answer.
+No final invariant is supplied. Current enabled primary Path/Class graphs
+derive exact execution and all three memo receipts. The lazy class prefix,
+global unfolding composition, fallback/whole caller, checked-state/runtime
+transfer, and general completion remain open. The full audit passes 2,055
+jobs and 52,039 dependency checks with no new warning or axiom. Nine new
+modules and two additive Audit imports contain the proof change. All older
+definitions and all four Haskell package trees remain unchanged. Full scope
+and distinct Sized contracts remain. Earlier sections are historical.
+
+## Current gate-based scoped class-query proofs
+
+Proof checkpoint `602b20a7`, source main `525d722e`. Read
+[the actual class-query proof and caller limits](notes-source-gate-class-query.md).
+Actual scoped projection and both class folds derive closed resident output,
+common accepted subtrees, and normalized fields from one fixed gate anchor.
+A false secondary class trace and true actual seeded-query Decision refute
+the original active class without a static path domain or semantic oracle.
+The current lazy-prefix caller, gate cost readiness after prior query work,
+three-family memo composition, fallback, checked-state/runtime transfer, and
+general completion remain open. The pinned audit passes 2,046 jobs and
+51,989 dependency checks with no new warning or axiom. Prior definitions
+except one additive Audit import and all four Haskell package trees stay
+unchanged. Full library scope and all separate Sized contracts remain.
+Earlier sections retain historical checkpoint scope.
+
+## Current selected projection from secondary gates
+
+Proof checkpoint `ea919bfa`, source main `525d722e`. Read
+[the actual projection proofs and next class transfer](notes-source-gate-projection.md).
+Actual false proper-path traces now derive finite projection, closed resident
+output, accepted-subtree inclusion, and physical annotation retention.
+Support transfers through actual recursive exposure and canonical row child
+positions. Endpoint cost invariants stay at the fixed gate anchor; later
+caller heaps need no cost heap or whole-original-forest closedness.
+Forest [] remains explicit. Actual Operand/Fold/Seeded composition and the
+whole caller remain open. The pinned audit passes 2,042 jobs and 51,971
+dependency checks with no new warning or axiom. All prior definitions except
+two additive Audit imports and all four Haskell package trees stay unchanged.
+All broader library and separate Sized contracts remain. Earlier sections
+retain historical checkpoint scope.
+
+## Current secondary gate and recursive head proofs
+
+Proof checkpoint `e7c08d35`, source main `525d722e`. Read
+[the effects, language, and remaining projection target](notes-source-secondary-gate.md).
+Actual secondary traces derive semantic effects, physical annotations, and
+exact later-cache replay without CostHeap. False endpoints derive original
+closedness with an explicit cost invariant. Actual recursive head exposure
+then completes through repeated open Mu unfolding and the restarted collect
+worklist. Its language is exactly the original independent language, and
+its physical annotations remain valid. Selected-child support through
+actual exposed rows, general projection, and full caller composition remain
+open. The pinned audit passes 2,037 jobs and 51,930 dependency checks with
+no new warning or axiom. All prior definitions except four additive Audit
+imports and all four Haskell package trees remain unchanged. Full scope and
+all separate Sized contracts remain. Earlier entries retain historical scope.
+
+## Current open ordinary Mu projection
+
+Proof `00b4806e` derives open ordinary-head language and cache preservation,
+finite selected-path completion, and finite projection through an actual
+ordinary Mu unfolding. A checked warm fixture keeps its head open while its
+selected path is closed. Read [the proof and its limits](notes-source-open-ordinary-head.md).
+Next transfer false secondary-gate traces to later caller projections.
+General repeated-head/caller completion and broader library gaps remain.
+The full audit passes 2,031 jobs and 51,878 dependency checks, with no new
+warning or axiom. Prior definitions remain unchanged except two Audit imports.
+All Haskell package trees are unchanged. Earlier scopes below are historical.
+
+## Current refused-class queries and open Mu boundary
+
+Proofs `e36ecf90` and `38569b85` connect actual seeded class queries to
+completed scoped emptiness decisions. Ordinary paths permit open unvisited
+siblings. A checked open Mu fixture disproves the remaining gate-to-domain
+implication, including sequential gate effects in one exact heap. Read
+[the result and next target](notes-source-refused-class-query.md).
+Next prove open ordinary-head reconstruction, then current caller composition.
+Exact lazy demand, checked native transfer, ranges, completion, and broader
+library obligations remain. The full audit passes 2,027 jobs and 51,762
+dependency checks, with no new warning or axiom. Prior definitions remain
+unchanged except two Audit imports. Haskell source is unchanged.
+Earlier sections retain their historical checkpoint scope.
+
+## Current completed scoped task-table soundness
+
+Proof checkpoint `3c2346e8` derives saved class semantics, immutable body
+receipts, accepted final rows, and smaller witnesses for actual complete task
+reads. These derive finite Decomposes and one-sided table/equality-stop loop
+soundness without final-row, inventory, or primitive-operation oracles.
+Original normalized construction gives exclusion at its declared syntax
+language. Read [the proof and its limits](notes-source-emptiness-task-soundness.md).
+Completed scoped exploration remains a premise. Progressive lazy demand,
+original child forcing, checked native transfer, word bounds, completion,
+and current whole-caller composition remain open. Full scope remains.
+The pinned audit passes 2,021 jobs and 51,551 dependency checks, with no new
+warning or axiom. Prior definitions remain unchanged except one Audit import.
+All Haskell package trees are unchanged; their checks were not repeated.
+Earlier sections below retain their historical checkpoint scope.
+
+## Current main 525d722e: representative waiting counts
+
+Source main `525d722e` is merged at `c12a0420`. Read [the source transfer](notes-main-525d722e.md).
+Waiting counts now use current UF representatives, gained/lost deltas, and
+union rekeying. Correctness is required at compound-operation endpoints.
+Older raw-key index proofs need new aggregate-count, pure-root, scheduler,
+and machine-total bridges. All Lean files and the provablyEmpty body remain
+unchanged. The captured-task semantic target and template exclusion gap remain.
+The repository-required strict Nix build and all six suites pass 704
+examples plus golden checks. Fourmolu passes both changed Haskell files.
+Earlier entries below retain historical source and proof scopes.
+
+## Current main 54f4c272: template exclusion
+
+Source main `54f4c272` is merged at `29c6cfc7`. Read [the source update](notes-main-54f4c272.md).
+The new root-template exclusion API needs a complete disjoint edge-copy
+partition proof, cyclic FTA correctness, interned source transfer, and a
+separate unambiguity proof. Existing Template matching/restriction proofs
+survive unchanged. Equality, emptiness, Sized, and all Lean files are unchanged.
+The captured-task semantic invariant remains the immediate proof target.
+Strict Nix build, all six suites (704 examples plus golden), changed-file
+Fourmolu, and active-package Cabal formatting pass. The unchanged Lean tree
+retains its prior 2,014-job / 51,484-dependency audit. Full scope remains open.
+Earlier entries below retain their historical checkpoint scope.
+
+## Current captured-task and final-readback proofs
+
+Source main remains `a22b2ad4`. Proofs `ec3ebf72`, `305da606`, `c2321463`,
+and `66b9c097` derive captured class sharing, actual fold/row-read effects,
+normalized fields, final stored records, complete task rows, exact table keys,
+and inventory-free physical readback. Read [the proof limits and next target](notes-source-emptiness-tasks.md).
+Exposure uses complete nodeEdges reads; exact lazy row demand and original
+child forcing remain open. Saved-result language and immutable body receipts
+still need proof. Whole oracle/caller soundness, native completion, and the
+checked constraint-state transfer remain open. The pinned audit passes 2,014
+jobs and 51,484 dependency checks with no new warning or axiom. Haskell and
+all prior proof definitions remain unchanged except one additive Audit import.
+Full library scope and separate Sized contracts remain. Earlier entries below
+retain their historical checkpoint scope.
+
+## Current delayed-worklist and entry-inventory proofs
+
+Proof checkpoint `2a1e918e`, source main unchanged at `a22b2ad4`.
+Read [the delayed-worklist note](notes-delayed-emptiness.md).
+Reached traces retain force/exposure states, delayed rows, old entries,
+unique keys, admission bounds, and force receipts for every newly stored row
+task. Zero budget still forces queued tasks. Literal closed entry records
+now derive their own certified inventory, coverage, and coherent readback.
+Actual source Force/Expose, final-heap entry validity, completed row decoding,
+certified primitive laws, and checked native allocation transfer remain open.
+General native and whole-caller completion remain open. The pinned audit
+passes 2,008 jobs and 51,372 dependency checks with no new warning or axiom.
+All Haskell source and prior proof definitions remain unchanged except two
+additive Audit imports. Full scope and the separate Sized contracts remain.
+Earlier checkpoints below are historical.
+
+## Current explored-table and source-row proofs
+
+Proofs `76afeec1`, `e736beeb`, and `71b7fd08`, on unchanged main `a22b2ad4`.
+Read [the table and source-read note](notes-emptiness-table-source.md).
+Completed table keys derive the finite carrier, literal rounds, least fixed
+point, and equality-stop completion. Empty-start exploration derives stored
+rows. Closed resident records derive untagged physical readback. Actual
+nodeEdges reads derive retained accepted rows and normalized satisfied classes
+from original source construction. Plain projections and both distinct scoped
+native fold schedules derive closed output and smaller accepted witnesses.
+Stateful delayed exploration, final inventory coverage, certified primitive
+laws, checked native allocation transfer, and the complete current class scan
+remain open. All Haskell source is unchanged. The pinned Lean audit passes
+2,006 jobs and 51,337 dependency checks with only permitted axioms. Full scope
+and the separate Sized contracts remain. Earlier checkpoints below are historical.
+
+## Current conservative emptiness source
+
+Main `a22b2ad4` is merged at `e612302b`. Read
+[the source comparison and proof limits](notes-main-a22b2ad4.md).
+Proofs `598ad8dc`, `59b2fbf4`, `0414c98b`, and `dab4eade` cover both endpoint
+modes, finite optimistic Boolean stabilization, smaller witnesses for original
+children and foldr1 class intersections, finite completed-value exploration,
+and conditional preservation by the refused-class emptiness branch. The row
+bridge derives Decomposes from primitive laws, physical readback, and local
+accepted-row exposure. Actual graph construction, untagged identity adequacy,
+native call receipts, per-call oracle soundness, and lazy class-scan effects
+remain open. The 1000-key budget bounds admissions, not native work.
+The fixture now returns EmptyNode; the old identity observer is unsuitable.
+Raw malformed class probes confirm the need for normalized input invariants.
+All six Nix suites pass 697 examples plus golden checks; strict build and
+changed-file formatting pass. The pinned Lean audit passes 1,999 jobs and
+51,206 dependency checks with only permitted axioms. All prior proofs/repros/
+drafts remain. The optimized core and distinct Sized contracts remain.
+Earlier source heads, counts, runtime observations, and targets are historical.
+
+## Current stateful gate and descendant memo
+
+Proof checkpoint `9f6d66a6`, source main `24a710a3`. Read
+[the stateful memo note](notes-endpoint-memo-stateful.md). Current-policy
+stateful graphs and finite execution agree with exact returned constructor
+heaps. Original construction derives finite node/path/class checks. The new
+ordered descendant memo derives exact answers, both query-table invariants,
+and preserved completed entries. Strict resident ancestry excludes active
+ancestor reentry in a sequential helper machine. Three-memo gate receipts
+retain actual unfolding, predicate, and descendant calls with source short
+circuits. Original construction derives stable finite node checks and these
+receipts. The old complete class-selection pipeline is still historical.
+Current ordered class receipts/filtering and native runtime ownership remain
+open. The audit passes 1,994 jobs and 51,072 dependency checks. No Haskell or
+Sized source changed. Earlier scopes and counts below are historical.
+
+## Main 24a710a3: current endpoint recursion guard
+
+Main `24a710a3` is merged at `6a02619c`; proofs are at `3eed507c`.
+Read [the current policy and source comparison](notes-main-24a710a3.md).
+Six additive modules prove exact stored-record descendant witnesses, the
+stronger pure gate, selected-class containment, conditional pass preservation,
+ranked finite node/path/class checks, and current-policy checks derived from
+original construction. Kernel evaluation confirms the new barrier on the
+preserved caller input. The old stateful gate, memo, class-selection pipeline,
+and cycle witnesses retain their earlier endpoint policy. Their current-source
+correspondence is historical. The new global descendant memo and retargeted
+stateful selection remain open. General caller/fixpoint termination is unproved.
+The preserved cold Haskell caller repro completes; its old default certificate
+fails as expected. All six Nix suites pass 697 examples plus golden checks.
+The strict build and changed-file Fourmolu checks pass. The Lean audit passes
+1,981 jobs and 50,858 dependency checks, with no new warnings or axioms.
+Prior proofs/repros/drafts and the optimized interned core remain. Native
+intersection bodies, Sized, and the uncovered derived-refinement APIs are
+unchanged. All remaining full-library and separate Sized contracts remain.
+Older source heads, counts, and next targets below are historical.
+
+The [previous main refresh](notes-main-6fe34ab8.md), `9f8d3afc`, preserves
+all proofs, the optimized core, the equality repair, and Sized. New Symbolic
+and automatic derived-refinement APIs remain uncovered. A retained standalone
+repro verifies named-annotation projection loss and strict-field placeholders.
+All six Nix suites pass 696 examples plus golden checks. The strict build,
+format, metadata, and 1,975-job/50,686-dependency Lean audit pass.
+Whole-library correspondence and general checked-native correctness remain open.
+
+The [running and field checkpoint](notes-native-field-running-invariants.md),
+`b03d0d1f`, derives actual running-cell preservation, exact started requests,
+and normalized-field closure through checked execution. Native input checks
+and semantic finish receipts remain explicit. Open-context branch laws expose
+the remaining candidate-parametric Mu obligation. The audit passes 1,975 jobs
+and 50,686 dependency checks. No Haskell file changed. Older counts and next
+targets below are historical.
+
+The [accepted child execution proof](notes-native-accepted-child-demand.md),
+`970ef848`, derives actual ordered child traces, accepted edge constructor
+receipts, and completion of a fresh self-child source class. Observed accepted
+completion has conditional provenance under bounded reached-child checks.
+General node/Mu preservation and derivation of those checks remain open.
+The audit passes 1,965 jobs and 50,512 dependency checks. No Haskell file
+changed. Older counts and next targets below are historical.
+
+The [checked provenance proof](notes-native-checked-provenance.md),
+`20982f98`, derives actual mismatch and constraint-rejection completion,
+checked native cell validity, and surrounding recursive memo Sound. Generic
+finite heap preservation follows from reached current-input checks. The new
+language invariant covers closed inputs in the empty domain. Accepted
+recursive provenance and derivation of the current-input/field plans remain
+open. The audit passes 1,955 jobs and 50,413 dependency checks. No Haskell
+file changed. Older counts and next targets below are historical.
+
+The [resumable native demand proof](notes-native-checked-demand.md),
+`f4687ad9`, carries equality-operation state through actual typed memo
+publication, checked edge bodies, and delayed child code. Every finite
+outcome retains structural native cells and allocation receipts. Stopped
+branches have empty common language. New completed semantic provenance and
+actual heap preservation remain next. The audit passes 1,945 jobs and 50,309
+dependency checks. No Haskell definition changed. Older counts are historical.
+
+The [checked-edge allocation proof](notes-checked-edge-allocation.md),
+`261627c4`, derives exact raw conjunction, demanded arity checks, and sentinel
+allocation. Every satisfying complete term passes. Concrete prefixes and
+constructor heap effects preserve current recursive result-cell Sound.
+The audit passes 1,936 jobs and 50,146 dependency checks. Ready native child
+continuations and complete guarded execution remain next. The older eager
+kernel has no proved physical-demand correspondence. No Haskell file changed.
+The older counts and next-target statements below are historical.
+
+The [current upstream comparison](notes-main-1eb4ab05.md) records named measures,
+generic decoding, and inferred solver function sorts. Five additive modules
+restore the current full solver/preparation/public/raw-map Sized bridge.
+Exact classes, finite execution, sequence, size order, and both rank inverses
+remain separate contracts. The named-measure frontend and actual parser/codec
+bridges remain open. The optimized interned core and equality code are preserved.
+
+The [allocation receipt proof](notes-payload-allocation-receipts.md), `bb35a074`,
+retains actual completed combination/descent caches, delayed guard demand,
+accessor effects, and native prechecks. Concrete prefixes give exact physical
+readback and preserve all result cells and current Sound. Inherited child
+construction retains actual descent and satisfaction. The audit passes 1,929
+jobs and 50,083 dependency checks. Full native conjunction/intersection and
+edge-rebuilding effects remain next. No Haskell files changed. Earlier counts
+below describe historical checkpoints.
+
+The [physical identity bridge](notes-constraint-identity-renaming.md), `d851d5fb`,
+relates different constraint allocation histories through actual memo operations.
+It transports completed-cell Sound under actual heap preservation and connects
+key equality to signed words under a complete reservation bound. The audit
+passes 1,918 jobs and 49,920 dependency checks. Actual allocation-site receipts,
+cache/hash/IntMap adequacy, unrelated global result history, and the lifetime
+bound remain source obligations. No Haskell files changed. Older counts below
+are historical.
+
+The [completed-cell proof](notes-result-memo-soundness.md), `51a5922c`, derives
+full memo Sound and exact contextual language through actual recursive effects.
+Original closed construction and successful reached checks give exact public
+language. The p(a,a) kernel fixture supplies a concrete successful plan and
+two returned shared cells. The original busy fixture retains two running cells
+and no completed answers. Ready hits return identical full state at any bound.
+Constraint allocation up to identity renaming and source runtime correspondence
+remain open. General successful caller completion is not proved.
+The aggregate audit passes 1,914 jobs and 49,869 theorem dependency checks.
+Only propext, Classical.choice, and Quot.sound occur. Log:
+`/tmp/mcfta-memo-invariant-audit-20261015.log`.
+No Haskell files changed. Earlier strict Nix, six-suite, format, metadata, and
+205-rank example checks retain their prior evidence and were not repeated.
+Older counts and next targets below are historical.
+
+The [closed caller cycle](notes-outer-caller-cycle.md), proved in `eed062bd`,
+returns to the original physical root with empty inherited constraints after
+two actual local prefixes. Its observed physical-key relation is not well
+founded. The retained source certificate passes. Cold and warm full-pass
+calls time out. The typed result-thunk instantiation in `6e4d477d` reaches
+busy with neither result completed. The actual-worker note now supplies
+its monadic first-child necessity laws. No production algorithm is repaired.
+This supersedes unconditional caller-rank targets below. The kernel result does not prove GHC divergence.
+The older audit counts below describe their historical proof checkpoints.
+The [source boundary checks](notes-origin-boundaries.md) refute inherited
+literal conjunction closure and a local maximum-path bound. Retained Haskell
+prefixes also refute physical absorption of a repeated intersection factor.
+The latter kernel identity candidates remain explicitly unverified drafts.
+These are finite boundary checks, with no infinite-growth or termination
+claim. Exact small normalization receipts retain the actual source result.
+The [finite physical constraint inventory](notes-constraint-inventory.md)
+remains proved for checked successful public calls, with exact language,
+both source gate memo receipts, and stable full-state replay. Inherited
+records and actual node construction need separate analysis. The caller
+cycle now supersedes that physical-key rank target.
+The [ordinary-height counterexample](notes-constraint-origins.md) still applies.
+The [closed warm completion proof](notes-closed-warm-completion.md) gives finite
+local execution at arbitrary closed warm scopes under reached word checks.
+The [inherited Region proof](notes-inherited-plain-completion.md) gives finite
+outer execution for equality-free regions with any inherited payload.
+The [Sized comparison](notes-canonical-upstream.md) remains current. Exact
+classes, finite size execution, sequence, and both rank inverse contracts
+retain their source definitions. UVar and synthesis orders remain separate.
+This paragraph supersedes generic factor and inherited-closure candidates.
+Older next-target statements below are historical where superseded here.
+The [inherited edge proof](notes-inherited-edge.md) derives actual physical
+constraint combination and trie descent, indexed child obligations, exact
+callback observations, and direct equal-arity edge rebuilding. Concrete native
+local narrowing composes with that inherited continuation. The pointwise node
+callback remains an explicit induction hypothesis. The outer node/row worker,
+modifyNode fast path, and actual Mu reconstruction remain next. Stable six-stage
+bounds apply to a fixed callback; they do not prove whole-caller termination.
+This paragraph supersedes older inherited payload and child-continuation targets.
+The [public guarded-edge proof](notes-public-native-edge.md) derives annotation
+preservation through actual general merging, captured targets, first forcing,
+shared edits, gate selection, required paths, class folds, and guarded interning.
+The complete concrete guarded native edge pass narrows publicly and has exact
+public input/output language under inherited satisfaction. Original normalized
+syntax derives finite source execution, both memo certificates, stable stage
+bounds, and eventual bounded-array agreement. The actual inherited caller and
+full reducePartially traversal remain next. This paragraph supersedes older
+complete-pass annotation targets. Repeated-pass termination, GHC scheduling,
+and extraction remain separate.
+The [normalized annotation proof](notes-normalized-annotations.md) discharges
+all concrete source guard laws at the existing independent PCS meaning.
+It proves public agreement on normalized annotations, derives annotation heaps
+from original construction, and preserves them through actual stored-body
+compilation and optional binders. The concrete source edge entry has exact
+PCS output/public input meaning. Public output readback still needs native
+and shared-edit annotation heap preservation. This paragraph supersedes older
+unrestricted guard-law next targets. GHC extraction remains separate.
+The [guarded-edge proof](notes-guarded-edge.md) now derives actual accessor
+readback, valid physical records, literal original-guard reconstruction, stable
+six-bound and bounded-array execution, and original closed source completion.
+Independent edge language is exact under inherited satisfaction and the
+existing local guard-constructor contracts. Concrete normalized constructor
+laws are proved. Their restriction to actual reached guards remains next;
+unrestricted laws on malformed raw payloads are not established. This paragraph
+supersedes older guarded-edge next targets. GHC extraction remains separate.
+The [complete native one-pass proof](notes-native-one-pass.md) now derives
+actual prechecks, physical record selection, required paths, native folds,
+and final propagation in one worker. It has checked two-way graph agreement,
+stable six-bound answers, eventual bounded-array agreement, independent
+language preservation, and original source completion with both gate memo
+certificates. Actual guarded-edge rebuilding and guard/payload readback are
+next. This paragraph supersedes older combined one-pass worker targets.
+GHC scheduling and extraction remain separate.
+The [selected class-fold proof](notes-selected-class-fold.md) now composes
+actual gate/required stages, original physical records, fresh class captures,
+finite native right folds, and one final empty propagation. Stable five-bound
+worker agreement and no loss of class-satisfying terms are proved. Original
+closed construction supplies the selected live-branch entry. The combined
+one-pass worker and guarded-edge language are next. This paragraph supersedes
+older class-fold next targets. GHC scheduling and extraction remain separate.
+The [shared class-edit proof](notes-shared-class-edits.md) now derives actual
+first force, exact target reuse, finite simultaneous edit completion, and
+stable five-bound function/graph agreement. Compiled original class paths
+retain every accepted class-satisfying term. Actual selected-class fold and
+structural empty propagation are next. This paragraph supersedes older shared
+forcing next targets. GHC lazy scheduling and extraction remain separate.
+The [demanded class-target proof](notes-demanded-class-targets.md) derives
+actual projection/merge operands, interleaved first-seeded native target folds,
+finite stable four-bound execution, and original class-subterm preservation.
+Construction receipts derive captured target scope and no loss of class terms
+through native edits. Shared target forcing and full class-pass composition
+remain open. This paragraph supersedes earlier standalone target construction
+and merge next targets.
+The [finite general merge proof](notes-merged-finite.md) now derives general
+comparison and merger completion, stable identical full caches at larger
+bounds, and original closed source-language inclusion. It uses actual fresh
+Mu allocation and source order. Shared target forcing and full class-pass
+composition remain open. This paragraph supersedes older completion targets.
+The [general merged proof](notes-merged-general.md) derives independent
+comparison inclusion, exact child-selection union language, and successful
+merge coverage with complete semantic cache preservation. Original construction
+and actual getPath composition derive source entry. Its general completion
+target is now proved above. Older next-target statements below are historical
+when this paragraph supersedes them.
+The [scoped native edit proof](notes-native-edits.md) now derives full native
+state preservation, finite edit completion, exact retained target language,
+and stable three-bound worker agreement. Coherent physical classes have
+exact original-path readback. Constructed target receipts now supply its
+captured scope in the proof above.
+The [scoped native target proof](notes-native-target-fold.md) now derives finite
+warm native target folds, exact intersection-list language, and target-then-leaf
+narrowing. General projection retains the actual domain and both memo tables.
+The simultaneous edit composition now has its scoped proof above.
+The [general projection proof](notes-general-projection.md) now derives finite
+stable getPath execution on arbitrary closed nested Mu/Union inputs, exact
+source closed-union language, and accepted-subterm inclusion. It retains
+actual reads, full final caches, and signed missing-position behavior.
+Scoped native callback composition and merged targets remain open.
+The [public entry proof](notes-native-public-entry.md) derives finite actual
+entry execution, exact independent root-language readback, and complete
+optimized/reference query-record equality. It includes direct empty/open
+returns, exact distinct node-count classes, size order, and both term inverses.
+Normalized original annotations and reached cache capacity remain explicit.
+The [common API proof](notes-sized-api-laws.md) now applies the complete
+specification to original-map reference, optimized dispatch, and actual bounded
+solver-decided traces. The [general cold entry proof](notes-general-cold-liquid-entry.md)
+now derives actual normalized validation and complete encoded queries from
+repaired construction. It retains the real arity failure before solver work.
+The [closed source theorem](notes-source-closed-sized.md) now derives construction
+and all three exact query paths at the original expression's guarded least
+language. Reference and optimized paths return identical records and errors.
+The [general unfolding-rank proof](notes-general-unfold-rank.md) now derives
+strict minimum free-occurrence rank decrease for every actual repaired open
+Mu unfolding. It includes arbitrary nested Mu and root unions. Prepared-plan
+retention derives nonempty reconstruction for live siblings. Actual execution
+retains every cache invariant needed by later unfoldings. The concrete
+certified read adapter gives a total gate decision and finite instrumented
+evaluation at every finite path. Original source construction derives its
+initial representation premises. The [stateful gate proof](notes-stateful-gate.md)
+now threads actual returned caches through ordered edge and path scans.
+It proves finite class evaluation, exact graph/execution correspondence,
+and uniqueness of both Boolean decisions and final caches. Original source
+construction derives finite traces. Coherent outer-unfold memo hits and misses
+have exact constructor readback. The [memo graph and source read proof](notes-memo-gate-predicate.md)
+now carries unfolding memos through complete ordered graphs. It installs the
+actual visited-node `crush` read and proves its finite distinct identity
+inventory. Node and class source entries have no supplied whole-node predicate.
+The concrete predicate memo also has exact hit/miss and growth laws.
+The [exact fold and both memo proof](notes-source-crush-both-memos.md) now
+characterizes every physically reached ordinary edge, including shared
+canonical records and root unions. A false fold has a reached failing edge.
+Complete gate graphs now carry both actual memos and retain exact finite
+source execution. The [complete class filter](notes-ordered-class-selection.md)
+now retains both memo tables and one ordered receipt per class occurrence.
+Derived gate replay gives exact pure selected-class readback in the retained
+final cache and connects the existing one-pass theorem. The
+[physical entry proof](notes-physical-class-order-entry.md) now derives the
+installed source sort schedule, exact trie/set comparison, safe prechecks,
+and actual parent-array normalization before selection. A checked raw-class
+comparator cycle explains why the physical merge schedule is retained.
+The [Needed compiler and cycle repair](notes-needed-head-repair.md) now
+prove exact signed trie construction and independent complete-path meaning.
+The kernel checks constructor-row exposure and empty least language for the
+raw self binder. Eight source traversals now use that exposure. All 645 Haskell
+examples pass. The original stutter witness and reproduction remain unchanged.
+The source child-adjustment fold now has exact lookup and conditional forest
+meaning. The actual arity check derives every normalized child position.
+The [physical required-path worker](notes-required-execution.md) now derives
+finite stable execution, actual cache effects, and exact graph correspondence
+for arbitrary closed source inputs. Its source entry includes retained raw
+binders. The complete worker has kernel fixtures for the raw cycle and early
+row rejection. The [independent head-language proof](notes-required-head-language.md)
+now identifies actual head normalization with the input guarded least language.
+A finite future cache is a proof witness; runtime conversion is unchanged.
+Both semantic probe heaps survive the full required-path graph. Normalized
+paths derive nonnegative trie keys at every depth. The
+[complete filter proof](notes-required-filter.md) now derives exact independent
+node and forest languages from actual graph execution. It retains the missing
+top-level child boundary and proves both pure-pass required-operation laws.
+Closed source selection derives its unchanged constructor cache and composes
+with required-path execution, including both actual memo receipts. The
+[simultaneous edit proof](notes-edit-execution.md) now retains signed trie
+compilation, callback branch priority, finite traversal from stored leaf
+contracts, exact graph agreement, and stable complete returned caches.
+Independent edit conditions agree with the signed child fold. The
+[edit-language proof](notes-edit-language.md) now derives actual output
+languages, exact original nonoverlapping path readback, and coherent physical
+class edit conditions. Actual native intersection supplies immediate leaf
+cache effects and exact narrowing with captured-target scope and checked
+word ranges explicit. Next compose scoped callbacks and actual projection
+and merged targets through the caller. Native lazy scheduling, open contexts,
+containers, and extraction remain separate.
+[The Lava paper note](notes-lava.md) records relevant prior art and its source,
+solver, and termination limits. The [occurrence-cost note](notes-occurrence-costs.md)
+records the full weighted source callback/probe correspondence used here.
+All old proofs, fixtures, and marked drafts remain.
+
+[The system specification and current findings](SYSTEM.md) describe the
+language, distinct-term index, distribution, and optimization contracts.
+[API-COVERAGE.md](API-COVERAGE.md) maps all 77 source modules and exported
+function families. [COVERAGE.md](COVERAGE.md) records proof obligations.
+
+Current base: `origin/microcfta` at `7989e91a`, including the merged
+core-formula extension, the optimization changes, and the merged findings
+repairs, bounded import fallback, and shared row adapter through PR #115. Benchmark programs,
+datasets, and workload specifications are excluded from formalization.
+The [shared row note](notes-shared-rows.md) covers finite extraction, dense
+numbering, canonical order, minimum sizes, cyclic query laws, and the custom-key
+tie counterexample. Ordinary native intersection construction, dispatch,
+completed memo provenance, and shared productivity are now proved. One
+productive stored knot has actual unfolding and shared exposure. General
+recursive construction remains open. See
+[physical construction](notes-physical-intersection-rows.md).
+The [bounded import note](notes-bounded-import.md) records the preceding work
+and its remaining native correspondence boundaries.
+Local repairs reject uncertain identity replacement
+and payload queries of unfinished recursive occurrences. Grouped recursion
+also rejects discovery tables that disagree with the final body. The
+rebase retained every proof and reproduction while retiring superseded
+source patches. Earlier reports retain their original source hashes and
+describe historical snapshots.
+
+The later liquid review found quantified capture from distinct names with
+the same external SMT spelling. Repair `73223201` encodes every solver-facing
+name injectively. The [solver name note](notes-solver-name-encoding.md) records
+the Lean/native counterexample and the checked codec, preflight, quantified
+semantics, and complete public liquid composition. All 635 existing Haskell
+examples pass after the repair. The closing audit passes **1,180 build targets
+and 39,689 theorem dependency checks** at proof checkpoint `9207c2cf`.
+
+The [finite map Sized proof](notes-sized-finite-keys.md) now derives the
+actual raw-map reference, decided, and optimized paths, including canonical
+order, finite class execution, all four queries, and both inverse laws.
+The original state type need not be finite.
+[Weighted selection](notes-quickcheck-frequency.md) derives the actual
+QuickCheck backend and verifies the safe midpoint repair `a8b32869`.
+All 206 generator examples passed again after that isolated repair.
+The [equality root proof](notes-equality-nested-unary-root.md) completes both
+ancestor edits and bounded iteration for its fixed unary/two-atom fragment.
+Root [HANDOFF.md](../HANDOFF.md) gives the remaining targets and exact logs.
+All work is local. Benchmark formalization remains excluded.
+
+The model proves constrained grammar compilation, complete bounded language
+enumeration, a distinct-term bijection with `Fin n`, requested term
+probabilities, counted decoding, and component optimization laws. The source
+models include core and quantified formula syntax, symbolic counting,
+small-arity terms, size classes, shrinking, public failure behavior, and the
+construction, enumeration, pruning, minimization, and symbolic drivers.
+`System.grammar_bijection` and `System.grammar_probability` compose the
+reference grammar, FTA, index, and distribution results.
+
+Recorded implementation failures now have source repairs and checked
+regressions: quantified substitution, observed atomic weights, accepted root
+representatives, open recursive unions, pruning through open nested binders,
+closing grouped private alternatives, recursive term boundaries, and grouped
+function spines, unsafe sparse substitution decisions in pruning and compilation,
+unbounded conjunction growth during equality reduction, and interference between
+independent semantic guards, repeated expansion of recursive equality
+domains, explicit unions lost during observed imports, and rejected recursive
+observation groups, bounded traversal of retained empty binder cycles,
+self-dependent measure extraction, recursive open group positioning, and
+same-scope identity-replacement precedence, and inconsistent recursive
+payload queries during reconstruction, and stale grouped minimum-size tables.
+Historical counterexamples remain
+separate from the repair theorems. See [SYSTEM.md](SYSTEM.md).
+
+The later source proofs include complete symbolic count/select/rank execution
+and its distinct-term bijection, compiled guard indicators, three-valued cached
+acceptance, typed single and mutual recursive sampling records, enumeration
+soundness, completeness and final rendering,
+successful recursive pruning, total cyclic binder construction, exact support
+constructors, and the full indexed-array equality normalization loop. See the [symbolic notes](notes-symbolic-semantics.md),
+[indicator notes](notes-constraint-indicators.md), [acceptance notes](notes-acceptance.md),
+[recursive source notes](notes-recursive-source.md), [keyed source notes](notes-keyed-source.md),
+[enumeration notes](notes-enumeration-driver.md), [binder notes](notes-binder-language.md),
+[array notes](notes-array-union-find.md), [pruning notes](notes-prune-correctness.md),
+[lattice retry notes](notes-lattice-retry.md), [cyclic conversion notes](notes-binder-compile.md),
+[equality reduction notes](notes-equality-reduction.md),
+[exact enumeration notes](notes-enumeration-exact.md),
+[support graph notes](notes-support-graph.md), and
+[actual-table notes](notes-actual-quotient.md).
+
+The source finite and cyclic FTA entry points now derive their distinct-rank
+contracts from the actual guard and ambiguity gates. See the
+[finite compiler notes](notes-source-finite-automaton.md) and
+[cyclic index notes](notes-source-cyclic-automaton.md). Final finite observation
+merging also connects ranks to retained probability mass. See the
+[observation merge notes](notes-final-observation-merge.md).
+The [finite size-field notes](notes-finite-size-fields.md) connect those
+records to exact class weights, sparse mass tables, and class samplers.
+The [recursive alignment notes](notes-recursive-term-alignment.md) connect
+typed recursive value and term indexes at every class and bounded rank.
+The [recursive callback notes](notes-recursive-callbacks.md) connect the
+actual inverse workers to those tables for the single-knot binary-choice
+body algebra, including ordering, uniqueness, and exact ranked probabilities.
+The [arbitrary-choice notes](notes-recursive-nary-choice.md) cover the local
+ordered list adapter and its recursive child producers.
+The [n-ary body notes](notes-recursive-nary-body.md) extend the full forward
+compiler, guards, decoder, inverse, and ranked mass fields to arbitrary branch
+counts. Their callback proof includes the source knot equation and exact
+bounded global rank queries.
+The [keyed alignment notes](notes-keyed-term-alignment.md) and
+[keyed callback notes](notes-keyed-callbacks.md) extend these results to
+finite mutually recursive key families. They retain separate key masses,
+actual private member wrappers, and complete per-key global inverses.
+The [flat keyed-family notes](notes-keyed-nary.md) extend the mutual-family
+results to any finite branch count. They include retained mass, complete
+inverse queries, and empty/singleton merge dispatch. The [original guard
+notes](notes-keyed-nary-guards.md) derive size and term-growth checks from
+label-aware syntax before value lowering.
+The [dispatcher notes](notes-static-dispatch.md) cover all finite sampling and
+bucket-merge flag branches. The [similarity notes](notes-similarity-within.md)
+and [parent-index notes](notes-minimize-parent-index.md) verify the new
+minimization optimizations.
+The [current equality notes](notes-current-recursive-equality.md) cover the
+revised recursion gate, root self-reference removal, and constraint identities.
+The [recursive join notes](notes-recursive-join-fields.md) cover nested
+heterogeneous join bodies, mutual-family probabilities, full inverse
+callbacks, and public bounded queries. The [join guard
+notes](notes-recursive-join-guards.md) derive the required family guards
+from the original source metadata. The [runtime notes](notes-recursive-runtime.md)
+connect source weight flags, optional terms, and query errors to those families.
+`RecursiveJoinSupportFamily` derives their shared-binder support languages
+from independently compiled term derivations. The [support and inspection
+notes](notes-recursive-join-support-inspection.md) describe the separate named
+diagnostic graph and its constructor proofs. The [complete-record
+notes](notes-recursive-complete-record.md) connect all these fields to one
+checked program.
+The [fresh-probe notes](notes-interned-fresh-probe-keys.md) separate the
+proved nested-binder key cases from the remaining normalization-erasure case.
+The [probe provenance notes](notes-interned-probe-provenance.md) derive the
+probe premises from constructor traces. The [gate rank
+notes](notes-gate-unfolding-rank.md) distinguish lexical termination from
+remaining smart-union source cases.
+
+This is not a claim that the whole Haskell implementation is verified. The
+Lean algorithms are handwritten. Some complete driver invariants, concrete runtime
+representations, and external contracts remain explicit in the coverage
+ledger. A proved reference algorithm does not prove its Haskell adapter.
+
+Toolchain: Lean 4.34.1. Dependencies: Lean's bundled `Std` and `Lean` libraries.
+
+## Build and inspect
+
+From this directory:
+
+```sh
+lake build
+```
+
+`lean-toolchain` pins the installed version. The package needs no external Lean
+dependencies. In the restricted WSL environment, the `elan` wrapper failed while
+querying its default channel. The installed binary worked:
+
+```sh
+/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lake build
+```
+
+The default target imports every proof module and runs
+[`MicroCFTA/Audit.lean`](MicroCFTA/Audit.lean). The audit checks the transitive
+axiom dependencies of every theorem in the `MicroCFTA` namespace, including
+generated and private theorems. It permits only `propext`, `Classical.choice`, and
+`Quot.sound`. A placeholder proof, a native evaluation axiom, or a project
+axiom makes the build fail. Temporary public and private theorems with `sorry` verified that the audit
+rejects `sorryAx`. The negative probes are outside this project.
+
+## Proof map
+
+New end-to-end and source correspondence modules are described in
+[SYSTEM.md](SYSTEM.md) and [API-COVERAGE.md](API-COVERAGE.md). The table below
+also retains the earlier component proof anchors.
+
+| File | Principal results |
+| --- | --- |
+| [Language.lean](MicroCFTA/Language.lean) | `mem_enumerate_iff`, `accepts_iff_eventually_enumerated`, `accepts_intersect_iff`, `pathEquality_correct`, `strict_prefix_paths_not_equal`, `equality_sharing_preserves_terms` |
+| [Probability.lean](MicroCFTA/Probability.lean) | `split_pair`, `pair_split`, `uniform_tickets_probability`, `frequency_probability`, `eventMass_condition`, `regrouping_preserves_distribution`, `join_group_pair_probability` |
+| [Integration.lean](MicroCFTA/Integration.lean) | `samples_probability`, `event_probability`, `accepted_has_rank`, `rank_is_accepted`, `accepts_iff_eventually_positive` |
+| [Guards.lean](MicroCFTA/Guards.lean) | `evaluate_supports`, `splitGuard_preserves`, `groupByKey_cover`, `partition_discharge_preserves`, `independent_holds_sound`, `holds_alias_counterexample` |
+| [Lattice.lean](MicroCFTA/Lattice.lean) | `signed_correct`, `normalize_divisor`, `project_pair`, `firstMaximum_unique`, `firstMaximum_exists`, `intervalSum_antiderivative` |
+| [Counterexamples.lean](MicroCFTA/Counterexamples.lean) | `similarity_guard_counterexample`: the original language is nonempty, the rewritten graph remains structurally productive, and its accepted language is empty at every depth. |
+| [Holds.lean](MicroCFTA/Holds.lean) | `firstNames_lookup`, `aliasPairs_correct`, `compiledQuery_iff`: repaired aliases represent exactly one value per mentioned path, in both polarities. |
+| [Decoder.lean](MicroCFTA/Decoder.lean) | `count_correct`, `decode_correct`, `decode_normalize`, `decode_binary_fusion`, `countAt_correct`, `compiled_coverage`, `compiled_probability_normalized` |
+| [Minimization.lean](MicroCFTA/Minimization.lean) | `classified_guard_preserves` and the historical rejected-representative counterexample |
+| [Sized.lean](MicroCFTA/Sized.lean) | Atomic repair correctness, source-size counterexamples, concrete partition coverage, and proposed size-retaining reconstruction laws |
+| [Productivity.lean](MicroCFTA/Productivity.lean) | `finite_stability`, `reachClosure_correct`, `productive_correct`, `checked_representative_has_accepted_term`, `RootDeletion.root_deletion_counterexample` |
+| [SizeMass.lean](MicroCFTA/SizeMass.lean) | `classWeights_total`, `classWeights_positive`, `mergeWeight_associative`, `split_merge_probability`, `split_product_probability`, and the atomic-pair mass counterexample |
+| [Sparse.lean](MicroCFTA/Sparse.lean) | `addSparse_ordered`, `mulSparse_ordered`, `valueAtSize_mulSparse`, `sparse_split_correct`, `seeded_product_correct`, and zero-size prefix counterexamples |
+| [ZeroSize.lean](MicroCFTA/ZeroSize.lean) | `splitPairs_exact`, `closePoints_exact`, `closePoints_has_rank`, `closePoints_size_count`, `zero_lag_no_finite_count` |
+| [UnionFind.lean](MicroCFTA/UnionFind.lean) | Exact compression and union classes, termination, size metadata, allocation-domain closure, and `union_satisfies` |
+| [Cache.lean](MicroCFTA/Cache.lean) | First-writer readback, pure memoization, interleaved identity allocation, canonical keys, and shard equivalence |
+| [Fragments.lean](MicroCFTA/Fragments.lean) | Completion-preserving hole resolution, slot intersection and assimilation, and exact combined union/assimilation constraints |
+| [RecursiveSize.lean](MicroCFTA/RecursiveSize.lean) | Exact node-count enumeration, count-recurrence uniqueness, size-major decoding, sparse convolution correspondence, and bounded run probabilities |
+| [MinimumSize.lean](MicroCFTA/MinimumSize.lean) | Asynchronous relaxation, proved convergence, least accepted node counts, and safe omission of empty or smaller size classes |
+| [Observation.lean](MicroCFTA/Observation.lean) | Concrete path-plan construction, sparse lookup, exact keys, and derived guard homogeneity |
+| [ObservationGraph.lean](MicroCFTA/ObservationGraph.lean) | Cyclic-graph specialization coverage, exact stored observations, and `selectSpecialized_discharges_guard` |
+| [LatticeRank.lean](MicroCFTA/LatticeRank.lean) | Exact cumulative-count binary search, both lexicographic rank/select inverses, finite tuple coverage, and a verified integer-closure table |
+| [LatticePolynomial.lean](MicroCFTA/LatticePolynomial.lean) | Sparse polynomial normalization, addition, multiplication, powers, partial substitution, and constant extraction |
+| [Faulhaber.lean](MicroCFTA/Faulhaber.lean) | Exact source Bernoulli recurrence and the discrete-antiderivative identity for every degree and every rational argument |
+| [PolynomialSum.lean](MicroCFTA/PolynomialSum.lean) | Concrete `sumOver` equals the finite integer-interval sum, including negative endpoints and empty intervals |
+| [PolynomialSupport.lean](MicroCFTA/PolynomialSupport.lean) | Variable removal, preservation of prior removals, and exact constant extraction after all variables are absent |
+| [LatticeLinear.lean](MicroCFTA/LatticeLinear.lean) | Integer linear arithmetic, sparse-map invariants, supported expression parsing, and integer/rational evaluation correspondence |
+| [LatticeNormalize.lean](MicroCFTA/LatticeNormalize.lean) | Exact conjunction normalization, valid maps, no added variables, and elimination of constant inequalities |
+| [LatticeBound.lean](MicroCFTA/LatticeBound.lean) | Executable unit-coefficient extraction, exact inequality semantics, and variable deletion |
+| [LatticeFeasible.lean](MicroCFTA/LatticeFeasible.lean) | Actual minimum-cost variable choice, projection, termination by distinct-variable count, and sound rejection |
+| [EqualityTrie.lean](MicroCFTA/EqualityTrie.lean) | Exact path construction, prefix checks, sorted distinct enumeration, descent, and arity bounds |
+| [EqualityNormalize.lean](MicroCFTA/EqualityNormalize.lean) | Canonical connected components, congruence generation, contradiction detection, completed bounded normalization, and strict-extension range correctness |
+| [SizedRank.lean](MicroCFTA/SizedRank.lean) | Size-major/class-rank inverses, source/map/choice/application positions, and exact sparse product offsets |
+| [TablePosition.lean](MicroCFTA/TablePosition.lean) | Bottom-up term ranking, derived transition prefixes, last-successful overwrite semantics, acceptance equivalence, and exact replay |
+| [PlanVariants.lean](MicroCFTA/PlanVariants.lean) | Nested shared/sized plans, size/rank conversion, derived counts, and omission of zero-count classes |
+| [Sampler.lean](MicroCFTA/Sampler.lean) | Rational-to-integer masses, cumulative binary ticket decoding, exact weighted events, sampler composition, and bounded constructors |
+| [EqualitySaturation.lean](MicroCFTA/EqualitySaturation.lean) | Exact short-circuit trie cardinality and descent; finite-model saturation bound |
+| [EqualityTermination.lean](MicroCFTA/EqualityTermination.lean) | Unconditional termination of canonical equality saturation and exact total normalization semantics |
+| [EqualityModel.lean](MicroCFTA/EqualityModel.lean) | Constructive finite models for accepted fixed points; rejection iff no finite model exists |
+| [LatticePiece.lean](MicroCFTA/LatticePiece.lean), [LatticePipeline.lean](MicroCFTA/LatticePipeline.lean) | Actual bound traversal and piece construction, exact weighted splitting, normalization/feasibility filtering, and variable deletion |
+| [FiniteSum.lean](MicroCFTA/FiniteSum.lean), [LatticeCount.lean](MicroCFTA/LatticeCount.lean) | Unique finite-support sums, exact repeated elimination, and final constant extraction |
+| [LatticeSigned.lean](MicroCFTA/LatticeSigned.lean), [LatticeFormula.lean](MicroCFTA/LatticeFormula.lean) | Concrete signed simplification, all integer relations, polarity and Boolean compilation, and n-ary traversal/fold correspondence |
+| [LatticeInput.lean](MicroCFTA/LatticeInput.lean), [LatticeDecision.lean](MicroCFTA/LatticeDecision.lean) | Derived initial metadata/support/indicator, integer nonnegative counts, and zero count iff no satisfying assignment |
+| [LatticeLevels.lean](MicroCFTA/LatticeLevels.lean), [LatticeInterval.lean](MicroCFTA/LatticeInterval.lean), [LatticeCumulative.lean](MicroCFTA/LatticeCumulative.lean) | Stored elimination levels, exact floor-division intervals, cumulative polynomial construction, and exact clipped counts |
+| [LatticeAPI.lean](MicroCFTA/LatticeAPI.lean) | Actual point-count constructor, unreachable nonintegral error, and exact integer implication decisions |
+
+Detailed correspondence and limitations are in
+[language notes](notes-language.md), [probability notes](notes-probability.md),
+and [guard notes](notes-guards.md). [State notes](notes-state.md) describe
+union-find, interning and memoization. The [coverage ledger](COVERAGE.md)
+records later progress and all remaining implementation obligations.
+
+`Lattice.lean` corresponds to `Refinement/Lattice.hs` as follows:
+
+- `signed_correct` verifies polarity propagation, conjunction products, and
+  inclusion-exclusion for Boolean formulas. Lists represent signed-map entries.
+- `normalize_divisor` verifies division of a linear inequality by a positive
+  common divisor, including floor division of a negative offset.
+- `tightest_offset` and `opposite_inconsistent` justify two normalization steps.
+- `project_pair` verifies one Fourier-Motzkin projection step.
+- `firstMaximum_exists` and `firstMaximum_unique` verify the strict tie rule
+  for a selected lower bound. The upper-bound rule follows by negating values.
+- `intervalSum_antiderivative` verifies telescoping over intervals that can
+  start at negative integers. Its discrete-antiderivative equation is a premise.
+
+The later modules prove the general Bernoulli/Faulhaber construction,
+terminating feasibility recursion, formula-to-count pipeline, and cumulative
+polynomial sums. `LatticeSelect` now connects the stored cumulative polynomials to exact
+section counts and the recursive ranker. `LatticeRetry` proves the named-error
+and variable-order retry policy. Concrete `Map` storage, scoped binding,
+recursive graph conversion, and Fixpoint serialization remain boundaries.
+Full formula freshening and typed syntax lowering are proved in the later
+`Formula*` modules; see [formula correctness](notes-formula-correctness.md).
+
+## Meaning of the main theorem
+
+`Language.Accepts` is an independent inductive relation on finite trees.
+`Language.enumerate` computes bounded Cartesian products and checks each guard
+on its complete tree. The main language theorem proves their equivalence.
+A Lean leaf has height one; Haskell depth `d` corresponds to Lean fuel `d + 1`.
+Finite terms and finite transition lists suffice. The state graph can be cyclic.
+
+The integration theorem normalizes one ticket per enumerated run. A term with
+several accepting runs receives the sum of their masses. Thus the theorem
+establishes uniformity over runs, not distinct terms. It does not assert that
+arbitrary Haskell generators use this distribution. The separate probability
+module proves weighted-distribution identities with explicit preconditions.
+
+The SMT solver and concrete refinement evaluator are outside the language
+proof. Guards have a supplied Boolean interpretation there. `Guards.lean`
+states the atomic-decision and observation requirements. `Observation` and
+`ObservationGraph` now derive coverage and homogeneity from executable sparse
+plans and graph specialization. The full substitution algorithm is proved.
+`PruneCandidates` proves ambiguous Unknown restoration. `PruneCorrectness`
+proves the successful recursive driver under named primitive laws. Concrete
+interning, binder adapters and recursive termination remain obligations.
+
+Other remaining boundaries include recursive binder conversion, concrete
+interning and union-find callers, lazy size-table execution, machine-integer
+conversions, callback contracts, the random backend, and concrete shrinker record wiring.
+The state algorithms, finite size recurrences, and lattice binary search have
+checked executable proofs. The strict-smaller relation is covered by the
+size-retention proofs. The Lean definitions are handwritten algorithms. There
+is no verified translation connecting all Haskell code to them.
+
+## Papers
+
+The term semantics follows the supplied LTA paper's Figure 6 and the ECTA
+paper's finite-term denotation. ECTA reduction requires exact language
+preservation. LTA similarity minimization deliberately removes terms and needs
+a weaker representative-preservation property. The historical root-deletion
+counterexample violates even nonemptiness preservation.
+
+The supplied LTA appendix's Lemmas 2 and 3 have proof headings without proof
+arguments. They are not used as axioms. The proofs here also do not formalize
+the paper's source-language typing judgment or assume that arbitrary library
+functions satisfy their refinements.
+
+Source PDF SHA-256 values:
+
+```text
+lta.pdf  f3a84b08cfce95747dac5148f28a9092115bfe3144880ca13e2258531a1f9463
+ecta.pdf 34572866be0bc8e86a546f712ffb2666fe641d133417a895ecbdee5d8f6e1ebf
+```
+
+## Validation
+
+The current closing evidence is above and in root [HANDOFF.md](../HANDOFF.md).
+The following older commands and results remain historical records.
+
+- The complete Lean package builds. The axiom audit passes.
+- All earlier repaired cases and the new counterexamples run inside `nix-shell`,
+  with Z3 for the public cases.
+- Existing suites pass on `de910ea`: 284 core, 194 generator, and 142
+  refinement examples; 620 total, zero failures. The log is
+  `/tmp/mcfta-scope-precedence-full.log`. Existing scope cases were extended
+  for the new evaluator repair.
+- Fourmolu accepts the reproductions. Cabal-gild accepts both audited packages.
+
+The Haskell commands run from the repository root:
+
+```sh
+nix-shell --run 'export PATH=/usr/bin:$PATH; cabal build lib:cfta lib:cfta-generator -j1'
+nix-shell --run 'export PATH=/usr/bin:$PATH; cabal exec -- runghc -package=cfta -package=cfta-generator lean/repro/Counterexamples.hs'
+nix-shell --run 'export PATH=/usr/bin:$PATH; cabal exec -- runghc -package=cfta -package=cfta-generator lean/repro/RemainingFindings.hs'
+nix-shell --run 'export PATH=/usr/bin:$PATH; cabal exec -- runghc -package=cfta -package=cfta-generator lean/repro/CurrentFindings.hs'
+nix-shell --run 'export PATH=/usr/bin:$PATH; cabal test cfta:unit-tests cfta-generator:gen-tests cfta-generator:refinement-tests -j1 --test-show-details=direct'
+```
+
+The host compiler path resolves the existing Nix/GHC `-lgmp` linker failure on
+this WSL host. The reproduction is a standalone audit artifact. It does not
+add a package test suite.
+
+## Earlier proof obligations
+
+Use root [HANDOFF.md](../HANDOFF.md) for the current ordered targets.
+The following list retains the earlier broad correspondence scope.
+
+1. Connect the checked finite sampler records to every heterogeneous recipe and
+   support callback. Atomic observed masses are repaired and proved.
+2. Connect the proved root-representative schedule to concrete graph conversion
+   and guard validation. The root deletion defect is repaired.
+3. Connect proved single and mutual recursive records and size invariants to
+   heterogeneous families and lazy runtime tables.
+4. Connect rich sparse guard observations and concrete interned identities to
+   the proved pruning and complete symbolic index drivers.
+5. Connect the checked lattice eliminator and rank/select implementation to
+   scoped binding and concrete container adapters.
+6. Establish an implementation correspondence through a translation, extraction,
+   or a narrower verified core. Differential tests can support this work but
+   cannot replace the correspondence proof.

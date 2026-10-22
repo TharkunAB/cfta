@@ -1,0 +1,104 @@
+ := by
+  dsimp only
+  revert stable good contextual semantic growth history allocations idle
+  induction remaining generalizing incomparableReversed keptReversed before with
+  | nil =>
+      intro stable good contextual semantic growth history allocations idle
+        pivotMember _remainingMembers incomparableMembers keptMembers
+      refine ⟨1, incomparableReversed.reverse, pivot :: keptReversed, before, by omega,
+        rfl, ?_, ?_, ?_, ?_, good, contextual, semantic, Extension.refl _, stable, idle,
+        extends_refl _, FlatMemoThunk.Returned.refl _, allocations⟩
+      · simp only [List.length_reverse, List.length_nil]
+        omega
+      · simp only [List.length_reverse, List.length_cons, List.length_nil]
+        omega
+      · simpa only [List.mem_reverse] using incomparableMembers
+      · intro edge member
+        rcases List.mem_cons.mp member with rfl | member
+        · exact pivotMember
+        · exact keptMembers edge member
+  | cons candidate tail ih =>
+      intro stable good contextual semantic growth history allocations idle
+        pivotMember remainingMembers incomparableMembers keptMembers
+      have candidateMember := remainingMembers candidate (List.mem_cons_self ..)
+      have tailMembers := fun edge member =>
+        remainingMembers edge (List.mem_cons_of_mem candidate member)
+      have symbols : pivot.entry.key.symbol = candidate.entry.key.symbol :=
+        (of_decide_eq_true (List.mem_filter.mp pivotMember).2).trans
+          (of_decide_eq_true (List.mem_filter.mp candidateMember).2).symm
+      obtain ⟨fuel, common, middle, done, _resident, _law, midGood, midContextual,
+          midSemantic, extension, midStable, midIdle, tables, retained, midTrace⟩ :=
+        SourceCurrentSameSymbolEdgeComparisonDomains.original_rows_complete bits source facts
+          formulas solver inputModel inputRanked parent parent original original available available
+          closed closed pivot candidate (List.mem_filter.mp pivotMember).1
+          (List.mem_filter.mp candidateMember).1 symbols initialDomains initialValid before stable
+          good contextual semantic growth history allocations idle room
+      obtain ⟨used, _positive, _bound, resumed⟩ :=
+        SourceCurrentOriginalRowClusterScan.comparison_lift fuel pivot candidate common tail
+          incomparableReversed keptReversed (.call (pivot, candidate) []) before middle done
+      have prefix : SourceCurrentOriginalRowClusterScan.execute (used + 1)
+          (.scan pivot (candidate :: tail) incomparableReversed keptReversed) before =
+          .yielded
+            (if common.entry.identity = candidate.entry.identity then
+               .scan pivot tail incomparableReversed keptReversed
+             else if common.entry.identity = pivot.entry.identity then
+               .cluster (candidate :: (incomparableReversed.reverse ++ tail)) keptReversed
+             else .scan pivot tail (candidate :: incomparableReversed) keptReversed) middle := by
+        simpa only [SourceCurrentOriginalRowClusterScan.execute,
+          SourceCurrentOriginalRowClusterScan.step] using resumed
+      by_cases promoted : common.entry.identity ≠ candidate.entry.identity ∧
+          common.entry.identity = pivot.entry.identity
+      · rcases promoted with ⟨notDropped, promoted⟩
+        refine ⟨used + 1, candidate :: (incomparableReversed.reverse ++ tail),
+          keptReversed, middle, by omega, ?_, ?_, ?_, ?_, keptMembers, midGood,
+          midContextual, midSemantic, extension, midStable, midIdle, tables, retained, midTrace⟩
+        · simpa only [notDropped, promoted, ↓reduceIte] using prefix
+        · simp only [List.length_cons, List.length_append, List.length_reverse]
+          omega
+        · simp only [List.length_cons, List.length_append, List.length_reverse]
+          omega
+        · intro edge member
+          rcases List.mem_cons.mp member with rfl | member
+          · exact candidateMember
+          · rcases List.mem_append.mp member with member | member
+            · exact incomparableMembers edge (List.mem_reverse.mp member)
+            · exact tailMembers edge member
+      · let nextIncomparable := if common.entry.identity = candidate.entry.identity then
+          incomparableReversed else candidate :: incomparableReversed
+        have nextMembers : ∀ edge ∈ nextIncomparable,
+            edge ∈ (nodeEdges parent).filter (fun row => decide (row.entry.key.symbol = symbol)) := by
+          dsimp only [nextIncomparable]
+          split
+          · exact incomparableMembers
+          · intro edge member
+            rcases List.mem_cons.mp member with rfl | member
+            · exact candidateMember
+            · exact incomparableMembers edge member
+        have nextLength : nextIncomparable.length ≤ incomparableReversed.length + 1 := by
+          dsimp only [nextIncomparable]
+          split <;> simp only [List.length_cons] <;> omega
+        have resumedScan : SourceCurrentOriginalRowClusterScan.execute (used + 1)
+            (.scan pivot (candidate :: tail) incomparableReversed keptReversed) before =
+            .yielded (.scan pivot tail nextIncomparable keptReversed) middle := by
+          by_cases dropped : common.entry.identity = candidate.entry.identity
+          · simpa only [dropped, ↓reduceIte, nextIncomparable] using prefix
+          · have notPromoted : common.entry.identity ≠ pivot.entry.identity :=
+              fun equal => promoted ⟨dropped, equal⟩
+            simpa only [dropped, notPromoted, ↓reduceIte, nextIncomparable] using prefix
+        obtain ⟨more, next, newKept, after, _positive, scanned, shorter, total,
+            nextMembers, newKeptMembers, afterGood, afterContextual, afterSemantic,
+            laterExtension, afterStable, afterIdle, laterTables, laterReturned, afterTrace⟩ :=
+          ih (incomparableReversed := nextIncomparable) (keptReversed := keptReversed)
+            (before := middle) midStable midGood midContextual midSemantic
+            (grows_trans growth extension.heap) (extends_trans history extension.history)
+            midTrace midIdle pivotMember tailMembers nextMembers keptMembers
+        refine ⟨used + 1 + more, next, newKept, after, by omega, ?_, ?_, ?_, nextMembers,
+          newKeptMembers, afterGood, afterContextual, afterSemantic,
+          extension.trans laterExtension, afterStable, afterIdle,
+          extends_trans tables laterTables, retained.trans laterReturned, afterTrace⟩
+        · rw [execute_yielded_add (used + 1) more _ _ _ _ resumedScan]
+          exact scanned
+        · simp only [List.length_cons]
+          omega
+        · simp only [List.length_cons]
+          omega

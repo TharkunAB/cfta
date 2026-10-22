@@ -1,0 +1,38 @@
+import MicroCFTA.SourceRecursiveIntersectionInputIdentity
+import MicroCFTA.SourceRecursiveIntersectionInputCopy
+import MicroCFTA.SourcePhysicalSharedRowsLanguage
+
+/-!
+# Original physical syntax and independent input languages
+
+Physical syntax retains ordered children, complete guards, and least recursive
+binders. Independent input derivations use the actual tagged physical view.
+-/
+namespace MicroCFTA.SourceRecursiveIntersectionInputView
+open Cache Binding BinderLanguage InternedConstructorTemplates InternedProbeProvenance
+open InternedFreshProbeKeys InternedBinderProtocol InternedNestedFacts IntersectSchedule Language
+
+/-- Copied member lists retain their exact order and multiplicity. -/
+theorem shapeValues_map (holds : Guard → Term Symbol → Bool) (values : List (Value Symbol Guard)) :
+    shapeValues holds values = values.map (shape holds) := by
+  induction values with
+  | nil => simp [shapeValues]
+  | cons first rest ih => simp [shapeValues, ih]
+
+/-- Copied row lists retain their exact order and multiplicity. -/
+theorem shapeEdges_map (holds : Guard → Term Symbol → Bool) (edges : List (EdgeValue Symbol Guard)) :
+    shapeEdges holds edges = edges.map (shapeEdge holds) := by
+  induction edges with
+  | nil => simp [shapeEdges]
+  | cons first rest ih => simp [shapeEdges, ih]
+
+/-- Copied physical forests have exactly the corresponding ordered child meanings. -/
+theorem shapeValues_meaning (holds : Guard → Term Symbol → Bool) (environment : Env Symbol)
+    (values : List (Value Symbol Guard)) (terms : List (Term Symbol)) :
+    forest environment (shapeValues holds values) terms ↔
+      All₂ (fun value term => meaning environment (shape holds value) term) values terms := by
+  induction values generalizing terms with
+  | nil =>
+      cases terms with
+      | nil => simp only [shapeValues, forest]; exact ⟨fun _ => .nil, fun _ => trivial⟩
+      | cons term terms => simp only [shapeValues, forest]; constructor <;> intro impossible <;> cases impossible

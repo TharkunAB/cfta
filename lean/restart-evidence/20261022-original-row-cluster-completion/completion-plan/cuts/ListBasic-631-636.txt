@@ -1,0 +1,6 @@
+@[simp, grind =] theorem length_append {as bs : List α} : (as ++ bs).length = as.length + bs.length := by
+  induction as with
+  | nil => simp
+  | cons _ as ih => simp [ih, Nat.succ_add]
+
+@[simp] theorem append_assoc (as bs cs : List α) : (as ++ bs) ++ cs = as ++ (bs ++ cs) := by

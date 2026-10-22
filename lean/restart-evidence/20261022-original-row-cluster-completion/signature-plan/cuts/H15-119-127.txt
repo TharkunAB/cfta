@@ -1,0 +1,9 @@
+  have currentRoom : SourceCurrentAllocatedNativeResourceForecast.Room bits
+      ⟨source.nodes.next, source.edges.next, before.checked.native.machine.domains.next, 0⟩ :=
+    SourceCurrentAllocatedNativeResourceForecast.Room.mono room
+      ⟨Nat.le_refl _, Nat.le_refl _, allocations.next_le, Nat.le_refl _⟩
+  have resources : SourceCurrentAllocatedRecursivePrefixAdmission.Resources bits source inventory initialDomains :=
+    ⟨facts, SourceCurrentAllocatedRecursiveDomainCode.source_closed source facts, initialValid,
+      room.1, room.2.1, Nat.lt_of_le_of_lt (Nat.le_add_right _ _) room.2.2⟩
+  have current : SourceCurrentAllocatedRecursivePrefixState.Current source inventory initialDomains before.checked :=
+    ⟨good, semantic, growth, history, allocations⟩

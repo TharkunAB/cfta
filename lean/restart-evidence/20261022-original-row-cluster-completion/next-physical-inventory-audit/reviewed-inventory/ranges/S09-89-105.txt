@@ -1,0 +1,17 @@
+/-- Original physical node readback selects its actual ordered rows. -/
+theorem rows_readback (state : InternedConstructorTemplates.State Symbol Guard) (facts : Facts state)
+    (holds : Guard → Term Symbol → Bool) (entry : Interned NodeKey) (edges : List (EdgeValue Symbol Guard))
+    (depth : Nat) (free : List Reference) (available : Available state (.node entry edges depth free)) :
+    (view state holds).rows entry.identity = edges.map (row holds) := by
+  simp only [view, payload_readback state facts _ available (.node entry.identity) rfl]
+
+/-- Original physical union readback selects its actual ordered members. -/
+theorem members_readback (state : InternedConstructorTemplates.State Symbol Guard) (facts : Facts state)
+    (holds : Guard → Term Symbol → Bool) (entry : Interned NodeKey) (members : List (Value Symbol Guard))
+    (depth : Nat) (free : List Reference) (available : Available state (.union entry members depth free)) :
+    (view state holds).members entry.identity = members.map inputOf := by
+  simp only [view, payload_readback state facts _ available (.union entry.identity) rfl]
+
+/-- Erase the finite unfolding bound from independent actual input derivations. -/
+def InputLanguage (state : InternedConstructorTemplates.State Symbol Guard) (holds : Guard → Term Symbol → Bool)
+    (input : Input) : Lang Symbol := fun term => ∃ rank, InputDerivation (view state holds) input rank term

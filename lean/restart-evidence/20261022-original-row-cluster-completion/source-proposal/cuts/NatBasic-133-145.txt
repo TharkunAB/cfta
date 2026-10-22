@@ -1,0 +1,13 @@
+/-! # Nat.add theorems -/
+
+@[simp] protected theorem zero_add : ∀ (n : Nat), 0 + n = n
+  | 0   => rfl
+  | n+1 => congrArg succ (Nat.zero_add n)
+instance : Std.LawfulIdentity (α := Nat) (· + ·) 0 where
+  left_id := Nat.zero_add
+  right_id := Nat.add_zero
+
+theorem succ_add : ∀ (n m : Nat), (succ n) + m = succ (n + m)
+  | _, 0   => rfl
+  | n, m+1 => congrArg succ (succ_add n m)
+

@@ -1,0 +1,11 @@
+--- prepare-selected-full.H17-v1.py.txt
++++ prepare-selected-full.py
+@@ -12,7 +12,7 @@
+ assert len(source.splitlines()) == int(expected_lines) and 1 <= int(expected_lines) <= 350
+ assert json.loads((HERE / (stem + '.json')).read_text())['exit_code'] == 0
+ assert (HERE / (stem + '.log')).read_bytes() == b''
+-context = (HERE / 'signature-plan/context.lean.txt').read_bytes()
++context = (HERE / 'source-repair-v2/context.lean.txt').read_bytes()
+ proposed = (HERE / 'signature-plan/proposed-signature.lean.txt').read_bytes()
+ header = proposed.rstrip(b'\n') + b' := by\n'
+ assert source.startswith(context)

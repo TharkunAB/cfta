@@ -1,0 +1,4 @@
+/-- Original stored payloads and their actual lexical copies have equal independent guarded meanings. -/
+theorem original_meaning (holds : Guard → Term Symbol → Bool) (value : Value Symbol Guard) (original : Original value)
+    (ambient : InternedGuardedLanguage.Env Symbol) :
+    InternedGuardedLanguage.meaning holds ambient value = BinderLanguage.meaning (internedEnv ambient) (shape holds value) := by
