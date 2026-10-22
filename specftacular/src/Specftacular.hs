@@ -267,7 +267,7 @@ data Settings = Settings
     , -- \^ The phase and the size after which the search stops, for a profile
       --    of a part of a long run.
       --
-      splitEnumeration :: Int
+      splitEnumeration :: Maybe Int
     , skeletonTemplates :: Bool
     -- ^ Whether the templates of the rules prune the skeletons (spike).
     , parallelBuckets :: Bool
@@ -371,9 +371,11 @@ data SearchOptions = SearchOptions
     background threads, while the buckets test in order. This needs
     @+RTS -N@.
     -}
-    , searchSplit :: Int
-    {- ^ The number of levels of applications by which phase 4 splits the
-    enumeration of its skeletons into parts of one shape (0: no split).
+    , searchSplit :: Maybe Int
+    {- ^ The number of levels of applications by which all phases split the
+    enumeration into parts of one shape (0: no split). With 'Nothing', phase
+    4 splits the skeletons of size k down to k - 1 levels, so that each part
+    has one shape, and phases 1 to 3 split down to 2 levels.
     -}
     , searchBucketTimeout :: Maybe Double
     {- ^ The seconds after which a bucket stops testing its schemas. The
@@ -447,7 +449,7 @@ defaultOptions size phase =
         , searchPhase = phase
         , searchParallel = False
         , searchEnumerateAhead = False
-        , searchSplit = 2
+        , searchSplit = Nothing
         , searchBucketTimeout = Nothing
         , searchBucketMemLimit = Nothing
         , searchCompletionTimeout = Nothing
@@ -470,8 +472,8 @@ defaultOptions size phase =
 @--parallel@, @--enumerate-ahead@, @--split DEPTH@, the limits of a bucket
 (@--bucket-timeout SECONDS@, @--bucket-mem-limit SIZE@), and the limits of the
 completion of one law (@--completion-timeout SECONDS@,
-@--completion-mem-limit SIZE@, @--completion-alloc-limit SIZE@). The split is
-2, unless @--split@ gives it.
+@--completion-mem-limit SIZE@, @--completion-alloc-limit SIZE@). The split
+follows the size, unless @--split@ gives it.
 -}
 parseOptions :: IO SearchOptions
 parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.progDesc "Find the laws of a signature."))
@@ -552,14 +554,14 @@ parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.p
                     "Enumerate the phase 4 skeletons of all the types of a size in background threads, and test the buckets in order (needs +RTS -N)"
             )
     split =
-        O.option
-            O.auto
-            ( O.long "split"
-                <> O.metavar "DEPTH"
-                <> O.value 2
-                <> O.help
-                    "Split the phase 4 skeletons by shape down to DEPTH levels of applications (default 2; 0 does not split)"
-            )
+        O.optional $
+            O.option
+                O.auto
+                ( O.long "split"
+                    <> O.metavar "DEPTH"
+                    <> O.help
+                        "Split the enumeration of all phases by shape down to DEPTH levels of applications (0 does not split). By default, phase 4 gives each shape of a size its own part, and phases 1 to 3 split down to 2 levels"
+                )
     bucketTimeout =
         O.option
             O.auto
@@ -937,6 +939,11 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..}
     | parallelBuckets = goSizes [1 .. size]
     | otherwise = go Map.empty [(lvl, tc) | lvl <- [1 .. size], tc <- ordered, kept lvl tc]
   where
+    -- The depth of the split of the phase 4 skeletons of a size: one part for
+    -- each shape, unless the options give a depth (see 'searchSplit').
+    skeletonSplit lvl = fromMaybe (lvl - 1) splitEnumeration
+    -- The depth of the split of the terms of phases 1 to 3.
+    termSplit = fromMaybe 2 splitEnumeration
     kept lvl tc = case (onlyBucket, stopAfter) of
         (Just only, Just (stopPhase, stopSize)) | stopPhase == diagnosticPhase && stopSize == lvl -> show tc == only
         _ -> True
@@ -1045,22 +1052,22 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..}
     -- The principal typings of the skeletons of a size and a monomorphic type
     -- (see 'generalizeCarriers'). Only templates without annotations prune a
     -- skeleton, because they match each typing of it.
-    -- With 'splitEnumeration', each shape of the left spine is enumerated and
-    -- typed in its own thread, and the parts are joined in their order.
+    -- With a split, each shape of the left spine is enumerated and typed in
+    -- its own thread, and the parts are joined in their order.
     skeletonTypings skeleton lvl monomorphic rules
-        | splitEnumeration > 0 =
+        | skeletonSplit lvl > 0 =
             concat <$> forceInParallel diagnostics lvl monomorphic (skeletonParts skeleton lvl monomorphic rules)
         | otherwise = pure (concat (skeletonParts skeleton lvl monomorphic rules))
     -- The typings of the parts of the skeletons, in their order.
     skeletonParts skeleton@StEcta{compl_sig = skeletonSig} lvl monomorphic rules
-        | splitEnumeration > 0 = map typingsOf (searchSpaceParts splitEnumeration skeleton lvl monomorphic)
+        | skeletonSplit lvl > 0 = map typingsOf (searchSpaceParts (skeletonSplit lvl) skeleton lvl monomorphic)
         | otherwise = [typingsOf (searchSpace skeleton lvl monomorphic)]
       where
         templates
             | canPrune && skeletonTemplates = filter annotationFree (pruningTemplates skeletonSig lvl rules)
             | otherwise = []
         typingsOf space =
-            let (pruningRoot, oracleTemplates) = Compile.preparePruning templates (refold space)
+            let (pruningRoot, oracleTemplates) = preparePruning templates (refold space)
              in mapMaybe (generalizeCarriers skeletonSig phase_variables . npTerm') (prunedTerms oracleTemplates pruningRoot)
     bucket lvl typings tc s = do
         bucketStart <- getMonotonicTimeNSec
@@ -1070,13 +1077,13 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..}
         produced <- case typings of
             Just typingsOfType -> pure $ nubOrd (mapMaybe ($ tc) typingsOfType)
             Nothing
-                | splitEnumeration > 0 ->
+                | termSplit > 0 ->
                     -- Each shape of the spine is reduced and enumerated on its own,
                     -- as for the phase 4 skeletons (see 'spineParts').
                     pure
                         [ canonicalTypes (npTerm' t)
-                        | space <- searchSpaceParts splitEnumeration stecta lvl tc
-                        , let (pruningRoot, oracleTemplates) = Compile.preparePruning bucketTemplates (refold space)
+                        | space <- searchSpaceParts termSplit stecta lvl tc
+                        , let (pruningRoot, oracleTemplates) = preparePruning bucketTemplates (refold space)
                         , t <- prunedTerms oracleTemplates pruningRoot
                         ]
             Nothing -> do
@@ -1087,7 +1094,7 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..}
                 -- The oracle rejects partial branches before their remaining type
                 -- choices expand. The bucket has one program size. KBO orders its
                 -- ties before testing; smaller sizes have already supplied rules.
-                let (pruningRoot, oracleTemplates) = Compile.preparePruning bucketTemplates folded
+                let (pruningRoot, oracleTemplates) = preparePruning bucketTemplates folded
                 pure [canonicalTypes (npTerm' t) | t <- prunedTerms oracleTemplates pruningRoot]
         let terms = sortBy (kboCompare (isGivenVar compl_sig)) (filter eligible produced)
             -- Apply the checks that are already known before retaining the
@@ -1178,16 +1185,22 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..}
 
 -- 2. The candidate terms.
 
--- | The reduced automaton of the terms of a size and a type.
+-- | The reduced automaton of the terms of a size and a type, with merged type alternatives (see 'mergeTypeAlternatives').
 searchSpace :: StEcta -> Int -> TypeSkeleton -> Node Symbol
 searchSpace StEcta{..} lvl tc =
     let !ecta = filterType (union $ tk any_arg lvl) $ typeToFta tc
-     in fixWithin 100 (withoutRedundantEdges . reducePartially) ecta
+     in mergeTypeAlternatives (fixWithin 100 (withoutRedundantEdges . reducePartially) ecta)
+
+{- | 'Compile.preparePruning', and then 'mergeTypeAlternatives' again,
+because its reduction can make overlapping type alternatives.
+-}
+preparePruning :: [Template Symbol] -> Node Symbol -> (Node Symbol, [Template Symbol])
+preparePruning templates = Bi.first mergeTypeAlternatives . Compile.preparePruning templates
 
 -- | 'searchSpace' in disjoint parts, one for each shape of the left spine (see 'spineParts').
 searchSpaceParts :: Int -> StEcta -> Int -> TypeSkeleton -> [Node Symbol]
 searchSpaceParts splitDepth StEcta{..} lvl tc =
-    [ fixWithin 100 (withoutRedundantEdges . reducePartially) (filterType part (typeToFta tc))
+    [ mergeTypeAlternatives (fixWithin 100 (withoutRedundantEdges . reducePartially) (filterType part (typeToFta tc)))
     | part <- spineParts splitDepth any_arg lvl
     ]
 
