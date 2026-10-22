@@ -3095,6 +3095,7 @@ import MicroCFTA.SourceCurrentAllocatedDirectEdgeWordRanges
 import MicroCFTA.SourceCurrentSameSymbolEdgeOriginalRows
 import MicroCFTA.SourceCurrentSameSymbolEdgeComparison
 import MicroCFTA.SourceCurrentSameSymbolEdgeComparisonDomains
+import MicroCFTA.SourceCurrentOriginalRowClusterScan
 /-!
 # Proof dependency audit
 
