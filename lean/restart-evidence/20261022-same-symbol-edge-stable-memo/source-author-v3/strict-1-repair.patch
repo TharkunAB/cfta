@@ -1,0 +1,162 @@
+--- failed-strict-1/same-symbol-edge-stable-strict-1.source.lean
++++ v3/SourceCurrentSameSymbolEdgeStable.lean
+@@ -94,20 +94,31 @@
+       | failed | constraintError | blocked =>
+           simp only [SourceCurrentSameSymbolEdgeControl.execute, SourceCurrentSameSymbolEdgeControl.step, one] at done; cases done
+ 
++private theorem overwrite_cells (cells : Table Nat (FlatMemoThunk.Cell (Edge × Edge) Edge))
++    (handle : Nat) (first second : FlatMemoThunk.Cell (Edge × Edge) Edge) :
++    put (put cells handle first) handle second = put cells handle second := by
++  funext other
++  by_cases same : other = handle <;> simp [put, same]
++
+ private theorem miss_order [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+     (fuel : Nat) (pair : Edge × Edge) (pending : List Nat) (before after : Wrapper width) (result : Edge)
+     (missing : before.memo.table (key pair) = none) (done : run fuel (.call pair pending) before = .done result after) :
+     ∃ rest, run rest (.order before.memo.next pair pending) {before with memo := started pair before.memo} = .done result after := by
+-  cases fuel with
+-  | zero => cases done
+-  | succ fuel =>
+-      cases fuel with
+-      | zero => simp only [SourceCurrentSameSymbolEdgeControl.execute, SourceCurrentSameSymbolEdgeControl.step] at done; cases done
+-      | succ fuel =>
+-          refine ⟨fuel, ?_⟩
+-          simpa only [SourceCurrentSameSymbolEdgeControl.execute, SourceCurrentSameSymbolEdgeControl.step,
+-            FlatMemoThunk.lookupOrInsert, missing, FlatMemoThunk.demand, FlatMemoThunk.setStatus, put, key, started,
+-            if_pos rfl] using done
++  let published := (FlatMemoThunk.lookupOrInsert (key pair) pair before.memo).2
++  have stored : published.cells before.memo.next = some ⟨pair, .suspended⟩ :=
++    (FlatMemoThunk.lookup_miss (key pair) pair before.memo missing).2.2
++  have running : FlatMemoThunk.setStatus before.memo.next .evaluating published = started pair before.memo := by
++    simp only [FlatMemoThunk.setStatus, stored, published, FlatMemoThunk.lookupOrInsert, missing, started, overwrite_cells]
++  have looked : advance (.call pair pending) before = .yielded (.demand before.memo.next pending) {before with memo := published} := by
++    change SourceCurrentSameSymbolEdgeControl.Outcome.yielded
++      (.demand (FlatMemoThunk.lookupOrInsert (key pair) pair before.memo).1 pending) {before with memo := published} = _
++    exact congrArg (fun handle => SourceCurrentSameSymbolEdgeControl.Outcome.yielded (.demand handle pending)
++      {before with memo := published}) (FlatMemoThunk.lookup_miss (key pair) pair before.memo missing).1
++  obtain ⟨remaining, tail⟩ := tail_done fuel _ _ _ _ after result looked done
++  have demanded : advance (.demand before.memo.next pending) {before with memo := published} =
++      .yielded (.order before.memo.next pair pending) {before with memo := started pair before.memo} := by
++    simp only [SourceCurrentSameSymbolEdgeControl.step, FlatMemoThunk.demand, stored, running]
++  exact tail_done remaining _ _ _ _ after result demanded tail
+ 
+ private theorem ready_cell (memo : Memo)
+     (valid : FlatMemoThunk.Valid (fun pair target => key pair = target) (fun _ => True) memo)
+@@ -120,22 +131,24 @@
+ 
+ private theorem finish_started (pair : Edge × Edge) (value : Edge) (memo : Memo) :
+     FlatMemoThunk.finish memo.next value (started pair memo) = written pair value memo := by
+-  simp only [started, written, FlatMemoThunk.finish, FlatMemoThunk.setStatus, put, if_pos rfl]
+-  congr 1
+-  funext handle
+-  by_cases same : handle = memo.next <;> simp [started, written, FlatMemoThunk.finish, FlatMemoThunk.setStatus, put, same]
++  have stored : (started pair memo).cells memo.next = some ⟨pair, .evaluating⟩ := by simp [started, put]
++  simp only [FlatMemoThunk.finish, stored, FlatMemoThunk.setStatus, started, written, overwrite_cells]
+ 
+ private theorem finish_two (left right value : Edge) (memo : Memo) :
+     FlatMemoThunk.finish memo.next value (FlatMemoThunk.finish (memo.next + 1) value
+       (started (right, left) (started (left, right) memo))) =
+       written (right, left) value (written (left, right) value memo) := by
+   have different : memo.next ≠ memo.next + 1 := by omega
+-  simp only [started, written, FlatMemoThunk.finish, FlatMemoThunk.setStatus, put, if_pos rfl, ite_eq_right different]
++  rw [finish_started (right, left) value (started (left, right) memo)]
++  have stored : (written (right, left) value (started (left, right) memo)).cells memo.next =
++      some ⟨(left, right), .evaluating⟩ := by
++    simp only [written, started, put, ite_eq_right different, ↓reduceIte]
++  simp only [FlatMemoThunk.finish, stored, FlatMemoThunk.setStatus, written, started]
+   congr 1
+   funext handle
+   by_cases first : handle = memo.next
+-  · subst handle; simp [different]
+-  · by_cases second : handle = memo.next + 1 <;> simp [first, second]
++  · subst handle; simp [put, different]
++  · by_cases second : handle = memo.next + 1 <;> simp [put, first, second]
+ 
+ private theorem call_image [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+     (fuel : Nat) (left right result : Edge) (before after : Wrapper width)
+@@ -152,13 +165,14 @@
+   cases found : before.memo.table (key (left, right)) with
+   | some handle =>
+       obtain ⟨pair, value, stored⟩ := ready_cell before.memo valid returned _ handle found
++      have literalFound : before.memo.table (left.entry.identity, right.entry.identity) = some handle := found
+       have looked : advance (.call (left, right) []) before = .yielded (.demand handle []) before := by
+-        simp only [SourceCurrentSameSymbolEdgeControl.step, FlatMemoThunk.lookupOrInsert, found]
++        simp only [SourceCurrentSameSymbolEdgeControl.step, FlatMemoThunk.lookupOrInsert, literalFound]
+       obtain ⟨rest, tail⟩ := tail_done fuel _ _ _ _ after result looked done
+       have demanded : advance (.demand handle []) before = .yielded (.ret value []) before := by
+         simp only [SourceCurrentSameSymbolEdgeControl.step, FlatMemoThunk.demand_ready handle before.memo pair value stored]
+       obtain ⟨rest, tail⟩ := tail_done rest _ _ _ _ after result demanded tail
+-      exact Or.inl ⟨by simp [found], by simpa only [List.foldl] using (ret_memo rest value result [] before after tail).2⟩
++      exact Or.inl ⟨by simp, by simpa only [List.foldl] using (ret_memo rest value result [] before after tail).2⟩
+   | none =>
+       obtain ⟨rest, tail⟩ := miss_order fuel (left, right) [] before after result found done
+       let current : Wrapper width := {before with memo := started (left, right) before.memo}
+@@ -172,14 +186,17 @@
+             obtain ⟨pair, value, stored⟩ := ready_cell before.memo valid returned _ handle reverse
+             have fresh : handle ≠ before.memo.next := by have := valid.bounded handle _ stored; omega
+             have currentStored : current.memo.cells handle = some ⟨pair, .returned value⟩ := by simpa only [current, started, put, ite_eq_right fresh] using stored
++            have currentFound : current.memo.table (right.entry.identity, left.entry.identity) = some handle := by
++              change current.memo.table (key (right, left)) = some handle
++              simpa only [current, started, put, ite_eq_right different] using reverse
+             have looked : advance (.call (right, left) [before.memo.next]) current = .yielded (.demand handle [before.memo.next]) current := by
+-              simp only [SourceCurrentSameSymbolEdgeControl.step, current, started, put, ite_eq_right different, FlatMemoThunk.lookupOrInsert, reverse]
++              simp only [SourceCurrentSameSymbolEdgeControl.step, FlatMemoThunk.lookupOrInsert, currentFound]
+             obtain ⟨rest, tail⟩ := tail_done rest _ _ _ _ after result looked tail
+             have demanded : advance (.demand handle [before.memo.next]) current = .yielded (.ret value [before.memo.next]) current := by
+               simp only [SourceCurrentSameSymbolEdgeControl.step, FlatMemoThunk.demand_ready handle current.memo pair value currentStored]
+             obtain ⟨rest, tail⟩ := tail_done rest _ _ _ _ after result demanded tail
+             obtain ⟨rfl, image⟩ := ret_memo rest value result _ current after tail
+-            exact Or.inr (Or.inl ⟨found, Or.inr (by simp [reverse]), by simpa only [List.foldl, current, finish_started] using image⟩)
++            exact Or.inr (Or.inl ⟨rfl, Or.inr (by simp), by simpa only [List.foldl, current, finish_started] using image⟩)
+         | none =>
+             have missing : current.memo.table (key (right, left)) = none := by simpa only [current, started, put, ite_eq_right different] using reverse
+             obtain ⟨rest, tail⟩ := miss_order rest (right, left) [before.memo.next] current after result missing tail
+@@ -190,7 +207,7 @@
+               simp only [SourceCurrentSameSymbolEdgeControl.step, forward, ↓reduceIte]
+             obtain ⟨rest, tail⟩ := tail_done rest _ _ _ _ after result ordered tail
+             have image := native_memo rest _ _ next after result tail
+-            refine Or.inr (Or.inr ⟨swap, found, reverse, ?_⟩)
++            refine Or.inr (Or.inr ⟨swap, rfl, rfl, ?_⟩)
+             calc after.memo = FlatMemoThunk.finish before.memo.next result
+                     (FlatMemoThunk.finish (before.memo.next + 1) result (started (right, left) (started (left, right) before.memo))) := by
+                       simpa only [List.foldl, next, current, started] using image
+@@ -200,7 +217,7 @@
+           simp only [SourceCurrentSameSymbolEdgeControl.step, swap, ↓reduceIte]
+         obtain ⟨rest, tail⟩ := tail_done rest _ _ _ _ after result ordered tail
+         have image := native_memo rest _ _ current after result tail
+-        exact Or.inr (Or.inl ⟨found, Or.inl swap, by simpa only [List.foldl, current, finish_started] using image⟩)
++        exact Or.inr (Or.inl ⟨rfl, Or.inl swap, by simpa only [List.foldl, current, finish_started] using image⟩)
+ 
+ private theorem written_fields (pair : Edge × Edge) (value : Edge) (memo : Memo)
+     (good : FlatMemoThunk.Cell (Edge × Edge) Edge → Prop)
+@@ -217,7 +234,7 @@
+     (FlatMemoThunk.lookup_miss (key pair) pair memo missing).2.2
+   have changed := FlatMemoThunk.setStatus_valid memo.next (.returned value) published _ good publishedValid _ stored finished
+   refine ⟨?_, ?_, ?_, ?_⟩
+-  · simpa [written, published, FlatMemoThunk.lookupOrInsert, missing, FlatMemoThunk.setStatus, put] using changed
++  · simpa only [FlatMemoThunk.setStatus, stored, published, FlatMemoThunk.lookupOrInsert, missing, written, overwrite_cells] using changed
+   · intro handle cell present
+     by_cases same : handle = memo.next
+     · subst handle
+@@ -277,7 +294,7 @@
+         | none => exact False.elim (present found)
+         | some canonical =>
+             exact ⟨canonical, by simpa only [swap, ↓reduceIte, key] using extension _ _ found⟩
+-      · exact ⟨before.memo.next, by simp only [swap, ↓reduceIte, written, key, put, if_pos rfl]⟩
++      · exact ⟨before.memo.next, by simp only [swap, ↓reduceIte, written, key, put]⟩
+     · have old : before.memo.table (a, b) = some handle := by
+         simpa only [written, put, ite_eq_right newKey] using stored
+       obtain ⟨canonical, present⟩ := stable.canonical a b handle old
+@@ -300,10 +317,10 @@
+     intro a b handle stored
+     by_cases reverseKey : (a, b) = key (right, left)
+     · rcases Prod.mk.inj reverseKey with ⟨rfl, rfl⟩
+-      exact ⟨before.memo.next + 1, by simp only [forward, ↓reduceIte, written, key, put, if_pos rfl]⟩
++      exact ⟨before.memo.next + 1, by simp only [forward, ↓reduceIte, written, key, put]⟩
+     · by_cases originalKey : (a, b) = key (left, right)
+       · rcases Prod.mk.inj originalKey with ⟨rfl, rfl⟩
+-        exact ⟨before.memo.next + 1, by simp only [swap, ↓reduceIte, written, key, put, if_pos rfl]⟩
++        exact ⟨before.memo.next + 1, by simp only [swap, ↓reduceIte, written, key, put]⟩
+       · have old : before.memo.table (a, b) = some handle := by
+           simpa only [written, put, ite_eq_right reverseKey, ite_eq_right originalKey] using stored
+         obtain ⟨canonical, present⟩ := stable.canonical a b handle old

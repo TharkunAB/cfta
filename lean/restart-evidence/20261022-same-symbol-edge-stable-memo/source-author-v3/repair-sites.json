@@ -1,0 +1,50 @@
+[
+  {
+    "before": "private theorem miss_order",
+    "after": "private theorem overwrite_cells (cells : Table Nat (FlatMemoThunk.Cell (Edge × Edge) Edge))\n    (handle : Nat) (first second : FlatMemoThunk.Cell (Edge × Edge) Edge) :\n    put (put cells handle first) handle second = put cells handle second := by\n  funext other\n  by_cases same : other = handle <;> simp [put, same]\n\nprivate theorem miss_order"
+  },
+  {
+    "before": "  cases fuel with\n  | zero => cases done\n  | succ fuel =>\n      cases fuel with\n      | zero => simp only [SourceCurrentSameSymbolEdgeControl.execute, SourceCurrentSameSymbolEdgeControl.step] at done; cases done\n      | succ fuel =>\n          refine ⟨fuel, ?_⟩\n          simpa only [SourceCurrentSameSymbolEdgeControl.execute, SourceCurrentSameSymbolEdgeControl.step,\n            FlatMemoThunk.lookupOrInsert, missing, FlatMemoThunk.demand, FlatMemoThunk.setStatus, put, key, started,\n            if_pos rfl] using done",
+    "after": "  let published := (FlatMemoThunk.lookupOrInsert (key pair) pair before.memo).2\n  have stored := (FlatMemoThunk.lookup_miss (key pair) pair before.memo missing).2.2\n  have running : FlatMemoThunk.setStatus before.memo.next .evaluating published = started pair before.memo := by\n    simp only [FlatMemoThunk.setStatus, stored, published, FlatMemoThunk.lookupOrInsert, missing, started, overwrite_cells]\n  have looked : advance (.call pair pending) before = .yielded (.demand before.memo.next pending) {before with memo := published} := by\n    change SourceCurrentSameSymbolEdgeControl.Outcome.yielded\n      (.demand (FlatMemoThunk.lookupOrInsert (key pair) pair before.memo).1 pending) {before with memo := published} = _\n    exact congrArg (fun handle => SourceCurrentSameSymbolEdgeControl.Outcome.yielded (.demand handle pending)\n      {before with memo := published}) (FlatMemoThunk.lookup_miss (key pair) pair before.memo missing).1\n  obtain ⟨remaining, tail⟩ := tail_done fuel _ _ _ _ after result looked done\n  have demanded : advance (.demand before.memo.next pending) {before with memo := published} =\n      .yielded (.order before.memo.next pair pending) {before with memo := started pair before.memo} := by\n    simp only [SourceCurrentSameSymbolEdgeControl.step, FlatMemoThunk.demand, stored, running]\n  exact tail_done remaining _ _ _ _ after result demanded tail"
+  },
+  {
+    "before": "  simp only [started, written, FlatMemoThunk.finish, FlatMemoThunk.setStatus, put, if_pos rfl]\n  congr 1\n  funext handle\n  by_cases same : handle = memo.next <;> simp [started, written, FlatMemoThunk.finish, FlatMemoThunk.setStatus, put, same]",
+    "after": "  have stored : (started pair memo).cells memo.next = some ⟨pair, .evaluating⟩ := by simp [started, put]\n  simp only [FlatMemoThunk.finish, stored, FlatMemoThunk.setStatus, started, written, overwrite_cells]"
+  },
+  {
+    "before": "  have different : memo.next ≠ memo.next + 1 := by omega\n  simp only [started, written, FlatMemoThunk.finish, FlatMemoThunk.setStatus, put, if_pos rfl, ite_eq_right different]\n  congr 1\n  funext handle\n  by_cases first : handle = memo.next\n  · subst handle; simp [different]\n  · by_cases second : handle = memo.next + 1 <;> simp [first, second]",
+    "after": "  have different : memo.next ≠ memo.next + 1 := by omega\n  rw [finish_started (right, left) value (started (left, right) memo)]\n  have stored : (written (right, left) value (started (left, right) memo)).cells memo.next =\n      some ⟨(left, right), .evaluating⟩ := by\n    simp only [written, started, put, ite_eq_right different, ↓reduceIte]\n  simp only [FlatMemoThunk.finish, stored, FlatMemoThunk.setStatus, written, started]\n  congr 1\n  funext handle\n  by_cases first : handle = memo.next\n  · subst handle; simp [put, different]\n  · by_cases second : handle = memo.next + 1 <;> simp [put, first, second]"
+  },
+  {
+    "before": "      have looked : advance (.call (left, right) []) before = .yielded (.demand handle []) before := by\n        simp only [SourceCurrentSameSymbolEdgeControl.step, FlatMemoThunk.lookupOrInsert, found]",
+    "after": "      have literalFound : before.memo.table (left.entry.identity, right.entry.identity) = some handle := found\n      have looked : advance (.call (left, right) []) before = .yielded (.demand handle []) before := by\n        simp only [SourceCurrentSameSymbolEdgeControl.step, FlatMemoThunk.lookupOrInsert, literalFound]"
+  },
+  {
+    "before": "      exact Or.inl ⟨by simp [found], by simpa only [List.foldl] using (ret_memo rest value result [] before after tail).2⟩",
+    "after": "      exact Or.inl ⟨by simp, by simpa only [List.foldl] using (ret_memo rest value result [] before after tail).2⟩"
+  },
+  {
+    "before": "            have looked : advance (.call (right, left) [before.memo.next]) current = .yielded (.demand handle [before.memo.next]) current := by\n              simp only [SourceCurrentSameSymbolEdgeControl.step, current, started, put, ite_eq_right different, FlatMemoThunk.lookupOrInsert, reverse]",
+    "after": "            have currentFound : current.memo.table (right.entry.identity, left.entry.identity) = some handle := by\n              change current.memo.table (key (right, left)) = some handle\n              simpa only [current, started, put, ite_eq_right different] using reverse\n            have looked : advance (.call (right, left) [before.memo.next]) current = .yielded (.demand handle [before.memo.next]) current := by\n              simp only [SourceCurrentSameSymbolEdgeControl.step, FlatMemoThunk.lookupOrInsert, currentFound]"
+  },
+  {
+    "before": "            exact Or.inr (Or.inl ⟨found, Or.inr (by simp [reverse]), by simpa only [List.foldl, current, finish_started] using image⟩)",
+    "after": "            exact Or.inr (Or.inl ⟨rfl, Or.inr (by simp), by simpa only [List.foldl, current, finish_started] using image⟩)"
+  },
+  {
+    "before": "            refine Or.inr (Or.inr ⟨swap, found, reverse, ?_⟩)",
+    "after": "            refine Or.inr (Or.inr ⟨swap, rfl, rfl, ?_⟩)"
+  },
+  {
+    "before": "        exact Or.inr (Or.inl ⟨found, Or.inl swap, by simpa only [List.foldl, current, finish_started] using image⟩)",
+    "after": "        exact Or.inr (Or.inl ⟨rfl, Or.inl swap, by simpa only [List.foldl, current, finish_started] using image⟩)"
+  },
+  {
+    "before": "  · simpa [written, published, FlatMemoThunk.lookupOrInsert, missing, FlatMemoThunk.setStatus, put] using changed",
+    "after": "  · simpa only [FlatMemoThunk.setStatus, stored, published, FlatMemoThunk.lookupOrInsert, missing, written, overwrite_cells] using changed"
+  },
+  {
+    "before": "Remaining three canonical-presence simp lists include if_pos rfl.",
+    "after": "Delete only the unused deprecated argument from each list."
+  }
+]

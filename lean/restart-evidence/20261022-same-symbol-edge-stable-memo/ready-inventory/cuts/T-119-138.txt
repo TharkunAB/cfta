@@ -1,0 +1,20 @@
+theorem lookup_stored [DecidableEq Key] (key : Key) (request : Request) (state : State Key Request Value) :
+    (lookupOrInsert key request state).2.table key = some (lookupOrInsert key request state).1 := by
+  cases found : state.table key <;> simp [lookupOrInsert, found, put]
+
+/-- A ready demand identifies the original returned cell and leaves the entire memo unchanged. -/
+theorem demand_ready_original (handle : Nat) (state : State Key Request Value) (value : Value) (after : State Key Request Value)
+    (ready : demand handle state = (.ready value, after)) :
+    ∃ original, state.cells handle = some ⟨original, .returned value⟩ ∧ after = state := by
+  cases found : state.cells handle with
+  | none => simp only [demand, found] at ready; cases ready
+  | some cell =>
+      cases cell with
+      | mk original status =>
+          cases status with
+          | suspended | evaluating => simp only [demand, found] at ready; cases ready
+          | returned result =>
+              have same := Prod.mk.inj (by simpa only [demand, found] using ready)
+              have values := Observation.ready.inj same.1
+              subst result
+              exact ⟨original, rfl, same.2.symm⟩

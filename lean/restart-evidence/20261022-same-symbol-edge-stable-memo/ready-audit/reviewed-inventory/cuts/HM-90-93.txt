@@ -1,0 +1,4 @@
+-- | Memoize one application in an explicitly supplied table.
+memoWith :: (Hashable a) => MemoCache a b -> (a -> b) -> a -> b
+{-# INLINEABLE memoWith #-}
+memoWith (MemoCache table) f x = unsafeDupablePerformIO $ insertKeepingFirst table x (f x)

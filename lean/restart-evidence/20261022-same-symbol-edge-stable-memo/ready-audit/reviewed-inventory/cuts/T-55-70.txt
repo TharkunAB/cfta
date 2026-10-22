@@ -1,0 +1,16 @@
+theorem finish_returned (handle : Nat) (value : Value) (state : State Key Request Value) : Returned state (finish handle value state) := by
+  intro other original result returned
+  cases found : state.cells handle with
+  | none => simpa only [finish, found] using returned
+  | some cell =>
+      cases cell with
+      | mk request status =>
+          cases status with
+          | suspended | returned previous => simpa only [finish, found] using returned
+          | evaluating =>
+              have different : other ≠ handle := by
+                intro same
+                subst other
+                have impossible := Option.some.inj (returned.symm.trans found)
+                cases impossible
+              simpa only [finish, found, setStatus, put, ite_eq_right different] using returned

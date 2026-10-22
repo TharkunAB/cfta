@@ -1,0 +1,22 @@
+        if let some isEmpty ← declModifiersDocStatus head then
+          lintDocStatusField isEmpty rest[1][0] stx[1] "computed field"
+  else if rest.getKind == ``«structure» then
+    unless rest[4][2].isNone do
+      let redecls : Std.HashSet String.Pos.Raw :=
+        (← get).infoState.trees.foldl (init := {}) fun s tree =>
+          tree.foldInfo (init := s) fun _ info s =>
+            if let .ofFieldRedeclInfo info := info then
+              if let some range := info.stx.getRange? then
+                s.insert range.start
+              else s
+            else s
+      let parent := rest[1][0]
+      let lint1 isEmpty stx := do
+        if let some range := stx.getRange? then
+          if redecls.contains range.start then return
+        lintDocStatusField isEmpty parent stx "public field"
+      for stx in rest[4][2][0].getArgs do
+        let head := stx[0]
+        if let some isEmpty ← declModifiersDocStatus head then
+          if stx.getKind == ``structSimpleBinder then
+            lint1 isEmpty stx[1]

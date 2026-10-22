@@ -1,0 +1,37 @@
+/-- Only returned cells require a relation between the original request and result. -/
+def CellSpec (spec : Request → Value → Prop) (cell : Cell Request Value) : Prop :=
+  match cell.status with
+  | .returned value => spec cell.request value
+  | _ => True
+
+/-- Starting a suspended request preserves every established result specification. -/
+theorem demand_spec (handle : Nat) (state : State Key Request Value) (keyOf : Request → Key → Prop)
+    (spec : Request → Value → Prop) (valid : Valid keyOf (CellSpec spec) state) :
+    Valid keyOf (CellSpec spec) (demand handle state).2 := by
+  cases found : state.cells handle with
+  | none => simpa only [demand, found] using valid
+  | some cell =>
+      cases cell with
+      | mk request status =>
+          cases status with
+          | evaluating | returned value => simpa only [demand, found] using valid
+          | suspended =>
+              simp only [demand, found]
+              exact setStatus_valid handle .evaluating state _ _ valid _ found trivial
+
+/-- Completion checks the result against the request actually stored in the running cell. -/
+theorem finish_spec (handle : Nat) (value : Value) (state : State Key Request Value)
+    (keyOf : Request → Key → Prop) (spec : Request → Value → Prop)
+    (valid : Valid keyOf (CellSpec spec) state)
+    (completed : ∀ request, state.cells handle = some ⟨request, .evaluating⟩ → spec request value) :
+    Valid keyOf (CellSpec spec) (finish handle value state) := by
+  cases found : state.cells handle with
+  | none => simpa only [finish, found] using valid
+  | some cell =>
+      cases cell with
+      | mk request status =>
+          cases status with
+          | suspended | returned previous => simpa only [finish, found] using valid
+          | evaluating =>
+              simp only [finish, found]
+              exact setStatus_valid handle (.returned value) state _ _ valid _ found (completed request found)

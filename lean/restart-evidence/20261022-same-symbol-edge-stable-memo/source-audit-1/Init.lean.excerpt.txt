@@ -1,0 +1,7 @@
+  envLinterOptionsRef.modify (·.push opt)
+
+def getLinterAll (o : LinterOptions) (defValue := linter.all.defValue) : Bool :=
+    o.get linter.all.name defValue
+
+def getLinterValue (opt : Lean.Option Bool) (o : LinterOptions) : Bool :=
+  o.get opt.name (getLinterAll o <| (o.getSet opt).any (o.get? · == some true) || opt.defValue)

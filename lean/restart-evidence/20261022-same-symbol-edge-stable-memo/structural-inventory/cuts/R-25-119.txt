@@ -1,0 +1,95 @@
+theorem lookup_running [DecidableEq Key] (key : Key) (request : Request) (state : State Key Request Value)
+    (keyOf : Request → Key → Prop) (valid : Valid keyOf (fun _ => True) state) :
+    Running state (lookupOrInsert key request state).2 := by
+  intro handle original stored
+  cases found : state.table key with
+  | some existing => simpa only [lookupOrInsert, found] using stored
+  | none =>
+    have different : handle ≠ state.next := by have := valid.bounded handle _ stored; omega
+    simpa only [lookupOrInsert, found, put, ite_eq_right different] using stored
+
+/-- Demand preserves structural validity without an assumed result property. -/
+theorem demand_valid (handle : Nat) (state : State Key Request Value) (keyOf : Request → Key → Prop)
+    (valid : Valid keyOf (fun _ => True) state) : Valid keyOf (fun _ => True) (demand handle state).2 := by
+  cases stored : state.cells handle with
+  | none => simpa only [demand, stored] using valid
+  | some cell =>
+    cases cell with
+    | mk request status =>
+      cases status with
+      | suspended =>
+        simp only [demand, stored]
+        exact setStatus_valid handle .evaluating state _ _ valid _ stored trivial
+      | evaluating | returned value => simpa only [demand, stored] using valid
+
+/-- Demanding another cell cannot reset an already-running request. -/
+theorem demand_running (handle : Nat) (state : State Key Request Value) : Running state (demand handle state).2 := by
+  intro other original running
+  cases found : state.cells handle with
+  | none => simpa only [demand, found] using running
+  | some cell =>
+    cases cell with
+    | mk request status =>
+      cases status with
+      | suspended =>
+        have different : other ≠ handle := by
+          intro same
+          subst other
+          have impossible := Option.some.inj (running.symm.trans found)
+          cases impossible
+        simpa only [demand, found, setStatus, put, ite_eq_right different] using running
+      | evaluating | returned value => simpa only [demand, found] using running
+
+/-- Starting evaluation identifies the original suspended cell and exact returned running cell. -/
+theorem demand_evaluate (handle : Nat) (state after : State Key Request Value) (request : Request)
+    (started : demand handle state = (.evaluate request, after)) :
+    state.cells handle = some ⟨request, .suspended⟩ ∧ after.cells handle = some ⟨request, .evaluating⟩ := by
+  cases found : state.cells handle with
+  | none => simp only [demand, found] at started; cases started
+  | some cell =>
+    cases cell with
+    | mk original status =>
+      cases status with
+      | evaluating | returned value => simp only [demand, found] at started; cases started
+      | suspended =>
+        have same := Prod.mk.inj (by simpa only [demand, found] using started)
+        have requests : original = request := Observation.evaluate.inj same.1
+        subst original
+        rcases same.2 with rfl
+        exact ⟨rfl, setStatus_cell handle .evaluating state _ found⟩
+
+/-- Completion preserves original request links and fresh allocation bounds in every phase. -/
+theorem finish_valid (handle : Nat) (value : Value) (state : State Key Request Value) (keyOf : Request → Key → Prop)
+    (valid : Valid keyOf (fun _ => True) state) : Valid keyOf (fun _ => True) (finish handle value state) := by
+  cases found : state.cells handle with
+  | none => simpa only [finish, found] using valid
+  | some cell =>
+    cases cell with
+    | mk request status =>
+      cases status with
+      | suspended | returned value => simpa only [finish, found] using valid
+      | evaluating =>
+        simp only [finish, found]
+        exact setStatus_valid handle (.returned value) state _ _ valid _ found trivial
+
+/-- Completion does not change any different running cell. -/
+theorem finish_running_other (handle other : Nat) (value : Value) (state : State Key Request Value) (request : Request)
+    (different : other ≠ handle) (running : state.cells other = some ⟨request, .evaluating⟩) :
+    (finish handle value state).cells other = some ⟨request, .evaluating⟩ := by
+  cases found : state.cells handle with
+  | none => simpa only [finish, found] using running
+  | some cell =>
+    cases cell with
+    | mk original status =>
+      cases status with
+      | suspended | returned value => simpa only [finish, found] using running
+      | evaluating => simpa only [finish, found, setStatus, put, ite_eq_right different] using running
+
+/-- Finishing a running request retains that exact request with its actual returned value. -/
+theorem finish_evaluating (handle : Nat) (value : Value) (state : State Key Request Value) (request : Request)
+    (running : state.cells handle = some ⟨request, .evaluating⟩) :
+    (finish handle value state).cells handle = some ⟨request, .returned value⟩ := by
+  simp only [finish, running]
+  exact setStatus_cell handle (.returned value) state _ running
+
+end MicroCFTA.FlatMemoThunk

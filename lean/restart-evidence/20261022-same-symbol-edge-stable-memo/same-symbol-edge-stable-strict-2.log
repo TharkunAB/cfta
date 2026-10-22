@@ -1,0 +1,100 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261022-same-symbol-edge-stable-memo/same-symbol-edge-stable-strict-2.source.lean:110:110: error: unsolved goals
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+fuel : Nat
+pair : Edge × Edge
+pending : List Nat
+before after : Wrapper width
+result : Edge
+missing : before.memo.table (key pair) = none
+done :
+  run fuel (SourceCurrentSameSymbolEdgeControl.Control.call pair pending) before =
+    SourceCurrentSameSymbolEdgeControl.Outcome.done result after
+published : FlatMemoThunk.State (Nat × Nat) (Edge × Edge) Edge :=
+  (FlatMemoThunk.lookupOrInsert (key pair) pair before.memo).snd
+stored : published.cells before.memo.next = some { request := pair, status := FlatMemoThunk.Status.suspended }
+⊢ (match
+      put before.memo.cells before.memo.next { request := pair, status := FlatMemoThunk.Status.suspended }
+        before.memo.next with
+    | none =>
+      { table := put before.memo.table (key pair) before.memo.next,
+        cells := put before.memo.cells before.memo.next { request := pair, status := FlatMemoThunk.Status.suspended },
+        next := before.memo.next + 1 }
+    | some cell =>
+      { table := put before.memo.table (key pair) before.memo.next,
+        cells :=
+          put before.memo.cells before.memo.next { request := cell.request, status := FlatMemoThunk.Status.evaluating },
+        next := before.memo.next + 1 }) =
+    { table := put before.memo.table (key pair) before.memo.next,
+      cells := put before.memo.cells before.memo.next { request := pair, status := FlatMemoThunk.Status.evaluating },
+      next := before.memo.next + 1 }
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261022-same-symbol-edge-stable-memo/same-symbol-edge-stable-strict-2.source.lean:111:40: warning: This simp argument is unused:
+  stored
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [FlatMemoThunk.setStatus, published, FlatMemoThunk.lookupOrInsert, missing, started,
+    overwrite_cells]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261022-same-symbol-edge-stable-memo/same-symbol-edge-stable-strict-2.source.lean:133:90: error: unsolved goals
+pair : Edge × Edge
+value : Edge
+memo : Memo
+stored : (started pair memo).cells memo.next = some { request := pair, status := FlatMemoThunk.Status.evaluating }
+⊢ (match put memo.cells memo.next { request := pair, status := FlatMemoThunk.Status.evaluating } memo.next with
+    | some { request := request, status := FlatMemoThunk.Status.evaluating } =>
+      match put memo.cells memo.next { request := pair, status := FlatMemoThunk.Status.evaluating } memo.next with
+      | none =>
+        { table := put memo.table (key pair) memo.next,
+          cells := put memo.cells memo.next { request := pair, status := FlatMemoThunk.Status.evaluating },
+          next := memo.next + 1 }
+      | some cell =>
+        { table := put memo.table (key pair) memo.next,
+          cells := put memo.cells memo.next { request := cell.request, status := FlatMemoThunk.Status.returned value },
+          next := memo.next + 1 }
+    | x =>
+      { table := put memo.table (key pair) memo.next,
+        cells := put memo.cells memo.next { request := pair, status := FlatMemoThunk.Status.evaluating },
+        next := memo.next + 1 }) =
+    { table := put memo.table (key pair) memo.next,
+      cells := put memo.cells memo.next { request := pair, status := FlatMemoThunk.Status.returned value },
+      next := memo.next + 1 }
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261022-same-symbol-edge-stable-memo/same-symbol-edge-stable-strict-2.source.lean:135:35: warning: This simp argument is unused:
+  stored
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [FlatMemoThunk.finish, FlatMemoThunk.setStatus, started, written, overwrite_cells]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261022-same-symbol-edge-stable-memo/same-symbol-edge-stable-strict-2.source.lean:142:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FlatMemoThunk.finish (started (left, right) memo).next value (started (right, left) (started (left, right) memo))
+in the target expression
+  FlatMemoThunk.finish memo.next value
+      (FlatMemoThunk.finish (memo.next + 1) value (started (right, left) (started (left, right) memo))) =
+    written (right, left) value (written (left, right) value memo)
+
+left right value : Edge
+memo : Memo
+different : memo.next ≠ memo.next + 1
+⊢ FlatMemoThunk.finish memo.next value
+      (FlatMemoThunk.finish (memo.next + 1) value (started (right, left) (started (left, right) memo))) =
+    written (right, left) value (written (left, right) value memo)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261022-same-symbol-edge-stable-memo/same-symbol-edge-stable-strict-2.source.lean:237:4: error: Type mismatch: After simplification, term
+  changed
+ has type
+  FlatMemoThunk.Valid (fun pair target => key pair = target) good
+    (match put memo.cells memo.next { request := pair, status := FlatMemoThunk.Status.suspended } memo.next with
+    | none =>
+      { table := put memo.table (key pair) memo.next,
+        cells := put memo.cells memo.next { request := pair, status := FlatMemoThunk.Status.suspended },
+        next := memo.next + 1 }
+    | some cell =>
+      { table := put memo.table (key pair) memo.next,
+        cells := put memo.cells memo.next { request := cell.request, status := FlatMemoThunk.Status.returned value },
+        next := memo.next + 1 })
+but is expected to have type
+  FlatMemoThunk.Valid (fun pair target => key pair = target) good
+    { table := put memo.table (key pair) memo.next,
+      cells := put memo.cells memo.next { request := pair, status := FlatMemoThunk.Status.returned value },
+      next := memo.next + 1 }

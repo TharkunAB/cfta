@@ -1,0 +1,51 @@
+--- failed-strict-2.source.lean
++++ selected-v4.source.lean
+@@ -108,7 +108,8 @@
+   have stored : published.cells before.memo.next = some ⟨pair, .suspended⟩ :=
+     (FlatMemoThunk.lookup_miss (key pair) pair before.memo missing).2.2
+   have running : FlatMemoThunk.setStatus before.memo.next .evaluating published = started pair before.memo := by
+-    simp only [FlatMemoThunk.setStatus, stored, published, FlatMemoThunk.lookupOrInsert, missing, started, overwrite_cells]
++    simp only [FlatMemoThunk.setStatus, stored]
++    simp only [published, FlatMemoThunk.lookupOrInsert, missing, started, overwrite_cells]
+   have looked : advance (.call pair pending) before = .yielded (.demand before.memo.next pending) {before with memo := published} := by
+     change SourceCurrentSameSymbolEdgeControl.Outcome.yielded
+       (.demand (FlatMemoThunk.lookupOrInsert (key pair) pair before.memo).1 pending) {before with memo := published} = _
+@@ -132,18 +133,25 @@
+ private theorem finish_started (pair : Edge × Edge) (value : Edge) (memo : Memo) :
+     FlatMemoThunk.finish memo.next value (started pair memo) = written pair value memo := by
+   have stored : (started pair memo).cells memo.next = some ⟨pair, .evaluating⟩ := by simp [started, put]
+-  simp only [FlatMemoThunk.finish, stored, FlatMemoThunk.setStatus, started, written, overwrite_cells]
++  simp only [FlatMemoThunk.finish, stored]
++  simp only [FlatMemoThunk.setStatus, stored]
++  simp only [started, written, overwrite_cells]
+ 
+ private theorem finish_two (left right value : Edge) (memo : Memo) :
+     FlatMemoThunk.finish memo.next value (FlatMemoThunk.finish (memo.next + 1) value
+       (started (right, left) (started (left, right) memo))) =
+       written (right, left) value (written (left, right) value memo) := by
+   have different : memo.next ≠ memo.next + 1 := by omega
+-  rw [finish_started (right, left) value (started (left, right) memo)]
++  have inner : FlatMemoThunk.finish (memo.next + 1) value (started (right, left) (started (left, right) memo)) =
++      written (right, left) value (started (left, right) memo) :=
++    finish_started (right, left) value (started (left, right) memo)
++  rw [inner]
+   have stored : (written (right, left) value (started (left, right) memo)).cells memo.next =
+       some ⟨(left, right), .evaluating⟩ := by
+     simp only [written, started, put, ite_eq_right different, ↓reduceIte]
+-  simp only [FlatMemoThunk.finish, stored, FlatMemoThunk.setStatus, written, started]
++  simp only [FlatMemoThunk.finish, stored]
++  simp only [FlatMemoThunk.setStatus, stored]
++  simp only [written, started]
+   congr 1
+   funext handle
+   by_cases first : handle = memo.next
+@@ -234,7 +242,8 @@
+     (FlatMemoThunk.lookup_miss (key pair) pair memo missing).2.2
+   have changed := FlatMemoThunk.setStatus_valid memo.next (.returned value) published _ good publishedValid _ stored finished
+   refine ⟨?_, ?_, ?_, ?_⟩
+-  · simpa only [FlatMemoThunk.setStatus, stored, published, FlatMemoThunk.lookupOrInsert, missing, written, overwrite_cells] using changed
++  · simp only [FlatMemoThunk.setStatus, stored] at changed
++    simpa only [published, FlatMemoThunk.lookupOrInsert, missing, written, overwrite_cells] using changed
+   · intro handle cell present
+     by_cases same : handle = memo.next
+     · subst handle

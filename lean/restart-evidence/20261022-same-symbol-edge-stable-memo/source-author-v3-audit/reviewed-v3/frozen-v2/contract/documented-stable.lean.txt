@@ -1,0 +1,24 @@
+/-- A completed boundary retains exact pair links, resident records and canonical laws. -/
+structure Stable (semanticView : View Symbol) (model : InputMeaning semanticView)
+    (ranked : RankedInput semanticView model.valid) (holds : Guard → Term Symbol → Bool)
+    (state : Wrapper width) : Prop where
+  /-- The table links captured requests to resident cells with canonical result laws. -/
+  valid : FlatMemoThunk.Valid
+    (fun (pair : Edge × Edge) (key : Nat × Nat) =>
+      (pair.1.entry.identity, pair.2.entry.identity) = key)
+    (fun cell =>
+      EdgeResident state.checked.native.machine.heap cell.request.1 ∧
+      EdgeResident state.checked.native.machine.heap cell.request.2 ∧
+      FlatMemoThunk.CellSpec (fun pair value =>
+        let ordered := if pair.2.entry.identity < pair.1.entry.identity then (pair.2, pair.1) else pair
+        EdgeResident state.checked.native.machine.heap value ∧
+          SourceCurrentAllocatedNativeContextCache.EdgeLaw semanticView model ranked holds
+            ⟨IntersectionEmptyDomain.emptyDomain, ordered.1, ordered.2⟩ value) cell)
+    state.memo
+  /-- Every allocated cell has a returned result. -/
+  returned : ∀ handle cell, state.memo.cells handle = some cell →
+    ∃ value, cell.status = .returned value
+  /-- Every published pair has its canonical ordered key. -/
+  canonical : ∀ first second handle, state.memo.table (first, second) = some handle →
+    ∃ orderedHandle, state.memo.table
+      (if second < first then (second, first) else (first, second)) = some orderedHandle

@@ -1,0 +1,12 @@
+--- preflight-328.source.lean.txt
++++ SourceCurrentSameSymbolEdgeStable.lean
+@@ -105,7 +105,8 @@
+     (missing : before.memo.table (key pair) = none) (done : run fuel (.call pair pending) before = .done result after) :
+     ∃ rest, run rest (.order before.memo.next pair pending) {before with memo := started pair before.memo} = .done result after := by
+   let published := (FlatMemoThunk.lookupOrInsert (key pair) pair before.memo).2
+-  have stored := (FlatMemoThunk.lookup_miss (key pair) pair before.memo missing).2.2
++  have stored : published.cells before.memo.next = some ⟨pair, .suspended⟩ :=
++    (FlatMemoThunk.lookup_miss (key pair) pair before.memo missing).2.2
+   have running : FlatMemoThunk.setStatus before.memo.next .evaluating published = started pair before.memo := by
+     simp only [FlatMemoThunk.setStatus, stored, published, FlatMemoThunk.lookupOrInsert, missing, started, overwrite_cells]
+   have looked : advance (.call pair pending) before = .yielded (.demand before.memo.next pending) {before with memo := published} := by

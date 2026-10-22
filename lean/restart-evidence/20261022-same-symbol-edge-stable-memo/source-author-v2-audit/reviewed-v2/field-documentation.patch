@@ -1,0 +1,21 @@
+--- v1/SourceCurrentSameSymbolEdgeStable.lean
++++ v2/SourceCurrentSameSymbolEdgeStable.lean
+@@ -15,6 +15,7 @@
+ structure Stable (semanticView : View Symbol) (model : InputMeaning semanticView)
+     (ranked : RankedInput semanticView model.valid) (holds : Guard → Term Symbol → Bool)
+     (state : Wrapper width) : Prop where
++  /-- The table links captured requests to resident cells with canonical result laws. -/
+   valid : FlatMemoThunk.Valid
+     (fun (pair : Edge × Edge) (key : Nat × Nat) =>
+       (pair.1.entry.identity, pair.2.entry.identity) = key)
+@@ -27,8 +28,10 @@
+           SourceCurrentAllocatedNativeContextCache.EdgeLaw semanticView model ranked holds
+             ⟨IntersectionEmptyDomain.emptyDomain, ordered.1, ordered.2⟩ value) cell)
+     state.memo
++  /-- Every allocated cell has a returned result. -/
+   returned : ∀ handle cell, state.memo.cells handle = some cell →
+     ∃ value, cell.status = .returned value
++  /-- Every published pair has its canonical ordered key. -/
+   canonical : ∀ first second handle, state.memo.table (first, second) = some handle →
+     ∃ orderedHandle, state.memo.table
+       (if second < first then (second, first) else (first, second)) = some orderedHandle

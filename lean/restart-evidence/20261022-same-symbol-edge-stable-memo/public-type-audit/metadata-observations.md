@@ -1,0 +1,1 @@
+A read-only raw reconstruction assertion initially omitted the actual leading @ on #check output. The next comparison included @ and recovered every raw byte. This was an audit metadata assertion, not a proof job or a defect in the retained reader.

@@ -1,0 +1,109 @@
+/-- Read the native trace and completed pair cells from a successful miss. -/
+theorem miss_readback [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (left right result : Edge) (before after : State width)
+    (valid : FlatMemoThunk.Valid
+      (fun (request : Edge × Edge) (key : Nat × Nat) =>
+        (request.1.entry.identity, request.2.entry.identity) = key)
+      (fun _ => True) before.memo)
+    (missing : before.memo.table (left.entry.identity, right.entry.identity) = none)
+    (reverseMissing : before.memo.table (right.entry.identity, left.entry.identity) = none)
+    (done : execute fuel (.call (left, right) []) before = .done result after) :
+    let ordered := if right.entry.identity < left.entry.identity then (right, left) else (left, right)
+    ∃ nativeFuel handle,
+      SourceEqualityNativeDemand.Steps nativeFuel
+        (.edgeBody ⟨IntersectionEmptyDomain.emptyDomain, ordered.1, ordered.2⟩ .pure)
+        before.checked (.code (.pure result)) after.checked ∧
+      after.memo.table (left.entry.identity, right.entry.identity) = some handle ∧
+      after.memo.cells handle = some ⟨(left, right), .returned result⟩ ∧
+      FlatMemoThunk.Returned before.memo after.memo ∧
+      (right.entry.identity < left.entry.identity →
+        ∃ reversedHandle, reversedHandle ≠ handle ∧
+          after.memo.table (right.entry.identity, left.entry.identity) = some reversedHandle ∧
+          after.memo.cells reversedHandle = some ⟨(right, left), .returned result⟩) := by
+  obtain ⟨remaining, current, tail, checked, currentValid, _, retained, table, cell, fresh⟩ :=
+    start_miss fuel (left, right) [] before after result valid missing done
+  dsimp only
+  by_cases reversed : right.entry.identity < left.entry.identity
+  · simp only [reversed, ↓reduceIte]
+    have different : pairKey (right, left) ≠ pairKey (left, right) := by
+      intro same
+      have identities := congrArg Prod.fst same
+      simp only [pairKey] at identities
+      omega
+    have missingReverse : current.memo.table (pairKey (right, left)) = none := by
+      rw [table]
+      rw [Cache.put, ite_eq_right different]
+      simpa only [pairKey] using reverseMissing
+    have one : step (.order before.memo.next (left, right) []) current =
+        .yielded (.call (right, left) [before.memo.next]) current := by
+      simp only [step, reversed, ↓reduceIte]
+    obtain ⟨remaining, reverseCall⟩ := tail_done remaining _ _ _ _ after result one tail
+    obtain ⟨nextFuel, next, nextTail, nextChecked, _, stillRunning, nextReturned, nextTable, nextCell, _⟩ :=
+      start_miss remaining (right, left) [before.memo.next] current after result currentValid missingReverse reverseCall
+    have forward : ¬ left.entry.identity < right.entry.identity := by omega
+    have nextOne : step (.order current.memo.next (right, left) [before.memo.next]) next =
+        .yielded (.native (.edgeBody ⟨IntersectionEmptyDomain.emptyDomain, right, left⟩ .pure)
+          [current.memo.next, before.memo.next]) next := by
+      simp only [step, forward, ↓reduceIte]
+    obtain ⟨nativeFuel, nativeRun⟩ := tail_done nextFuel _ _ _ _ after result nextOne nextTail
+    obtain ⟨count, rest, value, finalChecked, trace, retRun⟩ :=
+      native_done nativeFuel _ _ next after result nativeRun
+    obtain ⟨same, finalState, finalMemo⟩ := ret_done rest value result _ _ after retRun
+    subst value
+    have memo : after.memo = FlatMemoThunk.finish before.memo.next result
+        (FlatMemoThunk.finish current.memo.next result next.memo) := by
+      simpa only [List.foldl] using finalMemo
+    have distinct : current.memo.next ≠ before.memo.next := by omega
+    have originalRunning := stillRunning before.memo.next (left, right) cell
+    have originalStill := FlatMemoThunk.finish_running_other current.memo.next before.memo.next result
+      next.memo (left, right) (Ne.symm distinct) originalRunning
+    have originalDone := FlatMemoThunk.finish_evaluating before.memo.next result _ (left, right) originalStill
+    have reverseDone := FlatMemoThunk.finish_evaluating current.memo.next result next.memo (right, left) nextCell
+    have reverseFinal := FlatMemoThunk.finish_returned before.memo.next result _
+      current.memo.next (right, left) result reverseDone
+    have originalTable : next.memo.table (pairKey (left, right)) = some before.memo.next := by
+      rw [nextTable]
+      simp only [Cache.put, ite_eq_right (Ne.symm different)]
+      simp [table, Cache.put]
+    have reverseTable : next.memo.table (pairKey (right, left)) = some current.memo.next := by
+      simp [nextTable, Cache.put]
+    refine ⟨count, before.memo.next, ?_, ?_, ?_, ?_, ?_⟩
+    · rw [nextChecked, checked] at trace
+      simpa only [finalState] using trace
+    · simpa only [memo, finish_table, pairKey] using originalTable
+    · rw [memo]
+      exact originalDone
+    · rw [memo]
+      exact retained.trans (nextReturned.trans
+        ((FlatMemoThunk.finish_returned current.memo.next result next.memo).trans
+          (FlatMemoThunk.finish_returned before.memo.next result _)))
+    · intro _
+      refine ⟨current.memo.next, distinct, ?_, ?_⟩
+      · simpa only [memo, finish_table, pairKey] using reverseTable
+      · rw [memo]
+        exact reverseFinal
+  · simp only [reversed, ↓reduceIte]
+    have one : step (.order before.memo.next (left, right) []) current =
+        .yielded (.native (.edgeBody ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩ .pure)
+          [before.memo.next]) current := by
+      simp only [step, reversed, ↓reduceIte]
+    obtain ⟨nativeFuel, nativeRun⟩ := tail_done remaining _ _ _ _ after result one tail
+    obtain ⟨count, rest, value, finalChecked, trace, retRun⟩ :=
+      native_done nativeFuel _ _ current after result nativeRun
+    obtain ⟨same, finalState, finalMemo⟩ := ret_done rest value result _ _ after retRun
+    subst value
+    have memo : after.memo = FlatMemoThunk.finish before.memo.next result current.memo := by
+      simpa only [List.foldl] using finalMemo
+    refine ⟨count, before.memo.next, ?_, ?_, ?_, ?_, ?_⟩
+    · rw [checked] at trace
+      simpa only [finalState] using trace
+    · have stored := congrFun table (pairKey (left, right))
+      simpa [memo, finish_table, pairKey, Cache.put] using stored
+    · rw [memo]
+      exact FlatMemoThunk.finish_evaluating before.memo.next result current.memo (left, right) cell
+    · rw [memo]
+      exact retained.trans (FlatMemoThunk.finish_returned before.memo.next result current.memo)
+    · intro impossible
+      exact False.elim impossible
+
+end MicroCFTA.SourceCurrentSameSymbolEdgeControl
