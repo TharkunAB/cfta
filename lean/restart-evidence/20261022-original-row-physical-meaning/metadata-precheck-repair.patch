@@ -1,0 +1,12 @@
+--- mcfta-original-row-physical-meaning-source-precheck-1.source.py
++++ mcfta-original-row-physical-meaning-source-precheck-2.source.py
+@@ -13,7 +13,8 @@
+ package = here / component
+ source = (package / (name + '.lean')).read_bytes()
+ assert sha(source) == expected_sha and 0 < len(source.splitlines()) == int(expected_lines) <= 180
+-for path, pin in json.loads((package / 'pins.json').read_text()).items():
++for pin in json.loads((package / 'pins.json').read_text()):
++    path = pin['path']
+     data = (package / path).read_bytes()
+     assert sha(data) == pin['sha256'], path
+     if 'bytes' in pin:

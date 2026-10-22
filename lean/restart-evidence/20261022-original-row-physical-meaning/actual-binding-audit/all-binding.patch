@@ -1,0 +1,243 @@
+--- templates/verify-checkpoint.py
++++ bound/verify-checkpoint.py
+@@ -4,9 +4,9 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ ROOT = HERE.parents[2]
+-AUDIT_SHA = '__H18_AUDIT_LOG_SHA__'
+-AUDIT_JOBS = int('__H18_AUDIT_BUILD_JOBS__')
+-AUDIT_DEPENDENCIES = int('__H18_AUDIT_DEPENDENCIES__')
++AUDIT_SHA = '466693d2927694094f94b53a0c86ac875b0800da9109b6793c621acdc6d3a0f9'
++AUDIT_JOBS = int('3635')
++AUDIT_DEPENDENCIES = int('75453')
+ for mode, label in [([], 'normal'), (['--live'], 'live')]:
+     result = subprocess.run(['/usr/bin/python3', str(HERE / 'verify-proofs.py'),
+         '--root', str(ROOT), *mode], cwd='/', capture_output=True, text=True)
+@@ -14,12 +14,12 @@
+     (HERE / ('proof-verification-' + label + '.stderr')).write_text(result.stderr)
+     assert result.returncode == 0, result.stderr
+     report = json.loads(result.stdout)
+-    assert report['status'] == 'PASS' and report['actual_jobs'] == int('__H18_ACTUAL_JOBS__') and report['failed_jobs'] == int('__H18_FAILED_JOBS__')
+-    assert report['source_jobs'] == int('__H18_SOURCE_JOBS__') and report['audit_jobs'] == int('__H18_AUDIT_JOBS__') and report['selected_modules'] == 1
++    assert report['status'] == 'PASS' and report['actual_jobs'] == int('3') and report['failed_jobs'] == int('0')
++    assert report['source_jobs'] == int('2') and report['audit_jobs'] == int('1') and report['selected_modules'] == 1
+     assert report['audit_build_jobs'] == AUDIT_JOBS and report['audit_dependencies'] == AUDIT_DEPENDENCIES
+     assert report['audit_log_sha256'] == AUDIT_SHA
+-    assert report['warned_source_exit_zero_jobs'] == int('__H18_WARNED_SOURCE_EXIT_ZERO_JOBS__')
+-    assert report['rejected_public_type_jobs'] == int('__H18_REJECTED_PUBLIC_TYPE_JOBS__')
++    assert report['warned_source_exit_zero_jobs'] == int('0')
++    assert report['rejected_public_type_jobs'] == int('0')
+ result = subprocess.run(['/usr/bin/python3', str(HERE / 'verify-preservation.py')],
+     cwd='/', capture_output=True, text=True)
+ (HERE / 'preservation-final.stderr').write_text(result.stderr)
+--- templates/commit-proofs.py
++++ bound/commit-proofs.py
+@@ -5,16 +5,16 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ ROOT = HERE.parents[2]
+-AUDIT_SHA = '__H18_AUDIT_LOG_SHA__'
+-AUDIT_JOBS = int('__H18_AUDIT_BUILD_JOBS__')
+-AUDIT_DEPENDENCIES = int('__H18_AUDIT_DEPENDENCIES__')
++AUDIT_SHA = '466693d2927694094f94b53a0c86ac875b0800da9109b6793c621acdc6d3a0f9'
++AUDIT_JOBS = int('3635')
++AUDIT_DEPENDENCIES = int('75453')
+ def git(*args):
+     return subprocess.check_output(['git', *args], cwd=ROOT, text=True)
+ 
+ assert git('branch', '--show-current').strip() == 'formalize'
+ assert git('rev-parse', 'HEAD').strip() == (HERE / 'starting-head.txt').read_text().strip() == '4fffdcea9e49afb54ff4c3218347a830df4cc39d'
+ assert not git('diff', '--cached', '--name-only').strip()
+-assert git('rev-parse', '__H18_BACKUP_BRANCH__').strip() == (HERE / 'starting-head.txt').read_text().strip()
++assert git('rev-parse', 'codex/backup-original-row-physical-meaning-20261022-0752').strip() == (HERE / 'starting-head.txt').read_text().strip()
+ assert git('rev-parse', 'main').strip() == (HERE / 'starting-local-main.txt').read_text().strip() == 'ed73f5997f1c07e2961d06e6e290d1de38319dad'
+ assert git('rev-parse', 'origin/main').strip() == (HERE / 'starting-main.txt').read_text().strip() == '794903b3fbad3becb8b28736fc33463760731fc7'
+ selected = json.loads((HERE / 'selected-sources.json').read_text())
+@@ -22,8 +22,8 @@
+ gate = json.loads((HERE / 'selected-source-gate.json').read_text())
+ assert gate['status'] == 'ROOT_ACCEPTED' and gate['path'] == next(iter(selected))
+ assert selected[gate['path']]['sha256'] == gate['sha256'] == hashlib.sha256((HERE / gate['snapshot']).read_bytes()).hexdigest()
+-assert selected[next(iter(selected))]['strict'] == '__H18_SELECTED_STRICT_STEM__'
+-assert selected[next(iter(selected))]['full'] == '__H18_SELECTED_FULL_STEM__'
++assert selected[next(iter(selected))]['strict'] == 'original-row-physical-meaning-strict-1'
++assert selected[next(iter(selected))]['full'] == 'original-row-physical-meaning-public-1'
+ assert 'lean/MicroCFTA/SourceCurrentOriginalRowPhysicalMeaning.lean' not in json.loads((HERE / 'starting-files.json').read_text())
+ for name, pin in selected.items():
+     data = (ROOT / name).read_bytes()
+@@ -31,8 +31,8 @@
+     assert data == (HERE / (pin['strict'] + '.source.lean')).read_bytes()
+     assert not (HERE / (pin['strict'] + '.log')).read_bytes()
+     assert json.loads((HERE / (pin['full'] + '.json')).read_text())['exit_code'] == 0
+-assert json.loads((HERE / '__H18_AUDIT_STEM__.json').read_text())['exit_code'] == 0
+-audit_raw = (HERE / '__H18_AUDIT_STEM__.log').read_bytes()
++assert json.loads((HERE / 'original-row-physical-meaning-audit-1.json').read_text())['exit_code'] == 0
++audit_raw = (HERE / 'original-row-physical-meaning-audit-1.log').read_bytes()
+ assert hashlib.sha256(audit_raw).hexdigest() == AUDIT_SHA
+ audit = audit_raw.decode()
+ assert f"Build completed successfully ({AUDIT_JOBS} jobs)." in audit
+--- templates/final-publication.py
++++ bound/final-publication.py
+@@ -8,7 +8,7 @@
+ assert (H/'starting-head.txt').read_text().strip()=='4fffdcea9e49afb54ff4c3218347a830df4cc39d'
+ assert git('rev-parse','HEAD').decode().strip()==(H/'proof-commit.txt').read_text().strip()==proof
+ assert git('branch','--show-current').decode().strip()=='formalize'
+-assert git('rev-parse','__H18_BACKUP_BRANCH__').decode().strip()==(H/'starting-head.txt').read_text().strip()
++assert git('rev-parse','codex/backup-original-row-physical-meaning-20261022-0752').decode().strip()==(H/'starting-head.txt').read_text().strip()
+ assert git('rev-parse','main').decode().strip()=='ed73f5997f1c07e2961d06e6e290d1de38319dad'
+ assert git('rev-parse','origin/main').decode().strip()=='794903b3fbad3becb8b28736fc33463760731fc7'
+ subprocess.run(['/usr/bin/python3',str(H/'verify-seal.py')],check=True)
+--- templates/update-documents.py
++++ bound/update-documents.py
+@@ -6,19 +6,19 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ ROOT = HERE.parents[2]
+-SOURCE_SHA = '__H18_SOURCE_SHA__'
+-SOURCE_LINES = int('__H18_SOURCE_LINES__')
++SOURCE_SHA = 'b3c2aba3c1faf072e318feb7adb07f2b1d60970e4584354ef6584566e053d58e'
++SOURCE_LINES = int('108')
+ assert 0 < SOURCE_LINES <= 180
+-strict, full, audit_stem = '__H18_SELECTED_STRICT_STEM__', '__H18_SELECTED_FULL_STEM__', '__H18_AUDIT_STEM__'
++strict, full, audit_stem = 'original-row-physical-meaning-strict-1', 'original-row-physical-meaning-public-1', 'original-row-physical-meaning-audit-1'
+ metrics = {
+-    'actual_jobs': int('__H18_ACTUAL_JOBS__'),
+-    'source_jobs': int('__H18_SOURCE_JOBS__'),
+-    'audit_jobs': int('__H18_AUDIT_JOBS__'),
+-    'failed_jobs': int('__H18_FAILED_JOBS__'),
+-    'warned_source_exit_zero_jobs': int('__H18_WARNED_SOURCE_EXIT_ZERO_JOBS__'),
+-    'rejected_public_type_jobs': int('__H18_REJECTED_PUBLIC_TYPE_JOBS__'),
+-    'audit_build_jobs': int('__H18_AUDIT_BUILD_JOBS__'),
+-    'audit_dependencies': int('__H18_AUDIT_DEPENDENCIES__'),
++    'actual_jobs': int('3'),
++    'source_jobs': int('2'),
++    'audit_jobs': int('1'),
++    'failed_jobs': int('0'),
++    'warned_source_exit_zero_jobs': int('0'),
++    'rejected_public_type_jobs': int('0'),
++    'audit_build_jobs': int('3635'),
++    'audit_dependencies': int('75453'),
+ }
+ start = (HERE / 'starting-head.txt').read_text().strip()
+ assert start == '4fffdcea9e49afb54ff4c3218347a830df4cc39d'
+@@ -36,7 +36,7 @@
+ assert source == (HERE / (strict + '.source.lean')).read_bytes() and (HERE / (strict + '.log')).read_bytes() == b''
+ assert json.loads((HERE / (strict + '.json')).read_text())['exit_code'] == 0
+ raw = (HERE / (full + '.log')).read_bytes()
+-assert hashlib.sha256(raw).hexdigest() == '__H18_FULL_LOG_SHA__'
++assert hashlib.sha256(raw).hexdigest() == '4ec965e2d50131b88922ad5a3ca21d9a56212860c26474122f885e05b58ada4c'
+ assert json.loads((HERE / (full + '.json')).read_text())['exit_code'] == 0
+ readback = json.loads((HERE / 'public-readback/original-row-physical-meaning-full-readback.json').read_text())
+ assert readback['source_sha256'] == SOURCE_SHA and readback['source_lines'] == SOURCE_LINES
+@@ -45,7 +45,7 @@
+ review = json.loads((HERE / 'root-full-review.json').read_text())
+ assert review['complete_public_type_root_review'] == review['independent_complete_public_type_review'] == 'CLEAR'
+ head_specs = [
+-    ('row_inputs_meaning', '__H18_ROW_INPUTS_MEANING_TYPE_SHA__', 'public-readback/original-row-physical-meaning-row_inputs_meaning-public-type.txt', 'public-readback/original-row-physical-meaning-row_inputs_meaning-printed-public-type.txt', '__H18_ROW_INPUTS_MEANING_ACTUAL_AXIOMS_JSON__'),
++    ('row_inputs_meaning', 'a948f2dbd947fd8d7571b5810bf60e8ebcded9143866cb8b9dda68dca71de82b', 'public-readback/original-row-physical-meaning-row_inputs_meaning-public-type.txt', 'public-readback/original-row-physical-meaning-row_inputs_meaning-printed-public-type.txt', '["Classical.choice", "Quot.sound", "propext"]'),
+ ]
+ heads = {head['head'].rsplit('.', 1)[1]: head for head in readback['heads']}
+ assert set(heads) == {spec[0] for spec in head_specs}
+@@ -63,7 +63,7 @@
+ proof_report = json.loads((HERE / 'proof-evidence-normal.json').read_text())
+ assert proof_report['status'] == 'PASS' and all(proof_report[key] == value for key, value in metrics.items())
+ audit = (HERE / (audit_stem + '.log')).read_bytes()
+-assert hashlib.sha256(audit).hexdigest() == proof_report['audit_log_sha256'] == '__H18_AUDIT_LOG_SHA__'
++assert hashlib.sha256(audit).hexdigest() == proof_report['audit_log_sha256'] == '466693d2927694094f94b53a0c86ac875b0800da9109b6793c621acdc6d3a0f9'
+ assert json.loads((HERE / (audit_stem + '.json')).read_text())['exit_code'] == 0
+ assert f"Build completed successfully ({metrics['audit_build_jobs']} jobs).".encode() in audit
+ assert f"{metrics['audit_dependencies']} MicroCFTA theorems".encode() in audit
+--- templates/verify-proofs.py
++++ bound/verify-proofs.py
+@@ -17,14 +17,14 @@
+ def digest(data):
+     return hashlib.sha256(data).hexdigest()
+ name, head = "SourceCurrentOriginalRowPhysicalMeaning", "MicroCFTA.SourceCurrentOriginalRowPhysicalMeaning.row_inputs_meaning"
+-selected_sha = "__H18_SELECTED_SOURCE_SHA__"
+-source_lines = int("__H18_SOURCE_LINES__")
+-strict_stem, full_stem, audit_stem = "__H18_SELECTED_STRICT_STEM__", "__H18_SELECTED_FULL_STEM__", "__H18_AUDIT_STEM__"
+-metrics = dict(actual_jobs=int("__H18_ACTUAL_JOBS__"), source_jobs=int("__H18_SOURCE_JOBS__"), audit_jobs=int("__H18_AUDIT_JOBS__"),
+-    failed_jobs=int("__H18_FAILED_JOBS__"), warned_source_exit_zero_jobs=int("__H18_WARNED_SOURCE_EXIT_ZERO_JOBS__"),
+-    rejected_public_type_jobs=int("__H18_REJECTED_PUBLIC_TYPE_JOBS__"))
+-jobs = json.loads("__H18_JOBS_JSON__")
+-rejected = json.loads("__H18_REJECTED_PUBLIC_STEMS_JSON__")
++selected_sha = "b3c2aba3c1faf072e318feb7adb07f2b1d60970e4584354ef6584566e053d58e"
++source_lines = int("108")
++strict_stem, full_stem, audit_stem = "original-row-physical-meaning-strict-1", "original-row-physical-meaning-public-1", "original-row-physical-meaning-audit-1"
++metrics = dict(actual_jobs=int("3"), source_jobs=int("2"), audit_jobs=int("1"),
++    failed_jobs=int("0"), warned_source_exit_zero_jobs=int("0"),
++    rejected_public_type_jobs=int("0"))
++jobs = json.loads('{"original-row-physical-meaning-audit-1": [0, null, "466693d2927694094f94b53a0c86ac875b0800da9109b6793c621acdc6d3a0f9", 0, 0], "original-row-physical-meaning-public-1": [0, "cfe7e86855615e4366e66954939927197483e04ce96a461ec89bd4abb434f328", "4ec965e2d50131b88922ad5a3ca21d9a56212860c26474122f885e05b58ada4c", 0, 0], "original-row-physical-meaning-strict-1": [0, "b3c2aba3c1faf072e318feb7adb07f2b1d60970e4584354ef6584566e053d58e", "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", 0, 0]}')
++rejected = json.loads('[]')
+ assert jobs and all(stem.startswith("original-row-physical-meaning-") for stem in jobs)
+ assert strict_stem in jobs and full_stem in jobs and audit_stem in jobs
+ assert jobs[strict_stem][0] == jobs[full_stem][0] == jobs[audit_stem][0] == 0
+@@ -76,7 +76,7 @@
+ assert gate == dict(status="ROOT_ACCEPTED", path=source_path, sha256=selected_sha, lines=source_lines, snapshot="selected-sources/" + name + ".lean")
+ assert (evidence / gate["snapshot"]).read_bytes() == source
+ history = load("source-history-gate.json")
+-assert history == json.loads("__H18_SOURCE_HISTORY_JSON__") and history["status"] == "ROOT_ACCEPTED"
++assert history == json.loads('{"artifacts": [{"bytes": 616, "path": "original-row-physical-meaning-audit-1.json", "sha256": "c51b00d3e0e6e640e6726bca0d59410d5513eed003adb1c8d3729c13d65fd97f"}, {"bytes": 90, "path": "original-row-physical-meaning-audit-1.limits.json", "sha256": "408bad6c1715f2c15adecf485dbfcb2753512b2f94e0a96011ddef6f6650faf3"}, {"bytes": 695, "path": "original-row-physical-meaning-audit-1.log", "sha256": "466693d2927694094f94b53a0c86ac875b0800da9109b6793c621acdc6d3a0f9"}, {"bytes": 114, "path": "original-row-physical-meaning-audit-1.usage.json", "sha256": "a31621f74e58f57c4ff5d9a685c80b55c57df5150a3f88ceb1157bbc5bb60600"}, {"bytes": 850, "path": "original-row-physical-meaning-public-1.json", "sha256": "60adaffa9365e9090bb24fa28d3b696df4ee310eb366ebb6d0cc06f2877a1b85"}, {"bytes": 90, "path": "original-row-physical-meaning-public-1.limits.json", "sha256": "408bad6c1715f2c15adecf485dbfcb2753512b2f94e0a96011ddef6f6650faf3"}, {"bytes": 431135, "path": "original-row-physical-meaning-public-1.log", "sha256": "4ec965e2d50131b88922ad5a3ca21d9a56212860c26474122f885e05b58ada4c"}, {"bytes": 6501, "path": "original-row-physical-meaning-public-1.source.lean", "sha256": "cfe7e86855615e4366e66954939927197483e04ce96a461ec89bd4abb434f328"}, {"bytes": 114, "path": "original-row-physical-meaning-public-1.usage.json", "sha256": "453257a0622a9587bd01ec8985d09afdb12483e8cc2b14118c56aad473df102b"}, {"bytes": 850, "path": "original-row-physical-meaning-strict-1.json", "sha256": "dd2a908574078415d7d3fb4e193df15e6d5184075272085dd1f6866b56719090"}, {"bytes": 90, "path": "original-row-physical-meaning-strict-1.limits.json", "sha256": "408bad6c1715f2c15adecf485dbfcb2753512b2f94e0a96011ddef6f6650faf3"}, {"bytes": 0, "path": "original-row-physical-meaning-strict-1.log", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}, {"bytes": 114, "path": "original-row-physical-meaning-strict-1.usage.json", "sha256": "fcd9afd13326bc648dcbe73314b37bf409548b107538a0fb252403b1b8f7c19b"}, {"bytes": 1108, "path": "root-source-precheck.json", "sha256": "d305fb7562d47b28efb8ba81e5c8981f6552cd50a7bb6a3965f78504d525b0f1"}, {"bytes": 501, "path": "signature-plan/context.lean.txt", "sha256": "e77baf30cd10e1d276341600663386d30104b8c05116ff77218b24257d0927e6"}, {"bytes": 457, "path": "signature-plan/private-signature.lean.txt", "sha256": "61c92c549e600f5ce9285a5d28908ffb0e20f6f88bab404b4aba3bad8aff44ef"}, {"bytes": 877, "path": "signature-plan/proposed-signature.lean.txt", "sha256": "5e1823c8064b825c21dbaf859381835154e19a231093e8f6e74f839bafb2f73c"}, {"bytes": 2846, "path": "source-proposal-audit/review.md", "sha256": "0c7d58a68a77b5f4e5ed8063cb052de7b87e2808556ecff1fb6cb85926d51020"}, {"bytes": 5083, "path": "source-proposal/source-addition.patch", "sha256": "794b089ae335215460c7c152f75043c015d8e38373e8be4563e1ac2b98c78c57"}], "patches": [], "rejected_public_types": [], "selected_source_sha256": "b3c2aba3c1faf072e318feb7adb07f2b1d60970e4584354ef6584566e053d58e", "status": "ROOT_ACCEPTED", "variants": [{"lines": 108, "path": "source-proposal/SourceCurrentOriginalRowPhysicalMeaning.lean", "sha256": "b3c2aba3c1faf072e318feb7adb07f2b1d60970e4584354ef6584566e053d58e"}, {"lines": 108, "path": "original-row-physical-meaning-strict-1.source.lean", "sha256": "b3c2aba3c1faf072e318feb7adb07f2b1d60970e4584354ef6584566e053d58e"}]}') and history["status"] == "ROOT_ACCEPTED"
+ assert history["selected_source_sha256"] == selected_sha
+ variants = {item["path"]: item for item in history["variants"]}
+ artifacts = {item["path"]: item for item in history["artifacts"]}
+@@ -106,7 +106,7 @@
+ for stem, item in rejections.items():
+     assert item["raw_sha256"] == jobs[stem][2] and item["reason"] and item["artifacts"]
+     assert all(path in artifacts for path in item["artifacts"])
+-contracts = json.loads("__H18_CONTRACTS_JSON__")
++contracts = json.loads('{"context.lean.txt": {"path": "signature-plan/context.lean.txt", "lines": 9, "sha256": "e77baf30cd10e1d276341600663386d30104b8c05116ff77218b24257d0927e6"}, "private-signature.lean.txt": {"path": "signature-plan/private-signature.lean.txt", "lines": 8, "sha256": "61c92c549e600f5ce9285a5d28908ffb0e20f6f88bab404b4aba3bad8aff44ef"}, "proposed-signature.lean.txt": {"path": "signature-plan/proposed-signature.lean.txt", "lines": 16, "sha256": "5e1823c8064b825c21dbaf859381835154e19a231093e8f6e74f839bafb2f73c"}}')
+ required_contracts = {"context.lean.txt", "proposed-signature.lean.txt"}
+ assert required_contracts <= set(contracts) <= required_contracts | {"private-signature.lean.txt"}
+ expected_helpers = ["original_of_readback"] if "private-signature.lean.txt" in contracts else []
+@@ -148,7 +148,7 @@
+ assert all(printer.decode().splitlines().count(d + head) == 1 for d in ["#check @", "#print ", "#print axioms "])
+ assert source.rstrip().endswith(("end MicroCFTA." + name).encode())
+ assert (report["source_sha256"], report["source_lines"], report["printer_sha256"]) == (selected_sha, source_lines, digest(printer))
+-assert report["log_sha256"] == digest(raw) and report["log_bytes"] == len(raw) == int("__H18_FULL_RAW_BYTES__")
++assert report["log_sha256"] == digest(raw) and report["log_bytes"] == len(raw) == int("431135")
+ assert report["receipt_sha256"] == digest((evidence / (full_stem + ".json")).read_bytes()) and report["owned_public_job_exit"] == 0
+ assert all(report[key] for key in ["all_eight_printer_settings", "exact_module_and_diagnostic_tail", "diagnostic_limits_after_module_only", "no_omissions"])
+ assert len(report["heads"]) == 1 and report["heads"][0]["head"] == head and report["heads"][0]["kind"] == "theorem"
+@@ -172,9 +172,9 @@
+         break
+ assert len(matches) == 1
+ declared, body = declaration[:matches[0].start()], declaration[matches[0].end():]
+-assert checked.encode() == declared.encode() and len(checked) == int("__H18_TYPE_CHARACTERS__") and len(checked.encode()) == int("__H18_TYPE_BYTES__")
+-assert len(checked.splitlines()) == int("__H18_TYPE_LOGICAL_LINES__") and checked.count("\n") == int("__H18_TYPE_LINE_FEEDS__") and checked.endswith("\n") == json.loads("__H18_TYPE_FINAL_NEWLINE_JSON__")
+-assert digest(checked.encode()) == "__H18_TYPE_SHA__"
++assert checked.encode() == declared.encode() and len(checked) == int("8222") and len(checked.encode()) == int("8248")
++assert len(checked.splitlines()) == int("112") and checked.count("\n") == int("111") and checked.endswith("\n") == json.loads('false')
++assert digest(checked.encode()) == "a948f2dbd947fd8d7571b5810bf60e8ebcded9143866cb8b9dda68dca71de82b"
+ assert not any(token in checked for token in ["_private", "✝", "†", "‡"])
+ helpers = []
+ for line in source.decode().splitlines():
+@@ -187,17 +187,17 @@
+ head_report = report["heads"][0]
+ assert all(head_report[key] for key in ["check_print_type_identity", "check_print_type_byte_identity", "unique_complete_type_body_delimiter", "actual_axioms_within_standard_allowed"])
+ assert head_report["private_namespace_helpers_checked"] == helpers and head_report["private_type_spellings_checked"] == ["_private", "✝", "†", "‡"] and head_report["private_public_type_names"] is False
+-assert head_report["checked_type_characters"] == len(checked) and head_report["body_characters"] == len(body) == int("__H18_BODY_CHARACTERS__")
+-assert body.startswith("fun ") and len(body.encode()) == int("__H18_BODY_BYTES__")
++assert head_report["checked_type_characters"] == len(checked) and head_report["body_characters"] == len(body) == int("414058")
++assert body.startswith("fun ") and len(body.encode()) == int("414346")
+ values = re.fullmatch(r"\s*\[([^\]]*)\]\s*", printed[axiom.end():]) if axiom.group(1) == "depends on axioms:" else None
+ assert values or (axiom.group(1) == "does not depend on any axioms" and not printed[axiom.end():].strip())
+ actual_axioms = {re.sub(r"\.\{[^}]*\}", "", item.strip()) for item in values.group(1).split(",") if item.strip()} if values else set()
+-assert actual_axioms == set(head_report["actual_axioms"]) == set(json.loads("__H18_ACTUAL_AXIOMS_JSON__")) and actual_axioms <= {"Classical.choice", "Quot.sound", "propext"}
++assert actual_axioms == set(head_report["actual_axioms"]) == set(json.loads('["Classical.choice", "Quot.sound", "propext"]')) and actual_axioms <= {"Classical.choice", "Quot.sound", "propext"}
+ for suffix, text in [("public-type", checked), ("printed-public-type", declared), ("body", body), ("axioms", axiom_output)]:
+     filename = "original-row-physical-meaning-row_inputs_meaning-" + suffix + ".txt"
+     retained = (evidence / "public-readback" / filename).read_bytes()
+     assert retained == text.encode() and report["retained_slices"][filename] == dict(bytes=len(retained), sha256=digest(retained))
+-assert digest((evidence / "full-preparation/check-full-public.py").read_bytes()) == "__H18_FULL_READER_SHA__"
++assert digest((evidence / "full-preparation/check-full-public.py").read_bytes()) == "ac93d3ac1442748997d75aced4777366bd891943fdc083aff6703bfbb9515436"
+ review = load("root-full-review.json")
+ assert review["status"] == "ROOT_ACCEPTED_FOR_OFFICIAL_INSTALL_AND_AUDIT" and review["source_sha256"] == selected_sha and review["source_lines"] == source_lines
+ assert review["public_theorem"] == head and review["complete_public_type_root_review"] == review["independent_complete_public_type_review"] == "CLEAR"
+@@ -211,6 +211,6 @@
+ build = re.search(r"Build completed successfully \((\d+) jobs\)\.", audit)
+ dependencies = re.search(r"Checked axiom dependencies of (\d+) MicroCFTA theorems", audit)
+ assert build and dependencies and not re.search(r"\berror(?:\([^)]*\))?:", audit)
+-assert int(build.group(1)) == int("__H18_AUDIT_BUILD_JOBS__") and int(dependencies.group(1)) == int("__H18_AUDIT_DEPENDENCIES__")
++assert int(build.group(1)) == int("3635") and int(dependencies.group(1)) == int("75453")
+ print(json.dumps(dict(status="PASS", live=args.live, **metrics, new_lean_lake_jobs=0, selected_modules=1, original_archives=1,
+     audit_build_jobs=int(build.group(1)), audit_dependencies=int(dependencies.group(1)), audit_log_sha256=digest(audit.encode())), indent=2))

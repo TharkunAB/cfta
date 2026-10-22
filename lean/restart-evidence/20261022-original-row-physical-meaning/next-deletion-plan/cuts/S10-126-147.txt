@@ -1,0 +1,22 @@
+        remainingMembers edge (List.mem_cons_of_mem candidate member)
+      have symbols : pivot.entry.key.symbol = candidate.entry.key.symbol :=
+        (of_decide_eq_true (List.mem_filter.mp pivotMember).2).trans
+          (of_decide_eq_true (List.mem_filter.mp candidateMember).2).symm
+      obtain ⟨fuel, common, middle, done, _resident, _law, midGood, midContextual,
+          midSemantic, extension, midStable, midIdle, tables, retained, midTrace⟩ :=
+        SourceCurrentSameSymbolEdgeComparisonDomains.original_rows_complete bits source facts
+          formulas solver inputModel inputRanked parent parent original original available available
+          closed closed pivot candidate (List.mem_filter.mp pivotMember).1
+          (List.mem_filter.mp candidateMember).1 symbols initialDomains initialValid before stable
+          good contextual semantic growth history allocations idle room
+      obtain ⟨used, _positive, _bound, resumed⟩ :=
+        SourceCurrentOriginalRowClusterScan.comparison_lift fuel pivot candidate common tail
+          incomparableReversed keptReversed (.call (pivot, candidate) []) before middle done
+      have prefixRun : SourceCurrentOriginalRowClusterScan.execute (used + 1)
+          (.scan pivot (candidate :: tail) incomparableReversed keptReversed) before =
+          .yielded
+            (if common.entry.identity = candidate.entry.identity then
+               .scan pivot tail incomparableReversed keptReversed
+             else if common.entry.identity = pivot.entry.identity then
+               .cluster (candidate :: (incomparableReversed.reverse ++ tail)) keptReversed
+             else .scan pivot tail (candidate :: incomparableReversed) keptReversed) middle := by

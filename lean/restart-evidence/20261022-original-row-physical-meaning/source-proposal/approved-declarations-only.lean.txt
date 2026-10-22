@@ -1,0 +1,37 @@
+import MicroCFTA.SourceCurrentAllocatedNativeContextCache
+
+namespace MicroCFTA.SourceCurrentOriginalRowPhysicalMeaning
+open Language IntersectSchedule InternedConstructorTemplates InternedProbeProvenance
+open SourceRecursiveIntersectionInputView
+open SourceCurrentAllocatedNativeContextCache (RowLanguage)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Edge" => EdgeValue Symbol Guard
+
+/-- Identify an available original payload through its complete source codec. -/
+private theorem original_of_readback
+    (source : InternedConstructorTemplates.State Symbol Guard)
+    (facts : InternedNestedFacts.Facts source)
+    (value : Value Symbol Guard) (input : Input)
+    (available : Available source value)
+    (complete : IntersectionFlatMemoKey.input value.referenceOf = some input)
+    (original : OriginalInput source input) : Original value
+
+/-- Retain original children in the fixed model and read their physical row language. -/
+theorem row_inputs_meaning
+    (source : InternedConstructorTemplates.State Symbol Guard)
+    (facts : InternedNestedFacts.Facts source)
+    (holds : Guard → Term Symbol → Bool)
+    (inputModel : InputMeaning (view source holds))
+    (parent : Value Symbol Guard) (row : Edge)
+    (original : OriginalInput source (inputOf parent))
+    (available : Available source parent)
+    (closed : parent.free = [])
+    (admitted : inputModel.valid (inputOf parent))
+    (member : row ∈ InternedEdgeResidency.nodeEdges parent) :
+    (∀ child ∈ row.children, Original child ∧ inputModel.valid (inputOf child)) ∧
+      ∀ ambient : InternedGuardedLanguage.Env Symbol,
+        RowLanguage holds inputModel.languages row =
+          InternedGuardedLanguage.edgeMeaning holds ambient row
+
+end MicroCFTA.SourceCurrentOriginalRowPhysicalMeaning

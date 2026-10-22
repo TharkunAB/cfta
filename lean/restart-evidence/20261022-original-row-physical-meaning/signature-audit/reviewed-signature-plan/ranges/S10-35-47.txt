@@ -1,0 +1,13 @@
+/-- Interpret the source symbol, full guard, and ordered children of one actual edge. -/
+def edgeMeaning (holds : Guard → Term Symbol → Bool) (environment : Env Symbol) : EdgeValue Symbol Guard → Lang Symbol
+  | .mk entry children => fun term => ∃ terms, term = .node entry.key.symbol terms ∧
+      forest holds environment children terms ∧ holds entry.key.constraint term = true
+termination_by edge => sizeOf edge
+decreasing_by all_goals simp_wf; all_goals omega
+
+/-- Interpret ordered child forests with the same arity and term order. -/
+def forest (holds : Guard → Term Symbol → Bool) (environment : Env Symbol) :
+    List (Value Symbol Guard) → List (Term Symbol) → Prop
+  | [], [] => True
+  | child :: rest, term :: terms => meaning holds environment child term ∧ forest holds environment rest terms
+  | _, _ => False

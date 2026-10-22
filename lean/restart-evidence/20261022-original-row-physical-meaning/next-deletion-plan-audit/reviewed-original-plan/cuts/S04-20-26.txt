@@ -1,0 +1,7 @@
+/-- An edge payload is the complete canonical record under its own key. -/
+def EdgeResident (state : State Symbol Guard) (edge : EdgeValue Symbol Guard) : Prop :=
+  state.edgeRecords edge.entry.key = some edge
+
+/-- Each edge retained in a stored ordinary node has its canonical payload. -/
+def Linked (state : State Symbol Guard) : Prop :=
+  ∀ key value, state.nodeRecords key = some value →

@@ -1,0 +1,18 @@
+
+/-- Read only the actual outgoing edge payloads of an ordinary node. -/
+def nodeEdges : Value Symbol Guard → List (EdgeValue Symbol Guard)
+  | .node _ edges _ _ => edges
+  | _ => []
+
+/-- An edge payload is the complete canonical record under its own key. -/
+def EdgeResident (state : State Symbol Guard) (edge : EdgeValue Symbol Guard) : Prop :=
+  state.edgeRecords edge.entry.key = some edge
+
+/-- Each edge retained in a stored ordinary node has its canonical payload. -/
+def Linked (state : State Symbol Guard) : Prop :=
+  ∀ key value, state.nodeRecords key = some value →
+    ∀ edge ∈ nodeEdges value, EdgeResident state edge
+
+/-- The initial source tables contain no unlinked edge payload. -/
+theorem empty_linked : Linked (empty (Symbol := Symbol) (Guard := Guard)) := by
+  intro key value impossible

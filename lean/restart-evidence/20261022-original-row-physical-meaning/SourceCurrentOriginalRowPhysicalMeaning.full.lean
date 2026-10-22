@@ -1,0 +1,122 @@
+import MicroCFTA.SourceCurrentAllocatedNativeContextCache
+
+namespace MicroCFTA.SourceCurrentOriginalRowPhysicalMeaning
+open Language IntersectSchedule InternedConstructorTemplates InternedProbeProvenance
+open SourceRecursiveIntersectionInputView
+open SourceCurrentAllocatedNativeContextCache (RowLanguage)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Edge" => EdgeValue Symbol Guard
+
+/-- Identify an available original payload through its complete source codec. -/
+private theorem original_of_readback
+    (source : InternedConstructorTemplates.State Symbol Guard)
+    (facts : InternedNestedFacts.Facts source)
+    (value : Value Symbol Guard) (input : Input)
+    (available : Available source value)
+    (complete : IntersectionFlatMemoKey.input value.referenceOf = some input)
+    (original : OriginalInput source input) : Original value := by
+  obtain ⟨witness, witnessOriginal, witnessAvailable, witnessCodec⟩ := original
+  have witnessRead := payload_readback source facts witness witnessAvailable input witnessCodec
+  have actualRead := payload_readback source facts value available input complete
+  have same : witness = value := witnessRead.symm.trans actualRead
+  exact same ▸ witnessOriginal
+
+/-- Retain original children in the fixed model and read their physical row language. -/
+theorem row_inputs_meaning
+    (source : InternedConstructorTemplates.State Symbol Guard)
+    (facts : InternedNestedFacts.Facts source)
+    (holds : Guard → Term Symbol → Bool)
+    (inputModel : InputMeaning (view source holds))
+    (parent : Value Symbol Guard) (row : Edge)
+    (original : OriginalInput source (inputOf parent))
+    (available : Available source parent)
+    (closed : parent.free = [])
+    (admitted : inputModel.valid (inputOf parent))
+    (member : row ∈ InternedEdgeResidency.nodeEdges parent) :
+    (∀ child ∈ row.children, Original child ∧ inputModel.valid (inputOf child)) ∧
+      ∀ ambient : InternedGuardedLanguage.Env Symbol,
+        RowLanguage holds inputModel.languages row =
+          InternedGuardedLanguage.edgeMeaning holds ambient row := by
+  cases parent with
+  | empty | reference | union | mu => cases member
+  | node entry edges depth free =>
+      change row ∈ edges at member
+      have originalNode : Original (.node entry edges depth free) :=
+        original_of_readback source facts _ (.node entry.identity) available rfl original
+      have childData (child : Value Symbol Guard) (present : child ∈ row.children) :
+          Original child ∧ Available source child ∧
+            inputModel.valid (inputOf child) ∧ child.free = [] := by
+        have originalChild : Original child := by
+          cases originalNode with
+          | node _ _ _ _ originals => exact originals row member child present
+        have inside : child ∈ edges.flatMap EdgeValue.children :=
+          List.mem_flatMap.mpr ⟨row, member, present⟩
+        have childAvailable : Available source child := available.children child inside
+        have childAdmitted : inputModel.valid (inputOf child) := by
+          apply inputModel.row_valid entry.identity admitted
+            (SourceRecursiveIntersectionInputView.row holds row)
+          · rw [rows_readback source facts holds entry edges depth free available]
+            exact List.mem_map.mpr ⟨row, member, rfl⟩
+          · exact List.mem_map.mpr ⟨child, present, rfl⟩
+        have childClosed : child.free = [] := by
+          have allFree : childFree (edges.flatMap EdgeValue.children) = [] :=
+            (InternedNormalizationFree.node_free source facts.coherent
+              entry edges depth free available.resident).symm.trans closed
+          apply List.eq_nil_iff_forall_not_mem.mpr
+          intro reference named
+          have included := (childFree_member (edges.flatMap EdgeValue.children) reference).mpr
+            ⟨child, inside, named⟩
+          rw [allFree] at included
+          cases included
+        exact ⟨originalChild, childAvailable, childAdmitted, childClosed⟩
+      have childMeaning (child : Value Symbol Guard) (present : child ∈ row.children)
+          (ambient : InternedGuardedLanguage.Env Symbol) :
+          InternedGuardedLanguage.meaning holds ambient child =
+            inputLanguage inputModel.languages (inputOf child) := by
+        have data := childData child present
+        have childClosed : IntersectSchedule.closed (view source holds) (inputOf child) = true := by
+          rw [closed_readback source facts holds child data.1 data.2.1, data.2.2.2]
+          rfl
+        have copied := inputModel.copy_exact (inputOf child) data.2.2.1 childClosed
+          (SourceRecursiveIntersectionGuardedInput.internedEnv ambient)
+        rw [copy_readback source facts holds child data.2.1 (inputOf child)
+          (Original.codec child data.1)] at copied
+        exact (SourceRecursiveIntersectionGuardedInput.original_meaning
+          holds child data.1 ambient).trans copied
+      constructor
+      · intro child present
+        exact ⟨(childData child present).1, (childData child present).2.2.1⟩
+      · intro ambient
+        funext term
+        apply propext
+        rw [InternedGuardedLanguage.edgeMeaning_all]
+        constructor
+        · rintro ⟨terms, shape, runs, guard⟩
+          refine ⟨terms, shape, ?_, guard⟩
+          apply SourcePhysicalSharedRows.all₂_both_imp _ _ _ _ runs
+          intro child present part _partIn accepted
+          rw [childMeaning child present ambient]
+          exact accepted
+        · rintro ⟨terms, shape, runs, guard⟩
+          refine ⟨terms, shape, ?_, guard⟩
+          apply SourcePhysicalSharedRows.all₂_both_imp _ _ _ _ runs
+          intro child present part _partIn accepted
+          rw [← childMeaning child present ambient]
+          exact accepted
+
+end MicroCFTA.SourceCurrentOriginalRowPhysicalMeaning
+
+set_option maxRecDepth 30000
+set_option maxHeartbeats 0
+set_option linter.all true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.proofs true
+set_option pp.proofs.threshold 254
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 10000000
+#check @MicroCFTA.SourceCurrentOriginalRowPhysicalMeaning.row_inputs_meaning
+#print MicroCFTA.SourceCurrentOriginalRowPhysicalMeaning.row_inputs_meaning
+#print axioms MicroCFTA.SourceCurrentOriginalRowPhysicalMeaning.row_inputs_meaning

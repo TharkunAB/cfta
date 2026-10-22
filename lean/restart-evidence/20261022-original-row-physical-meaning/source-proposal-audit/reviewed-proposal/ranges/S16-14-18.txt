@@ -1,0 +1,5 @@
+/-- An edge retains its label, guard, and ordered child languages. -/
+def EdgeMeaning (lang : Value Symbol Guard → Term Symbol → Prop)
+    (meaning : Guard → Term Symbol → Bool) (edge : EdgeValue Symbol Guard) (term : Term Symbol) : Prop :=
+  ∃ terms, term = .node edge.entry.key.symbol terms ∧ All₂ lang edge.children terms ∧
+    meaning edge.entry.key.constraint term = true

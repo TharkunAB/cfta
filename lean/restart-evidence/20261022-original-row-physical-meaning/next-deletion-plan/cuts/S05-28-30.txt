@@ -1,0 +1,3 @@
+/-- Ordered caller effects compose both physical and domain histories. -/
+theorem Extension.trans (first : Extension before middle) (second : Extension middle after) : Extension before after :=
+  ⟨grows_trans first.heap second.heap, extends_trans first.history second.history, extends_trans first.domains second.domains⟩

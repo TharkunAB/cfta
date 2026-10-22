@@ -1,0 +1,8 @@
+/-- Replace an ordered relation using membership in both original lists. -/
+theorem all₂_both_imp (R S : A → B → Prop) (as : List A) (bs : List B)
+    (related : All₂ R as bs) (change : ∀ a ∈ as, ∀ b ∈ bs, R a b → S a b) : All₂ S as bs := by
+  induction related with
+  | nil => exact .nil
+  | cons head tail ih =>
+      exact .cons (change _ List.mem_cons_self _ List.mem_cons_self head)
+        (ih (fun a member b included => change a (List.mem_cons_of_mem _ member) b (List.mem_cons_of_mem _ included)))

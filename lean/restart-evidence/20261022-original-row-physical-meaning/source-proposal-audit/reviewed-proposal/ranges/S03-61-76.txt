@@ -1,0 +1,16 @@
+/-- An original node retains complete available original children in every physical row. -/
+theorem OriginalInput.child (state : InternedConstructorTemplates.State Symbol Guard) (facts : Facts state)
+    (holds : Guard → Language.Term Symbol → Bool) (name : Nat) (original : OriginalInput state (.node name))
+    (selectedRow : Row Symbol) (present : selectedRow ∈ (view state holds).rows name)
+    (input : Input) (member : input ∈ selectedRow.children) : OriginalInput state input := by
+  obtain ⟨value, original, available, complete⟩ := original
+  cases original <;> simp only [Value.referenceOf, IntersectionFlatMemoKey.input, Option.some.injEq, reduceCtorEq] at complete <;> try contradiction
+  case node entry edges depth free originals =>
+    cases complete
+    have selected := payload_readback state facts _ available (.node entry.identity) rfl
+    have rowsExact : (view state holds).rows entry.identity = edges.map (row holds) := by simp only [view, selected]
+    rw [rowsExact] at present
+    obtain ⟨edge, inEdges, rfl⟩ := List.mem_map.mp present
+    obtain ⟨child, inChildren, rfl⟩ := List.mem_map.mp member
+    have original := originals edge inEdges child inChildren
+    exact ⟨child, original, available.children child (List.mem_flatMap.mpr ⟨edge, inEdges, inChildren⟩), original.codec child⟩

@@ -1,0 +1,14 @@
+/-- Restrict an actual reference environment to the original interned-name inputs. -/
+def internedEnv (ambient : InternedGuardedLanguage.Env Symbol) : BinderLanguage.Env Symbol :=
+  fun name => ambient (.interned name)
+
+/-- An actual interned binder has the same local override in the original input copy. -/
+theorem internedEnv_bind (ambient : InternedGuardedLanguage.Env Symbol) (name : Nat) (candidate : BinderLanguage.Lang Symbol) :
+    internedEnv (InternedGuardedLanguage.bind ambient (.interned name) candidate) = BinderLanguage.bind (internedEnv ambient) name candidate := by
+  funext other
+  simp only [internedEnv, InternedGuardedLanguage.bind, Reference.interned.injEq, BinderLanguage.bind]
+
+/-- Original stored payloads and their actual lexical copies have equal independent guarded meanings. -/
+theorem original_meaning (holds : Guard → Term Symbol → Bool) (value : Value Symbol Guard) (original : Original value)
+    (ambient : InternedGuardedLanguage.Env Symbol) :
+    InternedGuardedLanguage.meaning holds ambient value = BinderLanguage.meaning (internedEnv ambient) (shape holds value) := by

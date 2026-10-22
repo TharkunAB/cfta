@@ -1,0 +1,8 @@
+/-- Identify an available original payload through its complete source codec. -/
+private theorem original_of_readback
+    (source : InternedConstructorTemplates.State Symbol Guard)
+    (facts : InternedNestedFacts.Facts source)
+    (value : Value Symbol Guard) (input : Input)
+    (available : Available source value)
+    (complete : IntersectionFlatMemoKey.input value.referenceOf = some input)
+    (original : OriginalInput source input) : Original value
