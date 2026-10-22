@@ -1,0 +1,33 @@
+  obtain ⟨scope, complete, orderedSymbols⟩ := orderedInputs
+  have ready : EdgeReady before.checked.native.machine request :=
+    ⟨empty_domain _, edge_grows source _ growth _ scope.leftResident,
+      edge_grows source _ growth _ scope.rightResident⟩
+  have ranges := SourceCurrentAllocatedDirectEdgeWordRanges.edge_body bits source before.checked
+    facts good semantic growth history request.left request.right scope ready room
+  have active : SourceRecursiveIntersectionNative.ActiveAbove
+      (view source (guardHolds formulas solver)) (guardHolds formulas solver)
+      (requiredFuel (view source (guardHolds formulas solver))
+        (SourceRecursiveIntersectionNative.edgeSemantic (guardHolds formulas solver) request) complete)
+      before.checked.native := idle.active _ _ _ _
+  have memoValid : FlatMemoThunk.Valid
+      (fun (pair : Edge × Edge) (key : Nat × Nat) =>
+        (pair.1.entry.identity, pair.2.entry.identity) = key)
+      (fun _ => True) before.memo :=
+    FlatMemoThunk.Valid.map before.memo _ _ _ stable.valid (fun _ _ => True.intro)
+  obtain ⟨fuel, nativeFuel, handle, result, after, done, receipt, stored, cell, _, reversed⟩ :=
+    SourceCurrentSameSymbolEdgeForwardCompletion.both_miss_complete source facts formulas solver
+      inputModel inputRanked left right before memoValid missing reverseMissing scope complete
+      good contextual semantic orderedSymbols ready growth history active ranges
+  obtain ⟨afterStable, tables, retained⟩ :=
+    SourceCurrentSameSymbolEdgeStable.completed_preserves
+      (view source (guardHolds formulas solver)) inputModel inputRanked (guardHolds formulas solver)
+      fuel left right result before after stable
+      (edge_grows source _ growth _ sourceScope.leftResident)
+      (edge_grows source _ growth _ sourceScope.rightResident)
+      done receipt.extension receipt.result receipt.law
+  have afterIdle : NativeIdle after.checked.native :=
+    SourceCurrentAllocatedNativeRunning.done_idle (nativeFuel + 1) (.edgeBody request .pure)
+      before.checked after.checked result (by intro value; trivial)
+      good.native.shape idle receipt.done
+  exact ⟨fuel, nativeFuel, handle, result, after, done, receipt, afterStable, afterIdle,
+    tables, retained, stored, cell, reversed⟩

@@ -1,0 +1,7 @@
+/-- Admission constructs the checks of a supplied raw prefix from its local source certificate. -/
+def Admits (source : InternedConstructorTemplates.State Symbol Guard)
+    (inventory : List DomainKey) (initial : Cache.State DomainKey) (width fuel : Nat) : Prop :=
+  ∀ {A : Type} (control : Control A) (before : Checked width) (remaining : Control A) (after : Checked width)
+    (post : Machine Symbol Guard → A → Prop), Current source inventory initial before →
+    Certified source inventory control before.native.machine post → Fields control before →
+    Steps fuel control before remaining after → Receipt source inventory initial fuel control before remaining after post

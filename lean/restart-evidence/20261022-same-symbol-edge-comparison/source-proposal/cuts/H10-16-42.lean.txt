@@ -1,0 +1,27 @@
+private theorem read_ready
+    (semanticView : View Symbol) (model : InputMeaning semanticView)
+    (ranked : RankedInput semanticView model.valid) (holds : Guard → Term Symbol → Bool)
+    (left right : Edge) (before : Wrapper width)
+    (coherent : InternedRecordCoherence.Coherent before.checked.native.machine.heap)
+    (stable : SourceCurrentSameSymbolEdgeStable.Stable semanticView model ranked holds before)
+    (leftResident : EdgeResident before.checked.native.machine.heap left)
+    (rightResident : EdgeResident before.checked.native.machine.heap right)
+    (handle : Nat) (present : before.memo.table (left.entry.identity, right.entry.identity) = some handle) :
+    ∃ result, before.memo.cells handle = some ⟨(left, right), .returned result⟩ ∧
+      EdgeResident before.checked.native.machine.heap result ∧
+      (let ordered := if right.entry.identity < left.entry.identity then (right, left) else (left, right)
+       SourceCurrentAllocatedNativeContextCache.EdgeLaw semanticView model ranked holds
+         ⟨IntersectionEmptyDomain.emptyDomain, ordered.1, ordered.2⟩ result) := by
+  obtain ⟨⟨⟨capturedLeft, capturedRight⟩, status⟩, stored, keys⟩ :=
+    stable.valid.linked (left.entry.identity, right.entry.identity) handle present
+  obtain ⟨result, phase⟩ := stable.returned handle _ stored
+  change status = .returned result at phase
+  subst status
+  obtain ⟨first, second, spec⟩ := stable.valid.checked handle _ stored
+  have leftIdentity : capturedLeft.entry.identity = left.entry.identity := congrArg Prod.fst keys
+  have rightIdentity : capturedRight.entry.identity = right.entry.identity := congrArg Prod.snd keys
+  have leftSame := edge_identity_unique _ coherent capturedLeft left first leftResident leftIdentity
+  have rightSame := edge_identity_unique _ coherent capturedRight right second rightResident rightIdentity
+  subst capturedLeft
+  subst capturedRight
+  exact ⟨result, stored, spec.1, spec.2⟩

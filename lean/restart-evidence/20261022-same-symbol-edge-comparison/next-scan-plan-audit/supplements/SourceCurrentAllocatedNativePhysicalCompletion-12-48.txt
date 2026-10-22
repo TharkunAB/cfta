@@ -1,0 +1,37 @@
+namespace MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion
+open Cache InternedConstructorTemplates InternedProbeProvenance InternedEdgeResidency
+open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionThunks SourceRecursiveIntersectionCode
+open SourceRecursiveIntersectionInputView IntersectSchedule SourceEqualityNativeDemand
+open SourceCurrentAllocatedNativeFieldClosure (Fields OutcomeFields body_fields)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "CheckedState" => SourceEqualityNativeDemand.State
+local notation "CodeFields" => SourceCurrentAllocatedNativeCodeFields.Fields
+local notation "Heap" => SourceCurrentConjunctionEquality.Fields
+local notation "Operations" => SourceEqualityConstraintMemoAllocation.State
+local instance : DecidableEq (SourceGuards.Guard FullSyntax.Formula) :=
+  SourceEqualityPCSNativeEdge.guardDecidableEq
+
+/-- Initial physical caches and loaded fields contain no semantic result receipt. -/
+structure Good (state : CheckedState width) : Prop where
+  native : SourceCurrentAllocatedNativePhysicalCache.Valid state.native
+  heap : SourceEqualityRequiredCache.Ready state.native.machine.heap
+  operations : SourceEqualityConstraintMemoAllocation.Valid state.operations
+  fields : Heap state.operations state.native.machine.heap
+
+private theorem lift_native (operations : SourceEqualityConstraintMemoAllocation.State)
+    (outcome : SourceRecursiveIntersectionNative.Outcome width Symbol Guard Output) :
+    (lift operations outcome).state.native = outcome.state := by cases outcome <;> rfl
+
+/-- Actual source instructions retain field loads in the returned operation cache. -/
+theorem step_fields [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (control : Control Output) (state : CheckedState width)
+    (valid : Good state) (heap : Heap state.operations state.native.machine.heap)
+    (inputs : SourceCurrentAllocatedNativePhysicalExecution.Inputs control state) (fields : Fields control state) :
+    OutcomeFields (step control state) := by
+  cases control with
+  | edgeBody request next =>
+      have growth := SourceEqualityNativeDemandOperations.body_operations request next state valid.operations
+        (heap _ _ fields.1.2.1).1 (heap _ _ fields.1.2.2).1
+      have retained : Heap (body request next state).state.operations (body request next state).state.native.machine.heap := by
+        rw [SourceEqualityNativeDemandOperations.body_native]

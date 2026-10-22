@@ -1,0 +1,12 @@
+
+/-- Returned physical execution records its own trace, effects, and structural postcondition. -/
+structure Receipt [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (control : Control A) (before : Checked width) (value : A) (after : Checked width)
+    (post : Machine Symbol Guard → A → Prop) : Prop where
+  trace : Trace fuel control before (.code (.pure value)) after
+  good : Good after
+  extension : Extension before.native.machine after.native.machine
+  keeps : SourceEqualityRequiredCache.Keeps before.native.machine.heap after.native.machine.heap
+  operations : SourceEqualityConstraintMemoAllocation.Grows before.operations after.operations
+  result : post after.native.machine value
+

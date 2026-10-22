@@ -1,0 +1,4 @@
+/-- Removing redundant alternatives preserves every term of the cluster. -/
+theorem reduce_exact [DecidableEq Edge] (meet : Edge → Edge → Edge) (meaning : Edge → Term → Prop)
+    (intersection : ∀ first second term, meaning (meet first second) term ↔ meaning first term ∧ meaning second term)
+    (edges : List Edge) (term : Term) : Denotes meaning (reduce meet edges) term ↔ Denotes meaning edges term := by

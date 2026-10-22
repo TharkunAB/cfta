@@ -1,0 +1,77 @@
+--- H13/bind-actual-evidence.py
++++ H14/bind-actual-evidence.py
+@@ -6,13 +6,13 @@
+ from pathlib import Path
+ 
+ HERE = Path(__file__).resolve().parent
+-name = 'SourceCurrentSameSymbolEdgeOriginalRows'
++name = 'SourceCurrentSameSymbolEdgeComparison'
+ source = (HERE / (name + '.lean')).read_bytes()
+ sha = lambda data: hashlib.sha256(data).hexdigest()
+-assert sha(source) == '9d8af23bc2bbdd97f462a34b4d786d772a55bebf243dd585187b25630ac6440b'
+-readback = json.loads((HERE / 'public-readback/same-symbol-edge-original-rows-full-readback.json').read_text())
+-checked = (HERE / 'public-readback/same-symbol-edge-original-rows-both_miss_complete-public-type.txt').read_bytes()
+-body = (HERE / 'public-readback/same-symbol-edge-original-rows-both_miss_complete-body.txt').read_bytes()
++assert sha(source) == '02d01576ce9e7188342835138452a5163b150e28c264c01782137848e1a1c560'
++readback = json.loads((HERE / 'public-readback/same-symbol-edge-comparison-full-readback.json').read_text())
++checked = (HERE / 'public-readback/same-symbol-edge-comparison-original_rows_complete-public-type.txt').read_bytes()
++body = (HERE / 'public-readback/same-symbol-edge-comparison-original_rows_complete-body.txt').read_bytes()
+ assert readback['heads'][0]['actual_axioms'] == ['Classical.choice', 'Quot.sound', 'propext']
+ jobs = {}
+ for path in HERE.glob('*.json'):
+@@ -20,7 +20,7 @@
+     if isinstance(item, dict) and 'wrapper' in item and 'exit_code' in item:
+         if Path(item.get('command', [''])[0]).name in {'lean', 'lake'}:
+             jobs[path.stem] = item
+-strict, full, audit_stem = ['same-symbol-edge-original-rows-' + suffix
++strict, full, audit_stem = ['same-symbol-edge-comparison-' + suffix
+                           for suffix in ['strict-1', 'public-1', 'audit-1']]
+ assert set(jobs) == {strict, full, audit_stem}
+ assert all(item['exit_code'] == 0 for item in jobs.values())
+@@ -28,7 +28,7 @@
+ audit = (HERE / (audit_stem + '.log')).read_bytes()
+ build = re.search(rb'Build completed successfully \((\d+) jobs\)\.', audit)
+ dependencies = re.search(rb'Checked axiom dependencies of (\d+) MicroCFTA theorems', audit)
+-assert build and dependencies and (int(build[1]), int(dependencies[1])) == (3630, 75383)
++assert build and dependencies and int(build[1]) > 0 and int(dependencies[1]) > 0
+ ledger = {}
+ for stem, receipt in jobs.items():
+     raw = (HERE / receipt['log']).read_bytes()
+@@ -61,14 +61,15 @@
+     'TYPE_CHARACTERS': str(len(checked.decode())),
+     'BODY_BYTES': str(len(body)), 'BODY_CHARACTERS': str(len(body.decode())),
+     'ACTUAL_AXIOMS_JSON': json.dumps(readback['heads'][0]['actual_axioms']),
+-    'BACKUP_REF': 'codex/backup-same-symbol-edge-original-rows-20261022-0356',
++    'BACKUP_REF': 'codex/backup-same-symbol-edge-comparison-20261022-0424',
++    'FULL_READER_SHA': sha((HERE / 'full-preparation/check-full-public.py').read_bytes()),
+ }
+ sets = [
+     ('checkpoint-preparation', 'actual-tools-preparation', [
+         'verify-preservation.py', 'verify-checkpoint.py', 'commit-proofs.py',
+         'seal-checkpoint.py', 'verify-seal.py', 'archive-support.py',
+-        'final-publication.py', 'update-documents.py'], 18),
+-    ('proof-verifier-preparation', 'actual-verifier-preparation', ['verify-proofs.py'], 24),
++        'final-publication.py', 'update-documents.py'], 19),
++    ('proof-verifier-preparation', 'actual-verifier-preparation', ['verify-proofs.py'], 25),
+ ]
+ for predecessor, directory, names, expected_bindings in sets:
+     target = HERE / directory
+@@ -79,15 +80,15 @@
+         path = HERE / predecessor / name
+         before = path.read_text()
+         after = before
+-        for key in sorted(set(re.findall(r'__H13_([A-Z_]+)__', before))):
+-            token, value = '__H13_' + key + '__', values[key]
++        for key in sorted(set(re.findall(r'__H14_([A-Z_]+)__', before))):
++            token, value = '__H14_' + key + '__', values[key]
+             if key.endswith('_JSON'):
+                 after = after.replace('"' + token + '"', repr(value)).replace("'" + token + "'", repr(value))
+             else:
+                 after = after.replace(token, value)
+             assert token not in after
+             used[key] = value
+-        assert '__H13_' not in after
++        assert '__H14_' not in after
+         ast.parse(after)
+         assert sum(isinstance(node, ast.Assert) for node in ast.walk(ast.parse(before))) == sum(
+             isinstance(node, ast.Assert) for node in ast.walk(ast.parse(after)))

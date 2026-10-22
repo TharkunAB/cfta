@@ -1,0 +1,11 @@
+--- before-pin-schema
++++ after-pin-schema
+@@ -7,7 +7,7 @@
+ HERE = Path(__file__).resolve().parent
+ source = HERE / 'full-preparation/prepare-selected-full.py'
+ pins = json.loads((HERE / 'full-preparation/pins.json').read_text())
+-assert hashlib.sha256(source.read_bytes()).hexdigest() == pins[source.name]
++assert hashlib.sha256(source.read_bytes()).hexdigest() == pins['files'][source.name]['sha256']
+ assert (HERE / 'full-reader-audit/review.md').is_file()
+ old = (HERE.parent / '20261022-same-symbol-edge-original-rows/materialize-full.py').read_bytes()
+ (HERE / 'materialize-full.H13-original.py.txt').write_bytes(old)

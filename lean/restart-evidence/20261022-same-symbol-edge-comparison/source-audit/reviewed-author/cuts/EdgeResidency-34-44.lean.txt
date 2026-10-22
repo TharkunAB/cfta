@@ -1,0 +1,11 @@
+/-- Actual table growth retains complete edge payloads. -/
+theorem edge_grows (before after : State Symbol Guard) (growth : Grows before after)
+    (edge : EdgeValue Symbol Guard) (resident : EdgeResident before edge) : EdgeResident after edge :=
+  growth.edgeRecords edge.entry.key edge resident
+
+/-- Residency of the parent gives residency of every actual outgoing edge. -/
+theorem resident_edges (state : State Symbol Guard) (linked : Linked state)
+    (value : Value Symbol Guard) (resident : Resident state value) :
+    ∀ edge ∈ nodeEdges value, EdgeResident state edge := by
+  cases value <;> simp only [nodeEdges] <;> try simp
+  case node entry edges depth free => exact linked entry.key _ (resident entry rfl)

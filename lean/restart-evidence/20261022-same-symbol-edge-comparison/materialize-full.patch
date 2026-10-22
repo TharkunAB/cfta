@@ -1,0 +1,26 @@
+--- H13-materialize-full
++++ H14-materialize-full
+@@ -1,3 +1,4 @@
++import difflib
+ import hashlib
+ import json
+ import subprocess
+@@ -6,9 +7,15 @@
+ HERE = Path(__file__).resolve().parent
+ source = HERE / 'full-preparation/prepare-selected-full.py'
+ pins = json.loads((HERE / 'full-preparation/pins.json').read_text())
+-assert hashlib.sha256(source.read_bytes()).hexdigest() == pins[source.name]
++assert hashlib.sha256(source.read_bytes()).hexdigest() == pins['files'][source.name]['sha256']
++assert (HERE / 'full-reader-audit/review.md').is_file()
++old = (HERE.parent / '20261022-same-symbol-edge-original-rows/materialize-full.py').read_bytes()
++(HERE / 'materialize-full.H13-original.py.txt').write_bytes(old)
++(HERE / 'materialize-full.patch').write_text(''.join(difflib.unified_diff(
++    old.decode().splitlines(keepends=True), Path(__file__).read_text().splitlines(keepends=True),
++    fromfile='H13-materialize-full', tofile='H14-materialize-full')))
+ target = HERE / source.name
+ assert not target.exists()
+ target.write_bytes(source.read_bytes())
+-subprocess.run(['/usr/bin/python3', str(target), 'same-symbol-edge-original-rows-strict-1',
+-    '9d8af23bc2bbdd97f462a34b4d786d772a55bebf243dd585187b25630ac6440b', '174'], check=True)
++subprocess.run(['/usr/bin/python3', str(target), 'same-symbol-edge-comparison-strict-1',
++    '02d01576ce9e7188342835138452a5163b150e28c264c01782137848e1a1c560', '112'], check=True)

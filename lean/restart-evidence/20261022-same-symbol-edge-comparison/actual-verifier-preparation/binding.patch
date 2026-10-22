@@ -1,0 +1,77 @@
+--- proof-verifier-preparation/verify-proofs.py
++++ actual-verifier-preparation/verify-proofs.py
+@@ -16,14 +16,14 @@
+ def digest(data):
+     return hashlib.sha256(data).hexdigest()
+ name, head = "SourceCurrentSameSymbolEdgeComparison", "MicroCFTA.SourceCurrentSameSymbolEdgeComparison.original_rows_complete"
+-selected_sha = "__H14_SELECTED_SOURCE_SHA__"
+-source_lines = int("__H14_SOURCE_LINES__")
+-strict_stem, full_stem, audit_stem = "__H14_SELECTED_STRICT_STEM__", "__H14_SELECTED_FULL_STEM__", "__H14_AUDIT_STEM__"
+-metrics = dict(actual_jobs=int("__H14_ACTUAL_JOBS__"), source_jobs=int("__H14_SOURCE_JOBS__"), audit_jobs=int("__H14_AUDIT_JOBS__"),
+-    failed_jobs=int("__H14_FAILED_JOBS__"), warned_source_exit_zero_jobs=int("__H14_WARNED_SOURCE_EXIT_ZERO_JOBS__"),
+-    rejected_public_type_jobs=int("__H14_REJECTED_PUBLIC_TYPE_JOBS__"))
+-jobs = json.loads('__H14_JOBS_JSON__')
+-rejected = json.loads('__H14_REJECTED_PUBLIC_STEMS_JSON__')
++selected_sha = "02d01576ce9e7188342835138452a5163b150e28c264c01782137848e1a1c560"
++source_lines = int("112")
++strict_stem, full_stem, audit_stem = "same-symbol-edge-comparison-strict-1", "same-symbol-edge-comparison-public-1", "same-symbol-edge-comparison-audit-1"
++metrics = dict(actual_jobs=int("3"), source_jobs=int("2"), audit_jobs=int("1"),
++    failed_jobs=int("0"), warned_source_exit_zero_jobs=int("0"),
++    rejected_public_type_jobs=int("0"))
++jobs = json.loads('{"same-symbol-edge-comparison-audit-1": [0, null, "7e8be4569d2e14ecf95f0ac83511e8ca6e569dde6c70dbb761c51782f386af0b", null, null], "same-symbol-edge-comparison-public-1": [0, "83ecdd4a280a8465191222957fd460b5917ab1d490d52397e50e11a981f053a9", "61cf4903d08f2d93443807fbb8429b6dbba821cc92910509d74a5404f905334d", 0, 0], "same-symbol-edge-comparison-strict-1": [0, "02d01576ce9e7188342835138452a5163b150e28c264c01782137848e1a1c560", "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", 0, 0]}')
++rejected = json.loads('[]')
+ assert jobs and all(stem.startswith("same-symbol-edge-comparison-") for stem in jobs)
+ assert strict_stem in jobs and full_stem in jobs and audit_stem in jobs
+ assert jobs[strict_stem][0] == jobs[full_stem][0] == jobs[audit_stem][0] == 0
+@@ -102,7 +102,7 @@
+ assert all(printer.decode().splitlines().count(d + head) == 1 for d in ["#check @", "#print ", "#print axioms "])
+ assert source.rstrip().endswith(("end MicroCFTA." + name).encode())
+ assert (report["source_sha256"], report["source_lines"], report["printer_sha256"]) == (selected_sha, source_lines, digest(printer))
+-assert report["log_sha256"] == digest(raw) and report["log_bytes"] == len(raw) == int("__H14_FULL_RAW_BYTES__")
++assert report["log_sha256"] == digest(raw) and report["log_bytes"] == len(raw) == int("4460566")
+ assert report["receipt_sha256"] == digest((evidence / (full_stem + ".json")).read_bytes()) and report["owned_public_job_exit"] == 0
+ assert all(report[key] for key in ["all_eight_printer_settings", "exact_module_and_diagnostic_tail", "diagnostic_limits_after_module_only", "no_omissions"])
+ assert len(report["heads"]) == 1 and report["heads"][0]["head"] == head and report["heads"][0]["kind"] == "theorem"
+@@ -124,9 +124,9 @@
+         break
+ assert len(matches) == 1
+ declared, body = declaration[:matches[0].start()], declaration[matches[0].end():]
+-assert checked.encode() == declared.encode() and len(checked) == int("__H14_TYPE_CHARACTERS__") and len(checked.encode()) == int("__H14_TYPE_BYTES__")
+-assert len(checked.splitlines()) == int("__H14_TYPE_LOGICAL_LINES__") and checked.count("\n") == int("__H14_TYPE_LINE_FEEDS__") and not checked.endswith("\n")
+-assert digest(checked.encode()) == "__H14_TYPE_SHA__"
++assert checked.encode() == declared.encode() and len(checked) == int("69795") and len(checked.encode()) == int("69839")
++assert len(checked.splitlines()) == int("728") and checked.count("\n") == int("727") and not checked.endswith("\n")
++assert digest(checked.encode()) == "7fb94c311d5eff9aa93faa2dab7cc235a2e9dffe365b98d2c5ca04c39c49dd8d"
+ assert not any(token in checked for token in ["_private", "✝", "†", "‡"])
+ helpers = re.findall(r"^private (?:noncomputable )?(?:def|theorem|abbrev) (\w+)", source.decode(), re.M)
+ assert helpers == []
+@@ -134,17 +134,17 @@
+ head_report = report["heads"][0]
+ assert all(head_report[key] for key in ["check_print_type_identity", "check_print_type_byte_identity", "unique_complete_type_body_delimiter", "actual_axioms_within_standard_allowed"])
+ assert head_report["private_namespace_helpers_checked"] == helpers and head_report["private_type_spellings_checked"] == ["_private", "✝", "†", "‡"] and head_report["private_public_type_names"] is False
+-assert head_report["checked_type_characters"] == len(checked) and head_report["body_characters"] == len(body) == int("__H14_BODY_CHARACTERS__")
+-assert body.startswith("fun ") and len(body.encode()) == int("__H14_BODY_BYTES__")
++assert head_report["checked_type_characters"] == len(checked) and head_report["body_characters"] == len(body) == int("4320550")
++assert body.startswith("fun ") and len(body.encode()) == int("4320588")
+ values = re.fullmatch(r"\s*\[([^\]]*)\]\s*", printed[axiom.end():]) if axiom.group(1) == "depends on axioms:" else None
+ assert values or (axiom.group(1) == "does not depend on any axioms" and not printed[axiom.end():].strip())
+ actual_axioms = {re.sub(r"\.\{[^}]*\}", "", item.strip()) for item in values.group(1).split(",") if item.strip()} if values else set()
+-assert actual_axioms == set(head_report["actual_axioms"]) == set(json.loads('__H14_ACTUAL_AXIOMS_JSON__')) and actual_axioms <= {"Classical.choice", "Quot.sound", "propext"}
++assert actual_axioms == set(head_report["actual_axioms"]) == set(json.loads('["Classical.choice", "Quot.sound", "propext"]')) and actual_axioms <= {"Classical.choice", "Quot.sound", "propext"}
+ for suffix, text in [("public-type", checked), ("printed-public-type", declared), ("body", body), ("axioms", axiom_output)]:
+     filename = "same-symbol-edge-comparison-original_rows_complete-" + suffix + ".txt"
+     retained = (evidence / "public-readback" / filename).read_bytes()
+     assert retained == text.encode() and report["retained_slices"][filename] == dict(bytes=len(retained), sha256=digest(retained))
+-assert digest((evidence / "full-preparation/check-full-public.py").read_bytes()) == "__H14_FULL_READER_SHA__"
++assert digest((evidence / "full-preparation/check-full-public.py").read_bytes()) == "058187125a18160aa38db0e403aa177516440d146af23bc823d74cf06e17a707"
+ review = load("root-full-review.json")
+ assert review["status"] == "ROOT_ACCEPTED_FOR_OFFICIAL_INSTALL_AND_AUDIT" and review["source_sha256"] == selected_sha and review["source_lines"] == source_lines
+ assert review["public_theorem"] == head and review["complete_public_type_root_review"] == review["independent_complete_public_type_review"] == "CLEAR"
+@@ -159,6 +159,6 @@
+ build = re.search(r"Build completed successfully \((\d+) jobs\)\.", audit)
+ dependencies = re.search(r"Checked axiom dependencies of (\d+) MicroCFTA theorems", audit)
+ assert build and dependencies and not re.search(r"\berror(?:\([^)]*\))?:", audit)
+-assert int(build.group(1)) == int("__H14_AUDIT_BUILD_JOBS__") and int(dependencies.group(1)) == int("__H14_AUDIT_DEPENDENCIES__")
++assert int(build.group(1)) == int("3631") and int(dependencies.group(1)) == int("75384")
+ print(json.dumps(dict(status="PASS", live=args.live, **metrics, new_lean_lake_jobs=0, selected_modules=1, original_archives=1,
+     audit_build_jobs=int(build.group(1)), audit_dependencies=int(dependencies.group(1)), audit_log_sha256=digest(audit.encode())), indent=2))

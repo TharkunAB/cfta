@@ -1,0 +1,5 @@
+/-- Physical validity includes exact original keys, fresh handles, and resident results. -/
+structure Valid (state : Native width Symbol Guard) : Prop where
+  machine : SourceRecursiveIntersectionKernel.Valid state.machine
+  nodes : FlatMemoThunk.Valid (NodeKey width) (NodeGood state.machine) state.nodes
+  edges : FlatMemoThunk.Valid (EdgeKeyOf width) (EdgeGood state.machine) state.edges
