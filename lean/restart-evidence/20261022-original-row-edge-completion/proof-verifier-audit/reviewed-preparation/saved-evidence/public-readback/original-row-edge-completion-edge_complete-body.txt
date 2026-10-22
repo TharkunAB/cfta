@@ -1,0 +1,1703 @@
+fun {Symbol Guard} [inst : DecidableEq.{1} Symbol] source facts holds leftParent rightParent leftOriginal rightOriginal
+    leftAvailable rightAvailable leftClosed rightClosed left right leftMember rightMember =>
+  @MicroCFTA.InternedConstructorTemplates.Value.casesOn.{0} Symbol Guard
+    (fun t =>
+      @Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) leftParent t →
+        @MicroCFTA.IntersectSchedule.Completes Symbol inst
+          (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+          (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+            (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+              MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+    leftParent
+    (fun h =>
+      @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+        (fun leftParent =>
+          @MicroCFTA.SourceRecursiveIntersectionInputView.OriginalInput Symbol Guard source
+              (@MicroCFTA.SourceRecursiveIntersectionInputView.inputOf Symbol Guard leftParent) →
+            @MicroCFTA.InternedProbeProvenance.Available Symbol Guard source leftParent →
+              @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard leftParent)
+                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+                @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                    (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard leftParent) left →
+                  @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                    (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                    (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                        MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+        (fun leftOriginal leftAvailable leftClosed leftMember =>
+          @List.Mem.casesOn.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) left
+            (fun a t =>
+              @Eq.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                  (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                    (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                  a →
+                @HEq.{0}
+                    (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                      (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                        (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                      left)
+                    leftMember (@List.Mem.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) left a)
+                    t →
+                  @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                    (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                    (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                        MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+            (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+              (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+            leftMember
+            (fun as h =>
+              @False.elim.{0}
+                (@HEq.{0}
+                    (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                      (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                        (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                      left)
+                    leftMember
+                    (@List.Mem.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) left
+                      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) left as))
+                    (@List.Mem.head.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) left as) →
+                  @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                    (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                    (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                        MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+                (@noConfusion_of_Nat.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                  (@List.ctorIdx.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                  (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                  (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) left as) h))
+            (fun b {as} a h =>
+              @False.elim.{0}
+                (@HEq.{0}
+                    (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                      (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                        (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                      left)
+                    leftMember
+                    (@List.Mem.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) left
+                      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) b as))
+                    (@List.Mem.tail.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) left b as a) →
+                  @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                    (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                    (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                        MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+                (@noConfusion_of_Nat.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                  (@List.ctorIdx.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                  (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                  (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) b as) h))
+            (@Eq.refl.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+              (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)))
+            (@HEq.refl.{0}
+              (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                  (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                left)
+              leftMember))
+        leftParent
+        (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) leftParent
+          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) h)
+        leftOriginal leftAvailable leftClosed leftMember)
+    (fun name h =>
+      @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+        (fun leftParent =>
+          @MicroCFTA.SourceRecursiveIntersectionInputView.OriginalInput Symbol Guard source
+              (@MicroCFTA.SourceRecursiveIntersectionInputView.inputOf Symbol Guard leftParent) →
+            @MicroCFTA.InternedProbeProvenance.Available Symbol Guard source leftParent →
+              @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard leftParent)
+                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+                @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                    (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard leftParent) left →
+                  @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                    (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                    (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                        MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+        (fun leftOriginal leftAvailable leftClosed leftMember =>
+          @List.Mem.casesOn.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) left
+            (fun a t =>
+              @Eq.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                  (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                    (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                  a →
+                @HEq.{0}
+                    (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                      (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                      left)
+                    leftMember (@List.Mem.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) left a)
+                    t →
+                  @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                    (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                    (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                        MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+            (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+              (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+            leftMember
+            (fun as h =>
+              @False.elim.{0}
+                (@HEq.{0}
+                    (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                      (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                      left)
+                    leftMember
+                    (@List.Mem.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) left
+                      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) left as))
+                    (@List.Mem.head.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) left as) →
+                  @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                    (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                    (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                        MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+                (@noConfusion_of_Nat.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                  (@List.ctorIdx.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                  (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                  (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) left as) h))
+            (fun b {as} a h =>
+              @False.elim.{0}
+                (@HEq.{0}
+                    (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                      (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                      left)
+                    leftMember
+                    (@List.Mem.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) left
+                      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) b as))
+                    (@List.Mem.tail.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) left b as a) →
+                  @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                    (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                    (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                        MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+                (@noConfusion_of_Nat.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                  (@List.ctorIdx.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                  (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                  (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) b as) h))
+            (@Eq.refl.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+              (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)))
+            (@HEq.refl.{0}
+              (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                left)
+              leftMember))
+        leftParent
+        (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) leftParent
+          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) h)
+        leftOriginal leftAvailable leftClosed leftMember)
+    (fun first leftEdges leftDepth leftFree h =>
+      @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard first leftEdges leftDepth leftFree)
+        (fun leftParent =>
+          @MicroCFTA.SourceRecursiveIntersectionInputView.OriginalInput Symbol Guard source
+              (@MicroCFTA.SourceRecursiveIntersectionInputView.inputOf Symbol Guard leftParent) →
+            @MicroCFTA.InternedProbeProvenance.Available Symbol Guard source leftParent →
+              @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard leftParent)
+                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+                @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                    (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard leftParent) left →
+                  @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                    (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                    (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                        MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+        (fun leftOriginal leftAvailable leftClosed leftMember =>
+          @MicroCFTA.InternedConstructorTemplates.Value.casesOn.{0} Symbol Guard
+            (fun t =>
+              @Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rightParent t →
+                @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                  (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                  (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                    (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                      MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+            rightParent
+            (fun h =>
+              @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+                (fun rightParent =>
+                  @MicroCFTA.SourceRecursiveIntersectionInputView.OriginalInput Symbol Guard source
+                      (@MicroCFTA.SourceRecursiveIntersectionInputView.inputOf Symbol Guard rightParent) →
+                    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard source rightParent →
+                      @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard rightParent)
+                          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+                        @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                            (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                            (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard rightParent) right →
+                          @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                            (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                            (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                              (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                                MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+                (fun rightOriginal rightAvailable rightClosed rightMember =>
+                  @List.Mem.casesOn.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) right
+                    (fun a t =>
+                      @Eq.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                          (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                            (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                          a →
+                        @HEq.{0}
+                            (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                              (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                              (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                                (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                              right)
+                            rightMember
+                            (@List.Mem.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) right a) t →
+                          @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                            (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                            (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                              (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                                MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+                    (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                      (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                    rightMember
+                    (fun as h =>
+                      @False.elim.{0}
+                        (@HEq.{0}
+                            (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                              (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                              (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                                (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                              right)
+                            rightMember
+                            (@List.Mem.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) right
+                              (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) right as))
+                            (@List.Mem.head.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) right
+                              as) →
+                          @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                            (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                            (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                              (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                                MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+                        (@noConfusion_of_Nat.{1}
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                          (@List.ctorIdx.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) right as) h))
+                    (fun b {as} a h =>
+                      @False.elim.{0}
+                        (@HEq.{0}
+                            (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                              (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                              (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                                (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                              right)
+                            rightMember
+                            (@List.Mem.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) right
+                              (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) b as))
+                            (@List.Mem.tail.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) right b
+                              as a) →
+                          @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                            (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                            (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                              (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                                MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+                        (@noConfusion_of_Nat.{1}
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                          (@List.ctorIdx.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) b as) h))
+                    (@Eq.refl.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                      (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                        (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)))
+                    (@HEq.refl.{0}
+                      (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                        (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                        (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard))
+                        right)
+                      rightMember))
+                rightParent
+                (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rightParent
+                  (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) h)
+                rightOriginal rightAvailable rightClosed rightMember)
+            (fun name h =>
+              @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+                (fun rightParent =>
+                  @MicroCFTA.SourceRecursiveIntersectionInputView.OriginalInput Symbol Guard source
+                      (@MicroCFTA.SourceRecursiveIntersectionInputView.inputOf Symbol Guard rightParent) →
+                    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard source rightParent →
+                      @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard rightParent)
+                          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+                        @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                            (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                            (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard rightParent) right →
+                          @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                            (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                            (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                              (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                                MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+                (fun rightOriginal rightAvailable rightClosed rightMember =>
+                  @List.Mem.casesOn.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) right
+                    (fun a t =>
+                      @Eq.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                          (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                            (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                          a →
+                        @HEq.{0}
+                            (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                              (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                              (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                              right)
+                            rightMember
+                            (@List.Mem.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) right a) t →
+                          @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                            (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                            (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                              (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                                MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+                    (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                      (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                    rightMember
+                    (fun as h =>
+                      @False.elim.{0}
+                        (@HEq.{0}
+                            (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                              (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                              (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                              right)
+                            rightMember
+                            (@List.Mem.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) right
+                              (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) right as))
+                            (@List.Mem.head.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) right
+                              as) →
+                          @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                            (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                            (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                              (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                                MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+                        (@noConfusion_of_Nat.{1}
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                          (@List.ctorIdx.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) right as) h))
+                    (fun b {as} a h =>
+                      @False.elim.{0}
+                        (@HEq.{0}
+                            (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                              (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                              (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                                (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                              right)
+                            rightMember
+                            (@List.Mem.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) right
+                              (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) b as))
+                            (@List.Mem.tail.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) right b
+                              as a) →
+                          @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                            (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                            (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                              (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                                MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+                        (@noConfusion_of_Nat.{1}
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                          (@List.ctorIdx.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) b as) h))
+                    (@Eq.refl.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                      (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)))
+                    (@HEq.refl.{0}
+                      (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                        (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                        (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name))
+                        right)
+                      rightMember))
+                rightParent
+                (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rightParent
+                  (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) h)
+                rightOriginal rightAvailable rightClosed rightMember)
+            (fun second rightEdges rightDepth rightFree h =>
+              @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard second rightEdges rightDepth rightFree)
+                (fun rightParent =>
+                  @MicroCFTA.SourceRecursiveIntersectionInputView.OriginalInput Symbol Guard source
+                      (@MicroCFTA.SourceRecursiveIntersectionInputView.inputOf Symbol Guard rightParent) →
+                    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard source rightParent →
+                      @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard rightParent)
+                          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+                        @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                            (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                            (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard rightParent) right →
+                          @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                            (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                            (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                              (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                                MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+                (fun rightOriginal rightAvailable rightClosed rightMember =>
+                  @id.{0}
+                    (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                        (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                        (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard first leftEdges leftDepth
+                            leftFree))
+                        left →
+                      @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                        (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                        (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                          (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                            MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+                    (fun leftMember =>
+                      @id.{0}
+                        (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                            (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                            (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                              (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard second rightEdges
+                                rightDepth rightFree))
+                            right →
+                          @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                            (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                            (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                              (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                                MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+                        (fun rightMember =>
+                          have firstOriginal :=
+                            @MicroCFTA.SourceRecursiveIntersectionOriginalRowCompletion.original_of_readback Symbol
+                              Guard source facts
+                              (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard first leftEdges leftDepth
+                                leftFree)
+                              (MicroCFTA.IntersectSchedule.Input.node
+                                (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey first))
+                              leftAvailable
+                              (@rfl.{1} (Option.{0} MicroCFTA.IntersectSchedule.Input)
+                                (MicroCFTA.IntersectionFlatMemoKey.input
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                                    (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard first leftEdges
+                                      leftDepth leftFree))))
+                              leftOriginal;
+                          have secondOriginal :=
+                            @MicroCFTA.SourceRecursiveIntersectionOriginalRowCompletion.original_of_readback Symbol
+                              Guard source facts
+                              (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard second rightEdges
+                                rightDepth rightFree)
+                              (MicroCFTA.IntersectSchedule.Input.node
+                                (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey second))
+                              rightAvailable
+                              (@rfl.{1} (Option.{0} MicroCFTA.IntersectSchedule.Input)
+                                (MicroCFTA.IntersectionFlatMemoKey.input
+                                  (@MicroCFTA.InternedConstructorTemplates.Value.referenceOf Symbol Guard
+                                    (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard second rightEdges
+                                      rightDepth rightFree))))
+                              rightOriginal;
+                          have firstClosed :=
+                            @id.{0}
+                              (@Eq.{1} Bool
+                                (@MicroCFTA.IntersectSchedule.closed Symbol
+                                  (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                                  (MicroCFTA.IntersectSchedule.Input.node
+                                    (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey
+                                      first)))
+                                Bool.true)
+                              (@Eq.mpr.{0}
+                                (@Eq.{1} Bool
+                                  (@MicroCFTA.IntersectSchedule.closed Symbol
+                                    (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                                    (@MicroCFTA.SourceRecursiveIntersectionInputView.inputOf Symbol Guard
+                                      (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard first leftEdges
+                                        leftDepth leftFree)))
+                                  Bool.true)
+                                (@Eq.{1} Bool
+                                  (@List.isEmpty.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard
+                                      (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard first leftEdges
+                                        leftDepth leftFree)))
+                                  Bool.true)
+                                (@id.{0}
+                                  (@Eq.{1} Prop
+                                    (@Eq.{1} Bool
+                                      (@MicroCFTA.IntersectSchedule.closed Symbol
+                                        (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                                        (@MicroCFTA.SourceRecursiveIntersectionInputView.inputOf Symbol Guard
+                                          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard first
+                                            leftEdges leftDepth leftFree)))
+                                      Bool.true)
+                                    (@Eq.{1} Bool
+                                      (@List.isEmpty.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                        (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard
+                                          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard first
+                                            leftEdges leftDepth leftFree)))
+                                      Bool.true))
+                                  (@congrArg.{1, 1} Bool Prop
+                                    (@MicroCFTA.IntersectSchedule.closed Symbol
+                                      (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                                      (@MicroCFTA.SourceRecursiveIntersectionInputView.inputOf Symbol Guard
+                                        (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard first leftEdges
+                                          leftDepth leftFree)))
+                                    (@List.isEmpty.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard
+                                        (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard first leftEdges
+                                          leftDepth leftFree)))
+                                    (fun _a => @Eq.{1} Bool _a Bool.true)
+                                    (@MicroCFTA.SourceRecursiveIntersectionInputView.closed_readback Symbol Guard source
+                                      facts holds
+                                      (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard first leftEdges
+                                        leftDepth leftFree)
+                                      firstOriginal leftAvailable)))
+                                (@Eq.mpr.{0}
+                                  (@Eq.{1} Bool
+                                    (@List.isEmpty.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard
+                                        (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard first leftEdges
+                                          leftDepth leftFree)))
+                                    Bool.true)
+                                  (@Eq.{1} Bool
+                                    (@List.isEmpty.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                                    Bool.true)
+                                  (@id.{0}
+                                    (@Eq.{1} Prop
+                                      (@Eq.{1} Bool
+                                        (@List.isEmpty.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                          (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard
+                                            (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard first
+                                              leftEdges leftDepth leftFree)))
+                                        Bool.true)
+                                      (@Eq.{1} Bool
+                                        (@List.isEmpty.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                                        Bool.true))
+                                    (@congrArg.{1, 1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference) Prop
+                                      (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard
+                                        (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard first leftEdges
+                                          leftDepth leftFree))
+                                      (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                      (fun _a =>
+                                        @Eq.{1} Bool (@List.isEmpty.{0} MicroCFTA.InternedBinderProtocol.Reference _a)
+                                          Bool.true)
+                                      leftClosed))
+                                  (@Eq.refl.{1} Bool
+                                    (@List.isEmpty.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))));
+                          have secondClosed :=
+                            @id.{0}
+                              (@Eq.{1} Bool
+                                (@MicroCFTA.IntersectSchedule.closed Symbol
+                                  (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                                  (MicroCFTA.IntersectSchedule.Input.node
+                                    (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey
+                                      second)))
+                                Bool.true)
+                              (@Eq.mpr.{0}
+                                (@Eq.{1} Bool
+                                  (@MicroCFTA.IntersectSchedule.closed Symbol
+                                    (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                                    (@MicroCFTA.SourceRecursiveIntersectionInputView.inputOf Symbol Guard
+                                      (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard second rightEdges
+                                        rightDepth rightFree)))
+                                  Bool.true)
+                                (@Eq.{1} Bool
+                                  (@List.isEmpty.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                    (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard
+                                      (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard second rightEdges
+                                        rightDepth rightFree)))
+                                  Bool.true)
+                                (@id.{0}
+                                  (@Eq.{1} Prop
+                                    (@Eq.{1} Bool
+                                      (@MicroCFTA.IntersectSchedule.closed Symbol
+                                        (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                                        (@MicroCFTA.SourceRecursiveIntersectionInputView.inputOf Symbol Guard
+                                          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard second
+                                            rightEdges rightDepth rightFree)))
+                                      Bool.true)
+                                    (@Eq.{1} Bool
+                                      (@List.isEmpty.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                        (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard
+                                          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard second
+                                            rightEdges rightDepth rightFree)))
+                                      Bool.true))
+                                  (@congrArg.{1, 1} Bool Prop
+                                    (@MicroCFTA.IntersectSchedule.closed Symbol
+                                      (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                                      (@MicroCFTA.SourceRecursiveIntersectionInputView.inputOf Symbol Guard
+                                        (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard second
+                                          rightEdges rightDepth rightFree)))
+                                    (@List.isEmpty.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard
+                                        (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard second
+                                          rightEdges rightDepth rightFree)))
+                                    (fun _a => @Eq.{1} Bool _a Bool.true)
+                                    (@MicroCFTA.SourceRecursiveIntersectionInputView.closed_readback Symbol Guard source
+                                      facts holds
+                                      (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard second rightEdges
+                                        rightDepth rightFree)
+                                      secondOriginal rightAvailable)))
+                                (@Eq.mpr.{0}
+                                  (@Eq.{1} Bool
+                                    (@List.isEmpty.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard
+                                        (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard second
+                                          rightEdges rightDepth rightFree)))
+                                    Bool.true)
+                                  (@Eq.{1} Bool
+                                    (@List.isEmpty.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                                    Bool.true)
+                                  (@id.{0}
+                                    (@Eq.{1} Prop
+                                      (@Eq.{1} Bool
+                                        (@List.isEmpty.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                          (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard
+                                            (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard second
+                                              rightEdges rightDepth rightFree)))
+                                        Bool.true)
+                                      (@Eq.{1} Bool
+                                        (@List.isEmpty.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference))
+                                        Bool.true))
+                                    (@congrArg.{1, 1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference) Prop
+                                      (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard
+                                        (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard second
+                                          rightEdges rightDepth rightFree))
+                                      (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                                      (fun _a =>
+                                        @Eq.{1} Bool (@List.isEmpty.{0} MicroCFTA.InternedBinderProtocol.Reference _a)
+                                          Bool.true)
+                                      rightClosed))
+                                  (@Eq.refl.{1} Bool
+                                    (@List.isEmpty.{0} MicroCFTA.InternedBinderProtocol.Reference
+                                      (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference)))));
+                          let inputs :=
+                            @MicroCFTA.SourceRecursiveIntersectionInputView.finiteInput Symbol Guard source facts holds
+                              (MicroCFTA.IntersectSchedule.Input.node
+                                (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey first))
+                              (MicroCFTA.IntersectSchedule.Input.node
+                                (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey second))
+                              leftOriginal rightOriginal firstClosed secondClosed;
+                          let bounds :=
+                            @MicroCFTA.SourceRecursiveIntersectionInputView.inputBounds Symbol Guard source facts holds
+                              (MicroCFTA.IntersectSchedule.Input.node
+                                (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey first))
+                              (MicroCFTA.IntersectSchedule.Input.node
+                                (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey second))
+                              leftOriginal rightOriginal firstClosed secondClosed;
+                          let roots :=
+                            @MicroCFTA.IntersectSchedule.ClosedRoots.mk Symbol
+                              (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds) inputs
+                              (MicroCFTA.IntersectSchedule.Input.node
+                                (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey first))
+                              (MicroCFTA.IntersectSchedule.Input.node
+                                (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey second))
+                              (@Or.inl
+                                (@MicroCFTA.IntersectSchedule.InputReach Symbol
+                                  (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                                  (MicroCFTA.IntersectSchedule.Input.node
+                                    (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey first))
+                                  (MicroCFTA.IntersectSchedule.Input.node
+                                    (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey
+                                      first)))
+                                (@MicroCFTA.IntersectSchedule.InputReach Symbol
+                                  (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                                  (MicroCFTA.IntersectSchedule.Input.node
+                                    (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey
+                                      second))
+                                  (MicroCFTA.IntersectSchedule.Input.node
+                                    (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey
+                                      first)))
+                                (@MicroCFTA.IntersectSchedule.InputReach.root Symbol
+                                  (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                                  (MicroCFTA.IntersectSchedule.Input.node
+                                    (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey
+                                      first))))
+                              (@Or.inr
+                                (@MicroCFTA.IntersectSchedule.InputReach Symbol
+                                  (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                                  (MicroCFTA.IntersectSchedule.Input.node
+                                    (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey first))
+                                  (MicroCFTA.IntersectSchedule.Input.node
+                                    (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey
+                                      second)))
+                                (@MicroCFTA.IntersectSchedule.InputReach Symbol
+                                  (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                                  (MicroCFTA.IntersectSchedule.Input.node
+                                    (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey
+                                      second))
+                                  (MicroCFTA.IntersectSchedule.Input.node
+                                    (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey
+                                      second)))
+                                (@MicroCFTA.IntersectSchedule.InputReach.root Symbol
+                                  (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                                  (MicroCFTA.IntersectSchedule.Input.node
+                                    (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey
+                                      second))))
+                              firstClosed secondClosed;
+                          have ready :=
+                            @MicroCFTA.IntersectSchedule.roots_ready Symbol
+                              (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds) inputs
+                              roots;
+                          have leftRow :=
+                            @Eq.mpr.{0}
+                              (@Membership.mem.{0, 0} (MicroCFTA.IntersectSchedule.Row Symbol)
+                                (List.{0} (MicroCFTA.IntersectSchedule.Row Symbol))
+                                (@List.instMembership.{0} (MicroCFTA.IntersectSchedule.Row Symbol))
+                                (@MicroCFTA.IntersectSchedule.View.rows Symbol
+                                  (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                                  (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey first))
+                                (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds left))
+                              (@Membership.mem.{0, 0} (MicroCFTA.IntersectSchedule.Row Symbol)
+                                (List.{0} (MicroCFTA.IntersectSchedule.Row Symbol))
+                                (@List.instMembership.{0} (MicroCFTA.IntersectSchedule.Row Symbol))
+                                (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                                  (MicroCFTA.IntersectSchedule.Row Symbol)
+                                  (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds) leftEdges)
+                                (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds left))
+                              (@id.{0}
+                                (@Eq.{1} Prop
+                                  (@Membership.mem.{0, 0} (MicroCFTA.IntersectSchedule.Row Symbol)
+                                    (List.{0} (MicroCFTA.IntersectSchedule.Row Symbol))
+                                    (@List.instMembership.{0} (MicroCFTA.IntersectSchedule.Row Symbol))
+                                    (@MicroCFTA.IntersectSchedule.View.rows Symbol
+                                      (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                                      (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey
+                                        first))
+                                    (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds left))
+                                  (@Membership.mem.{0, 0} (MicroCFTA.IntersectSchedule.Row Symbol)
+                                    (List.{0} (MicroCFTA.IntersectSchedule.Row Symbol))
+                                    (@List.instMembership.{0} (MicroCFTA.IntersectSchedule.Row Symbol))
+                                    (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                                      (MicroCFTA.IntersectSchedule.Row Symbol)
+                                      (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds)
+                                      leftEdges)
+                                    (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds left)))
+                                (@congrArg.{1, 1} (List.{0} (MicroCFTA.IntersectSchedule.Row Symbol)) Prop
+                                  (@MicroCFTA.IntersectSchedule.View.rows Symbol
+                                    (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                                    (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey first))
+                                  (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                                    (MicroCFTA.IntersectSchedule.Row Symbol)
+                                    (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds) leftEdges)
+                                  (fun _a =>
+                                    @Membership.mem.{0, 0} (MicroCFTA.IntersectSchedule.Row Symbol)
+                                      (List.{0} (MicroCFTA.IntersectSchedule.Row Symbol))
+                                      (@List.instMembership.{0} (MicroCFTA.IntersectSchedule.Row Symbol)) _a
+                                      (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds left))
+                                  (@MicroCFTA.SourceRecursiveIntersectionInputView.rows_readback Symbol Guard source
+                                    facts holds first leftEdges leftDepth leftFree leftAvailable)))
+                              (@Iff.mpr
+                                (@Membership.mem.{0, 0} (MicroCFTA.IntersectSchedule.Row Symbol)
+                                  (List.{0} (MicroCFTA.IntersectSchedule.Row Symbol))
+                                  (@List.instMembership.{0} (MicroCFTA.IntersectSchedule.Row Symbol))
+                                  (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                                    (MicroCFTA.IntersectSchedule.Row Symbol)
+                                    (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds) leftEdges)
+                                  (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds left))
+                                (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun a =>
+                                  And
+                                    (@Membership.mem.{0, 0}
+                                      (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                                      (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                                      (@List.instMembership.{0}
+                                        (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                                      leftEdges a)
+                                    (@Eq.{1} (MicroCFTA.IntersectSchedule.Row Symbol)
+                                      (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds a)
+                                      (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds left)))
+                                (@List.mem_map.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                                  (MicroCFTA.IntersectSchedule.Row Symbol)
+                                  (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds left)
+                                  (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds) leftEdges)
+                                (@Exists.intro.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                                  (fun a =>
+                                    And
+                                      (@Membership.mem.{0, 0}
+                                        (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                                        (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                                        (@List.instMembership.{0}
+                                          (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                                        leftEdges a)
+                                      (@Eq.{1} (MicroCFTA.IntersectSchedule.Row Symbol)
+                                        (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds a)
+                                        (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds left)))
+                                  left
+                                  (@And.intro
+                                    (@Membership.mem.{0, 0}
+                                      (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                                      (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                                      (@List.instMembership.{0}
+                                        (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                                      leftEdges left)
+                                    (@Eq.{1} (MicroCFTA.IntersectSchedule.Row Symbol)
+                                      (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds left)
+                                      (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds left))
+                                    leftMember
+                                    (@rfl.{1} (MicroCFTA.IntersectSchedule.Row Symbol)
+                                      (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds left)))));
+                          have rightRow :=
+                            @Eq.mpr.{0}
+                              (@Membership.mem.{0, 0} (MicroCFTA.IntersectSchedule.Row Symbol)
+                                (List.{0} (MicroCFTA.IntersectSchedule.Row Symbol))
+                                (@List.instMembership.{0} (MicroCFTA.IntersectSchedule.Row Symbol))
+                                (@MicroCFTA.IntersectSchedule.View.rows Symbol
+                                  (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                                  (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey second))
+                                (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds right))
+                              (@Membership.mem.{0, 0} (MicroCFTA.IntersectSchedule.Row Symbol)
+                                (List.{0} (MicroCFTA.IntersectSchedule.Row Symbol))
+                                (@List.instMembership.{0} (MicroCFTA.IntersectSchedule.Row Symbol))
+                                (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                                  (MicroCFTA.IntersectSchedule.Row Symbol)
+                                  (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds) rightEdges)
+                                (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds right))
+                              (@id.{0}
+                                (@Eq.{1} Prop
+                                  (@Membership.mem.{0, 0} (MicroCFTA.IntersectSchedule.Row Symbol)
+                                    (List.{0} (MicroCFTA.IntersectSchedule.Row Symbol))
+                                    (@List.instMembership.{0} (MicroCFTA.IntersectSchedule.Row Symbol))
+                                    (@MicroCFTA.IntersectSchedule.View.rows Symbol
+                                      (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                                      (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey
+                                        second))
+                                    (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds right))
+                                  (@Membership.mem.{0, 0} (MicroCFTA.IntersectSchedule.Row Symbol)
+                                    (List.{0} (MicroCFTA.IntersectSchedule.Row Symbol))
+                                    (@List.instMembership.{0} (MicroCFTA.IntersectSchedule.Row Symbol))
+                                    (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                                      (MicroCFTA.IntersectSchedule.Row Symbol)
+                                      (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds)
+                                      rightEdges)
+                                    (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds right)))
+                                (@congrArg.{1, 1} (List.{0} (MicroCFTA.IntersectSchedule.Row Symbol)) Prop
+                                  (@MicroCFTA.IntersectSchedule.View.rows Symbol
+                                    (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                                    (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey
+                                      second))
+                                  (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                                    (MicroCFTA.IntersectSchedule.Row Symbol)
+                                    (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds) rightEdges)
+                                  (fun _a =>
+                                    @Membership.mem.{0, 0} (MicroCFTA.IntersectSchedule.Row Symbol)
+                                      (List.{0} (MicroCFTA.IntersectSchedule.Row Symbol))
+                                      (@List.instMembership.{0} (MicroCFTA.IntersectSchedule.Row Symbol)) _a
+                                      (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds right))
+                                  (@MicroCFTA.SourceRecursiveIntersectionInputView.rows_readback Symbol Guard source
+                                    facts holds second rightEdges rightDepth rightFree rightAvailable)))
+                              (@Iff.mpr
+                                (@Membership.mem.{0, 0} (MicroCFTA.IntersectSchedule.Row Symbol)
+                                  (List.{0} (MicroCFTA.IntersectSchedule.Row Symbol))
+                                  (@List.instMembership.{0} (MicroCFTA.IntersectSchedule.Row Symbol))
+                                  (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                                    (MicroCFTA.IntersectSchedule.Row Symbol)
+                                    (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds) rightEdges)
+                                  (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds right))
+                                (@Exists.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) fun a =>
+                                  And
+                                    (@Membership.mem.{0, 0}
+                                      (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                                      (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                                      (@List.instMembership.{0}
+                                        (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                                      rightEdges a)
+                                    (@Eq.{1} (MicroCFTA.IntersectSchedule.Row Symbol)
+                                      (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds a)
+                                      (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds right)))
+                                (@List.mem_map.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                                  (MicroCFTA.IntersectSchedule.Row Symbol)
+                                  (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds right)
+                                  (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds) rightEdges)
+                                (@Exists.intro.{1} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                                  (fun a =>
+                                    And
+                                      (@Membership.mem.{0, 0}
+                                        (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                                        (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                                        (@List.instMembership.{0}
+                                          (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                                        rightEdges a)
+                                      (@Eq.{1} (MicroCFTA.IntersectSchedule.Row Symbol)
+                                        (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds a)
+                                        (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds right)))
+                                  right
+                                  (@And.intro
+                                    (@Membership.mem.{0, 0}
+                                      (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                                      (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                                      (@List.instMembership.{0}
+                                        (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                                      rightEdges right)
+                                    (@Eq.{1} (MicroCFTA.IntersectSchedule.Row Symbol)
+                                      (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds right)
+                                      (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds right))
+                                    rightMember
+                                    (@rfl.{1} (MicroCFTA.IntersectSchedule.Row Symbol)
+                                      (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds
+                                        right)))));
+                          have rowsReady :=
+                            @MicroCFTA.IntersectSchedule.ready_rows Symbol
+                              (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds) inputs
+                              (@MicroCFTA.SourceRecursiveIntersectionInputView.free_correct Symbol Guard source facts
+                                holds)
+                              bounds roots { }
+                              (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey first)
+                              (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey second) ready
+                              (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds left)
+                              (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds right) leftRow
+                              rightRow;
+                          @Exists.casesOn.{1} Nat
+                            (fun bound =>
+                              @Exists.{1} (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol))
+                                fun value =>
+                                ∀ (fuel : Nat),
+                                  @LE.le.{0} Nat instLENat bound fuel →
+                                    @Eq.{1}
+                                      (Except.{0, 0} MicroCFTA.IntersectSchedule.Error
+                                        (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol)))
+                                      ((fun fuel =>
+                                          @MicroCFTA.IntersectSchedule.execute Symbol inst
+                                            (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source
+                                              holds)
+                                            fuel
+                                            (@MicroCFTA.IntersectSchedule.Call.edge Symbol { }
+                                              (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds
+                                                left)
+                                              (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds
+                                                right)))
+                                        fuel)
+                                      (@Except.ok.{0, 0} MicroCFTA.IntersectSchedule.Error
+                                        (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol)) value))
+                            (fun x =>
+                              @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                                (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                                (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                                  (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                                    MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+                            (@MicroCFTA.IntersectSchedule.call_eventual Symbol inst
+                              (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds) inputs
+                              (@MicroCFTA.SourceRecursiveIntersectionInputView.free_correct Symbol Guard source facts
+                                holds)
+                              bounds roots
+                              (@MicroCFTA.IntersectSchedule.Call.edge Symbol { }
+                                (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds left)
+                                (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds right))
+                              rowsReady)
+                            fun fuel h =>
+                            @Exists.casesOn.{1} (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol))
+                              (fun value =>
+                                ∀ (fuel_1 : Nat),
+                                  @LE.le.{0} Nat instLENat fuel fuel_1 →
+                                    @Eq.{1}
+                                      (Except.{0, 0} MicroCFTA.IntersectSchedule.Error
+                                        (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol)))
+                                      ((fun fuel =>
+                                          @MicroCFTA.IntersectSchedule.execute Symbol inst
+                                            (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source
+                                              holds)
+                                            fuel
+                                            (@MicroCFTA.IntersectSchedule.Call.edge Symbol { }
+                                              (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds
+                                                left)
+                                              (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds
+                                                right)))
+                                        fuel_1)
+                                      (@Except.ok.{0, 0} MicroCFTA.IntersectSchedule.Error
+                                        (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol)) value))
+                              (fun x =>
+                                @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                                  (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                                  (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                                    (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                                      MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+                              h fun result done =>
+                              have empty :=
+                                @rfl.{1} MicroCFTA.IntersectSchedule.Domain
+                                  (MicroCFTA.SourceRecursiveIntersectionSchedule.domain
+                                    (@MicroCFTA.Cache.Interned.key MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+                                      MicroCFTA.IntersectionEmptyDomain.emptyDomain));
+                              @Exists.intro.{1} Nat
+                                (fun fuel =>
+                                  @Exists.{1} (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol))
+                                    fun result =>
+                                    @Eq.{1}
+                                      (Except.{0, 0} MicroCFTA.IntersectSchedule.Error
+                                        (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol)))
+                                      (@MicroCFTA.IntersectSchedule.execute Symbol inst
+                                        (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                                        fuel
+                                        (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                                          (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                                            MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+                                      (@Except.ok.{0, 0} MicroCFTA.IntersectSchedule.Error
+                                        (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol)) result))
+                                fuel
+                                (@Exists.intro.{1} (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol))
+                                  (fun result =>
+                                    @Eq.{1}
+                                      (Except.{0, 0} MicroCFTA.IntersectSchedule.Error
+                                        (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol)))
+                                      (@MicroCFTA.IntersectSchedule.execute Symbol inst
+                                        (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                                        fuel
+                                        (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                                          (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                                            MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+                                      (@Except.ok.{0, 0} MicroCFTA.IntersectSchedule.Error
+                                        (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol)) result))
+                                  result
+                                  (@Eq.mpr.{0}
+                                    (@Eq.{1}
+                                      (Except.{0, 0} MicroCFTA.IntersectSchedule.Error
+                                        (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol)))
+                                      (@MicroCFTA.IntersectSchedule.execute Symbol inst
+                                        (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                                        fuel
+                                        (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                                          (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                                            MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+                                      (@Except.ok.{0, 0} MicroCFTA.IntersectSchedule.Error
+                                        (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol)) result))
+                                    (@Eq.{1}
+                                      (Except.{0, 0} MicroCFTA.IntersectSchedule.Error
+                                        (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol)))
+                                      (@MicroCFTA.IntersectSchedule.execute Symbol inst
+                                        (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                                        fuel
+                                        (@MicroCFTA.IntersectSchedule.Call.edge Symbol { }
+                                          (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds left)
+                                          (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds
+                                            right)))
+                                      (@Except.ok.{0, 0} MicroCFTA.IntersectSchedule.Error
+                                        (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol)) result))
+                                    (@id.{0}
+                                      (@Eq.{1} Prop
+                                        (@Eq.{1}
+                                          (Except.{0, 0} MicroCFTA.IntersectSchedule.Error
+                                            (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol)))
+                                          (@MicroCFTA.IntersectSchedule.execute Symbol inst
+                                            (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source
+                                              holds)
+                                            fuel
+                                            (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol
+                                              holds
+                                              (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                                                MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+                                          (@Except.ok.{0, 0} MicroCFTA.IntersectSchedule.Error
+                                            (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol)) result))
+                                        (@Eq.{1}
+                                          (Except.{0, 0} MicroCFTA.IntersectSchedule.Error
+                                            (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol)))
+                                          (@MicroCFTA.IntersectSchedule.execute Symbol inst
+                                            (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source
+                                              holds)
+                                            fuel
+                                            (@MicroCFTA.IntersectSchedule.Call.edge Symbol { }
+                                              (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds
+                                                left)
+                                              (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds
+                                                right)))
+                                          (@Except.ok.{0, 0} MicroCFTA.IntersectSchedule.Error
+                                            (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol))
+                                            result)))
+                                      (@congrFun'.{1, 1}
+                                        (Except.{0, 0} MicroCFTA.IntersectSchedule.Error
+                                          (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol)))
+                                        Prop
+                                        (@Eq.{1}
+                                          (Except.{0, 0} MicroCFTA.IntersectSchedule.Error
+                                            (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol)))
+                                          (@MicroCFTA.IntersectSchedule.execute Symbol inst
+                                            (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source
+                                              holds)
+                                            fuel
+                                            (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol
+                                              holds
+                                              (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                                                MicroCFTA.IntersectionEmptyDomain.emptyDomain left right))))
+                                        (@Eq.{1}
+                                          (Except.{0, 0} MicroCFTA.IntersectSchedule.Error
+                                            (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol)))
+                                          (@MicroCFTA.IntersectSchedule.execute Symbol inst
+                                            (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source
+                                              holds)
+                                            fuel
+                                            (@MicroCFTA.IntersectSchedule.Call.edge Symbol { }
+                                              (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds
+                                                left)
+                                              (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds
+                                                right))))
+                                        (@congrArg.{1, 1}
+                                          (Except.{0, 0} MicroCFTA.IntersectSchedule.Error
+                                            (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol)))
+                                          (Except.{0, 0} MicroCFTA.IntersectSchedule.Error
+                                              (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol)) →
+                                            Prop)
+                                          (@MicroCFTA.IntersectSchedule.execute Symbol inst
+                                            (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source
+                                              holds)
+                                            fuel
+                                            (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol
+                                              holds
+                                              (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                                                MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+                                          (@MicroCFTA.IntersectSchedule.execute Symbol inst
+                                            (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source
+                                              holds)
+                                            fuel
+                                            (@MicroCFTA.IntersectSchedule.Call.edge Symbol { }
+                                              (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds
+                                                left)
+                                              (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds
+                                                right)))
+                                          (@Eq.{1}
+                                            (Except.{0, 0} MicroCFTA.IntersectSchedule.Error
+                                              (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol))))
+                                          (@congrArg.{1, 1} (MicroCFTA.IntersectSchedule.Call Symbol)
+                                            (Except.{0, 0} MicroCFTA.IntersectSchedule.Error
+                                              (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol)))
+                                            (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol
+                                              holds
+                                              (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                                                MicroCFTA.IntersectionEmptyDomain.emptyDomain left right))
+                                            (@MicroCFTA.IntersectSchedule.Call.edge Symbol { }
+                                              (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds
+                                                left)
+                                              (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds
+                                                right))
+                                            (@MicroCFTA.IntersectSchedule.execute Symbol inst
+                                              (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source
+                                                holds)
+                                              fuel)
+                                            (@congrFun'.{1, 1} (MicroCFTA.IntersectSchedule.Row Symbol)
+                                              (MicroCFTA.IntersectSchedule.Call Symbol)
+                                              (@MicroCFTA.IntersectSchedule.Call.edge Symbol
+                                                (MicroCFTA.SourceRecursiveIntersectionSchedule.domain
+                                                  (@MicroCFTA.Cache.Interned.key
+                                                    MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+                                                    (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.domain
+                                                      Symbol Guard
+                                                      (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk
+                                                        Symbol Guard MicroCFTA.IntersectionEmptyDomain.emptyDomain left
+                                                        right))))
+                                                (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds
+                                                  (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.left Symbol
+                                                    Guard
+                                                    (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol
+                                                      Guard MicroCFTA.IntersectionEmptyDomain.emptyDomain left right))))
+                                              (@MicroCFTA.IntersectSchedule.Call.edge Symbol { }
+                                                (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds
+                                                  left))
+                                              (@congrFun'.{1, 1} (MicroCFTA.IntersectSchedule.Row Symbol)
+                                                (MicroCFTA.IntersectSchedule.Row Symbol →
+                                                  MicroCFTA.IntersectSchedule.Call Symbol)
+                                                (@MicroCFTA.IntersectSchedule.Call.edge Symbol
+                                                  (MicroCFTA.SourceRecursiveIntersectionSchedule.domain
+                                                    (@MicroCFTA.Cache.Interned.key
+                                                      MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+                                                      (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.domain
+                                                        Symbol Guard
+                                                        (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk
+                                                          Symbol Guard MicroCFTA.IntersectionEmptyDomain.emptyDomain
+                                                          left right)))))
+                                                (@MicroCFTA.IntersectSchedule.Call.edge Symbol { })
+                                                (@congrArg.{1, 1} MicroCFTA.IntersectSchedule.Domain
+                                                  (MicroCFTA.IntersectSchedule.Row Symbol →
+                                                    MicroCFTA.IntersectSchedule.Row Symbol →
+                                                      MicroCFTA.IntersectSchedule.Call Symbol)
+                                                  (MicroCFTA.SourceRecursiveIntersectionSchedule.domain
+                                                    (@MicroCFTA.Cache.Interned.key
+                                                      MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey
+                                                      (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.domain
+                                                        Symbol Guard
+                                                        (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk
+                                                          Symbol Guard MicroCFTA.IntersectionEmptyDomain.emptyDomain
+                                                          left right))))
+                                                  { } (@MicroCFTA.IntersectSchedule.Call.edge Symbol) empty)
+                                                (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds
+                                                  left))
+                                              (@MicroCFTA.SourceRecursiveIntersectionInputView.row Guard Symbol holds
+                                                right))))
+                                        (@Except.ok.{0, 0} MicroCFTA.IntersectSchedule.Error
+                                          (MicroCFTA.Binding.Shape (MicroCFTA.BinderLanguage.Payload Symbol)) result)))
+                                    (done fuel (Nat.le_refl fuel)))))
+                        rightMember)
+                    leftMember)
+                rightParent
+                (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rightParent
+                  (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard second rightEdges rightDepth
+                    rightFree)
+                  h)
+                rightOriginal rightAvailable rightClosed rightMember)
+            (fun entry members depth free h =>
+              @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth free)
+                (fun rightParent =>
+                  @MicroCFTA.SourceRecursiveIntersectionInputView.OriginalInput Symbol Guard source
+                      (@MicroCFTA.SourceRecursiveIntersectionInputView.inputOf Symbol Guard rightParent) →
+                    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard source rightParent →
+                      @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard rightParent)
+                          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+                        @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                            (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                            (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard rightParent) right →
+                          @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                            (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                            (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                              (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                                MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+                (fun rightOriginal rightAvailable rightClosed rightMember =>
+                  @List.Mem.casesOn.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) right
+                    (fun a t =>
+                      @Eq.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                          (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                            (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth free))
+                          a →
+                        @HEq.{0}
+                            (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                              (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                              (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                                (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth
+                                  free))
+                              right)
+                            rightMember
+                            (@List.Mem.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) right a) t →
+                          @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                            (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                            (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                              (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                                MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+                    (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                      (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth free))
+                    rightMember
+                    (fun as h =>
+                      @False.elim.{0}
+                        (@HEq.{0}
+                            (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                              (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                              (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                                (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth
+                                  free))
+                              right)
+                            rightMember
+                            (@List.Mem.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) right
+                              (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) right as))
+                            (@List.Mem.head.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) right
+                              as) →
+                          @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                            (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                            (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                              (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                                MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+                        (@noConfusion_of_Nat.{1}
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                          (@List.ctorIdx.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) right as) h))
+                    (fun b {as} a h =>
+                      @False.elim.{0}
+                        (@HEq.{0}
+                            (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                              (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                              (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                                (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth
+                                  free))
+                              right)
+                            rightMember
+                            (@List.Mem.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) right
+                              (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) b as))
+                            (@List.Mem.tail.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) right b
+                              as a) →
+                          @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                            (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                            (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                              (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                                MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+                        (@noConfusion_of_Nat.{1}
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                          (@List.ctorIdx.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) b as) h))
+                    (@Eq.refl.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                      (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                        (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth free)))
+                    (@HEq.refl.{0}
+                      (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                        (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                        (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                          (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth free))
+                        right)
+                      rightMember))
+                rightParent
+                (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rightParent
+                  (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth free) h)
+                rightOriginal rightAvailable rightClosed rightMember)
+            (fun entry body depthShape ordinaryShape h =>
+              @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape ordinaryShape)
+                (fun rightParent =>
+                  @MicroCFTA.SourceRecursiveIntersectionInputView.OriginalInput Symbol Guard source
+                      (@MicroCFTA.SourceRecursiveIntersectionInputView.inputOf Symbol Guard rightParent) →
+                    @MicroCFTA.InternedProbeProvenance.Available Symbol Guard source rightParent →
+                      @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard rightParent)
+                          (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+                        @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                            (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                            (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                            (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard rightParent) right →
+                          @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                            (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                            (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                              (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                                MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+                (fun rightOriginal rightAvailable rightClosed rightMember =>
+                  @List.Mem.casesOn.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) right
+                    (fun a t =>
+                      @Eq.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                          (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                            (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                              ordinaryShape))
+                          a →
+                        @HEq.{0}
+                            (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                              (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                              (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                                  ordinaryShape))
+                              right)
+                            rightMember
+                            (@List.Mem.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) right a) t →
+                          @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                            (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                            (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                              (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                                MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+                    (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                      (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                        ordinaryShape))
+                    rightMember
+                    (fun as h =>
+                      @False.elim.{0}
+                        (@HEq.{0}
+                            (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                              (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                              (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                                  ordinaryShape))
+                              right)
+                            rightMember
+                            (@List.Mem.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) right
+                              (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) right as))
+                            (@List.Mem.head.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) right
+                              as) →
+                          @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                            (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                            (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                              (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                                MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+                        (@noConfusion_of_Nat.{1}
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                          (@List.ctorIdx.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) right as) h))
+                    (fun b {as} a h =>
+                      @False.elim.{0}
+                        (@HEq.{0}
+                            (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                              (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                              (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                              (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                                  ordinaryShape))
+                              right)
+                            rightMember
+                            (@List.Mem.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) right
+                              (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) b as))
+                            (@List.Mem.tail.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) right b
+                              as a) →
+                          @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                            (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                            (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                              (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                                MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+                        (@noConfusion_of_Nat.{1}
+                          (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                          (@List.ctorIdx.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                          (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                          (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) b as) h))
+                    (@Eq.refl.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                      (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                          ordinaryShape)))
+                    (@HEq.refl.{0}
+                      (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                        (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                        (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                        (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                            ordinaryShape))
+                        right)
+                      rightMember))
+                rightParent
+                (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rightParent
+                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape ordinaryShape) h)
+                rightOriginal rightAvailable rightClosed rightMember)
+            (@Eq.refl.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) rightParent))
+        leftParent
+        (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) leftParent
+          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard first leftEdges leftDepth leftFree) h)
+        leftOriginal leftAvailable leftClosed leftMember)
+    (fun entry members depth free h =>
+      @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth free)
+        (fun leftParent =>
+          @MicroCFTA.SourceRecursiveIntersectionInputView.OriginalInput Symbol Guard source
+              (@MicroCFTA.SourceRecursiveIntersectionInputView.inputOf Symbol Guard leftParent) →
+            @MicroCFTA.InternedProbeProvenance.Available Symbol Guard source leftParent →
+              @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard leftParent)
+                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+                @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                    (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard leftParent) left →
+                  @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                    (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                    (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                        MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+        (fun leftOriginal leftAvailable leftClosed leftMember =>
+          @List.Mem.casesOn.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) left
+            (fun a t =>
+              @Eq.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                  (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                    (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth free))
+                  a →
+                @HEq.{0}
+                    (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                      (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                        (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth free))
+                      left)
+                    leftMember (@List.Mem.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) left a)
+                    t →
+                  @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                    (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                    (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                        MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+            (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+              (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth free))
+            leftMember
+            (fun as h =>
+              @False.elim.{0}
+                (@HEq.{0}
+                    (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                      (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                        (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth free))
+                      left)
+                    leftMember
+                    (@List.Mem.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) left
+                      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) left as))
+                    (@List.Mem.head.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) left as) →
+                  @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                    (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                    (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                        MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+                (@noConfusion_of_Nat.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                  (@List.ctorIdx.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                  (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                  (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) left as) h))
+            (fun b {as} a h =>
+              @False.elim.{0}
+                (@HEq.{0}
+                    (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                      (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                        (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth free))
+                      left)
+                    leftMember
+                    (@List.Mem.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) left
+                      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) b as))
+                    (@List.Mem.tail.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) left b as a) →
+                  @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                    (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                    (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                        MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+                (@noConfusion_of_Nat.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                  (@List.ctorIdx.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                  (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                  (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) b as) h))
+            (@Eq.refl.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+              (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth free)))
+            (@HEq.refl.{0}
+              (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                  (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth free))
+                left)
+              leftMember))
+        leftParent
+        (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) leftParent
+          (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth free) h)
+        leftOriginal leftAvailable leftClosed leftMember)
+    (fun entry body depthShape ordinaryShape h =>
+      @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape ordinaryShape)
+        (fun leftParent =>
+          @MicroCFTA.SourceRecursiveIntersectionInputView.OriginalInput Symbol Guard source
+              (@MicroCFTA.SourceRecursiveIntersectionInputView.inputOf Symbol Guard leftParent) →
+            @MicroCFTA.InternedProbeProvenance.Available Symbol Guard source leftParent →
+              @Eq.{1} (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                  (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard leftParent)
+                  (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) →
+                @Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                    (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                    (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                    (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard leftParent) left →
+                  @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                    (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                    (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                        MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+        (fun leftOriginal leftAvailable leftClosed leftMember =>
+          @List.Mem.casesOn.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) left
+            (fun a t =>
+              @Eq.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                  (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                    (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape ordinaryShape))
+                  a →
+                @HEq.{0}
+                    (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                      (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                          ordinaryShape))
+                      left)
+                    leftMember (@List.Mem.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) left a)
+                    t →
+                  @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                    (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                    (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                        MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+            (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+              (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape ordinaryShape))
+            leftMember
+            (fun as h =>
+              @False.elim.{0}
+                (@HEq.{0}
+                    (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                      (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                          ordinaryShape))
+                      left)
+                    leftMember
+                    (@List.Mem.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) left
+                      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) left as))
+                    (@List.Mem.head.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) left as) →
+                  @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                    (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                    (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                        MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+                (@noConfusion_of_Nat.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                  (@List.ctorIdx.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                  (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                  (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) left as) h))
+            (fun b {as} a h =>
+              @False.elim.{0}
+                (@HEq.{0}
+                    (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                      (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                      (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                      (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape
+                          ordinaryShape))
+                      left)
+                    leftMember
+                    (@List.Mem.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) left
+                      (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) b as))
+                    (@List.Mem.tail.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) left b as a) →
+                  @MicroCFTA.IntersectSchedule.Completes Symbol inst
+                    (@MicroCFTA.SourceRecursiveIntersectionInputView.view Symbol Guard source holds)
+                    (@MicroCFTA.SourceRecursiveIntersectionNative.edgeSemantic Guard Symbol holds
+                      (@MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest.mk Symbol Guard
+                        MicroCFTA.IntersectionEmptyDomain.emptyDomain left right)))
+                (@noConfusion_of_Nat.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                  (@List.ctorIdx.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                  (@List.nil.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                  (@List.cons.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard) b as) h))
+            (@Eq.refl.{1} (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+              (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape ordinaryShape)))
+            (@HEq.refl.{0}
+              (@Membership.mem.{0, 0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+                (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                (@List.instMembership.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+                (@MicroCFTA.InternedEdgeResidency.nodeEdges Symbol Guard
+                  (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape ordinaryShape))
+                left)
+              leftMember))
+        leftParent
+        (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) leftParent
+          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depthShape ordinaryShape) h)
+        leftOriginal leftAvailable leftClosed leftMember)
+    (@Eq.refl.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) leftParent)

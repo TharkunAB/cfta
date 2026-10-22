@@ -1,0 +1,13 @@
+theorem edge_prefix (request : EdgeRequest Symbol Guard) {next : Control (EdgeValue Symbol Guard)} {before after : Checked width}
+    (actual : Trace fuel (.code (requestEdge request.domain request.left request.right)) before next after)
+    (good : Good before) (ready : EdgeReady before.native.machine request) :
+    SourceCurrentAllocatedRecursiveMassTrace.InputsThrough fuel (initialBound before.native.machine.heap)
+      (.code (requestEdge request.domain request.left request.right)) before ∧
+      ControlAt next after (massAfter fuel (initialBound before.native.machine.heap)) (fun final edge => EdgeResident final.heap edge) ∧
+      Good after ∧ Fields next after ∧ Stored (massAfter fuel (initialBound before.native.machine.heap)) after.native.machine.heap ∧
+      after.native.machine.heap.nodes.next ≤ before.native.machine.heap.nodes.next + credit fuel (initialBound before.native.machine.heap) ∧
+      after.native.machine.heap.edges.next ≤ before.native.machine.heap.edges.next + credit fuel (initialBound before.native.machine.heap) ∧
+      after.native.machine.domains.next ≤ before.native.machine.domains.next + fuel := by
+  exact initial actual good (fun _ => trivial)
+    (SourceRecursiveIntersectionCodeMass.request_edge request.domain request.left request.right before.native.machine _ ready)
+

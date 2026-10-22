@@ -1,0 +1,5 @@
+def Value.free : Value Symbol Guard → List Reference
+  | .empty => []
+  | .reference name => [name]
+  | .node _ _ _ free | .union _ _ _ free => free
+  | .mu entry body _ _ => body.free.filter (· != .interned entry.identity)

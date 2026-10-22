@@ -1,0 +1,7 @@
+/-- Read the exact semantic node request from its captured original physical fields. -/
+def nodeSemantic (request : NodeRequest Symbol Guard) : Call Symbol :=
+  .node (SourceRecursiveIntersectionSchedule.domain request.domain.key) (inputOf request.left) (inputOf request.right)
+
+/-- Read the exact semantic row request from its original fields and complete executable guards. -/
+def edgeSemantic (holds : Guard → Language.Term Symbol → Bool) (request : EdgeRequest Symbol Guard) : Call Symbol :=
+  .edge (SourceRecursiveIntersectionSchedule.domain request.domain.key) (row holds request.left) (row holds request.right)

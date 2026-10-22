@@ -1,0 +1,68 @@
+/-- A closed root contains itself and strictly smaller reachable payloads. -/
+def Below (size : Input → Nat) (root input : Input) : Prop := input = root ∨ size input < size root
+
+/-- Finite source payload structure bounds all pairs and all closed reachable subgraphs. -/
+structure InputBounds (view : View Symbol) (inputs : FiniteInput view) where
+  pairs : List Pair
+  pair_mem : ∀ left right, inputs.valid left → inputs.valid right → left ≠ .empty → right ≠ .empty → pair left right ∈ pairs
+  localWeight : LocalWeight view
+  size : Input → Nat
+  body : ∀ name, inputs.valid (.mu name) → size (view.body name) < size (.mu name)
+  child : ∀ name, inputs.valid (.node name) → ∀ row ∈ view.rows name, ∀ child ∈ row.children,
+    size child < size (.node name)
+  member : ∀ name, inputs.valid (.union name) → ∀ child ∈ view.members name, size child < size (.union name)
+  closed_reach : ∀ root, inputs.valid root → closed view root = true → ∀ input,
+    InputReach view root input → Below size root input
+
+/-- One pair of closed inputs bounds the work before the next environment reset. -/
+structure ClosedRoots (view : View Symbol) (inputs : FiniteInput view) where
+  left : Input
+  right : Input
+  left_valid : inputs.valid left
+  right_valid : inputs.valid right
+  left_closed : closed view left = true
+  right_closed : closed view right = true
+
+/-- Swapping operands also swaps their independent closed roots. -/
+def ClosedRoots.swap (roots : ClosedRoots view inputs) : ClosedRoots view inputs :=
+  ⟨roots.right, roots.left, roots.right_valid, roots.left_valid, roots.right_closed, roots.left_closed⟩
+
+/-- An input with no binder tag cannot be restored by a reference lookup. -/
+def NotBinder (input : Input) : Prop := ∀ name, input ≠ .mu name
+
+/-- Either references cannot restore the roots, or the source cutoff protects their pair. -/
+def RootProtected (roots : ClosedRoots view inputs) (domain : Domain) : Prop :=
+  (NotBinder roots.left ∧ NotBinder roots.right) ∨ pair roots.left roots.right ∈ domain.seen
+
+/-- Initial work may precede insertion of the first root pair. -/
+def RootStarted (roots : ClosedRoots view inputs) (domain : Domain) (left right : Input) : Prop :=
+  RootProtected roots domain ∨ (domain.free = [] ∧ domain.seen = [] ∧ left = roots.left ∧ right = roots.right)
+
+/-- Local node calls preserve coverage, closed-root bounds, and cutoff protection. -/
+structure NodeReady (roots : ClosedRoots view inputs) (domain : Domain) (left right : Input) : Prop where
+  left_reach : InputReach view roots.left left
+  right_reach : InputReach view roots.right right
+  domain_valid : ValidDomain view domain
+  left_covered : Covers view domain left
+  right_covered : Covers view domain right
+  unchanged : left = roots.left → right = roots.right → domain.free = []
+  started : RootStarted roots domain left right
+
+/-- Row children are strict payload descendants of their closed roots. -/
+structure EdgeReady (bounds : InputBounds view inputs) (roots : ClosedRoots view inputs)
+    (domain : Domain) (left right : Row Symbol) : Prop where
+  left_reach : ∀ child ∈ left.children, InputReach view roots.left child
+  right_reach : ∀ child ∈ right.children, InputReach view roots.right child
+  left_less : ∀ child ∈ left.children, bounds.size child < bounds.size roots.left
+  right_less : ∀ child ∈ right.children, bounds.size child < bounds.size roots.right
+  domain_valid : ValidDomain view domain
+  left_covered : ∀ child ∈ left.children, Covers view domain child
+  right_covered : ∀ child ∈ right.children, Covers view domain child
+  protection : RootProtected roots domain
+
+/-- Every closed pair starts with valid empty-domain invariants. -/
+theorem roots_ready (view : View Symbol) (inputs : FiniteInput view) (roots : ClosedRoots view inputs) :
+    NodeReady roots {} roots.left roots.right := by
+  exact ⟨.root, .root, valid_empty view, closed_covered view {} roots.left roots.left_closed,
+    closed_covered view {} roots.right roots.right_closed, by intros; rfl, Or.inr ⟨rfl, rfl, rfl, rfl⟩⟩
+

@@ -1,0 +1,15 @@
+/-- Original syntax makes projected closedness equal to the actual cached source test. -/
+theorem closed_readback (state : InternedConstructorTemplates.State Symbol Guard) (facts : Facts state)
+    (holds : Guard → Language.Term Symbol → Bool) (value : Value Symbol Guard)
+    (original : Original value) (available : Available state value) :
+    closed (view state holds) (inputOf value) = value.free.isEmpty := by
+  rw [closed, free_readback state facts holds value available]
+  apply Bool.eq_iff_iff.mpr
+  simp only [List.isEmpty_iff]
+  constructor
+  · intro empty
+    apply List.eq_nil_iff_forall_not_mem.mpr
+    intro reference member
+    obtain ⟨name, rfl⟩ := original.free_interned state facts value available reference member
+    have named := (freeNames_member value name).mpr member
+    simp [empty] at named

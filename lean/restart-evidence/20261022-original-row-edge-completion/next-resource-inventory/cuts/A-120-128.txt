@@ -1,0 +1,9 @@
+          exact sentinel_below source holds _ _ _
+        · simp only [code_bind_pure] at yielded
+          cases yielded
+          exact children_below source facts holds request scope complete before.native.machine valid ready _ arity
+
+/-- Only reached native node and edge instructions require their actual machine-key checks. -/
+def Words (width : Nat) : Control Output → Prop
+  | .code (.node request _) => ∀ key,
+      SourceRecursiveIntersectionMemo.requestKey width request.domain request.left request.right = some key →

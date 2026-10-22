@@ -1,0 +1,14 @@
+/-- Derive semantic completion for rows of the same source's actual closed original parents. -/
+theorem edge_complete [DecidableEq Symbol]
+    (source : InternedConstructorTemplates.State Symbol Guard) (facts : Facts source)
+    (holds : Guard → Term Symbol → Bool) (leftParent rightParent : Value Symbol Guard)
+    (leftOriginal : OriginalInput source (inputOf leftParent))
+    (rightOriginal : OriginalInput source (inputOf rightParent))
+    (leftAvailable : Available source leftParent) (rightAvailable : Available source rightParent)
+    (leftClosed : leftParent.free = []) (rightClosed : rightParent.free = [])
+    (left right : EdgeValue Symbol Guard)
+    (leftMember : left ∈ InternedEdgeResidency.nodeEdges leftParent)
+    (rightMember : right ∈ InternedEdgeResidency.nodeEdges rightParent) :
+    Completes (view source holds)
+      (SourceRecursiveIntersectionNative.edgeSemantic holds
+        ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩) := by

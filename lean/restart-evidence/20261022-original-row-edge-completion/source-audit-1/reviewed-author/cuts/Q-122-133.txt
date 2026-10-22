@@ -1,0 +1,12 @@
+/-- Actual source row requests retain original resident rows and all original children. -/
+theorem NodeScope.rows (source : InternedConstructorTemplates.State Symbol Guard) (facts : Facts source) (domain : Interned DomainKey)
+    (first : Interned NodeKey) (leftEdges : List (EdgeValue Symbol Guard)) (leftDepth : Nat) (leftFree : List Reference)
+    (second : Interned NodeKey) (rightEdges : List (EdgeValue Symbol Guard)) (rightDepth : Nat) (rightFree : List Reference)
+    (scope : NodeScope source ⟨domain, .node first leftEdges leftDepth leftFree, .node second rightEdges rightDepth rightFree⟩)
+    (left right : EdgeValue Symbol Guard) (leftMember : left ∈ leftEdges) (rightMember : right ∈ rightEdges) :
+    EdgeScope source ⟨domain, left, right⟩ :=
+  ⟨facts.linked first.key _ (scope.leftAvailable.resident first rfl) left leftMember,
+    facts.linked second.key _ (scope.rightAvailable.resident second rfl) right rightMember,
+    node_child_original first leftEdges leftDepth leftFree scope.left left leftMember,
+    node_child_original second rightEdges rightDepth rightFree scope.right right rightMember, scope.bindings⟩
+

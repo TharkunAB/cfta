@@ -1,0 +1,1 @@
+The first index selected InitialRanges29–36. It ended before the last proof line. Before freeze the selected cut was extended to29–37. The original index and29–36 excerpt remain. The proposed context, theorem header and plan did not change.

@@ -1,0 +1,12 @@
+
+/-- Each actual yielded instruction records its current physical check. -/
+inductive Trace [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] :
+    Nat → Control A → Checked width → Control A → Checked width → Prop where
+  | refl (control : Control A) (state : Checked width) : Trace 0 control state control state
+  | cons (control : Control A) (state : Checked width) (next : Control A) (after : Checked width)
+      (final : Control A) (result : Checked width) (fuel : Nat)
+      (inputs : Inputs control state)
+      (actual : step control state = .yielded next after)
+      (rest : Trace fuel next after final result) : Trace (fuel + 1) control state final result
+
+/-- Erasure retains the literal yielded controls and all current state fields. -/

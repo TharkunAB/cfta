@@ -1,0 +1,8 @@
+
+/-- Initial code safety derives all reached widths and the final continuation certificate. -/
+theorem widths {control next : Control A} {before after : Checked width}
+    (actual : Trace fuel control before next after) (good : Good before) (fields : Fields control before)
+    (stored : Stored bound before.native.machine.heap)
+    (certificate : ControlAt control before bound post) :
+    SourceCurrentAllocatedRecursiveMassTrace.InputsThrough fuel bound control before ∧
+      ControlAt next after (massAfter fuel bound) post := by

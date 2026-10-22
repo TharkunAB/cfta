@@ -1,0 +1,35 @@
+/-- Actual closed original roots supply every structural and semantic field of the finite input interface. -/
+def finiteInput (state : InternedConstructorTemplates.State Symbol Guard) (facts : Facts state)
+    (holds : Guard → Term Symbol → Bool) (leftRoot rightRoot : Input)
+    (leftOriginal : OriginalInput state leftRoot) (rightOriginal : OriginalInput state rightRoot)
+    (leftClosed : closed (view state holds) leftRoot = true) (rightClosed : closed (view state holds) rightRoot = true) :
+    FiniteInput (view state holds) where
+  valid := Reachable state holds leftRoot rightRoot
+  representative := representative state
+  identity_exact := reachable_identity state facts holds leftRoot rightRoot leftOriginal rightOriginal leftClosed rightClosed
+  body_valid := Reachable.body state holds leftRoot rightRoot
+  reference_valid := Reachable.reference state holds leftRoot rightRoot
+  row_valid := Reachable.child state holds leftRoot rightRoot
+  union_valid := Reachable.member state holds leftRoot rightRoot
+  copy_exact input reachable isClosed environment :=
+    copy_exact_original state facts holds input
+      (reachable_original state facts holds leftRoot rightRoot leftOriginal rightOriginal leftClosed rightClosed input reachable)
+      isClosed environment
+
+/-- The actual finite carrier and physical payload rank supply every finite schedule bound. -/
+noncomputable def inputBounds (state : InternedConstructorTemplates.State Symbol Guard) (facts : Facts state)
+    (holds : Guard → Term Symbol → Bool) (leftRoot rightRoot : Input)
+    (leftOriginal : OriginalInput state leftRoot) (rightOriginal : OriginalInput state rightRoot)
+    (leftClosed : closed (view state holds) leftRoot = true) (rightClosed : closed (view state holds) rightRoot = true) :
+    InputBounds (view state holds) (finiteInput state facts holds leftRoot rightRoot leftOriginal rightOriginal leftClosed rightClosed) where
+  pairs := inputPairs (inventory state)
+  pair_mem left right leftValid rightValid _ _ := input_pair_mem (inventory state) left right
+    ((reachable_original state facts holds leftRoot rightRoot leftOriginal rightOriginal leftClosed rightClosed left leftValid).inventory state facts left)
+    ((reachable_original state facts holds leftRoot rightRoot leftOriginal rightOriginal leftClosed rightClosed right rightValid).inventory state facts right)
+  localWeight := localWeight state facts holds
+  size := weight state
+  body name valid := (reachable_original state facts holds leftRoot rightRoot leftOriginal rightOriginal leftClosed rightClosed (.mu name) valid).body_weight state facts holds name
+  child name _ := rows_weight state facts holds name
+  member name _ := members_weight state facts holds name
+  closed_reach root valid isClosed input reachable := closed_reach_below state facts holds root input
+    (reachable_original state facts holds leftRoot rightRoot leftOriginal rightOriginal leftClosed rightClosed root valid) isClosed reachable

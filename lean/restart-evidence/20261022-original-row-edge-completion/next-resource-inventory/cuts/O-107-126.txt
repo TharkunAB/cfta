@@ -1,0 +1,20 @@
+/-- A ready original edge request bounds every physical prefix from its initial semantic source. -/
+theorem edge_prefix (source : InternedConstructorTemplates.State Symbol Guard) (facts : InternedNestedFacts.Facts source)
+    (holds : Guard → Language.Term Symbol → Bool) (request : EdgeRequest Symbol Guard) (scope : EdgeScope source request)
+    (complete : Completes (view source holds) (SourceRecursiveIntersectionNative.edgeSemantic holds request))
+    {next : Control (EdgeValue Symbol Guard)} {before after : Checked width}
+    (actual : Trace fuel (.code (requestEdge request.domain request.left request.right)) before next after)
+    (good : Good before) (ready : EdgeReady before.native.machine request)
+    (sourceGrowth : Grows source before.native.machine.heap)
+    (sourceHistory : Extends source.nodes.issued before.native.machine.heap.nodes.issued) :
+    fuel ≤ edgeBudget source holds request := by
+  have charged : SourceRecursiveIntersectionInstructionCredit.EdgeCharge source holds (sourceBranching source)
+      request (edgeBudget source holds request) := by
+    refine ⟨scope, complete, ?_⟩
+    rw [edgeBudget_of_complete source holds request complete]
+    exact Nat.le_refl _
+  have initial := SourceRecursiveIntersectionInstructionCredit.request_edge request before.native.machine _ ready charged
+  obtain ⟨remaining, spent, _⟩ := prefix_bound source facts holds actual good (fun _ => trivial)
+    sourceGrowth sourceHistory initial
+  omega
+

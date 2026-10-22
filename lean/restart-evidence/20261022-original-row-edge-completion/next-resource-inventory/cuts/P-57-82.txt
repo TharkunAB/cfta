@@ -1,0 +1,26 @@
+theorem edge (bits : Nat) (before : Checked (bits + 2)) (good : Good before)
+    (left right : EdgeValue Symbol Guard)
+    (leftResident : EdgeResident before.native.machine.heap left)
+    (rightResident : EdgeResident before.native.machine.heap right)
+    (leftKeys : KEdge bits left) (rightKeys : KEdge bits right) :
+    WordRanges (.code (requestEdge emptyDomain left right)) before := by
+  apply SourceCurrentAllocatedFiniteOrdinaryWordExecution.word_ranges bits before.native.machine good.native.machine
+    (.code (requestEdge emptyDomain left right)) before
+    (SourceCurrentAllocatedFiniteOrdinaryWordExecution.Origins.of_valid before.native good.native)
+  exact SourceCurrentAllocatedFiniteOrdinaryWordCode.request_edge bits before.native.machine
+    ⟨emptyDomain, left, right⟩ ⟨rfl, leftKeys, rightKeys, leftResident, rightResident⟩
+
+/-- Initial row and node supplies suffice for every raw row and tagged descendant request. -/
+theorem edge_of_domain (bits : Nat) (before : Checked (bits + 2)) (good : Good before)
+    (nodes : before.native.machine.heap.nodes.next ≤ 2 ^ bits)
+    (edges : before.native.machine.heap.edges.next ≤ 2 ^ (bits + 2))
+    (left right : EdgeValue Symbol Guard)
+    (leftResident : EdgeResident before.native.machine.heap left)
+    (rightResident : EdgeResident before.native.machine.heap right)
+    (leftDomain : DEdge left) (rightDomain : DEdge right) :
+    WordRanges (.code (requestEdge emptyDomain left right)) before := by
+  exact edge bits before good left right leftResident rightResident
+    (SourceCurrentAllocatedFiniteOrdinaryKeys.of_resident bits before.native.machine.heap
+      good.native.machine.1 nodes edges left leftResident leftDomain)
+    (SourceCurrentAllocatedFiniteOrdinaryKeys.of_resident bits before.native.machine.heap
+      good.native.machine.1 nodes edges right rightResident rightDomain)

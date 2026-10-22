@@ -1,0 +1,21 @@
+/-- The reserved empty domain is included before any query executes. -/
+theorem empty_mem (source : InternedConstructorTemplates.State Symbol Guard) :
+    IntersectionEmptyDomain.emptyKey ∈ domains source :=
+  SourceRecursiveIntersectionDomainInventory.empty_mem _ _
+
+/-- The finite pair carrier has the square of the original issued range length. -/
+theorem pairs_length (source : InternedConstructorTemplates.State Symbol Guard) :
+    (pairs source).length = source.nodes.next * source.nodes.next := by
+  have length (values : List Nat) :
+      (values.flatMap fun left => (names source).map (SourceRecursiveIntersectionControl.pair left)).length =
+        values.length * (names source).length := by
+    induction values with
+    | nil => simp
+    | cons head tail ih => simp [ih, Nat.add_mul, Nat.add_comm]
+  simpa [pairs, names] using length (names source)
+
+/-- The initial heap computes a conservative finite domain budget. -/
+theorem domains_length (source : InternedConstructorTemplates.State Symbol Guard) :
+    (domains source).length = 2 ^ (source.nodes.next + source.nodes.next * source.nodes.next) := by
+  rw [domains, inventory_length, pairs_length]
+  simp [names]

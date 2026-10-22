@@ -1,0 +1,217 @@
+--- originals/update-documents.py
++++ update-documents.py
+@@ -6,28 +6,28 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ ROOT = HERE.parents[2]
+-SOURCE_SHA = '68d9ca87569a4bb4ad3d2df6e928c441a4e218bf54154c1da9f4d14de6b2c8aa'
+-SOURCE_LINES = int('192')
+-strict, full, audit_stem = 'same-symbol-edge-ready-strict-2', 'same-symbol-edge-ready-public-1', 'same-symbol-edge-ready-audit-1'
++SOURCE_SHA = '__H11_SOURCE_SHA__'
++SOURCE_LINES = int('__H11_SOURCE_LINES__')
++strict, full, audit_stem = '__H11_SELECTED_STRICT__', '__H11_SELECTED_FULL__', '__H11_AUDIT_STEM__'
+ metrics = {
+-    'actual_jobs': int('4'),
+-    'source_jobs': int('3'),
+-    'audit_jobs': int('1'),
+-    'failed_jobs': int('1'),
+-    'warned_source_exit_zero_jobs': int('0'),
+-    'rejected_public_type_jobs': int('0'),
+-    'audit_build_jobs': int('3627'),
+-    'audit_dependencies': int('75377'),
++    'actual_jobs': int('__H11_ACTUAL_JOBS__'),
++    'source_jobs': int('__H11_SOURCE_JOBS__'),
++    'audit_jobs': int('__H11_AUDIT_JOBS__'),
++    'failed_jobs': int('__H11_FAILED_JOBS__'),
++    'warned_source_exit_zero_jobs': int('__H11_WARNED_SOURCE_EXIT_ZERO_JOBS__'),
++    'rejected_public_type_jobs': int('__H11_REJECTED_PUBLIC_TYPE_JOBS__'),
++    'audit_build_jobs': int('__H11_AUDIT_BUILD_JOBS__'),
++    'audit_dependencies': int('__H11_AUDIT_DEPENDENCIES__'),
+ }
+ start = (HERE / 'starting-head.txt').read_text().strip()
+-assert start == 'f985c09f5b18b740082799e15abc4736b3cbf880'
++assert start == '47c597a8e39cb82aa158a9fca104ed41b24849ef'
+ proof = (HERE / 'proof-commit.txt').read_text().strip()
+ assert len(proof) == 40 and all(c in '0123456789abcdef' for c in proof)
+ assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip() == proof
+ assert subprocess.check_output(['git', 'branch', '--show-current'], cwd=ROOT, text=True).strip() == 'formalize'
+ now = datetime.datetime.now().astimezone().strftime('%Y-%m-%d %H:%M %Z')
+ gate = json.loads((HERE / 'selected-source-gate.json').read_text())
+-source_path = 'lean/MicroCFTA/SourceCurrentSameSymbolEdgeReady.lean'
++source_path = 'lean/MicroCFTA/SourceRecursiveIntersectionOriginalRowCompletion.lean'
+ assert gate['status'] == 'ROOT_ACCEPTED' and gate['path'] == source_path
+ source = (ROOT / source_path).read_bytes()
+ assert hashlib.sha256(source).hexdigest() == gate['sha256'] == SOURCE_SHA
+@@ -35,22 +35,22 @@
+ assert source == (HERE / (strict + '.source.lean')).read_bytes() and (HERE / (strict + '.log')).read_bytes() == b''
+ assert json.loads((HERE / (strict + '.json')).read_text())['exit_code'] == 0
+ raw = (HERE / (full + '.log')).read_bytes()
+-assert hashlib.sha256(raw).hexdigest() == 'ffc63200806cbf19fa84666b5b288f39a6f40d8167bf7d886d143a97a7499dfe'
++assert hashlib.sha256(raw).hexdigest() == '__H11_FULL_RAW_SHA__'
+ assert json.loads((HERE / (full + '.json')).read_text())['exit_code'] == 0
+-readback = json.loads((HERE / 'public-readback/same-symbol-edge-ready-full-readback.json').read_text())
++readback = json.loads((HERE / 'public-readback/original-row-edge-completion-full-readback.json').read_text())
+ assert readback['source_sha256'] == SOURCE_SHA and readback['source_lines'] == SOURCE_LINES
+ assert readback['log_sha256'] == hashlib.sha256(raw).hexdigest() and readback['log_bytes'] == len(raw)
+ assert readback['owned_public_job_exit'] == 0 and readback['no_omissions'] and len(readback['heads']) == 1
+-assert 'ROOT_AND_INDEPENDENT_COMPLETE' == 'ROOT_AND_INDEPENDENT_COMPLETE'
++assert '__H11_TYPE_REVIEW_STATUS__' == 'ROOT_AND_INDEPENDENT_COMPLETE'
+ head_specs = [
+-    ('ready_complete', '3318dd2a433532c6a7d313cf7b587303358e4f9092fe7d79523ef93ca6c44c69', 'public-readback/same-symbol-edge-ready-ready_complete-public-type.txt', 'public-readback/same-symbol-edge-ready-ready_complete-printed-public-type.txt', '["Classical.choice", "Quot.sound", "propext"]'),
++    ('edge_complete', '__H11_TYPE_SHA__', 'public-readback/original-row-edge-completion-edge_complete-public-type.txt', 'public-readback/original-row-edge-completion-edge_complete-printed-public-type.txt', '__H11_ACTUAL_AXIOMS_JSON__'),
+ ]
+ heads = {head['head'].rsplit('.', 1)[1]: head for head in readback['heads']}
+ assert set(heads) == {spec[0] for spec in head_specs}
+ checked_types = {}
+ for short, type_sha, type_path, printed_path, axioms_json in head_specs:
+     head = heads[short]
+-    assert head['head'] == 'MicroCFTA.SourceCurrentSameSymbolEdgeReady.' + short
++    assert head['head'] == 'MicroCFTA.SourceRecursiveIntersectionOriginalRowCompletion.' + short
+     assert head['check_print_type_identity'] and head['check_print_type_byte_identity'] and head['unique_complete_type_body_delimiter']
+     checked = (HERE / type_path).read_bytes()
+     assert checked == (HERE / printed_path).read_bytes() and hashlib.sha256(checked).hexdigest() == type_sha
+@@ -61,7 +61,7 @@
+ proof_report = json.loads((HERE / 'proof-evidence-normal.json').read_text())
+ assert proof_report['status'] == 'PASS' and all(proof_report[key] == value for key, value in metrics.items())
+ audit = (HERE / (audit_stem + '.log')).read_bytes()
+-assert hashlib.sha256(audit).hexdigest() == proof_report['audit_log_sha256'] == '18fafb8c4bb0d3de3e0c2b2f2adcbd433c1f3621f2035aaf79847fa80d113688'
++assert hashlib.sha256(audit).hexdigest() == proof_report['audit_log_sha256'] == '__H11_AUDIT_SHA__'
+ assert json.loads((HERE / (audit_stem + '.json')).read_text())['exit_code'] == 0
+ assert f"Build completed successfully ({metrics['audit_build_jobs']} jobs).".encode() in audit
+ assert f"{metrics['audit_dependencies']} MicroCFTA theorems".encode() in audit
+@@ -70,55 +70,51 @@
+     f"{short} TYPE: {len(data.splitlines())} logical lines, {data.count(bytes([10]))} LF, {len(data)} bytes, {len(data.decode())} characters.\n"
+     f"{short} actual axioms: {', '.join(heads[short]['actual_axioms']) or 'none'}."
+     for short, data in checked_types.items())
+-update = f'''## Ready same-symbol comparisons
++update = f'''## Semantic completion for original parent rows
+ 
+ Updated: {now}. Proof checkpoint: `{proof[:10]}`.
+ Start: `{start[:10]}`. Imported main remains `794903b3f`.
+-Read `lean/notes-current-same-symbol-edge-ready.md`.
++Read `lean/notes-current-original-row-edge-completion.md`.
+ 
+-SourceCurrentSameSymbolEdgeReady.ready_complete derives execution from an
+-incoming Stable packet, current heap coherence, both requested resident
+-edges and presence of the original or reversed pair key. It returns the
+-actual value and full state at fixed execute fuel 7. The full checked state
+-is unchanged. The result is resident and satisfies the exact canonical
+-emptyDomain contextual EdgeLaw. Final Stable, table Extends and Returned
+-retain the pair memo. Original hits stop in 3 steps; reverse-only hits use 7.
++SourceRecursiveIntersectionOriginalRowCompletion.edge_complete derives
++Completes for the exact empty-domain edgeSemantic request. Its two literal
++rows belong to actual available closed OriginalInput parents in the SAME
++source heap with Facts. The theorem is generic in Symbol and Guard, with
++arbitrary holds. The parents may coincide. No equal-symbol premise is used.
++It assumes no semantic or native success and no FreeCorrect oracle.
+ 
+-The fixed view, model, ranks and holds remain unchanged. Captured operand
+-identity follows from resident records and coherence. No execution or
+-semantic symmetry, native Receipt or native admission is assumed on hits.
+-Both-miss native admission and completion remain separate H8 obligations.
++Completes is existence of semantic interpreter fuel and an ok result.
++This result does not produce native admission, WordRanges, a physical
++language iff, recursive Mu completion or the full public pass.
+ H6 constructed_node_calls remains the strongest combined semantic result.
+-Full public-pass behavior, convergence, practical host bounds, external
+-solver composition and Haskell refinement remain open.
++Convergence, practical host bounds, external solver composition and
++Haskell refinement remain open. The whole formalization goal stays active.
+ 
+ All old proofs, drafts, counterexamples and optimized code remain.
+-Preservation covers 80323 baseline files/modes, 292 unchanged baseline
+-Haskell files and 207 package files. New H10 Haskell archive copies must
+-match baseline bytes. Only the Audit import and additive doc prefixes may
+-change old files. FINDINGS keeps its Haskell repair index FIRST. Work continues.
++Preservation covers 81460 baseline files/modes, 298 unchanged baseline
++Haskell files and 207 package files. Any new H11 Haskell archive copies
++must match baseline bytes. Only the Audit import and additive doc prefixes
++may change old files. FINDINGS retains its Haskell repair index FIRST.
+ '''
+ findings = update
+-focused = f'''# Ready same-symbol comparisons
++focused = f'''# Semantic completion for original parent rows
+ 
+ Updated: {now}. Proof checkpoint: `{proof}`. Start: `{start}`.
+ 
+-ready_complete consumes a Stable packet at the same completed boundary,
+-current heap Coherent, both resident requested operands, and existence of
+-the original or reversed pair key. It derives an actual result and full
+-returned state at execute 7. The entire checked native and equality state
+-is unchanged. It retains the separate pair memo and its completed cells.
+-It derives result residency, the exact canonical emptyDomain contextual
+-EdgeLaw, final Stable, table Extends and Returned. It assumes no done
+-equation, result law or native admission for the ready comparison.
++edge_complete consumes one actual source heap and its Facts, two parent
++values with OriginalInput witnesses, Available at that SAME source, empty
++free lists, and literal row memberships in those parent values.
++It derives Completes for edgeSemantic at the exact emptyDomain request
++using those two edge records. This is generic in Symbol and Guard with
++arbitrary holds. The parent values may be the same. The theorem requires
++no equality of row symbols, semantic success, native success or caller
++FreeCorrect oracle. Source Facts supply the view's free-correct law.
+ 
+-The original hit stops in 3 steps. The reverse-only case takes 7 steps.
+-Canonical presence forces descending requested identities in that case;
+-equal identities collapse the keys. Full captured operands follow from
+-key links, resident records and heap coherence. No EdgeLaw symmetry or
+-execution symmetry is used. A ready hit produces no native Receipt.
+-The fixed view, model, ranks and holds remain the same throughout.
+-A separate empty Stable producer is not added by this checkpoint.
++Completes states that some semantic interpreter fuel returns an ok result.
++The proof uses finite-input bounds and the direct-row eventual execution
++endpoint. It binds the OriginalInput witness to the actual available
++parent by payload readback. Closed opaque Mu values do not establish
++closedness of every nested parent or arbitrary generated parent.
+ 
+ Selected source: {SOURCE_LINES} lines, SHA `{SOURCE_SHA}`.
+ Selected clean strict: `{strict}`. Sole selected FULL: `{full}`.
+@@ -140,25 +136,27 @@
+ dependencies. The actual warning log remains. No seal or publication
+ success is claimed by this document writer.
+ 
+-H8 both_miss_complete retains its semantic interpreter completion,
+-current admission, readiness and WordRanges packet. This ready theorem
+-does not supply those facts or an all-pair completion theorem.
++The theorem can discharge a semantic completion premise only after a
++consumer identifies the same actual original closed parents and rows.
++Native readiness, admission, WordRanges and actual execution still need
++separate producers. No physical language iff, whole same-symbol scan,
++cache rebasing, cluster reconstruction, recursive Mu or full
++withoutRedundantEdges result is produced by this theorem.
+ H6 constructed_node_calls remains the strongest combined semantic result.
+-Actual next-state rebasing, sequence capacity, ruleOut, cluster control,
+-recursive Mu, the full withoutRedundantEdges pass, convergence, practical
+-host width, solver contracts/exported tables and Haskell refinement remain
+-open. No Haskell fix or runtime change is added.
++Convergence, practical host width, external solver contracts/exported
++tables and Haskell refinement remain open. No Haskell fix or runtime
++change is added. The whole formalization goal stays active and incomplete.
+ 
+-Preservation covers all 80323 starting files/modes, 292 baseline Haskell
+-files and 207 active package files. Additional H10 Haskell archive copies
+-must match pinned baseline live-source bytes and remain under H10.
++Preservation covers all 81460 starting files/modes, 298 baseline Haskell
++files and 207 active package files. Additional H11 Haskell archive copies
++must match pinned baseline live-source bytes and remain under H11.
+ All old proof components, drafts, counterexamples, reproducers and
+ optimized code remain. Only the Audit import and nine additive prefixes
+ may change old files; every old text has an exact inverse.
+-The original Audit has 3115 lines and SHA a36b1f2aefc14b99db041f7b8c40c6c3acc79db4f563b87532fda88b24d392fc.
++The original Audit has 3116 lines and SHA d88c464169937b31eef6302946a736116e9449e14fdb965ec23ea49eb05bb769.
+ FINDINGS keeps the external repair index FIRST. The field-pool repair in
+ PR #65 and typing-documentation repair in PR #97 remain fixed.
+-The whole formalization goal stays active.
++No new Haskell repair is required by this checkpoint.
+ '''
+ documents = ['NEXT-PROMPT.md', 'HANDOFF.md', 'FINDINGS.md', 'lean/README.md',
+     'lean/SYSTEM.md', 'lean/API-COVERAGE.md', 'lean/COVERAGE.md',
+@@ -182,7 +180,7 @@
+     (ROOT / name).write_text(changed)
+ (HERE / 'current-update.md').write_text(update)
+ (HERE / 'findings-update.md').write_text(findings)
+-note = ROOT / 'lean/notes-current-same-symbol-edge-ready.md'
++note = ROOT / 'lean/notes-current-original-row-edge-completion.md'
+ assert not note.exists()
+ note.write_text(focused)
+ print('Updated nine documents and focused note. All prior text remains.')

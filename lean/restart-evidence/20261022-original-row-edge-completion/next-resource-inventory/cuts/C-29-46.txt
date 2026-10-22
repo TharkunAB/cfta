@@ -1,0 +1,18 @@
+/-- Initial resources and a local source certificate derive words on every raw prefix. -/
+theorem word_ranges {A : Type} (resources : Resources bits source inventory initialDomains)
+    (control : Control A) (before : Checked (bits + 2)) (post : Machine Symbol Guard → A → Prop)
+    (current : Current source inventory initialDomains before)
+    (certificate : Certified source inventory control before.native.machine post)
+    (fields : SourceCurrentAllocatedNativeFieldClosure.Fields control before) : WordRanges control before := by
+  intro fuel remaining after trace
+  exact (SourceCurrentAllocatedRecursivePrefixAdmission.prefixes resources fuel control before remaining after post
+    current certificate fields trace).words
+
+/-- The same initial conditions derive enter-key admission instead of assuming it over prefixes. -/
+theorem domain_prefixes {A : Type} (resources : Resources bits source inventory initialDomains)
+    (control : Control A) (before : Checked (bits + 2)) (post : Machine Symbol Guard → A → Prop)
+    (current : Current source inventory initialDomains before)
+    (certificate : Certified source inventory control before.native.machine post)
+    (fields : SourceCurrentAllocatedNativeFieldClosure.Fields control before) :
+    SourceCurrentAllocatedNativeDomainTrace.Prefixes inventory control before := by
+  intro fuel remaining after trace

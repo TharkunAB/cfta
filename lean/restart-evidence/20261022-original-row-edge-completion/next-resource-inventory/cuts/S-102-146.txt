@@ -1,0 +1,41 @@
+/-- Raw finite yielded prefixes give exact reservation equations without a completed receipt. -/
+theorem prefix_counts (bits : Nat) (source : Machine Symbol Guard) (valid : SourceRecursiveIntersectionKernel.Valid source)
+    (fuel : Nat) (control next : Control A) (before after : Checked (bits + 2))
+    (origins : Origins source before.native) (certificate : Certified bits source control)
+    (actual : Steps fuel control before next after) :
+    after.native.machine.heap.nodes.next = before.native.machine.heap.nodes.next + nodeReservations (requestsThrough fuel control before) ∧
+    after.native.machine.heap.edges.next = before.native.machine.heap.edges.next + edgeReservations (requestsThrough fuel control before) := by
+  induction actual with
+  | refl => simp [requestsThrough, nodeReservations, edgeReservations]
+  | cons control before middle current next after count one rest ih =>
+      have entered := SourceCurrentAllocatedFiniteOrdinaryWordExecution.step_preserves bits source valid
+        control middle before current origins certificate one
+      have first := step_counts bits source control middle before current certificate one
+      have tail := ih entered.1 entered.2
+      have summed := counts_append (step_requests control before) (requestsThrough count middle current)
+      simp only [requestsThrough, one] at *
+      omega
+
+/-- The number of actual executed requests bounds both supplies at any yielded prefix. -/
+theorem prefix_bounds (bits : Nat) (source : Machine Symbol Guard) (valid : SourceRecursiveIntersectionKernel.Valid source)
+    (fuel : Nat) (control next : Control A) (before after : Checked (bits + 2))
+    (origins : Origins source before.native) (certificate : Certified bits source control)
+    (actual : Steps fuel control before next after) :
+    after.native.machine.heap.nodes.next ≤ before.native.machine.heap.nodes.next + nodeRequests (requestsThrough fuel control before) ∧
+    after.native.machine.heap.edges.next ≤ before.native.machine.heap.edges.next + edgeRequests (requestsThrough fuel control before) := by
+  have counted := prefix_counts bits source valid fuel control next before after origins certificate actual
+  have bounded := reservations_le_requests (requestsThrough fuel control before)
+  omega
+
+/-- Initial supply plus an actual prefix request budget derives numeric capacity at that entry. -/
+theorem capacity_after (bits : Nat) (source : Machine Symbol Guard) (valid : SourceRecursiveIntersectionKernel.Valid source)
+    (fuel : Nat) (control next : Control A) (before after : Checked (bits + 2))
+    (origins : Origins source before.native) (certificate : Certified bits source control)
+    (actual : Steps fuel control before next after)
+    (nodes : before.native.machine.heap.nodes.next + nodeRequests (requestsThrough fuel control before) ≤ 2 ^ bits)
+    (edges : before.native.machine.heap.edges.next + edgeRequests (requestsThrough fuel control before) ≤ 2 ^ (bits + 2)) :
+    SourceCurrentAllocatedFiniteOrdinaryCapacity.Capacity bits after := by
+  have bounded := prefix_bounds bits source valid fuel control next before after origins certificate actual
+  exact ⟨Nat.le_trans bounded.1 nodes, Nat.le_trans bounded.2 edges⟩
+
+end MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryQueryReservations

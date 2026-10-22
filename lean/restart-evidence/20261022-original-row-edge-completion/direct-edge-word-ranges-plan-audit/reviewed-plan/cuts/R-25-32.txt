@@ -1,0 +1,8 @@
+structure State (width : Nat) : Type 1 where
+  native : Native width Symbol Guard
+  operations : Operations
+
+/-- A demanded edge body resumes without looking up its running thunk again. -/
+inductive Control (Output : Type) : Type 1 where
+  | code (body : Code Symbol Guard Output)
+  | edgeBody (request : EdgeRequest Symbol Guard) (next : EdgeValue Symbol Guard → Code Symbol Guard Output)

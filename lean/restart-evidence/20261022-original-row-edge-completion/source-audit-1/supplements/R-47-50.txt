@@ -1,0 +1,4 @@
+/-- The actual reachable input domain of two roots excludes unused tagged carrier entries. -/
+def Reachable (state : InternedConstructorTemplates.State Symbol Guard) (holds : Guard → Language.Term Symbol → Bool)
+    (leftRoot rightRoot input : Input) : Prop :=
+  InputReach (view state holds) leftRoot input ∨ InputReach (view state holds) rightRoot input

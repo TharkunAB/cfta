@@ -1,0 +1,19 @@
+/-- Complete row construction retains strict child descent from both closed roots. -/
+theorem ready_rows (view : View Symbol) (inputs : FiniteInput view) (freeCorrect : FreeCorrect view)
+    (bounds : InputBounds view inputs) (roots : ClosedRoots view inputs) (domain : Domain)
+    (first second : Nat) (ready : NodeReady roots domain (.node first) (.node second))
+    (left right : Row Symbol) (leftMember : left ∈ view.rows first) (rightMember : right ∈ view.rows second) :
+    EdgeReady bounds roots domain left right := by
+  have firstValid := input_reach_valid view inputs roots.left _ roots.left_valid ready.left_reach
+  have secondValid := input_reach_valid view inputs roots.right _ roots.right_valid ready.right_reach
+  exact ⟨fun child member => .child ready.left_reach leftMember member,
+    fun child member => .child ready.right_reach rightMember member,
+    fun child member => Nat.lt_of_lt_of_le (bounds.child first firstValid left leftMember child member)
+      (reach_size_le bounds roots.left _ roots.left_valid roots.left_closed ready.left_reach),
+    fun child member => Nat.lt_of_lt_of_le (bounds.child second secondValid right rightMember child member)
+      (reach_size_le bounds roots.right _ roots.right_valid roots.right_closed ready.right_reach),
+    ready.domain_valid,
+    fun child member => node_child_covered view freeCorrect domain first left leftMember child member ready.left_covered,
+    fun child member => node_child_covered view freeCorrect domain second right rightMember child member ready.right_covered,
+    started_nonbinders roots domain _ _ ready.started (by intro name same; cases same) (by intro name same; cases same)⟩
+

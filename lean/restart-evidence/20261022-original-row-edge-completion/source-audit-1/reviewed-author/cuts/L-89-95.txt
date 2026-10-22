@@ -1,0 +1,7 @@
+/-- Original physical node readback selects its actual ordered rows. -/
+theorem rows_readback (state : InternedConstructorTemplates.State Symbol Guard) (facts : Facts state)
+    (holds : Guard → Term Symbol → Bool) (entry : Interned NodeKey) (edges : List (EdgeValue Symbol Guard))
+    (depth : Nat) (free : List Reference) (available : Available state (.node entry edges depth free)) :
+    (view state holds).rows entry.identity = edges.map (row holds) := by
+  simp only [view, payload_readback state facts _ available (.node entry.identity) rfl]
+

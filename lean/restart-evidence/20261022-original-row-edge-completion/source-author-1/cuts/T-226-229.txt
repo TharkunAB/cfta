@@ -1,0 +1,4 @@
+/-- One successful result is stable at every sufficiently large execution bound. -/
+def IntersectEventually (action : Nat → Except Error α) : Prop :=
+  ∃ bound value, ∀ fuel, bound ≤ fuel → action fuel = .ok value
+
