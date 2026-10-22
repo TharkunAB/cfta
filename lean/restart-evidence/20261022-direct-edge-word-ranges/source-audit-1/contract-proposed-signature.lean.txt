@@ -1,0 +1,15 @@
+/-- Source counters and current domain room bound every direct edge-body prefix. -/
+theorem edge_body (bits : Nat)
+    (source : InternedConstructorTemplates.State Symbol Guard) (state : Checked (bits + 2))
+    (facts : Facts source)
+    (good : SourceCurrentAllocatedNativePhysicalCompletion.Good state)
+    (semantic : SourceEqualityRequiredSemanticCache.SemanticReady state.native.machine.heap)
+    (growth : Grows source state.native.machine.heap)
+    (history : Cache.Extends source.nodes.issued state.native.machine.heap.nodes.issued)
+    (left right : EdgeValue Symbol Guard)
+    (scope : EdgeScope source ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩)
+    (ready : EdgeReady state.native.machine ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩)
+    (room : SourceCurrentAllocatedNativeResourceForecast.Room bits
+      ⟨source.nodes.next, source.edges.next, state.native.machine.domains.next, 0⟩) :
+    SourceCurrentAllocatedNativeRequestBounds.WordRanges
+      (.edgeBody ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩ .pure) state

@@ -1,0 +1,26 @@
+/-- Idle original closed inputs derive their request bound and a closed returned free list. -/
+theorem initial_complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (holds : Guard → Term Symbol → Bool) (state : Checked width) (valid : Good state)
+    (scopedCache : Scoped state.native) (semantic : SemanticReady state.native.machine.heap)
+    (idle : SourceRecursiveIntersectionNative.Idle state.native)
+    (left right : Value Symbol Guard) (leftOriginal : Original left) (rightOriginal : Original right)
+    (leftAvailable : Available state.native.machine.heap left) (rightAvailable : Available state.native.machine.heap right)
+    (leftClosed : left.free = []) (rightClosed : right.free = [])
+    (ranges : WordRanges (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) state) :
+    ∃ fuel value after,
+      Receipt fuel (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) state value after
+        (fun final value => Available final.heap value)
+        (fun _ value => NodeLaw ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩ value) ∧
+      SourceRecursiveIntersectionNative.Idle after.native ∧ value.free = [] := by
+  let request : NodeRequest Symbol Guard := ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩
+  have facts := valid.native.machine.1
+  have complete : Completes (view state.native.machine.heap holds) (SourceRecursiveIntersectionNative.nodeSemantic request) :=
+    SourceRecursiveIntersectionRequestProgress.initial_complete state.native.machine.heap facts holds left right leftOriginal rightOriginal
+      leftAvailable rightAvailable leftClosed rightClosed
+  have ready : NodeReady state.native.machine request := ⟨empty_domain _, leftAvailable, rightAvailable⟩
+  obtain ⟨fuel, value, after, receipt⟩ := request_complete state.native.machine.heap facts holds request
+    (initial_scope state.native.machine.heap left right leftOriginal rightOriginal leftAvailable rightAvailable)
+    complete state valid scopedCache semantic ready (grows_refl _) (extends_refl _) (idle.active _ holds _ state.native) ranges
+  have afterIdle := SourceCurrentAllocatedNativeRunning.done_idle (fuel + 1) _ state after value
+    (by intro value; trivial) valid.native.shape idle receipt.done
+  exact ⟨fuel, value, after, receipt, afterIdle, SourceRecursiveIntersectionResultScope.empty_scope value receipt.law⟩

@@ -1,0 +1,69 @@
+--- H11/commit-proofs.py
++++ H12/commit-proofs.py
+@@ -5,34 +5,34 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ ROOT = HERE.parents[2]
+-AUDIT_SHA = '6ea3ec3d0e64000cdca8234d09aa1623703b5708547a3dec1d669454a6589e2f'
+-AUDIT_JOBS = int('3628')
+-AUDIT_DEPENDENCIES = int('75379')
++AUDIT_SHA = '__H12_AUDIT_SHA__'
++AUDIT_JOBS = int('__H12_AUDIT_BUILD_JOBS__')
++AUDIT_DEPENDENCIES = int('__H12_AUDIT_DEPENDENCIES__')
+ def git(*args):
+     return subprocess.check_output(['git', *args], cwd=ROOT, text=True)
+ 
+ assert git('branch', '--show-current').strip() == 'formalize'
+-assert git('rev-parse', 'HEAD').strip() == (HERE / 'starting-head.txt').read_text().strip() == '47c597a8e39cb82aa158a9fca104ed41b24849ef'
++assert git('rev-parse', 'HEAD').strip() == (HERE / 'starting-head.txt').read_text().strip() == '108bc09e803b90b5e2e790c796d7ffd3c1d2f39f'
+ assert not git('diff', '--cached', '--name-only').strip()
+-assert git('rev-parse', 'codex/backup-original-row-edge-completion-20261022-0246').strip() == (HERE / 'starting-head.txt').read_text().strip()
++assert git('rev-parse', 'codex/backup-direct-edge-word-ranges-20261022-0319').strip() == (HERE / 'starting-head.txt').read_text().strip()
+ assert git('rev-parse', 'main').strip() == (HERE / 'starting-local-main.txt').read_text().strip() == 'ed73f5997f1c07e2961d06e6e290d1de38319dad'
+ assert git('rev-parse', 'origin/main').strip() == (HERE / 'starting-main.txt').read_text().strip() == '794903b3fbad3becb8b28736fc33463760731fc7'
+ selected = json.loads((HERE / 'selected-sources.json').read_text())
+-assert set(selected) == {'lean/MicroCFTA/SourceRecursiveIntersectionOriginalRowCompletion.lean'}
++assert set(selected) == {'lean/MicroCFTA/SourceCurrentAllocatedDirectEdgeWordRanges.lean'}
+ gate = json.loads((HERE / 'selected-source-gate.json').read_text())
+ assert gate['status'] == 'ROOT_ACCEPTED' and gate['path'] == next(iter(selected))
+ assert selected[gate['path']]['sha256'] == gate['sha256'] == hashlib.sha256((HERE / gate['snapshot']).read_bytes()).hexdigest()
+-assert selected[next(iter(selected))]['strict'] == 'original-row-edge-completion-strict-1'
+-assert selected[next(iter(selected))]['full'] == 'original-row-edge-completion-public-1'
+-assert 'lean/MicroCFTA/SourceRecursiveIntersectionOriginalRowCompletion.lean' not in json.loads((HERE / 'starting-files.json').read_text())
++assert selected[next(iter(selected))]['strict'] == '__H12_SELECTED_STRICT__'
++assert selected[next(iter(selected))]['full'] == '__H12_SELECTED_FULL__'
++assert 'lean/MicroCFTA/SourceCurrentAllocatedDirectEdgeWordRanges.lean' not in json.loads((HERE / 'starting-files.json').read_text())
+ for name, pin in selected.items():
+     data = (ROOT / name).read_bytes()
+     assert hashlib.sha256(data).hexdigest() == pin['sha256']
+     assert data == (HERE / (pin['strict'] + '.source.lean')).read_bytes()
+     assert not (HERE / (pin['strict'] + '.log')).read_bytes()
+     assert json.loads((HERE / (pin['full'] + '.json')).read_text())['exit_code'] == 0
+-assert json.loads((HERE / 'original-row-edge-completion-audit-1.json').read_text())['exit_code'] == 0
+-audit_raw = (HERE / 'original-row-edge-completion-audit-1.log').read_bytes()
++assert json.loads((HERE / '__H12_AUDIT_STEM__.json').read_text())['exit_code'] == 0
++audit_raw = (HERE / '__H12_AUDIT_STEM__.log').read_bytes()
+ assert hashlib.sha256(audit_raw).hexdigest() == AUDIT_SHA
+ audit = audit_raw.decode()
+ assert f"Build completed successfully ({AUDIT_JOBS} jobs)." in audit
+@@ -40,16 +40,16 @@
+ paths = sorted([*selected, 'lean/MicroCFTA/Audit.lean'])
+ assert set(git('diff', '--name-only').splitlines()) == {'lean/MicroCFTA/Audit.lean'}
+ original_audit = (HERE / 'original-sources/Audit.original.lean.txt').read_bytes()
+-assert hashlib.sha256(original_audit).hexdigest() == 'd88c464169937b31eef6302946a736116e9449e14fdb965ec23ea49eb05bb769'
+-assert len(original_audit.splitlines()) == 3116
++assert hashlib.sha256(original_audit).hexdigest() == 'eb67f7c671837d434cc443c9bbe48e2a11bd54c66a3ffbd3bb2506884face11e'
++assert len(original_audit.splitlines()) == 3117
+ audit_bytes = (ROOT / 'lean/MicroCFTA/Audit.lean').read_bytes()
+-addition = b'import MicroCFTA.SourceRecursiveIntersectionOriginalRowCompletion\n'
++addition = b'import MicroCFTA.SourceCurrentAllocatedDirectEdgeWordRanges\n'
+ assert audit_bytes.count(addition) == 1 and audit_bytes.replace(addition, b'', 1) == original_audit
+ assert audit_bytes.index(addition) < audit_bytes.index(b'/-!')
+ subprocess.run(['git', 'add', '--', *paths], cwd=ROOT, check=True)
+ assert set(git('diff', '--cached', '--name-only').splitlines()) == set(paths)
+ subprocess.run(['git', 'diff', '--cached', '--check'], cwd=ROOT, check=True)
+-subprocess.run(['git', 'commit', '-m', 'Derive semantic completion for original closed parent rows'], cwd=ROOT, check=True)
++subprocess.run(['git', 'commit', '-m', 'Bound word ranges for direct edge-body prefixes'], cwd=ROOT, check=True)
+ commit = git('rev-parse', 'HEAD').strip()
+ (HERE / 'proof-commit.txt').write_text(commit + '\n')
+ print(json.dumps({'status': 'PASS', 'proof_commit': commit, 'proof_files': paths}))

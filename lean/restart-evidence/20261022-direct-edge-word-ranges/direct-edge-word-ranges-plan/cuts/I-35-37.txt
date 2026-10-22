@@ -1,0 +1,3 @@
+def Fields : Control Output → CheckedState width → Prop
+  | .code code, state => CodeFields state.operations code
+  | .edgeBody request next, state => EdgeReady state.native.machine request ∧ ∀ value, CodeFields state.operations (next value)

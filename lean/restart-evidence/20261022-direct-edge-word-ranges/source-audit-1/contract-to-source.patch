@@ -1,0 +1,26 @@
+--- frozen-context-and-header
++++ SourceCurrentAllocatedDirectEdgeWordRanges.source.lean.txt
+@@ -23,4 +23,22 @@
+     (room : SourceCurrentAllocatedNativeResourceForecast.Room bits
+       ⟨source.nodes.next, source.edges.next, state.native.machine.domains.next, 0⟩) :
+     SourceCurrentAllocatedNativeRequestBounds.WordRanges
+-      (.edgeBody ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩ .pure) state
++      (.edgeBody ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩ .pure) state := by
++  let inventory := SourceRecursiveIntersectionSourceInventory.domains source
++  let request : EdgeRequest Symbol Guard := ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩
++  have resources : SourceCurrentAllocatedRecursivePrefixAdmission.Resources bits source inventory
++      state.native.machine.domains :=
++    ⟨facts, SourceCurrentAllocatedRecursiveDomainCode.source_closed source facts,
++      good.native.machine.2, room.1, room.2.1, by
++        simpa only [inventory, SourceRecursiveIntersectionSourceInventory.domains_length] using room.2.2⟩
++  have current : SourceCurrentAllocatedRecursivePrefixState.Current source inventory
++      state.native.machine.domains state :=
++    ⟨good, semantic, growth, history, .refl _⟩
++  have member : request.domain.key ∈ inventory :=
++    SourceRecursiveIntersectionSourceInventory.empty_mem source
++  have certificate := SourceCurrentAllocatedRecursivePrefixControl.edge_body source inventory request
++    state.native.machine scope member ready
++  exact SourceCurrentAllocatedRecursiveInitialRanges.word_ranges resources (.edgeBody request .pure)
++    state (fun after value => EdgeResident after.heap value) current certificate ⟨ready, fun _ => trivial⟩
++
++end MicroCFTA.SourceCurrentAllocatedDirectEdgeWordRanges

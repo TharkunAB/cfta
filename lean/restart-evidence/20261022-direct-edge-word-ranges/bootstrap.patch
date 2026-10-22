@@ -1,0 +1,38 @@
+--- H11/start.py
++++ H12/start.py
+@@ -6,7 +6,7 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ ROOT = HERE.parents[2]
+-START = '47c597a8e39cb82aa158a9fca104ed41b24849ef'
++START = '108bc09e803b90b5e2e790c796d7ffd3c1d2f39f'
+ 
+ 
+ def git(*args):
+@@ -21,7 +21,7 @@
+     subprocess.run(['timeout', '45s', 'git', 'pull', '--ff-only'], cwd=ROOT, env=env,
+                    check=True, stdout=log, stderr=subprocess.STDOUT)
+ assert git('rev-parse', 'HEAD').decode().strip() == START
+-subprocess.run(['git', 'branch', 'codex/backup-original-row-edge-completion-20261022-0246', START], cwd=ROOT, check=True)
++subprocess.run(['git', 'branch', 'codex/backup-direct-edge-word-ranges-20261022-0319', START], cwd=ROOT, check=True)
+ baseline = {}
+ for item in git('ls-tree', '-r', '-z', START).split(b'\0'):
+     if not item:
+@@ -44,5 +44,5 @@
+     'starting-worktrees.txt': ('worktree', 'list', '--porcelain'),
+ }.items():
+     (HERE / name).write_bytes(git(*arguments))
+-(HERE / 'previous-publication.json').write_bytes(Path('/tmp/mcfta-same-symbol-edge-ready-publication.json').read_bytes())
++(HERE / 'previous-local-checkpoint.json').write_bytes(Path('/tmp/mcfta-original-row-edge-completion-local-publication.json').read_bytes())
+ print(json.dumps({'status': 'PASS', 'baseline_files': len(baseline), 'starting_head': START}))
+--- H11/driver.py
++++ H12/driver.py
+@@ -1,7 +1,7 @@
+ import datetime, json, os, subprocess, sys
+ from pathlib import Path
+ root = Path('/home/tritlo/Code/mcfta')
+-here = root / 'lean/restart-evidence/20261022-original-row-edge-completion'
++here = root / 'lean/restart-evidence/20261022-direct-edge-word-ranges'
+ stem, script = sys.argv[1:3]
+ usage = subprocess.check_output(['/usr/bin/python3', '/tmp/mcfta-weekly-usage.py'], text=True)
+ Path('/tmp/' + stem + '.usage.json').write_text(usage)

@@ -1,0 +1,5 @@
+/-- The joint receipt completes the literal checked interpreter. -/
+theorem Receipt.done [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    {control : Control A} {before after : Checked width} {value : A} {post semanticPost : Machine Symbol Guard → A → Prop}
+    (receipt : Receipt (semanticView := semanticView) (model := model) (ranked := ranked) (semanticHolds := semanticHolds) fuel control before value after post semanticPost) :
+    execute (fuel + 1) control before = .done value after := receipt.toReceipt.done

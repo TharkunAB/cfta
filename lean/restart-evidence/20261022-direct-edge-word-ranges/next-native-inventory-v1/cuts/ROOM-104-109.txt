@@ -1,0 +1,6 @@
+/-- Numeric entry conditions for the checked native query at this width. -/
+def Room (bits : Nat) (profile : Profile) : Prop :=
+  profile.nodes < 2 ^ bits ∧ profile.edges ≤ 2 ^ (bits + 2) ∧
+    profile.domains + 2 ^ (profile.nodes + profile.nodes * profile.nodes) < 2 ^ (bits + 1)
+
+/-- Entry room for a larger profile gives entry room for a smaller profile. -/

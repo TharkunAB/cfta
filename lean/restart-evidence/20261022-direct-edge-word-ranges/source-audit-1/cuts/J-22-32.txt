@@ -1,0 +1,11 @@
+def Fields (operations : OpState) : Code Symbol Guard Output → Prop
+  | .pure _ | .fail _ => True
+  | .work job next => SourceEqualityAnnotationHeap.SafeWork (SourceCurrentConjunctionEquality.FieldAvailable operations) job ∧
+      ∀ value, Fields operations (next value)
+  | .enter _ _ _ _ _ next => ∀ value, Fields operations (next value)
+  | .read _ next => ∀ value, Fields operations (next value)
+  | .optionalBinder _ _ next => ∀ value, Fields operations (next value)
+  | .node _ next => ∀ value, Fields operations (next value)
+  | .edge _ next => ∀ value, Fields operations (next value)
+  | .finishNode _ _ next | .finishEdge _ _ next => Fields operations next
+
