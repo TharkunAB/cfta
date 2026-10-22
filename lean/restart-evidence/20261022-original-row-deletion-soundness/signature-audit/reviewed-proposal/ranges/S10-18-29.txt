@@ -1,0 +1,12 @@
+/-- Independent finite input derivations decrease at binder unfolding. -/
+structure RankedInput (view : View Symbol) (valid : Input → Prop) where
+  languages : Nat → Nat → Lang Symbol
+  body : ∀ name, valid (.mu name) → ∀ rank term, languages name rank term →
+    ∃ smaller, smaller < rank ∧ inputAt languages (view.body name) smaller term
+  row : ∀ name, valid (.node name) → ∀ rank term, languages name rank term →
+    ∃ row ∈ view.rows name, ∃ terms, term = .node row.label terms ∧
+      All₂ (fun child term => inputAt languages child rank term) row.children terms ∧ row.guard term = true
+  union : ∀ name, valid (.union name) → ∀ rank term, languages name rank term →
+    ∃ child ∈ view.members name, inputAt languages child rank term
+  copy : ∀ input, valid input → closed view input = true → ∀ rank term,
+    inputAt languages input rank term → ∀ environment, meaning environment (view.copy input) term

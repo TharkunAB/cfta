@@ -1,0 +1,20 @@
+--- H18/prepare-selected-full.py
++++ H19/prepare-selected-full.py
+@@ -6,7 +6,7 @@
+ HERE = Path(__file__).resolve().parent
+ stem, expected_sha, expected_lines, expected_context_sha, expected_context_lines, expected_signature_sha, expected_signature_lines = sys.argv[1:]
+ assert all(len(value) == 64 and set(value) <= set('0123456789abcdef') for value in [expected_sha, expected_context_sha, expected_signature_sha])
+-name = 'SourceCurrentOriginalRowPhysicalMeaning'
++name = 'SourceCurrentOriginalRowDeletionSoundness'
+ source = (HERE / (stem + '.source.lean')).read_bytes()
+ assert hashlib.sha256(source).hexdigest() == expected_sha
+ assert len(source.splitlines()) == int(expected_lines) and 1 <= int(expected_lines) <= 180
+@@ -27,7 +27,7 @@
+ options = ['maxRecDepth 30000', 'maxHeartbeats 0', 'linter.all true', 'pp.explicit true',
+     'pp.fullNames true', 'pp.proofs true', 'pp.proofs.threshold 254', 'pp.universes true',
+     'pp.deepTerms true', 'pp.maxSteps 10000000']
+-head = 'MicroCFTA.' + name + '.row_inputs_meaning'
++head = 'MicroCFTA.' + name + '.deletion_sound'
+ tail = '\n' + ''.join('set_option ' + option + '\n' for option in options)
+ tail += ''.join(command + head + '\n' for command in ['#check @', '#print ', '#print axioms '])
+ assert len(tail.splitlines()) == 14

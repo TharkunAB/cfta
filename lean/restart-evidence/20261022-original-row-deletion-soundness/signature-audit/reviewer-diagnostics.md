@@ -1,0 +1,2 @@
+One inline reviewer assertion assumed numbered cut snapshots. The owner stores raw line slices. It failed on ranges/S01-25-40.txt before creating this audit. The corrected check compares exact raw bytes and passes all20 cuts. No prepared script or root command failed.
+The first clearance message was stamped08:54. Measured date immediately afterward was2026-10-22 08:53:07 CEST. A separate correction was sent. Hashes and source review results did not change.

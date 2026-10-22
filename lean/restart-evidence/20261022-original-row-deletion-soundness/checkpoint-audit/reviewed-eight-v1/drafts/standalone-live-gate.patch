@@ -1,0 +1,16 @@
+--- update-documents.before-standalone-live-gate.py.txt
++++ update-documents.py
+@@ -60,8 +60,11 @@
+     assert head['actual_axioms'] == json.loads(axioms_json)
+     assert head['actual_axioms_within_standard_allowed'] and set(head['actual_axioms']) <= {'Classical.choice', 'Quot.sound', 'propext'}
+     checked_types[short] = checked
+-proof_report = json.loads((HERE / 'proof-evidence-normal.json').read_text())
+-assert proof_report['status'] == 'PASS' and all(proof_report[key] == value for key, value in metrics.items())
++for mode, expected_live in [('normal', False), ('live', True)]:
++    proof_report = json.loads((HERE / ('proof-evidence-' + mode + '.json')).read_text())
++    assert proof_report['status'] == 'PASS' and proof_report['live'] is expected_live
++    assert all(proof_report[key] == value for key, value in metrics.items())
++    assert proof_report['audit_log_sha256'] == '__H19_AUDIT_LOG_SHA__'
+ audit = (HERE / (audit_stem + '.log')).read_bytes()
+ assert hashlib.sha256(audit).hexdigest() == proof_report['audit_log_sha256'] == '__H19_AUDIT_LOG_SHA__'
+ assert json.loads((HERE / (audit_stem + '.json')).read_text())['exit_code'] == 0

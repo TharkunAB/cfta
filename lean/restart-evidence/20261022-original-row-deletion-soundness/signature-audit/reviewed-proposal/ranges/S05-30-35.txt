@@ -1,0 +1,6 @@
+/-- Stored payloads agree with canonical entries and their constructor fields. -/
+structure Coherent (state : InternedConstructorTemplates.State Symbol Guard) : Prop where
+  valid : InternedConstructorTemplates.Valid state
+  edges : ∀ key value, state.edgeRecords key = some value →
+    state.edges.table key = some value.entry ∧ EdgeFields key value
+  nodes : ∀ key value, state.nodeRecords key = some value →

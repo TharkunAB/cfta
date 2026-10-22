@@ -1,0 +1,63 @@
+--- writer-precision-v2/update-documents.py
++++ update-documents.py
+@@ -6,19 +6,19 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ ROOT = HERE.parents[2]
+-SOURCE_SHA = '__H19_SOURCE_SHA__'
+-SOURCE_LINES = int('__H19_SOURCE_LINES__')
++SOURCE_SHA = 'a4dd0cdd8a73cdd0e0a87f4ef668f9708cbee9b9132108424411772a8c91ae0a'
++SOURCE_LINES = int('105')
+ assert 0 < SOURCE_LINES <= 180
+-strict, full, audit_stem = '__H19_SELECTED_STRICT_STEM__', '__H19_SELECTED_FULL_STEM__', '__H19_AUDIT_STEM__'
++strict, full, audit_stem = 'original-row-deletion-soundness-strict-1', 'original-row-deletion-soundness-public-1', 'original-row-deletion-soundness-audit-1'
+ metrics = {
+-    'actual_jobs': int('__H19_ACTUAL_JOBS__'),
+-    'source_jobs': int('__H19_SOURCE_JOBS__'),
+-    'audit_jobs': int('__H19_AUDIT_JOBS__'),
+-    'failed_jobs': int('__H19_FAILED_JOBS__'),
+-    'warned_source_exit_zero_jobs': int('__H19_WARNED_SOURCE_EXIT_ZERO_JOBS__'),
+-    'rejected_public_type_jobs': int('__H19_REJECTED_PUBLIC_TYPE_JOBS__'),
+-    'audit_build_jobs': int('__H19_AUDIT_BUILD_JOBS__'),
+-    'audit_dependencies': int('__H19_AUDIT_DEPENDENCIES__'),
++    'actual_jobs': int('3'),
++    'source_jobs': int('2'),
++    'audit_jobs': int('1'),
++    'failed_jobs': int('0'),
++    'warned_source_exit_zero_jobs': int('0'),
++    'rejected_public_type_jobs': int('0'),
++    'audit_build_jobs': int('3636'),
++    'audit_dependencies': int('75454'),
+ }
+ start = (HERE / 'starting-head.txt').read_text().strip()
+ assert start == 'a8223aafa4ef99da5570f2013aadc14af99076b3'
+@@ -36,7 +36,7 @@
+ assert source == (HERE / (strict + '.source.lean')).read_bytes() and (HERE / (strict + '.log')).read_bytes() == b''
+ assert json.loads((HERE / (strict + '.json')).read_text())['exit_code'] == 0
+ raw = (HERE / (full + '.log')).read_bytes()
+-assert hashlib.sha256(raw).hexdigest() == '__H19_FULL_LOG_SHA__'
++assert hashlib.sha256(raw).hexdigest() == 'b754194bf85bd6c73e6dae7eef38f0563fa43e69c2b5aff5317e5a859f4c3457'
+ assert json.loads((HERE / (full + '.json')).read_text())['exit_code'] == 0
+ readback = json.loads((HERE / 'public-readback/original-row-deletion-soundness-full-readback.json').read_text())
+ assert readback['source_sha256'] == SOURCE_SHA and readback['source_lines'] == SOURCE_LINES
+@@ -45,7 +45,7 @@
+ review = json.loads((HERE / 'root-full-review.json').read_text())
+ assert review['complete_public_type_root_review'] == review['independent_complete_public_type_review'] == 'CLEAR'
+ head_specs = [
+-    ('deletion_sound', '__H19_DELETION_SOUND_TYPE_SHA__', 'public-readback/original-row-deletion-soundness-deletion_sound-public-type.txt', 'public-readback/original-row-deletion-soundness-deletion_sound-printed-public-type.txt', '__H19_DELETION_SOUND_ACTUAL_AXIOMS_JSON__'),
++    ('deletion_sound', 'b83d40149dd1db19b919413d5eca5a5177e0f99fec652f800444a61f535462b5', 'public-readback/original-row-deletion-soundness-deletion_sound-public-type.txt', 'public-readback/original-row-deletion-soundness-deletion_sound-printed-public-type.txt', '["Classical.choice", "Quot.sound", "propext"]'),
+ ]
+ heads = {head['head'].rsplit('.', 1)[1]: head for head in readback['heads']}
+ assert set(heads) == {spec[0] for spec in head_specs}
+@@ -64,9 +64,9 @@
+     proof_report = json.loads((HERE / ('proof-evidence-' + mode + '.json')).read_text())
+     assert proof_report['status'] == 'PASS' and proof_report['live'] is expected_live
+     assert all(proof_report[key] == value for key, value in metrics.items())
+-    assert proof_report['audit_log_sha256'] == '__H19_AUDIT_LOG_SHA__'
++    assert proof_report['audit_log_sha256'] == 'da1e97ab1910308be353811d334d4f294181e7f7ab8f0f7567716fd6231f0616'
+ audit = (HERE / (audit_stem + '.log')).read_bytes()
+-assert hashlib.sha256(audit).hexdigest() == proof_report['audit_log_sha256'] == '__H19_AUDIT_LOG_SHA__'
++assert hashlib.sha256(audit).hexdigest() == proof_report['audit_log_sha256'] == 'da1e97ab1910308be353811d334d4f294181e7f7ab8f0f7567716fd6231f0616'
+ assert json.loads((HERE / (audit_stem + '.json')).read_text())['exit_code'] == 0
+ assert f"Build completed successfully ({metrics['audit_build_jobs']} jobs).".encode() in audit
+ assert f"{metrics['audit_dependencies']} MicroCFTA theorems".encode() in audit

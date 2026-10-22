@@ -1,0 +1,27 @@
+--- basis/H17-public-header.lean.txt
++++ public-contract-sketch.lean.txt
+@@ -1,4 +1,4 @@
+-/-- Complete one original symbol group and retain its current packet and domain history. -/
++/-- Complete one original symbol group and preserve its physical union language. -/
+ theorem cluster_complete
+     [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+     (bits : Nat) (source : InternedConstructorTemplates.State Symbol Guard)
+@@ -10,6 +10,7 @@
+     (parent : Value Symbol Guard)
+     (original : OriginalInput source (inputOf parent))
+     (available : Available source parent) (closed : parent.free = [])
++    (admitted : inputModel.valid (inputOf parent))
+     (symbol : Symbol)
+     (initialDomains : Cache.State IntersectionFlatMemoKeyDomain.DomainKey)
+     (initialValid : Cache.Valid initialDomains)
+@@ -48,4 +49,9 @@
+       FlatMemoThunk.Returned before.memo after.memo ∧
+       SourceRecursiveIntersectionDomainAllocation.Trace
+         (SourceRecursiveIntersectionSourceInventory.domains source)
+-        initialDomains after.checked.native.machine.domains
++        initialDomains after.checked.native.machine.domains ∧
++      ∀ ambient : InternedGuardedLanguage.Env Symbol, ∀ term : Term Symbol,
++        (∃ edge ∈ kept, InternedGuardedLanguage.edgeMeaning
++          (guardHolds formulas solver) ambient edge term) ↔
++        ∃ edge ∈ rows, InternedGuardedLanguage.edgeMeaning
++          (guardHolds formulas solver) ambient edge term

@@ -1,0 +1,14 @@
+/-- Later operations preserve both identity tables and both record tables. -/
+structure Grows (before after : State Symbol Guard) : Prop where
+  edges : Extends before.edges.table after.edges.table
+  nodes : Extends before.nodes.table after.nodes.table
+  edgeRecords : Extends before.edgeRecords after.edgeRecords
+  nodeRecords : Extends before.nodeRecords after.nodeRecords
+
+theorem grows_refl (state : State Symbol Guard) : Grows state state :=
+  ⟨extends_refl _, extends_refl _, extends_refl _, extends_refl _⟩
+
+theorem grows_trans (first : Grows before middle) (second : Grows middle after) : Grows before after :=
+  ⟨extends_trans first.edges second.edges, extends_trans first.nodes second.nodes,
+    extends_trans first.edgeRecords second.edgeRecords, extends_trans first.nodeRecords second.nodeRecords⟩
+

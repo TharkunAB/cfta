@@ -1,0 +1,11 @@
+  dsimp only
+  let inventory := SourceRecursiveIntersectionSourceInventory.domains source
+  let ordered := if right.entry.identity < left.entry.identity then (right, left) else (left, right)
+  let request : EdgeRequest Symbol Guard := ⟨IntersectionEmptyDomain.emptyDomain, ordered.1, ordered.2⟩
+  have sourceScope := rows_scope source facts leftParent rightParent leftOriginal rightOriginal
+    leftAvailable rightAvailable left right leftMember rightMember
+  have leftResident := edge_grows source _ growth left sourceScope.leftResident
+  have rightResident := edge_grows source _ growth right sourceScope.rightResident
+  have currentRoom : SourceCurrentAllocatedNativeResourceForecast.Room bits
+      ⟨source.nodes.next, source.edges.next, before.checked.native.machine.domains.next, 0⟩ :=
+    SourceCurrentAllocatedNativeResourceForecast.Room.mono room
