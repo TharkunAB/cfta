@@ -1,0 +1,25 @@
+-- Edges
+
+{- | The identity of an interned edge.
+
+The interning cache gives each new edge a fresh identity. Identities are
+unique, but they are not dense. A node orders its edges by identity.
+-}
+newtype EdgeId = EdgeId Int
+    deriving newtype (Eq, Ord, Hashable)
+
+-- | One outgoing transition of an interned automaton node.
+data Edge symbol = InternedEdge
+    { edgeId :: !EdgeId
+    , uninternedEdge :: !(UninternedEdge symbol)
+    }
+
+instance (Show symbol) => Show (Edge symbol) where
+    show e
+        | edgeConstraint e == noConstraint = "(Edge " ++ show (edgeSymbol e) ++ " " ++ show (edgeChildren e) ++ ")"
+        | otherwise = "(mkEdge " ++ show (edgeSymbol e) ++ " " ++ show (edgeChildren e) ++ " " ++ show (edgeConstraint e) ++ ")"
+
+-- | Symbol at the root of terms accepted through this edge.
+{-# INLINEABLE edgeSymbol #-}
+edgeSymbol :: Edge symbol -> symbol
+edgeSymbol = uEdgeSymbol . uninternedEdge

@@ -1,0 +1,26 @@
+/-- Interpret each actual source reference by a language of finite terms. -/
+abbrev Env (Symbol : Type) := Reference → Lang Symbol
+
+/-- A stored Mu replaces the language of its own actual interned reference. -/
+def bind (environment : Env Symbol) (name : Reference) (language : Lang Symbol) : Env Symbol :=
+  fun other => if other = name then language else environment other
+
+mutual
+/-- Interpret the actual guarded payload with positive least-language binders. -/
+def meaning (holds : Guard → Term Symbol → Bool) (environment : Env Symbol) : Value Symbol Guard → Lang Symbol
+  | .empty => fun _ => False
+  | .reference name => environment name
+  | .node _ edges _ _ => fun term => ∃ edge : {edge // edge ∈ edges}, edgeMeaning holds environment edge.val term
+  | .union _ members _ _ => fun term => ∃ member : {member // member ∈ members}, meaning holds environment member.val term
+  | .mu entry body _ _ => least (fun language => meaning holds (bind environment (.interned entry.identity) language) body)
+termination_by value => sizeOf value
+decreasing_by
+  all_goals simp_wf
+  all_goals first | omega | (have smaller := List.sizeOf_lt_of_mem edge.property; omega) | (have smaller := List.sizeOf_lt_of_mem member.property; omega)
+
+/-- Interpret the source symbol, full guard, and ordered children of one actual edge. -/
+def edgeMeaning (holds : Guard → Term Symbol → Bool) (environment : Env Symbol) : EdgeValue Symbol Guard → Lang Symbol
+  | .mk entry children => fun term => ∃ terms, term = .node entry.key.symbol terms ∧
+      forest holds environment children terms ∧ holds entry.key.constraint term = true
+termination_by edge => sizeOf edge
+decreasing_by all_goals simp_wf; all_goals omega

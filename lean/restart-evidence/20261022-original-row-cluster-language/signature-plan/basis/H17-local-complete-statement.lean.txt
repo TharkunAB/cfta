@@ -1,0 +1,31 @@
+  have complete : ∀ size (candidates keptReversed : List Edge) (current : Wrapper (bits + 2)),
+      candidates.length = size →
+      (∀ edge ∈ candidates, edge ∈ rows) → (∀ edge ∈ keptReversed, edge ∈ rows) →
+      Stable (view source (guardHolds formulas solver)) inputModel inputRanked
+        (guardHolds formulas solver) current → Good current.checked →
+      SourceCurrentAllocatedNativeContextCache.Contextual
+        (view source (guardHolds formulas solver)) inputModel inputRanked
+        (guardHolds formulas solver) current.checked.native →
+      SemanticReady current.checked.native.machine.heap →
+      Grows source current.checked.native.machine.heap →
+      Extends source.nodes.issued current.checked.native.machine.heap.nodes.issued →
+      SourceRecursiveIntersectionDomainAllocation.Trace
+        (SourceRecursiveIntersectionSourceInventory.domains source)
+        initialDomains current.checked.native.machine.domains → NativeIdle current.checked.native →
+      ∃ (fuel : Nat) (kept : List Edge) (after : Wrapper (bits + 2)),
+        SourceCurrentOriginalRowClusterScan.execute fuel (.cluster candidates keptReversed) current =
+          .done kept after ∧
+        (∀ edge ∈ kept, edge ∈ rows) ∧ kept.length ≤ candidates.length + keptReversed.length ∧
+        Good after.checked ∧
+        SourceCurrentAllocatedNativeContextCache.Contextual
+          (view source (guardHolds formulas solver)) inputModel inputRanked
+          (guardHolds formulas solver) after.checked.native ∧
+        SemanticReady after.checked.native.machine.heap ∧
+        Extension current.checked.native.machine after.checked.native.machine ∧
+        Stable (view source (guardHolds formulas solver)) inputModel inputRanked
+          (guardHolds formulas solver) after ∧ NativeIdle after.checked.native ∧
+        Extends current.memo.table after.memo.table ∧
+        FlatMemoThunk.Returned current.memo after.memo ∧
+        SourceRecursiveIntersectionDomainAllocation.Trace
+          (SourceRecursiveIntersectionSourceInventory.domains source)
+          initialDomains after.checked.native.machine.domains

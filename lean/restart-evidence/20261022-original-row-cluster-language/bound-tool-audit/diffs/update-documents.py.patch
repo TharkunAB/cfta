@@ -1,0 +1,63 @@
+--- checkpoint-preparation/update-documents.py
++++ update-documents.py
+@@ -6,19 +6,19 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ ROOT = HERE.parents[2]
+-SOURCE_SHA = '__H20_SOURCE_SHA__'
+-SOURCE_LINES = int('__H20_SOURCE_LINES__')
++SOURCE_SHA = 'e1c54fe63f95392a928cf539b108a061b64101596a3fc6bfc5c09b72a030eba8'
++SOURCE_LINES = int('393')
+ assert 0 < SOURCE_LINES <= 500
+-strict, full, audit_stem = '__H20_SELECTED_STRICT_STEM__', '__H20_SELECTED_FULL_STEM__', '__H20_AUDIT_STEM__'
++strict, full, audit_stem = 'original-row-cluster-language-strict-2', 'original-row-cluster-language-public-1', 'original-row-cluster-language-audit-1'
+ metrics = {
+-    'actual_jobs': int('__H20_ACTUAL_JOBS__'),
+-    'source_jobs': int('__H20_SOURCE_JOBS__'),
+-    'audit_jobs': int('__H20_AUDIT_JOBS__'),
+-    'failed_jobs': int('__H20_FAILED_JOBS__'),
+-    'warned_source_exit_zero_jobs': int('__H20_WARNED_SOURCE_EXIT_ZERO_JOBS__'),
+-    'rejected_public_type_jobs': int('__H20_REJECTED_PUBLIC_TYPE_JOBS__'),
+-    'audit_build_jobs': int('__H20_AUDIT_BUILD_JOBS__'),
+-    'audit_dependencies': int('__H20_AUDIT_DEPENDENCIES__'),
++    'actual_jobs': int('4'),
++    'source_jobs': int('3'),
++    'audit_jobs': int('1'),
++    'failed_jobs': int('0'),
++    'warned_source_exit_zero_jobs': int('1'),
++    'rejected_public_type_jobs': int('0'),
++    'audit_build_jobs': int('3637'),
++    'audit_dependencies': int('75482'),
+ }
+ start = (HERE / 'starting-head.txt').read_text().strip()
+ assert start == '21dbf7da7ec880f6d9673213934f764e6fda7999'
+@@ -36,7 +36,7 @@
+ assert source == (HERE / (strict + '.source.lean')).read_bytes() and (HERE / (strict + '.log')).read_bytes() == b''
+ assert json.loads((HERE / (strict + '.json')).read_text())['exit_code'] == 0
+ raw = (HERE / (full + '.log')).read_bytes()
+-assert hashlib.sha256(raw).hexdigest() == '__H20_FULL_RAW_SHA__'
++assert hashlib.sha256(raw).hexdigest() == 'b63da6894e9f7d794c8ecaa1bee4bb76664d556d8d96cd2ab0fef8bd060fb34f'
+ assert json.loads((HERE / (full + '.json')).read_text())['exit_code'] == 0
+ readback = json.loads((HERE / 'public-readback/original-row-cluster-language-full-readback.json').read_text())
+ assert readback['source_sha256'] == SOURCE_SHA and readback['source_lines'] == SOURCE_LINES
+@@ -45,7 +45,7 @@
+ review = json.loads((HERE / 'root-full-review.json').read_text())
+ assert review['complete_public_type_root_review'] == review['independent_complete_public_type_review'] == 'CLEAR'
+ head_specs = [
+-    ('cluster_complete', '__H20_PUBLIC_TYPE_SHA__', 'public-readback/original-row-cluster-language-cluster_complete-public-type.txt', 'public-readback/original-row-cluster-language-cluster_complete-printed-public-type.txt', '__H20_ACTUAL_AXIOMS_JSON__'),
++    ('cluster_complete', 'c389a111047d46708592ebc6c0b098106bcd6121f25b490285d4f6e0cf3f9f4c', 'public-readback/original-row-cluster-language-cluster_complete-public-type.txt', 'public-readback/original-row-cluster-language-cluster_complete-printed-public-type.txt', '["Classical.choice", "Quot.sound", "propext"]'),
+ ]
+ heads = {head['head'].rsplit('.', 1)[1]: head for head in readback['heads']}
+ assert set(heads) == {spec[0] for spec in head_specs}
+@@ -64,9 +64,9 @@
+     proof_report = json.loads((HERE / ('proof-evidence-' + mode + '.json')).read_text())
+     assert proof_report['status'] == 'PASS' and proof_report['live'] is expected_live
+     assert all(proof_report[key] == value for key, value in metrics.items())
+-    assert proof_report['audit_log_sha256'] == '__H20_AUDIT_SHA__'
++    assert proof_report['audit_log_sha256'] == '9dee6d0995dd5b2b6a7e3ea9dc5866df756abe877e590d15c96fb23a50c597ea'
+ audit = (HERE / (audit_stem + '.log')).read_bytes()
+-assert hashlib.sha256(audit).hexdigest() == proof_report['audit_log_sha256'] == '__H20_AUDIT_SHA__'
++assert hashlib.sha256(audit).hexdigest() == proof_report['audit_log_sha256'] == '9dee6d0995dd5b2b6a7e3ea9dc5866df756abe877e590d15c96fb23a50c597ea'
+ assert json.loads((HERE / (audit_stem + '.json')).read_text())['exit_code'] == 0
+ assert f"Build completed successfully ({metrics['audit_build_jobs']} jobs).".encode() in audit
+ assert f"{metrics['audit_dependencies']} MicroCFTA theorems".encode() in audit

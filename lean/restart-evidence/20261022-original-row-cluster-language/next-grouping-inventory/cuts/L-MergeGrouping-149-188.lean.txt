@@ -1,0 +1,40 @@
+/-- A finite map iterator returns every stored entry once at its literal lookup key. -/
+structure Iteration (table : Table Key Item) (entries : List (Key × List Item)) : Prop where
+  unique : (entries.map Prod.fst).Nodup
+  lookup : ∀ query bucket, (query, bucket) ∈ entries ↔ table query = some bucket
+
+/-- Unique emitted keys and exact lookup imply unique emitted buckets for this source map. -/
+theorem Iteration.buckets_nodup [DecidableEq Key] (key : Item → Key) (rows : List Item)
+    (entries : List (Key × List Item)) (iteration : Iteration (fromRows key rows) entries) :
+    (entries.map Prod.snd).Nodup := by
+  apply List.pairwise_map.mpr
+  apply (List.pairwise_map.mp iteration.unique).imp_of_mem
+  intro left right leftIn rightIn different equal
+  have leftLookup := (iteration.lookup left.1 left.2).mp leftIn
+  have rightLookup := (iteration.lookup right.1 right.2).mp rightIn
+  obtain ⟨first, rest, shape⟩ := List.exists_cons_of_ne_nil (lookup_nonempty key rows left.1 left.2 leftLookup)
+  have firstIn : first ∈ left.2 := by simp [shape]
+  have leftKey := lookup_key key rows left.1 left.2 leftLookup first firstIn
+  have rightKey := lookup_key key rows right.1 right.2 rightLookup first (equal ▸ firstIn)
+  exact different (leftKey.symm.trans rightKey)
+
+/-- The exact finite iterator emits a permutation of the canonical buckets, without fixing its order. -/
+theorem Iteration.permutation [DecidableEq Key] (key : Item → Key) (rows : List Item)
+    (entries : List (Key × List Item)) (iteration : Iteration (fromRows key rows) entries) :
+    (entries.map Prod.snd).Perm (Sized.groups key rows) := by
+  apply (List.perm_ext_iff_of_nodup (iteration.buckets_nodup key rows entries) (groups_nodup key rows)).mpr
+  intro bucket
+  constructor
+  · intro present
+    obtain ⟨entry, member, same⟩ := List.mem_map.mp present
+    exact (group_member key rows bucket).mpr ⟨entry.1, same ▸ (iteration.lookup entry.1 entry.2).mp member⟩
+  · intro present
+    obtain ⟨query, found⟩ := (group_member key rows bucket).mp present
+    exact List.mem_map.mpr ⟨(query, bucket), (iteration.lookup query bucket).mpr found, rfl⟩
+
+/-- Literal merge-key insertion and exact iteration derive the existing physical grouping contract. -/
+theorem merge_grouping [DecidableEq Symbol] (edges : List (EdgeValue Symbol Guard))
+    (entries : List ((Symbol × Nat) × List (EdgeValue Symbol Guard)))
+    (iteration : Iteration (fromRows MergedSourceGrouping.groupKey edges) entries) :
+    MergedPhysicalGroupRoot.Grouping edges (entries.map Prod.snd) :=
+  MergedSourceGrouping.grouping_permutation edges _ (iteration.permutation MergedSourceGrouping.groupKey edges entries)

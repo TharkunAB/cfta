@@ -1,0 +1,7 @@
+@[simp, grind =] theorem mem_filter : x ∈ filter p as ↔ x ∈ as ∧ p x := by
+  induction as with
+  | nil => simp
+  | cons a as ih =>
+    by_cases h : p a
+    · simp_all [or_and_left]
+    · simp_all [or_and_right]

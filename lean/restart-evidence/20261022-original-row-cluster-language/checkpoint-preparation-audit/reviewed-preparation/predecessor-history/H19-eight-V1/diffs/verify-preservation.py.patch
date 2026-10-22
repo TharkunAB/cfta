@@ -1,0 +1,91 @@
+--- predecessors/verify-preservation.py
++++ verify-preservation.py
+@@ -11,7 +11,7 @@
+     return subprocess.check_output(['git', *args], cwd=ROOT, text=True)
+ 
+ base = json.loads((HERE / 'starting-files.json').read_text())
+-assert len(base) == 89667
++assert len(base) == 90717
+ changed = []
+ for name, pin in base.items():
+     path = ROOT / name
+@@ -25,7 +25,7 @@
+ selected = json.loads((HERE / 'selected-sources.json').read_text())
+ gate = json.loads((HERE / 'selected-source-gate.json').read_text())
+ assert gate['status'] == 'ROOT_ACCEPTED'
+-assert gate['path'] == 'lean/MicroCFTA/SourceCurrentOriginalRowPhysicalMeaning.lean'
++assert gate['path'] == 'lean/MicroCFTA/SourceCurrentOriginalRowDeletionSoundness.lean'
+ assert isinstance(gate['lines'], int) and 0 < gate['lines'] <= 180
+ assert sha(HERE / gate['snapshot']) == gate['sha256']
+ expected = {gate['path']: (gate['sha256'], gate['lines'])}
+@@ -33,20 +33,20 @@
+ for name, (expected_sha, lines) in expected.items():
+     assert selected[name]['sha256'] == expected_sha and sha(ROOT / name) == expected_sha
+     assert len((ROOT / name).read_bytes().splitlines()) == lines
+-new_module = 'lean/MicroCFTA/SourceCurrentOriginalRowPhysicalMeaning.lean'
++new_module = 'lean/MicroCFTA/SourceCurrentOriginalRowDeletionSoundness.lean'
+ assert new_module not in base
+-assert 'lean/notes-current-original-row-physical-meaning.md' not in base
+-assert (ROOT / 'lean/notes-current-original-row-physical-meaning.md').is_file()
++assert 'lean/notes-current-original-row-deletion-soundness.md' not in base
++assert (ROOT / 'lean/notes-current-original-row-deletion-soundness.md').is_file()
+ assert json.loads((HERE / 'frozen-modules.json').read_text()) == {
+     Path(name).stem: pin['sha256'] for name, pin in selected.items()}
+ assert set(changed) == set(documents) | (set(selected) & set(base)) | {'lean/MicroCFTA/Audit.lean'}, changed
+ start = (HERE / 'starting-head.txt').read_text().strip()
+-assert start == '4fffdcea9e49afb54ff4c3218347a830df4cc39d'
++assert start == 'a8223aafa4ef99da5570f2013aadc14af99076b3'
+ audit_original = HERE / 'original-sources/Audit.original.lean.txt'
+-assert sha(audit_original) == '47087565238f473ef8269f9328bfe087f8902cd4976c18ce0aa5e6da39542308'
+-assert len(audit_original.read_bytes().splitlines()) == 3123
++assert sha(audit_original) == '3dcbcdcec1ff02d14f17784dda3eba709811d291e1c82619d5eb1b4fac4ecd4e'
++assert len(audit_original.read_bytes().splitlines()) == 3124
+ audit = (ROOT / 'lean/MicroCFTA/Audit.lean').read_bytes()
+-addition = b'import MicroCFTA.SourceCurrentOriginalRowPhysicalMeaning\n'
++addition = b'import MicroCFTA.SourceCurrentOriginalRowDeletionSoundness\n'
+ assert audit.count(addition) == 1 and audit.replace(addition, b'', 1) == audit_original.read_bytes()
+ assert audit.index(addition) < audit.index(b'/-!')
+ for name in documents:
+@@ -55,13 +55,13 @@
+ marker = '# Current formalization findings\n\n## Haskell fix handoff for external work\n\n'
+ marker += (HERE / 'haskell-repair-index.md').read_text().rstrip() + '\n\n'
+ assert (ROOT / 'FINDINGS.md').read_text().startswith(marker)
+-previous = json.loads((ROOT / 'lean/restart-evidence/20261022-original-row-cluster-completion/preservation-final.json').read_text())
++previous = json.loads((ROOT / 'lean/restart-evidence/20261022-original-row-physical-meaning/preservation-final.json').read_text())
+ archives = dict(previous['frozen_entry_archives'])
+ registries = dict(previous['frozen_manifests'])
+-assert len(registries) == 301 and sum(pin['checked'] for pin in registries.values()) == 1395
++assert len(registries) == 302 and sum(pin['checked'] for pin in registries.values()) == 1396
+ assert len(archives) == 5
+-assert 'lean/restart-evidence/20261022-original-row-cluster-completion/frozen-modules.json' not in registries
+-registries['lean/restart-evidence/20261022-original-row-cluster-completion/frozen-modules.json'] = {'checked': 1}
++assert 'lean/restart-evidence/20261022-original-row-physical-meaning/frozen-modules.json' not in registries
++registries['lean/restart-evidence/20261022-original-row-physical-meaning/frozen-modules.json'] = {'checked': 1}
+ frozen = {}
+ for name in registries:
+     entries = json.loads((ROOT / name).read_text())
+@@ -75,7 +75,7 @@
+             assert entry['sha256'] == expected and sha(ROOT / entry['snapshot']) == expected
+             assert sha(ROOT / source) == entry['current_sha256']
+     frozen[name] = {'checked': len(entries), 'manifest_sha256': sha(ROOT / name)}
+-assert len(frozen) == 302 and sum(pin['checked'] for pin in frozen.values()) == 1396
++assert len(frozen) == 303 and sum(pin['checked'] for pin in frozen.values()) == 1397
+ for name, args in [('starting-stashes.txt', ('stash', 'list', '--format=%gd %H %s')),
+                    ('starting-worktrees.txt', ('worktree', 'list', '--porcelain'))]:
+     actual, expected = git(*args), (HERE / name).read_text()
+@@ -115,13 +115,13 @@
+     and name != 'lean/MicroCFTA/Audit.lean' and name not in selected for name in base)
+ assert older_sources == sum(name.startswith('lean/MicroCFTA/') and name.endswith('.lean')
+     and name != 'lean/MicroCFTA/Audit.lean' for name in base)
+-assert older_sources == 3633
++assert older_sources == 3634
+ report = dict(status='PASS', baseline_files=len(base), changed=sorted(changed),
+               unchanged_haskell_files=len(hs), added_haskell_archive_files=len(added_hs), unchanged_package_files=len(active),
+               unchanged_older_non_audit_sources=older_sources,
+               frozen_registry_count=len(frozen), frozen_entries=sum(item['checked'] for item in frozen.values()),
+               frozen_manifests=frozen, frozen_entry_archives=archives,
+-              audit_only_new_import=True, new_original_row_physical_meaning_absent_baseline=True,
++              audit_only_new_import=True, new_original_row_deletion_soundness_absent_baseline=True,
+               stashes_preserved=True, other_worktrees_preserved=True,
+               haskell_fix_registry_first_and_retained=True, archived_components=len(components))
+ print(json.dumps(report, indent=2))

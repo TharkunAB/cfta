@@ -1,0 +1,27 @@
+--- H17/scan-boundary-complete
++++ H20/scan-boundary-complete
+@@ -1,4 +1,4 @@
+-/-- Complete the current scan to a smaller cluster boundary with the same global history. -/
++/-- Complete the scan to a smaller boundary and preserve its physical union language. -/
+ private theorem scan_boundary_complete
+     [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+     (bits : Nat) (source : InternedConstructorTemplates.State Symbol Guard)
+@@ -10,6 +10,7 @@
+     (parent : Value Symbol Guard)
+     (original : OriginalInput source (inputOf parent))
+     (available : Available source parent) (closed : parent.free = [])
++    (admitted : inputModel.valid (inputOf parent))
+     (symbol : Symbol)
+     (initialDomains : Cache.State IntersectionFlatMemoKeyDomain.DomainKey)
+     (initialValid : Cache.Valid initialDomains)
+@@ -59,4 +60,9 @@
+       FlatMemoThunk.Returned before.memo after.memo ∧
+       SourceRecursiveIntersectionDomainAllocation.Trace
+         (SourceRecursiveIntersectionSourceInventory.domains source)
+-        initialDomains after.checked.native.machine.domains
++        initialDomains after.checked.native.machine.domains ∧
++      ∀ ambient : InternedGuardedLanguage.Env Symbol, ∀ term : Term Symbol,
++        (∃ edge ∈ next ++ newKept.reverse, InternedGuardedLanguage.edgeMeaning
++          (guardHolds formulas solver) ambient edge term) ↔
++        ∃ edge ∈ pivot :: (remaining ++ incomparableReversed.reverse ++ keptReversed.reverse),
++          InternedGuardedLanguage.edgeMeaning (guardHolds formulas solver) ambient edge term

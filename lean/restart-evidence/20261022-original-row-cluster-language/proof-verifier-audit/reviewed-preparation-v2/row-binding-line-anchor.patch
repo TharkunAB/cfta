@@ -1,0 +1,11 @@
+--- H20-V1/verify-proofs.py
++++ H20-V2/verify-proofs.py
+@@ -133,7 +133,7 @@
+     elif filename == "local-strong-IH-expanded.lean.txt":
+         assert declaration not in source, "Expanded IH is review-only; it is not an extra source declaration"
+     else:
+-        literal = declaration if filename == "local-rows-binding.lean.txt" else declaration.rstrip(b"\n") + b" := by\n"
++        literal = b"\n" + declaration if filename == "local-rows-binding.lean.txt" else declaration.rstrip(b"\n") + b" := by\n"
+         assert source.count(literal) == 1 and source.index(literal) >= len((evidence / contracts["context.lean.txt"]["path"]).read_bytes())
+         positions[filename] = source.index(literal)
+ compiled_order = ["private-execute-yielded-add.lean.txt", "private-scan-boundary-complete.lean.txt", "proposed-signature.lean.txt",

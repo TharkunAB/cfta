@@ -1,0 +1,37 @@
+/-- The canonical partition emits no repeated complete bucket. -/
+theorem groups_nodup [DecidableEq Key] (key : Item → Key) (rows : List Item) :
+    (Sized.groups key rows).Nodup := by
+  induction rows using Sized.groups.induct key with
+  | case1 => simp [Sized.groups]
+  | case2 first rest ih =>
+      rw [List.unattach_filter (g := fun other => decide (key other ≠ key first))
+        (hf := fun _ _ => rfl), List.unattach_attach] at ih
+      rw [Sized.groups, List.nodup_cons]
+      refine ⟨?_, ih⟩
+      intro repeated
+      have bad : first ∈ rest.filter (fun other => decide (key other ≠ key first)) :=
+        (Sized.groups_perm key _).mem_iff.mp
+          (List.mem_flatten.mpr ⟨_, repeated, List.mem_cons_self⟩)
+      exact (of_decide_eq_true (List.mem_filter.mp bad).2) rfl
+
+/-- Canonical groups and optional source lookups contain the same complete buckets. -/
+theorem group_member [DecidableEq Key] (key : Item → Key) (rows : List Item) (bucket : List Item) :
+    bucket ∈ Sized.groups key rows ↔ ∃ query, fromRows key rows query = some bucket := by
+  constructor
+  · intro included
+    obtain ⟨first, rest, shape, exactBucket⟩ := MergedSourceGrouping.groups_exact key rows bucket included
+    have original : first ∈ rows :=
+      (Sized.groups_perm key rows).mem_iff.mp (List.mem_flatten.mpr ⟨bucket, included, by simp [shape]⟩)
+    exact ⟨key first, (lookup_some key rows (key first) bucket).mpr
+      ⟨List.mem_map.mpr ⟨first, original, rfl⟩, exactBucket⟩⟩
+  · rintro ⟨query, found⟩
+    obtain ⟨present, contents⟩ := (lookup_some key rows query bucket).mp found
+    obtain ⟨first, original, same⟩ := List.mem_map.mp present
+    obtain ⟨group, included, firstIn⟩ := List.mem_flatten.mp ((Sized.groups_perm key rows).mem_iff.mpr original)
+    obtain ⟨head, rest, _, exactGroup⟩ := MergedSourceGrouping.groups_exact key rows group included
+    have firstKey : key first = key head := by
+      rw [exactGroup] at firstIn
+      exact of_decide_eq_true (List.mem_filter.mp firstIn).2
+    have queryKey : query = key head := same.symm.trans firstKey
+    have equal : bucket = group := by rw [contents, exactGroup, queryKey]
+    exact equal ▸ included

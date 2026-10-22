@@ -1,0 +1,21 @@
+mergeAlternatives :: forall symbol. (Hashable symbol, Typeable symbol) => Node symbol -> Node symbol
+{-# INLINEABLE mergeAlternatives #-}
+mergeAlternatives = memoTypeableWith @symbol genericMergeAlternativesCache go
+  where
+    go node@(InternedNode payload)
+        | null (freeVars node) =
+            Node
+                [ merged
+                | group <- HashMap.elems groups
+                , merged <- case group of
+                    edge : _
+                        | not (null (drop smallGroup group)) ->
+                            [Edge (edgeSymbol edge) (map mergedUnion (transpose (map edgeChildren group)))]
+                    _ -> [setChildren edge (map mergeAlternatives (edgeChildren edge)) | edge <- group]
+                ]
+      where
+        groups =
+            HashMap.fromListWith
+                (flip (<>))
+                [((edgeSymbol edge, length (edgeChildren edge)), [edge]) | edge <- internedNodeEdges payload]
+    go node = node

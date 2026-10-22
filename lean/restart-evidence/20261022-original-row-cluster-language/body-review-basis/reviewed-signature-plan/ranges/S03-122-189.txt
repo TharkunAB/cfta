@@ -1,0 +1,68 @@
+      ⟨Nat.le_refl _, Nat.le_refl _, allocations.next_le, Nat.le_refl _⟩
+  have resources : SourceCurrentAllocatedRecursivePrefixAdmission.Resources bits source inventory initialDomains :=
+    ⟨facts, SourceCurrentAllocatedRecursiveDomainCode.source_closed source facts, initialValid,
+      room.1, room.2.1, Nat.lt_of_le_of_lt (Nat.le_add_right _ _) room.2.2⟩
+  have current : SourceCurrentAllocatedRecursivePrefixState.Current source inventory initialDomains before.checked :=
+    ⟨good, semantic, growth, history, allocations⟩
+  cases found : before.memo.table (left.entry.identity, right.entry.identity) with
+  | some handle =>
+      obtain ⟨result, after, done, same, resident, law, afterStable, tables, retained⟩ :=
+        SourceCurrentSameSymbolEdgeReady.ready_complete
+          (view source (guardHolds formulas solver)) inputModel inputRanked (guardHolds formulas solver)
+          left right before good.native.machine.1.coherent stable leftResident rightResident
+          (Or.inl ⟨handle, found⟩)
+      refine ⟨7, result, after, done, resident, law, ?_, ?_, ?_, ?_, afterStable, ?_, tables, retained, ?_⟩
+      · simpa only [same] using good
+      · simpa only [same] using contextual
+      · simpa only [same] using semantic
+      · rw [same]
+        exact Extension.refl _
+      · simpa only [same] using idle
+      · simpa only [same] using allocations
+  | none =>
+      cases reverseFound : before.memo.table (right.entry.identity, left.entry.identity) with
+      | some handle =>
+          obtain ⟨result, after, done, same, resident, law, afterStable, tables, retained⟩ :=
+            SourceCurrentSameSymbolEdgeReady.ready_complete
+              (view source (guardHolds formulas solver)) inputModel inputRanked (guardHolds formulas solver)
+              left right before good.native.machine.1.coherent stable leftResident rightResident
+              (Or.inr ⟨handle, reverseFound⟩)
+          refine ⟨7, result, after, done, resident, law, ?_, ?_, ?_, ?_, afterStable, ?_, tables, retained, ?_⟩
+          · simpa only [same] using good
+          · simpa only [same] using contextual
+          · simpa only [same] using semantic
+          · rw [same]
+            exact Extension.refl _
+          · simpa only [same] using idle
+          · simpa only [same] using allocations
+      | none =>
+          have scope : EdgeScope source request := by
+            by_cases swap : right.entry.identity < left.entry.identity
+            · simpa only [request, ordered, swap, ↓reduceIte] using
+                (show EdgeScope source ⟨IntersectionEmptyDomain.emptyDomain, right, left⟩ from
+                  ⟨sourceScope.rightResident, sourceScope.leftResident,
+                    sourceScope.right, sourceScope.left, sourceScope.bindings⟩)
+            · simpa only [request, ordered, swap, ↓reduceIte] using sourceScope
+          have ready : EdgeReady before.checked.native.machine request :=
+            ⟨empty_domain _, edge_grows source _ growth _ scope.leftResident,
+              edge_grows source _ growth _ scope.rightResident⟩
+          have member : request.domain.key ∈ inventory :=
+            SourceRecursiveIntersectionSourceInventory.empty_mem source
+          have certificate := SourceCurrentAllocatedRecursivePrefixControl.edge_body source inventory request
+            before.checked.native.machine scope member ready
+          have fields : SourceCurrentAllocatedNativeFieldClosure.Fields (.edgeBody request .pure) before.checked :=
+            ⟨ready, fun _ => trivial⟩
+          obtain ⟨fuel, nativeFuel, _, result, after, done, receipt, afterStable, afterIdle,
+              tables, retained, _, _, _⟩ :=
+            SourceCurrentSameSymbolEdgeOriginalRows.both_miss_complete bits source facts formulas solver
+              inputModel inputRanked leftParent rightParent leftOriginal rightOriginal
+              leftAvailable rightAvailable leftClosed rightClosed left right leftMember rightMember
+              symbols before stable found reverseFound good contextual semantic growth history idle currentRoom
+          have admitted := SourceCurrentAllocatedRecursivePrefixAdmission.prefixes resources nativeFuel
+            (.edgeBody request .pure) before.checked (.code (.pure result)) after.checked
+            (fun final value => EdgeResident final.heap value) current certificate fields receipt.trace.steps
+          exact ⟨fuel, result, after, done, receipt.result, receipt.law, receipt.good,
+            receipt.contextual, receipt.semantic, receipt.extension, afterStable, afterIdle,
+            tables, retained, admitted.current.domains⟩
+
+end MicroCFTA.SourceCurrentSameSymbolEdgeComparisonDomains

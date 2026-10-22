@@ -1,0 +1,246 @@
+--- checkpoint-preparation/verify-checkpoint.py
++++ verify-checkpoint.py
+@@ -4,9 +4,9 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ ROOT = HERE.parents[2]
+-AUDIT_SHA = '__H19_AUDIT_LOG_SHA__'
+-AUDIT_JOBS = int('__H19_AUDIT_BUILD_JOBS__')
+-AUDIT_DEPENDENCIES = int('__H19_AUDIT_DEPENDENCIES__')
++AUDIT_SHA = 'da1e97ab1910308be353811d334d4f294181e7f7ab8f0f7567716fd6231f0616'
++AUDIT_JOBS = int('3636')
++AUDIT_DEPENDENCIES = int('75454')
+ for mode, label in [([], 'normal'), (['--live'], 'live')]:
+     result = subprocess.run(['/usr/bin/python3', str(HERE / 'verify-proofs.py'),
+         '--root', str(ROOT), *mode], cwd='/', capture_output=True, text=True)
+@@ -14,12 +14,12 @@
+     (HERE / ('proof-verification-' + label + '.stderr')).write_text(result.stderr)
+     assert result.returncode == 0, result.stderr
+     report = json.loads(result.stdout)
+-    assert report['status'] == 'PASS' and report['actual_jobs'] == int('__H19_ACTUAL_JOBS__') and report['failed_jobs'] == int('__H19_FAILED_JOBS__')
+-    assert report['source_jobs'] == int('__H19_SOURCE_JOBS__') and report['audit_jobs'] == int('__H19_AUDIT_JOBS__') and report['selected_modules'] == 1
++    assert report['status'] == 'PASS' and report['actual_jobs'] == int('3') and report['failed_jobs'] == int('0')
++    assert report['source_jobs'] == int('2') and report['audit_jobs'] == int('1') and report['selected_modules'] == 1
+     assert report['audit_build_jobs'] == AUDIT_JOBS and report['audit_dependencies'] == AUDIT_DEPENDENCIES
+     assert report['audit_log_sha256'] == AUDIT_SHA
+-    assert report['warned_source_exit_zero_jobs'] == int('__H19_WARNED_SOURCE_EXIT_ZERO_JOBS__')
+-    assert report['rejected_public_type_jobs'] == int('__H19_REJECTED_PUBLIC_TYPE_JOBS__')
++    assert report['warned_source_exit_zero_jobs'] == int('0')
++    assert report['rejected_public_type_jobs'] == int('0')
+ result = subprocess.run(['/usr/bin/python3', str(HERE / 'verify-preservation.py')],
+     cwd='/', capture_output=True, text=True)
+ (HERE / 'preservation-final.stderr').write_text(result.stderr)
+--- checkpoint-preparation/commit-proofs.py
++++ commit-proofs.py
+@@ -5,16 +5,16 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ ROOT = HERE.parents[2]
+-AUDIT_SHA = '__H19_AUDIT_LOG_SHA__'
+-AUDIT_JOBS = int('__H19_AUDIT_BUILD_JOBS__')
+-AUDIT_DEPENDENCIES = int('__H19_AUDIT_DEPENDENCIES__')
++AUDIT_SHA = 'da1e97ab1910308be353811d334d4f294181e7f7ab8f0f7567716fd6231f0616'
++AUDIT_JOBS = int('3636')
++AUDIT_DEPENDENCIES = int('75454')
+ def git(*args):
+     return subprocess.check_output(['git', *args], cwd=ROOT, text=True)
+ 
+ assert git('branch', '--show-current').strip() == 'formalize'
+ assert git('rev-parse', 'HEAD').strip() == (HERE / 'starting-head.txt').read_text().strip() == 'a8223aafa4ef99da5570f2013aadc14af99076b3'
+ assert not git('diff', '--cached', '--name-only').strip()
+-assert git('rev-parse', '__H19_BACKUP_BRANCH__').strip() == (HERE / 'starting-head.txt').read_text().strip()
++assert git('rev-parse', 'codex/backup-original-row-deletion-soundness-20261022-0840').strip() == (HERE / 'starting-head.txt').read_text().strip()
+ assert git('rev-parse', 'main').strip() == (HERE / 'starting-local-main.txt').read_text().strip() == 'ed73f5997f1c07e2961d06e6e290d1de38319dad'
+ assert git('rev-parse', 'origin/main').strip() == (HERE / 'starting-main.txt').read_text().strip() == '794903b3fbad3becb8b28736fc33463760731fc7'
+ selected = json.loads((HERE / 'selected-sources.json').read_text())
+@@ -22,8 +22,8 @@
+ gate = json.loads((HERE / 'selected-source-gate.json').read_text())
+ assert gate['status'] == 'ROOT_ACCEPTED' and gate['path'] == next(iter(selected))
+ assert selected[gate['path']]['sha256'] == gate['sha256'] == hashlib.sha256((HERE / gate['snapshot']).read_bytes()).hexdigest()
+-assert selected[next(iter(selected))]['strict'] == '__H19_SELECTED_STRICT_STEM__'
+-assert selected[next(iter(selected))]['full'] == '__H19_SELECTED_FULL_STEM__'
++assert selected[next(iter(selected))]['strict'] == 'original-row-deletion-soundness-strict-1'
++assert selected[next(iter(selected))]['full'] == 'original-row-deletion-soundness-public-1'
+ assert 'lean/MicroCFTA/SourceCurrentOriginalRowDeletionSoundness.lean' not in json.loads((HERE / 'starting-files.json').read_text())
+ for name, pin in selected.items():
+     data = (ROOT / name).read_bytes()
+@@ -31,8 +31,8 @@
+     assert data == (HERE / (pin['strict'] + '.source.lean')).read_bytes()
+     assert not (HERE / (pin['strict'] + '.log')).read_bytes()
+     assert json.loads((HERE / (pin['full'] + '.json')).read_text())['exit_code'] == 0
+-assert json.loads((HERE / '__H19_AUDIT_STEM__.json').read_text())['exit_code'] == 0
+-audit_raw = (HERE / '__H19_AUDIT_STEM__.log').read_bytes()
++assert json.loads((HERE / 'original-row-deletion-soundness-audit-1.json').read_text())['exit_code'] == 0
++audit_raw = (HERE / 'original-row-deletion-soundness-audit-1.log').read_bytes()
+ assert hashlib.sha256(audit_raw).hexdigest() == AUDIT_SHA
+ audit = audit_raw.decode()
+ assert f"Build completed successfully ({AUDIT_JOBS} jobs)." in audit
+--- checkpoint-preparation/final-publication.py
++++ final-publication.py
+@@ -8,7 +8,7 @@
+ assert (H/'starting-head.txt').read_text().strip()=='a8223aafa4ef99da5570f2013aadc14af99076b3'
+ assert git('rev-parse','HEAD').decode().strip()==(H/'proof-commit.txt').read_text().strip()==proof
+ assert git('branch','--show-current').decode().strip()=='formalize'
+-assert git('rev-parse','__H19_BACKUP_BRANCH__').decode().strip()==(H/'starting-head.txt').read_text().strip()
++assert git('rev-parse','codex/backup-original-row-deletion-soundness-20261022-0840').decode().strip()==(H/'starting-head.txt').read_text().strip()
+ assert git('rev-parse','main').decode().strip()=='ed73f5997f1c07e2961d06e6e290d1de38319dad'
+ assert git('rev-parse','origin/main').decode().strip()=='794903b3fbad3becb8b28736fc33463760731fc7'
+ subprocess.run(['/usr/bin/python3',str(H/'verify-seal.py')],check=True)
+--- writer-precision-v2/update-documents.py
++++ update-documents.py
+@@ -6,19 +6,19 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ ROOT = HERE.parents[2]
+-SOURCE_SHA = '__H19_SOURCE_SHA__'
+-SOURCE_LINES = int('__H19_SOURCE_LINES__')
++SOURCE_SHA = 'a4dd0cdd8a73cdd0e0a87f4ef668f9708cbee9b9132108424411772a8c91ae0a'
++SOURCE_LINES = int('105')
+ assert 0 < SOURCE_LINES <= 180
+-strict, full, audit_stem = '__H19_SELECTED_STRICT_STEM__', '__H19_SELECTED_FULL_STEM__', '__H19_AUDIT_STEM__'
++strict, full, audit_stem = 'original-row-deletion-soundness-strict-1', 'original-row-deletion-soundness-public-1', 'original-row-deletion-soundness-audit-1'
+ metrics = {
+-    'actual_jobs': int('__H19_ACTUAL_JOBS__'),
+-    'source_jobs': int('__H19_SOURCE_JOBS__'),
+-    'audit_jobs': int('__H19_AUDIT_JOBS__'),
+-    'failed_jobs': int('__H19_FAILED_JOBS__'),
+-    'warned_source_exit_zero_jobs': int('__H19_WARNED_SOURCE_EXIT_ZERO_JOBS__'),
+-    'rejected_public_type_jobs': int('__H19_REJECTED_PUBLIC_TYPE_JOBS__'),
+-    'audit_build_jobs': int('__H19_AUDIT_BUILD_JOBS__'),
+-    'audit_dependencies': int('__H19_AUDIT_DEPENDENCIES__'),
++    'actual_jobs': int('3'),
++    'source_jobs': int('2'),
++    'audit_jobs': int('1'),
++    'failed_jobs': int('0'),
++    'warned_source_exit_zero_jobs': int('0'),
++    'rejected_public_type_jobs': int('0'),
++    'audit_build_jobs': int('3636'),
++    'audit_dependencies': int('75454'),
+ }
+ start = (HERE / 'starting-head.txt').read_text().strip()
+ assert start == 'a8223aafa4ef99da5570f2013aadc14af99076b3'
+@@ -36,7 +36,7 @@
+ assert source == (HERE / (strict + '.source.lean')).read_bytes() and (HERE / (strict + '.log')).read_bytes() == b''
+ assert json.loads((HERE / (strict + '.json')).read_text())['exit_code'] == 0
+ raw = (HERE / (full + '.log')).read_bytes()
+-assert hashlib.sha256(raw).hexdigest() == '__H19_FULL_LOG_SHA__'
++assert hashlib.sha256(raw).hexdigest() == 'b754194bf85bd6c73e6dae7eef38f0563fa43e69c2b5aff5317e5a859f4c3457'
+ assert json.loads((HERE / (full + '.json')).read_text())['exit_code'] == 0
+ readback = json.loads((HERE / 'public-readback/original-row-deletion-soundness-full-readback.json').read_text())
+ assert readback['source_sha256'] == SOURCE_SHA and readback['source_lines'] == SOURCE_LINES
+@@ -45,7 +45,7 @@
+ review = json.loads((HERE / 'root-full-review.json').read_text())
+ assert review['complete_public_type_root_review'] == review['independent_complete_public_type_review'] == 'CLEAR'
+ head_specs = [
+-    ('deletion_sound', '__H19_DELETION_SOUND_TYPE_SHA__', 'public-readback/original-row-deletion-soundness-deletion_sound-public-type.txt', 'public-readback/original-row-deletion-soundness-deletion_sound-printed-public-type.txt', '__H19_DELETION_SOUND_ACTUAL_AXIOMS_JSON__'),
++    ('deletion_sound', 'b83d40149dd1db19b919413d5eca5a5177e0f99fec652f800444a61f535462b5', 'public-readback/original-row-deletion-soundness-deletion_sound-public-type.txt', 'public-readback/original-row-deletion-soundness-deletion_sound-printed-public-type.txt', '["Classical.choice", "Quot.sound", "propext"]'),
+ ]
+ heads = {head['head'].rsplit('.', 1)[1]: head for head in readback['heads']}
+ assert set(heads) == {spec[0] for spec in head_specs}
+@@ -64,9 +64,9 @@
+     proof_report = json.loads((HERE / ('proof-evidence-' + mode + '.json')).read_text())
+     assert proof_report['status'] == 'PASS' and proof_report['live'] is expected_live
+     assert all(proof_report[key] == value for key, value in metrics.items())
+-    assert proof_report['audit_log_sha256'] == '__H19_AUDIT_LOG_SHA__'
++    assert proof_report['audit_log_sha256'] == 'da1e97ab1910308be353811d334d4f294181e7f7ab8f0f7567716fd6231f0616'
+ audit = (HERE / (audit_stem + '.log')).read_bytes()
+-assert hashlib.sha256(audit).hexdigest() == proof_report['audit_log_sha256'] == '__H19_AUDIT_LOG_SHA__'
++assert hashlib.sha256(audit).hexdigest() == proof_report['audit_log_sha256'] == 'da1e97ab1910308be353811d334d4f294181e7f7ab8f0f7567716fd6231f0616'
+ assert json.loads((HERE / (audit_stem + '.json')).read_text())['exit_code'] == 0
+ assert f"Build completed successfully ({metrics['audit_build_jobs']} jobs).".encode() in audit
+ assert f"{metrics['audit_dependencies']} MicroCFTA theorems".encode() in audit
+--- proof-verifier-preparation-v2/verify-proofs.py
++++ verify-proofs.py
+@@ -17,14 +17,14 @@
+ def digest(data):
+     return hashlib.sha256(data).hexdigest()
+ name, head = "SourceCurrentOriginalRowDeletionSoundness", "MicroCFTA.SourceCurrentOriginalRowDeletionSoundness.deletion_sound"
+-selected_sha = "__H19_SELECTED_SOURCE_SHA__"
+-source_lines = int("__H19_SOURCE_LINES__")
+-strict_stem, full_stem, audit_stem = "__H19_SELECTED_STRICT_STEM__", "__H19_SELECTED_FULL_STEM__", "__H19_AUDIT_STEM__"
+-metrics = dict(actual_jobs=int("__H19_ACTUAL_JOBS__"), source_jobs=int("__H19_SOURCE_JOBS__"), audit_jobs=int("__H19_AUDIT_JOBS__"),
+-    failed_jobs=int("__H19_FAILED_JOBS__"), warned_source_exit_zero_jobs=int("__H19_WARNED_SOURCE_EXIT_ZERO_JOBS__"),
+-    rejected_public_type_jobs=int("__H19_REJECTED_PUBLIC_TYPE_JOBS__"))
+-jobs = json.loads("__H19_JOBS_JSON__")
+-rejected = json.loads("__H19_REJECTED_PUBLIC_STEMS_JSON__")
++selected_sha = "a4dd0cdd8a73cdd0e0a87f4ef668f9708cbee9b9132108424411772a8c91ae0a"
++source_lines = int("105")
++strict_stem, full_stem, audit_stem = "original-row-deletion-soundness-strict-1", "original-row-deletion-soundness-public-1", "original-row-deletion-soundness-audit-1"
++metrics = dict(actual_jobs=int("3"), source_jobs=int("2"), audit_jobs=int("1"),
++    failed_jobs=int("0"), warned_source_exit_zero_jobs=int("0"),
++    rejected_public_type_jobs=int("0"))
++jobs = json.loads('{"original-row-deletion-soundness-audit-1": [0, null, "da1e97ab1910308be353811d334d4f294181e7f7ab8f0f7567716fd6231f0616", 0, 0], "original-row-deletion-soundness-public-1": [0, "8155393648ebccd6be20d6efcdd43588363cb0e701de4fc6854bbce7acc31453", "b754194bf85bd6c73e6dae7eef38f0563fa43e69c2b5aff5317e5a859f4c3457", 0, 0], "original-row-deletion-soundness-strict-1": [0, "a4dd0cdd8a73cdd0e0a87f4ef668f9708cbee9b9132108424411772a8c91ae0a", "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", 0, 0]}')
++rejected = json.loads('[]')
+ assert jobs and all(stem.startswith("original-row-deletion-soundness-") for stem in jobs)
+ assert strict_stem in jobs and full_stem in jobs and audit_stem in jobs
+ assert jobs[strict_stem][0] == jobs[full_stem][0] == jobs[audit_stem][0] == 0
+@@ -78,7 +78,7 @@
+ assert gate == dict(status="ROOT_ACCEPTED", path=source_path, sha256=selected_sha, lines=source_lines, snapshot="selected-sources/" + name + ".lean")
+ assert (evidence / gate["snapshot"]).read_bytes() == source
+ history = load("source-history-gate.json")
+-assert history == json.loads("__H19_SOURCE_HISTORY_JSON__") and history["status"] == "ROOT_ACCEPTED"
++assert history == json.loads('{"artifacts": [{"bytes": 622, "path": "original-row-deletion-soundness-audit-1.json", "sha256": "2ff432d70f138532445da1a54f152dfc9db95d17ffaa1e4745460c11607c827c"}, {"bytes": 90, "path": "original-row-deletion-soundness-audit-1.limits.json", "sha256": "408bad6c1715f2c15adecf485dbfcb2753512b2f94e0a96011ddef6f6650faf3"}, {"bytes": 697, "path": "original-row-deletion-soundness-audit-1.log", "sha256": "da1e97ab1910308be353811d334d4f294181e7f7ab8f0f7567716fd6231f0616"}, {"bytes": 114, "path": "original-row-deletion-soundness-audit-1.usage.json", "sha256": "418d9eea6dc0fe927abc6f6a64bf725414689ec25bbf5b9571b71b23215e5faa"}, {"bytes": 862, "path": "original-row-deletion-soundness-public-1.json", "sha256": "15b8a0bde309fe88eec0bc7f8ef5779b35968bb9cdad82fc602f9600cd6fad89"}, {"bytes": 90, "path": "original-row-deletion-soundness-public-1.limits.json", "sha256": "408bad6c1715f2c15adecf485dbfcb2753512b2f94e0a96011ddef6f6650faf3"}, {"bytes": 250381, "path": "original-row-deletion-soundness-public-1.log", "sha256": "b754194bf85bd6c73e6dae7eef38f0563fa43e69c2b5aff5317e5a859f4c3457"}, {"bytes": 6461, "path": "original-row-deletion-soundness-public-1.source.lean", "sha256": "8155393648ebccd6be20d6efcdd43588363cb0e701de4fc6854bbce7acc31453"}, {"bytes": 114, "path": "original-row-deletion-soundness-public-1.usage.json", "sha256": "a6455b958cddd02e13bf2154e38d05a8748a7c83b242a0a48b8b3619de8703cf"}, {"bytes": 862, "path": "original-row-deletion-soundness-strict-1.json", "sha256": "b5b17922e211fef758c3f4238a3153e07325ed1c0f997f2a683739f7542db85d"}, {"bytes": 90, "path": "original-row-deletion-soundness-strict-1.limits.json", "sha256": "408bad6c1715f2c15adecf485dbfcb2753512b2f94e0a96011ddef6f6650faf3"}, {"bytes": 0, "path": "original-row-deletion-soundness-strict-1.log", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}, {"bytes": 114, "path": "original-row-deletion-soundness-strict-1.usage.json", "sha256": "ab340737a308cea843cc80a2d44abb590d1d58010f303af1c45e7401172b141e"}, {"bytes": 1428, "path": "root-source-precheck.json", "sha256": "d21fcf2c48ead5368ab8621c713c557bbf242aa21115b18bd737815311446cdf"}, {"bytes": 464, "path": "signature-plan/context.lean.txt", "sha256": "afe61fd9ff562d6b562bd7ccb2053afdd1528ac2711236a7d6447567034d2928"}, {"bytes": 1869, "path": "signature-plan/proposed-signature.lean.txt", "sha256": "fcf8cfe500c226bce7eca1c4a3f8475b49f39d5fb798ff7c795094fa9ad90426"}, {"bytes": 2517, "path": "source-proposal-audit/review.md", "sha256": "4f3cb78bd21d633bad8dab315fc1b7932b5807a8fb908cf003df057f4af85bc1"}, {"bytes": 4090, "path": "source-proposal/source-addition.patch", "sha256": "3d94a7c9d45ef475a799683a4cdfb4deac2cabe644145702f6868abf3afbf5cb"}], "patches": [], "rejected_public_types": [], "selected_source_sha256": "a4dd0cdd8a73cdd0e0a87f4ef668f9708cbee9b9132108424411772a8c91ae0a", "status": "ROOT_ACCEPTED", "variants": [{"lines": 105, "path": "source-proposal/SourceCurrentOriginalRowDeletionSoundness.lean", "sha256": "a4dd0cdd8a73cdd0e0a87f4ef668f9708cbee9b9132108424411772a8c91ae0a"}, {"lines": 105, "path": "original-row-deletion-soundness-strict-1.source.lean", "sha256": "a4dd0cdd8a73cdd0e0a87f4ef668f9708cbee9b9132108424411772a8c91ae0a"}]}') and history["status"] == "ROOT_ACCEPTED"
+ assert history["selected_source_sha256"] == selected_sha
+ variants = {item["path"]: item for item in history["variants"]}
+ artifacts = {item["path"]: item for item in history["artifacts"]}
+@@ -108,7 +108,7 @@
+ for stem, item in rejections.items():
+     assert item["raw_sha256"] == jobs[stem][2] and item["reason"] and item["artifacts"]
+     assert all(path in artifacts for path in item["artifacts"])
+-contracts = json.loads("__H19_CONTRACTS_JSON__")
++contracts = json.loads('{"context.lean.txt": {"path": "signature-plan/context.lean.txt", "lines": 8, "sha256": "afe61fd9ff562d6b562bd7ccb2053afdd1528ac2711236a7d6447567034d2928"}, "proposed-signature.lean.txt": {"path": "signature-plan/proposed-signature.lean.txt", "lines": 36, "sha256": "fcf8cfe500c226bce7eca1c4a3f8475b49f39d5fb798ff7c795094fa9ad90426"}}')
+ required_contracts = {"context.lean.txt", "proposed-signature.lean.txt"}
+ assert required_contracts <= set(contracts) <= required_contracts | {"private-signature.lean.txt"}
+ expected_helpers = ["canonical_sound"] if "private-signature.lean.txt" in contracts else []
+@@ -150,7 +150,7 @@
+ assert all(printer.decode().splitlines().count(d + head) == 1 for d in ["#check @", "#print ", "#print axioms "])
+ assert source.rstrip().endswith(("end MicroCFTA." + name).encode())
+ assert (report["source_sha256"], report["source_lines"], report["printer_sha256"]) == (selected_sha, source_lines, digest(printer))
+-assert report["log_sha256"] == digest(raw) and report["log_bytes"] == len(raw) == int("__H19_FULL_RAW_BYTES__")
++assert report["log_sha256"] == digest(raw) and report["log_bytes"] == len(raw) == int("250381")
+ assert report["receipt_sha256"] == digest((evidence / (full_stem + ".json")).read_bytes()) and report["owned_public_job_exit"] == 0
+ assert all(report[key] for key in ["all_eight_printer_settings", "exact_module_and_diagnostic_tail", "diagnostic_limits_after_module_only", "no_omissions"])
+ assert len(report["heads"]) == 1 and report["heads"][0]["head"] == head and report["heads"][0]["kind"] == "theorem"
+@@ -174,9 +174,9 @@
+         break
+ assert len(matches) == 1
+ declared, body = declaration[:matches[0].start()], declaration[matches[0].end():]
+-assert checked.encode() == declared.encode() and len(checked) == int("__H19_TYPE_CHARACTERS__") and len(checked.encode()) == int("__H19_TYPE_BYTES__")
+-assert len(checked.splitlines()) == int("__H19_TYPE_LOGICAL_LINES__") and checked.count("\n") == int("__H19_TYPE_LINE_FEEDS__") and checked.endswith("\n") == json.loads("__H19_TYPE_FINAL_NEWLINE_JSON__")
+-assert digest(checked.encode()) == "__H19_TYPE_SHA__"
++assert checked.encode() == declared.encode() and len(checked) == int("21211") and len(checked.encode()) == int("21255")
++assert len(checked.splitlines()) == int("256") and checked.count("\n") == int("255") and checked.endswith("\n") == json.loads('false')
++assert digest(checked.encode()) == "b83d40149dd1db19b919413d5eca5a5177e0f99fec652f800444a61f535462b5"
+ assert not any(token in checked for token in ["_private", "✝", "†", "‡"])
+ helpers = []
+ for line in source.decode().splitlines():
+@@ -189,17 +189,17 @@
+ head_report = report["heads"][0]
+ assert all(head_report[key] for key in ["check_print_type_identity", "check_print_type_byte_identity", "unique_complete_type_body_delimiter", "actual_axioms_within_standard_allowed"])
+ assert head_report["private_namespace_helpers_checked"] == helpers and head_report["private_type_spellings_checked"] == ["_private", "✝", "†", "‡"] and head_report["private_public_type_names"] is False
+-assert head_report["checked_type_characters"] == len(checked) and head_report["body_characters"] == len(body) == int("__H19_BODY_CHARACTERS__")
+-assert body.startswith("fun ") and len(body.encode()) == int("__H19_BODY_BYTES__")
++assert head_report["checked_type_characters"] == len(checked) and head_report["body_characters"] == len(body) == int("207524")
++assert body.startswith("fun ") and len(body.encode()) == int("207584")
+ values = re.fullmatch(r"\s*\[([^\]]*)\]\s*", printed[axiom.end():]) if axiom.group(1) == "depends on axioms:" else None
+ assert values or (axiom.group(1) == "does not depend on any axioms" and not printed[axiom.end():].strip())
+ actual_axioms = {re.sub(r"\.\{[^}]*\}", "", item.strip()) for item in values.group(1).split(",") if item.strip()} if values else set()
+-assert actual_axioms == set(head_report["actual_axioms"]) == set(json.loads("__H19_ACTUAL_AXIOMS_JSON__")) and actual_axioms <= {"Classical.choice", "Quot.sound", "propext"}
++assert actual_axioms == set(head_report["actual_axioms"]) == set(json.loads('["Classical.choice", "Quot.sound", "propext"]')) and actual_axioms <= {"Classical.choice", "Quot.sound", "propext"}
+ for suffix, text in [("public-type", checked), ("printed-public-type", declared), ("body", body), ("axioms", axiom_output)]:
+     filename = "original-row-deletion-soundness-deletion_sound-" + suffix + ".txt"
+     retained = (evidence / "public-readback" / filename).read_bytes()
+     assert retained == text.encode() and report["retained_slices"][filename] == dict(bytes=len(retained), sha256=digest(retained))
+-assert digest((evidence / "full-preparation/check-full-public.py").read_bytes()) == "__H19_FULL_READER_SHA__"
++assert digest((evidence / "full-preparation/check-full-public.py").read_bytes()) == "5b6de82fb62cad65f417ba1fd586b34382100439fef2ef572cd53ce3b105f7a4"
+ review = load("root-full-review.json")
+ assert review["status"] == "ROOT_ACCEPTED_FOR_OFFICIAL_INSTALL_AND_AUDIT" and review["source_sha256"] == selected_sha and review["source_lines"] == source_lines
+ assert review["public_theorem"] == head and review["complete_public_type_root_review"] == review["independent_complete_public_type_review"] == "CLEAR"
+@@ -213,6 +213,6 @@
+ build = re.search(r"Build completed successfully \((\d+) jobs\)\.", audit)
+ dependencies = re.search(r"Checked axiom dependencies of (\d+) MicroCFTA theorems", audit)
+ assert build and dependencies and not re.search(r"\berror(?:\([^)]*\))?:", audit)
+-assert int(build.group(1)) == int("__H19_AUDIT_BUILD_JOBS__") and int(dependencies.group(1)) == int("__H19_AUDIT_DEPENDENCIES__")
++assert int(build.group(1)) == int("3636") and int(dependencies.group(1)) == int("75454")
+ print(json.dumps(dict(status="PASS", live=args.live, **metrics, new_lean_lake_jobs=0, selected_modules=1, original_archives=1,
+     audit_build_jobs=int(build.group(1)), audit_dependencies=int(dependencies.group(1)), audit_log_sha256=digest(audit.encode())), indent=2))

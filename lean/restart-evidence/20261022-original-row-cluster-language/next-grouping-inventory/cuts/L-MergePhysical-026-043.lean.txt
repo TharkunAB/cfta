@@ -1,0 +1,18 @@
+/-- Source groups preserve the canonical row order within each complete symbol/arity class. -/
+structure Grouping [DecidableEq Symbol] (edges : List (EdgeValue Symbol Guard))
+    (input : List (List (EdgeValue Symbol Guard))) : Prop where
+  partition : input.flatten.Perm edges
+  exact : ∀ group ∈ input, ∃ first rest, group = first :: rest ∧
+    group = edges.filter (fun edge => decide (edge.entry.key.symbol = first.entry.key.symbol ∧
+      edge.children.length = first.children.length))
+
+/-- Exact source grouping derives the homogeneous key premise of the physical group proof. -/
+theorem Grouping.keys [DecidableEq Symbol] (edges : List (EdgeValue Symbol Guard))
+    (input : List (List (EdgeValue Symbol Guard))) (grouping : Grouping edges input) :
+    ∀ group ∈ input, SameKey group := by
+  intro group included left leftIn right rightIn
+  obtain ⟨first, rest, _, exactGroup⟩ := grouping.exact group included
+  rw [exactGroup] at leftIn rightIn
+  have leftKey := of_decide_eq_true (List.mem_filter.mp leftIn).2
+  have rightKey := of_decide_eq_true (List.mem_filter.mp rightIn).2
+  exact ⟨leftKey.1.trans rightKey.1.symm, leftKey.2.trans rightKey.2.symm⟩

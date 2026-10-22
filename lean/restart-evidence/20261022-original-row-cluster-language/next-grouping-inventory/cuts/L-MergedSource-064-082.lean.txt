@@ -1,0 +1,19 @@
+
+/-- Append the next source row to its bucket, as `fromListWith (flip (++))` does. -/
+def appendBucket [DecidableEq Key] (key : Item → Key) (table : Key → List Item) (item : Item) : Key → List Item :=
+  fun query => if key item = query then table query ++ [item] else table query
+
+/-- The ordered source insertion fold retains exactly the filtered suffix in each bucket. -/
+theorem fold_bucket [DecidableEq Key] (key : Item → Key) (items : List Item)
+    (table : Key → List Item) (query : Key) :
+    (items.foldl (appendBucket key) table) query = table query ++ items.filter (fun item => decide (key item = query)) := by
+  induction items generalizing table with
+  | nil => simp
+  | cons first rest ih =>
+      rw [List.foldl_cons, ih]
+      by_cases same : key first = query <;> simp [appendBucket, same, List.append_assoc]
+
+/-- Starting from an empty source map gives the exact bucket used by the grouping proof. -/
+theorem empty_bucket [DecidableEq Key] (key : Item → Key) (items : List Item) (query : Key) :
+    (items.foldl (appendBucket key) (fun _ => [])) query = items.filter (fun item => decide (key item = query)) := by
+  simpa using fold_bucket key items (fun _ => []) query

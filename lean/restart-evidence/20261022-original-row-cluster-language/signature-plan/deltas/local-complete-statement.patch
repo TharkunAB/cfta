@@ -1,0 +1,13 @@
+--- H17/local-complete-statement
++++ H20/local-complete-statement
+@@ -28,4 +28,9 @@
+         FlatMemoThunk.Returned current.memo after.memo ∧
+         SourceRecursiveIntersectionDomainAllocation.Trace
+           (SourceRecursiveIntersectionSourceInventory.domains source)
+-          initialDomains after.checked.native.machine.domains
++          initialDomains after.checked.native.machine.domains ∧
++        ∀ ambient : InternedGuardedLanguage.Env Symbol, ∀ term : Term Symbol,
++          (∃ edge ∈ kept, InternedGuardedLanguage.edgeMeaning
++            (guardHolds formulas solver) ambient edge term) ↔
++          ∃ edge ∈ candidates ++ keptReversed.reverse, InternedGuardedLanguage.edgeMeaning
++            (guardHolds formulas solver) ambient edge term

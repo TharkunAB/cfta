@@ -1,0 +1,14 @@
+/-- Two actual histories can be joined at the same cache. -/
+theorem Trace.trans (first : Trace inventory before middle)
+    (last : Trace inventory middle after) : Trace inventory before after := by
+  induction last with
+  | refl => exact first
+  | make _ key member ih => exact .make ih key member
+
+/-- The actual domain history preserves cache validity. -/
+theorem Trace.valid (trace : Trace inventory before after) (valid : Cache.Valid before) :
+    Cache.Valid after := trace.interns.valid valid
+
+/-- The history retains every earlier canonical table entry. -/
+theorem Trace.extends (trace : Trace inventory before after) :
+    Cache.Extends before.table after.table := trace.interns.extends
