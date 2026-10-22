@@ -1217,29 +1217,35 @@ concurrently actions = do
         _ <- forkIO (try action >>= putMVar result)
         pure result
 
-{- | Evaluate the spine of each list in its own thread. With 'True', print the
+{- | Evaluate the spine of each list in a thread, with one thread for each
+capability. The threads take the lists in order, so the lists that are in
+evaluation at one time are at most the capabilities. With 'True', print the
 time and the length of each on stderr. An exception in a thread is raised
 again here.
 -}
 forceInParallel :: Bool -> Int -> TypeSkeleton -> [[a]] -> IO [[a]]
 forceInParallel report lvl tc lists = do
-    results <- mapM start lists
-    timings <- mapM (\result -> takeMVar result >>= either (\e -> throwIO (e :: SomeException)) pure) results
+    capabilities <- getNumCapabilities
+    tagged <- mapM (\xs -> (,) xs <$> newEmptyMVar) lists
+    queue <- newIORef tagged
+    let worker = do
+            next <- atomicModifyIORef' queue (\parts -> case parts of [] -> ([], Nothing); part : rest -> (rest, Just part))
+            case next of
+                Nothing -> pure ()
+                Just (xs, result) -> do
+                    begin <- getMonotonicTimeNSec
+                    outcome <- try (evaluate (length xs))
+                    end <- getMonotonicTimeNSec
+                    putMVar result ((\n -> (fromIntegral (end - begin) / 1e9 :: Double, n)) <$> outcome)
+                    worker
+    mapM_ (const (forkIO worker)) [1 .. min capabilities (length lists)]
+    timings <- mapM (\(_, result) -> takeMVar result >>= either (\e -> throwIO (e :: SomeException)) pure) tagged
     when report $
         mapM_
             ( \(index, (seconds, n)) -> hPutStrLn stderr (intercalate "\t" ["parpart", show lvl, show tc, show index, show seconds, show n])
             )
             (zip [0 :: Int ..] timings)
     pure lists
-  where
-    start xs = do
-        result <- newEmptyMVar
-        _ <- forkIO $ do
-            begin <- getMonotonicTimeNSec
-            outcome <- try (evaluate (length xs))
-            end <- getMonotonicTimeNSec
-            putMVar result ((\n -> (fromIntegral (end - begin) / 1e9 :: Double, n)) <$> outcome)
-        pure result
 
 {- | Evaluate the spines of the parts of each group in background threads,
 and give for each group an action that waits for its parts, and its parts
