@@ -122,10 +122,19 @@ Wilf, and Feat (ranking).
   which a trace can end.
 - **Step**: one action of a state machine. When the next state depends on a
   response, the response is part of the step.
-- **Trace**: a sequence of steps that a state machine accepts. Its term is
-  the right spine `Step s1 (Step s2 (... (Step sn End)))`, so a trace of `n`
-  steps has size `n + 1`, and a prefix of a trace is a preorder prefix of its
-  term. Do not call a trace a path: a path is a list of child indexes.
+- **Guarded state machine**: a state machine whose state is named integers
+  (`GuardedMachine`). A step can have an integer **parameter** from a range.
+  Its **guard** is its precondition as a formula over the state and the
+  parameter, and its **update** gives the new values of some names. In the
+  refinement generator, the guard is the contract of the constructor of the
+  step, and each name is a named measure of a prefix.
+- **Trace**: a sequence of steps that a state machine accepts. In
+  `Data.CFTA.Trace`, its term is the right spine
+  `Step s1 (Step s2 (... (Step sn End)))`, so a trace of `n` steps has size
+  `n + 1`, and a prefix of a trace is a preorder prefix of its term. In the
+  generator of a guarded state machine, the last step is at the root, because
+  a measure is calculated from the children. Do not call a trace a path: a
+  path is a list of child indexes.
 
 ## Variables
 

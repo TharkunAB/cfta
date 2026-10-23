@@ -1472,6 +1472,48 @@ and a separate concrete integer/Boolean interpreter. A smaller surface-DSL
 variant also verifies guarded shrinking. The final QuickCheck property needs no
 implication or `suchThat` filter.
 
+### Guarded state machines
+
+`Data.CFTA.Gen.Refinement.Trace` gives the traces of a state machine over
+named integers. A `GuardedStep` can have an integer parameter from a range.
+Its guard is the precondition over the state and the parameter, and its
+update gives the new values of some names. A guard and an update read the
+state by name, and they are functions over `Symbolic`, so one definition
+gives the concrete run and the refinement generator:
+
+```haskell
+import qualified Data.CFTA.Gen.Refinement.QuickCheck as LTAGen
+import Data.CFTA.Gen.Refinement.Trace
+import Data.CFTA.Refinement.Symbolic (true, (.<=))
+
+-- | A bank account: deposit or withdraw an amount from 1 to a million.
+account :: GuardedMachine
+account =
+  GuardedMachine
+    [("balance", 0)]
+    [ GuardedStep "deposit" (Just (1, 1000000)) (\_ _ -> true) (\state amount -> [("balance", state "balance" + amount)])
+    , GuardedStep "withdraw" (Just (1, 1000000)) (\state amount -> amount .<= state "balance") (\state amount -> [("balance", state "balance" - amount)])
+    ]
+
+-- traces <- LTAGen.compile (guardedTraces 3 account)
+-- LTAGen.cardinality traces   -- Right 2500002500001000001
+-- LTAGen.countAtSize traces 5 -- Right 1500000500000: the traces of exactly 2 steps
+-- guardedRun account [Event "deposit" (Just 5), Event "withdraw" (Just 7)]
+--   -- Left (Infeasible {infeasibleSteps = [...deposit 5...], infeasibleSymbol = Step (...withdraw 7...), infeasibleStates = [[("balance",5)]]})
+```
+
+`guardedTraces n` gives the traces of at most `n` steps. Each name is a
+named measure of a prefix (`measuredBy`), the guard is the contract of the
+constructor of the step, and the parameter comes from `every`. So the compiled
+generator counts the parameters without a list of them: a range of a million
+costs no more than a range of two. Each step adds two to the size, so
+`countAtSize` at `2n + 1` counts the traces of exactly `n` steps. The last
+step is at the root, so the ranks are not the ranks of `Data.CFTA.Trace`.
+`guardedProduct` gives the traces of two machines over the step names that
+both have, with the intersection of the parameter ranges. `guardedRun` gives
+the shortest prefix that fails, and `unrolled` gives a finite `StateMachine`
+for small ranges, for the operations of `Data.CFTA.Trace`.
+
 ### LTA-biased case study: sized-vector pipelines
 
 The stack machine is a stateful progression, but an FTA author can still
