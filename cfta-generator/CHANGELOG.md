@@ -2,6 +2,13 @@
 
 ## 0.1.0.0 - Unreleased
 
+- Add `Data.CFTA.Extension`: `checkExtension` checks that a later automaton
+  is a definitional extension of an earlier automaton by a template lowering.
+  It reports another initial state, a lost or changed old production, an old
+  constructor that the lowering expands, a production that does not lower,
+  and a production with another number of children than its expansion. Each
+  report has a counterexample term, built with the smallest terms of
+  `Data.CFTA.Sized`, and its lowering. Automata with constraints are rejected.
 Before release, the package was called `microcfta-generator`.
 
 Initial release. `cfta-generator` is one generator over the constrained

@@ -2,6 +2,7 @@ module Main (main) where
 
 import Test.Hspec (hspec)
 
+import qualified Data.CFTA.ExtensionSpec
 import qualified Data.CFTA.Gen.Equality.DatatypeGenSpec
 import qualified Data.CFTA.Gen.Equality.GenSpec
 import qualified Data.CFTA.Gen.Equality.IFCExpressionGenSpec
@@ -34,3 +35,4 @@ main =
         Data.CFTA.Gen.Synthesis.StatesSpec.spec
         Data.CFTA.Gen.TypingSpec.spec
         Data.CFTA.SizedSpec.spec
+        Data.CFTA.ExtensionSpec.spec
