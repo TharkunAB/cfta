@@ -2,6 +2,9 @@
 
 ## 0.1.0.0 - Unreleased
 
+- `Data.CFTA.Sized.termsOfSizeFrom`: the terms of a size class from a class
+  rank on. Where the count table applies, it does not build the terms before
+  the class rank.
 Before release, the package was called `microcfta-generator`.
 
 Initial release. `cfta-generator` is one generator over the constrained
