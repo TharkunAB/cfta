@@ -1,3 +1,4 @@
+import MicroCFTA.SourceCurrentSameSymbolEdgeComparisonCovered
 import MicroCFTA.SourceCurrentOriginalRowGroupChain
 import Lean
 import MicroCFTA.SourceCurrentOriginalRowClusterLanguage
