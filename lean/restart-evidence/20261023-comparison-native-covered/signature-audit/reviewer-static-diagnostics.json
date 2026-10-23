@@ -1,0 +1,26 @@
+{
+  "classification": "REVIEWER_ONLY_INLINE_STATIC_DIAGNOSTICS",
+  "prepared_program_failure": false,
+  "proof_failure": false,
+  "owner_package_changed": false,
+  "items": [
+    {
+      "operation": "First bounded cut display",
+      "diagnostic": "KeyError: 'id'",
+      "reason": "Reviewer assumed an optional source id field. Actual source-index uses path entries.",
+      "correction": "Display and index by actual path field; all35 cuts then read completely."
+    },
+    {
+      "operation": "Initial snapshot-reference hash loop",
+      "diagnostic": "KeyError: 'full_snapshot_reference'",
+      "reason": "FormulaExecutable has a live whole-file pin and literal cut but no full_snapshot_reference field.",
+      "correction": "Check every live identity and every cut; check full snapshot references only where present (28). No required source pin was skipped."
+    },
+    {
+      "operation": "Old public-header substring anchor",
+      "diagnostic": "AssertionError at terminal-LF substring test",
+      "reason": "Stored header terminates with LF. Live declaration continues with the body separator := by on the same final line.",
+      "correction": "Match the header payload before the actual body separator. The complete inverse still compares exact tokens modulo the four approved ASCII layout characters."
+    }
+  ]
+}

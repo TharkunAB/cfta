@@ -1,0 +1,4 @@
+
+/-- Original edge inputs retain their complete resident row records. -/
+def EdgeReady (machine : Machine Symbol Guard) (request : EdgeRequest Symbol Guard) : Prop :=
+  Domain machine request.domain ∧ EdgeResident machine.heap request.left ∧ EdgeResident machine.heap request.right

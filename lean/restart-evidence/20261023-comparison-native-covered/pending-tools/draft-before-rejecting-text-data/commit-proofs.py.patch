@@ -1,0 +1,11 @@
+--- draft-text-data/commit-proofs.py
++++ rejecting-JSON-text-data/commit-proofs.py
+@@ -49,7 +49,7 @@
+ subprocess.run(['git', 'add', '--', *paths], cwd=ROOT, check=True)
+ assert set(git('diff', '--cached', '--name-only').splitlines()) == set(paths)
+ subprocess.run(['git', 'diff', '--cached', '--check'], cwd=ROOT, check=True)
+-subprocess.run(['git', 'commit', '-m', '__H28_PROOF_COMMIT_MESSAGE__'], cwd=ROOT, check=True)
++subprocess.run(['git', 'commit', '-m', json.loads('__H28_PROOF_COMMIT_MESSAGE_JSON__')], cwd=ROOT, check=True)
+ commit = git('rev-parse', 'HEAD').strip()
+ (HERE / 'proof-commit.txt').write_text(commit + '\n')
+ print(json.dumps({'status': 'PASS', 'proof_commit': commit, 'proof_files': paths}))

@@ -1,0 +1,18 @@
+      output middle.checked.native.machine.heap midGood.fields
+  have rawDone : SourceEqualityNativeDemand.execute 2 (.code (.work (makeNode output) .pure))
+    middle.checked = .done built.1 after.checked := by
+    rfl
+  refine ⟨fuels, kept, states, start, steps, packets, rawDone, rebuiltGood,
+    SourceCurrentAllocatedNativeContextCache.advance_contextual
+      (view source (guardHolds formulas solver)) inputModel inputRanked
+      (guardHolds formulas solver) middle.checked.native _ midContextual,
+    rebuiltSemantic, grows_trans midGrowth rebuilt.1.growth,
+    extends_trans midHistory rebuilt.1.history,
+    stable_heap _ _ _ _ middle built.2 midStable rebuilt.1.growth,
+    midIdle, midTrace, extension.trans rebuildExtension, tables, retained,
+    rfl, rfl, rfl, rfl, rfl, rebuilt.2.1, rebuilt.2.2.2, rebuilt.2.2.1,
+    members, lengthBound, ?_⟩
+  intro ambient term
+  apply (InternedGuardedLanguage.makeNode_exact middle.checked.native.machine.heap
+    midGood.native.machine.1 (guardHolds formulas solver) ambient output residentRows term).trans
+  apply (show (∃ edge ∈ output, MergedColdInterpretation.EdgeMeaning

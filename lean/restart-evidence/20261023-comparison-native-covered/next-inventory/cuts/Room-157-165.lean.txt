@@ -1,0 +1,9 @@
+/-- One numeric test at the last query entry supplies the full finite reservation. -/
+theorem reserved_iff_last (bits : Nat) (profile : Profile) (count : Nat) :
+    Reserved bits profile (count + 1) ↔ Room bits (advance profile count) := by
+  constructor
+  · intro reservation
+    exact reservation count (by omega)
+  · intro room index less
+    exact room.mono (advance_count_mono profile (by omega))
+

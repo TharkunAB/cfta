@@ -1,0 +1,20 @@
+/-- View growth preserves admission and exact ranks of every old valid input. -/
+structure Agreement (before : FiniteInput oldView) (after : FiniteInput newView) : Prop where
+  valid : ∀ input, before.valid input → after.valid input
+  rank : ∀ input, before.valid input → ∀ rank term,
+    inputAt (finiteRanks newView after) input rank term ↔ inputAt (finiteRanks oldView before) input rank term
+
+/-- An interpreted name has an old valid nonempty physical representative. -/
+def NameCovered (inputs : FiniteInput oldView) (name : Nat) : Prop :=
+  ∃ input, inputs.valid input ∧ input ≠ .empty ∧ identity input = name
+
+/-- Both identities of every enclosing pair have old admitted representatives. -/
+def SeenCovered (inputs : FiniteInput oldView) (domain : IntersectionFlatMemoKeyDomain.DomainKey) : Prop :=
+  ∀ pair ∈ domain.seen, NameCovered inputs pair.1 ∧ NameCovered inputs pair.2
+
+/-- Returned request contexts retain admission for every enclosing pair name. -/
+structure SeenAdmitted (inputs : FiniteInput oldView) (state : SourceRecursiveIntersectionThunks.State width Symbol Guard) : Prop where
+  nodes : Returned (fun (request : NodeRequest Symbol Guard) (_ : Value Symbol Guard) =>
+    SeenCovered inputs request.domain.key) state.nodes
+  edges : Returned (fun (request : EdgeRequest Symbol Guard) (_ : EdgeValue Symbol Guard) =>
+    SeenCovered inputs request.domain.key) state.edges

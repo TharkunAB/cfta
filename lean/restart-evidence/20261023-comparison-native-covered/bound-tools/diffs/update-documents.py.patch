@@ -1,0 +1,101 @@
+--- basis/update-documents.py
++++ selected/update-documents.py
+@@ -7,19 +7,19 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ ROOT = HERE.parents[2]
+-SOURCE_SHA = '__H28_SOURCE_SHA__'
+-SOURCE_LINES = int('__H28_SOURCE_LINES__')
+-assert 0 < SOURCE_LINES <= int('__H28_SOURCE_HARD_STOP__')
+-strict, full, audit_stem = '__H28_SELECTED_STRICT_STEM__', '__H28_SELECTED_FULL_STEM__', '__H28_AUDIT_STEM__'
++SOURCE_SHA = 'c923d6ffba1ccd787aa7384225e34232b5ff3b6098be671355787b982ead3f01'
++SOURCE_LINES = int('204')
++assert 0 < SOURCE_LINES <= int('230')
++strict, full, audit_stem = 'comparison-native-covered-strict-1', 'comparison-native-covered-public-1', 'comparison-native-covered-audit-1'
+ metrics = {
+-    'actual_jobs': int('__H28_ACTUAL_JOBS__'),
+-    'source_jobs': int('__H28_SOURCE_JOBS__'),
+-    'audit_jobs': int('__H28_AUDIT_JOBS__'),
+-    'failed_jobs': int('__H28_FAILED_JOBS__'),
+-    'warned_source_exit_zero_jobs': int('__H28_WARNED_SOURCE_EXIT_ZERO_JOBS__'),
+-    'rejected_public_type_jobs': int('__H28_REJECTED_PUBLIC_TYPE_JOBS__'),
+-    'audit_build_jobs': int('__H28_AUDIT_BUILD_JOBS__'),
+-    'audit_dependencies': int('__H28_AUDIT_DEPENDENCIES__'),
++    'actual_jobs': int('3'),
++    'source_jobs': int('2'),
++    'audit_jobs': int('1'),
++    'failed_jobs': int('0'),
++    'warned_source_exit_zero_jobs': int('0'),
++    'rejected_public_type_jobs': int('0'),
++    'audit_build_jobs': int('3645'),
++    'audit_dependencies': int('75508'),
+ }
+ start = (HERE / 'starting-head.txt').read_text().strip()
+ assert start == 'b796e8e660a73ac328d41cad53c61099ba79d93f'
+@@ -37,13 +37,13 @@
+ assert source == (HERE / (strict + '.source.lean')).read_bytes() and (HERE / (strict + '.log')).read_bytes() == b''
+ assert json.loads((HERE / (strict + '.json')).read_text())['exit_code'] == 0
+ raw = (HERE / (full + '.log')).read_bytes()
+-assert hashlib.sha256(raw).hexdigest() == '__H28_FULL_RAW_SHA__'
++assert hashlib.sha256(raw).hexdigest() == '01e903addd01f1d88413664ef8eed2664b1236e61387879d22c4c58755d0887e'
+ assert json.loads((HERE / (full + '.json')).read_text())['exit_code'] == 0
+ readback = json.loads((HERE / 'public-readback/comparison-native-covered-full-readback.json').read_text())
+ assert readback['source_sha256'] == SOURCE_SHA and readback['source_lines'] == SOURCE_LINES
+ assert readback['log_sha256'] == hashlib.sha256(raw).hexdigest() and readback['log_bytes'] == len(raw)
+-head_specs = json.loads('__H28_HEAD_SPECS_JSON__')
+-assert [spec[0] for spec in head_specs] == json.loads('__H28_PUBLIC_HEAD_NAMES_JSON__')
++head_specs = json.loads('[["original_rows_complete", "73f30229b7c09cdbfa0ebee0a99d161f66b32089d51e4b6be79bd9a7aeeab485", "73f30229b7c09cdbfa0ebee0a99d161f66b32089d51e4b6be79bd9a7aeeab485", "a253d2cbaec020446702878a811dd890ff1e14eb93a121bef05f24d302327fb1", true, "public-readback/comparison-native-covered-original_rows_complete-public-type.txt", "public-readback/comparison-native-covered-original_rows_complete-printed-public-type.txt", "[\\"Classical.choice\\", \\"Quot.sound\\", \\"propext\\"]"]]')
++assert [spec[0] for spec in head_specs] == json.loads('["original_rows_complete"]')
+ assert head_specs and readback['owned_public_job_exit'] == 0 and readback['no_omissions'] and len(readback['heads']) == len(head_specs)
+ review = json.loads((HERE / 'root-full-review.json').read_text())
+ assert review['complete_public_type_root_review'] == review['independent_complete_public_type_review'] == 'CLEAR'
+@@ -71,9 +71,9 @@
+     proof_report = json.loads((HERE / ('proof-evidence-' + mode + '.json')).read_text())
+     assert proof_report['status'] == 'PASS' and proof_report['live'] is expected_live
+     assert all(proof_report[key] == value for key, value in metrics.items())
+-    assert proof_report['audit_log_sha256'] == '__H28_AUDIT_SHA__'
++    assert proof_report['audit_log_sha256'] == 'cc3983fd3d75f7c2120d3e8614c174598a9828fb691623d1dddd0433d12686ae'
+ audit = (HERE / (audit_stem + '.log')).read_bytes()
+-assert hashlib.sha256(audit).hexdigest() == proof_report['audit_log_sha256'] == '__H28_AUDIT_SHA__'
++assert hashlib.sha256(audit).hexdigest() == proof_report['audit_log_sha256'] == 'cc3983fd3d75f7c2120d3e8614c174598a9828fb691623d1dddd0433d12686ae'
+ assert json.loads((HERE / (audit_stem + '.json')).read_text())['exit_code'] == 0
+ assert f"Build completed successfully ({metrics['audit_build_jobs']} jobs).".encode() in audit
+ assert f"{metrics['audit_dependencies']} MicroCFTA theorems".encode() in audit
+@@ -84,13 +84,13 @@
+     f"{short} raw byte identity: {heads[short]['check_print_type_byte_identity']}; lexical identity: {heads[short]['check_print_type_lexical_identity']}; canonical SHA `{heads[short]['canonical_type_sha256']}`.\n"
+     f"{short} actual axioms: {', '.join(heads[short]['actual_axioms']) or 'none'}."
+     for short, data in checked_types.items())
+-update = f'''## {json.loads('__H28_DOCUMENT_TITLE_JSON__')}
++update = f'''## {json.loads('"Native coverage through original-row comparisons"')}
+ 
+ Updated: {now}. Proof checkpoint: `{proof[:10]}`.
+ Start: `{start[:10]}`. Imported main remains `794903b3f`.
+ Read `lean/notes-current-comparison-native-covered.md`.
+ 
+-{json.loads('__H28_UPDATE_SCOPE_TEXT_JSON__')}
++{json.loads('"The checked theorem adds native Covered to the SAME H15 comparison result and full caller.\\nOne finite inventory fixes the source view, model, ranks and guard semantics.\\nGenuine admission of both closed original parents and incoming native Covered remain premises.\\nThe arbitrary initial domain cache, Valid, global allocation Trace and initial Room remain explicit.\\nOne H15 invocation supplies the exact fuel, result, after state and all twelve existing outputs.\\nH27 handles either cache hit through checked-state equality from that SAME done equation.\\nOn a miss, public raw-step readback and prefix admission derive the physical Trace at those endpoints.\\nActual row admission and public branch certificates then derive final native Covered.\\nPair admission through group runs, generated-root composition, new resources, Mu/full pass, practical width,\\nHaskell refinement and convergence remain open."')}
+ H6 constructed_node_calls remains strongest combined.
+ The whole goal remains ACTIVE and incomplete.
+ Preservation covers 106098 baseline files/modes, 298 baseline Haskell files
+@@ -101,18 +101,18 @@
+ Root push follows successful seal and local checkpoint verification.
+ '''
+ findings = update
+-focused = f'''# {json.loads('__H28_DOCUMENT_TITLE_JSON__')}
++focused = f'''# {json.loads('"Native coverage through original-row comparisons"')}
+ 
+ Updated: {now}. Proof checkpoint: `{proof}`. Start: `{start}`.
+ 
+-{json.loads('__H28_FOCUSED_SCOPE_TEXT_JSON__')}
++{json.loads('"SourceCurrentSameSymbolEdgeComparisonCovered.original_rows_complete completes one original-row comparison.\\nIt fixes one source, finite inventory, finiteInputMeaning, finiteRankedInput and guard semantics.\\nBoth parents are original, available, closed and admitted. Both rows are literal members with the same symbol.\\nThe populated Wrapper retains its Stable, Good, Contextual, SemanticReady and native Idle premises.\\nIncoming native Covered, source growth and issued history remain explicit.\\nThe proof retains the same initialDomains parameter and its Valid proof.\\nThe SAME global allocation Trace and one genuine initial Room support the comparison at fixed width.\\nOne H15 invocation supplies the exact fuel, result, full after and done equation.\\nAll twelve H15 outputs remain. The only additional output is native Covered at that same after state.\\nA published-key hit uses H27 on the SAME done equation to derive checked-state equality.\\nA miss uses public miss_readback on the SAME done equation to recover raw native Steps.\\nActual parent admission and literal row residency derive request scope and coverage.\\nCanonical ordering swaps complete Edge records and both scope and admission facts together.\\nOnly the literal emptyDomain request has no binding obligations. Source bindings can be nonempty.\\nThe initial packet supplies Resources and Current. Public prefix admission derives a physical Receipt\\nat the exact before.checked and after.checked endpoints. Its trace feeds Trace.covered.\\nPublic branch certificates and the derived local admission certificate supply final native Covered.\\nThe proof selects no second comparison or hidden H15 receipt. It uses no helper or induction.\\nCaptured-pair Requests and canonical returned-pair admission remain separate.\\nComposition with generated-root source/model/rank transport, deriving new fixed-width Room\\nand WordRanges, literal Mu/full pass,\\npractical width, Haskell and solver correspondence, and convergence remain open."')}
+ H6 constructed_node_calls remains strongest combined.
+ The whole goal remains ACTIVE and incomplete.
+ 
+ Selected source: {SOURCE_LINES} lines, SHA `{SOURCE_SHA}`.
+ Selected clean strict: `{strict}`. Selected FULL: `{full}`.
+ Strict has a literal-empty log. Default declaration limits and all linters remain.
+-The source hard stop is {int('__H28_SOURCE_HARD_STOP__')} lines. Diagnostic options follow the complete module.
++The source hard stop is {int('230')} lines. Diagnostic options follow the complete module.
+ FULL retains {len(raw)} raw bytes. Complete TYPEs agree under four-character ASCII whitespace normalization.
+ {type_summary}
+ Root and an independent reviewer read each complete checked public TYPE.

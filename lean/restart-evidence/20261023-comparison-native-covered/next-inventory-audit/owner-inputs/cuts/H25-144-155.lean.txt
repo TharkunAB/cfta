@@ -1,0 +1,12 @@
+                  (SourceCurrentAllocatedNativeAdmissionCache.Requests.finish
+                    property handle value current.memo covered) trivial
+                simpa only [SourceCurrentSameSymbolEdgeControl.execute,
+                  SourceCurrentSameSymbolEdgeControl.step] using observed
+
+  have final : SourceCurrentAllocatedNativeAdmissionCache.Requests property after.memo := by
+    exact preserved fuel (.call (left, right) []) before initial known done
+  refine ⟨final, ?_⟩
+  intro handle pair value stored
+  by_cases order : pair.2.entry.identity < pair.1.entry.identity
+  · simpa only [order, ↓reduceIte] using swapped pair (final handle _ stored)
+  · simpa only [order, ↓reduceIte] using final handle _ stored

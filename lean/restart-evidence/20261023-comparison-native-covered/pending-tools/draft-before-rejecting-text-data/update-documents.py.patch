@@ -1,0 +1,32 @@
+--- draft-text-data/update-documents.py
++++ rejecting-JSON-text-data/update-documents.py
+@@ -84,13 +84,13 @@
+     f"{short} raw byte identity: {heads[short]['check_print_type_byte_identity']}; lexical identity: {heads[short]['check_print_type_lexical_identity']}; canonical SHA `{heads[short]['canonical_type_sha256']}`.\n"
+     f"{short} actual axioms: {', '.join(heads[short]['actual_axioms']) or 'none'}."
+     for short, data in checked_types.items())
+-update = f'''## __H28_DOCUMENT_TITLE__
++update = f'''## {json.loads('__H28_DOCUMENT_TITLE_JSON__')}
+ 
+ Updated: {now}. Proof checkpoint: `{proof[:10]}`.
+ Start: `{start[:10]}`. Imported main remains `794903b3f`.
+ Read `lean/notes-current-comparison-native-covered.md`.
+ 
+-__H28_UPDATE_SCOPE_TEXT__
++{json.loads('__H28_UPDATE_SCOPE_TEXT_JSON__')}
+ H6 constructed_node_calls remains strongest combined.
+ The whole goal remains ACTIVE and incomplete.
+ Preservation covers 106098 baseline files/modes, 298 baseline Haskell files
+@@ -101,11 +101,11 @@
+ Root push follows successful seal and local checkpoint verification.
+ '''
+ findings = update
+-focused = f'''# __H28_DOCUMENT_TITLE__
++focused = f'''# {json.loads('__H28_DOCUMENT_TITLE_JSON__')}
+ 
+ Updated: {now}. Proof checkpoint: `{proof}`. Start: `{start}`.
+ 
+-__H28_FOCUSED_SCOPE_TEXT__
++{json.loads('__H28_FOCUSED_SCOPE_TEXT_JSON__')}
+ H6 constructed_node_calls remains strongest combined.
+ The whole goal remains ACTIVE and incomplete.
+ 

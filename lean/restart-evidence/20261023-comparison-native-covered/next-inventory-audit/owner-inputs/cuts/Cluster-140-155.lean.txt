@@ -1,0 +1,16 @@
+          (of_decide_eq_true (List.mem_filter.mp candidateMember).2).symm
+      obtain ⟨fuel, common, middle, done, resident, law, midGood, midContextual,
+          midSemantic, extension, midStable, midIdle, tables, retained, midTrace⟩ :=
+        SourceCurrentSameSymbolEdgeComparisonDomains.original_rows_complete bits source facts
+          formulas solver inputModel inputRanked parent parent original original available available
+          closed closed pivot candidate (List.mem_filter.mp pivotMember).1
+          (List.mem_filter.mp candidateMember).1 symbols initialDomains initialValid before stable
+          good contextual semantic growth history allocations idle room
+      have deletion := SourceCurrentOriginalRowDeletionSoundness.deletion_sound
+        source facts (guardHolds formulas solver) inputModel inputRanked parent original
+        available closed admitted pivot candidate (List.mem_filter.mp pivotMember).1
+        (List.mem_filter.mp candidateMember).1 middle.checked.native.machine.heap
+        midGood.native.machine.1.coherent (grows_trans growth extension.heap) common resident law
+      obtain ⟨used, _positive, _bound, resumed⟩ :=
+        SourceCurrentOriginalRowClusterScan.comparison_lift fuel pivot candidate common tail
+          incomparableReversed keptReversed (.call (pivot, candidate) []) before middle done

@@ -1,0 +1,18 @@
+theorem contextual (agreement : Agreement before after) (holds : SourceGuard → Term SourceSymbol → Bool)
+    (state : SourceRecursiveIntersectionThunks.State width SourceSymbol SourceGuard)
+    (admitted : Admitted oldView (finiteInputMeaning oldView before) state) (seen : SeenAdmitted before state)
+    (valid : Contextual oldView (finiteInputMeaning oldView before) (finiteRankedInput oldView before) holds state) :
+    Contextual newView (finiteInputMeaning newView after) (finiteRankedInput newView after) holds state :=
+  ⟨fun handle request result found => node_law agreement holds request result
+      (admitted.nodes handle request result found) (seen.nodes handle request result found) (valid.nodes handle request result found),
+    fun handle request result found => edge_law agreement holds request result
+      (admitted.edges handle request result found) (seen.edges handle request result found) (valid.edges handle request result found)⟩
+
+/-- Cross-view cache transport retains both coverage certificates with the contextual laws. -/
+theorem rebase (agreement : Agreement before after) (holds : SourceGuard → Term SourceSymbol → Bool)
+    (state : SourceRecursiveIntersectionThunks.State width SourceSymbol SourceGuard)
+    (admitted : Admitted oldView (finiteInputMeaning oldView before) state) (seen : SeenAdmitted before state)
+    (valid : Contextual oldView (finiteInputMeaning oldView before) (finiteRankedInput oldView before) holds state) :
+    Contextual newView (finiteInputMeaning newView after) (finiteRankedInput newView after) holds state ∧
+      Admitted newView (finiteInputMeaning newView after) state ∧ SeenAdmitted after state :=
+  ⟨contextual agreement holds state admitted seen valid, agreement.admitted state admitted, agreement.seen_admitted state seen⟩

@@ -1,0 +1,12 @@
+  contextual : SourceCurrentAllocatedNativeContextCache.Contextual
+    (view inventory.source (SourceEqualityPCSGuard.holds formulas solver))
+    (finiteInputMeaning (view inventory.source (SourceEqualityPCSGuard.holds formulas solver))
+      (inventory.inputs (SourceEqualityPCSGuard.holds formulas solver)))
+    (finiteRankedInput (view inventory.source (SourceEqualityPCSGuard.holds formulas solver))
+      (inventory.inputs (SourceEqualityPCSGuard.holds formulas solver)))
+    (SourceEqualityPCSGuard.holds formulas solver) state.native
+  covered : SourceCurrentAllocatedNativeAdmissionCache.Covered
+    (inventory.inputs (SourceEqualityPCSGuard.holds formulas solver)) state.native
+  growth : Grows inventory.source state.native.machine.heap
+  history : Extends inventory.source.nodes.issued state.native.machine.heap.nodes.issued
+

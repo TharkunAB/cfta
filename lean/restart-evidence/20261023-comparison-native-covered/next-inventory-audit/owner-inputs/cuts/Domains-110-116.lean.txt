@@ -1,0 +1,7 @@
+
+/-- The initial heap computes a conservative finite domain budget. -/
+theorem domains_length (source : InternedConstructorTemplates.State Symbol Guard) :
+    (domains source).length = 2 ^ (source.nodes.next + source.nodes.next * source.nodes.next) := by
+  rw [domains, inventory_length, pairs_length]
+  simp [names]
+

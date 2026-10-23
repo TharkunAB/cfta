@@ -1,0 +1,9 @@
+/-- A newly listed closed resident root is admitted by the actual target inventory. -/
+theorem target_root_valid (target : State Symbol Guard) (facts : InternedNestedFacts.Facts target)
+    (holds : Guard → Term Symbol → Bool) (roots : List (Value Symbol Guard))
+    (available : Values target roots) (closed : ∀ root ∈ roots, root.free = [])
+    (root : Value Symbol Guard) (member : root ∈ roots) :
+    (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput target facts holds roots
+      (closed_originals target facts roots available closed) available closed).valid (inputOf root) :=
+  SourceCurrentAllocatedNativeInputInventoryModels.root_valid target facts holds roots
+    (closed_originals target facts roots available closed) available closed root member

@@ -1,0 +1,12 @@
+/-- A node result uses only recursive pair names from its incoming domain. -/
+def NodeLaw (request : NodeRequest Symbol Guard) (result : Value Symbol Guard) : Prop :=
+  SourceRecursiveIntersectionResultScope.Scope request.domain.key.seen result
+
+/-- Every returned edge child uses only the incoming recursive pair names. -/
+def EdgeLaw (request : EdgeRequest Symbol Guard) (result : EdgeValue Symbol Guard) : Prop :=
+  SourceRecursiveIntersectionResultScope.EdgeScope request.domain.key.seen result
+
+/-- Only returned cells require a syntactic result scope. -/
+structure Scoped (state : Native width Symbol Guard) : Prop where
+  nodes : Returned NodeLaw state.nodes
+  edges : Returned EdgeLaw state.edges

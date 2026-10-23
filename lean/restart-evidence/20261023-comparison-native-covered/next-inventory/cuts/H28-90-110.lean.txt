@@ -1,0 +1,21 @@
+      SourceRecursiveIntersectionDomainAllocation.Trace
+        (SourceRecursiveIntersectionSourceInventory.domains source)
+        initialDomains after.checked.native.machine.domains ∧
+      Covered inputs after.checked.native := by
+  classical
+  dsimp only
+  let inventory : List IntersectionFlatMemoKeyDomain.DomainKey :=
+    SourceRecursiveIntersectionSourceInventory.domains source
+  let ordered : Edge × Edge := if right.entry.identity < left.entry.identity then (right, left) else (left, right)
+  let request : EdgeRequest Symbol Guard := ⟨IntersectionEmptyDomain.emptyDomain, ordered.1, ordered.2⟩
+  obtain ⟨fuel, result, after, done, resident, law, afterGood, afterContextual,
+    afterSemantic, extension, afterStable, afterIdle, tables, retained, afterAllocations⟩ :=
+    SourceCurrentSameSymbolEdgeComparisonDomains.original_rows_complete bits source facts formulas solver
+      (finiteInputMeaning (view source (guardHolds formulas solver)) inputs)
+      (finiteRankedInput (view source (guardHolds formulas solver)) inputs)
+      leftParent rightParent leftOriginal rightOriginal leftAvailable rightAvailable
+      leftClosed rightClosed left right leftMember rightMember symbols initialDomains initialValid
+      before stable good contextual semantic growth history allocations idle room
+  have finalCovered : Covered inputs after.checked.native := by
+    by_cases present :
+      (∃ handle, before.memo.table (left.entry.identity, right.entry.identity) = some handle) ∨

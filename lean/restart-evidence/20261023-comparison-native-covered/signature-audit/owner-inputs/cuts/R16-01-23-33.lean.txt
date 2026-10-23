@@ -1,0 +1,11 @@
+variable (source : InternedConstructorTemplates.State Symbol Guard) (inventory : List DomainKey)
+
+/-- A control retains current physical operands and fixed-source request scope. -/
+def Certified [DecidableEq (EdgeKey Symbol Guard)] (control : Control A)
+    (state : Machine Symbol Guard) (post : Machine Symbol Guard → A → Prop) : Prop :=
+  match control with
+  | .code code => SourceCurrentAllocatedRecursivePrefixCode.Certified source inventory code state post
+  | .edgeBody request next => EdgeScope source request ∧ request.domain.key ∈ inventory ∧ EdgeReady state request ∧
+      ∀ value after, SourceRecursiveIntersectionKernel.Valid after → Extension state after → SemanticReady after.heap →
+        EdgeResident after.heap value → SourceCurrentAllocatedRecursivePrefixCode.Certified source inventory (next value) after post
+

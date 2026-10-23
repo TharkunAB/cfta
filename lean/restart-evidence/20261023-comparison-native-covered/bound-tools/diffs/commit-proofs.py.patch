@@ -1,0 +1,46 @@
+--- basis/commit-proofs.py
++++ selected/commit-proofs.py
+@@ -5,9 +5,9 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ ROOT = HERE.parents[2]
+-AUDIT_SHA = '__H28_AUDIT_SHA__'
+-AUDIT_JOBS = int('__H28_AUDIT_BUILD_JOBS__')
+-AUDIT_DEPENDENCIES = int('__H28_AUDIT_DEPENDENCIES__')
++AUDIT_SHA = 'cc3983fd3d75f7c2120d3e8614c174598a9828fb691623d1dddd0433d12686ae'
++AUDIT_JOBS = int('3645')
++AUDIT_DEPENDENCIES = int('75508')
+ def git(*args):
+     return subprocess.check_output(['git', *args], cwd=ROOT, text=True)
+ 
+@@ -22,8 +22,8 @@
+ gate = json.loads((HERE / 'selected-source-gate.json').read_text())
+ assert gate['status'] == 'ROOT_ACCEPTED' and gate['path'] == next(iter(selected))
+ assert selected[gate['path']]['sha256'] == gate['sha256'] == hashlib.sha256((HERE / gate['snapshot']).read_bytes()).hexdigest()
+-assert selected[next(iter(selected))]['strict'] == '__H28_SELECTED_STRICT_STEM__'
+-assert selected[next(iter(selected))]['full'] == '__H28_SELECTED_FULL_STEM__'
++assert selected[next(iter(selected))]['strict'] == 'comparison-native-covered-strict-1'
++assert selected[next(iter(selected))]['full'] == 'comparison-native-covered-public-1'
+ assert 'lean/MicroCFTA/SourceCurrentSameSymbolEdgeComparisonCovered.lean' not in json.loads((HERE / 'starting-files.json').read_text())
+ for name, pin in selected.items():
+     data = (ROOT / name).read_bytes()
+@@ -31,8 +31,8 @@
+     assert data == (HERE / (pin['strict'] + '.source.lean')).read_bytes()
+     assert not (HERE / (pin['strict'] + '.log')).read_bytes()
+     assert json.loads((HERE / (pin['full'] + '.json')).read_text())['exit_code'] == 0
+-assert json.loads((HERE / '__H28_AUDIT_STEM__.json').read_text())['exit_code'] == 0
+-audit_raw = (HERE / '__H28_AUDIT_STEM__.log').read_bytes()
++assert json.loads((HERE / 'comparison-native-covered-audit-1.json').read_text())['exit_code'] == 0
++audit_raw = (HERE / 'comparison-native-covered-audit-1.log').read_bytes()
+ assert hashlib.sha256(audit_raw).hexdigest() == AUDIT_SHA
+ audit = audit_raw.decode()
+ assert f"Build completed successfully ({AUDIT_JOBS} jobs)." in audit
+@@ -49,7 +49,7 @@
+ subprocess.run(['git', 'add', '--', *paths], cwd=ROOT, check=True)
+ assert set(git('diff', '--cached', '--name-only').splitlines()) == set(paths)
+ subprocess.run(['git', 'diff', '--cached', '--check'], cwd=ROOT, check=True)
+-subprocess.run(['git', 'commit', '-m', json.loads('__H28_PROOF_COMMIT_MESSAGE_JSON__')], cwd=ROOT, check=True)
++subprocess.run(['git', 'commit', '-m', json.loads('"Preserve native coverage through original-row comparisons"')], cwd=ROOT, check=True)
+ commit = git('rev-parse', 'HEAD').strip()
+ (HERE / 'proof-commit.txt').write_text(commit + '\n')
+ print(json.dumps({'status': 'PASS', 'proof_commit': commit, 'proof_files': paths}))

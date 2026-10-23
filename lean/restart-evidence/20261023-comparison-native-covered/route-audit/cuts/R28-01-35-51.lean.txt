@@ -1,0 +1,17 @@
+structure Valid (keyOf : Request → Key → Prop) (good : Cell Request Value → Prop)
+    (state : State Key Request Value) : Prop where
+  bounded : ∀ handle cell, state.cells handle = some cell → handle < state.next
+  linked : ∀ key handle, state.table key = some handle →
+    ∃ cell, state.cells handle = some cell ∧ keyOf cell.request key
+  checked : ∀ handle cell, state.cells handle = some cell → good cell
+
+/-- An empty table has no supplied result or request assumptions. -/
+theorem empty_valid (keyOf : Request → Key → Prop) (good : Cell Request Value → Prop) :
+    Valid keyOf good empty := by
+  constructor <;> intros <;> contradiction
+
+/-- Retained source facts can strengthen the cell interpretation without table effects. -/
+theorem Valid.map (state : State Key Request Value) (keyOf : Request → Key → Prop)
+    (first second : Cell Request Value → Prop) (valid : Valid keyOf first state)
+    (retained : ∀ cell, first cell → second cell) : Valid keyOf second state :=
+  ⟨valid.bounded, valid.linked, fun handle cell stored => retained cell (valid.checked handle cell stored)⟩

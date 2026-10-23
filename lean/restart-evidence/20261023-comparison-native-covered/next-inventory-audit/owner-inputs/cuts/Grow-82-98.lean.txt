@@ -1,0 +1,17 @@
+/-- The actual larger target inventory admits every old valid input. -/
+theorem valid_grows (input : Input) (valid : (oldInputs).valid input) : (newInputs).valid input := by
+  obtain ⟨root, member, reached⟩ := reachable_grows
+    source target sourceFacts targetFacts growth history holds roots originals available closed input valid
+  exact ⟨root, included root member, reached⟩
+
+/-- Every old admitted input retains the same rank in the actual target inventory. -/
+theorem rank_exact (input : Input) (valid : (oldInputs).valid input) (rank : Nat) (term : Term Symbol) :
+    inputAt (finiteRanks (view target holds) newInputs) input rank term ↔
+      inputAt (finiteRanks (view source holds) oldInputs) input rank term := by
+  have targetValid := valid_grows source target sourceFacts targetFacts growth history holds
+    roots originals available closed targetRoots targetAvailable targetClosed included input valid
+  rw [finiteRanks_exact (view target holds) newInputs input targetValid rank term,
+    finiteRanks_exact (view source holds) oldInputs input valid rank term]
+  exact SourceCurrentAllocatedNativeInputGrowthModels.derivation_exact oldInputs
+    (SourceCurrentAllocatedNativeInputGrowthModels.inventory_agreement source target sourceFacts targetFacts
+      growth history holds roots originals available closed) input valid rank term

@@ -1,0 +1,36 @@
+/-- Rebuild an original ordinary parent after its actual symbol-group runs. -/
+theorem ordinary_complete
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (bits : Nat) (source : InternedConstructorTemplates.State Symbol Guard)
+    (facts : InternedNestedFacts.Facts source)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inputModel : InputMeaning (view source (guardHolds formulas solver)))
+    (inputRanked : RankedInput (view source (guardHolds formulas solver)) inputModel.valid)
+    (parentEntry : Interned InternedBinderProtocol.NodeKey)
+    (parentRows : List Edge) (parentDepth : Nat)
+    (original : OriginalInput source (inputOf (.node parentEntry parentRows parentDepth [])))
+    (available : Available source (.node parentEntry parentRows parentDepth []))
+    (admitted : inputModel.valid (inputOf (.node parentEntry parentRows parentDepth [])))
+    (entries : List (Symbol × List Edge))
+    (iteration : SourceCurrentMergeGrouping.Iteration
+      (SourceCurrentPrependGrouping.fromRows (fun edge : Edge => edge.entry.key.symbol)
+        parentRows) entries)
+    (initialDomains : Cache.State IntersectionFlatMemoKeyDomain.DomainKey)
+    (initialValid : Cache.Valid initialDomains)
+    (before : Wrapper (bits + 2))
+    (stable : Stable (view source (guardHolds formulas solver)) inputModel inputRanked
+      (guardHolds formulas solver) before)
+    (good : Good before.checked)
+    (contextual : SourceCurrentAllocatedNativeContextCache.Contextual
+      (view source (guardHolds formulas solver)) inputModel inputRanked
+      (guardHolds formulas solver) before.checked.native)
+    (semantic : SemanticReady before.checked.native.machine.heap)
+    (growth : Grows source before.checked.native.machine.heap)
+    (history : Extends source.nodes.issued before.checked.native.machine.heap.nodes.issued)
+    (allocations : SourceRecursiveIntersectionDomainAllocation.Trace
+      (SourceRecursiveIntersectionSourceInventory.domains source)
+      initialDomains before.checked.native.machine.domains)
+    (idle : NativeIdle before.checked.native)
+    (room : SourceCurrentAllocatedNativeResourceForecast.Room bits
+      ⟨source.nodes.next, source.edges.next,

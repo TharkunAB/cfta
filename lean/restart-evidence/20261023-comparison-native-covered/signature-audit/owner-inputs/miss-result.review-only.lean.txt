@@ -1,0 +1,12 @@
+    let ordered := if right.entry.identity < left.entry.identity then (right, left) else (left, right)
+    ∃ nativeFuel handle,
+      SourceEqualityNativeDemand.Steps nativeFuel
+        (.edgeBody ⟨IntersectionEmptyDomain.emptyDomain, ordered.1, ordered.2⟩ .pure)
+        before.checked (.code (.pure result)) after.checked ∧
+      after.memo.table (left.entry.identity, right.entry.identity) = some handle ∧
+      after.memo.cells handle = some ⟨(left, right), .returned result⟩ ∧
+      FlatMemoThunk.Returned before.memo after.memo ∧
+      (right.entry.identity < left.entry.identity →
+        ∃ reversedHandle, reversedHandle ≠ handle ∧
+          after.memo.table (right.entry.identity, left.entry.identity) = some reversedHandle ∧
+          after.memo.cells reversedHandle = some ⟨(right, left), .returned result⟩)

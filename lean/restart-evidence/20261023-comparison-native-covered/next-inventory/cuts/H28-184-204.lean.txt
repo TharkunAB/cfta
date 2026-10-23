@@ -1,0 +1,21 @@
+        intro _ _ _ _ _ resident
+        exact resident
+      obtain ⟨nativeFuel, _, steps, _, _, _, _⟩ :=
+        SourceCurrentSameSymbolEdgeControl.miss_readback fuel left right result before after
+          (FlatMemoThunk.Valid.map before.memo _ _ _ stable.valid (fun _ _ => True.intro))
+          missing reverseMissing done
+      have physicalRun : SourceCurrentAllocatedRecursivePrefixReceipt.Receipt
+          source inventory initialDomains nativeFuel (.edgeBody request .pure) before.checked
+          (.code (.pure result)) after.checked (fun final value => EdgeResident final.heap value) := by
+        exact SourceCurrentAllocatedRecursivePrefixAdmission.prefixes resources nativeFuel
+          (.edgeBody request .pure) before.checked (.code (.pure result)) after.checked
+          (fun final value => EdgeResident final.heap value) current physicalCertificate fields steps
+      exact (SourceCurrentAllocatedNativeAdmissionTrace.Trace.covered source
+        (guardHolds formulas solver) inputs
+        (SourceCurrentAllocatedNativeCoveredQuery.branches source facts (guardHolds formulas solver) inputs)
+        physicalRun.trace (fun final value => EdgeResident final.heap value)
+        good semantic growth history fields covered admissionCertificate).1
+  exact ⟨fuel, result, after, done, resident, law, afterGood, afterContextual,
+    afterSemantic, extension, afterStable, afterIdle, tables, retained, afterAllocations, finalCovered⟩
+
+end MicroCFTA.SourceCurrentSameSymbolEdgeComparisonCovered

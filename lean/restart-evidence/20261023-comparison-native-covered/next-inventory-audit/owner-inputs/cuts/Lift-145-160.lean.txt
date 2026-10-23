@@ -1,0 +1,16 @@
+
+/-- Actual physical growth supplies view agreement on the old closed-root inventory. -/
+theorem inventory_agreement (source target : InternedConstructorTemplates.State Symbol Guard)
+    (sourceFacts : InternedNestedFacts.Facts source) (targetFacts : InternedNestedFacts.Facts target)
+    (growth : Grows source target) (history : Extends source.nodes.issued target.nodes.issued)
+    (holds : Guard → Term Symbol → Bool) (roots : List (Value Symbol Guard))
+    (originals : ∀ root ∈ roots, Original root) (available : Values source roots)
+    (closed : ∀ root ∈ roots, root.free = []) :
+    ViewAgreement (view source holds) (view target holds)
+      (SourceCurrentAllocatedNativeInputInventoryModels.finiteInput source sourceFacts holds roots originals available closed).valid := by
+  have same := growthAgreement source target sourceFacts targetFacts growth history holds
+  have original := SourceCurrentAllocatedNativeInputInventoryModels.reachable_original
+    source sourceFacts holds roots originals available closed
+  exact ⟨fun input valid => same.free input (original input valid),
+    fun input valid => same.copy input (original input valid),
+    fun name valid => same.body name (original _ valid),
