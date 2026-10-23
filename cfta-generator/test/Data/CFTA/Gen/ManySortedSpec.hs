@@ -35,6 +35,7 @@ arithmetic =
             , SortedFunction "ite" [Bool, Int, Int] Int
             ]
         , sortedRoots = [Int, Bool]
+        , sortedValues = []
         }
 
 maxSize :: Int

@@ -37,6 +37,7 @@ signature leaves =
                    , SortedFunction "ite" [Bool, Int, Int] Int
                    ]
         , sortedRoots = [Int, Bool]
+        , sortedValues = []
         }
 
 -- | The interval 0..high as a leaf source.
