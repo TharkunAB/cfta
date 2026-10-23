@@ -2,6 +2,9 @@
 
 ## 0.1.0.0 - Unreleased
 
+- `Data.CFTA.Lowering`: `newConstructors` gives the constructors with an
+  expansion, and `checkProductions` gives each failure of `checkLowering`
+  with its state and production.
 Before release, the package was called `microcfta`.
 
 - Add `Data.CFTA.Lowering`: template lowerings, which translate the terms of
