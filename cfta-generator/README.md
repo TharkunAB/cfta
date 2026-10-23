@@ -329,8 +329,25 @@ count equality constraints; use `Data.CFTA.Sized` or the depth-bounded import.
 of counting them under an assumption. A site is `Branching` when a state above
 it has two transitions for the symbol of the term there: another transition
 could accept an edited term. A context wrap is `ConstrainedHole` when a class
-reads the child with the hole, or when that child can have a node with an
-equality constraint: the place of the hole differs from edit to edit.
+reads the child with the hole, or when that child can have a node with a
+constraint: the place of the hole differs from edit to edit.
+
+`guardedEditAutomaton` does the same for an automaton with guards, with a
+solver. A guard atom reads the symbols at its paths, and the symbols outside
+the new material do not change. So the solver decides an atom on fixed paths
+once, when the automaton is built: Yes keeps the site, and No leaves it
+without a valid edit. An atom on the new material moves onto the root
+transition of the edit, and the count decides it on each edit. A negation is
+decided with its atom, so it holds only when the refinements refute the
+formula. Three more reasons in `leftOut` keep the result exact: `MixedGuard`
+for an atom on fixed paths and new material together, which the guard
+language cannot move onto the edit; `GuardSubstitution` for a guard with a
+substitution; and `UndecidedGuard` when the solver does not decide an atom on
+fixed paths, or whether a state accepts the fixed part of a site. In an
+automaton with guards on many states, most context wraps are
+`ConstrainedHole`. Count the result with `sizedUpTo` over the symbols of
+`plainSymbols`, which also decodes each counted term to an edit for
+`applyEdit`.
 
 ## Equality-constrained generators
 
