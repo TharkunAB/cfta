@@ -567,20 +567,36 @@ bySize ::
 bySize bound automaton =
     fromRight (error "bySize: the states of a valid automaton give a valid automaton")
         $ FTA.mkFTA Nothing
-        $ (Nothing, concat [rowOf (FTA.initialState automaton) size | size <- [1 .. bound]])
-            : [(Just (state, size), rowOf state size) | state <- Map.keys $ FTA.transitionTable automaton, size <- [1 .. bound]]
+        $ (Nothing, root)
+            : explore Set.empty [child | transition <- root, Just child <- FTA.transitionChildren transition] []
   where
+    initial = FTA.initialState automaton
+    least = Map.map (\(Size size) -> size) $ Ordinary.minimumSizes $ FTA.transitionTable automaton
+    root = concat [rowOf initial size | size <- [1 .. bound]]
+    -- The rows of the pairs of a state and a size that the root reaches.
+    explore _ [] rows = rows
+    explore seen (pair@(state, size) : pending) rows
+        | Set.member pair seen = explore seen pending rows
+        | otherwise =
+            let row = rowOf state size
+             in explore
+                    (Set.insert pair seen)
+                    ([child | transition <- row, Just child <- FTA.transitionChildren transition] <> pending)
+                    ((Just pair, row) : rows)
     rowOf state size =
         [ transition
             { FTA.transitionChildren = zipWith (curry Just) (FTA.transitionChildren transition) parts
             }
         | transition <- FTA.transitionsFrom automaton state
-        , parts <- splits (length $ FTA.transitionChildren transition) (size - 1)
+        , parts <- splits (FTA.transitionChildren transition) (size - 1)
         , equalSizes (FTA.transitionConstraint transition) parts
         ]
-    splits 0 0 = [[]]
-    splits 0 _ = []
-    splits count total = [first : rest | first <- [1 .. total - toInteger (count - 1)], rest <- splits (count - 1) (total - first)]
+    -- The sizes of the children, each at least the least size of its state.
+    splits [] total = [[] | total == 0]
+    splits (child : rest) total = case (Map.lookup child least, traverse (`Map.lookup` least) rest) of
+        (Just smallest, Just others) ->
+            [first : sizes | first <- [smallest .. total - sum others], sizes <- splits rest (total - first)]
+        _ -> []
     equalSizes constraint parts = case equalities constraint of
         EqConstraints classes ->
             and
