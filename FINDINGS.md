@@ -4,15 +4,56 @@
 
 ### External Haskell repair status
 
-No new Haskell repair is required by this proof checkpoint.
+The negative type-depth repair is fixed locally in `058b11fe8f`.
+Two optional LPO repairs remain open. Native counterexamples are retained below.
 
-| Repair | Imported status | External action |
+| Repair | Current status | External action |
 | --- | --- | --- |
 | Recursive self-type field pools | Fixed by `b9219b9e`, merged in PR #65 at `c0cc8a05`. The API rejects a field pool for the datatype itself. This includes the reported `Chain` case. | No additional patch. Keep the historical reproducer and validation below. |
-| Typing binder size-order documentation | Fixed by `74691832`, merged in PR #97 at current imported main `794903b3f`. This changes documentation. | No additional patch. The earlier failed runtime reproduction remains unvalidated. |
+| Typing binder size-order documentation | Fixed by `74691832`, merged in PR #97 at the earlier imported main `794903b3f`. This changes documentation. | No additional patch. The earlier failed runtime reproduction remains unvalidated. |
+| Negative Specftacular type depth | Fixed locally in `058b11fe8f`; CLI, search and grammar entries reject it. The pre-fix call timed out. | Import this commit into main. |
+| Optional LPO comparator transitivity | OPEN. Native well-typed terms give `s < t < u < s`, also after canonicalTypes. | Repair annotation handling and the order fallback. See the retained comparator regression. |
+| Optional LPO application context | OPEN. Native terms give `f a > a` and `(f a) x < a x`. | Establish an order compatible with function application and actual rewriting. The annotation repair alone is insufficient. |
 
-Both repairs are in the imported main history. No Haskell source changes
-in this checkpoint. All earlier repair entries and evidence remain below.
+The two earlier repairs remain in the imported main history. The local
+type-depth fix and both open LPO repairs are recorded in the current note.
+All earlier repair entries and evidence remain below.
+
+## Imported main: partial program enumeration and term orders
+
+Updated: 2026-10-24. Main: `6b62b4afef`. Merge: `78904be729`.
+Read `lean/notes-current-upstream-program-enumeration.md`.
+
+All 34 upstream paths are incorporated. All earlier Lean sources, evidence,
+drafts, counterexamples and the local equality-reduction implementation remain.
+The previous scan checkpoint was pushed and verified at `d501c53489`.
+The backup is `codex/backup-main-refresh-20261024-0033`.
+
+New termsPruneUntil results can be partial and need not have an accepted completion.
+The shared driver changes the empty-node callback order. The old literal driver
+equation needs a new correspondence bridge. Per-exclusion memo catalogs stay separate.
+Phase 4 now enumerates programs and extends a typing after each fragment.
+Compiled pruning, type-alternative merging, runtime specialization, parallel state
+merge and optional term orders add explicit source-correspondence obligations.
+
+Negative type-depth inputs are fixed locally in `058b11fe8f`.
+Two native LPO defects remain open: a nontransitive annotated comparator and
+an order reversal inside function application. FINDINGS lists both for external repair.
+KBO remains the default. No partial LPO repair is presented as sufficient.
+
+The CFTA suite passed all 325 examples. Specftacular goldens passed; they cover phase 1.
+Both Specftacular libraries built with strict GHC warnings. Nine core probes passed.
+A small phase-4 signature gave identical laws in serial, parallel and enumeration-ahead modes.
+All three negative-depth entry checks and depth-zero checks passed.
+Fourmolu and cabal-gild passed on all changed Haskell and Cabal paths.
+The retained evidence distinguishes source bugs from environment and probe-harness failures.
+
+H6 constructed_node_calls remains the strongest combined theorem under its stated premises.
+No new Lean theorem or Audit run is claimed. Next, model the shared enumeration driver
+and prove the no-stop bridge. The reviewed H23 scan-chain/rebuild counter proposal is retained.
+Full-pipeline composition, upper resources, practical width, Haskell/solver correspondence,
+the new frontend obligations and convergence remain open. The full goal remains active.
+This record precedes publication of the refresh evidence and its authorized push.
 
 ## Node-counter growth through row cluster scans
 
