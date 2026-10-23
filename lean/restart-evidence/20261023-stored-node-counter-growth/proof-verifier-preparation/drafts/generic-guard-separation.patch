@@ -1,0 +1,12 @@
+--- selected403
++++ selected404
+@@ -263,7 +263,8 @@
+     assert helpers == schema["private_helpers"] == m["private_helpers"]
+     assert not re.search(rb"(?m)^\s*(?:variable[ \t]+\[|omit\b)", source)
+     assert all(source.count(("theorem " + short + " [DecidableEq (EdgeKey Symbol Guard)]").encode()) == 1 for short in ["callback_mono", "request_mono"] + shorts)
+-    assert b"theorem bind_mono [" not in source and schema["explicit_instance_heads"] == ["callback_mono", "request_mono"] + shorts
++    assert b"theorem bind_mono [" not in source
++    assert schema["explicit_instance_heads"] == ["callback_mono", "request_mono"] + shorts
+     preparation = json.loads(pinned(m["canonical_preparation"]))
+     assert preparation["status"] == "EARLY_EVIDENCE_COPY_RETAINED_BEFORE_MATERIALIZER" and preparation["sha256"] == m["source_sha256"] and all(preparation[k] for k in ["no_guard_changed", "no_Lean_source_changed", "no_proof_job_repeated"])
+     assert m["canonical_preparation"]["path"] in artifacts and preparation["retained_copy"] in artifacts and read(preparation["retained_copy"]) == source

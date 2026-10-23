@@ -1,0 +1,11 @@
+/-- A canonical interned entry retains both its identity and its structural key. -/
+structure Interned (Key : Type) where
+  identity : Nat
+  key : Key
+deriving DecidableEq
+
+/-- The identity supply records issued candidates, including candidates that lose races. -/
+structure State (Key : Type) where
+  next : Nat
+  issued : Nat → Option Key
+  table : Table Key (Interned Key)

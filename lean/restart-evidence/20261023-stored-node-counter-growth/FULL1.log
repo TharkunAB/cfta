@@ -1,0 +1,831 @@
+@MicroCFTA.InternedFreshOrdinaryStoredNodeCounterGrowth.execute_mono : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (environment : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @LE.le.{0} Nat instLENat
+    (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+      (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+    (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+      (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+        (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst value environment state))))
+theorem MicroCFTA.InternedFreshOrdinaryStoredNodeCounterGrowth.execute_mono : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (environment : MicroCFTA.InternedStoredSubstitution.Environment Symbol Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @LE.le.{0} Nat instLENat
+    (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+      (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+    (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+      (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+        (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute Symbol Guard inst value environment state)))) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] value
+    environment state =>
+  @MicroCFTA.InternedFreshOrdinaryNodeCounterGrowth.build_mono Symbol Guard inst
+    (@MicroCFTA.InternedStoredSubstitution.encode Symbol Guard
+      (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard value)
+      (@List.nil.{0} MicroCFTA.InternedBinderProtocol.Reference) value)
+    (@List.map.{0, 0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (@MicroCFTA.InternedStoredSubstitution.input Symbol Guard environment)
+      (@MicroCFTA.InternedStoredSubstitution.leaves Symbol Guard value))
+    state
+'MicroCFTA.InternedFreshOrdinaryStoredNodeCounterGrowth.execute_mono' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.InternedFreshOrdinaryStoredNodeCounterGrowth.unfold_mono : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @LE.le.{0} Nat instLENat
+    (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+      (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+    (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+      (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+        (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.unfold Symbol Guard inst value state))))
+theorem MicroCFTA.InternedFreshOrdinaryStoredNodeCounterGrowth.unfold_mono : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @LE.le.{0} Nat instLENat
+    (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+      (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+    (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+      (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+        (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.unfold Symbol Guard inst value state)))) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] value state =>
+  @MicroCFTA.InternedConstructorTemplates.Value.casesOn.{0} Symbol Guard
+    (fun t =>
+      @Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value t →
+        @LE.le.{0} Nat instLENat
+          (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+          (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+              (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.unfold Symbol Guard inst value state)))))
+    value
+    (fun h =>
+      @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+        (fun value =>
+          @LE.le.{0} Nat instLENat
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.unfold Symbol Guard inst value state)))))
+        (Nat.le_refl
+          (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state)))
+        value
+        (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value
+          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) h))
+    (fun name h =>
+      @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+        (fun value =>
+          @LE.le.{0} Nat instLENat
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.unfold Symbol Guard inst value state)))))
+        (Nat.le_refl
+          (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state)))
+        value
+        (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value
+          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) h))
+    (fun entry edges depth free h =>
+      @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free)
+        (fun value =>
+          @LE.le.{0} Nat instLENat
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.unfold Symbol Guard inst value state)))))
+        (Nat.le_refl
+          (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state)))
+        value
+        (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value
+          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free) h))
+    (fun entry members depth free h =>
+      @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth free)
+        (fun value =>
+          @LE.le.{0} Nat instLENat
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.unfold Symbol Guard inst value state)))))
+        (Nat.le_refl
+          (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state)))
+        value
+        (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value
+          (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth free) h))
+    (fun entry body depth ordinary h =>
+      @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)
+        (fun value =>
+          @LE.le.{0} Nat instLENat
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.unfold Symbol Guard inst value state)))))
+        (@MicroCFTA.InternedFreshOrdinaryStoredNodeCounterGrowth.execute_mono Symbol Guard inst body
+          (fun name =>
+            @ite.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference name
+                (MicroCFTA.InternedBinderProtocol.Reference.interned
+                  (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry)))
+              (MicroCFTA.InternedBinderProtocol.instDecidableEqReference name
+                (MicroCFTA.InternedBinderProtocol.Reference.interned
+                  (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry)))
+              (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary))
+              (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+          state)
+        value
+        (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value
+          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary) h))
+    (@Eq.refl.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value)
+'MicroCFTA.InternedFreshOrdinaryStoredNodeCounterGrowth.unfold_mono' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+@MicroCFTA.InternedFreshOrdinaryStoredNodeCounterGrowth.maybeMu_mono : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (key : Prod.{0, 0} Nat Nat)
+  (body : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @LE.le.{0} Nat instLENat
+    (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+      (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+    (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+      (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+        (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.maybeMu Symbol Guard inst key body state))))
+theorem MicroCFTA.InternedFreshOrdinaryStoredNodeCounterGrowth.maybeMu_mono : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (key : Prod.{0, 0} Nat Nat)
+  (body : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @LE.le.{0} Nat instLENat
+    (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+      (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+    (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+      (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+        (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.maybeMu Symbol Guard inst key body state)))) :=
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] key body
+    state =>
+  @id.{0}
+    (@LE.le.{0} Nat instLENat
+      (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+        (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+      (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+        (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+          (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.maybeMu Symbol Guard inst key body state)))))
+    (@Decidable.casesOn.{0}
+      (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+        (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+        (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+        (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard body)
+        (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+          (@Prod.snd.{0, 0} Nat Nat key)))
+      (fun x =>
+        @LE.le.{0} Nat instLENat
+          (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+          (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+              (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@ite.{1}
+                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                    (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard body)
+                    (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                      (@Prod.snd.{0, 0} Nat Nat key)))
+                  (@List.instDecidableMemOfLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                      MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                    (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                      MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                    (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                      (@Prod.snd.{0, 0} Nat Nat key))
+                    (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard body))
+                  (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.construct Symbol Guard inst
+                    (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                      (@Prod.snd.{0, 0} Nat Nat key))
+                    body state)
+                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body state))))))
+      (@List.instDecidableMemOfLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+        (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+        (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+          (@Prod.snd.{0, 0} Nat Nat key))
+        (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard body))
+      (fun h =>
+        @Eq.mpr.{0}
+          (@LE.le.{0} Nat instLENat
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@ite.{1}
+                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                      (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                      (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard body)
+                      (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                        (@Prod.snd.{0, 0} Nat Nat key)))
+                    (@List.instDecidableMemOfLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                      (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                      (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                        (@Prod.snd.{0, 0} Nat Nat key))
+                      (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard body))
+                    (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.construct Symbol Guard inst
+                      (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                        (@Prod.snd.{0, 0} Nat Nat key))
+                      body state)
+                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body state))))))
+          (@LE.le.{0} Nat instLENat
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body state)))))
+          (@id.{0}
+            (@Eq.{1} Prop
+              (@LE.le.{0} Nat instLENat
+                (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+                (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                    (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@ite.{1}
+                        (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                        (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                          (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                          (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                          (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard body)
+                          (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                            (@Prod.snd.{0, 0} Nat Nat key)))
+                        (@List.instDecidableMemOfLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                          (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                            MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                          (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                            (@Prod.snd.{0, 0} Nat Nat key))
+                          (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard body))
+                        (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.construct Symbol Guard inst
+                          (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                            (@Prod.snd.{0, 0} Nat Nat key))
+                          body state)
+                        (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body state))))))
+              (@LE.le.{0} Nat instLENat
+                (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+                (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                    (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body state))))))
+            (@congrArg.{1, 1} Nat Prop
+              (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                  (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (@ite.{1}
+                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                        (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard body)
+                        (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                          (@Prod.snd.{0, 0} Nat Nat key)))
+                      (@List.instDecidableMemOfLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                        (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                        (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                          (@Prod.snd.{0, 0} Nat Nat key))
+                        (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard body))
+                      (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.construct Symbol Guard inst
+                        (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                          (@Prod.snd.{0, 0} Nat Nat key))
+                        body state)
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body state)))))
+              (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                  (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body state))))
+              (@LE.le.{0} Nat instLENat
+                (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state)))
+              (@congrArg.{1, 1} (MicroCFTA.Cache.State MicroCFTA.InternedBinderProtocol.NodeKey) Nat
+                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                  (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (@ite.{1}
+                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                        (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard body)
+                        (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                          (@Prod.snd.{0, 0} Nat Nat key)))
+                      (@List.instDecidableMemOfLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                        (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                        (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                          (@Prod.snd.{0, 0} Nat Nat key))
+                        (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard body))
+                      (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.construct Symbol Guard inst
+                        (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                          (@Prod.snd.{0, 0} Nat Nat key))
+                        body state)
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body state))))
+                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                  (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body state)))
+                (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey)
+                (@congrArg.{1, 1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                  (MicroCFTA.Cache.State MicroCFTA.InternedBinderProtocol.NodeKey)
+                  (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (@ite.{1}
+                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                        (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard body)
+                        (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                          (@Prod.snd.{0, 0} Nat Nat key)))
+                      (@List.instDecidableMemOfLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                        (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                        (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                          (@Prod.snd.{0, 0} Nat Nat key))
+                        (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard body))
+                      (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.construct Symbol Guard inst
+                        (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                          (@Prod.snd.{0, 0} Nat Nat key))
+                        body state)
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body state)))
+                  (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body state))
+                  (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard)
+                  (@congrArg.{1, 1}
+                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                    (@ite.{1}
+                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                        (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard body)
+                        (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                          (@Prod.snd.{0, 0} Nat Nat key)))
+                      (@List.instDecidableMemOfLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                        (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                        (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                          (@Prod.snd.{0, 0} Nat Nat key))
+                        (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard body))
+                      (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.construct Symbol Guard inst
+                        (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                          (@Prod.snd.{0, 0} Nat Nat key))
+                        body state)
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body state))
+                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body state)
+                    (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@ite_eq_right.{1}
+                      (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                        (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard body)
+                        (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                          (@Prod.snd.{0, 0} Nat Nat key)))
+                      (@List.instDecidableMemOfLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                        (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                        (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                          (@Prod.snd.{0, 0} Nat Nat key))
+                        (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard body))
+                      h
+                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.construct Symbol Guard inst
+                        (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                          (@Prod.snd.{0, 0} Nat Nat key))
+                        body state)
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body state)))))))
+          (Nat.le_refl
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))))
+      fun h =>
+      @Eq.mpr.{0}
+        (@LE.le.{0} Nat instLENat
+          (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+          (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+              (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@ite.{1}
+                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                    (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                    (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard body)
+                    (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                      (@Prod.snd.{0, 0} Nat Nat key)))
+                  (@List.instDecidableMemOfLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                    (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                      MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                    (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                      MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                    (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                      (@Prod.snd.{0, 0} Nat Nat key))
+                    (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard body))
+                  (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.construct Symbol Guard inst
+                    (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                      (@Prod.snd.{0, 0} Nat Nat key))
+                    body state)
+                  (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body state))))))
+        (@LE.le.{0} Nat instLENat
+          (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+          (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+              (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.construct Symbol Guard inst
+                  (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                    (@Prod.snd.{0, 0} Nat Nat key))
+                  body state)))))
+        (@id.{0}
+          (@Eq.{1} Prop
+            (@LE.le.{0} Nat instLENat
+              (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+              (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                  (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (@ite.{1}
+                      (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                      (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                        (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                        (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard body)
+                        (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                          (@Prod.snd.{0, 0} Nat Nat key)))
+                      (@List.instDecidableMemOfLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                        (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                          MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                        (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                          (@Prod.snd.{0, 0} Nat Nat key))
+                        (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard body))
+                      (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.construct Symbol Guard inst
+                        (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                          (@Prod.snd.{0, 0} Nat Nat key))
+                        body state)
+                      (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                        (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body state))))))
+            (@LE.le.{0} Nat instLENat
+              (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+              (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                  (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.construct Symbol Guard inst
+                      (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                        (@Prod.snd.{0, 0} Nat Nat key))
+                      body state))))))
+          (@congrArg.{1, 1} Nat Prop
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@ite.{1}
+                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                      (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                      (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard body)
+                      (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                        (@Prod.snd.{0, 0} Nat Nat key)))
+                    (@List.instDecidableMemOfLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                      (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                      (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                        (@Prod.snd.{0, 0} Nat Nat key))
+                      (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard body))
+                    (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.construct Symbol Guard inst
+                      (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                        (@Prod.snd.{0, 0} Nat Nat key))
+                      body state)
+                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body state)))))
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.construct Symbol Guard inst
+                    (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                      (@Prod.snd.{0, 0} Nat Nat key))
+                    body state))))
+            (@LE.le.{0} Nat instLENat
+              (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state)))
+            (@congrArg.{1, 1} (MicroCFTA.Cache.State MicroCFTA.InternedBinderProtocol.NodeKey) Nat
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@ite.{1}
+                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                      (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                      (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard body)
+                      (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                        (@Prod.snd.{0, 0} Nat Nat key)))
+                    (@List.instDecidableMemOfLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                      (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                      (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                        (@Prod.snd.{0, 0} Nat Nat key))
+                      (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard body))
+                    (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.construct Symbol Guard inst
+                      (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                        (@Prod.snd.{0, 0} Nat Nat key))
+                      body state)
+                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body state))))
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.construct Symbol Guard inst
+                    (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                      (@Prod.snd.{0, 0} Nat Nat key))
+                    body state)))
+              (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey)
+              (@congrArg.{1, 1} (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                (MicroCFTA.Cache.State MicroCFTA.InternedBinderProtocol.NodeKey)
+                (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@ite.{1}
+                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                      (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                      (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard body)
+                      (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                        (@Prod.snd.{0, 0} Nat Nat key)))
+                    (@List.instDecidableMemOfLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                      (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                      (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                        (@Prod.snd.{0, 0} Nat Nat key))
+                      (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard body))
+                    (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.construct Symbol Guard inst
+                      (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                        (@Prod.snd.{0, 0} Nat Nat key))
+                      body state)
+                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body state)))
+                (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.construct Symbol Guard inst
+                    (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                      (@Prod.snd.{0, 0} Nat Nat key))
+                    body state))
+                (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard)
+                (@congrArg.{1, 1}
+                  (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+                  (@ite.{1}
+                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                      (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                      (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard body)
+                      (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                        (@Prod.snd.{0, 0} Nat Nat key)))
+                    (@List.instDecidableMemOfLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                      (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                      (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                        (@Prod.snd.{0, 0} Nat Nat key))
+                      (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard body))
+                    (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.construct Symbol Guard inst
+                      (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                        (@Prod.snd.{0, 0} Nat Nat key))
+                      body state)
+                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body state))
+                  (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.construct Symbol Guard inst
+                    (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                      (@Prod.snd.{0, 0} Nat Nat key))
+                    body state)
+                  (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                    (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                  (@ite_eq_left.{1}
+                    (@Membership.mem.{0, 0} MicroCFTA.InternedBinderProtocol.Reference
+                      (List.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                      (@List.instMembership.{0} MicroCFTA.InternedBinderProtocol.Reference)
+                      (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard body)
+                      (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                        (@Prod.snd.{0, 0} Nat Nat key)))
+                    (@List.instDecidableMemOfLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                      (@instBEqOfDecidableEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                      (@instLawfulBEq.{0} MicroCFTA.InternedBinderProtocol.Reference
+                        MicroCFTA.InternedBinderProtocol.instDecidableEqReference)
+                      (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                        (@Prod.snd.{0, 0} Nat Nat key))
+                      (@MicroCFTA.InternedConstructorTemplates.Value.free Symbol Guard body))
+                    h
+                    (MicroCFTA.InternedNestedConstruction.Outcome Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+                    (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.construct Symbol Guard inst
+                      (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                        (@Prod.snd.{0, 0} Nat Nat key))
+                      body state)
+                    (@MicroCFTA.InternedNestedConstruction.Outcome.done Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) body state)))))))
+        (@id.{0}
+          (@LE.le.{0} Nat instLENat
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.construct Symbol Guard inst
+                    (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                      (@Prod.snd.{0, 0} Nat Nat key))
+                    body state)))))
+          (@MicroCFTA.InternedFreshOrdinaryStoredNodeCounterGrowth.bind_mono Symbol Guard
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+            (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.callback Symbol Guard inst
+              (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                (@Prod.snd.{0, 0} Nat Nat key))
+              body MicroCFTA.InternedBinderProtocol.Reference.depth state)
+            (fun depth afterDepth =>
+              @MicroCFTA.InternedNestedConstruction.Outcome.bind Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.callback Symbol Guard inst
+                  (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                    (@Prod.snd.{0, 0} Nat Nat key))
+                  body
+                  (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+                    (@MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel Symbol Guard depth))
+                  afterDepth)
+                fun ordinary afterOrdinary =>
+                @MicroCFTA.InternedNestedConstruction.request Symbol Guard inst Bool.true depth ordinary
+                  (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.callback Symbol Guard inst
+                    (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                      (@Prod.snd.{0, 0} Nat Nat key))
+                    body)
+                  afterOrdinary)
+            state
+            (@MicroCFTA.InternedFreshOrdinaryStoredNodeCounterGrowth.callback_mono Symbol Guard inst
+              (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                (@Prod.snd.{0, 0} Nat Nat key))
+              body MicroCFTA.InternedBinderProtocol.Reference.depth state)
+            fun depth afterDepth =>
+            @MicroCFTA.InternedFreshOrdinaryStoredNodeCounterGrowth.bind_mono Symbol Guard
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+              (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.callback Symbol Guard inst
+                (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                  (@Prod.snd.{0, 0} Nat Nat key))
+                body
+                (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+                  (@MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel Symbol Guard depth))
+                afterDepth)
+              (fun ordinary afterOrdinary =>
+                @MicroCFTA.InternedNestedConstruction.request Symbol Guard inst Bool.true depth ordinary
+                  (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.callback Symbol Guard inst
+                    (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                      (@Prod.snd.{0, 0} Nat Nat key))
+                    body)
+                  afterOrdinary)
+              afterDepth
+              (@MicroCFTA.InternedFreshOrdinaryStoredNodeCounterGrowth.callback_mono Symbol Guard inst
+                (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                  (@Prod.snd.{0, 0} Nat Nat key))
+                body
+                (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+                  (@MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel Symbol Guard depth))
+                afterDepth)
+              fun ordinary afterOrdinary =>
+              @MicroCFTA.InternedFreshOrdinaryStoredNodeCounterGrowth.request_mono Symbol Guard inst
+                (MicroCFTA.InternedBinderProtocol.Reference.intersection (@Prod.fst.{0, 0} Nat Nat key)
+                  (@Prod.snd.{0, 0} Nat Nat key))
+                body depth ordinary afterOrdinary)))
+'MicroCFTA.InternedFreshOrdinaryStoredNodeCounterGrowth.maybeMu_mono' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]

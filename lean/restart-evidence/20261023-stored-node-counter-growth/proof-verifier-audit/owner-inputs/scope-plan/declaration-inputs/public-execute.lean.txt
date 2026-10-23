@@ -1,0 +1,4 @@
+/-- Actual repaired stored substitution retains the node supply on every outcome. -/
+theorem execute_mono [DecidableEq (EdgeKey Symbol Guard)] (value : Value Symbol Guard)
+    (environment : Environment Symbol Guard) (state : State Symbol Guard) :
+    state.nodes.next ≤ (InternedFreshOrdinaryStoredSubstitution.execute value environment state).state.nodes.next

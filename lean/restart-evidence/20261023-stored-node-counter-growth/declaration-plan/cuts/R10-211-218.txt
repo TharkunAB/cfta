@@ -1,0 +1,8 @@
+/-- A sequential miss reserves an identity and performs the first-writer update. -/
+def intern [DecidableEq Key] (state : State Key) (key : Key) : Interned Key × State Key :=
+  match state.table key with
+  | some found => (found, state)
+  | none =>
+    let (candidate, reserved) := reserve state key
+    let installed := install reserved candidate
+    ((installed.table key).getD candidate, installed)

@@ -1,0 +1,5 @@
+/-- The actual canonical request retains the node supply for its stored callback. -/
+private theorem request_mono [DecidableEq (EdgeKey Symbol Guard)] (old : Reference)
+    (body depth ordinary : Value Symbol Guard) (state : State Symbol Guard) :
+    state.nodes.next ≤
+      (request true depth ordinary (SourceRecursiveIntersectionMaybeMu.callback old body) state).state.nodes.next

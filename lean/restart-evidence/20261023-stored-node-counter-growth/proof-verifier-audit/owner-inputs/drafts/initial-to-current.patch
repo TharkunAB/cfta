@@ -1,0 +1,21 @@
+--- H34/initial-source.py
++++ H34/current-source.py
+@@ -237,7 +237,8 @@
+         allowed = {b["name"] for entry in types["entries"] if entry["owner"] == short for b in entry["binders"]}
+         patterns = [part.decode() for part in re.findall(rb"(?m)^[ \t]*\| ([^\n]*?) =>", body)]
+         assert patterns == expected["case_pattern_groups"] and all(part in patterns for part in inventory["owners"][short]["case_pattern_groups"])
+-        assert all(n in allowed | {"done", "pending", "mu", "empty", "reference", "node", "union", "|"} for group in patterns + expected["intro_groups"] + expected["lambda_groups"] for n in group.split())
++        assert all(n in allowed for group in expected["intro_groups"] + expected["lambda_groups"] for n in group.split())
++        assert all(n in allowed | {"done", "pending", "mu", "empty", "reference", "node", "union", "|"} for group in patterns for n in group.split())
+         assert not re.search(rb"\binduction\b", body)
+         assert not re.search(rb"\b(?:show|suffices|haveI|letI)\b", body) and not re.search(rb"\bobtain\b(?:(?!:=).)*:(?!=)", body, re.S)
+         assert not re.search(rb"\b" + short.encode() + rb"\b", body)
+@@ -264,7 +265,7 @@
+     assert all(source.count(("theorem " + short + " [DecidableEq (EdgeKey Symbol Guard)]").encode()) == 1 for short in ["callback_mono", "request_mono"] + shorts)
+     assert b"theorem bind_mono [" not in source and schema["explicit_instance_heads"] == ["callback_mono", "request_mono"] + shorts
+     preparation = json.loads(pinned(m["canonical_preparation"]))
+-    assert all(preparation[k] for k in ["no_guard_changed", "no_Lean_source_changed", "no_proof_job_repeated"])
++    assert preparation["status"] == "EARLY_EVIDENCE_COPY_RETAINED_BEFORE_MATERIALIZER" and preparation["sha256"] == m["source_sha256"] and all(preparation[k] for k in ["no_guard_changed", "no_Lean_source_changed", "no_proof_job_repeated"])
+     assert m["canonical_preparation"]["path"] in artifacts and preparation["retained_copy"] in artifacts and read(preparation["retained_copy"]) == source
+     if args.live:
+         assert (root / m["source_path"]).read_bytes() == source

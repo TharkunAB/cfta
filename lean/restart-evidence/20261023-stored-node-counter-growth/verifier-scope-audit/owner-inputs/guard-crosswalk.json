@@ -1,0 +1,1283 @@
+{
+  "status": "ALL_H33_AST_ASSERTIONS_ACCOUNTED_FOR_SCOPE_ONLY",
+  "basis_AST_assertions": 212,
+  "rows": [
+    {
+      "basis_line": 19,
+      "basis_expression": "not path.is_absolute() and '..' not in path.parts",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 25,
+      "basis_expression": "len(data) == record['bytes'] and digest(data) == record['sha256']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 30,
+      "basis_expression": "digest(raw_data) == '511742ee2076a23736fd42427ee6081c9548848ca305c65b5bfa448036a8eb73'",
+      "action": "REPLACE_ACTUAL_BOUND_DATA_MODULE_CAP_HEAD_BINDINGS",
+      "reason": "H34 actual data digest, module key, hard160 and three theorem names; future values reject until observed."
+    },
+    {
+      "basis_line": 31,
+      "basis_expression": "not re.search('__H\\\\d+_', raw_data.decode())",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 34,
+      "basis_expression": "[m['key'] for m in modules] == ['fresh_node_counter_growth']",
+      "action": "REPLACE_ACTUAL_BOUND_DATA_MODULE_CAP_HEAD_BINDINGS",
+      "reason": "H34 actual data digest, module key, hard160 and three theorem names; future values reject until observed."
+    },
+    {
+      "basis_line": 35,
+      "basis_expression": "[m['source_cap'] for m in modules] == [180]",
+      "action": "REPLACE_ACTUAL_BOUND_DATA_MODULE_CAP_HEAD_BINDINGS",
+      "reason": "H34 actual data digest, module key, hard160 and three theorem names; future values reject until observed."
+    },
+    {
+      "basis_line": 36,
+      "basis_expression": "[m['specs'] for m in modules] == [[[name, 'theorem'] for name in ['build_mono', 'buildMany_mono', 'buildEdges_mono']]]",
+      "action": "REPLACE_ACTUAL_BOUND_DATA_MODULE_CAP_HEAD_BINDINGS",
+      "reason": "H34 actual data digest, module key, hard160 and three theorem names; future values reject until observed."
+    },
+    {
+      "basis_line": 45,
+      "basis_expression": "actual == set(jobs)",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 47,
+      "basis_expression": "metrics['actual_jobs'] == len(actual)",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 48,
+      "basis_expression": "metrics['source_jobs'] == sum((j['kind'] in {'strict', 'full'} for j in jobs.values()))",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 49,
+      "basis_expression": "metrics['focused_build_jobs'] == sum((j['kind'] == 'focused_build' for j in jobs.values()))",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 50,
+      "basis_expression": "metrics['audit_jobs'] == sum((j['kind'] == 'audit' for j in jobs.values())) == 1",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 51,
+      "basis_expression": "metrics['actual_jobs'] == sum((metrics[k] for k in ['source_jobs', 'focused_build_jobs', 'audit_jobs']))",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 52,
+      "basis_expression": "metrics['failed_jobs'] == sum((j['exit_code'] != 0 for j in jobs.values()))",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 53,
+      "basis_expression": "metrics['warned_source_exit_zero_jobs'] == sum((j['kind'] in {'strict', 'full'} and j['exit_code'] == 0 and bool(j['source_warnings']) for j in jobs.values()))",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 56,
+      "basis_expression": "receipt['exit_code'] == job['exit_code'] and receipt['observed_at']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 57,
+      "basis_expression": "receipt['log'] == stem + '.log' and receipt['limits'] == stem + '.limits.json'",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 59,
+      "basis_expression": "re.fullmatch('[0-9a-f]{64}', job['log_sha256']) and digest(raw) == job['log_sha256']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 60,
+      "basis_expression": "load(receipt['limits']) == {'memory.max': '4294967296', 'memory.high': '4294967296', 'memory.swap.max': '0'}",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 62,
+      "basis_expression": "0 <= usage['age_seconds'] <= 600 and usage['remaining_percent'] > 1",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 63,
+      "basis_expression": "receipt['wrapper'][1:5] == ['--mem', '4G', '--time', '5m']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 64,
+      "basis_expression": "job['kind'] in {'strict', 'full', 'focused_build', 'audit'}",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 66,
+      "basis_expression": "job['module'] in by_name and re.fullmatch('[0-9a-f]{64}', job['source_sha256'])",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 67,
+      "basis_expression": "receipt['source'] == stem + '.source.lean' and receipt['sha256'] == job['source_sha256']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 69,
+      "basis_expression": "digest(source) == job['source_sha256']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 70,
+      "basis_expression": "len(receipt['command']) == 3 and Path(receipt['command'][0]).name == 'lean'",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 71,
+      "basis_expression": "receipt['command'][1] == '-Dlinter.all=true' and Path(receipt['command'][-1]).resolve() == (evidence / receipt['source']).resolve()",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 72,
+      "basis_expression": "len(re.findall('^.+?:\\\\d+:\\\\d+: error(?:\\\\([^)]*\\\\))?:', raw.decode(), re.M)) == job['errors']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 73,
+      "basis_expression": "len(re.findall('^.+?:\\\\d+:\\\\d+: warning(?:\\\\([^)]*\\\\))?:', raw.decode(), re.M)) == job['source_warnings']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 75,
+      "basis_expression": "not re.search('^\\\\s*set_option (?:maxHeartbeats|maxRecDepth|linter\\\\.)', source.decode(), re.M)",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 77,
+      "basis_expression": "job['source_sha256'] is None and 'source' not in receipt and ('sha256' not in receipt)",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 79,
+      "basis_expression": "len(receipt['command']) == 5 and Path(receipt['command'][0]).name == 'lake'",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 80,
+      "basis_expression": "receipt['command'][1:] == ['-d', str(root / 'lean'), 'build', target]",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 81,
+      "basis_expression": "receipt['exit_code'] == 0 and (not re.search('\\\\berror(?:\\\\([^)]*\\\\))?:', raw.decode()))",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 84,
+      "basis_expression": "build and int(build.group(1)) == expected['build_jobs']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 85,
+      "basis_expression": "re.findall('(?m)^warning: .+$', raw.decode()) == expected['warnings']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 86,
+      "basis_expression": "all(('InternedFreshOrdinaryClosedCompletion.lean:24:5:' in warning for warning in expected['warnings']))",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 87,
+      "basis_expression": "job['module'] is None if job['kind'] == 'audit' else job['module'] in by_name",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 89,
+      "basis_expression": "history['status'] == 'ROOT_ACCEPTED'",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 90,
+      "basis_expression": "set(history) == {'status', 'selected_sources', 'variants', 'artifacts', 'patches', 'rejected_public_types'}",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 91,
+      "basis_expression": "history['selected_sources'] == {m['source_path']: m['source_sha256'] for m in modules}",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 94,
+      "basis_expression": "variants and len(variants) == len(history['variants']) and (len(artifacts) == len(history['artifacts']))",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 95,
+      "basis_expression": "not set(variants) & set(artifacts)",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 98,
+      "basis_expression": "re.fullmatch('[0-9a-f]{64}', record['sha256']) and digest(data) == record['sha256']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 100,
+      "basis_expression": "record['module'] in by_name and record['reason'].strip()",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 101,
+      "basis_expression": "0 < len(data.splitlines()) == record['lines'] <= by_name[record['module']]['source_cap']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 103,
+      "basis_expression": "len(data) == record['bytes']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 105,
+      "basis_expression": "all((stem + suffix in artifacts for suffix in ['.json', '.log', '.limits.json', '.usage.json']))",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 107,
+      "basis_expression": "any((v['module'] == job['module'] and v['sha256'] == job['source_sha256'] and (read(path) == read(stem + '.source.lean')) for path, v in variants.items()))",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 109,
+      "basis_expression": "stem + '.source.lean' in artifacts",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 111,
+      "basis_expression": "patch['reason'].strip() and patch['before'] in variants and (patch['after'] in variants)",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 112,
+      "basis_expression": "patch['module'] == variants[patch['before']]['module'] == variants[patch['after']]['module']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 113,
+      "basis_expression": "patch['path'] in artifacts and artifacts[patch['path']]['sha256'] == patch['sha256']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 116,
+      "basis_expression": "read(patch['path']).decode() == expected",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 118,
+      "basis_expression": "len(rejected) == len(history['rejected_public_types']) == metrics['rejected_public_type_jobs']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 120,
+      "basis_expression": "stem in jobs and jobs[stem]['kind'] == 'full' and (jobs[stem]['exit_code'] == 0)",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 121,
+      "basis_expression": "record['raw_sha256'] == jobs[stem]['log_sha256'] and record['reason'].strip()",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 122,
+      "basis_expression": "record['artifacts'] and all((path in artifacts for path in record['artifacts']))",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 125,
+      "basis_expression": "cut['status'] == 'COMPLETE_TERMINAL_METADATA_CUT_BEFORE_CLOSING_TOOLS'",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 126,
+      "basis_expression": "[p for p, code in metadata_jobs.items() if code != 0] == bound['metadata_failure_paths']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 127,
+      "basis_expression": "cut['failed_jobs'] == sum((code != 0 for code in metadata_jobs.values()))",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 129,
+      "basis_expression": "relative.startswith('root-metadata-history/') and relative.endswith('.json') and (relative in artifacts)",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 130,
+      "basis_expression": "type(code) is int",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 132,
+      "basis_expression": "receipt['exit_code'] == code and receipt['observed_at'] and (Path(receipt['command'][0]).name not in {'lean', 'lake'})",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 133,
+      "basis_expression": "all((relative[:-5] + suffix in artifacts for suffix in ['.json', '.log', '.limits.json', '.usage.json', '.source.py', '.peaks.txt']))",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 134,
+      "basis_expression": "load(relative[:-5] + '.limits.json') == {'memory.max': '4294967296', 'memory.high': '4294967296', 'memory.swap.max': '0'}",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 136,
+      "basis_expression": "0 <= usage['age_seconds'] <= 600 and usage['remaining_percent'] > 1",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 138,
+      "basis_expression": "selection == {m['source_path']: dict(sha256=m['source_sha256'], lines=m['source_lines'], strict=m['strict'], full=m['full']) for m in modules}",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 139,
+      "basis_expression": "json.loads(pinned(bound['frozen_modules'])) == {m['name']: m['source_sha256'] for m in modules}",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 146,
+      "basis_expression": "re.fullmatch('[0-9a-f]{64}', m['source_sha256']) and digest(source) == m['source_sha256']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 147,
+      "basis_expression": "source == read(m['strict'] + '.source.lean') and 0 < len(source.splitlines()) == m['source_lines'] <= m['source_cap']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 148,
+      "basis_expression": "read(m['strict'] + '.log') == b'' and jobs[m['strict']]['kind'] == 'strict'",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 149,
+      "basis_expression": "jobs[m['strict']]['module'] == name and jobs[m['strict']]['exit_code'] == 0",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 150,
+      "basis_expression": "jobs[m['full']]['kind'] == 'full' and jobs[m['full']]['module'] == name and (jobs[m['full']]['exit_code'] == 0)",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 151,
+      "basis_expression": "jobs[m['strict']]['errors'] == jobs[m['strict']]['source_warnings'] == jobs[m['full']]['errors'] == jobs[m['full']]['source_warnings'] == 0",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 152,
+      "basis_expression": "m['full'] not in rejected and source.rstrip().endswith(('end MicroCFTA.' + name).encode())",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 153,
+      "basis_expression": "any((v['module'] == name and read(path) == source for path, v in variants.items()))",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 155,
+      "basis_expression": "gate['status'] == 'ACCEPTED_STRICT_SOURCE' and gate['source_sha256'] == m['source_sha256']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 156,
+      "basis_expression": "gate['source_lines'] == m['source_lines'] and gate['source_cap'] == m['source_cap']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 157,
+      "basis_expression": "gate['selected_strict'] == m['strict'] and gate['strict_log_bytes'] == 0 and (gate['public_heads'] == shorts)",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 158,
+      "basis_expression": "gate['receipt_sha256'] == digest(read(m['strict'] + '.json'))",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 159,
+      "basis_expression": "gate['module'] == name and gate['root_default_limit_check'] and gate['all_linters']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 160,
+      "basis_expression": "gate['declaration_gate'] == m['declaration_gate']['path'] and gate['body_gate'] == m['body_gate']['path']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 162,
+      "basis_expression": "body_gate['status'] == 'ACCEPTED_COMPLETE_BODY_BEFORE_STRICT' and body_gate['module'] == name",
+      "action": "ADAPT_ACTUAL_H34_BODY_AND_DECLARATION_GATES",
+      "reason": "Preserve gate/hash/review/read-scope/default/linter families. Replace H33 counts/history flags with actual H34 eight39-line schema and genuine callback scope."
+    },
+    {
+      "basis_line": 163,
+      "basis_expression": "body_gate['source_sha256'] == m['source_sha256'] and body_gate['source_lines'] == m['source_lines']",
+      "action": "ADAPT_ACTUAL_H34_BODY_AND_DECLARATION_GATES",
+      "reason": "Preserve gate/hash/review/read-scope/default/linter families. Replace H33 counts/history flags with actual H34 eight39-line schema and genuine callback scope."
+    },
+    {
+      "basis_line": 164,
+      "basis_expression": "body_gate['source_hard_stop'] == m['source_cap'] and body_gate['declaration_gate_sha256'] == m['declaration_gate']['sha256']",
+      "action": "ADAPT_ACTUAL_H34_BODY_AND_DECLARATION_GATES",
+      "reason": "Preserve gate/hash/review/read-scope/default/linter families. Replace H33 counts/history flags with actual H34 eight39-line schema and genuine callback scope."
+    },
+    {
+      "basis_line": 165,
+      "basis_expression": "body_gate['root_complete_source_lines_read'] == m['source_lines'] and body_gate['declaration_gate'] == m['declaration_gate']['path']",
+      "action": "ADAPT_ACTUAL_H34_BODY_AND_DECLARATION_GATES",
+      "reason": "Preserve gate/hash/review/read-scope/default/linter families. Replace H33 counts/history flags with actual H34 eight39-line schema and genuine callback scope."
+    },
+    {
+      "basis_line": 166,
+      "basis_expression": "body_gate['independent_review_sha256'] == m['body_review']['sha256'] and json.loads(pinned(m['body_review']))['status'] == 'CLEAR'",
+      "action": "ADAPT_ACTUAL_H34_BODY_AND_DECLARATION_GATES",
+      "reason": "Preserve gate/hash/review/read-scope/default/linter families. Replace H33 counts/history flags with actual H34 eight39-line schema and genuine callback scope."
+    },
+    {
+      "basis_line": 167,
+      "basis_expression": "all((body_gate[k] for k in ['root_complete_source_read', 'root_all_six_bodies_read', 'root_all_ten_fragments_read', 'root_all_23_scoped_types_and_seven_restricted_calls_read', 'actual_repaired_pending_included', 'default_declaration_limits', 'all_linters']))",
+      "action": "ADAPT_ACTUAL_H34_BODY_AND_DECLARATION_GATES",
+      "reason": "Preserve gate/hash/review/read-scope/default/linter families. Replace H33 counts/history flags with actual H34 eight39-line schema and genuine callback scope."
+    },
+    {
+      "basis_line": 168,
+      "basis_expression": "(body_gate['haves'], body_gate['lets'], body_gate['obtains'], body_gate['termination_by_count']) == (2, 1, 0, 3)",
+      "action": "ADAPT_ACTUAL_H34_BODY_AND_DECLARATION_GATES",
+      "reason": "Preserve gate/hash/review/read-scope/default/linter families. Replace H33 counts/history flags with actual H34 eight39-line schema and genuine callback scope."
+    },
+    {
+      "basis_line": 169,
+      "basis_expression": "body_gate['private_helpers'] == m['private_helpers'] and body_gate['public_heads'] == shorts",
+      "action": "ADAPT_ACTUAL_H34_BODY_AND_DECLARATION_GATES",
+      "reason": "Preserve gate/hash/review/read-scope/default/linter families. Replace H33 counts/history flags with actual H34 eight39-line schema and genuine callback scope."
+    },
+    {
+      "basis_line": 170,
+      "basis_expression": "all((body_gate[k] for k in ['private_bind_has_no_unused_instance', 'all_five_instance_headers_read', 'all_six_body_texts_unchanged', 'actual_state_arguments_and_base_equations_explicit', 'strict1_failed_source_and_diagnostics_retained', 'strict2_warning_and_failed_metadata_selection_retained']))",
+      "action": "ADAPT_ACTUAL_H34_BODY_AND_DECLARATION_GATES",
+      "reason": "Preserve gate/hash/review/read-scope/default/linter families. Replace H33 counts/history flags with actual H34 eight39-line schema and genuine callback scope."
+    },
+    {
+      "basis_line": 172,
+      "basis_expression": "declaration['status'] == 'ACCEPTED_EXACT_DECLARATIONS_BEFORE_BODY' and declaration['module'] == name",
+      "action": "ADAPT_ACTUAL_H34_BODY_AND_DECLARATION_GATES",
+      "reason": "Preserve gate/hash/review/read-scope/default/linter families. Replace H33 counts/history flags with actual H34 eight39-line schema and genuine callback scope."
+    },
+    {
+      "basis_line": 173,
+      "basis_expression": "declaration['public_heads'] == shorts and declaration['private_helpers'] == m['private_helpers']",
+      "action": "ADAPT_ACTUAL_H34_BODY_AND_DECLARATION_GATES",
+      "reason": "Preserve gate/hash/review/read-scope/default/linter families. Replace H33 counts/history flags with actual H34 eight39-line schema and genuine callback scope."
+    },
+    {
+      "basis_line": 174,
+      "basis_expression": "declaration['contracts_sha256'] == m['manifest']['sha256'] and declaration['insertion_map_sha256'] == m['layout']['sha256']",
+      "action": "ADAPT_ACTUAL_H34_BODY_AND_DECLARATION_GATES",
+      "reason": "Preserve gate/hash/review/read-scope/default/linter families. Replace H33 counts/history flags with actual H34 eight39-line schema and genuine callback scope."
+    },
+    {
+      "basis_line": 175,
+      "basis_expression": "declaration['whole_source_hard_stop'] == m['source_cap'] and declaration['default_declaration_limits'] and declaration['all_linters']",
+      "action": "ADAPT_ACTUAL_H34_BODY_AND_DECLARATION_GATES",
+      "reason": "Preserve gate/hash/review/read-scope/default/linter families. Replace H33 counts/history flags with actual H34 eight39-line schema and genuine callback scope."
+    },
+    {
+      "basis_line": 176,
+      "basis_expression": "[declaration[k] for k in ['compiled_fragments', 'compiled_fragment_lines', 'root_whole_context_lines_read', 'root_whole_public_header_lines_read', 'root_whole_private_header_lines_read', 'root_whole_local_compiled_fragment_lines_read']] == [10, 45, 8, 12, 18, 7]",
+      "action": "ADAPT_ACTUAL_H34_BODY_AND_DECLARATION_GATES",
+      "reason": "Preserve gate/hash/review/read-scope/default/linter families. Replace H33 counts/history flags with actual H34 eight39-line schema and genuine callback scope."
+    },
+    {
+      "basis_line": 177,
+      "basis_expression": "all((declaration[k] for k in ['root_all_public_and_private_header_types_read', 'root_all_local_have_let_and_lambda_types_read', 'root_all_three_recursive_signatures_and_seven_restricted_call_types_read', 'root_all_23_scoped_introduced_types_read', 'generalized_environment_and_full_heap', 'callback_pending_bound_derived_not_public_premise', 'same_repaired_executor_outcome_state', 'no_public_Dense_Valid_Facts_Good_success_or_counter_oracle']))",
+      "action": "ADAPT_ACTUAL_H34_BODY_AND_DECLARATION_GATES",
+      "reason": "Preserve gate/hash/review/read-scope/default/linter families. Replace H33 counts/history flags with actual H34 eight39-line schema and genuine callback scope."
+    },
+    {
+      "basis_line": 178,
+      "basis_expression": "[declaration[k] for k in ['body_haves', 'body_lets', 'body_obtains', 'helpers', 'recursive_calls', 'termination_by_count']] == [2, 1, 0, 3, 7, 3]",
+      "action": "ADAPT_ACTUAL_H34_BODY_AND_DECLARATION_GATES",
+      "reason": "Preserve gate/hash/review/read-scope/default/linter families. Replace H33 counts/history flags with actual H34 eight39-line schema and genuine callback scope."
+    },
+    {
+      "basis_line": 179,
+      "basis_expression": "declaration['contract_root'] == 'declaration-plan-v3' and declaration['unused_private_instance_removed'] and declaration['all_public_and_local_and_recursive_types_unchanged']",
+      "action": "ADAPT_ACTUAL_H34_BODY_AND_DECLARATION_GATES",
+      "reason": "Preserve gate/hash/review/read-scope/default/linter families. Replace H33 counts/history flags with actual H34 eight39-line schema and genuine callback scope."
+    },
+    {
+      "basis_line": 180,
+      "basis_expression": "declaration['explicit_instance_heads'] == ['work_mono', 'request_mono'] + shorts and declaration['global_instance_declaration'] is False and (declaration['omit_directives'] == 0)",
+      "action": "ADAPT_ACTUAL_H34_BODY_AND_DECLARATION_GATES",
+      "reason": "Preserve gate/hash/review/read-scope/default/linter families. Replace H33 counts/history flags with actual H34 eight39-line schema and genuine callback scope."
+    },
+    {
+      "basis_line": 181,
+      "basis_expression": "all((declaration[k] for k in ['root_all_five_explicit_instance_headers_read', 'public_requirements_and_conclusions_unchanged', 'strict2_warning_and_failed_metadata_selection_retained']))",
+      "action": "ADAPT_ACTUAL_H34_BODY_AND_DECLARATION_GATES",
+      "reason": "Preserve gate/hash/review/read-scope/default/linter families. Replace H33 counts/history flags with actual H34 eight39-line schema and genuine callback scope."
+    },
+    {
+      "basis_line": 182,
+      "basis_expression": "declaration['recursive_mutual_induction'] and declaration['tactic_induction'] is False and (declaration['native_Scan_H23_or_resource_result_claimed'] is False)",
+      "action": "ADAPT_ACTUAL_H34_BODY_AND_DECLARATION_GATES",
+      "reason": "Preserve gate/hash/review/read-scope/default/linter families. Replace H33 counts/history flags with actual H34 eight39-line schema and genuine callback scope."
+    },
+    {
+      "basis_line": 186,
+      "basis_expression": "list(manifest) == [f['file'] for f in fragments] and [f['order'] for f in fragments] == list(range(1, len(fragments) + 1))",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 189,
+      "basis_expression": "[{k: v for k, v in f.items() if k != 'path'} for f in fragments] == layout['compiled_fragments']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 190,
+      "basis_expression": "layout['schema'] == schema and json.loads(pinned(m['declaration_layout'])) == m['declaration_layout_values']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 194,
+      "basis_expression": "digest(raw_fragment) == f['sha256'] and len(raw_fragment.splitlines()) == f['lines']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 195,
+      "basis_expression": "manifest[f['file']] == f['sha256']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 197,
+      "basis_expression": "source.startswith(data['context.lean.txt']) and source.count(data['context.lean.txt']) == 1",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 202,
+      "basis_expression": "source.count(header) == 1 and source.index(header) >= len(data['context.lean.txt'])",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 204,
+      "basis_expression": "[positions[s][0] for s in all_shorts] == sorted((positions[s][0] for s in all_shorts))",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 219,
+      "basis_expression": "scope.count(fragment) == 1",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 221,
+      "basis_expression": "matched == sorted(matched) and len(set(matched)) == len(matched)",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 226,
+      "basis_expression": "len(types['entries']) == 23 and len(recursive['calls']) == 7 and (len(signatures['recursive_signatures']) == 3)",
+      "action": "REPLACE_H33_MUTUAL_SIGNATURE_SCOPE_WITH_H34_ZERO_RECURSION",
+      "reason": "Keep seven introduced types and complete actual body-inventories. H34 has no recursive signatures, mutual group or sizeOf clauses; require zero rather than importing an H33 oracle."
+    },
+    {
+      "basis_line": 227,
+      "basis_expression": "signatures['termination_obligations_are_not_public_premises'] and recursive['no_tactic_induction_or_named_IH']",
+      "action": "REPLACE_H33_MUTUAL_SIGNATURE_SCOPE_WITH_H34_ZERO_RECURSION",
+      "reason": "Keep seven introduced types and complete actual body-inventories. H34 has no recursive signatures, mutual group or sizeOf clauses; require zero rather than importing an H33 oracle."
+    },
+    {
+      "basis_line": 228,
+      "basis_expression": "[item['name'] for item in signatures['recursive_signatures']] == shorts",
+      "action": "REPLACE_H33_MUTUAL_SIGNATURE_SCOPE_WITH_H34_ZERO_RECURSION",
+      "reason": "Keep seven introduced types and complete actual body-inventories. H34 has no recursive signatures, mutual group or sizeOf clauses; require zero rather than importing an H33 oracle."
+    },
+    {
+      "basis_line": 229,
+      "basis_expression": "all((digest(reviewed[item['full_type_file']]) == item['sha256'] for item in signatures['recursive_signatures']))",
+      "action": "REPLACE_H33_MUTUAL_SIGNATURE_SCOPE_WITH_H34_ZERO_RECURSION",
+      "reason": "Keep seven introduced types and complete actual body-inventories. H34 has no recursive signatures, mutual group or sizeOf clauses; require zero rather than importing an H33 oracle."
+    },
+    {
+      "basis_line": 230,
+      "basis_expression": "len(re.findall(b'(?m)^mutual$', source)) == 1 and len(re.findall(b'(?m)^termination_by sizeOf expression$', source)) == 3",
+      "action": "REPLACE_H33_MUTUAL_SIGNATURE_SCOPE_WITH_H34_ZERO_RECURSION",
+      "reason": "Keep seven introduced types and complete actual body-inventories. H34 has no recursive signatures, mutual group or sizeOf clauses; require zero rather than importing an H33 oracle."
+    },
+    {
+      "basis_line": 233,
+      "basis_expression": "re.findall(b'\\\\bhave[ \\\\t]+([^ \\\\t:\\\\n]+)', body) == [n.encode() for n in expected['have_names']]",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 234,
+      "basis_expression": "len(re.findall(b'\\\\bhave\\\\b', body)) == len(expected['have_names'])",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 235,
+      "basis_expression": "re.findall(b'\\\\blet[ \\\\t]+([^ \\\\t:=\\\\n]+)', body) == [n.encode() for n in expected['let_names']]",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 236,
+      "basis_expression": "len(re.findall(b'\\\\blet\\\\b', body)) == len(expected['let_names'])",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 237,
+      "basis_expression": "re.findall(b'\\\\bby_cases[ \\\\t]+([^ \\\\t:\\\\n]+)', body) == [n.encode() for n in expected['by_cases_names']]",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 238,
+      "basis_expression": "re.findall(b'\\\\bcases[ \\\\t]+([^ \\\\t:\\\\n]+)[ \\\\t]*:', body) == [n.encode() for n in expected['case_equations']]",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 240,
+      "basis_expression": "groups == expected['obtain_groups'] and len(re.findall(b'\\\\bobtain\\\\b', body)) == len(groups)",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 241,
+      "basis_expression": "re.findall(b'\\\\bintro[ \\\\t]+([^\\\\n]+)', body) == [n.encode() for n in expected['intro_groups']]",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 242,
+      "basis_expression": "re.findall(b'\\\\bfun[ \\\\t]+([^\\\\n]*?)=>', body) == [n.encode() for n in expected['lambda_groups']]",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 244,
+      "basis_expression": "all((n in allowed for group in expected['intro_groups'] + expected['lambda_groups'] for n in group.split()))",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 245,
+      "basis_expression": "not re.search(b'\\\\binduction\\\\b', body)",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Keep the tactic-induction or global-instance/omit exclusion unchanged."
+    },
+    {
+      "basis_line": 246,
+      "basis_expression": "not re.search(b'\\\\b(?:show|suffices|haveI|letI)\\\\b', body) and (not re.search(b'\\\\bobtain\\\\b(?:(?!:=).)*:(?!=)', body, re.S))",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 247,
+      "basis_expression": "re.findall(b'(?m)^termination_by (.+)$', body) == ([b'sizeOf expression'] if short in shorts else [])",
+      "action": "REPLACE_H33_TERMINATION_WITH_H34_ZERO",
+      "reason": "Every H34 body must have no termination_by clause. Preserve per-body checking; no H33 sizeOf clause applies."
+    },
+    {
+      "basis_line": 248,
+      "basis_expression": "re.findall(b'\\\\b(build_mono|buildMany_mono|buildEdges_mono)\\\\b', body) == [n.encode() for n in expected['recursive_calls']]",
+      "action": "REPLACE_H33_RECURSIVE_CALL_INVENTORY",
+      "reason": "Pin the H34 acyclic proof-dependency inventory. In particular unfold_mono -> execute_mono is allowed; prohibit self/mutual recursion and preserve zero induction."
+    },
+    {
+      "basis_line": 249,
+      "basis_expression": "schema['private_helpers'] == m['private_helpers'] == ['work_mono', 'bind_mono', 'request_mono']",
+      "action": "ADAPT_EXACT_H34_LOCAL_SCHEMA",
+      "reason": "Private/public order, eight39-line manifest, one reserved have, zero lets/obtains/lambdas/IH and exact schema metadata."
+    },
+    {
+      "basis_line": 250,
+      "basis_expression": "schema['public_heads'] == schema['public_mutual_group'] == shorts and schema['new_definitions'] == schema['new_predicates_or_structures'] == schema['typed_show_fragments'] == schema['local_induction_names'] == []",
+      "action": "ADAPT_EXACT_H34_LOCAL_SCHEMA",
+      "reason": "Private/public order, eight39-line manifest, one reserved have, zero lets/obtains/lambdas/IH and exact schema metadata."
+    },
+    {
+      "basis_line": 251,
+      "basis_expression": "schema['recursive_function_proofs_not_tactic_induction'] and schema['no_additional_helpers_haves_lets_obtains_shows_or_IH_authorized']",
+      "action": "ADAPT_EXACT_H34_LOCAL_SCHEMA",
+      "reason": "Private/public order, eight39-line manifest, one reserved have, zero lets/obtains/lambdas/IH and exact schema metadata."
+    },
+    {
+      "basis_line": 252,
+      "basis_expression": "schema['compiled_contract_count'] == 10 and schema['compiled_contract_lines'] == 45 and (schema['compiled_contract_order'] == list(manifest))",
+      "action": "ADAPT_EXACT_H34_LOCAL_SCHEMA",
+      "reason": "Private/public order, eight39-line manifest, one reserved have, zero lets/obtains/lambdas/IH and exact schema metadata."
+    },
+    {
+      "basis_line": 253,
+      "basis_expression": "schema['local_have_names_by_owner'] == {n: m['bodies'][n]['have_names'] for n in all_shorts} and schema['local_let_names_by_owner'] == {n: m['bodies'][n]['let_names'] for n in all_shorts}",
+      "action": "ADAPT_EXACT_H34_LOCAL_SCHEMA",
+      "reason": "Private/public order, eight39-line manifest, one reserved have, zero lets/obtains/lambdas/IH and exact schema metadata."
+    },
+    {
+      "basis_line": 254,
+      "basis_expression": "schema['local_obtain_groups'] == schema['by_cases_names'] == schema['case_equation_names'] == [] and schema['public_premises'] == ['DecidableEq (EdgeKey Symbol Guard)']",
+      "action": "ADAPT_EXACT_H34_LOCAL_SCHEMA",
+      "reason": "Private/public order, eight39-line manifest, one reserved have, zero lets/obtains/lambdas/IH and exact schema metadata."
+    },
+    {
+      "basis_line": 258,
+      "basis_expression": "public == [(kind, short) for short, kind in specs]",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 263,
+      "basis_expression": "found",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 265,
+      "basis_expression": "helpers == schema['private_helpers'] == m['private_helpers']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 266,
+      "basis_expression": "not re.search(b'(?m)^\\\\s*(?:variable[ \\\\t]+\\\\[|omit\\\\b)', source)",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Keep the tactic-induction or global-instance/omit exclusion unchanged."
+    },
+    {
+      "basis_line": 267,
+      "basis_expression": "all((source.count(('theorem ' + short + ' [DecidableEq (EdgeKey Symbol Guard)]').encode()) == 1 for short in ['work_mono', 'request_mono'] + shorts))",
+      "action": "REPLACE_FIVE_EXPLICIT_INSTANCE_HEAD_NAMES",
+      "reason": "Require callback_mono/request_mono and all three public heads to carry the explicit EdgeKey instance. bind_mono remains instance-free."
+    },
+    {
+      "basis_line": 268,
+      "basis_expression": "b'theorem bind_mono [' not in source",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 270,
+      "basis_expression": "(root / m['source_path']).read_bytes() == source",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 272,
+      "basis_expression": "tool_gate['status'] == 'ACCEPTED_EXACT_TOOLS_FOR_SELECTED_STRICT_SOURCE' and tool_gate['source_sha256'] == m['source_sha256']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 273,
+      "basis_expression": "tool_gate['public_heads'] == shorts and tool_gate['materializer_activation'] and tool_gate['sole_FULL_activation'] and tool_gate['reader_activation_after_actual_FULL']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 276,
+      "basis_expression": "pinned(active) == pinned(archived) and tool_gate['installed_tools'][active['path']] == active['sha256']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 283,
+      "basis_expression": "printer == source + tail.encode() and len(tail.splitlines()) == 11 + 3 * len(specs)",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 284,
+      "basis_expression": "len(printer.splitlines()) == m['source_lines'] + len(tail.splitlines()) == tool_gate['diagnostic_tail_lines'] + m['source_lines']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 285,
+      "basis_expression": "all((printer.decode().splitlines().count('set_option ' + option) == 1 for option in options))",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 286,
+      "basis_expression": "all((printer.decode().splitlines().count(d + namespace + short) == 1 for short, kind in specs for d in ['#check @', '#print ', '#print axioms ']))",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 290,
+      "basis_expression": "len(matching) == 1",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 292,
+      "basis_expression": "(report['source_sha256'], report['source_lines'], report['printer_sha256']) == (m['source_sha256'], m['source_lines'], digest(printer))",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 293,
+      "basis_expression": "report['log_sha256'] == digest(raw) and report['log_bytes'] == len(raw)",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 294,
+      "basis_expression": "report['receipt_sha256'] == digest(read(m['full'] + '.json')) and report['owned_public_job_exit'] == 0",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 295,
+      "basis_expression": "all((report[k] for k in ['all_eight_printer_settings', 'exact_module_and_diagnostic_tail', 'diagnostic_limits_after_module_only', 'no_omissions']))",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 296,
+      "basis_expression": "(report['pp_option_count'], report['linter_option_count'], report['diagnostic_limit_count']) == (7, 1, 2)",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 297,
+      "basis_expression": "report['configured_paths'] == {k: str(path.resolve()) for k, path in dict(source=evidence / m['snapshot'], printer=evidence / (m['full'] + '.source.lean'), raw=evidence / (m['full'] + '.log'), receipt=evidence / (m['full'] + '.json')).items()}",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 298,
+      "basis_expression": "[(h['head'], h['kind']) for h in report['heads']] == [(namespace + short, kind) for short, kind in specs]",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 300,
+      "basis_expression": "not re.search('sorryAx|\\\\b(?:warning|error)(?:\\\\([^)]*\\\\))?:|failed to pretty print|pp\\\\.rawOnError|maximum recursion depth|maximum number of heartbeats|\u22ef|\u2026|\\\\.\\\\.\\\\.', log)",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 304,
+      "basis_expression": "len(matches) == 1",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 306,
+      "basis_expression": "starts == sorted(starts, key=lambda match: match.start()) and (not log[:starts[0].start()].strip())",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 313,
+      "basis_expression": "len(delimiters) == 1",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 316,
+      "basis_expression": "len(axiom_matches) == 1",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 326,
+      "basis_expression": "len(matches) == 1",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 331,
+      "basis_expression": "normalized == canonical(declared) and raw_identity is metric['raw_type_byte_identity']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 332,
+      "basis_expression": "len(checked.encode()) == metric['type_bytes'] and len(checked) == metric['type_characters'] and (digest(checked.encode()) == metric['type_sha256'])",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 333,
+      "basis_expression": "len(checked.splitlines()) == metric['type_logical_lines'] and checked.count('\\n') == metric['type_line_feeds'] and (checked.endswith('\\n') == metric['type_final_newline'])",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 334,
+      "basis_expression": "len(declared.encode()) == metric['printed_type_bytes'] and digest(declared.encode()) == metric['printed_type_sha256']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 335,
+      "basis_expression": "digest(normalized.encode()) == metric['canonical_type_sha256']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 336,
+      "basis_expression": "not any((token in checked + declared for token in ['_private', '\u271d', '\u2020', '\u2021']))",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 337,
+      "basis_expression": "not any((re.search(re.escape(namespace + helper) + \"(?![\\\\w'])\", checked + declared) for helper in helpers))",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 338,
+      "basis_expression": "all((head_report[k] for k in ['check_print_type_identity', 'check_print_type_lexical_identity', 'unique_complete_type_body_delimiter', 'actual_axioms_within_standard_allowed']))",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 339,
+      "basis_expression": "head_report['check_print_type_byte_identity'] is raw_identity",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 340,
+      "basis_expression": "head_report['private_namespace_helpers_checked'] == helpers and head_report['private_type_spellings_checked'] == ['_private', '\u271d', '\u2020', '\u2021'] and (head_report['private_public_type_names'] is False)",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 341,
+      "basis_expression": "head_report['checked_type_characters'] == len(checked) and head_report['checked_type_bytes'] == len(checked.encode()) and (head_report['checked_type_sha256'] == metric['type_sha256'])",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 342,
+      "basis_expression": "head_report['printed_type_bytes'] == metric['printed_type_bytes'] and head_report['printed_type_characters'] == len(declared) and (head_report['printed_type_sha256'] == metric['printed_type_sha256'])",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 343,
+      "basis_expression": "head_report['normalized_type_characters'] == len(normalized) and head_report['canonical_type_sha256'] == metric['canonical_type_sha256']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 344,
+      "basis_expression": "head_report['body_characters'] == len(body) == metric['body_characters'] and len(body.encode()) == metric['body_bytes']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 345,
+      "basis_expression": "body.startswith('fun ') and len(body) > 50 and (digest(body.encode()) == metric['body_sha256'])",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 347,
+      "basis_expression": "values or (axiom.group(1) == 'does not depend on any axioms' and (not printed[axiom.end():].strip()))",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 349,
+      "basis_expression": "axioms == head_report['actual_axioms'] == metric['actual_axioms'] and set(axioms) <= {'Classical.choice', 'Quot.sound', 'propext'}",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 350,
+      "basis_expression": "head_report['actual_standard_three_axioms'] == (set(axioms) == {'Classical.choice', 'Quot.sound', 'propext'})",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 355,
+      "basis_expression": "retained == text.encode() and report['retained_slices'][filename] == dict(bytes=len(retained), sha256=digest(retained))",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 357,
+      "basis_expression": "''.join(reconstructed) == log and set(report['retained_slices']) == set(retained_names)",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 360,
+      "basis_expression": "review['status'] == 'ACCEPTED_COMPLETE_PUBLIC_TYPES_AND_INSTALLED' and review['source_sha256'] == m['source_sha256'] and (review['source_lines'] == m['source_lines'])",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 361,
+      "basis_expression": "review['root_manual_complete_TYPEs'] is True and review['goal_status'] == 'ACTIVE_INCOMPLETE'",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 362,
+      "basis_expression": "review['readback_sha256'] == m['readback']['sha256']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 363,
+      "basis_expression": "review['independent_complete_TYPE_review_sha256'] == m['type_review']['sha256'] and independent['status'] == 'CLEAR'",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 364,
+      "basis_expression": "set(review['TYPEs']) == set(shorts)",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 367,
+      "basis_expression": "review['TYPEs'][short] == dict(sha256=metric['type_sha256'], bytes=metric['type_bytes'], logical_lines=metric['type_logical_lines'], actual_axioms=actual_axioms[short])",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 368,
+      "basis_expression": "review['module'] == name and review['scope'] == m['scope']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 369,
+      "basis_expression": "review['BODY_review'] == dict(complete_retention=True, programmatic_only=True, whole_body_manual_read_claimed=False)",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 370,
+      "basis_expression": "independent['scope'] == 'INDEPENDENT_COMPLETE_ACTUAL_PUBLIC_TYPE_AND_READBACK_REVIEW'",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 371,
+      "basis_expression": "independent['module'] == name and independent['source_sha256'] == m['source_sha256']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 372,
+      "basis_expression": "independent['source_lines'] == m['source_lines'] and independent['public_heads'] == [namespace + short for short in shorts]",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 373,
+      "basis_expression": "independent['ownership']['reviewer_math_author'] is False",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 375,
+      "basis_expression": "manual['checked_TYPEs_complete'] == shorts and manual['printed_TYPEs_manual'] is manual['BODYs_manual'] is False",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 378,
+      "basis_expression": "item['checked_type'] == dict(logical_lines=metric['type_logical_lines'], LF=metric['type_line_feeds'], final_LF=metric['type_final_newline'], characters=metric['type_characters'], bytes=metric['type_bytes'], sha256=metric['type_sha256'])",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 379,
+      "basis_expression": "item['printed_type'] == dict(bytes=metric['printed_type_bytes'], sha256=metric['printed_type_sha256'])",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 380,
+      "basis_expression": "item['actual_raw_byte_identity'] is metric['raw_type_byte_identity'] and item['lexical_identity'] is True",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 381,
+      "basis_expression": "item['canonical_sha256'] == metric['canonical_type_sha256'] and item['axioms']['actual'] == actual_axioms[short]",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 382,
+      "basis_expression": "item['body'] == dict(characters=metric['body_characters'], bytes=metric['body_bytes'], sha256=metric['body_sha256'])",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 383,
+      "basis_expression": "len(full_variant_keys) == len(set(full_variant_keys))",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 384,
+      "basis_expression": "load('original-source-index.json')['sources'] == [bound['original_audit']]",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 386,
+      "basis_expression": "digest(original) == bound['original_audit']['sha256'] and len(original.splitlines()) == bound['original_audit']['lines']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 390,
+      "basis_expression": "audit_source.count(addition) == 1 and audit_source.index(addition) < audit_source.index(b'/-!')",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 392,
+      "basis_expression": "audit_source == original",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 394,
+      "basis_expression": "jobs[audit_stem]['kind'] == 'audit' and jobs[audit_stem]['exit_code'] == 0",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 396,
+      "basis_expression": "digest(raw_audit) == bound['audit']['log_sha256']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    },
+    {
+      "basis_line": 398,
+      "basis_expression": "dependencies and int(dependencies.group(1)) == bound['audit']['dependencies']",
+      "action": "KEEP_GENERIC_GUARD",
+      "reason": "Preserve this guard family; update only actual evidence data and H34 binding names where applicable."
+    }
+  ],
+  "new_guards": [
+    "Literal actual case-pattern inventory and owner binder-type check",
+    "No mutual/termination/self-recursion for H34, while earlier-theorem calls remain allowed"
+  ],
+  "no_selected_algorithm_or_execution": true
+}

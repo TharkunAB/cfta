@@ -1,0 +1,4 @@
+/-- Actual optional binder construction retains the node supply on every outcome. -/
+theorem maybeMu_mono [DecidableEq (EdgeKey Symbol Guard)] (key : Nat × Nat)
+    (body : Value Symbol Guard) (state : State Symbol Guard) :
+    state.nodes.next ≤ (SourceRecursiveIntersectionMaybeMu.maybeMu key body state).state.nodes.next

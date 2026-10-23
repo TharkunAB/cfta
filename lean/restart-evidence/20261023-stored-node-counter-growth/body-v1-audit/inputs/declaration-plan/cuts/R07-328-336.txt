@@ -1,0 +1,9 @@
+/-- Remove the binder's own bare reference only from a union at the body root. -/
+def withoutSelfReference (name : Reference) (body : Value Symbol Guard) : Work Symbol Guard (Value Symbol Guard) :=
+  match body with
+  | .union _ members _ _ =>
+      if members.any (fun member => member.referenceOf == .ref name) then
+        makeUnion (members.filter (fun member => member.referenceOf != .ref name))
+      else .pure body
+  | _ => .pure body
+

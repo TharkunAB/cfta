@@ -1,0 +1,11 @@
+--- unbound404
++++ actual-bound404
+@@ -27,7 +27,7 @@
+ def canonical(text):
+     return re.sub(r"[ \t\r\n]+", " ", text).strip(" \t\r\n")
+ raw_data = read("bound-data.json")
+-assert digest(raw_data) == "__H34_BOUND_DATA_SHA256__"
++assert digest(raw_data) == "f60555dd0c4e55bdea653c5ef62cb554e9ffe5fe2ff07a3d07adec264150fc66"
+ assert not re.search(r"__H\d+_", raw_data.decode()), "Unbound evidence input"
+ bound = json.loads(raw_data)
+ modules = bound["modules"]

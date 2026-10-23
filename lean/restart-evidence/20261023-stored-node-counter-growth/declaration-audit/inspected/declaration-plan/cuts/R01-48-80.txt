@@ -1,0 +1,33 @@
+mutual
+/-- Actual repaired construction retains the node supply on every outcome. -/
+theorem build_mono [DecidableEq (EdgeKey Symbol Guard)] (expression : Syntax Symbol Guard)
+    (environment : List (Value Symbol Guard)) (state : State Symbol Guard) :
+    state.nodes.next ≤ (build expression environment state).state.nodes.next := by
+  cases expression with
+  | empty | var index => simp only [build, Outcome.state]; exact Nat.le_refl _
+  | node edges =>
+      simp only [build]
+      exact bind_mono _ _ state (buildEdges_mono edges environment state)
+        (fun values current => work_mono (makeNode values) current)
+  | union members =>
+      simp only [build]
+      exact bind_mono _ _ state (buildMany_mono members environment state)
+        (fun values current => work_mono (makeUnion values) current)
+  | binder smart body =>
+      let callback : InternedBinderProtocol.Reference → State Symbol Guard →
+          Outcome Symbol Guard (Value Symbol Guard) :=
+        fun name current => (build body (.reference name :: environment) current).bind
+          fun value next => work (withoutSelfReference name value) next
+      have preserved : ∀ name current,
+          current.nodes.next ≤ (callback name current).state.nodes.next := by
+        intro name current
+        exact bind_mono _ _ current (build_mono body (.reference name :: environment) current)
+          (fun value after => work_mono (withoutSelfReference name value) after)
+      simp only [build]
+      apply bind_mono _ _ state (preserved .depth state)
+      intro depth afterDepth
+      apply bind_mono _ _ afterDepth (preserved (.uninterned (ordinaryLevel depth)) afterDepth)
+      intro ordinary afterOrdinary
+      exact request_mono smart depth ordinary callback afterOrdinary preserved
+termination_by sizeOf expression
+

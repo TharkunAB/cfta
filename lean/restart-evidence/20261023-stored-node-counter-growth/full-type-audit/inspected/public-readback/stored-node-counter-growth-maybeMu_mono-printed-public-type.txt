@@ -1,0 +1,12 @@
+ ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (key : Prod.{0, 0} Nat Nat)
+  (body : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @LE.le.{0} Nat instLENat
+    (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+      (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+    (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+      (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+        (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (@MicroCFTA.SourceRecursiveIntersectionMaybeMu.maybeMu Symbol Guard inst key body state))))

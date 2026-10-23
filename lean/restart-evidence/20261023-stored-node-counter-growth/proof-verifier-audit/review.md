@@ -1,0 +1,11 @@
+# H34 saved verifier source review
+
+CLEAR. I read all 404 selected source lines, all 483 bound data lines, and both complete adaptation patches. I correlated the whole H33 basis with its prior complete review and checked its current bytes. All 212 assertion scopes are accounted for. The 174 generic assertion expressions remain exact. The 38 adapted scopes match the accepted H34 declarations, six body inventories, and actual evidence.
+
+The checker retains the eight-fragment, 39-line contract layout and all owner metadata. It checks seven scoped type entries, the one reserved have, zero lets/obtains/induction/recursion, and the allowed earlier proof dependencies. It retains default limits, all linters, literal-empty selected strict output, dynamic job history, caps and fresh usage, source plus exact 20-line diagnostics, complete raw framing and all 12 slices, raw byte-identity facts, the four-ASCII lexical rule, all helper/private marker denials, and the standard allowed axiom subset, including the empty subset.
+
+Static evidence checks confirm three successful proof jobs, Audit 3653/75553, 13 historical metadata jobs with no failures, one source variant, zero patches, and all 856 artifact hashes. Each actual checked/printed TYPE pair is byte-identical. The three actual axiom sets contain the standard three axioms. The complete raw output reconstructs exactly. BODY handling is programmatic only. This review makes no new manual TYPE or BODY reading claim. The original Audit is recovered by removing the sole new import.
+
+The complete owner package is copied unchanged. All 65 owner payload records match. Only the exact top-level pins.json and FROZEN.json are excluded from their own manifest. Nested controls are included. The retained python-name lookup diagnostic is an author static metadata diagnostic. It is not a prepared verifier or proof failure.
+
+Arity authored the selected verifier and data. Root authored the mathematical body. I reviewed earlier H34 body/FULL/scope packages and authored the five closing sources. I did not author this selected verifier, its data, or the mathematical body. Root owns installation and actual normal/live checks. No prepared code was imported or executed, and no repository, Git, network, or board action occurred.

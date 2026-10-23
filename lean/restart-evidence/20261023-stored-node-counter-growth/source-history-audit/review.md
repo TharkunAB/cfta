@@ -1,0 +1,13 @@
+The complete actual H34 installed source and history cut are CLEAR. I read all82 source lines, the81-line history collector and46-line Root common helper. The installed source equals the sole selected variant, strict1 snapshot and canonical module. The actual body matches the eight approved fragments and retains the one reserved fact with no new declaration or premise.
+
+All856 artifact paths, sizes and SHA hashes match. The one82-line variant is disjoint from those artifact paths. The history contains no patch or TYPE rejection. The independent receipt scan gives strict1, FULL1 and audit1 only: three successful jobs, two source jobs, one Audit, zero failed or warned source jobs. Strict1 has a literal-empty log. All owned proof and historical metadata commands retain4GiB memory max/high, swap0,5m and fresh usage.
+
+Audit completes3653 build jobs and75553 dependency checks. Its raw SHA is e077c7b1d57b104aae5c1458febcff0b1a244e60e0c2d3519a798fae6ea25d8a. Its sole warning is the retained old InternedFreshOrdinaryClosedCompletion inputs replay. The sole new Audit import deletes to the exact3141-line original8257a051 snapshot.
+
+All13 historical metadata receipts and their six-file sets match the original /tmp donors and have exit0. The collector completion is later than this cut. Its own six files are retained separately, and its log equals actual-proof-cut.json. Later closing receipts remain outside the historical13/0 cut and belong in the one-time final support archive.
+
+The early canonical evidence copy and preparation record are both pinned. That retained copy equals the selected source. Root moved it before materialization while preserving the original nonoverwrite guard. The record describes that earlier cut. It is not a current claim that the canonical path is absent. No proof job or mathematical repair is invented.
+
+The existing complete37-line public TYPE review is reused by exact checked-TYPE, readback and Root acceptance hashes. All twelve retained slices reconstruct the complete raw output again. BODY retention and identity checks are programmatic only. At this review cut,14 archived component file sets,756 file hashes and56 nested control files match. These counts may increase before the mandatory final seal rerun.
+
+Root authored the mathematics and collector. Arity authored the declarations. I authored the FULL adapters and earlier declaration/TYPE reviews; I did not author the mathematics. I ran no selected verifier, reader, closer, compiler, Git, network or board action and wrote no repository file. This review adds no native/Scan/H23, initial source counter order, Room, WordRanges, Trace transport, full-pass or Haskell result. H6 remains the strongest combined theorem. The whole goal remains active.

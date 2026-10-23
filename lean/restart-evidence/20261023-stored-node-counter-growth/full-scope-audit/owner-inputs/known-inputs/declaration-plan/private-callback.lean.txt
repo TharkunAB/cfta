@@ -1,0 +1,5 @@
+/-- Actual stored substitution and cleanup retain the node supply. -/
+private theorem callback_mono [DecidableEq (EdgeKey Symbol Guard)] (old : Reference)
+    (body : Value Symbol Guard) (name : Reference) (state : State Symbol Guard) :
+    state.nodes.next ≤
+      (SourceRecursiveIntersectionMaybeMu.callback old body name state).state.nodes.next

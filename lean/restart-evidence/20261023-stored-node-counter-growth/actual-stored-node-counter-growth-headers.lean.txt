@@ -1,0 +1,14 @@
+/-- Actual repaired stored substitution retains the node supply on every outcome. -/
+theorem execute_mono [DecidableEq (EdgeKey Symbol Guard)] (value : Value Symbol Guard)
+    (environment : Environment Symbol Guard) (state : State Symbol Guard) :
+    state.nodes.next ≤ (InternedFreshOrdinaryStoredSubstitution.execute value environment state).state.nodes.next := by
+
+/-- Actual repaired unfolding retains the node supply on every outcome. -/
+theorem unfold_mono [DecidableEq (EdgeKey Symbol Guard)] (value : Value Symbol Guard)
+    (state : State Symbol Guard) :
+    state.nodes.next ≤ (InternedFreshOrdinaryStoredSubstitution.unfold value state).state.nodes.next := by
+
+/-- Actual optional binder construction retains the node supply on every outcome. -/
+theorem maybeMu_mono [DecidableEq (EdgeKey Symbol Guard)] (key : Nat × Nat)
+    (body : Value Symbol Guard) (state : State Symbol Guard) :
+    state.nodes.next ≤ (SourceRecursiveIntersectionMaybeMu.maybeMu key body state).state.nodes.next := by

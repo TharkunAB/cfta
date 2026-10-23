@@ -1,0 +1,65 @@
+/-- Source substitution maps recursive names to actual complete replacement records. -/
+abbrev Environment (Symbol Guard : Type) := Reference → Option (Value Symbol Guard)
+
+mutual
+/-- Collect closed constants and reference leaves from the prepared source traversal. -/
+def leaves (value : Value Symbol Guard) : List (Value Symbol Guard) :=
+  if value.free.isEmpty then [value] else
+  match value with
+  | .empty | .reference _ => [value]
+  | .node _ edges _ _ => edgeLeaves edges
+  | .union _ members _ _ => manyLeaves members
+  | .mu _ body _ _ => leaves body
+termination_by sizeOf value
+
+/-- Ordered source children contribute their original prepared leaves. -/
+def manyLeaves : List (Value Symbol Guard) → List (Value Symbol Guard)
+  | [] => []
+  | first :: rest => leaves first ++ manyLeaves rest
+termination_by values => sizeOf values
+
+/-- Original edge metadata adds no substitution variable. -/
+def edgeLeaves : List (EdgeValue Symbol Guard) → List (Value Symbol Guard)
+  | [] => []
+  | .mk _ children :: rest => manyLeaves children ++ edgeLeaves rest
+termination_by edges => sizeOf edges
+end
+
+/-- Locate an immutable source record by the same identity used in canonical keys. -/
+def slot (context : List (Value Symbol Guard)) (value : Value Symbol Guard) : Nat :=
+  context.findIdx (fun candidate => candidate.referenceOf == value.referenceOf)
+
+/-- Replace a free reference leaf while retaining a closed constant exactly. -/
+def input (environment : Environment Symbol Guard) (value : Value Symbol Guard) : Value Symbol Guard :=
+  match value with
+  | .reference name => (environment name).getD value
+  | _ => value
+
+mutual
+/-- Translate the prepared record traversal to the existing complete lexical executor. -/
+def encode (context : List (Value Symbol Guard)) (locals : List Reference) (value : Value Symbol Guard) : Syntax Symbol Guard :=
+  if value.free.isEmpty then .var (locals.length + slot context value) else
+  match value with
+  | .empty => .empty
+  | .reference name =>
+      match locals.findIdx? (· == name) with
+      | some index => .var index
+      | none => .var (locals.length + slot context value)
+  | .node _ edges _ _ => .node (encodeEdges context locals edges)
+  | .union _ members _ _ => .union (encodeMany context locals members)
+  | .mu entry body _ _ => .binder true (encode context (.interned entry.identity :: locals) body)
+termination_by sizeOf value
+
+/-- Retain the source ordering of prepared child plans. -/
+def encodeMany (context : List (Value Symbol Guard)) (locals : List Reference) : List (Value Symbol Guard) → List (Syntax Symbol Guard)
+  | [] => []
+  | first :: rest => encode context locals first :: encodeMany context locals rest
+termination_by values => sizeOf values
+
+/-- Rebuild each source edge with its actual symbol and original constraint. -/
+def encodeEdges (context : List (Value Symbol Guard)) (locals : List Reference) : List (EdgeValue Symbol Guard) → List (EdgeSyntax Symbol Guard)
+  | [] => []
+  | .mk entry children :: rest => .mk entry.key.symbol entry.key.constraint (encodeMany context locals children) :: encodeEdges context locals rest
+termination_by edges => sizeOf edges
+end
+

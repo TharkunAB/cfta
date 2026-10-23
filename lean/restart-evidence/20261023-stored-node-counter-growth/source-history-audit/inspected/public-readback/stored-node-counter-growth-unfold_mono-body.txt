@@ -1,0 +1,114 @@
+fun {Symbol Guard} [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] value state =>
+  @MicroCFTA.InternedConstructorTemplates.Value.casesOn.{0} Symbol Guard
+    (fun t =>
+      @Eq.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value t →
+        @LE.le.{0} Nat instLENat
+          (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+          (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+              (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.unfold Symbol Guard inst value state)))))
+    value
+    (fun h =>
+      @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard)
+        (fun value =>
+          @LE.le.{0} Nat instLENat
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.unfold Symbol Guard inst value state)))))
+        (Nat.le_refl
+          (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state)))
+        value
+        (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value
+          (@MicroCFTA.InternedConstructorTemplates.Value.empty Symbol Guard) h))
+    (fun name h =>
+      @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name)
+        (fun value =>
+          @LE.le.{0} Nat instLENat
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.unfold Symbol Guard inst value state)))))
+        (Nat.le_refl
+          (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state)))
+        value
+        (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value
+          (@MicroCFTA.InternedConstructorTemplates.Value.reference Symbol Guard name) h))
+    (fun entry edges depth free h =>
+      @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free)
+        (fun value =>
+          @LE.le.{0} Nat instLENat
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.unfold Symbol Guard inst value state)))))
+        (Nat.le_refl
+          (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state)))
+        value
+        (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value
+          (@MicroCFTA.InternedConstructorTemplates.Value.node Symbol Guard entry edges depth free) h))
+    (fun entry members depth free h =>
+      @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth free)
+        (fun value =>
+          @LE.le.{0} Nat instLENat
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.unfold Symbol Guard inst value state)))))
+        (Nat.le_refl
+          (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state)))
+        value
+        (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value
+          (@MicroCFTA.InternedConstructorTemplates.Value.union Symbol Guard entry members depth free) h))
+    (fun entry body depth ordinary h =>
+      @Eq.ndrec.{0, 1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+        (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary)
+        (fun value =>
+          @LE.le.{0} Nat instLENat
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+                  (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                  (@MicroCFTA.InternedFreshOrdinaryStoredSubstitution.unfold Symbol Guard inst value state)))))
+        (@MicroCFTA.InternedFreshOrdinaryStoredNodeCounterGrowth.execute_mono Symbol Guard inst body
+          (fun name =>
+            @ite.{1} (Option.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+              (@Eq.{1} MicroCFTA.InternedBinderProtocol.Reference name
+                (MicroCFTA.InternedBinderProtocol.Reference.interned
+                  (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry)))
+              (MicroCFTA.InternedBinderProtocol.instDecidableEqReference name
+                (MicroCFTA.InternedBinderProtocol.Reference.interned
+                  (@MicroCFTA.Cache.Interned.identity MicroCFTA.InternedBinderProtocol.NodeKey entry)))
+              (@Option.some.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary))
+              (@Option.none.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)))
+          state)
+        value
+        (@Eq.symm.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value
+          (@MicroCFTA.InternedConstructorTemplates.Value.mu Symbol Guard entry body depth ordinary) h))
+    (@Eq.refl.{1} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) value)

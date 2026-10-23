@@ -1,0 +1,4 @@
+/-- Actual repaired unfolding retains the node supply on every outcome. -/
+theorem unfold_mono [DecidableEq (EdgeKey Symbol Guard)] (value : Value Symbol Guard)
+    (state : State Symbol Guard) :
+    state.nodes.next ≤ (InternedFreshOrdinaryStoredSubstitution.unfold value state).state.nodes.next

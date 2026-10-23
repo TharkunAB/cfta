@@ -1,0 +1,8 @@
+/-- Complete source reference tags distinguish both probes from actual binder references. -/
+inductive Reference where
+  | interned (identity : Nat)
+  | uninterned (depth : Nat)
+  | depth
+  | intersection (first second : Nat)
+  | state (position : Nat)
+  deriving DecidableEq, Ord, Repr

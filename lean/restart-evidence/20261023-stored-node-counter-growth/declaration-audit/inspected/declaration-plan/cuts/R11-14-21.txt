@@ -1,0 +1,8 @@
+/-- One above every free ordinary level; other reference kinds contribute zero. -/
+def freeBound : List Reference → Nat
+  | [] => 0
+  | .uninterned level :: rest => max (level + 1) (freeBound rest)
+  | _ :: rest => freeBound rest
+
+/-- Keep the stored Depth bound unless a free ordinary name requires a larger choice. -/
+def ordinaryLevel (depth : Value Symbol Guard) : Nat := max depth.depth (freeBound depth.free)
