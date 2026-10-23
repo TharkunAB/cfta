@@ -33,6 +33,49 @@ size by its weight, then a term of that size with the same chance for each.
 'resumeSampling' rejects a checkpoint of another graph or of other weights.
 The bound and the seed come from the checkpoint.
 
+= The draws of route @sized-sample@ 1 with the generator @splitmix64@ 1
+
+These steps define each draw, so that another implementation can give the
+same draws. All arithmetic on words is modulo @2^64@.
+
+1. The SplitMix64 stream from a state @s@ ('splitMix64') is the words
+   @mix (s + k * g)@ for @k = 1, 2, 3, ...@, with the golden gamma
+   @g = 0x9e3779b97f4a7c15@. The function @mix@ is the output function of
+   @splitmix64.c@ of Sebastiano Vigna. It sets
+   @z = (z xor (z >> 30)) * 0xbf58476d1ce4e5b9@, then
+   @z = (z xor (z >> 27)) * 0x94d049bb133111eb@, and gives
+   @z xor (z >> 31)@.
+
+2. Draw @i@ counts from zero. It reads the SplitMix64 stream from the state
+   @mix (seed + (i + 1) * g)@, which is word @i@ of the stream from the seed.
+   Each draw reads only its own stream, from its first word on.
+
+3. A value below a bound @n@ of at least one: when @n = 1@, the value is zero,
+   and the draw reads no word. Otherwise, let @b@ be the number of bits of
+   @n - 1@, and let @k = (b + 63) div 64@. The draw reads the next @k@ words
+   @u 0, ..., u (k - 1)@ and takes
+   @v = (u 0 + u 1 * 2^64 + ... + u (k - 1) * 2^(64 * (k - 1))) mod 2^b@. When
+   @v@ is less than @n@, the value is @v@. Otherwise, the draw reads the next
+   @k@ words and tries again. Thus each value below @n@ has the same chance,
+   also when @n@ is more than @2^64@.
+
+4. Without weights, let @total@ be the number of terms of the listing: the
+   sum of the counts of the sizes from one to the bound. The draw takes a
+   value @r@ below @total@, the rank in the listing. The listing has the
+   sizes in ascending order. The size is the size @s@ where @r - o s@ is at
+   least zero and less than @count s@, with @o s@ the number of terms of the
+   sizes less than @s@. The class rank is @r - o s@.
+
+5. With weights, take the sizes of the weights in ascending order, without
+   the sizes that have no terms. Let @total@ be the sum of their weights. The
+   draw takes a value @t@ below @total@. The size is the size @s@ where
+   @t - p s@ is at least zero and less than @weight s@, with @p s@ the sum of
+   the weights of the sizes before @s@. Then the draw takes the class rank, a
+   value below @count s@, from the next words of the same stream.
+
+6. The term is 'Data.CFTA.Sized.unrankOfSize' of the size and the class rank,
+   in the order of the route @sized@.
+
 The routes decide equality constraints without a solver. A guard beyond
 equality constraints needs a solver. 'resume', 'relocate', and
 'resumeSampling' reject a graph with such a guard: the result is
