@@ -103,13 +103,13 @@ sized ::
 sized automaton
     | all (all ((== noConstraint) . FTA.transitionConstraint)) (FTA.transitionTable automaton)
     , unambiguousRows rows =
-        let index = Ordinary.tableIndex initial rows
+        let index = Ordinary.tableIndex (const Nothing) initial rows
             count = countAtSize index
             unrank size (ClassRank rank)
                 | rank >= 0 && Cardinality rank < count size =
                     Just $ rankedValue $ sizeClassSelect index size (ClassRank rank)
                 | otherwise = Nothing
-            position = Ordinary.tablePosition initial rows
+            position = Ordinary.tablePosition (const Nothing) initial rows
          in Right
                 Sized
                     { sizedTerms = \size -> [term | rank <- everyClassRank (count size), Just term <- [unrank size rank]]
