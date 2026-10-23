@@ -51,9 +51,31 @@ spec = describe "Data.CFTA.Edit.Between" $ do
         let found = either (error . show) id $ editsBetween expressions (lit "one") (Term.Node "neg" [lit "one"])
             edits = either (error . show) id $ editAutomaton expressions (lit "one")
         map (FTA.accepts edits) found `shouldBe` [True, True]
-    it "gives only a replacement for x to f(g(x))" $
+    it "gives a replacement and a context wrap for x to f(g(x))" $
         editsBetween expressions (lit "one") (Term.Node "neg" [Term.Node "neg" [lit "one"]])
-            `shouldBe` Right [term (ReplaceAt (path [])) [material "neg" [material "neg" [lit' "one"]]]]
+            `shouldBe` Right
+                [ term (ContextAt (path []) "neg" (TransitionIndex 1) (ChildIndex 0)) [term (HoleParent "neg" (ChildIndex 0)) []]
+                , term (ReplaceAt (path [])) [material "neg" [material "neg" [lit' "one"]]]
+                ]
+    it "gives an unwrap to delete a statement, and a context wrap to wrap a statement in an if" $ do
+        let skip = Term.Node "skip" []
+            nil = Term.Node "nil" []
+            cons a b = Term.Node "cons" [a, b]
+            unwrap = term (UnwrapAt (path [0]) (ChildIndex 1)) []
+            wrapIf =
+                term
+                    (ContextAt (path [0, 0]) "if" (TransitionIndex 1) (ChildIndex 0))
+                    [term (HoleParent "cons" (ChildIndex 0)) [material "nil" []]]
+        take 1 (either (error . show) id $ editsBetween statements twoStatements (Term.Node "block" [cons skip nil]))
+            `shouldBe` [unwrap]
+        -- Two context wraps of size 3 give the term: the if around the statement, and the cons around an if over the old statement.
+        let found =
+                either (error . show) id $
+                    editsBetween statements oneStatement (Term.Node "block" [cons (Term.Node "if" [cons skip nil]) nil])
+        (wrapIf `elem` found, map length (take 2 found)) `shouldBe` (True, [3, 3])
+    it "gives no unwrap to a child that the state does not accept" $
+        -- A body is a non-empty list, so cons(skip, nil) is not replaced by nil there.
+        editsBetween statements oneStatement (Term.Node "block" [Term.Node "nil" []]) `shouldBe` Right []
     it "gives the rank of each edit in the generator of the edit automaton, in rank order" $ do
         let edits = either (error . show) id $ editAutomaton expressions (lit "one")
             generator = Gen.fromAutomaton $ fromFTA edits
@@ -83,7 +105,25 @@ fixtures =
     [ ("expressions", expressions, sum')
     , ("chains", fromRows "s" [("s", [leaf "a", node "f" ["s"]])], Term.Node "f" [Term.Node "f" [Term.Node "a" []]])
     , ("pairs", pairs, pairGiven)
+    , ("statements", statements, twoStatements)
     ]
+
+-- | Blocks of statements: a body is a non-empty list, and an if has a body.
+statements :: FTA.PlainFTA String String
+statements =
+    fromRows
+        "m"
+        [ ("m", [node "block" ["b"]])
+        , ("b", [node "cons" ["s", "l"]])
+        , ("l", [leaf "nil", node "cons" ["s", "l"]])
+        , ("s", [leaf "skip", node "if" ["b"]])
+        ]
+
+-- | A block of one statement, and a block of two.
+oneStatement, twoStatements :: Term String
+oneStatement = Term.Node "block" [Term.Node "cons" [Term.Node "skip" [], Term.Node "nil" []]]
+twoStatements =
+    Term.Node "block" [Term.Node "cons" [Term.Node "skip" [], Term.Node "cons" [Term.Node "skip" [], Term.Node "nil" []]]]
 
 -- | Expressions: a literal of a number, a negation, or a sum.
 expressions :: FTA.PlainFTA String String

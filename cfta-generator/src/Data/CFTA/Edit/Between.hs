@@ -11,13 +11,17 @@ is not a minimal edit, and it is not the difference of two languages
 * Let @p@ be the deepest position that holds every position where the two
   terms differ. An edit at a position @q@ changes only the subterm at @q@, so
   @q@ is @p@ or an ancestor of @p@. For each such @q@ the candidates are:
-  the replacement at @q@ by the new subterm, and each wrap at @q@ whose new node
-  is the new subterm, with the old subterm as one child.
+  the replacement at @q@ by the new subterm, each wrap at @q@ whose new node
+  is the new subterm, with the old subterm as one child, each unwrap at @q@ to
+  a child of the old subterm that is the new subterm, and each context wrap at
+  @q@ whose new term is the new subterm, with the old subterm at the hole, deeper
+  than the children of the new root.
 * A term that is a wrap of the old subterm is also a replacement: @x@ to @f(x)@
   is a 'ReplaceAt' and, when @f@ is a transition of the state at the position, a
-  'WrapAt'. The term @f(g(x))@ for @x@ is only a 'ReplaceAt', because the old
-  subterm is not a child of the new node. The candidates of both kinds are
-  built, so neither is lost.
+  'WrapAt'. The term @f(g(x))@ for @x@ is a 'ReplaceAt' and, when @f(g)@ is a
+  context of the state at the position, a 'ContextAt'. If the old subterm is
+  more than once in the new subterm, each place is a context wrap. The
+  candidates of all kinds are built, so none is lost.
 * Each candidate is checked: 'applyEdit' gives the new term from it, and the
   edit automaton accepts it. The automaton checks the state of the position
   (the category), the vocabulary, and that a replacement differs from the old
@@ -38,7 +42,6 @@ module Data.CFTA.Edit.Between (
 import Control.Monad (guard)
 import Data.Hashable (Hashable)
 import Data.List (isPrefixOf, sortOn)
-import Data.Maybe (mapMaybe)
 import Data.Typeable (Typeable)
 
 import qualified Data.CFTA as FTA
@@ -103,22 +106,60 @@ candidates ::
     [Edit symbol]
 candidates edits old new = case differenceAt old new of
     Nothing -> []
-    Just deepest -> mapMaybe (candidate deepest) sites
+    Just deepest -> concatMap (candidate deepest) sites
   where
     sites = map FTA.transitionSymbol $ FTA.transitionsFrom edits EditRoot
     candidate deepest site = case site of
         ReplaceAt at -> do
             guard $ ancestorOf at deepest
-            replacement <- getPath at new
+            replacement <- toList $ getPath at new
             pure $ Term.Node site [fmap Material replacement]
         WrapAt at symbol _ (ChildIndex hole) -> do
             guard $ ancestorOf at deepest
-            Term.Node found children <- getPath at new
-            before <- getPath at old
+            Term.Node found children <- toList $ getPath at new
+            before <- toList $ getPath at old
             guard $ found == symbol && hole >= 0 && hole < length children && children !! hole == before
             pure $ Term.Node site [fmap Material child | (index, child) <- zip [0 ..] children, index /= hole]
-        Material _ -> Nothing
+        UnwrapAt at (ChildIndex index) -> do
+            guard $ ancestorOf at deepest
+            Term.Node _ children <- toList $ getPath at old
+            now <- toList $ getPath at new
+            guard $ index >= 0 && index < length children && children !! index == now
+            pure $ Term.Node site []
+        ContextAt at symbol _ (ChildIndex hole) -> do
+            guard $ ancestorOf at deepest
+            Term.Node found children <- toList $ getPath at new
+            before <- toList $ getPath at old
+            guard $ found == symbol && hole >= 0 && hole < length children
+            -- The old subterm may be at more than one place below the child: each place is an edit.
+            Term.Node site <$> [fillChildren hole children below | below <- placesBelow before (children !! hole)]
+        HoleParent _ _ -> []
+        Material _ -> []
     ancestorOf at deepest = unPath at `isPrefixOf` unPath deepest
+    toList = maybe [] pure
+    -- The child at the hole index becomes a context along the path, the other children are new material.
+    fillChildren hole children below =
+        [if index == hole then context below child else fmap Material child | (index, child) <- zip [0 ..] children]
+
+-- | The paths in a term, at least one step down, to the subterms that equal the given term.
+placesBelow :: (Eq symbol) => Term symbol -> Term symbol -> [[Int]]
+placesBelow wanted (Term.Node _ children) =
+    concat
+        [ [[index] | child == wanted] <> map (index :) (placesBelow wanted child)
+        | (index, child) <- zip [0 ..] children
+        ]
+
+-- | The new term along a path to its hole: the node over the hole has no child at the hole.
+context :: [Int] -> Term symbol -> Edit symbol
+context [index] (Term.Node symbol children) =
+    Term.Node
+        (HoleParent symbol (ChildIndex index))
+        [fmap Material child | (other, child) <- zip [0 ..] children, other /= index]
+context (index : rest) (Term.Node symbol children) =
+    Term.Node
+        (Material symbol)
+        [if other == index then context rest child else fmap Material child | (other, child) <- zip [0 ..] children]
+context [] term' = fmap Material term'
 
 {- | The deepest position that holds every position where two terms differ.
 'Nothing' if the terms are equal.
