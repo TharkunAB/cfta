@@ -13,9 +13,14 @@ Before release, the package was called `microcfta`.
   `larkGrammarByState` writes an alternative without a symbol for each pair,
   and `linearizeRun` gives the text of a term in its first run. An empty text
   gives an empty alternative, which Lark 1.3.1 and llguidance 1.9.1 accept.
-  A constraint, the empty language, a wrong number of texts, and brackets of
-  two empty texts are errors. The caller decides whether two terms can have
-  the same text.
+  `stateOrder` puts the children of a transition in another order in the
+  text, and a `Bracket` can hold another state, whose terms then count as
+  terms of the state. `lexemes` splits each literal of a grammar into
+  lexemes, because llguidance 1.9.1 reads literals greedily. A constraint,
+  the empty language, a wrong number of texts, an order that is not a
+  permutation, brackets of two empty texts, and brackets around a state
+  outside the trimmed automaton are errors. The caller decides whether two
+  terms can have the same text.
 - `Data.CFTA.replaceRows` applies row replacements and deletions to an
   existing explicit automaton. It shares unchanged rows and validates the
   complete result after the batch. The original automaton stays unchanged.

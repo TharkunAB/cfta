@@ -46,6 +46,45 @@ spec = describe "Data.CFTA.Lark" $ do
                 `shouldBe` []
         it "is the grammar of a linearization when each state has its texts" $
             larkGrammarByState (everyState arithmeticTexts) arithmetic `shouldBe` larkGrammar arithmeticTexts arithmetic
+    describe "with an order of the children" $ do
+        it "writes the children in the order of the text" $
+            larkGrammarByState conditionalTexts conditionals
+                `shouldBe` Right (unlines ["start: s1", "s0: \"T\" | \"F\"", "s1: \"x\" | \"y\" | s1 \" if \" s0 \" else \" s1"])
+        it "linearizes a term in the order, and accepts the text of each term" $ do
+            let grammar = readGrammar $ either (error . show) id $ larkGrammarByState conditionalTexts conditionals
+            linearizeRun
+                conditionalTexts
+                conditionals
+                (term "cond" [term "true" [], term "x" [], term "cond" [term "false" [], term "y" [], term "x" []]])
+                `shouldBe` Just "x if T else y if F else x"
+            [ found
+              | found <- members conditionals
+              , not $ recognizes grammar $ fromMaybe (error "no text") $ linearizeRun conditionalTexts conditionals found
+              ]
+                `shouldBe` []
+    describe "with brackets around another state" $ do
+        it "writes the rule of the inner state between the texts" $
+            larkGrammarByState operandTexts operands
+                `shouldBe` Right (unlines ["start: s0", "s0: \"x\" | \"not \" s0 | s0 \" + \" s1", "s1: \"x\" | s0 \" + \" s1 | \"(\" s0 \")\""])
+        it "accepts a term of the inner state in brackets, which the automaton refuses" $ do
+            let grammar = readGrammar $ either (error . show) id $ larkGrammarByState operandTexts operands
+                negated = term "add" [term "x" [], term "not" [term "x" []]]
+            FTA.accepts operands negated `shouldBe` False
+            linearizeRun operandTexts operands negated `shouldBe` Nothing
+            map (recognizes grammar) ["x + (not x)", "not x + x", "x + x + x", "x + (x + x)"] `shouldBe` replicate 4 True
+            map (recognizes grammar) ["x + not x", "(x)", "x + (not x"] `shouldBe` replicate 3 False
+    describe "with lexemes" $ do
+        it "splits each literal into runs of spaces, runs of word characters, and other characters" $
+            lexemes
+                (unlines ["start: s0", "s0: \"    return\" | \"    \" s1", "s1: \"result\" | \"(1 + 2)\\n\" | \"\\u0001\233_x\""])
+                `shouldBe` unlines
+                    [ "start: s0"
+                    , "s0: \"    \" \"return\" | \"    \" s1"
+                    , "s1: \"result\" | \"(\" \"1\" \" \" \"+\" \" \" \"2\" \")\" \"\\n\" | \"\\u0001\" \"\233_x\""
+                    ]
+        it "keeps the texts of the grammar" $ do
+            let grammar = readGrammar $ lexemes $ either (error . show) id $ larkGrammar listTexts lists
+            [found | found <- members lists, not $ recognizes grammar $ linearizeOrFail listTexts found] `shouldBe` []
     describe "with brackets" $ do
         it "writes an alternative without a symbol for each pair" $
             larkGrammarByState sums arithmetic
@@ -98,8 +137,15 @@ spec = describe "Data.CFTA.Lark" $ do
                 tables
                 `shouldBe` Left (WrongTextCount "words" "cons" (Arity 2) 1)
         it "with brackets of two empty texts" $
-            larkGrammarByState (everyState arithmeticTexts){stateBrackets = const [("", "")]} arithmetic
+            larkGrammarByState (everyState arithmeticTexts){stateBrackets = const [Bracket "" "e" ""]} arithmetic
                 `shouldBe` Left (EmptyBrackets "e")
+        it "with an order that is not a permutation" $ do
+            let ordered order = conditionalTexts{stateOrder = \_ symbol -> if symbol == "cond" then Just order else Nothing}
+            map (\order -> larkGrammarByState (ordered order) conditionals) [[0, 0, 2], [1, 0]]
+                `shouldBe` [Left (WrongOrder "e" "cond" [0, 0, 2]), Left (WrongOrder "e" "cond" [1, 0])]
+        it "with brackets around a state outside the trimmed automaton" $
+            larkGrammarByState operandTexts{stateBrackets = \state -> [Bracket "(" "dead" ")" | state == "r"]} operands
+                `shouldBe` Left (BracketOutside "r" "dead")
         it "with no term" $
             larkGrammar arithmeticTexts (automaton "e" [("e", [node "neg" ["e"]])]) `shouldBe` Left EmptyLanguage
 
@@ -135,12 +181,49 @@ arithmeticTexts symbol = case symbol of
 expressions.
 -}
 sums :: StateLinearization String String
-sums = StateLinearization (const texts) brackets
+sums = (everyState texts){stateBrackets = \state -> [Bracket "(" state ")" | state == "e"]}
   where
     texts symbol = case symbol of
         "add" -> ["", " + ", ""]
         _ -> arithmeticTexts symbol
-    brackets state = [("(", ")") | state == "e"]
+
+-- | Conditionals: a value, or a conditional with a test, a value, and another value.
+conditionals :: FTA.PlainFTA String String
+conditionals = automaton "e" [("e", [leaf "x", leaf "y", node "cond" ["b", "e", "e"]]), ("b", [leaf "true", leaf "false"])]
+
+-- | The texts of 'conditionals': the value first, then the test, then the other value.
+conditionalTexts :: StateLinearization String String
+conditionalTexts = (everyState texts){stateOrder = \_ symbol -> if symbol == "cond" then Just [1, 0, 2] else Nothing}
+  where
+    texts symbol = case symbol of
+        "cond" -> ["", " if ", " else ", ""]
+        "x" -> ["x"]
+        "y" -> ["y"]
+        "true" -> ["T"]
+        "false" -> ["F"]
+        _ -> []
+
+{- | Sums and negations, with right operands that do not start with a
+negation, and a state that accepts no term.
+-}
+operands :: FTA.PlainFTA String String
+operands =
+    automaton
+        "e"
+        [ ("e", [leaf "x", node "not" ["e"], node "add" ["e", "r"]])
+        , ("r", [leaf "x", node "add" ["e", "r"]])
+        , ("dead", [node "not" ["dead"]])
+        ]
+
+-- | The texts of 'operands', with brackets around any expression for a right operand.
+operandTexts :: StateLinearization String String
+operandTexts = (everyState texts){stateBrackets = \state -> [Bracket "(" "e" ")" | state == "r"]}
+  where
+    texts symbol = case symbol of
+        "not" -> ["not ", ""]
+        "add" -> ["", " + ", ""]
+        "x" -> ["x"]
+        _ -> []
 
 -- | Tables: lines of words, with the same list symbols for the lines and for the words.
 tables :: FTA.PlainFTA String String
@@ -155,7 +238,7 @@ tables =
 
 -- | The texts of 'tables': a line feed between lines, and a space between words.
 tableTexts :: StateLinearization String String
-tableTexts = StateLinearization texts (const [])
+tableTexts = StateLinearization{stateTexts = texts, stateOrder = \_ _ -> Nothing, stateBrackets = const []}
   where
     texts state symbol = case (state, symbol) of
         ("table", "table") -> ["", ""]
