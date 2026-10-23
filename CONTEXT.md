@@ -107,6 +107,14 @@ Wilf, and Feat (ranking).
   Removing a fact removes that obligation. It does not negate the constraint.
 - **Patch**: an ordered batch of edits together with the source document it
   expects. A valid patch produces a new source document.
+- **Three-way merge**: the merge of two versions of a language, the left and
+  the right, that come from one base. It merges by key: the initial state, the
+  state rows, the production names, the fact names, and the exclusion names.
+  A key that one side changes takes that change. A key that both sides change
+  in the same way takes that change.
+- **Conflict**: a key that the two sides of a three-way merge change in
+  different ways, or that one side deletes and the other side changes. A
+  conflict holds its key and its three versions.
 
 ## Transformations
 
