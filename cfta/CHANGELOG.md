@@ -2,6 +2,11 @@
 
 ## 0.1.0.0 - Unreleased
 
+- Add `Data.CFTA.Abstraction`: `checkAbstraction` checks with a solver that
+  the refined variants of each production cover its refinement and add no
+  value, and `checkOverlaps` reports two variants with a common value as a
+  warning. Each report keeps the verdict `No` or `Unknown`; a time limit is
+  `Unknown`.
 - `Data.CFTA.Lowering`: `newConstructors` gives the constructors with an
   expansion, and `checkProductions` gives each failure of `checkLowering`
   with its state and production.

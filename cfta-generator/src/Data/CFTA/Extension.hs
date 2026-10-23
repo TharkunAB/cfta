@@ -36,6 +36,9 @@ so only the reported production can make the counterexample fail.
 
 The check handles automata without constraints, as 'Lowering.lift' does. A
 transition with a constraint is 'Lowering.ConstrainedTransition'.
+
+An abstraction extension splits a production into refined variants instead.
+@Data.CFTA.Abstraction@ of @cfta@ checks it with a solver.
 -}
 module Data.CFTA.Extension (
     Production,
