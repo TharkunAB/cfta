@@ -6,7 +6,7 @@ import Data.List (isPrefixOf)
 import qualified Data.Map.Lazy as Map
 import Data.Maybe (fromMaybe)
 import Numeric (readHex)
-import Test.Hspec (Spec, describe, it, shouldBe, shouldSatisfy)
+import Test.Hspec (Spec, describe, it, shouldBe)
 
 import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint, equalityConstraint, noConstraint)
@@ -35,7 +35,8 @@ spec = describe "Data.CFTA.Lark" $ do
         ]
             `shouldBe` [(name, []) | (name, _, _) <- fixtures]
     it "has terms to check in each fixture" $
-        [(name, length (members fixture)) | (name, fixture, _) <- fixtures] `shouldSatisfy` all ((> 3) . snd)
+        [(name, length (members fixture)) | (name, fixture, _) <- fixtures]
+            `shouldBe` [("arithmetic", 110), ("chains of even length", 4), ("lists of special characters", 156)]
     it "accepts the text of a chain exactly when the automaton accepts the chain" $ do
         let grammar = readGrammar $ either (error . show) id $ larkGrammar chainTexts evenChains
         [recognizes grammar (linearizeOrFail chainTexts found) | found <- allTerms (alphabet evenChains) =<< [1 .. sizeBound]]
