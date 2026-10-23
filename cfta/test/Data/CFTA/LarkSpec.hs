@@ -24,6 +24,43 @@ spec = describe "Data.CFTA.Lark" $ do
     it "escapes a text as a JSON string" $
         larkGrammar (const ["\"\\\n\t\1é"]) (automaton "s" [("s", [leaf "q"])])
             `shouldBe` Right (unlines ["start: s0", "s0: \"\\\"\\\\\\n\\t\\u0001é\""])
+    it "writes an empty alternative for an empty text" $
+        larkGrammar (\symbol -> if symbol == "one" then [""] else arithmeticTexts symbol) arithmetic
+            `shouldBe` Right (unlines ["start: s0", "s0: s1 | \"-\" s0 | \"(\" s0 \" + \" s0 \")\"", "s1:  | \"2\""])
+    describe "by state" $ do
+        it "writes the texts of one symbol in each state" $
+            larkGrammarByState tableTexts tables
+                `shouldBe` Right (unlines ["start: s1", "s0: \".\" | s3 \"\\n\" s0", "s1: s0", "s2: \"1\" | \"2\"", "s3: \";\" | s2 \" \" s3"])
+        it "linearizes a term by its run" $ do
+            let words' = term "cons" [term "one" [], term "cons" [term "two" [], term "nil" []]]
+            linearizeRun tableTexts tables (term "table" [term "cons" [words', term "cons" [term "nil" [], term "nil" []]]])
+                `shouldBe` Just "1 2 ;\n;\n."
+            linearizeRun tableTexts tables words' `shouldBe` Nothing
+        it "accepts the text of each term of the run" $ do
+            let grammar = readGrammar $ either (error . show) id $ larkGrammarByState tableTexts tables
+            length (members tables) `shouldBe` 14
+            [ found
+              | found <- members tables
+              , not $ recognizes grammar $ fromMaybe (error "no text") $ linearizeRun tableTexts tables found
+              ]
+                `shouldBe` []
+        it "is the grammar of a linearization when each state has its texts" $
+            larkGrammarByState (everyState arithmeticTexts) arithmetic `shouldBe` larkGrammar arithmeticTexts arithmetic
+    describe "with brackets" $ do
+        it "writes an alternative without a symbol for each pair" $
+            larkGrammarByState sums arithmetic
+                `shouldBe` Right (unlines ["start: s0", "s0: s1 | \"-\" s0 | s0 \" + \" s0 | \"(\" s0 \")\"", "s1: \"1\" | \"2\""])
+        it "accepts the text of a term with and without brackets, and gives the text without them" $ do
+            let grammar = readGrammar $ either (error . show) id $ larkGrammarByState sums arithmetic
+                sum' = term "add" [term "lit" [term "one" []], term "add" [term "lit" [term "two" []], term "lit" [term "one" []]]]
+            linearizeRun sums arithmetic sum' `shouldBe` Just "1 + 2 + 1"
+            map (recognizes grammar) ["1 + 2 + 1", "1 + (2 + 1)", "(1 + 2) + 1", "-(1 + 2)", "((1))"] `shouldBe` replicate 5 True
+            map (recognizes grammar) ["(1 + 2", "()", "(1) + ", "1 +2", "(-)"] `shouldBe` replicate 5 False
+            [ found
+              | found <- members arithmetic
+              , not $ recognizes grammar $ fromMaybe (error "no text") $ linearizeRun sums arithmetic found
+              ]
+                `shouldBe` []
     it "linearizes a term" $ do
         linearize arithmeticTexts (term "add" [term "lit" [term "one" []], term "neg" [term "lit" [term "two" []]]])
             `shouldBe` Just "(1 + -2)"
@@ -52,10 +89,17 @@ spec = describe "Data.CFTA.Lark" $ do
                 `shouldBe` Left ConstrainedAutomaton
         it "with a wrong number of texts" $
             larkGrammar (\symbol -> if symbol == "add" then ["(", ")"] else arithmeticTexts symbol) arithmetic
-                `shouldBe` Left (WrongTextCount "add" (Arity 2) 2)
-        it "with an empty text for a symbol without children" $
-            larkGrammar (\symbol -> if symbol == "one" then [""] else arithmeticTexts symbol) arithmetic
-                `shouldBe` Left (EmptyText "one")
+                `shouldBe` Left (WrongTextCount "e" "add" (Arity 2) 2)
+        it "with a wrong number of texts in one state" $
+            larkGrammarByState
+                tableTexts
+                    { stateTexts = \state symbol -> if state == "words" && symbol == "cons" then [""] else stateTexts tableTexts state symbol
+                    }
+                tables
+                `shouldBe` Left (WrongTextCount "words" "cons" (Arity 2) 1)
+        it "with brackets of two empty texts" $
+            larkGrammarByState (everyState arithmeticTexts){stateBrackets = const [("", "")]} arithmetic
+                `shouldBe` Left (EmptyBrackets "e")
         it "with no term" $
             larkGrammar arithmeticTexts (automaton "e" [("e", [node "neg" ["e"]])]) `shouldBe` Left EmptyLanguage
 
@@ -86,6 +130,42 @@ arithmeticTexts symbol = case symbol of
     "one" -> ["1"]
     "two" -> ["2"]
     _ -> []
+
+{- | The sums of 'arithmetic' without parentheses, and brackets for the
+expressions.
+-}
+sums :: StateLinearization String String
+sums = StateLinearization (const texts) brackets
+  where
+    texts symbol = case symbol of
+        "add" -> ["", " + ", ""]
+        _ -> arithmeticTexts symbol
+    brackets state = [("(", ")") | state == "e"]
+
+-- | Tables: lines of words, with the same list symbols for the lines and for the words.
+tables :: FTA.PlainFTA String String
+tables =
+    automaton
+        "table"
+        [ ("table", [node "table" ["lines"]])
+        , ("lines", [leaf "nil", node "cons" ["words", "lines"]])
+        , ("words", [leaf "nil", node "cons" ["word", "words"]])
+        , ("word", [leaf "one", leaf "two"])
+        ]
+
+-- | The texts of 'tables': a line feed between lines, and a space between words.
+tableTexts :: StateLinearization String String
+tableTexts = StateLinearization texts (const [])
+  where
+    texts state symbol = case (state, symbol) of
+        ("table", "table") -> ["", ""]
+        ("lines", "nil") -> ["."]
+        ("lines", "cons") -> ["", "\n", ""]
+        ("words", "nil") -> [";"]
+        ("words", "cons") -> ["", " ", ""]
+        (_, "one") -> ["1"]
+        (_, "two") -> ["2"]
+        _ -> []
 
 -- | The chains with an even number of s nodes, through two states.
 evenChains :: FTA.PlainFTA String String
@@ -208,10 +288,11 @@ tokens line = case line of
 
 A table holds whether a rule derives the text between two positions. Each
 item that is a rule takes at least one character, because each rule derives
-only texts that are not empty. So an entry reads only entries for shorter
-texts, or for the same text through an alternative that is only one rule. The
-fixtures have no cycle of such alternatives, so the lazy table is well
-founded.
+only texts that are not empty. So a rule that is not the last item of its
+alternative takes a shorter text than the alternative, and an entry reads only
+entries for shorter texts, or for the same text through an alternative that is
+only one rule. The fixtures have no cycle of such alternatives, so the lazy
+table is well founded.
 -}
 recognizes :: Map.Map String [[Item]] -> String -> Bool
 recognizes grammar text = derives "start" 0 (length text)
@@ -227,7 +308,8 @@ recognizes grammar text = derives "start" 0 (length text)
     matches [] from to = from == to
     matches (Literal literal : rest) from to =
         from + length literal <= to && literal `isPrefixOf` drop from text && matches rest (from + length literal) to
-    matches (Rule name : rest) from to = or [derives name from middle && matches rest middle to | middle <- [from + 1 .. to]]
+    matches (Rule name : rest) from to =
+        or [derives name from middle && matches rest middle to | middle <- [from + 1 .. if null rest then to else to - 1]]
 
 -- | An automaton from rows of named states.
 automaton :: String -> [(String, [FTA.Transition String String Constraint])] -> FTA.PlainFTA String String
