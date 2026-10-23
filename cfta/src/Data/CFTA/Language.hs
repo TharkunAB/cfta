@@ -15,6 +15,7 @@ module Data.CFTA.Language (
     remove,
     require,
     relax,
+    start,
     editSource,
     wholeTerm,
     subterm,
@@ -114,6 +115,12 @@ require (ProductionRef state name) fact constraint = editSource $ Document.SetFa
 -- | Remove one existing fact. Keep the production and all its other facts.
 relax :: ProductionRef state -> FactName -> Update state
 relax (ProductionRef state name) fact = editSource $ Document.RemoveFact state (productionNameText name) (factNameText fact)
+
+{- | Make a state the initial state. The state must have a row when the
+update ends, so one update can add the row and make it the initial state.
+-}
+start :: state -> Update state
+start = editSource . Document.SetStart
 
 -- | Include a checked source edit, such as an atomic state-row change.
 editSource :: Document.Edit state -> Update state

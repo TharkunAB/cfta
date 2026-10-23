@@ -217,6 +217,7 @@ everyOperation =
         <> L.editSource (D.DeleteRow "extra")
         <> L.without "pairs" (L.AtRoot $ TemplateNode "pair" [Hole, Hole])
         <> L.restore "0"
+        <> L.start "atom"
 
 -- | State labels as plain text.
 strings :: StateCodec String
