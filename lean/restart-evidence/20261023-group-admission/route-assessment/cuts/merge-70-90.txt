@@ -1,0 +1,21 @@
+/-- A stored lookup has the exact nonempty source bucket, including repeated rows. -/
+theorem lookup_some [DecidableEq Key] (key : Item → Key) (rows : List Item) (query : Key) (bucket : List Item) :
+    fromRows key rows query = some bucket ↔
+      query ∈ rows.map key ∧ bucket = rows.filter (fun row => decide (key row = query)) := by
+  constructor
+  · intro found
+    have member : query ∈ rows.map key := by
+      by_cases present : query ∈ rows.map key
+      · exact present
+      · rw [(lookup_none key rows query).mpr present] at found
+        cases found
+    have contents := lookup_default key rows query
+    rw [found] at contents
+    exact ⟨member, contents⟩
+  · rintro ⟨member, rfl⟩
+    cases found : fromRows key rows query with
+    | none => exact False.elim ((lookup_none key rows query).mp found member)
+    | some bucket =>
+        have contents := lookup_default key rows query
+        rw [found] at contents
+        exact congrArg some contents

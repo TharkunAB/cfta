@@ -1,0 +1,23 @@
+  have reversed : SourceCurrentMergeGrouping.Iteration
+      (SourceCurrentPrependGrouping.reverseTable
+        (SourceCurrentPrependGrouping.fromRows (fun edge : Edge => edge.entry.key.symbol)
+          (nodeEdges parent)))
+      (entries.map (fun entry => (entry.1, entry.2.reverse)))
+
+  refine Fin.induction ?_ ?_
+
+  · intro index ih
+
+    obtain ⟨sourceStable, sourceGood, sourceSemantic, sourceTrace, sourceIdle⟩ := packets index
+
+    obtain ⟨sourceCurrent, sourceAdmitted⟩ := ih
+
+    have included : ((entries.get index).1, (entries.get index).2.reverse) ∈
+        entries.map (fun entry => (entry.1, entry.2.reverse))
+
+    have found : SourceCurrentPrependGrouping.reverseTable
+        (SourceCurrentPrependGrouping.fromRows (fun edge : Edge => edge.entry.key.symbol)
+          (nodeEdges parent)) (entries.get index).1 = some ((entries.get index).2.reverse)
+
+    have contents : (entries.get index).2.reverse = (nodeEdges parent).filter
+        (fun edge => decide (edge.entry.key.symbol = (entries.get index).1))

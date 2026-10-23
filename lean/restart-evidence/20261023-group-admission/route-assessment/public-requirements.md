@@ -1,0 +1,14 @@
+This is a plain-text declaration proposal. It is not a Lean header or source package.
+Use one public certificate theorem. A working module name is SourceCurrentOriginalRowGroupAdmission. Root must choose the final names and accept exact declarations separately.
+Import the existing cluster-admission module and group-chain module. Do not import a private bucket theorem.
+Fix inventory, formulas and solver once. Use inventory.source, inventory.inputs holds, its finiteInputMeaning, its finiteRankedInput, and the same concrete holds throughout.
+Keep both existing DecidableEq instances. Keep bits, a parent and proof that the parent belongs to inventory.roots. The inventory supplies source facts, Original/Available/closed parent data and finite-model admission. Do not add these as independent new oracles.
+Keep the same entries and exact Iteration of prepend fromRows keyed by each literal nodeEdges row symbol.
+Keep initialDomains, Cache.Valid initialDomains, one initial Room with the exact source nodes/edges and initialDomains forecast, before, fuels, kept and states. Use fuels and kept indexed by Fin entries.length. Use states indexed by Fin(entries.length+1).
+Require start: states 0 = before. Require initial At at before.checked and the initial canonical returned-cell admission condition at before.memo.
+For every input index, require the exact supplied Scan.execute equation: its given fuel runs .cluster of that entry's reversed bucket with empty kept accumulator, from states index.castSucc to .done of the given kept and states index.succ.
+For every input index only, retain Stable, Good, SemanticReady, global allocation Trace from the same initialDomains, and NativeIdle at states index.castSucc. This is the minimal caller packet required by completed_admitted once the induction supplies At and canonical admission.
+Do not require Contextual, Grows or source-issued history separately. They are fields of the induction's At certificate. Do not require final-state Stable/Good/SemanticReady/Idle/Trace as new premises for this certificate-only conclusion. Existing H22 outputs may remain in the caller's witness.
+Conclude at every index in Fin(entries.length+1): At formulas solver inventory at that exact state's checked field, and canonical captured returned-pair EdgeInputs admission for every actual returned-cell lookup in its memo.
+Expand canonical pair admission exactly as H29: swap captured full Edge records when second identity < first identity, then use the empty-domain EdgeRequest with the same finite input view/model. The lookup quantifies handle, captured pair and returned value. It covers unreferenced returned cells too.
+Do not quantify an alternative chain, replace fuels/kept/states, require a future success or Room premise, or claim a new execution producer. Do not append language/effect/member/length results already retained by the supplied H22 witness.

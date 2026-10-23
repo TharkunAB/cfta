@@ -1,0 +1,9 @@
+@[elab_as_elim] def induction {motive : Fin (n + 1) → Sort _} (zero : motive 0)
+    (succ : ∀ i : Fin n, motive (castSucc i) → motive i.succ) :
+    ∀ i : Fin (n + 1), motive i
+  | ⟨i, hi⟩ => go i hi
+where
+  -- Use a curried function so that this is structurally recursive
+  go : ∀ (i : Nat) (hi : i < n + 1), motive ⟨i, hi⟩
+  | 0, hi => by rwa [Fin.mk_zero]
+  | i+1, hi => succ ⟨i, Nat.lt_of_succ_lt_succ hi⟩ (go i (Nat.lt_of_succ_lt hi))

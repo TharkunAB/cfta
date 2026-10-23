@@ -1,0 +1,10 @@
+This file specifies obligations. It contains no proof body.
+Derive reversed with public iteration_reverse. Keep it fixed before Fin.induction.
+Use the existing Fin.induction at n=entries.length. The zero obligation rewrites by start and uses current plus admitted. No extra local fact is planned in this branch.
+At the successor, index has type Fin entries.length. The IH refers to states index.castSucc. The goal refers to states index.succ. Destructure packets index and ih using the two exact retained obtain fragments.
+The included fact follows from the actual entries.get index membership, public List.get_mem and List.mem_map. The found fact follows from reversed.lookup at the same key and reversed bucket. Rewrite its table by reverse_fromRows. The contents projection of lookup_some gives the exact symbol-filter equality.
+Use completed_admitted with inventory/formulas/solver/bits/parent/member, this exact entry symbol, the unchanged initialDomains/Valid/Room, the actual input state, packet fields, IH certificates, and the supplied fuels index/kept index/after state. Only the observed bucket control needs the contents rewrite.
+The adapter's proved full-state uniqueness transports to the SAME supplied after. Do not construct or choose a replacement chain.
+Every local have, obtain group, binder type and induction activation is listed. No extra inferred declaration, typed show, helper, induction or global predicate is authorized. Anonymous proof arguments must not introduce unreviewed local declarations.
+For entries=[], the successor type Fin 0 is empty. The all-boundaries conclusion still covers the sole Fin 1 zero boundary. Repeated rows and arbitrary iterator key order are retained by the exact lookup facts.
+The H22 language, effects, membership and length results remain in the caller's existing witness. This theorem adds only At and canonical returned-cell admission. Literal Mu nodeEdges remains the modeled empty view; physical Mu traversal and reconstruction are outside this proposal.

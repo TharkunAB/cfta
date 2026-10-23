@@ -1,0 +1,13 @@
+variable (inventory : Inventory)
+variable (formulas : SourceGuards.Formulas FullSyntax.Formula)
+variable (solver : SourceGuards.Entailment FullSyntax.Formula)
+local notation "holds" => guardHolds formulas solver
+local notation "inputs" => inventory.inputs holds
+local notation "inputView" => view inventory.source holds
+local notation "inputModel" => finiteInputMeaning inputView inputs
+local notation "inputRanked" => finiteRankedInput inputView inputs
+local notation "Stable" => SourceCurrentSameSymbolEdgeStable.Stable inputView inputModel inputRanked holds
+local notation "Current" => At formulas solver inventory
+local notation "PairInputs" => (fun pair : Edge × Edge =>
+  SourceCurrentAllocatedNativeContextCache.EdgeInputs inputView inputModel
+    (SourceRecursiveIntersectionThunks.EdgeRequest.mk IntersectionEmptyDomain.emptyDomain (Prod.fst pair) (Prod.snd pair)))

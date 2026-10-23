@@ -1,0 +1,44 @@
+import json
+import subprocess
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parents[2]
+AUDIT_SHA = '866c966deeb27dce926e5ac2476e4f132f9f211969e5db59e4851e8bf6eb6631'
+AUDIT_JOBS = int('3648')
+AUDIT_DEPENDENCIES = int('75525')
+for mode, label in [([], 'normal'), (['--live'], 'live')]:
+    result = subprocess.run(['/usr/bin/python3', str(HERE / 'verify-proofs.py'),
+        '--root', str(ROOT), *mode], cwd='/', capture_output=True, text=True)
+    (HERE / ('proof-verification-' + label + '.stdout')).write_text(result.stdout)
+    (HERE / ('proof-verification-' + label + '.stderr')).write_text(result.stderr)
+    assert result.returncode == 0, result.stderr
+    report = json.loads(result.stdout)
+    assert report['status'] == 'PASS' and report['actual_jobs'] == int('12') and report['failed_jobs'] == int('3')
+    assert report['source_jobs'] == int('9') and report['focused_build_jobs'] == int('2') and report['audit_jobs'] == int('1') and report['selected_modules'] == 3
+    assert report['audit_build_jobs'] == AUDIT_JOBS and report['audit_dependencies'] == AUDIT_DEPENDENCIES
+    assert report['audit_log_sha256'] == AUDIT_SHA
+    assert report['warned_source_exit_zero_jobs'] == int('0')
+    assert report['rejected_public_type_jobs'] == int('0')
+result = subprocess.run(['/usr/bin/python3', str(HERE / 'verify-preservation.py')],
+    cwd='/', capture_output=True, text=True)
+(HERE / 'preservation-final.stderr').write_text(result.stderr)
+assert result.returncode == 0, result.stderr
+preserved = json.loads(result.stdout)
+(HERE / 'preservation-final.json').write_text(json.dumps(preserved, indent=2) + '\n')
+assert preserved['status'] == 'PASS' and preserved['baseline_files'] == 107353
+baseline = json.loads((HERE / 'starting-files.json').read_text())
+selected = json.loads((HERE / 'selected-sources.json').read_text())
+new_modules = sum(name not in baseline for name in selected)
+assert len(selected) == 3 and new_modules == 3
+report = dict(status='PASS', actual_jobs=report['actual_jobs'], source_jobs=report['source_jobs'],
+    focused_build_jobs=report['focused_build_jobs'], audit_jobs=report['audit_jobs'], failed_jobs=report['failed_jobs'],
+    warned_source_exit_zero_jobs=report['warned_source_exit_zero_jobs'],
+    rejected_public_type_jobs=report['rejected_public_type_jobs'],
+    audit_dependencies=report['audit_dependencies'], audit_build_jobs=report['audit_build_jobs'],
+    selected_modules=len(selected), new_modules=new_modules, proof_declaration_limits_unchanged=True,
+    baseline_files=preserved['baseline_files'], archived_components=preserved['archived_components'],
+    added_haskell_archive_files=preserved['added_haskell_archive_files'],
+    both_proof_verification_modes=True, no_haskell_or_package_changes=True)
+(HERE / 'verification.json').write_text(json.dumps(report, indent=2) + '\n')
+print(json.dumps(report))

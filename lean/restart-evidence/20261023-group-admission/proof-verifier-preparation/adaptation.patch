@@ -1,0 +1,172 @@
+--- H29-V2/verify-proofs.py
++++ H30/verify-proofs.py
+@@ -1,4 +1,4 @@
+-"""Check saved cluster-admission evidence without running Lean or Lake."""
++"""Check saved group-admission evidence without running Lean or Lake."""
+ import argparse
+ import difflib
+ import hashlib
+@@ -11,7 +11,7 @@
+ parser.add_argument("--live", action="store_true")
+ args = parser.parse_args()
+ root = args.root.resolve()
+-evidence = root / "lean/restart-evidence/20261023-cluster-admission"
++evidence = root / "lean/restart-evidence/20261023-group-admission"
+ def digest(data):
+     return hashlib.sha256(data).hexdigest()
+ def read(relative):
+@@ -27,13 +27,13 @@
+ def canonical(text):
+     return re.sub(r"[ \t\r\n]+", " ", text).strip(" \t\r\n")
+ raw_data = read("bound-data.json")
+-assert digest(raw_data) == "a459946233210efb26d9366b60acdde473686e171d4d209b793985eb455efbc9"
++assert digest(raw_data) == "2f5bab0543581602061ee4b530d1ecfb1ca62d3a3228e46363d0390d3a321060"
+ assert not re.search(r"__H\d+_", raw_data.decode()), "Unbound evidence input"
+ bound = json.loads(raw_data)
+ modules = bound["modules"]
+-assert [m["key"] for m in modules] == ["execution", "boundary", "outer"]
+-assert [m["source_cap"] for m in modules] == [130, 230, 230]
+-assert [len(m["specs"]) for m in modules] == [3, 1, 2]
++assert [m["key"] for m in modules] == ["group_admission"]
++assert [m["source_cap"] for m in modules] == [180]
++assert [m["specs"] for m in modules] == [[["groups_admitted", "theorem"]]]
+ by_name = {m["name"]: m for m in modules}
+ jobs = json.loads(pinned(bound["job_history"]))
+ actual = set()
+@@ -151,20 +151,35 @@
+     assert jobs[m["strict"]]["errors"] == jobs[m["strict"]]["source_warnings"] == jobs[m["full"]]["errors"] == jobs[m["full"]]["source_warnings"] == 0
+     assert m["full"] not in rejected and source.rstrip().endswith(("end MicroCFTA." + name).encode())
+     assert any(v["module"] == name and read(path) == source for path, v in variants.items())
++    alias = json.loads(pinned(bound["source_alias"]))
++    assert alias["status"] == "EXACT_WORKING_COPY_RETAINED_BEFORE_ONCE_ONLY_MATERIALIZER"
++    assert alias["old_path"] == m["snapshot"] and alias["source_sha256"] == m["source_sha256"]
++    assert alias["frozen_variant_and_strict_source_unchanged"] and alias["mathematical_source_change"] is False
++    assert read(alias["retained_path"]) == source
+     gate = json.loads(pinned(m["selected_gate"]))
+     assert gate["status"] == "ACCEPTED_STRICT_SOURCE" and gate["source_sha256"] == m["source_sha256"]
+     assert gate["source_lines"] == m["source_lines"] and gate["source_cap"] == m["source_cap"]
+     assert gate["selected_strict"] == m["strict"] and gate["strict_log_bytes"] == 0 and gate["public_heads"] == shorts
+     assert gate["receipt_sha256"] == digest(read(m["strict"] + ".json"))
++    assert gate["module"] == name and gate["root_default_limit_check"] and gate["all_linters"]
+     assert gate["declaration_gate"] == m["declaration_gate"]["path"] and gate["body_gate"] == m["body_gate"]["path"]
+     body_gate = json.loads(pinned(m["body_gate"]))
+-    assert body_gate["source_sha256"] == m["source_sha256"]
+-    assert body_gate[m["body_review_field"]] == m["body_review"]["sha256"]
++    assert body_gate["status"] == "ACCEPTED_COMPLETE_BODY_FOR_STRICT_CHECK" and body_gate["module"] == name
++    assert body_gate["source_sha256"] == m["source_sha256"] and body_gate["source_lines"] == m["source_lines"]
++    assert body_gate["whole_source_hard_stop"] == m["source_cap"]
++    assert body_gate["exact_declaration_gate_sha256"] == m["declaration_gate"]["sha256"]
++    assert body_gate["independent_body_review_sha256"] == m["body_review"]["sha256"]
++    assert body_gate["root_complete_source_lines_read"] == m["source_lines"] and body_gate["all_ten_fragments_exact"]
++    assert body_gate["local_haves"] == 4 and body_gate["local_obtains"] == 2 and body_gate["generated_Fin_IH_reviewed"]
++    assert body_gate["default_declaration_limits"] and body_gate["all_linters"]
+     assert json.loads(pinned(m["body_review"]))["status"] == "CLEAR"
+     declaration = json.loads(pinned(m["declaration_gate"]))
+     assert declaration["status"] == "ACCEPTED_EXACT_DECLARATIONS_BEFORE_BODY" and declaration["module"] == name
+     assert declaration["public_heads"] == shorts and declaration["contracts_sha256"] == m["manifest"]["sha256"]
+     assert declaration["whole_source_hard_stop"] == m["source_cap"] and declaration["default_declaration_limits"] and declaration["all_linters"]
++    assert declaration["insertion_map_sha256"] == m["layout"]["sha256"]
++    assert declaration["root_whole_context_lines_read"] == 28 and declaration["root_whole_public_header_lines_read"] == 38
++    assert declaration["root_all_local_contracts_and_generated_IH_read"]
+     manifest = json.loads(pinned(m["manifest"]))
+     schema = json.loads(pinned(m["schema"]))
+     fragments = m["fragments"]
+@@ -176,7 +191,7 @@
+     for f in fragments:
+         raw_fragment = read(f["path"])
+         assert digest(raw_fragment) == f["sha256"] and len(raw_fragment.splitlines()) == f["lines"]
+-        assert manifest[f["file"]] == (dict(lines=f["lines"], sha256=f["sha256"]) if m["key"] == "execution" else f["sha256"])
++        assert manifest[f["file"]] == f["sha256"]
+         data[f["file"]] = raw_fragment
+     assert source.startswith(data["context.lean.txt"]) and source.count(data["context.lean.txt"]) == 1
+     bodies, positions = {}, {}
+@@ -197,7 +212,7 @@
+         if "future_body_attachment" in f:
+             fragment = fragment.rstrip(b"\n") + f["future_body_attachment"].encode()
+         scope = source if f["role"] == "public-header" else bodies[f["owner"]]
+-        if f["role"] != "public-header":
++        if f["role"] in {"local-have", "local-obtain"}:
+             scope = re.sub(rb"(?m)^([ \t]*)\xc2\xb7 ", rb"\1  ", scope)
+         assert scope.count(fragment) == 1, f["file"]
+         matched.append(scope.index(fragment) + (0 if f["role"] == "public-header" else positions[f["owner"]][1]))
+@@ -212,13 +227,16 @@
+         assert re.findall(rb"\bcases[ \t]+([^ \t:\n]+)[ \t]*:", body) == [n.encode() for n in expected["case_equations"]]
+         groups = [[n.strip().decode() for n in g.split(b",")] for g in re.findall(rb"(?s)\bobtain[ \t]+\xe2\x9f\xa8(.*?)\xe2\x9f\xa9[ \t\r\n]*:=", body)]
+         assert groups == expected["obtain_groups"] and len(re.findall(rb"\bobtain\b", body)) == len(groups)
+-        assert re.findall(rb"(?m)^\s*(induction .+? with)\s*$", body) == [n.encode() for n in expected["inductions"]]
+-        assert len(re.findall(rb"\binduction\b", body)) == len(expected["inductions"])
++        assert body.count(b"Fin.induction") == len(re.findall(rb"\binduction\b", body)) == 1
++        assert not re.search(rb"(?m)^\s*induction\b", body)
+         assert not re.search(rb"\b(?:show|suffices|haveI|letI)\b", body) and not re.search(rb"\bobtain\b(?:(?!:=).)*:(?!=)", body, re.S)
+-    assert schema["private_helpers"] == schema["global_definitions"] == schema["typed_show_fragments"] == []
++    assert schema["private_helpers"] == schema["global_definitions"] == schema["global_predicates_or_structures"] == schema["typed_show_fragments"] == []
++    assert schema["local_have_names"] == ["reversed", "included", "found", "contents"] and schema["local_let_names"] == []
++    assert schema["induction"]["eliminator"] == "Fin.induction" and schema["induction"]["generalized"] == []
++    assert schema["induction"]["new_hypothesis_or_final_certificate_premise"] is False
+     for record in m["review_only"]:
+         reviewed = pinned(record)
+-        if record["path"].endswith("ih-schema.lean.txt"):
++        if record["path"].endswith("generated-IH.lean.txt"):
+             assert reviewed not in source, "Generated IH schemas are review-only"
+     public = re.findall(r"(?m)^\s*(?:(?:noncomputable|unsafe|partial)\s+)?(def|theorem|lemma|abbrev|opaque|instance|structure|inductive)\s+([^\s(\[{:=]+)", source.decode())
+     assert public == [(kind, short) for short, kind in specs]
+@@ -328,44 +346,22 @@
+     for short in shorts:
+         metric = m["head_metrics"][short]
+         assert review["TYPEs"][short] == dict(sha256=metric["type_sha256"], bytes=metric["type_bytes"], logical_lines=metric["type_logical_lines"], actual_axioms=actual_axioms[short])
+-    if m["key"] == "execution":
+-        assert independent["source_sha256"] == m["source_sha256"] and independent["source_lines"] == m["source_lines"]
+-        assert independent["public_heads"] == [namespace + short for short in shorts]
+-        assert independent["complete_checked_TYPEs_manually_read"] == independent["printed_TYPE_byte_comparisons"] == len(specs)
+-        assert independent["all_twelve_slice_hashes_verified"] and independent["entire_raw_byte_reconstruction_verified"]
+-        assert independent["all_raw_TYPE_byte_identity"] == all(v["raw_type_byte_identity"] for v in m["head_metrics"].values())
+-        assert independent["all_lexical_TYPE_identity"] and independent["all_private_type_markers_absent"] and independent["actual_private_helpers"] == helpers
+-        assert independent["actual_axioms_by_head"] == {namespace + short: actual_axioms[short] for short in shorts}
+-        assert independent["separate_manual_printed_TYPE_read_claimed"] is independent["whole_BODY_manual_read_claimed"] is independent["reviewer_math_author"] is False
+-    else:
+-        assert independent["ownership"]["reviewer_math_author"] is False
+-        manual = independent["manual_read_scope"]
+-        if m["key"] == "boundary":
+-            assert manual["complete_checked_TYPE"] is True and independent["public_head"] == namespace + shorts[0]
+-            assert manual["logical_lines"] == m["head_metrics"][shorts[0]]["type_logical_lines"]
+-            assert manual["printed_TYPE"] == "Programmatic raw byte identity; no separate complete manual read claimed."
+-            assert manual["BODY"] == "Complete retention and raw reconstruction programmatic only; no whole manual read."
+-        else:
+-            assert manual["both_complete_checked_TYPEs"] is True and independent["public_heads"] == [namespace + short for short in shorts]
+-            assert manual["printed_TYPEs"] == "Programmatic raw byte identity; no separate full manual printed-TYPE read claimed."
+-            assert manual["BODYs"] == "Complete retention and raw reconstruction programmatic only; no whole manual BODY read."
+-        for short in shorts:
+-            metric = m["head_metrics"][short]
+-            item = independent["metrics"] if m["key"] == "boundary" else independent["metrics"][short]
+-            assert item["checked_type"] == dict(logical_lines=metric["type_logical_lines"], LF=metric["type_line_feeds"], final_LF=metric["type_final_newline"], characters=metric["type_characters"], bytes=metric["type_bytes"], sha256=metric["type_sha256"])
+-            assert item["printed_type"] == dict(bytes=metric["printed_type_bytes"], sha256=metric["printed_type_sha256"])
+-            assert item["actual_raw_byte_identity"] is metric["raw_type_byte_identity"] and item["lexical_identity"] is True
+-            assert item["canonical_sha256"] == metric["canonical_type_sha256"] and item["axioms"]["actual"] == actual_axioms[short]
+-            assert item["body"] == dict(characters=metric["body_characters"], bytes=metric["body_bytes"], sha256=metric["body_sha256"])
+-        assert review["no_future_Room_or_result_oracle"] is True
+-    if m["key"] == "outer":
+-        assert review["producer_derives_actual_completion"] is review["adapter_retains_supplied_fuel_kept_and_full_after"] is True
++    assert review["module"] == name and review["scope"] == m["scope"]
++    assert review["BODY_review"] == dict(complete_retention=True, programmatic_only=True, whole_body_manual_read_claimed=False)
++    assert independent["scope"] == "INDEPENDENT_COMPLETE_ACTUAL_PUBLIC_TYPE_AND_READBACK_REVIEW"
++    assert independent["module"] == name and independent["source_sha256"] == m["source_sha256"]
++    assert independent["source_lines"] == m["source_lines"] and independent["public_heads"] == [namespace + short for short in shorts]
++    assert independent["ownership"]["reviewer_math_author"] is False
++    manual = independent["manual_read_scope"]
++    assert manual["checked_TYPEs_complete"] == shorts and manual["printed_TYPEs_manual"] is manual["BODYs_manual"] is False
++    for short in shorts:
++        metric, item = m["head_metrics"][short], independent["metrics"][short]
++        assert item["checked_type"] == dict(logical_lines=metric["type_logical_lines"], LF=metric["type_line_feeds"], final_LF=metric["type_final_newline"], characters=metric["type_characters"], bytes=metric["type_bytes"], sha256=metric["type_sha256"])
++        assert item["printed_type"] == dict(bytes=metric["printed_type_bytes"], sha256=metric["printed_type_sha256"])
++        assert item["actual_raw_byte_identity"] is metric["raw_type_byte_identity"] and item["lexical_identity"] is True
++        assert item["canonical_sha256"] == metric["canonical_type_sha256"] and item["axioms"]["actual"] == actual_axioms[short]
++        assert item["body"] == dict(characters=metric["body_characters"], bytes=metric["body_bytes"], sha256=metric["body_sha256"])
+ assert len(full_variant_keys) == len(set(full_variant_keys)), "FULL repeated on an unchanged module variant"
+-dependency = json.loads(pinned(bound["dependency_gate"]))
+-assert dependency["status"] == "ACCEPTED_BOUNDARY_READY_FOR_OUTER_STRICT" and dependency["compiler_activation_authorized"] is True
+-assert dependency["boundary_source_sha256"] == modules[1]["source_sha256"] and dependency["outer_source_sha256"] == modules[2]["source_sha256"]
+-assert dependency["boundary_full_review_sha256"] == modules[1]["root_full"]["sha256"]
+-assert dependency["boundary_build_receipt_sha256"] == digest(read("boundary-build1.json")) and dependency["outer_body_gate_sha256"] == modules[2]["body_gate"]["sha256"]
+ assert load("original-source-index.json")["sources"] == [bound["original_audit"]]
+ original = read(bound["original_audit"]["snapshot"])
+ assert digest(original) == bound["original_audit"]["sha256"] and len(original.splitlines()) == bound["original_audit"]["lines"]

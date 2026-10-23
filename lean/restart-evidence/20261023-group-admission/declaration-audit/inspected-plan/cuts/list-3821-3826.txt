@@ -1,0 +1,6 @@
+theorem get_mem : ∀ (l : List α) n, get l n ∈ l
+  | _ :: _, ⟨0, _⟩ => .head ..
+  | _ :: l, ⟨_+1, _⟩ => .tail _ (get_mem l ..)
+
+theorem mem_iff_get {a} {l : List α} : a ∈ l ↔ ∃ n, get l n = a :=
+  ⟨get_of_mem, fun ⟨_, e⟩ => e ▸ get_mem ..⟩

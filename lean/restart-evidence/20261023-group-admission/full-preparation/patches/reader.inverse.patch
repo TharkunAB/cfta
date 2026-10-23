@@ -1,0 +1,48 @@
+--- H30/reader.py
++++ H29/reader.py
+@@ -1,4 +1,4 @@
+-"""Read complete original-row group admission public output. This script does not run Lean."""
++"""Read complete cluster admission boundary public output. This script does not run Lean."""
+ from pathlib import Path
+ import argparse
+ import hashlib
+@@ -14,9 +14,9 @@
+ source_raw, printer_raw, raw = (path.read_bytes() for path in [args.source, args.printer, args.raw])
+ source, printer, log = (item.decode("utf-8") for item in [source_raw, printer_raw, raw])
+ assert hashlib.sha256(source_raw).hexdigest() == args.expected_source_sha256
+-assert 1 <= len(source.splitlines()) <= int("180")
+-namespace = "MicroCFTA.SourceCurrentOriginalRowGroupAdmission."
+-specs = json.loads('[["groups_admitted", "theorem"]]')
++assert 1 <= len(source.splitlines()) <= int("230")
++namespace = "MicroCFTA.SourceCurrentOriginalRowClusterAdmissionBoundary."
++specs = json.loads('[["boundary_complete", "theorem"]]')
+ public = re.findall(r"(?m)^\s*(?:(?:noncomputable|unsafe|partial)\s+)?(def|theorem|lemma|abbrev|opaque|instance|structure|inductive)\s+([^\s(\[{:=]+)", source)
+ assert public == [(kind, short) for short, kind in specs]
+ options = ["maxRecDepth 30000", "maxHeartbeats 0", "linter.all true", "pp.explicit true", "pp.fullNames true", "pp.proofs true",
+@@ -24,7 +24,7 @@
+ tail = "\n" + "".join("set_option " + option + "\n" for option in options)
+ for short, _kind in specs:
+     tail += "".join(directive + namespace + short + "\n" for directive in ["#check @", "#print ", "#print axioms "])
+-assert source.rstrip().endswith("end MicroCFTA.SourceCurrentOriginalRowGroupAdmission")
++assert source.rstrip().endswith("end MicroCFTA.SourceCurrentOriginalRowClusterAdmissionBoundary")
+ assert not re.search(r"(?m)^\s*set_option\s+(?:maxRecDepth|maxHeartbeats)\b", source)
+ assert printer_raw == source_raw + tail.encode("utf-8")
+ for option in options:
+@@ -94,7 +94,7 @@
+         assert not axiom_text.strip(), short
+         axioms = set()
+     assert axioms <= allowed, (short, axioms)
+-    stem = "group-admission-" + short
++    stem = "cluster-admission-boundary-" + short
+     artifacts.update({stem + "-public-type.txt": checked, stem + "-printed-public-type.txt": declared,
+         stem + "-body.txt": body, stem + "-axioms.txt": axiom_output})
+     heads.append(dict(head=name, kind=kind, check_print_type_identity=True, check_print_type_byte_identity=byte_identity,
+@@ -116,7 +116,7 @@
+     retained_slices={filename: dict(bytes=len(text.encode("utf-8")), sha256=hashlib.sha256(text.encode("utf-8")).hexdigest())
+         for filename, text in artifacts.items()}, new_metadata_proof_jobs=0)
+ args.output_dir.mkdir(parents=True, exist_ok=True)
+-readback = args.output_dir / "group-admission-full-readback.json"
++readback = args.output_dir / "cluster-admission-boundary-full-readback.json"
+ assert not readback.exists() and all(not (args.output_dir / filename).exists() for filename in artifacts)
+ for filename, text in artifacts.items():
+     (args.output_dir / filename).write_bytes(text.encode("utf-8"))
