@@ -746,6 +746,17 @@ timeout is not taken for an undecided query; `withZ3Timeout` sets another limit.
 Z3 sees a query, so a refinement such as `predicate "between" [v, 0, 3]`
 gets an exact verdict.
 
+`Data.CFTA.Refinement.Ground.groundEntailment` decides a ground query
+without a solver process. The caller gives a Haskell function for each named
+function and predicate, for example `append` and `sorted` on lists that `nil`
+and `cons` build. The entailment checks the sorts and unfolds the defined
+predicates. Then it reads values from the equalities of the antecedent, such
+as `v == append(x, y)` and `x == cons(1, nil)`, and evaluates. A query that
+is not ground, for example a query with a quantifier, gives `Unknown`.
+`fallback ground z3` asks Z3 only for such queries; `fallback` does not catch
+`TimeLimitReached`. A `No` needs a value of each declared sort, so a named
+sort counts only when `inhabitedSorts` contains it.
+
 A refinement is a Haskell function of the refined value, as in
 `\v -> v .>= 0`. `Data.CFTA.Refinement.Expression` supplies the terms, which
 take integer literals and arithmetic, the comparisons `.==`, `./=`, `.<`,
