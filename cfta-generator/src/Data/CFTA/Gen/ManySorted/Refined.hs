@@ -24,9 +24,16 @@ refinement. The refinement generator tracks the measure of each node as a
 term of the integers of its leaves, so it counts the preconditions without
 listing the values.
 
+A value sort is an 'Interval' or a 'Pool'. The entries of a pool are leaves. An
+entry has a measure when 'projectInteger' of the codec gives an integer for its
+symbol, and then its integer is the measure. An entry without an integer has no
+measure, so a function can use it only if no measure or precondition names that
+argument. A condition on a pool sort keeps the entries whose integer satisfies
+it, and it drops the entries without an integer.
+
 Limits that come from the refinement generators: a condition and a precondition
 must be linear, and a recursive signature needs a bound on the nesting of the
-functions. A signature has no variables or pools here.
+functions. A signature has no variables here.
 -}
 module Data.CFTA.Gen.ManySorted.Refined (
     RefinedSignature (..),
@@ -58,6 +65,7 @@ import Data.CFTA.Refinement.Expression (
     Refinement,
     freeNames,
     literal,
+    refinementFormula,
     true,
     variable,
     (.&&),
@@ -93,8 +101,6 @@ data RefinedSignature sort = RefinedSignature
 data RefinedError sort
     = -- | The base signature is not valid.
       RefinedBaseError !(SignatureError sort Symbol)
-    | -- | A value sort has a pool, which has no integers.
-      RefinedPool !sort
     | -- | A condition names a sort that has no values.
       ConditionWithoutValues !sort
     | -- | An entry of the semantics names a symbol that is not a function.
@@ -132,9 +138,6 @@ instance MeasureBuilder ListMeasure where
 checkRefined :: (Ord sort) => ValueCodec sort Symbol -> RefinedSignature sort -> Either (RefinedError sort) ()
 checkRefined codec refined = do
     either (Left . RefinedBaseError) Right $ checkSignatureWith (Just codec) base
-    case [valueSort v | v@(ValueSort _ (Pool _)) <- sortedValues base] of
-        sort : _ -> Left $ RefinedPool sort
-        [] -> Right ()
     case [sort | (sort, _) <- refinedConditions refined, sort `notElem` map valueSort (sortedValues base)] of
         sort : _ -> Left $ ConditionWithoutValues sort
         [] -> Right ()
@@ -166,7 +169,6 @@ refinedGen solver codec refined = case checkRefined codec refined of
     base = refinedBase refined
     semantics = Map.fromList (refinedSemantics refined)
     conditions = Map.fromListWith (\new old v -> old v .&& new v) (refinedConditions refined)
-    intervals = Map.fromList [(valueSort v, (low, high)) | v@(ValueSort _ (Interval low high)) <- sortedValues base]
     sorts = Map.keys (Map.fromList [(sort, ()) | sort <- sortedSorts base])
 
     -- One generator for each sort and each nesting level, shared.
@@ -179,14 +181,30 @@ refinedGen solver codec refined = case checkRefined codec refined of
     functionsOf sort = [f | f <- sortedFunctions base, functionResult f == sort]
     generator = LTAGen.oneof [table LazyMap.! (refinedNesting refined, root) | root <- sortedRoots base]
 
-    values sort = case Map.lookup sort intervals of
-        Nothing -> []
-        Just (low, high) ->
+    values sort = case [valueSource v | v <- sortedValues base, valueSort v == sort] of
+        Interval low high : _ ->
             [ (\n -> Term.Node (injectInteger codec n) []) <$> (LTAGen.every @Integer `LTAGen.satisfying` bounded)
             ]
           where
-            extra = fromMaybe (const true) (Map.lookup sort conditions)
             bounded v = literal low .<= v .&& v .<= literal high .&& extra v
+        Pool symbols : _ ->
+            [ conditioned $
+                LTAGen.oneof
+                    [ LTAGen.leaf (Term.Node symbol []) symbol (poolRefinement symbol)
+                    | symbol <- symbols
+                    ]
+            ]
+        [] -> []
+      where
+        extra = fromMaybe (const true) (Map.lookup sort conditions)
+        conditioned pooled
+            | Map.member sort conditions = pooled `LTAGen.satisfying` extra
+            | otherwise = pooled
+
+    -- The refinement of a pool entry: its integer when it has one, and nothing otherwise.
+    poolRefinement symbol = case projectInteger codec symbol of
+        Just n -> \v -> v .== literal n
+        Nothing -> const true
 
     constant f =
         let symbol = functionSymbol f
@@ -257,11 +275,12 @@ refinedTypeCheck solver codec refined term = case typeCheckWith codec (refinedBa
     integerOf = projectInteger codec
 
     walk reversed depth (Term.Node symbol children)
-        | Just n <- integerOf symbol
-        , null children
+        | null children
         , Just sort <- valueSortOf codec base symbol = do
             let condition = fromMaybe (const true) (Map.lookup sort conditions)
-            verdict <- entails solver true (condition (literal n))
+                -- A value without an integer has the refinement that holds for all integers.
+                consequent = maybe (refinementFormula condition) (condition . literal) (integerOf symbol)
+            verdict <- entails solver true consequent
             pure $ case verdict of
                 Yes -> Right ()
                 No -> Left $ ConditionFailed here symbol
