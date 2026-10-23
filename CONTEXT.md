@@ -90,6 +90,12 @@ Wilf, and Feat (ranking).
   the body, with the arguments in place of the parameters. It is a solver
   lowering for a solver without predicates.
 
+- **Ground evaluation**: a decision of an entailment by computation. A
+  **ground value** is an integer, or a data constructor applied to ground
+  values. The equalities of the antecedent give names ground values, and
+  fixed interpretations give the meanings of named functions and predicates.
+  A query whose result needs a name without a value stays undecided.
+
 - **Exact transformation**: an operation on an automaton that keeps its
   language, the set of terms it accepts. Equality reduction
   (`reducePartially`), `prune`, `withoutRedundantEdges`, `refold`, and `trim`
