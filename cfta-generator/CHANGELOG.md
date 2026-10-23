@@ -4,6 +4,9 @@
 
 - Carry named predicates through child substitution and measured constructors.
   The logical result value can have a solver-defined data type.
+- `Data.CFTA.Sized.termsOfSizeFrom`: the terms of a size class from a class
+  rank on. Where the count table applies, it does not build the terms before
+  the class rank.
 
 Before release, the package was called `microcfta-generator`.
 
