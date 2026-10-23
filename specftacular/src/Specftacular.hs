@@ -21,7 +21,7 @@ import qualified Data.Map.Strict as Map
 import Data.Proxy (Proxy (..))
 import qualified Specftacular.CompiledPruning as Compile
 import qualified Specftacular.DecisionTree as DT
-import Specftacular.Pruning (prunedTerms)
+import Specftacular.Pruning (prunedPrograms, prunedTerms)
 import Specftacular.Rewriting
 import Specftacular.Types
 import Specftacular.Utils
@@ -1071,9 +1071,22 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..}
             | otherwise = []
         -- One partial application, so that the parts share the remaining templates.
         prepare = preparePruning templates
+        -- 'generalizeCarriers' does not read the annotations, so each program
+        -- is enumerated without its typings, and a typing of the partial
+        -- program prunes it (see 'prunedPrograms').
         typingsOf space =
             let (pruningRoot, oracleTemplates) = prepare (refold space)
-             in mapMaybe (generalizeCarriers skeletonSig phase_variables . npTerm') (prunedTerms oracleTemplates pruningRoot)
+             in mapMaybe
+                    (generalizeCarriersWithin typeDepth skeletonSig phase_variables . npTerm')
+                    ( prunedPrograms
+                        (startTyping monomorphic)
+                        (\n -> extendTyping typeDepth skeletonSig n . npTerm')
+                        (\typing n -> canonicalVariables (holeTypeOf typing n))
+                        (constantFits typeDepth skeletonSig)
+                        (flip typeAdmits)
+                        oracleTemplates
+                        pruningRoot
+                    )
     bucket lvl typings tc s = do
         bucketStart <- getMonotonicTimeNSec
         let bucketTemplates
