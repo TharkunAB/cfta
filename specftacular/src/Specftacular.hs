@@ -9,6 +9,7 @@ module Specftacular (
     discoverMonomorphic,
     experimentalPhases,
     SearchOptions (..),
+    TermOrder (..),
     Diagnostics (..),
     defaultOptions,
     parseOptions,
@@ -298,6 +299,8 @@ data Settings = Settings
     -}
     , dumpLaws :: Bool
     -- ^ Whether to write each law with the types of its subterms on stderr.
+    , termOrder :: TermOrder
+    -- ^ The order of the rewriting (see 'searchTermOrder').
     , completionAllocLimit :: Word64
     {- ^ The bytes that the completion of one law may allocate.
     ^ The bytes by which a bucket may grow the live heap.
@@ -431,6 +434,12 @@ data SearchOptions = SearchOptions
     -}
     , searchDumpLaws :: Bool
     -- ^ Whether to write each law with the types of its subterms on stderr.
+    , searchTermOrder :: TermOrder
+    {- ^ The order of the rewriting: 'KnuthBendix' (the default), or a
+    lexicographic path order with a precedence ('PathOrder'). The order
+    orients the laws, decides each rewrite, and chooses the term that stays
+    of each set of equal terms.
+    -}
     }
     deriving (Show)
 
@@ -467,6 +476,7 @@ defaultOptions size phase =
         , searchTypeDepth = Nothing
         , searchFunctionBuckets = False
         , searchDumpLaws = False
+        , searchTermOrder = KnuthBendix
         }
 
 {- | Read the options from the program arguments: the size, the phase,
@@ -522,6 +532,17 @@ parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.p
                         "Give a bucket to each function type between two small data types, and compare two functions on a sample of their argument type in each test case"
                 )
             <*> O.switch (O.long "dump-laws" <> O.help "Write each law with the types of its subterms on stderr")
+            <*> termOrderOption
+    termOrderOption =
+        maybe KnuthBendix (PathOrder . T.words . T.pack)
+            <$> O.optional
+                ( O.strOption
+                    ( O.long "lpo"
+                        <> O.metavar "SYMBOLS"
+                        <> O.help
+                            "Use the lexicographic path order with this precedence of the function symbols, from the lowest to the highest, separated by spaces (default: the Knuth-Bendix order)"
+                    )
+                )
     testsOption =
         O.option
             O.auto
@@ -716,6 +737,7 @@ searchPhases
         , searchTypeDepth = typeDepthSetting
         , searchFunctionBuckets = functionBucketsSetting
         , searchDumpLaws = dumpLawsSetting
+        , searchTermOrder = termOrderSetting
         }
     givenInstances
     givenSig =
@@ -785,6 +807,7 @@ searchPhases
                         , typeDepth = typeDepthSetting
                         , functionBuckets = functionBucketsSetting
                         , dumpLaws = dumpLawsSetting
+                        , termOrder = termOrderSetting
                         }
             runPhases env size (max 1 (min 4 phase)) instances sig
 
@@ -892,7 +915,7 @@ runPhases env size lastPhase instances sig =
             , trees = Map.empty
             , instance_trees = Map.empty
             , instantiated = HS.empty
-            , rewrite_rules = emptyRules
+            , rewrite_rules = emptyRules (termOrder env)
             , so_far = 0
             , law_count = 0
             , pending_laws = []
@@ -1095,11 +1118,11 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..}
                 refreshCount progress "Refolding ecta" (" for " ++ show tc) "" lvl (so_far s)
                 folded <- diagnose env lvl (show tc) "refold_whnf" s $ evaluate (refold reduced)
                 -- The oracle rejects partial branches before their remaining type
-                -- choices expand. The bucket has one program size. KBO orders its
-                -- ties before testing; smaller sizes have already supplied rules.
+                -- choices expand. The bucket has one program size. The term order
+                -- sorts its ties before testing; smaller sizes have already supplied rules.
                 let (pruningRoot, oracleTemplates) = preparePruning bucketTemplates folded
                 pure [canonicalTypes (npTerm' t) | t <- prunedTerms oracleTemplates pruningRoot]
-        let terms = sortBy (kboCompare (isGivenVar compl_sig)) (filter eligible produced)
+        let terms = sortBy (termCompare (rulesOrder (rewrite_rules s)) (isGivenVar compl_sig)) (filter eligible produced)
             -- Apply the checks that are already known before retaining the
             -- sort bucket. The search checks new rules again as it runs.
             eligible t =

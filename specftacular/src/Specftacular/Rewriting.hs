@@ -4,12 +4,16 @@
 {- | Ordered rewriting with the laws that the search found, and the prover
 that completes the rules. A law gives rules: its two sides as templates,
 in which the variables of the law are template variables. A rule
-rewrites a term only when the term gets smaller in the Knuth-Bendix
-order, as in Twee.
+rewrites a term only when the term gets smaller in the term order of the
+rules, as in Twee. The order is the Knuth-Bendix order, or a lexicographic
+path order with a precedence of the function symbols ('TermOrder').
 -}
 module Specftacular.Rewriting (
+    TermOrder (..),
     Rules,
     emptyRules,
+    rulesOrder,
+    termCompare,
     reducible,
     pruningTemplates,
     joinable,
@@ -25,7 +29,7 @@ import Data.CFTA.Symbol (Symbol (Symbol))
 import Data.CFTA.Template (Template (..))
 import Data.Containers.ListUtils (nubOrd)
 import qualified Data.HashMap.Strict as HashMap
-import Data.List (permutations, sortOn)
+import Data.List (elemIndex, permutations, sortOn)
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe, isJust, isNothing)
@@ -114,7 +118,9 @@ does not give the right side, but they show that an equation follows
 (see 'subsumed').
 -}
 data Rules = Rules
-    { oriented :: !Index
+    { rulesOrder :: !TermOrder
+    -- ^ The order that orients the rules and decides each rewrite.
+    , oriented :: !Index
     -- ^ The rules with a type-independent orientation.
     , unoriented :: !Index
     -- ^ The rules that make some instances smaller.
@@ -122,9 +128,56 @@ data Rules = Rules
     -- ^ The rules that cannot rewrite.
     }
 
--- | No rules.
-emptyRules :: Rules
-emptyRules = Rules emptyIndex emptyIndex emptyIndex
+-- | No rules, with the order of the rules to come.
+emptyRules :: TermOrder -> Rules
+emptyRules order = Rules order emptyIndex emptyIndex emptyIndex
+
+{- | The order of the rewriting.
+
+'KnuthBendix' is the Knuth-Bendix order of 'kboCompare' and 'kboGreater':
+each symbol and each application has the weight 1. It orients an equation
+towards the side with fewer symbols, so a rule never makes a term larger,
+and a term that a rule rewrites has a smaller form in the search.
+
+'PathOrder' is the lexicographic path order on the uncurried terms: the
+function symbol of the spine of an application with its arguments. The list
+gives the precedence of the function symbols from the lowest to the
+highest. A symbol that the list does not give is below each listed symbol,
+and generated variables are below all function symbols. The order can
+make a term larger, for example
+@reverse (xs ++ ys) > reverse ys ++ reverse xs@ when @reverse@ is above
+@++@. Thus a rule can rewrite a term to a form with more symbols, and the
+search can then prune a term whose smaller form is over the size bound.
+-}
+data TermOrder
+    = KnuthBendix
+    | PathOrder ![T.Text]
+    deriving (Eq, Show)
+
+{- | The total order of ground terms that decides the rewrites of the search
+and the order of the terms of a bucket. The generated variables are
+constants, below all function symbols.
+-}
+termCompare :: TermOrder -> (Symbol -> Bool) -> Term -> Term -> Ordering
+termCompare KnuthBendix isVar = kboCompare isVar
+termCompare (PathOrder precedence) isVar = lpoCompare precedence isVar
+
+-- | Whether a ground term is greater than another in the order.
+orderGreater :: TermOrder -> (Symbol -> Bool) -> Term -> Term -> Bool
+orderGreater order isVar a b = termCompare order isVar a b == GT
+
+{- | Whether a template is greater than another for each instance in which
+the ranked template variables compare as the ranking says (see
+'kboGreater').
+-}
+rankedGreater :: TermOrder -> Map Symbol Int -> Term -> Term -> Bool
+rankedGreater KnuthBendix rank = kboGreater rank
+rankedGreater (PathOrder precedence) rank = lpoGreater precedence rank
+
+-- | Whether a template is greater than another for each term and type instance.
+independentGreater :: TermOrder -> Term -> Term -> Bool
+independentGreater KnuthBendix = annotationIndependentGreater
+independentGreater (PathOrder precedence) = lpoGreater precedence Map.empty
 
 {- | Add the rules of an equation, and give the new rules too. Keep one
 orientation only when its decrease is independent of type annotations.
@@ -133,8 +186,8 @@ instantiated order.
 -}
 addEquation :: (Term, Term) -> Rules -> ([(Term, Term)], Rules)
 addEquation (l, r) rules
-    | annotationIndependentGreater l r = ([(l, r)], rules{oriented = insert (l, r) (oriented rules)})
-    | annotationIndependentGreater r l = ([(r, l)], rules{oriented = insert (r, l) (oriented rules)})
+    | independentGreater (rulesOrder rules) l r = ([(l, r)], rules{oriented = insert (l, r) (oriented rules)})
+    | independentGreater (rulesOrder rules) r l = ([(r, l)], rules{oriented = insert (r, l) (oriented rules)})
     | otherwise = ([(l, r), (r, l)], foldr addUnoriented rules [(l, r), (r, l)])
   where
     addUnoriented rule@(a, b) rs
@@ -213,7 +266,7 @@ law that the order cannot orient, such as commutativity, rewrites an
 instance only when the instance gets smaller.
 -}
 reducible :: (Symbol -> Bool) -> Rules -> Term -> Bool
-reducible isVar rules = isJust . rewriteStep (groundGreater isVar) rules
+reducible isVar rules = isJust . rewriteStep (orderGreater (rulesOrder rules) isVar) rules
 
 {- | Templates of uniformly decreasing linear rules up to the given size.
 The enumeration oracle rejects partial terms that contain these patterns.
@@ -232,7 +285,7 @@ pruningTemplates sig size rules =
         , Term "app" [_, _, _] <- [l]
         , template <- case principalType sig l of
             Just principal
-                | annotationIndependentGreater l r
+                | independentGreater (rulesOrder rules) l r
                 , rewrites l r principal ->
                     [rawTemplate (const Hole) l]
             _ ->
@@ -241,7 +294,7 @@ pruningTemplates sig size rules =
                 , rewrites l r l'
                 , Just bindings <- [matchTemplate l l' Map.empty]
                 , Just r' <- [instantiate bindings r]
-                , kboGreater Map.empty l' r'
+                , rankedGreater (rulesOrder rules) Map.empty l' r'
                 ]
         ]
   where
@@ -473,12 +526,8 @@ all values of its variables.
 joinable :: (Symbol -> Bool) -> Rules -> Term -> Term -> Bool
 joinable isVar rules a b = a' == b' || subsumed rules (a', b') || subsumed rules (b', a')
   where
-    a' = normalForm (groundGreater isVar) rules a
-    b' = normalForm (groundGreater isVar) rules b
-
--- | The ground order of 'kboCompare' as a test.
-groundGreater :: (Symbol -> Bool) -> Term -> Term -> Bool
-groundGreater isVar a b = kboCompare isVar a b == GT
+    a' = normalForm (orderGreater (rulesOrder rules) isVar) rules a
+    b' = normalForm (orderGreater (rulesOrder rules) isVar) rules b
 
 {- | Replace term and type variables with their matched instances.
 An unmatched variable cannot supply a rewrite result.
@@ -853,7 +902,7 @@ groundJoinable rules (s, t)
     vs = nubOrd (templateVarLeaves s ++ templateVarLeaves t)
     joinableUnder (merge, rank) = nf (substitute merge s) == nf (substitute merge t)
       where
-        nf = normalForm (kboGreater rank) rules
+        nf = normalForm (rankedGreater (rulesOrder rules) rank) rules
 
 {- | The total preorders of the template variables: the variables of a block
 are equal, and the blocks have the ranks of their places. Only variables
@@ -950,7 +999,7 @@ addLaw maxSize gsig (Term "(==)" [_, l, r]) rules0 =
         -- Normalize a critical pair only with decreases that hold for every
         -- type instance. Otherwise normalization can erase a general rule
         -- that its later instances still need.
-        nf = normalForm annotationIndependentGreater rules
+        nf = normalForm (independentGreater (rulesOrder rules)) rules
         (s', cache1) = cachedNormalForm nf cache s
         (t', cache2) = cachedNormalForm nf cache1 t
         (new', rules') = addEquation (canonical (s', t')) rules
@@ -976,3 +1025,90 @@ canonical (s, t) = (rename name typeName s, rename name typeName t)
     types (Term "app" [ty, f, v]) = typeVars ty ++ types f ++ types v
     types (Term _ tys) = concatMap typeVars tys
     typeVars (Term h ts) = [h | null ts, isTypeVar h] ++ concatMap typeVars ts
+
+{- | The spine of a term: its head, a symbol with its annotation, and the
+arguments of the applications, from the first.
+-}
+spine :: Term -> (Term, [Term])
+spine (Term "app" [_, f, x]) = let (h, args) = spine f in (h, args ++ [x])
+spine t = (t, [])
+
+{- | The place of a function symbol with a number of arguments in the
+precedence: the symbols of the list in their order, above the symbols that
+it does not give, which are in the order of their names. A symbol with more
+arguments is above the same symbol with fewer.
+-}
+precedenceKey :: [T.Text] -> Symbol -> Int -> (Int, T.Text, Int)
+precedenceKey precedence (Symbol name) arity = case elemIndex name precedence of
+    Just index -> (index, "", arity)
+    Nothing -> (-1, name, arity)
+
+{- | The lexicographic path order on the uncurried templates: whether the
+first is greater than the second for each term and type instance in which
+the ranked template variables compare as the ranking says.
+
+A template variable is greater only than a variable of a lower rank. A
+term is greater than a variable that it contains, or than a variable of a
+lower rank than one that it contains. Otherwise a term is greater when an
+argument of it is equal to or greater than the other term, or when it is
+greater than each argument of the other term and its head is above the
+other head in the precedence, or the heads are one symbol with the same
+arguments and its arguments are greater from the left. A term whose head is
+a template variable is greater only through an argument, or than a term with
+the same variable head and lexicographically smaller arguments. The order
+reads no type annotation, so it holds for each type instance.
+-}
+lpoGreater :: [T.Text] -> Map Symbol Int -> Term -> Term -> Bool
+lpoGreater precedence rank = greater
+  where
+    greater s t
+        | s == t = False
+        | otherwise = case (spine s, spine t) of
+            ((Term x [_], []), _)
+                | isTemplateVar x -> case spine t of
+                    (Term y [_], []) | isTemplateVar y -> above x y
+                    _ -> False
+            (_, (Term y [_], []))
+                | isTemplateVar y -> y `elem` templateVars s || any (`above` y) (templateVars s)
+            ((Term f [_], ss), (Term g [_], ts)) ->
+                any (\si -> si == t || greater si t) ss
+                    || ( not (isTemplateVar f)
+                            && not (isTemplateVar g)
+                            && precedenceKey precedence f (length ss) > precedenceKey precedence g (length ts)
+                            && all (greater s) ts
+                       )
+                    || (f == g && length ss == length ts && lexicographic ss ts && all (greater s) ts)
+            _ -> False
+    above x y = case (Map.lookup x rank, Map.lookup y rank) of
+        (Just i, Just j) -> i > j
+        _ -> False
+    lexicographic (a : as) (b : bs)
+        | a == b = lexicographic as bs
+        | otherwise = greater a b
+    lexicographic _ _ = False
+
+{- | The lexicographic path order on ground terms, total: the generated
+variables are constants below all function symbols, in the order of their
+names. Two terms that differ only in their type annotations compare by the
+annotations.
+-}
+lpoCompare :: [T.Text] -> (Symbol -> Bool) -> Term -> Term -> Ordering
+lpoCompare precedence isVar s t
+    | s == t = EQ
+    | greater s t = GT
+    | greater t s = LT
+    | otherwise = compare s t
+  where
+    key symbol@(Symbol name) arity
+        | isVar symbol = (-2 :: Int, name, arity)
+        | otherwise = precedenceKey precedence symbol arity
+    greater a b = case (spine a, spine b) of
+        ((Term f [_], as), (Term g [_], bs)) ->
+            any (\ai -> ai == b || greater ai b) as
+                || (key f (length as) > key g (length bs) && all (greater a) bs)
+                || (f == g && length as == length bs && lexicographic as bs && all (greater a) bs)
+        _ -> False
+    lexicographic (a : as) (b : bs)
+        | a == b = lexicographic as bs
+        | otherwise = greater a b
+    lexicographic _ _ = False
