@@ -27,10 +27,12 @@ A `Patch` is a list of edits and the document that the edits were prepared on.
 `applyPatch` returns `StalePatch` when the current document is a different
 document. It applies the edits in order, and checks the graph references and
 arities after the last edit. Thus an edit can refer to a state that a later
-edit in the same batch adds. The initial state does not change.
+edit in the same batch adds. Only `SetStart` changes the initial state, and
+the new initial state must have a row after the last edit.
 
 | Edit | Effect |
 | --- | --- |
+| `SetStart state` | Make the state the initial state. The last `SetStart` of a batch applies. |
 | `PutRow state transitions` | Replace or add the row of the state. |
 | `DeleteRow state` | Remove the row. The state must have a row. |
 | `PutTransition state transition` | Replace the production with the same name, or append it. |
@@ -65,6 +67,7 @@ changes =
 | `remove ref` | `DeleteTransition` on the production. |
 | `require ref fact constraint` | `SetFact` on the production. |
 | `relax ref fact` | `RemoveFact` on the production. |
+| `start state` | `SetStart`: the state becomes the initial state. |
 | `editSource edit` | Any other source edit. |
 | `without name exclusion` | Add or replace a named exclusion. |
 | `restore name` | Remove a named exclusion. The exclusion must exist. |
@@ -87,9 +90,9 @@ make the compiled graph much larger than the source.
 `other`. `diffDocument` gives the `Patch` of the source documents. The edits
 are by name where they can be: `DeleteTransition`, `PutTransition`, `SetFact`,
 and `RemoveFact`. They keep the order of the old productions of a row and
-append the new ones. A row with another order is one `PutRow`. No edit
-changes the initial state, so two versions with different initial states give
-`DifferentStart`.
+append the new ones. A row with another order is one `PutRow`. When the
+initial states differ, the first edit is `SetStart`, so `diff` and
+`diffDocument` are total.
 
 `merge3 base left right` merges two versions that come from `base`. The keys
 are the initial state, the state rows, the production names in a row, the
