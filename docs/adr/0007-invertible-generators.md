@@ -47,10 +47,18 @@ There are two routes, by how the generator is built.
   label from the integers under it in the order of the engine term, as
   `compile` fills a term. The match does not assume that the order of the term
   and the order of the engine term agree.
-- The cost of the match is the size of the term times the number of shape nodes
-  for each symbol, and it does not depend on the integer domain. A new function
-  adds no cost to a generator that does not call it. No production path changes
-  for the compiled route.
+- The work of the match does not depend on the integer domain. The match finds
+  the runs of the support whose surface is the term, and each of them is one
+  candidate for `ranksOf`. The memo computes each pair of a support state and a
+  rest of the term once, but the candidates of siblings multiply. So the number
+  of candidates, and of `ranksOf` calls, can grow with the product of the
+  groups of each symbol along the term. On 121 sampled terms of each compiled
+  generator, the candidates were at most 5 (median 1) for sums and differences of
+  integers with a nesting of 3, 1 for the state-machine traces of length 20
+  (terms of 81 nodes), and 1 for the equality-typed expressions of depth 3 (terms
+  of up to 37 nodes).
+  A new function adds no cost to a generator that does not call it. No
+  production path changes for the compiled route.
 
 ## Consequences
 
@@ -61,6 +69,8 @@ There are two routes, by how the generator is built.
   `oneof` counts it twice. Both routes give all of them.
 - A generator built with `<$>` and `<*>` has no `rankOfInvertible`. The user
   chooses the blocks. A compiled generator has `ranksOfSurface`.
+- Pruning each node by its group condition, so that the candidates do not
+  multiply, is a follow-up.
 - `ranksOfSurface` reads the support, so it works for a finite generator and
   for an import with a cycle whose cycles pass through a labelled node.
 - The names `rankOfTerm`, `rankOfInvertible`, and `ranksOfSurface` stay
