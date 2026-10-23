@@ -3,10 +3,12 @@ module Data.CFTA.Gen.Internal.Table (
     tableIndex,
     tablePosition,
     minimumSizes,
+    unambiguousRows,
 ) where
 
 import Control.Monad (zipWithM)
 import Data.Foldable (toList)
+import Data.List (tails)
 import Data.List.NonEmpty (NonEmpty)
 import qualified Data.List.NonEmpty as NonEmpty
 import qualified Data.Map.Lazy as LazyMap
@@ -161,3 +163,35 @@ minimumSizes rows = converge Map.empty
                 sizes -> Map.insertWith min state (minimum sizes) known
     transitionMinimum known transition =
         (1 +) . sum <$> traverse (`Map.lookup` known) (FTA.transitionChildren transition)
+
+{- | Whether each term has at most one run in the rows.
+
+The synchronous product accepts the common terms of each pair of states.
+Two alternatives overlap when every pair of child states is productive.
+-}
+unambiguousRows :: (Ord state, Eq symbol) => Map.Map state [FTA.Transition state symbol ()] -> Bool
+unambiguousRows rows =
+    not $
+        or
+            [ FTA.transitionSymbol left == FTA.transitionSymbol right
+                && length (FTA.transitionChildren left) == length (FTA.transitionChildren right)
+                && all (`Map.member` productive) (zip (FTA.transitionChildren left) (FTA.transitionChildren right))
+            | alternatives <- Map.elems rows
+            , left : rest <- tails alternatives
+            , right <- rest
+            ]
+  where
+    productive = minimumSizes products
+    products =
+        Map.fromList
+            [ ( (leftState, rightState)
+              , [ FTA.Transition (FTA.transitionSymbol left) (zip (FTA.transitionChildren left) (FTA.transitionChildren right)) ()
+                | left <- leftRows
+                , right <- rightRows
+                , FTA.transitionSymbol left == FTA.transitionSymbol right
+                , length (FTA.transitionChildren left) == length (FTA.transitionChildren right)
+                ]
+              )
+            | (leftState, leftRows) <- Map.toList rows
+            , (rightState, rightRows) <- Map.toList rows
+            ]

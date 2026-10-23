@@ -58,7 +58,7 @@ import Control.Monad.Except (runExceptT, throwError)
 import Control.Monad.IO.Class (liftIO)
 import Data.Containers.ListUtils (nubOrd)
 import qualified Data.IntMap.Strict as IntMap
-import Data.List (elemIndex, genericDrop, genericIndex, genericLength, sortOn, tails)
+import Data.List (elemIndex, genericDrop, genericIndex, genericLength, sortOn)
 import qualified Data.Map.Lazy as LazyMap
 import qualified Data.Map.Strict as Map
 import Data.Maybe (listToMaybe)
@@ -102,7 +102,7 @@ sized ::
     FTA.FTA state symbol Constraint -> Either SizedError (Sized symbol)
 sized automaton
     | all (all ((== noConstraint) . FTA.transitionConstraint)) (FTA.transitionTable automaton)
-    , unambiguousRows rows =
+    , Ordinary.unambiguousRows rows =
         let index = Ordinary.tableIndex initial rows
             count = countAtSize index
             unrank size (ClassRank rank)
@@ -122,38 +122,6 @@ sized automaton
     initial = FTA.initialState automaton
     rows = Map.map (map void) $ sortedRows automaton
     everyClassRank (Cardinality total) = map ClassRank [0 .. total - 1]
-
-{- | Whether each term has at most one run in the rows.
-
-The synchronous product accepts the common terms of each pair of states.
-Two alternatives overlap when every pair of child states is productive.
--}
-unambiguousRows :: (Ord state, Eq symbol) => Map.Map state [FTA.Transition state symbol ()] -> Bool
-unambiguousRows rows =
-    not $
-        or
-            [ FTA.transitionSymbol left == FTA.transitionSymbol right
-                && length (FTA.transitionChildren left) == length (FTA.transitionChildren right)
-                && all (`Map.member` productive) (zip (FTA.transitionChildren left) (FTA.transitionChildren right))
-            | alternatives <- Map.elems rows
-            , left : rest <- tails alternatives
-            , right <- rest
-            ]
-  where
-    productive = Ordinary.minimumSizes products
-    products =
-        Map.fromList
-            [ ( (leftState, rightState)
-              , [ FTA.Transition (FTA.transitionSymbol left) (zip (FTA.transitionChildren left) (FTA.transitionChildren right)) ()
-                | left <- leftRows
-                , right <- rightRows
-                , FTA.transitionSymbol left == FTA.transitionSymbol right
-                , length (FTA.transitionChildren left) == length (FTA.transitionChildren right)
-                ]
-              )
-            | (leftState, leftRows) <- Map.toList rows
-            , (rightState, rightRows) <- Map.toList rows
-            ]
 
 {- | The size classes of an automaton, each built from its definition.
 
