@@ -755,6 +755,9 @@ datatypes that have a value, so the caller writes no Haskell function.
 `Data.CFTA.Refinement.SmtLib` writes the same theory as SMT-LIB
 (`declare-datatypes`, and `define-funs-rec` with `match`), and an entailment
 as a script for a solver such as Z3. It starts no solver process.
+`Data.CFTA.Refinement.Z3Process.withZ3Theory` does: it starts one `z3` from
+`PATH`, sends the theory once, and decides each query between `push` and
+`pop`, with the verdicts and the time limit of `withZ3Timeout`.
 `predicateDefinitions` gives `withZ3Definitions` the theory predicates that
 unfold without names of the theory.
 
