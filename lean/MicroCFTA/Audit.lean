@@ -3106,6 +3106,7 @@ import MicroCFTA.SourceCurrentOriginalRowReconstruction
 import MicroCFTA.SourceCurrentSameSymbolEdgeModelTransport
 import MicroCFTA.SourceCurrentSameSymbolEdgeRequestAdmission
 import MicroCFTA.SourceCurrentSameSymbolEdgeOriginalRowsCovered
+import MicroCFTA.SourceCurrentSameSymbolEdgeHitReadback
 /-!
 # Proof dependency audit
 
