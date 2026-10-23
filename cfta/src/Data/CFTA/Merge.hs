@@ -2,9 +2,9 @@
 their stable names.
 
 'diff' gives the update that changes one language into another, and
-'diffDocument' gives the patch that changes one document into another. No
-edit changes the initial state, so two versions with different initial states
-have no difference: the result is 'DifferentStart'.
+'diffDocument' gives the patch that changes one document into another. Both
+are total: 'D.SetStart' changes the initial state, so each two versions have a
+difference.
 
 'merge3' merges two versions of a language, the left and the right, that come
 from one base. The keys of the merge are the stable names: the initial state,
@@ -54,7 +54,6 @@ module Data.CFTA.Merge (
     Versions (..),
     Conflict (..),
     MergeError (..),
-    DiffError (..),
     diff,
     diffDocument,
     merge3,
@@ -109,20 +108,15 @@ data MergeError state
       InvalidMerge !(D.DocumentError state)
     deriving (Eq, Show)
 
--- | Why no update changes one version into the other.
-data DiffError state
-    = -- | The initial states of the two versions. No edit changes the initial state.
-      DifferentStart !state !state
-    deriving (Eq, Show)
-
 {- | The update that changes the first language into the second:
 @update base (diff base other) == Right other@.
 
-The source edits come first, by state in ascending order. A state that only
-the first language has is 'D.DeleteRow', and a state that only the second has
-is 'D.PutRow'. In a state that both have, a production that only the first
-row has is 'D.DeleteTransition'. A production with another symbol or other
-child states is 'D.PutTransition', which replaces it in place, and a
+The source edits come first. When the initial states differ, the first edit
+is 'D.SetStart'. The other source edits are by state in ascending order. A
+state that only the first language has is 'D.DeleteRow', and a state that only
+the second has is 'D.PutRow'. In a state that both have, a production that only
+the first row has is 'D.DeleteTransition'. A production with another symbol or
+other child states is 'D.PutTransition', which replaces it in place, and a
 production with other facts is 'D.SetFact' and 'D.RemoveFact'. A new
 production is 'D.PutTransition', which appends it. These edits keep the order
 of the old productions and append the new ones. When the second row has
@@ -130,10 +124,8 @@ another order, the edit is one 'D.PutRow' of the second row. Then
 'L.Restore' removes each exclusion that only the first language has, and
 'L.Exclude' adds or replaces each new or other exclusion.
 -}
-diff :: (Ord state) => L.Language state -> L.Language state -> Either (DiffError state) (L.Update state)
-diff base other = do
-    sourceEdits <- edits (L.source base) (L.source other)
-    pure $ L.Update $ map L.EditSource sourceEdits <> restored <> excluded
+diff :: (Ord state) => L.Language state -> L.Language state -> L.Update state
+diff base other = L.Update $ map L.EditSource (edits (L.source base) (L.source other)) <> restored <> excluded
   where
     before = L.exclusions base
     after = L.exclusions other
@@ -143,15 +135,14 @@ diff base other = do
 {- | The patch that changes the first document into the second, with the
 source edits of 'diff': @applyPatch (diffDocument base other) base == Right other@.
 -}
-diffDocument :: (Ord state) => D.Document state -> D.Document state -> Either (DiffError state) (D.Patch state)
-diffDocument base other = D.patch base <$> edits base other
+diffDocument :: (Ord state) => D.Document state -> D.Document state -> D.Patch state
+diffDocument base other = D.patch base $ edits base other
 
 -- | The source edits of 'diff'.
-edits :: (Ord state) => D.Document state -> D.Document state -> Either (DiffError state) [D.Edit state]
-edits base other
-    | FTA.initialState before /= FTA.initialState after =
-        Left $ DifferentStart (FTA.initialState before) (FTA.initialState after)
-    | otherwise = Right $ concatMap stateEdits $ Set.toAscList $ Map.keysSet rowsBefore <> Map.keysSet rowsAfter
+edits :: (Ord state) => D.Document state -> D.Document state -> [D.Edit state]
+edits base other =
+    [D.SetStart (FTA.initialState after) | FTA.initialState before /= FTA.initialState after]
+        <> concatMap stateEdits (Set.toAscList $ Map.keysSet rowsBefore <> Map.keysSet rowsAfter)
   where
     before = D.sourceGraph base
     after = D.sourceGraph other

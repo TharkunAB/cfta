@@ -32,7 +32,7 @@ import qualified Data.CFTA.Document as D
 import Data.CFTA.Equality.Constraint (EqConstraints (EqConstraints), mkEqConstraints)
 import Data.CFTA.Language (Exclusion (..), Language (..))
 import qualified Data.CFTA.Language as L
-import Data.CFTA.Merge (Conflict (..), DiffError (..), MergeError (..), Versions (..))
+import Data.CFTA.Merge (Conflict (..), MergeError (..), Versions (..))
 import qualified Data.CFTA.Merge as Merge
 import Data.CFTA.Path (path)
 import Data.CFTA.Symbol (Symbol)
@@ -54,8 +54,8 @@ spec = describe "differences and merges" $ do
                 symmetric original left right
 
     describe "conflicts" $ do
-        it "name a changed initial state" $
-            Merge.merge3 fixture (restart "a" fixture) (restart "b" fixture)
+        it "name an initial state that the two sides change in different ways" $
+            Merge.merge3 fixture (changed fixture $ L.start "a") (changed fixture $ L.start "b")
                 `shouldBe` Left (Conflicts [StartConflict $ Versions (Just "s") (Just "a") (Just "b")])
         it "name a row that one side deletes and the other side changes" $ do
             let left = changed fixture $ L.editSource (D.DeleteRow "b")
@@ -126,22 +126,31 @@ spec = describe "differences and merges" $ do
                 right = changed fixture $ L.define (L.at "a" "w") "leaf" []
             Merge.merge3Document (source fixture) (source left) (source right)
                 `shouldBe` fmap source (Merge.merge3 fixture left right)
-        it "give the difference of two languages with other initial states as an error" $
-            Merge.diff fixture (restart "a" fixture) `shouldBe` Left (DifferentStart "s" "a")
+        it "keep the initial state that one side changes, with the changes of the other side" $ do
+            let left = changed fixture $ L.start "a"
+                right = changed fixture $ L.require (L.at "s" "p") "f" impossible
+            Merge.merge3 fixture left right
+                `shouldBe` Right (changed fixture $ L.start "a" <> L.require (L.at "s" "p") "f" impossible)
+            Merge.merge3 fixture right left
+                `shouldBe` Right (changed fixture $ L.start "a" <> L.require (L.at "s" "p") "f" impossible)
 
--- | 'diff' and 'Merge.diffDocument' give the second language from the first, or report other initial states.
+    describe "start edits" $ do
+        it "give the initial state that a document with that initial state has" $
+            changed fixture (L.start "a") `shouldBe` restart "a" fixture
+        it "are the difference of two languages with other initial states" $
+            Merge.diff fixture (restart "a" fixture) `shouldBe` L.start "a"
+
+-- | 'diff' and 'Merge.diffDocument' give the second language from the first.
 diffLaw :: Language String -> Language String -> Property
-diffLaw before after = case Merge.diff before after of
-    Left (DifferentStart old new) ->
-        tabulate "difference" ["other initial state"] $ (old, new) === (start before, start after)
-    Right changes ->
-        tabulate "difference" [kind changes] $
-            L.update before changes === Right after
-                QC..&&. (D.applyPatch <$> Merge.diffDocument (source before) (source after) <*> pure (source before))
-                    === Right (Right $ source after)
+diffLaw before after =
+    tabulate "difference" [kind changes] $
+        L.update before changes === Right after
+            QC..&&. D.applyPatch (Merge.diffDocument (source before) (source after)) (source before) === Right (source after)
   where
+    changes = Merge.diff before after
     kind (L.Update operations)
         | null operations = "none"
+        | not (null [() | L.EditSource (D.SetStart _) <- operations]) = "a new initial state"
         | or [Map.member state (rows before) | L.EditSource (D.PutRow state _) <- operations] = "a row with a new order"
         | otherwise = "edits by name"
 
@@ -193,7 +202,7 @@ fixture =
 changed :: Language String -> L.Update String -> Language String
 changed language = must . L.update language
 
--- | Give a language another initial state, which no update can do.
+-- | Give a language another initial state, with a new document of the same rows.
 restart :: String -> Language String -> Language String
 restart state language = language{source = must $ D.mkDocument state $ Map.toAscList $ rows language}
 
@@ -240,16 +249,18 @@ equal = equalityConstraint $ mkEqConstraints [[path [0], path [1]]]
 must :: (Show failure) => Either failure value -> value
 must = either (error . show) id
 
-{- | A random language: the initial state @s@, some of the states @a@ and @b@,
-rows with distinct production names in a random order, random facts, and
-random exclusions. Each symbol has one arity, so each language is valid.
+{- | A random language: the state @s@ and some of the states @a@ and @b@, one
+of them the initial state, rows with distinct production names in a random
+order, random facts, and random exclusions. Each symbol has one arity, so
+each language is valid.
 -}
 randomLanguage :: Gen (Language String)
 randomLanguage = do
     others <- sublistOf ["a", "b"]
     let present = "s" : others
+    initial <- elements present
     table <- forM present $ \state -> (state,) <$> (shuffle productionNames >>= sublistOf >>= mapM (randomProduction present))
-    Language (must $ D.mkDocument "s" table) <$> exclusionMap
+    Language (must $ D.mkDocument initial table) <$> exclusionMap
 
 -- | A random production with a name, whose children are some of the given states.
 randomProduction :: [String] -> Text -> Gen (Merge.Production String)
