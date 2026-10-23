@@ -3104,6 +3104,7 @@ import MicroCFTA.SourceCurrentOriginalRowClusterScan
 import MicroCFTA.SourceCurrentPrependGrouping
 import MicroCFTA.SourceCurrentOriginalRowReconstruction
 import MicroCFTA.SourceCurrentSameSymbolEdgeModelTransport
+import MicroCFTA.SourceCurrentSameSymbolEdgeRequestAdmission
 /-!
 # Proof dependency audit
 
