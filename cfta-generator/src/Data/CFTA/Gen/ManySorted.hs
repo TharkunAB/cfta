@@ -50,6 +50,11 @@ module Data.CFTA.Gen.ManySorted (
     TypeError (..),
     typeCheck,
     typeCheckWith,
+
+    -- * For modules that extend signatures
+    checkSignatureWith,
+    valueLeaves,
+    valueSortOf,
 ) where
 
 import qualified Data.Array as Array
@@ -182,7 +187,7 @@ automatonOf ::
     SortedSignature sort symbol ->
     Either (SignatureError sort symbol) (FTA.FTA (Maybe sort) symbol Constraint)
 automatonOf codec signature = do
-    checkSignature codec signature
+    checkSignatureWith codec signature
     let transitions =
             [ (functionResult function, FTA.Transition (functionSymbol function) (map Just (functionArguments function)) noConstraint)
             | function <- sortedFunctions signature
@@ -242,6 +247,20 @@ signatureGenWith codec signature = do
         $ Gen.fromAutomatonWithLeaves leaves
         $ Interned.fromRows (FTA.initialState automaton) (FTA.transitionTable automaton)
 
+{- | The leaf sources of the value sorts of a signature, by the symbol
+'valueSymbol' of the sort.
+-}
+valueLeaves ::
+    (Ord symbol) => ValueCodec sort symbol -> SortedSignature sort symbol -> Map.Map symbol (LeafSource symbol)
+valueLeaves codec signature =
+    Map.fromList
+        [(valueSymbol codec (valueSort value), leafSourceOf codec (valueSource value)) | value <- sortedValues signature]
+
+-- | The value sort that holds a symbol, if any.
+valueSortOf :: (Ord symbol) => ValueCodec sort symbol -> SortedSignature sort symbol -> symbol -> Maybe sort
+valueSortOf codec signature symbol =
+    valueSort <$> find (\value -> holds codec (valueSource value) symbol) (sortedValues signature)
+
 -- | The leaves of a value source, with the inverse of their ranks.
 leafSourceOf :: (Ord symbol) => ValueCodec sort symbol -> ValueSource symbol -> LeafSource symbol
 leafSourceOf codec (Interval low high) =
@@ -271,10 +290,10 @@ holds codec (Interval low high) symbol = maybe False (\n -> low <= n && n <= hig
 holds _ (Pool symbols) symbol = symbol `elem` symbols
 
 -- | Find the first unknown sort, the first duplicate symbol, or the first value problem.
-checkSignature ::
+checkSignatureWith ::
     (Ord sort, Ord symbol) =>
     Maybe (ValueCodec sort symbol) -> SortedSignature sort symbol -> Either (SignatureError sort symbol) ()
-checkSignature codec signature = do
+checkSignatureWith codec signature = do
     case find (`notElem` sortedSorts signature) used of
         Just sort -> Left $ UnknownSort sort
         Nothing -> Right ()
@@ -355,6 +374,14 @@ data TypeError sort symbol
         [Maybe sort]
     | -- | The term is well-typed at the root, but its sort is not a root sort.
       NotRootSort !sort
+    | {- | A variable has an index that no binder or input holds. The fields
+      are the path, the index, and the number of variables in scope.
+      -}
+      UnboundVariable !Path !Int !Int
+    | {- | The binders of a child would exceed the bound on the binders of
+      the signature.
+      -}
+      TooManyBinders !Path !symbol
     deriving (Eq, Show)
 
 {- | Check that a term is a term of the signature, and find its sort.
@@ -393,7 +420,7 @@ typeCheckWith ::
     Either (TypeError sort symbol) sort
 typeCheckWith codec signature = checkWith valueOf signature
   where
-    valueOf symbol = valueSort <$> find (\value -> holds codec (valueSource value) symbol) (sortedValues signature)
+    valueOf = valueSortOf codec signature
 
 checkWith ::
     (Ord sort, Ord symbol) =>
