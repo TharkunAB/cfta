@@ -2,6 +2,8 @@
 
 ## 0.1.0.0 - Unreleased
 
+- Add `printDefinitions` and `parseDefinitions`: predicate definitions in a
+  `definitions 1;` file, one statement for each predicate.
 - Retain global predicate applications and named sorts with `predicate` and
   `named` syntax. Preserve empty argument lists and escaped names.
 

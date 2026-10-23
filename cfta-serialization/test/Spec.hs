@@ -4,6 +4,7 @@
 module Main (main) where
 
 import Control.Monad (forM_)
+import Data.List (isInfixOf)
 import qualified Data.Map.Strict as Map
 import qualified Data.Set as Set
 import Data.Text (Text)
@@ -32,8 +33,10 @@ import qualified Data.CFTA.Formula as F
 import Data.CFTA.Index (ClassRank (..))
 import qualified Data.CFTA.Language as L
 import Data.CFTA.Path (path)
-import Data.CFTA.Refinement.Expression (refinementFormula, (.==), (.>))
-import Data.CFTA.Refinement.LiquidFixpoint (withZ3)
+import Data.CFTA.Refinement (Entailment (entails), Verdict (..))
+import Data.CFTA.Refinement.Definition (Definition (..), Definitions)
+import Data.CFTA.Refinement.Expression (predicate, refinementFormula, (.==), (.>))
+import Data.CFTA.Refinement.LiquidFixpoint (withZ3, withZ3Definitions)
 import Data.CFTA.Serialization.Text (StateCodec (..), TextError (..))
 import qualified Data.CFTA.Serialization.Text as T
 import qualified Data.CFTA.Sized as Sized
@@ -165,10 +168,53 @@ spec = do
                 Left (SyntaxError line _ _) -> line `shouldBe` 3
                 other -> expectationFailure $ show other
 
+    describe "predicate definitions" $ do
+        let parseDefinitions = T.parseDefinitions :: Text -> Either (TextError ()) Definitions
+
+        it "keep every definition" $
+            roundTrip T.printDefinitions parseDefinitions definitions
+
+        it "print one statement for each predicate" $
+            T.printDefinitions (Map.filterWithKey (\name _ -> name == F.Name "between") definitions)
+                `shouldBe` "definitions 1;\npredicate between [x: int, lo: int, hi: int] = and(le(var(lo), var(x)), le(var(x), var(hi)));\n"
+
+        it "reject two definitions of one name" $
+            case parseDefinitions "definitions 1;\npredicate p [] = true;\npredicate p [] = false;" of
+                Left (SyntaxError _ _ message) -> message `shouldSatisfy` ("duplicate predicate name" `isInfixOf`)
+                other -> expectationFailure $ show other
+
+        it "decide a query with Z3 after reopening" $ do
+            let reopened = must $ parseDefinitions $ T.printDefinitions definitions
+                value = F.Name $ Text.pack valueName
+            withZ3Definitions reopened [(value, F.IntSort)] [] $ \solver -> do
+                entails solver (refinementFormula (.== 2)) (refinementFormula (\v -> predicate "between" [v, 0, 3]))
+                    >>= (`shouldBe` Yes)
+                entails solver (refinementFormula (.== 12)) (refinementFormula (\v -> predicate "digit" [v])) >>= (`shouldBe` No)
+
     describe "ranks" $
         it "are the same after a round trip" $
             forM_ (filter ((/= "all-forms") . fst) graphs) $ \(_, graph) ->
                 sameRanks graph $ must $ T.parseGraph $ T.printGraph graph
+
+-- | Predicate definitions with nested predicates, a quantifier, and a named sort.
+definitions :: Definitions
+definitions =
+    Map.fromList
+        [
+            ( F.Name "between"
+            , Definition
+                [("x", F.IntSort), ("lo", F.IntSort), ("hi", F.IntSort)]
+                (F.And [F.Atom F.Le (var "lo") (var "x"), F.Atom F.Le (var "x") (var "hi")])
+            )
+        , (F.Name "digit", Definition [("d", F.IntSort)] (F.Predicate "between" [var "d", F.Lit 0, F.Lit 9]))
+        ,
+            ( F.Name "hasSuccessor"
+            , Definition [("x", F.IntSort)] (F.Exists [("y", F.IntSort)] (F.Atom F.Eq (var "y") (F.Add (var "x") (F.Lit 1))))
+            )
+        , (F.Name "anyList", Definition [("xs", F.NamedSort "List" [F.IntSort])] F.Top)
+        ]
+  where
+    var = F.Var . F.Name
 
 -- | Print and parse again: the value is the same, and so is the text.
 roundTrip ::
