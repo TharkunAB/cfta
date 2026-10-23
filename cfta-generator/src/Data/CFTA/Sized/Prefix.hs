@@ -490,8 +490,10 @@ sampleWeighted = drawCompletion chooseInteger
         pure $ length $ takeWhile (<= drawn) $ scanl1 (+) scaled
 
 {- | A completion, drawn with a function that chooses an index of a list of
-weights in proportion to the weights. 'Nothing' when the completions have the
-weight zero.
+weights. 'Nothing' when the completions have the weight zero. The draw gives
+each completion a probability in proportion to its weight when the function
+chooses the index @i@ with the probability of the weight @i@ over the sum of
+the weights, as the function of 'sampleWeighted' does.
 
 With unambiguous rows and no constraint, the draw chooses the size and the
 stack of pending states, then the size of each pending node, then the
