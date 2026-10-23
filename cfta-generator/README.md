@@ -291,6 +291,46 @@ arity, symbol, and the classes of their children; the children of a
 transition by the size of the earlier children, in ascending order; and a
 term that several transitions accept at its first place.
 
+### Language inclusion up to a size
+
+`Data.CFTA.Inclusion` checks whether one explicit `FTA` accepts every term
+of another up to a size. `inclusionUpTo n left right` gives `IncludedUpTo n`
+when the right automaton accepts each term of the left automaton with at
+most `n` nodes. Otherwise it gives `NotIncluded` with a smallest
+counterexample: a term that the left automaton accepts and the right
+automaton rejects. Of the counterexamples of that size, it gives the one with
+the smallest class rank in the left automaton, so the order of the rows does
+not change the result. For each size, the check compares the count of the
+left automaton with the count of the intersection of the two automata, with
+`Data.CFTA.Sized`. The two automata must have no constraints. A constraint
+gives `ConstrainedLeft` or `ConstrainedRight`.
+
+```haskell
+module Main (main) where
+
+import qualified Data.CFTA as FTA
+import Data.CFTA.Constraint (noConstraint)
+import Data.CFTA.Inclusion (inclusionUpTo)
+
+-- | Binary trees, and the binary trees whose left children are leaves.
+main :: IO ()
+main = do
+    trees <- either (fail . show) pure $ FTA.mkFTA "tree" [("tree", [leaf, node "tree" "tree"])]
+    combs <- either (fail . show) pure $ FTA.mkFTA "comb" [("comb", [leaf, node "leaf" "comb"]), ("leaf", [leaf])]
+    print (inclusionUpTo 9 combs trees)
+    print (inclusionUpTo 9 trees combs)
+  where
+    leaf = FTA.Transition "leaf" [] noConstraint
+    node left right = FTA.Transition "node" [left, right] noConstraint
+```
+
+The output is:
+
+```text
+Right (IncludedUpTo 9)
+Right (NotIncluded (Node "node" [Node "node" [Node "leaf" [],Node "leaf" []],Node "leaf" []]))
+```
+
 ## Equality-constrained generators
 
 An equality generator is a `Gen Symbol`, with the name `ECTAGen`. Each
