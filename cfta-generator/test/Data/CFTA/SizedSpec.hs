@@ -89,6 +89,10 @@ exactClasses (SizedAutomaton description) =
                         | (rank, found') <- zip [0 ..] found
                         ]
                     .&&. unrankOfSize classes (Size size) (ClassRank $ toInteger $ length found) === Nothing
+                    .&&. QC.conjoin
+                        [ termsOfSizeFrom classes (Size size) (ClassRank $ toInteger from) === drop from found
+                        | from <- [-1 .. length found + 1]
+                        ]
             | size <- [1 .. sizeBound]
             , let found = termsOfSize classes (Size size)
             , let expected = filter (FTA.accepts graph) (allTerms size)
