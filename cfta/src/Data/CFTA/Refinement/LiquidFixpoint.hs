@@ -1,12 +1,14 @@
 {- | A Z3-backed 'Entailment' implemented with Liquid Fixpoint's SMT API.
 
 The entailment translates supported formulas to Liquid Fixpoint expressions.
-Named sorts and global predicates give 'Unknown'. A name is an integer unless
-a declaration gives it another 'Sort'.
+Named sorts and global predicates give 'Unknown'. 'withZ3Definitions' unfolds
+defined predicates first. A name is an integer unless a declaration gives it
+another 'Sort'.
 -}
 module Data.CFTA.Refinement.LiquidFixpoint (
     withZ3,
     withZ3Assuming,
+    withZ3Definitions,
     withZ3Timeout,
     defaultTimeLimit,
     TimeLimitReached (..),
@@ -24,7 +26,8 @@ import qualified Data.Text as Text
 import GHC.Clock (getMonotonicTime)
 
 import Data.CFTA.Formula (Formula (..), Name (..), Relation (..), Sort (..), Term (..))
-import Data.CFTA.Refinement (Entailment, Verdict (..), entailmentWithBindings)
+import Data.CFTA.Refinement (Entailment, Verdict (..), entailmentWithBindings, entailsWithBindings)
+import Data.CFTA.Refinement.Definition (Definitions, unfold)
 import Data.CFTA.Symbol (valueName)
 import qualified Language.Fixpoint.Smt.Interface as SMT
 import qualified Language.Fixpoint.Smt.Types as SMTTypes
@@ -59,6 +62,31 @@ withZ3Assuming ::
     (Entailment -> IO a) ->
     IO a
 withZ3Assuming = withZ3Timeout defaultTimeLimit
+
+{- | 'withZ3Assuming' for formulas with defined predicates.
+
+'Data.CFTA.Refinement.Definition.unfold' replaces each defined predicate in
+the assumptions and in each query by its body, and Z3 decides the result. The
+unfolding is exact, so a verdict of Z3 is a verdict on the original query. An
+assumption that does not unfold makes every query 'Unknown'. A query that
+does not unfold gives 'Unknown'. A fresh value name of a binding has the sort
+of the name that it stands for.
+-}
+withZ3Definitions ::
+    Definitions ->
+    [(Name, Sort)] ->
+    [Formula] ->
+    (Entailment -> IO a) ->
+    IO a
+withZ3Definitions definitions declarations assumptions action =
+    case traverse (unfold definitions declarations) assumptions of
+        Left _ -> action $ entailmentWithBindings $ \_ _ _ -> pure Unknown
+        Right unfolded -> withZ3Assuming declarations unfolded $ \z3 ->
+            action $ entailmentWithBindings $ \bindings antecedent consequent ->
+                let scope = [(fresh, fromMaybe IntSort $ lookup original declarations) | (fresh, original) <- bindings] <> declarations
+                 in case (unfold definitions scope antecedent, unfold definitions scope consequent) of
+                        (Right premise, Right conclusion) -> entailsWithBindings z3 bindings premise conclusion
+                        _ -> pure Unknown
 
 -- | The time limit of each query of 'withZ3' and 'withZ3Assuming': ten seconds.
 defaultTimeLimit :: Int

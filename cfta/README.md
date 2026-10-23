@@ -741,6 +741,10 @@ every free name as an integer unless the caller gives the name another sort.
 Each query has a time limit of ten seconds
 (`defaultTimeLimit`). A query that reaches it raises `TimeLimitReached`, so a
 timeout is not taken for an undecided query; `withZ3Timeout` sets another limit.
+`withZ3Definitions` takes predicate definitions in the formula language
+(`Data.CFTA.Refinement.Definition`). It unfolds each defined predicate before
+Z3 sees a query, so a refinement such as `predicate "between" [v, 0, 3]`
+gets an exact verdict.
 
 A refinement is a Haskell function of the refined value, as in
 `\v -> v .>= 0`. `Data.CFTA.Refinement.Expression` supplies the terms, which
