@@ -8,6 +8,11 @@ module Specftacular (
     ftacularSpec,
     discoverMonomorphic,
     experimentalPhases,
+    SearchOptions (..),
+    TermOrder (..),
+    Diagnostics (..),
+    defaultOptions,
+    parseOptions,
     searchPhases,
 ) where
 
@@ -15,34 +20,77 @@ import qualified Data.Bifunctor as Bi
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
 import Data.Proxy (Proxy (..))
+import qualified Specftacular.CompiledPruning as Compile
 import qualified Specftacular.DecisionTree as DT
+import Specftacular.Pruning (prunedPrograms, prunedTerms)
 import Specftacular.Rewriting
 import Specftacular.Types
 import Specftacular.Utils
 
-import Control.Monad (when)
+import Control.Concurrent (
+    forkIO,
+    forkIOWithUnmask,
+    forkOn,
+    getNumCapabilities,
+    killThread,
+    myThreadId,
+    threadDelay,
+    throwTo,
+ )
+import Control.Concurrent.MVar (newEmptyMVar, putMVar, readMVar, takeMVar)
+import Control.Exception (
+    AllocationLimitExceeded (..),
+    Exception (..),
+    SomeException,
+    asyncExceptionFromException,
+    asyncExceptionToException,
+    bracket,
+    evaluate,
+    finally,
+    handleJust,
+    mask,
+    onException,
+    throwIO,
+    try,
+    uninterruptibleMask_,
+ )
+import Control.Monad (foldM, unless, void, when)
 import Data.CFTA.Equality (
     Edge (Edge),
     Node (Node),
     fixWithin,
     reducePartially,
     refold,
-    runsInterned,
     union,
     withoutRedundantEdges,
  )
 import Data.CFTA.Symbol (Symbol (Symbol))
+import Data.CFTA.Template (Template (..))
 import Data.Char (isAlphaNum)
+import Data.IORef (IORef, atomicModifyIORef', modifyIORef', newIORef, readIORef, writeIORef)
+import Data.Int (Int64)
 import Data.List hiding (union)
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromMaybe, isJust, mapMaybe, maybeToList)
 import qualified Data.Text as T
+import Data.Unique (Unique, newUnique)
+import Data.Word (Word64)
+import GHC.Clock (getMonotonicTimeNSec)
+import GHC.Conc (disableAllocationLimit, enableAllocationLimit, getAllocationCounter, setAllocationCounter)
+import GHC.Stats (
+    GCDetails (gcdetails_live_bytes),
+    RTSStats (allocated_bytes, gc, gc_cpu_ns, gcs),
+    getRTSStats,
+    getRTSStatsEnabled,
+ )
+import qualified Options.Applicative as O
+import System.CPUTime (getCPUTime)
 import qualified System.Environment as Env
+import System.Timeout (timeout)
 import qualified Text.Read as TR
 
 import Data.Containers.ListUtils (nubOrd)
-import Data.Function (on)
 import qualified Data.HashSet as HS
-import System.IO (hFlush, hPutStr, hPutStrLn, stderr)
+import System.IO (BufferMode (LineBuffering), hFlush, hPutStr, hPutStrLn, hSetBuffering, stderr)
 
 data StEcta = StEcta
     { any_arg :: Node Symbol
@@ -51,16 +99,24 @@ data StEcta = StEcta
     , sig_ty_cons :: [TypeSkeleton]
     , compl_sig :: Sig
     , given_sig :: Sig
+    , phase_variables :: Map TypeSkeleton Symbol
+    -- ^ The generated variable of each type of the phase.
     , inst_sig :: Sig
     {- ^ The complete signature with more variables of each
     type, for the instances of the schemas.
+    -}
+    , function_samples :: Map TypeSkeleton T.Text
+    {- ^ With function buckets, the sample variable of each function type
+    (see 'sigGivens'). The sample variables are in 'inst_sig'.
     -}
     , schema_vars :: Map Symbol [Symbol]
     {- ^ The variables of each type, from the variable with
     the index 0 of the type.
     -}
-    , test_cases :: [VarVals]
-    -- ^ The test cases that all terms of the phase share.
+    , test_cases :: [Case]
+    -- ^ The test cases that all terms of the phase share, with the values of the variables.
+    , recheck_cases :: [Case]
+    -- ^ The extra test cases of a new law (see 'recheckSchedule').
     }
     deriving (Show)
 
@@ -117,28 +173,23 @@ schemaInstances isVar vars t =
   where
     generality ivs = (negate (length (nubOrd (map snd ivs))), map fst ivs)
 
-{- | A law with canonical names, as QuickSpec prints a law: the variables of
-each type get the indexes 0, 1, and so on, in the order of their first
-occurrence from left to right. The second argument gives the variables of
-each type, from the variable with the index 0.
+{- | Give the variables of each type indexes in first-occurrence order.
+Only the printed names change. Evaluation uses the original signature.
 -}
-canonicalLaw :: Map Symbol [Symbol] -> Term -> Term
-canonicalLaw vars law = rename law
+canonicalLaw :: Sig -> Term -> Term
+canonicalLaw sig law = rename law
   where
-    family = Map.fromList [(v, x) | (x, vs) <- Map.assocs vars, v <- vs]
-    occurrences (Term s ts) = [s | s `Map.member` family] ++ concatMap occurrences ts
+    variables =
+        Map.fromList
+            [(Symbol name, (ty, info)) | (name, GivenFun info@GivenVar{} ty) <- Map.assocs sig]
+    occurrences (Term symbol children) = [symbol | symbol `Map.member` variables] ++ concatMap occurrences children
     names = Map.fromList (snd (mapAccumL next Map.empty (nubOrd (occurrences law))))
-    next counts v =
-        let f = family Map.! v
-            n = Map.findWithDefault 0 f counts
-         in (Map.insert f (n + 1) counts, (v, (vars Map.! f) !! n))
-    rename (Term s ts) = Term (Map.findWithDefault s s names) (map rename ts)
-
-typeSkeletonToTerm :: TypeSkeleton -> Term
-typeSkeletonToTerm (TCons s args) =
-    Term (Symbol s) $ map typeSkeletonToTerm args
-typeSkeletonToTerm (TFun f v) =
-    Term "->" [Term "(->)" [], typeSkeletonToTerm f, typeSkeletonToTerm v]
+    next counts symbol =
+        let (ty, GivenVar prefix label _ gen) = variables Map.! symbol
+            index = Map.findWithDefault 0 ty counts
+            name = Symbol (gvToName (GivenVar prefix label index gen))
+         in (Map.insert ty (index + 1) counts, (symbol, name))
+    rename (Term symbol children) = Term (Map.findWithDefault symbol symbol names) (map rename children)
 
 termSize :: Term -> Int
 termSize (Term s []) = 1
@@ -151,6 +202,17 @@ termSize (Term s args) = 1 + sum (map termSize args)
 -- for all things of that type! i.e. if x == x ++ [],
 -- then we can rewrite all instances of (_ :: [A] ++ []) to (_::[A])
 -- best would probably be to apply this in the node.
+
+{- | Whether a pruning template leaves each type annotation open. Such a
+template comes from a rule that rewrites each typing of a program, so it can
+prune a skeleton before its typing is known.
+-}
+annotationFree :: Template Symbol -> Bool
+annotationFree template = case template of
+    Hole -> True
+    TemplateNode "app" [Hole, _, f, x] -> annotationFree f && annotationFree x
+    TemplateNode _ [Hole] -> True
+    _ -> False
 
 -- | Whether a symbol is a generated variable of the signature.
 isGivenVar :: Sig -> Symbol -> Bool
@@ -174,6 +236,12 @@ data Search = Search
     -- ^ The number of terms that the search examined.
     , law_count :: !Int
     -- ^ The number of laws that the search found.
+    , pending_laws :: ![(Term, Term, Sig, Term)]
+    {- ^ With 'deferLaws', the laws of a bucket, newest first: the two terms
+    of the test, and the signature and the law that 'generalizeLaw' gives.
+    -}
+    , touched_reps :: !(HS.HashSet Term)
+    -- ^ The representatives whose instance trees a bucket changed.
     }
 
 -- | The settings of the search, which do not change.
@@ -184,7 +252,433 @@ data Settings = Settings
     -- ^ The number of test cases that the terms of a phase share.
     , maxSize :: Int
     -- ^ The largest size of the terms of the search.
+    , diagnostics :: Bool
+    -- ^ Whether to emit flushed timing events on stderr.
+    , detailedDiagnostics :: Bool
+    -- ^ Whether to include stages inside each bucket.
+    , resolveInstance :: TypeSkeleton -> Maybe Instance
+    -- ^ Resolve exact generators and equality for law generalization.
+    , diagnosticPhase :: Int
+    -- ^ The phase that is running, rather than the requested last phase.
+    , stopAfter :: Maybe (Int, Int)
+    , onlyBucket :: Maybe String
+    {- ^ With 'stopAfter', the only bucket of the last size, by the 'show' of
+    its type; each of its schemas prints its time and its term (spike).
+    -}
+    , -- \^ The phase and the size after which the search stops, for a profile
+      --    of a part of a long run.
+      --
+      splitEnumeration :: Maybe Int
+    , skeletonTemplates :: Bool
+    -- ^ Whether the templates of the rules prune the skeletons (spike).
+    , parallelBuckets :: Bool
+    {- ^ Whether the buckets of a size run in parallel from the state at the
+    start of the size (spike).
+    -}
+    , enumerateAhead :: Bool
+    {- ^ Whether phase 4 enumerates the skeletons of all the types of a size
+    in background threads at the start of the size, while the buckets test
+    in order (spike).
+    -}
+    , bucketTimeout :: Maybe Double
+    -- ^ The seconds after which a bucket stops testing its schemas.
+    , bucketMemLimit :: Maybe Word64
+    , completionTimeout :: Maybe Double
+    -- ^ The seconds that the completion of one law may take.
+    , completionMemLimit :: Word64
+    -- ^ The bytes by which the completion of one law may grow the live heap.
+    , recheckCount :: Int
+    -- ^ The number of extra test cases of a new law (see 'recheckSchedule').
+    , typeDepth :: Maybe Int
+    {- ^ The largest depth of the type of a type variable of the grammar (see
+    'mtauWithin'). 'Nothing' is no limit.
+    -}
+    , functionBuckets :: Bool
+    {- ^ Whether each function type between two small data types of the
+    signature gets a bucket (see 'sigGivens').
+    -}
+    , dumpLaws :: Bool
+    -- ^ Whether to write each law with the types of its subterms on stderr.
+    , termOrder :: TermOrder
+    -- ^ The order of the rewriting (see 'searchTermOrder').
+    , completionAllocLimit :: Word64
+    {- ^ The bytes that the completion of one law may allocate.
+    ^ The bytes by which a bucket may grow the live heap.
+    -}
+    , lawSink :: IORef [(Term, Term, Sig, Term)]
+    {- ^ With 'deferLaws', the laws of the schema that runs, newest first, so
+    that a schema that runs out of time keeps the laws that it found.
+    -}
+    , deferLaws :: Bool
+    {- ^ Whether a bucket records its laws in 'pending_laws' instead of
+    printing them.
+    -}
     }
+
+-- \^ Whether to enumerate the skeletons of a bucket in one thread for each
+--    shape of the left spine (spike).
+--
+
+{- | Emit one versioned TSV event. Allocation and GC counters are RTS
+samples. This function does not force a collection or inspect test values.
+-}
+diagnosticEvent :: Settings -> String -> Int -> String -> String -> Search -> IO ()
+diagnosticEvent Settings{diagnostics = False} _ _ _ _ _ = return ()
+diagnosticEvent Settings{..} event level ty stage s = do
+    wall <- getMonotonicTimeNSec
+    cpu <- getCPUTime
+    enabled <- getRTSStatsEnabled
+    stats <- if enabled then Just <$> getRTSStats else return Nothing
+    hPutStrLn stderr $
+        intercalate
+            "\t"
+            [ "specftacular-diagnostic"
+            , "1"
+            , event
+            , show diagnosticPhase
+            , show level
+            , stage
+            , ty
+            , show wall
+            , show cpu
+            , if event == "begin" || event == "checkpoint" then show (so_far s) else ""
+            , if event == "begin" || event == "checkpoint" then show (law_count s) else ""
+            , maybe "" (show . allocated_bytes) stats
+            , maybe "" (show . gc_cpu_ns) stats
+            , maybe "" (show . gcs) stats
+            ]
+    hFlush stderr
+
+{- | Measure demanded IO work. An abort event preserves the active stage
+when cancellation propagates. Nested intervals include their children.
+-}
+diagnose :: Settings -> Int -> String -> String -> Search -> IO a -> IO a
+diagnose env@Settings{..} level ty stage s action
+    | not diagnostics || not detailedDiagnostics && stage `notElem` ["phase", "bucket"] = action
+    | otherwise = mask $ \restore -> do
+        diagnosticEvent env "begin" level ty stage s
+        result <- restore action `onException` diagnosticEvent env "abort" level ty stage s
+        diagnosticEvent env "end" level ty stage s
+        return result
+
+-- | The options of a search.
+data SearchOptions = SearchOptions
+    { searchSize :: Int
+    -- ^ The largest size of the terms.
+    , searchPhase :: Int
+    -- ^ The last phase, from 1 to 4.
+    , searchParallel :: Bool
+    -- ^ Whether the buckets of a size run in parallel. This needs @+RTS -N@.
+    , searchEnumerateAhead :: Bool
+    {- ^ Whether phase 4 enumerates the skeletons of the types of a size in
+    background threads, while the buckets test in order. This needs
+    @+RTS -N@.
+    -}
+    , searchSplit :: Maybe Int
+    {- ^ The number of levels of applications by which all phases split the
+    enumeration into parts of one shape (0: no split). With 'Nothing', phase
+    4 with 'searchEnumerateAhead' splits the skeletons of size k down to k - 1
+    levels, so that each part has one shape, and the other phases and phase 4
+    without it split down to 2 levels.
+    -}
+    , searchBucketTimeout :: Maybe Double
+    {- ^ The seconds after which a bucket stops testing its schemas. The
+    search reports the bucket and goes on with the next one.
+    -}
+    , searchBucketMemLimit :: Maybe Word64
+    {- ^ The bytes by which a bucket may grow the live heap. Over them, the
+    bucket stops testing its schemas, as after 'searchBucketTimeout'.
+    -}
+    , searchCompletionTimeout :: Maybe Double
+    {- ^ The seconds that the completion of one law may take. Over them, the
+    law keeps only its own rules (see 'boundedCompletion').
+    -}
+    , searchCompletionMemLimit :: Word64
+    -- ^ The bytes by which the completion of one law may grow the live heap.
+    , searchCompletionAllocLimit :: Word64
+    -- ^ The bytes that the completion of one law may allocate.
+    , searchRecheck :: Int
+    {- ^ The number of extra test cases of small sizes on which a new law is
+    tested again (0: no test). The search drops a law that one of them
+    refutes. At HugeLists 6-p4, 2000 of them refute the 4 false laws that
+    pass the cases of 'testSchedule'.
+    -}
+    , searchTests :: Int
+    -- ^ The number of random test cases (1000, as in QuickSpec).
+    , searchChecked :: Bool
+    {- ^ Whether the values keep their types, so that each application tests
+    them (see 'Value').
+    -}
+    , searchProgress :: Bool
+    -- ^ Whether to show the progress of the search on stderr.
+    , searchDiagnostics :: Maybe Diagnostics
+    -- ^ The diagnostic events on stderr, if any (see 'diagnosticEvent').
+    , searchSkeletonTemplates :: Bool
+    -- ^ Whether the templates of the rules prune the phase 4 skeletons.
+    , searchStopAfter :: Maybe (Int, Int)
+    {- ^ The phase and the size after which the search stops, so that a
+    profile of the run is written.
+    -}
+    , searchOnlyBucket :: Maybe String
+    {- ^ With 'searchStopAfter', the only bucket of the last size, by the
+    'show' of its type. Each of its schemas prints its time and its term.
+    -}
+    , searchTypeDepth :: Maybe Int
+    {- ^ The largest depth of the type of a type variable of the grammar.
+    'Nothing' is no limit.
+    -}
+    , searchFunctionBuckets :: Bool
+    {- ^ Whether each function type between two small data types of the
+    signature gets a bucket. Each test case applies two functions to a
+    sample of their argument type and compares the results.
+    -}
+    , searchDumpLaws :: Bool
+    -- ^ Whether to write each law with the types of its subterms on stderr.
+    , searchTermOrder :: TermOrder
+    {- ^ The order of the rewriting: 'KnuthBendix' (the default), or a
+    lexicographic path order with a precedence ('PathOrder'). The order
+    orients the laws, decides each rewrite, and chooses the term that stays
+    of each set of equal terms.
+    -}
+    }
+    deriving (Show)
+
+-- | The diagnostic events that a search writes on stderr, as versioned TSV.
+data Diagnostics
+    = -- | The phases and the buckets.
+      PhaseDiagnostics
+    | -- | The stages inside each bucket too.
+      DetailedDiagnostics
+    deriving (Eq, Show)
+
+-- | A sequential search with terms up to a size and the phases up to a phase.
+defaultOptions :: Int -> Int -> SearchOptions
+defaultOptions size phase =
+    SearchOptions
+        { searchSize = size
+        , searchPhase = phase
+        , searchParallel = False
+        , searchEnumerateAhead = False
+        , searchSplit = Nothing
+        , searchBucketTimeout = Nothing
+        , searchBucketMemLimit = Nothing
+        , searchCompletionTimeout = Nothing
+        , searchCompletionMemLimit = completionMemoryLimit
+        , searchCompletionAllocLimit = completionBudget
+        , searchRecheck = 0
+        , searchTests = 1000
+        , searchChecked = False
+        , searchProgress = False
+        , searchDiagnostics = Nothing
+        , searchSkeletonTemplates = True
+        , searchStopAfter = Nothing
+        , searchOnlyBucket = Nothing
+        , searchTypeDepth = Nothing
+        , searchFunctionBuckets = False
+        , searchDumpLaws = False
+        , searchTermOrder = KnuthBendix
+        }
+
+{- | Read the options from the program arguments: the size, the phase,
+@--parallel@, @--enumerate-ahead@, @--split DEPTH@, the limits of a bucket
+(@--bucket-timeout SECONDS@, @--bucket-mem-limit SIZE@), and the limits of the
+completion of one law (@--completion-timeout SECONDS@,
+@--completion-mem-limit SIZE@, @--completion-alloc-limit SIZE@). The split
+follows the size, unless @--split@ gives it.
+-}
+parseOptions :: IO SearchOptions
+parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.progDesc "Find the laws of a signature."))
+  where
+    -- The parsers are in the order of the fields of 'SearchOptions'.
+    options =
+        SearchOptions
+            <$> size
+            <*> phase
+            <*> parallel
+            <*> ahead
+            <*> split
+            <*> O.optional bucketTimeout
+            <*> O.optional bucketMemLimit
+            <*> O.optional completionTimeoutOption
+            <*> completionMemLimitOption
+            <*> completionAllocLimitOption
+            <*> recheckOption
+            <*> testsOption
+            <*> O.switch (O.long "checked" <> O.help "Keep the types of the values, and test them at each application")
+            <*> O.switch (O.long "progress" <> O.help "Show the progress of the search on stderr")
+            <*> O.optional diagnosticsOption
+            <*> ( not
+                    <$> O.switch (O.long "no-skeleton-templates" <> O.help "Enumerate the phase 4 skeletons without the templates of the rules")
+                )
+            <*> O.optional stopAfterOption
+            <*> O.optional
+                ( O.strOption
+                    ( O.long "only-bucket"
+                        <> O.metavar "TYPE"
+                        <> O.help "With --stop-after, run only this bucket at the last size, and time each of its schemas"
+                    )
+                )
+            <*> O.optional
+                ( O.option
+                    O.auto
+                    ( O.long "type-depth"
+                        <> O.metavar "D"
+                        <> O.help "Bound the types that the type variables of the grammar take to depth D"
+                    )
+                )
+            <*> O.switch
+                ( O.long "function-buckets"
+                    <> O.help
+                        "Give a bucket to each function type between two small data types, and compare two functions on a sample of their argument type in each test case"
+                )
+            <*> O.switch (O.long "dump-laws" <> O.help "Write each law with the types of its subterms on stderr")
+            <*> termOrderOption
+    termOrderOption =
+        maybe KnuthBendix (PathOrder . T.words . T.pack)
+            <$> O.optional
+                ( O.strOption
+                    ( O.long "lpo"
+                        <> O.metavar "SYMBOLS"
+                        <> O.help
+                            "Use the lexicographic path order with this precedence of the function symbols, from the lowest to the highest, separated by spaces (default: the Knuth-Bendix order)"
+                    )
+                )
+    testsOption =
+        O.option
+            O.auto
+            ( O.long "tests"
+                <> O.metavar "N"
+                <> O.value 1000
+                <> O.help "The number of random test cases (default 1000, as in QuickSpec)"
+            )
+    diagnosticsOption =
+        O.option
+            (O.maybeReader (`lookup` [("phases", PhaseDiagnostics), ("detailed", DetailedDiagnostics)]))
+            ( O.long "diagnostics"
+                <> O.metavar "phases|detailed"
+                <> O.help "Write the events of the phases and the buckets, or also of the stages inside each bucket, on stderr"
+            )
+    stopAfterOption =
+        O.option
+            (O.maybeReader parseStop)
+            (O.long "stop-after" <> O.metavar "PHASE:SIZE" <> O.help "Stop the search after this size of this phase")
+    size = O.argument O.auto (O.metavar "SIZE" <> O.help "The largest size of the terms")
+    phase = O.argument O.auto (O.metavar "PHASE" <> O.help "The last phase, from 1 to 4")
+    parallel =
+        O.switch
+            ( O.long "parallel"
+                <> O.help "Run the buckets of a size in parallel, and enumerate the phase 4 skeletons in parallel parts (needs +RTS -N)"
+            )
+    ahead =
+        O.switch
+            ( O.long "enumerate-ahead"
+                <> O.help
+                    "Enumerate the phase 4 skeletons of all the types of a size in background threads, and test the buckets in order (needs +RTS -N)"
+            )
+    split =
+        O.optional $
+            O.option
+                O.auto
+                ( O.long "split"
+                    <> O.metavar "DEPTH"
+                    <> O.help
+                        "Split the enumeration of all phases by shape down to DEPTH levels of applications (0 does not split). By default, phase 4 with --enumerate-ahead gives each shape of a size its own part, and the other phases split down to 2 levels"
+                )
+    bucketTimeout =
+        O.option
+            O.auto
+            ( O.long "bucket-timeout"
+                <> O.metavar "SECONDS"
+                <> O.help
+                    "Stop testing the schemas of a bucket after SECONDS, report the bucket, and go on (the laws then depend on the speed of the machine)"
+            )
+    bucketMemLimit =
+        O.option
+            (O.maybeReader parseBytes)
+            ( O.long "bucket-mem-limit"
+                <> O.metavar "SIZE"
+                <> O.help
+                    "Stop testing the schemas of a bucket when it grows the live heap by more than SIZE (such as 512M or 4G), report the bucket, and go on (needs RTS statistics, +RTS -T; the laws then depend on the times of the collections)"
+            )
+    completionTimeoutOption =
+        O.option
+            O.auto
+            ( O.long "completion-timeout"
+                <> O.metavar "SECONDS"
+                <> O.help
+                    "Keep only the rules of a law whose completion takes more than SECONDS (no limit by default; the laws then depend on the speed of the machine)"
+            )
+    completionMemLimitOption =
+        O.option
+            (O.maybeReader parseBytes)
+            ( O.long "completion-mem-limit"
+                <> O.metavar "SIZE"
+                <> O.value completionMemoryLimit
+                <> O.help
+                    "Keep only the rules of a law whose completion grows the live heap by more than SIZE (default 4G; needs RTS statistics, +RTS -T; the laws then depend on the times of the collections)"
+            )
+    completionAllocLimitOption =
+        O.option
+            (O.maybeReader parseBytes)
+            ( O.long "completion-alloc-limit"
+                <> O.metavar "SIZE"
+                <> O.value completionBudget
+                <> O.help "Keep only the rules of a law whose completion allocates more than SIZE (default 256G)"
+            )
+    recheckOption =
+        O.option
+            O.auto
+            ( O.long "recheck"
+                <> O.metavar "N"
+                <> O.value 0
+                <> O.help "Test each new law again on N random cases of sizes 1 to 8, and drop it if one refutes it (default 0: no test)"
+            )
+
+-- | The exception that 'withMemoryLimit' throws to its thread.
+newtype MemoryLimitHit = MemoryLimitHit Unique
+    deriving (Eq)
+
+instance Show MemoryLimitHit where
+    show _ = "<<bucket memory limit>>"
+
+instance Exception MemoryLimitHit where
+    toException = asyncExceptionToException
+    fromException = asyncExceptionFromException
+
+-- | The live bytes of the heap after the last collection.
+liveBytes :: IO Word64
+liveBytes = gcdetails_live_bytes . gc <$> getRTSStats
+
+{- | Run an action, and stop it when the live heap grows by more than a
+number of bytes over a base: 'Left' gives the growth. A thread reads the
+statistics of the collector every 100 ms, so the stop comes after the
+collection that sees the growth.
+-}
+withMemoryLimit :: Maybe (Word64, Word64) -> IO a -> IO (Either Word64 a)
+withMemoryLimit Nothing action = Right <$> action
+withMemoryLimit (Just (base, bytes)) action = do
+    me <- myThreadId
+    key <- newUnique
+    grown <- newIORef 0
+    let hit = MemoryLimitHit key
+        watch = do
+            threadDelay 100000
+            live <- liveBytes
+            if live > base + bytes
+                then writeIORef grown (live - base) >> throwTo me hit
+                else watch
+    handleJust
+        (\e -> if e == hit then Just () else Nothing)
+        (\_ -> Left <$> readIORef grown)
+        (bracket (forkIOWithUnmask (\unmask -> unmask watch)) (uninterruptibleMask_ . killThread) (\_ -> Right <$> action))
+
+-- | Read a number of bytes with an optional suffix K, M, G, or T (powers of 1024).
+parseBytes :: String -> Maybe Word64
+parseBytes text = case span (`elem` ['0' .. '9']) text of
+    (digits@(_ : _), suffix) -> (read digits *) <$> lookup suffix units
+    _ -> Nothing
+  where
+    units = [("", 1), ("K", 1024), ("M", 1024 ^ (2 :: Int)), ("G", 1024 ^ (3 :: Int)), ("T", 1024 ^ (4 :: Int))]
 
 {- | Print the laws of a signature, with terms up to the size that the first
 program argument gives (6 by default). The types are monomorphic, as in
@@ -205,86 +699,158 @@ monomorphic: A, B, C, D, and Acc all become A (phase 1). The function
 gives the generators and the equalities of other types.
 -}
 discoverMonomorphic :: Int -> (TypeSkeleton -> Maybe GeneratedInstance) -> [Sig] -> IO [String]
-discoverMonomorphic size = experimentalPhases size 1
+discoverMonomorphic size = experimentalPhases (defaultOptions size 1)
 
 {- | The laws of a signature, with the phases from 1 to the given phase.
 Phases 2 to 4 are experimental. Phase 2 keeps A, B, C, D, and Acc apart.
-Phases 3 and 4 generalize the types of the functions, so a term can apply
-a value to an argument of another type. The search does not test such a
-term (see 'termType').
+Phases 3 and 4 instantiate the abstract carrier types of each constant.
+The search checks every instance before evaluation (see 'termType').
 -}
-experimentalPhases :: Int -> Int -> (TypeSkeleton -> Maybe GeneratedInstance) -> [Sig] -> IO [String]
-experimentalPhases size phase extraReps sigs = searchPhases size phase (frontInstances extraReps) (mconcat sigs)
+experimentalPhases :: SearchOptions -> (TypeSkeleton -> Maybe GeneratedInstance) -> [Sig] -> IO [String]
+experimentalPhases options extraReps sigs = searchPhases options (frontInstances extraReps) (mconcat sigs)
 
 {- | 'experimentalPhases' with the instances of the types for the search,
 for a front end that does not give the types of the values to Haskell,
 such as a GHC session.
 -}
-searchPhases :: Int -> Int -> (TypeSkeleton -> Maybe Instance) -> Sig -> IO [String]
-searchPhases size phase givenInstances givenSig =
-    do
-        -- SPECFTACULAR_PROGRESS=1 shows the progress of the search on stderr.
-        progress <- (== Just "1") <$> Env.lookupEnv "SPECFTACULAR_PROGRESS"
-        -- SPECFTACULAR_TESTS sets the number of test cases (1000 by default,
-        -- as in QuickSpec).
-        numTests <- fromMaybe 1000 . (>>= TR.readMaybe) <$> Env.lookupEnv "SPECFTACULAR_TESTS"
-        -- SPECFTACULAR_CHECKED=1 keeps the types of the values, and tests
-        -- them at each application (see 'Value').
-        checked <- (== Just "1") <$> Env.lookupEnv "SPECFTACULAR_CHECKED"
-        let sig
-                | checked = givenSig
-                | otherwise = untypedSig givenSig
-            instances
-                | checked = givenInstances
-                | otherwise = fmap untypedInstance . givenInstances
-        let StEcta
-                { compl_sig = compl_sig
-                , arb_insts = arb_insts
-                , sig_ty_cons = sig_ty_cons
-                } = mkStecta size numTests instances sig id id
-        putStrLn $ "In Scope (" ++ show (Map.size compl_sig) ++ " functions/constants):"
-        putStrLn "---------------------------------"
-        mapM_ (putStrLn . T.unpack) $ Map.keys compl_sig
-        putStrLn ""
-        putStrLn "Type constructors (and derived) in the signature:"
-        putStrLn "---------------------------------"
-        mapM_ print sig_ty_cons
-        putStrLn ""
-        putStrLn "Variable generators"
-        putStrLn "---------------------------------"
-        mapM_ print (Map.assocs arb_insts)
-        putStrLn ""
+searchPhases :: SearchOptions -> (TypeSkeleton -> Maybe Instance) -> Sig -> IO [String]
+searchPhases
+    SearchOptions
+        { searchSize = size
+        , searchPhase = phase
+        , searchParallel = parallelSetting
+        , searchEnumerateAhead = aheadSetting
+        , searchSplit = splitSetting
+        , searchBucketTimeout = timeoutSetting
+        , searchBucketMemLimit = memLimitOption
+        , searchCompletionTimeout = completionTimeoutSetting
+        , searchCompletionMemLimit = completionMemLimitSetting
+        , searchCompletionAllocLimit = completionAllocLimitSetting
+        , searchRecheck = recheckSetting
+        , searchTests = numTests
+        , searchChecked = checked
+        , searchProgress = progress
+        , searchDiagnostics = diagnosticSetting
+        , searchSkeletonTemplates = skeletonTemplatesSetting
+        , searchStopAfter = stopSetting
+        , searchOnlyBucket = onlySetting
+        , searchTypeDepth = typeDepthSetting
+        , searchFunctionBuckets = functionBucketsSetting
+        , searchDumpLaws = dumpLawsSetting
+        , searchTermOrder = termOrderSetting
+        }
+    givenInstances
+    givenSig =
+        do
+            -- Threads write whole diagnostic lines.
+            when parallelSetting $ hSetBuffering stderr LineBuffering
+            sink <- newIORef []
+            statsEnabled <- getRTSStatsEnabled
+            let memLimitSetting = if statsEnabled then memLimitOption else Nothing
+            when (isJust memLimitOption && not statsEnabled) $
+                hPutStrLn stderr "*** Warning: --bucket-mem-limit needs RTS statistics (+RTS -T); it has no effect."
+            when (isJust memLimitSetting && aheadSetting) $
+                hPutStrLn
+                    stderr
+                    "*** Warning: with --enumerate-ahead, --bucket-mem-limit also counts the heap of the background enumeration."
+            let diagnostics = isJust diagnosticSetting
+                detailedDiagnostics = diagnosticSetting == Just DetailedDiagnostics
+                sig
+                    | checked = givenSig
+                    | otherwise = untypedSig givenSig
+                instances
+                    | checked = givenInstances
+                    | otherwise = fmap untypedInstance . givenInstances
+            let StEcta
+                    { compl_sig = compl_sig
+                    , arb_insts = arb_insts
+                    , sig_ty_cons = sig_ty_cons
+                    } = mkStecta size numTests 0 typeDepthSetting functionBucketsSetting instances sig False id id
+            putStrLn $ "In Scope (" ++ show (Map.size compl_sig) ++ " functions/constants):"
+            putStrLn "---------------------------------"
+            mapM_ (putStrLn . T.unpack) $ Map.keys compl_sig
+            putStrLn ""
+            putStrLn "Type constructors (and derived) in the signature:"
+            putStrLn "---------------------------------"
+            mapM_ print sig_ty_cons
+            putStrLn ""
+            putStrLn "Variable generators"
+            putStrLn "---------------------------------"
+            mapM_ print (Map.assocs arb_insts)
+            putStrLn ""
 
-        putStrLn "Laws according to Haskell's (==):"
-        putStrLn "---------------------------------"
-        let env = Settings{progress = progress, numTests = numTests, maxSize = size}
-        runPhases env size (max 1 (min 4 phase)) instances sig
+            putStrLn "Laws according to Haskell's (==):"
+            putStrLn "---------------------------------"
+            let env =
+                    Settings
+                        { progress = progress
+                        , numTests = numTests
+                        , maxSize = size
+                        , diagnostics = diagnostics
+                        , detailedDiagnostics = detailedDiagnostics
+                        , diagnosticPhase = 0
+                        , resolveInstance = instances
+                        , splitEnumeration = splitSetting
+                        , skeletonTemplates = skeletonTemplatesSetting
+                        , parallelBuckets = parallelSetting
+                        , enumerateAhead = aheadSetting
+                        , deferLaws = parallelSetting || isJust timeoutSetting || isJust memLimitSetting
+                        , bucketMemLimit = memLimitSetting
+                        , bucketTimeout = timeoutSetting
+                        , completionTimeout = completionTimeoutSetting
+                        , completionMemLimit = completionMemLimitSetting
+                        , completionAllocLimit = completionAllocLimitSetting
+                        , recheckCount = recheckSetting
+                        , lawSink = sink
+                        , stopAfter = stopSetting
+                        , onlyBucket = onlySetting
+                        , typeDepth = typeDepthSetting
+                        , functionBuckets = functionBucketsSetting
+                        , dumpLaws = dumpLawsSetting
+                        , termOrder = termOrderSetting
+                        }
+            runPhases env size (max 1 (min 4 phase)) instances sig
+
+-- | Read "phase:size".
+parseStop :: String -> Maybe (Int, Int)
+parseStop text = case break (== ':') text of
+    (phase, ':' : size) -> (,) <$> TR.readMaybe phase <*> TR.readMaybe size
+    _ -> Nothing
 
 -- 1. The runtime signature and the search space.
 
 {- | The runtime signature and the search space of one phase: the signature
 with the generated variables and the equalities, the node of the atoms,
-and the types to test. The first function changes the types of the
-generated variables, and the second the types of the functions.
+and the types to test. With 'True', the generated variables also have
+each renaming of the carriers of their types (see 'sigGivens'). The first
+function changes the types of the generated variables, and the second the
+types of the functions.
 -}
 mkStecta ::
     Int ->
     Int ->
+    Int ->
+    Maybe Int ->
+    Bool ->
     (TypeSkeleton -> Maybe Instance) ->
     Sig ->
+    Bool ->
     (TypeSkeleton -> TypeSkeleton) ->
     (TypeSkeleton -> TypeSkeleton) ->
     StEcta
-mkStecta size numTests instances sig givenTrans skelTrans =
+mkStecta size numTests recheckCount typeDepth' functionBuckets' instances sig closed givenTrans skelTrans =
     StEcta
         { any_arg = ag
         , compl_sig = compl_sig
         , given_sig = givenSig
+        , phase_variables = Map.fromList [(sfTypeRep f, Symbol name) | (name, f) <- Map.assocs givenSig]
         , inst_sig = inst_sig
+        , function_samples = fst <$> samples
         , schema_vars = Map.fromList [(Symbol x, map (Symbol . fst) vs) | (x, vs) <- moreVars]
         , sig_ty_cons = Map.keys eq_insts
         , eq_insts = eq_insts
-        , test_cases = testCases numTests inst_sig
+        , test_cases = withValues inst_sig (testSchedule numTests)
+        , recheck_cases = withValues inst_sig (recheckSchedule recheckCount)
         , arb_insts = arbs
         }
   where
@@ -295,8 +861,8 @@ mkStecta size numTests instances sig givenTrans skelTrans =
         [ (x, [(gvToName gv, g) | g@(GivenFun gv _) <- take (max variablesPerType size) (moreGenerators f)])
         | (x, f@(GivenFun{given_info = GivenVar{}})) <- Map.assocs compl_sig
         ]
-    inst_sig = Map.fromList (concatMap snd moreVars) <> compl_sig
-    (givenSig, eq_insts, arbs) = sigGivens givenTrans sig instances
+    inst_sig = Map.fromList (concatMap snd moreVars) <> Map.fromList (Map.elems samples) <> compl_sig
+    (givenSig, eq_insts, arbs, samples) = sigGivens closed functionBuckets' givenTrans sig instances
     givens = Map.assocs $ givenTrans . sfTypeRep <$> givenSig
     compl_sig = sig <> givenSig
     sc = skels ++ givens
@@ -311,23 +877,30 @@ mkStecta size numTests instances sig givenTrans skelTrans =
             ngnodes givens ++ gnodes skels
     addSyms st tt = map (Bi.bimap (Symbol . st) (tt . typeToFta))
     ngnodes = addSyms id id
-    gnodes = addSyms id (generalize sc)
+    gnodes = addSyms id (generalize typeDepth' sc)
 
 {- | The phases: the message at the end of the phase, the message at the
-start of the phase, and the changes of the types of the generated
-variables and of the functions.
+start of the phase, the changes of the types of the generated variables and
+of the functions, and the change of the types of the variables of a
+skeleton grammar. A phase with a skeleton grammar does not enumerate its own
+grammar. It tests the most general carrier typing of each schema of the
+skeleton grammar instead (see 'generalizeCarriers'). Phase 4 enumerates
+with its functions and with variables at A, so the constants keep
+independent type variables and the variables of a skeleton are fewer.
 -}
-phases :: [(String, String, TypeSkeleton -> TypeSkeleton, TypeSkeleton -> TypeSkeleton)]
+phases ::
+    [(String, String, TypeSkeleton -> TypeSkeleton, TypeSkeleton -> TypeSkeleton, Maybe (TypeSkeleton -> TypeSkeleton))]
 phases =
-    [ ("Fully monomorphic phase finished..", "", monomorphiseType, monomorphiseType)
-    , ("Monomorphic phases finished..", "Starting phase with more types....", id, id)
+    [ ("Fully monomorphic phase finished..", "", monomorphiseType, monomorphiseType, Nothing)
+    , ("Monomorphic phases finished..", "Starting phase with more types....", id, id, Nothing)
     ,
         ( "Mono-polymorphic phase done! "
         , "Starting mono-polymorphic phase...."
         , monomorphiseType
         , generalizeType . monomorphiseType
+        , Nothing
         )
-    , ("Done! ", "Starting fully-polymorphic phase....", id, generalizeType)
+    , ("Done! ", "Starting fully-polymorphic phase....", id, generalizeType, Just monomorphiseType)
     ]
 
 {- | Run the phases from 1 to the given phase. The search state goes from
@@ -342,63 +915,405 @@ runPhases env size lastPhase instances sig =
             , trees = Map.empty
             , instance_trees = Map.empty
             , instantiated = HS.empty
-            , rewrite_rules = emptyRules
+            , rewrite_rules = emptyRules (termOrder env)
             , so_far = 0
             , law_count = 0
+            , pending_laws = []
+            , touched_reps = HS.empty
             }
   where
-    go ((pn, (finished, starting, givenTrans, skelTrans)) : rest) s
+    go ((pn, (finished, starting, givenTrans, skelTrans, skeletonTrans)) : rest) s
         | pn <= lastPhase = do
             when (pn > 1) $ putStrLn starting
-            (laws, s') <- runPhase env size (mkStecta size (numTests env) instances sig givenTrans skelTrans) s
+            let phaseEnv = env{diagnosticPhase = pn}
+                -- A phase with a skeleton grammar closes its variable types
+                -- under carrier renaming, so each renaming of a typing of a
+                -- skeleton has its variables.
+                stectaWith variableTrans =
+                    mkStecta
+                        size
+                        (numTests env)
+                        (recheckCount env)
+                        (typeDepth env)
+                        (functionBuckets env)
+                        instances
+                        sig
+                        (isJust skeletonTrans)
+                        variableTrans
+                        skelTrans
+            (laws, s') <- diagnose phaseEnv 0 "" "phase" s $ do
+                result@(_, finishedState) <- runPhase phaseEnv (phaseSize pn) (stectaWith <$> skeletonTrans) (stectaWith givenTrans) s
+                diagnosticEvent phaseEnv "checkpoint" 0 "" "phase" finishedState
+                return result
             putStrLn $ finished ++ show (so_far s') ++ " terms examined."
             putStrLn $ show (sum $ map DT.size $ Map.elems (trees s')) ++ " unique terms discovered."
-            (laws ++) <$> go rest s'
+            if fmap fst (stopAfter env) == Just pn then return laws else (laws ++) <$> go rest s'
     go _ _ = return []
+    phaseSize pn = case stopAfter env of
+        Just (stopPhase, stopSize) | stopPhase == pn -> min size stopSize
+        _ -> size
 
 {- | Run one phase: the sizes from 1 to the given size, and for each size
-each type to test.
+each type to test. With a skeleton grammar, the candidates of a type are the
+most general carrier typings with that result type of the skeletons of its
+monomorphic type.
 -}
-runPhase :: Settings -> Int -> StEcta -> Search -> IO ([String], Search)
-runPhase env@Settings{..} size stecta@StEcta{..} = go [(lvl, tc) | lvl <- [1 .. size], tc <- sig_ty_cons]
+runPhase :: Settings -> Int -> Maybe StEcta -> StEcta -> Search -> IO ([String], Search)
+runPhase env@Settings{..} size skeletons stecta@StEcta{..}
+    | parallelBuckets = goSizes [1 .. size]
+    | otherwise = go Map.empty [(lvl, tc) | lvl <- [1 .. size], tc <- ordered, kept lvl tc]
   where
-    go [] s = return ([], s)
-    go ((lvl, tc) : rest) s = do
-        refreshCount progress "Reducing  ECTA" (" for " ++ show tc) "" lvl (so_far s)
-        let !reduced = searchSpace stecta lvl tc
-        refreshCount progress "Refolding ecta" (" for " ++ show tc) "" lvl (so_far s)
-        !folded <- return $ refold reduced
-        -- Each accepting run gives one term. The terms come in the order
-        -- of kboCompare, so that the laws do not depend on the order in
-        -- which cfta interned the nodes and the edges. So the runs need no
-        -- canonical order (runsInterned).
-        let terms =
-                map snd $
-                    sortBy
-                        (kboCompare (isGivenVar compl_sig) `on` fst)
-                        [(npTerm' t, t) | (t, _) <- runsInterned "Mu" folded]
+    -- The depth of the split of the phase 4 skeletons of a size. The
+    -- background threads take one part for each shape. Without them, one
+    -- part for each shape saves no time, and at HugeLists 6-p4 with -N1 it
+    -- exhausted a 14 GiB heap (see 'searchSplit').
+    skeletonSplit lvl = fromMaybe (if enumerateAhead then lvl - 1 else 2) splitEnumeration
+    -- The depth of the split of the terms of phases 1 to 3.
+    termSplit = fromMaybe 2 splitEnumeration
+    kept lvl tc = case (onlyBucket, stopAfter) of
+        (Just only, Just (stopPhase, stopSize)) | stopPhase == diagnosticPhase && stopSize == lvl -> show tc == only
+        _ -> True
+    ordered = sortOn (\t -> (typeSize t, concreteTypeLeaves t, t)) (filter tested sig_ty_cons)
+    -- With 'parallelBuckets', the buckets of a size run in parallel from the
+    -- state at the start of the size. A bucket changes only the trees of its
+    -- type and records its laws. The merge takes the trees of each bucket,
+    -- and adds its laws in the order of the buckets. It drops a law that the
+    -- laws before it prove. Each printed law passed its tests.
+    goSizes [] s = return ([], s)
+    goSizes (lvl : rest) s = do
+        typings <- case skeletons of
+            Just skeleton ->
+                Map.fromList
+                    <$> concurrently
+                        [ do
+                            found <- skeletonTypings skeleton lvl key (rewrite_rules s)
+                            _ <- evaluate (length found)
+                            pure (key, found)
+                        | key <- nubOrd (map monomorphiseType ordered)
+                        ]
+            Nothing -> pure Map.empty
+        results <-
+            concurrently
+                [ diagnose env lvl (show tc) "bucket" s $
+                    bucket lvl (Map.lookup (monomorphiseType tc) typings) tc s{pending_laws = [], touched_reps = HS.empty}
+                | tc <- ordered
+                ]
+        (laws, s') <- foldM (mergeBucket s) ([], s) (zip ordered results)
+        (more, s'') <- goSizes rest s'
+        return (laws ++ more, s'')
+    mergeBucket start (laws, merged) (tc, (_, done)) = do
+        let key = typeSkeletonToTerm tc
+            combined =
+                merged
+                    { seen = HS.union (seen done) (seen merged)
+                    , trees = maybe (trees merged) (\tree -> Map.insert key tree (trees merged)) (Map.lookup key (trees done))
+                    , instance_trees =
+                        foldl'
+                            (\m r -> maybe m (\tree -> Map.insert r tree m) (Map.lookup r (instance_trees done)))
+                            (instance_trees merged)
+                            (HS.toList (touched_reps done))
+                    , instantiated = HS.union (instantiated done) (instantiated merged)
+                    , so_far = so_far merged + so_far done - so_far start
+                    }
+        foldM replay (laws, combined) (reverse (pending_laws done))
+    replay (laws, s) (w, i, lawSig, law)
+        | joinable (isGivenVar inst_sig) (rewrite_rules s) w i = return (laws, s)
+        | otherwise = do
+            let n = law_count s + 1
+                lawText = show n <> ". " <> ppNpTerm (canonicalLaw lawSig law)
+            putStrLn lawText
+            rules <-
+                boundedCompletion env lawText (addLaw maxSize lawSig law (rewrite_rules s)) (addLawRules lawSig law (rewrite_rules s))
+            return (laws ++ [lawText], s{law_count = n, rewrite_rules = rules})
+    -- With a skeleton grammar, the variable types are closed under carrier
+    -- renaming (see 'mkStecta'). Then the schemas of a type are the
+    -- renamings of the schemas of its canonical type (see
+    -- 'generalizeCarriers'), and the canonical type finds their laws up to
+    -- renaming. This needs variables whose carriers are the first carriers
+    -- of 'carriers'.
+    tested tc = case skeletons of
+        Just _
+            | firstCarriers ->
+                canonicalCarrierType tc == tc || canonicalCarrierType tc `notElem` sig_ty_cons
+        _ -> True
+    firstCarriers =
+        let used = nubOrd (concatMap carriersOf (Map.keys phase_variables))
+         in sort used == sort (take (length used) (map fst carriers))
+    -- Only program applications have this shape. Do not exclude matching
+    -- type constructors in a custom signature.
+    canPrune = ("app", 4) `notElem` allConstructors (Map.assocs (sfTypeRep <$> compl_sig))
+    go _ [] s = return ([], s)
+    go cache ((lvl, tc) : rest) s = do
+        -- A typing of a skeleton with the result type has the monomorphic
+        -- result type in the skeleton grammar. The first bucket of a size and
+        -- a monomorphic type finds the typings of its skeletons. The later
+        -- buckets of the size with that monomorphic type use them again, and
+        -- 'eligible' applies the rules that the buckets between them add.
+        let key = monomorphiseType tc
+            current = Map.filterWithKey (\(size', _) _ -> size' == lvl) cache
+        cache' <- case skeletons of
+            Just skeleton
+                | Map.notMember (lvl, key) current ->
+                    if enumerateAhead
+                        then do
+                            -- The first bucket of a size starts the enumeration of
+                            -- the skeletons of each type of the size. The rules at
+                            -- the start of the size prune them, and 'eligible'
+                            -- applies the rules that the buckets add later.
+                            let keys = nubOrd [monomorphiseType tc' | (lvl', tc') <- (lvl, tc) : rest, lvl' == lvl]
+                            started <- enumerateInBackground [skeletonParts skeleton lvl k (rewrite_rules s) | k <- keys]
+                            pure (Map.union (Map.fromList (zip [(lvl, k) | k <- keys] started)) current)
+                        else do
+                            typings <- skeletonTypings skeleton lvl key (rewrite_rules s)
+                            pure (Map.insert (lvl, key) (pure (), typings) current)
+            _ -> pure current
+        let entry = Map.lookup (lvl, key) cache'
+        mapM_ fst entry
+        (laws, s') <- diagnose env lvl (show tc) "bucket" s $ do
+            result@(_, finishedState) <- bucket lvl (snd <$> entry) tc s
+            diagnosticEvent env "checkpoint" lvl (show tc) "bucket" finishedState
+            return result
+        (more, s'') <- go cache' rest s'
+        return (laws ++ more, s'')
+    -- The principal typings of the skeletons of a size and a monomorphic type
+    -- (see 'generalizeCarriers'). Only templates without annotations prune a
+    -- skeleton, because they match each typing of it.
+    -- With a split, each shape of the left spine is enumerated and typed in
+    -- its own thread, and the parts are joined in their order.
+    skeletonTypings skeleton lvl monomorphic rules
+        | skeletonSplit lvl > 0 =
+            concat <$> forceInParallel diagnostics lvl monomorphic (skeletonParts skeleton lvl monomorphic rules)
+        | otherwise = pure (concat (skeletonParts skeleton lvl monomorphic rules))
+    -- The typings of the parts of the skeletons, in their order.
+    skeletonParts skeleton@StEcta{compl_sig = skeletonSig} lvl monomorphic rules
+        | skeletonSplit lvl > 0 = map typingsOf (searchSpaceParts (skeletonSplit lvl) skeleton lvl monomorphic)
+        | otherwise = [typingsOf (searchSpace skeleton lvl monomorphic)]
+      where
+        templates
+            | canPrune && skeletonTemplates = filter annotationFree (pruningTemplates skeletonSig lvl rules)
+            | otherwise = []
+        -- One partial application, so that the parts share the remaining templates.
+        prepare = preparePruning templates
+        -- 'generalizeCarriers' does not read the annotations, so each program
+        -- is enumerated without its typings, and a typing of the partial
+        -- program prunes it (see 'prunedPrograms').
+        typingsOf space =
+            let (pruningRoot, oracleTemplates) = prepare (refold space)
+             in mapMaybe
+                    (generalizeCarriersWithin typeDepth skeletonSig phase_variables . npTerm')
+                    ( prunedPrograms
+                        (startTyping monomorphic)
+                        (\n -> extendTyping typeDepth skeletonSig n . npTerm')
+                        (\typing n -> canonicalVariables (holeTypeOf typing n))
+                        (constantFits typeDepth skeletonSig)
+                        (flip typeAdmits)
+                        oracleTemplates
+                        pruningRoot
+                    )
+    bucket lvl typings tc s = do
+        bucketStart <- getMonotonicTimeNSec
+        let bucketTemplates
+                | canPrune = pruningTemplates compl_sig lvl (rewrite_rules s)
+                | otherwise = []
+        produced <- case typings of
+            Just typingsOfType -> pure $ nubOrd (mapMaybe ($ tc) typingsOfType)
+            Nothing
+                | termSplit > 0 ->
+                    -- Each shape of the spine is reduced and enumerated on its own,
+                    -- as for the phase 4 skeletons (see 'spineParts').
+                    pure
+                        [ canonicalTypes (npTerm' t)
+                        | let prepare = preparePruning bucketTemplates
+                        , space <- searchSpaceParts termSplit stecta lvl tc
+                        , let (pruningRoot, oracleTemplates) = prepare (refold space)
+                        , t <- prunedTerms oracleTemplates pruningRoot
+                        ]
+            Nothing -> do
+                refreshCount progress "Reducing  ECTA" (" for " ++ show tc) "" lvl (so_far s)
+                reduced <- diagnose env lvl (show tc) "reduce_whnf" s $ evaluate (searchSpace stecta lvl tc)
+                refreshCount progress "Refolding ecta" (" for " ++ show tc) "" lvl (so_far s)
+                folded <- diagnose env lvl (show tc) "refold_whnf" s $ evaluate (refold reduced)
+                -- The oracle rejects partial branches before their remaining type
+                -- choices expand. The bucket has one program size. The term order
+                -- sorts its ties before testing; smaller sizes have already supplied rules.
+                let (pruningRoot, oracleTemplates) = preparePruning bucketTemplates folded
+                pure [canonicalTypes (npTerm' t) | t <- prunedTerms oracleTemplates pruningRoot]
+        let terms = sortBy (termCompare (rulesOrder (rewrite_rules s)) (isGivenVar compl_sig)) (filter eligible produced)
+            -- Apply the checks that are already known before retaining the
+            -- sort bucket. The search checks new rules again as it runs.
+            eligible t =
+                not (t `HS.member` seen s)
+                    && either (const False) (sameUpToCarriers tc) (termType inst_sig t)
+                    && not (reducible (isGivenVar inst_sig) (rewrite_rules s) (mostGeneral (isGivenVar inst_sig) schema_vars t))
         -- We want to display a message once the first term is found.
         -- in particular, it hangs after this messages for HugeLists 6
         refreshCount progress "Finding first term " (" for " ++ show tc) "" lvl (so_far s)
-        case terms of
+        first <- diagnose env lvl (show tc) "candidate_list_demand" s $ evaluate terms
+        case first of
             (_ : _) -> refreshCount progress "Folded, exploring " (" for " ++ show tc) "" lvl (so_far s)
             _ -> return ()
-        (laws, s') <- considerAll lvl terms s
-        (more, s'') <- go rest s'
-        return (laws ++ more, s'')
-    considerAll _ [] s = return ([], s)
-    considerAll lvl (t : ts) s = do
-        (laws, s') <- consider env stecta lvl t s
-        (more, s'') <- considerAll lvl ts s'
+        let deadline = (\seconds -> bucketStart + round (seconds * 1e9)) <$> bucketTimeout
+        memory <- case bucketMemLimit of
+            Just bytes -> (\live -> Just (live, bytes)) <$> liveBytes
+            Nothing -> return Nothing
+        considerAll (deadline, memory, bucketStart, s) lvl tc first s
+    considerAll _ _ _ [] s = return ([], s)
+    considerAll limit@(deadline, memory, bucketStart, start) lvl tc (t : ts) s = do
+        begin <- getMonotonicTimeNSec
+        schemaSink <- newIORef []
+        let considerOne =
+                diagnose env lvl (show tc) "schema" s $
+                    consider env{lawSink = schemaSink} stecta lvl (Term "filter" [typeSkeletonToTerm tc, t]) s
+        result <- withMemoryLimit memory $ case deadline of
+            Nothing -> Just <$> considerOne
+            Just d
+                | begin >= d -> return Nothing
+                | otherwise -> timeout (fromIntegral ((d - begin) `div` 1000)) considerOne
+        let stopped reason = do
+                -- The bucket ran out of time or memory: keep the laws that the
+                -- schema found, drop the rest of the schema, and report.
+                found <- reverse <$> readIORef schemaSink
+                (kept, s1) <-
+                    if parallelBuckets
+                        then return ([], s{pending_laws = reverse found ++ pending_laws s})
+                        else foldM replay ([], s) found
+                now <- getMonotonicTimeNSec
+                let tree = Map.findWithDefault DT.empty (typeSkeletonToTerm tc) (trees s)
+                putStrLn $
+                    reason
+                        ++ ": phase "
+                        ++ show diagnosticPhase
+                        ++ ", size "
+                        ++ show lvl
+                        ++ ", type "
+                        ++ show tc
+                        ++ ", after "
+                        ++ show (fromIntegral (now - bucketStart) / 1e9 :: Double)
+                        ++ " s: "
+                        ++ show (so_far s - so_far start)
+                        ++ " schemas tested, "
+                        ++ show (law_count s - law_count start)
+                        ++ " laws, "
+                        ++ show (DT.size tree)
+                        ++ " representatives; interrupted at "
+                        ++ ppNpTerm t
+                diagnosticEvent env "stopped" lvl (show tc) "bucket" s1
+                return (kept, s1)
+        case result of
+            Left grown ->
+                stopped
+                    ("Bucket memory limit (live heap grew by " ++ show (grown `div` (1024 * 1024)) ++ " MiB)")
+            Right Nothing -> stopped "Bucket timeout"
+            Right (Just (laws, s')) -> considerRest limit lvl tc t ts begin s s' laws
+    considerRest limit lvl tc t ts begin s s' laws = do
+        end <- getMonotonicTimeNSec
+        -- Without parallel buckets, deferred laws print when their schema ends.
+        when (deferLaws && not parallelBuckets) $ mapM_ putStrLn laws
+        when (isJust onlyBucket && stopAfter == Just (diagnosticPhase, lvl)) $
+            hPutStrLn
+                stderr
+                ( intercalate
+                    "\t"
+                    [ "schematime"
+                    , show (fromIntegral (end - begin) / 1e9 :: Double)
+                    , show (length laws)
+                    , show (so_far s' - so_far s)
+                    , ppNpTerm t
+                    ]
+                )
+        next <- diagnose env lvl (show tc) "candidate_list_demand" s' $ evaluate ts
+        (more, s'') <- considerAll limit lvl tc next (if parallelBuckets then s' else s'{pending_laws = []})
         return (laws ++ more, s'')
 
 -- 2. The candidate terms.
 
--- | The reduced automaton of the terms of a size and a type.
+-- | The reduced automaton of the terms of a size and a type, with merged type alternatives (see 'mergeTypeAlternatives').
 searchSpace :: StEcta -> Int -> TypeSkeleton -> Node Symbol
 searchSpace StEcta{..} lvl tc =
     let !ecta = filterType (union $ tk any_arg lvl) $ typeToFta tc
-     in fixWithin 100 (withoutRedundantEdges . reducePartially) ecta
+     in mergeTypeAlternatives (fixWithin 100 (withoutRedundantEdges . reducePartially) ecta)
+
+{- | 'Compile.preparePruning', and then 'mergeTypeAlternatives' again,
+because its reduction can make overlapping type alternatives.
+-}
+preparePruning :: [Template Symbol] -> Node Symbol -> (Node Symbol, [Template Symbol])
+preparePruning templates = let prepare = Compile.preparePruning templates in Bi.first mergeTypeAlternatives . prepare
+
+-- | 'searchSpace' in disjoint parts, one for each shape of the left spine (see 'spineParts').
+searchSpaceParts :: Int -> StEcta -> Int -> TypeSkeleton -> [Node Symbol]
+searchSpaceParts splitDepth StEcta{..} lvl tc =
+    [ mergeTypeAlternatives (fixWithin 100 (withoutRedundantEdges . reducePartially) (filterType part (typeToFta tc)))
+    | part <- spineParts splitDepth any_arg lvl
+    ]
+
+{- | Run each action in its own thread, and give the results in order. An
+exception in a thread is raised again here.
+-}
+concurrently :: [IO a] -> IO [a]
+concurrently actions = do
+    results <- mapM start actions
+    mapM (\result -> takeMVar result >>= either (\e -> throwIO (e :: SomeException)) pure) results
+  where
+    start action = do
+        result <- newEmptyMVar
+        _ <- forkIO (try action >>= putMVar result)
+        pure result
+
+{- | Evaluate the spine of each list in a thread, with one thread for each
+capability. The threads take the lists in order, so the lists that are in
+evaluation at one time are at most the capabilities. With 'True', print the
+time and the length of each on stderr. An exception in a thread is raised
+again here.
+-}
+forceInParallel :: Bool -> Int -> TypeSkeleton -> [[a]] -> IO [[a]]
+forceInParallel report lvl tc lists = do
+    capabilities <- getNumCapabilities
+    tagged <- mapM (\xs -> (,) xs <$> newEmptyMVar) lists
+    queue <- newIORef tagged
+    let worker = do
+            next <- atomicModifyIORef' queue (\parts -> case parts of [] -> ([], Nothing); part : rest -> (rest, Just part))
+            case next of
+                Nothing -> pure ()
+                Just (xs, result) -> do
+                    begin <- getMonotonicTimeNSec
+                    outcome <- try (evaluate (length xs))
+                    end <- getMonotonicTimeNSec
+                    putMVar result ((\n -> (fromIntegral (end - begin) / 1e9 :: Double, n)) <$> outcome)
+                    worker
+    mapM_ (const (forkIO worker)) [1 .. min capabilities (length lists)]
+    timings <- mapM (\(_, result) -> takeMVar result >>= either (\e -> throwIO (e :: SomeException)) pure) tagged
+    when report $
+        mapM_
+            ( \(index, (seconds, n)) -> hPutStrLn stderr (intercalate "\t" ["parpart", show lvl, show tc, show index, show seconds, show n])
+            )
+            (zip [0 :: Int ..] timings)
+    pure lists
+
+{- | Evaluate the spines of the parts of each group in background threads,
+and give for each group an action that waits for its parts, and its parts
+joined in their order. The threads take the parts in order: the parts of
+the first group, then those of the second group, and so on. With more than
+one capability, one thread runs on each capability other than the first, so
+that the thread that tests keeps its own. A part that fails is left to the
+thread that reads it.
+-}
+enumerateInBackground :: [[[a]]] -> IO [(IO (), [a])]
+enumerateInBackground groups = do
+    capabilities <- getNumCapabilities
+    tagged <- mapM (mapM (\xs -> (,) xs <$> newEmptyMVar)) groups
+    queue <- newIORef (concat tagged)
+    let worker = do
+            next <- atomicModifyIORef' queue (\parts -> case parts of [] -> ([], Nothing); part : rest -> (rest, Just part))
+            case next of
+                Nothing -> pure ()
+                Just (xs, done) -> do
+                    _ <- try (evaluate (length xs)) :: IO (Either SomeException Int)
+                    putMVar done ()
+                    worker
+    if capabilities > 1
+        then mapM_ (`forkOn` worker) [1 .. capabilities - 1]
+        else void (forkIO worker)
+    pure [(mapM_ (readMVar . snd) parts, concatMap fst parts) | parts <- tagged]
 
 -- 3. The test of a candidate, and the laws that it gives.
 
@@ -426,22 +1341,19 @@ two schemas. A new representative schema is also instantiated if it is
 small. Give the laws that the tests find.
 -}
 consider :: Settings -> StEcta -> Int -> Term -> Search -> IO ([String], Search)
-consider Settings{..} StEcta{..} lvl full_term s0
+consider env@Settings{..} StEcta{..} lvl full_term s0
     -- A known law rewrites the most general instance to a smaller term. The
     -- law rewrites each instance in the same way, so the schema is
     -- redundant.
     | reducible isVar (rewrite_rules s0) most_general = return ([], s0)
     -- if we've seen it before, we can immediately skip.
     | np_term `HS.member` seen s0 = return ([], s0{so_far = so_far s0 + 1})
-    -- We don't want terms that are all variables.
-    | termSize np_term > 1
-    , allFromSig given_sig np_term =
-        return ([], s0{so_far = so_far s0 + 1, seen = HS.insert np_term (seen s0)})
     -- An application of the schema does not fit its argument, or its
     -- equality does not fit its values, so the search does not test it.
     | not (testable np_term) = return ([], s0{so_far = so_far s0 + 1})
     | otherwise = do
         let tree = Map.findWithDefault DT.empty current_ty (trees s0)
+            known a b = a == b || joinable isVar (rewrite_rules s0) a b
         refreshCount
             progress
             ("exploring " ++ show current_ty)
@@ -451,7 +1363,9 @@ consider Settings{..} StEcta{..} lvl full_term s0
             (so_far s0)
         -- The schema goes into the decision tree of its type. It is
         -- evaluated on the test cases of its path only.
-        inserted <- DT.insert (valuesEqual eq_inst) np_term (values np_term) tree
+        inserted <-
+            diagnose env lvl (show current_ty) "schema_tests" s0 $
+                DT.insertWith known (valuesEqual eq_inst) test_cases np_term (values np_term) tree
         let s = s0{so_far = so_far s0 + 1}
             -- A later phase enumerates the schema again, so it goes into
             -- seen.
@@ -469,8 +1383,9 @@ consider Settings{..} StEcta{..} lvl full_term s0
                             { instance_trees =
                                 Map.insert
                                     np_term
-                                    (DT.leaf most_general (values most_general))
+                                    (DT.leafWith most_general (values most_general))
                                     (instance_trees s0)
+                            , touched_reps = HS.insert np_term (touched_reps s0)
                             }
                         )
               where
@@ -491,13 +1406,27 @@ consider Settings{..} StEcta{..} lvl full_term s0
     -- arguments, and its equality fits its values, as an application
     -- does (see 'termType').
     testable t = either (const False) (sameUpToCarriers eq_type) (termType inst_sig t)
+    -- A function bucket compares its functions on the value of the sample
+    -- variable in each test case (see 'function_samples').
+    sample = Map.lookup eq_type function_samples
+    observe evaluateTerm = case sample of
+        Nothing -> evaluateTerm
+        Just x -> \vals -> apply (evaluateTerm vals) (vals Map.! x)
     -- The values of a term on the test cases, evaluated when needed.
-    values u = map (\tc -> evalTerm inst_sig tc u) test_cases
+    values u = case compileTerm inst_sig u of
+        Left message -> error message
+        Right evaluateTerm ->
+            let variables = [v | Symbol v <- holes isVar u] ++ maybeToList sample
+                required = Map.fromList [(v, inst_sig Map.! v) | v <- variables]
+                evaluateValues
+                    | Map.null required = const (evaluateTerm Map.empty)
+                    | otherwise = observe evaluateTerm
+             in DT.Evaluator required evaluateValues
 
     -- The schema equals the representative schema rep. Test the most
     -- general instance of the schema against the instances of rep.
     exploreIn rep s = do
-        (explored, s') <- exploreInstance rep most_general s
+        (explored, s') <- diagnose env lvl (show current_ty) "instance" s $ exploreInstance rep most_general s
         case explored of
             Discovered law -> return ([law], s')
             Knew -> return ([], s')
@@ -513,11 +1442,11 @@ consider Settings{..} StEcta{..} lvl full_term s0
 
     -- Test the instances of a schema against the instances of the
     -- representative schema rep, the most general instances first.
-    instantiate rep schema = go (schemaInstances isVar schema_vars schema)
+    instantiate rep schema initial = diagnose env lvl (show current_ty) "instances" initial $ go (schemaInstances isVar schema_vars schema) initial
       where
         go [] s = return ([], s)
         go (i : is) s = do
-            (explored, s') <- exploreInstance rep i s
+            (explored, s') <- diagnose env lvl (show current_ty) "instance" s $ exploreInstance rep i s
             (laws, s'') <- go is s'
             return
                 ( case explored of
@@ -533,11 +1462,15 @@ consider Settings{..} StEcta{..} lvl full_term s0
         | not (testable i) = return (Knew, s)
         | otherwise = do
             let table = Map.findWithDefault DT.empty rep (instance_trees s)
-            inserted <- DT.insert (valuesEqual eq_inst) i (values i) table
+                known a b = a == b || joinable isVar (rewrite_rules s) a b
+            inserted <-
+                diagnose env lvl (show current_ty) "instance_tests" s $
+                    DT.insertWith known (valuesEqual eq_inst) test_cases i (values i) table
             case inserted of
                 DT.Untested -> return (Knew, s)
                 DT.Distinct table' ->
-                    return (Singleton, s{instance_trees = Map.insert rep table' (instance_trees s)})
+                    return
+                        (Singleton, s{instance_trees = Map.insert rep table' (instance_trees s), touched_reps = HS.insert rep (touched_reps s)})
                 DT.EqualTo w
                     | w == i -> return (Knew, s)
                     -- The known laws prove the law.
@@ -546,20 +1479,135 @@ consider Settings{..} StEcta{..} lvl full_term s0
                             hPutStrLn stderr ("\r\ESC[Kfollows from the laws: " ++ ppNpTerm (lawOf w))
                         return (Knew, s)
                     | otherwise -> do
-                        let n = law_count s + 1
-                            law = lawOf w
-                            law_str = show n <> ". " <> ppNpTerm (canonicalLaw schema_vars law)
-                        when progress $ hPutStr stderr "\r\ESC[K"
-                        putStrLn law_str
-                        return
-                            ( Discovered law_str
-                            , s
-                                { law_count = n
-                                , rewrite_rules = addLaw maxSize inst_sig law (rewrite_rules s)
-                                }
-                            )
+                        refuting <- refutingCase w recheck_cases
+                        case refuting of
+                            Just c -> do
+                                hPutStrLn
+                                    stderr
+                                    ( "*** A small test case refutes a law, which the search drops: "
+                                        ++ ppNpTerm (lawOf w)
+                                        ++ " ("
+                                        ++ show (caseTest c)
+                                        ++ ")"
+                                    )
+                                return (Knew, s)
+                            Nothing -> discover w
       where
         lawOf w = Term "(==)" [Term (Symbol eq_txt) [], w, i]
+        -- The first extra test case on which the instance and w differ. Each
+        -- side is compiled once.
+        refutingCase w cases = case (compileTerm inst_sig w, compileTerm inst_sig i) of
+            (Right left, Right right) -> firstRefuting (observe left) (observe right) cases
+            _ -> return Nothing
+        firstRefuting _ _ [] = return Nothing
+        firstRefuting left right (c : cs) = do
+            equal <- valuesEqual eq_inst (left (caseValues c)) (right (caseValues c))
+            if equal == Just False then return (Just c) else firstRefuting left right cs
+        discover w = do
+            (lawSig, law) <-
+                generalizeLaw
+                    resolveInstance
+                    (map caseTest test_cases)
+                    inst_sig
+                    ((\x -> (x, inst_sig Map.! x)) <$> sample)
+                    (eq_type, eq_inst)
+                    (lawOf w)
+            let n = law_count s + 1
+                law_str = show n <> ". " <> ppNpTerm (canonicalLaw lawSig law)
+            unless deferLaws $ do
+                when progress $ hPutStr stderr "\r\ESC[K"
+                putStrLn law_str
+            when dumpLaws $
+                hPutStrLn stderr ("specftacular-law\t" ++ show n ++ "\t" ++ show (canonicalLaw lawSig law))
+            when deferLaws $ modifyIORef' lawSink ((w, i, lawSig, law) :)
+            -- With parallel buckets, the merge completes the law, so the
+            -- bucket adds the rules of the law alone.
+            let complete
+                    | parallelBuckets = return (addLawRules lawSig law (rewrite_rules s))
+                    | otherwise =
+                        boundedCompletion env law_str (addLaw maxSize lawSig law (rewrite_rules s)) (addLawRules lawSig law (rewrite_rules s))
+            rules <-
+                if detailedDiagnostics
+                    then diagnose env lvl (show current_ty) "completion" s complete
+                    else complete
+            return
+                ( Discovered law_str
+                , s
+                    { law_count = n
+                    , rewrite_rules = rules
+                    , pending_laws = [(w, i, lawSig, law) | deferLaws] ++ pending_laws s
+                    }
+                )
+
+{- | The default number of bytes by which the completion of one law may grow
+the live heap (@--completion-mem-limit@). See 'boundedCompletion'. This
+limit keeps the machine safe.
+-}
+completionMemoryLimit :: Word64
+completionMemoryLimit = 4 * 1024 * 1024 * 1024
+
+{- | The default number of bytes that the completion of one law may allocate
+(@--completion-alloc-limit@). See 'boundedCompletion'. This limit stops a
+completion that runs long within the memory limit: at 6-p4, one completion
+runs more than 25 minutes within 4 GiB of live heap. The most expensive
+completion of HugeLists 7-p3 up to phase 3 size 5 that ends allocates
+184 GiB. A law that keeps only its own rules can make the completions of the
+laws after it expensive too, so the budget is above the costs of the
+completions that end.
+-}
+completionBudget :: Word64
+completionBudget = 256 * 1024 * 1024 * 1024
+
+{- | The completed rules of a law, if their computation stays within the
+limits of the completion (see 'completionTimeout', 'completionMemLimit',
+'completionAllocLimit'), and else the rules of the law alone, with a report
+on stderr. Completion only adds rules that follow from the laws, so fewer
+rules prune less but stay sound. The allocation does not depend on the load.
+The time does, and the memory limit depends on the times of the collections.
+Without RTS statistics (@+RTS -T@) there is no memory limit.
+-}
+boundedCompletion :: Settings -> String -> Rules -> Rules -> IO Rules
+boundedCompletion Settings{..} label completed alone = do
+    statsEnabled <- getRTSStatsEnabled
+    base <- if statsEnabled then Just <$> liveBytes else pure Nothing
+    begin <- getMonotonicTimeNSec
+    setAllocationCounter (fromIntegral completionAllocLimit)
+    enableAllocationLimit
+    result <-
+        try $
+            withMemoryLimit ((\live -> (live, completionMemLimit)) <$> base) $
+                case completionTimeout of
+                    Nothing -> Just <$> evaluate completed
+                    Just seconds -> timeout (round (seconds * 1e6)) (evaluate completed)
+    disableAllocationLimit
+    left <- getAllocationCounter
+    end <- getMonotonicTimeNSec
+    -- A completion that allocates more than 1 GiB prints its cost on stderr.
+    let allocated = fromIntegral completionAllocLimit - fromIntegral left :: Double
+    when (allocated > 1024 ^ (3 :: Int)) $
+        hPutStrLn
+            stderr
+            ( intercalate
+                "\t"
+                ["completioncost", show (fromIntegral (end - begin) / 1e9 :: Double), show (allocated / 1024 ^ (3 :: Int)), label]
+            )
+    case result of
+        Right (Right (Just rules)) -> return rules
+        Right (Right Nothing) -> do
+            hPutStrLn stderr ("completion over its time limit, the law alone: " ++ label)
+            return alone
+        Right (Left grown) -> do
+            hPutStrLn
+                stderr
+                ( "completion over its memory limit (live heap grew by "
+                    ++ show (grown `div` (1024 * 1024))
+                    ++ " MiB), the law alone: "
+                    ++ label
+                )
+            return alone
+        Left AllocationLimitExceeded -> do
+            hPutStrLn stderr ("completion over its budget, the law alone: " ++ label)
+            return alone
 
 npTerm' :: Term -> Term
 npTerm' (Term "filter" [_, term]) = npTerm' term
@@ -579,9 +1627,6 @@ ppNpTerm t
     ppTerm' _ (Term (Symbol t) _) = T.unpack t
     parIfReq s@(c : _) | c /= '(', c /= '[', not (isAlphaNum c) = "(" <> s <> ")"
     parIfReq s = s
-
-allFromSig sig (Term "app" [_, f, v]) = allFromSig sig f && allFromSig sig v
-allFromSig sig (Term (Symbol t) _) = t `Map.member` sig
 
 {- | Show the progress of the search on one line of stderr, if the first
 argument is True.
@@ -611,9 +1656,6 @@ refreshCount True pre mid post size i = hPutStr stderr (o ++ fill ++ "\r") >> hF
 --    resolve critical pairs: if a term can be rewritten with two different rules
 --    might not be stable, but we *don't need confluence*. Term indexing:
 --    have a hashtable of the root node. Makes it a lot faster.
--- 4. Look at DbOpt file for examples of how we can apply rewrites directly.
--- 8. We should be able to do the "rewrites" by cleverly constructing the ECTAs
---
 -- 11. make term a pattern synonym and compute the hash when we construct
 --     the term.
 --
