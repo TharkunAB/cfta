@@ -1,0 +1,17 @@
+/-- Bound the node counter across the supplied completed group chain and rebuild. -/
+theorem observed_groups_rebuild_mono [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (n : Nat) (rows kept : Fin n → List Edge) (fuels : Fin n → Nat)
+    (states : Fin (n + 1) → SourceCurrentSameSymbolEdgeControl.State width)
+    (before : SourceCurrentSameSymbolEdgeControl.State width)
+    (start : states 0 = before)
+    (steps : ∀ index : Fin n,
+      SourceCurrentOriginalRowClusterScan.execute (fuels index)
+        (.cluster (rows index) []) (states index.castSucc) =
+        .done (kept index) (states index.succ))
+    (value : Value Symbol Guard)
+    (finalChecked : SourceEqualityNativeDemand.State width)
+    (observedRawDone : SourceEqualityNativeDemand.execute 2
+      (.code (.work (makeNode (List.ofFn kept).flatten) .pure))
+      (states (Fin.last n)).checked = .done value finalChecked) :
+    before.checked.native.machine.heap.nodes.next ≤
+      finalChecked.native.machine.heap.nodes.next

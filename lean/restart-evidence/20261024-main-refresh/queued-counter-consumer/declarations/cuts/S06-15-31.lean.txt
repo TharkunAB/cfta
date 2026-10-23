@@ -1,0 +1,17 @@
+-/
+namespace MicroCFTA.SourceEqualityNativeDemand
+open InternedConstructorTemplates SourceRecursiveIntersectionCode SourceRecursiveIntersectionThunks
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Native" => SourceRecursiveIntersectionThunks.State
+local notation "Operations" => SourceEqualityConstraintMemoAllocation.State
+local instance : DecidableEq (SourceGuards.Guard FullSyntax.Formula) := SourceEqualityPCSNativeEdge.guardDecidableEq
+
+/-- Native requests retain both physical equality caches and their completed operation tables. -/
+structure State (width : Nat) : Type 1 where
+  native : Native width Symbol Guard
+  operations : Operations
+
+/-- A demanded edge body resumes without looking up its running thunk again. -/
+inductive Control (Output : Type) : Type 1 where
+  | code (body : Code Symbol Guard Output)

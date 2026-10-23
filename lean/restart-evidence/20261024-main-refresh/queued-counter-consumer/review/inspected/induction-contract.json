@@ -1,0 +1,46 @@
+{
+  "status": "REVIEW_ONLY_EXACT_FIN_INDUCTION",
+  "owner": "observed_groups_rebuild_mono",
+  "local_owner": "chain",
+  "activation": "refine Fin.induction ?_ ?_",
+  "activation_count": 1,
+  "public_API": "Fin.induction",
+  "primary_signature": "{motive : Fin (n + 1) \u2192 Sort _} \u2192 motive 0 \u2192 (\u2200 index : Fin n, motive index.castSucc \u2192 motive index.succ) \u2192 \u2200 index : Fin (n + 1), motive index",
+  "motive": "fun index : Fin (n + 1) => (states 0).checked.native.machine.heap.nodes.next \u2264 (states index).checked.native.machine.heap.nodes.next",
+  "motive_is_review_only_not_an_explicit_body_lambda": true,
+  "base_goal": "(states 0).checked.native.machine.heap.nodes.next \u2264 (states 0).checked.native.machine.heap.nodes.next",
+  "successor_intro": "intro index ih",
+  "generated_IH_name": "ih",
+  "generated_IH_type": "(states 0).checked.native.machine.heap.nodes.next \u2264\n  (states index.castSucc).checked.native.machine.heap.nodes.next",
+  "generated_IH_file": "Fin-IH.lean.txt",
+  "successor_goal": "(states 0).checked.native.machine.heap.nodes.next \u2264 (states index.succ).checked.native.machine.heap.nodes.next",
+  "fixed": [
+    "width",
+    "DecidableEq Symbol",
+    "DecidableEq (EdgeKey Symbol Guard)",
+    "n",
+    "rows",
+    "kept",
+    "fuels",
+    "states",
+    "before",
+    "start",
+    "steps",
+    "value",
+    "finalChecked",
+    "observedRawDone"
+  ],
+  "generalized": [],
+  "uses": [
+    {
+      "term": "ih",
+      "count": 1,
+      "scope": "only chain Fin.induction successor, composed with adjacent"
+    }
+  ],
+  "actual_recursive_function_or_theorem_call": false,
+  "unrestricted_induction_oracle": false,
+  "empty_chain_n_zero_included": true,
+  "last_instantiation": "chain (Fin.last n)",
+  "castSucc_and_succ_actual_states_retained": true
+}

@@ -1,0 +1,12 @@
+/-- Ordinary identification computes its metadata from the canonical edge children. -/
+def identifyNode (edges : List (EdgeValue Symbol Guard)) (entry : Interned NodeKey) : Value Symbol Guard :=
+  let children := edges.flatMap EdgeValue.children
+  .node entry edges (maximumDepth children) (childFree children)
+
+/-- Execute empty-child removal, canonical edge ordering, and the ordinary node-cache request. -/
+def makeNode (edges : List (EdgeValue Symbol Guard)) : Work Symbol Guard (Value Symbol Guard) :=
+  let kept := canonicalEdges (surviving edges)
+  match kept with
+  | [] => .pure .empty
+  | first :: rest => .node (.node ((first :: rest).map (fun edge => edge.entry.identity)))
+      (identifyNode (first :: rest)) Work.pure

@@ -1,0 +1,36 @@
+import MicroCFTA.SourceCurrentOriginalRowClusterScanNodeCounterGrowth
+
+namespace MicroCFTA.SourceCurrentOriginalRowReconstructionNodeCounterGrowth
+open InternedConstructorTemplates
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Edge" => EdgeValue Symbol Guard
+variable {width : Nat}
+
+/-- Bound the node counter across the supplied completed group chain and rebuild. -/
+theorem observed_groups_rebuild_mono [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (n : Nat) (rows kept : Fin n → List Edge) (fuels : Fin n → Nat)
+    (states : Fin (n + 1) → SourceCurrentSameSymbolEdgeControl.State width)
+    (before : SourceCurrentSameSymbolEdgeControl.State width)
+    (start : states 0 = before)
+    (steps : ∀ index : Fin n,
+      SourceCurrentOriginalRowClusterScan.execute (fuels index)
+        (.cluster (rows index) []) (states index.castSucc) =
+        .done (kept index) (states index.succ))
+    (value : Value Symbol Guard)
+    (finalChecked : SourceEqualityNativeDemand.State width)
+    (observedRawDone : SourceEqualityNativeDemand.execute 2
+      (.code (.work (makeNode (List.ofFn kept).flatten) .pure))
+      (states (Fin.last n)).checked = .done value finalChecked) :
+    before.checked.native.machine.heap.nodes.next ≤
+      finalChecked.native.machine.heap.nodes.next
+
+  have chain : ∀ index : Fin (n + 1),
+      (states 0).checked.native.machine.heap.nodes.next ≤
+        (states index).checked.native.machine.heap.nodes.next
+
+      have adjacent : (states index.castSucc).checked.native.machine.heap.nodes.next ≤
+          (states index.succ).checked.native.machine.heap.nodes.next
+
+  have rebuilt : (states (Fin.last n)).checked.native.machine.heap.nodes.next ≤
+      finalChecked.native.machine.heap.nodes.next

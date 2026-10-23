@@ -1,0 +1,8 @@
+  let middle := states (Fin.last entries.length)
+  let output := (List.ofFn kept).flatten
+  let built := run (makeNode output) middle.checked.native.machine.heap
+  let after : Wrapper (bits + 2) :=
+    { middle with checked :=
+      { middle.checked with native := (SourceRecursiveIntersectionThunks.advance
+        middle.checked.native { middle.checked.native.machine with heap := built.2 }) } }
+  obtain ⟨midGood, midContextual, midSemantic, midGrowth, midHistory, midStable,

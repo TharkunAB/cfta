@@ -1,0 +1,12 @@
+          .blocked reason (.comparison pivot candidate tail incomparableReversed keptReversed next) after
+
+/-- Run at most the supplied number of scan control steps. -/
+noncomputable def execute [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] :
+    Nat → Control → PairState width → Outcome width
+  | 0, control, state => .yielded control state
+  | fuel + 1, control, state =>
+      match step control state with
+      | .yielded next after => execute fuel next after
+      | .done values after => .done values after
+      | .failed reason after => .failed reason after
+      | .constraintError message after => .constraintError message after

@@ -1,0 +1,29 @@
+            SourceCurrentSameSymbolEdgeControlNodeCounterGrowth.outcomeState] using pairGrowth
+
+/-- Every finite scan outcome retains or increases its input node counter. -/
+theorem execute_mono [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (control : SourceCurrentOriginalRowClusterScan.Control)
+    (state : SourceCurrentSameSymbolEdgeControl.State width) :
+    state.checked.native.machine.heap.nodes.next ≤
+      (outcomeState (SourceCurrentOriginalRowClusterScan.execute fuel control state)).checked.native.machine.heap.nodes.next := by
+  induction fuel generalizing control state with
+  | zero => exact Nat.le_refl _
+  | succ fuel ih =>
+      have first : state.checked.native.machine.heap.nodes.next ≤
+          (outcomeState (SourceCurrentOriginalRowClusterScan.step control state)).checked.native.machine.heap.nodes.next := by
+        exact step_mono control state
+      cases observed : SourceCurrentOriginalRowClusterScan.step control state with
+      | yielded next after =>
+          simp only [observed, outcomeState] at first
+          simpa only [SourceCurrentOriginalRowClusterScan.execute, observed] using
+            Nat.le_trans first (ih next after)
+      | done values after =>
+          simpa only [SourceCurrentOriginalRowClusterScan.execute, observed, outcomeState] using first
+      | failed reason after =>
+          simpa only [SourceCurrentOriginalRowClusterScan.execute, observed, outcomeState] using first
+      | constraintError message after =>
+          simpa only [SourceCurrentOriginalRowClusterScan.execute, observed, outcomeState] using first
+      | blocked reason next after =>
+          simpa only [SourceCurrentOriginalRowClusterScan.execute, observed, outcomeState] using first
+
+end MicroCFTA.SourceCurrentOriginalRowClusterScanNodeCounterGrowth

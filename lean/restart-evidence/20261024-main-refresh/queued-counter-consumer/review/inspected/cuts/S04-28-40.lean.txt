@@ -1,0 +1,13 @@
+/-- Retain the actual state in each scan outcome. -/
+inductive Outcome (width : Nat) : Type 1 where
+  /-- Retain the next control and the full comparison state. -/
+  | yielded (control : Control) (state : PairState width)
+  /-- Return the retained rows and the full comparison state. -/
+  | done (values : List Edge) (state : PairState width)
+  /-- Retain the native failure and the actual state. -/
+  | failed (reason : SourceRecursiveIntersectionKernel.Failure) (state : PairState width)
+  /-- Retain the constraint error and the actual state. -/
+  | constraintError (message : String) (state : PairState width)
+  /-- Retain the blockage, exact residual control and actual state. -/
+  | blocked (reason : PairBlocked) (control : Control) (state : PairState width)
+

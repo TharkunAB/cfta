@@ -1,0 +1,146 @@
+SOURCE SHA256: bf74e1afc44493913061f8af3b17bcab3e039aadcfedff27058346ce2cb4b3cc
+COMPILE: cabal exec -- ghc -threaded -rtsopts -XOverloadedStrings -Wall -Werror -package specftacular -package cfta /tmp/mcfta-main-refresh-20261024/RootLpoComparatorRegression.hs -o /tmp/mcfta-main-refresh-20261024/lpo-comparator-regression
+Loaded package environment from /home/tritlo/Code/mcfta/dist-newstyle/tmp/environment.-23795220/.ghc.environment.x86_64-linux-9.14.1
+[1 of 2] Compiling Main             ( /tmp/mcfta-main-refresh-20261024/RootLpoComparatorRegression.hs, /tmp/mcfta-main-refresh-20261024/RootLpoComparatorRegression.o )
+[2 of 2] Linking /tmp/mcfta-main-refresh-20261024/lpo-comparator-regression
+RUN: /tmp/mcfta-main-refresh-20261024/lpo-comparator-regression
+Validated Int terms: f ([] :: [A]) (c :: Bool), f ([] :: [B]) (d :: Char), f ([] :: [A]) (e :: Int)
+s/t, t/u, u/s: [LT,LT,LT]
+after canonicalTypes: [LT,LT,LT]
+SOURCE SHA256: 337533b7ebae9634e28ed0b6c31922b2c8fa9d8c516d03eb950949c4c4a373c1
+COMPILE: cabal exec -- ghc -threaded -rtsopts -XOverloadedStrings -Wall -Werror -package specftacular -package cfta /tmp/mcfta-main-refresh-20261024/RootLpoContextRegression.hs -o /tmp/mcfta-main-refresh-20261024/lpo-context-regression
+Loaded package environment from /home/tritlo/Code/mcfta/dist-newstyle/tmp/environment.-23795900/.ghc.environment.x86_64-linux-9.14.1
+[1 of 2] Compiling Main             ( /tmp/mcfta-main-refresh-20261024/RootLpoContextRegression.hs, /tmp/mcfta-main-refresh-20261024/RootLpoContextRegression.o )
+[2 of 2] Linking /tmp/mcfta-main-refresh-20261024/lpo-context-regression
+RUN: /tmp/mcfta-main-refresh-20261024/lpo-context-regression
+compare (f a) a: GT
+compare ((f a) x) (a x): LT
+SOURCE SHA256: 5a7e22804d203e90c4347d6d6818955acd5abb45f30bb223256d54a2af69c787
+COMPILE: cabal exec -- ghc -threaded -rtsopts -XOverloadedStrings -Wall -Werror -package specftacular -package cfta /tmp/mcfta-main-refresh-20261024-typing-probe.hs -o /tmp/mcfta-main-refresh-20261024/typing-probe
+Loaded package environment from /home/tritlo/Code/mcfta/dist-newstyle/tmp/environment.-23796710/.ghc.environment.x86_64-linux-9.14.1
+[1 of 2] Compiling Main             ( /tmp/mcfta-main-refresh-20261024-typing-probe.hs, /tmp/mcfta-main-refresh-20261024-typing-probe.o )
+[2 of 2] Linking /tmp/mcfta-main-refresh-20261024/typing-probe
+RUN: /tmp/mcfta-main-refresh-20261024/typing-probe
+option --type-depth: type depth must be a nonnegative integer
+
+Usage: typing-probe SIZE PHASE [--parallel] [--enumerate-ahead] [--split DEPTH] 
+                    [--bucket-timeout SECONDS] [--bucket-mem-limit SIZE] 
+                    [--completion-timeout SECONDS] [--completion-mem-limit SIZE]
+                    [--completion-alloc-limit SIZE] [--recheck N] [--tests N] 
+                    [--checked] [--progress] [--diagnostics phases|detailed] 
+                    [--no-skeleton-templates] [--stop-after PHASE:SIZE] 
+                    [--only-bucket TYPE] [--type-depth D] [--function-buckets] 
+                    [--dump-laws] [--lpo SYMBOLS]
+
+  Find the laws of a signature.
+PASS: parser rejects a negative type depth
+PASS: grammar rejects a negative type depth immediately
+PASS: public search rejects a negative type depth immediately
+In Scope (5 functions/constants):
+---------------------------------
+[]
+reverse
+x0_<A>
+xs0_<[A]>
+xs0_<[[A]]>
+
+Type constructors (and derived) in the signature:
+---------------------------------
+TCons "Specftacular.Types.A" []
+TCons "[]" [TCons "Specftacular.Types.A" []]
+TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]]
+
+Variable generators
+---------------------------------
+(TCons "Specftacular.Types.A" [],("x0_<A>",GivenFun {given_info = GivenVar "x" "A" 0 <generator>, giv_rep = TCons "Specftacular.Types.A" []}))
+(TCons "[]" [TCons "Specftacular.Types.A" []],("xs0_<[A]>",GivenFun {given_info = GivenVar "xs" "[A]" 0 <generator>, giv_rep = TCons "[]" [TCons "Specftacular.Types.A" []]}))
+(TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]],("xs0_<[[A]]>",GivenFun {given_info = GivenVar "xs" "[[A]]" 0 <generator>, giv_rep = TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]]}))
+
+Laws according to Haskell's (==):
+---------------------------------
+1. [] == reverse []
+2. xs0_<[A]> == reverse (reverse xs0_<[A]>)
+Fully monomorphic phase finished..7 terms examined.
+5 unique terms discovered.
+Starting phase with more types....
+Monomorphic phases finished..7 terms examined.
+5 unique terms discovered.
+Starting mono-polymorphic phase....
+Mono-polymorphic phase done! 9 terms examined.
+7 unique terms discovered.
+Starting fully-polymorphic phase....
+Done! 9 terms examined.
+7 unique terms discovered.
+In Scope (5 functions/constants):
+---------------------------------
+[]
+reverse
+x0_<A>
+xs0_<[A]>
+xs0_<[[A]]>
+
+Type constructors (and derived) in the signature:
+---------------------------------
+TCons "Specftacular.Types.A" []
+TCons "[]" [TCons "Specftacular.Types.A" []]
+TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]]
+
+Variable generators
+---------------------------------
+(TCons "Specftacular.Types.A" [],("x0_<A>",GivenFun {given_info = GivenVar "x" "A" 0 <generator>, giv_rep = TCons "Specftacular.Types.A" []}))
+(TCons "[]" [TCons "Specftacular.Types.A" []],("xs0_<[A]>",GivenFun {given_info = GivenVar "xs" "[A]" 0 <generator>, giv_rep = TCons "[]" [TCons "Specftacular.Types.A" []]}))
+(TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]],("xs0_<[[A]]>",GivenFun {given_info = GivenVar "xs" "[[A]]" 0 <generator>, giv_rep = TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]]}))
+
+Laws according to Haskell's (==):
+---------------------------------
+1. [] == reverse []
+2. xs0_<[A]> == reverse (reverse xs0_<[A]>)
+Fully monomorphic phase finished..7 terms examined.
+5 unique terms discovered.
+Starting phase with more types....
+Monomorphic phases finished..7 terms examined.
+5 unique terms discovered.
+Starting mono-polymorphic phase....
+Mono-polymorphic phase done! 9 terms examined.
+7 unique terms discovered.
+Starting fully-polymorphic phase....
+Done! 9 terms examined.
+7 unique terms discovered.
+In Scope (5 functions/constants):
+---------------------------------
+[]
+reverse
+x0_<A>
+xs0_<[A]>
+xs0_<[[A]]>
+
+Type constructors (and derived) in the signature:
+---------------------------------
+TCons "Specftacular.Types.A" []
+TCons "[]" [TCons "Specftacular.Types.A" []]
+TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]]
+
+Variable generators
+---------------------------------
+(TCons "Specftacular.Types.A" [],("x0_<A>",GivenFun {given_info = GivenVar "x" "A" 0 <generator>, giv_rep = TCons "Specftacular.Types.A" []}))
+(TCons "[]" [TCons "Specftacular.Types.A" []],("xs0_<[A]>",GivenFun {given_info = GivenVar "xs" "[A]" 0 <generator>, giv_rep = TCons "[]" [TCons "Specftacular.Types.A" []]}))
+(TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]],("xs0_<[[A]]>",GivenFun {given_info = GivenVar "xs" "[[A]]" 0 <generator>, giv_rep = TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]]}))
+
+Laws according to Haskell's (==):
+---------------------------------
+1. [] == reverse []
+2. xs0_<[A]> == reverse (reverse xs0_<[A]>)
+Fully monomorphic phase finished..7 terms examined.
+5 unique terms discovered.
+Starting phase with more types....
+Monomorphic phases finished..7 terms examined.
+5 unique terms discovered.
+Starting mono-polymorphic phase....
+Mono-polymorphic phase done! 9 terms examined.
+7 unique terms discovered.
+Starting fully-polymorphic phase....
+Done! 9 terms examined.
+7 unique terms discovered.
+PASS: phase 4 runs with incremental typing, depth bound and rechecking
+PASS: serial, parallel and enumerate-ahead runs return identical laws for this signature
+

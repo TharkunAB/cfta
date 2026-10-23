@@ -1,0 +1,9 @@
+  have chain : ∀ index : Fin (n + 1),
+      (states 0).checked.native.machine.heap.nodes.next ≤
+        (states index).checked.native.machine.heap.nodes.next
+
+      have adjacent : (states index.castSucc).checked.native.machine.heap.nodes.next ≤
+          (states index.succ).checked.native.machine.heap.nodes.next
+
+  have rebuilt : (states (Fin.last n)).checked.native.machine.heap.nodes.next ≤
+      finalChecked.native.machine.heap.nodes.next

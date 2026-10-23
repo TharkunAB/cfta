@@ -1,0 +1,76 @@
+COMPILE: cabal exec -- ghc -threaded -rtsopts -XOverloadedStrings -Wall -Werror -package specftacular -package cfta /tmp/mcfta-main-refresh-20261024-pruning-inputs/LpoComparatorRegression.hs -o /tmp/mcfta-main-refresh-20261024/lpo-comparator-regression
+Loaded package environment from /home/tritlo/Code/mcfta/dist-newstyle/tmp/environment.-23785390/.ghc.environment.x86_64-linux-9.14.1
+[1 of 2] Compiling Main             ( /tmp/mcfta-main-refresh-20261024-pruning-inputs/LpoComparatorRegression.hs, /tmp/mcfta-main-refresh-20261024-pruning-inputs/LpoComparatorRegression.o )
+/tmp/mcfta-main-refresh-20261024-pruning-inputs/LpoComparatorRegression.hs:56:52: error: [GHC-63394] [-Wx-partial, -Werror=x-partial]
+    In the use of ‘tail’
+    (imported from Prelude, but defined in GHC.Internal.List):
+    "This is a partial function, it throws an error on empty lists. Replace it with 'drop' 1, or use pattern matching or 'GHC.Internal.Data.List.uncons' instead. Consider refactoring to use "Data.List.NonEmpty"."
+   |
+56 |                 comparisons xs = zipWith order xs (tail xs ++ take 1 xs)
+   |                                                    ^^^^
+
+/tmp/mcfta-main-refresh-20261024-pruning-inputs/LpoComparatorRegression.hs:62:13: error: [GHC-18042] [-Wtype-defaults, Werror=type-defaults]
+    • Defaulting the type variable ‘a0’ to type ‘[Char]’ in the following constraints
+        (Show a0)
+          arising from a use of ‘print’
+          at /tmp/mcfta-main-refresh-20261024-pruning-inputs/LpoComparatorRegression.hs:62:13-17
+        (GHC.Internal.Data.String.IsString a0)
+          arising from the literal ‘"s/t, t/u, u/s"’
+          at /tmp/mcfta-main-refresh-20261024-pruning-inputs/LpoComparatorRegression.hs:62:20-34
+    • In a stmt of a 'do' block: print ("s/t, t/u, u/s", raw)
+      In the expression:
+        do let int = typeSkeletonOf (Proxy :: Proxy Int)
+               order = termCompare (PathOrder ...) (const False)
+               ....
+           unless (all ((== Right int) . termType signature) [s, t, ....])
+             $ fail "the terms do not share the validated Int result type"
+           putStrLn
+             "Validated Int terms: f ([] :: [A]) (c :: Bool), f ([] :: [B]) (d :: Char), f ([] :: [A]) (e :: Int)"
+           print ("s/t, t/u, u/s", raw)
+           ....
+      In a case alternative:
+          Right [s, t, u]
+            -> do let int = ...
+                      ....
+                  unless (all ((== Right int) . termType signature) [s, ....])
+                    $ fail "the terms do not share the validated Int result type"
+                  putStrLn
+                    "Validated Int terms: f ([] :: [A]) (c :: Bool), f ([] :: [B]) (d :: Char), f ([] :: [A]) (e :: Int)"
+                  ....
+   |
+62 |             print ("s/t, t/u, u/s", raw)
+   |             ^^^^^
+
+/tmp/mcfta-main-refresh-20261024-pruning-inputs/LpoComparatorRegression.hs:63:13: error: [GHC-18042] [-Wtype-defaults, Werror=type-defaults]
+    • Defaulting the type variable ‘a0’ to type ‘[Char]’ in the following constraints
+        (Show a0)
+          arising from a use of ‘print’
+          at /tmp/mcfta-main-refresh-20261024-pruning-inputs/LpoComparatorRegression.hs:63:13-17
+        (GHC.Internal.Data.String.IsString a0)
+          arising from the literal ‘"after canonicalTypes"’
+          at /tmp/mcfta-main-refresh-20261024-pruning-inputs/LpoComparatorRegression.hs:63:20-41
+    • In a stmt of a 'do' block:
+        print ("after canonicalTypes", canonical)
+      In the expression:
+        do let int = typeSkeletonOf (Proxy :: Proxy Int)
+               order = termCompare (PathOrder ...) (const False)
+               ....
+           unless (all ((== Right int) . termType signature) [s, t, ....])
+             $ fail "the terms do not share the validated Int result type"
+           putStrLn
+             "Validated Int terms: f ([] :: [A]) (c :: Bool), f ([] :: [B]) (d :: Char), f ([] :: [A]) (e :: Int)"
+           print ("s/t, t/u, u/s", raw)
+           ....
+      In a case alternative:
+          Right [s, t, u]
+            -> do let int = ...
+                      ....
+                  unless (all ((== Right int) . termType signature) [s, ....])
+                    $ fail "the terms do not share the validated Int result type"
+                  putStrLn
+                    "Validated Int terms: f ([] :: [A]) (c :: Bool), f ([] :: [B]) (d :: Char), f ([] :: [A]) (e :: Int)"
+                  ....
+   |
+63 |             print ("after canonicalTypes", canonical)
+   |             ^^^^^
+

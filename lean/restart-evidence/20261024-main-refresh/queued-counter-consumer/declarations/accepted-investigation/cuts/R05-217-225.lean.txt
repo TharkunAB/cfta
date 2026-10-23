@@ -1,0 +1,9 @@
+/-- A raw node constructor reserves at most one node identity and no edge identity. -/
+theorem makeNode_next (edges : List (EdgeValue Symbol Guard)) (state : State Symbol Guard) :
+    (run (makeNode edges) state).2.nodes.next ≤ state.nodes.next + 1 ∧
+    (run (makeNode edges) state).2.edges.next = state.edges.next := by
+  have bounds := run_next_le (makeNode edges) state
+  have exactCounts := run_next (makeNode edges) state
+  have requests := makeNode_requests edges state
+  have reserved := reservations_le_requests (observe (makeNode edges) state)
+  split at requests <;> omega
