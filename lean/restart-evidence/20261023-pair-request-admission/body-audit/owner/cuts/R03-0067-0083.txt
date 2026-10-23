@@ -1,0 +1,17 @@
+/-- Starting evaluation identifies the original suspended cell and exact returned running cell. -/
+theorem demand_evaluate (handle : Nat) (state after : State Key Request Value) (request : Request)
+    (started : demand handle state = (.evaluate request, after)) :
+    state.cells handle = some ⟨request, .suspended⟩ ∧ after.cells handle = some ⟨request, .evaluating⟩ := by
+  cases found : state.cells handle with
+  | none => simp only [demand, found] at started; cases started
+  | some cell =>
+    cases cell with
+    | mk original status =>
+      cases status with
+      | evaluating | returned value => simp only [demand, found] at started; cases started
+      | suspended =>
+        have same := Prod.mk.inj (by simpa only [demand, found] using started)
+        have requests : original = request := Observation.evaluate.inj same.1
+        subst original
+        rcases same.2 with rfl
+        exact ⟨rfl, setStatus_cell handle .evaluating state _ found⟩

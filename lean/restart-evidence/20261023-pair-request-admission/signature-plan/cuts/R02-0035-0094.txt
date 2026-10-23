@@ -1,0 +1,60 @@
+
+/-- A hit keeps its original request. A miss publishes only the supplied admitted request. -/
+theorem Requests.lookup [DecidableEq Key] (property : Request → Prop) (key : Key) (request : Request)
+    (state : FlatMemoThunk.State Key Request Answer) (covered : Requests property state)
+    (known : property request) : Requests property (FlatMemoThunk.lookupOrInsert key request state).2 := by
+  cases found : state.table key with
+  | some handle => simpa only [FlatMemoThunk.lookupOrInsert, found] using covered
+  | none =>
+      intro handle cell stored
+      by_cases same : handle = state.next
+      · subst handle
+        have equal : (⟨request, .suspended⟩ : FlatMemoThunk.Cell Request Answer) = cell := by
+          simpa [FlatMemoThunk.lookupOrInsert, found, Cache.put] using stored
+        subst cell
+        exact known
+      · exact covered handle cell (by
+          simpa only [FlatMemoThunk.lookupOrInsert, found, Cache.put, ite_eq_right same] using stored)
+
+/-- A phase update retains the original stored request and its admission. -/
+theorem Requests.status (property : Request → Prop) (handle : Nat) (phase : FlatMemoThunk.Status Answer)
+    (state : FlatMemoThunk.State Key Request Answer) (covered : Requests property state) :
+    Requests property (FlatMemoThunk.setStatus handle phase state) := by
+  cases found : state.cells handle with
+  | none => simpa only [FlatMemoThunk.setStatus, found] using covered
+  | some original =>
+      intro other cell stored
+      by_cases same : other = handle
+      · subst other
+        have equal : { original with status := phase } = cell := by
+          simpa [FlatMemoThunk.setStatus, found, Cache.put] using stored
+        subst cell
+        exact covered handle original found
+      · exact covered other cell (by
+          simpa only [FlatMemoThunk.setStatus, found, Cache.put, ite_eq_right same] using stored)
+
+/-- Actual demand starts or observes the same admitted request. -/
+theorem Requests.demand (property : Request → Prop) (handle : Nat)
+    (state : FlatMemoThunk.State Key Request Answer) (covered : Requests property state) :
+    Requests property (FlatMemoThunk.demand handle state).2 := by
+  cases found : state.cells handle with
+  | none => simpa only [FlatMemoThunk.demand, found] using covered
+  | some cell =>
+      cases cell with
+      | mk request phase =>
+          cases phase with
+          | suspended => simpa only [FlatMemoThunk.demand, found] using Requests.status property handle .evaluating state covered
+          | evaluating | returned value => simpa only [FlatMemoThunk.demand, found] using covered
+
+/-- Actual finish retains the evaluating request independently of the candidate result. -/
+theorem Requests.finish (property : Request → Prop) (handle : Nat) (value : Answer)
+    (state : FlatMemoThunk.State Key Request Answer) (covered : Requests property state) :
+    Requests property (FlatMemoThunk.finish handle value state) := by
+  cases found : state.cells handle with
+  | none => simpa only [FlatMemoThunk.finish, found] using covered
+  | some cell =>
+      cases cell with
+      | mk request phase =>
+          cases phase with
+          | evaluating => simpa only [FlatMemoThunk.finish, found] using Requests.status property handle (.returned value) state covered
+          | suspended | returned prior => simpa only [FlatMemoThunk.finish, found] using covered

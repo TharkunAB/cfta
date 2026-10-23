@@ -1,0 +1,198 @@
+--- H24/update-documents.py
++++ H25-pending/update-documents.py
+@@ -7,29 +7,29 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ ROOT = HERE.parents[2]
+-SOURCE_SHA = '69a294d6519b9029480175702b8025b1b1a32a1d2328e3c24b6ad0916972610f'
+-SOURCE_LINES = int('41')
+-assert 0 < SOURCE_LINES <= int('120')
+-strict, full, audit_stem = 'pair-stable-model-transport-strict-1', 'pair-stable-model-transport-public-1', 'pair-stable-model-transport-audit-1'
++SOURCE_SHA = '__H25_SOURCE_SHA__'
++SOURCE_LINES = int('__H25_SOURCE_LINES__')
++assert 0 < SOURCE_LINES <= int('__H25_SOURCE_HARD_STOP__')
++strict, full, audit_stem = '__H25_SELECTED_STRICT_STEM__', '__H25_SELECTED_FULL_STEM__', '__H25_AUDIT_STEM__'
+ metrics = {
+-    'actual_jobs': int('3'),
+-    'source_jobs': int('2'),
+-    'audit_jobs': int('1'),
+-    'failed_jobs': int('0'),
+-    'warned_source_exit_zero_jobs': int('0'),
+-    'rejected_public_type_jobs': int('0'),
+-    'audit_build_jobs': int('3641'),
+-    'audit_dependencies': int('75502'),
++    'actual_jobs': int('__H25_ACTUAL_JOBS__'),
++    'source_jobs': int('__H25_SOURCE_JOBS__'),
++    'audit_jobs': int('__H25_AUDIT_JOBS__'),
++    'failed_jobs': int('__H25_FAILED_JOBS__'),
++    'warned_source_exit_zero_jobs': int('__H25_WARNED_SOURCE_EXIT_ZERO_JOBS__'),
++    'rejected_public_type_jobs': int('__H25_REJECTED_PUBLIC_TYPE_JOBS__'),
++    'audit_build_jobs': int('__H25_AUDIT_BUILD_JOBS__'),
++    'audit_dependencies': int('__H25_AUDIT_DEPENDENCIES__'),
+ }
+ start = (HERE / 'starting-head.txt').read_text().strip()
+-assert start == '0d03a28e82f9f3d0b5dfbba16bc919fb16c422cb'
++assert start == '8e9ca779c555994e1b5b6bb207ef664376f90583'
+ proof = (HERE / 'proof-commit.txt').read_text().strip()
+ assert len(proof) == 40 and all(c in '0123456789abcdef' for c in proof)
+ assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip() == proof
+ assert subprocess.check_output(['git', 'branch', '--show-current'], cwd=ROOT, text=True).strip() == 'formalize'
+ now = datetime.datetime.now().astimezone().strftime('%Y-%m-%d %H:%M %Z')
+ gate = json.loads((HERE / 'selected-source-gate.json').read_text())
+-source_path = 'lean/MicroCFTA/SourceCurrentSameSymbolEdgeModelTransport.lean'
++source_path = 'lean/MicroCFTA/__H25_MODULE_NAME__.lean'
+ assert gate['status'] == 'ROOT_ACCEPTED' and gate['path'] == source_path
+ source = (ROOT / source_path).read_bytes()
+ assert hashlib.sha256(source).hexdigest() == gate['sha256'] == SOURCE_SHA
+@@ -37,13 +37,13 @@
+ assert source == (HERE / (strict + '.source.lean')).read_bytes() and (HERE / (strict + '.log')).read_bytes() == b''
+ assert json.loads((HERE / (strict + '.json')).read_text())['exit_code'] == 0
+ raw = (HERE / (full + '.log')).read_bytes()
+-assert hashlib.sha256(raw).hexdigest() == '60e482e706203117cc772e4ac8a2b0040d1463474ad9015c7d40b98ce268a230'
++assert hashlib.sha256(raw).hexdigest() == '__H25_FULL_RAW_SHA__'
+ assert json.loads((HERE / (full + '.json')).read_text())['exit_code'] == 0
+-readback = json.loads((HERE / 'public-readback/pair-stable-model-transport-full-readback.json').read_text())
++readback = json.loads((HERE / 'public-readback/pair-request-admission-full-readback.json').read_text())
+ assert readback['source_sha256'] == SOURCE_SHA and readback['source_lines'] == SOURCE_LINES
+ assert readback['log_sha256'] == hashlib.sha256(raw).hexdigest() and readback['log_bytes'] == len(raw)
+-head_specs = json.loads('[["rebase", "4eaaf82ba9e58cac4adf879eb745c56dd08e8a6f01aae675c1b281b8553c97f2", "4eaaf82ba9e58cac4adf879eb745c56dd08e8a6f01aae675c1b281b8553c97f2", "10b208001752e629ac32e1bb0d3495801f7423aff563ce9bbe6e128c2527ebb7", true, "public-readback/pair-stable-model-transport-rebase-public-type.txt", "public-readback/pair-stable-model-transport-rebase-printed-public-type.txt", "[\\"Quot.sound\\", \\"propext\\"]"]]')
+-assert [spec[0] for spec in head_specs] == json.loads('["rebase"]')
++head_specs = json.loads('__H25_HEAD_SPECS_JSON__')
++assert [spec[0] for spec in head_specs] == json.loads('__H25_PUBLIC_HEAD_NAMES_JSON__')
+ assert head_specs and readback['owned_public_job_exit'] == 0 and readback['no_omissions'] and len(readback['heads']) == len(head_specs)
+ review = json.loads((HERE / 'root-full-review.json').read_text())
+ assert review['complete_public_type_root_review'] == review['independent_complete_public_type_review'] == 'CLEAR'
+@@ -54,7 +54,7 @@
+ checked_types, printed_types = {}, {}
+ for short, type_sha, printed_sha, canonical_sha, raw_identity, type_path, printed_path, axioms_json in head_specs:
+     head = heads[short]
+-    assert head['head'] == 'MicroCFTA.SourceCurrentSameSymbolEdgeModelTransport.' + short
++    assert head['head'] == 'MicroCFTA.__H25_MODULE_NAME__.' + short
+     assert head['check_print_type_identity'] and head['check_print_type_lexical_identity'] and head['unique_complete_type_body_delimiter']
+     checked = (HERE / type_path).read_bytes()
+     printed = (HERE / printed_path).read_bytes()
+@@ -71,9 +71,9 @@
+     proof_report = json.loads((HERE / ('proof-evidence-' + mode + '.json')).read_text())
+     assert proof_report['status'] == 'PASS' and proof_report['live'] is expected_live
+     assert all(proof_report[key] == value for key, value in metrics.items())
+-    assert proof_report['audit_log_sha256'] == '5bc7b23b962b868cfcc39caf495984abaf32cb35628b17f1212cadaca1e23437'
++    assert proof_report['audit_log_sha256'] == '__H25_AUDIT_SHA__'
+ audit = (HERE / (audit_stem + '.log')).read_bytes()
+-assert hashlib.sha256(audit).hexdigest() == proof_report['audit_log_sha256'] == '5bc7b23b962b868cfcc39caf495984abaf32cb35628b17f1212cadaca1e23437'
++assert hashlib.sha256(audit).hexdigest() == proof_report['audit_log_sha256'] == '__H25_AUDIT_SHA__'
+ assert json.loads((HERE / (audit_stem + '.json')).read_text())['exit_code'] == 0
+ assert f"Build completed successfully ({metrics['audit_build_jobs']} jobs).".encode() in audit
+ assert f"{metrics['audit_dependencies']} MicroCFTA theorems".encode() in audit
+@@ -84,46 +84,53 @@
+     f"{short} raw byte identity: {heads[short]['check_print_type_byte_identity']}; lexical identity: {heads[short]['check_print_type_lexical_identity']}; canonical SHA `{heads[short]['canonical_type_sha256']}`.\n"
+     f"{short} actual axioms: {', '.join(heads[short]['actual_axioms']) or 'none'}."
+     for short, data in checked_types.items())
+-update = f'''## Stable pair model transport
++update = f'''## Completed pair request admission
+ 
+ Updated: {now}. Proof checkpoint: `{proof[:10]}`.
+ Start: `{start[:10]}`. Imported main remains `794903b3f`.
+-Read `lean/notes-current-pair-stable-model-transport.md`.
++Read `lean/notes-current-pair-request-admission.md`.
+ 
+-The checked theorem transports Stable for the same populated Wrapper.
+-It requires finite input agreement and genuine old captured canonical request admission.
+-It transports both EdgeLaw fields and the ranked input index. It keeps the complete state.
+-It does not produce actual admission, native Covered, new-source Room or WordRanges.
+-Generated-node composition, Mu/full pass, practical width, Haskell refinement
+-and convergence remain open. H6 constructed_node_calls remains strongest combined.
+-Preservation covers 100056 baseline files/modes, 298 baseline Haskell files
++The checked theorem derives admission for all captured pair memo cells after
++one observed completed H7 comparison. It also derives canonical admission
++for every actual returned pair cell in the same final memo.
++Incoming Stable, old returned canonical admission and the new pair admission
++are explicit premises. The source, model, ranks and holds stay fixed.
++The proof follows the actual control and full state. It does not derive execution.
++Native Covered, generated-node composition, new-source Room, WordRanges,
++Mu/full pass, practical width, Haskell refinement and convergence remain open.
++H6 constructed_node_calls remains strongest combined. The whole goal is incomplete.
++Preservation covers 101066 baseline files/modes, 298 baseline Haskell files
+ and 207 active package files. FINDINGS keeps its repair index FIRST.
+-H23 was pushed and remote-verified at0d03a28e82f9f3d0b5dfbba16bc919fb16c422cb.
+-The user authorized further pushes to formalize. H24 seal and push remain future work.
++H24 was pushed and remote-verified at8e9ca779c555994e1b5b6bb207ef664376f90583.
++The user authorized further pushes to formalize. H25 seal and push remain future work.
+ The local publisher stays LOCAL_ONLY and has no network command.
+ Root push follows successful seal and local checkpoint verification.
+ '''
+ findings = update
+-focused = f'''# Stable pair model transport
++focused = f'''# Completed pair request admission
+ 
+ Updated: {now}. Proof checkpoint: `{proof}`. Start: `{start}`.
+ 
+-The checked theorem transports Stable on the same populated Wrapper.
+-Finite input agreement and admission of the actual old captured canonical requests
+-are explicit premises. They are not produced by this theorem.
+-The proof transports both soundness and bounded completeness in EdgeLaw.
+-The model and ranked index can change under the explicit agreement premises.
+-The checked state, pair memo, keys, statuses, captures and results stay the same.
+-No execution, allocation or native Receipt is produced by this pure transport.
+-No actual admission producer or new-node composition is derived.
+-Native Covered, new-source Room, WordRanges, Mu/full pass, practical width,
+-solver correspondence, Haskell refinement and convergence remain open.
++The checked theorem derives the generic Requests certificate for every stored
++pair memo cell after the same observed completed H7 comparison.
++The certificate covers all cell phases and cells without a table entry.
++The theorem also derives canonical request admission for actual returned cells.
++Incoming Stable and genuine old returned canonical admission are explicit.
++The actual requested full pair must be admitted. The completed run is an explicit
++past-execution premise. No future completion or desired final admission is assumed.
++The source view, input model, ranks and holds stay fixed.
++The local predicate, swap fact, initial certificate, generalized control induction
++and final certificate have exact reviewed type fragments.
++Native steps retain the pair memo. The return path needs no result-language law.
++No native Covered producer, generated-root composition, new-source Room,
++WordRanges, Mu/full pass, practical width, solver correspondence,
++Haskell refinement or convergence is derived.
+ H6 constructed_node_calls remains strongest combined. The whole goal is incomplete.
+ 
+ Selected source: {SOURCE_LINES} lines, SHA `{SOURCE_SHA}`.
+ Selected clean strict: `{strict}`. Selected FULL: `{full}`.
+ Strict has a literal-empty log. Default declaration limits and all linters remain.
+-The source hard stop is {int('120')} lines. Diagnostic options follow the complete module.
++The source hard stop is {int('__H25_SOURCE_HARD_STOP__')} lines. Diagnostic options follow the complete module.
+ FULL retains {len(raw)} raw bytes. Complete TYPEs agree under four-character ASCII whitespace normalization.
+ {type_summary}
+ Root and an independent reviewer read each complete checked public TYPE.
+@@ -140,21 +147,19 @@
+ rejected PUBLIC TYPE commands. All actual inputs, raw logs and repair history remain.
+ Metadata work creates no proof command. Audit has {metrics['audit_build_jobs']}
+ build jobs and {metrics['audit_dependencies']} theorem dependencies.
+-The first bootstrap pull timed out over SSH22. Its verified terminal result and
+-successful one-command HTTPS retry remain archived. These are not proof jobs.
+ This writer claims no seal or local publication success.
+ 
+-Preservation covers 100056 files/modes and 3639 older non-Audit Lean sources.
++Preservation covers 101066 files/modes and 3640 older non-Audit Lean sources.
+ All 298 baseline Haskell files, 207 active package files, proofs, drafts,
+-counterexamples and optimized code remain. Extra H24 Haskell archives must match baseline bytes.
++counterexamples and optimized code remain. Extra H25 Haskell archives must match baseline bytes.
+ Nine document inverses preserve all old text.
+-The original Audit has 3129 lines and SHA f3f370610be0dddc7b2f21b77af15f21cc11774a95b8ecf93cd63748b6ed9145.
++The original Audit has 3130 lines and SHA 1245a94512e41e442a4c2b6969cc5848393a34872bb0f23e09d40fa06020bf66.
+ Its sole edit is the new module import. FINDINGS retains the repair index FIRST.
+ PR #65 and PR #97 remain fixed. No Haskell repair or runtime change is added.
+ 
+-H23 was pushed and remote-verified at0d03a28e82f9f3d0b5dfbba16bc919fb16c422cb.
++H24 was pushed and remote-verified at8e9ca779c555994e1b5b6bb207ef664376f90583.
+ The standing user authorization permits further pushes to formalize.
+-H24 seal and push are not claimed here.
++H25 seal and push are not claimed here.
+ The local publisher stays LOCAL_ONLY/AUTHORIZED_PENDING_ROOT_PUSH.
+ It retains seal, scoped staging and filesystem/index/HEAD checks and runs no network command.
+ Root push follows successful seal and local checkpoint verification.
+@@ -183,7 +188,7 @@
+     (ROOT / name).write_text(changed)
+ (HERE / 'current-update.md').write_text(update)
+ (HERE / 'findings-update.md').write_text(findings)
+-note = ROOT / 'lean/notes-current-pair-stable-model-transport.md'
++note = ROOT / 'lean/notes-current-pair-request-admission.md'
+ assert not note.exists()
+ note.write_text(focused)
+ print('Updated nine documents and focused note. All prior text remains.')

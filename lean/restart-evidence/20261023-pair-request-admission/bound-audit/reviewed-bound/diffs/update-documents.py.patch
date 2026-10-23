@@ -1,0 +1,108 @@
+--- H25-pending/update-documents.py
++++ H25-actual-bound/update-documents.py
+@@ -7,19 +7,19 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ ROOT = HERE.parents[2]
+-SOURCE_SHA = '__H25_SOURCE_SHA__'
+-SOURCE_LINES = int('__H25_SOURCE_LINES__')
+-assert 0 < SOURCE_LINES <= int('__H25_SOURCE_HARD_STOP__')
+-strict, full, audit_stem = '__H25_SELECTED_STRICT_STEM__', '__H25_SELECTED_FULL_STEM__', '__H25_AUDIT_STEM__'
++SOURCE_SHA = '103064aca3b5320b00e001823e6fd372ff51f1768b6dbf8683a8ed58148e5cfe'
++SOURCE_LINES = int('157')
++assert 0 < SOURCE_LINES <= int('180')
++strict, full, audit_stem = 'pair-request-admission-strict-1', 'pair-request-admission-public-1', 'pair-request-admission-audit-1'
+ metrics = {
+-    'actual_jobs': int('__H25_ACTUAL_JOBS__'),
+-    'source_jobs': int('__H25_SOURCE_JOBS__'),
+-    'audit_jobs': int('__H25_AUDIT_JOBS__'),
+-    'failed_jobs': int('__H25_FAILED_JOBS__'),
+-    'warned_source_exit_zero_jobs': int('__H25_WARNED_SOURCE_EXIT_ZERO_JOBS__'),
+-    'rejected_public_type_jobs': int('__H25_REJECTED_PUBLIC_TYPE_JOBS__'),
+-    'audit_build_jobs': int('__H25_AUDIT_BUILD_JOBS__'),
+-    'audit_dependencies': int('__H25_AUDIT_DEPENDENCIES__'),
++    'actual_jobs': int('3'),
++    'source_jobs': int('2'),
++    'audit_jobs': int('1'),
++    'failed_jobs': int('0'),
++    'warned_source_exit_zero_jobs': int('0'),
++    'rejected_public_type_jobs': int('0'),
++    'audit_build_jobs': int('3642'),
++    'audit_dependencies': int('75503'),
+ }
+ start = (HERE / 'starting-head.txt').read_text().strip()
+ assert start == '8e9ca779c555994e1b5b6bb207ef664376f90583'
+@@ -29,7 +29,7 @@
+ assert subprocess.check_output(['git', 'branch', '--show-current'], cwd=ROOT, text=True).strip() == 'formalize'
+ now = datetime.datetime.now().astimezone().strftime('%Y-%m-%d %H:%M %Z')
+ gate = json.loads((HERE / 'selected-source-gate.json').read_text())
+-source_path = 'lean/MicroCFTA/__H25_MODULE_NAME__.lean'
++source_path = 'lean/MicroCFTA/SourceCurrentSameSymbolEdgeRequestAdmission.lean'
+ assert gate['status'] == 'ROOT_ACCEPTED' and gate['path'] == source_path
+ source = (ROOT / source_path).read_bytes()
+ assert hashlib.sha256(source).hexdigest() == gate['sha256'] == SOURCE_SHA
+@@ -37,13 +37,13 @@
+ assert source == (HERE / (strict + '.source.lean')).read_bytes() and (HERE / (strict + '.log')).read_bytes() == b''
+ assert json.loads((HERE / (strict + '.json')).read_text())['exit_code'] == 0
+ raw = (HERE / (full + '.log')).read_bytes()
+-assert hashlib.sha256(raw).hexdigest() == '__H25_FULL_RAW_SHA__'
++assert hashlib.sha256(raw).hexdigest() == '3118c4286d375adf21580fe264a84cab823506f046f04146dc1760c65177a725'
+ assert json.loads((HERE / (full + '.json')).read_text())['exit_code'] == 0
+ readback = json.loads((HERE / 'public-readback/pair-request-admission-full-readback.json').read_text())
+ assert readback['source_sha256'] == SOURCE_SHA and readback['source_lines'] == SOURCE_LINES
+ assert readback['log_sha256'] == hashlib.sha256(raw).hexdigest() and readback['log_bytes'] == len(raw)
+-head_specs = json.loads('__H25_HEAD_SPECS_JSON__')
+-assert [spec[0] for spec in head_specs] == json.loads('__H25_PUBLIC_HEAD_NAMES_JSON__')
++head_specs = json.loads('[["completed_admitted", "d2c2d75fb35b20ac5327d57535140b5261a8360f5c9df3638353c4aaf0a6c9ee", "d2c2d75fb35b20ac5327d57535140b5261a8360f5c9df3638353c4aaf0a6c9ee", "a4904cbf9748a690f677f630700c0fc47398e4d518c5afcaf8ccd3bafb5446c7", true, "public-readback/pair-request-admission-completed_admitted-public-type.txt", "public-readback/pair-request-admission-completed_admitted-printed-public-type.txt", "[\\"Classical.choice\\", \\"Quot.sound\\", \\"propext\\"]"]]')
++assert [spec[0] for spec in head_specs] == json.loads('["completed_admitted"]')
+ assert head_specs and readback['owned_public_job_exit'] == 0 and readback['no_omissions'] and len(readback['heads']) == len(head_specs)
+ review = json.loads((HERE / 'root-full-review.json').read_text())
+ assert review['complete_public_type_root_review'] == review['independent_complete_public_type_review'] == 'CLEAR'
+@@ -54,7 +54,7 @@
+ checked_types, printed_types = {}, {}
+ for short, type_sha, printed_sha, canonical_sha, raw_identity, type_path, printed_path, axioms_json in head_specs:
+     head = heads[short]
+-    assert head['head'] == 'MicroCFTA.__H25_MODULE_NAME__.' + short
++    assert head['head'] == 'MicroCFTA.SourceCurrentSameSymbolEdgeRequestAdmission.' + short
+     assert head['check_print_type_identity'] and head['check_print_type_lexical_identity'] and head['unique_complete_type_body_delimiter']
+     checked = (HERE / type_path).read_bytes()
+     printed = (HERE / printed_path).read_bytes()
+@@ -71,9 +71,9 @@
+     proof_report = json.loads((HERE / ('proof-evidence-' + mode + '.json')).read_text())
+     assert proof_report['status'] == 'PASS' and proof_report['live'] is expected_live
+     assert all(proof_report[key] == value for key, value in metrics.items())
+-    assert proof_report['audit_log_sha256'] == '__H25_AUDIT_SHA__'
++    assert proof_report['audit_log_sha256'] == 'e056cf8c0db769d61acf828844dbebf80bbced55c5a6eac3f8e4256b80869b21'
+ audit = (HERE / (audit_stem + '.log')).read_bytes()
+-assert hashlib.sha256(audit).hexdigest() == proof_report['audit_log_sha256'] == '__H25_AUDIT_SHA__'
++assert hashlib.sha256(audit).hexdigest() == proof_report['audit_log_sha256'] == 'e056cf8c0db769d61acf828844dbebf80bbced55c5a6eac3f8e4256b80869b21'
+ assert json.loads((HERE / (audit_stem + '.json')).read_text())['exit_code'] == 0
+ assert f"Build completed successfully ({metrics['audit_build_jobs']} jobs).".encode() in audit
+ assert f"{metrics['audit_dependencies']} MicroCFTA theorems".encode() in audit
+@@ -96,7 +96,7 @@
+ Incoming Stable, old returned canonical admission and the new pair admission
+ are explicit premises. The source, model, ranks and holds stay fixed.
+ The proof follows the actual control and full state. It does not derive execution.
+-Native Covered, generated-node composition, new-source Room, WordRanges,
++Native Covered for these comparisons, generated-node composition, new-source Room, WordRanges,
+ Mu/full pass, practical width, Haskell refinement and convergence remain open.
+ H6 constructed_node_calls remains strongest combined. The whole goal is incomplete.
+ Preservation covers 101066 baseline files/modes, 298 baseline Haskell files
+@@ -122,7 +122,7 @@
+ The local predicate, swap fact, initial certificate, generalized control induction
+ and final certificate have exact reviewed type fragments.
+ Native steps retain the pair memo. The return path needs no result-language law.
+-No native Covered producer, generated-root composition, new-source Room,
++No native Covered producer for these comparisons, generated-root composition, new-source Room,
+ WordRanges, Mu/full pass, practical width, solver correspondence,
+ Haskell refinement or convergence is derived.
+ H6 constructed_node_calls remains strongest combined. The whole goal is incomplete.
+@@ -130,7 +130,7 @@
+ Selected source: {SOURCE_LINES} lines, SHA `{SOURCE_SHA}`.
+ Selected clean strict: `{strict}`. Selected FULL: `{full}`.
+ Strict has a literal-empty log. Default declaration limits and all linters remain.
+-The source hard stop is {int('__H25_SOURCE_HARD_STOP__')} lines. Diagnostic options follow the complete module.
++The source hard stop is {int('180')} lines. Diagnostic options follow the complete module.
+ FULL retains {len(raw)} raw bytes. Complete TYPEs agree under four-character ASCII whitespace normalization.
+ {type_summary}
+ Root and an independent reviewer read each complete checked public TYPE.

@@ -1,0 +1,10 @@
+  have preserved :
+      ∀ (steps : Nat) (control : SourceCurrentSameSymbolEdgeControl.Control)
+        (current : Wrapper width),
+        SourceCurrentAllocatedNativeAdmissionCache.Requests property current.memo →
+        (match control with
+          | .call pair _ => property pair
+          | .order _ pair _ => property pair
+          | _ => True) →
+        SourceCurrentSameSymbolEdgeControl.execute steps control current = .done result after →
+        SourceCurrentAllocatedNativeAdmissionCache.Requests property after.memo

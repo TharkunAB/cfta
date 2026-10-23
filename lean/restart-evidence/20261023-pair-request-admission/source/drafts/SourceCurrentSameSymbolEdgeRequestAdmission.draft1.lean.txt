@@ -1,0 +1,156 @@
+import MicroCFTA.SourceCurrentSameSymbolEdgeStable
+import MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache
+
+namespace MicroCFTA.SourceCurrentSameSymbolEdgeRequestAdmission
+open Language IntersectSchedule InternedConstructorTemplates
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Edge" => EdgeValue Symbol Guard
+local notation "Wrapper" => SourceCurrentSameSymbolEdgeControl.State
+
+/-- Derive admission for every captured pair after the same completed comparison. -/
+theorem completed_admitted
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    {width : Nat} (view : View Symbol) (model : InputMeaning view)
+    (ranked : RankedInput view model.valid) (holds : Guard → Term Symbol → Bool)
+    (left right result : Edge) (before after : Wrapper width) (fuel : Nat)
+    (stable : SourceCurrentSameSymbolEdgeStable.Stable view model ranked holds before)
+    (admitted : ∀ (handle : Nat) (pair : Edge × Edge) (value : Edge),
+      before.memo.cells handle = some ⟨pair, .returned value⟩ →
+      let ordered := if pair.2.entry.identity < pair.1.entry.identity then (pair.2, pair.1) else pair
+      SourceCurrentAllocatedNativeContextCache.EdgeInputs view model
+        ⟨IntersectionEmptyDomain.emptyDomain, ordered.1, ordered.2⟩)
+    (known : SourceCurrentAllocatedNativeContextCache.EdgeInputs view model
+      ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩)
+    (done : SourceCurrentSameSymbolEdgeControl.execute fuel (.call (left, right) []) before =
+      .done result after) :
+    SourceCurrentAllocatedNativeAdmissionCache.Requests
+      (fun pair : Edge × Edge => SourceCurrentAllocatedNativeContextCache.EdgeInputs view model
+        ⟨IntersectionEmptyDomain.emptyDomain, pair.1, pair.2⟩) after.memo ∧
+    ∀ (handle : Nat) (pair : Edge × Edge) (value : Edge),
+      after.memo.cells handle = some ⟨pair, .returned value⟩ →
+      let ordered := if pair.2.entry.identity < pair.1.entry.identity then (pair.2, pair.1) else pair
+      SourceCurrentAllocatedNativeContextCache.EdgeInputs view model
+        ⟨IntersectionEmptyDomain.emptyDomain, ordered.1, ordered.2⟩ := by
+  let property : Edge × Edge → Prop := fun pair =>
+    SourceCurrentAllocatedNativeContextCache.EdgeInputs view model
+      ⟨IntersectionEmptyDomain.emptyDomain, pair.1, pair.2⟩
+
+  have swapped : ∀ pair : Edge × Edge, property pair → property (pair.2, pair.1) := by
+    intro pair inputs
+    exact ⟨inputs.2, inputs.1⟩
+
+  have initial : SourceCurrentAllocatedNativeAdmissionCache.Requests property before.memo := by
+    intro handle cell stored
+    rcases cell with ⟨pair, status⟩
+    obtain ⟨value, returned⟩ := stable.returned handle ⟨pair, status⟩ stored
+    cases returned
+    by_cases order : pair.2.entry.identity < pair.1.entry.identity
+    · apply swapped (pair.2, pair.1)
+      simpa only [order, ↓reduceIte] using admitted handle pair value stored
+    · simpa only [order, ↓reduceIte] using admitted handle pair value stored
+
+  have preserved :
+      ∀ (steps : Nat) (control : SourceCurrentSameSymbolEdgeControl.Control)
+        (current : Wrapper width),
+        SourceCurrentAllocatedNativeAdmissionCache.Requests property current.memo →
+        (match control with
+          | .call pair _ => property pair
+          | .order _ pair _ => property pair
+          | _ => True) →
+        SourceCurrentSameSymbolEdgeControl.execute steps control current = .done result after →
+        SourceCurrentAllocatedNativeAdmissionCache.Requests property after.memo := by
+    intro steps
+    induction steps with
+    | zero =>
+        intro control current covered active observed
+        cases observed
+    | succ steps ih =>
+        intro control current covered active observed
+        cases control with
+        | call pair pending =>
+            cases selected : FlatMemoThunk.lookupOrInsert
+                (pair.1.entry.identity, pair.2.entry.identity) pair current.memo with
+            | mk handle memo =>
+                apply ih (.demand handle pending) {current with memo := memo}
+                · simpa only [selected] using
+                    SourceCurrentAllocatedNativeAdmissionCache.Requests.lookup
+                      property _ pair current.memo covered active
+                · trivial
+                · simpa only [SourceCurrentSameSymbolEdgeControl.execute,
+                    SourceCurrentSameSymbolEdgeControl.step, selected] using observed
+        | demand handle pending =>
+            cases selected : FlatMemoThunk.demand handle current.memo with
+            | mk observation memo =>
+                cases observation with
+                | absent | busy =>
+                    simp only [SourceCurrentSameSymbolEdgeControl.execute,
+                      SourceCurrentSameSymbolEdgeControl.step, selected] at observed
+                    cases observed
+                | ready value =>
+                    apply ih (.ret value pending) {current with memo := memo}
+                    · simpa only [selected] using
+                        SourceCurrentAllocatedNativeAdmissionCache.Requests.demand
+                          property handle current.memo covered
+                    · trivial
+                    · simpa only [SourceCurrentSameSymbolEdgeControl.execute,
+                        SourceCurrentSameSymbolEdgeControl.step, selected] using observed
+                | evaluate pair =>
+                    apply ih (.order handle pair pending) {current with memo := memo}
+                    · simpa only [selected] using
+                        SourceCurrentAllocatedNativeAdmissionCache.Requests.demand
+                          property handle current.memo covered
+                    · exact covered handle _
+                        (FlatMemoThunk.demand_evaluate handle current.memo memo pair selected).1
+                    · simpa only [SourceCurrentSameSymbolEdgeControl.execute,
+                        SourceCurrentSameSymbolEdgeControl.step, selected] using observed
+        | order handle pair pending =>
+            by_cases order : pair.2.entry.identity < pair.1.entry.identity
+            · apply ih (.call (pair.2, pair.1) (handle :: pending)) current covered
+                (swapped pair active)
+              simpa only [SourceCurrentSameSymbolEdgeControl.execute,
+                SourceCurrentSameSymbolEdgeControl.step, order, ↓reduceIte] using observed
+            · apply ih (.native (.edgeBody
+                ⟨IntersectionEmptyDomain.emptyDomain, pair.1, pair.2⟩ .pure)
+                (handle :: pending)) current covered trivial
+              simpa only [SourceCurrentSameSymbolEdgeControl.execute,
+                SourceCurrentSameSymbolEdgeControl.step, order, ↓reduceIte] using observed
+        | native control pending =>
+            cases advanced : SourceEqualityNativeDemand.step control current.checked with
+            | yielded next checked =>
+                apply ih (.native next pending) {current with checked := checked} covered trivial
+                simpa only [SourceCurrentSameSymbolEdgeControl.execute,
+                  SourceCurrentSameSymbolEdgeControl.step, advanced] using observed
+            | done value checked =>
+                apply ih (.ret value pending) {current with checked := checked} covered trivial
+                simpa only [SourceCurrentSameSymbolEdgeControl.execute,
+                  SourceCurrentSameSymbolEdgeControl.step, advanced] using observed
+            | failed _ _ | constraintError _ _ | blocked _ _ _ =>
+                simp only [SourceCurrentSameSymbolEdgeControl.execute,
+                  SourceCurrentSameSymbolEdgeControl.step, advanced] at observed
+                cases observed
+        | ret value pending =>
+            cases pending with
+            | nil =>
+                simp only [SourceCurrentSameSymbolEdgeControl.execute,
+                  SourceCurrentSameSymbolEdgeControl.step,
+                  SourceCurrentSameSymbolEdgeControl.Outcome.done.injEq] at observed
+                rcases observed with ⟨rfl, rfl⟩
+                exact covered
+            | cons handle pending =>
+                apply ih (.ret value pending)
+                  {current with memo := FlatMemoThunk.finish handle value current.memo}
+                  (SourceCurrentAllocatedNativeAdmissionCache.Requests.finish
+                    property handle value current.memo covered) trivial
+                simpa only [SourceCurrentSameSymbolEdgeControl.execute,
+                  SourceCurrentSameSymbolEdgeControl.step] using observed
+
+  have final : SourceCurrentAllocatedNativeAdmissionCache.Requests property after.memo := by
+    exact preserved fuel (.call (left, right) []) before initial known done
+  refine ⟨final, ?_⟩
+  intro handle pair value stored
+  by_cases order : pair.2.entry.identity < pair.1.entry.identity
+  · simpa only [order, ↓reduceIte] using swapped pair (final handle _ stored)
+  · simpa only [order, ↓reduceIte] using final handle _ stored
+
+end MicroCFTA.SourceCurrentSameSymbolEdgeRequestAdmission

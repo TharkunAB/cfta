@@ -1,0 +1,36 @@
+--- H25-two-contract-shape
++++ H25-seven-contract-shape
+@@ -133,9 +133,22 @@
+     contract_data[filename] = data
+ context = contract_data["context.lean.txt"]
+ assert source.startswith(context)
+-assert list(contracts) == ["context.lean.txt", "public-header.lean.txt"]
++assert list(contracts) == ["context.lean.txt", "public-header.lean.txt", "local-property.lean.txt", "local-swapped.lean.txt", "local-initial.lean.txt", "local-preserved.lean.txt", "local-final.lean.txt"]
+ header = contract_data["public-header.lean.txt"].rstrip(b"\n") + b" := by\n"
+ assert source.count(header) == 1 and source.index(header) >= len(context)
++body_start = source.index(header) + len(header)
++body_end = source.rindex(("end MicroCFTA." + name).encode())
++public_body = source[body_start:body_end]
++local_names = ["property", "swapped", "initial", "preserved", "final"]
++positions = []
++for local in local_names:
++    fragment = contract_data["local-" + local + ".lean.txt"].rstrip(b"\n")
++    fragment += b"\n" if local == "property" else b" := by\n"
++    assert public_body.count(fragment) == 1, local
++    positions.append(public_body.index(fragment))
++assert positions == sorted(positions)
++assert re.findall(rb"(?m)^ *have[ \t]+([^ \t:\n]+)", public_body) == [local.encode() for local in local_names[1:]]
++assert re.findall(rb"(?m)^ *let[ \t]+([^ \t:\n]+)[ \t]*:", public_body) == [b"property"]
+ public = re.findall(r"(?m)^\s*(?:(?:noncomputable|unsafe|partial)\s+)?(def|theorem|lemma|abbrev|opaque|instance|structure|inductive)\s+([^\s(\[{:=]+)", source.decode())
+ assert public == [(kind, short) for short, kind in specs]
+ helpers = []
+@@ -149,7 +162,8 @@
+ assert declaration_review["status"] == "ROOT_DECLARATION_REVIEW_CLEAR"
+ assert declaration_review["module"] == "MicroCFTA." + name
+ assert declaration_review["public_names"] == short_names and declaration_review["private_names"] == helpers
+-assert declaration_review.get("local_induction") is None
++assert declaration_review["local_induction"] == "preserved"
++assert declaration_review["local_names"] == local_names
+ assert declaration_review["source_hard_stop"] == int("__H25_SOURCE_HARD_STOP__")
+ assert declaration_review["contract_sha256"] == "__H25_CONTRACT_SHA256__"
+ assert digest((evidence / "signature-plan/contracts.json").read_bytes()) == declaration_review["contract_sha256"]

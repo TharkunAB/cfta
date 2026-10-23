@@ -1,0 +1,12 @@
+--- drafts/SourceCurrentSameSymbolEdgeRequestAdmission.draft1.lean.txt
++++ SourceCurrentSameSymbolEdgeRequestAdmission.lean
+@@ -75,7 +75,8 @@
+                 apply ih (.demand handle pending) {current with memo := memo}
+                 · simpa only [selected] using
+                     SourceCurrentAllocatedNativeAdmissionCache.Requests.lookup
+-                      property _ pair current.memo covered active
++                      property (pair.1.entry.identity, pair.2.entry.identity)
++                      pair current.memo covered active
+                 · trivial
+                 · simpa only [SourceCurrentSameSymbolEdgeControl.execute,
+                     SourceCurrentSameSymbolEdgeControl.step, selected] using observed

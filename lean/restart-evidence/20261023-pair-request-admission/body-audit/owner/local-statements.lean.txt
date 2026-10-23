@@ -1,0 +1,20 @@
+  let property : Edge × Edge → Prop := fun pair =>
+    SourceCurrentAllocatedNativeContextCache.EdgeInputs view model
+      ⟨IntersectionEmptyDomain.emptyDomain, pair.1, pair.2⟩
+
+  have swapped : ∀ pair : Edge × Edge, property pair → property (pair.2, pair.1)
+
+  have initial : SourceCurrentAllocatedNativeAdmissionCache.Requests property before.memo
+
+  have preserved :
+      ∀ (steps : Nat) (control : SourceCurrentSameSymbolEdgeControl.Control)
+        (current : Wrapper width),
+        SourceCurrentAllocatedNativeAdmissionCache.Requests property current.memo →
+        (match control with
+          | .call pair _ => property pair
+          | .order _ pair _ => property pair
+          | _ => True) →
+        SourceCurrentSameSymbolEdgeControl.execute steps control current = .done result after →
+        SourceCurrentAllocatedNativeAdmissionCache.Requests property after.memo
+
+  have final : SourceCurrentAllocatedNativeAdmissionCache.Requests property after.memo
