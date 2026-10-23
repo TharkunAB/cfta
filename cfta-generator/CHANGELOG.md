@@ -137,14 +137,16 @@ tree automata of `cfta`, with QuickCheck integration.
   classes up to a size bound with a solver that decides every guard on each
   built term, so a liquid automaton has an exact route that needs no
   pruning; a guard the solver cannot decide is `GuardUnknown`.
-- `Data.CFTA.Inclusion`: `inclusionUpTo` decides whether one explicit
-  automaton accepts every term of another up to a size bound. The result is
-  `IncludedUpTo` with the bound, or `NotIncluded` with a smallest
-  counterexample: a term that the first automaton accepts and the second
-  rejects. For each size, it
+- `Data.CFTA.Inclusion`: `inclusion` decides whether one explicit automaton
+  accepts every term of another, and `inclusionUpTo` decides it up to a size
+  bound. The result is `Included`, `IncludedUpTo` with the bound, or
+  `NotIncluded` with a smallest counterexample: a term that the first
+  automaton accepts and the second rejects. For each size, `inclusionUpTo`
   compares the count of the first automaton with the count of the
-  intersection, with `Data.CFTA.Sized`. It accepts only automata without
-  constraints. A constraint is `ConstrainedLeft` or `ConstrainedRight`.
+  intersection, with `Data.CFTA.Sized`. `inclusion` uses the bottom-up
+  antichain algorithm, and then `inclusionUpTo` to find the smallest
+  counterexample. Both accept only automata without constraints. A
+  constraint is `ConstrainedLeft` or `ConstrainedRight`.
 - Terms are `Term symbol` from `Data.CFTA.Term` of `cfta`:
   `fromAutomaton`, `fromAutomatonUpToDepth`, `termAt`, `rankOf`, `ranksOf`,
   `rankOfTerm`, `surface`, and the refinement witnesses take and give `Term`
