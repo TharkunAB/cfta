@@ -109,8 +109,10 @@ all the states. For each state that the initial state reaches, the classes
 are those that 'sized' gives with that state as the initial state.
 
 The result is 'ResidualGuard' when a transition that the initial state can
-reach has a guard beyond equality constraints. A rank query of a state
-builds a position table for that state.
+reach has a guard beyond equality constraints. A guard on a transition that
+the initial state cannot reach is not checked, so the classes of a state that
+the initial state does not reach can hold too many terms. Do not read them.
+A rank query of a state builds a position table for that state.
 -}
 sizedStates ::
     (Ord state, Ord symbol) =>
