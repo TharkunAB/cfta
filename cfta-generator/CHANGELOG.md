@@ -151,6 +151,12 @@ tree automata of `cfta`, with QuickCheck integration.
   the solver does not decide a guard on a term, it stops at the size of that
   term, with `UnknownAt` or a counterexample below that size. A constraint
   that a check does not accept is `ConstrainedLeft` or `ConstrainedRight`.
+  `partitionUpTo` and `partition` check a list of parts against a whole:
+  whether the parts cover the whole, with a smallest `Gap` otherwise, and
+  whether they are disjoint within it, with a smallest `Overlap` and the
+  indexes of its two parts otherwise. `partitionUpTo` takes equality
+  constraints; `partition` decides without a bound for automata without
+  constraints.
 - Terms are `Term symbol` from `Data.CFTA.Term` of `cfta`:
   `fromAutomaton`, `fromAutomatonUpToDepth`, `termAt`, `rankOf`, `ranksOf`,
   `rankOfTerm`, `surface`, and the refinement witnesses take and give `Term`
