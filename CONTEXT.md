@@ -97,6 +97,8 @@ Wilf, and Feat (ranking).
   language.
 - **Weight**: a relative frequency weight of an alternative or a value
   (QuickCheck's word). Not the real-valued weight of a Boltzmann sampler.
+  The weight of a term is the product of the weights of the symbols of its
+  nodes (`withWeights`).
 - **Checked rank**: a rank of a term with whether the ranking checked every
   symbol of the term.
 - **Occurrence**: the token of one recursion probe.

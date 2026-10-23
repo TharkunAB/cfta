@@ -154,7 +154,12 @@ tree automata of `cfta`, with QuickCheck integration.
   gives the tokens with an accepted completion, `undecidedTokens` the tokens
   that the solver neither offers nor rejects, `undecidedTerms` the undecided
   completions, and `completeVerdict` whether the prefix is an accepted term,
-  with `Unknown` when the solver does not decide it.
+  with `Unknown` when the solver does not decide it. `withWeights` gives each
+  symbol a non-negative `Rational` weight, and the weight of a term is the
+  product over its nodes: `completionWeight`, `nextTokenWeights`, and
+  `tokenProbability` give the exact masses and probabilities, and
+  `sampleWeighted` and `drawCompletion` draw a completion in proportion to its
+  weight.
 - Terms are `Term symbol` from `Data.CFTA.Term` of `cfta`:
   `fromAutomaton`, `fromAutomatonUpToDepth`, `termAt`, `rankOf`, `ranksOf`,
   `rankOfTerm`, `surface`, and the refinement witnesses take and give `Term`
