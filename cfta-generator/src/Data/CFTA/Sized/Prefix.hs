@@ -34,11 +34,11 @@ the sizes of the terms that fill the pending nodes.
 The completions are distinct terms, each once, as in "Data.CFTA.Sized". When
 the rows of the automaton are unambiguous, each term has at most one run.
 Then two stacks have no completion in common, and the count of a stack is the
-convolution of the counts of its states. The counts of a state come from
-'Data.CFTA.Sized.sized', with the state as the initial state. When the rows are ambiguous, one
-term can complete two stacks. Then the queries list the completions and keep
-the first place of each term, as 'Data.CFTA.Sized.sizedReference' does. This
-is exact, but it is slow for many completions.
+convolution of the counts of its states. The counts of the states come from
+one count table, 'Data.CFTA.Sized.sizedStates'. When the rows are ambiguous,
+one term can complete two stacks. Then the queries list the completions and
+keep the first place of each term, as 'Data.CFTA.Sized.sizedReference' does.
+This is exact, but it is slow for many completions.
 
 The completions are in order of their size, then of their stack, then of the
 terms that fill the stack. The term of the first pending node varies
@@ -82,7 +82,7 @@ import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint, noConstraint)
 import qualified Data.CFTA.Gen.Internal.Table as Ordinary
 import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), Size (..))
-import Data.CFTA.Sized (Sized, countOfSize, sized, termsOfSize, unrankOfSize)
+import Data.CFTA.Sized (Sized, countOfSize, sizedStates, termsOfSize, unrankOfSize)
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
 
@@ -157,11 +157,9 @@ prefixCompletions (Size bound) automaton
             , tablesClasses = IntMap.fromList [(number state, stateClasses state) | state <- Map.keys rows]
             , tablesUnambiguous = Ordinary.unambiguousRows $ Map.map (map void) rows
             }
-    stateClasses state =
-        fromRight (error "prefixCompletions: an automaton without constraints has size classes")
-            $ sized
-            $ fromRight (error "prefixCompletions: each state of a valid automaton is a valid initial state")
-            $ FTA.mkFTA state (Map.toList rows)
+    stateClasses =
+        fromRight (error "prefixCompletions: an automaton without constraints has size classes") $
+            sizedStates automaton
 
 {- | The completions after one more token. 'Nothing' when no completion
 starts with the prefix and the token.

@@ -2,6 +2,7 @@ module Data.CFTA.Sized.PrefixSpec (spec) where
 
 import Control.Monad (forM_)
 import Data.Containers.ListUtils (nubOrd)
+import Data.Either (fromRight)
 import Data.Functor (void)
 import Data.List (genericLength, inits, isPrefixOf, sort)
 import qualified Data.Map.Strict as Map
@@ -18,8 +19,8 @@ import qualified Data.CFTA.Equality as ECTA
 import Data.CFTA.Gen.Internal.Table (unambiguousRows)
 import Data.CFTA.Gen.TypedArithmeticLanguage (arithAutomaton)
 import Data.CFTA.Gen.UntypedExpressionLanguage (expressionAutomaton)
-import Data.CFTA.Index (Cardinality (..), Rank (..), Size (..))
-import Data.CFTA.Sized (sized, termsOfSize)
+import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), Size (..))
+import Data.CFTA.Sized (countOfSize, sized, sizedStates, termsOfSize, unrankOfSize)
 import Data.CFTA.Sized.Prefix
 import Data.CFTA.Symbol (Symbol (Symbol))
 import Data.CFTA.Term (Term)
@@ -109,6 +110,18 @@ fixture name graph = describe name $ do
                 Just gen -> do
                     (prefix, draw gen) `shouldBe` (prefix, draw gen)
                     (prefix, filter (`notElem` completionTerms completions) (draw gen)) `shouldBe` (prefix, [])
+    it "reads the classes that sized gives with each state as the initial state" $
+        forM_ (Map.keys $ FTA.transitionTable $ FTA.trim graph) $ \state -> do
+            let shared = either (error . show) id (sizedStates graph) state
+                alone =
+                    either (error . show) id
+                        $ sized
+                        $ fromRight (error "a state of a valid automaton is a valid initial state")
+                        $ FTA.mkFTA state (Map.toList $ FTA.transitionTable graph)
+            forM_ [1 .. sizeBound] $ \size -> do
+                let Cardinality count = countOfSize alone (Size size)
+                    classOf found = (termsOfSize found (Size size), [unrankOfSize found (Size size) (ClassRank rank) | rank <- [-1 .. count]])
+                (size, countOfSize shared (Size size), classOf shared) `shouldBe` (size, Cardinality count, classOf alone)
     it "rejects invalid prefixes" $
         forM_ invalid $ \prefix -> do
             (prefix, isJust $ afterPrefix empty prefix) `shouldBe` (prefix, False)
