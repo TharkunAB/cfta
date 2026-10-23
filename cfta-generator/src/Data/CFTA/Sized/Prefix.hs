@@ -147,6 +147,7 @@ import qualified Test.QuickCheck as QC
 
 import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint, constraintPaths, equalities, equalityConstraint, noConstraint, residual)
+import Data.CFTA.Equality.Constraint (EqConstraints (EqConstraints), unPathEClass)
 import qualified Data.CFTA.Gen.Internal.Table as Ordinary
 import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), Size (..))
 import Data.CFTA.Path (ChildIndex (..), Path, getPath, path, unPath)
@@ -482,6 +483,7 @@ afterRuns walk token = case decidingPending walk of
       where
         go open flag [] = pure $ Just (stack, reverse open, flag)
         go open flag (obligation@(node, state, index) : rest)
+            | equalitiesFail template node (constraintAt state index) = pure Nothing
             | decidedBy template node (constraintAt state index) = do
                 verdict <- case getPath node placeholder of
                     Just subterm -> machineConstraint machine state index subterm
@@ -506,6 +508,31 @@ afterRuns walk token = case decidingPending walk of
                    , (node, state, index) <- open
                    ]
                 <> zipWith (machineState machine) stack terms
+
+{- | Whether the prefix decides that the equality constraints of the node at a
+path fail for every completion: a path leaves the term at a node that the
+prefix fixes, or two paths of a class reach nodes that the prefix fixes with
+different symbols or numbers of children at the same place.
+-}
+equalitiesFail :: Template Symbol -> Path -> Constraint -> Bool
+equalitiesFail template node constraint = case equalities constraint of
+    EqConstraints classes -> any (classFails . map (at template . (unPath node <>) . unPath) . Set.toList . unPathEClass) classes
+    _ -> True
+  where
+    classFails found =
+        Nothing `elem` found || or [conflict left right | (left, rights) <- pairs (catMaybes found), right <- rights]
+    pairs (first : rest) = (first, rest) : pairs rest
+    pairs [] = []
+    -- The part of the prefix at a path: 'Nothing' when the path leaves the
+    -- term at a node that the prefix fixes, and 'Just Hole' below a pending node.
+    at part [] = Just part
+    at (TemplateNode _ children) (ChildIndex child : rest) = case drop child children of
+        next : _ | child >= 0 -> at next rest
+        _ -> Nothing
+    at _ _ = Just Hole
+    conflict (TemplateNode left lefts) (TemplateNode right rights) =
+        left /= right || length lefts /= length rights || or (zipWith conflict lefts rights)
+    conflict _ _ = False
 
 -- | Whether the prefix fixes every path that a constraint of the node at a path reads.
 decidedBy :: Template Symbol -> Path -> Constraint -> Bool
