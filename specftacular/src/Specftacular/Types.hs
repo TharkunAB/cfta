@@ -781,12 +781,62 @@ variable of each new variable type. 'Nothing' if the result type does not
 unify or no naming fits.
 -}
 generalizeCarriers :: Sig -> Map TypeSkeleton Symbol -> Term -> Maybe (TypeSkeleton -> Maybe Term)
-generalizeCarriers sig variableOfType term = do
+generalizeCarriers = generalizeCarriersWithin Nothing
+
+{- | 'generalizeCarriers' that also gives 'Nothing' when a type
+variable of a constant takes a type deeper than the bound, as the grammar
+with @--type-depth@ allows (see 'Specftacular.Utils.mtauWithin'). Without a
+bound, it is 'generalizeCarriers'.
+-}
+generalizeCarriersWithin :: Maybe Int -> Sig -> Map TypeSkeleton Symbol -> Term -> Maybe (TypeSkeleton -> Maybe Term)
+generalizeCarriersWithin bound sig variableOfType term = snd <$> carrierTypings False bound sig variableOfType term
+
+{- | Whether a partial program has a typing at a result type, within
+the type depth bound. A hole @?program@ has a fresh type. A generated variable
+has the type of its name, as in the automaton, so the carriers of the
+variables of a program must agree with the result type. Thus the check holds
+for each program of the automaton and for each partial program that one of
+them completes.
+-}
+typableAt :: Maybe Int -> Sig -> TypeSkeleton -> Term -> Bool
+typableAt bound sig resultType term = maybe False (\(check, _) -> check resultType) (carrierTypings True bound sig Map.empty term)
+
+{- | Whether a constant of the signature can have a type, within the
+type depth bound. The type variables of the type are renamed apart from
+those of the constant.
+-}
+constantFits :: Maybe Int -> Sig -> TypeSkeleton -> Symbol -> Bool
+constantFits bound sig ty symbol = typableAt bound sig (renameApart ty) (Term symbol [Term "?" []])
+  where
+    renameApart t = case t of
+        TVar v -> TVar ("e:" <> v)
+        TCons name args -> TCons name (map renameApart args)
+        TFun arg result -> TFun (renameApart arg) (renameApart result)
+
+{- | The check of 'typableAt' and the typings of 'generalizeCarriersWithin',
+from one principal typing. With 'True', a generated variable has the type of
+its name instead of a fresh type variable at each carrier.
+-}
+carrierTypings ::
+    Bool ->
+    Maybe Int ->
+    Sig ->
+    Map TypeSkeleton Symbol ->
+    Term ->
+    Maybe (TypeSkeleton -> Bool, TypeSkeleton -> Maybe Term)
+carrierTypings rigid bound sig variableOfType term = do
     (typed, equations) <- annotate "r" term
     substitution <- foldM (\s (a, b) -> unifyTypes a b s) Map.empty equations
     let resolved = mapTypes (applyTypes substitution) typed
-    pure $ \resultType -> do
-        fixed <- unifyTypes (nodeType resolved) resultType Map.empty
+        instanceVariables = nubOrd [v | v <- concatMap typeVariablesOf (nodeTypes typed), "c:" `T.isPrefixOf` v]
+        principalWithin d = all (\v -> typeDepthOf (applyTypes substitution (TVar v)) <= d) instanceVariables
+        fixedAt resultType = do
+            fixed <- unifyTypes (nodeType resolved) resultType Map.empty
+            let withinBound d = all (\v -> typeDepthOf (applyTypes fixed (applyTypes substitution (TVar v))) <= d) instanceVariables
+            if maybe True withinBound bound then Just fixed else Nothing
+    if maybe True principalWithin bound then Just () else Nothing
+    pure . (\typings -> (isJust . fixedAt, typings)) $ \resultType -> do
+        fixed <- fixedAt resultType
         let instantiated = mapTypes (applyTypes fixed) resolved
             keys =
                 Map.fromListWith
@@ -804,66 +854,13 @@ generalizeCarriers sig variableOfType term = do
         listToMaybe
             [schema | naming <- candidates, Just schema <- [rebuild (mapTypes (applyTypes (Map.fromList naming)) instantiated)]]
   where
-    annotate path (Term "app" [_, f, x]) = do
-        (f', fs) <- annotate (path <> "f") f
-        (x', xs) <- annotate (path <> "x") x
-        let result = TVar ("g:" <> path)
-        pure (CT.Node ("app", result) [f', x'], (nodeType f', TFun (nodeType x') result) : fs ++ xs)
-    annotate path (Term symbol@(Symbol name) [_]) = do
-        fun <- Map.lookup name sig
-        let ty = case fun of
-                GivenFun{given_info = GivenVar{}} -> snd (carrierPositions path 0 (sfTypeRep fun))
-                _ -> freshInstance path (generalizeType (sfTypeRep fun))
-        pure (CT.Node (symbol, ty) [], [])
-    annotate _ _ = Nothing
-    -- Each carrier of a variable type gets its own fresh type variable.
-    carrierPositions path index ty
-        | ty `elem` map fst carriers = (index + 1, TVar ("v:" <> path <> ":" <> T.pack (show index)))
-        | otherwise = case ty of
-            TCons name args -> TCons name <$> foldList (carrierPositions path) index args
-            TFun arg result ->
-                let (afterArg, arg') = carrierPositions path index arg
-                    (afterResult, result') = carrierPositions path afterArg result
-                 in (afterResult, TFun arg' result')
-            TVar _ -> (index, ty)
-    foldList _ index [] = (index, [])
-    foldList step index (ty : rest) =
-        let (next, ty') = step index ty
-            (final, rest') = foldList step next rest
-         in (final, ty' : rest')
-    freshInstance path ty = case ty of
-        TVar name -> TVar ("c:" <> path <> ":" <> name)
-        TCons name args -> TCons name (map (freshInstance path) args)
-        TFun arg result -> TFun (freshInstance path arg) (freshInstance path result)
-    unifyTypes a b s = case (applyTypes s a, applyTypes s b) of
-        (a', b') | a' == b' -> Just s
-        (TVar v, b') | not (occursIn v b') -> Just (Map.insert v b' s)
-        (a', TVar v) | not (occursIn v a') -> Just (Map.insert v a' s)
-        (TFun a1 r1, TFun a2 r2) -> unifyTypes a1 a2 s >>= unifyTypes r1 r2
-        (TCons c1 as1, TCons c2 as2)
-            | c1 == c2 && length as1 == length as2 -> foldM (\m (x, y) -> unifyTypes x y m) s (zip as1 as2)
-        _ -> Nothing
-    applyTypes s ty = case ty of
-        TVar v | Just bound <- Map.lookup v s -> applyTypes s bound
-        TCons name args -> TCons name (map (applyTypes s) args)
-        TFun arg result -> TFun (applyTypes s arg) (applyTypes s result)
-        TVar _ -> ty
-    occursIn v ty = case ty of
-        TVar w -> v == w
-        TCons _ args -> any (occursIn v) args
-        TFun arg result -> occursIn v arg || occursIn v result
-    typeVariablesOf ty = case ty of
-        TVar v -> [v]
-        TCons _ args -> concatMap typeVariablesOf args
-        TFun arg result -> typeVariablesOf arg ++ typeVariablesOf result
-    nodeType (CT.Node (_, ty) _) = ty
+    annotate = annotateWith rigid sig
     -- The generated variables of the typed schema, each with the type
     -- variables of its carrier positions in order.
     variablePositions (CT.Node (symbol@(Symbol name), ty) []) = case Map.lookup name sig of
         Just GivenFun{given_info = GivenVar{}} -> [(symbol, typeVariablesOf ty)]
         _ -> []
     variablePositions (CT.Node _ children) = concatMap variablePositions children
-    nodeTypes (CT.Node (_, ty) children) = ty : concatMap nodeTypes children
     mapTypes f (CT.Node (symbol, ty) children) = CT.Node (symbol, f ty) (map (mapTypes f) children)
     -- Injective namings of the type variables, in the order of the carriers.
     namings [] _ = [[]]
@@ -874,6 +871,142 @@ generalizeCarriers sig variableOfType term = do
             Just GivenFun{given_info = GivenVar{}} -> (\variable -> Term variable [typeSkeletonToTerm ty]) <$> Map.lookup ty variableOfType
             _ -> Just (Term symbol [typeSkeletonToTerm ty])
         _ -> Nothing
+
+{- | The typing problem of a program. Each node gets a type and each
+application an equation. With 'True', a generated variable has the type of
+its name (see 'carrierTypings'). 'Nothing' if a symbol is not in the
+signature.
+-}
+annotateWith :: Bool -> Sig -> T.Text -> Term -> Maybe (CT.Term (Symbol, TypeSkeleton), [(TypeSkeleton, TypeSkeleton)])
+annotateWith rigid sig path (Term "app" [_, f, x]) = do
+    (f', fs) <- annotateWith rigid sig (path <> "f") f
+    (x', xs) <- annotateWith rigid sig (path <> "x") x
+    let result = TVar ("g:" <> path)
+    pure (CT.Node ("app", result) [f', x'], (nodeType f', TFun (nodeType x') result) : fs ++ xs)
+-- A hole of a partial program has a fresh type.
+annotateWith _ _ _ (Term symbol@(Symbol name) [])
+    | "?program#" `T.isPrefixOf` name = pure (CT.Node (symbol, TVar ("h#" <> T.drop (T.length "?program#") name)) [], [])
+annotateWith rigid sig path (Term symbol@(Symbol name) [_]) = do
+    fun <- Map.lookup name sig
+    let ty = case fun of
+            GivenFun{given_info = GivenVar{}}
+                | rigid -> sfTypeRep fun
+                | otherwise -> snd (carrierPositions path 0 (sfTypeRep fun))
+            _ -> freshInstance path (generalizeType (sfTypeRep fun))
+    pure (CT.Node (symbol, ty) [], [])
+annotateWith _ _ _ _ = Nothing
+
+-- | Each carrier of a variable type gets its own fresh type variable.
+carrierPositions :: T.Text -> Int -> TypeSkeleton -> (Int, TypeSkeleton)
+carrierPositions path index ty
+    | ty `elem` map fst carriers = (index + 1, TVar ("v:" <> path <> ":" <> T.pack (show index)))
+    | otherwise = case ty of
+        TCons name args -> TCons name <$> foldList (carrierPositions path) index args
+        TFun arg result ->
+            let (afterArg, arg') = carrierPositions path index arg
+                (afterResult, result') = carrierPositions path afterArg result
+             in (afterResult, TFun arg' result')
+        TVar _ -> (index, ty)
+
+-- | 'carrierPositions' over a list of types.
+foldList :: (Int -> TypeSkeleton -> (Int, TypeSkeleton)) -> Int -> [TypeSkeleton] -> (Int, [TypeSkeleton])
+foldList _ index [] = (index, [])
+foldList step index (ty : rest) =
+    let (next, ty') = step index ty
+        (final, rest') = foldList step next rest
+     in (final, ty' : rest')
+
+-- | An instance of a type scheme with type variables named by a path.
+freshInstance :: T.Text -> TypeSkeleton -> TypeSkeleton
+freshInstance path ty = case ty of
+    TVar name -> TVar ("c:" <> path <> ":" <> name)
+    TCons name args -> TCons name (map (freshInstance path) args)
+    TFun arg result -> TFun (freshInstance path arg) (freshInstance path result)
+
+-- | Extend a substitution so that it unifies two types.
+unifyTypes :: TypeSkeleton -> TypeSkeleton -> Map T.Text TypeSkeleton -> Maybe (Map T.Text TypeSkeleton)
+unifyTypes a b s = case (applyTypes s a, applyTypes s b) of
+    (a', b') | a' == b' -> Just s
+    (TVar v, b') | not (occursIn v b') -> Just (Map.insert v b' s)
+    (a', TVar v) | not (occursIn v a') -> Just (Map.insert v a' s)
+    (TFun a1 r1, TFun a2 r2) -> unifyTypes a1 a2 s >>= unifyTypes r1 r2
+    (TCons c1 as1, TCons c2 as2)
+        | c1 == c2 && length as1 == length as2 -> foldM (\m (x, y) -> unifyTypes x y m) s (zip as1 as2)
+    _ -> Nothing
+
+-- | Apply a substitution to a type.
+applyTypes :: Map T.Text TypeSkeleton -> TypeSkeleton -> TypeSkeleton
+applyTypes s ty = case ty of
+    TVar v | Just bound <- Map.lookup v s -> applyTypes s bound
+    TCons name args -> TCons name (map (applyTypes s) args)
+    TFun arg result -> TFun (applyTypes s arg) (applyTypes s result)
+    TVar _ -> ty
+
+-- | Whether a type variable occurs in a type.
+occursIn :: T.Text -> TypeSkeleton -> Bool
+occursIn v ty = case ty of
+    TVar w -> v == w
+    TCons _ args -> any (occursIn v) args
+    TFun arg result -> occursIn v arg || occursIn v result
+
+-- | The depth of a type, as @--type-depth@ counts it.
+typeDepthOf :: TypeSkeleton -> Int
+typeDepthOf ty = case ty of
+    TVar _ -> 0
+    TCons _ [] -> 0
+    TCons _ args -> 1 + maximum (map typeDepthOf args)
+    TFun arg result -> 1 + max (typeDepthOf arg) (typeDepthOf result)
+
+-- | The type variables of a type, in order, with repeats.
+typeVariablesOf :: TypeSkeleton -> [T.Text]
+typeVariablesOf ty = case ty of
+    TVar v -> [v]
+    TCons _ args -> concatMap typeVariablesOf args
+    TFun arg result -> typeVariablesOf arg ++ typeVariablesOf result
+
+-- | The type of the root of a typed program.
+nodeType :: CT.Term (Symbol, TypeSkeleton) -> TypeSkeleton
+nodeType (CT.Node (_, ty) _) = ty
+
+-- | The types of the nodes of a typed program, in preorder.
+nodeTypes :: CT.Term (Symbol, TypeSkeleton) -> [TypeSkeleton]
+nodeTypes (CT.Node (_, ty) children) = ty : concatMap nodeTypes children
+
+{- | The typing of a partial program of the programs enumeration, kept
+from one expansion to the next. It has a substitution and the instance type
+variables of the constants. The hole @?program#n@ has the type variable
+@h#n@.
+-}
+data PartialTyping = PartialTyping (Map T.Text TypeSkeleton) [T.Text]
+
+-- | The typing of the program that is the hole @?program#0@ at a result type.
+startTyping :: TypeSkeleton -> PartialTyping
+startTyping resultType = PartialTyping (Map.singleton "h#0" resultType) []
+
+{- | The typing after the hole @?program#n@ expands to a fragment, as
+'typableAt' types it. 'Nothing' if the fragment cannot have the type of the
+hole, or if a type variable of a constant takes a type deeper than the
+bound. Each hole of the fragment has a fresh type.
+-}
+extendTyping :: Maybe Int -> Sig -> Int -> Term -> PartialTyping -> Maybe PartialTyping
+extendTyping bound sig n fragment (PartialTyping substitution instances) = do
+    let name = T.pack (show n)
+    (typed, equations) <- annotateWith True sig ("u" <> name <> ":") fragment
+    substitution' <- foldM (\s (a, b) -> unifyTypes a b s) substitution ((TVar ("h#" <> name), nodeType typed) : equations)
+    let instances' = [v | v <- concatMap typeVariablesOf (nodeTypes typed), "c:" `T.isPrefixOf` v] ++ instances
+        within d = all (\v -> typeDepthOf (applyTypes substitution' (TVar v)) <= d) instances'
+    if maybe True within bound then Just (PartialTyping substitution' instances') else Nothing
+
+{- | A type with its type variables renamed in the order of their first
+occurrence, so that two types that differ only in the names of their type
+variables are equal.
+-}
+canonicalVariables :: TypeSkeleton -> TypeSkeleton
+canonicalVariables ty = applyTypes (Map.fromList (zip (nubOrd (typeVariablesOf ty)) (map (TVar . T.pack . show) [0 :: Int ..]))) ty
+
+-- | The type of the hole @?program#n@ under a typing.
+holeTypeOf :: PartialTyping -> Int -> TypeSkeleton
+holeTypeOf (PartialTyping substitution _) n = applyTypes substitution (TVar ("h#" <> T.pack (show n)))
 
 -- | Resolve an annotation without changing the program symbols.
 canonicalType :: Term -> Term

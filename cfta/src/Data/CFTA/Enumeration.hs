@@ -37,6 +37,7 @@ module Data.CFTA.Enumeration (
     -- * Pruning oracles
     termsPrune,
     termsPruneWith,
+    termsPruneUntil,
     OrderedConfig (..),
     OrderedCursor,
     OrderedNext (..),
@@ -59,7 +60,7 @@ module Data.CFTA.Enumeration (
 ) where
 
 import Control.Applicative (Alternative (..))
-import Control.Monad (MonadPlus, forM_, guard, mzero, unless, when, zipWithM)
+import Control.Monad (MonadPlus, forM_, guard, mzero, unless, void, when, zipWithM)
 import Control.Monad.State.Strict (MonadState, gets, modify')
 import qualified Control.Monad.State.Strict as State
 import qualified Data.Foldable as Foldable
@@ -868,18 +869,14 @@ nextExpandableUVar choose = do
                                 preferred
                         _ -> intToUVar (IntSet.findMin candidates)
 
-{- | Expand one UVar into a fragment.
+{- | Expand one selected slot into a fragment with the supplied node-expansion
+function.
 
 The pattern bind is deliberately failable: a failed match in 'EnumerateM'
 ends the branch, so a UVar that is not an unexpanded node drops this branch
 instead of raising. The branch is unreachable through @enumerateFully'@, which takes its
 UVar from 'nextExpandableUVar' and so only offers expandable UVars.
 -}
-enumerateOutUVar ::
-    (Hashable symbol, Typeable symbol) => UVar -> EnumerateM symbol (TermFragment symbol)
-enumerateOutUVar = enumerateOutUVarWith enumerateNode
-
--- | Expand one selected slot with the supplied node-expansion function.
 enumerateOutUVarWith ::
     (Hashable symbol, Typeable symbol) =>
     (Seq SuspendedConstraint -> Node symbol -> EnumerateM symbol (TermFragment symbol)) ->
@@ -909,6 +906,18 @@ enumerateFully :: (Hashable symbol, Typeable symbol) => EnumerateM symbol ()
 enumerateFully =
     enumerateFully' () noExpansionPreference (\state _ _ -> return (False, state))
 
+{- | 'enumerateUntil'' without a stop rule and without narrowing: enumerate
+until the root term is complete.
+-}
+enumerateFully' ::
+    forall symbol a.
+    (Hashable symbol, Typeable symbol) =>
+    a ->
+    ExpansionOrder a ->
+    (a -> UVar -> Either (TermFragment symbol) (Node symbol) -> EnumerateM symbol (Bool, a)) ->
+    EnumerateM symbol ()
+enumerateFully' ost order oracle = void (enumerateUntil' Nothing (\_ _ n -> n) enumerateNode ost order oracle)
+
 {- | Enumerate until the root term is complete, with optional oracle pruning.
 
 The oracle is called twice around each UVar it expands:
@@ -927,44 +936,74 @@ The 'ExpansionOrder' sees the same state and may steer which expandable UVar
 goes next; 'noExpansionPreference' leaves that to the enumerator. An
 unconstrained 'Mu' is never offered for expansion, so it is not expanded and
 produces neither callback. Enumeration ends when no other UVar can be expanded.
+
+Before the choice of an edge, the narrowing function can drop edges of the
+node of the UVar. It sees the state and the UVar. A node without edges ends
+the branch. The node expansion function expands the chosen node, for example
+'enumerateNode'.
+
+With a stop rule, enumeration also ends when the rule accepts every UVar that
+is still to expand, the blocked ones included. The result is then the state at
+that point. Without a stop rule, or at the end of the enumeration, the result
+is 'Nothing'.
 -}
-enumerateFully' ::
+enumerateUntil' ::
     forall symbol a.
     (Hashable symbol, Typeable symbol) =>
+    Maybe (a -> UVar -> Bool) ->
+    (a -> UVar -> Node symbol -> Node symbol) ->
+    (Seq SuspendedConstraint -> Node symbol -> EnumerateM symbol (TermFragment symbol)) ->
     a ->
     ExpansionOrder a ->
     (a -> UVar -> Either (TermFragment symbol) (Node symbol) -> EnumerateM symbol (Bool, a)) ->
-    EnumerateM symbol ()
-enumerateFully' ost order oracle = do
-    muv <- nextExpandableUVar (order ost)
-    case muv of
-        ExpansionStuck -> mzero
-        ExpansionDone -> return ()
-        ExpansionNext uv ->
-            let continue ost' = do
-                    tf <- enumerateOutUVar uv
-                    (should_prune, ost'') <- oracle ost' uv (Left tf)
-                    if should_prune
-                        then mzero
-                        else enumerateFully' ost'' order oracle
-                expand n = do
-                    (should_prune, ost') <- oracle ost uv (Right n)
-                    if should_prune then mzero else continue ost'
-             in do
-                    UVarUnenumerated (Just n) scs <- getUVarValue uv
-                    case n of
-                        _ | recursiveBoundary n -> do
+    EnumerateM symbol (Maybe a)
+enumerateUntil' stop narrow expandNode ost order oracle = case stop of
+    Just rule -> do
+        remaining <- gets _expandableUVars
+        if not (IntSet.null remaining) && all (rule ost . intToUVar) (IntSet.toList remaining)
+            then return (Just ost)
+            else step
+    Nothing -> step
+  where
+    step = do
+        muv <- nextExpandableUVar (order ost)
+        case muv of
+            ExpansionStuck -> mzero
+            ExpansionDone -> return Nothing
+            ExpansionNext uv -> expandNext uv
+    expandNext uv =
+        let continue ost' = do
+                tf <- enumerateOutUVarWith expandNode uv
+                (should_prune, ost'') <- oracle ost' uv (Left tf)
+                if should_prune
+                    then mzero
+                    else enumerateUntil' stop narrow expandNode ost'' order oracle
+            expand n scs = do
+                let narrowed = narrow ost uv n
+                case narrowed of
+                    EmptyNode -> mzero
+                    _
+                        | nodeIdentity narrowed == nodeIdentity n -> pure ()
+                        | otherwise -> do
                             uv' <- getUVarRepresentative uv
-                            ancestry <- gets $ IntMap.findWithDefault HashSet.empty (uvarToInt uv') . _recursionAncestry
-                            if HashSet.member (recursionKey n scs) ancestry
-                                then do
-                                    -- The expansion of this node with these paths led to it
-                                    -- again, so each further expansion repeats the last one.
-                                    -- Enumeration stops here, as at an unconstrained 'Mu'.
-                                    setUVarValue uv' (UVarUnenumerated (Just n) Sequence.Empty)
-                                    enumerateFully' ost order oracle
-                                else expand n
-                        _ -> expand n
+                            setUVarValue uv' (UVarUnenumerated (Just narrowed) scs)
+                (should_prune, ost') <- oracle ost uv (Right narrowed)
+                if should_prune then mzero else continue ost'
+         in do
+                UVarUnenumerated (Just n) scs <- getUVarValue uv
+                case n of
+                    _ | recursiveBoundary n -> do
+                        uv' <- getUVarRepresentative uv
+                        ancestry <- gets $ IntMap.findWithDefault HashSet.empty (uvarToInt uv') . _recursionAncestry
+                        if HashSet.member (recursionKey n scs) ancestry
+                            then do
+                                -- The expansion of this node with these paths led to it
+                                -- again, so each further expansion repeats the last one.
+                                -- Enumeration stops here, as at an unconstrained 'Mu'.
+                                setUVarValue uv' (UVarUnenumerated (Just n) Sequence.Empty)
+                                enumerateUntil' stop narrow expandNode ost order oracle
+                            else expand n scs
+                    _ -> expand n scs
 
 ---------------------
 -------- Expanding an enumerated term fragment into a term
@@ -1125,6 +1164,33 @@ termsPruneWith recursionSymbol ost order oracle n =
     map fst $ flip allBranches (initEnumerationState (canonicalEdgesOf Nothing n) n) $ do
         enumerateFully' ost order oracle
         expandUVarWith recursionSymbol (intToUVar 0)
+
+{- | 'termsPruneWith' that stops a branch when the stop rule accepts every
+UVar that is still to expand, and gives the partial term at that point, with
+'UVarHole' at those UVars. A branch that reaches a complete term gives that
+term. The narrowing function can drop edges of the node of each UVar before
+the choice (see 'enumerateUntil''). It must keep each edge that leads to a
+term that the caller wants. Each expansion defers the children of the chosen
+edge as UVars where it can (see 'enumerateShallowHere'), so that each choice
+of a subterm is the expansion of a UVar, which the narrowing sees.
+
+A branch stops without the search for a completion of its remaining UVars,
+so a partial term need not have a completion in the automaton.
+-}
+termsPruneUntil ::
+    forall symbol a.
+    (Hashable symbol, Ord symbol, Typeable symbol) =>
+    a ->
+    ExpansionOrder a ->
+    (a -> UVar -> Node symbol -> Node symbol) ->
+    (a -> UVar -> Bool) ->
+    (a -> UVar -> Either (TermFragment symbol) (Node symbol) -> EnumerateM symbol (Bool, a)) ->
+    Node symbol ->
+    [Term (PartialSymbol symbol)]
+termsPruneUntil ost order narrow stop oracle n =
+    map fst $ flip allBranches (initEnumerationState (canonicalEdgesOf Nothing n) n) $ do
+        _ <- enumerateUntil' (Just stop) narrow enumerateShallowHere ost order oracle
+        rootTermFrag >>= expandPartialTermFrag
 
 {- | The terms of the automaton's accepting runs, each once.
 

@@ -222,3 +222,25 @@ typeToFta (TVar v) =
 typeToFta (TFun t1 t2) = arrowType (typeToFta t1) (typeToFta t2)
 typeToFta (TCons "Fun" [t1, t2]) = arrowType (typeToFta t1) (typeToFta t2)
 typeToFta (TCons s ts) = mkDatatype s (map typeToFta ts)
+
+{- | Whether a type node can hold a type. A type variable of the type,
+and a type variable of the node (see 'globalTyVars'), stand for any type. The
+check ignores the constraints of the node, so it can hold for a type that the
+node does not hold.
+-}
+typeAdmits :: Node Symbol -> TypeSkeleton -> Bool
+typeAdmits n ty = case (n, ty) of
+    (_, TVar _) -> True
+    (Node es, _) -> any edgeAdmits es
+    _ -> True
+  where
+    edgeAdmits e = case (ty, edgeChildren e) of
+        _ | null (edgeChildren e) && edgeSymbol e `elem` globalTyVarSymbols -> True
+        (TCons name args, children) ->
+            edgeSymbol e == Symbol name && length children == length args && and (zipWith typeAdmits children args)
+        (TFun arg result, [_, arg', result']) -> edgeSymbol e == "->" && typeAdmits arg' arg && typeAdmits result' result
+        _ -> False
+
+-- | The symbols of 'globalTyVars'.
+globalTyVarSymbols :: [Symbol]
+globalTyVarSymbols = [edgeSymbol e | var <- globalTyVars, e <- nodeEdges var]
