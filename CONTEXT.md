@@ -130,6 +130,18 @@ Wilf, and Feat (ranking).
 - **Checked rank**: a rank of a term with whether the ranking checked every
   symbol of the term.
 - **Occurrence**: the token of one recursion probe.
+- **Query route**: a named way to list the terms of a graph, with a version.
+  The route and its version fix the order. Route `sized`, version 1, is the
+  order of `Data.CFTA.Sized`. A **listing** holds the terms of each size from
+  one to a size bound, in the order of a route.
+- **Checkpoint**: a saved position in a listing: the graph, the query route
+  and its version, the size bound, and the sized rank of the next term.
+  Resuming a checkpoint gives the next term and the terms after it, in the
+  same order, also in a new process. A checkpoint is **stale** for each graph
+  other than its own graph.
+- **Relocation**: finding a term in another graph, and making a checkpoint at
+  that term. It does not continue the old listing: the new listing can repeat
+  or skip terms of the old one.
 
 ## Generators
 
