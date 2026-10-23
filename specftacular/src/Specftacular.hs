@@ -520,7 +520,11 @@ parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.p
                 )
             <*> O.optional
                 ( O.option
-                    O.auto
+                    ( O.eitherReader $ \text ->
+                        case TR.readMaybe text of
+                            Just depth | depth >= 0 -> Right depth
+                            _ -> Left "type depth must be a nonnegative integer"
+                    )
                     ( O.long "type-depth"
                         <> O.metavar "D"
                         <> O.help "Bound the types that the type variables of the grammar take to depth D"
@@ -742,6 +746,8 @@ searchPhases
     givenInstances
     givenSig =
         do
+            when (maybe False (< 0) typeDepthSetting) $
+                fail "type depth must be a nonnegative integer"
             -- Threads write whole diagnostic lines.
             when parallelSetting $ hSetBuffering stderr LineBuffering
             sink <- newIORef []
