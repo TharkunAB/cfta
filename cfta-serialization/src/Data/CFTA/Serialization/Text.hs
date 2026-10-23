@@ -29,6 +29,10 @@ module Data.CFTA.Serialization.Text (
     parseCheckpoint,
     printCheckpointWith,
     parseCheckpointWith,
+    printSamplingCheckpoint,
+    parseSamplingCheckpoint,
+    printSamplingCheckpointWith,
+    parseSamplingCheckpointWith,
 ) where
 
 import Control.Applicative ((<|>))
@@ -45,11 +49,12 @@ import Data.Text (Text)
 import qualified Data.Text as Text
 import qualified Data.Text.Lazy as Lazy
 import Data.Text.Lazy.Builder (Builder, fromText, toLazyText)
+import Data.Word (Word64)
 import Numeric (showHex)
 import Text.Read (readEither)
 
 import qualified Data.CFTA as FTA
-import Data.CFTA.Checkpoint (Checkpoint (..))
+import Data.CFTA.Checkpoint (Checkpoint (..), SamplingCheckpoint (..))
 import qualified Data.CFTA.Constraint as C
 import qualified Data.CFTA.Document as D
 import Data.CFTA.Equality.Constraint (
@@ -58,7 +63,7 @@ import Data.CFTA.Equality.Constraint (
     unPathEClass,
  )
 import qualified Data.CFTA.Formula as F
-import Data.CFTA.Index (ChildIndex (ChildIndex), ClassRank (ClassRank), Size (Size))
+import Data.CFTA.Index (ChildIndex (ChildIndex), ClassRank (ClassRank), Size (Size), Weight (Weight))
 import qualified Data.CFTA.Language as L
 import Data.CFTA.Path (Path (Path), unPath)
 import Data.CFTA.Symbol (Symbol (RefinedSymbol, Symbol), symbolRefinement, symbolText, valueName)
@@ -171,6 +176,26 @@ parseCheckpoint = readCheckpoint (readEither . Text.unpack)
 parseCheckpointWith :: (Ord state) => StateCodec state -> Text -> Either (TextError state) (Checkpoint state)
 parseCheckpointWith = readCheckpoint . decodeState
 
+{- | Print a sampling checkpoint with state labels from their 'Show' instance.
+The text holds the query, the weights, the pseudorandom generator, the seed,
+and the number of draws, then the text of 'printGraph' for the graph.
+-}
+printSamplingCheckpoint :: (Show state) => SamplingCheckpoint state -> Text
+printSamplingCheckpoint = renderSamplingCheckpoint (Text.pack . show)
+
+-- | Print a sampling checkpoint with an explicit typed state codec.
+printSamplingCheckpointWith :: StateCodec state -> SamplingCheckpoint state -> Text
+printSamplingCheckpointWith = renderSamplingCheckpoint . encodeState
+
+-- | Read a sampling checkpoint with its state's 'Read' instance, and validate its graph.
+parseSamplingCheckpoint :: (Ord state, Read state) => Text -> Either (TextError state) (SamplingCheckpoint state)
+parseSamplingCheckpoint = readSamplingCheckpoint (readEither . Text.unpack)
+
+-- | Read a sampling checkpoint with an explicit typed state codec.
+parseSamplingCheckpointWith ::
+    (Ord state) => StateCodec state -> Text -> Either (TextError state) (SamplingCheckpoint state)
+parseSamplingCheckpointWith = readSamplingCheckpoint . decodeState
+
 -- | Render graph rows with their complete transition constraints.
 renderGraph :: (state -> Text) -> FTA.PlainFTA state Symbol -> Text
 renderGraph encode = built . plainGraphText encode
@@ -214,6 +239,32 @@ renderCheckpoint encode checkpoint =
   where
     Size bound = checkpointBound checkpoint
     (Size size, ClassRank rank) = checkpointNext checkpoint
+
+-- | Render the query, the weights, and the position of the run, then the graph in the graph format.
+renderSamplingCheckpoint :: (state -> Text) -> SamplingCheckpoint state -> Text
+renderSamplingCheckpoint encode checkpoint =
+    built $
+        "sampling 1;\nquery "
+            <> nameText (samplingRoute checkpoint)
+            <> " "
+            <> integerText (samplingVersion checkpoint)
+            <> ";\nbound "
+            <> integerText bound
+            <> ";\nweights "
+            <> maybe "uniform" weightsText (samplingWeights checkpoint)
+            <> ";\nprng "
+            <> nameText (samplingPrng checkpoint)
+            <> " "
+            <> integerText (samplingPrngVersion checkpoint)
+            <> ";\nseed "
+            <> integerText (toInteger $ samplingSeed checkpoint)
+            <> ";\ndraws "
+            <> integerText (samplingDraws checkpoint)
+            <> ";\n\n"
+            <> plainGraphText encode (samplingGraph checkpoint)
+  where
+    Size bound = samplingBound checkpoint
+    weightsText weights = listText [integerText size <> ": " <> integerText weight | (Size size, Weight weight) <- Map.toAscList weights]
 
 -- | Render a named exclusion.
 exclusionText :: L.ExclusionName -> L.Exclusion -> Builder
@@ -439,6 +490,57 @@ integerText = fromText . Text.pack . show
 -- | Finish one text builder.
 built :: Builder -> Text
 built = Lazy.toStrict . toLazyText
+
+-- | Read the query, the weights, the position, and the graph of a sampling checkpoint.
+readSamplingCheckpoint ::
+    (Ord state) => (Text -> Either String state) -> Text -> Either (TextError state) (SamplingCheckpoint state)
+readSamplingCheckpoint decode input = do
+    (fields, rows) <- runParser parser input
+    graph <- validGraph rows
+    pure $ fields graph
+  where
+    parser = do
+        keyword "sampling"
+        format <- integerParser
+        unless (format == 1) $ fail "unsupported sampling version; expected 1"
+        token ";"
+        keyword "query"
+        route <- nameParser
+        version <- integerParser
+        token ";"
+        keyword "bound"
+        bound <- integerParser
+        token ";"
+        keyword "weights"
+        uniform <- startsKeyword "uniform"
+        weights <-
+            if uniform
+                then keyword "uniform" $> Nothing
+                else Just . Map.fromList <$> (bracketed weight >>= distinctSizes)
+        token ";"
+        keyword "prng"
+        algorithm <- nameParser
+        algorithmVersion <- integerParser
+        token ";"
+        keyword "seed"
+        seed <- integerParser
+        when (seed < 0 || seed > toInteger (maxBound :: Word64)) $ fail "seed is outside the range of a 64-bit word"
+        token ";"
+        keyword "draws"
+        draws <- integerParser
+        token ";"
+        rows <- plainGraphParser decode
+        pure
+            ( \graph -> SamplingCheckpoint graph route version (Size bound) weights algorithm algorithmVersion (fromInteger seed) draws
+            , rows
+            )
+    weight = (,) <$> (Size <$> integerParser <* token ":") <*> (Weight <$> integerParser)
+    distinctSizes entries = do
+        foldM_ distinct Set.empty $ map fst entries
+        pure entries
+    distinct seen size
+        | Set.member size seen = fail $ "duplicate weight of size " <> show size
+        | otherwise = pure $ Set.insert size seen
 
 -- | Read graph syntax and validate identities before constructing its row map.
 readGraph ::
