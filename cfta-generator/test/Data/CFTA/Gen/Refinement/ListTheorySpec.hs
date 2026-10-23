@@ -7,9 +7,14 @@ The programs are the chunks @[]@, @[1]@, @[2]@, @[1,2]@, and @[2,1]@, the
 reverse of a chunk, and the append of two chunks. The @answer@ production
 requires that the value of its program is sorted and a permutation of
 @[1,2]@. Both solvers accept the same five programs, with the same ranks.
+
+Z3 runs as one process for all queries ('withZ3Theory'). A second route
+starts one process for each query with the complete script
+('entailmentScript'). It gives the same verdict for each query.
 -}
 module Data.CFTA.Gen.Refinement.ListTheorySpec (spec) where
 
+import Data.IORef (IORef, modifyIORef', newIORef, readIORef)
 import qualified Data.Map.Strict as Map
 import Data.String (fromString)
 import Data.Text (Text)
@@ -23,9 +28,11 @@ import Data.CFTA.Formula (Formula (..), Name, Relation (..), Sort (..), Term (..
 import Data.CFTA.Index (ClassRank (..), Size)
 import Data.CFTA.Path (path)
 import Data.CFTA.Refinement.Ground (groundEntailment)
+import Data.CFTA.Refinement.LiquidFixpoint (TimeLimitReached (..))
 import Data.CFTA.Refinement.SmtLib (entailmentScript)
 import Data.CFTA.Refinement.Theory
-import Data.CFTA.Refinement.Verdict (Entailment (entails), Verdict (..), entailmentWithBindings)
+import Data.CFTA.Refinement.Verdict (Entailment (entails), Verdict (..), entailmentWithBindings, entailsWithBindings)
+import Data.CFTA.Refinement.Z3Process (withZ3Theory, withZ3TheoryTimeout)
 import qualified Data.CFTA.Sized as Sized
 import Data.CFTA.Symbol (Symbol (RefinedSymbol), symbolText, valueName)
 import qualified Data.CFTA.Term as Tree
@@ -86,11 +93,11 @@ declarations = theoryDeclarations listTheory <> [(value, list)]
 ground :: Entailment
 ground = groundEntailment (theoryInterpretations listTheory) Map.empty declarations []
 
-{- | Z3 with the SMT-LIB text of the theory, one process for each query, with
-a time limit in milliseconds.
+{- | Z3 with the complete SMT-LIB script of each query, one process for each
+query, with a time limit in milliseconds.
 -}
-z3 :: Int -> Entailment
-z3 milliseconds = entailmentWithBindings $ \bindings antecedent consequent ->
+z3Script :: Int -> Entailment
+z3Script milliseconds = entailmentWithBindings $ \bindings antecedent consequent ->
     case entailmentScript listTheory Map.empty declarations [] bindings antecedent consequent of
         Left _ -> pure Unknown
         Right script -> do
@@ -150,6 +157,13 @@ language =
         , ys <- chunks
         ]
 
+-- | Record the verdict of each query, in the order of the queries.
+recording :: IORef [Verdict] -> Entailment -> Entailment
+recording verdicts solver = entailmentWithBindings $ \bindings antecedent consequent -> do
+    verdict <- entailsWithBindings solver bindings antecedent consequent
+    modifyIORef' verdicts (verdict :)
+    pure verdict
+
 -- | The accepted programs up to size four, with their sizes and class ranks.
 accepted :: Entailment -> IO [(Size, ClassRank, Text)]
 accepted solver = do
@@ -175,10 +189,23 @@ spec = describe "a theory of integer lists" $ do
     it "decides the 35 programs by ground evaluation" $
         accepted ground >>= (`shouldBe` expected)
 
-    it "decides the 35 programs with Z3 and the SMT-LIB text" $
-        accepted (z3 10000) >>= (`shouldBe` expected)
+    it "decides the 35 programs with one Z3 process" $
+        withZ3Theory listTheory declarations [] accepted >>= (`shouldBe` expected)
 
-    it "gives Unknown for reverse(reverse(xs)) == xs for all lists" $ do
+    it "decides the 35 programs with one Z3 process for each query" $
+        accepted (z3Script 10000) >>= (`shouldBe` expected)
+
+    it "gives the same verdict for each query with one process and with a process for each query" $ do
+        persistent <- newIORef []
+        perQuery <- newIORef []
+        _ <- withZ3Theory listTheory declarations [] (accepted . recording persistent)
+        _ <- accepted (recording perQuery (z3Script 10000))
+        verdicts <- readIORef persistent
+        length verdicts `shouldBe` 45
+        readIORef perQuery >>= (`shouldBe` verdicts)
+
+    it "does not decide reverse(reverse(xs)) == xs for all lists" $ do
         let involution = Forall [("xs", list)] (Atom Eq (App "reverse" [App "reverse" [Var "xs"]]) (Var "xs"))
         entails ground Top involution >>= (`shouldBe` Unknown)
-        entails (z3 2000) Top involution >>= (`shouldBe` Unknown)
+        withZ3TheoryTimeout 2000 listTheory declarations [] $ \z3 ->
+            entails z3 Top involution `shouldThrow` (== TimeLimitReached 2000)
