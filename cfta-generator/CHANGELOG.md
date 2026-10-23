@@ -160,9 +160,12 @@ tree automata of `cfta`, with QuickCheck integration.
   token, and `decided` gives the `Completions` of the current prefix. The
   verdicts are kept for the whole walk. The next tokens come from the runs of
   the automaton on the prefix, and a constraint that the prefix fixes is
-  decided once for its whole run. `withWeights` gives each symbol a
-  non-negative `Rational` weight, and the weight of a term is the product
-  over its nodes: `completionWeight`, `nextTokenWeights`, and
+  decided once for its whole run. With equality constraints, the walk
+  enumerates the completions of an automaton of the terms of each exact size,
+  restricted to the prefix, with the equalities solved by unification, so its
+  tokens need no list of the terms up to the bound. `withWeights` gives each
+  symbol a non-negative `Rational` weight, and the weight of a term is the
+  product over its nodes: `completionWeight`, `nextTokenWeights`, and
   `tokenProbability` give the exact masses and probabilities, and
   `sampleWeighted` and `drawCompletion` draw a completion in proportion to its
   weight.

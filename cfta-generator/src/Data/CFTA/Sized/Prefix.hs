@@ -83,6 +83,15 @@ run. 'decided' gives the 'Completions' of the current prefix, the same as
 'prefixCompletionsWith' and 'afterPrefix' give. A query for counts needs
 every candidate decided, so it gains nothing from the walk.
 
+With equality constraints, the walk takes its candidates from an automaton of
+the terms of each exact size up to the bound, restricted to the prefix, whose
+enumerator ("Data.CFTA.Enumeration") solves the equalities by unification. A
+token is then offered at the first completion that the enumerator gives, so
+the tokens are exact without a list of the terms up to the bound. The counts
+are not: an equality class that joins two pending nodes makes the count of
+their fillings more than a product of their counts, so 'decided' and the
+counts still list the candidates.
+
 'withWeights' gives each symbol a weight, a non-negative 'Rational'. The weight
 of a term is the product of the weights of the symbols of its nodes.
 'nextTokenWeights' gives the total weight of the completions after each token,
@@ -147,15 +156,17 @@ import qualified Test.QuickCheck as QC
 
 import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint, constraintPaths, equalities, equalityConstraint, noConstraint, residual)
+import qualified Data.CFTA.Enumeration as Enumeration
 import Data.CFTA.Equality.Constraint (EqConstraints (EqConstraints), unPathEClass)
 import qualified Data.CFTA.Gen.Internal.Table as Ordinary
 import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), Size (..))
+import Data.CFTA.Interned (Node (Node), edgeChildren, fromFTA, nodeEdges, setChildren)
 import Data.CFTA.Path (ChildIndex (..), Path, getPath, path, unPath)
 import Data.CFTA.Refinement.Evaluate (evaluateConstraint)
 import Data.CFTA.Refinement.Verdict (Entailment, Verdict (..), andVerdicts, orVerdicts)
 import Data.CFTA.Sized (Sized, countOfSize, sizedStates, termsOfSize, unrankOfSize)
 import Data.CFTA.Symbol (Symbol)
-import Data.CFTA.Template (Template (..), preorderPrefix)
+import Data.CFTA.Template (Template (..), preorderPrefix, restrict)
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
 
@@ -291,8 +302,14 @@ data Deciding = Deciding
     , decidingRuns :: Set.Set Run
     -- ^ The runs on the prefix that can have a candidate within the budget.
     , decidingMachine :: Machine
-    -- ^ The automaton, and the memories of the verdicts, for the whole walk.
+    , decidingProduct :: Maybe (Node Symbol)
+    {- ^ With equality constraints, the automaton of the terms of each exact
+    size up to the bound, restricted to the prefix: its enumeration gives the
+    completions, with the equalities solved by unification.
+    -}
     }
+
+-- \^ The automaton, and the memories of the verdicts, for the whole walk.
 
 {- | A run of the automaton on the nodes of a prefix: the stack of pending
 states; the constraints of the prefix nodes that the prefix does not decide,
@@ -354,6 +371,10 @@ deciding entailment (Size bound) automaton = do
             , decidingPending = [path []]
             , decidingRuns = Set.fromList $ filter (runFits machine bound) [([machineInitial machine], [], False)]
             , decidingMachine = machine
+            , decidingProduct =
+                if any (any (hasEqualities . FTA.transitionConstraint)) (FTA.transitionTable $ FTA.trim automaton)
+                    then Just $ fromFTA $ FTA.trim $ bySize bound automaton
+                    else Nothing
             }
   where
     rows = FTA.transitionTable automaton
@@ -391,7 +412,7 @@ first, until one is not rejected.
 -}
 decidingStep :: Deciding -> (Symbol, Int) -> IO (Maybe Deciding)
 decidingStep walk token = do
-    (runs, verdicts) <- afterRuns walk token
+    (runs, verdicts, restricted) <- afterRuns walk token
     found <- anyIO (fmap (/= No)) $ verdicts $ Set.toList runs
     pure $
         if found
@@ -403,6 +424,7 @@ decidingStep walk token = do
                         , decidingCandidates = [(term, rest) | (term, next : rest) <- decidingCandidates walk, next == token]
                         , decidingPending = pendingAfter walk token
                         , decidingRuns = runs
+                        , decidingProduct = restricted
                         }
             else Nothing
 
@@ -437,7 +459,7 @@ decidingTokens walk = do
                 , token <- Map.keys $ IntMap.findWithDefault Map.empty top $ machineTokens $ decidingMachine walk
                 ]
     tokenVerdict token = do
-        (after, verdicts) <- afterRuns walk token
+        (after, verdicts, _) <- afterRuns walk token
         best <- firstAccepted No $ verdicts [run | run@(_, _, False) <- Set.toList after]
         case best of
             No -> do
@@ -454,11 +476,19 @@ decidingTokens walk = do
             No -> firstAccepted found rest
 
 {- | The runs after a token, with the constraints that the prefix and the token
-decide, and the verdicts of the candidates of given runs, smallest first.
+decide; the verdicts of the candidates of given runs, smallest first; and,
+with equality constraints, the product restricted to the prefix and the token.
+
+Without equality constraints, the candidates of a run are the fillings of its
+pending states. With them, a filling can break an equality class that joins
+two pending nodes, and the search would try fillings until one holds. So the
+candidates are then the terms of the product, which the enumerator builds
+with the equalities solved: the first one is a completion, and none means
+that there is none.
 -}
-afterRuns :: Deciding -> (Symbol, Int) -> IO (Set.Set Run, [Run] -> [IO Verdict])
+afterRuns :: Deciding -> (Symbol, Int) -> IO (Set.Set Run, [Run] -> [IO Verdict], Maybe (Node Symbol))
 afterRuns walk token = case decidingPending walk of
-    [] -> pure (Set.empty, const [])
+    [] -> pure (Set.empty, const [], Nothing)
     here : _ -> do
         found <-
             traverse
@@ -468,8 +498,11 @@ afterRuns walk token = case decidingPending walk of
                 , (children, index) <- Map.findWithDefault [] token $ IntMap.findWithDefault Map.empty top $ machineTokens machine
                 , runFits machine budget (children <> rest, [], False)
                 ]
-        pure (Set.fromList (catMaybes found), verdictsOf)
+        pure (Set.fromList (catMaybes found), verdictsOf, restricted)
   where
+    restricted = case decidingPending walk of
+        here : _ -> restrictAt (unPath here) (TemplateNode (fst token) (replicate (snd token) Hole)) <$> decidingProduct walk
+        [] -> Nothing
     machine = decidingMachine walk
     budget = decidingBudget walk - 1
     prefix = decidingPrefix walk <> [token]
@@ -494,12 +527,15 @@ afterRuns walk token = case decidingPending walk of
                     Unknown -> go open True rest
             | otherwise = go (obligation : open) flag rest
     -- The verdicts of the candidates of the runs, smallest first.
-    verdictsOf runs =
-        [ candidateVerdict run terms
-        | size <- [0 .. budget]
-        , run@(stack, _, _) <- runs
-        , terms <- fillings (machineClasses machine) stack size
-        ]
+    verdictsOf [] = []
+    verdictsOf runs = case restricted of
+        Just node -> map (machineState machine $ machineInitial machine) $ Enumeration.terms node
+        Nothing ->
+            [ candidateVerdict run terms
+            | size <- [0 .. budget]
+            , run@(stack, _, _) <- runs
+            , terms <- fillings (machineClasses machine) stack size
+            ]
     candidateVerdict (stack, open, flag) terms =
         andVerdicts $
             [pure Unknown | flag]
@@ -508,6 +544,64 @@ afterRuns walk token = case decidingPending walk of
                    , (node, state, index) <- open
                    ]
                 <> zipWith (machineState machine) stack terms
+
+-- | Whether a constraint has an equality class.
+hasEqualities :: Constraint -> Bool
+hasEqualities constraint = case equalities constraint of
+    EqConstraints [] -> False
+    _ -> True
+
+{- | The automaton of the terms with at most the given number of nodes: a state
+for each state and exact size, and a root for every size. A transition has a
+copy for each split of its size over its children. Children that one class of
+its equality constraints names directly have one size, because equal terms
+have equal sizes. The constraints keep their paths. The automaton is acyclic,
+so its enumeration ends, and it has no term above the bound.
+
+A transition with @k@ children has a copy for each of the about
+@size^(k-1)@ splits of each size, so the automaton grows with the arities.
+-}
+bySize ::
+    (Ord state, Ord symbol) =>
+    Integer -> FTA.FTA state symbol Constraint -> FTA.FTA (Maybe (state, Integer)) symbol Constraint
+bySize bound automaton =
+    fromRight (error "bySize: the states of a valid automaton give a valid automaton")
+        $ FTA.mkFTA Nothing
+        $ (Nothing, concat [rowOf (FTA.initialState automaton) size | size <- [1 .. bound]])
+            : [(Just (state, size), rowOf state size) | state <- Map.keys $ FTA.transitionTable automaton, size <- [1 .. bound]]
+  where
+    rowOf state size =
+        [ transition
+            { FTA.transitionChildren = zipWith (curry Just) (FTA.transitionChildren transition) parts
+            }
+        | transition <- FTA.transitionsFrom automaton state
+        , parts <- splits (length $ FTA.transitionChildren transition) (size - 1)
+        , equalSizes (FTA.transitionConstraint transition) parts
+        ]
+    splits 0 0 = [[]]
+    splits 0 _ = []
+    splits count total = [first : rest | first <- [1 .. total - toInteger (count - 1)], rest <- splits (count - 1) (total - first)]
+    equalSizes constraint parts = case equalities constraint of
+        EqConstraints classes ->
+            and
+                [ all (== first) rest
+                | equal <- classes
+                , first : rest <- [[parts !! child | [ChildIndex child] <- map unPath $ Set.toList $ unPathEClass equal]]
+                ]
+        _ -> True
+
+-- | A node with the node at a path below its root restricted to a template.
+restrictAt :: [ChildIndex] -> Template Symbol -> Node Symbol -> Node Symbol
+restrictAt [] template node = restrict template node
+restrictAt (ChildIndex index : rest) template node =
+    Node
+        [ setChildren
+            edge
+            [ if position == index then restrictAt rest template child else child
+            | (position, child) <- zip [0 ..] $ edgeChildren edge
+            ]
+        | edge <- nodeEdges node
+        ]
 
 {- | Whether the prefix decides that the equality constraints of the node at a
 path fail for every completion: a path leaves the term at a node that the
