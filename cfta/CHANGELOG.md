@@ -10,6 +10,13 @@
   sampled run of draws from that listing. It holds the graph, the route and
   its version, the bound, the weights of the sizes, the pseudorandom
   generator and its version, the seed, and the number of draws so far.
+- Add `Data.CFTA.Merge`: `diff` and `diffDocument` give the update or the
+  patch between two versions of a language or a document. `merge3` and
+  `merge3Document` merge two versions from one base by stable names: the
+  initial state, the rows, the production names, the fact names, and the
+  exclusion names. Each conflict holds its key and its three versions. The
+  merged order of a row is defined, and two different new orders of one row
+  are a conflict.
 Before release, the package was called `microcfta`.
 
 - Add `Data.CFTA.Document`: editable source documents with named

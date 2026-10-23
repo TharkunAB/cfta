@@ -79,6 +79,46 @@ with `Template.excludeFTA`, then the subterm exclusions with
 exclusion keeps an unambiguous graph unambiguous. Overlapping templates can
 make the compiled graph much larger than the source.
 
+## Differences and merges
+
+`Data.CFTA.Merge` compares and merges versions by their stable names.
+
+`diff base other` gives an `Update` such that `update base` of it gives
+`other`. `diffDocument` gives the `Patch` of the source documents. The edits
+are by name where they can be: `DeleteTransition`, `PutTransition`, `SetFact`,
+and `RemoveFact`. They keep the order of the old productions of a row and
+append the new ones. A row with another order is one `PutRow`. No edit
+changes the initial state, so two versions with different initial states give
+`DifferentStart`.
+
+`merge3 base left right` merges two versions that come from `base`. The keys
+are the initial state, the state rows, the production names in a row, the
+fact names in a production, and the exclusion names. The symbol and child
+states of a production are one value, and the order of a row is one value.
+For each key, the merge takes the version of the two sides when they agree,
+or the version of the side that changes it. A key that the two sides change in
+different ways, or that one side deletes and the other side changes, is a
+`Conflict`. A conflict holds its key as data, for example a `ProductionRef`
+with a state and a production name, and the versions of the base, the left
+side, and the right side. `merge3` reports all conflicts.
+
+The order of a merged row:
+
+1. When one side keeps the names of the base row in their order, the merged
+   row has the order of the other side.
+2. When the two sides have the same names in the same order, the merged row
+   has that order.
+3. Otherwise, the merged row has the names of the base in their merged order,
+   then the new names of the left side, then the new names of the right side.
+   Two different new orders of the names of the base are an `OrderConflict`.
+
+The order matters, because the ranks follow the order of the rows. Thus
+`merge3 base left right` and `merge3 base right left` can have different
+orders in case 3. A merge without conflicts can still give an invalid
+document, for example a production that uses a state that the other side
+deletes: the result is `InvalidMerge`. Two versions are the same when they are
+equal, and equal versions have the same text in the text format.
+
 ## Ranks
 
 The compiled graph is a new graph. Its state numbers and ranks belong to that
