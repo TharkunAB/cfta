@@ -23,6 +23,12 @@ gives the traces of two state machines over one step type, and
 'feasibility' runs a sequence of steps from the root of an automaton. It
 gives the shortest prefix that has no run, and the states in which its last
 symbol fails.
+
+An automaton can have more than one run of a trace, for example after
+'Data.CFTA.mapSymbols' maps two steps to one. Then "Data.CFTA.Sized" lists
+each class to count it, and the generators can reject it. 'determinize' makes the
+automaton with one run for each trace. 'concatenate' and 'project' use it,
+so their results are deterministic too.
 -}
 module Data.CFTA.Trace (
     TraceSymbol (..),
@@ -32,11 +38,18 @@ module Data.CFTA.Trace (
     traceSteps,
     Infeasible (..),
     feasibility,
+    determinize,
+    concatenate,
+    project,
 ) where
 
+import Data.Bifunctor (first)
 import Data.Containers.ListUtils (nubOrd)
 import Data.Either (fromRight)
 import Data.Hashable (Hashable)
+import qualified Data.Map.Strict as Map
+import Data.Set (Set)
+import qualified Data.Set as Set
 import GHC.Generics (Generic)
 
 import Data.CFTA (FTA, PlainFTA, Transition (..))
@@ -146,3 +159,87 @@ feasibility automaton = go [] [FTA.initialState automaton]
         | transition <- FTA.transitionsFrom automaton state
         , transitionSymbol transition == symbol
         ]
+
+{- | The deterministic automaton of the traces that an automaton accepts: the
+subset construction. A state of the result is the set of the states in which
+the input can be after a prefix of a trace. It has an 'End' leaf when one of
+its states has one. For each step, it has one 'Step' transition to the set
+of the children of the transitions with that step. So each state has at most
+one transition for each symbol, and each trace has one run. Thus
+"Data.CFTA.Sized" counts and ranks the traces with its count table, and the
+generators accept the result.
+
+The construction builds only the sets that the initial set reaches, and not
+the empty set. For an input of @n@ states and @k@ steps, the result has at
+most @2^n - 1@ states, one for each non-empty set of input states, and each
+state has at most @k + 1@ transitions. Some inputs reach the bound on the
+states: the traces whose @m@-th step from the end is a given step have an
+automaton of @m + 1@ states, and its result has @2^m@ states. An input with
+one run for each prefix, such as an automaton from 'traceAutomaton', gives a
+result of at most @n@ states.
+
+The function reads only the transitions of trace terms: 'End' with no child
+and 'Step' with one child. It does not interpret annotations.
+-}
+determinize ::
+    (Ord state, Ord step) =>
+    FTA state (TraceSymbol step) annotation -> PlainFTA (Set state) (TraceSymbol step)
+determinize automaton = subsets (edges automaton) (FTA.initialState automaton)
+
+{- | The traces that are a trace of the first automaton followed by a trace of
+the second. A trace can continue with a trace of the second automaton where
+a trace of the first can end. A trace that splits in more than one way has
+one run, because the result comes from the subset construction of
+'determinize'. For inputs of @n@ and @m@ states, the result has at most
+@2^(n + m) - 1@ states, and at most @(n + 1) * 2^m@ states when the first
+input has one run for each prefix, as an automaton from 'traceAutomaton'
+has. The function does not interpret annotations.
+-}
+concatenate ::
+    (Ord left, Ord right, Ord step) =>
+    FTA left (TraceSymbol step) leftAnnotation ->
+    FTA right (TraceSymbol step) rightAnnotation ->
+    PlainFTA (Set (Either left right)) (TraceSymbol step)
+concatenate before after = subsets edgesOf (Left $ FTA.initialState before)
+  where
+    edgesOf (Left state) =
+        [(symbol, map Left children) | (symbol, children) <- edges before state, symbol /= End]
+            <> if (End, []) `elem` edges before state then edgesOf (Right $ FTA.initialState after) else []
+    edgesOf (Right state) = [(symbol, map Right children) | (symbol, children) <- edges after state]
+
+{- | The traces of an automaton with each step replaced by its image: a
+projection to a coarser alphabet of steps. Two steps with one image can give
+two runs of one trace, as in 'FTA.mapSymbols'. The result comes from the
+subset construction of 'determinize', so it has one run for each trace, and
+the same bound on its size. The function does not interpret annotations.
+-}
+project ::
+    (Ord state, Ord coarse) =>
+    (step -> coarse) -> FTA state (TraceSymbol step) annotation -> PlainFTA (Set state) (TraceSymbol coarse)
+project image automaton = subsets (map (first $ fmap image) . edges automaton) (FTA.initialState automaton)
+
+-- | The symbol and the children of each transition of a state.
+edges :: (Ord state) => FTA state symbol annotation -> state -> [(symbol, [state])]
+edges automaton state =
+    [(transitionSymbol transition, transitionChildren transition) | transition <- FTA.transitionsFrom automaton state]
+
+{- | The subset construction from the symbol and the children of each
+transition of a state, and an initial state. It reads only 'End' with no
+child and 'Step' with one child.
+-}
+subsets ::
+    (Ord state, Ord step) =>
+    (state -> [(TraceSymbol step, [state])]) -> state -> PlainFTA (Set state) (TraceSymbol step)
+subsets edgesOf initial =
+    -- Each child is an explored set, and each symbol has one arity, so validation cannot fail.
+    fromRight (error "subsets: the subset construction of trace terms is valid")
+        $ FTA.mkFTA start
+        $ explore row FTA.transitionChildren start
+  where
+    start = Set.singleton initial
+    row states =
+        [Transition End [] noConstraint | (End, []) `elem` outgoing]
+            <> [Transition (Step step) [next] noConstraint | (step, next) <- Map.toList successors]
+      where
+        outgoing = concatMap edgesOf $ Set.toList states
+        successors = Map.fromListWith Set.union [(step, Set.singleton child) | (Step step, [child]) <- outgoing]
