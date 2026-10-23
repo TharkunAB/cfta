@@ -37,6 +37,15 @@ Wilf, and Feat (ranking).
   **Mu depth** is the nesting depth of `Mu` binders, a different quantity.
 - **Counterexample** (inclusion): a term that the left automaton accepts and
   the right automaton rejects.
+- **Partition**: a list of automata, the **parts**, that together accept each
+  term of one automaton, the **whole**, and of which no two accept one term
+  of the whole. The **part index** is the position of a part in the list. Do
+  not call the parts children or the whole a parent: a child is a subterm or
+  a child state, and a parent is a state or a union-find element.
+- **Gap**: a term of the whole that no part accepts.
+- **Overlap**: a term of the whole that two parts accept, with the indexes of
+  the two parts. A term of two parts that the whole rejects is not an
+  overlap.
 
 ## Constraints
 
