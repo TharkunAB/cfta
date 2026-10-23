@@ -52,8 +52,8 @@ module Data.CFTA.Edit.Sets (
 import Control.Monad (foldM)
 import Data.Either (fromRight)
 import Data.Hashable (Hashable)
+import Data.List (mapAccumL)
 import qualified Data.Map.Strict as Map
-import qualified Data.Set as Set
 import GHC.Generics (Generic)
 
 import qualified Data.CFTA as FTA
@@ -109,13 +109,15 @@ editSetAutomaton ::
     Either EditError (FTA.PlainFTA (SetState state symbol) (SetSymbol symbol))
 editSetAutomaton bound automaton given = do
     edits <- editAutomaton automaton given
-    let sites = sitesOf edits given
+    let byIndex = Map.fromListWith (flip (<>)) [(siteIndex site, [site]) | site <- sitesOf edits given]
         positions = length $ extents given
         total = until (>= positions) (* 2) 1
-        withSites = Set.fromList $ map siteIndex sites
+        -- The sites with an index in a range, in the order of the sites.
+        inRange (start, size) = concat $ Map.elems $ Map.takeWhileAntitone (< start + size) $ Map.dropWhileAntitone (< start) byIndex
+        -- Whether a range holds a site: the least index from its start on is inside it.
+        holdsSite (start, size) = maybe False ((< start + size) . fst) $ Map.lookupGE start byIndex
         -- The ranges of the cover of the indexes from a bound on, without the ranges that hold no site.
-        cover from = [range | range <- dyadicCover total from, any (`Set.member` withSites) (indexesOf range)]
-        indexesOf (start, size) = [start .. start + size - 1]
+        cover from = filter holdsSite $ dyadicCover total from
         ends site = FTA.Transition (Last $ siteSymbol site) (siteMaterial site) noConstraint
         links remaining site =
             [ FTA.Transition (Link $ siteSymbol site) (siteMaterial site <> [SetRange range (remaining - 1)]) noConstraint
@@ -123,12 +125,14 @@ editSetAutomaton bound automaton given = do
             , range <- cover (siteEnd site)
             ]
         chosen remaining site = ends site : links remaining site
-        rowOf SetRoot = [transition | bound >= 1, site <- sites, transition <- chosen bound site]
-        rowOf (SetRange (start, size) remaining) =
-            [ transition | site <- sites, siteIndex site >= start, siteIndex site < start + size, transition <- chosen remaining site
-            ]
+        rowOf SetRoot = [transition | bound >= 1, site <- concat (Map.elems byIndex), transition <- chosen bound site]
+        rowOf (SetRange range remaining) = [transition | site <- inRange range, transition <- chosen remaining site]
         rowOf (SetBelow _) = []
     pure $ close (materialRows edits) rowOf
+
+-- | An impossible case.
+bug :: String -> a
+bug message = error $ "cfta-generator bug in Data.CFTA.Edit.Sets: " <> message
 
 -- | The rows of the new material: the rows of the edit automaton without its root.
 materialRows ::
@@ -153,7 +157,7 @@ close ::
     FTA.PlainFTA (SetState state symbol) (SetSymbol symbol)
 close material rowOf =
     FTA.trim
-        $ fromRight (error "Data.CFTA.Edit.Sets: the automaton of edit sets of a ranked automaton is not ranked")
+        $ fromRight (bug "the automaton of edit sets of a ranked automaton is not ranked")
         $ FTA.mkFTA SetRoot
         $ Map.toList
         $ Map.union (visit Map.empty [SetRoot]) (Map.fromList material)
@@ -181,7 +185,7 @@ sitesOf edits given =
     | FTA.Transition symbol children _ <- FTA.transitionsFrom edits EditRoot
     , let (index, end) =
             Map.findWithDefault
-                (error "Data.CFTA.Edit.Sets: a site outside the term")
+                (bug "a site outside the term")
                 (map unChild $ unPath $ sitePath symbol)
                 extentsOfPaths
     ]
@@ -194,11 +198,9 @@ extents :: Term symbol -> [([Int], (Int, Int))]
 extents = fst . go 0 []
   where
     go next at (Term.Node _ children) =
-        let (inner, after) = foldl step ([], next + 1) (zip [0 ..] children)
-            step (found, current) (index, child) =
-                let (more, following) = go current (at <> [index]) child
-                 in (found <> more, following)
-         in ((at, (next, after)) : inner, after)
+        let (after, inner) = mapAccumL step (next + 1) (zip [0 ..] children)
+            step current (index, child) = let (found, following) = go current (at <> [index]) child in (following, found)
+         in ((at, (next, after)) : concat inner, after)
 
 -- | The path of an edit site.
 sitePath :: EditSymbol symbol -> Path
