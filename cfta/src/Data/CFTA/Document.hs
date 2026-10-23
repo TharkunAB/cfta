@@ -52,7 +52,8 @@ data DocumentError state
 
 -- | One edit in an ordered atomic batch. Facts select a state and transition name.
 data Edit state
-    = PutRow !state ![FTA.Transition state Symbol Annotation]
+    = SetStart !state
+    | PutRow !state ![FTA.Transition state Symbol Annotation]
     | DeleteRow !state
     | PutTransition !state !(FTA.Transition state Symbol Annotation)
     | DefineTransition !state !Text !Symbol ![state]
@@ -137,38 +138,50 @@ applyPatch (Patch expected edits) current
     | otherwise = applyEdits edits current
 
 {- | Apply an ordered batch of edits. An invalid edit returns an error.
-SetFact adds or replaces a named fact; RemoveFact and
+SetStart makes a state the initial state; the last SetStart of the batch
+applies. SetFact adds or replaces a named fact; RemoveFact and
 DeleteRow require their targets to exist. PutTransition replaces a named
 production in place or appends a new one. DeleteTransition requires an existing
 name and leaves the state row. DefineTransition changes the symbol and children
 of an existing production while retaining its facts, or appends a new production
 with no facts. Named edits require an existing state and a unique
 production name. They resolve their targets at that step
-in the sequence. Validate graph references and arities after the complete batch.
-The initial state stays fixed. The old document is unchanged.
+in the sequence. Validate graph references and arities after the complete batch,
+so the initial state must have a row only at the end of the batch. Without a
+SetStart, the initial state stays the same. The old document is unchanged.
 
 The result replaces the rows that the edits change and shares the other rows
-(see 'FTA.replaceRows'). Transition names are checked again only in the changed
-rows. It does not reuse count tables or provide a compact serialized patch.
+(see 'FTA.replaceRows'). A batch that changes the initial state validates the
+whole graph again with 'FTA.mkFTA'. Transition names are checked again only in
+the changed rows. It does not reuse count tables or provide a compact
+serialized patch.
 -}
 applyEdits :: (Ord state) => [Edit state] -> Document state -> Either (DocumentError state) (Document state)
 applyEdits edits current = do
     rows <- foldM apply (FTA.transitionTable graph) edits
-    let changed = Map.fromSet (`Map.lookup` rows) $ Set.fromList $ map editState edits
-    graph' <- first InvalidGraph $ FTA.replaceRows changed graph
+    let changed = Map.fromSet (`Map.lookup` rows) $ Set.fromList $ concatMap editState edits
+        start = foldl' (\_ state -> state) (FTA.initialState graph) [state | SetStart state <- edits]
+    graph' <-
+        first InvalidGraph $
+            if start == FTA.initialState graph
+                then FTA.replaceRows changed graph
+                else FTA.mkFTA start $ Map.toList rows
     mapM_ distinctTransitions [(state, transitions) | (state, Just transitions) <- Map.toList changed]
     pure $ Document graph'
   where
     graph = sourceGraph current
+    -- The state whose row the edit changes, if any.
     editState edit = case edit of
-        PutRow state _ -> state
-        DeleteRow state -> state
-        PutTransition state _ -> state
-        DefineTransition state _ _ _ -> state
-        DeleteTransition state _ -> state
-        SetFact state _ _ _ -> state
-        RemoveFact state _ _ -> state
+        SetStart _ -> []
+        PutRow state _ -> [state]
+        DeleteRow state -> [state]
+        PutTransition state _ -> [state]
+        DefineTransition state _ _ _ -> [state]
+        DeleteTransition state _ -> [state]
+        SetFact state _ _ _ -> [state]
+        RemoveFact state _ _ -> [state]
     apply rows edit = case edit of
+        SetStart _ -> Right rows
         PutRow state transitions -> Right $ Map.insert state transitions rows
         DeleteRow state
             | Map.member state rows -> Right $ Map.delete state rows
