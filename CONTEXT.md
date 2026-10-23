@@ -39,7 +39,11 @@ Wilf, and Feat (ranking).
   the text of a term: the first text, the text of the first child, the second
   text, and so on. A lowering gives a term; a linearization gives a text. Do
   not call the texts of a symbol a template: a template belongs to a template
-  lowering.
+  lowering. A *linearization by state* gives the texts by the state and the
+  symbol of a transition, so the text of a term depends on its run.
+- **Brackets**: an opening and a closing text around the text of a state. The
+  text in brackets has the term of the text inside, so a term with brackets
+  has more than one text.
 
 ## Constraints
 
