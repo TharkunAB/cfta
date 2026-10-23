@@ -121,6 +121,11 @@ spec = describe "differences and merges" $ do
                 names = fmap (map (D.annotationName . FTA.transitionConstraint) . concat . rowOf "a")
             names (Merge.merge3 fixture left right) `shouldBe` Right ["r", "t", "u", "w"]
             names (Merge.merge3 fixture right left) `shouldBe` Right ["r", "t", "w", "u"]
+        it "merge documents as the languages of the documents" $ do
+            let left = changed fixture $ L.require (L.at "s" "p") "f" impossible
+                right = changed fixture $ L.define (L.at "a" "w") "leaf" []
+            Merge.merge3Document (source fixture) (source left) (source right)
+                `shouldBe` fmap source (Merge.merge3 fixture left right)
         it "give the difference of two languages with other initial states as an error" $
             Merge.diff fixture (restart "a" fixture) `shouldBe` Left (DifferentStart "s" "a")
 
