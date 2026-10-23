@@ -13,14 +13,14 @@ import Test.Hspec (Spec, describe, expectationFailure, it, shouldBe)
 import qualified Data.CFTA.Gen as Gen
 import Data.CFTA.Gen.ManySorted
 import Data.CFTA.Gen.ManySorted.Refined
-import Data.CFTA.Index (Cardinality (..))
+import Data.CFTA.Index (Cardinality (..), everyRank)
 import Data.CFTA.Path (ChildIndex (..), path)
 import Data.CFTA.Refinement.Expression ((./=), (.>=))
 import Data.CFTA.Refinement.LiquidFixpoint (withZ3)
 import Data.CFTA.Symbol (Symbol (Symbol))
 import Data.CFTA.Term (Term (Node))
 
-data Sort = Int | Quot
+data Sort = Int | Quot | Level | Tag
     deriving (Eq, Ord, Show)
 
 codec :: ValueCodec Sort Symbol
@@ -71,12 +71,61 @@ terms onlyValid high nesting = [(Quot, t) | t <- quots nesting] <> [(Int, t) | t
     quots 0 = []
     quots level = [Node "divide" [l, r] | l <- ints (level - 1), r <- ints (level - 1), not onlyValid || measure r /= 0]
 
+-- | Pools: Level has the integers 10, 20, and 30 without 20, and Tag has two symbols without integers.
+pools :: Int -> RefinedSignature Sort
+pools nesting =
+    RefinedSignature
+        { refinedBase =
+            SortedSignature
+                { sortedSorts = [Int, Level, Tag, Quot]
+                , sortedFunctions = [SortedFunction "shift" [Level, Int] Int, SortedFunction "label" [Tag, Int] Quot]
+                , sortedRoots = [Int, Quot]
+                , sortedValues =
+                    [ ValueSort Int (Interval 0 5)
+                    , ValueSort Level (Pool ["#10", "#20", "#30"])
+                    , ValueSort Tag (Pool ["red", "blue"])
+                    ]
+                }
+        , refinedSemantics =
+            [ ("shift", FunctionSemantics (Just (binary (+))) (Just (binary (\_ b -> b .>= 1))))
+            , ("label", FunctionSemantics Nothing (Just (binary (\_ b -> b .>= 1))))
+            ]
+        , refinedConditions = [(Int, \v -> v ./= 3), (Level, \v -> v ./= 20)]
+        , refinedNesting = nesting
+        }
+
+-- | The terms of the pool signature, with the values that the conditions drop allowed, by the nesting. Optionally only the valid terms.
+poolTerms :: Bool -> Int -> [Term Symbol]
+poolTerms onlyValid nesting = quots nesting <> ints nesting
+  where
+    levels = [Node l [] | l <- ["#10", "#20", "#30"], not onlyValid || l /= "#20"]
+    tags = [Node t [] | t <- ["red", "blue"]]
+    ints 0 = [Node (injectInteger codec n) [] | n <- [0 .. 5], not onlyValid || n /= 3]
+    ints level = ints 0 <> [Node "shift" [l, i] | l <- levels, i <- ints (level - 1), not onlyValid || measure i >= 1]
+    quots 0 = []
+    quots level = [Node "label" [t, i] | t <- tags, i <- ints (level - 1), not onlyValid || measure i >= 1]
+
+-- | The first node in preorder where the brute-force semantics of the pool signature fails.
+poolFailure :: Term Symbol -> Maybe (RefinedTypeError Sort)
+poolFailure = go []
+  where
+    go reversed (Node symbol children)
+        | Just n <- projectInteger codec symbol, null children, n == 3 || n == 20 = Just (ConditionFailed here symbol)
+        | symbol == "shift" || symbol == "label", [_, i] <- children, measure i < 1 = Just (PreconditionFailed here symbol)
+        | otherwise = firstOf [go (index : reversed) child | (index, child) <- zip [0 ..] children]
+      where
+        here = path (map ChildIndex (reverse reversed))
+    firstOf (Just failure : _) = Just failure
+    firstOf (Nothing : rest) = firstOf rest
+    firstOf [] = Nothing
+
 -- | The integer of a term of Int.
 measure :: Term Symbol -> Integer
 measure (Node (Symbol text) children) = case (Text.unpack text, map measure children) of
     ('#' : digits, []) | [(n, "")] <- reads digits -> n
     ("add", [a, b]) -> a + b
     ("sub", [a, b]) -> a - b
+    ("shift", [a, b]) -> a + b
     _ -> error "measure"
 
 -- | The first node in preorder where the brute-force semantics fails, with its path.
@@ -158,6 +207,39 @@ spec = describe "Data.CFTA.Gen.ManySorted.Refined" $ do
             exceeded `shouldBe` Left (NestingExceeded (path [ChildIndex 0]) "add")
             bad <- refinedGen solver codec (division 5 (-1))
             either Just (const Nothing) bad `shouldBe` Just (Left (NegativeNesting (-1)))
+    it "has pool sorts with measures, conditions, and entries without integers" $
+        withZ3 [] $ \solver -> do
+            result <- refinedGen solver codec (pools 2)
+            case result of
+                Left err -> expectationFailure (either show show err)
+                Right generator -> do
+                    let expected = poolTerms True 2
+                    sort (either (error . show) id (Gen.values generator)) `shouldBe` sort expected
+                    Gen.cardinality generator `shouldBe` Right (Cardinality (fromIntegral (length expected)))
+            mapM_
+                ( \term -> do
+                    verdict <- refinedTypeCheck solver codec (pools 1) term
+                    case poolFailure term of
+                        Nothing -> verdict `shouldBe` Right (if isLabel term then Quot else Int)
+                        Just failure -> verdict `shouldBe` Left failure
+                )
+                (poolTerms False 1)
+
+    it "keeps the engine ranks of the compiled generator inverse to its terms" $
+        withZ3 [] $ \solver -> do
+            result <- refinedGen solver codec (division 5 2)
+            case result of
+                Left err -> expectationFailure (either show show err)
+                Right generator -> do
+                    let total = either (const 0) (\(Cardinality n) -> n) (Gen.cardinality generator)
+                    mapM_
+                        ( \rank -> do
+                            Gen.unrank generator rank `shouldSatisfy'` either (const False) (const True)
+                            (Gen.termAt generator rank >>= Gen.rankOf generator) `shouldBe` Right rank
+                        )
+                        (everyRank (Cardinality total))
   where
+    shouldSatisfy' x p = if p x then pure () else expectationFailure "unrank failed"
+    isLabel (Node symbol _) = symbol == "label"
     isQuot (Node symbol _) = symbol == "divide"
     cardinalityOf = either (const (error "no generator")) Gen.cardinality
