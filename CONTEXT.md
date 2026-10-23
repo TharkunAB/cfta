@@ -43,6 +43,10 @@ Wilf, and Feat (ranking).
   **new material** of an edit is what it adds: the new subterm, or the other
   children of the new node. Not a row edit of an automaton
   (`Data.CFTA.replaceRows`).
+- **Edit set** (of a term): the edits at one to k sites of a term at pairwise
+  incomparable paths, so that no edit is inside another. `Data.CFTA.Edit.Sets`
+  gives the automaton of the edit sets. Its size is the number of the edits plus
+  the total new material.
 
 ## Constraints
 
