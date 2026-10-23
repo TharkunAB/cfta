@@ -186,6 +186,7 @@ renderUpdate encode (L.Update operations) = built $ "update 1;\n" <> foldMap ope
     state = nameText . encode
     operation change = case change of
         L.EditSource edit -> case edit of
+            D.SetStart at -> "start " <> state at <> ";\n"
             D.DefineTransition at name symbol children ->
                 "define "
                     <> state at
@@ -442,6 +443,7 @@ readUpdate decode = runParser $ do
     operation = do
         word <- nameParser
         case word of
+            "start" -> (D.SetStart <$> state <* end) >>= source
             "define" -> do
                 at <- state
                 name <- nameParser
