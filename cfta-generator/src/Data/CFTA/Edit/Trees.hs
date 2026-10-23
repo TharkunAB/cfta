@@ -14,8 +14,8 @@ edits plus the new material. The nesting is not in the term: it follows from the
 preorder indexes. A site at the index @i@ with the end @e@ (the first index after
 its subtree) is followed by a site with an index in @[e, N)@. A /treeable/ wrap
 can also be followed by a site in @(i, e)@, which is inside the old subterm in
-its hole, and by a wrap or an unwrap at the index @i@. The ranges are disjoint,
-so the next site selects one: the cover of @[i + 1, N)@ and the sites at the
+its hole, and by an unwrap at the index @i@. The ranges are disjoint,
+so the next site selects one: the cover of @[i + 1, N)@ and the unwraps at the
 index @i@. So a tree has one run, and no split of a budget between a hole and the
 later sites is needed: the number of the remaining edits is the same along the
 chain.
@@ -33,9 +33,14 @@ a context wrap has one run.
 __Redundant forms.__ A replacement of the old subterm inside a wrap at the same
 position gives the same term as one replacement at the position, and it costs one
 more node (the wrap). So the tree does not allow a replacement after a wrap at its
-index. A wrap after a wrap stays: it is not a replacement. An unwrap after a wrap
-stays too: the wrap goes around a child of the old subterm, and no other edit with
-this size does that.
+index. A wrap or a context wrap directly after a treeable wrap at its index is not
+allowed either. The two wraps put one new term around the old subterm, and that
+term is one context wrap with the same edited term and the same size: the nodes
+of the two new terms are the nodes of the context. The tree with the context wrap
+has one edit instead of two, and it can hold the same edits inside, because the
+hole of the context has the state of the hole of the inner wrap. So each edited
+term has one tree for a stack of wraps. An unwrap after a wrap stays: the wrap goes
+around a child of the old subterm, and no other edit with this size does that.
 
 __The edited term__ applies the edits from the last to the first: an edit inside
 a wrap changes the old subterm before the wrap, and the order of the edits at
@@ -88,8 +93,8 @@ data TreeState state symbol
       index, number of indexes), with at most the given number of edits.
       -}
       TreeRange !(Int, Int) !Int
-    | -- | The trees whose first site is a wrap or an unwrap at the index, with at most the given number of edits.
-      TreeStackAt !Int !Int
+    | -- | The trees whose first site is an unwrap at the index, with at most the given number of edits.
+      TreeUnwrapAt !Int !Int
     | -- | A state of the edit automaton below its root: the new material.
       TreeBelow !(EditState state symbol)
     deriving (Eq, Ord, Show)
@@ -102,8 +107,8 @@ data Site state symbol = Site
     , siteIndex :: !Int
     , siteEnd :: !Int
     , siteMaterial :: [TreeState state symbol]
-    , siteStacks :: !Bool
-    -- ^ A wrap, a context wrap, or an unwrap: it may follow a wrap at its index.
+    , siteUnwraps :: !Bool
+    -- ^ An unwrap: it may follow a wrap at its index.
     , siteHolds :: !Bool
     -- ^ A treeable wrap or context wrap: the sites inside the old subterm may follow it.
     }
@@ -121,7 +126,7 @@ editTreeAutomaton bound automaton given = do
     edits <- editAutomaton automaton given
     let allSites = sitesOf automaton edits given
         byIndex = Map.fromListWith (flip (<>)) [(siteIndex site, [site]) | site <- allSites]
-        stacksAt = Map.fromListWith (flip (<>)) [(siteIndex site, [site]) | site <- allSites, siteStacks site]
+        unwrapsAt = Map.fromListWith (flip (<>)) [(siteIndex site, [site]) | site <- allSites, siteUnwraps site]
         positions = length $ extents given
         total = until (>= positions) (* 2) 1
         -- The sites with an index in a range, in the order of the sites.
@@ -134,7 +139,7 @@ editTreeAutomaton bound automaton given = do
         followers remaining site
             | siteHolds site =
                 [TreeRange range (remaining - 1) | range <- cover (siteIndex site + 1)]
-                    <> [TreeStackAt (siteIndex site) (remaining - 1) | Map.member (siteIndex site) stacksAt]
+                    <> [TreeUnwrapAt (siteIndex site) (remaining - 1) | Map.member (siteIndex site) unwrapsAt]
             | otherwise = [TreeRange range (remaining - 1) | range <- cover (siteEnd site)]
         ends site = FTA.Transition (Last $ siteSymbol site) (siteMaterial site) noConstraint
         links remaining site =
@@ -145,7 +150,7 @@ editTreeAutomaton bound automaton given = do
         chosen remaining site = ends site : links remaining site
         rowOf TreeRoot = [transition | bound >= 1, site <- concat (Map.elems byIndex), transition <- chosen bound site]
         rowOf (TreeRange range remaining) = [transition | site <- inRange range, transition <- chosen remaining site]
-        rowOf (TreeStackAt index remaining) = [transition | site <- Map.findWithDefault [] index stacksAt, transition <- chosen remaining site]
+        rowOf (TreeUnwrapAt index remaining) = [transition | site <- Map.findWithDefault [] index unwrapsAt, transition <- chosen remaining site]
         rowOf (TreeBelow _) = []
         -- The hole sets that the sites use, which the edit automaton may not have.
         holeSets = Set.fromList [holeStates | site <- allSites, TreeBelow (Holed holeStates _) <- siteMaterial site]
@@ -213,15 +218,13 @@ sitesOf automaton edits given = concatMap sitesOfTransition $ FTA.transitionsFro
     states = runStates automaton given
     unChild (ChildIndex index) = index
     sitesOfTransition (FTA.Transition symbol children _) =
-        [ Site symbol index end (map TreeBelow children') (stacks symbol) holds
+        [ Site symbol index end (map TreeBelow children') (unwraps symbol) holds
         | (children', holds) <- variants symbol children
         ]
       where
         (index, end) =
             Map.findWithDefault (bug "a site outside the term") (map unChild $ unPath $ sitePath symbol) extentsOfPaths
-    stacks symbol = case symbol of
-        WrapAt{} -> True
-        ContextAt{} -> True
+    unwraps symbol = case symbol of
         UnwrapAt{} -> True
         _ -> False
     stateAt symbol = Map.lookup (map unChild $ unPath $ sitePath symbol) states
