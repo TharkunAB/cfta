@@ -25,7 +25,6 @@ import Test.QuickCheck
 
 import Data.CFTA.Equality
 import Data.CFTA.Index (Depth)
-import Data.CFTA.Internal.UnionFind (intToUVar)
 import Data.CFTA.Interned.Operations (mergeAlternatives)
 import Data.CFTA.Symbol
 import Data.CFTA.Term (Term)

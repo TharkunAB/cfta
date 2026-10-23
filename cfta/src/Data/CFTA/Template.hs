@@ -35,7 +35,7 @@ import Control.Monad.State.Strict (evalState, gets, modify', runState)
 import Data.Containers.ListUtils (nubOrd)
 import Data.Either (fromRight)
 import Data.Foldable (toList)
-import Data.Hashable (Hashable)
+import Data.Hashable (Hashable (..))
 import qualified Data.IntMap.Strict as IntMap
 import qualified Data.IntSet as IntSet
 import Data.List (partition, sort)
@@ -50,6 +50,7 @@ import qualified Data.CFTA as FTA
 import Data.CFTA.Index (Arity (..))
 import Data.CFTA.Internal.Tree (explore)
 import Data.CFTA.Interned (fromRows)
+import Data.CFTA.Interned.Memo (memo)
 import Data.CFTA.Interned.Operations (nodeEdges)
 import Data.CFTA.Interned.Type
 import Data.CFTA.Term (Term)
@@ -183,11 +184,13 @@ exclude ::
 exclude templates = walk
   where
     (hole, prepared) = prepareTemplates templates
+    -- One application of 'refine' for all the nodes, so that they share its table.
+    refined = refine originalTemplate (preparedChildren hole)
     walk node
         | any trivial templates = EmptyNode
         | null templates = node
         | EmptyNode <- node = EmptyNode
-        | otherwise = refine originalTemplate (preparedChildren hole) [] prepared node
+        | otherwise = refined [] prepared node
 
 {- | A structural template with its catalog identifier and prepared children.
 Identifiers preserve structural template order within one catalog. Parts from
@@ -200,6 +203,9 @@ instance Eq (PreparedTemplate symbol) where
 
 instance Ord (PreparedTemplate symbol) where
     compare (PreparedTemplate left _ _) (PreparedTemplate right _ _) = compare left right
+
+instance Hashable (PreparedTemplate symbol) where
+    hashWithSalt salt (PreparedTemplate identifier _ _) = hashWithSalt salt identifier
 
 -- | The original template of a prepared part.
 originalTemplate :: PreparedTemplate symbol -> Template symbol
@@ -237,28 +243,32 @@ preparedChildren hole (PreparedTemplate _ template children) symbol arity@(Arity
 
 {- | The terms of a node that match every template of the first list and none
 of the second. Parts keep their original templates and child projections.
-Their Ord instance must agree with structural template order.
+Their Ord instance must agree with structural template order. A table for
+each application of the first two arguments shares the result of a node
+and its two lists of parts, so a node that many edges reach with the same
+parts is refined once.
 -}
 refine ::
-    (Ord part, Ord symbol, Hashable symbol, Typeable symbol) =>
+    (Ord part, Hashable part, Ord symbol, Hashable symbol, Typeable symbol) =>
     (part -> Template symbol) ->
     (part -> symbol -> Arity -> Maybe [part]) ->
     [part] ->
     [part] ->
     Node symbol ->
     Node symbol
-refine original childrenOf = walk
+refine original childrenOf = \wanted unwanted node -> walk (wanted, unwanted, node)
   where
-    walk wanted unwanted node
+    walk = memo walk'
+    walk' (wanted, unwanted, node)
         | any (trivial . original) unwanted = EmptyNode
         | null wanted' && null unwanted = node
         | otherwise = case node of
             EmptyNode -> EmptyNode
-            Mu _ -> walk wanted' unwanted (Node $ nodeEdges node)
-            InternedUnion _ -> walk wanted' unwanted (Node $ nodeEdges node)
+            Mu _ -> walk (wanted', unwanted, Node $ nodeEdges node)
+            InternedUnion _ -> walk (wanted', unwanted, Node $ nodeEdges node)
             Node edges ->
                 Node
-                    [ setChildren edge (zipWith (\(wanted'', unwanted') child -> walk wanted'' unwanted' child) parts (edgeChildren edge))
+                    [ setChildren edge (zipWith (\(wanted'', unwanted') child -> walk (wanted'', unwanted', child)) parts (edgeChildren edge))
                     | edge <- edges
                     , parts <-
                         edgeCopiesWith original childrenOf wanted' (nubOrd unwanted) (edgeSymbol edge) (map shapesOf (edgeChildren edge))

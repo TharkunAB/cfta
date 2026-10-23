@@ -4,15 +4,12 @@
 import Control.Monad
 import Specftacular
 
-import System.Environment (getArgs)
-
 main = do
-    [s, p] <- map read <$> getArgs
+    options <- parseOptions
     -- ftacularSpec' 7 3 extraReps [
     res <-
         experimentalPhases
-            s
-            p
+            options
             (const Nothing)
             [ con "return" (return :: A -> [A])
             , con ">>=" ((>>=) :: [A] -> (A -> [B]) -> [B])

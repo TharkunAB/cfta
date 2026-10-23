@@ -9,8 +9,7 @@ import Specftacular
 
 main =
     experimentalPhases
-        7
-        4
+        (defaultOptions 7 4)
         (const Nothing)
         [ con "reverse" (reverse :: [A] -> [A])
         , con "[]" ([] :: [A])
