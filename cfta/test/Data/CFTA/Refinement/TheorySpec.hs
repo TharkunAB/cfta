@@ -1,11 +1,14 @@
 {-# LANGUAGE OverloadedStrings #-}
 
--- | The checks of a theory, ground evaluation from a theory, and the predicate definitions of a theory.
+{- | The checks of a theory, ground evaluation from a theory, the predicate
+definitions of a theory, and the SMT-LIB text of a theory.
+-}
 module Data.CFTA.Refinement.TheorySpec (spec) where
 
 import qualified Data.Map.Strict as Map
 import qualified Data.Set as Set
 import Data.String (fromString)
+import qualified Data.Text as Text
 import Test.Hspec
 
 import Data.CFTA.Formula (Formula (..), Name, Relation (..), Sort (..), Term (..))
@@ -13,6 +16,7 @@ import Data.CFTA.Refinement (Entailment (entails), Verdict (..))
 import Data.CFTA.Refinement.Definition (Definition (..), DefinitionError (..))
 import Data.CFTA.Refinement.Ground (groundEntailment)
 import Data.CFTA.Refinement.LiquidFixpoint (withZ3Definitions)
+import Data.CFTA.Refinement.SmtLib (SmtLibError (..), entailmentScript, theoryCommands)
 import Data.CFTA.Refinement.Theory
 import Data.CFTA.Symbol (valueName)
 
@@ -64,6 +68,10 @@ listTerm = foldr (\x rest -> App "cons" [Lit x, rest]) (App "nil" [])
 -- | The value name of a refinement.
 value :: Name
 value = fromString valueName
+
+-- | The SMT-LIB symbol of the list sort.
+listSymbol :: Text.Text
+listSymbol = "|t:NamedSort \"List\" [IntSort]|"
 
 spec :: Spec
 spec = do
@@ -177,6 +185,48 @@ spec = do
             withZ3Definitions (predicateDefinitions integers) [(value, IntSort)] [] $ \z3 -> do
                 entails z3 (Atom Eq (Var value) (Lit 7)) (Predicate "digit" [Var value]) >>= (`shouldBe` Yes)
                 entails z3 (Atom Eq (Var value) (Lit 12)) (Predicate "digit" [Var value]) >>= (`shouldBe` No)
+
+    describe "theoryCommands" $ do
+        it "declares the datatypes and defines the functions with match" $
+            theoryCommands (unsafeTheory [lists] [append])
+                `shouldBe` Right
+                    ( Text.unlines
+                        [ "(declare-datatypes (("
+                            <> listSymbol
+                            <> " 0)) (((|c:nil|) (|c:cons| (|s:cons:head| Int) (|s:cons:tail| "
+                            <> listSymbol
+                            <> ")))))"
+                        , "(define-funs-rec ((|f:append| ((|b:xs| " <> listSymbol <> ") (|b:ys| " <> listSymbol <> ")) " <> listSymbol <> "))"
+                        , "  ((match |b:xs| ((|c:nil| |b:ys|) ((|c:cons| |b:h| |b:t|) (|c:cons| |b:h| (|f:append| |b:t| |b:ys|)))))))"
+                        ]
+                    )
+
+        it "escapes the characters that a quoted symbol cannot hold, and the separator" $
+            theoryCommands (unsafeTheory [Datatype (NamedSort "unit|" []) [Constructor "x:y\\z" []]] [])
+                `shouldBe` Right "(declare-datatypes ((|t:NamedSort \"unit%124;\" []| 0)) (((|c:x%58;y%92;z|))))\n"
+
+        it "rejects a datatype without values" $
+            theoryCommands (unsafeTheory [lists, streams] [append]) `shouldBe` Left (UninhabitedDatatype (NamedSort "Stream" []))
+
+    describe "entailmentScript" $ do
+        let lowered = unsafeTheory [lists] [append]
+            script = entailmentScript lowered Map.empty [(value, list)] [] []
+
+        it "declares the values and asserts the antecedent and the negated consequent" $
+            script (Atom Eq (Var value) (App "append" [listTerm [1], listTerm [2]])) (Atom Eq (Var value) (listTerm [1, 2]))
+                `shouldBe` ( ( <>
+                                Text.unlines
+                                    [ "(declare-fun |v:__cfta_value| () " <> listSymbol <> ")"
+                                    , "(assert (= |v:__cfta_value| (|f:append| (|c:cons| 1 |c:nil|) (|c:cons| 2 |c:nil|))))"
+                                    , "(assert (not (= |v:__cfta_value| (|c:cons| 1 (|c:cons| 2 |c:nil|)))))"
+                                    , "(check-sat)"
+                                    ]
+                             )
+                                <$> theoryCommands lowered
+                           )
+
+        it "rejects a query that fails the sort check" $
+            script (Atom Eq (Var value) (Lit 3)) Top `shouldBe` Left (IllSortedQuery (IllSortedAtom Eq (Var value) (Lit 3)))
 
 -- | A theory that the test expects 'theory' to accept.
 unsafeTheory :: [Datatype] -> [(Name, TheoryDefinition)] -> Theory
