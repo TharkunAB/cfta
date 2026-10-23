@@ -47,6 +47,7 @@ import qualified Data.CFTA.Enumeration as Enumeration
 import qualified Data.CFTA.Generic as Generic
 import qualified Data.CFTA.Interned as Common
 import qualified Data.CFTA.Template as Template
+import qualified Data.CFTA.Trace as Trace
 ```
 
 | Operation | API | Result |
@@ -59,6 +60,7 @@ import qualified Data.CFTA.Template as Template
 | Check membership | `FTA.accepts`, `Common.acceptsWith` | Whether a supplied tree belongs. The interned API takes a constraint interpreter. |
 | List accepted terms | `FTA.terms`, `Enumeration.terms`, `Enumeration.plainTerms`, `Enumeration.plainTermsAtMost` | Every term. `FTA.terms`, `plainTerms`, and `plainTermsAtMost` list by depth. `FTA.terms` and `plainTerms` ignore constraints and give an infinite list for a recursive grammar, and `plainTermsAtMost` stops at a depth. `terms` solves constraints and stops at recursion. For an automaton with constraints or recursion, it lists in the order of the runs, each term once. |
 | Translate to an earlier language | `Lowering.lower`, `Lowering.lift`, `Lowering.checkLowering` | A lowered term; the automaton of the terms whose lowering an automaton accepts; the productions that do not lower. |
+| Build the traces of a state machine | `Trace.traceAutomaton`, `Trace.feasibility` | The automaton of the traces; the shortest prefix of a sequence of steps that has no run. |
 | Restrict to a pattern | `Template.restrictFTA`, `Template.restrict` | A grammar for the terms that match a `Template`. |
 | List terms a check accepts | `FTA.termsUpToM` | The terms up to a depth, each checked once by a monadic predicate that sees its transition. |
 | Bound tree depth | `FTA.boundDepth` | Another grammar, restricted to trees within the bound. |
@@ -253,6 +255,54 @@ An ordinary automaton has `noConstraint` on every transition.
 input annotations. Apply `dropConstraints` to the result of two plain FTAs before
 calling `accepts`. Use `intersectWith` when you need a different annotation
 combination. `dropConstraints` removes annotations; it does not solve constraints.
+
+
+
+## Trace languages
+
+`Data.CFTA.Trace` builds the automaton of the traces of a state machine. A
+`StateMachine` has an initial state, the steps, the next state of a step
+(`Nothing` when the precondition of the step is false), and the final states.
+The trace of the steps `s1 ... sn` is the term `Step s1 (... (Step sn End))`.
+
+```haskell
+import qualified Data.CFTA as FTA
+import Data.CFTA.Trace
+
+data Handle = Closed | Opened
+  deriving (Eq, Ord, Show)
+
+data HandleStep = Open | Read | Close
+  deriving (Eq, Ord, Show)
+
+handle :: StateMachine Handle HandleStep
+handle = StateMachine Closed [Open, Read, Close] next (== Closed)
+  where
+    next Closed Open = Just Opened
+    next Opened Read = Just Opened
+    next Opened Close = Just Closed
+    next _ _ = Nothing
+
+traces :: FTA.PlainFTA Handle (TraceSymbol HandleStep)
+traces = traceAutomaton handle
+
+-- FTA.accepts traces (traceTerm [Open, Read, Close])
+-- True
+-- feasibility traces [Open, Read, Close, Read]
+-- Left (Infeasible {infeasibleSteps = [Open,Read,Close], infeasibleSymbol = Step Read, infeasibleStates = [Closed]})
+-- feasibility traces [Open, Read]
+-- Left (Infeasible {infeasibleSteps = [Open,Read], infeasibleSymbol = End, infeasibleStates = [Opened]})
+```
+
+The states of the automaton are the states that the initial state reaches,
+so the state space must be finite. Each state has at most one transition for
+each symbol, so the automaton is unambiguous. `Data.CFTA.Sized` in
+cfta-generator lists, counts, and ranks the traces of `n` steps as the terms
+of size `n + 1`, and `Gen.fromAutomaton` samples and shrinks them.
+`FTA.intersect` gives the traces of two state machines over one step type,
+and `Lowering.lift` gives the traces over a finer alphabet of steps.
+`feasibility` reads the first step first, so it stops at the first failure.
+`Template.excludePrefixesFTA` takes the failing prefixes as `[(Step s, 1)]`.
 
 ## Visualize a grammar
 
