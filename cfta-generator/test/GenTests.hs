@@ -17,6 +17,7 @@ import qualified Data.CFTA.GenSpec
 import qualified Data.CFTA.RankedSpec
 import qualified Data.CFTA.SizedSpec
 import qualified Data.CFTA.Template.LearnSpec
+import qualified Data.CFTA.Template.NamedSpec
 
 main :: IO ()
 main =
@@ -36,3 +37,4 @@ main =
         Data.CFTA.Gen.TypingSpec.spec
         Data.CFTA.SizedSpec.spec
         Data.CFTA.Template.LearnSpec.spec
+        Data.CFTA.Template.NamedSpec.spec
