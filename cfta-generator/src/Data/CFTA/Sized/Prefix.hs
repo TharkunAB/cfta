@@ -205,7 +205,9 @@ each run has a guard that fails, and 'Unknown' otherwise, in the three-valued
 logic of 'andVerdicts' and 'orVerdicts'. A guard of a run is decided even when
 another guard of the run is 'Unknown', so this verdict is 'No' in some cases
 where 'Data.CFTA.Refinement.Denotation.accepts' is 'Unknown'. The two agree
-on 'Yes'. The solver decides each guard at most once on each subterm.
+on 'Yes'. The verdict of each state on each subterm is kept, so the solver
+decides the guards of a state at most once on each subterm. A subterm that
+two states reach is decided for each of them.
 
 An automaton without a guard beyond equality constraints gives the result of
 'prefixCompletions', and the solver is not called.
