@@ -1069,8 +1069,10 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..}
         templates
             | canPrune && skeletonTemplates = filter annotationFree (pruningTemplates skeletonSig lvl rules)
             | otherwise = []
+        -- One partial application, so that the parts share the remaining templates.
+        prepare = preparePruning templates
         typingsOf space =
-            let (pruningRoot, oracleTemplates) = preparePruning templates (refold space)
+            let (pruningRoot, oracleTemplates) = prepare (refold space)
              in mapMaybe (generalizeCarriers skeletonSig phase_variables . npTerm') (prunedTerms oracleTemplates pruningRoot)
     bucket lvl typings tc s = do
         bucketStart <- getMonotonicTimeNSec
@@ -1085,8 +1087,9 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..}
                     -- as for the phase 4 skeletons (see 'spineParts').
                     pure
                         [ canonicalTypes (npTerm' t)
-                        | space <- searchSpaceParts termSplit stecta lvl tc
-                        , let (pruningRoot, oracleTemplates) = preparePruning bucketTemplates (refold space)
+                        | let prepare = preparePruning bucketTemplates
+                        , space <- searchSpaceParts termSplit stecta lvl tc
+                        , let (pruningRoot, oracleTemplates) = prepare (refold space)
                         , t <- prunedTerms oracleTemplates pruningRoot
                         ]
             Nothing -> do
@@ -1198,7 +1201,7 @@ searchSpace StEcta{..} lvl tc =
 because its reduction can make overlapping type alternatives.
 -}
 preparePruning :: [Template Symbol] -> Node Symbol -> (Node Symbol, [Template Symbol])
-preparePruning templates = Bi.first mergeTypeAlternatives . Compile.preparePruning templates
+preparePruning templates = let prepare = Compile.preparePruning templates in Bi.first mergeTypeAlternatives . prepare
 
 -- | 'searchSpace' in disjoint parts, one for each shape of the left spine (see 'spineParts').
 searchSpaceParts :: Int -> StEcta -> Int -> TypeSkeleton -> [Node Symbol]
