@@ -159,10 +159,13 @@ type Comps = [(Text, TypeSkeleton)]
 {- | The types that a type variable of the grammar can take. With a depth D,
 only the types with at most D levels of constructors and arrows above the
 constants and the type variables. Without a depth, all the types ('mtau').
+A negative depth raises an error.
 -}
 mtauWithin :: Maybe Int -> Comps -> Node Symbol
 mtauWithin Nothing comps = mtau comps
-mtauWithin (Just depth) comps = go depth
+mtauWithin (Just depth) comps
+    | depth < 0 = error "mtauWithin: type depth must be a nonnegative integer"
+    | otherwise = go depth
   where
     go 0 = union (globalTyVars ++ [Node [Edge (Symbol nm) []] | (nm, 0) <- allConstructors comps])
     go d =
