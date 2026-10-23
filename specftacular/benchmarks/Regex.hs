@@ -15,7 +15,6 @@ import Data.Ord
 import Data.Typeable
 import Specftacular
 import Specftacular.Types (genRepFromProxy)
-import System.Environment (getArgs)
 import Test.QuickCheck
 import Test.QuickCheck.Gen
 import Test.QuickCheck.Random
@@ -45,7 +44,7 @@ data Regex a
     | Plus (Regex a)
     deriving (Typeable, Show)
 
--- This should really use observational equality instead.
+-- | The fixed words used for sampled language equality.
 vals :: [[Sym]]
 vals = unGen (vector 100) (mkQCGen 12345) 10
 
@@ -154,11 +153,11 @@ extraReps _ = Nothing
 --   monoType (Proxy :: Proxy Sym) ]
 
 main = do
-    [s, p] <- map read <$> getArgs
+    options <- parseOptions
+    putStrLn "Observation: acceptance on 100 fixed words; seed 12345; size 10."
     res <-
         experimentalPhases
-            s
-            p
+            options
             extraReps
             [ con "char" (Char :: Sym -> Regex Sym)
             , con "any" (AnyChar :: Regex Sym)

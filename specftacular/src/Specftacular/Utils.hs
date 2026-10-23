@@ -4,20 +4,29 @@ module Specftacular.Utils where
 
 import Data.CFTA.Equality (
     Edge (Edge),
-    Node (Node),
+    Node (EmptyNode, Node, Rec),
     Path,
     createMu,
+    edgeChildren,
+    edgeConstraint,
+    edgeSymbol,
     equalityConstraint,
     getPath,
     mapNodes,
     mkEdge,
     mkEqConstraints,
+    noConstraint,
+    nodeEdges,
+    numNestedMu,
     path,
     pathsMatching,
+    setChildren,
     union,
  )
 import Data.CFTA.Symbol (Symbol (Symbol))
 import Data.Containers.ListUtils (nubOrd)
+import Data.List (transpose)
+import qualified Data.Map.Strict as Map
 import Data.Text (Text)
 import Specftacular.Types (TypeSkeleton (..))
 
@@ -60,6 +69,23 @@ tk anyArg k = map constructApp [1 .. (k - 1)]
             (union $ tk anyArg i)
             (union $ tk anyArg (k - i))
 
+{- | The nodes of the terms with k leaves, one node for each shape: the atoms,
+or the applications of a shape with i leaves to a shape with k - i leaves,
+down to the given depth of applications; below it, a part is the union of
+'tk'. Their union is the union of 'tk', and no two of them share a term.
+-}
+spineParts :: Int -> Node Symbol -> Int -> [Node Symbol]
+spineParts _ _ 0 = []
+spineParts _ anyArg 1 = [anyArg]
+spineParts depth anyArg k
+    | depth <= 0 = [union $ tk anyArg k]
+    | otherwise =
+        [ mapp function argument
+        | i <- [1 .. k - 1]
+        , function <- spineParts (depth - 1) anyArg i
+        , argument <- spineParts (depth - 1) anyArg (k - i)
+        ]
+
 mapp :: Node Symbol -> Node Symbol -> Node Symbol
 mapp n1 n2 =
     Node
@@ -75,6 +101,50 @@ mapp n1 n2 =
             )
         ]
 
+{- | Merge the alternatives of each type node that have the same symbol, the
+same arity and no constraint. The merged alternative has the union of the
+children, child by child. This occurs below each type position: the
+annotation and the arrow marker of an application, the type of a filter,
+and the children of the other symbols, which are the types of the
+constants and the arguments of the type constructors.
+
+An application annotation is the union of the result types of its
+functions, and the reduction intersects types with unions of types. Thus
+two alternatives of one type node can accept the same type, for example
+@(a, b)@ from @(,)@ and @([a], [b])@ from @unzip@. Each such alternative
+gives a different run of the same term, and the enumeration lists one term
+for each run. After the merge, each term has one run in the merged nodes.
+
+A merged node can accept more types. The equalities of the applications
+and of the filter make each type equal to the type of the program below
+it, so the automaton accepts the same terms. The program symbols must be
+@app@ with four children, @filter@ with two children, and the constants
+with one child. A recursive type node does not change.
+-}
+mergeTypeAlternatives :: Node Symbol -> Node Symbol
+mergeTypeAlternatives = mapNodes atTerm
+  where
+    atTerm n@(Node _) = Node [setChildren e (zipWith ($) (roles e) (edgeChildren e)) | e <- nodeEdges n]
+    atTerm n = n
+    roles e = case (edgeSymbol e, length (edgeChildren e)) of
+        ("app", 4) -> [merged, merged, id, id]
+        ("filter", 2) -> [merged, id]
+        _ -> repeat merged
+    merged n = case n of
+        EmptyNode -> n
+        Rec _ -> n
+        _
+            | numNestedMu n > 0 -> n
+            | otherwise ->
+                let groups = Map.elems (Map.fromListWith (flip (++)) [((edgeSymbol e, length (edgeChildren e)), [e]) | e <- nodeEdges n])
+                 in if all ((== 1) . length) groups
+                        then n
+                        else Node (concatMap mergeGroup groups)
+    mergeGroup group@(e : _ : _)
+        | all ((== noConstraint) . edgeConstraint) group =
+            [Edge (edgeSymbol e) (map (merged . union) (transpose (map edgeChildren group)))]
+    mergeGroup group = group
+
 allConstructors :: Comps -> [(Text, Int)]
 allConstructors comps = nubOrd (concatMap (getConstructors . snd) comps)
   where
@@ -85,6 +155,20 @@ allConstructors comps = nubOrd (concatMap (getConstructors . snd) comps)
         (nm, length ts) : concatMap getConstructors ts
 
 type Comps = [(Text, TypeSkeleton)]
+
+{- | The types that a type variable of the grammar can take. With a depth D,
+only the types with at most D levels of constructors and arrows above the
+constants and the type variables. Without a depth, all the types ('mtau').
+-}
+mtauWithin :: Maybe Int -> Comps -> Node Symbol
+mtauWithin Nothing comps = mtau comps
+mtauWithin (Just depth) comps = go depth
+  where
+    go 0 = union (globalTyVars ++ [Node [Edge (Symbol nm) []] | (nm, 0) <- allConstructors comps])
+    go d =
+        let n = go (d - 1)
+         in union
+                ((arrowType n n : globalTyVars) ++ [Node [Edge (Symbol nm) (replicate arity n)] | (nm, arity) <- allConstructors comps])
 
 mtau :: Comps -> Node Symbol
 mtau comps =
@@ -104,8 +188,8 @@ mtau comps =
 globalTyVars :: [Node Symbol]
 globalTyVars = [var1, var2, var3, var4, varAcc]
 
-generalize :: Comps -> Node Symbol -> Node Symbol
-generalize comps n@(Node [_]) =
+generalize :: Maybe Int -> Comps -> Node Symbol -> Node Symbol
+generalize typeDepth comps n@(Node [_]) =
     Node
         [mkEdge s ns' (equalityConstraint $ mkEqConstraints $ map pathsForVar vars)]
   where
@@ -114,7 +198,7 @@ generalize comps n@(Node [_]) =
         mapNodes
             ( \x ->
                 if x `elem` vars
-                    then mtau comps
+                    then mtauWithin typeDepth comps
                     else x
             )
             n
@@ -122,7 +206,7 @@ generalize comps n@(Node [_]) =
 
     pathsForVar :: Node Symbol -> [Path]
     pathsForVar v = pathsMatching (== v) n
-generalize _ n = n -- error $ "cannot generalize: " ++ show n
+generalize _ _ n = n -- error $ "cannot generalize: " ++ show n
 
 typeToFta :: TypeSkeleton -> Node Symbol
 typeToFta (TVar "a") = var1
@@ -138,3 +222,25 @@ typeToFta (TVar v) =
 typeToFta (TFun t1 t2) = arrowType (typeToFta t1) (typeToFta t2)
 typeToFta (TCons "Fun" [t1, t2]) = arrowType (typeToFta t1) (typeToFta t2)
 typeToFta (TCons s ts) = mkDatatype s (map typeToFta ts)
+
+{- | Whether a type node can hold a type. A type variable of the type,
+and a type variable of the node (see 'globalTyVars'), stand for any type. The
+check ignores the constraints of the node, so it can hold for a type that the
+node does not hold.
+-}
+typeAdmits :: Node Symbol -> TypeSkeleton -> Bool
+typeAdmits n ty = case (n, ty) of
+    (_, TVar _) -> True
+    (Node es, _) -> any edgeAdmits es
+    _ -> True
+  where
+    edgeAdmits e = case (ty, edgeChildren e) of
+        _ | null (edgeChildren e) && edgeSymbol e `elem` globalTyVarSymbols -> True
+        (TCons name args, children) ->
+            edgeSymbol e == Symbol name && length children == length args && and (zipWith typeAdmits children args)
+        (TFun arg result, [_, arg', result']) -> edgeSymbol e == "->" && typeAdmits arg' arg && typeAdmits result' result
+        _ -> False
+
+-- | The symbols of 'globalTyVars'.
+globalTyVarSymbols :: [Symbol]
+globalTyVarSymbols = [edgeSymbol e | var <- globalTyVars, e <- nodeEdges var]
