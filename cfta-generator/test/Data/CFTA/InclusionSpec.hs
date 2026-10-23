@@ -7,7 +7,7 @@ import qualified Data.Text as Text
 import Test.Hspec (Spec, describe, it, shouldBe)
 
 import qualified Data.CFTA as FTA
-import Data.CFTA.Constraint (Constraint, equalityConstraint, noConstraint)
+import Data.CFTA.Constraint (Constraint, Guard (..), equalityConstraint, noConstraint, semanticConstraint)
 import qualified Data.CFTA.Equality as ECTA
 import Data.CFTA.Inclusion
 import Data.CFTA.Index (Size (..))
@@ -19,9 +19,11 @@ import qualified Data.CFTA.Term as Term
 spec :: Spec
 spec = describe "Data.CFTA.Inclusion" $ do
     it "agrees with a search of the size classes of the left automaton" $
-        overPairs (inclusionUpTo bound) `shouldBe` overPairs (\left right -> Right $ search left right)
+        overPairs boundedFixtures (inclusionUpTo bound)
+            `shouldBe` overPairs boundedFixtures (\left right -> Right $ search left right)
     it "gives a counterexample that the left automaton accepts, that the right rejects, and that no smaller term separates" $
-        overPairs counterexampleCheck `shouldBe` overPairs (\left right -> Just $ smallestDifference left right)
+        overPairs boundedFixtures counterexampleCheck
+            `shouldBe` overPairs boundedFixtures (\left right -> Just $ smallestDifference left right)
     it "finds a missing tree at the first size where the languages differ, and not at rank zero" $ do
         -- The binary trees with five nodes are g(a, g(a, a)) and then
         -- g(g(a, a), a). The right combs have only the first.
@@ -44,22 +46,32 @@ spec = describe "Data.CFTA.Inclusion" $ do
                        | name <- ["trimmed", "reordered"]
                        ]
     it "gives the same counterexample for reordered copies of the two automata" $ do
-        overPairs (\left right -> inclusionUpTo bound (reordered left) (reordered right))
-            `shouldBe` overPairs (inclusionUpTo bound)
-        overPairs (\left right -> inclusion (reordered left) (reordered right)) `shouldBe` overPairs inclusion
-    it "rejects an automaton with a constraint" $ do
-        let equal = equalityConstraint $ ECTA.mkEqConstraints [[ECTA.path [0], ECTA.path [1]]]
-            pairs = automaton "s" [("s", [FTA.Transition (sym "g") ["q", "q"] equal]), ("q", [leaf "a", leaf "b"])]
-        inclusionUpTo bound pairs trees `shouldBe` Left ConstrainedLeft
-        inclusionUpTo bound trees pairs `shouldBe` Left ConstrainedRight
-        inclusion pairs trees `shouldBe` Left ConstrainedLeft
-        inclusion trees pairs `shouldBe` Left ConstrainedRight
+        overPairs boundedFixtures (\left right -> inclusionUpTo bound (reordered left) (reordered right))
+            `shouldBe` overPairs boundedFixtures (inclusionUpTo bound)
+        overPairs fixtures (\left right -> inclusion (reordered left) (reordered right)) `shouldBe` overPairs fixtures inclusion
+    it "decides equality constraints" $ do
+        inclusionUpTo bound equalPairs pairsOfChains `shouldBe` Right (IncludedUpTo bound)
+        inclusionUpTo bound pairsOfChains equalPairs `shouldBe` Right (NotIncluded $ term "g" [term "a" [], term "b" []])
+        inclusionUpTo bound chainAndItsF equalPairs
+            `shouldBe` Right (NotIncluded $ term "g" [term "f" [term "a" []], term "a" []])
+        -- The same equality, at the transition of g or at the root, two
+        -- levels above the equal chains.
+        (inclusionUpTo bound fOfEqualPairs fOfEqualPairsAtRoot, inclusionUpTo bound fOfEqualPairsAtRoot fOfEqualPairs)
+            `shouldBe` (Right (IncludedUpTo bound), Right (IncludedUpTo bound))
+    it "rejects an automaton with a constraint that the check does not decide" $ do
+        let different = semanticConstraint $ Not $ Same (ECTA.path [0]) (ECTA.path [1])
+            differentPairs = automaton "s" $ ("s", [FTA.Transition (sym "g") ["t", "t"] different]) : chainRows "t"
+        inclusionUpTo bound differentPairs trees `shouldBe` Left ConstrainedLeft
+        inclusionUpTo bound trees differentPairs `shouldBe` Left ConstrainedRight
+        inclusion equalPairs trees `shouldBe` Left ConstrainedLeft
+        inclusion trees equalPairs `shouldBe` Left ConstrainedRight
     it "includes every automaton up to a bound below one" $
         inclusionUpTo 0 treesOverAB trees `shouldBe` Right (IncludedUpTo 0)
     it "agrees with the bounded check on every pair" $
         -- The largest smallest counterexample of a pair has five nodes, so
         -- the bound shows each counterexample.
-        overPairs (\left right -> upToBound <$> inclusion left right) `shouldBe` overPairs (inclusionUpTo bound)
+        overPairs fixtures (\left right -> upToBound <$> inclusion left right)
+            `shouldBe` overPairs fixtures (inclusionUpTo bound)
     it "shows the inclusion of two infinite languages, which no bound shows" $ do
         inclusion chainsBySix evenChains `shouldBe` Right Included
         inclusionUpTo bound chainsBySix evenChains `shouldBe` Right (IncludedUpTo bound)
@@ -117,11 +129,61 @@ smallestDifference left right =
         (\size -> any (\candidate -> FTA.accepts left candidate && not (FTA.accepts right candidate)) (allTerms size))
         [1 .. bound]
 
--- | A function of each ordered pair of the fixtures, with the names of the pair.
-overPairs :: (FTA.PlainFTA String Symbol -> FTA.PlainFTA String Symbol -> result) -> [(String, String, result)]
-overPairs check = [(leftName, rightName, check left right) | (leftName, left) <- fixtures, (rightName, right) <- fixtures]
+-- | A function of each ordered pair of some fixtures, with the names of the pair.
+overPairs ::
+    [(String, FTA.PlainFTA String Symbol)] ->
+    (FTA.PlainFTA String Symbol -> FTA.PlainFTA String Symbol -> result) ->
+    [(String, String, result)]
+overPairs named check = [(leftName, rightName, check left right) | (leftName, left) <- named, (rightName, right) <- named]
 
--- | The test automata, each with a name.
+-- | The fixtures of the bounded check: those without constraints and those with equality constraints.
+boundedFixtures :: [(String, FTA.PlainFTA String Symbol)]
+boundedFixtures = fixtures <> equalityFixtures
+
+-- | The test automata with equality constraints, each with a name, and the chains they compare.
+equalityFixtures :: [(String, FTA.PlainFTA String Symbol)]
+equalityFixtures =
+    [ ("pairs of chains", pairsOfChains)
+    , ("pairs of equal chains", equalPairs)
+    ,
+        ( "pairs of equal chains, from two states"
+        , automaton "s" $ ("s", [equalAt "g" ["t", "u"] [0] [1]]) : chainRows "t" <> chainRows "u"
+        )
+    , ("f of pairs of equal chains", fOfEqualPairs)
+    , ("f of pairs of equal chains, with the equality at the root", fOfEqualPairsAtRoot)
+    , ("g(f(x), x)", chainAndItsF)
+    ]
+
+-- | The pairs g(x, y) of chains x and y over a and b.
+pairsOfChains :: FTA.PlainFTA String Symbol
+pairsOfChains = automaton "s" $ ("s", [node "g" ["t", "t"]]) : chainRows "t"
+
+-- | The pairs g(x, x) of equal chains over a and b.
+equalPairs :: FTA.PlainFTA String Symbol
+equalPairs = automaton "s" $ ("s", [equalAt "g" ["t", "t"] [0] [1]]) : chainRows "t"
+
+-- | The terms f(g(x, x)), with the equality on the transition of g.
+fOfEqualPairs :: FTA.PlainFTA String Symbol
+fOfEqualPairs = automaton "s" $ ("s", [node "f" ["p"]]) : ("p", [equalAt "g" ["t", "t"] [0] [1]]) : chainRows "t"
+
+-- | The terms f(g(x, x)), with the equality on the transition of f.
+fOfEqualPairsAtRoot :: FTA.PlainFTA String Symbol
+fOfEqualPairsAtRoot = automaton "s" $ ("s", [equalAt "f" ["p"] [0, 0] [0, 1]]) : ("p", [node "g" ["t", "t"]]) : chainRows "t"
+
+-- | The terms g(f(x), x) of a chain x over a and b.
+chainAndItsF :: FTA.PlainFTA String Symbol
+chainAndItsF = automaton "s" $ ("s", [equalAt "g" ["t", "t"] [0, 0] [1]]) : chainRows "t"
+
+-- | A state of the chains over a and b.
+chainRows :: String -> [(String, [FTA.Transition String Symbol Constraint])]
+chainRows state = [(state, [leaf "a", leaf "b", node "f" [state]])]
+
+-- | A transition whose subterms at the two paths are equal.
+equalAt :: String -> [String] -> [ECTA.ChildIndex] -> [ECTA.ChildIndex] -> FTA.Transition String Symbol Constraint
+equalAt symbol children one other =
+    FTA.Transition (sym symbol) children $ equalityConstraint $ ECTA.mkEqConstraints [[ECTA.path one, ECTA.path other]]
+
+-- | The test automata without constraints, each with a name.
 fixtures :: [(String, FTA.PlainFTA String Symbol)]
 fixtures =
     [ ("binary trees", trees)
