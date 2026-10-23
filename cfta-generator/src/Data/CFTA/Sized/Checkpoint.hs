@@ -36,7 +36,10 @@ The bound and the seed come from the checkpoint.
 = The draws of route @sized-sample@ 1 with the generator @splitmix64@ 1
 
 These steps define each draw, so that another implementation can give the
-same draws. All arithmetic on words is modulo @2^64@.
+same draws. All arithmetic on words is modulo @2^64@. The seed is the 64-bit
+word 'samplingSeed'. The next draw of a checkpoint is draw @i@ with @i@ equal
+to 'samplingDraws'. @count s@ is the number of terms of size @s@ in the size
+classes of the graph ('Data.CFTA.Sized.countOfSize').
 
 1. The SplitMix64 stream from a state @s@ ('splitMix64') is the words
    @mix (s + k * g)@ for @k = 1, 2, 3, ...@, with the golden gamma
@@ -71,7 +74,8 @@ same draws. All arithmetic on words is modulo @2^64@.
    draw takes a value @t@ below @total@. The size is the size @s@ where
    @t - p s@ is at least zero and less than @weight s@, with @p s@ the sum of
    the weights of the sizes before @s@. Then the draw takes the class rank, a
-   value below @count s@, from the next words of the same stream.
+   value below @count s@, from the next words of the same stream. Each weight
+   is at least one, and each size of a weight is from one to the bound.
 
 6. The term is 'Data.CFTA.Sized.unrankOfSize' of the size and the class rank,
    in the order of the route @sized@.
