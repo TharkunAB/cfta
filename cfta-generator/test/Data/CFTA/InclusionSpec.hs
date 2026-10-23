@@ -63,7 +63,7 @@ search left right =
 
 {- | Whether the left automaton accepts the counterexample and the right
 automaton rejects it, with the size of the counterexample. 'Nothing' when the
-counterexample fails.
+counterexample fails, or for an error or 'Included'.
 -}
 counterexampleCheck :: FTA.PlainFTA String Symbol -> FTA.PlainFTA String Symbol -> Maybe (Maybe Size)
 counterexampleCheck left right = case inclusionUpTo bound left right of
@@ -72,7 +72,7 @@ counterexampleCheck left right = case inclusionUpTo bound left right of
             Just $ Just $ Size $ toInteger $ length counterexample
         | otherwise -> Nothing
     Right (IncludedUpTo _) -> Just Nothing
-    Left _ -> Nothing
+    _ -> Nothing
 
 -- | The smallest size of a term over the alphabet that the left automaton accepts and the right rejects.
 smallestDifference :: FTA.PlainFTA String Symbol -> FTA.PlainFTA String Symbol -> Maybe Size
