@@ -1,0 +1,140 @@
+--- verify-proofs.py
++++ basis/verify-proofs.py.txt
+@@ -1,4 +1,4 @@
+-"""Check saved native-node-counter-growth evidence without running Lean or Lake."""
++"""Check saved stored-node-counter-growth evidence without running Lean or Lake."""
+ import argparse
+ import difflib
+ import hashlib
+@@ -11,7 +11,7 @@
+ parser.add_argument("--live", action="store_true")
+ args = parser.parse_args()
+ root = args.root.resolve()
+-evidence = root / "lean/restart-evidence/20261023-native-node-counter-growth"
++evidence = root / "lean/restart-evidence/20261023-stored-node-counter-growth"
+ def digest(data):
+     return hashlib.sha256(data).hexdigest()
+ def read(relative):
+@@ -27,13 +27,13 @@
+ def canonical(text):
+     return re.sub(r"[ \t\r\n]+", " ", text).strip(" \t\r\n")
+ raw_data = read("bound-data.json")
+-assert digest(raw_data) == "a6cdede0a991e2dd3afba59e8feb0e818b51938c860fef2a5dae0c55b0bb995e"
++assert digest(raw_data) == "f60555dd0c4e55bdea653c5ef62cb554e9ffe5fe2ff07a3d07adec264150fc66"
+ assert not re.search(r"__H\d+_", raw_data.decode()), "Unbound evidence input"
+ bound = json.loads(raw_data)
+ modules = bound["modules"]
+-assert [m["key"] for m in modules] == ["native_node_counter_growth"]
++assert [m["key"] for m in modules] == ["stored_node_counter_growth"]
+ assert [m["source_cap"] for m in modules] == [160]
+-assert [m["specs"] for m in modules] == [[[name, "theorem"] for name in ["step_mono", "execute_mono", "resume_mono"]]]
++assert [m["specs"] for m in modules] == [[[name, "theorem"] for name in ["execute_mono", "unfold_mono", "maybeMu_mono"]]]
+ by_name = {m["name"]: m for m in modules}
+ jobs = json.loads(pinned(bound["job_history"]))
+ actual = set()
+@@ -86,8 +86,6 @@
+         assert all("InternedFreshOrdinaryClosedCompletion.lean:24:5:" in warning for warning in expected["warnings"])
+         assert job["module"] is None if job["kind"] == "audit" else job["module"] in by_name
+ history = json.loads(pinned(bound["history"]))
+-pinned(bound["history_review"])
+-pinned(bound["history_peer"])
+ assert history["status"] == "ROOT_ACCEPTED"
+ assert set(history) == {"status", "selected_sources", "variants", "artifacts", "patches", "rejected_public_types"}
+ assert history["selected_sources"] == {m["source_path"]: m["source_sha256"] for m in modules}
+@@ -166,20 +164,20 @@
+     assert body_gate["source_hard_stop"] == m["source_cap"] and body_gate["declaration_gate_sha256"] == m["declaration_gate"]["sha256"]
+     assert body_gate["root_complete_source_lines_read"] == m["source_lines"] and body_gate["declaration_gate"] == m["declaration_gate"]["path"]
+     assert body_gate["independent_review_sha256"] == m["body_review"]["sha256"] and json.loads(pinned(m["body_review"]))["status"] == "CLEAR"
+-    assert all(body_gate[k] for k in ["root_complete_source_read", "root_all_three_bodies_and_six_fragments_read", "root_all_twelve_scoped_introduced_types_read", "root_all_six_case_equation_types_read", "root_complete_generalized_fuel_IH_read", "actual_pending_constructor_heap_and_actual_yielded_IH_state", "no_public_validity_success_callback_or_final_counter_oracle", "default_declaration_limits", "all_linters"])
+-    assert (body_gate["haves"], body_gate["lets"], body_gate["obtains"], body_gate["termination_by_count"]) == (2, 0, 0, 0)
++    assert all(body_gate[k] for k in ["root_complete_source_read", "root_all_six_bodies_and_eight_fragments_read", "root_all_seven_scoped_introduced_types_read", "actual_repaired_pending_included", "concrete_callback_bound_derived_from_public_H33_and_Work", "same_literal_probes_and_request_and_returned_states", "no_new_public_oracle_or_success_or_validity_requirement", "default_declaration_limits", "all_linters"])
++    assert (body_gate["haves"], body_gate["lets"], body_gate["obtains"], body_gate["termination_by_count"]) == (1, 0, 0, 0)
+     assert body_gate["private_helpers"] == m["private_helpers"] and body_gate["public_heads"] == shorts
+-    assert body_gate["induction"] is True and body_gate["recursive_calls"] == 0 and body_gate["restricted_induction_call"] == "ih next after"
++    assert body_gate["induction"] is False and body_gate["recursive_calls"] == 0
+     declaration = json.loads(pinned(m["declaration_gate"]))
+     assert declaration["status"] == "ACCEPTED_EXACT_DECLARATIONS_BEFORE_BODY" and declaration["module"] == name
+     assert declaration["public_heads"] == shorts and declaration["private_helpers"] == m["private_helpers"]
+     assert declaration["contracts_sha256"] == m["manifest"]["sha256"] and declaration["insertion_map_sha256"] == m["layout"]["sha256"]
+     assert declaration["whole_source_hard_stop"] == m["source_cap"] and declaration["default_declaration_limits"] and declaration["all_linters"]
+-    assert [declaration[k] for k in ["root_whole_context_lines_read", "root_whole_public_header_lines_read", "root_whole_private_header_lines_read", "root_whole_local_compiled_fragment_lines_read"]] == [7, 18, 0, 4]
+-    assert all(declaration[k] for k in ["root_all_public_and_private_header_types_read", "root_all_twelve_scoped_introduced_types_read", "root_all_schema_layout_owner_attachment_and_body_inventory_metadata_read", "root_all_six_specialized_equation_types_read", "root_complete_generalized_fuel_IH_three_lines_read", "root_all_16_relevant_live_API_cuts_278_lines_read", "root_all_seven_public_import_routes_checked"])
+-    assert [declaration[k] for k in ["body_haves", "body_lets", "body_obtains", "helpers", "recursive_calls", "termination_by_count"]] == [2, 0, 0, 0, 0, 0]
+-    assert declaration["restricted_induction_call"] == "ih next after" and re.fullmatch(r"[0-9a-f]{64}", declaration["independent_review_sha256"])
+-    assert declaration["induction"] is True and declaration["goal_status"] == "ACTIVE_INCOMPLETE"
++    assert [declaration[k] for k in ["compiled_fragments", "compiled_fragment_lines", "root_whole_context_lines_read", "root_whole_public_header_lines_read", "root_whole_private_header_lines_read", "root_whole_local_compiled_fragment_lines_read"]] == [8, 39, 9, 12, 17, 1]
++    assert all(declaration[k] for k in ["root_all_public_and_private_header_types_read", "root_all_seven_scoped_introduced_types_read", "root_all_schema_layout_owner_attachment_and_body_inventory_metadata_read", "generalized_environment_and_full_heap", "concrete_callback_pending_bound_derived_not_public_premise", "same_repaired_execute_unfold_maybeMu_outcome_state", "no_public_Dense_Valid_Facts_Good_Available_success_or_counter_oracle", "private_callback_uses_H33_public_build_without_forward_reference", "no_H33_private_helper_import"])
++    assert [declaration[k] for k in ["body_haves", "body_lets", "body_obtains", "helpers", "recursive_calls", "termination_by_count"]] == [1, 0, 0, 3, 0, 0]
++    assert declaration["contract_root"] == "declaration-plan" and declaration["global_instance_declaration"] is False and declaration["omit_directives"] == 0
++    assert declaration["induction"] is False and declaration["native_Scan_H23_or_resource_result_claimed"] is False
+     manifest = json.loads(pinned(m["manifest"]))
+     schema = json.loads(pinned(m["schema"]))
+     fragments = m["fragments"]
+@@ -222,18 +220,8 @@
+     reviewed = {Path(record["path"]).name: pinned(record) for record in m["review_only"]}
+     types = json.loads(reviewed["introduced-types.json"])
+     inventory = json.loads(reviewed["body-inventories.json"])
+-    assert len(types["entries"]) == 12 and set(inventory["owners"]) == set(all_shorts)
++    assert len(types["entries"]) == 7 and set(inventory["owners"]) == set(all_shorts)
+     assert not re.search(rb"(?m)^\s*(?:mutual|termination_by)\b", source)
+-    equations = json.loads(reviewed["case-equations.json"])
+-    induction = json.loads(reviewed["induction-contract.json"])
+-    assert equations == m["case_equations"] and len(equations["entries"]) == 2 and sum(len(e["specialized_types"]) for e in equations["entries"]) == 6
+-    assert induction == m["induction_contract"] and induction["owner"] == "execute_mono" and induction["activation"] == schema["induction_activation"]
+-    assert reviewed["execute-IH.lean.txt"].decode().rstrip("\n") == induction["complete_IH_type"] and len(reviewed["execute-IH.lean.txt"].splitlines()) == 3
+-    assert induction["generalized_arguments"] == [dict(name="code", type="Code Symbol Guard A"), dict(name="state", type="SourceRecursiveIntersectionThunks.State width Symbol Guard")]
+-    assert induction["fixed_parameters"] == ["Symbol", "Guard", "A", "width", "DecidableEq Symbol", "DecidableEq (EdgeKey Symbol Guard)", "emptyGuard", "conjoin"]
+-    assert induction["call_forms"][0]["exact_term"] == "ih next after" and len(induction["call_forms"]) == 1 and induction["all_other_case_IH_calls"] is induction["unrestricted_IH_or_future_success_assumed"] is False
+-    for equation in equations["entries"]:
+-        assert bodies[equation["owner"]].count(equation["activation"].encode()) == 1
+     for short, body in bodies.items():
+         expected = m["bodies"][short]
+         assert re.findall(rb"\bhave[ \t]+([^ \t:\n]+)", body) == [n.encode() for n in expected["have_names"]]
+@@ -250,23 +238,18 @@
+         patterns = [part.decode() for part in re.findall(rb"(?m)^[ \t]*\| ([^\n]*?) =>", body)]
+         assert patterns == expected["case_pattern_groups"] and all(part in patterns for part in inventory["owners"][short]["case_pattern_groups"])
+         assert all(n in allowed for group in expected["intro_groups"] + expected["lambda_groups"] for n in group.split())
+-        assert all(n in allowed | {"pure", "fail", "enter", "read", "finishNode", "finishEdge", "work", "optionalBinder", "done", "pending", "node", "edge", "zero", "succ", "yielded", "failed", "blocked", "|"} for group in patterns for n in group.split())
+-        assert re.findall(rb"\binduction[ \t]+([^\n]+)", body) == ([induction["activation"].removeprefix("induction ").encode()] if short == "execute_mono" else [])
++        assert all(n in allowed | {"done", "pending", "mu", "empty", "reference", "node", "union", "|"} for group in patterns for n in group.split())
++        assert not re.search(rb"\binduction\b", body)
+         assert not re.search(rb"\b(?:show|suffices|haveI|letI)\b", body) and not re.search(rb"\bobtain\b(?:(?!:=).)*:(?!=)", body, re.S)
+         assert not re.search(rb"\b" + short.encode() + rb"\b", body)
+-        dependencies = re.findall(rb"\b(step_mono|execute_mono|resume_mono)\b", body)
++        dependencies = re.findall(rb"\b(bind_mono|callback_mono|request_mono|execute_mono|unfold_mono|maybeMu_mono)\b", body)
+         assert dependencies == [n.encode() for n in expected["proof_dependencies"]] and all(all_shorts.index(n.decode()) < all_shorts.index(short) for n in dependencies)
+-    assert schema["induction_owner"] == "execute_mono" and schema["restricted_induction_call_terms"] == ["ih next after"]
+-    assert [len(re.findall(rb"\bih\b", bodies[n])) for n in all_shorts] == [0, 2, 0]
+-    yielded = re.search(rb"\| yielded next after =>(.*?)(?=\n[ \t]*\| done value after =>)", bodies["execute_mono"], re.S)
+-    assert yielded and re.findall(rb"\bih[ \t]+([A-Za-z_][A-Za-z_0-9]*)[ \t]+([A-Za-z_][A-Za-z_0-9]*)", yielded.group(1)) == [(b"next", b"after")]
+-    assert bodies["execute_mono"].count(b"ih next after") == 1
+-    assert schema["private_helpers"] == m["private_helpers"] == []
+-    assert schema["public_heads"] == shorts and schema["new_definitions"] == schema["new_predicates_or_structures"] == schema["typed_show_fragments"] == [] and schema["local_induction_names"] == ["ih"]
+-    assert schema["recursive_calls"] == [] and schema["termination_by_count"] == 0 and schema["extra_unreviewed_named_or_typed_body_fragments_authorized"] is False
+-    assert schema["compiled_contract_count"] == 6 and schema["compiled_contract_lines"] == 29 and schema["compiled_contract_order"] == list(manifest)
++    assert schema["private_helpers"] == m["private_helpers"] == ["bind_mono", "callback_mono", "request_mono"]
++    assert schema["public_heads"] == shorts and schema["new_definitions"] == schema["new_predicates_or_structures"] == schema["typed_show_fragments"] == schema["local_induction_names"] == []
++    assert schema["recursive_calls"] == [] and schema["termination_by_count"] == 0 and schema["extra_helpers_haves_lets_obtains_shows_lambdas_or_IH_authorized"] is False
++    assert schema["compiled_contract_count"] == 8 and schema["compiled_contract_lines"] == 39 and schema["compiled_contract_order"] == list(manifest)
+     assert schema["local_have_names_by_owner"] == {n: m["bodies"][n]["have_names"] for n in all_shorts} and schema["local_let_names_by_owner"] == {n: m["bodies"][n]["let_names"] for n in all_shorts}
+-    assert schema["local_obtain_groups"] == schema["by_cases_names"] == [] and schema["case_equation_names_by_owner"] == {n: m["bodies"][n]["case_equations"] for n in all_shorts} and schema["public_premises"] == ["DecidableEq Symbol", "DecidableEq (EdgeKey Symbol Guard)"]
++    assert schema["local_obtain_groups"] == schema["by_cases_names"] == schema["case_equation_names"] == [] and schema["public_premises"] == ["DecidableEq (EdgeKey Symbol Guard)"]
+     for record in m["review_only"]:
+         pinned(record)
+     public = re.findall(r"(?m)^\s*(?:(?:noncomputable|unsafe|partial)\s+)?(def|theorem|lemma|abbrev|opaque|instance|structure|inductive)\s+([^\s(\[{:=]+)", source.decode())
+@@ -279,9 +262,12 @@
+             helpers.append(found.group(1))
+     assert helpers == schema["private_helpers"] == m["private_helpers"]
+     assert not re.search(rb"(?m)^\s*(?:variable[ \t]+\[|omit\b)", source)
+-    assert all(source.count(("theorem " + short + " [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]").encode()) == 1 for short in shorts)
+-    assert schema["global_instance_declaration"] is False and schema["omit_directives"] == 0
+-    assert schema["explicit_instance_heads"] == shorts
++    assert all(source.count(("theorem " + short + " [DecidableEq (EdgeKey Symbol Guard)]").encode()) == 1 for short in ["callback_mono", "request_mono"] + shorts)
++    assert b"theorem bind_mono [" not in source
++    assert schema["explicit_instance_heads"] == ["callback_mono", "request_mono"] + shorts
++    preparation = json.loads(pinned(m["canonical_preparation"]))
++    assert preparation["status"] == "EARLY_EVIDENCE_COPY_RETAINED_BEFORE_MATERIALIZER" and preparation["sha256"] == m["source_sha256"] and all(preparation[k] for k in ["no_guard_changed", "no_Lean_source_changed", "no_proof_job_repeated"])
++    assert m["canonical_preparation"]["path"] in artifacts and preparation["retained_copy"] in artifacts and read(preparation["retained_copy"]) == source
+     if args.live:
+         assert (root / m["source_path"]).read_bytes() == source
+     tool_gate = json.loads(pinned(m["tool_gate"]))

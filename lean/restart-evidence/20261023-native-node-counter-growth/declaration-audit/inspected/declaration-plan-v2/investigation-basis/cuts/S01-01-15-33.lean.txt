@@ -1,0 +1,19 @@
+/-- Pending native observations retain the exact requested thunk or constructor key. -/
+inductive Blocked where
+  | nodeBusy (handle : Nat)
+  | edgeBusy (handle : Nat)
+  | absentNode (handle : Nat)
+  | absentEdge (handle : Nat)
+  | constructor (key : NodeKey)
+  deriving DecidableEq, Repr
+
+/-- Native observations retain the current control whenever execution can resume. -/
+inductive Outcome (width : Nat) (Symbol Guard A : Type) : Type 1 where
+  | yielded (code : Code Symbol Guard A) (state : SourceRecursiveIntersectionThunks.State width Symbol Guard)
+  | done (value : A) (state : SourceRecursiveIntersectionThunks.State width Symbol Guard)
+  | failed (failure : Failure) (state : SourceRecursiveIntersectionThunks.State width Symbol Guard)
+  | blocked (reason : Blocked) (code : Code Symbol Guard A) (state : SourceRecursiveIntersectionThunks.State width Symbol Guard)
+
+/-- Observe the exact current source and memo caches in every outcome. -/
+def Outcome.state : Outcome width Symbol Guard A → SourceRecursiveIntersectionThunks.State width Symbol Guard
+  | .yielded _ state | .done _ state | .failed _ state | .blocked _ _ state => state

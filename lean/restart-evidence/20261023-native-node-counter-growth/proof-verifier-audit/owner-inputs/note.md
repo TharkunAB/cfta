@@ -1,0 +1,9 @@
+H35 saved-proof verifier source adaptation only. Root accepted the scope before authorship. The selected source has 418 ordinary lines and 221 AST assertions. The hard limit is 430 lines.
+All 174 generic basis assertion expressions remain exact. The H35-specific checks retain all three public bodies, both local haves, all twelve scoped type entries, both actual case equations and all six branch equality types.
+The complete three-line fuel IH is pinned. The verifier checks its generalized code and full state, exact activation and sole ih next after call in the actual yielded branch. No extra helper, induction or recursive theorem call is permitted.
+The actual raw TYPE byte-identity flags are true, false and false for step, execute and resume. Lexical equality uses only four ASCII whitespace characters. Both raw views and their hashes remain distinct.
+The complete basis source and data, all drafts, declaration metadata, exact source/data diffs and input hashes are retained. Large saved BODY and history artifacts stay at their exact pinned evidence paths.
+Arity authored this verifier adaptation and the H35 declarations. Root authored the mathematical body. Required independently reviewed the declarations and public TYPE evidence. Guard independently reviewed the mathematical body. Guard must independently review this complete verifier before Root activation.
+The author made one read-only filename lookup error before following the actual selected gate. Its diagnostic is retained separately. It is not a proof job or Root metadata job.
+No selected program was imported, executed or installed. No compiler, Git, network, board or repository mutation occurred.
+The final two source lines pin the actual accepted Root and independent source/history review records. The prior 416-line draft is retained. Both lines use the existing pinned-record guard. All 174 generic assertions remain exact.

@@ -1,0 +1,11 @@
+CLEAR for the complete installed H35 source and actual history cut.
+
+The installed source, single variant, canonical evidence source and strict snapshot have the same 79 lines and b43e0c75517bb57db8a062d45c2282c9117ce3944d5086d323318790a8fb9bec digest. I reuse the exact complete source and 52-line checked TYPE reading from my frozen TYPE audit. All six contracts and the approved fuel IH remain exact. I read the whole 77-line Root collector, 46-line common helper, proof receipts, complete Audit log and metadata cut.
+
+All 692 artifact hashes and the disjoint single variant match. There are zero mathematical patches or rejected TYPE jobs. The three actual Lean/Lake jobs are strict1, FULL1 and audit1; all pass, with zero failed jobs or warned exit-zero source jobs. Strict1 is literally empty. Audit reports 3654 build jobs and 75556 dependencies, with only the known older unused-input replay warning. The sole new Audit import exactly recovers original Audit 3142/1f3a43b7fb26827dc930bdddc7d6ee2f0c543cc53821c897ad5062d776f3320f.
+
+All thirteen historical metadata attempts pass. Their 78 receipt/log/limits/usage/source/peaks files match both history pins and original donors. Effective limits are four GiB high/max, zero swap, five minutes and fresh usage above one percent. The collector own successful six-file set occurs after the historical cut and is retained separately. Fifteen archived components have exact 550-file sets. All 52 nested control artifacts are included. Component totals are review-cut values. Later closing receipts remain for once-only support collection.
+
+The complete raw FULL output and all twelve slices match the prior independent audit. Raw TYPE identity is true/false/false by public-head order; four-ASCII lexical identity holds for all. Both views and hashes remain. Printed TYPEs and BODYs are retained programmatically, with no new manual reading claim. No early canonical copy occurred. No new source-to-input order, resources, Trace, Scan/H23 composition, Haskell repair or full-pass claim is introduced. H6 remains strongest.
+
+Root authored the body and collector. Arity authored declarations. I authored FULL adapters and prior independent reviews, and did not author this mathematics or collector. No prepared program, compiler, Git or network command ran and no repository file changed.

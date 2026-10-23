@@ -1,0 +1,17 @@
+ ∀ {Symbol Guard A : Type} {width : Nat}
+  [inst : DecidableEq.{1} Symbol]
+  [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (emptyGuard : Guard)
+  (conjoin : Guard → Guard → Guard) (fuel : Nat) (code : MicroCFTA.SourceRecursiveIntersectionCode.Code Symbol Guard A)
+  (state : MicroCFTA.SourceRecursiveIntersectionThunks.State width Symbol Guard),
+  @LE.le.{0} Nat instLENat
+    (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+      (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+        (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width Symbol Guard state))))
+    (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+      (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+        (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard
+          (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width Symbol Guard
+            (@MicroCFTA.SourceRecursiveIntersectionNative.Outcome.state width Symbol Guard A
+              (@MicroCFTA.SourceRecursiveIntersectionNative.execute Symbol Guard A width inst inst_1 emptyGuard conjoin
+                fuel code state))))))

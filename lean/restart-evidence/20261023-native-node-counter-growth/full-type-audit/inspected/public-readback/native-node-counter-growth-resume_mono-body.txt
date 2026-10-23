@@ -1,0 +1,126 @@
+fun {Symbol Guard A} {width} [inst : DecidableEq.{1} Symbol]
+    [inst_1 : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] emptyGuard conjoin fuel
+    outcome =>
+  @MicroCFTA.SourceRecursiveIntersectionNative.Outcome.casesOn.{0} width Symbol Guard A
+    (fun t =>
+      @Eq.{2} (MicroCFTA.SourceRecursiveIntersectionNative.Outcome width Symbol Guard A) outcome t →
+        @LE.le.{0} Nat instLENat
+          (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width Symbol Guard
+                  (@MicroCFTA.SourceRecursiveIntersectionNative.Outcome.state width Symbol Guard A outcome)))))
+          (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width Symbol Guard
+                  (@MicroCFTA.SourceRecursiveIntersectionNative.Outcome.state width Symbol Guard A
+                    (@MicroCFTA.SourceRecursiveIntersectionNative.resume Symbol Guard width A inst inst_1 emptyGuard
+                      conjoin fuel outcome)))))))
+    outcome
+    (fun code state h =>
+      @Eq.ndrec.{0, 2} (MicroCFTA.SourceRecursiveIntersectionNative.Outcome width Symbol Guard A)
+        (@MicroCFTA.SourceRecursiveIntersectionNative.Outcome.yielded width Symbol Guard A code state)
+        (fun outcome =>
+          @LE.le.{0} Nat instLENat
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard
+                  (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width Symbol Guard
+                    (@MicroCFTA.SourceRecursiveIntersectionNative.Outcome.state width Symbol Guard A outcome)))))
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard
+                  (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width Symbol Guard
+                    (@MicroCFTA.SourceRecursiveIntersectionNative.Outcome.state width Symbol Guard A
+                      (@MicroCFTA.SourceRecursiveIntersectionNative.resume Symbol Guard width A inst inst_1 emptyGuard
+                        conjoin fuel outcome)))))))
+        (@MicroCFTA.SourceRecursiveIntersectionNativeNodeCounterGrowth.execute_mono Symbol Guard A width inst inst_1
+          emptyGuard conjoin fuel code state)
+        outcome
+        (@Eq.symm.{2} (MicroCFTA.SourceRecursiveIntersectionNative.Outcome width Symbol Guard A) outcome
+          (@MicroCFTA.SourceRecursiveIntersectionNative.Outcome.yielded width Symbol Guard A code state) h))
+    (fun value state h =>
+      @Eq.ndrec.{0, 2} (MicroCFTA.SourceRecursiveIntersectionNative.Outcome width Symbol Guard A)
+        (@MicroCFTA.SourceRecursiveIntersectionNative.Outcome.done width Symbol Guard A value state)
+        (fun outcome =>
+          @LE.le.{0} Nat instLENat
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard
+                  (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width Symbol Guard
+                    (@MicroCFTA.SourceRecursiveIntersectionNative.Outcome.state width Symbol Guard A outcome)))))
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard
+                  (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width Symbol Guard
+                    (@MicroCFTA.SourceRecursiveIntersectionNative.Outcome.state width Symbol Guard A
+                      (@MicroCFTA.SourceRecursiveIntersectionNative.resume Symbol Guard width A inst inst_1 emptyGuard
+                        conjoin fuel outcome)))))))
+        (Nat.le_refl
+          (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width Symbol Guard
+                  (@MicroCFTA.SourceRecursiveIntersectionNative.Outcome.state width Symbol Guard A
+                    (@MicroCFTA.SourceRecursiveIntersectionNative.Outcome.done width Symbol Guard A value state)))))))
+        outcome
+        (@Eq.symm.{2} (MicroCFTA.SourceRecursiveIntersectionNative.Outcome width Symbol Guard A) outcome
+          (@MicroCFTA.SourceRecursiveIntersectionNative.Outcome.done width Symbol Guard A value state) h))
+    (fun failure state h =>
+      @Eq.ndrec.{0, 2} (MicroCFTA.SourceRecursiveIntersectionNative.Outcome width Symbol Guard A)
+        (@MicroCFTA.SourceRecursiveIntersectionNative.Outcome.failed width Symbol Guard A failure state)
+        (fun outcome =>
+          @LE.le.{0} Nat instLENat
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard
+                  (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width Symbol Guard
+                    (@MicroCFTA.SourceRecursiveIntersectionNative.Outcome.state width Symbol Guard A outcome)))))
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard
+                  (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width Symbol Guard
+                    (@MicroCFTA.SourceRecursiveIntersectionNative.Outcome.state width Symbol Guard A
+                      (@MicroCFTA.SourceRecursiveIntersectionNative.resume Symbol Guard width A inst inst_1 emptyGuard
+                        conjoin fuel outcome)))))))
+        (Nat.le_refl
+          (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width Symbol Guard
+                  (@MicroCFTA.SourceRecursiveIntersectionNative.Outcome.state width Symbol Guard A
+                    (@MicroCFTA.SourceRecursiveIntersectionNative.Outcome.failed width Symbol Guard A failure
+                      state)))))))
+        outcome
+        (@Eq.symm.{2} (MicroCFTA.SourceRecursiveIntersectionNative.Outcome width Symbol Guard A) outcome
+          (@MicroCFTA.SourceRecursiveIntersectionNative.Outcome.failed width Symbol Guard A failure state) h))
+    (fun reason code state h =>
+      @Eq.ndrec.{0, 2} (MicroCFTA.SourceRecursiveIntersectionNative.Outcome width Symbol Guard A)
+        (@MicroCFTA.SourceRecursiveIntersectionNative.Outcome.blocked width Symbol Guard A reason code state)
+        (fun outcome =>
+          @LE.le.{0} Nat instLENat
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard
+                  (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width Symbol Guard
+                    (@MicroCFTA.SourceRecursiveIntersectionNative.Outcome.state width Symbol Guard A outcome)))))
+            (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+              (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+                (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard
+                  (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width Symbol Guard
+                    (@MicroCFTA.SourceRecursiveIntersectionNative.Outcome.state width Symbol Guard A
+                      (@MicroCFTA.SourceRecursiveIntersectionNative.resume Symbol Guard width A inst inst_1 emptyGuard
+                        conjoin fuel outcome)))))))
+        (Nat.le_refl
+          (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+            (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+              (@MicroCFTA.SourceRecursiveIntersectionKernel.Machine.heap Symbol Guard
+                (@MicroCFTA.SourceRecursiveIntersectionThunks.State.machine width Symbol Guard
+                  (@MicroCFTA.SourceRecursiveIntersectionNative.Outcome.state width Symbol Guard A
+                    (@MicroCFTA.SourceRecursiveIntersectionNative.Outcome.blocked width Symbol Guard A reason code
+                      state)))))))
+        outcome
+        (@Eq.symm.{2} (MicroCFTA.SourceRecursiveIntersectionNative.Outcome width Symbol Guard A) outcome
+          (@MicroCFTA.SourceRecursiveIntersectionNative.Outcome.blocked width Symbol Guard A reason code state) h))
+    (@Eq.refl.{2} (MicroCFTA.SourceRecursiveIntersectionNative.Outcome width Symbol Guard A) outcome)

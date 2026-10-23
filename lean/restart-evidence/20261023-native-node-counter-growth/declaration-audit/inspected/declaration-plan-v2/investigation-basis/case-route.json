@@ -1,0 +1,46 @@
+{
+  "status": "PLAIN_SOURCE_ROUTE_NO_THEOREM_HEADER_OR_BODY",
+  "instruction_cases": [
+    {
+      "instruction": "pure/fail",
+      "effect": "Same state. Counter equality by the literal step and Outcome.state definitions."
+    },
+    {
+      "instruction": "work",
+      "effect": "Exact returned Work heap. Apply public Reservations.run_next node component and nonnegative reservation count."
+    },
+    {
+      "instruction": "enter",
+      "effect": "Only domains update. Physical heap stays the input heap."
+    },
+    {
+      "instruction": "read",
+      "effect": "Same native state."
+    },
+    {
+      "instruction": "optionalBinder",
+      "effect": "H34 maybeMu_mono applies before splitting done/pending. Both literal branches retain the actual returned constructor heap."
+    },
+    {
+      "instruction": "node",
+      "effect": "Public Native.node_step_machine gives immediate whole machine equality for every actual selection and observation."
+    },
+    {
+      "instruction": "edge",
+      "effect": "Public Native.edge_step_machine gives immediate whole machine equality for every actual observation."
+    },
+    {
+      "instruction": "finishNode/finishEdge",
+      "effect": "Public definitions update only logical memo cells. Physical machine is unchanged."
+    }
+  ],
+  "additional_private_helpers": [],
+  "public_shape_names_tentative": [
+    "step_mono",
+    "execute_mono",
+    "resume_mono"
+  ],
+  "all_future_declarations_types_IH_and_local_binders_require_new_exact_gate": true,
+  "actual_resume_only_reexecutes_yielded": true,
+  "completion_or_state_replacement_assumed": false
+}

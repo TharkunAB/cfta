@@ -1,0 +1,7 @@
+/-- Node completion updates only the original running node cell. -/
+def finishNode (handle : Nat) (value : Value Symbol Guard) (state : State width Symbol Guard) : State width Symbol Guard :=
+  { state with nodes := FlatMemoThunk.finish handle value state.nodes }
+
+/-- Edge completion updates only the original running edge cell. -/
+def finishEdge (handle : Nat) (value : EdgeValue Symbol Guard) (state : State width Symbol Guard) : State width Symbol Guard :=
+  { state with edges := FlatMemoThunk.finish handle value state.edges }

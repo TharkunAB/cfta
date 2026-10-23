@@ -1,0 +1,19 @@
+/-- Source node requests with unresolved placeholders bypass the native memo. -/
+inductive NodeSelection (Symbol Guard : Type) where
+  | direct (request : NodeRequest Symbol Guard)
+  | memoized (handle : Nat)
+
+/-- Node lookup publishes a suspended source request and retains the separate edge table. -/
+def lookupNode (width : Nat) (request : NodeRequest Symbol Guard) (state : State width Symbol Guard) :
+    NodeSelection Symbol Guard × State width Symbol Guard :=
+  match SourceRecursiveIntersectionMemo.requestKey width request.domain request.left request.right with
+  | none => (.direct request, state)
+  | some key =>
+    let (handle, nodes) := FlatMemoThunk.lookupOrInsert key request state.nodes
+    (.memoized handle, { state with nodes := nodes })
+
+/-- Edge lookup publishes a suspended original row request in its own family. -/
+def lookupEdge (width : Nat) (request : EdgeRequest Symbol Guard) (state : State width Symbol Guard) :
+    Nat × State width Symbol Guard :=
+  let (handle, edges) := FlatMemoThunk.lookupOrInsert (SourceRecursiveIntersectionEdgeMemo.requestKey width request.domain request.left request.right) request state.edges
+  (handle, { state with edges := edges })

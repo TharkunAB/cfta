@@ -1,0 +1,1 @@
+A read-only display requested optional status.json, which does not exist in this owner package. The actual FROZEN.json and static-review.json were read. No prepared program or root proof/metadata job ran or failed. No owner/source bytes changed.

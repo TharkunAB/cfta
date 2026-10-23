@@ -1,0 +1,7 @@
+H35 selected FULL tooling source only. Root accepted the exact declaration and FULL scope before authorship.
+
+The materializer has 86 lines and the reader has 124 lines. The total is 210 lines with 71 AST assertions. The one added assertion checks the reviewed complete fuel IH and its restricted call. Exact checkpoint names, public files and actual declaration-schema facts replace H34 literals. All generic guard algorithms remain. The reader scans private declarations and requires the approved empty list. The diagnostic tail has exactly 20 post-module lines.
+
+All seven materializer CLI inputs remain mandatory. The approved context and contract identities are known; the selected strict stem, source hash and source line count remain rejecting placeholders in the input map. No strict, FULL, TYPE, axiom, Audit or history result is predicted. All three canonical output paths were absent at the source preparation cut. The nonoverwrite guard remains unchanged.
+
+Complete bases, scope records, actual declaration metadata and gates, exact replacement map and forward/inverse patches are retained. Required authored this adaptation. Arity authored the declarations. Root authors the mathematical body and owns activation. No prepared program was executed, imported or installed. No Lean, Git, network or repository mutation occurred. Independent complete source review and Root acceptance are required before activation.

@@ -1,0 +1,11 @@
+# H35 saved verifier scope review
+
+CLEAR for the source-only scope plan. I read all 38 plan lines, complete adaptation/future-data maps, all 212 crosswalk rows, and all 38 replacement reasons. The whole H34 basis was previously read. Its current 404 source and 483 data lines match the sealed basis. Every crosswalk expression matches its actual basis assertion.
+
+The plan retains 174 generic assertion expressions. Its 38 adapters replace H34-specific facts with the six exact H35 fragments and their complete owner/layout metadata. It keeps all three public body checks with an empty private list. It pins twelve scoped type entries, six specialized equations, both local haves, and the full generalized fuel IH. Only one induction and one ih next after call in the actual yielded branch are permitted. All other IH uses, theorem recursion, extra locals, and option changes remain denied.
+
+The dynamic proof/source/metadata histories, every failure or warning, exact patches, one FULL per unchanged variant, receipts/caps/usage, complete raw TYPE/BODY/slices, raw identity Boolean, four-ASCII lexical rule, helper/marker privacy, and actual axiom subsets remain. Root and independent public review links, the Audit inverse, and actual build/dependency facts remain. Removing the H34-only early-copy requirement does not remove the generic H35 history checks. Future actual values remain rejecting. The proposed target is 414–420, hard 430, without padding.
+
+All 26 owner payload files and both controls are copied unchanged. Basis and sixteen declaration snapshot pairs match live evidence. Nested controls are included. A read-only display requested an absent optional status.json; the actual FROZEN/static-review files supply status. This was not a prepared-program, root, or proof failure.
+
+Arity authored this plan and the basis verifier. Root authored the H35 body. I reviewed the body and earlier verifier, and authored the separate pending closing sources. I did not author this verifier scope plan or its future selected program. Root must accept scope before selected authorship. Whole selected code/data review must precede activation. No prepared execution, compiler, repository, Git, network or board action occurred.

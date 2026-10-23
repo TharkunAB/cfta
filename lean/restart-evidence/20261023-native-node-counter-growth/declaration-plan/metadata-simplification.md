@@ -1,0 +1,1 @@
+Root confirmed that the two existing equation families and six specialized types are complete. V1 froze before that clarification arrived. V2 removes only the duplicate branch-fact list and count fields. All compiled fragments, existing six specialized equality types, IH and scoped constructor types are byte-identical. Frozen V1 remains unchanged.

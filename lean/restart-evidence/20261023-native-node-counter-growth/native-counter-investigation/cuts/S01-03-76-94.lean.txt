@@ -1,0 +1,19 @@
+/-- A finite native bound yields the original remaining code instead of a fabricated result. -/
+def execute [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] (emptyGuard : Guard) (conjoin : Guard → Guard → Guard) :
+    Nat → Code Symbol Guard A → SourceRecursiveIntersectionThunks.State width Symbol Guard → Outcome width Symbol Guard A
+  | 0, code, state => .yielded code state
+  | fuel + 1, code, state =>
+      match step emptyGuard conjoin code state with
+      | .yielded next after => execute emptyGuard conjoin fuel next after
+      | .done value after => .done value after
+      | .failed failure after => .failed failure after
+      | .blocked reason next after => .blocked reason next after
+
+/-- More fuel continues yielded code at its exact returned state. -/
+def resume [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] (emptyGuard : Guard) (conjoin : Guard → Guard → Guard)
+    (fuel : Nat) (outcome : Outcome width Symbol Guard A) : Outcome width Symbol Guard A :=
+  match outcome with
+  | .yielded next after => execute emptyGuard conjoin fuel next after
+  | .done value after => .done value after
+  | .failed failure after => .failed failure after
+  | .blocked reason next after => .blocked reason next after

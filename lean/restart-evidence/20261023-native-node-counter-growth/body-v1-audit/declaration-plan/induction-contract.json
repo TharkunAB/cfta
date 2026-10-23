@@ -1,0 +1,44 @@
+{
+  "status": "REVIEW_ONLY_RESTRICTED_FUEL_IH_CONTRACT",
+  "owner": "execute_mono",
+  "activation": "induction fuel generalizing code state with",
+  "induction_argument": "fuel : Nat",
+  "generalized_arguments": [
+    {
+      "name": "code",
+      "type": "Code Symbol Guard A"
+    },
+    {
+      "name": "state",
+      "type": "SourceRecursiveIntersectionThunks.State width Symbol Guard"
+    }
+  ],
+  "fixed_parameters": [
+    "Symbol",
+    "Guard",
+    "A",
+    "width",
+    "DecidableEq Symbol",
+    "DecidableEq (EdgeKey Symbol Guard)",
+    "emptyGuard",
+    "conjoin"
+  ],
+  "zero_case": "No IH. Native.execute 0 returns yielded code at the same full state.",
+  "successor_pattern": "succ fuel ih",
+  "complete_IH_type_file": "execute-IH.lean.txt",
+  "complete_IH_type": "\u2200 (code : Code Symbol Guard A) (state : SourceRecursiveIntersectionThunks.State width Symbol Guard),\n  state.machine.heap.nodes.next \u2264\n    (SourceRecursiveIntersectionNative.execute emptyGuard conjoin fuel code state).state.machine.heap.nodes.next",
+  "call_forms": [
+    {
+      "activation": "Only the yielded next after branch of the observed actual step in the successor fuel case.",
+      "exact_term": "ih next after",
+      "callee_code_type": "Code Symbol Guard A",
+      "callee_state_type": "SourceRecursiveIntersectionThunks.State width Symbol Guard",
+      "strict_decrease": "The enclosing goal has Nat.succ fuel; the IH has predecessor fuel.",
+      "caller_to_callee_state": "after is the SAME actual yielded native state, not a replacement or supplied successful run.",
+      "composition": "The first local bound transports input counter to actual after; the IH transports actual after to actual remaining execute outcome."
+    }
+  ],
+  "all_other_case_IH_calls": false,
+  "unrestricted_IH_or_future_success_assumed": false,
+  "new_termination_by_clause": false
+}

@@ -1,0 +1,19 @@
+--- H33/run-standalone-proof-evidence.py
++++ H34/run-standalone-proof-evidence.py
+@@ -1,4 +1,4 @@
+-exec(compile(open('/tmp/mcfta-fresh-node-counter-growth-root-common.py').read(), '/tmp/mcfta-fresh-node-counter-growth-root-common.py', 'exec'))
++exec(compile(open('/tmp/mcfta-stored-node-counter-growth-root-common.py').read(), '/tmp/mcfta-stored-node-counter-growth-root-common.py', 'exec'))
+ import sys
+ mode = sys.argv[1]
+ assert mode in ('normal', 'live')
+@@ -19,8 +19,8 @@
+ assert result.returncode == 0, result.stderr.decode()
+ report = json.loads(result.stdout)
+ assert report['status'] == 'PASS' and report['live'] is (mode == 'live')
+-assert report['actual_jobs'] == 5 and report['selected_modules'] == 1
+-assert report['public_theorems'] == 3 and report['failed_jobs'] == 1
++assert report['actual_jobs'] == 3 and report['selected_modules'] == 1
++assert report['public_theorems'] == 3 and report['failed_jobs'] == 0
+ assert report['new_lean_lake_jobs'] == 0
+ save(report_path.name, report)
+ print(json.dumps(report))

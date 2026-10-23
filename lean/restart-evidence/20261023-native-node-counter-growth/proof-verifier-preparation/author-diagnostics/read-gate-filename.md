@@ -1,0 +1,1 @@
+A read-only author inspection used root-body-gate.json and received FileNotFoundError. The accepted selection record names root-body-gate-v1.json. The follow-up read used that exact field. No prepared verifier or root job ran. No proof or repository state changed.

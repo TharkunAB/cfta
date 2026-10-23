@@ -1,0 +1,23 @@
+theorem Nat.zero_lt_succ (n : Nat) : LT.lt 0 (succ n) :=
+  succ_le_succ (zero_le n)
+
+theorem Nat.le_succ_of_le (h : LE.le n m) : LE.le n (succ m) :=
+  Nat.le.step h
+
+protected theorem Nat.le_trans {n m k : Nat} : LE.le n m → LE.le m k → LE.le n k
+  | h,  Nat.le.refl    => h
+  | h₁, Nat.le.step h₂ => Nat.le.step (Nat.le_trans h₁ h₂)
+
+protected theorem Nat.lt_of_lt_of_le {n m k : Nat} : LT.lt n m → LE.le m k → LT.lt n k :=
+  Nat.le_trans
+
+protected theorem Nat.lt_trans {n m k : Nat} (h₁ : LT.lt n m) : LT.lt m k → LT.lt n k :=
+  Nat.le_trans (le_succ_of_le h₁)
+
+theorem Nat.le_succ (n : Nat) : LE.le n (succ n) :=
+  Nat.le.step Nat.le.refl
+
+protected theorem Nat.le_refl (n : Nat) : LE.le n n :=
+  Nat.le.refl
+
+theorem Nat.succ_pos (n : Nat) : LT.lt 0 (succ n) :=

@@ -1,0 +1,28 @@
+/-- Actual repaired stored substitution retains the node supply on every outcome. -/
+theorem execute_mono [DecidableEq (EdgeKey Symbol Guard)] (value : Value Symbol Guard)
+    (environment : Environment Symbol Guard) (state : State Symbol Guard) :
+    state.nodes.next ≤ (InternedFreshOrdinaryStoredSubstitution.execute value environment state).state.nodes.next := by
+  exact InternedFreshOrdinaryNodeCounterGrowth.build_mono _ _ state
+
+/-- Actual repaired unfolding retains the node supply on every outcome. -/
+theorem unfold_mono [DecidableEq (EdgeKey Symbol Guard)] (value : Value Symbol Guard)
+    (state : State Symbol Guard) :
+    state.nodes.next ≤ (InternedFreshOrdinaryStoredSubstitution.unfold value state).state.nodes.next := by
+  cases value with
+  | mu entry body depth ordinary => exact execute_mono body _ state
+  | empty | reference | node | union => exact Nat.le_refl _
+
+/-- Actual optional binder construction retains the node supply on every outcome. -/
+theorem maybeMu_mono [DecidableEq (EdgeKey Symbol Guard)] (key : Nat × Nat)
+    (body : Value Symbol Guard) (state : State Symbol Guard) :
+    state.nodes.next ≤ (SourceRecursiveIntersectionMaybeMu.maybeMu key body state).state.nodes.next := by
+  simp only [SourceRecursiveIntersectionMaybeMu.maybeMu]
+  split
+  · simp only [SourceRecursiveIntersectionMaybeMu.construct]
+    apply bind_mono _ _ state (callback_mono _ _ .depth state)
+    intro depth afterDepth
+    apply bind_mono _ _ afterDepth
+      (callback_mono _ _ (.uninterned (InternedFreshOrdinaryConstruction.ordinaryLevel depth)) afterDepth)
+    intro ordinary afterOrdinary
+    exact request_mono _ _ depth ordinary afterOrdinary
+  · exact Nat.le_refl _

@@ -1,0 +1,13 @@
+--- selected/archive-support.py
++++ basis/archive-support.py
+@@ -7,8 +7,8 @@
+ target = HERE / 'completed-root-support'
+ target.mkdir()
+ files = {}
+-for source in sorted(Path('/tmp').glob('mcfta-native-node-counter-growth-*')):
+-    if not source.is_file() or source.name.startswith('mcfta-native-node-counter-growth-support-1'):
++for source in sorted(Path('/tmp').glob('mcfta-stored-node-counter-growth-*')):
++    if not source.is_file() or source.name.startswith('mcfta-stored-node-counter-growth-support-1'):
+         continue
+     shutil.copyfile(source, target / source.name)
+     files[source.name] = hashlib.sha256(source.read_bytes()).hexdigest()

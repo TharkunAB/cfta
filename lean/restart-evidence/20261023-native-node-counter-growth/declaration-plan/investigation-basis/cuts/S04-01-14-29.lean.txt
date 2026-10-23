@@ -1,0 +1,16 @@
+/-- Actual node lookup changes no physical or domain cache. -/
+theorem lookupNode_machine (request : NodeRequest Symbol Guard) (state : SourceRecursiveIntersectionThunks.State width Symbol Guard) :
+    (lookupNode width request state).2.machine = state.machine := by
+  cases key : SourceRecursiveIntersectionMemo.requestKey width request.domain request.left request.right <;> simp only [lookupNode, key]
+
+/-- Actual edge lookup changes no physical or domain cache. -/
+theorem lookupEdge_machine (request : EdgeRequest Symbol Guard) (state : SourceRecursiveIntersectionThunks.State width Symbol Guard) :
+    (lookupEdge width request state).2.machine = state.machine := rfl
+
+/-- Node demand changes only its logical node cell phase. -/
+theorem demandNode_machine (handle : Nat) (state : SourceRecursiveIntersectionThunks.State width Symbol Guard) :
+    (demandNode handle state).2.machine = state.machine := rfl
+
+/-- Edge demand changes only its logical edge cell phase. -/
+theorem demandEdge_machine (handle : Nat) (state : SourceRecursiveIntersectionThunks.State width Symbol Guard) :
+    (demandEdge handle state).2.machine = state.machine := rfl

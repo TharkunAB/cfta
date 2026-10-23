@@ -1,0 +1,1 @@
+The first package-writing command had an unparenthesized generator argument in enumerate. Python reported a syntax error before any command body ran or directory was created. The corrected static package command follows. No prepared tool, Lean, Git or repository action was involved.

@@ -1,0 +1,9 @@
+theorem le_or_eq_of_le_add_one {m n : Nat} (h : m ≤ n + 1) : m ≤ n ∨ m = n + 1 :=
+  le_or_eq_of_le_succ h
+
+@[simp] theorem le_add_right : ∀ (n k : Nat), n ≤ n + k
+  | n, 0   => Nat.le_refl n
+  | n, k+1 => le_succ_of_le (le_add_right n k)
+
+@[simp] theorem le_add_left (n m : Nat): n ≤ m + n :=
+  Nat.add_comm n m ▸ le_add_right n m

@@ -1,0 +1,20 @@
+/-- One native step retains or increases its actual constructor node counter. -/
+theorem step_mono [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (emptyGuard : Guard) (conjoin : Guard → Guard → Guard) (code : Code Symbol Guard A)
+    (state : SourceRecursiveIntersectionThunks.State width Symbol Guard) :
+    state.machine.heap.nodes.next ≤
+      (SourceRecursiveIntersectionNative.step emptyGuard conjoin code state).state.machine.heap.nodes.next := by
+
+/-- Every finite native outcome retains or increases its input constructor node counter. -/
+theorem execute_mono [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (emptyGuard : Guard) (conjoin : Guard → Guard → Guard) (fuel : Nat)
+    (code : Code Symbol Guard A) (state : SourceRecursiveIntersectionThunks.State width Symbol Guard) :
+    state.machine.heap.nodes.next ≤
+      (SourceRecursiveIntersectionNative.execute emptyGuard conjoin fuel code state).state.machine.heap.nodes.next := by
+
+/-- Resuming an actual outcome retains or increases its current constructor node counter. -/
+theorem resume_mono [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (emptyGuard : Guard) (conjoin : Guard → Guard → Guard) (fuel : Nat)
+    (outcome : SourceRecursiveIntersectionNative.Outcome width Symbol Guard A) :
+    outcome.state.machine.heap.nodes.next ≤
+      (SourceRecursiveIntersectionNative.resume emptyGuard conjoin fuel outcome).state.machine.heap.nodes.next := by

@@ -1,0 +1,381 @@
+{
+  "basis_lines": 236,
+  "basis_AST_assertions": 59,
+  "all_base_checks_preserved": [
+    "all baseline file bytes and executable modes",
+    "exact selected map, snapshot/live/gate source identities and hard cap",
+    "original Audit sole-import inverse",
+    "nine additive LF prefix inverses and FINDINGS repair-index-first",
+    "Haskell and active package sets and safe baseline-identical .hs archives",
+    "all older frozen registries and five archived overrides",
+    "all component exact recursive file sets, hashes and nested controls",
+    "stashes, other worktrees, branch, START ancestor and main refs",
+    "both saved proof modes explicit root and cwd slash",
+    "all dynamic actual proof metrics and actual Audit log/build/dependencies",
+    "preservation report and actual selected/new module counts",
+    "support target mkdir once and exact task prefix/self-exclusion",
+    "mandatory final checkpoint before seal writes",
+    "seal scope/blob/checksum identities and byte-identical verify-seal"
+  ],
+  "no_new_generic_exception": true,
+  "writer_committer_publisher_are_separate": true,
+  "no_network_in_selected_five": true,
+  "basis_assertions": [
+    {
+      "file": "verify-preservation.py",
+      "line": 14,
+      "expression": "len(base) == 116844",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 18,
+      "expression": "path.is_file()",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 19,
+      "expression": "('100755' if path.stat().st_mode & 73 else '100644') == pin['mode']",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 31,
+      "expression": "gate['status'] == 'ACCEPTED_STRICT_SOURCE'",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 32,
+      "expression": "gate['source_cap'] == cap and gate['public_heads'] == heads",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 33,
+      "expression": "isinstance(gate['source_lines'], int) and 0 < gate['source_lines'] <= cap",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 34,
+      "expression": "sha(HERE / (module + '.lean')) == gate['source_sha256']",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 35,
+      "expression": "selected[name]['strict'] == gate['selected_strict'] and selected[name]['lines'] == gate['source_lines']",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 37,
+      "expression": "set(selected) == set(expected)",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 39,
+      "expression": "selected[name]['sha256'] == expected_sha and sha(ROOT / name) == expected_sha",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 40,
+      "expression": "len((ROOT / name).read_bytes().splitlines()) == lines",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 41,
+      "expression": "all((name not in base for name in selected))",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 42,
+      "expression": "'lean/notes-current-stored-node-counter-growth.md' not in base",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 43,
+      "expression": "(ROOT / 'lean/notes-current-stored-node-counter-growth.md').is_file()",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 44,
+      "expression": "json.loads((HERE / 'frozen-modules.json').read_text()) == {Path(name).stem: pin['sha256'] for name, pin in selected.items()}",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 46,
+      "expression": "set(changed) == set(documents) | set(selected) & set(base) | {'lean/MicroCFTA/Audit.lean'}",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 48,
+      "expression": "start == 'af73f5d67493168cbab9cdd58cbc625d80585a23'",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 50,
+      "expression": "sha(audit_original) == '8257a0517c3ead6de9329d49ccae6cfcf57622f652c2d14a2ff61b9caa3286fd'",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 51,
+      "expression": "len(audit_original.read_bytes().splitlines()) == 3141",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 56,
+      "expression": "audit.count(addition) == 1 and audit.index(addition) < audit.index(b'/-!')",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 58,
+      "expression": "restored == audit_original.read_bytes()",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 61,
+      "expression": "(ROOT / name).read_text().replace((HERE / update).read_text() + '\\n', '', 1) == git('show', start + ':' + name)",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 64,
+      "expression": "(ROOT / 'FINDINGS.md').read_text().startswith(marker)",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 68,
+      "expression": "len(registries) == 317 and sum((pin['checked'] for pin in registries.values())) == 1413",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 69,
+      "expression": "len(archives) == 5",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 70,
+      "expression": "'lean/restart-evidence/20261023-fresh-node-counter-growth/frozen-modules.json' not in registries",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 75,
+      "expression": "len(entries) == registries[name]['checked']",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 77,
+      "expression": "sha(ROOT / name) == registries[name]['manifest_sha256']",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 82,
+      "expression": "entry['sha256'] == expected and sha(ROOT / entry['snapshot']) == expected",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 83,
+      "expression": "sha(ROOT / source) == entry['current_sha256']",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 85,
+      "expression": "len(frozen) == 318 and sum((pin['checked'] for pin in frozen.values())) == 1414",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 94,
+      "expression": "actual == expected",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 95,
+      "expression": "git('branch', '--show-current').strip() == 'formalize'",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 97,
+      "expression": "local_main == 'ed73f5997f1c07e2961d06e6e290d1de38319dad'",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 98,
+      "expression": "git('rev-parse', 'main').strip() == local_main",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 99,
+      "expression": "git('rev-parse', 'origin/main').strip() == (HERE / 'starting-main.txt').read_text().strip()",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 105,
+      "expression": "hs <= tracked_hs",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 109,
+      "expression": "name.startswith(str(HERE.relative_to(ROOT)) + '/')",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 112,
+      "expression": "matches and any(((ROOT / old).read_bytes() == data for old in matches))",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 113,
+      "expression": "active == {name for name in tracked if name.split('/')[0] in {'cfta', 'cfta-generator', 'cfta-ghc', 'decision-model'}}",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 114,
+      "expression": "len(hs) == 298 and len(active) == 207",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 115,
+      "expression": "not set(changed) & (hs | active)",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 118,
+      "expression": "{str(p.relative_to(HERE / component)) for p in (HERE / component).rglob('*') if p.is_file()} == set(files)",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 120,
+      "expression": "sha(HERE / component / name) == expected",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 123,
+      "expression": "older_sources == sum((name.startswith('lean/MicroCFTA/') and name.endswith('.lean') and (name != 'lean/MicroCFTA/Audit.lean') for name in base))",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 125,
+      "expression": "older_sources == 3651",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "seal-checkpoint.py",
+      "line": 19,
+      "expression": "len(data) < 90 * 1024 * 1024",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-seal.py",
+      "line": 10,
+      "expression": "len(data) == entry['bytes'] and hashlib.sha256(data).hexdigest() == entry['sha256']",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-seal.py",
+      "line": 14,
+      "expression": "hashlib.sha256((HERE / name).read_bytes()).hexdigest() == expected",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-checkpoint.py",
+      "line": 15,
+      "expression": "result.returncode == 0",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-checkpoint.py",
+      "line": 17,
+      "expression": "report['status'] == 'PASS' and report['actual_jobs'] == int('3') and (report['failed_jobs'] == int('0'))",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-checkpoint.py",
+      "line": 18,
+      "expression": "report['source_jobs'] == int('2') and report['focused_build_jobs'] == int('0') and (report['audit_jobs'] == int('1')) and (report['selected_modules'] == 1)",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-checkpoint.py",
+      "line": 19,
+      "expression": "report['audit_build_jobs'] == AUDIT_JOBS and report['audit_dependencies'] == AUDIT_DEPENDENCIES",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-checkpoint.py",
+      "line": 20,
+      "expression": "report['audit_log_sha256'] == AUDIT_SHA",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-checkpoint.py",
+      "line": 21,
+      "expression": "report['warned_source_exit_zero_jobs'] == int('0')",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-checkpoint.py",
+      "line": 22,
+      "expression": "report['rejected_public_type_jobs'] == int('0')",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-checkpoint.py",
+      "line": 26,
+      "expression": "result.returncode == 0",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-checkpoint.py",
+      "line": 29,
+      "expression": "preserved['status'] == 'PASS' and preserved['baseline_files'] == 116844",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    },
+    {
+      "file": "verify-checkpoint.py",
+      "line": 33,
+      "expression": "len(selected) == 1 and new_modules == 1",
+      "scope": "Preserve the whole assertion; change only approved checkpoint literals or observed actual data."
+    }
+  ],
+  "basis_checkpoint": "H34",
+  "status": "SCOPE_ONLY_ALL_59_BASE_ASSERTIONS_RETAINED"
+}

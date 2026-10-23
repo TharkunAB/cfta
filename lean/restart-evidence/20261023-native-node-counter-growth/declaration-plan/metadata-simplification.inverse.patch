@@ -1,0 +1,88 @@
+--- v2/case-equations.json
++++ v1/case-equations.json
+@@ -28,5 +28,62 @@
+       }
+     }
+   ],
+-  "no_named_lookup_or_demand_equation_needed": true
++  "no_named_lookup_or_demand_equation_needed": true,
++  "branch_specific_facts": [
++    {
++      "owner": "step_mono",
++      "name": "constructed",
++      "scope": "The done value after branch of the named actual cases equation.",
++      "pattern": "done value after",
++      "type": "SourceRecursiveIntersectionMaybeMu.maybeMu key body state.machine.heap = InternedNestedConstruction.Outcome.done value after",
++      "derived_from_actual_case_split": true,
++      "supplied_or_assumed_as_a_new_premise": false
++    },
++    {
++      "owner": "step_mono",
++      "name": "constructed",
++      "scope": "The pending pending after branch of the named actual cases equation.",
++      "pattern": "pending pending after",
++      "type": "SourceRecursiveIntersectionMaybeMu.maybeMu key body state.machine.heap = InternedNestedConstruction.Outcome.pending pending after",
++      "derived_from_actual_case_split": true,
++      "supplied_or_assumed_as_a_new_premise": false
++    },
++    {
++      "owner": "execute_mono",
++      "name": "observed",
++      "scope": "The yielded next after branch of the named actual cases equation.",
++      "pattern": "yielded next after",
++      "type": "SourceRecursiveIntersectionNative.step emptyGuard conjoin code state = SourceRecursiveIntersectionNative.Outcome.yielded next after",
++      "derived_from_actual_case_split": true,
++      "supplied_or_assumed_as_a_new_premise": false
++    },
++    {
++      "owner": "execute_mono",
++      "name": "observed",
++      "scope": "The done value after branch of the named actual cases equation.",
++      "pattern": "done value after",
++      "type": "SourceRecursiveIntersectionNative.step emptyGuard conjoin code state = SourceRecursiveIntersectionNative.Outcome.done value after",
++      "derived_from_actual_case_split": true,
++      "supplied_or_assumed_as_a_new_premise": false
++    },
++    {
++      "owner": "execute_mono",
++      "name": "observed",
++      "scope": "The failed failure after branch of the named actual cases equation.",
++      "pattern": "failed failure after",
++      "type": "SourceRecursiveIntersectionNative.step emptyGuard conjoin code state = SourceRecursiveIntersectionNative.Outcome.failed failure after",
++      "derived_from_actual_case_split": true,
++      "supplied_or_assumed_as_a_new_premise": false
++    },
++    {
++      "owner": "execute_mono",
++      "name": "observed",
++      "scope": "The blocked reason next after branch of the named actual cases equation.",
++      "pattern": "blocked reason next after",
++      "type": "SourceRecursiveIntersectionNative.step emptyGuard conjoin code state = SourceRecursiveIntersectionNative.Outcome.blocked reason next after",
++      "derived_from_actual_case_split": true,
++      "supplied_or_assumed_as_a_new_premise": false
++    }
++  ],
++  "branch_specific_fact_count": 6
+ }
+--- v2/declaration-schema.json
++++ v1/declaration-schema.json
+@@ -80,5 +80,6 @@
+   "only_same_actual_outcome_machine_heap_node_counter_claimed": true,
+   "all_four_native_outcome_tags_included": true,
+   "success_validity_counter_oracle_or_replacement_state_premise": false,
+-  "source_initial_order_upper_resources_Scan_H23_Mu_Haskell_or_wholepass_claimed": false
++  "source_initial_order_upper_resources_Scan_H23_Mu_Haskell_or_wholepass_claimed": false,
++  "branch_specific_equation_type_entries": 6
+ }
+--- v2/insertion-map.json
++++ v1/insertion-map.json
+@@ -145,7 +145,8 @@
+     "only_same_actual_outcome_machine_heap_node_counter_claimed": true,
+     "all_four_native_outcome_tags_included": true,
+     "success_validity_counter_oracle_or_replacement_state_premise": false,
+-    "source_initial_order_upper_resources_Scan_H23_Mu_Haskell_or_wholepass_claimed": false
++    "source_initial_order_upper_resources_Scan_H23_Mu_Haskell_or_wholepass_claimed": false,
++    "branch_specific_equation_type_entries": 6
+   },
+   "review_only": [
+     "introduced-types.json",
