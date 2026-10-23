@@ -74,6 +74,31 @@ cases =
                 ]
         )
     ,
+        ( "lists-kbo-5"
+        , \checked ->
+            monomorphic
+                checked
+                5
+                (const Nothing)
+                [ con "reverse" (reverse :: [A] -> [A])
+                , con "++" ((++) :: [A] -> [A] -> [A])
+                , con "[]" ([] :: [A])
+                ]
+        )
+    ,
+        ( "lists-lpo-5"
+        , \checked ->
+            withOrder
+                (PathOrder ["[]", "++", "reverse"])
+                checked
+                5
+                (const Nothing)
+                [ con "reverse" (reverse :: [A] -> [A])
+                , con "++" ((++) :: [A] -> [A] -> [A])
+                , con "[]" ([] :: [A])
+                ]
+        )
+    ,
         ( "gcd-3"
         , \checked ->
             monomorphic
@@ -125,4 +150,8 @@ main = do
 phase, as 'discoverMonomorphic', with or without the test of the types.
 -}
 monomorphic :: Bool -> Int -> (TypeSkeleton -> Maybe GeneratedInstance) -> [Sig] -> IO [String]
-monomorphic checked size = experimentalPhases ((defaultOptions size 1){searchChecked = checked})
+monomorphic = withOrder KnuthBendix
+
+-- | 'monomorphic' with a term order.
+withOrder :: TermOrder -> Bool -> Int -> (TypeSkeleton -> Maybe GeneratedInstance) -> [Sig] -> IO [String]
+withOrder order checked size = experimentalPhases ((defaultOptions size 1){searchChecked = checked, searchTermOrder = order})
