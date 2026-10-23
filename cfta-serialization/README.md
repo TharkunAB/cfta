@@ -245,9 +245,9 @@ rest <- either (fail . show) pure $ Checkpoint.resume saved graph
 `resume` builds the size classes of the graph again. It rejects a graph that
 is not equal to the graph of the checkpoint, and names the first row that
 differs. A new order of the transitions of one state also makes a checkpoint
-stale, although the listing can keep its order. To resume the saved version,
-use `checkpointGraph saved` as the graph. To continue in an edited graph, use
-`relocate`: it does not continue the old listing.
+stale, because the ranks follow the order of the rows. To resume the saved
+version, use `checkpointGraph saved` as the graph. To continue in an edited
+graph, use `relocate`: it does not continue the old listing.
 
 ## Grammar
 
