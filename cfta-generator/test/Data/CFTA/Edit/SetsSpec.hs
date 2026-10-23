@@ -126,9 +126,11 @@ found k automaton given =
 
 {- | The edit sets by the definition: the sets of one to k edits at pairwise
 incomparable positions, where an edit at a position is a replacement by
-another term of the state of the position, or a wrap in a transition of that
+another term of the state of the position, a wrap in a transition of that
 state with the old subterm as a child that accepts it, and the other children
-terms of their states. The new material is up to the bound in total.
+terms of their states, a context wrap: a term of the state with the old
+subterm below a child of its root, or an unwrap to a child of the old
+subterm that the state accepts. The new material is up to the bound in total.
 -}
 definition :: Int -> FTA.PlainFTA String String -> Term String -> Set.Set (Set.Set (Edit String))
 definition k automaton given =
@@ -155,9 +157,39 @@ definition k automaton given =
                , acceptsAt child old
                , siblings <- siblingTerms [sibling | (other, sibling) <- zip [0 :: Int ..] children, other /= hole]
                ]
+            <> [ Term.Node (UnwrapAt (path $ map ChildIndex at) (ChildIndex index)) []
+               | Term.Node _ grandchildren <- [old]
+               , (index, child) <- zip [0 ..] grandchildren
+               , acceptsAt state child
+               ]
+            <> [ Term.Node
+                    (ContextAt (path $ map ChildIndex at) symbol (TransitionIndex index) (ChildIndex hole))
+                    (contextChildren deeper children')
+               | wrapped <- termsOf state (fromInteger bound + 1 + length old)
+               , deeper@(hole : _ : _) <- positions wrapped
+               , subtermAt wrapped deeper == Just old
+               , Term.Node symbol children' <- [wrapped]
+               , (index, FTA.Transition other states _) <- zip [0 ..] $ FTA.transitionsFrom automaton state
+               , other == symbol
+               , length states == length children'
+               , and (zipWith acceptsAt states children')
+               ]
       where
         old = fromMaybe (error "no subterm") $ subtermAt given at
         state = runState at
+    -- The children of the root of a context: the child on the path to the hole becomes a context.
+    contextChildren (hole : rest) children' =
+        [if index == hole then context rest child else fmap Material child | (index, child) <- zip [0 ..] children']
+    contextChildren [] _ = []
+    context [index] (Term.Node symbol children') =
+        Term.Node
+            (HoleParent symbol (ChildIndex index))
+            [fmap Material child | (other, child) <- zip [0 ..] children', other /= index]
+    context (index : rest) (Term.Node symbol children') =
+        Term.Node
+            (Material symbol)
+            [if other == index then context rest child else fmap Material child | (other, child) <- zip [0 ..] children']
+    context [] _ = error "a context needs a hole"
     siblingTerms [] = [[]]
     siblingTerms (state : rest) = [new : others | new <- termsOf state (fromInteger bound), others <- siblingTerms rest]
     termsOf state size = [candidate | candidate <- allTerms automaton =<< [1 .. size], acceptsAt state candidate]
@@ -183,10 +215,26 @@ fixtures =
         , trees
         , Term.Node "g" [Term.Node "g" [Term.Node "a" [], Term.Node "b" []], Term.Node "a" []]
         )
+    ,
+        ( "statements"
+        , statements
+        , Term.Node "block" [Term.Node "cons" [Term.Node "skip" [], Term.Node "cons" [Term.Node "skip" [], Term.Node "nil" []]]]
+        )
     , ("a balanced tree of 7 nodes", trees, Term.Node "g" [Term.Node "g" [leafA, leafA], Term.Node "g" [leafA, leafA]])
     ]
   where
     leafA = Term.Node "a" []
+
+-- | Blocks of statements: a body is a non-empty list, and an if has a body.
+statements :: FTA.PlainFTA String String
+statements =
+    fromRows
+        "m"
+        [ ("m", [node "block" ["b"]])
+        , ("b", [node "cons" ["s", "l"]])
+        , ("l", [leaf "nil", node "cons" ["s", "l"]])
+        , ("s", [leaf "skip", node "if" ["b"]])
+        ]
 
 trees :: FTA.PlainFTA String String
 trees = fromRows "s" [("s", [leaf "a", leaf "b", node "g" ["s", "s"]])]
@@ -216,6 +264,9 @@ sitePath :: EditSymbol symbol -> Path
 sitePath symbol = case symbol of
     ReplaceAt at -> at
     WrapAt at _ _ _ -> at
+    UnwrapAt at _ -> at
+    ContextAt at _ _ _ -> at
+    HoleParent _ _ -> mempty
     Material _ -> mempty
 
 -- | The positions of a term, the root first.
