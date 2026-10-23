@@ -145,8 +145,12 @@ tree automata of `cfta`, with QuickCheck integration.
   compares the count of the first automaton with the count of the
   intersection, with `Data.CFTA.Sized`. `inclusion` uses the bottom-up
   antichain algorithm, and then `inclusionUpTo` to find the smallest
-  counterexample. Both accept only automata without constraints. A
-  constraint is `ConstrainedLeft` or `ConstrainedRight`.
+  counterexample. `inclusion` accepts only automata without constraints, and
+  `inclusionUpTo` also accepts equality constraints. `inclusionUpToWith`
+  accepts any guard and decides it with a solver, through `sizedUpTo`. When
+  the solver does not decide a guard on a term, it stops at the size of that
+  term, with `UnknownAt` or a counterexample below that size. A constraint
+  that a check does not accept is `ConstrainedLeft` or `ConstrainedRight`.
 - Terms are `Term symbol` from `Data.CFTA.Term` of `cfta`:
   `fromAutomaton`, `fromAutomatonUpToDepth`, `termAt`, `rankOf`, `ranksOf`,
   `rankOfTerm`, `surface`, and the refinement witnesses take and give `Term`

@@ -299,14 +299,22 @@ when the right automaton accepts each term of the left automaton with at
 most `n` nodes. Otherwise it gives `NotIncluded` with a smallest
 counterexample: a term that the left automaton accepts and the right
 automaton rejects. Of the counterexamples of that size, it gives the one with
-the smallest class rank in the left automaton, so the order of the rows does
-not change the result. For each size, the check compares the count of the
-left automaton with the count of the intersection of the two automata, with
-`Data.CFTA.Sized`. `inclusion left right` checks without a bound, with the
-bottom-up antichain algorithm of Bouajjani, Habermehl, Holík, Touili, and
-Vojnar (CIAA 2008). It gives `Included`, or the counterexample that
-`inclusionUpTo` gives. The two automata must have no constraints. A
-constraint gives `ConstrainedLeft` or `ConstrainedRight`.
+the smallest class rank in the left automaton. For automata without
+constraints, the order of the rows does not change the result. For each
+size, the check compares the count of the left automaton with the count of
+the intersection of the two automata, with `Data.CFTA.Sized`.
+`inclusion left right` checks without a bound, with the bottom-up antichain
+algorithm of Bouajjani, Habermehl, Holík, Touili, and Vojnar (CIAA 2008). It
+gives `Included`, or the counterexample that `inclusionUpTo` gives.
+
+The checks take different constraints. `inclusion` takes only automata
+without constraints, and `inclusionUpTo` also takes equality constraints.
+`inclusionUpToWith entailment n left right` takes any guard, and the solver
+decides it on each term, as in `sizedUpTo`. When the solver answers `Unknown`
+for a guard on a term, the check stops at the size of that term. The result
+is then a counterexample below that size, or `UnknownAt` with that size. A
+constraint that a check does not take gives `ConstrainedLeft` or
+`ConstrainedRight`.
 
 ```haskell
 module Main (main) where
