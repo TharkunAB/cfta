@@ -156,6 +156,14 @@ spec = do
             entails unknownSorts (is [2, 1]) sorted >>= (`shouldBe` Unknown)
             entails unknownSorts (is [1, 2]) sorted >>= (`shouldBe` Yes)
 
+        it "needs no value for the sort of an interpreted function" $ do
+            let stream = NamedSort "Stream" []
+                next = \case [IntValue x, rest] -> Just (DataValue "next" [IntValue x, rest]); _ -> Nothing
+                streams = lists{interpretedFunctions = Map.insert "next" next (interpretedFunctions lists)}
+                withNext extra = groundEntailment streams definitions (declarations <> [("next", FunctionSort [IntSort, stream] stream)] <> extra) []
+            entails (withNext []) (is [2, 1]) sorted >>= (`shouldBe` No)
+            entails (withNext [("s", stream)]) (is [2, 1]) sorted >>= (`shouldBe` Unknown)
+
         it "unfolds a defined predicate" $ do
             let between lo hi = Predicate "between" [Var value, Lit lo, Lit hi]
             entails integers (Atom Eq (Var value) (Lit 2)) (between 0 3) >>= (`shouldBe` Yes)
