@@ -1,0 +1,1337 @@
+{
+  "status": "ALL_221_SEALED_H35_ASSERTIONS_ACCOUNTED_FOR_SCOPE_ONLY",
+  "basis_AST_assertions": 221,
+  "generic_assertions_kept_exactly": 174,
+  "H35_scope_assertions_replaced": 47,
+  "new_H36_scope_guards": "Exact external qualified-token count and the helper dependency count; actual count remains a selected-source static result, not a guessed outcome.",
+  "rows": [
+    {
+      "basis_line": 19,
+      "basis_expression": "not path.is_absolute() and '..' not in path.parts",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 25,
+      "basis_expression": "len(data) == record['bytes'] and digest(data) == record['sha256']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 30,
+      "basis_expression": "digest(raw_data) == 'a6cdede0a991e2dd3afba59e8feb0e818b51938c860fef2a5dae0c55b0bb995e'",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Bind only the future actual H36 bound-data digest."
+    },
+    {
+      "basis_line": 31,
+      "basis_expression": "not re.search('__H\\\\d+_', raw_data.decode())",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 34,
+      "basis_expression": "[m['key'] for m in modules] == ['native_node_counter_growth']",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Use the H36 demand_node_counter_growth module key."
+    },
+    {
+      "basis_line": 35,
+      "basis_expression": "[m['source_cap'] for m in modules] == [160]",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Keep the reviewed hard160 source cap."
+    },
+    {
+      "basis_line": 36,
+      "basis_expression": "[m['specs'] for m in modules] == [[[name, 'theorem'] for name in ['step_mono', 'execute_mono', 'resume_mono']]]",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Keep the reviewed three public theorem specs."
+    },
+    {
+      "basis_line": 45,
+      "basis_expression": "actual == set(jobs)",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 47,
+      "basis_expression": "metrics['actual_jobs'] == len(actual)",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 48,
+      "basis_expression": "metrics['source_jobs'] == sum((j['kind'] in {'strict', 'full'} for j in jobs.values()))",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 49,
+      "basis_expression": "metrics['focused_build_jobs'] == sum((j['kind'] == 'focused_build' for j in jobs.values()))",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 50,
+      "basis_expression": "metrics['audit_jobs'] == sum((j['kind'] == 'audit' for j in jobs.values())) == 1",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 51,
+      "basis_expression": "metrics['actual_jobs'] == sum((metrics[k] for k in ['source_jobs', 'focused_build_jobs', 'audit_jobs']))",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 52,
+      "basis_expression": "metrics['failed_jobs'] == sum((j['exit_code'] != 0 for j in jobs.values()))",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 53,
+      "basis_expression": "metrics['warned_source_exit_zero_jobs'] == sum((j['kind'] in {'strict', 'full'} and j['exit_code'] == 0 and bool(j['source_warnings']) for j in jobs.values()))",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 56,
+      "basis_expression": "receipt['exit_code'] == job['exit_code'] and receipt['observed_at']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 57,
+      "basis_expression": "receipt['log'] == stem + '.log' and receipt['limits'] == stem + '.limits.json'",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 59,
+      "basis_expression": "re.fullmatch('[0-9a-f]{64}', job['log_sha256']) and digest(raw) == job['log_sha256']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 60,
+      "basis_expression": "load(receipt['limits']) == {'memory.max': '4294967296', 'memory.high': '4294967296', 'memory.swap.max': '0'}",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 62,
+      "basis_expression": "0 <= usage['age_seconds'] <= 600 and usage['remaining_percent'] > 1",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 63,
+      "basis_expression": "receipt['wrapper'][1:5] == ['--mem', '4G', '--time', '5m']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 64,
+      "basis_expression": "job['kind'] in {'strict', 'full', 'focused_build', 'audit'}",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 66,
+      "basis_expression": "job['module'] in by_name and re.fullmatch('[0-9a-f]{64}', job['source_sha256'])",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 67,
+      "basis_expression": "receipt['source'] == stem + '.source.lean' and receipt['sha256'] == job['source_sha256']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 69,
+      "basis_expression": "digest(source) == job['source_sha256']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 70,
+      "basis_expression": "len(receipt['command']) == 3 and Path(receipt['command'][0]).name == 'lean'",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 71,
+      "basis_expression": "receipt['command'][1] == '-Dlinter.all=true' and Path(receipt['command'][-1]).resolve() == (evidence / receipt['source']).resolve()",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 72,
+      "basis_expression": "len(re.findall('^.+?:\\\\d+:\\\\d+: error(?:\\\\([^)]*\\\\))?:', raw.decode(), re.M)) == job['errors']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 73,
+      "basis_expression": "len(re.findall('^.+?:\\\\d+:\\\\d+: warning(?:\\\\([^)]*\\\\))?:', raw.decode(), re.M)) == job['source_warnings']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 75,
+      "basis_expression": "not re.search('^\\\\s*set_option (?:maxHeartbeats|maxRecDepth|linter\\\\.)', source.decode(), re.M)",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 77,
+      "basis_expression": "job['source_sha256'] is None and 'source' not in receipt and ('sha256' not in receipt)",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 79,
+      "basis_expression": "len(receipt['command']) == 5 and Path(receipt['command'][0]).name == 'lake'",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 80,
+      "basis_expression": "receipt['command'][1:] == ['-d', str(root / 'lean'), 'build', target]",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 81,
+      "basis_expression": "receipt['exit_code'] == 0 and (not re.search('\\\\berror(?:\\\\([^)]*\\\\))?:', raw.decode()))",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 84,
+      "basis_expression": "build and int(build.group(1)) == expected['build_jobs']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 85,
+      "basis_expression": "re.findall('(?m)^warning: .+$', raw.decode()) == expected['warnings']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 86,
+      "basis_expression": "all(('InternedFreshOrdinaryClosedCompletion.lean:24:5:' in warning for warning in expected['warnings']))",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 87,
+      "basis_expression": "job['module'] is None if job['kind'] == 'audit' else job['module'] in by_name",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 91,
+      "basis_expression": "history['status'] == 'ROOT_ACCEPTED'",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 92,
+      "basis_expression": "set(history) == {'status', 'selected_sources', 'variants', 'artifacts', 'patches', 'rejected_public_types'}",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 93,
+      "basis_expression": "history['selected_sources'] == {m['source_path']: m['source_sha256'] for m in modules}",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 96,
+      "basis_expression": "variants and len(variants) == len(history['variants']) and (len(artifacts) == len(history['artifacts']))",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 97,
+      "basis_expression": "not set(variants) & set(artifacts)",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 100,
+      "basis_expression": "re.fullmatch('[0-9a-f]{64}', record['sha256']) and digest(data) == record['sha256']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 102,
+      "basis_expression": "record['module'] in by_name and record['reason'].strip()",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 103,
+      "basis_expression": "0 < len(data.splitlines()) == record['lines'] <= by_name[record['module']]['source_cap']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 105,
+      "basis_expression": "len(data) == record['bytes']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 107,
+      "basis_expression": "all((stem + suffix in artifacts for suffix in ['.json', '.log', '.limits.json', '.usage.json']))",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 109,
+      "basis_expression": "any((v['module'] == job['module'] and v['sha256'] == job['source_sha256'] and (read(path) == read(stem + '.source.lean')) for path, v in variants.items()))",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 111,
+      "basis_expression": "stem + '.source.lean' in artifacts",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 113,
+      "basis_expression": "patch['reason'].strip() and patch['before'] in variants and (patch['after'] in variants)",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 114,
+      "basis_expression": "patch['module'] == variants[patch['before']]['module'] == variants[patch['after']]['module']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 115,
+      "basis_expression": "patch['path'] in artifacts and artifacts[patch['path']]['sha256'] == patch['sha256']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 118,
+      "basis_expression": "read(patch['path']).decode() == expected",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 120,
+      "basis_expression": "len(rejected) == len(history['rejected_public_types']) == metrics['rejected_public_type_jobs']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 122,
+      "basis_expression": "stem in jobs and jobs[stem]['kind'] == 'full' and (jobs[stem]['exit_code'] == 0)",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 123,
+      "basis_expression": "record['raw_sha256'] == jobs[stem]['log_sha256'] and record['reason'].strip()",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 124,
+      "basis_expression": "record['artifacts'] and all((path in artifacts for path in record['artifacts']))",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 127,
+      "basis_expression": "cut['status'] == 'COMPLETE_TERMINAL_METADATA_CUT_BEFORE_CLOSING_TOOLS'",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 128,
+      "basis_expression": "[p for p, code in metadata_jobs.items() if code != 0] == bound['metadata_failure_paths']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 129,
+      "basis_expression": "cut['failed_jobs'] == sum((code != 0 for code in metadata_jobs.values()))",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 131,
+      "basis_expression": "relative.startswith('root-metadata-history/') and relative.endswith('.json') and (relative in artifacts)",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 132,
+      "basis_expression": "type(code) is int",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 134,
+      "basis_expression": "receipt['exit_code'] == code and receipt['observed_at'] and (Path(receipt['command'][0]).name not in {'lean', 'lake'})",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 135,
+      "basis_expression": "all((relative[:-5] + suffix in artifacts for suffix in ['.json', '.log', '.limits.json', '.usage.json', '.source.py', '.peaks.txt']))",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 136,
+      "basis_expression": "load(relative[:-5] + '.limits.json') == {'memory.max': '4294967296', 'memory.high': '4294967296', 'memory.swap.max': '0'}",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 138,
+      "basis_expression": "0 <= usage['age_seconds'] <= 600 and usage['remaining_percent'] > 1",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 140,
+      "basis_expression": "selection == {m['source_path']: dict(sha256=m['source_sha256'], lines=m['source_lines'], strict=m['strict'], full=m['full']) for m in modules}",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 141,
+      "basis_expression": "json.loads(pinned(bound['frozen_modules'])) == {m['name']: m['source_sha256'] for m in modules}",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 148,
+      "basis_expression": "re.fullmatch('[0-9a-f]{64}', m['source_sha256']) and digest(source) == m['source_sha256']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 149,
+      "basis_expression": "source == read(m['strict'] + '.source.lean') and 0 < len(source.splitlines()) == m['source_lines'] <= m['source_cap']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 150,
+      "basis_expression": "read(m['strict'] + '.log') == b'' and jobs[m['strict']]['kind'] == 'strict'",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 151,
+      "basis_expression": "jobs[m['strict']]['module'] == name and jobs[m['strict']]['exit_code'] == 0",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 152,
+      "basis_expression": "jobs[m['full']]['kind'] == 'full' and jobs[m['full']]['module'] == name and (jobs[m['full']]['exit_code'] == 0)",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 153,
+      "basis_expression": "jobs[m['strict']]['errors'] == jobs[m['strict']]['source_warnings'] == jobs[m['full']]['errors'] == jobs[m['full']]['source_warnings'] == 0",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 154,
+      "basis_expression": "m['full'] not in rejected and source.rstrip().endswith(('end MicroCFTA.' + name).encode())",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 155,
+      "basis_expression": "any((v['module'] == name and read(path) == source for path, v in variants.items()))",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 157,
+      "basis_expression": "gate['status'] == 'ACCEPTED_STRICT_SOURCE' and gate['source_sha256'] == m['source_sha256']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 158,
+      "basis_expression": "gate['source_lines'] == m['source_lines'] and gate['source_cap'] == m['source_cap']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 159,
+      "basis_expression": "gate['selected_strict'] == m['strict'] and gate['strict_log_bytes'] == 0 and (gate['public_heads'] == shorts)",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 160,
+      "basis_expression": "gate['receipt_sha256'] == digest(read(m['strict'] + '.json'))",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 161,
+      "basis_expression": "gate['module'] == name and gate['root_default_limit_check'] and gate['all_linters']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 162,
+      "basis_expression": "gate['declaration_gate'] == m['declaration_gate']['path'] and gate['body_gate'] == m['body_gate']['path']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 164,
+      "basis_expression": "body_gate['status'] == 'ACCEPTED_COMPLETE_BODY_BEFORE_STRICT' and body_gate['module'] == name",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Adapt only the exact H36 owner schema, body inventory or actual gate field names. Preserve the existing validation obligation."
+    },
+    {
+      "basis_line": 165,
+      "basis_expression": "body_gate['source_sha256'] == m['source_sha256'] and body_gate['source_lines'] == m['source_lines']",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Adapt only the exact H36 owner schema, body inventory or actual gate field names. Preserve the existing validation obligation."
+    },
+    {
+      "basis_line": 166,
+      "basis_expression": "body_gate['source_hard_stop'] == m['source_cap'] and body_gate['declaration_gate_sha256'] == m['declaration_gate']['sha256']",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Adapt only the exact H36 owner schema, body inventory or actual gate field names. Preserve the existing validation obligation."
+    },
+    {
+      "basis_line": 167,
+      "basis_expression": "body_gate['root_complete_source_lines_read'] == m['source_lines'] and body_gate['declaration_gate'] == m['declaration_gate']['path']",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Adapt only the exact H36 owner schema, body inventory or actual gate field names. Preserve the existing validation obligation."
+    },
+    {
+      "basis_line": 168,
+      "basis_expression": "body_gate['independent_review_sha256'] == m['body_review']['sha256'] and json.loads(pinned(m['body_review']))['status'] == 'CLEAR'",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Adapt only the exact H36 owner schema, body inventory or actual gate field names. Preserve the existing validation obligation."
+    },
+    {
+      "basis_line": 169,
+      "basis_expression": "all((body_gate[k] for k in ['root_complete_source_read', 'root_all_three_bodies_and_six_fragments_read', 'root_all_twelve_scoped_introduced_types_read', 'root_all_six_case_equation_types_read', 'root_complete_generalized_fuel_IH_read', 'actual_pending_constructor_heap_and_actual_yielded_IH_state', 'no_public_validity_success_callback_or_final_counter_oracle', 'default_declaration_limits', 'all_linters']))",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Use actual H36 root body review fields for four bodies, seven fragments, ten types, five observed equations and exact supplied-state scope."
+    },
+    {
+      "basis_line": 170,
+      "basis_expression": "(body_gate['haves'], body_gate['lets'], body_gate['obtains'], body_gate['termination_by_count']) == (2, 0, 0, 0)",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Adapt only the exact H36 owner schema, body inventory or actual gate field names. Preserve the existing validation obligation."
+    },
+    {
+      "basis_line": 171,
+      "basis_expression": "body_gate['private_helpers'] == m['private_helpers'] and body_gate['public_heads'] == shorts",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Adapt only the exact H36 owner schema, body inventory or actual gate field names. Preserve the existing validation obligation."
+    },
+    {
+      "basis_line": 172,
+      "basis_expression": "body_gate['induction'] is True and body_gate['recursive_calls'] == 0 and (body_gate['restricted_induction_call'] == 'ih next after')",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Adapt only the exact H36 owner schema, body inventory or actual gate field names. Preserve the existing validation obligation."
+    },
+    {
+      "basis_line": 174,
+      "basis_expression": "declaration['status'] == 'ACCEPTED_EXACT_DECLARATIONS_BEFORE_BODY' and declaration['module'] == name",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Adapt only the exact H36 owner schema, body inventory or actual gate field names. Preserve the existing validation obligation."
+    },
+    {
+      "basis_line": 175,
+      "basis_expression": "declaration['public_heads'] == shorts and declaration['private_helpers'] == m['private_helpers']",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Adapt only the exact H36 owner schema, body inventory or actual gate field names. Preserve the existing validation obligation."
+    },
+    {
+      "basis_line": 176,
+      "basis_expression": "declaration['contracts_sha256'] == m['manifest']['sha256'] and declaration['insertion_map_sha256'] == m['layout']['sha256']",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Adapt only the exact H36 owner schema, body inventory or actual gate field names. Preserve the existing validation obligation."
+    },
+    {
+      "basis_line": 177,
+      "basis_expression": "declaration['whole_source_hard_stop'] == m['source_cap'] and declaration['default_declaration_limits'] and declaration['all_linters']",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Adapt only the exact H36 owner schema, body inventory or actual gate field names. Preserve the existing validation obligation."
+    },
+    {
+      "basis_line": 178,
+      "basis_expression": "[declaration[k] for k in ['root_whole_context_lines_read', 'root_whole_public_header_lines_read', 'root_whole_private_header_lines_read', 'root_whole_local_compiled_fragment_lines_read']] == [7, 18, 0, 4]",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Use context8/public17/private4/local5 actual declaration counts."
+    },
+    {
+      "basis_line": 179,
+      "basis_expression": "all((declaration[k] for k in ['root_all_public_and_private_header_types_read', 'root_all_twelve_scoped_introduced_types_read', 'root_all_schema_layout_owner_attachment_and_body_inventory_metadata_read', 'root_all_six_specialized_equation_types_read', 'root_complete_generalized_fuel_IH_three_lines_read', 'root_all_16_relevant_live_API_cuts_278_lines_read', 'root_all_seven_public_import_routes_checked']))",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Use actual H36 root declaration review fields and exact current source/import review facts."
+    },
+    {
+      "basis_line": 180,
+      "basis_expression": "[declaration[k] for k in ['body_haves', 'body_lets', 'body_obtains', 'helpers', 'recursive_calls', 'termination_by_count']] == [2, 0, 0, 0, 0, 0]",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Retain two haves, no lets/obtains, one private helper, no recursion or termination annotations."
+    },
+    {
+      "basis_line": 181,
+      "basis_expression": "declaration['restricted_induction_call'] == 'ih next after' and re.fullmatch('[0-9a-f]{64}', declaration['independent_review_sha256'])",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Adapt only the exact H36 owner schema, body inventory or actual gate field names. Preserve the existing validation obligation."
+    },
+    {
+      "basis_line": 182,
+      "basis_expression": "declaration['induction'] is True and declaration['goal_status'] == 'ACTIVE_INCOMPLETE'",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Adapt only the exact H36 owner schema, body inventory or actual gate field names. Preserve the existing validation obligation."
+    },
+    {
+      "basis_line": 186,
+      "basis_expression": "list(manifest) == [f['file'] for f in fragments] and [f['order'] for f in fragments] == list(range(1, len(fragments) + 1))",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 189,
+      "basis_expression": "[{k: v for k, v in f.items() if k != 'path'} for f in fragments] == layout['compiled_fragments']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 190,
+      "basis_expression": "layout['schema'] == schema and json.loads(pinned(m['declaration_layout'])) == m['declaration_layout_values']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 194,
+      "basis_expression": "digest(raw_fragment) == f['sha256'] and len(raw_fragment.splitlines()) == f['lines']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 195,
+      "basis_expression": "manifest[f['file']] == f['sha256']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 197,
+      "basis_expression": "source.startswith(data['context.lean.txt']) and source.count(data['context.lean.txt']) == 1",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 202,
+      "basis_expression": "source.count(header) == 1 and source.index(header) >= len(data['context.lean.txt'])",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 204,
+      "basis_expression": "[positions[s][0] for s in all_shorts] == sorted((positions[s][0] for s in all_shorts))",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 219,
+      "basis_expression": "scope.count(fragment) == 1",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 221,
+      "basis_expression": "matched == sorted(matched) and len(set(matched)) == len(matched)",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 225,
+      "basis_expression": "len(types['entries']) == 12 and set(inventory['owners']) == set(all_shorts)",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Read H36 body-inventories.bodies and ten scoped type entries, without dropping the private body."
+    },
+    {
+      "basis_line": 226,
+      "basis_expression": "not re.search(b'(?m)^\\\\s*(?:mutual|termination_by)\\\\b', source)",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 229,
+      "basis_expression": "equations == m['case_equations'] and len(equations['entries']) == 2 and (sum((len(e['specialized_types']) for e in equations['entries'])) == 6)",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Read H36 case-equations.families: one family and five specialized observed equalities."
+    },
+    {
+      "basis_line": 230,
+      "basis_expression": "induction == m['induction_contract'] and induction['owner'] == 'execute_mono' and (induction['activation'] == schema['induction_activation'])",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Adapt only the exact H36 owner schema, body inventory or actual gate field names. Preserve the existing validation obligation."
+    },
+    {
+      "basis_line": 231,
+      "basis_expression": "reviewed['execute-IH.lean.txt'].decode().rstrip('\\n') == induction['complete_IH_type'] and len(reviewed['execute-IH.lean.txt'].splitlines()) == 3",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Read H36 generated_IH_type and exact three-line execute-IH text."
+    },
+    {
+      "basis_line": 232,
+      "basis_expression": "induction['generalized_arguments'] == [dict(name='code', type='Code Symbol Guard A'), dict(name='state', type='SourceRecursiveIntersectionThunks.State width Symbol Guard')]",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Use generalized control:Demand.Control Output and state:Demand.State width."
+    },
+    {
+      "basis_line": 233,
+      "basis_expression": "induction['fixed_parameters'] == ['Symbol', 'Guard', 'A', 'width', 'DecidableEq Symbol', 'DecidableEq (EdgeKey Symbol Guard)', 'emptyGuard', 'conjoin']",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Use fixed width, Output and both equality instances; concrete Symbol/Guard are fixed aliases."
+    },
+    {
+      "basis_line": 234,
+      "basis_expression": "induction['call_forms'][0]['exact_term'] == 'ih next after' and len(induction['call_forms']) == 1 and (induction['all_other_case_IH_calls'] is induction['unrestricted_IH_or_future_success_assumed'] is False)",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Read the exact H36 restricted calls record and reject any unrestricted induction oracle."
+    },
+    {
+      "basis_line": 236,
+      "basis_expression": "bodies[equation['owner']].count(equation['activation'].encode()) == 1",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Adapt only the exact H36 owner schema, body inventory or actual gate field names. Preserve the existing validation obligation."
+    },
+    {
+      "basis_line": 239,
+      "basis_expression": "re.findall(b'\\\\bhave[ \\\\t]+([^ \\\\t:\\\\n]+)', body) == [n.encode() for n in expected['have_names']]",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 240,
+      "basis_expression": "len(re.findall(b'\\\\bhave\\\\b', body)) == len(expected['have_names'])",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 241,
+      "basis_expression": "re.findall(b'\\\\blet[ \\\\t]+([^ \\\\t:=\\\\n]+)', body) == [n.encode() for n in expected['let_names']]",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 242,
+      "basis_expression": "len(re.findall(b'\\\\blet\\\\b', body)) == len(expected['let_names'])",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 243,
+      "basis_expression": "re.findall(b'\\\\bby_cases[ \\\\t]+([^ \\\\t:\\\\n]+)', body) == [n.encode() for n in expected['by_cases_names']]",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 244,
+      "basis_expression": "re.findall(b'\\\\bcases[ \\\\t]+([^ \\\\t:\\\\n]+)[ \\\\t]*:', body) == [n.encode() for n in expected['case_equations']]",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 246,
+      "basis_expression": "groups == expected['obtain_groups'] and len(re.findall(b'\\\\bobtain\\\\b', body)) == len(groups)",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 247,
+      "basis_expression": "re.findall(b'\\\\bintro[ \\\\t]+([^\\\\n]+)', body) == [n.encode() for n in expected['intro_groups']]",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 248,
+      "basis_expression": "re.findall(b'\\\\bfun[ \\\\t]+([^\\\\n]*?)=>', body) == [n.encode() for n in expected['lambda_groups']]",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 251,
+      "basis_expression": "patterns == expected['case_pattern_groups'] and all((part in patterns for part in inventory['owners'][short]['case_pattern_groups']))",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Compare exact H36 inventory bodies and literal case_patterns for all four bodies."
+    },
+    {
+      "basis_line": 252,
+      "basis_expression": "all((n in allowed for group in expected['intro_groups'] + expected['lambda_groups'] for n in group.split()))",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 253,
+      "basis_expression": "all((n in allowed | {'pure', 'fail', 'enter', 'read', 'finishNode', 'finishEdge', 'work', 'optionalBinder', 'done', 'pending', 'node', 'edge', 'zero', 'succ', 'yielded', 'failed', 'blocked', '|'} for group in patterns for n in group.split()))",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Add only reviewed code, edgeBody and constraintError constructor names; require scoped binder membership."
+    },
+    {
+      "basis_line": 254,
+      "basis_expression": "re.findall(b'\\\\binduction[ \\\\t]+([^\\\\n]+)', body) == ([induction['activation'].removeprefix('induction ').encode()] if short == 'execute_mono' else [])",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Adapt only the exact H36 owner schema, body inventory or actual gate field names. Preserve the existing validation obligation."
+    },
+    {
+      "basis_line": 255,
+      "basis_expression": "not re.search(b'\\\\b(?:show|suffices|haveI|letI)\\\\b', body) and (not re.search(b'\\\\bobtain\\\\b(?:(?!:=).)*:(?!=)', body, re.S))",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 256,
+      "basis_expression": "not re.search(b'\\\\b' + short.encode() + b'\\\\b', body)",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence.",
+      "execution_view": "GUARDED_LOCAL_DEPENDENCY_ONLY_VIEW_FOR_EXACT_EXTERNAL_H35_TOKEN"
+    },
+    {
+      "basis_line": 258,
+      "basis_expression": "dependencies == [n.encode() for n in expected['proof_dependencies']] and all((all_shorts.index(n.decode()) < all_shorts.index(short) for n in dependencies))",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence.",
+      "execution_view": "GUARDED_LOCAL_DEPENDENCY_ONLY_VIEW_FOR_EXACT_EXTERNAL_H35_TOKEN"
+    },
+    {
+      "basis_line": 259,
+      "basis_expression": "schema['induction_owner'] == 'execute_mono' and schema['restricted_induction_call_terms'] == ['ih next after']",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Adapt only the exact H36 owner schema, body inventory or actual gate field names. Preserve the existing validation obligation."
+    },
+    {
+      "basis_line": 260,
+      "basis_expression": "[len(re.findall(b'\\\\bih\\\\b', bodies[n])) for n in all_shorts] == [0, 2, 0]",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Use four-body IH counts [0,0,2,0]."
+    },
+    {
+      "basis_line": 262,
+      "basis_expression": "yielded and re.findall(b'\\\\bih[ \\\\t]+([A-Za-z_][A-Za-z_0-9]*)[ \\\\t]+([A-Za-z_][A-Za-z_0-9]*)', yielded.group(1)) == [(b'next', b'after')]",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Adapt only the exact H36 owner schema, body inventory or actual gate field names. Preserve the existing validation obligation."
+    },
+    {
+      "basis_line": 263,
+      "basis_expression": "bodies['execute_mono'].count(b'ih next after') == 1",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Adapt only the exact H36 owner schema, body inventory or actual gate field names. Preserve the existing validation obligation."
+    },
+    {
+      "basis_line": 264,
+      "basis_expression": "schema['private_helpers'] == m['private_helpers'] == []",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Require the single exact private helper lift_native."
+    },
+    {
+      "basis_line": 265,
+      "basis_expression": "schema['public_heads'] == shorts and schema['new_definitions'] == schema['new_predicates_or_structures'] == schema['typed_show_fragments'] == [] and (schema['local_induction_names'] == ['ih'])",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Adapt only the exact H36 owner schema, body inventory or actual gate field names. Preserve the existing validation obligation."
+    },
+    {
+      "basis_line": 266,
+      "basis_expression": "schema['recursive_calls'] == [] and schema['termination_by_count'] == 0 and (schema['extra_unreviewed_named_or_typed_body_fragments_authorized'] is False)",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Adapt only the exact H36 owner schema, body inventory or actual gate field names. Preserve the existing validation obligation."
+    },
+    {
+      "basis_line": 267,
+      "basis_expression": "schema['compiled_contract_count'] == 6 and schema['compiled_contract_lines'] == 29 and (schema['compiled_contract_order'] == list(manifest))",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Require seven STRING contracts and 34 lines in reviewed insertion order."
+    },
+    {
+      "basis_line": 268,
+      "basis_expression": "schema['local_have_names_by_owner'] == {n: m['bodies'][n]['have_names'] for n in all_shorts} and schema['local_let_names_by_owner'] == {n: m['bodies'][n]['let_names'] for n in all_shorts}",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Adapt only the exact H36 owner schema, body inventory or actual gate field names. Preserve the existing validation obligation."
+    },
+    {
+      "basis_line": 269,
+      "basis_expression": "schema['local_obtain_groups'] == schema['by_cases_names'] == [] and schema['case_equation_names_by_owner'] == {n: m['bodies'][n]['case_equations'] for n in all_shorts} and (schema['public_premises'] == ['DecidableEq Symbol', 'DecidableEq (EdgeKey Symbol Guard)'])",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Adapt only the exact H36 owner schema, body inventory or actual gate field names. Preserve the existing validation obligation."
+    },
+    {
+      "basis_line": 273,
+      "basis_expression": "public == [(kind, short) for short, kind in specs]",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 278,
+      "basis_expression": "found",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 280,
+      "basis_expression": "helpers == schema['private_helpers'] == m['private_helpers']",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Adapt only the exact H36 owner schema, body inventory or actual gate field names. Preserve the existing validation obligation."
+    },
+    {
+      "basis_line": 281,
+      "basis_expression": "not re.search(b'(?m)^\\\\s*(?:variable[ \\\\t]+\\\\[|omit\\\\b)', source)",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 282,
+      "basis_expression": "all((source.count(('theorem ' + short + ' [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]').encode()) == 1 for short in shorts))",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Adapt only the exact H36 owner schema, body inventory or actual gate field names. Preserve the existing validation obligation."
+    },
+    {
+      "basis_line": 283,
+      "basis_expression": "schema['global_instance_declaration'] is False and schema['omit_directives'] == 0",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Adapt only the exact H36 owner schema, body inventory or actual gate field names. Preserve the existing validation obligation."
+    },
+    {
+      "basis_line": 284,
+      "basis_expression": "schema['explicit_instance_heads'] == shorts",
+      "action": "REPLACE_H35_SPECIFIC_SCOPE_GUARD",
+      "reason": "Adapt only the exact H36 owner schema, body inventory or actual gate field names. Preserve the existing validation obligation."
+    },
+    {
+      "basis_line": 286,
+      "basis_expression": "(root / m['source_path']).read_bytes() == source",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 288,
+      "basis_expression": "tool_gate['status'] == 'ACCEPTED_EXACT_TOOLS_FOR_SELECTED_STRICT_SOURCE' and tool_gate['source_sha256'] == m['source_sha256']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 289,
+      "basis_expression": "tool_gate['public_heads'] == shorts and tool_gate['materializer_activation'] and tool_gate['sole_FULL_activation'] and tool_gate['reader_activation_after_actual_FULL']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 292,
+      "basis_expression": "pinned(active) == pinned(archived) and tool_gate['installed_tools'][active['path']] == active['sha256']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 299,
+      "basis_expression": "printer == source + tail.encode() and len(tail.splitlines()) == 11 + 3 * len(specs)",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 300,
+      "basis_expression": "len(printer.splitlines()) == m['source_lines'] + len(tail.splitlines()) == tool_gate['diagnostic_tail_lines'] + m['source_lines']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 301,
+      "basis_expression": "all((printer.decode().splitlines().count('set_option ' + option) == 1 for option in options))",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 302,
+      "basis_expression": "all((printer.decode().splitlines().count(d + namespace + short) == 1 for short, kind in specs for d in ['#check @', '#print ', '#print axioms ']))",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 306,
+      "basis_expression": "len(matching) == 1",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 308,
+      "basis_expression": "(report['source_sha256'], report['source_lines'], report['printer_sha256']) == (m['source_sha256'], m['source_lines'], digest(printer))",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 309,
+      "basis_expression": "report['log_sha256'] == digest(raw) and report['log_bytes'] == len(raw)",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 310,
+      "basis_expression": "report['receipt_sha256'] == digest(read(m['full'] + '.json')) and report['owned_public_job_exit'] == 0",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 311,
+      "basis_expression": "all((report[k] for k in ['all_eight_printer_settings', 'exact_module_and_diagnostic_tail', 'diagnostic_limits_after_module_only', 'no_omissions']))",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 312,
+      "basis_expression": "(report['pp_option_count'], report['linter_option_count'], report['diagnostic_limit_count']) == (7, 1, 2)",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 313,
+      "basis_expression": "report['configured_paths'] == {k: str(path.resolve()) for k, path in dict(source=evidence / m['snapshot'], printer=evidence / (m['full'] + '.source.lean'), raw=evidence / (m['full'] + '.log'), receipt=evidence / (m['full'] + '.json')).items()}",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 314,
+      "basis_expression": "[(h['head'], h['kind']) for h in report['heads']] == [(namespace + short, kind) for short, kind in specs]",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 316,
+      "basis_expression": "not re.search('sorryAx|\\\\b(?:warning|error)(?:\\\\([^)]*\\\\))?:|failed to pretty print|pp\\\\.rawOnError|maximum recursion depth|maximum number of heartbeats|⋯|…|\\\\.\\\\.\\\\.', log)",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 320,
+      "basis_expression": "len(matches) == 1",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 322,
+      "basis_expression": "starts == sorted(starts, key=lambda match: match.start()) and (not log[:starts[0].start()].strip())",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 329,
+      "basis_expression": "len(delimiters) == 1",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 332,
+      "basis_expression": "len(axiom_matches) == 1",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 342,
+      "basis_expression": "len(matches) == 1",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 347,
+      "basis_expression": "normalized == canonical(declared) and raw_identity is metric['raw_type_byte_identity']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 348,
+      "basis_expression": "len(checked.encode()) == metric['type_bytes'] and len(checked) == metric['type_characters'] and (digest(checked.encode()) == metric['type_sha256'])",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 349,
+      "basis_expression": "len(checked.splitlines()) == metric['type_logical_lines'] and checked.count('\\n') == metric['type_line_feeds'] and (checked.endswith('\\n') == metric['type_final_newline'])",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 350,
+      "basis_expression": "len(declared.encode()) == metric['printed_type_bytes'] and digest(declared.encode()) == metric['printed_type_sha256']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 351,
+      "basis_expression": "digest(normalized.encode()) == metric['canonical_type_sha256']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 352,
+      "basis_expression": "not any((token in checked + declared for token in ['_private', '✝', '†', '‡']))",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 353,
+      "basis_expression": "not any((re.search(re.escape(namespace + helper) + \"(?![\\\\w'])\", checked + declared) for helper in helpers))",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 354,
+      "basis_expression": "all((head_report[k] for k in ['check_print_type_identity', 'check_print_type_lexical_identity', 'unique_complete_type_body_delimiter', 'actual_axioms_within_standard_allowed']))",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 355,
+      "basis_expression": "head_report['check_print_type_byte_identity'] is raw_identity",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 356,
+      "basis_expression": "head_report['private_namespace_helpers_checked'] == helpers and head_report['private_type_spellings_checked'] == ['_private', '✝', '†', '‡'] and (head_report['private_public_type_names'] is False)",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 357,
+      "basis_expression": "head_report['checked_type_characters'] == len(checked) and head_report['checked_type_bytes'] == len(checked.encode()) and (head_report['checked_type_sha256'] == metric['type_sha256'])",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 358,
+      "basis_expression": "head_report['printed_type_bytes'] == metric['printed_type_bytes'] and head_report['printed_type_characters'] == len(declared) and (head_report['printed_type_sha256'] == metric['printed_type_sha256'])",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 359,
+      "basis_expression": "head_report['normalized_type_characters'] == len(normalized) and head_report['canonical_type_sha256'] == metric['canonical_type_sha256']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 360,
+      "basis_expression": "head_report['body_characters'] == len(body) == metric['body_characters'] and len(body.encode()) == metric['body_bytes']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 361,
+      "basis_expression": "body.startswith('fun ') and len(body) > 50 and (digest(body.encode()) == metric['body_sha256'])",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 363,
+      "basis_expression": "values or (axiom.group(1) == 'does not depend on any axioms' and (not printed[axiom.end():].strip()))",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 365,
+      "basis_expression": "axioms == head_report['actual_axioms'] == metric['actual_axioms'] and set(axioms) <= {'Classical.choice', 'Quot.sound', 'propext'}",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 366,
+      "basis_expression": "head_report['actual_standard_three_axioms'] == (set(axioms) == {'Classical.choice', 'Quot.sound', 'propext'})",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 371,
+      "basis_expression": "retained == text.encode() and report['retained_slices'][filename] == dict(bytes=len(retained), sha256=digest(retained))",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 373,
+      "basis_expression": "''.join(reconstructed) == log and set(report['retained_slices']) == set(retained_names)",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 376,
+      "basis_expression": "review['status'] == 'ACCEPTED_COMPLETE_PUBLIC_TYPES_AND_INSTALLED' and review['source_sha256'] == m['source_sha256'] and (review['source_lines'] == m['source_lines'])",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 377,
+      "basis_expression": "review['root_manual_complete_TYPEs'] is True and review['goal_status'] == 'ACTIVE_INCOMPLETE'",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 378,
+      "basis_expression": "review['readback_sha256'] == m['readback']['sha256']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 379,
+      "basis_expression": "review['independent_complete_TYPE_review_sha256'] == m['type_review']['sha256'] and independent['status'] == 'CLEAR'",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 380,
+      "basis_expression": "set(review['TYPEs']) == set(shorts)",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 383,
+      "basis_expression": "review['TYPEs'][short] == dict(sha256=metric['type_sha256'], bytes=metric['type_bytes'], logical_lines=metric['type_logical_lines'], actual_axioms=actual_axioms[short])",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 384,
+      "basis_expression": "review['module'] == name and review['scope'] == m['scope']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 385,
+      "basis_expression": "review['BODY_review'] == dict(complete_retention=True, programmatic_only=True, whole_body_manual_read_claimed=False)",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 386,
+      "basis_expression": "independent['scope'] == 'INDEPENDENT_COMPLETE_ACTUAL_PUBLIC_TYPE_AND_READBACK_REVIEW'",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 387,
+      "basis_expression": "independent['module'] == name and independent['source_sha256'] == m['source_sha256']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 388,
+      "basis_expression": "independent['source_lines'] == m['source_lines'] and independent['public_heads'] == [namespace + short for short in shorts]",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 389,
+      "basis_expression": "independent['ownership']['reviewer_math_author'] is False",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 391,
+      "basis_expression": "manual['checked_TYPEs_complete'] == shorts and manual['printed_TYPEs_manual'] is manual['BODYs_manual'] is False",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 394,
+      "basis_expression": "item['checked_type'] == dict(logical_lines=metric['type_logical_lines'], LF=metric['type_line_feeds'], final_LF=metric['type_final_newline'], characters=metric['type_characters'], bytes=metric['type_bytes'], sha256=metric['type_sha256'])",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 395,
+      "basis_expression": "item['printed_type'] == dict(bytes=metric['printed_type_bytes'], sha256=metric['printed_type_sha256'])",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 396,
+      "basis_expression": "item['actual_raw_byte_identity'] is metric['raw_type_byte_identity'] and item['lexical_identity'] is True",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 397,
+      "basis_expression": "item['canonical_sha256'] == metric['canonical_type_sha256'] and item['axioms']['actual'] == actual_axioms[short]",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 398,
+      "basis_expression": "item['body'] == dict(characters=metric['body_characters'], bytes=metric['body_bytes'], sha256=metric['body_sha256'])",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 399,
+      "basis_expression": "len(full_variant_keys) == len(set(full_variant_keys))",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 400,
+      "basis_expression": "load('original-source-index.json')['sources'] == [bound['original_audit']]",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 402,
+      "basis_expression": "digest(original) == bound['original_audit']['sha256'] and len(original.splitlines()) == bound['original_audit']['lines']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 406,
+      "basis_expression": "audit_source.count(addition) == 1 and audit_source.index(addition) < audit_source.index(b'/-!')",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 408,
+      "basis_expression": "audit_source == original",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 410,
+      "basis_expression": "jobs[audit_stem]['kind'] == 'audit' and jobs[audit_stem]['exit_code'] == 0",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 412,
+      "basis_expression": "digest(raw_audit) == bound['audit']['log_sha256']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    },
+    {
+      "basis_line": 414,
+      "basis_expression": "dependencies and int(dependencies.group(1)) == bound['audit']['dependencies']",
+      "action": "KEEP_GENERIC_GUARD_EXACT_EXPRESSION",
+      "reason": "Keep the exact generic expression. Bind only actual pinned evidence."
+    }
+  ]
+}

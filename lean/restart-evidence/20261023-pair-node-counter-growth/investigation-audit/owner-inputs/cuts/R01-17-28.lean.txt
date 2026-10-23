@@ -1,0 +1,12 @@
+theorem step_mono [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (control : SourceEqualityNativeDemand.Control Output)
+    (state : SourceEqualityNativeDemand.State width) :
+    state.native.machine.heap.nodes.next ≤
+      (SourceEqualityNativeDemand.step control state).state.native.machine.heap.nodes.next := by
+  cases control with
+  | code code =>
+      have nativeGrowth : state.native.machine.heap.nodes.next ≤
+          (SourceRecursiveIntersectionNative.step SourceEqualityConstraintConstructors.top
+            SourceEqualityPCSNativeEdge.conjoin code state.native).state.machine.heap.nodes.next := by
+        exact SourceRecursiveIntersectionNativeNodeCounterGrowth.step_mono
+          SourceEqualityConstraintConstructors.top SourceEqualityPCSNativeEdge.conjoin code state.native

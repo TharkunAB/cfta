@@ -1,0 +1,50 @@
+--- basis/update-documents.py
++++ selected/update-documents.py
+@@ -6,7 +6,7 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ ROOT = HERE.parents[2]
+-START = '86b6dd30387c62a1f8f46e1914824695c4a0e908'
++START = 'de085728ebe1e905ae339eaba8d26348126e5ada'
+ def git(*args):
+     return subprocess.check_output(['git', *args], cwd=ROOT)
+ def sha(data):
+@@ -14,12 +14,12 @@
+ 
+ metrics = dict(actual_jobs=3, source_jobs=2, focused_build_jobs=0, audit_jobs=1,
+     failed_jobs=0, warned_source_exit_zero_jobs=0, rejected_public_type_jobs=0,
+-    selected_modules=1, public_theorems=3, audit_build_jobs=3655, audit_dependencies=75560)
++    selected_modules=1, public_definitions=1, public_theorems=2, audit_build_jobs=3656, audit_dependencies=75572)
+ for mode, live in [('normal', False), ('live', True)]:
+     report = json.loads((HERE / ('proof-evidence-' + mode + '.json')).read_bytes())
+     assert report['status'] == 'PASS' and report['live'] is live
+     assert all(report[key] == value for key, value in metrics.items())
+-    assert report['audit_log_sha256'] == '255bbf2ca92db811b215e1f915882870c64f3da513c1795c777675aa8e45b541'
++    assert report['audit_log_sha256'] == '18eebc67eff772ba1d8b6ce6f87caf8765b9abc83e5f4c4e50356ef0a7585665'
+ proof = (HERE / 'proof-commit.txt').read_text().strip()
+ assert len(proof) == 40 and all(char in '0123456789abcdef' for char in proof)
+ assert git('rev-parse', 'HEAD').decode().strip() == proof
+@@ -40,11 +40,11 @@
+ assert 'H6 constructed_node_calls remains strongest combined.' in focused
+ assert 'No Haskell repair' in focused and 'ACTIVE and incomplete' in focused
+ type_summary = []
+-readback = json.loads((HERE / ('full-output/demand-node-counter-growth-full-readback.json')).read_bytes())
++readback = json.loads((HERE / ('full-readback/pair-node-counter-growth-full-readback.json')).read_bytes())
+ for head in readback['heads']:
+     short = head['head'].rsplit('.', 1)[1]
+-    checked = (HERE / ('full-output/demand-node-counter-growth-' + short + '-public-type.txt')).read_bytes()
+-    printed = (HERE / ('full-output/demand-node-counter-growth-' + short + '-printed-public-type.txt')).read_bytes()
++    checked = (HERE / ('full-readback/pair-node-counter-growth-' + short + '-public-type.txt')).read_bytes()
++    printed = (HERE / ('full-readback/pair-node-counter-growth-' + short + '-printed-public-type.txt')).read_bytes()
+     assert sha(checked) == head['checked_type_sha256'] and sha(printed) == head['printed_type_sha256']
+     assert head['check_print_type_byte_identity'] is (checked == printed)
+     assert head['check_print_type_lexical_identity'] and head['actual_axioms_within_standard_allowed']
+@@ -75,7 +75,7 @@
+         changed = prefix + update + b'\n' + original[len(prefix):]
+     assert changed.replace(update + b'\n', b'', 1) == original
+     changes[name] = changed
+-note = ROOT / 'lean/notes-current-demand-node-counter-growth.md'
++note = ROOT / 'lean/notes-current-pair-node-counter-growth.md'
+ assert not note.exists()
+ assert not (HERE / 'current-update.md').exists() and not (HERE / 'findings-update.md').exists()
+ for name, data in changes.items():

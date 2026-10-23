@@ -1,0 +1,6 @@
+H37 three local publication sources are prepared only. Guard authored this adaptation after Root scope acceptance. Root owns activation and all Git actions.
+The whole sealed H36 bases are retained. The selected sources have101 lines and44 assertions. The exact literal forward/inverse recipes reconstruct all bytes. The existing report line now requires1 public definition and2 theorems.
+Actual3 jobs,0 failures and75572 Audit dependencies bind the accepted proof cut. Equal inherited3/0 literals stay unchanged. No future proof SHA is inserted.
+The standalone runner keeps both modes, explicit --root and cwd=/, accepted verifier/data hashes and output nonoverwrite checks. The proof committer retains START, branch, empty-index, source-history and exact2-file parent/scope checks.
+The local publisher retains final ROOT_ACCEPTED/LOCAL_ONLY gates, backup/main refs, all sealed index paths, filesystem/index/HEAD blob and mode identity, clean tree and both seal checks. It has no network command. Root performs any authorized push separately.
+The document writer is separate. No selected source was imported, executed or installed. Independent selected-source review and Root activation remain pending.

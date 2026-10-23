@@ -1,0 +1,7 @@
+/-- A hit returns the original thunk. A miss publishes a suspended request. -/
+def lookupOrInsert [DecidableEq Key] (key : Key) (request : Request) (state : State Key Request Value) :
+    Nat × State Key Request Value :=
+  match state.table key with
+  | some handle => (handle, state)
+  | none => (state.next, ⟨put state.table key state.next,
+      put state.cells state.next ⟨request, .suspended⟩, state.next + 1⟩)

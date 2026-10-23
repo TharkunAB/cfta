@@ -1,0 +1,1 @@
+Root clarification2026-10-23 17:32 CEST selects standalone runner, proof committer and local publisher as the three publication bases. The document writer remains a separate fourth scope. No selected code or scope package had been authored under the earlier ambiguous wording. Both saved modes must precede proof commit and document writes.

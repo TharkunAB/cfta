@@ -1,0 +1,11 @@
+--- drafts/01-pending-verify-proofs.py.txt
++++ verify-proofs.py
+@@ -27,7 +27,7 @@
+ def canonical(text):
+     return re.sub(r"[ \t\r\n]+", " ", text).strip(" \t\r\n")
+ raw_data = read("bound-data.json")
+-assert digest(raw_data) == "__H37_BOUND_DATA_SHA256__"
++assert digest(raw_data) == "1e12cb608db0a52a00d4e4838d72777a2ee3607e34a15d13904fcc83b4174985"
+ assert not re.search(r"__H\d+_", raw_data.decode()), "Unbound evidence input"
+ bound = json.loads(raw_data)
+ modules = bound["modules"]

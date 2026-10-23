@@ -1,0 +1,17 @@
+/-- Read the complete state in every actual comparison outcome. -/
+def outcomeState (outcome : SourceCurrentSameSymbolEdgeControl.Outcome width) :
+    SourceCurrentSameSymbolEdgeControl.State width :=
+
+/-- One comparison step retains or increases its actual constructor node counter. -/
+theorem step_mono [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (control : SourceCurrentSameSymbolEdgeControl.Control)
+    (state : SourceCurrentSameSymbolEdgeControl.State width) :
+    state.checked.native.machine.heap.nodes.next ≤
+      (outcomeState (SourceCurrentSameSymbolEdgeControl.step control state)).checked.native.machine.heap.nodes.next := by
+
+/-- Every finite comparison outcome retains or increases its input node counter. -/
+theorem execute_mono [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (control : SourceCurrentSameSymbolEdgeControl.Control)
+    (state : SourceCurrentSameSymbolEdgeControl.State width) :
+    state.checked.native.machine.heap.nodes.next ≤
+      (outcomeState (SourceCurrentSameSymbolEdgeControl.execute fuel control state)).checked.native.machine.heap.nodes.next := by

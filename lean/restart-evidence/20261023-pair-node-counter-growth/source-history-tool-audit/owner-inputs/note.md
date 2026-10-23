@@ -1,0 +1,7 @@
+# H37 source-history collector: selected source only
+
+The collector has 78 ordinary lines and fourteen assertions. The complete sealed H36 collector and its 46-line Root common helper are retained. The selected helper matches the actual existing H37 helper byte for byte. Every change is an approved checkpoint literal. Exact forward and inverse patches and recipes recover both full bases. The full program ASTs are identical after literal normalization.
+
+The actual 96-line variant is now staged and equals the body, strict snapshot and canonical source. The collector keeps the complete dynamic Lean/Lake receipt inventory, all completed Root metadata six-artifact sets, all caps and usage checks, the empty strict log, disjoint variant/artifact paths, complete artifact hashes and actual Audit parsing. The declaration type correction and selected-source full-link correction remain metadata history. No mathematical repair or failed Lean job is invented.
+
+All four output schemas remain unchanged. Artifact and metadata totals are computed at collection. The current collector receipt and later closing receipts remain outside that historical cut and enter final support once. Existing nonoverwrite guards remain. Root authored the original collector and helper; Required authored this literal adaptation and earlier independent history reviews. No selected program was imported, executed or installed. Root and an independent whole-source review must accept it before activation.

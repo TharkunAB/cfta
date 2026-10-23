@@ -1,0 +1,55 @@
+--- selected/check-full-public.py
++++ basis/check-full-public.py
+@@ -1,4 +1,4 @@
+-"""Read complete pair node counter growth public output. This script does not run Lean."""
++"""Read complete checked-demand node counter growth public output. This script does not run Lean."""
+ from pathlib import Path
+ import argparse
+ import hashlib
+@@ -15,8 +15,8 @@
+ source, printer, log = (item.decode("utf-8") for item in [source_raw, printer_raw, raw])
+ assert hashlib.sha256(source_raw).hexdigest() == args.expected_source_sha256
+ assert 1 <= len(source.splitlines()) <= int("160")
+-namespace = "MicroCFTA.SourceCurrentSameSymbolEdgeControlNodeCounterGrowth."
+-specs = json.loads('[["outcomeState", "def"], ["step_mono", "theorem"], ["execute_mono", "theorem"]]')
++namespace = "MicroCFTA.SourceEqualityNativeDemandNodeCounterGrowth."
++specs = json.loads('[["step_mono", "theorem"], ["execute_mono", "theorem"], ["resume_mono", "theorem"]]')
+ public = re.findall(r"(?m)^\s*(?:(?:noncomputable|unsafe|partial)\s+)?(def|theorem|lemma|abbrev|opaque|instance|structure|inductive)\s+([^\s(\[{:=]+)", source)
+ assert public == [(kind, short) for short, kind in specs]
+ options = ["maxRecDepth 30000", "maxHeartbeats 0", "linter.all true", "pp.explicit true", "pp.fullNames true", "pp.proofs true",
+@@ -24,7 +24,7 @@
+ tail = "\n" + "".join("set_option " + option + "\n" for option in options)
+ for short, _kind in specs:
+     tail += "".join(directive + namespace + short + "\n" for directive in ["#check @", "#print ", "#print axioms "])
+-assert source.rstrip().endswith("end MicroCFTA.SourceCurrentSameSymbolEdgeControlNodeCounterGrowth")
++assert source.rstrip().endswith("end MicroCFTA.SourceEqualityNativeDemandNodeCounterGrowth")
+ assert not re.search(r"(?m)^\s*set_option\s+(?:maxRecDepth|maxHeartbeats)\b", source)
+ assert printer_raw == source_raw + tail.encode("utf-8")
+ for option in options:
+@@ -46,7 +46,7 @@
+         declaration = re.match(r"^\s*(?:(?:noncomputable|unsafe|partial)\s+)?private\s+(?:(?:noncomputable|unsafe|partial)\s+)?(?:def|theorem|lemma|abbrev|opaque|instance|structure|inductive)\s+([^\s(\[{:=]+)", line)
+         assert declaration, ("unsupported private declaration", line)
+         private.append(declaration.group(1))
+-assert private == json.loads('[]'), "Only exact approved private declarations are permitted"
++assert private == json.loads('["lift_native"]'), "Only exact approved private declarations are permitted"
+ starts = []
+ for short, _kind in specs:
+     name_pattern = re.escape(namespace + short) + r"(?:\.\{[^}\n]*\})?"
+@@ -94,7 +94,7 @@
+         assert not axiom_text.strip(), short
+         axioms = set()
+     assert axioms <= allowed, (short, axioms)
+-    stem = "pair-node-counter-growth-" + short
++    stem = "demand-node-counter-growth-" + short
+     artifacts.update({stem + "-public-type.txt": checked, stem + "-printed-public-type.txt": declared,
+         stem + "-body.txt": body, stem + "-axioms.txt": axiom_output})
+     heads.append(dict(head=name, kind=kind, check_print_type_identity=True, check_print_type_byte_identity=byte_identity,
+@@ -116,7 +116,7 @@
+     retained_slices={filename: dict(bytes=len(text.encode("utf-8")), sha256=hashlib.sha256(text.encode("utf-8")).hexdigest())
+         for filename, text in artifacts.items()}, new_metadata_proof_jobs=0)
+ args.output_dir.mkdir(parents=True, exist_ok=True)
+-readback = args.output_dir / "pair-node-counter-growth-full-readback.json"
++readback = args.output_dir / "demand-node-counter-growth-full-readback.json"
+ assert not readback.exists() and all(not (args.output_dir / filename).exists() for filename in artifacts)
+ for filename, text in artifacts.items():
+     (args.output_dir / filename).write_bytes(text.encode("utf-8"))

@@ -1,0 +1,228 @@
+{
+  "run-standalone-proof-evidence.py": [
+    {
+      "basis_expression": "mode in ('normal', 'live')",
+      "selected_expression": "mode in ('normal', 'live')",
+      "unchanged": true
+    },
+    {
+      "basis_expression": "gate['status'] == 'ACCEPTED_WHOLE_REVIEWED_FOR_STANDALONE_DUAL_MODE_EXECUTION'",
+      "selected_expression": "gate['status'] == 'ACCEPTED_WHOLE_REVIEWED_FOR_STANDALONE_DUAL_MODE_EXECUTION'",
+      "unchanged": true
+    },
+    {
+      "basis_expression": "sha(HERE / 'verify-proofs.py') == gate['verifier_sha256']",
+      "selected_expression": "sha(HERE / 'verify-proofs.py') == gate['verifier_sha256']",
+      "unchanged": true
+    },
+    {
+      "basis_expression": "sha(HERE / 'bound-data.json') == gate['bound_data_sha256']",
+      "selected_expression": "sha(HERE / 'bound-data.json') == gate['bound_data_sha256']",
+      "unchanged": true
+    },
+    {
+      "basis_expression": "not report_path.exists()",
+      "selected_expression": "not report_path.exists()",
+      "unchanged": true
+    },
+    {
+      "basis_expression": "result.returncode == 0",
+      "selected_expression": "result.returncode == 0",
+      "unchanged": true
+    },
+    {
+      "basis_expression": "report['status'] == 'PASS' and report['live'] is (mode == 'live')",
+      "selected_expression": "report['status'] == 'PASS' and report['live'] is (mode == 'live')",
+      "unchanged": true
+    },
+    {
+      "basis_expression": "report['actual_jobs'] == int('3') and report['selected_modules'] == 1",
+      "selected_expression": "report['actual_jobs'] == int('3') and report['selected_modules'] == 1",
+      "unchanged": true
+    },
+    {
+      "basis_expression": "report['public_theorems'] == 3 and report['failed_jobs'] == int('0')",
+      "selected_expression": "report['public_definitions'] == 1 and report['public_theorems'] == 2 and (report['failed_jobs'] == int('0'))",
+      "unchanged": false
+    },
+    {
+      "basis_expression": "report['new_lean_lake_jobs'] == 0",
+      "selected_expression": "report['new_lean_lake_jobs'] == 0",
+      "unchanged": true
+    },
+    {
+      "basis_expression": "not path.exists()",
+      "selected_expression": "not path.exists()",
+      "unchanged": true
+    }
+  ],
+  "proof-commit.py": [
+    {
+      "basis_expression": "git('branch', '--show-current').strip() == 'formalize'",
+      "selected_expression": "git('branch', '--show-current').strip() == 'formalize'",
+      "unchanged": true
+    },
+    {
+      "basis_expression": "git('rev-parse', 'HEAD').strip() == START",
+      "selected_expression": "git('rev-parse', 'HEAD').strip() == START",
+      "unchanged": true
+    },
+    {
+      "basis_expression": "not git('diff', '--cached', '--name-only').strip()",
+      "selected_expression": "not git('diff', '--cached', '--name-only').strip()",
+      "unchanged": true
+    },
+    {
+      "basis_expression": "load(HERE / 'root-source-history-review.json')['status'] == 'ACCEPTED_COMPLETE_SELECTED_SOURCE_AND_ACTUAL_HISTORY'",
+      "selected_expression": "load(HERE / 'root-source-history-review.json')['status'] == 'ACCEPTED_COMPLETE_SELECTED_SOURCE_AND_ACTUAL_HISTORY'",
+      "unchanged": true
+    },
+    {
+      "basis_expression": "len(selected) == 1",
+      "selected_expression": "len(selected) == 1",
+      "unchanged": true
+    },
+    {
+      "basis_expression": "set(git('diff', '--name-only').splitlines()) == {'lean/MicroCFTA/Audit.lean'}",
+      "selected_expression": "set(git('diff', '--name-only').splitlines()) == {'lean/MicroCFTA/Audit.lean'}",
+      "unchanged": true
+    },
+    {
+      "basis_expression": "set(git('diff', '--cached', '--name-only').splitlines()) == set(paths)",
+      "selected_expression": "set(git('diff', '--cached', '--name-only').splitlines()) == set(paths)",
+      "unchanged": true
+    },
+    {
+      "basis_expression": "git('rev-parse', proof + '^').strip() == START",
+      "selected_expression": "git('rev-parse', proof + '^').strip() == START",
+      "unchanged": true
+    },
+    {
+      "basis_expression": "set(git('diff-tree', '--no-commit-id', '--name-only', '-r', proof).splitlines()) == set(paths)",
+      "selected_expression": "set(git('diff-tree', '--no-commit-id', '--name-only', '-r', proof).splitlines()) == set(paths)",
+      "unchanged": true
+    },
+    {
+      "basis_expression": "not (HERE / 'proof-commit.txt').exists()",
+      "selected_expression": "not (HERE / 'proof-commit.txt').exists()",
+      "unchanged": true
+    },
+    {
+      "basis_expression": "report['status'] == 'PASS' and report['live'] is live",
+      "selected_expression": "report['status'] == 'PASS' and report['live'] is live",
+      "unchanged": true
+    },
+    {
+      "basis_expression": "report['actual_jobs'] == int('3') and report['selected_modules'] == 1",
+      "selected_expression": "report['actual_jobs'] == int('3') and report['selected_modules'] == 1",
+      "unchanged": true
+    },
+    {
+      "basis_expression": "report['public_theorems'] == 3 and report['failed_jobs'] == int('0')",
+      "selected_expression": "report['public_definitions'] == 1 and report['public_theorems'] == 2 and (report['failed_jobs'] == int('0'))",
+      "unchanged": false
+    },
+    {
+      "basis_expression": "report['audit_dependencies'] == int('75560') and report['new_lean_lake_jobs'] == 0",
+      "selected_expression": "report['audit_dependencies'] == int('75572') and report['new_lean_lake_jobs'] == 0",
+      "unchanged": false
+    },
+    {
+      "basis_expression": "sha(ROOT / path) == pin['sha256']",
+      "selected_expression": "sha(ROOT / path) == pin['sha256']",
+      "unchanged": true
+    },
+    {
+      "basis_expression": "(ROOT / path).read_bytes() == (HERE / (Path(path).stem + '.lean')).read_bytes()",
+      "selected_expression": "(ROOT / path).read_bytes() == (HERE / (Path(path).stem + '.lean')).read_bytes()",
+      "unchanged": true
+    }
+  ],
+  "final-publication.py": [
+    {
+      "basis_expression": "publication['status'] == 'ROOT_ACCEPTED'",
+      "selected_expression": "publication['status'] == 'ROOT_ACCEPTED'",
+      "unchanged": true
+    },
+    {
+      "basis_expression": "publication['publication_scope'] == 'LOCAL_ONLY' and publication['network_publication'] == 'AUTHORIZED_PENDING_ROOT_PUSH'",
+      "selected_expression": "publication['publication_scope'] == 'LOCAL_ONLY' and publication['network_publication'] == 'AUTHORIZED_PENDING_ROOT_PUSH'",
+      "unchanged": true
+    },
+    {
+      "basis_expression": "len(proof) == 40 and set(proof) <= set('0123456789abcdef')",
+      "selected_expression": "len(proof) == 40 and set(proof) <= set('0123456789abcdef')",
+      "unchanged": true
+    },
+    {
+      "basis_expression": "(H / 'starting-head.txt').read_text().strip() == '86b6dd30387c62a1f8f46e1914824695c4a0e908'",
+      "selected_expression": "(H / 'starting-head.txt').read_text().strip() == 'de085728ebe1e905ae339eaba8d26348126e5ada'",
+      "unchanged": false
+    },
+    {
+      "basis_expression": "git('rev-parse', 'HEAD').decode().strip() == (H / 'proof-commit.txt').read_text().strip() == proof",
+      "selected_expression": "git('rev-parse', 'HEAD').decode().strip() == (H / 'proof-commit.txt').read_text().strip() == proof",
+      "unchanged": true
+    },
+    {
+      "basis_expression": "git('branch', '--show-current').decode().strip() == 'formalize'",
+      "selected_expression": "git('branch', '--show-current').decode().strip() == 'formalize'",
+      "unchanged": true
+    },
+    {
+      "basis_expression": "git('rev-parse', 'codex/backup-demand-node-counter-growth-20261023-1545').decode().strip() == (H / 'starting-head.txt').read_text().strip()",
+      "selected_expression": "git('rev-parse', 'codex/backup-pair-node-counter-growth-20261023-1656').decode().strip() == (H / 'starting-head.txt').read_text().strip()",
+      "unchanged": false
+    },
+    {
+      "basis_expression": "git('rev-parse', 'main').decode().strip() == 'ed73f5997f1c07e2961d06e6e290d1de38319dad'",
+      "selected_expression": "git('rev-parse', 'main').decode().strip() == 'ed73f5997f1c07e2961d06e6e290d1de38319dad'",
+      "unchanged": true
+    },
+    {
+      "basis_expression": "git('rev-parse', 'origin/main').decode().strip() == '794903b3fbad3becb8b28736fc33463760731fc7'",
+      "selected_expression": "git('rev-parse', 'origin/main').decode().strip() == '794903b3fbad3becb8b28736fc33463760731fc7'",
+      "unchanged": true
+    },
+    {
+      "basis_expression": "all((n in files or n.startswith(str(H.relative_to(R)) + '/') for n in selected))",
+      "selected_expression": "all((n in files or n.startswith(str(H.relative_to(R)) + '/') for n in selected))",
+      "unchanged": true
+    },
+    {
+      "basis_expression": "not git('status', '--porcelain')",
+      "selected_expression": "not git('status', '--porcelain')",
+      "unchanged": true
+    },
+    {
+      "basis_expression": "index == head_entries",
+      "selected_expression": "index == head_entries",
+      "unchanged": true
+    },
+    {
+      "basis_expression": "kind == 'blob'",
+      "selected_expression": "kind == 'blob'",
+      "unchanged": true
+    },
+    {
+      "basis_expression": "hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\\x00' + data).hexdigest() == blob",
+      "selected_expression": "hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\\x00' + data).hexdigest() == blob",
+      "unchanged": true
+    },
+    {
+      "basis_expression": "('100755' if p.stat().st_mode & 73 else '100644') == mode",
+      "selected_expression": "('100755' if p.stat().st_mode & 73 else '100644') == mode",
+      "unchanged": true
+    },
+    {
+      "basis_expression": "stage == '0'",
+      "selected_expression": "stage == '0'",
+      "unchanged": true
+    },
+    {
+      "basis_expression": "relative in index_names",
+      "selected_expression": "relative in index_names",
+      "unchanged": true
+    }
+  ]
+}

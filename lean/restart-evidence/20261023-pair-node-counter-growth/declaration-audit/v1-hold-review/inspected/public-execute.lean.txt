@@ -1,0 +1,6 @@
+/-- Every finite comparison outcome retains or increases its input node counter. -/
+theorem execute_mono [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (control : SourceCurrentSameSymbolEdgeControl.Control)
+    (state : SourceCurrentSameSymbolEdgeControl.State width) :
+    state.checked.native.machine.heap.nodes.next ≤
+      (outcomeState (SourceCurrentSameSymbolEdgeControl.execute fuel control state)).checked.native.machine.heap.nodes.next

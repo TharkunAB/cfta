@@ -1,0 +1,7 @@
+# H37 pending five closing tools
+
+Guard authored this source-only adaptation after the accepted Root scope. The complete sealed H36 basis and accepted scope package are retained. The selected five programs contain236 lines and59 assertions. Only checkpoint constants, the checkpoint report-field name and ten distinct rejecting job/Audit slots change. Every program has an exact forward/inverse recipe and the same AST after checkpoint literal normalization. verify-seal.py is byte-identical.
+
+The public definition and two theorem names affect only the accepted source-gate head list in preservation. Proof-kind and exact body checks belong to separately reviewed tools. Every old path/hash/mode, Audit import inverse, nine LF prefix inverses, FINDINGS repair-index-first check, frozen registry/override and complete nested component file-set check remains. Both saved proof modes still use explicit --root at cwd=/. Support runs once and excludes only its own support-1 prefix. Seal calls verify-checkpoint before any seal write. No network command is present.
+
+H37 actual source/strict/FULL/history/Audit metrics are not bound here. Ten rejecting tokens remain. Root must retain this pending package, bind only accepted actual records into a fresh package and obtain independent review before installation or execution. No selected import/execution, compiler, Git, network, board or repository action occurred.

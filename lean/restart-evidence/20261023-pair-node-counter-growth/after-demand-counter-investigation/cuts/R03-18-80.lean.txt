@@ -1,0 +1,63 @@
+/-- Retain the scan lists and the current comparison control. -/
+inductive Control : Type 1 where
+  /-- Start a cluster with the retained rows in reverse order. -/
+  | cluster (candidates keptReversed : List Edge)
+  /-- Compare the pivot with the remaining rows. -/
+  | scan (pivot : Edge) (remaining incomparableReversed keptReversed : List Edge)
+  /-- Retain the scan frame while one comparison advances. -/
+  | comparison (pivot candidate : Edge)
+      (tail incomparableReversed keptReversed : List Edge) (inner : PairControl)
+
+/-- Retain the actual state in each scan outcome. -/
+inductive Outcome (width : Nat) : Type 1 where
+  /-- Retain the next control and the full comparison state. -/
+  | yielded (control : Control) (state : PairState width)
+  /-- Return the retained rows and the full comparison state. -/
+  | done (values : List Edge) (state : PairState width)
+  /-- Retain the native failure and the actual state. -/
+  | failed (reason : SourceRecursiveIntersectionKernel.Failure) (state : PairState width)
+  /-- Retain the constraint error and the actual state. -/
+  | constraintError (message : String) (state : PairState width)
+  /-- Retain the blockage, exact residual control and actual state. -/
+  | blocked (reason : PairBlocked) (control : Control) (state : PairState width)
+
+/-- Advance one scan phase or one existing comparison step. -/
+noncomputable def step [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (control : Control) (state : PairState width) : Outcome width :=
+  match control with
+  | .cluster [] keptReversed => .done keptReversed.reverse state
+  | .cluster (pivot :: tail) keptReversed =>
+      .yielded (.scan pivot tail [] keptReversed) state
+  | .scan pivot [] incomparableReversed keptReversed =>
+      .yielded (.cluster incomparableReversed.reverse (pivot :: keptReversed)) state
+  | .scan pivot (candidate :: tail) incomparableReversed keptReversed =>
+      .yielded (.comparison pivot candidate tail incomparableReversed keptReversed
+        (.call (pivot, candidate) [])) state
+  | .comparison pivot candidate tail incomparableReversed keptReversed inner =>
+      match SourceCurrentSameSymbolEdgeControl.step inner state with
+      | .yielded next after =>
+          .yielded (.comparison pivot candidate tail incomparableReversed keptReversed next) after
+      | .done common after =>
+          .yielded
+            (if common.entry.identity = candidate.entry.identity then
+               .scan pivot tail incomparableReversed keptReversed
+             else if common.entry.identity = pivot.entry.identity then
+               .cluster (candidate :: (incomparableReversed.reverse ++ tail)) keptReversed
+             else .scan pivot tail (candidate :: incomparableReversed) keptReversed)
+            after
+      | .failed reason after => .failed reason after
+      | .constraintError message after => .constraintError message after
+      | .blocked reason next after =>
+          .blocked reason (.comparison pivot candidate tail incomparableReversed keptReversed next) after
+
+/-- Run at most the supplied number of scan control steps. -/
+noncomputable def execute [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] :
+    Nat → Control → PairState width → Outcome width
+  | 0, control, state => .yielded control state
+  | fuel + 1, control, state =>
+      match step control state with
+      | .yielded next after => execute fuel next after
+      | .done values after => .done values after
+      | .failed reason after => .failed reason after
+      | .constraintError message after => .constraintError message after
+      | .blocked reason next after => .blocked reason next after

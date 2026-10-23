@@ -1,0 +1,15 @@
+inductive Status (Value : Type) where
+  | suspended
+  | evaluating
+  | returned (value : Value)
+
+/-- A thunk retains its original request in every evaluation phase. -/
+structure Cell (Request Value : Type) where
+  request : Request
+  status : Status Value
+
+/-- The effective table stores logical thunk identities. -/
+structure State (Key Request Value : Type) where
+  table : Table Key Nat
+  cells : Table Nat (Cell Request Value)
+  next : Nat

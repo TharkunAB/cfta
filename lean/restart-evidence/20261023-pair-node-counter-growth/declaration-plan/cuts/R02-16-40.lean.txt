@@ -1,0 +1,25 @@
+/-- One checked-demand step retains or increases its actual constructor node counter. -/
+theorem step_mono [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (control : SourceEqualityNativeDemand.Control Output)
+    (state : SourceEqualityNativeDemand.State width) :
+    state.native.machine.heap.nodes.next ≤
+      (SourceEqualityNativeDemand.step control state).state.native.machine.heap.nodes.next := by
+  cases control with
+  | code code =>
+      have nativeGrowth : state.native.machine.heap.nodes.next ≤
+          (SourceRecursiveIntersectionNative.step SourceEqualityConstraintConstructors.top
+            SourceEqualityPCSNativeEdge.conjoin code state.native).state.machine.heap.nodes.next := by
+        exact SourceRecursiveIntersectionNativeNodeCounterGrowth.step_mono
+          SourceEqualityConstraintConstructors.top SourceEqualityPCSNativeEdge.conjoin code state.native
+      cases code with
+      | edge request next =>
+          rw [SourceEqualityNativeDemandHeap.step_edge_heap]
+          simpa only [SourceRecursiveIntersectionNative.edge_step_machine] using nativeGrowth
+      | pure | fail | work | enter | read | optionalBinder | node | finishNode | finishEdge =>
+          simpa only [SourceEqualityNativeDemand.step, lift_native] using nativeGrowth
+  | edgeBody request next =>
+      change state.native.machine.heap.nodes.next ≤
+        (SourceEqualityNativeDemand.body request next state).state.native.machine.heap.nodes.next
+      rw [SourceEqualityNativeDemandOperations.body_native]
+      exact Nat.le_refl _
+

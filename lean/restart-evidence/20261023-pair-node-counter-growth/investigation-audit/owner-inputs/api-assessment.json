@@ -1,0 +1,135 @@
+{
+  "status": "PLAIN_SOURCE_ASSESSMENT_ONLY_NO_DECLARATIONS",
+  "whole_controls_read": [
+    {
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentSameSymbolEdgeControl.lean",
+      "lines": 334
+    },
+    {
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentOriginalRowClusterScan.lean",
+      "lines": 129
+    }
+  ],
+  "existing_missing_API": {
+    "pair_outcome_state_accessor": false,
+    "scan_outcome_state_accessor": false,
+    "pair_resume_executor": false,
+    "scan_resume_executor": false
+  },
+  "recommended_first_component": {
+    "scope": "Pair control input-to-actual-outcome node-counter lower bounds",
+    "inputs": [
+      "Both existing DecidableEq instances",
+      "arbitrary width",
+      "arbitrary pair Control and full pair State",
+      "arbitrary finite fuel for execute"
+    ],
+    "result_projection": "The actual stored pair State checked.native.machine.heap.nodes.next in all five outcome tags.",
+    "fixed_result_type": "Pair result is the concrete Edge, not an arbitrary Output.",
+    "proposed_public_API_kinds": [
+      "One total full-state projection definition in the new module",
+      "step_mono theorem",
+      "execute_mono theorem"
+    ],
+    "new_private_helper_required": false,
+    "accessor_instances": [],
+    "theorem_instances": "Both equality instances inline; no global instance.",
+    "source_target": [
+      90,
+      125
+    ],
+    "source_hard_cap_proposal": 160,
+    "fresh_exact_declaration_gate_required": true
+  },
+  "accessor_decision": {
+    "recommended": "One public total five-tag outcomeState projection in the new module namespace, returning the existing full pair State. It does not edit an earlier module.",
+    "alternative": "Repeat an explicit total five-tag match in each public counter statement. This needs no named accessor, but duplicates the projection in the step and execute statements.",
+    "private_accessor_in_public_type": "Reject. It would expose a private name in the public TYPE.",
+    "no_new_packet_type_or_generic_projection_class": true
+  },
+  "pair_step_cases": {
+    "call": "lookupOrInsert updates only the separate memo field. checked is the original state by record projection.",
+    "demand": "Split the actual FlatMemoThunk observation: absent/evaluate/busy/ready. Every outer checked field is unchanged, including invalid or busy memo states.",
+    "order": "Both numeric-order branches retain the same full state.",
+    "native": "Use H36 step_mono at the actual supplied checked body and checked state. Split the same actual checked step across all five outcomes. Each outer checked field is that exact returned checked state.",
+    "ret": "Split pending as nil or cons. The empty case is done; finishing a pending memo updates only memo."
+  },
+  "pair_execute_IH": {
+    "target": "fuel",
+    "fixed": [
+      "width",
+      "both existing equality instances"
+    ],
+    "generalized": [
+      "actual pair Control",
+      "complete pair State"
+    ],
+    "zero": "yielded with the same input state",
+    "successor": "Derive the first-step bound, split the actual five-tag step, and compose only the yielded branch with predecessor fuel at its exact next control and after state.",
+    "terminal_tags_retained": [
+      "done",
+      "failed",
+      "constraintError",
+      "blocked"
+    ],
+    "no_supplied_IH_or_counter_oracle": true
+  },
+  "later_scan_component": {
+    "scope": "Same unconditional step and execute lower bounds over the actual pair State in all five scan outcomes.",
+    "proposed_public_API_kinds": [
+      "One total full-state projection definition in the new module",
+      "step_mono theorem",
+      "execute_mono theorem"
+    ],
+    "inputs": [
+      "Both existing equality instances",
+      "arbitrary width",
+      "actual Scan.Control",
+      "full pair State",
+      "arbitrary finite fuel"
+    ],
+    "source_target": [
+      80,
+      115
+    ],
+    "source_hard_cap_proposal": 160,
+    "pure_cases": "cluster nil/cons and scan nil/cons retain the exact state.",
+    "comparison_case": "Use the pair step bound on the same inner control and state. All five actual pair outcomes forward their exact after state. The done branch yields a conditional residual control but still the exact same after state.",
+    "no_ID_branch_split_needed_for_state_projection": true,
+    "candidate_first_promotion_and_reversed_accumulators_unchanged": true,
+    "yielded_IH": "Generalize scan Control and full pair State over fuel. Recurse only on the exact yielded next/after with predecessor fuel.",
+    "resume_head_not_proposed": "There is no existing Scan.resume function."
+  },
+  "public_immediate_APIs": {
+    "pair_state_fields": [
+      "SourceCurrentSameSymbolEdgeControl.State.checked",
+      "SourceCurrentSameSymbolEdgeControl.State.memo"
+    ],
+    "projection_equalities": "The enclosing memo-only record updates retain checked definitionally. No new Valid or cache-retention theorem is needed.",
+    "FlatMemoThunk": [
+      "State",
+      "lookupOrInsert",
+      "Observation",
+      "demand",
+      "finish"
+    ],
+    "native_bound": "SourceEqualityNativeDemandNodeCounterGrowth.step_mono",
+    "conditional_miss_readback_not_used": "The existing public miss_readback requires Valid, both misses and observed done. It cannot replace an unconditional outcome bound.",
+    "private_H7_names_not_called": [
+      "tail_done",
+      "finish_table",
+      "ret_done",
+      "native_done",
+      "start_miss"
+    ]
+  },
+  "obstructions_and_limits": [
+    "The exact public projection API must be chosen before statement/body authoring. There is no existing accessor to project silently.",
+    "No decreasing actual branch was found in these control definitions. This is a source route, not a new kernel proof.",
+    "Strict growth fails for fuel zero and memo-only/list transitions. Whole checked-state equality also fails for actual allocating work.",
+    "Later H23 composition must use its actual finite sequence of Scan.execute witnesses and its exact checked execute2 construction, without another run.",
+    "An operational before-to-after bound does not derive source.nodes.next <= before.nodes.next. Grows and Kernel.Extension do not supply that counter field.",
+    "No upper resource, new Room, WordRanges, domain Trace, completion, admission, language, Mu, Haskell or public-pass result is produced."
+  ],
+  "mathematical_header_body_or_prepared_program_authored": false
+}

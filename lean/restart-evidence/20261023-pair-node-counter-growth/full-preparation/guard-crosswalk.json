@@ -1,0 +1,514 @@
+{
+  "status": "ALL_72_BASIS_ASSERTIONS_RETAINED_AFTER_APPROVED_LITERAL_ADAPTERS",
+  "assertions": [
+    {
+      "file": "prepare-full.py",
+      "basis_line": 9,
+      "expression": "all(len(value) == 64 and set(value) <= set('0123456789abcdef') for value in [expected_sha, expected_context_sha, expected_contracts_sha])",
+      "selected_after_approved_literal_adapters": "all(len(value) == 64 and set(value) <= set('0123456789abcdef') for value in [expected_sha, expected_context_sha, expected_contracts_sha])",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 14,
+      "expression": "hashlib.sha256(source).hexdigest() == expected_sha",
+      "selected_after_approved_literal_adapters": "hashlib.sha256(source).hexdigest() == expected_sha",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 15,
+      "expression": "len(source.splitlines()) == int(expected_lines) and 1 <= int(expected_lines) <= 160",
+      "selected_after_approved_literal_adapters": "len(source.splitlines()) == int(expected_lines) and 1 <= int(expected_lines) <= 160",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 18,
+      "expression": "receipt['exit_code'] == 0 and receipt['observed_at']",
+      "selected_after_approved_literal_adapters": "receipt['exit_code'] == 0 and receipt['observed_at']",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 19,
+      "expression": "receipt['sha256'] == expected_sha",
+      "selected_after_approved_literal_adapters": "receipt['sha256'] == expected_sha",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 20,
+      "expression": "(receipt_path.parent / receipt['source']).resolve() == source_path.resolve()",
+      "selected_after_approved_literal_adapters": "(receipt_path.parent / receipt['source']).resolve() == source_path.resolve()",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 21,
+      "expression": "Path(receipt['command'][-1]).resolve() == source_path.resolve()",
+      "selected_after_approved_literal_adapters": "Path(receipt['command'][-1]).resolve() == source_path.resolve()",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 22,
+      "expression": "'-Dlinter.all=true' in receipt['command']",
+      "selected_after_approved_literal_adapters": "'-Dlinter.all=true' in receipt['command']",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 23,
+      "expression": "(receipt_path.parent / receipt['log']).resolve() == (HERE / (stem + '.log')).resolve()",
+      "selected_after_approved_literal_adapters": "(receipt_path.parent / receipt['log']).resolve() == (HERE / (stem + '.log')).resolve()",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 24,
+      "expression": "(HERE / (stem + '.log')).read_bytes() == b''",
+      "selected_after_approved_literal_adapters": "(HERE / (stem + '.log')).read_bytes() == b''",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 27,
+      "expression": "hashlib.sha256(contracts_raw).hexdigest() == expected_contracts_sha",
+      "selected_after_approved_literal_adapters": "hashlib.sha256(contracts_raw).hexdigest() == expected_contracts_sha",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 30,
+      "expression": "hashlib.sha256(layout_raw).hexdigest() == '0469db607f9204634b631ad17b420f051f2e073ac1f7f1cb19b23001baeec57e'",
+      "selected_after_approved_literal_adapters": "hashlib.sha256(layout_raw).hexdigest() == 'bafb3250634ad76bb14933097e4eae22e2c7ce29690ab3bbc2018a84b53d6fb5'",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 32,
+      "expression": "len(contracts) == int(expected_contracts_count) == 7",
+      "selected_after_approved_literal_adapters": "len(contracts) == int(expected_contracts_count) == 7",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 38,
+      "expression": "gate['status'] == 'ACCEPTED_EXACT_DECLARATIONS_BEFORE_BODY'",
+      "selected_after_approved_literal_adapters": "gate['status'] == 'ACCEPTED_EXACT_DECLARATIONS_BEFORE_BODY'",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 39,
+      "expression": "gate['module'] == name and gate['public_heads'] == [short for short, _kind in specs]",
+      "selected_after_approved_literal_adapters": "gate['module'] == name and gate['public_heads'] == [short for short, _kind in specs] and gate['public_kinds'] == [list(spec) for spec in specs]",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 40,
+      "expression": "gate['contracts_sha256'] == expected_contracts_sha",
+      "selected_after_approved_literal_adapters": "gate['contracts_sha256'] == expected_contracts_sha",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 41,
+      "expression": "gate['insertion_map_sha256'] == hashlib.sha256(layout_raw).hexdigest()",
+      "selected_after_approved_literal_adapters": "gate['insertion_map_sha256'] == hashlib.sha256(layout_raw).hexdigest()",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 42,
+      "expression": "gate['whole_source_hard_stop'] == 160 and gate['default_declaration_limits'] and gate['all_linters']",
+      "selected_after_approved_literal_adapters": "gate['whole_source_hard_stop'] == 160 and gate['default_declaration_limits'] and gate['all_linters']",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 43,
+      "expression": "gate['root_all_public_and_private_header_types_read'] and gate['root_all_schema_layout_owner_attachment_and_body_inventory_metadata_read']",
+      "selected_after_approved_literal_adapters": "gate['root_all_public_and_private_header_types_read'] and gate['root_all_schema_layout_owner_attachment_and_body_inventory_metadata_read']",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 44,
+      "expression": "gate['root_all_ten_scoped_introduced_types_read'] and gate['root_all_five_specialized_equation_types_read']",
+      "selected_after_approved_literal_adapters": "gate['root_all_28_scoped_introduced_types_read'] and gate['root_all_14_specialized_equation_types_read']",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 45,
+      "expression": "gate['root_complete_generalized_fuel_IH_three_lines_read'] and gate['restricted_induction_call'] == 'ih next after'",
+      "selected_after_approved_literal_adapters": "gate['root_complete_generalized_fuel_IH_three_lines_read'] and gate['restricted_induction_call'] == 'ih next after'",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 46,
+      "expression": "gate['external_native_step_mono_is_not_local_recursion']",
+      "selected_after_approved_literal_adapters": "gate['external_checked_step_mono_is_not_local_recursion']",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 47,
+      "expression": "gate['root_all_15_relevant_live_API_cuts_257_lines_read'] and gate['root_all_ten_public_import_routes_checked']",
+      "selected_after_approved_literal_adapters": "gate['root_all_11_relevant_live_API_cuts_241_lines_read'] and gate['root_all_seven_public_import_routes_checked']",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 48,
+      "expression": "gate['body_haves'] == 2 and gate['body_lets'] == gate['body_obtains'] == 0 and gate['helpers'] == 1",
+      "selected_after_approved_literal_adapters": "gate['body_haves'] == 2 and gate['body_lets'] == gate['body_obtains'] == 0 and gate['helpers'] == 0",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 49,
+      "expression": "gate['induction'] and gate['recursive_calls'] == gate['termination_by_count'] == 0",
+      "selected_after_approved_literal_adapters": "gate['induction'] and gate['recursive_calls'] == gate['termination_by_count'] == 0",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 50,
+      "expression": "gate['root_whole_context_lines_read'] == 8 and gate['root_whole_public_header_lines_read'] == 17",
+      "selected_after_approved_literal_adapters": "gate['root_whole_context_lines_read'] == 9 and gate['root_whole_public_header_lines_read'] == 15",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 51,
+      "expression": "gate['root_whole_private_header_lines_read'] == 4 and gate['root_whole_local_compiled_fragment_lines_read'] == 5",
+      "selected_after_approved_literal_adapters": "gate['root_whole_private_header_lines_read'] == 0 and gate['root_whole_local_compiled_fragment_lines_read'] == 5",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 52,
+      "expression": "gate['private_helpers'] == ['lift_native']",
+      "selected_after_approved_literal_adapters": "gate['private_helpers'] == []",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 53,
+      "expression": "re.fullmatch(r'[0-9a-f]{64}', gate['independent_review_sha256'])",
+      "selected_after_approved_literal_adapters": "re.fullmatch(r'[0-9a-f]{64}', gate['independent_review_sha256'])",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 55,
+      "expression": "source.startswith(context)",
+      "selected_after_approved_literal_adapters": "source.startswith(context)",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 56,
+      "expression": "hashlib.sha256(context).hexdigest() == expected_context_sha",
+      "selected_after_approved_literal_adapters": "hashlib.sha256(context).hexdigest() == expected_context_sha",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 57,
+      "expression": "len(context.splitlines()) == int(expected_context_lines) == 8",
+      "selected_after_approved_literal_adapters": "len(context.splitlines()) == int(expected_context_lines) == 9",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 63,
+      "expression": "positions == sorted(positions)",
+      "selected_after_approved_literal_adapters": "positions == sorted(positions)",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 64,
+      "expression": "source.rstrip().endswith(('end MicroCFTA.' + name).encode())",
+      "selected_after_approved_literal_adapters": "source.rstrip().endswith(('end MicroCFTA.' + name).encode())",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 65,
+      "expression": "b'set_option maxRecDepth' not in source and b'set_option maxHeartbeats' not in source",
+      "selected_after_approved_literal_adapters": "b'set_option maxRecDepth' not in source and b'set_option maxHeartbeats' not in source",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 72,
+      "expression": "len(tail.splitlines()) == 11 + 3 * len(specs) == 20",
+      "selected_after_approved_literal_adapters": "len(tail.splitlines()) == 11 + 3 * len(specs) == 20",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 73,
+      "expression": "tail.encode() == (HERE / 'full-preparation/diagnostic-tail.lean.txt').read_bytes()",
+      "selected_after_approved_literal_adapters": "tail.encode() == (HERE / 'full-preparation/diagnostic-tail.lean.txt').read_bytes()",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 77,
+      "expression": "not snapshot.exists() and not printer.exists() and not actual_headers.exists()",
+      "selected_after_approved_literal_adapters": "not snapshot.exists() and not printer.exists() and not actual_headers.exists()",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 35,
+      "expression": "filename == record['file'] and hashlib.sha256(fragment).hexdigest() == expected_digest == record['sha256']",
+      "selected_after_approved_literal_adapters": "filename == record['file'] and hashlib.sha256(fragment).hexdigest() == expected_digest == record['sha256']",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 36,
+      "expression": "len(fragment.splitlines()) == record['lines']",
+      "selected_after_approved_literal_adapters": "len(fragment.splitlines()) == record['lines']",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "prepare-full.py",
+      "basis_line": 61,
+      "expression": "source.count(header) == 1 and source.index(header) >= len(context)",
+      "selected_after_approved_literal_adapters": "source.count(header) == 1 and source.index(header) >= len(context)",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "check-full-public.py",
+      "basis_line": 13,
+      "expression": "re.fullmatch(r\"[0-9a-f]{64}\", args.expected_source_sha256)",
+      "selected_after_approved_literal_adapters": "re.fullmatch(r\"[0-9a-f]{64}\", args.expected_source_sha256)",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "check-full-public.py",
+      "basis_line": 16,
+      "expression": "hashlib.sha256(source_raw).hexdigest() == args.expected_source_sha256",
+      "selected_after_approved_literal_adapters": "hashlib.sha256(source_raw).hexdigest() == args.expected_source_sha256",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "check-full-public.py",
+      "basis_line": 17,
+      "expression": "1 <= len(source.splitlines()) <= int(\"160\")",
+      "selected_after_approved_literal_adapters": "1 <= len(source.splitlines()) <= int(\"160\")",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "check-full-public.py",
+      "basis_line": 21,
+      "expression": "public == [(kind, short) for short, kind in specs]",
+      "selected_after_approved_literal_adapters": "public == [(kind, short) for short, kind in specs]",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "check-full-public.py",
+      "basis_line": 27,
+      "expression": "source.rstrip().endswith(\"end MicroCFTA.SourceEqualityNativeDemandNodeCounterGrowth\")",
+      "selected_after_approved_literal_adapters": "source.rstrip().endswith(\"end MicroCFTA.SourceCurrentSameSymbolEdgeControlNodeCounterGrowth\")",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "check-full-public.py",
+      "basis_line": 28,
+      "expression": "not re.search(r\"(?m)^\\s*set_option\\s+(?:maxRecDepth|maxHeartbeats)\\b\", source)",
+      "selected_after_approved_literal_adapters": "not re.search(r\"(?m)^\\s*set_option\\s+(?:maxRecDepth|maxHeartbeats)\\b\", source)",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "check-full-public.py",
+      "basis_line": 29,
+      "expression": "printer_raw == source_raw + tail.encode(\"utf-8\")",
+      "selected_after_approved_literal_adapters": "printer_raw == source_raw + tail.encode(\"utf-8\")",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "check-full-public.py",
+      "basis_line": 35,
+      "expression": "not re.search(r\"sorryAx|\\b(?:warning|error)(?:\\([^)]*\\))?:|failed to pretty print|pp\\.rawOnError|maximum recursion depth|maximum number of heartbeats|\u22ef|\u2026|\\.\\.\\.\", log)",
+      "selected_after_approved_literal_adapters": "not re.search(r\"sorryAx|\\b(?:warning|error)(?:\\([^)]*\\))?:|failed to pretty print|pp\\.rawOnError|maximum recursion depth|maximum number of heartbeats|\u22ef|\u2026|\\.\\.\\.\", log)",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "check-full-public.py",
+      "basis_line": 37,
+      "expression": "receipt[\"exit_code\"] == 0 and receipt[\"observed_at\"]",
+      "selected_after_approved_literal_adapters": "receipt[\"exit_code\"] == 0 and receipt[\"observed_at\"]",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "check-full-public.py",
+      "basis_line": 38,
+      "expression": "(args.receipt.parent / receipt[\"source\"]).resolve() == args.printer.resolve()",
+      "selected_after_approved_literal_adapters": "(args.receipt.parent / receipt[\"source\"]).resolve() == args.printer.resolve()",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "check-full-public.py",
+      "basis_line": 39,
+      "expression": "(args.receipt.parent / receipt[\"log\"]).resolve() == args.raw.resolve()",
+      "selected_after_approved_literal_adapters": "(args.receipt.parent / receipt[\"log\"]).resolve() == args.raw.resolve()",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "check-full-public.py",
+      "basis_line": 40,
+      "expression": "receipt[\"sha256\"] == hashlib.sha256(printer_raw).hexdigest()",
+      "selected_after_approved_literal_adapters": "receipt[\"sha256\"] == hashlib.sha256(printer_raw).hexdigest()",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "check-full-public.py",
+      "basis_line": 41,
+      "expression": "Path(receipt[\"command\"][-1]).resolve() == args.printer.resolve()",
+      "selected_after_approved_literal_adapters": "Path(receipt[\"command\"][-1]).resolve() == args.printer.resolve()",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "check-full-public.py",
+      "basis_line": 42,
+      "expression": "\"-Dlinter.all=true\" in receipt[\"command\"]",
+      "selected_after_approved_literal_adapters": "\"-Dlinter.all=true\" in receipt[\"command\"]",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "check-full-public.py",
+      "basis_line": 49,
+      "expression": "private == json.loads('[\"lift_native\"]')",
+      "selected_after_approved_literal_adapters": "private == json.loads('[]')",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "check-full-public.py",
+      "basis_line": 56,
+      "expression": "starts == sorted(starts, key=lambda match: match.start()) and not log[:starts[0].start()].strip()",
+      "selected_after_approved_literal_adapters": "starts == sorted(starts, key=lambda match: match.start()) and not log[:starts[0].start()].strip()",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "check-full-public.py",
+      "basis_line": 120,
+      "expression": "not readback.exists() and all(not (args.output_dir / filename).exists() for filename in artifacts)",
+      "selected_after_approved_literal_adapters": "not readback.exists() and all(not (args.output_dir / filename).exists() for filename in artifacts)",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "check-full-public.py",
+      "basis_line": 31,
+      "expression": "printer.splitlines().count(\"set_option \" + option) == 1",
+      "selected_after_approved_literal_adapters": "printer.splitlines().count(\"set_option \" + option) == 1",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "check-full-public.py",
+      "basis_line": 54,
+      "expression": "len(found) == 1",
+      "selected_after_approved_literal_adapters": "len(found) == 1",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "check-full-public.py",
+      "basis_line": 65,
+      "expression": "len(delimiters) == 1",
+      "selected_after_approved_literal_adapters": "len(delimiters) == 1",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "check-full-public.py",
+      "basis_line": 68,
+      "expression": "len(reports) == 1",
+      "selected_after_approved_literal_adapters": "len(reports) == 1",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "check-full-public.py",
+      "basis_line": 78,
+      "expression": "len(candidates) == 1",
+      "selected_after_approved_literal_adapters": "len(candidates) == 1",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "check-full-public.py",
+      "basis_line": 81,
+      "expression": "normalize(checked) == normalize(declared)",
+      "selected_after_approved_literal_adapters": "normalize(checked) == normalize(declared)",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "check-full-public.py",
+      "basis_line": 87,
+      "expression": "body.startswith(\"fun \") and len(body) > 50",
+      "selected_after_approved_literal_adapters": "body.startswith(\"fun \") and len(body) > 50",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "check-full-public.py",
+      "basis_line": 96,
+      "expression": "axioms <= allowed",
+      "selected_after_approved_literal_adapters": "axioms <= allowed",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "check-full-public.py",
+      "basis_line": 34,
+      "expression": "printer.splitlines().count(directive + namespace + short) == 1",
+      "selected_after_approved_literal_adapters": "printer.splitlines().count(directive + namespace + short) == 1",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "check-full-public.py",
+      "basis_line": 47,
+      "expression": "declaration",
+      "selected_after_approved_literal_adapters": "declaration",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "check-full-public.py",
+      "basis_line": 84,
+      "expression": "spelling not in checked + declared",
+      "selected_after_approved_literal_adapters": "spelling not in checked + declared",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "check-full-public.py",
+      "basis_line": 86,
+      "expression": "not re.search(re.escape(namespace + helper) + r\"(?![\\w'])\", checked + declared)",
+      "selected_after_approved_literal_adapters": "not re.search(re.escape(namespace + helper) + r\"(?![\\w'])\", checked + declared)",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "check-full-public.py",
+      "basis_line": 91,
+      "expression": "report",
+      "selected_after_approved_literal_adapters": "report",
+      "all_conjuncts_retained": true
+    },
+    {
+      "file": "check-full-public.py",
+      "basis_line": 94,
+      "expression": "not axiom_text.strip()",
+      "selected_after_approved_literal_adapters": "not axiom_text.strip()",
+      "all_conjuncts_retained": true
+    }
+  ],
+  "new_strengthening": [
+    "Root accepted all five accessor equation types",
+    "Root exact public kind inventory"
+  ],
+  "nonliteral_change": "Replace the common theorem attachment with exact three approved filename/byte-attachment pairs. Preserve unique header counts, context positions and sorted order."
+}

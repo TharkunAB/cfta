@@ -1,0 +1,16 @@
+/-- Both final counters equal their initial counters plus actual recorded misses. -/
+theorem run_next (work : Work Symbol Guard Result) (state : State Symbol Guard) :
+    (run work state).2.nodes.next = state.nodes.next + nodeReservations (observe work state) ∧
+    (run work state).2.edges.next = state.edges.next + edgeReservations (observe work state) := by
+  induction work generalizing state with
+  | pure value => simp [run, observe, nodeReservations, edgeReservations]
+  | node key identify next ih =>
+      have tail := ih (nodeStep key identify state).1 (nodeStep key identify state).2
+      have one := nodeStep_next key identify state
+      simp only [run, observe, nodeReservations, edgeReservations]
+      omega
+  | edge key identify next ih =>
+      have tail := ih (edgeStep key identify state).1 (edgeStep key identify state).2
+      have one := edgeStep_next key identify state
+      simp only [run, observe, nodeReservations, edgeReservations]
+      omega
