@@ -9,6 +9,7 @@ import qualified Data.CFTA.Gen.Equality.RankDecodingSpec
 import qualified Data.CFTA.Gen.Equality.RecursiveGenSpec
 import qualified Data.CFTA.Gen.Equality.SimpleSpec
 import qualified Data.CFTA.Gen.Equality.TypedExpressionGenSpec
+import qualified Data.CFTA.Gen.ManySortedSpec
 import qualified Data.CFTA.Gen.ReferenceSpec
 import qualified Data.CFTA.Gen.Synthesis.StatesSpec
 import qualified Data.CFTA.Gen.SynthesisSpec
@@ -29,6 +30,7 @@ main =
         Data.CFTA.Gen.Equality.RecursiveGenSpec.spec
         Data.CFTA.Gen.Equality.SimpleSpec.spec
         Data.CFTA.Gen.Equality.TypedExpressionGenSpec.spec
+        Data.CFTA.Gen.ManySortedSpec.spec
         Data.CFTA.Gen.ReferenceSpec.spec
         Data.CFTA.Gen.SynthesisSpec.spec
         Data.CFTA.Gen.Synthesis.StatesSpec.spec
