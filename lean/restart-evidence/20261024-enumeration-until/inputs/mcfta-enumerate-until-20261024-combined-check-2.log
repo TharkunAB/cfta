@@ -1,0 +1,55 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-R", "/tmp/mcfta-enumerate-until-20261024/combined-check-2", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-enumerate-until-20261024/combined-check-2/checked.lean"], "exit_code": 1, "raw_bytes": 2376, "raw_sha256": "7ebf4cba73fc6d29e5a17f1f8ca402ce94e2396e5d11c3b513dcda5f4d44a31c", "source_sha256": "732eb0969c5d46c677d6d2525014221529e79c42291656487a0e88b26cc6bbbe"}
+/tmp/mcfta-enumerate-until-20261024/combined-check-2/checked.lean:421:26: error: Type mismatch: After simplification, term
+  Eq.symm
+    (empty_observation graph oracle observer oracleState (fuel + 1) (fuel + 1) uv node scs scanned readState view
+      reading fun fragment beforeState => do
+      let __x ← oracle beforeState uv (Sum.inl fragment)
+      match __x with
+        | (afterReject, afterState) => do
+          require !afterReject
+          enumerateFully graph order oracle fuel afterState
+          next none)
+ has type
+  [] =
+    successes
+      ((oracle oracleState uv (Sum.inr node) >>= fun decision => do
+            require !decision.fst
+            let fragment ← enumerateOut graph (fuel + 1) uv
+            let __x ← oracle decision.snd uv (Sum.inl fragment)
+            require !__x.fst
+            enumerateFully graph order oracle fuel __x.snd
+            next none)
+          readState).run
+but is expected to have type
+  successes ((reject >>= next) readState).run =
+    successes
+      (((do
+              let __x ← oracle oracleState uv (Sum.inr node)
+              require !__x.fst
+              let fragment ← enumerateOut graph (fuel + 1) uv
+              let __x ← oracle __x.snd uv (Sum.inl fragment)
+              require !__x.fst
+              enumerateFully graph order oracle fuel __x.snd) >>=
+            fun x => next none)
+          readState).run
+/tmp/mcfta-enumerate-until-20261024/combined-check-2/checked.lean:430:37: error: This simp argument is unused:
+  view
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [↓reduceIte, pure_bind, enumerateOutWith_eager, bind_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-enumerate-until-20261024/combined-check-2/checked.lean:430:43: error: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [view, pure_bind, enumerateOutWith_eager, bind_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-enumerate-until-20261024/combined-check-2/checked.lean:430:55: error: This simp argument is unused:
+  pure_bind
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [view, ↓reduceIte, enumerateOutWith_eager, bind_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

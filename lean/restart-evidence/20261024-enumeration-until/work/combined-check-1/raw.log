@@ -1,0 +1,428 @@
+/tmp/mcfta-enumerate-until-20261024/combined-check-1/checked.lean:185:42: error: unsolved goals
+Symbol Guard OracleState : Type
+graph : Graph Symbol Guard
+rule : OracleState → Nat → Bool
+narrow : OracleState → Nat → Nat → Nat
+expandAt : Nat → NodeExpansion Symbol Guard
+order : OracleState → List Nat → Option Nat
+oracle : Oracle Symbol Guard OracleState
+fuel : Nat
+oracleState : OracleState
+before : State Symbol Guard
+nonempty : (remaining graph before).isEmpty = false
+accepted : (remaining graph before).all (rule oracleState) = true
+nonempty' : remaining graph before ≠ []
+accepted' : ∀ (uv : Nat), uv ∈ remaining graph before → rule oracleState uv = true
+⊢ (if ∀ (x : Nat), x ∈ remaining graph before → rule oracleState x = true then StateT.pure (some oracleState)
+      else
+        StateT.bind (findExpandable graph (fuel + 1)) fun __do_lift =>
+          match pickNext (order oracleState) __do_lift with
+          | Next.done => StateT.pure none
+          | Next.stuck => reject
+          | Next.expand uv =>
+            StateT.bind (getValue (fuel + 1) uv) fun __do_lift =>
+              match __do_lift with
+              | UVarValue.unenumerated (some node) scs =>
+                StateT.bind (EnumerationDriver.checkRepeated graph (fuel + 1) uv node scs) fun repeated =>
+                  if repeated = true then enumerateUntil graph (some rule) narrow expandAt order oracle fuel oracleState
+                  else
+                    match graph.node (narrow oracleState uv node) with
+                    | Node.empty => reject
+                    | x =>
+                      if narrow oracleState uv node = node then
+                        StateT.bind (oracle oracleState uv (Sum.inr (narrow oracleState uv node))) fun __x =>
+                          StateT.bind (require !__x.fst) fun __r =>
+                            StateT.bind (enumerateOutWith graph (expandAt (fuel + 1)) (fuel + 1) uv) fun fragment =>
+                              StateT.bind (oracle __x.snd uv (Sum.inl fragment)) fun __x =>
+                                StateT.bind (require !__x.fst) fun __r =>
+                                  enumerateUntil graph (some rule) narrow expandAt order oracle fuel __x.snd
+                      else
+                        StateT.bind (representative (fuel + 1) uv) fun root =>
+                          StateT.bind (setValue root (UVarValue.unenumerated (some (narrow oracleState uv node)) scs))
+                            fun __r =>
+                            StateT.bind (oracle oracleState uv (Sum.inr (narrow oracleState uv node))) fun __x =>
+                              StateT.bind (require !__x.fst) fun __r =>
+                                StateT.bind (enumerateOutWith graph (expandAt (fuel + 1)) (fuel + 1) uv) fun fragment =>
+                                  StateT.bind (oracle __x.snd uv (Sum.inl fragment)) fun __x =>
+                                    StateT.bind (require !__x.fst) fun __r =>
+                                      enumerateUntil graph (some rule) narrow expandAt order oracle fuel __x.snd
+              | x => reject)
+      before =
+    [Except.ok (some oracleState, before)]
+/tmp/mcfta-enumerate-until-20261024/combined-check-1/checked.lean:188:35: error: This simp argument is unused:
+  accepted'
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [enumerateUntil, nonempty', bind, get, getThe, MonadStateOf.get, pure, StateT.bind, StateT.get,
+    StateT.pure, ExceptT.bind, ExceptT.bindCont, ExceptT.pure, ExceptT.mk]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-enumerate-until-20261024/combined-check-1/checked.lean:189:35: error: This simp argument is unused:
+  StateT.pure
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [enumerateUntil, nonempty', accepted', bind, get, getThe, MonadStateOf.get, pure, StateT.bind,
+    StateT.get, ExceptT.bind, ExceptT.bindCont, ExceptT.pure, ExceptT.mk]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-enumerate-until-20261024/combined-check-1/checked.lean:231:21: error: unsolved goals
+case cons.error
+Symbol Guard α β : Type
+action : EnumerateM Symbol Guard α
+next : α → EnumerateM Symbol Guard β
+before : State Symbol Guard
+rows : List (Except Error (α × State Symbol Guard))
+ih :
+  successes
+      (List.flatMap
+        (fun result =>
+          match result with
+          | Except.error error => [Except.error error]
+          | Except.ok (value, after) => (next value after).run)
+        rows) =
+    List.flatMap (fun pair => successes (next pair.fst pair.snd).run) (successes rows)
+a✝ : Error
+⊢ List.filterMap
+      (fun result =>
+        match result with
+        | Except.ok pair => some pair
+        | Except.error a => none)
+      (List.flatMap
+        (fun result =>
+          match result with
+          | Except.error error => [Except.error error]
+          | Except.ok (value, after) => (next value after).run)
+        rows) =
+    List.flatMap
+      (fun pair =>
+        List.filterMap
+          (fun result =>
+            match result with
+            | Except.ok pair => some pair
+            | Except.error a => none)
+          (next pair.fst pair.snd).run)
+      (List.filterMap
+        (fun result =>
+          match result with
+          | Except.ok pair => some pair
+          | Except.error a => none)
+        rows)
+
+case cons.ok
+Symbol Guard α β : Type
+action : EnumerateM Symbol Guard α
+next : α → EnumerateM Symbol Guard β
+before : State Symbol Guard
+rows : List (Except Error (α × State Symbol Guard))
+ih :
+  successes
+      (List.flatMap
+        (fun result =>
+          match result with
+          | Except.error error => [Except.error error]
+          | Except.ok (value, after) => (next value after).run)
+        rows) =
+    List.flatMap (fun pair => successes (next pair.fst pair.snd).run) (successes rows)
+a✝ : α × State Symbol Guard
+⊢ List.filterMap
+      (fun result =>
+        match result with
+        | Except.ok pair => some pair
+        | Except.error a => none)
+      (List.flatMap
+        (fun result =>
+          match result with
+          | Except.error error => [Except.error error]
+          | Except.ok (value, after) => (next value after).run)
+        rows) =
+    List.flatMap
+      (fun pair =>
+        List.filterMap
+          (fun result =>
+            match result with
+            | Except.ok pair => some pair
+            | Except.error a => none)
+          (next pair.fst pair.snd).run)
+      (List.filterMap
+        (fun result =>
+          match result with
+          | Except.ok pair => some pair
+          | Except.error a => none)
+        rows)
+/tmp/mcfta-enumerate-until-20261024/combined-check-1/checked.lean:231:55: error: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [successes, List.filterMap_append]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-enumerate-until-20261024/combined-check-1/checked.lean:381:77: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 x_1 x_2 : Type) → Error → EnumerateM x_0 x_1 x_2
+/tmp/mcfta-enumerate-until-20261024/combined-check-1/checked.lean:381:9: error: unsolved goals
+case zero
+Symbol Guard OracleState α : Type
+graph : Graph Symbol Guard
+order : OracleState → List Nat → Option Nat
+oracle : Oracle Symbol Guard OracleState
+observer : ReadOnlyOracle oracle
+next : Option OracleState → EnumerateM Symbol Guard α
+oracleState : OracleState
+before : State Symbol Guard
+⊢ List.filterMap
+      (fun result =>
+        match result with
+        | Except.ok pair => some pair
+        | Except.error a => none)
+      ((EnumerationState.failure Error.fuelExhausted >>= next) before) =
+    List.filterMap
+      (fun result =>
+        match result with
+        | Except.ok pair => some pair
+        | Except.error a => none)
+      ((EnumerationState.failure Error.fuelExhausted >>= fun x => next none) before)
+/tmp/mcfta-enumerate-until-20261024/combined-check-1/checked.lean:389:14: error: unsolved goals
+case succ.stuck
+Symbol Guard OracleState α : Type
+graph : Graph Symbol Guard
+order : OracleState → List Nat → Option Nat
+oracle : Oracle Symbol Guard OracleState
+observer : ReadOnlyOracle oracle
+next : Option OracleState → EnumerateM Symbol Guard α
+fuel : Nat
+ih :
+  ∀ (oracleState : OracleState) (before : State Symbol Guard),
+    successes
+        ((enumerateUntil graph none (fun x x_1 node => node) (fun remaining => enumerateNode graph remaining) order
+                oracle fuel oracleState >>=
+              next)
+            before).run =
+      successes ((enumerateFully graph order oracle fuel oracleState >>= fun x => next none) before).run
+oracleState : OracleState
+before : State Symbol Guard
+available : Option (List Nat)
+scanned : State Symbol Guard
+a✝ : Success (findExpandable graph (fuel + 1)) before available scanned
+selected : pickNext (order oracleState) available = Next.stuck
+⊢ List.filterMap
+      (fun result =>
+        match result with
+        | Except.ok pair => some pair
+        | Except.error a => none)
+      ((reject >>= next) scanned) =
+    List.filterMap
+      (fun result =>
+        match result with
+        | Except.ok pair => some pair
+        | Except.error a => none)
+      ((reject >>= fun x => next none) scanned)
+/tmp/mcfta-enumerate-until-20261024/combined-check-1/checked.lean:392:10: error: Tactic `apply` failed: could not unify the conclusion of `@successes_bind_congr`
+  successes ((?action >>= ?left) ?before).run = successes ((?action >>= ?right) ?before).run
+with the goal
+  successes
+      (((do
+              let __do_lift ← getValue (fuel + 1) uv
+              match __do_lift with
+                | UVarValue.unenumerated (some node) scs => do
+                  let repeated ← checkRepeated graph (fuel + 1) uv node scs
+                  if repeated = true then
+                      enumerateUntil graph none (fun x x_1 node => node)
+                        (fun remaining => enumerateNode graph remaining) order oracle fuel oracleState
+                    else
+                      match graph.node node with
+                      | Node.empty => reject
+                      | x =>
+                        if True then do
+                          let __x ← oracle oracleState uv (Sum.inr node)
+                          require !__x.fst
+                          let fragment ← enumerateOutWith graph (enumerateNode graph (fuel + 1)) (fuel + 1) uv
+                          let __x ← oracle __x.snd uv (Sum.inl fragment)
+                          require !__x.fst
+                          enumerateUntil graph none (fun x x_1 node => node)
+                              (fun remaining => enumerateNode graph remaining) order oracle fuel __x.snd
+                        else do
+                          let root ← representative (fuel + 1) uv
+                          setValue root (UVarValue.unenumerated (some node) scs)
+                          let __x ← oracle oracleState uv (Sum.inr node)
+                          require !__x.fst
+                          let fragment ← enumerateOutWith graph (enumerateNode graph (fuel + 1)) (fuel + 1) uv
+                          let __x ← oracle __x.snd uv (Sum.inl fragment)
+                          require !__x.fst
+                          enumerateUntil graph none (fun x x_1 node => node)
+                              (fun remaining => enumerateNode graph remaining) order oracle fuel __x.snd
+                | x => reject) >>=
+            next)
+          scanned).run =
+    successes
+      (((do
+              let __do_lift ← getValue (fuel + 1) uv
+              match __do_lift with
+                | UVarValue.unenumerated (some node) scs => do
+                  let repeated ← checkRepeated graph (fuel + 1) uv node scs
+                  if repeated = true then enumerateFully graph order oracle fuel oracleState
+                    else do
+                      let __x ← oracle oracleState uv (Sum.inr node)
+                      require !__x.fst
+                      let fragment ← enumerateOut graph (fuel + 1) uv
+                      let __x ← oracle __x.snd uv (Sum.inl fragment)
+                      require !__x.fst
+                      enumerateFully graph order oracle fuel __x.snd
+                | x => reject) >>=
+            fun x => next none)
+          scanned).run
+
+Note: The full type of `@successes_bind_congr` is
+  ∀ {Symbol Guard α β : Type} (action : EnumerateM Symbol Guard α) (left right : α → EnumerateM Symbol Guard β)
+    (before : State Symbol Guard),
+    (∀ (value : α) (after : State Symbol Guard),
+        Success action before value after → successes (left value after).run = successes (right value after).run) →
+      successes ((action >>= left) before).run = successes ((action >>= right) before).run
+
+case succ.expand
+Symbol Guard OracleState α : Type
+graph : Graph Symbol Guard
+order : OracleState → List Nat → Option Nat
+oracle : Oracle Symbol Guard OracleState
+observer : ReadOnlyOracle oracle
+next : Option OracleState → EnumerateM Symbol Guard α
+fuel : Nat
+ih :
+  ∀ (oracleState : OracleState) (before : State Symbol Guard),
+    successes
+        ((enumerateUntil graph none (fun x x_1 node => node) (fun remaining => enumerateNode graph remaining) order
+                oracle fuel oracleState >>=
+              next)
+            before).run =
+      successes ((enumerateFully graph order oracle fuel oracleState >>= fun x => next none) before).run
+oracleState : OracleState
+before : State Symbol Guard
+available : Option (List Nat)
+scanned : State Symbol Guard
+a✝ : Success (findExpandable graph (fuel + 1)) before available scanned
+uv : Nat
+selected : pickNext (order oracleState) available = Next.expand uv
+⊢ successes
+      (((do
+              let __do_lift ← getValue (fuel + 1) uv
+              match __do_lift with
+                | UVarValue.unenumerated (some node) scs => do
+                  let repeated ← checkRepeated graph (fuel + 1) uv node scs
+                  if repeated = true then
+                      enumerateUntil graph none (fun x x_1 node => node)
+                        (fun remaining => enumerateNode graph remaining) order oracle fuel oracleState
+                    else
+                      match graph.node node with
+                      | Node.empty => reject
+                      | x =>
+                        if True then do
+                          let __x ← oracle oracleState uv (Sum.inr node)
+                          require !__x.fst
+                          let fragment ← enumerateOutWith graph (enumerateNode graph (fuel + 1)) (fuel + 1) uv
+                          let __x ← oracle __x.snd uv (Sum.inl fragment)
+                          require !__x.fst
+                          enumerateUntil graph none (fun x x_1 node => node)
+                              (fun remaining => enumerateNode graph remaining) order oracle fuel __x.snd
+                        else do
+                          let root ← representative (fuel + 1) uv
+                          setValue root (UVarValue.unenumerated (some node) scs)
+                          let __x ← oracle oracleState uv (Sum.inr node)
+                          require !__x.fst
+                          let fragment ← enumerateOutWith graph (enumerateNode graph (fuel + 1)) (fuel + 1) uv
+                          let __x ← oracle __x.snd uv (Sum.inl fragment)
+                          require !__x.fst
+                          enumerateUntil graph none (fun x x_1 node => node)
+                              (fun remaining => enumerateNode graph remaining) order oracle fuel __x.snd
+                | x => reject) >>=
+            next)
+          scanned).run =
+    successes
+      (((do
+              let __do_lift ← getValue (fuel + 1) uv
+              match __do_lift with
+                | UVarValue.unenumerated (some node) scs => do
+                  let repeated ← checkRepeated graph (fuel + 1) uv node scs
+                  if repeated = true then enumerateFully graph order oracle fuel oracleState
+                    else do
+                      let __x ← oracle oracleState uv (Sum.inr node)
+                      require !__x.fst
+                      let fragment ← enumerateOut graph (fuel + 1) uv
+                      let __x ← oracle __x.snd uv (Sum.inl fragment)
+                      require !__x.fst
+                      enumerateFully graph order oracle fuel __x.snd
+                | x => reject) >>=
+            fun x => next none)
+          scanned).run
+/tmp/mcfta-enumerate-until-20261024/combined-check-1/checked.lean:381:50: error: This simp argument is unused:
+  successes_bind
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [enumerateUntil, enumerateFully, successes, failure, ExceptT.run]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-enumerate-until-20261024/combined-check-1/checked.lean:388:27: error: This simp argument is unused:
+  selected
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [pure_bind]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-enumerate-until-20261024/combined-check-1/checked.lean:389:23: error: This simp argument is unused:
+  selected
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [successes_bind, successes, reject, ExceptT.run]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-enumerate-until-20261024/combined-check-1/checked.lean:389:33: error: This simp argument is unused:
+  successes_bind
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [selected, successes, reject, ExceptT.run]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-enumerate-until-20261024/combined-check-1/checked.lean:389:60: error: This simp argument is unused:
+  reject
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [selected, successes_bind, successes, ExceptT.run]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-enumerate-until-20261024/combined-check-1/checked.lean:391:21: error: This simp argument is unused:
+  selected
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-enumerate-until-20261024/combined-check-1/checked.lean:449:2: error: Type mismatch: After simplification, term
+  bridge
+ has type
+  List.filterMap
+      (fun result =>
+        match result with
+        | Except.ok pair => some pair
+        | Except.error a => none)
+      ((enumerateUntil graph none (fun x x_1 node => node) (fun remaining => enumerateNode graph remaining) order oracle
+            fuel oracleState >>=
+          fun result => StateT.pure result)
+        before) =
+    List.filterMap
+      (fun result =>
+        match result with
+        | Except.ok pair => some pair
+        | Except.error a => none)
+      ((enumerateFully graph order oracle fuel oracleState >>= fun x => StateT.pure none) before)
+but is expected to have type
+  List.filterMap
+      (fun result =>
+        match result with
+        | Except.ok pair => some pair
+        | Except.error a => none)
+      (enumerateUntil graph none (fun x x_1 node => node) (fun remaining => enumerateNode graph remaining) order oracle
+        fuel oracleState before) =
+    List.flatMap (fun x => [(none, x.snd)])
+      (List.filterMap
+        (fun result =>
+          match result with
+          | Except.ok pair => some pair
+          | Except.error a => none)
+        (enumerateFully graph order oracle fuel oracleState before))

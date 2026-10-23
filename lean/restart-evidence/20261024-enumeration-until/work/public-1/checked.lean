@@ -1,0 +1,41 @@
+import MicroCFTA.EnumerationUntilBridge
+
+set_option pp.width 100
+set_option pp.universes true
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+
+#check MicroCFTA.EnumerationUntil.NodeExpansion
+#check MicroCFTA.EnumerationUntil.enumerateEdgeWith
+#check MicroCFTA.EnumerationUntil.prepareShallowChild
+#check MicroCFTA.EnumerationUntil.enumerateShallowHere
+#check MicroCFTA.EnumerationUntil.enumerateOutWith
+#check MicroCFTA.EnumerationUntil.remaining
+#check MicroCFTA.EnumerationUntil.enumerateUntil
+#check MicroCFTA.EnumerationUntil.rootFragment
+#check MicroCFTA.EnumerationUntil.partialRunsUntil
+#check MicroCFTA.EnumerationUntil.enumerateOutWith_eager
+#check MicroCFTA.EnumerationUntil.enumerateEdgeWith_eager
+#check MicroCFTA.EnumerationUntil.stop_all
+#check MicroCFTA.EnumerationUntilBridge.successes_bind
+#check MicroCFTA.EnumerationUntilBridge.successes_pure
+#check MicroCFTA.EnumerationUntilBridge.successes_bind_congr
+#check MicroCFTA.EnumerationUntilBridge.successes_empty
+#check MicroCFTA.EnumerationUntilBridge.getValue_repeat_value
+#check MicroCFTA.EnumerationUntilBridge.empty_out_after_read
+#check MicroCFTA.EnumerationUntilBridge.no_stop_eager_successes
+#check MicroCFTA.EnumerationUntilBridge.no_stop_eager_success_iff
+#check MicroCFTA.EnumerationUntilBridge.no_stop_eager_outcome
+
+#print axioms MicroCFTA.EnumerationUntil.enumerateOutWith_eager
+#print axioms MicroCFTA.EnumerationUntil.enumerateEdgeWith_eager
+#print axioms MicroCFTA.EnumerationUntil.stop_all
+#print axioms MicroCFTA.EnumerationUntilBridge.successes_bind
+#print axioms MicroCFTA.EnumerationUntilBridge.successes_pure
+#print axioms MicroCFTA.EnumerationUntilBridge.successes_bind_congr
+#print axioms MicroCFTA.EnumerationUntilBridge.successes_empty
+#print axioms MicroCFTA.EnumerationUntilBridge.getValue_repeat_value
+#print axioms MicroCFTA.EnumerationUntilBridge.empty_out_after_read
+#print axioms MicroCFTA.EnumerationUntilBridge.no_stop_eager_successes
+#print axioms MicroCFTA.EnumerationUntilBridge.no_stop_eager_success_iff
+#print axioms MicroCFTA.EnumerationUntilBridge.no_stop_eager_outcome

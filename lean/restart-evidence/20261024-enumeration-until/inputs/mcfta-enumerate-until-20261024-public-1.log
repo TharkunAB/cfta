@@ -1,0 +1,167 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-R", "/tmp/mcfta-enumerate-until-20261024/public-1", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-enumerate-until-20261024/public-1/checked.lean"], "exit_code": 1, "raw_bytes": 12289, "raw_sha256": "d4e8c12ac8693ecd245225290d0b7da18dc7fb0faab5681a471a88db84d9530d", "source_sha256": "647c854f957c7cc6259ecd0e1bf8ce5a20885f5e5a3aac7155f80f19021c5901"}
+/tmp/mcfta-enumerate-until-20261024/public-1/checked.lean:3:0: error: Unknown option `pp.width`
+MicroCFTA.EnumerationUntil.NodeExpansion (Symbol Guard : Type) : Type
+MicroCFTA.EnumerationUntil.enumerateEdgeWith {Symbol Guard : Type}
+  (prepareAt : Nat → MicroCFTA.EnumerationUntil.NodeExpansion Symbol Guard) :
+  Nat →
+    List.{0} MicroCFTA.EnumerationState.Suspended →
+      MicroCFTA.EnumerationState.Edge Symbol Guard →
+        MicroCFTA.EnumerationState.EnumerateM Symbol Guard (MicroCFTA.Fragments.Fragment Symbol)
+MicroCFTA.EnumerationUntil.prepareShallowChild {Symbol Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph Symbol Guard) : Nat → MicroCFTA.EnumerationUntil.NodeExpansion Symbol Guard
+MicroCFTA.EnumerationUntil.enumerateShallowHere {Symbol Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph Symbol Guard) : Nat → MicroCFTA.EnumerationUntil.NodeExpansion Symbol Guard
+MicroCFTA.EnumerationUntil.enumerateOutWith {Symbol Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph Symbol Guard)
+  (expand : MicroCFTA.EnumerationUntil.NodeExpansion Symbol Guard) (fuel uv : Nat) :
+  MicroCFTA.EnumerationState.EnumerateM Symbol Guard (MicroCFTA.Fragments.Fragment Symbol)
+MicroCFTA.EnumerationUntil.remaining {Symbol Guard : Type} (graph : MicroCFTA.EnumerationState.Graph Symbol Guard)
+  (state : MicroCFTA.EnumerationState.State Symbol Guard) : List.{0} Nat
+MicroCFTA.EnumerationUntil.enumerateUntil {Symbol Guard OracleState : Type}
+  (graph : MicroCFTA.EnumerationState.Graph Symbol Guard) (stop : Option.{0} (OracleState → Nat → Bool))
+  (narrow : OracleState → Nat → Nat → Nat) (expandAt : Nat → MicroCFTA.EnumerationUntil.NodeExpansion Symbol Guard)
+  (order : OracleState → List.{0} Nat → Option.{0} Nat)
+  (oracle : MicroCFTA.EnumerationState.Oracle Symbol Guard OracleState) :
+  Nat → OracleState → MicroCFTA.EnumerationState.EnumerateM Symbol Guard (Option.{0} OracleState)
+MicroCFTA.EnumerationUntil.rootFragment {Symbol Guard : Type} (fuel : Nat) :
+  MicroCFTA.EnumerationState.EnumerateM Symbol Guard (MicroCFTA.Fragments.Fragment Symbol)
+MicroCFTA.EnumerationUntil.partialRunsUntil {Symbol Guard OracleState : Type}
+  (graph : MicroCFTA.EnumerationState.Graph Symbol Guard) (stop : OracleState → Nat → Bool)
+  (narrow : OracleState → Nat → Nat → Nat) (order : OracleState → List.{0} Nat → Option.{0} Nat)
+  (oracle : MicroCFTA.EnumerationState.Oracle Symbol Guard OracleState) (fuel root : Nat) (oracleState : OracleState) :
+  List.{0}
+    (Except.{0, 0} MicroCFTA.EnumerationState.Error
+      (Prod.{0, 0} (MicroCFTA.Language.Term (MicroCFTA.EnumerationState.PartialSymbol Symbol))
+        (MicroCFTA.EnumerationState.State Symbol Guard)))
+MicroCFTA.EnumerationUntil.enumerateOutWith_eager {Symbol Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph Symbol Guard) (fuel uv : Nat) :
+  Eq.{1}
+    (MicroCFTA.EnumerationUntil.enumerateOutWith graph (MicroCFTA.EnumerationState.enumerateNode graph fuel) fuel uv)
+    (MicroCFTA.EnumerationState.enumerateOut graph fuel uv)
+MicroCFTA.EnumerationUntil.enumerateEdgeWith_eager {Symbol Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph Symbol Guard) (fuel : Nat)
+  (scs : List.{0} MicroCFTA.EnumerationState.Suspended) (edge : MicroCFTA.EnumerationState.Edge Symbol Guard) :
+  Eq.{1}
+    (MicroCFTA.EnumerationUntil.enumerateEdgeWith
+      (fun remaining => MicroCFTA.EnumerationState.enumerateNode graph remaining) fuel scs edge)
+    (MicroCFTA.EnumerationState.enumerateEdge graph fuel scs edge)
+MicroCFTA.EnumerationUntil.stop_all {Symbol Guard OracleState : Type}
+  (graph : MicroCFTA.EnumerationState.Graph Symbol Guard) (rule : OracleState → Nat → Bool)
+  (narrow : OracleState → Nat → Nat → Nat) (expandAt : Nat → MicroCFTA.EnumerationUntil.NodeExpansion Symbol Guard)
+  (order : OracleState → List.{0} Nat → Option.{0} Nat)
+  (oracle : MicroCFTA.EnumerationState.Oracle Symbol Guard OracleState) (fuel : Nat) (oracleState : OracleState)
+  (before : MicroCFTA.EnumerationState.State Symbol Guard)
+  (nonempty : Eq.{1} (List.isEmpty.{0} (MicroCFTA.EnumerationUntil.remaining graph before)) false)
+  (accepted : Eq.{1} (List.all.{0} (MicroCFTA.EnumerationUntil.remaining graph before) (rule oracleState)) true) :
+  Eq.{1}
+    (MicroCFTA.EnumerationUntil.enumerateUntil graph (some.{0} rule) narrow expandAt order oracle
+      (HAdd.hAdd.{0, 0, 0} fuel 1) oracleState before)
+    (List.cons.{0} (Except.ok.{0, 0} (Prod.mk.{0, 0} (some.{0} oracleState) before)) List.nil.{0})
+MicroCFTA.EnumerationUntilBridge.successes_bind {Symbol Guard α β : Type}
+  (action : MicroCFTA.EnumerationState.EnumerateM Symbol Guard α)
+  (next : α → MicroCFTA.EnumerationState.EnumerateM Symbol Guard β)
+  (before : MicroCFTA.EnumerationState.State Symbol Guard) :
+  Eq.{1} (MicroCFTA.EnumerationCPSChecked.successes (ExceptT.run.{0, 0} (bind.{0, 0} action next before)))
+    (List.flatMap.{0, 0}
+      (fun pair =>
+        MicroCFTA.EnumerationCPSChecked.successes
+          (ExceptT.run.{0, 0} (next (Prod.fst.{0, 0} pair) (Prod.snd.{0, 0} pair))))
+      (MicroCFTA.EnumerationCPSChecked.successes (ExceptT.run.{0, 0} (action before))))
+MicroCFTA.EnumerationUntilBridge.successes_pure {α Symbol Guard : Type} (value : α)
+  (before : MicroCFTA.EnumerationState.State Symbol Guard) :
+  Eq.{1} (MicroCFTA.EnumerationCPSChecked.successes (ExceptT.run.{0, 0} (pure.{0, 0} value before)))
+    (List.cons.{0} (Prod.mk.{0, 0} value before) List.nil.{0})
+MicroCFTA.EnumerationUntilBridge.successes_bind_congr {Symbol Guard α β : Type}
+  (action : MicroCFTA.EnumerationState.EnumerateM Symbol Guard α)
+  (left right : α → MicroCFTA.EnumerationState.EnumerateM Symbol Guard β)
+  (before : MicroCFTA.EnumerationState.State Symbol Guard)
+  (same :
+    ∀ (value : α) (after : MicroCFTA.EnumerationState.State Symbol Guard),
+      MicroCFTA.EnumerationCorrectness.Success action before value after →
+        Eq.{1} (MicroCFTA.EnumerationCPSChecked.successes (ExceptT.run.{0, 0} (left value after)))
+          (MicroCFTA.EnumerationCPSChecked.successes (ExceptT.run.{0, 0} (right value after)))) :
+  Eq.{1} (MicroCFTA.EnumerationCPSChecked.successes (ExceptT.run.{0, 0} (bind.{0, 0} action left before)))
+    (MicroCFTA.EnumerationCPSChecked.successes (ExceptT.run.{0, 0} (bind.{0, 0} action right before)))
+MicroCFTA.EnumerationUntilBridge.successes_empty {Symbol Guard α : Type}
+  (action : MicroCFTA.EnumerationState.EnumerateM Symbol Guard α)
+  (before : MicroCFTA.EnumerationState.State Symbol Guard)
+  (absent :
+    ∀ (value : α) (after : MicroCFTA.EnumerationState.State Symbol Guard),
+      ¬MicroCFTA.EnumerationCorrectness.Success action before value after) :
+  Eq.{1} (MicroCFTA.EnumerationCPSChecked.successes (ExceptT.run.{0, 0} (action before))) List.nil.{0}
+MicroCFTA.EnumerationUntilBridge.getValue_repeat_value {Symbol Guard : Type} (firstFuel secondFuel uv : Nat)
+  (before middle after : MicroCFTA.EnumerationState.State Symbol Guard)
+  (first second : MicroCFTA.EnumerationState.UVarValue Symbol)
+  (firstRead :
+    MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationState.getValue firstFuel uv) before first middle)
+  (secondRead :
+    MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationState.getValue secondFuel uv) middle second after) :
+  Eq.{1} second first
+MicroCFTA.EnumerationUntilBridge.empty_out_after_read {Symbol Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph Symbol Guard) (firstFuel fuel uv node : Nat)
+  (scs : List.{0} MicroCFTA.EnumerationState.Suspended)
+  (before readState after : MicroCFTA.EnumerationState.State Symbol Guard)
+  (fragment : MicroCFTA.Fragments.Fragment Symbol)
+  (empty : Eq.{1} (graph.node node) MicroCFTA.EnumerationState.Node.empty)
+  (reading :
+    MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationState.getValue firstFuel uv) before
+      (MicroCFTA.EnumerationState.UVarValue.unenumerated (some.{0} node) scs) readState) :
+  ¬MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationState.enumerateOut graph fuel uv) readState fragment
+      after
+MicroCFTA.EnumerationUntilBridge.no_stop_eager_successes {Symbol Guard OracleState : Type}
+  (graph : MicroCFTA.EnumerationState.Graph Symbol Guard) (order : OracleState → List.{0} Nat → Option.{0} Nat)
+  (oracle : MicroCFTA.EnumerationState.Oracle Symbol Guard OracleState)
+  (observer : MicroCFTA.EnumerationDriver.ReadOnlyOracle oracle) (fuel : Nat) (oracleState : OracleState)
+  (before : MicroCFTA.EnumerationState.State Symbol Guard) :
+  Eq.{1}
+    (MicroCFTA.EnumerationCPSChecked.successes
+      (ExceptT.run.{0, 0}
+        (MicroCFTA.EnumerationUntil.enumerateUntil graph none.{0} (fun x x_1 node => node)
+          (fun remaining => MicroCFTA.EnumerationState.enumerateNode graph remaining) order oracle fuel oracleState
+          before)))
+    (List.map.{0, 0} (fun pair => Prod.mk.{0, 0} none.{0} (Prod.snd.{0, 0} pair))
+      (MicroCFTA.EnumerationCPSChecked.successes
+        (ExceptT.run.{0, 0} (MicroCFTA.EnumerationState.enumerateFully graph order oracle fuel oracleState before))))
+MicroCFTA.EnumerationUntilBridge.no_stop_eager_success_iff {Symbol Guard OracleState : Type}
+  (graph : MicroCFTA.EnumerationState.Graph Symbol Guard) (order : OracleState → List.{0} Nat → Option.{0} Nat)
+  (oracle : MicroCFTA.EnumerationState.Oracle Symbol Guard OracleState)
+  (observer : MicroCFTA.EnumerationDriver.ReadOnlyOracle oracle) (fuel : Nat) (oracleState : OracleState)
+  (before after : MicroCFTA.EnumerationState.State Symbol Guard) (result : Option.{0} OracleState) :
+  MicroCFTA.EnumerationCorrectness.Success
+      (MicroCFTA.EnumerationUntil.enumerateUntil graph none.{0} (fun x x_1 node => node)
+        (fun remaining => MicroCFTA.EnumerationState.enumerateNode graph remaining) order oracle fuel oracleState)
+      before result after ↔
+    Eq.{1} result none.{0} ∧
+      MicroCFTA.EnumerationCorrectness.Success
+        (MicroCFTA.EnumerationState.enumerateFully graph order oracle fuel oracleState) before () after
+MicroCFTA.EnumerationUntilBridge.no_stop_eager_outcome {Symbol Guard OracleState : Type}
+  (graph : MicroCFTA.EnumerationState.Graph Symbol Guard) (order : OracleState → List.{0} Nat → Option.{0} Nat)
+  (oracle : MicroCFTA.EnumerationState.Oracle Symbol Guard OracleState)
+  (observer : MicroCFTA.EnumerationDriver.ReadOnlyOracle oracle) (fuel : Nat) (oracleState : OracleState)
+  (before after : MicroCFTA.EnumerationState.State Symbol Guard) (result : Option.{0} OracleState)
+  (safe : MicroCFTA.EnumerationSchedule.Safe before)
+  (success :
+    MicroCFTA.EnumerationCorrectness.Success
+      (MicroCFTA.EnumerationUntil.enumerateUntil graph none.{0} (fun x x_1 node => node)
+        (fun remaining => MicroCFTA.EnumerationState.enumerateNode graph remaining) order oracle fuel oracleState)
+      before result after) :
+  MicroCFTA.EnumerationSchedule.Safe after ∧
+    LE.le.{0} before.counter after.counter ∧ MicroCFTA.EnumerationDriver.Finished graph after
+'MicroCFTA.EnumerationUntil.enumerateOutWith_eager' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationUntil.enumerateEdgeWith_eager' depends on axioms: [propext]
+'MicroCFTA.EnumerationUntil.stop_all' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationUntilBridge.successes_bind' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationUntilBridge.successes_pure' does not depend on any axioms
+'MicroCFTA.EnumerationUntilBridge.successes_bind_congr' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationUntilBridge.successes_empty' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+'MicroCFTA.EnumerationUntilBridge.getValue_repeat_value' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationUntilBridge.empty_out_after_read' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationUntilBridge.no_stop_eager_successes' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+'MicroCFTA.EnumerationUntilBridge.no_stop_eager_success_iff' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+'MicroCFTA.EnumerationUntilBridge.no_stop_eager_outcome' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]

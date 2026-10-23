@@ -1,0 +1,74 @@
+/tmp/mcfta-enumerate-until-20261024/definitions-check-3/checked.lean:183:42: error: unsolved goals
+Symbol Guard OracleState : Type
+graph : Graph Symbol Guard
+rule : OracleState → Nat → Bool
+narrow : OracleState → Nat → Nat → Nat
+expandAt : Nat → NodeExpansion Symbol Guard
+order : OracleState → List Nat → Option Nat
+oracle : Oracle Symbol Guard OracleState
+fuel : Nat
+oracleState : OracleState
+before : State Symbol Guard
+nonempty : (remaining graph before).isEmpty = false
+accepted : (remaining graph before).all (rule oracleState) = true
+⊢ (if ¬remaining graph before = [] ∧ ∀ (x : Nat), x ∈ remaining graph before → rule oracleState x = true then
+        StateT.pure (some oracleState)
+      else
+        StateT.bind (findExpandable graph (fuel + 1)) fun __do_lift =>
+          match pickNext (order oracleState) __do_lift with
+          | Next.done => StateT.pure none
+          | Next.stuck => reject
+          | Next.expand uv =>
+            StateT.bind (getValue (fuel + 1) uv) fun __do_lift =>
+              match __do_lift with
+              | UVarValue.unenumerated (some node) scs =>
+                StateT.bind (EnumerationDriver.checkRepeated graph (fuel + 1) uv node scs) fun repeated =>
+                  if repeated = true then enumerateUntil graph (some rule) narrow expandAt order oracle fuel oracleState
+                  else
+                    match graph.node (narrow oracleState uv node) with
+                    | Node.empty => reject
+                    | x =>
+                      if narrow oracleState uv node = node then
+                        StateT.bind (oracle oracleState uv (Sum.inr (narrow oracleState uv node))) fun __x =>
+                          StateT.bind (require !__x.fst) fun __r =>
+                            StateT.bind (enumerateOutWith graph (expandAt (fuel + 1)) (fuel + 1) uv) fun fragment =>
+                              StateT.bind (oracle __x.snd uv (Sum.inl fragment)) fun __x =>
+                                StateT.bind (require !__x.fst) fun __r =>
+                                  enumerateUntil graph (some rule) narrow expandAt order oracle fuel __x.snd
+                      else
+                        StateT.bind (representative (fuel + 1) uv) fun root =>
+                          StateT.bind (setValue root (UVarValue.unenumerated (some (narrow oracleState uv node)) scs))
+                            fun __r =>
+                            StateT.bind (oracle oracleState uv (Sum.inr (narrow oracleState uv node))) fun __x =>
+                              StateT.bind (require !__x.fst) fun __r =>
+                                StateT.bind (enumerateOutWith graph (expandAt (fuel + 1)) (fuel + 1) uv) fun fragment =>
+                                  StateT.bind (oracle __x.snd uv (Sum.inl fragment)) fun __x =>
+                                    StateT.bind (require !__x.fst) fun __r =>
+                                      enumerateUntil graph (some rule) narrow expandAt order oracle fuel __x.snd
+              | x => reject)
+      before =
+    [Except.ok (some oracleState, before)]
+/tmp/mcfta-enumerate-until-20261024/definitions-check-3/checked.lean:184:24: error: This simp argument is unused:
+  nonempty
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [enumerateUntil, accepted, bind, get, getThe, MonadStateOf.get, pure, StateT.bind, StateT.get,
+    StateT.pure, ExceptT.bind, ExceptT.bindCont, ExceptT.pure, ExceptT.mk]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-enumerate-until-20261024/definitions-check-3/checked.lean:184:34: error: This simp argument is unused:
+  accepted
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [enumerateUntil, nonempty, bind, get, getThe, MonadStateOf.get, pure, StateT.bind, StateT.get,
+    StateT.pure, ExceptT.bind, ExceptT.bindCont, ExceptT.pure, ExceptT.mk]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-enumerate-until-20261024/definitions-check-3/checked.lean:185:35: error: This simp argument is unused:
+  StateT.pure
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [enumerateUntil, nonempty, accepted, bind, get, getThe, MonadStateOf.get, pure, StateT.bind, StateT.get,
+    ExceptT.bind, ExceptT.bindCont, ExceptT.pure, ExceptT.mk]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
