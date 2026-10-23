@@ -1,0 +1,18 @@
+    | cons entry rest ih =>
+        intro current members currentStable currentGood currentContextual currentSemantic
+          currentGrowth currentHistory currentTrace currentIdle
+        have contents := bucket_readback parent entries iteration entry (members entry List.mem_cons_self)
+        obtain ⟨headFuel, headKept, middle, headDone, headMembers, headLength, midGood,
+            midContextual, midSemantic, extension, midStable, midIdle, tables, retained,
+            midTrace, headMeaning⟩ :=
+          SourceCurrentOriginalRowClusterLanguage.cluster_complete bits source facts formulas solver
+            inputModel inputRanked parent original available closed admitted entry.1
+            initialDomains initialValid current currentStable currentGood currentContextual
+            currentSemantic currentGrowth currentHistory currentTrace currentIdle room
+        rw [← contents] at headDone headMembers headLength headMeaning
+        obtain ⟨tailFuels, tailKept, tailStates, tailStart, tailSteps, tailPackets,
+            laterExtension, laterTables, laterReturned, tailMembers, tailLength, tailMeaning⟩ :=
+          ih middle (fun stored member => members stored (List.mem_cons_of_mem entry member))
+            midStable midGood midContextual midSemantic
+            (grows_trans currentGrowth extension.heap)
+            (extends_trans currentHistory extension.history) midTrace midIdle

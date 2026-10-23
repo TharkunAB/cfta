@@ -1,0 +1,20 @@
+--- V1/verify-proofs.py
++++ V2-pending/verify-proofs.py
+@@ -27,7 +27,7 @@
+ def canonical(text):
+     return re.sub(r"[ \t\r\n]+", " ", text).strip(" \t\r\n")
+ raw_data = read("bound-data.json")
+-assert digest(raw_data) == "b3aacbf63eb1a9f4e8c974af919be30ba7df588a923930515484aef60b548c19"
++assert digest(raw_data) == "__H29_REVISED_BOUND_DATA_SHA__"
+ assert not re.search(r"__H\d+_", raw_data.decode()), "Unbound evidence input"
+ bound = json.loads(raw_data)
+ modules = bound["modules"]
+@@ -197,6 +197,8 @@
+         if "future_body_attachment" in f:
+             fragment = fragment.rstrip(b"\n") + f["future_body_attachment"].encode()
+         scope = source if f["role"] == "public-header" else bodies[f["owner"]]
++        if f["role"] != "public-header":
++            scope = re.sub(rb"(?m)^([ \t]*)\xc2\xb7 ", rb"\1  ", scope)
+         assert scope.count(fragment) == 1, f["file"]
+         matched.append(scope.index(fragment) + (0 if f["role"] == "public-header" else positions[f["owner"]][1]))
+     assert matched == sorted(matched) and len(set(matched)) == len(matched)

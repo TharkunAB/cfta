@@ -1,0 +1,50 @@
+  let built := run (makeNode output) middle.checked.native.machine.heap
+  let after : Wrapper (bits + 2) :=
+    { middle with checked :=
+      { middle.checked with native := (SourceRecursiveIntersectionThunks.advance
+        middle.checked.native { middle.checked.native.machine with heap := built.2 }) } }
+  obtain ⟨midGood, midContextual, midSemantic, midGrowth, midHistory, midStable,
+      midIdle, midTrace⟩ := packets (Fin.last entries.length)
+  have parentClosed : childFree (parentRows.flatMap EdgeValue.children) = [] := by
+    exact (InternedNormalizationFree.node_free source facts.coherent
+      parentEntry parentRows parentDepth [] available.resident).symm
+  have residentRows : InternedNestedProvenance.Edges middle.checked.native.machine.heap output := by
+    intro edge member
+    exact edge_grows source _ midGrowth edge
+      (resident_edges source facts.linked _ available.resident edge (members edge member))
+  have closedRows : MergedColdReaderClosedInputs.ClosedEdges output := by
+    intro edge member child childMember
+    apply List.eq_nil_iff_forall_not_mem.mpr
+    intro reference occurs
+    cases (show reference ∈ ([] : List InternedBinderProtocol.Reference) from
+      parentClosed ▸ (childFree_member (parentRows.flatMap EdgeValue.children) reference).mpr
+        ⟨child, List.mem_flatMap.mpr ⟨edge, members edge member, childMember⟩, occurs⟩)
+  have rebuilt : SourceEqualityRequiredCache.Keeps middle.checked.native.machine.heap built.2 ∧
+    Available built.2 built.1 ∧ built.1.free = [] ∧ SourceEqualityRequiredCache.Ordinary built.1 := by
+    exact SourceEqualityRequiredCache.node output middle.checked.native.machine.heap
+      midSemantic.ready residentRows closedRows
+  have rebuiltSemantic : SemanticReady built.2 := by
+    exact SourceEqualityRequiredSemanticCache.node output middle.checked.native.machine.heap
+      midSemantic residentRows closedRows
+  have rebuildExtension : Extension middle.checked.native.machine
+    { middle.checked.native.machine with heap := built.2 } := by
+    exact ⟨rebuilt.1.growth, rebuilt.1.history, extends_refl _⟩
+  have rebuiltGood : Good after.checked := by
+    refine ⟨SourceCurrentAllocatedNativePhysicalCache.advance_valid middle.checked.native
+      midGood.native _ ⟨rebuilt.1.ready.semantic.1.normal.facts, midGood.native.machine.2⟩
+      rebuildExtension, rebuilt.1.ready, midGood.operations, ?_⟩
+    exact SourceCurrentAllocatedNativeCodeFields.makeNode_heap middle.checked.operations
+      output middle.checked.native.machine.heap midGood.fields
+  have rawDone : SourceEqualityNativeDemand.execute 2 (.code (.work (makeNode output) .pure))
+    middle.checked = .done built.1 after.checked := by
+    rfl
+  refine ⟨fuels, kept, states, start, steps, packets, rawDone, rebuiltGood,
+    SourceCurrentAllocatedNativeContextCache.advance_contextual
+      (view source (guardHolds formulas solver)) inputModel inputRanked
+      (guardHolds formulas solver) middle.checked.native _ midContextual,
+    rebuiltSemantic, grows_trans midGrowth rebuilt.1.growth,
+    extends_trans midHistory rebuilt.1.history,
+    stable_heap _ _ _ _ middle built.2 midStable rebuilt.1.growth,
+    midIdle, midTrace, extension.trans rebuildExtension, tables, retained,
+    rfl, rfl, rfl, rfl, rfl, rebuilt.2.1, rebuilt.2.2.2, rebuilt.2.2.1,
+    members, lengthBound, ?_⟩

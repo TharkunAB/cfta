@@ -1,0 +1,14 @@
+/-- All stored cells retain the same request property in every phase. -/
+def Requests (property : Request → Prop) (state : FlatMemoThunk.State Key Request Answer) : Prop :=
+  ∀ handle cell, state.cells handle = some cell → property cell.request
+
+/-- Empty memo tables have no request admission obligation. -/
+theorem Requests.empty (property : Request → Prop) :
+    Requests property (FlatMemoThunk.empty : FlatMemoThunk.State Key Request Answer) := by
+  intro handle cell absent
+  cases absent
+
+/-- A hit keeps its original request. A miss publishes only the supplied admitted request. -/
+theorem Requests.lookup [DecidableEq Key] (property : Request → Prop) (key : Key) (request : Request)
+    (state : FlatMemoThunk.State Key Request Answer) (covered : Requests property state)
+    (known : property request) : Requests property (FlatMemoThunk.lookupOrInsert key request state).2 := by

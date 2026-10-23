@@ -1,0 +1,29 @@
+/-- Final bucket reversal gives the existing empty-table grouping exactly. -/
+theorem reverse_fromRows [DecidableEq Key] (key : Item → Key) (rows : List Item) :
+    reverseTable (fromRows key rows) = SourceCurrentMergeGrouping.fromRows key rows := by
+  unfold fromRows SourceCurrentMergeGrouping.fromRows
+  rw [reverse_fold]
+  apply congrArg (fun table : Table Key Item =>
+    rows.foldl (fun table row => SourceCurrentMergeGrouping.insertWith table (key row, [row])) table)
+  funext query
+  rfl
+
+/-- Reverse each emitted bucket and retain its exact lookup key and iteration order. -/
+theorem iteration_reverse (table : Table Key Item) (entries : List (Key × List Item))
+    (iteration : Iteration table entries) :
+    Iteration (reverseTable table) (entries.map (fun entry => (entry.1, entry.2.reverse))) := by
+  refine ⟨?_, ?_⟩
+  · simpa only [List.map_map, Function.comp_def] using iteration.unique
+  · intro query bucket
+    constructor
+    · intro included
+      obtain ⟨entry, original, same⟩ := List.mem_map.mp included
+      cases entry with
+      | mk storedKey storedBucket =>
+          cases same
+          exact congrArg (Option.map List.reverse)
+            ((iteration.lookup storedKey storedBucket).mp original)
+    · intro found
+      obtain ⟨storedBucket, stored, same⟩ := Option.map_eq_some_iff.mp found
+      exact List.mem_map.mpr ⟨(query, storedBucket),
+        (iteration.lookup query storedBucket).mpr stored, Prod.ext rfl same⟩

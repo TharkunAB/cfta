@@ -1,0 +1,29 @@
+
+/-- The complete nested binder construction has exactly the open graph language. -/
+theorem compile_exact (graph : Automaton Nat Symbol) (active : List Nat) (unique : active.Nodup)
+    (environment : Env Symbol) (state : Nat) :
+    meaning environment (compile graph active state) = Run graph active environment state := by
+  induction count : active.length using Nat.strongRecOn generalizing active environment state with
+  | ind size ih =>
+    by_cases present : state ∈ active
+    · rw [compile, dite_eq_left present]
+      simp only [meaning]
+      have smaller : (active.erase state).length < size := by
+        rw [List.length_erase_of_mem present]
+        have positive := List.length_pos_of_mem present
+        omega
+      have bodyExact : ∀ value,
+          meaning (BinderLanguage.bind environment state value)
+              (rows graph state (compile graph (active.erase state))) =
+            step graph active environment state value := by
+        intro value
+        apply rows_exact
+        intro child
+        exact ih _ smaller _ (unique.erase state) _ child rfl
+      rw [least_congr _ _ (fun value term => by rw [bodyExact value])]
+      funext term
+      exact propext (least_exact graph active environment state unique present term)
+    · rw [compile, dite_eq_right present]
+      simp only [meaning]
+      funext term
+      exact propext (external_exact graph active environment state present term).symm

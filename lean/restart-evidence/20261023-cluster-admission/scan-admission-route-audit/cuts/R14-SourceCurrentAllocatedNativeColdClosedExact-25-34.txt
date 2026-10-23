@@ -1,0 +1,10 @@
+theorem completed_unique [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (firstFuel secondFuel : Nat) (control : Control A) (before firstAfter secondAfter : Checked width)
+    (firstValue secondValue : A)
+    (first : execute firstFuel control before = .done firstValue firstAfter)
+    (second : execute secondFuel control before = .done secondValue secondAfter) :
+    firstValue = secondValue ∧ firstAfter = secondAfter := by
+  have firstStable := done_stable firstFuel secondFuel control before firstAfter firstValue first
+  have secondStable := done_stable secondFuel firstFuel control before secondAfter secondValue second
+  rw [Nat.add_comm secondFuel firstFuel] at secondStable
+  exact Outcome.done.inj (firstStable.symm.trans secondStable)

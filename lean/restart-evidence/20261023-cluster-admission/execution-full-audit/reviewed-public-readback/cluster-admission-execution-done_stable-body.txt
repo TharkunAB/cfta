@@ -1,0 +1,1250 @@
+fun {width} [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+    [inst_1 :
+      DecidableEq.{1}
+        (MicroCFTA.InternedConstructorTemplates.EdgeKey
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    fuel extra control before after kept observed =>
+  @Nat.recAux.{0}
+    (fun fuel =>
+      ∀ (control : MicroCFTA.SourceCurrentOriginalRowClusterScan.Control)
+        (before : MicroCFTA.SourceCurrentSameSymbolEdgeControl.State width),
+        @Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+            (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1 fuel control before)
+            (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after) →
+          @Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+            (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra) control before)
+            (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+    (fun control before observed =>
+      @Eq.casesOn.{0, 2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+        (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+          (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) control before)
+        (fun a t =>
+          @Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+              (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after) a →
+            @HEq.{0}
+                (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                    (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) control before)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+                observed
+                (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                    (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) control before)
+                  a)
+                t →
+              @Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) extra)
+                  control before)
+                (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+        (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after) observed
+        (fun h =>
+          @False.elim.{0}
+            (@HEq.{0}
+                (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                    (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) control before)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+                observed
+                (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                    (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) control before)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                    (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) control before))
+                (@Eq.refl.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                    (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) control before)) →
+              @Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) extra)
+                  control before)
+                (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+            (@noConfusion_of_Nat.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+              (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.ctorIdx width)
+              (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after)
+              (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.yielded width control before) h))
+        (@Eq.refl.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+        (@HEq.refl.{0}
+          (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+            (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+              (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) control before)
+            (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+          observed))
+    (fun fuel ih control before observed =>
+      @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.casesOn.{0} width
+        (fun t =>
+          @Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+              (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before) t →
+            @Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+              (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                  extra)
+                control before)
+              (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+        (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before)
+        (fun control_1 state h =>
+          @Eq.ndrec.{0, 2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+            (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.yielded width control_1 state)
+            (fun x =>
+              @Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before) x →
+                @Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                      extra)
+                    control before)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+            (fun one =>
+              @Eq.mpr.{0}
+                (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                      extra)
+                    control before)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+                (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra) control_1 state)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+                (@id.{0}
+                  (@Eq.{1} Prop
+                    (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          extra)
+                        control before)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+                    (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra) control_1 state)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after)))
+                  (@congrFun'.{2, 1} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width) Prop
+                    (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          extra)
+                        control before))
+                    (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra) control_1 state))
+                    (@congrArg.{2, 2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                      (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width → Prop)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          extra)
+                        control before)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra) control_1 state)
+                      (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width))
+                      (@Eq.trans.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                        (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                            extra)
+                          control before)
+                        (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute.match_1.{2} width
+                          (fun x => MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before)
+                          (fun next after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra) next after)
+                          (fun values after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width values after)
+                          (fun reason after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.failed width reason after)
+                          (fun message after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.constraintError width message after)
+                          fun reason next after =>
+                          @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.blocked width reason next after)
+                        (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute.match_1.{2} width
+                          (fun x => MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.yielded width control_1 state)
+                          (fun next after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra) next after)
+                          (fun values after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width values after)
+                          (fun reason after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.failed width reason after)
+                          (fun message after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.constraintError width message after)
+                          fun reason next after =>
+                          @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.blocked width reason next after)
+                        (@Eq.trans.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                              extra)
+                            control before)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra).succ control
+                            before)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute.match_1.{2} width
+                            (fun x => MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                            (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before)
+                            (fun next after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra) next after)
+                            (fun values after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width values after)
+                            (fun reason after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.failed width reason after)
+                            (fun message after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.constraintError width message
+                                after)
+                            fun reason next after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.blocked width reason next after)
+                          (@congrFun'.{2, 2} (MicroCFTA.SourceCurrentSameSymbolEdgeControl.State width)
+                            (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                            (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                extra)
+                              control)
+                            (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra).succ control)
+                            (@congrFun'.{2, 2} MicroCFTA.SourceCurrentOriginalRowClusterScan.Control
+                              (MicroCFTA.SourceCurrentSameSymbolEdgeControl.State width →
+                                MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                              (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                  extra))
+                              (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra).succ)
+                              (@congrArg.{1, 2} Nat
+                                (MicroCFTA.SourceCurrentOriginalRowClusterScan.Control →
+                                  MicroCFTA.SourceCurrentSameSymbolEdgeControl.State width →
+                                    MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                  extra)
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra).succ
+                                (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1)
+                                (Nat.succ_add fuel extra))
+                              control)
+                            before)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute.eq_2 width inst inst_1 control before
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra)))
+                        (@congrArg.{2, 2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                          (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.yielded width control_1 state)
+                          (fun x =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.execute.match_1.{2} width
+                              (fun x => MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width) x
+                              (fun next after =>
+                                @MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra) next
+                                  after)
+                              (fun values after =>
+                                @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width values after)
+                              (fun reason after =>
+                                @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.failed width reason after)
+                              (fun message after =>
+                                @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.constraintError width message
+                                  after)
+                              fun reason next after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.blocked width reason next after)
+                          one)))
+                    (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after)))
+                (ih control_1 state
+                  (@Eq.mp.{0}
+                    (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                        control before)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+                    (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1 fuel control_1 state)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+                    (@congrFun'.{2, 1} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width) Prop
+                      (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                        (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          control before))
+                      (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                        (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1 fuel control_1 state))
+                      (@congrArg.{2, 2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                        (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width → Prop)
+                        (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          control before)
+                        (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1 fuel control_1 state)
+                        (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width))
+                        (@congrArg.{2, 2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                          (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.yielded width control_1 state)
+                          (fun x =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.execute.match_1.{2} width
+                              (fun x => MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width) x
+                              (fun next after =>
+                                @MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1 fuel next
+                                  after)
+                              (fun values after =>
+                                @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width values after)
+                              (fun reason after =>
+                                @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.failed width reason after)
+                              (fun message after =>
+                                @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.constraintError width message
+                                  after)
+                              fun reason next after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.blocked width reason next after)
+                          one))
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+                    observed)))
+            (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before)
+            (@Eq.symm.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+              (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before)
+              (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.yielded width control_1 state) h)
+            (@Eq.refl.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+              (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before)))
+        (fun values state h =>
+          @Eq.ndrec.{0, 2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+            (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width values state)
+            (fun x =>
+              @Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before) x →
+                @Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                      extra)
+                    control before)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+            (fun one =>
+              @Eq.mpr.{0}
+                (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                      extra)
+                    control before)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+                (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width values state)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+                (@id.{0}
+                  (@Eq.{1} Prop
+                    (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          extra)
+                        control before)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+                    (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width values state)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after)))
+                  (@congrFun'.{2, 1} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width) Prop
+                    (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          extra)
+                        control before))
+                    (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width values state))
+                    (@congrArg.{2, 2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                      (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width → Prop)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          extra)
+                        control before)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width values state)
+                      (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width))
+                      (@Eq.trans.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                        (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                            extra)
+                          control before)
+                        (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute.match_1.{2} width
+                          (fun x => MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before)
+                          (fun next after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra) next after)
+                          (fun values after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width values after)
+                          (fun reason after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.failed width reason after)
+                          (fun message after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.constraintError width message after)
+                          fun reason next after =>
+                          @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.blocked width reason next after)
+                        (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute.match_1.{2} width
+                          (fun x => MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width values state)
+                          (fun next after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra) next after)
+                          (fun values after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width values after)
+                          (fun reason after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.failed width reason after)
+                          (fun message after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.constraintError width message after)
+                          fun reason next after =>
+                          @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.blocked width reason next after)
+                        (@Eq.trans.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                              extra)
+                            control before)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra).succ control
+                            before)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute.match_1.{2} width
+                            (fun x => MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                            (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before)
+                            (fun next after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra) next after)
+                            (fun values after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width values after)
+                            (fun reason after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.failed width reason after)
+                            (fun message after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.constraintError width message
+                                after)
+                            fun reason next after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.blocked width reason next after)
+                          (@congrFun'.{2, 2} (MicroCFTA.SourceCurrentSameSymbolEdgeControl.State width)
+                            (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                            (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                extra)
+                              control)
+                            (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra).succ control)
+                            (@congrFun'.{2, 2} MicroCFTA.SourceCurrentOriginalRowClusterScan.Control
+                              (MicroCFTA.SourceCurrentSameSymbolEdgeControl.State width →
+                                MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                              (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                  extra))
+                              (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra).succ)
+                              (@congrArg.{1, 2} Nat
+                                (MicroCFTA.SourceCurrentOriginalRowClusterScan.Control →
+                                  MicroCFTA.SourceCurrentSameSymbolEdgeControl.State width →
+                                    MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                  extra)
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra).succ
+                                (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1)
+                                (Nat.succ_add fuel extra))
+                              control)
+                            before)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute.eq_2 width inst inst_1 control before
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra)))
+                        (@congrArg.{2, 2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                          (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width values state)
+                          (fun x =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.execute.match_1.{2} width
+                              (fun x => MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width) x
+                              (fun next after =>
+                                @MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra) next
+                                  after)
+                              (fun values after =>
+                                @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width values after)
+                              (fun reason after =>
+                                @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.failed width reason after)
+                              (fun message after =>
+                                @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.constraintError width message
+                                  after)
+                              fun reason next after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.blocked width reason next after)
+                          one)))
+                    (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after)))
+                (@Eq.mp.{0}
+                  (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                    (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                      control before)
+                    (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+                  (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                    (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width values state)
+                    (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+                  (@congrFun'.{2, 1} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width) Prop
+                    (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                        control before))
+                    (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width values state))
+                    (@congrArg.{2, 2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                      (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width → Prop)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                        control before)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width values state)
+                      (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width))
+                      (@congrArg.{2, 2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                        (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                        (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before)
+                        (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width values state)
+                        (fun x =>
+                          @MicroCFTA.SourceCurrentOriginalRowClusterScan.execute.match_1.{2} width
+                            (fun x => MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width) x
+                            (fun next after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1 fuel next after)
+                            (fun values after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width values after)
+                            (fun reason after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.failed width reason after)
+                            (fun message after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.constraintError width message
+                                after)
+                            fun reason next after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.blocked width reason next after)
+                        one))
+                    (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+                  observed))
+            (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before)
+            (@Eq.symm.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+              (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before)
+              (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width values state) h)
+            (@Eq.refl.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+              (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before)))
+        (fun reason state h =>
+          @Eq.ndrec.{0, 2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+            (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.failed width reason state)
+            (fun x =>
+              @Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before) x →
+                @Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                      extra)
+                    control before)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+            (fun one =>
+              @Eq.mpr.{0}
+                (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                      extra)
+                    control before)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+                (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.failed width reason state)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+                (@id.{0}
+                  (@Eq.{1} Prop
+                    (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          extra)
+                        control before)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+                    (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.failed width reason state)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after)))
+                  (@congrFun'.{2, 1} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width) Prop
+                    (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          extra)
+                        control before))
+                    (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.failed width reason state))
+                    (@congrArg.{2, 2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                      (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width → Prop)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          extra)
+                        control before)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.failed width reason state)
+                      (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width))
+                      (@Eq.trans.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                        (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                            extra)
+                          control before)
+                        (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute.match_1.{2} width
+                          (fun x => MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before)
+                          (fun next after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra) next after)
+                          (fun values after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width values after)
+                          (fun reason after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.failed width reason after)
+                          (fun message after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.constraintError width message after)
+                          fun reason next after =>
+                          @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.blocked width reason next after)
+                        (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute.match_1.{2} width
+                          (fun x => MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.failed width reason state)
+                          (fun next after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra) next after)
+                          (fun values after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width values after)
+                          (fun reason after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.failed width reason after)
+                          (fun message after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.constraintError width message after)
+                          fun reason next after =>
+                          @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.blocked width reason next after)
+                        (@Eq.trans.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                              extra)
+                            control before)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra).succ control
+                            before)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute.match_1.{2} width
+                            (fun x => MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                            (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before)
+                            (fun next after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra) next after)
+                            (fun values after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width values after)
+                            (fun reason after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.failed width reason after)
+                            (fun message after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.constraintError width message
+                                after)
+                            fun reason next after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.blocked width reason next after)
+                          (@congrFun'.{2, 2} (MicroCFTA.SourceCurrentSameSymbolEdgeControl.State width)
+                            (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                            (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                extra)
+                              control)
+                            (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra).succ control)
+                            (@congrFun'.{2, 2} MicroCFTA.SourceCurrentOriginalRowClusterScan.Control
+                              (MicroCFTA.SourceCurrentSameSymbolEdgeControl.State width →
+                                MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                              (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                  extra))
+                              (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra).succ)
+                              (@congrArg.{1, 2} Nat
+                                (MicroCFTA.SourceCurrentOriginalRowClusterScan.Control →
+                                  MicroCFTA.SourceCurrentSameSymbolEdgeControl.State width →
+                                    MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                  extra)
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra).succ
+                                (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1)
+                                (Nat.succ_add fuel extra))
+                              control)
+                            before)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute.eq_2 width inst inst_1 control before
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra)))
+                        (@congrArg.{2, 2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                          (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.failed width reason state)
+                          (fun x =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.execute.match_1.{2} width
+                              (fun x => MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width) x
+                              (fun next after =>
+                                @MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra) next
+                                  after)
+                              (fun values after =>
+                                @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width values after)
+                              (fun reason after =>
+                                @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.failed width reason after)
+                              (fun message after =>
+                                @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.constraintError width message
+                                  after)
+                              fun reason next after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.blocked width reason next after)
+                          one)))
+                    (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after)))
+                (@Eq.mp.{0}
+                  (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                    (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                      control before)
+                    (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+                  (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                    (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.failed width reason state)
+                    (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+                  (@congrFun'.{2, 1} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width) Prop
+                    (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                        control before))
+                    (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.failed width reason state))
+                    (@congrArg.{2, 2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                      (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width → Prop)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                        control before)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.failed width reason state)
+                      (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width))
+                      (@congrArg.{2, 2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                        (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                        (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before)
+                        (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.failed width reason state)
+                        (fun x =>
+                          @MicroCFTA.SourceCurrentOriginalRowClusterScan.execute.match_1.{2} width
+                            (fun x => MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width) x
+                            (fun next after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1 fuel next after)
+                            (fun values after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width values after)
+                            (fun reason after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.failed width reason after)
+                            (fun message after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.constraintError width message
+                                after)
+                            fun reason next after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.blocked width reason next after)
+                        one))
+                    (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+                  observed))
+            (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before)
+            (@Eq.symm.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+              (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before)
+              (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.failed width reason state) h)
+            (@Eq.refl.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+              (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before)))
+        (fun message state h =>
+          @Eq.ndrec.{0, 2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+            (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.constraintError width message state)
+            (fun x =>
+              @Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before) x →
+                @Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                      extra)
+                    control before)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+            (fun one =>
+              @Eq.mpr.{0}
+                (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                      extra)
+                    control before)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+                (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.constraintError width message state)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+                (@id.{0}
+                  (@Eq.{1} Prop
+                    (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          extra)
+                        control before)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+                    (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.constraintError width message state)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after)))
+                  (@congrFun'.{2, 1} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width) Prop
+                    (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          extra)
+                        control before))
+                    (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.constraintError width message state))
+                    (@congrArg.{2, 2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                      (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width → Prop)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          extra)
+                        control before)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.constraintError width message state)
+                      (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width))
+                      (@Eq.trans.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                        (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                            extra)
+                          control before)
+                        (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute.match_1.{2} width
+                          (fun x => MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before)
+                          (fun next after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra) next after)
+                          (fun values after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width values after)
+                          (fun reason after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.failed width reason after)
+                          (fun message after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.constraintError width message after)
+                          fun reason next after =>
+                          @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.blocked width reason next after)
+                        (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute.match_1.{2} width
+                          (fun x => MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.constraintError width message state)
+                          (fun next after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra) next after)
+                          (fun values after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width values after)
+                          (fun reason after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.failed width reason after)
+                          (fun message after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.constraintError width message after)
+                          fun reason next after =>
+                          @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.blocked width reason next after)
+                        (@Eq.trans.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                              extra)
+                            control before)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra).succ control
+                            before)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute.match_1.{2} width
+                            (fun x => MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                            (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before)
+                            (fun next after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra) next after)
+                            (fun values after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width values after)
+                            (fun reason after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.failed width reason after)
+                            (fun message after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.constraintError width message
+                                after)
+                            fun reason next after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.blocked width reason next after)
+                          (@congrFun'.{2, 2} (MicroCFTA.SourceCurrentSameSymbolEdgeControl.State width)
+                            (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                            (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                extra)
+                              control)
+                            (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra).succ control)
+                            (@congrFun'.{2, 2} MicroCFTA.SourceCurrentOriginalRowClusterScan.Control
+                              (MicroCFTA.SourceCurrentSameSymbolEdgeControl.State width →
+                                MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                              (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                  extra))
+                              (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra).succ)
+                              (@congrArg.{1, 2} Nat
+                                (MicroCFTA.SourceCurrentOriginalRowClusterScan.Control →
+                                  MicroCFTA.SourceCurrentSameSymbolEdgeControl.State width →
+                                    MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                  extra)
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra).succ
+                                (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1)
+                                (Nat.succ_add fuel extra))
+                              control)
+                            before)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute.eq_2 width inst inst_1 control before
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra)))
+                        (@congrArg.{2, 2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                          (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.constraintError width message state)
+                          (fun x =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.execute.match_1.{2} width
+                              (fun x => MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width) x
+                              (fun next after =>
+                                @MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra) next
+                                  after)
+                              (fun values after =>
+                                @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width values after)
+                              (fun reason after =>
+                                @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.failed width reason after)
+                              (fun message after =>
+                                @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.constraintError width message
+                                  after)
+                              fun reason next after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.blocked width reason next after)
+                          one)))
+                    (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after)))
+                (@Eq.mp.{0}
+                  (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                    (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                      control before)
+                    (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+                  (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                    (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.constraintError width message state)
+                    (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+                  (@congrFun'.{2, 1} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width) Prop
+                    (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                        control before))
+                    (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.constraintError width message state))
+                    (@congrArg.{2, 2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                      (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width → Prop)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                        control before)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.constraintError width message state)
+                      (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width))
+                      (@congrArg.{2, 2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                        (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                        (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before)
+                        (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.constraintError width message state)
+                        (fun x =>
+                          @MicroCFTA.SourceCurrentOriginalRowClusterScan.execute.match_1.{2} width
+                            (fun x => MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width) x
+                            (fun next after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1 fuel next after)
+                            (fun values after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width values after)
+                            (fun reason after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.failed width reason after)
+                            (fun message after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.constraintError width message
+                                after)
+                            fun reason next after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.blocked width reason next after)
+                        one))
+                    (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+                  observed))
+            (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before)
+            (@Eq.symm.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+              (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before)
+              (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.constraintError width message state) h)
+            (@Eq.refl.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+              (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before)))
+        (fun reason control_1 state h =>
+          @Eq.ndrec.{0, 2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+            (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.blocked width reason control_1 state)
+            (fun x =>
+              @Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before) x →
+                @Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                      extra)
+                    control before)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+            (fun one =>
+              @Eq.mpr.{0}
+                (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                      extra)
+                    control before)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+                (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.blocked width reason control_1 state)
+                  (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+                (@id.{0}
+                  (@Eq.{1} Prop
+                    (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          extra)
+                        control before)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+                    (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.blocked width reason control_1 state)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after)))
+                  (@congrFun'.{2, 1} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width) Prop
+                    (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          extra)
+                        control before))
+                    (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.blocked width reason control_1 state))
+                    (@congrArg.{2, 2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                      (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width → Prop)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          extra)
+                        control before)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.blocked width reason control_1 state)
+                      (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width))
+                      (@Eq.trans.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                        (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                            extra)
+                          control before)
+                        (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute.match_1.{2} width
+                          (fun x => MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before)
+                          (fun next after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra) next after)
+                          (fun values after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width values after)
+                          (fun reason after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.failed width reason after)
+                          (fun message after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.constraintError width message after)
+                          fun reason next after =>
+                          @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.blocked width reason next after)
+                        (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute.match_1.{2} width
+                          (fun x => MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.blocked width reason control_1 state)
+                          (fun next after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra) next after)
+                          (fun values after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width values after)
+                          (fun reason after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.failed width reason after)
+                          (fun message after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.constraintError width message after)
+                          fun reason next after =>
+                          @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.blocked width reason next after)
+                        (@Eq.trans.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                              extra)
+                            control before)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra).succ control
+                            before)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute.match_1.{2} width
+                            (fun x => MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                            (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before)
+                            (fun next after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra) next after)
+                            (fun values after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width values after)
+                            (fun reason after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.failed width reason after)
+                            (fun message after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.constraintError width message
+                                after)
+                            fun reason next after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.blocked width reason next after)
+                          (@congrFun'.{2, 2} (MicroCFTA.SourceCurrentSameSymbolEdgeControl.State width)
+                            (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                            (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                extra)
+                              control)
+                            (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra).succ control)
+                            (@congrFun'.{2, 2} MicroCFTA.SourceCurrentOriginalRowClusterScan.Control
+                              (MicroCFTA.SourceCurrentSameSymbolEdgeControl.State width →
+                                MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                              (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                  extra))
+                              (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra).succ)
+                              (@congrArg.{1, 2} Nat
+                                (MicroCFTA.SourceCurrentOriginalRowClusterScan.Control →
+                                  MicroCFTA.SourceCurrentSameSymbolEdgeControl.State width →
+                                    MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                  extra)
+                                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra).succ
+                                (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1)
+                                (Nat.succ_add fuel extra))
+                              control)
+                            before)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute.eq_2 width inst inst_1 control before
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra)))
+                        (@congrArg.{2, 2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                          (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before)
+                          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.blocked width reason control_1 state)
+                          (fun x =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.execute.match_1.{2} width
+                              (fun x => MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width) x
+                              (fun next after =>
+                                @MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel extra) next
+                                  after)
+                              (fun values after =>
+                                @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width values after)
+                              (fun reason after =>
+                                @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.failed width reason after)
+                              (fun message after =>
+                                @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.constraintError width message
+                                  after)
+                              fun reason next after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.blocked width reason next after)
+                          one)))
+                    (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after)))
+                (@Eq.mp.{0}
+                  (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                    (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                      control before)
+                    (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+                  (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                    (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.blocked width reason control_1 state)
+                    (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+                  (@congrFun'.{2, 1} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width) Prop
+                    (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                        control before))
+                    (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.blocked width reason control_1 state))
+                    (@congrArg.{2, 2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                      (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width → Prop)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) fuel
+                          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                        control before)
+                      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.blocked width reason control_1 state)
+                      (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width))
+                      (@congrArg.{2, 2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                        (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+                        (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before)
+                        (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.blocked width reason control_1 state)
+                        (fun x =>
+                          @MicroCFTA.SourceCurrentOriginalRowClusterScan.execute.match_1.{2} width
+                            (fun x => MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width) x
+                            (fun next after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1 fuel next after)
+                            (fun values after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width values after)
+                            (fun reason after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.failed width reason after)
+                            (fun message after =>
+                              @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.constraintError width message
+                                after)
+                            fun reason next after =>
+                            @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.blocked width reason next after)
+                        one))
+                    (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width kept after))
+                  observed))
+            (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before)
+            (@Eq.symm.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+              (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before)
+              (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.blocked width reason control_1 state) h)
+            (@Eq.refl.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+              (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before)))
+        (@Eq.refl.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.step width inst inst_1 control before)))
+    fuel control before observed

@@ -1,0 +1,15 @@
+ ∀ {width : Nat}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (used rest : Nat) (control next : MicroCFTA.SourceCurrentOriginalRowClusterScan.Control)
+  (before middle : MicroCFTA.SourceCurrentSameSymbolEdgeControl.State width),
+  @Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1 used control before)
+      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.yielded width next middle) →
+    @Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) used rest) control before)
+      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1 rest next middle)

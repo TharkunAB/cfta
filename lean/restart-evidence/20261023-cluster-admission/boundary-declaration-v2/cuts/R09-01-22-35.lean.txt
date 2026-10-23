@@ -1,0 +1,14 @@
+def NodeInputs (view : IntersectSchedule.View Symbol) (model : IntersectSchedule.InputMeaning view)
+    (request : NodeRequest Symbol Guard) : Prop :=
+  SourceRecursiveIntersectionInputView.Original request.left ∧
+    SourceRecursiveIntersectionInputView.Original request.right ∧
+    model.valid (SourceRecursiveIntersectionInputView.inputOf request.left) ∧
+    model.valid (SourceRecursiveIntersectionInputView.inputOf request.right)
+
+/-- Original edge children belong to the same fixed input domain. -/
+def EdgeInputs (view : IntersectSchedule.View Symbol) (model : IntersectSchedule.InputMeaning view)
+    (request : EdgeRequest Symbol Guard) : Prop :=
+  (∀ child ∈ request.left.children, SourceRecursiveIntersectionInputView.Original child ∧
+    model.valid (SourceRecursiveIntersectionInputView.inputOf child)) ∧
+  (∀ child ∈ request.right.children, SourceRecursiveIntersectionInputView.Original child ∧
+    model.valid (SourceRecursiveIntersectionInputView.inputOf child))

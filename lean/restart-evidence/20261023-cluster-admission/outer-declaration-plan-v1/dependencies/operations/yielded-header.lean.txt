@@ -1,0 +1,5 @@
+theorem yielded_add
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (used rest : Nat) (control next : Control) (before middle : Wrapper width)
+    (observed : execute used control before = .yielded next middle) :
+    execute (used + rest) control before = execute rest next middle

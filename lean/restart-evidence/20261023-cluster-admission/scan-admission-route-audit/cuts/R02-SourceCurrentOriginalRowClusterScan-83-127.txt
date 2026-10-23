@@ -1,0 +1,45 @@
+theorem comparison_lift
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (pivot candidate common : Edge)
+    (tail incomparableReversed keptReversed : List Edge)
+    (inner : PairControl) (before after : PairState width)
+    (observed : SourceCurrentSameSymbolEdgeControl.execute fuel inner before =
+      SourceCurrentSameSymbolEdgeControl.Outcome.done common after) :
+    ∃ used : Nat, 0 < used ∧ used ≤ fuel ∧
+      execute used
+        (.comparison pivot candidate tail incomparableReversed keptReversed inner) before =
+        .yielded
+          (if common.entry.identity = candidate.entry.identity then
+             .scan pivot tail incomparableReversed keptReversed
+           else if common.entry.identity = pivot.entry.identity then
+             .cluster (candidate :: (incomparableReversed.reverse ++ tail)) keptReversed
+           else
+             .scan pivot tail (candidate :: incomparableReversed) keptReversed)
+          after := by
+  induction fuel generalizing inner before with
+  | zero => cases observed
+  | succ fuel ih =>
+      cases one : SourceCurrentSameSymbolEdgeControl.step inner before with
+      | yielded next middle =>
+          have rest : SourceCurrentSameSymbolEdgeControl.execute fuel next middle =
+              SourceCurrentSameSymbolEdgeControl.Outcome.done common after := by
+            simpa only [SourceCurrentSameSymbolEdgeControl.execute, one] using observed
+          obtain ⟨used, _positive, bound, resumed⟩ := ih next middle rest
+          refine ⟨used + 1, Nat.zero_lt_succ used, Nat.succ_le_succ bound, ?_⟩
+          simpa only [execute, step, one] using resumed
+      | done value middle =>
+          have same : value = common ∧ middle = after := by
+            simpa only [SourceCurrentSameSymbolEdgeControl.execute, one,
+              SourceCurrentSameSymbolEdgeControl.Outcome.done.injEq] using observed
+          rcases same with ⟨rfl, rfl⟩
+          refine ⟨1, Nat.zero_lt_succ 0, Nat.succ_le_succ (Nat.zero_le fuel), ?_⟩
+          simp only [execute, step, one]
+      | failed reason middle =>
+          simp only [SourceCurrentSameSymbolEdgeControl.execute, one] at observed
+          cases observed
+      | constraintError message middle =>
+          simp only [SourceCurrentSameSymbolEdgeControl.execute, one] at observed
+          cases observed
+      | blocked reason next middle =>
+          simp only [SourceCurrentSameSymbolEdgeControl.execute, one] at observed
+          cases observed

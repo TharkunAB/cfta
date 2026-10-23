@@ -1,0 +1,16 @@
+@[builtin_quot_precheck Lean.Parser.Term.app] def precheckApp : Precheck
+  | `($f $args*) => do
+    precheck f
+    for arg in args.raw do
+      match arg with
+      | `(argument| ($_ := $e)) => precheck e
+      | `(argument| ..)         => pure ()
+      | `(argument| $e:term)    => precheck e
+  | _ => throwUnsupportedSyntax
+
+@[builtin_quot_precheck Lean.Parser.Term.typeAscription] def precheckTypeAscription : Precheck
+  | `(($e : $type)) => do
+    precheck e
+    precheck type
+  | `(($e :)) => precheck e
+  | _ => throwUnsupportedSyntax

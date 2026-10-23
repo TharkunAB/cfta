@@ -1,0 +1,87 @@
+
+/-- Complete an original-row comparison and retain native request admission. -/
+theorem original_rows_complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (bits : Nat) (source : InternedConstructorTemplates.State Symbol Guard)
+    (facts : InternedNestedFacts.Facts source)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inputs : FiniteInput (view source (guardHolds formulas solver)))
+    (leftParent rightParent : Value Symbol Guard)
+    (leftOriginal : OriginalInput source (inputOf leftParent))
+    (rightOriginal : OriginalInput source (inputOf rightParent))
+    (leftAvailable : Available source leftParent) (rightAvailable : Available source rightParent)
+    (leftClosed : leftParent.free = []) (rightClosed : rightParent.free = [])
+    (leftAdmitted : inputs.valid (inputOf leftParent))
+    (rightAdmitted : inputs.valid (inputOf rightParent))
+    (left right : Edge)
+    (leftMember : left ∈ nodeEdges leftParent) (rightMember : right ∈ nodeEdges rightParent)
+    (symbols : left.entry.key.symbol = right.entry.key.symbol)
+    (initialDomains : Cache.State IntersectionFlatMemoKeyDomain.DomainKey)
+    (initialValid : Cache.Valid initialDomains)
+    (before : Wrapper (bits + 2))
+    (stable : Stable (view source (guardHolds formulas solver))
+      (finiteInputMeaning (view source (guardHolds formulas solver)) inputs)
+      (finiteRankedInput (view source (guardHolds formulas solver)) inputs)
+      (guardHolds formulas solver) before)
+    (good : Good before.checked)
+    (contextual : SourceCurrentAllocatedNativeContextCache.Contextual
+      (view source (guardHolds formulas solver))
+      (finiteInputMeaning (view source (guardHolds formulas solver)) inputs)
+      (finiteRankedInput (view source (guardHolds formulas solver)) inputs)
+      (guardHolds formulas solver) before.checked.native)
+    (semantic : SemanticReady before.checked.native.machine.heap)
+    (covered : Covered inputs before.checked.native)
+    (growth : Grows source before.checked.native.machine.heap)
+    (history : Extends source.nodes.issued before.checked.native.machine.heap.nodes.issued)
+    (allocations : SourceRecursiveIntersectionDomainAllocation.Trace
+      (SourceRecursiveIntersectionSourceInventory.domains source)
+      initialDomains before.checked.native.machine.domains)
+    (idle : NativeIdle before.checked.native)
+    (room : SourceCurrentAllocatedNativeResourceForecast.Room bits
+      ⟨source.nodes.next, source.edges.next,
+        initialDomains.next + (SourceRecursiveIntersectionSourceInventory.domains source).length, 0⟩) :
+    let ordered := if right.entry.identity < left.entry.identity then (right, left) else (left, right)
+    let request : EdgeRequest Symbol Guard := ⟨IntersectionEmptyDomain.emptyDomain, ordered.1, ordered.2⟩
+    ∃ (fuel : Nat) (result : Edge) (after : Wrapper (bits + 2)),
+      SourceCurrentSameSymbolEdgeControl.execute fuel (.call (left, right) []) before = .done result after ∧
+      EdgeResident after.checked.native.machine.heap result ∧
+      SourceCurrentAllocatedNativeContextCache.EdgeLaw
+        (view source (guardHolds formulas solver))
+        (finiteInputMeaning (view source (guardHolds formulas solver)) inputs)
+        (finiteRankedInput (view source (guardHolds formulas solver)) inputs)
+        (guardHolds formulas solver) request result ∧
+      Good after.checked ∧
+      SourceCurrentAllocatedNativeContextCache.Contextual
+        (view source (guardHolds formulas solver))
+        (finiteInputMeaning (view source (guardHolds formulas solver)) inputs)
+        (finiteRankedInput (view source (guardHolds formulas solver)) inputs)
+        (guardHolds formulas solver) after.checked.native ∧
+      SemanticReady after.checked.native.machine.heap ∧
+      Extension before.checked.native.machine after.checked.native.machine ∧
+      Stable (view source (guardHolds formulas solver))
+        (finiteInputMeaning (view source (guardHolds formulas solver)) inputs)
+        (finiteRankedInput (view source (guardHolds formulas solver)) inputs)
+        (guardHolds formulas solver) after ∧
+      NativeIdle after.checked.native ∧
+      Extends before.memo.table after.memo.table ∧
+      FlatMemoThunk.Returned before.memo after.memo ∧
+      SourceRecursiveIntersectionDomainAllocation.Trace
+        (SourceRecursiveIntersectionSourceInventory.domains source)
+        initialDomains after.checked.native.machine.domains ∧
+      Covered inputs after.checked.native := by
+  classical
+  dsimp only
+  let inventory : List IntersectionFlatMemoKeyDomain.DomainKey :=
+    SourceRecursiveIntersectionSourceInventory.domains source
+  let ordered : Edge × Edge := if right.entry.identity < left.entry.identity then (right, left) else (left, right)
+  let request : EdgeRequest Symbol Guard := ⟨IntersectionEmptyDomain.emptyDomain, ordered.1, ordered.2⟩
+  obtain ⟨fuel, result, after, done, resident, law, afterGood, afterContextual,
+    afterSemantic, extension, afterStable, afterIdle, tables, retained, afterAllocations⟩ :=
+    SourceCurrentSameSymbolEdgeComparisonDomains.original_rows_complete bits source facts formulas solver
+      (finiteInputMeaning (view source (guardHolds formulas solver)) inputs)
+      (finiteRankedInput (view source (guardHolds formulas solver)) inputs)
+      leftParent rightParent leftOriginal rightOriginal leftAvailable rightAvailable
+      leftClosed rightClosed left right leftMember rightMember symbols initialDomains initialValid
+      before stable good contextual semantic growth history allocations idle room
+  have finalCovered : Covered inputs after.checked.native := by
+    by_cases present :

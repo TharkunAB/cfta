@@ -1,0 +1,8 @@
+/-- Every listed original root belongs to this same fixed input interface. -/
+theorem root_valid (source : InternedConstructorTemplates.State Symbol Guard) (facts : Facts source)
+    (holds : Guard → Term Symbol → Bool) (roots : List (Value Symbol Guard))
+    (originals : ∀ root ∈ roots, Original root) (available : Values source roots)
+    (closed : ∀ root ∈ roots, root.free = []) (root : Value Symbol Guard) (member : root ∈ roots) :
+    (finiteInput source facts holds roots originals available closed).valid (inputOf root) :=
+  ⟨root, member, .root⟩
+

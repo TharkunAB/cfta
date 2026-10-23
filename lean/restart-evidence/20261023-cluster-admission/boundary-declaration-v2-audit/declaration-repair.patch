@@ -1,0 +1,33 @@
+--- v1/context.lean.txt
++++ v2/context.lean.txt
+@@ -29,4 +29,4 @@
+ local notation "Current" => At formulas solver inventory
+ local notation "PairInputs" => (fun pair : Edge × Edge =>
+   SourceCurrentAllocatedNativeContextCache.EdgeInputs inputView inputModel
+-    ⟨IntersectionEmptyDomain.emptyDomain, pair.1, pair.2⟩)
++    (SourceRecursiveIntersectionThunks.EdgeRequest.mk IntersectionEmptyDomain.emptyDomain pair.1 pair.2))
+--- v1/local-parentAdmitted.lean.txt
++++ v2/local-parentAdmitted.lean.txt
+@@ -1 +1 @@
+-  have parentAdmitted : inputs.valid (inputOf parent)
++  have parentAdmitted : (inputs).valid (inputOf parent)
+--- v1/local-statements.lean.txt
++++ v2/local-statements.lean.txt
+@@ -1,5 +1,5 @@
+   have parentOriginal : OriginalInput inventory.source (inputOf parent)
+-  have parentAdmitted : inputs.valid (inputOf parent)
++  have parentAdmitted : (inputs).valid (inputOf parent)
+       have candidateMember : candidate ∈
+           (nodeEdges parent).filter (fun edge => decide (edge.entry.key.symbol = symbol))
+       have tailMembers : ∀ edge ∈ tail, edge ∈
+--- v1/proposed-signature.lean.txt
++++ v2/proposed-signature.lean.txt
+@@ -29,7 +29,7 @@
+ local notation "Current" => At formulas solver inventory
+ local notation "PairInputs" => (fun pair : Edge × Edge =>
+   SourceCurrentAllocatedNativeContextCache.EdgeInputs inputView inputModel
+-    ⟨IntersectionEmptyDomain.emptyDomain, pair.1, pair.2⟩)
++    (SourceRecursiveIntersectionThunks.EdgeRequest.mk IntersectionEmptyDomain.emptyDomain pair.1 pair.2))
+ 
+ /-- Complete one scan boundary with the same inventory and captured request admission. -/
+ theorem boundary_complete

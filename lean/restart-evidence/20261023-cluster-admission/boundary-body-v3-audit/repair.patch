@@ -1,0 +1,11 @@
+--- body-v2.lean
++++ body-v3.lean
+@@ -29,7 +29,7 @@
+ local notation "Current" => At formulas solver inventory
+ local notation "PairInputs" => (fun pair : Edge × Edge =>
+   SourceCurrentAllocatedNativeContextCache.EdgeInputs inputView inputModel
+-    (SourceRecursiveIntersectionThunks.EdgeRequest.mk IntersectionEmptyDomain.emptyDomain pair.1 pair.2))
++    (SourceRecursiveIntersectionThunks.EdgeRequest.mk IntersectionEmptyDomain.emptyDomain (Prod.fst pair) (Prod.snd pair)))
+ 
+ /-- Complete one scan boundary with the same inventory and captured request admission. -/
+ theorem boundary_complete

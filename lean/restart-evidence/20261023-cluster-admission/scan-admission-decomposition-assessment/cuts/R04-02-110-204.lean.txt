@@ -1,0 +1,95 @@
+      (∃ handle, before.memo.table (left.entry.identity, right.entry.identity) = some handle) ∨
+      (∃ handle, before.memo.table (right.entry.identity, left.entry.identity) = some handle)
+    ·
+      have hitChecked : after.checked = before.checked := by
+        exact SourceCurrentSameSymbolEdgeHitReadback.completed_hit_checked
+          (view source (guardHolds formulas solver))
+          (finiteInputMeaning (view source (guardHolds formulas solver)) inputs)
+          (finiteRankedInput (view source (guardHolds formulas solver)) inputs)
+          (guardHolds formulas solver) fuel left right result before after stable present done
+      simpa only [hitChecked] using covered
+    ·
+      have missing : before.memo.table (left.entry.identity, right.entry.identity) = none := by
+        cases found : before.memo.table (left.entry.identity, right.entry.identity) with
+        | none => rfl
+        | some handle => exact False.elim (present (Or.inl ⟨handle, found⟩))
+      have reverseMissing : before.memo.table (right.entry.identity, left.entry.identity) = none := by
+        cases reverseFound : before.memo.table (right.entry.identity, left.entry.identity) with
+        | none => rfl
+        | some handle => exact False.elim (present (Or.inr ⟨handle, reverseFound⟩))
+      have leftInputs : ∀ child ∈ left.children,
+          Original child ∧ inputs.valid (inputOf child) := by
+        exact (SourceCurrentOriginalRowPhysicalMeaning.row_inputs_meaning source facts
+          (guardHolds formulas solver)
+          (finiteInputMeaning (view source (guardHolds formulas solver)) inputs)
+          leftParent left leftOriginal leftAvailable leftClosed leftAdmitted leftMember).1
+      have rightInputs : ∀ child ∈ right.children,
+          Original child ∧ inputs.valid (inputOf child) := by
+        exact (SourceCurrentOriginalRowPhysicalMeaning.row_inputs_meaning source facts
+          (guardHolds formulas solver)
+          (finiteInputMeaning (view source (guardHolds formulas solver)) inputs)
+          rightParent right rightOriginal rightAvailable rightClosed rightAdmitted rightMember).1
+      have rawScope : EdgeScope source ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩ := by
+        refine ⟨resident_edges source facts.linked leftParent leftAvailable.resident left leftMember,
+          resident_edges source facts.linked rightParent rightAvailable.resident right rightMember,
+          ?_, ?_, ?_⟩
+        · intro child member
+          exact (leftInputs child member).1
+        · intro child member
+          exact (rightInputs child member).1
+        · intro _ member
+          cases member
+      have rawCovered : EdgeCovered inputs ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩ := by
+        exact ⟨⟨leftInputs, rightInputs⟩,
+          SourceCurrentAllocatedNativePairAdmission.empty_seen inputs⟩
+      have orderedInputs : EdgeScope source request ∧ EdgeCovered inputs request := by
+        by_cases swap : right.entry.identity < left.entry.identity
+        · simp only [request, ordered, swap, ↓reduceIte]
+          exact ⟨⟨rawScope.rightResident, rawScope.leftResident,
+            rawScope.right, rawScope.left, rawScope.bindings⟩,
+            ⟨⟨rightInputs, leftInputs⟩,
+              SourceCurrentAllocatedNativePairAdmission.empty_seen inputs⟩⟩
+        · simpa only [request, ordered, swap, ↓reduceIte] using And.intro rawScope rawCovered
+      have ready : EdgeReady before.checked.native.machine request := by
+        exact ⟨empty_domain _, edge_grows source _ growth _ orderedInputs.1.leftResident,
+          edge_grows source _ growth _ orderedInputs.1.rightResident⟩
+      have fields : Fields (.edgeBody request .pure) before.checked := by
+        exact ⟨ready, fun _ => True.intro⟩
+      have resources : SourceCurrentAllocatedRecursivePrefixAdmission.Resources
+          bits source inventory initialDomains := by
+        exact ⟨facts, SourceCurrentAllocatedRecursiveDomainCode.source_closed source facts,
+          initialValid, room.1, room.2.1, Nat.lt_of_le_of_lt (Nat.le_add_right _ _) room.2.2⟩
+      have current : SourceCurrentAllocatedRecursivePrefixState.Current
+          source inventory initialDomains before.checked := by
+        exact ⟨good, semantic, growth, history, allocations⟩
+      have physicalCertificate : SourceCurrentAllocatedRecursivePrefixControl.Certified
+          source inventory (.edgeBody request .pure) before.checked.native.machine
+          (fun final value => EdgeResident final.heap value) := by
+        exact SourceCurrentAllocatedRecursivePrefixControl.edge_body source inventory request
+          before.checked.native.machine orderedInputs.1
+          (SourceRecursiveIntersectionSourceInventory.empty_mem source) ready
+      have admissionCertificate : ControlCertified source (guardHolds formulas solver) inputs
+          (.edgeBody request .pure) before.checked.native.machine
+          (fun final value => EdgeResident final.heap value) := by
+        refine ⟨orderedInputs.1, orderedInputs.2, ?_⟩
+        intro _ _ _ _ _ resident
+        exact resident
+      obtain ⟨nativeFuel, _, steps, _, _, _, _⟩ :=
+        SourceCurrentSameSymbolEdgeControl.miss_readback fuel left right result before after
+          (FlatMemoThunk.Valid.map before.memo _ _ _ stable.valid (fun _ _ => True.intro))
+          missing reverseMissing done
+      have physicalRun : SourceCurrentAllocatedRecursivePrefixReceipt.Receipt
+          source inventory initialDomains nativeFuel (.edgeBody request .pure) before.checked
+          (.code (.pure result)) after.checked (fun final value => EdgeResident final.heap value) := by
+        exact SourceCurrentAllocatedRecursivePrefixAdmission.prefixes resources nativeFuel
+          (.edgeBody request .pure) before.checked (.code (.pure result)) after.checked
+          (fun final value => EdgeResident final.heap value) current physicalCertificate fields steps
+      exact (SourceCurrentAllocatedNativeAdmissionTrace.Trace.covered source
+        (guardHolds formulas solver) inputs
+        (SourceCurrentAllocatedNativeCoveredQuery.branches source facts (guardHolds formulas solver) inputs)
+        physicalRun.trace (fun final value => EdgeResident final.heap value)
+        good semantic growth history fields covered admissionCertificate).1
+  exact ⟨fuel, result, after, done, resident, law, afterGood, afterContextual,
+    afterSemantic, extension, afterStable, afterIdle, tables, retained, afterAllocations, finalCovered⟩
+
+end MicroCFTA.SourceCurrentSameSymbolEdgeComparisonCovered

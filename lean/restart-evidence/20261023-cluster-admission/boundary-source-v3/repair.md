@@ -1,0 +1,1 @@
+The exact declaration V3 gate precedes this revision. Only the notation projections change to public Prod.fst and Prod.snd. Every remaining source byte, proof step and IH is unchanged. Strict1 and strict2 failed inputs and logs remain. No V3 compiler result is claimed.

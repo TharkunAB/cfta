@@ -1,0 +1,5 @@
+theorem done_stable
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel extra : Nat) (control : Control) (before after : Wrapper width)
+    (kept : List Edge) (observed : execute fuel control before = .done kept after) :
+    execute (fuel + extra) control before = .done kept after

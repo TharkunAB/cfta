@@ -1,0 +1,68 @@
+private theorem scan_boundary_complete
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (bits : Nat) (source : InternedConstructorTemplates.State Symbol Guard)
+    (facts : InternedNestedFacts.Facts source)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inputModel : InputMeaning (view source (guardHolds formulas solver)))
+    (inputRanked : RankedInput (view source (guardHolds formulas solver)) inputModel.valid)
+    (parent : Value Symbol Guard)
+    (original : OriginalInput source (inputOf parent))
+    (available : Available source parent) (closed : parent.free = [])
+    (admitted : inputModel.valid (inputOf parent))
+    (symbol : Symbol)
+    (initialDomains : Cache.State IntersectionFlatMemoKeyDomain.DomainKey)
+    (initialValid : Cache.Valid initialDomains)
+    (pivot : Edge) (remaining incomparableReversed keptReversed : List Edge)
+    (before : Wrapper (bits + 2))
+    (stable : Stable (view source (guardHolds formulas solver)) inputModel inputRanked
+      (guardHolds formulas solver) before)
+    (good : Good before.checked)
+    (contextual : SourceCurrentAllocatedNativeContextCache.Contextual
+      (view source (guardHolds formulas solver)) inputModel inputRanked
+      (guardHolds formulas solver) before.checked.native)
+    (semantic : SemanticReady before.checked.native.machine.heap)
+    (growth : Grows source before.checked.native.machine.heap)
+    (history : Extends source.nodes.issued before.checked.native.machine.heap.nodes.issued)
+    (allocations : SourceRecursiveIntersectionDomainAllocation.Trace
+      (SourceRecursiveIntersectionSourceInventory.domains source)
+      initialDomains before.checked.native.machine.domains)
+    (idle : NativeIdle before.checked.native)
+    (room : SourceCurrentAllocatedNativeResourceForecast.Room bits
+      ⟨source.nodes.next, source.edges.next,
+        initialDomains.next + (SourceRecursiveIntersectionSourceInventory.domains source).length, 0⟩) :
+    let rows := (nodeEdges parent).filter (fun edge => decide (edge.entry.key.symbol = symbol))
+    pivot ∈ rows →
+    (∀ edge ∈ remaining, edge ∈ rows) →
+    (∀ edge ∈ incomparableReversed, edge ∈ rows) →
+    (∀ edge ∈ keptReversed, edge ∈ rows) →
+    ∃ (used : Nat) (next newKept : List Edge) (after : Wrapper (bits + 2)),
+      0 < used ∧
+      SourceCurrentOriginalRowClusterScan.execute used
+        (.scan pivot remaining incomparableReversed keptReversed) before =
+          .yielded (.cluster next newKept) after ∧
+      next.length < 1 + remaining.length + incomparableReversed.length ∧
+      next.length + newKept.length ≤
+        1 + remaining.length + incomparableReversed.length + keptReversed.length ∧
+      (∀ edge ∈ next, edge ∈ rows) ∧
+      (∀ edge ∈ newKept, edge ∈ rows) ∧
+      Good after.checked ∧
+      SourceCurrentAllocatedNativeContextCache.Contextual
+        (view source (guardHolds formulas solver)) inputModel inputRanked
+        (guardHolds formulas solver) after.checked.native ∧
+      SemanticReady after.checked.native.machine.heap ∧
+      Extension before.checked.native.machine after.checked.native.machine ∧
+      Stable (view source (guardHolds formulas solver)) inputModel inputRanked
+        (guardHolds formulas solver) after ∧
+      NativeIdle after.checked.native ∧
+      Extends before.memo.table after.memo.table ∧
+      FlatMemoThunk.Returned before.memo after.memo ∧
+      SourceRecursiveIntersectionDomainAllocation.Trace
+        (SourceRecursiveIntersectionSourceInventory.domains source)
+        initialDomains after.checked.native.machine.domains ∧
+      ∀ ambient : InternedGuardedLanguage.Env Symbol, ∀ term : Term Symbol,
+        (∃ edge ∈ next ++ newKept.reverse, InternedGuardedLanguage.edgeMeaning
+          (guardHolds formulas solver) ambient edge term) ↔
+        ∃ edge ∈ pivot :: (remaining ++ incomparableReversed.reverse ++ keptReversed.reverse),
+          InternedGuardedLanguage.edgeMeaning (guardHolds formulas solver) ambient edge term := by
+  dsimp only

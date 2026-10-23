@@ -1,0 +1,24 @@
+  have swapped : ∀ pair : Edge × Edge, property pair → property (pair.2, pair.1) := by
+    intro pair inputs
+    exact ⟨inputs.2, inputs.1⟩
+
+  have initial : SourceCurrentAllocatedNativeAdmissionCache.Requests property before.memo := by
+    intro handle cell stored
+    rcases cell with ⟨pair, status⟩
+    obtain ⟨value, returned⟩ := stable.returned handle ⟨pair, status⟩ stored
+    cases returned
+    by_cases order : pair.2.entry.identity < pair.1.entry.identity
+    · apply swapped (pair.2, pair.1)
+      simpa only [order, ↓reduceIte] using admitted handle pair value stored
+    · simpa only [order, ↓reduceIte] using admitted handle pair value stored
+
+  have preserved :
+      ∀ (steps : Nat) (control : SourceCurrentSameSymbolEdgeControl.Control)
+        (current : Wrapper width),
+        SourceCurrentAllocatedNativeAdmissionCache.Requests property current.memo →
+        (match control with
+          | .call pair _ => property pair
+          | .order _ pair _ => property pair
+          | _ => True) →
+        SourceCurrentSameSymbolEdgeControl.execute steps control current = .done result after →
+        SourceCurrentAllocatedNativeAdmissionCache.Requests property after.memo := by

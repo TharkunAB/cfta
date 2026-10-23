@@ -1,0 +1,31 @@
+        have pivotMember : pivot ∈
+            (nodeEdges parent).filter (fun edge => decide (edge.entry.key.symbol = symbol))
+        have tailMembers : ∀ edge ∈ tail, edge ∈
+            (nodeEdges parent).filter (fun row => decide (row.entry.key.symbol = symbol))
+        have smaller : next.length < size
+        have prefixRun : SourceCurrentOriginalRowClusterScan.execute (used + 1)
+            (.cluster (pivot :: tail) keptReversed) before =
+            .yielded (.cluster next newKept) middle
+
+ih : ∀ nextSize : Nat, nextSize < size →
+  ∀ (candidates keptReversed : List Edge),
+    (∀ edge ∈ candidates,
+      edge ∈ (nodeEdges parent).filter (fun row => decide (row.entry.key.symbol = symbol))) →
+  ∀ before : Wrapper (bits + 2),
+    Stable before → Good before.checked → Current before.checked →
+    SemanticReady before.checked.native.machine.heap →
+    SourceRecursiveIntersectionDomainAllocation.Trace
+      (SourceRecursiveIntersectionSourceInventory.domains inventory.source)
+      initialDomains before.checked.native.machine.domains →
+    NativeIdle before.checked.native →
+    (∀ (handle : Nat) (pair : Edge × Edge) (value : Edge),
+      before.memo.cells handle = some ⟨pair, .returned value⟩ →
+      PairInputs (if pair.2.entry.identity < pair.1.entry.identity then (pair.2, pair.1) else pair)) →
+    candidates.length = nextSize →
+    ∃ (fuel : Nat) (kept : List Edge) (after : Wrapper (bits + 2)),
+      SourceCurrentOriginalRowClusterScan.execute fuel
+        (.cluster candidates keptReversed) before = .done kept after ∧
+      Current after.checked ∧
+      ∀ (handle : Nat) (pair : Edge × Edge) (value : Edge),
+        after.memo.cells handle = some ⟨pair, .returned value⟩ →
+        PairInputs (if pair.2.entry.identity < pair.1.entry.identity then (pair.2, pair.1) else pair)

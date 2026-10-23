@@ -1,0 +1,43 @@
+{
+  "comparison": {
+    "fuel": "Nat",
+    "common": "Edge",
+    "middle": "Wrapper (bits + 2)",
+    "done": "SourceCurrentSameSymbolEdgeControl.execute fuel (.call (pivot, candidate) []) before = .done common middle",
+    "_resident": "EdgeResident middle.checked.native.machine.heap common",
+    "_law": "SourceCurrentAllocatedNativeContextCache.EdgeLaw inputView inputModel inputRanked holds \u27e8IntersectionEmptyDomain.emptyDomain, (if candidate.entry.identity < pivot.entry.identity then (candidate, pivot) else (pivot, candidate)).1, (if candidate.entry.identity < pivot.entry.identity then (candidate, pivot) else (pivot, candidate)).2\u27e9 common",
+    "midGood": "Good middle.checked",
+    "midContextual": "SourceCurrentAllocatedNativeContextCache.Contextual inputView inputModel inputRanked holds middle.checked.native",
+    "midSemantic": "SemanticReady middle.checked.native.machine.heap",
+    "extension": "Extension before.checked.native.machine middle.checked.native.machine",
+    "midStable": "Stable middle",
+    "midIdle": "NativeIdle middle.checked.native",
+    "_tables": "Extends before.memo.table middle.memo.table",
+    "_retained": "FlatMemoThunk.Returned before.memo middle.memo",
+    "midTrace": "SourceRecursiveIntersectionDomainAllocation.Trace (SourceRecursiveIntersectionSourceInventory.domains inventory.source) initialDomains middle.checked.native.machine.domains",
+    "midCovered": "SourceCurrentAllocatedNativeAdmissionCache.Covered inputs middle.checked.native"
+  },
+  "prefix": {
+    "used": "Nat",
+    "_positive": "0 < used",
+    "_bound": "used \u2264 fuel",
+    "resumed": "SourceCurrentOriginalRowClusterScan.execute used (.comparison pivot candidate tail incomparableReversed keptReversed (.call (pivot, candidate) [])) before = .yielded (if common.entry.identity = candidate.entry.identity then .scan pivot tail incomparableReversed keptReversed else if common.entry.identity = pivot.entry.identity then .cluster (candidate :: (incomparableReversed.reverse ++ tail)) keptReversed else .scan pivot tail (candidate :: incomparableReversed) keptReversed) middle"
+  },
+  "recursive": {
+    "more": "Nat",
+    "next": "List Edge",
+    "newKept": "List Edge",
+    "after": "Wrapper (bits + 2)",
+    "_positive": "0 < more",
+    "scanned": "SourceCurrentOriginalRowClusterScan.execute more (.scan pivot tail nextIncomparable keptReversed) middle = .yielded (.cluster next newKept) after",
+    "shorter": "next.length < 1 + tail.length + nextIncomparable.length",
+    "nextMembers": "\u2200 edge \u2208 next, edge \u2208 (nodeEdges parent).filter (fun row => decide (row.entry.key.symbol = symbol))",
+    "afterGood": "Good after.checked",
+    "afterAt": "Current after.checked",
+    "afterSemantic": "SemanticReady after.checked.native.machine.heap",
+    "afterStable": "Stable after",
+    "afterIdle": "NativeIdle after.checked.native",
+    "afterTrace": "SourceRecursiveIntersectionDomainAllocation.Trace (SourceRecursiveIntersectionSourceInventory.domains inventory.source) initialDomains after.checked.native.machine.domains",
+    "afterAdmission": "\u2200 (handle : Nat) (pair : Edge \u00d7 Edge) (value : Edge), after.memo.cells handle = some \u27e8pair, .returned value\u27e9 \u2192 PairInputs (if pair.2.entry.identity < pair.1.entry.identity then (pair.2, pair.1) else pair)"
+  }
+}

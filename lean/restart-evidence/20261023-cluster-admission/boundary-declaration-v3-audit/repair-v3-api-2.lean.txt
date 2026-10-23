@@ -1,0 +1,11 @@
+@[builtin_quot_precheck Lean.Parser.Term.fun] def precheckFun : Precheck
+  | `(fun $binders* $[: $ty?]? => $body) => do
+    let (binders, body, _) ← liftMacroM <| expandFunBinders binders body
+    let mut ids := #[]
+    for b in binders do
+      for v in ← toBinderViews b do
+        Quotation.withNewLocals ids <| precheck v.type
+        ids := ids.push v.id.getId
+    Quotation.withNewLocals ids <| precheck body
+  | _ => throwUnsupportedSyntax
+

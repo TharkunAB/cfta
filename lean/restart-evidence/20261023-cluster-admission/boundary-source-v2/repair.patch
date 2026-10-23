@@ -1,0 +1,20 @@
+--- body-v1.lean
++++ body-v2.lean
+@@ -29,7 +29,7 @@
+ local notation "Current" => At formulas solver inventory
+ local notation "PairInputs" => (fun pair : Edge × Edge =>
+   SourceCurrentAllocatedNativeContextCache.EdgeInputs inputView inputModel
+-    ⟨IntersectionEmptyDomain.emptyDomain, pair.1, pair.2⟩)
++    (SourceRecursiveIntersectionThunks.EdgeRequest.mk IntersectionEmptyDomain.emptyDomain pair.1 pair.2))
+ 
+ /-- Complete one scan boundary with the same inventory and captured request admission. -/
+ theorem boundary_complete
+@@ -76,7 +76,7 @@
+   have parentOriginal : OriginalInput inventory.source (inputOf parent) := by
+     exact ⟨parent, inventory.originals parent member, inventory.available parent member,
+       (inventory.originals parent member).codec parent⟩
+-  have parentAdmitted : inputs.valid (inputOf parent) := by
++  have parentAdmitted : (inputs).valid (inputOf parent) := by
+     exact SourceCurrentAllocatedNativeInputInventoryModels.root_valid inventory.source inventory.facts
+       holds inventory.roots inventory.originals inventory.available inventory.closed parent member
+   revert stable good current semantic allocations idle admitted

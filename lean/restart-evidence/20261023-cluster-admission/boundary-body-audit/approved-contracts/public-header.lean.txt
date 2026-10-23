@@ -1,0 +1,41 @@
+/-- Complete one scan boundary with the same inventory and captured request admission. -/
+theorem boundary_complete
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (bits : Nat) (parent : Value Symbol Guard) (member : parent ∈ inventory.roots)
+    (symbol : Symbol)
+    (initialDomains : Cache.State IntersectionFlatMemoKeyDomain.DomainKey)
+    (initialValid : Cache.Valid initialDomains)
+    (pivot : Edge) (remaining incomparableReversed keptReversed : List Edge)
+    (before : Wrapper (bits + 2))
+    (stable : Stable before) (good : Good before.checked)
+    (current : Current before.checked)
+    (semantic : SemanticReady before.checked.native.machine.heap)
+    (allocations : SourceRecursiveIntersectionDomainAllocation.Trace
+      (SourceRecursiveIntersectionSourceInventory.domains inventory.source)
+      initialDomains before.checked.native.machine.domains)
+    (idle : NativeIdle before.checked.native)
+    (admitted : ∀ (handle : Nat) (pair : Edge × Edge) (value : Edge),
+      before.memo.cells handle = some ⟨pair, .returned value⟩ →
+      PairInputs (if pair.2.entry.identity < pair.1.entry.identity then (pair.2, pair.1) else pair))
+    (room : SourceCurrentAllocatedNativeResourceForecast.Room bits
+      ⟨inventory.source.nodes.next, inventory.source.edges.next,
+        initialDomains.next + (SourceRecursiveIntersectionSourceInventory.domains inventory.source).length, 0⟩) :
+    let rows := (nodeEdges parent).filter (fun edge => decide (edge.entry.key.symbol = symbol))
+    pivot ∈ rows → (∀ edge ∈ remaining, edge ∈ rows) →
+    (∀ edge ∈ incomparableReversed, edge ∈ rows) →
+    ∃ (used : Nat) (next newKept : List Edge) (after : Wrapper (bits + 2)),
+      0 < used ∧
+      SourceCurrentOriginalRowClusterScan.execute used
+        (.scan pivot remaining incomparableReversed keptReversed) before =
+          .yielded (.cluster next newKept) after ∧
+      next.length < 1 + remaining.length + incomparableReversed.length ∧
+      (∀ edge ∈ next, edge ∈ rows) ∧
+      Good after.checked ∧ Current after.checked ∧
+      SemanticReady after.checked.native.machine.heap ∧ Stable after ∧
+      NativeIdle after.checked.native ∧
+      SourceRecursiveIntersectionDomainAllocation.Trace
+        (SourceRecursiveIntersectionSourceInventory.domains inventory.source)
+        initialDomains after.checked.native.machine.domains ∧
+      ∀ (handle : Nat) (pair : Edge × Edge) (value : Edge),
+        after.memo.cells handle = some ⟨pair, .returned value⟩ →
+        PairInputs (if pair.2.entry.identity < pair.1.entry.identity then (pair.2, pair.1) else pair)

@@ -1,0 +1,4 @@
+/-- A finite map iterator returns every stored entry once at its literal lookup key. -/
+structure Iteration (table : Table Key Item) (entries : List (Key × List Item)) : Prop where
+  unique : (entries.map Prod.fst).Nodup
+  lookup : ∀ query bucket, (query, bucket) ∈ entries ↔ table query = some bucket

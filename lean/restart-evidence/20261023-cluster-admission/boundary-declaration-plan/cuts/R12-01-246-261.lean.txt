@@ -1,0 +1,16 @@
+/-- Original payload syntax contains only complete interned references. Probe metadata is excluded. -/
+inductive Original : Value Symbol Guard → Prop where
+  | empty : Original .empty
+  | reference (name : Nat) : Original (.reference (.interned name))
+  | node (entry : Interned NodeKey) (edges : List (EdgeValue Symbol Guard)) (depth : Nat) (free : List Reference)
+      (children : ∀ edge ∈ edges, ∀ child ∈ edge.children, Original child) : Original (.node entry edges depth free)
+  | union (entry : Interned NodeKey) (members : List (Value Symbol Guard)) (depth : Nat) (free : List Reference)
+      (children : ∀ member ∈ members, Original member) : Original (.union entry members depth free)
+  | mu (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+      (original : Original body) : Original (.mu entry body depth ordinary)
+
+/-- Original available syntax has a complete root codec. -/
+theorem Original.codec (value : Value Symbol Guard) (original : Original value) :
+    IntersectionFlatMemoKey.input value.referenceOf = some (inputOf value) := by
+  cases original <;> rfl
+

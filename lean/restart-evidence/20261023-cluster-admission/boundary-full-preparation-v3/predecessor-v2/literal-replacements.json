@@ -1,0 +1,107 @@
+[
+  {
+    "file": "check-full-public.py",
+    "sites": [
+      {
+        "before": "Read complete cluster execution public output.",
+        "after": "Read complete cluster admission boundary public output.",
+        "occurrences": 1
+      },
+      {
+        "before": "SourceCurrentOriginalRowClusterExecution",
+        "after": "SourceCurrentOriginalRowClusterAdmissionBoundary",
+        "occurrences": 2
+      },
+      {
+        "before": "int(\"130\")",
+        "after": "int(\"230\")",
+        "occurrences": 1
+      },
+      {
+        "before": "[[\"yielded_add\", \"theorem\"], [\"done_stable\", \"theorem\"], [\"completed_unique\", \"theorem\"]]",
+        "after": "[[\"boundary_complete\", \"theorem\"]]",
+        "occurrences": 1
+      },
+      {
+        "before": "cluster-admission-execution",
+        "after": "cluster-admission-boundary",
+        "occurrences": 2
+      }
+    ]
+  },
+  {
+    "file": "prepare-selected-full.py",
+    "sites": [
+      {
+        "before": "name = 'SourceCurrentOriginalRowClusterExecution'",
+        "after": "name = 'SourceCurrentOriginalRowClusterAdmissionBoundary'",
+        "occurrences": 1
+      },
+      {
+        "before": "specs = [('yielded_add', 'theorem'), ('done_stable', 'theorem'), ('completed_unique', 'theorem')]",
+        "after": "specs = [('boundary_complete', 'theorem')]",
+        "occurrences": 1
+      },
+      {
+        "before": "1 <= int(expected_lines) <= 130",
+        "after": "1 <= int(expected_lines) <= 230",
+        "occurrences": 1
+      },
+      {
+        "before": "HERE / 'execution-declaration-plan'",
+        "after": "HERE / 'boundary-declaration-v2'",
+        "occurrences": 1
+      },
+      {
+        "before": "contracts = json.loads(contracts_raw)\nassert len(contracts) == int(expected_contracts_count) == 9\nfor filename, record in contracts.items():\n    fragment = (contract_root / filename).read_bytes()\n    assert hashlib.sha256(fragment).hexdigest() == record['sha256']\n    assert len(fragment.splitlines()) == record['lines']",
+        "after": "contracts = json.loads(contracts_raw)\nlayout_raw = (contract_root / 'insertion-map.json').read_bytes()\nassert hashlib.sha256(layout_raw).hexdigest() == '8c662efea9e663fdd604079a5ac092c5928034a8122230129feef84732542af1'\nlayout = json.loads(layout_raw)\nassert len(contracts) == int(expected_contracts_count) == 21\nfor (filename, expected_digest), record in zip(contracts.items(), layout['compiled_fragments'], strict=True):\n    fragment = (contract_root / filename).read_bytes()\n    assert filename == record['file'] and hashlib.sha256(fragment).hexdigest() == expected_digest == record['sha256']\n    assert len(fragment.splitlines()) == record['lines']",
+        "occurrences": 1
+      },
+      {
+        "before": "HERE / 'root-execution-declaration-gate.json'",
+        "after": "HERE / 'root-boundary-declaration-v2-gate.json'",
+        "occurrences": 1
+      },
+      {
+        "before": "assert gate['contracts_sha256'] == expected_contracts_sha",
+        "after": "assert gate['contracts_sha256'] == expected_contracts_sha and gate['contracts_count'] == int(expected_contracts_count) == 21",
+        "occurrences": 1
+      },
+      {
+        "before": "assert gate['whole_source_hard_stop'] == 130 and gate['default_declaration_limits'] and gate['all_linters']",
+        "after": "assert gate['whole_source_hard_stop'] == 230 and gate['proposed_260_fallback_accepted'] is False and gate['default_declaration_limits'] and gate['all_linters'] and layout['default_declaration_limits'] and layout['all_linters']",
+        "occurrences": 1
+      },
+      {
+        "before": "gate['root_complete_context_headers_local_types_and_IH_read']",
+        "after": "gate['root_complete_context_public_local_obtain_case_and_IH_read']",
+        "occurrences": 1
+      },
+      {
+        "before": "int(expected_context_lines) == 12",
+        "after": "int(expected_context_lines) == 32",
+        "occurrences": 1
+      },
+      {
+        "before": "['yielded-header.lean.txt', 'done-header.lean.txt', 'unique-header.lean.txt']",
+        "after": "['public-header.lean.txt']",
+        "occurrences": 1
+      },
+      {
+        "before": "11 + 3 * len(specs) == 20",
+        "after": "11 + 3 * len(specs) == 14",
+        "occurrences": 1
+      },
+      {
+        "before": "execution-full-preparation/diagnostic-tail.lean.txt",
+        "after": "boundary-full-preparation/diagnostic-tail.lean.txt",
+        "occurrences": 1
+      },
+      {
+        "before": "actual-execution-headers.lean.txt",
+        "after": "actual-boundary-headers.lean.txt",
+        "occurrences": 1
+      }
+    ]
+  }
+]

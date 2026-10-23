@@ -1,0 +1,41 @@
+fun {width} [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+    [inst_1 :
+      DecidableEq.{1}
+        (MicroCFTA.InternedConstructorTemplates.EdgeKey
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    firstFuel secondFuel control before firstAfter secondAfter firstRows secondRows first second =>
+  have firstStable :=
+    @MicroCFTA.SourceCurrentOriginalRowClusterExecution.done_stable width inst inst_1 firstFuel secondFuel control
+      before firstAfter firstRows first;
+  have secondStable :=
+    @MicroCFTA.SourceCurrentOriginalRowClusterExecution.done_stable width inst inst_1 secondFuel firstFuel control
+      before secondAfter secondRows second;
+  @MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done.inj width firstRows firstAfter secondRows secondAfter
+    (@Eq.trans.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width firstRows firstAfter)
+      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) firstFuel secondFuel) control before)
+      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width secondRows secondAfter)
+      (@Eq.symm.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+        (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) firstFuel secondFuel) control before)
+        (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width firstRows firstAfter) firstStable)
+      (@Eq.mp.{0}
+        (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) secondFuel firstFuel) control before)
+          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width secondRows secondAfter))
+        (@Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) firstFuel secondFuel) control before)
+          (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width secondRows secondAfter))
+        (@congrArg.{1, 1} Nat Prop
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) secondFuel firstFuel)
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) firstFuel secondFuel)
+          (fun _a =>
+            @Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+              (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1 _a control before)
+              (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width secondRows secondAfter))
+          (Nat.add_comm secondFuel firstFuel))
+        secondStable))

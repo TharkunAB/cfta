@@ -1,0 +1,63 @@
+        refine ⟨(fun index => Fin.elim0 index), (fun index => Fin.elim0 index),
+          (fun _ => current), rfl, ?_, ?_, Extension.refl _, extends_refl _,
+          FlatMemoThunk.Returned.refl _, ?_, ?_, ?_⟩
+        · intro index
+          exact Fin.elim0 index
+        · intro _index
+          exact ⟨currentGood, currentContextual, currentSemantic, currentGrowth,
+            currentHistory, currentStable, currentIdle, currentTrace⟩
+        · simp
+        · simp
+        · intro _ambient _term
+          simp
+    | cons entry rest ih =>
+        intro current members currentStable currentGood currentContextual currentSemantic
+          currentGrowth currentHistory currentTrace currentIdle
+        have contents := bucket_readback parent entries iteration entry (members entry List.mem_cons_self)
+        obtain ⟨headFuel, headKept, middle, headDone, headMembers, headLength, midGood,
+            midContextual, midSemantic, extension, midStable, midIdle, tables, retained,
+            midTrace, headMeaning⟩ :=
+          SourceCurrentOriginalRowClusterLanguage.cluster_complete bits source facts formulas solver
+            inputModel inputRanked parent original available closed admitted entry.1
+            initialDomains initialValid current currentStable currentGood currentContextual
+            currentSemantic currentGrowth currentHistory currentTrace currentIdle room
+        rw [← contents] at headDone headMembers headLength headMeaning
+        obtain ⟨tailFuels, tailKept, tailStates, tailStart, tailSteps, tailPackets,
+            laterExtension, laterTables, laterReturned, tailMembers, tailLength, tailMeaning⟩ :=
+          ih middle (fun stored member => members stored (List.mem_cons_of_mem entry member))
+            midStable midGood midContextual midSemantic
+            (grows_trans currentGrowth extension.heap)
+            (extends_trans currentHistory extension.history) midTrace midIdle
+        let fuels : Fin (rest.length + 1) → Nat := Fin.cases headFuel tailFuels
+        let kept : Fin (rest.length + 1) → List Edge := Fin.cases headKept tailKept
+        let states : Fin (rest.length + 1 + 1) → Wrapper (bits + 2) :=
+          Fin.cases current tailStates
+        have outputShape : (List.ofFn kept).flatten =
+            headKept ++ (List.ofFn tailKept).flatten := by
+          simp only [kept, List.ofFn_succ, Fin.cases_zero, Fin.cases_succ, List.flatten_cons]
+        refine ⟨fuels, kept, states, rfl, ?_, ?_, extension.trans laterExtension,
+          extends_trans tables laterTables, retained.trans laterReturned, ?_, ?_, ?_⟩
+        · intro index
+          refine Fin.cases ?_ (fun next => ?_) index
+          · change SourceCurrentOriginalRowClusterScan.execute headFuel
+                (.cluster entry.2.reverse []) current = .done headKept (tailStates 0) ∧
+              (∀ edge ∈ headKept, edge ∈ entry.2.reverse) ∧
+              headKept.length ≤ entry.2.reverse.length
+            rw [tailStart]
+            exact ⟨headDone, headMembers, headLength⟩
+          · change SourceCurrentOriginalRowClusterScan.execute (tailFuels next)
+                (.cluster (rest.get next).2.reverse []) (tailStates next.castSucc) =
+                .done (tailKept next) (tailStates next.succ) ∧
+              (∀ edge ∈ tailKept next, edge ∈ (rest.get next).2.reverse) ∧
+              (tailKept next).length ≤ (rest.get next).2.reverse.length
+            exact tailSteps next
+        · intro index
+          refine Fin.cases ?_ (fun next => ?_) index
+          · exact ⟨currentGood, currentContextual, currentSemantic, currentGrowth,
+              currentHistory, currentStable, currentIdle, currentTrace⟩
+          · exact tailPackets next
+        · rw [outputShape]
+          intro edge member
+          rcases List.mem_append.mp member with inHead | inTail
+          · exact List.mem_append.mpr (Or.inl (headMembers edge inHead))
+          · exact List.mem_append.mpr (Or.inr (tailMembers edge inTail))

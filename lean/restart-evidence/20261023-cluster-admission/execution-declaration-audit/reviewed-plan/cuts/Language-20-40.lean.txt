@@ -1,0 +1,21 @@
+/-- Compose a yielded scan prefix with the remaining scan fuel. -/
+private theorem execute_yielded_add
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (used rest : Nat) (control next : ScanControl) (before middle : Wrapper width)
+    (observed : SourceCurrentOriginalRowClusterScan.execute used control before = .yielded next middle) :
+    SourceCurrentOriginalRowClusterScan.execute (used + rest) control before =
+      SourceCurrentOriginalRowClusterScan.execute rest next middle := by
+  induction used generalizing control before with
+  | zero =>
+      have same : control = next ∧ before = middle := by
+        simpa only [SourceCurrentOriginalRowClusterScan.execute,
+          SourceCurrentOriginalRowClusterScan.Outcome.yielded.injEq] using observed
+      rcases same with ⟨rfl, rfl⟩
+      simp only [Nat.zero_add]
+  | succ used ih =>
+      cases one : SourceCurrentOriginalRowClusterScan.step control before <;>
+        simp only [SourceCurrentOriginalRowClusterScan.execute, one] at observed
+      case yielded following after =>
+        simpa only [Nat.succ_add, SourceCurrentOriginalRowClusterScan.execute, one] using
+          ih following after observed
+      all_goals cases observed

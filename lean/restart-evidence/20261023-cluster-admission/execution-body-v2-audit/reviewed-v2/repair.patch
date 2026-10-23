@@ -1,0 +1,34 @@
+--- source-v1.lean
++++ source-v2.lean
+@@ -21,14 +21,14 @@
+   induction used generalizing control before with
+   | zero =>
+       have same : control = next ∧ before = middle := by
+-        simpa only [execute, SourceCurrentOriginalRowClusterScan.Outcome.yielded.injEq] using observed
++        simpa only [SourceCurrentOriginalRowClusterScan.execute, SourceCurrentOriginalRowClusterScan.Outcome.yielded.injEq] using observed
+       rcases same with ⟨rfl, rfl⟩
+       simp only [Nat.zero_add]
+   | succ used ih =>
+       cases one : step control before <;>
+-        simp only [execute, one] at observed
++        simp only [SourceCurrentOriginalRowClusterScan.execute, one] at observed
+       case yielded following after =>
+-        simpa only [Nat.succ_add, execute, one] using ih following after observed
++        simpa only [Nat.succ_add, SourceCurrentOriginalRowClusterScan.execute, one] using ih following after observed
+       all_goals cases observed
+ 
+ /-- Additional fuel retains the exact completed rows and full state. -/
+@@ -41,10 +41,10 @@
+   | zero => cases observed
+   | succ fuel ih =>
+       cases one : step control before <;>
+-        simp only [execute, one] at observed
++        simp only [SourceCurrentOriginalRowClusterScan.execute, one] at observed
+       case yielded following middle =>
+-        simpa only [Nat.succ_add, execute, one] using ih following middle observed
+-      all_goals simpa only [Nat.succ_add, execute, one] using observed
++        simpa only [Nat.succ_add, SourceCurrentOriginalRowClusterScan.execute, one] using ih following middle observed
++      all_goals simpa only [Nat.succ_add, SourceCurrentOriginalRowClusterScan.execute, one] using observed
+ 
+ /-- Two completed scans from the same control and state return the same rows and state. -/
+ theorem completed_unique

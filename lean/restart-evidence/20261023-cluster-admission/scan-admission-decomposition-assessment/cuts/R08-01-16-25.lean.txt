@@ -1,0 +1,10 @@
+/-- The domain is the union of actual input reachability from listed physical roots. -/
+def Reachable (source : InternedConstructorTemplates.State Symbol Guard) (holds : Guard → Term Symbol → Bool)
+    (roots : List (Value Symbol Guard)) (input : Input) : Prop :=
+  ∃ root ∈ roots, InputReach (view source holds) (inputOf root) input
+
+private theorem listed_original (source : InternedConstructorTemplates.State Symbol Guard)
+    (roots : List (Value Symbol Guard)) (originals : ∀ root ∈ roots, Original root)
+    (available : Values source roots) (root : Value Symbol Guard) (member : root ∈ roots) :
+    OriginalInput source (inputOf root) :=
+  ⟨root, originals root member, available root member, (originals root member).codec root⟩

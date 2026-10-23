@@ -1,0 +1,38 @@
+--- initial-selected-verifier.py
++++ selected-verifier.py
+@@ -215,7 +215,9 @@
+         assert not re.search(rb"\b(?:show|suffices|haveI|letI)\b", body) and not re.search(rb"\bobtain\b(?:(?!:=).)*:(?!=)", body, re.S)
+     assert schema["private_helpers"] == schema["global_definitions"] == schema["typed_show_fragments"] == []
+     for record in m["review_only"]:
+-        assert pinned(record) not in source, "Generated IH schemas are review-only"
++        reviewed = pinned(record)
++        if record["path"].endswith("ih-schema.lean.txt"):
++            assert reviewed not in source, "Generated IH schemas are review-only"
+     public = re.findall(r"(?m)^\s*(?:(?:noncomputable|unsafe|partial)\s+)?(def|theorem|lemma|abbrev|opaque|instance|structure|inductive)\s+([^\s(\[{:=]+)", source.decode())
+     assert public == [(kind, short) for short, kind in specs]
+     helpers = []
+@@ -336,7 +338,15 @@
+     else:
+         assert independent["ownership"]["reviewer_math_author"] is False
+         manual = independent["manual_read_scope"]
+-        assert manual["complete_checked_TYPE"] is True if m["key"] == "boundary" else manual["both_complete_checked_TYPEs"] is True
++        if m["key"] == "boundary":
++            assert manual["complete_checked_TYPE"] is True and independent["public_head"] == namespace + shorts[0]
++            assert manual["logical_lines"] == m["head_metrics"][shorts[0]]["type_logical_lines"]
++            assert manual["printed_TYPE"] == "Programmatic raw byte identity; no separate complete manual read claimed."
++            assert manual["BODY"] == "Complete retention and raw reconstruction programmatic only; no whole manual read."
++        else:
++            assert manual["both_complete_checked_TYPEs"] is True and independent["public_heads"] == [namespace + short for short in shorts]
++            assert manual["printed_TYPEs"] == "Programmatic raw byte identity; no separate full manual printed-TYPE read claimed."
++            assert manual["BODYs"] == "Complete retention and raw reconstruction programmatic only; no whole manual BODY read."
+         for short in shorts:
+             metric = m["head_metrics"][short]
+             item = independent["metrics"] if m["key"] == "boundary" else independent["metrics"][short]
+@@ -370,5 +380,6 @@
+ dependencies = re.search(r"Checked axiom dependencies of (\d+) MicroCFTA theorems", raw_audit.decode())
+ assert dependencies and int(dependencies.group(1)) == bound["audit"]["dependencies"]
+ print(json.dumps(dict(status="PASS", live=args.live, **metrics, new_lean_lake_jobs=0, selected_modules=len(modules), original_archives=1,
+-    root_metadata_jobs=len(metadata_jobs), failed_root_metadata_jobs=cut["failed_jobs"], public_definitions=0, public_theorems=sum(len(m["specs"]) for m in modules),
++    root_metadata_jobs=len(metadata_jobs), failed_root_metadata_jobs=cut["failed_jobs"], warned_focused_build_jobs=sum(bool(v["warnings"]) for v in bound["focused_builds"].values()),
++    public_definitions=0, public_theorems=sum(len(m["specs"]) for m in modules),
+     audit_build_jobs=bound["audit"]["build_jobs"], audit_dependencies=bound["audit"]["dependencies"], audit_log_sha256=digest(raw_audit)), indent=2))

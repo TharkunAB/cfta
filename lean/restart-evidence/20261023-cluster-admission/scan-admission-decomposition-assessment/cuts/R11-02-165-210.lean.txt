@@ -1,0 +1,46 @@
+      parentClosed ▸ (childFree_member (parentRows.flatMap EdgeValue.children) reference).mpr
+        ⟨child, List.mem_flatMap.mpr ⟨edge, members edge member, childMember⟩, occurs⟩)
+  have rebuilt : SourceEqualityRequiredCache.Keeps middle.checked.native.machine.heap built.2 ∧
+    Available built.2 built.1 ∧ built.1.free = [] ∧ SourceEqualityRequiredCache.Ordinary built.1 := by
+    exact SourceEqualityRequiredCache.node output middle.checked.native.machine.heap
+      midSemantic.ready residentRows closedRows
+  have rebuiltSemantic : SemanticReady built.2 := by
+    exact SourceEqualityRequiredSemanticCache.node output middle.checked.native.machine.heap
+      midSemantic residentRows closedRows
+  have rebuildExtension : Extension middle.checked.native.machine
+    { middle.checked.native.machine with heap := built.2 } := by
+    exact ⟨rebuilt.1.growth, rebuilt.1.history, extends_refl _⟩
+  have rebuiltGood : Good after.checked := by
+    refine ⟨SourceCurrentAllocatedNativePhysicalCache.advance_valid middle.checked.native
+      midGood.native _ ⟨rebuilt.1.ready.semantic.1.normal.facts, midGood.native.machine.2⟩
+      rebuildExtension, rebuilt.1.ready, midGood.operations, ?_⟩
+    exact SourceCurrentAllocatedNativeCodeFields.makeNode_heap middle.checked.operations
+      output middle.checked.native.machine.heap midGood.fields
+  have rawDone : SourceEqualityNativeDemand.execute 2 (.code (.work (makeNode output) .pure))
+    middle.checked = .done built.1 after.checked := by
+    rfl
+  refine ⟨fuels, kept, states, start, steps, packets, rawDone, rebuiltGood,
+    SourceCurrentAllocatedNativeContextCache.advance_contextual
+      (view source (guardHolds formulas solver)) inputModel inputRanked
+      (guardHolds formulas solver) middle.checked.native _ midContextual,
+    rebuiltSemantic, grows_trans midGrowth rebuilt.1.growth,
+    extends_trans midHistory rebuilt.1.history,
+    stable_heap _ _ _ _ middle built.2 midStable rebuilt.1.growth,
+    midIdle, midTrace, extension.trans rebuildExtension, tables, retained,
+    rfl, rfl, rfl, rfl, rfl, rebuilt.2.1, rebuilt.2.2.2, rebuilt.2.2.1,
+    members, lengthBound, ?_⟩
+  intro ambient term
+  apply (InternedGuardedLanguage.makeNode_exact middle.checked.native.machine.heap
+    midGood.native.machine.1 (guardHolds formulas solver) ambient output residentRows term).trans
+  apply (show (∃ edge ∈ output, MergedColdInterpretation.EdgeMeaning
+      (InternedGuardedLanguage.meaning (guardHolds formulas solver) ambient)
+      (guardHolds formulas solver) edge term) ↔
+      ∃ edge ∈ output, InternedGuardedLanguage.edgeMeaning
+        (guardHolds formulas solver) ambient edge term from
+    exists_congr (fun edge => and_congr_right (fun _ =>
+      (InternedGuardedLanguage.edgeMeaning_all (guardHolds formulas solver) ambient edge term).symm))).trans
+  exact (meaning ambient term).trans
+    (SourceEqualityPartialNodeRebuild.node_meaning (guardHolds formulas solver)
+      ambient parentEntry parentRows parentDepth [] term).symm
+
+end MicroCFTA.SourceCurrentOriginalRowReconstruction

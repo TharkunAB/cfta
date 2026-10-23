@@ -1,0 +1,19 @@
+/-- Read each reversed iterator bucket as the complete original symbol filter. -/
+private theorem bucket_readback [DecidableEq Symbol]
+    (parent : Value Symbol Guard) (entries : List (Symbol × List Edge))
+    (iteration : SourceCurrentMergeGrouping.Iteration
+      (SourceCurrentPrependGrouping.fromRows (fun edge : Edge => edge.entry.key.symbol)
+        (nodeEdges parent)) entries)
+    (entry : Symbol × List Edge) (included : entry ∈ entries) :
+    entry.2.reverse = (nodeEdges parent).filter
+      (fun edge => decide (edge.entry.key.symbol = entry.1)) := by
+  have reversed := SourceCurrentPrependGrouping.iteration_reverse
+    (SourceCurrentPrependGrouping.fromRows (fun edge : Edge => edge.entry.key.symbol)
+      (nodeEdges parent)) entries iteration
+  have member : (entry.1, entry.2.reverse) ∈
+      entries.map (fun stored => (stored.1, stored.2.reverse)) :=
+    List.mem_map.mpr ⟨entry, included, rfl⟩
+  have found := (reversed.lookup entry.1 entry.2.reverse).mp member
+  rw [SourceCurrentPrependGrouping.reverse_fromRows] at found
+  exact ((SourceCurrentMergeGrouping.lookup_some
+    (fun edge : Edge => edge.entry.key.symbol) (nodeEdges parent) entry.1 entry.2.reverse).mp found).2

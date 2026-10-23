@@ -1,0 +1,27 @@
+ ∀ {width : Nat}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (firstFuel secondFuel : Nat) (control : MicroCFTA.SourceCurrentOriginalRowClusterScan.Control)
+  (before firstAfter secondAfter : MicroCFTA.SourceCurrentSameSymbolEdgeControl.State width)
+  (firstRows secondRows :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))),
+  @Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1 firstFuel control before)
+      (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width firstRows firstAfter) →
+    @Eq.{2} (MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome width)
+        (@MicroCFTA.SourceCurrentOriginalRowClusterScan.execute width inst inst_1 secondFuel control before)
+        (@MicroCFTA.SourceCurrentOriginalRowClusterScan.Outcome.done width secondRows secondAfter) →
+      And
+        (@Eq.{1}
+          (List.{0}
+            (MicroCFTA.InternedConstructorTemplates.EdgeValue
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+          firstRows secondRows)
+        (@Eq.{2} (MicroCFTA.SourceCurrentSameSymbolEdgeControl.State width) firstAfter secondAfter)

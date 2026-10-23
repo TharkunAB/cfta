@@ -1,0 +1,12 @@
+    {before : FiniteInput oldView} {after : FiniteInput newView}
+    (agreement : SourceCurrentAllocatedNativeContextRebase.Agreement before after)
+    {state : Native width Symbol Guard} (covered : Covered before state) : Covered after state := by
+  constructor
+  · intro handle cell stored
+    have known := covered.nodes handle cell stored
+    exact ⟨agreement.node_inputs known.1, agreement.seen_covered known.2⟩
+  · intro handle cell stored
+    have known := covered.edges handle cell stored
+    exact ⟨agreement.edge_inputs known.1, agreement.seen_covered known.2⟩
+
+end MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache

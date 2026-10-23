@@ -1,0 +1,1 @@
+Strict1 failed because local notation in simp theorem position elaborates to a function with an implicit width argument. Use the fully qualified execute declaration in every simp list. The mathematical headers, local declarations, induction schemas and line count are unchanged. Strict1 and its exact source remain retained. No FULL was run.

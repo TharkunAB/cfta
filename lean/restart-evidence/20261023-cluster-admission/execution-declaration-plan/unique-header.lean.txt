@@ -1,0 +1,7 @@
+theorem completed_unique
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (firstFuel secondFuel : Nat) (control : Control)
+    (before firstAfter secondAfter : Wrapper width) (firstRows secondRows : List Edge)
+    (first : execute firstFuel control before = .done firstRows firstAfter)
+    (second : execute secondFuel control before = .done secondRows secondAfter) :
+    firstRows = secondRows ∧ firstAfter = secondAfter

@@ -1,0 +1,140 @@
+{
+  "status": "OWNER_FROZEN_DECLARATION_FACTS_ONLY_NOT_ROOT_BODY_OR_PROOF_ACCEPTANCE",
+  "owner_package": "/tmp/mcfta-cluster-admission-execution-plan",
+  "owner_pins": {
+    "path": "/tmp/mcfta-cluster-admission-execution-plan/pins.json",
+    "bytes": 2617,
+    "sha256": "f66cb2934364aacba28d830037ebd57e8b1bdd50d18d7c7751a740751715d348"
+  },
+  "owner_FROZEN": {
+    "path": "/tmp/mcfta-cluster-admission-execution-plan/FROZEN.json",
+    "bytes": 128,
+    "sha256": "fb89ae27988603ce89e21fa29a201a97e1ff4e8fadb44ce099bf248cce1f3572"
+  },
+  "module": "SourceCurrentOriginalRowClusterExecution",
+  "public_specs": [
+    [
+      "yielded_add",
+      "theorem"
+    ],
+    [
+      "done_stable",
+      "theorem"
+    ],
+    [
+      "completed_unique",
+      "theorem"
+    ]
+  ],
+  "private_names": [],
+  "proposed_hard_stop": 130,
+  "context": {
+    "file": "context.lean.txt",
+    "lines": 12,
+    "sha256": "e5e8aa584049289f5135d2e0c1d76f478766eba5cbf50005d7ac8ad7ffd6b5f9"
+  },
+  "ordered_owner_contracts": [
+    {
+      "file": "context.lean.txt",
+      "lines": 12,
+      "sha256": "e5e8aa584049289f5135d2e0c1d76f478766eba5cbf50005d7ac8ad7ffd6b5f9"
+    },
+    {
+      "file": "yielded-header.lean.txt",
+      "lines": 5,
+      "sha256": "f702dcb4e4427fa131d1af0f618a710e9f11404ea7f3120eaba7d66a0816d21a"
+    },
+    {
+      "file": "yielded-same.lean.txt",
+      "lines": 1,
+      "sha256": "cbe4eb3bc01abe4ec1a2b91f703ce310c47c5e45a7ad1ebc3304913c29ff185d"
+    },
+    {
+      "file": "yielded-case.lean.txt",
+      "lines": 1,
+      "sha256": "1165ace63fd45583215a3cff69d9d92233c29e4554d709ef8f857915b711a05f"
+    },
+    {
+      "file": "done-header.lean.txt",
+      "lines": 5,
+      "sha256": "8b0559248686ae50d96b54e3ceb50086ec0b4e881bdb18be447d1dd230b0d258"
+    },
+    {
+      "file": "done-case.lean.txt",
+      "lines": 1,
+      "sha256": "1165ace63fd45583215a3cff69d9d92233c29e4554d709ef8f857915b711a05f"
+    },
+    {
+      "file": "unique-header.lean.txt",
+      "lines": 7,
+      "sha256": "2b57c75bf9714fe74ecd59d26fcaa6b107df18159a0bf0db5891946088046715"
+    },
+    {
+      "file": "unique-first.lean.txt",
+      "lines": 1,
+      "sha256": "52c58b9f55a5f9cdf83e62ee1e47596ad60b27301e35e33e7d580b4407390687"
+    },
+    {
+      "file": "unique-second.lean.txt",
+      "lines": 1,
+      "sha256": "5d1ed23ef87019b1371a79da14bb0e8c4ccc08b549526ee1ebaad68825caaf77"
+    }
+  ],
+  "public_body_scope_map": {
+    "yielded_add": {
+      "typed_haves": [
+        "same"
+      ],
+      "case_equations": [
+        "one"
+      ],
+      "literal_contracts": [
+        "yielded-same.lean.txt",
+        "yielded-case.lean.txt"
+      ],
+      "induction": {
+        "theorem": "yielded_add",
+        "variable": "used",
+        "generalizing": [
+          "control",
+          "before"
+        ],
+        "exact_IH": "∀ (control : Control) (before : Wrapper width), execute used control before = .yielded next middle → execute (used + rest) control before = execute rest next middle"
+      }
+    },
+    "done_stable": {
+      "typed_haves": [],
+      "case_equations": [
+        "one"
+      ],
+      "literal_contracts": [
+        "done-case.lean.txt"
+      ],
+      "induction": {
+        "theorem": "done_stable",
+        "variable": "fuel",
+        "generalizing": [
+          "control",
+          "before"
+        ],
+        "exact_IH": "∀ (control : Control) (before : Wrapper width), execute fuel control before = .done kept after → execute (fuel + extra) control before = .done kept after"
+      }
+    },
+    "completed_unique": {
+      "typed_haves": [
+        "firstStable",
+        "secondStable"
+      ],
+      "case_equations": [],
+      "literal_contracts": [
+        "unique-first.lean.txt",
+        "unique-second.lean.txt"
+      ],
+      "induction": null
+    }
+  },
+  "contract_archive_root": "PENDING explicit root-approved path; do not inherit H28/signature-plan implicitly",
+  "proposed_artifact_prefix": "cluster-admission-execution",
+  "diagnostic_tail_lines": 20,
+  "proof_results_claimed": false
+}

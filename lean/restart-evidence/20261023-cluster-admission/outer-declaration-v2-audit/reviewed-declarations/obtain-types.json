@@ -1,0 +1,39 @@
+{
+  "boundary": {
+    "used": "Nat",
+    "next": "List Edge",
+    "newKept": "List Edge",
+    "middle": "Wrapper (bits + 2)",
+    "_positive": "0 < used",
+    "scanned": "SourceCurrentOriginalRowClusterScan.execute used (.scan pivot tail [] keptReversed) before = .yielded (.cluster next newKept) middle",
+    "shorter": "next.length < 1 + tail.length + ([] : List Edge).length",
+    "nextMembers": "\u2200 edge \u2208 next, edge \u2208 (nodeEdges parent).filter (fun row => decide (row.entry.key.symbol = symbol))",
+    "midGood": "Good middle.checked",
+    "midAt": "Current middle.checked",
+    "midSemantic": "SemanticReady middle.checked.native.machine.heap",
+    "midStable": "Stable middle",
+    "midIdle": "NativeIdle middle.checked.native",
+    "midTrace": "SourceRecursiveIntersectionDomainAllocation.Trace (SourceRecursiveIntersectionSourceInventory.domains inventory.source) initialDomains middle.checked.native.machine.domains",
+    "midAdmission": "\u2200 (handle : Nat) (pair : Edge \u00d7 Edge) (value : Edge), middle.memo.cells handle = some \u27e8pair, .returned value\u27e9 \u2192 PairInputs (if pair.2.entry.identity < pair.1.entry.identity then (pair.2, pair.1) else pair)"
+  },
+  "recursive": {
+    "fuel": "Nat",
+    "kept": "List Edge",
+    "after": "Wrapper (bits + 2)",
+    "done": "SourceCurrentOriginalRowClusterScan.execute fuel (.cluster next newKept) middle = .done kept after",
+    "finalAt": "Current after.checked",
+    "finalAdmission": "\u2200 (handle : Nat) (pair : Edge \u00d7 Edge) (value : Edge), after.memo.cells handle = some \u27e8pair, .returned value\u27e9 \u2192 PairInputs (if pair.2.entry.identity < pair.1.entry.identity then (pair.2, pair.1) else pair)"
+  },
+  "producer": {
+    "otherFuel": "Nat",
+    "otherKept": "List Edge",
+    "otherAfter": "Wrapper (bits + 2)",
+    "otherDone": "SourceCurrentOriginalRowClusterScan.execute otherFuel (.cluster ((nodeEdges parent).filter (fun row => decide (row.entry.key.symbol = symbol))) []) before = .done otherKept otherAfter",
+    "otherAt": "Current otherAfter.checked",
+    "otherAdmission": "\u2200 (handle : Nat) (pair : Edge \u00d7 Edge) (value : Edge), otherAfter.memo.cells handle = some \u27e8pair, .returned value\u27e9 \u2192 PairInputs (if pair.2.entry.identity < pair.1.entry.identity then (pair.2, pair.1) else pair)"
+  },
+  "unique": {
+    "_sameKept": "otherKept = kept",
+    "sameState": "otherAfter = after"
+  }
+}

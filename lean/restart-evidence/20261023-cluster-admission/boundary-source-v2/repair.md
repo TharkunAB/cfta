@@ -1,0 +1,1 @@
+The root accepted both exact declaration changes before this source revision. Only the PairInputs request constructor and parentAdmitted projection spelling change. Every tactic, proof call, premise, conclusion and induction remains unchanged. The original strict1 failure is retained. This source has no compiler acceptance yet.
