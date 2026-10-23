@@ -4,20 +4,38 @@
 
 ### External Haskell repair status
 
-The negative type-depth repair is fixed locally in `058b11fe8f`.
+The negative type-depth repair is merged in PR #168 at `a5fbb66eec`.
+Upstream `75cfc19b8` has the same source as local `058b11fe8f`.
 Two optional LPO repairs remain open. Native counterexamples are retained below.
 
 | Repair | Current status | External action |
 | --- | --- | --- |
 | Recursive self-type field pools | Fixed by `b9219b9e`, merged in PR #65 at `c0cc8a05`. The API rejects a field pool for the datatype itself. This includes the reported `Chain` case. | No additional patch. Keep the historical reproducer and validation below. |
 | Typing binder size-order documentation | Fixed by `74691832`, merged in PR #97 at the earlier imported main `794903b3f`. This changes documentation. | No additional patch. The earlier failed runtime reproduction remains unvalidated. |
-| Negative Specftacular type depth | Fixed locally in `058b11fe8f`; CLI, search and grammar entries reject it. The pre-fix call timed out. | Import this commit into main. |
+| Negative Specftacular type depth | Fixed by `75cfc19b8`, merged in PR #168 at `a5fbb66eec`. Its source equals local `058b11fe8f`; all three public checks remain verified. | No additional patch. Keep the pre-fix timeout and the retained validation. |
 | Optional LPO comparator transitivity | OPEN. Native well-typed terms give `s < t < u < s`, also after canonicalTypes. | Repair annotation handling and the order fallback. See the retained comparator regression. |
 | Optional LPO application context | OPEN. Native terms give `f a > a` and `(f a) x < a x`. | Establish an order compatible with function application and actual rewriting. The annotation repair alone is insufficient. |
 
-The two earlier repairs remain in the imported main history. The local
+All three completed repairs are in the imported main history. The
 type-depth fix and both open LPO repairs are recorded in the current note.
 All earlier repair entries and evidence remain below.
+
+
+## Current main incorporated
+
+Updated: 2026-10-24. Main: `a5fbb66eec`. Merge: `65f237954c3`.
+Read `lean/notes-current-upstream-type-depth.md`.
+
+All current main commits are incorporated. PR #168 has the same negative-depth
+repair as local `058b11fe8f`; its merge changes no file bytes or modes.
+The earlier partial-enumeration, phase-4, refinement-memo and term-order updates
+are retained. The eager-driver bridge is checked under its stated premises.
+Actual cached scheduling and observing callbacks remain the next proof target.
+Phase-4 typing, pruning, runtime and parallel correspondence remain open.
+FINDINGS keeps the external repair index FIRST. Negative depth is fixed upstream;
+both LPO defects remain open. H6 remains strongest combined. The goal is ACTIVE.
+This status update adds no implementation or proof change. Earlier checks apply
+to the identical source bytes. Earlier reports retain their historical status.
 
 
 ## Shared enumeration: checked eager completion bridge

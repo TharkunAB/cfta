@@ -1,6 +1,23 @@
 Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
 
+## Current main incorporated
+
+Updated: 2026-10-24. Main: `a5fbb66eec`. Merge: `65f237954c3`.
+Read `lean/notes-current-upstream-type-depth.md`.
+
+All current main commits are incorporated. PR #168 has the same negative-depth
+repair as local `058b11fe8f`; its merge changes no file bytes or modes.
+The earlier partial-enumeration, phase-4, refinement-memo and term-order updates
+are retained. The eager-driver bridge is checked under its stated premises.
+Actual cached scheduling and observing callbacks remain the next proof target.
+Phase-4 typing, pruning, runtime and parallel correspondence remain open.
+FINDINGS keeps the external repair index FIRST. Negative depth is fixed upstream;
+both LPO defects remain open. H6 remains strongest combined. The goal is ACTIVE.
+This status update adds no implementation or proof change. Earlier checks apply
+to the identical source bytes. Earlier reports retain their historical status.
+
+
 ## Shared enumeration: checked eager completion bridge
 
 Updated: 2026-10-24. Proof: `ecabbf38e669d96275ce991fa8a843bcec3b51ed`.
