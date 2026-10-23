@@ -1,3 +1,4 @@
+import MicroCFTA.SourceRecursiveIntersectionNativeNodeCounterGrowth
 import MicroCFTA.InternedFreshOrdinaryStoredNodeCounterGrowth
 import MicroCFTA.InternedFreshOrdinaryNodeCounterGrowth
 import MicroCFTA.SourceCurrentAllocatedNativePairInventoryRebase
