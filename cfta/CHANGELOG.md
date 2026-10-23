@@ -4,6 +4,10 @@
 
 - Generalize refinement formulas with global predicate applications and named
   data sorts. Unsupported Z3 interpretations return `Unknown`.
+- Add `Data.CFTA.Refinement.Definition`: predicate definitions in the formula
+  language. `unfold` checks the sorts and replaces each defined predicate by
+  its body without variable capture. `withZ3Definitions` gives Z3 the
+  unfolded queries.
 
 Before release, the package was called `microcfta`.
 

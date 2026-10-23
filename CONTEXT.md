@@ -67,6 +67,11 @@ Wilf, and Feat (ranking).
 - **Solver lowering**: a meaning-preserving translation of a logical
   obligation to a solver's supported representation. It can be partial.
 
+- **Predicate definition**: a global predicate name with parameters and a
+  body in the formula language. **Unfolding** replaces each application by
+  the body, with the arguments in place of the parameters. It is a solver
+  lowering for a solver without predicates.
+
 - **Exact transformation**: an operation on an automaton that keeps its
   language, the set of terms it accepts. Equality reduction
   (`reducePartially`), `prune`, `withoutRedundantEdges`, `refold`, and `trim`
