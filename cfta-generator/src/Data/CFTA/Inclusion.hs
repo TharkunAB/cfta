@@ -45,7 +45,7 @@ exactly when the two transitions accept it, so the intersection stays exact.
 For two automata without constraints, the result is 'noConstraint' again, so
 'sized' can use the count table.
 
-The two checks decide different constraints. 'inclusion' accepts only
+The three checks decide different constraints. 'inclusion' accepts only
 automata without constraints. 'inclusionUpTo' also accepts equality
 constraints: 'sized' and 'FTA.accepts' check them on each term. A constraint
 that a check does not decide gives 'ConstrainedLeft' or 'ConstrainedRight'.
@@ -54,12 +54,21 @@ over-approximation. Without the constraints of the left automaton, the
 counterexample could be a term that the left automaton rejects. Without the
 constraints of the right automaton, the check could miss a term that the
 right automaton rejects.
+
+'inclusionUpToWith' also decides guards beyond equality constraints, with a
+solver ('sizedUpTo'). The solver can answer 'Unknown' for a guard on a term.
+Then 'sizedUpTo' stops at the size of that term, and the check cannot decide
+that size. The result is 'UnknownAt' with that size, unless a smaller size has
+a counterexample. 'sizedUpTo' does not keep the classes below the size where
+it stops, so the check builds them again with a smaller bound. The solver then
+decides the guards below that size two times.
 -}
 module Data.CFTA.Inclusion (
     Inclusion (..),
     InclusionError (..),
     inclusion,
     inclusionUpTo,
+    inclusionUpToWith,
 ) where
 
 import Data.Containers.ListUtils (nubOrd)
@@ -71,8 +80,10 @@ import qualified Data.Set as Set
 
 import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (conjoinConstraints, noConstraint, residual)
-import Data.CFTA.Index (Size)
-import Data.CFTA.Sized (Sized, countOfSize, sized, termsOfSize)
+import Data.CFTA.Index (Size (..))
+import Data.CFTA.Refinement.Verdict (Entailment)
+import Data.CFTA.Sized (Sized, SizedError (..), countOfSize, sized, sizedUpTo, termsOfSize)
+import Data.CFTA.Symbol (Symbol)
 import Data.CFTA.Term (Term)
 
 -- | The result of an inclusion check.
@@ -89,6 +100,14 @@ data Inclusion symbol
       automaton.
       -}
       NotIncluded !(Term symbol)
+    | {- | The right automaton accepts every term of the left automaton with
+      fewer nodes than this size. The solver did not decide a constraint on a
+      term with this number of nodes, which the left automaton or the
+      intersection builds at one of its states. So this size and the larger
+      sizes are not checked. A counterexample of this size is not given,
+      because the check cannot find the one with the smallest class rank.
+      -}
+      UnknownAt !Size
     deriving (Eq, Show)
 
 -- | Why an inclusion check cannot start.
@@ -137,6 +156,41 @@ inclusionUpTo bound left right
   where
     classes automaton = fromRight (bug "an automaton without a residual guard has one") $ sized automaton
     guarded = any (any (residual . FTA.transitionConstraint)) . FTA.transitionTable
+
+{- | 'inclusionUpTo' for automata with any constraints. The solver decides each
+constraint on each term that its transition builds. The result is
+'IncludedUpTo', 'NotIncluded', or 'UnknownAt'.
+
+When the solver does not decide a constraint on a term of the left automaton
+or of the intersection, the check stops at the size of that term. It then
+checks the sizes below it again. A counterexample there gives 'NotIncluded';
+otherwise the result is 'UnknownAt' with the size where the check stopped.
+The check calls the solver for each term up to the bound, also when a
+smaller size has a counterexample.
+-}
+inclusionUpToWith ::
+    (Ord left, Ord right) =>
+    Entailment -> Size -> FTA.PlainFTA left Symbol -> FTA.PlainFTA right Symbol -> IO (Inclusion Symbol)
+inclusionUpToWith entailment bound left right = do
+    leftClasses <- sizedUpTo entailment bound left
+    case leftClasses of
+        Left stop -> below stop
+        Right decidedLeft -> do
+            commonClasses <- sizedUpTo entailment bound (intersection left right)
+            case commonClasses of
+                Left stop -> below stop
+                Right decidedCommon -> pure $ firstMissing bound decidedLeft decidedCommon (missingFrom decidedCommon)
+  where
+    -- A term of the left class that the class of the intersection does not hold.
+    missingFrom decidedCommon size = (`Set.notMember` Set.fromList (termsOfSize decidedCommon size))
+    -- The result below the size of a term that the solver did not decide.
+    below (GuardUnknown _ term) = do
+        let stop = Size $ toInteger $ length term
+        smaller <- inclusionUpToWith entailment (stop - 1) left right
+        pure $ case smaller of
+            IncludedUpTo _ -> UnknownAt stop
+            decided -> decided
+    below ResidualGuard = bug "sizedUpTo rejects a guard"
 
 {- | The size of a counterexample, or 'Nothing' when the right automaton
 accepts every term of the left automaton. The automata have no constraints.

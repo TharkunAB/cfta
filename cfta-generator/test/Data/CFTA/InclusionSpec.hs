@@ -1,7 +1,9 @@
 module Data.CFTA.InclusionSpec (spec) where
 
+import Control.Monad (filterM)
 import Data.List (find)
 import qualified Data.Map.Strict as Map
+import Data.Maybe (listToMaybe)
 import Data.Ord (Down (..))
 import qualified Data.Text as Text
 import Test.Hspec (Spec, describe, it, shouldBe)
@@ -11,8 +13,11 @@ import Data.CFTA.Constraint (Constraint, Guard (..), equalityConstraint, noConst
 import qualified Data.CFTA.Equality as ECTA
 import Data.CFTA.Inclusion
 import Data.CFTA.Index (Size (..))
-import Data.CFTA.Sized (sized, termsOfSize)
-import Data.CFTA.Symbol (Symbol (Symbol))
+import Data.CFTA.Refinement.Evaluate (evaluateConstraint)
+import Data.CFTA.Refinement.Expression (Formula, refinementFormula, (.==), (.>))
+import Data.CFTA.Refinement.Verdict (Entailment (Entailment), Verdict (..))
+import Data.CFTA.Sized (sized, sizedUpTo, termsOfSize)
+import Data.CFTA.Symbol (Symbol (RefinedSymbol, Symbol))
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
 
@@ -90,6 +95,40 @@ spec = describe "Data.CFTA.Inclusion" $ do
                             <> sixRows
         inclusion byThree bySixOrThree `shouldBe` Right (NotIncluded $ chain 9)
         inclusion byThree bySixOrThree `shouldBe` inclusionUpTo 20 byThree bySixOrThree
+    describe "with a solver" $ do
+        it "agrees with the check without a solver where no guard needs one" $ do
+            found <-
+                traverse (\(leftName, rightName, check) -> (leftName,rightName,) . Right <$> check) $
+                    overPairs boundedFixtures (inclusionUpToWith unusedEntailment bound)
+            found `shouldBe` overPairs boundedFixtures (inclusionUpTo bound)
+        it "agrees with a search of the size classes of the left automaton, with the solver" $ do
+            found <-
+                traverse (\(leftName, rightName, check) -> (leftName,rightName,) <$> check) $
+                    overPairs guardFixtures (inclusionUpToWith partialEntailment bound)
+            expected <-
+                traverse (\(leftName, rightName, check) -> (leftName,rightName,) <$> check) $
+                    overPairs guardFixtures solverSearch
+            found `shouldBe` expected
+        it "makes a guard on both children equivalent to a smaller set of leaves" $ do
+            found <- traverse (uncurry $ inclusionUpToWith partialEntailment bound) [(bothAboveOne, twos), (twos, bothAboveOne)]
+            found `shouldBe` [IncludedUpTo bound, IncludedUpTo bound]
+        it "stops at the first size with a guard that the solver does not decide" $ do
+            -- The guard of the right automaton on g(n3, x) is not decided. A
+            -- term with three nodes is the smallest term.
+            stopped <-
+                inclusionUpToWith partialEntailment bound (numberPairs [1, 2, 3] noConstraint) (numberPairs [1, 2, 3] firstAboveOne)
+            stopped `shouldBe` UnknownAt 3
+            belowStop <-
+                inclusionUpToWith partialEntailment 2 (numberPairs [1, 2, 3] noConstraint) (numberPairs [1, 2, 3] firstAboveOne)
+            belowStop `shouldBe` IncludedUpTo 2
+        it "gives a counterexample below a guard that the solver does not decide" $ do
+            let withLeaf = automaton "s" [("s", [leaf "m", node "g" ["q", "q"]]), ("q", map number [1, 2, 3])]
+            found <- inclusionUpToWith partialEntailment bound withLeaf (numberPairs [1, 2, 3] firstAboveOne)
+            found `shouldBe` NotIncluded (term "m" [])
+        it "stops at a guard of the left automaton that the solver does not decide" $ do
+            stopped <-
+                inclusionUpToWith partialEntailment bound (numberPairs [1, 3] firstAboveOne) (numberPairs [1, 2, 3] noConstraint)
+            stopped `shouldBe` UnknownAt 3
 
 -- | The largest size that the tests check.
 bound :: Size
@@ -99,6 +138,19 @@ bound = 7
 upToBound :: Inclusion Symbol -> Inclusion Symbol
 upToBound Included = IncludedUpTo bound
 upToBound other = other
+
+{- | The first term of the left automaton, by size and then by class rank,
+that the right automaton does not accept with 'partialEntailment'. The classes
+come from 'sizedUpTo', and the acceptance from 'FTA.acceptsM'.
+-}
+solverSearch :: FTA.PlainFTA String Symbol -> FTA.PlainFTA String Symbol -> IO (Inclusion Symbol)
+solverSearch left right = do
+    classes <- sizedUpTo partialEntailment bound left >>= either (fail . show) pure
+    missing <- filterM (fmap not . acceptedByRight) [found | size <- [1 .. bound], found <- termsOfSize classes size]
+    pure $ maybe (IncludedUpTo bound) NotIncluded $ listToMaybe missing
+  where
+    acceptedByRight = FTA.acceptsM decide right
+    decide _ transition candidate = (== Yes) <$> evaluateConstraint partialEntailment (FTA.transitionConstraint transition) candidate
 
 -- | The first term of the left automaton, by size and then by class rank, that the right automaton rejects.
 search :: FTA.PlainFTA String Symbol -> FTA.PlainFTA String Symbol -> Inclusion Symbol
@@ -182,6 +234,62 @@ chainRows state = [(state, [leaf "a", leaf "b", node "f" [state]])]
 equalAt :: String -> [String] -> [ECTA.ChildIndex] -> [ECTA.ChildIndex] -> FTA.Transition String Symbol Constraint
 equalAt symbol children one other =
     FTA.Transition (sym symbol) children $ equalityConstraint $ ECTA.mkEqConstraints [[ECTA.path one, ECTA.path other]]
+
+-- | Pairs of refined leaves, with guards that 'partialEntailment' decides, each with a name.
+guardFixtures :: [(String, FTA.PlainFTA String Symbol)]
+guardFixtures =
+    [ ("pairs of 1 and 2", numberPairs [1, 2] noConstraint)
+    , ("pairs of 1 and 2, the first above one", numberPairs [1, 2] firstAboveOne)
+    , ("pairs of 1 and 2, the second above one", numberPairs [1, 2] $ semanticConstraint $ Satisfies (ECTA.path [1]) aboveOne)
+    , ("pairs of 1 and 2, both above one", bothAboveOne)
+    , ("pairs of 2", twos)
+    ]
+
+-- | The pairs g(x, y) of leaves with the given numbers, with a constraint on g.
+numberPairs :: [Integer] -> Constraint -> FTA.PlainFTA String Symbol
+numberPairs numbers constraint = automaton "s" [("s", [FTA.Transition (sym "g") ["q", "q"] constraint]), ("q", map number numbers)]
+
+-- | The pairs of 1 and 2 whose two children are above one.
+bothAboveOne :: FTA.PlainFTA String Symbol
+bothAboveOne =
+    numberPairs [1, 2] $ semanticConstraint $ And [Satisfies (ECTA.path [0]) aboveOne, Satisfies (ECTA.path [1]) aboveOne]
+
+-- | The pair of 2 and 2, without a guard.
+twos :: FTA.PlainFTA String Symbol
+twos = numberPairs [2] noConstraint
+
+-- | The guard that the first child is above one.
+firstAboveOne :: Constraint
+firstAboveOne = semanticConstraint $ Satisfies (ECTA.path [0]) aboveOne
+
+-- | A leaf n with the refinement that its value is the number.
+number :: Integer -> FTA.Transition String Symbol Constraint
+number value = FTA.Transition (RefinedSymbol (sym "n") (valueIs value)) [] noConstraint
+
+-- | The refinement that the value is the number.
+valueIs :: Integer -> Formula
+valueIs value = refinementFormula (.== fromInteger value)
+
+-- | The refinement that the value is above one.
+aboveOne :: Formula
+aboveOne = refinementFormula (.> 1)
+
+{- | A solver that decides only whether the values 1 and 2 are above one. It
+does not decide the value 3, or any other question.
+-}
+partialEntailment :: Entailment
+partialEntailment = Entailment $ \antecedent consequent ->
+    pure $
+        if consequent /= aboveOne
+            then Unknown
+            else
+                if antecedent == valueIs 2
+                    then Yes
+                    else if antecedent == valueIs 1 then No else Unknown
+
+-- | A solver that fails the test when the check calls it.
+unusedEntailment :: Entailment
+unusedEntailment = Entailment $ \_ _ -> fail "unexpected solver call"
 
 -- | The test automata without constraints, each with a name.
 fixtures :: [(String, FTA.PlainFTA String Symbol)]
