@@ -17,6 +17,12 @@
   exclusion names. Each conflict holds its key and its three versions. The
   merged order of a row is defined, and two different new orders of one row
   are a conflict.
+- Add the source edit `SetStart` and the language operation `start`, which
+  change the initial state of a document. The new initial state must have a
+  row at the end of the batch. With it, `Merge.diff` and
+  `Merge.diffDocument` are total and give `SetStart` first when the initial
+  states differ; `DiffError` and `DifferentStart` are removed. The text
+  format writes the edit as `start STATE;` in an update.
 Before release, the package was called `microcfta`.
 
 - Add `Data.CFTA.Document`: editable source documents with named

@@ -282,12 +282,15 @@ put row Extra {
 delete row Extra;
 exclude zero-pair = root pair(zero @{ v == 0 }, zero @{ v == 0 });
 restore old-rule;
+start Expr;
 ```
 
-`define`, `remove`, `require`, and `relax` are the operations of the same names
-in `Data.CFTA.Language`. `put production`, `put row`, and `delete row` are the
-source edits `PutTransition`, `PutRow`, and `DeleteRow`. An update does not
-name the language it changes: apply it with `Language.update`, which checks it.
+`define`, `remove`, `require`, `relax`, and `start` are the operations of the
+same names in `Data.CFTA.Language`. `put production`, `put row`, and
+`delete row` are the source edits `PutTransition`, `PutRow`, and `DeleteRow`.
+`start` is the source edit `SetStart`, written as the `start` line of a
+document. An update does not name the language it changes: apply it with
+`Language.update`, which checks it.
 
 ## Checkpoints
 
@@ -393,7 +396,8 @@ symbol          = name ( "@" "{" formula "}" )? ;
 children        = "(" ( name ( "," name )* )? ")" ;
 
 update-file     = "update" "1" ";" operation* ;
-operation       = "define" name name "=" symbol children? ";"
+operation       = "start" name ";"
+                | "define" name name "=" symbol children? ";"
                 | "remove" name name ";"
                 | "require" name name name "=" constraint ";"
                 | "relax" name name name ";"
