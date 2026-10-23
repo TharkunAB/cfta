@@ -1,20 +1,35 @@
 module Data.CFTA.Edit.ConstrainedSpec (spec) where
 
+import Control.Monad (filterM, forM, zipWithM)
 import Data.Containers.ListUtils (nubOrd)
+import Data.Functor.Identity (runIdentity)
 import qualified Data.Map.Strict as Map
 import qualified Data.Set as Set
+import Data.String (fromString)
 import Test.Hspec (Spec, describe, it, shouldBe)
 
 import qualified Data.CFTA as FTA
-import Data.CFTA.Constraint (Constraint, equalitiesHold, equalityConstraint, noConstraint)
+import Data.CFTA.Constraint (
+    Constraint (..),
+    Guard (..),
+    equalitiesHold,
+    equalityConstraint,
+    noConstraint,
+    semanticConstraint,
+ )
 import Data.CFTA.Edit
 import Data.CFTA.Edit.Constrained
 import Data.CFTA.Equality.Constraint (mkEqConstraints)
+import qualified Data.CFTA.Formula as Formula
 import qualified Data.CFTA.Gen as Gen
 import Data.CFTA.Index (ChildIndex (..), Size (..), TransitionIndex (..))
 import Data.CFTA.Interned (fromFTA)
 import Data.CFTA.Path (path)
-import Data.CFTA.Sized (countOfSize, sized, termsOfSize)
+import Data.CFTA.Refinement.Evaluate (evaluateConstraint)
+import Data.CFTA.Refinement.Expression (Formula, refinementFormula, (.==), (.>))
+import Data.CFTA.Refinement.Verdict (Entailment (Entailment), Verdict (..), negateVerdict)
+import Data.CFTA.Sized (SizedError (..), countOfSize, sized, sizedUpTo, termsOfSize)
+import Data.CFTA.Symbol (Symbol (RefinedSymbol))
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
 
@@ -102,6 +117,49 @@ spec = describe "Data.CFTA.Edit.Constrained" $ do
             Map.lookup (term "g" [term "a" [], term "b" []]) (decoded twoRuns twoRunsTerm) `shouldBe` Just 1
         it "gives the edits of the other sites as the definition does" $
             decoded twoRuns twoRunsTerm `shouldBe` definition [ReplaceAt $ path [0], ReplaceAt $ path [1]] twoRuns twoRunsTerm
+    describe "with guards" $ do
+        it "gives each edited term as often as the definition does, with a solver that decides every guard" $ do
+            found <- forM guardFixtures $ \(name, automaton, given) -> do
+                pairs <- guardedEdits fullSolver automaton given
+                pure (name, Map.fromListWith (+) [(edited, 1) | (_, edited) <- pairs])
+            expected <- forM guardFixtures $ \(name, automaton, given) -> do
+                counted <- definitionWith (decidedBy fullSolver) (map fst $ expectedGuardLeftOut name) automaton given
+                pure (name, counted)
+            found `shouldBe` expected
+        it "leaves out the sites of an atom on fixed paths and new material, and the context wraps whose hole a guard can read" $ do
+            found <- forM guardFixtures $ \(name, automaton, given) -> do
+                result <- guardedEditAutomaton fullSolver automaton given
+                pure (name, leftOut <$> result)
+            found `shouldBe` [(name, Right $ expectedGuardLeftOut name) | (name, _, _) <- guardFixtures]
+        it "has edits of each kind that the definition checks" $ do
+            found <- forM [fixture | fixture@(name, _, _) <- guardFixtures, name `elem` ["guarded chains", "guarded pairs"]] $
+                \(name, automaton, given) -> do
+                    pairs <- guardedEdits fullSolver automaton given
+                    pure (name, Set.fromList [kindOf edit | (edit, _) <- pairs])
+            found
+                `shouldBe` [ ("guarded chains", Set.fromList ["replace", "unwrap", "wrap", "context"])
+                           , ("guarded pairs", Set.fromList ["replace", "wrap"])
+                           ]
+        it "decides an atom on fixed paths once, and moves an atom on the new material onto the edit" $ do
+            result <- either (error . show) id <$> guardedEditAutomaton fullSolver (leafGuard aboveOneAt00) leafTerm
+            [ (FTA.transitionSymbol transition, constraintGuard $ FTA.transitionConstraint transition)
+              | transition <- FTA.transitionsFrom (edits result) ConstrainedRoot
+              , FTA.transitionSymbol transition `elem` [ReplaceAt $ path [0, 0], ReplaceAt $ path [1]]
+              ]
+                `shouldBe` [(ReplaceAt $ path [0, 0], Satisfies (path [0]) aboveOne), (ReplaceAt $ path [1], Top)]
+        it "lists a site apart when the solver does not decide an atom on fixed paths, or the fixed part of the site" $ do
+            eitherLeaf <-
+                guardedEditAutomaton partialSolver (leafGuard eitherAboveOne) (symbolTerm "g" [symbolTerm "f" [number 2], number 3])
+            unwraps <- guardedEditAutomaton partialSolver guardedUnwraps guardedUnwrapsTerm
+            (leftOut <$> eitherLeaf, leftOut <$> unwraps)
+                `shouldBe` ( Right [(ReplaceAt $ path [0], UndecidedGuard), (ReplaceAt $ path [0, 0], UndecidedGuard)]
+                           , Right [(UnwrapAt (path [0]) 0, UndecidedGuard)]
+                           )
+        it "leaves an atom on the new material that the solver does not decide to the count" $ do
+            result <- either (error . show) id <$> guardedEditAutomaton partialSolver (leafGuard aboveOneAt00) leafTerm
+            counted <- sizedUpTo partialSolver 4 (fst $ plainSymbols $ edits result)
+            either (\failure -> case failure of GuardUnknown _ _ -> "unknown"; _ -> "other") (const "decided") counted
+                `shouldBe` "unknown"
   where
     isWrap edit = kindOf edit == "wrap"
     acyclic = ["pinned", "shifted", "equal pairs", "two runs"]
@@ -155,7 +213,7 @@ pairsOfChainsTerm :: Term String
 pairsOfChainsTerm = term "k" [term "pair" [term "f" [term "a" []], term "f" [term "a" []]]]
 
 -- | The kind of the site of an edit.
-kindOf :: Term (EditSymbol String) -> String
+kindOf :: Term (EditSymbol symbol) -> String
 kindOf (Term.Node symbol _) = case symbol of
     ReplaceAt _ -> "replace"
     WrapAt{} -> "wrap"
@@ -230,72 +288,100 @@ decoded automaton given =
         , toInteger (length edited) <= bound
         ]
 
+-- | 'definitionWith' for an automaton with equality constraints.
+definition :: [EditSymbol String] -> FTA.PlainFTA String String -> Term String -> Map.Map (Term String) Int
+definition skipped automaton given =
+    runIdentity $ definitionWith (\constraint subterm -> pure $ equalitiesHold constraint subterm) skipped automaton given
+
 {- | The number of edits that give each candidate, by the definition: a
 replacement, an unwrap, a wrap, or a context wrap at a position, in the state
 that the run of the term gives the position, whose edited term the automaton
 accepts. A context wrap counts once for each position of the old subterm in
-the child with the hole. The sites of the first argument are left out.
+the child with the hole. The first argument decides a constraint on a term.
+The sites of the second argument are left out.
 -}
-definition :: [EditSymbol String] -> FTA.PlainFTA String String -> Term String -> Map.Map (Term String) Int
-definition skipped automaton given =
-    Map.fromList [(candidate, count) | candidate <- candidates automaton, let count = editCount candidate, count > 0]
+definitionWith ::
+    (Monad m, Ord symbol, Show symbol) =>
+    (Constraint -> Term symbol -> m Bool) ->
+    [EditSymbol symbol] ->
+    FTA.PlainFTA String symbol ->
+    Term symbol ->
+    m (Map.Map (Term symbol) Int)
+definitionWith check skipped automaton given = do
+    found <- runsOf check automaton (FTA.initialState automaton) given
+    let run = case found of
+            [one] -> one
+            _ -> error "not one run"
+    counts <- forM (candidates automaton) $ \candidate -> do
+        count <- editCount run candidate
+        pure (candidate, count)
+    pure $ Map.fromList [(candidate, count) | (candidate, count) <- counts, count > 0]
   where
-    run = case runsOf automaton (FTA.initialState automaton) given of
-        [found] -> found
-        _ -> error "not one run"
-    editCount candidate
-        | not (FTA.accepts automaton candidate) = 0
-        | otherwise =
-            length
-                [ ()
-                | (at, state) <- Map.toList run
-                , Just old <- [subtermAt given at]
-                , Just new <- [subtermAt candidate at]
-                , (replaceAt candidate at =<< subtermAt given at) == Just given
-                , site <- sites (path $ map ChildIndex at) state old new
-                , site `notElem` skipped
-                ]
+    editCount run candidate = do
+        accepted <- acceptsAt (FTA.initialState automaton) candidate
+        if not accepted
+            then pure 0
+            else do
+                found <-
+                    forM
+                        [ (path $ map ChildIndex at, state, old, new)
+                        | (at, state) <- Map.toList run
+                        , Just old <- [subtermAt given at]
+                        , Just new <- [subtermAt candidate at]
+                        , (replaceAt candidate at =<< subtermAt given at) == Just given
+                        ]
+                        (\(at, state, old, new) -> sites at state old new)
+                pure $ length [site | site <- concat found, site `notElem` skipped]
     -- The sites at a position whose edit gives the new subterm.
-    sites at state old@(Term.Node _ oldChildren) new@(Term.Node symbol arguments) =
-        [ReplaceAt at | new /= old, acceptsAt state new]
-            <> [UnwrapAt at (ChildIndex index) | (index, child) <- zip [0 ..] oldChildren, child == new, acceptsAt state new]
-            <> [ WrapAt at symbol (TransitionIndex index) (ChildIndex hole)
-               | index <- fitting
-               , (hole, argument) <- zip [0 ..] arguments
-               , argument == old
-               ]
-            <> [ ContextAt at symbol (TransitionIndex index) (ChildIndex hole)
-               | index <- fitting
-               , (hole, argument) <- zip [0 ..] arguments
-               , place <- drop 1 $ positions argument
-               , subtermAt argument place == Just old
-               ]
+    sites at state old@(Term.Node _ oldChildren) new@(Term.Node symbol arguments) = do
+        accepted <- acceptsAt state new
+        fitting <- map fst <$> filterM fits (zip [0 ..] (FTA.transitionsFrom automaton state))
+        pure $
+            [ReplaceAt at | new /= old, accepted]
+                <> [UnwrapAt at (ChildIndex index) | (index, child) <- zip [0 ..] oldChildren, child == new, accepted]
+                <> [ WrapAt at symbol (TransitionIndex index) (ChildIndex hole)
+                   | index <- fitting
+                   , (hole, argument) <- zip [0 ..] arguments
+                   , argument == old
+                   ]
+                <> [ ContextAt at symbol (TransitionIndex index) (ChildIndex hole)
+                   | index <- fitting
+                   , (hole, argument) <- zip [0 ..] arguments
+                   , place <- drop 1 $ positions argument
+                   , subtermAt argument place == Just old
+                   ]
       where
-        -- The transitions of the state that accept the new subterm, by index.
-        fitting =
-            [ index
-            | (index, FTA.Transition other children constraint) <- zip [0 ..] (FTA.transitionsFrom automaton state)
-            , other == symbol
-            , length children == length arguments
-            , equalitiesHold constraint new
-            , and $ zipWith acceptsAt children arguments
-            ]
-    acceptsAt state = FTA.accepts (fromRows state $ Map.toList $ FTA.transitionTable automaton)
+        -- Whether a transition of the state accepts the new subterm.
+        fits (_, FTA.Transition other children constraint)
+            | other /= symbol || length children /= length arguments = pure False
+            | otherwise = do
+                holds <- check constraint new
+                childrenAccept <- zipWithM acceptsAt children arguments
+                pure $ holds && and childrenAccept
+    acceptsAt state =
+        FTA.acceptsM
+            (\_ transition subterm -> check (FTA.transitionConstraint transition) subterm)
+            (fromRows state $ Map.toList $ FTA.transitionTable automaton)
 
 -- | The positions of a term, the root first.
-positions :: Term String -> [[Int]]
+positions :: Term symbol -> [[Int]]
 positions (Term.Node _ children) = [] : [index : at | (index, child) <- zip [0 ..] children, at <- positions child]
 
--- | The runs of an automaton from a state on a term: the state of each position.
-runsOf :: FTA.PlainFTA String String -> String -> Term String -> [Map.Map [Int] String]
-runsOf automaton state term'@(Term.Node symbol children) =
-    [ Map.insert [] state $ Map.unions [Map.mapKeys (index :) childRun | (index, childRun) <- zip [0 ..] childRuns]
-    | FTA.Transition other childStates constraint <- FTA.transitionsFrom automaton state
-    , other == symbol
-    , length childStates == length children
-    , equalitiesHold constraint term'
-    , childRuns <- traverse (uncurry $ runsOf automaton) (zip childStates children)
-    ]
+-- | The runs of an automaton from a state on a term: the state of each position. The first argument decides a constraint on a term.
+runsOf ::
+    (Monad m, Eq symbol) =>
+    (Constraint -> Term symbol -> m Bool) -> FTA.PlainFTA String symbol -> String -> Term symbol -> m [Map.Map [Int] String]
+runsOf check automaton state subterm@(Term.Node symbol children) =
+    fmap concat $ forM (FTA.transitionsFrom automaton state) $ \(FTA.Transition other childStates constraint) -> do
+        holds <- if other == symbol && length childStates == length children then check constraint subterm else pure False
+        if not holds
+            then pure []
+            else do
+                childRuns <- zipWithM (runsOf check automaton) childStates children
+                pure
+                    [ Map.insert [] state $ Map.unions [Map.mapKeys (index :) childRun | (index, childRun) <- zip [0 ..] picked]
+                    | picked <- sequence childRuns
+                    ]
 
 -- | The number of runs of an edit automaton on an edit, with the equalities checked.
 runs :: FTA.PlainFTA ConstrainedState (EditSymbol String) -> Term (EditSymbol String) -> Integer
@@ -311,7 +397,7 @@ runs automaton = go (FTA.initialState automaton)
             ]
 
 -- | The terms over the alphabet of the automaton with at most 'bound' nodes.
-candidates :: FTA.PlainFTA String String -> [Term String]
+candidates :: (Ord symbol) => FTA.PlainFTA String symbol -> [Term symbol]
 candidates automaton = allTerms =<< [1 .. fromInteger bound]
   where
     symbols =
@@ -331,21 +417,23 @@ candidates automaton = allTerms =<< [1 .. fromInteger bound]
         ]
 
 -- | The subterm at a position.
-subtermAt :: Term String -> [Int] -> Maybe (Term String)
+subtermAt :: Term symbol -> [Int] -> Maybe (Term symbol)
 subtermAt found [] = Just found
 subtermAt (Term.Node _ children) (index : rest) = case drop index children of
     child : _ -> subtermAt child rest
     [] -> Nothing
 
 -- | The term with the subterm at a position replaced.
-replaceAt :: Term String -> [Int] -> Term String -> Maybe (Term String)
+replaceAt :: Term symbol -> [Int] -> Term symbol -> Maybe (Term symbol)
 replaceAt _ [] new = Just new
 replaceAt (Term.Node symbol children) (index : rest) new = case splitAt index children of
     (before, child : after) -> (\changed -> Term.Node symbol (before <> (changed : after))) <$> replaceAt child rest new
     _ -> Nothing
 
 -- | An automaton from rows of named states.
-fromRows :: String -> [(String, [FTA.Transition String String Constraint])] -> FTA.PlainFTA String String
+fromRows ::
+    (Ord symbol, Show symbol) =>
+    String -> [(String, [FTA.Transition String symbol Constraint])] -> FTA.PlainFTA String symbol
 fromRows initial rows = either (error . show) id $ FTA.mkFTA initial rows
 
 -- | A transition without children.
@@ -367,3 +455,145 @@ term = Term.Node
 -- | New material from its symbol and children.
 material :: String -> [Term (EditSymbol String)] -> Term (EditSymbol String)
 material = Term.Node . Material
+
+-- | The automata with guards, each with a name and a term that it accepts.
+guardFixtures :: [(String, FTA.PlainFTA String Symbol, Term Symbol)]
+guardFixtures =
+    [ ("a guard on a leaf", leafGuard aboveOneAt00, leafTerm)
+    , ("either leaf above one", leafGuard eitherAboveOne, symbolTerm "g" [symbolTerm "f" [number 2], number 3])
+    , ("a negated guard", leafGuard $ Not $ Satisfies (path [1]) aboveOne, leafTerm)
+    , ("different leaves", leafGuard $ Not $ Same (path [0, 0]) (path [1]), leafTerm)
+    ,
+        ( "guarded chains"
+        , fromRows
+            "s"
+            [ ("s", [guardedAt "g" ["c", "n"] $ Satisfies (path [1]) aboveOne])
+            , ("c", [symbolNode "f" ["c"], symbolNode "h" ["n"]])
+            , ("n", numbers)
+            ]
+        , symbolTerm "g" [symbolTerm "f" [symbolTerm "h" [number 2]], number 3]
+        )
+    ,
+        ( "guarded pairs"
+        , fromRows
+            "s"
+            [ ("s", [symbolNode "k" ["c"]])
+            , ("c", numbers <> [guardedAt "pair" ["n", "c"] $ Satisfies (path [0]) aboveOne])
+            , ("n", numbers)
+            ]
+        , symbolTerm "k" [number 2]
+        )
+    , ("guarded unwraps", guardedUnwraps, guardedUnwrapsTerm)
+    ]
+
+-- | The sites that the edit automaton of each fixture with guards leaves out, with a solver that decides every guard.
+expectedGuardLeftOut :: String -> [(EditSymbol Symbol, LeftOut)]
+expectedGuardLeftOut name = case name of
+    "different leaves" -> [(ReplaceAt $ path at, MixedGuard) | at <- [[0], [0, 0], [1]]]
+    "guarded pairs" -> [(ContextAt (path [0]) (fromString "pair") 3 1, ConstrainedHole)]
+    _ -> []
+
+-- | g(f(n), n) with a guard on g.
+leafGuard :: Guard -> FTA.PlainFTA String Symbol
+leafGuard guard = fromRows "s" [("s", [guardedAt "g" ["p", "n"] guard]), ("p", [symbolNode "f" ["n"]]), ("n", numbers)]
+
+-- | The term g(f(2), 1).
+leafTerm :: Term Symbol
+leafTerm = symbolTerm "g" [symbolTerm "f" [number 2], number 1]
+
+-- | The number below f is above one.
+aboveOneAt00 :: Guard
+aboveOneAt00 = Satisfies (path [0, 0]) aboveOne
+
+-- | One of the two numbers is above one.
+eitherAboveOne :: Guard
+eitherAboveOne = Or [Satisfies (path [0, 0]) aboveOne, Satisfies (path [1]) aboveOne]
+
+-- | k(w(v(n))) or k(v(n)), where the number of v(n) at the place of w is above one.
+guardedUnwraps :: FTA.PlainFTA String Symbol
+guardedUnwraps =
+    fromRows
+        "s"
+        [ ("s", [symbolNode "k" ["c"]])
+        , ("c", [symbolNode "w" ["e"], guardedAt "v" ["n"] $ Satisfies (path [0]) aboveOne])
+        , ("e", [symbolNode "v" ["n"]])
+        , ("n", numbers)
+        ]
+
+-- | The term k(w(v(3))).
+guardedUnwrapsTerm :: Term Symbol
+guardedUnwrapsTerm = symbolTerm "k" [symbolTerm "w" [symbolTerm "v" [number 3]]]
+
+-- | The leaves with the numbers 1, 2, and 3.
+numbers :: [FTA.Transition String Symbol Constraint]
+numbers = [FTA.Transition (numberSymbol value) [] noConstraint | value <- [1, 2, 3]]
+
+-- | A transition without a constraint, over symbols.
+symbolNode :: String -> [String] -> FTA.Transition String Symbol Constraint
+symbolNode symbol children = FTA.Transition (fromString symbol) children noConstraint
+
+-- | A transition with a guard, over symbols.
+guardedAt :: String -> [String] -> Guard -> FTA.Transition String Symbol Constraint
+guardedAt symbol children guard = FTA.Transition (fromString symbol) children $ semanticConstraint guard
+
+-- | A term over symbols from its symbol and children.
+symbolTerm :: String -> [Term Symbol] -> Term Symbol
+symbolTerm symbol = Term.Node (fromString symbol)
+
+{- | The edits of a fixture with guards, up to one node more than 'bound',
+whose edited term has at most 'bound' nodes, with the edited term. The solver
+decides the guards.
+-}
+guardedEdits :: Entailment -> FTA.PlainFTA String Symbol -> Term Symbol -> IO [(Edit Symbol, Term Symbol)]
+guardedEdits solver automaton given = do
+    result <- either (error . show) id <$> guardedEditAutomaton solver automaton given
+    let (plain, decode) = plainSymbols (edits result)
+    classes <- either (error . show) id <$> sizedUpTo solver (Size $ bound + 1) plain
+    pure
+        [ (edit, edited)
+        | size <- [1 .. bound + 1]
+        , edit <- map decode $ termsOfSize classes (Size size)
+        , Just edited <- [applyEdit given edit]
+        , toInteger (length edited) <= bound
+        ]
+
+-- | Whether the solver decides that a term satisfies a constraint.
+decidedBy :: Entailment -> Constraint -> Term Symbol -> IO Bool
+decidedBy solver constraint subterm = (== Yes) <$> evaluateConstraint solver constraint subterm
+
+-- | A solver that decides whether the values 1, 2, and 3 are above one.
+fullSolver :: Entailment
+fullSolver = tableSolver [(1, No), (2, Yes), (3, Yes)]
+
+-- | A solver that decides whether the values 1 and 2 are above one, and not the value 3.
+partialSolver :: Entailment
+partialSolver = tableSolver [(1, No), (2, Yes)]
+
+{- | A solver from the verdicts of "the value is above one" for some values.
+It decides the negation from the same table, because a value refutes the
+formula when it does not satisfy it.
+-}
+tableSolver :: [(Integer, Verdict)] -> Entailment
+tableSolver table = Entailment $ \antecedent consequent ->
+    pure $ case lookup antecedent [(valueIs value, verdict) | (value, verdict) <- table] of
+        Nothing -> Unknown
+        Just verdict
+            | consequent == aboveOne -> verdict
+            | consequent == Formula.Not aboveOne -> negateVerdict verdict
+            | otherwise -> Unknown
+
+-- | The refinement that the value is above one.
+aboveOne :: Formula
+aboveOne = refinementFormula (.> 1)
+
+-- | The refinement that the value is the number.
+valueIs :: Integer -> Formula
+valueIs value = refinementFormula (.== fromInteger value)
+
+-- | The leaf n with a value.
+numberSymbol :: Integer -> Symbol
+numberSymbol value = RefinedSymbol (fromString "n") (valueIs value)
+
+-- | The term of a leaf n with a value.
+number :: Integer -> Term Symbol
+number value = Term.Node (numberSymbol value) []
