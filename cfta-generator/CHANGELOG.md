@@ -12,6 +12,13 @@
   checkpoint of another route, route version, or graph, and names the first
   row that differs. `relocate` finds a term in an edited graph. A graph with a
   guard beyond equality constraints needs a solver: `resume` rejects it.
+- `Data.CFTA.Sized.Checkpoint`: sampling checkpoints. `startSampling` and
+  `resumeSampling` draw terms from the same listing, uniformly or with a
+  weight for each size, with SplitMix64 (`splitMix64`, as `splitmix64.c`).
+  Draw `i` depends only on the seed and on `i`, so a checkpoint holds the
+  seed and the number of draws, and a new process gives the same next draws.
+  `resumeSampling` rejects another graph, other weights, another route
+  version, and another generator version.
 Before release, the package was called `microcfta-generator`.
 
 Initial release. `cfta-generator` is one generator over the constrained
