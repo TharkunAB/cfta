@@ -111,6 +111,7 @@ import Data.Bits (bit, shiftR, xor, (.&.))
 import Data.List (find)
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
+import Data.Maybe (fromMaybe)
 import Data.Text (Text)
 import Data.Word (Word64)
 
@@ -261,7 +262,7 @@ resumeSampling checkpoint graph weights = do
         [ (term, checkpoint{samplingDraws = index + 1})
         | index <- [draws ..]
         , let (size, rank) = select $ drawStream (samplingSeed checkpoint) index
-              term = maybe (error "cfta-generator bug: a draw outside its size class") id $ unrankOfSize classes size rank
+              term = fromMaybe (error "cfta-generator bug: a draw outside its size class") $ unrankOfSize classes size rank
         ]
 
 {- | The selection of a sized rank from the words of a stream, or the reason
@@ -299,7 +300,7 @@ selection classes bound weights = case weights of
 
 -- | The entry with the largest offset at most the value. The offsets start at zero.
 atOffset :: Integer -> Map Integer entry -> (Integer, entry)
-atOffset value offsets = maybe (error "cfta-generator bug: a value below the first offset") id $ Map.lookupLE value offsets
+atOffset value offsets = fromMaybe (error "cfta-generator bug: a value below the first offset") $ Map.lookupLE value offsets
 
 {- | An integer from zero to below a bound of at least one, from the words of
 a stream, and the rest of the stream.
