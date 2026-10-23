@@ -98,6 +98,11 @@ spec = describe "Data.CFTA.Sized.Prefix with a solver" $ do
         forM_ terms (searchVerdict searched guardedLists)
         searchMade <- readIORef searchCalls
         (made, searchMade) `shouldSatisfy` uncurry (<)
+    it "weighs the accepted completions only, so an undecided token has the probability zero" $ do
+        completions <- prefixCompletionsWith partialEntailment 3 guardedPairs
+        let after = fromMaybe (error "no pair") $ afterToken completions (sym "g", 2)
+        completionWeight after `shouldBe` 3
+        map (tokenProbability after) [(number 1, 0), (number 2, 0), (number 3, 0)] `shouldBe` [Just 0, Just 1, Just 0]
     it "rejects a constrained automaton without a solver" $
         either Just (const Nothing) (prefixCompletions 3 guardedPairs) `shouldBe` Just GuardedTransition
 

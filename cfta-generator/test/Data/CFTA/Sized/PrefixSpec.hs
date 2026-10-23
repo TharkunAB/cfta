@@ -1,6 +1,6 @@
 module Data.CFTA.Sized.PrefixSpec (spec) where
 
-import Control.Monad (forM_)
+import Control.Monad (ap, forM_)
 import Data.Containers.ListUtils (nubOrd)
 import Data.Either (fromRight)
 import Data.Functor (void)
@@ -58,6 +58,24 @@ spec = describe "Data.CFTA.Sized.Prefix" $ do
         let different = semanticConstraint $ Not $ Same (ECTA.path [0]) (ECTA.path [1])
             guarded = automaton "s" [("s", [FTA.Transition (sym "g") ["q", "q"] different]), ("q", [leaf "a", leaf "b"])]
         either Just (const Nothing) (prefixCompletions 6 guarded) `shouldBe` Just GuardedTransition
+    it "draws the sizes of two children with their weights" $ do
+        -- Up to nine nodes, the two children of a sum can have one and five
+        -- nodes or three and three, whose weights differ.
+        let completions = start 9 expressionAutomaton
+            add = fromMaybe (error "no sum") $ afterToken completions ("add", 2)
+            listed = concat [termsOfSize (either (error . show) id $ sized expressionAutomaton) (Size size) | size <- [1 .. 9]]
+            sums = [term | term <- listed, take 1 (preorder term) == [("add", 2)]]
+        forM_ [const 1, \symbol -> if symbol == "one" then 3 else 1 / 2] $ \each -> do
+            let total = sum $ map (termWeight each) sums
+            fmap distribution (drawCompletion proportional $ withWeights each add)
+                `shouldBe` Just (Map.fromListWith (+) [(term, termWeight each term / total) | term <- sums])
+    it "keeps a token whose completions have the weight zero, with the probability zero" $ do
+        let completions = withWeights (\symbol -> if symbol == "one" then 0 else 1) $ start 3 expressionAutomaton
+            one = fromMaybe (error "no one") $ afterToken completions ("one", 0)
+        lookup ("one", 0) (nextTokenWeights completions) `shouldBe` Just 0
+        tokenProbability completions ("one", 0) `shouldBe` Just 0
+        (completionWeight one, tokenProbability one ("zero", 0), isJust $ drawCompletion proportional one)
+            `shouldBe` (0, Nothing, False)
     it "has no completion below size one" $ do
         let completions = start 0 expressionAutomaton
         completionCount completions `shouldBe` 0
@@ -142,6 +160,54 @@ fixtureUpTo bound name graph = describe name $ do
         forM_ invalid $ \prefix -> do
             (prefix, isJust $ afterPrefix empty prefix) `shouldBe` (prefix, False)
             (prefix, brute prefix) `shouldBe` (prefix, 0)
+    describe "weights" $ do
+        it "gives each next token the number of its completions as its weight, with the weight one" $
+            forM_ prefixes $ \prefix -> do
+                let completions = after prefix
+                (prefix, nextTokenWeights completions, completionWeight completions)
+                    `shouldBe` ( prefix
+                               , [(token, fromIntegral count) | (token, Cardinality count) <- nextTokens completions]
+                               , fromIntegral $ brute prefix
+                               )
+        it "gives each next token the sum of the weights of its completions" $
+            forM_ prefixes $ \prefix -> do
+                let completions = withWeights weight $ after prefix
+                (prefix, nextTokenWeights completions, completionWeight completions)
+                    `shouldBe` ( prefix
+                               , [(token, bruteWeight (prefix <> [token])) | (token, _) <- nextTokens completions]
+                               , bruteWeight prefix
+                               )
+        it "draws each completion with its weight over the total weight" $
+            forM_ prefixes $ \prefix -> forM_ [const 1, weight] $ \each -> do
+                let completions = withWeights each $ after prefix
+                    total = sum [termWeight each term | term <- accepted, prefix `isPrefixOf` preorder term]
+                (prefix, fmap distribution $ drawCompletion proportional completions)
+                    `shouldBe` ( prefix
+                               , Just $
+                                    Map.fromListWith
+                                        (+)
+                                        [ (term, termWeight each term / total)
+                                        | term <- accepted
+                                        , prefix `isPrefixOf` preorder term
+                                        , termWeight each term > 0
+                                        ]
+                               )
+        it "gives the next tokens and the complete prefix probabilities that sum to one" $
+            forM_ prefixes $ \prefix -> do
+                let completions = withWeights weight $ after prefix
+                    complete = sum [termWeight weight term | term <- accepted, preorder term == prefix]
+                ( prefix
+                    , fmap (+ complete / bruteWeight prefix) $ sum <$> traverse (tokenProbability completions . fst) (nextTokens completions)
+                    )
+                    `shouldBe` (prefix, Just 1)
+                ( prefix
+                    , [ token
+                      | token <- alphabet
+                      , token `notElem` map fst (nextTokens completions)
+                      , tokenProbability completions token /= Just 0
+                      ]
+                    )
+                    `shouldBe` (prefix, [])
   where
     plain = FTA.dropConstraints graph
     empty = start bound graph
@@ -152,6 +218,10 @@ fixtureUpTo bound name graph = describe name $ do
     prefixes = nubOrd $ concatMap inits preorders
     brute :: [(symbol, Int)] -> Integer
     brute prefix = genericLength $ filter (prefix `isPrefixOf`) preorders
+    -- A weight for each symbol: its place among the symbols, over three.
+    symbols = nubOrd $ map fst alphabet
+    weight symbol = maybe 0 (\place -> fromIntegral (place + 1) / 3) $ lookup symbol $ zip symbols [0 :: Int ..]
+    bruteWeight prefix = sum [termWeight weight term | term <- accepted, prefix `isPrefixOf` preorder term]
     -- Each token of the automaton, and each symbol with one more child.
     alphabet =
         nubOrd $
@@ -166,6 +236,37 @@ fixtureUpTo bound name graph = describe name $ do
         take 5 [prefix <> [token] | prefix <- prefixes, token <- alphabet, token `notElem` map fst (nextTokens $ after prefix)]
             <> take 3 [tokens <> [token] | tokens <- preorders, token <- alphabet]
             <> take 3 (map preorder $ termsOfSize classes (Size $ bound + 1))
+
+-- | The weight of a term: the product of the weights of its symbols.
+termWeight :: (symbol -> Rational) -> Term symbol -> Rational
+termWeight weight = foldr ((*) . weight) 1
+
+-- | A distribution over values, as a list of values with their probabilities.
+newtype Distribution value = Distribution [(value, Rational)]
+
+instance Functor Distribution where
+    fmap f (Distribution weighted) = Distribution [(f value, probability) | (value, probability) <- weighted]
+
+instance Applicative Distribution where
+    pure value = Distribution [(value, 1)]
+    (<*>) = ap
+
+instance Monad Distribution where
+    Distribution weighted >>= next =
+        Distribution
+            [ (result, probability * probability')
+            | (value, probability) <- weighted
+            , let Distribution results = next value
+            , (result, probability') <- results
+            ]
+
+-- | The choice of an index in proportion to the weights.
+proportional :: [Rational] -> Distribution Int
+proportional weights = Distribution [(index, weight / sum weights) | (index, weight) <- zip [0 ..] weights, weight > 0]
+
+-- | The probability of each value of a distribution.
+distribution :: (Ord value) => Distribution value -> Map.Map value Rational
+distribution (Distribution weighted) = Map.fromListWith (+) weighted
 
 -- | The largest size of the completions.
 sizeBound :: Integer
