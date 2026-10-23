@@ -1,5 +1,27 @@
 # Constrained languages, indexing, and distributions
 
+## Completed pair request admission
+
+Updated: 2026-10-23 02:53 CEST. Proof checkpoint: `34ab7cbe04`.
+Start: `8e9ca779c5`. Imported main remains `794903b3f`.
+Read `lean/notes-current-pair-request-admission.md`.
+
+The checked theorem derives admission for all captured pair memo cells after
+one observed completed H7 comparison. It also derives canonical admission
+for every actual returned pair cell in the same final memo.
+Incoming Stable, old returned canonical admission and the new pair admission
+are explicit premises. The source, model, ranks and holds stay fixed.
+The proof follows the actual control and full state. It does not derive execution.
+Native Covered for these comparisons, generated-node composition, new-source Room, WordRanges,
+Mu/full pass, practical width, Haskell refinement and convergence remain open.
+H6 constructed_node_calls remains strongest combined. The whole goal is incomplete.
+Preservation covers 101066 baseline files/modes, 298 baseline Haskell files
+and 207 active package files. FINDINGS keeps its repair index FIRST.
+H24 was pushed and remote-verified at8e9ca779c555994e1b5b6bb207ef664376f90583.
+The user authorized further pushes to formalize. H25 seal and push remain future work.
+The local publisher stays LOCAL_ONLY and has no network command.
+Root push follows successful seal and local checkpoint verification.
+
 ## Stable pair model transport
 
 Updated: 2026-10-23 02:12 CEST. Proof checkpoint: `d759548ed2`.
