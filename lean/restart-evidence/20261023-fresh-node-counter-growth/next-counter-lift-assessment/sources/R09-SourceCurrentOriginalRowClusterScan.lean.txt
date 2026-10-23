@@ -1,0 +1,129 @@
+import MicroCFTA.SourceCurrentSameSymbolEdgeControl
+
+namespace MicroCFTA.SourceCurrentOriginalRowClusterScan
+open InternedConstructorTemplates
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Edge" => EdgeValue Symbol Guard
+local notation "PairControl" => SourceCurrentSameSymbolEdgeControl.Control
+local notation "PairState" => SourceCurrentSameSymbolEdgeControl.State
+local notation "PairOutcome" => SourceCurrentSameSymbolEdgeControl.Outcome
+local notation "PairBlocked" => SourceCurrentSameSymbolEdgeControl.Blocked
+variable {width : Nat}
+
+
+/- This control retains the original-row scan order and the full comparison state.
+   It does not establish cluster completion or physical pruning semantics. -/
+
+/-- Retain the scan lists and the current comparison control. -/
+inductive Control : Type 1 where
+  /-- Start a cluster with the retained rows in reverse order. -/
+  | cluster (candidates keptReversed : List Edge)
+  /-- Compare the pivot with the remaining rows. -/
+  | scan (pivot : Edge) (remaining incomparableReversed keptReversed : List Edge)
+  /-- Retain the scan frame while one comparison advances. -/
+  | comparison (pivot candidate : Edge)
+      (tail incomparableReversed keptReversed : List Edge) (inner : PairControl)
+
+/-- Retain the actual state in each scan outcome. -/
+inductive Outcome (width : Nat) : Type 1 where
+  /-- Retain the next control and the full comparison state. -/
+  | yielded (control : Control) (state : PairState width)
+  /-- Return the retained rows and the full comparison state. -/
+  | done (values : List Edge) (state : PairState width)
+  /-- Retain the native failure and the actual state. -/
+  | failed (reason : SourceRecursiveIntersectionKernel.Failure) (state : PairState width)
+  /-- Retain the constraint error and the actual state. -/
+  | constraintError (message : String) (state : PairState width)
+  /-- Retain the blockage, exact residual control and actual state. -/
+  | blocked (reason : PairBlocked) (control : Control) (state : PairState width)
+
+/-- Advance one scan phase or one existing comparison step. -/
+noncomputable def step [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (control : Control) (state : PairState width) : Outcome width :=
+  match control with
+  | .cluster [] keptReversed => .done keptReversed.reverse state
+  | .cluster (pivot :: tail) keptReversed =>
+      .yielded (.scan pivot tail [] keptReversed) state
+  | .scan pivot [] incomparableReversed keptReversed =>
+      .yielded (.cluster incomparableReversed.reverse (pivot :: keptReversed)) state
+  | .scan pivot (candidate :: tail) incomparableReversed keptReversed =>
+      .yielded (.comparison pivot candidate tail incomparableReversed keptReversed
+        (.call (pivot, candidate) [])) state
+  | .comparison pivot candidate tail incomparableReversed keptReversed inner =>
+      match SourceCurrentSameSymbolEdgeControl.step inner state with
+      | .yielded next after =>
+          .yielded (.comparison pivot candidate tail incomparableReversed keptReversed next) after
+      | .done common after =>
+          .yielded
+            (if common.entry.identity = candidate.entry.identity then
+               .scan pivot tail incomparableReversed keptReversed
+             else if common.entry.identity = pivot.entry.identity then
+               .cluster (candidate :: (incomparableReversed.reverse ++ tail)) keptReversed
+             else .scan pivot tail (candidate :: incomparableReversed) keptReversed)
+            after
+      | .failed reason after => .failed reason after
+      | .constraintError message after => .constraintError message after
+      | .blocked reason next after =>
+          .blocked reason (.comparison pivot candidate tail incomparableReversed keptReversed next) after
+
+/-- Run at most the supplied number of scan control steps. -/
+noncomputable def execute [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] :
+    Nat → Control → PairState width → Outcome width
+  | 0, control, state => .yielded control state
+  | fuel + 1, control, state =>
+      match step control state with
+      | .yielded next after => execute fuel next after
+      | .done values after => .done values after
+      | .failed reason after => .failed reason after
+      | .constraintError message after => .constraintError message after
+      | .blocked reason next after => .blocked reason next after
+
+/-- Lift a completed comparison to the exact scan resume control. -/
+theorem comparison_lift
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (pivot candidate common : Edge)
+    (tail incomparableReversed keptReversed : List Edge)
+    (inner : PairControl) (before after : PairState width)
+    (observed : SourceCurrentSameSymbolEdgeControl.execute fuel inner before =
+      SourceCurrentSameSymbolEdgeControl.Outcome.done common after) :
+    ∃ used : Nat, 0 < used ∧ used ≤ fuel ∧
+      execute used
+        (.comparison pivot candidate tail incomparableReversed keptReversed inner) before =
+        .yielded
+          (if common.entry.identity = candidate.entry.identity then
+             .scan pivot tail incomparableReversed keptReversed
+           else if common.entry.identity = pivot.entry.identity then
+             .cluster (candidate :: (incomparableReversed.reverse ++ tail)) keptReversed
+           else
+             .scan pivot tail (candidate :: incomparableReversed) keptReversed)
+          after := by
+  induction fuel generalizing inner before with
+  | zero => cases observed
+  | succ fuel ih =>
+      cases one : SourceCurrentSameSymbolEdgeControl.step inner before with
+      | yielded next middle =>
+          have rest : SourceCurrentSameSymbolEdgeControl.execute fuel next middle =
+              SourceCurrentSameSymbolEdgeControl.Outcome.done common after := by
+            simpa only [SourceCurrentSameSymbolEdgeControl.execute, one] using observed
+          obtain ⟨used, _positive, bound, resumed⟩ := ih next middle rest
+          refine ⟨used + 1, Nat.zero_lt_succ used, Nat.succ_le_succ bound, ?_⟩
+          simpa only [execute, step, one] using resumed
+      | done value middle =>
+          have same : value = common ∧ middle = after := by
+            simpa only [SourceCurrentSameSymbolEdgeControl.execute, one,
+              SourceCurrentSameSymbolEdgeControl.Outcome.done.injEq] using observed
+          rcases same with ⟨rfl, rfl⟩
+          refine ⟨1, Nat.zero_lt_succ 0, Nat.succ_le_succ (Nat.zero_le fuel), ?_⟩
+          simp only [execute, step, one]
+      | failed reason middle =>
+          simp only [SourceCurrentSameSymbolEdgeControl.execute, one] at observed
+          cases observed
+      | constraintError message middle =>
+          simp only [SourceCurrentSameSymbolEdgeControl.execute, one] at observed
+          cases observed
+      | blocked reason next middle =>
+          simp only [SourceCurrentSameSymbolEdgeControl.execute, one] at observed
+          cases observed
+
+end MicroCFTA.SourceCurrentOriginalRowClusterScan

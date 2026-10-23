@@ -1,0 +1,5 @@
+Pre-execution static correction: archive() accepts directories only.
+The initial unexecuted materializer used this line:
+archive(Path('/tmp/mcfta-fresh-node-counter-growth-write-body-v1.py'), 'body-v1-materializer.py')
+The selected materializer instead copies its exact bytes through create-only open.
+No proof-body bytes changed. No materializer or compiler failed.

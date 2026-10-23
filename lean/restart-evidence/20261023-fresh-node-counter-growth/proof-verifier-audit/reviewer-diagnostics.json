@@ -1,0 +1,23 @@
+{
+  "status": "REVIEWER_STATIC_CHECK_CORRECTION",
+  "diagnostics": [
+    {
+      "scope": "Independent inline audit check only",
+      "error": "TypeError at inspected-input snapshot comparison: one record uses snapshot:null.",
+      "cause": "The independent checker treated all inspected inputs as copied snapshots. Four records explicitly use snapshot:null for external evidence references.",
+      "correction": "Validate every live reference hash and size; compare a snapshot only when its snapshot field is non-null.",
+      "selected_source_changed": false,
+      "selected_program_executed": false,
+      "root_proof_or_metadata_job_failure": false
+    },
+    {
+      "scope": "Independent inline static RAW reconstruction only",
+      "error": "AssertionError in comparison of printed axiom spellings to normalized axiom names.",
+      "cause": "The independent checker initially retained universe suffixes such as Classical.choice.{u}. The reviewed selected verifier already strips these suffixes.",
+      "correction": "Normalize universe suffixes before comparing the three names. Exact RAW and slice bytes remain unchanged.",
+      "selected_source_changed": false,
+      "selected_program_executed": false,
+      "root_proof_or_metadata_job_failure": false
+    }
+  ]
+}

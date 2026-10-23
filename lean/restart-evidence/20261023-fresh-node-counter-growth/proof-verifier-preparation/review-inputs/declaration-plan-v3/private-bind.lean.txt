@@ -1,0 +1,7 @@
+/-- Sequential outcomes retain the node supply on completion or pending return. -/
+private theorem bind_mono (outcome : Outcome Symbol Guard First)
+    (next : First → State Symbol Guard → Outcome Symbol Guard Result)
+    (state : State Symbol Guard)
+    (first : state.nodes.next ≤ outcome.state.nodes.next)
+    (later : ∀ value current, current.nodes.next ≤ (next value current).state.nodes.next) :
+    state.nodes.next ≤ (outcome.bind next).state.nodes.next

@@ -1,0 +1,1450 @@
+{
+  "basis_assertions": 199,
+  "basis_lines": 384,
+  "no_guard_family_removed": true,
+  "all_AST_assertions": [
+    {
+      "assertion": 1,
+      "line": 19,
+      "end_line": 19,
+      "source": "assert not path.is_absolute() and \"..\" not in path.parts",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 2,
+      "line": 25,
+      "end_line": 25,
+      "source": "assert len(data) == record[\"bytes\"] and digest(data) == record[\"sha256\"], record[\"path\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 3,
+      "line": 30,
+      "end_line": 30,
+      "source": "assert digest(raw_data) == \"4b5abbcae64b1ddac1a0965424e1df8672280c2ca377672a9f00b73e9c3b88a6\"",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 4,
+      "line": 31,
+      "end_line": 31,
+      "source": "assert not re.search(r\"__H\\d+_\", raw_data.decode()), \"Unbound evidence input\"",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 5,
+      "line": 34,
+      "end_line": 34,
+      "source": "assert [m[\"key\"] for m in modules] == [\"pair_inventory_rebase\"]",
+      "disposition": "adapt_literal_module_cap_and_public_specs"
+    },
+    {
+      "assertion": 6,
+      "line": 35,
+      "end_line": 35,
+      "source": "assert [m[\"source_cap\"] for m in modules] == [180]",
+      "disposition": "adapt_literal_module_cap_and_public_specs"
+    },
+    {
+      "assertion": 7,
+      "line": 36,
+      "end_line": 36,
+      "source": "assert [m[\"specs\"] for m in modules] == [[[\"rebase\", \"theorem\"]]]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 8,
+      "line": 45,
+      "end_line": 45,
+      "source": "assert actual == set(jobs)",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 9,
+      "line": 47,
+      "end_line": 47,
+      "source": "assert metrics[\"actual_jobs\"] == len(actual)",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 10,
+      "line": 48,
+      "end_line": 48,
+      "source": "assert metrics[\"source_jobs\"] == sum(j[\"kind\"] in {\"strict\", \"full\"} for j in jobs.values())",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 11,
+      "line": 49,
+      "end_line": 49,
+      "source": "assert metrics[\"focused_build_jobs\"] == sum(j[\"kind\"] == \"focused_build\" for j in jobs.values())",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 12,
+      "line": 50,
+      "end_line": 50,
+      "source": "assert metrics[\"audit_jobs\"] == sum(j[\"kind\"] == \"audit\" for j in jobs.values()) == 1",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 13,
+      "line": 51,
+      "end_line": 51,
+      "source": "assert metrics[\"actual_jobs\"] == sum(metrics[k] for k in [\"source_jobs\", \"focused_build_jobs\", \"audit_jobs\"])",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 14,
+      "line": 52,
+      "end_line": 52,
+      "source": "assert metrics[\"failed_jobs\"] == sum(j[\"exit_code\"] != 0 for j in jobs.values())",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 15,
+      "line": 53,
+      "end_line": 53,
+      "source": "assert metrics[\"warned_source_exit_zero_jobs\"] == sum(j[\"kind\"] in {\"strict\", \"full\"} and j[\"exit_code\"] == 0 and bool(j[\"source_warnings\"]) for j in jobs.values())",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 16,
+      "line": 56,
+      "end_line": 56,
+      "source": "assert receipt[\"exit_code\"] == job[\"exit_code\"] and receipt[\"observed_at\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 17,
+      "line": 57,
+      "end_line": 57,
+      "source": "assert receipt[\"log\"] == stem + \".log\" and receipt[\"limits\"] == stem + \".limits.json\"",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 18,
+      "line": 59,
+      "end_line": 59,
+      "source": "assert re.fullmatch(r\"[0-9a-f]{64}\", job[\"log_sha256\"]) and digest(raw) == job[\"log_sha256\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 19,
+      "line": 60,
+      "end_line": 60,
+      "source": "assert load(receipt[\"limits\"]) == {\"memory.max\": \"4294967296\", \"memory.high\": \"4294967296\", \"memory.swap.max\": \"0\"}",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 20,
+      "line": 62,
+      "end_line": 62,
+      "source": "assert 0 <= usage[\"age_seconds\"] <= 600 and usage[\"remaining_percent\"] > 1",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 21,
+      "line": 63,
+      "end_line": 63,
+      "source": "assert receipt[\"wrapper\"][1:5] == [\"--mem\", \"4G\", \"--time\", \"5m\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 22,
+      "line": 64,
+      "end_line": 64,
+      "source": "assert job[\"kind\"] in {\"strict\", \"full\", \"focused_build\", \"audit\"}",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 23,
+      "line": 66,
+      "end_line": 66,
+      "source": "assert job[\"module\"] in by_name and re.fullmatch(r\"[0-9a-f]{64}\", job[\"source_sha256\"])",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 24,
+      "line": 67,
+      "end_line": 67,
+      "source": "assert receipt[\"source\"] == stem + \".source.lean\" and receipt[\"sha256\"] == job[\"source_sha256\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 25,
+      "line": 69,
+      "end_line": 69,
+      "source": "assert digest(source) == job[\"source_sha256\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 26,
+      "line": 70,
+      "end_line": 70,
+      "source": "assert len(receipt[\"command\"]) == 3 and Path(receipt[\"command\"][0]).name == \"lean\"",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 27,
+      "line": 71,
+      "end_line": 71,
+      "source": "assert receipt[\"command\"][1] == \"-Dlinter.all=true\" and Path(receipt[\"command\"][-1]).resolve() == (evidence / receipt[\"source\"]).resolve()",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 28,
+      "line": 72,
+      "end_line": 72,
+      "source": "assert len(re.findall(r\"^.+?:\\d+:\\d+: error(?:\\([^)]*\\))?:\", raw.decode(), re.M)) == job[\"errors\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 29,
+      "line": 73,
+      "end_line": 73,
+      "source": "assert len(re.findall(r\"^.+?:\\d+:\\d+: warning(?:\\([^)]*\\))?:\", raw.decode(), re.M)) == job[\"source_warnings\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 30,
+      "line": 75,
+      "end_line": 75,
+      "source": "assert not re.search(r\"^\\s*set_option (?:maxHeartbeats|maxRecDepth|linter\\.)\", source.decode(), re.M)",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 31,
+      "line": 77,
+      "end_line": 77,
+      "source": "assert job[\"source_sha256\"] is None and \"source\" not in receipt and \"sha256\" not in receipt",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 32,
+      "line": 79,
+      "end_line": 79,
+      "source": "assert len(receipt[\"command\"]) == 5 and Path(receipt[\"command\"][0]).name == \"lake\"",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 33,
+      "line": 80,
+      "end_line": 80,
+      "source": "assert receipt[\"command\"][1:] == [\"-d\", str(root / \"lean\"), \"build\", target]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 34,
+      "line": 81,
+      "end_line": 81,
+      "source": "assert receipt[\"exit_code\"] == 0 and not re.search(r\"\\berror(?:\\([^)]*\\))?:\", raw.decode())",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 35,
+      "line": 84,
+      "end_line": 84,
+      "source": "assert build and int(build.group(1)) == expected[\"build_jobs\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 36,
+      "line": 85,
+      "end_line": 85,
+      "source": "assert re.findall(r\"(?m)^warning: .+$\", raw.decode()) == expected[\"warnings\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 37,
+      "line": 86,
+      "end_line": 86,
+      "source": "assert all(\"InternedFreshOrdinaryClosedCompletion.lean:24:5:\" in warning for warning in expected[\"warnings\"])",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 38,
+      "line": 87,
+      "end_line": 87,
+      "source": "assert job[\"module\"] is None if job[\"kind\"] == \"audit\" else job[\"module\"] in by_name",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 39,
+      "line": 89,
+      "end_line": 89,
+      "source": "assert history[\"status\"] == \"ROOT_ACCEPTED\"",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 40,
+      "line": 90,
+      "end_line": 90,
+      "source": "assert set(history) == {\"status\", \"selected_sources\", \"variants\", \"artifacts\", \"patches\", \"rejected_public_types\"}",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 41,
+      "line": 91,
+      "end_line": 91,
+      "source": "assert history[\"selected_sources\"] == {m[\"source_path\"]: m[\"source_sha256\"] for m in modules}",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 42,
+      "line": 94,
+      "end_line": 94,
+      "source": "assert variants and len(variants) == len(history[\"variants\"]) and len(artifacts) == len(history[\"artifacts\"])",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 43,
+      "line": 95,
+      "end_line": 95,
+      "source": "assert not set(variants) & set(artifacts)",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 44,
+      "line": 98,
+      "end_line": 98,
+      "source": "assert re.fullmatch(r\"[0-9a-f]{64}\", record[\"sha256\"]) and digest(data) == record[\"sha256\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 45,
+      "line": 100,
+      "end_line": 100,
+      "source": "assert record[\"module\"] in by_name and record[\"reason\"].strip()",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 46,
+      "line": 101,
+      "end_line": 101,
+      "source": "assert 0 < len(data.splitlines()) == record[\"lines\"] <= by_name[record[\"module\"]][\"source_cap\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 47,
+      "line": 103,
+      "end_line": 103,
+      "source": "assert len(data) == record[\"bytes\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 48,
+      "line": 105,
+      "end_line": 105,
+      "source": "assert all(stem + suffix in artifacts for suffix in [\".json\", \".log\", \".limits.json\", \".usage.json\"])",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 49,
+      "line": 107,
+      "end_line": 107,
+      "source": "assert any(v[\"module\"] == job[\"module\"] and v[\"sha256\"] == job[\"source_sha256\"] and read(path) == read(stem + \".source.lean\") for path, v in variants.items())",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 50,
+      "line": 109,
+      "end_line": 109,
+      "source": "assert stem + \".source.lean\" in artifacts, \"Printers are artifacts, not bounded math variants\"",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 51,
+      "line": 111,
+      "end_line": 111,
+      "source": "assert patch[\"reason\"].strip() and patch[\"before\"] in variants and patch[\"after\"] in variants",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 52,
+      "line": 112,
+      "end_line": 112,
+      "source": "assert patch[\"module\"] == variants[patch[\"before\"]][\"module\"] == variants[patch[\"after\"]][\"module\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 53,
+      "line": 113,
+      "end_line": 113,
+      "source": "assert patch[\"path\"] in artifacts and artifacts[patch[\"path\"]][\"sha256\"] == patch[\"sha256\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 54,
+      "line": 116,
+      "end_line": 116,
+      "source": "assert read(patch[\"path\"]).decode() == expected",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 55,
+      "line": 118,
+      "end_line": 118,
+      "source": "assert len(rejected) == len(history[\"rejected_public_types\"]) == metrics[\"rejected_public_type_jobs\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 56,
+      "line": 120,
+      "end_line": 120,
+      "source": "assert stem in jobs and jobs[stem][\"kind\"] == \"full\" and jobs[stem][\"exit_code\"] == 0",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 57,
+      "line": 121,
+      "end_line": 121,
+      "source": "assert record[\"raw_sha256\"] == jobs[stem][\"log_sha256\"] and record[\"reason\"].strip()",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 58,
+      "line": 122,
+      "end_line": 122,
+      "source": "assert record[\"artifacts\"] and all(path in artifacts for path in record[\"artifacts\"])",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 59,
+      "line": 125,
+      "end_line": 125,
+      "source": "assert cut[\"status\"] == \"COMPLETE_TERMINAL_METADATA_CUT_BEFORE_CLOSING_TOOLS\"",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 60,
+      "line": 126,
+      "end_line": 126,
+      "source": "assert [p for p, code in metadata_jobs.items() if code != 0] == bound[\"metadata_failure_paths\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 61,
+      "line": 127,
+      "end_line": 127,
+      "source": "assert cut[\"failed_jobs\"] == sum(code != 0 for code in metadata_jobs.values())",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 62,
+      "line": 129,
+      "end_line": 129,
+      "source": "assert relative.startswith(\"root-metadata-history/\") and relative.endswith(\".json\") and relative in artifacts",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 63,
+      "line": 130,
+      "end_line": 130,
+      "source": "assert type(code) is int",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 64,
+      "line": 132,
+      "end_line": 132,
+      "source": "assert receipt[\"exit_code\"] == code and receipt[\"observed_at\"] and Path(receipt[\"command\"][0]).name not in {\"lean\", \"lake\"}",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 65,
+      "line": 133,
+      "end_line": 133,
+      "source": "assert all(relative[:-5] + suffix in artifacts for suffix in [\".json\", \".log\", \".limits.json\", \".usage.json\", \".source.py\", \".peaks.txt\"])",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 66,
+      "line": 134,
+      "end_line": 134,
+      "source": "assert load(relative[:-5] + \".limits.json\") == {\"memory.max\": \"4294967296\", \"memory.high\": \"4294967296\", \"memory.swap.max\": \"0\"}",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 67,
+      "line": 136,
+      "end_line": 136,
+      "source": "assert 0 <= usage[\"age_seconds\"] <= 600 and usage[\"remaining_percent\"] > 1",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 68,
+      "line": 138,
+      "end_line": 138,
+      "source": "assert selection == {m[\"source_path\"]: dict(sha256=m[\"source_sha256\"], lines=m[\"source_lines\"], strict=m[\"strict\"], full=m[\"full\"]) for m in modules}",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 69,
+      "line": 139,
+      "end_line": 139,
+      "source": "assert json.loads(pinned(bound[\"frozen_modules\"])) == {m[\"name\"]: m[\"source_sha256\"] for m in modules}",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 70,
+      "line": 146,
+      "end_line": 146,
+      "source": "assert re.fullmatch(r\"[0-9a-f]{64}\", m[\"source_sha256\"]) and digest(source) == m[\"source_sha256\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 71,
+      "line": 147,
+      "end_line": 147,
+      "source": "assert source == read(m[\"strict\"] + \".source.lean\") and 0 < len(source.splitlines()) == m[\"source_lines\"] <= m[\"source_cap\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 72,
+      "line": 148,
+      "end_line": 148,
+      "source": "assert read(m[\"strict\"] + \".log\") == b\"\" and jobs[m[\"strict\"]][\"kind\"] == \"strict\"",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 73,
+      "line": 149,
+      "end_line": 149,
+      "source": "assert jobs[m[\"strict\"]][\"module\"] == name and jobs[m[\"strict\"]][\"exit_code\"] == 0",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 74,
+      "line": 150,
+      "end_line": 150,
+      "source": "assert jobs[m[\"full\"]][\"kind\"] == \"full\" and jobs[m[\"full\"]][\"module\"] == name and jobs[m[\"full\"]][\"exit_code\"] == 0",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 75,
+      "line": 151,
+      "end_line": 151,
+      "source": "assert jobs[m[\"strict\"]][\"errors\"] == jobs[m[\"strict\"]][\"source_warnings\"] == jobs[m[\"full\"]][\"errors\"] == jobs[m[\"full\"]][\"source_warnings\"] == 0",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 76,
+      "line": 152,
+      "end_line": 152,
+      "source": "assert m[\"full\"] not in rejected and source.rstrip().endswith((\"end MicroCFTA.\" + name).encode())",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 77,
+      "line": 153,
+      "end_line": 153,
+      "source": "assert any(v[\"module\"] == name and read(path) == source for path, v in variants.items())",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 78,
+      "line": 155,
+      "end_line": 155,
+      "source": "assert gate[\"status\"] == \"ACCEPTED_STRICT_SOURCE\" and gate[\"source_sha256\"] == m[\"source_sha256\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 79,
+      "line": 156,
+      "end_line": 156,
+      "source": "assert gate[\"source_lines\"] == m[\"source_lines\"] and gate[\"source_cap\"] == m[\"source_cap\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 80,
+      "line": 157,
+      "end_line": 157,
+      "source": "assert gate[\"selected_strict\"] == m[\"strict\"] and gate[\"strict_log_bytes\"] == 0 and gate[\"public_heads\"] == shorts",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 81,
+      "line": 158,
+      "end_line": 158,
+      "source": "assert gate[\"receipt_sha256\"] == digest(read(m[\"strict\"] + \".json\"))",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 82,
+      "line": 159,
+      "end_line": 159,
+      "source": "assert gate[\"module\"] == name and gate[\"root_default_limit_check\"] and gate[\"all_linters\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 83,
+      "line": 160,
+      "end_line": 160,
+      "source": "assert gate[\"declaration_gate\"] == m[\"declaration_gate\"][\"path\"] and gate[\"body_gate\"] == m[\"body_gate\"][\"path\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 84,
+      "line": 162,
+      "end_line": 162,
+      "source": "assert body_gate[\"status\"] == \"ACCEPTED_COMPLETE_BODY_FOR_STRICT_CHECK\" and body_gate[\"module\"] == name",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 85,
+      "line": 163,
+      "end_line": 163,
+      "source": "assert body_gate[\"source_sha256\"] == m[\"source_sha256\"] and body_gate[\"source_lines\"] == m[\"source_lines\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 86,
+      "line": 164,
+      "end_line": 164,
+      "source": "assert body_gate[\"whole_source_hard_stop\"] == m[\"source_cap\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 87,
+      "line": 165,
+      "end_line": 165,
+      "source": "assert body_gate[\"exact_declaration_gate_sha256\"] == m[\"declaration_gate\"][\"sha256\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 88,
+      "line": 166,
+      "end_line": 166,
+      "source": "assert body_gate[\"independent_body_review_sha256\"] == m[\"body_review\"][\"sha256\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 89,
+      "line": 167,
+      "end_line": 167,
+      "source": "assert body_gate[\"root_complete_source_lines_read\"] == m[\"source_lines\"] and body_gate[\"all_six_fragments_exact\"]",
+      "disposition": "adapt_actual_H33_body_gate_and_all_six_body_inventories"
+    },
+    {
+      "assertion": 90,
+      "line": 168,
+      "end_line": 168,
+      "source": "assert body_gate[\"public_let_occurrences\"] == 3 and body_gate[\"local_haves\"] == 2 and body_gate[\"local_lets\"] == 1",
+      "disposition": "adapt_actual_H33_body_gate_and_all_six_body_inventories"
+    },
+    {
+      "assertion": 91,
+      "line": 169,
+      "end_line": 169,
+      "source": "assert body_gate[\"local_obtains\"] == 1 and body_gate[\"obtained_fields\"] == 5 and body_gate[\"all_lambda_types_reviewed\"]",
+      "disposition": "adapt_actual_H33_body_gate_and_all_six_body_inventories"
+    },
+    {
+      "assertion": 92,
+      "line": 170,
+      "end_line": 170,
+      "source": "assert body_gate[\"helper_count\"] == 0 and body_gate[\"induction\"] is False and body_gate[\"agreement_derived_not_assumed\"] and body_gate[\"same_full_wrapper\"]",
+      "disposition": "adapt_actual_H33_body_gate_and_all_six_body_inventories"
+    },
+    {
+      "assertion": 93,
+      "line": 171,
+      "end_line": 171,
+      "source": "assert body_gate[\"default_declaration_limits\"] and body_gate[\"all_linters\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 94,
+      "line": 172,
+      "end_line": 172,
+      "source": "assert json.loads(pinned(m[\"body_review\"]))[\"status\"] == \"CLEAR\"",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 95,
+      "line": 174,
+      "end_line": 174,
+      "source": "assert declaration[\"status\"] == \"ACCEPTED_EXACT_DECLARATIONS_BEFORE_BODY\" and declaration[\"module\"] == name",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 96,
+      "line": 175,
+      "end_line": 175,
+      "source": "assert declaration[\"public_heads\"] == shorts and declaration[\"contracts_sha256\"] == m[\"manifest\"][\"sha256\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 97,
+      "line": 176,
+      "end_line": 176,
+      "source": "assert declaration[\"whole_source_hard_stop\"] == m[\"source_cap\"] and declaration[\"default_declaration_limits\"] and declaration[\"all_linters\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 98,
+      "line": 177,
+      "end_line": 177,
+      "source": "assert declaration[\"insertion_map_sha256\"] == m[\"layout\"][\"sha256\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 99,
+      "line": 178,
+      "end_line": 178,
+      "source": "assert declaration[\"root_whole_context_lines_read\"] == 18 and declaration[\"root_whole_public_header_lines_read\"] == 37",
+      "disposition": "adapt_actual_H33_declaration_gate_and_ten_contract_counts"
+    },
+    {
+      "assertion": 100,
+      "line": 179,
+      "end_line": 179,
+      "source": "assert declaration[\"root_all_public_lets_and_introduced_field_types_read\"] and declaration[\"root_all_local_have_let_obtain_and_lambda_types_read\"] and declaration[\"compiled_fragments\"] == 6 and declaration[\"compiled_fragment_lines\"] == 61",
+      "disposition": "adapt_actual_H33_declaration_gate_and_ten_contract_counts"
+    },
+    {
+      "assertion": 101,
+      "line": 180,
+      "end_line": 180,
+      "source": "assert declaration[\"public_let_occurrences\"] == 3 and declaration[\"body_lets\"] == 1 and declaration[\"body_haves\"] == 2 and declaration[\"helpers\"] == 0",
+      "disposition": "adapt_actual_H33_declaration_gate_and_ten_contract_counts"
+    },
+    {
+      "assertion": 102,
+      "line": 181,
+      "end_line": 181,
+      "source": "assert declaration[\"body_obtains\"] == 1 and declaration[\"obtain_fields\"] == 5 and declaration[\"induction\"] is False and declaration[\"agreement_derived_not_assumed\"] and declaration[\"same_full_wrapper\"] and declaration[\"new_execution_or_resources_claimed\"] is False",
+      "disposition": "adapt_actual_H33_declaration_gate_and_ten_contract_counts"
+    },
+    {
+      "assertion": 103,
+      "line": 185,
+      "end_line": 185,
+      "source": "assert list(manifest) == [f[\"file\"] for f in fragments] and [f[\"order\"] for f in fragments] == list(range(1, len(fragments) + 1))",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 104,
+      "line": 188,
+      "end_line": 188,
+      "source": "assert [{k: v for k, v in f.items() if k not in {\"owner\", \"path\"}} for f in fragments] == [{k: v for k, v in f.items() if k != \"owner\"} for f in layout]",
+      "disposition": "preserve_complete_H33_layout_owner_and_metadata"
+    },
+    {
+      "assertion": 105,
+      "line": 192,
+      "end_line": 192,
+      "source": "assert digest(raw_fragment) == f[\"sha256\"] and len(raw_fragment.splitlines()) == f[\"lines\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 106,
+      "line": 193,
+      "end_line": 193,
+      "source": "assert manifest[f[\"file\"]] == f[\"sha256\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 107,
+      "line": 195,
+      "end_line": 195,
+      "source": "assert source.startswith(data[\"context.lean.txt\"]) and source.count(data[\"context.lean.txt\"]) == 1",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 108,
+      "line": 199,
+      "end_line": 199,
+      "source": "assert source.count(header) == 1 and source.index(header) >= len(data[\"context.lean.txt\"])",
+      "disposition": "extend_exact_header_and_body_extraction_to_all_six_theorems"
+    },
+    {
+      "assertion": 109,
+      "line": 201,
+      "end_line": 201,
+      "source": "assert [positions[s][0] for s in shorts] == sorted(positions[s][0] for s in shorts)",
+      "disposition": "extend_exact_header_and_body_extraction_to_all_six_theorems"
+    },
+    {
+      "assertion": 110,
+      "line": 216,
+      "end_line": 216,
+      "source": "assert scope.count(fragment) == 1, f[\"file\"]",
+      "disposition": "adapt_public_private_header_roles_and_exact_owner_local_scope"
+    },
+    {
+      "assertion": 111,
+      "line": 218,
+      "end_line": 218,
+      "source": "assert matched == sorted(matched) and len(set(matched)) == len(matched)",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 112,
+      "line": 221,
+      "end_line": 221,
+      "source": "assert re.findall(rb\"\\bhave[ \\t]+([^ \\t:\\n]+)\", body) == [n.encode() for n in expected[\"have_names\"]]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 113,
+      "line": 222,
+      "end_line": 222,
+      "source": "assert len(re.findall(rb\"\\bhave\\b\", body)) == len(expected[\"have_names\"])",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 114,
+      "line": 223,
+      "end_line": 223,
+      "source": "assert re.findall(rb\"\\blet[ \\t]+([^ \\t:=\\n]+)\", body) == [n.encode() for n in expected[\"let_names\"]]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 115,
+      "line": 224,
+      "end_line": 224,
+      "source": "assert len(re.findall(rb\"\\blet\\b\", body)) == len(expected[\"let_names\"])",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 116,
+      "line": 225,
+      "end_line": 225,
+      "source": "assert re.findall(rb\"\\bby_cases[ \\t]+([^ \\t:\\n]+)\", body) == [n.encode() for n in expected[\"by_cases_names\"]]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 117,
+      "line": 226,
+      "end_line": 226,
+      "source": "assert re.findall(rb\"\\bcases[ \\t]+([^ \\t:\\n]+)[ \\t]*:\", body) == [n.encode() for n in expected[\"case_equations\"]]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 118,
+      "line": 228,
+      "end_line": 228,
+      "source": "assert groups == expected[\"obtain_groups\"] and len(re.findall(rb\"\\bobtain\\b\", body)) == len(groups)",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 119,
+      "line": 229,
+      "end_line": 229,
+      "source": "assert re.findall(rb\"\\bintro[ \\t]+([^\\n]+)\", body) == [b\"root member\"] and len(re.findall(rb\"\\bintro\\b\", body)) == 1",
+      "disposition": "replace_H32_intro_lambda_inventory_with_all_six_H33_reviewed_inventories"
+    },
+    {
+      "assertion": 120,
+      "line": 231,
+      "end_line": 231,
+      "source": "assert b\"    intro root member\\n\" in included and re.findall(rb\"\\bfun[ \\t]+([^\\n]*?)=>\", body) == [b\"handle pair value stored \"]",
+      "disposition": "replace_H32_intro_lambda_inventory_with_all_six_H33_reviewed_inventories"
+    },
+    {
+      "assertion": 121,
+      "line": 232,
+      "end_line": 232,
+      "source": "assert not re.search(rb\"\\binduction\\b\", body)",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 122,
+      "line": 233,
+      "end_line": 233,
+      "source": "assert not re.search(rb\"\\b(?:show|suffices|haveI|letI)\\b\", body) and not re.search(rb\"\\bobtain\\b(?:(?!:=).)*:(?!=)\", body, re.S)",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 123,
+      "line": 234,
+      "end_line": 234,
+      "source": "assert schema[\"private_helpers\"] == schema[\"new_definitions\"] == schema[\"typed_show_fragments\"] == [] and schema[\"induction\"] is None",
+      "disposition": "replace_H32_contract_specific_schema_with_actual_H33_schema"
+    },
+    {
+      "assertion": 124,
+      "line": 235,
+      "end_line": 235,
+      "source": "assert schema[\"local_have_names\"] == [\"included\", \"agreement\"] and schema[\"local_let_names\"] == [\"next\"] and schema[\"body_intro_names\"] == []",
+      "disposition": "replace_H32_contract_specific_schema_with_actual_H33_schema"
+    },
+    {
+      "assertion": 125,
+      "line": 236,
+      "end_line": 236,
+      "source": "assert schema[\"local_obtain_groups\"] == [[\"nextCurrent\", \"sameSource\", \"sameRoots\", \"leftValid\", \"rightValid\"]] and schema[\"compiled_contract_count\"] == 6 and schema[\"compiled_contract_lines\"] == 61",
+      "disposition": "replace_H32_contract_specific_schema_with_actual_H33_schema"
+    },
+    {
+      "assertion": 126,
+      "line": 237,
+      "end_line": 237,
+      "source": "assert [item[\"name\"] for item in schema[\"public_let_occurrences\"]] == [\"ordered\", \"next\", \"ordered\"] and schema[\"compiled_contract_order\"] == list(manifest)",
+      "disposition": "replace_H32_contract_specific_schema_with_actual_H33_schema"
+    },
+    {
+      "assertion": 127,
+      "line": 238,
+      "end_line": 238,
+      "source": "assert re.findall(rb\"\\blet[ \\t]+([^ \\t:=\\n]+)\", data[\"public-header.lean.txt\"]) == [b\"ordered\", b\"next\", b\"ordered\"] and len(re.findall(rb\"\\blet\\b\", data[\"public-header.lean.txt\"])) == 3",
+      "disposition": "replace_H32_contract_specific_schema_with_actual_H33_schema"
+    },
+    {
+      "assertion": 128,
+      "line": 239,
+      "end_line": 239,
+      "source": "assert schema[\"future_local_lambda_binders_only\"] == dict(included=[\"root\", \"member\"], canonical_admission=[\"handle\", \"pair\", \"value\", \"stored\"]) and schema[\"additional_have_let_show_obtain_helper_or_induction_authorized\"] is False",
+      "disposition": "replace_H32_contract_specific_schema_with_actual_H33_schema"
+    },
+    {
+      "assertion": 129,
+      "line": 243,
+      "end_line": 243,
+      "source": "assert public == [(kind, short) for short, kind in specs]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 130,
+      "line": 248,
+      "end_line": 248,
+      "source": "assert found, line",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 131,
+      "line": 250,
+      "end_line": 250,
+      "source": "assert helpers == schema[\"private_helpers\"] == []",
+      "disposition": "adapt_exact_private_helper_allowlist_three"
+    },
+    {
+      "assertion": 132,
+      "line": 252,
+      "end_line": 252,
+      "source": "assert (root / m[\"source_path\"]).read_bytes() == source",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 133,
+      "line": 254,
+      "end_line": 254,
+      "source": "assert tool_gate[\"status\"] == \"ACCEPTED_EXACT_TOOLS_FOR_SELECTED_STRICT_SOURCE\" and tool_gate[\"source_sha256\"] == m[\"source_sha256\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 134,
+      "line": 255,
+      "end_line": 255,
+      "source": "assert tool_gate[\"public_heads\"] == shorts and tool_gate[\"materializer_activation\"] and tool_gate[\"sole_FULL_activation\"] and tool_gate[\"reader_activation_after_actual_FULL\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 135,
+      "line": 258,
+      "end_line": 258,
+      "source": "assert pinned(active) == pinned(archived) and tool_gate[\"installed_tools\"][active[\"path\"]] == active[\"sha256\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 136,
+      "line": 265,
+      "end_line": 265,
+      "source": "assert printer == source + tail.encode() and len(tail.splitlines()) == 11 + 3 * len(specs)",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 137,
+      "line": 266,
+      "end_line": 266,
+      "source": "assert len(printer.splitlines()) == m[\"source_lines\"] + len(tail.splitlines()) == tool_gate[\"diagnostic_tail_lines\"] + m[\"source_lines\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 138,
+      "line": 267,
+      "end_line": 267,
+      "source": "assert all(printer.decode().splitlines().count(\"set_option \" + option) == 1 for option in options)",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 139,
+      "line": 268,
+      "end_line": 268,
+      "source": "assert all(printer.decode().splitlines().count(d + namespace + short) == 1 for short, kind in specs for d in [\"#check @\", \"#print \", \"#print axioms \"])",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 140,
+      "line": 272,
+      "end_line": 272,
+      "source": "assert len(matching) == 1",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 141,
+      "line": 274,
+      "end_line": 274,
+      "source": "assert (report[\"source_sha256\"], report[\"source_lines\"], report[\"printer_sha256\"]) == (m[\"source_sha256\"], m[\"source_lines\"], digest(printer))",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 142,
+      "line": 275,
+      "end_line": 275,
+      "source": "assert report[\"log_sha256\"] == digest(raw) and report[\"log_bytes\"] == len(raw)",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 143,
+      "line": 276,
+      "end_line": 276,
+      "source": "assert report[\"receipt_sha256\"] == digest(read(m[\"full\"] + \".json\")) and report[\"owned_public_job_exit\"] == 0",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 144,
+      "line": 277,
+      "end_line": 277,
+      "source": "assert all(report[k] for k in [\"all_eight_printer_settings\", \"exact_module_and_diagnostic_tail\", \"diagnostic_limits_after_module_only\", \"no_omissions\"])",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 145,
+      "line": 278,
+      "end_line": 278,
+      "source": "assert (report[\"pp_option_count\"], report[\"linter_option_count\"], report[\"diagnostic_limit_count\"]) == (7, 1, 2)",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 146,
+      "line": 279,
+      "end_line": 279,
+      "source": "assert report[\"configured_paths\"] == {k: str(path.resolve()) for k, path in dict(source=evidence / m[\"snapshot\"], printer=evidence / (m[\"full\"] + \".source.lean\"), raw=evidence / (m[\"full\"] + \".log\"), receipt=evidence / (m[\"full\"] + \".json\")).items()}",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 147,
+      "line": 280,
+      "end_line": 280,
+      "source": "assert [(h[\"head\"], h[\"kind\"]) for h in report[\"heads\"]] == [(namespace + short, kind) for short, kind in specs]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 148,
+      "line": 282,
+      "end_line": 282,
+      "source": "assert not re.search(r\"sorryAx|\\b(?:warning|error)(?:\\([^)]*\\))?:|failed to pretty print|pp\\.rawOnError|maximum recursion depth|maximum number of heartbeats|⋯|…|\\.\\.\\.\", log)",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 149,
+      "line": 286,
+      "end_line": 286,
+      "source": "assert len(matches) == 1, short",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 150,
+      "line": 288,
+      "end_line": 288,
+      "source": "assert starts == sorted(starts, key=lambda match: match.start()) and not log[:starts[0].start()].strip()",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 151,
+      "line": 295,
+      "end_line": 295,
+      "source": "assert len(delimiters) == 1, short",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 152,
+      "line": 298,
+      "end_line": 298,
+      "source": "assert len(axiom_matches) == 1, short",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 153,
+      "line": 308,
+      "end_line": 308,
+      "source": "assert len(matches) == 1, short",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 154,
+      "line": 313,
+      "end_line": 313,
+      "source": "assert normalized == canonical(declared) and raw_identity is metric[\"raw_type_byte_identity\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 155,
+      "line": 314,
+      "end_line": 314,
+      "source": "assert len(checked.encode()) == metric[\"type_bytes\"] and len(checked) == metric[\"type_characters\"] and digest(checked.encode()) == metric[\"type_sha256\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 156,
+      "line": 315,
+      "end_line": 315,
+      "source": "assert len(checked.splitlines()) == metric[\"type_logical_lines\"] and checked.count(\"\\n\") == metric[\"type_line_feeds\"] and checked.endswith(\"\\n\") == metric[\"type_final_newline\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 157,
+      "line": 316,
+      "end_line": 316,
+      "source": "assert len(declared.encode()) == metric[\"printed_type_bytes\"] and digest(declared.encode()) == metric[\"printed_type_sha256\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 158,
+      "line": 317,
+      "end_line": 317,
+      "source": "assert digest(normalized.encode()) == metric[\"canonical_type_sha256\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 159,
+      "line": 318,
+      "end_line": 318,
+      "source": "assert not any(token in checked + declared for token in [\"_private\", \"✝\", \"†\", \"‡\"])",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 160,
+      "line": 319,
+      "end_line": 319,
+      "source": "assert not any(re.search(re.escape(namespace + helper) + r\"(?![\\w'])\", checked + declared) for helper in helpers)",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 161,
+      "line": 320,
+      "end_line": 320,
+      "source": "assert all(head_report[k] for k in [\"check_print_type_identity\", \"check_print_type_lexical_identity\", \"unique_complete_type_body_delimiter\", \"actual_axioms_within_standard_allowed\"])",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 162,
+      "line": 321,
+      "end_line": 321,
+      "source": "assert head_report[\"check_print_type_byte_identity\"] is raw_identity",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 163,
+      "line": 322,
+      "end_line": 322,
+      "source": "assert head_report[\"private_namespace_helpers_checked\"] == helpers and head_report[\"private_type_spellings_checked\"] == [\"_private\", \"✝\", \"†\", \"‡\"] and head_report[\"private_public_type_names\"] is False",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 164,
+      "line": 323,
+      "end_line": 323,
+      "source": "assert head_report[\"checked_type_characters\"] == len(checked) and head_report[\"checked_type_bytes\"] == len(checked.encode()) and head_report[\"checked_type_sha256\"] == metric[\"type_sha256\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 165,
+      "line": 324,
+      "end_line": 324,
+      "source": "assert head_report[\"printed_type_bytes\"] == metric[\"printed_type_bytes\"] and head_report[\"printed_type_characters\"] == len(declared) and head_report[\"printed_type_sha256\"] == metric[\"printed_type_sha256\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 166,
+      "line": 325,
+      "end_line": 325,
+      "source": "assert head_report[\"normalized_type_characters\"] == len(normalized) and head_report[\"canonical_type_sha256\"] == metric[\"canonical_type_sha256\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 167,
+      "line": 326,
+      "end_line": 326,
+      "source": "assert head_report[\"body_characters\"] == len(body) == metric[\"body_characters\"] and len(body.encode()) == metric[\"body_bytes\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 168,
+      "line": 327,
+      "end_line": 327,
+      "source": "assert body.startswith(\"fun \") and len(body) > 50 and digest(body.encode()) == metric[\"body_sha256\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 169,
+      "line": 329,
+      "end_line": 329,
+      "source": "assert values or (axiom.group(1) == \"does not depend on any axioms\" and not printed[axiom.end():].strip())",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 170,
+      "line": 331,
+      "end_line": 331,
+      "source": "assert axioms == head_report[\"actual_axioms\"] == metric[\"actual_axioms\"] and set(axioms) <= {\"Classical.choice\", \"Quot.sound\", \"propext\"}",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 171,
+      "line": 332,
+      "end_line": 332,
+      "source": "assert head_report[\"actual_standard_three_axioms\"] == (set(axioms) == {\"Classical.choice\", \"Quot.sound\", \"propext\"})",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 172,
+      "line": 337,
+      "end_line": 337,
+      "source": "assert retained == text.encode() and report[\"retained_slices\"][filename] == dict(bytes=len(retained), sha256=digest(retained))",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 173,
+      "line": 339,
+      "end_line": 339,
+      "source": "assert \"\".join(reconstructed) == log and set(report[\"retained_slices\"]) == set(retained_names)",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 174,
+      "line": 342,
+      "end_line": 342,
+      "source": "assert review[\"status\"] == \"ACCEPTED_COMPLETE_PUBLIC_TYPES_AND_INSTALLED\" and review[\"source_sha256\"] == m[\"source_sha256\"] and review[\"source_lines\"] == m[\"source_lines\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 175,
+      "line": 343,
+      "end_line": 343,
+      "source": "assert review[\"root_manual_complete_TYPEs\"] is True and review[\"goal_status\"] == \"ACTIVE_INCOMPLETE\"",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 176,
+      "line": 344,
+      "end_line": 344,
+      "source": "assert review[\"readback_sha256\"] == m[\"readback\"][\"sha256\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 177,
+      "line": 345,
+      "end_line": 345,
+      "source": "assert review[\"independent_complete_TYPE_review_sha256\"] == m[\"type_review\"][\"sha256\"] and independent[\"status\"] == \"CLEAR\"",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 178,
+      "line": 346,
+      "end_line": 346,
+      "source": "assert set(review[\"TYPEs\"]) == set(shorts)",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 179,
+      "line": 349,
+      "end_line": 349,
+      "source": "assert review[\"TYPEs\"][short] == dict(sha256=metric[\"type_sha256\"], bytes=metric[\"type_bytes\"], logical_lines=metric[\"type_logical_lines\"], actual_axioms=actual_axioms[short])",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 180,
+      "line": 350,
+      "end_line": 350,
+      "source": "assert review[\"module\"] == name and review[\"scope\"] == m[\"scope\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 181,
+      "line": 351,
+      "end_line": 351,
+      "source": "assert review[\"BODY_review\"] == dict(complete_retention=True, programmatic_only=True, whole_body_manual_read_claimed=False)",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 182,
+      "line": 352,
+      "end_line": 352,
+      "source": "assert independent[\"scope\"] == \"INDEPENDENT_COMPLETE_ACTUAL_PUBLIC_TYPE_AND_READBACK_REVIEW\"",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 183,
+      "line": 353,
+      "end_line": 353,
+      "source": "assert independent[\"module\"] == name and independent[\"source_sha256\"] == m[\"source_sha256\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 184,
+      "line": 354,
+      "end_line": 354,
+      "source": "assert independent[\"source_lines\"] == m[\"source_lines\"] and independent[\"public_heads\"] == [namespace + short for short in shorts]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 185,
+      "line": 355,
+      "end_line": 355,
+      "source": "assert independent[\"ownership\"][\"reviewer_math_author\"] is False",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 186,
+      "line": 357,
+      "end_line": 357,
+      "source": "assert manual[\"checked_TYPEs_complete\"] == shorts and manual[\"printed_TYPEs_manual\"] is manual[\"BODYs_manual\"] is False",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 187,
+      "line": 360,
+      "end_line": 360,
+      "source": "assert item[\"checked_type\"] == dict(logical_lines=metric[\"type_logical_lines\"], LF=metric[\"type_line_feeds\"], final_LF=metric[\"type_final_newline\"], characters=metric[\"type_characters\"], bytes=metric[\"type_bytes\"], sha256=metric[\"type_sha256\"])",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 188,
+      "line": 361,
+      "end_line": 361,
+      "source": "assert item[\"printed_type\"] == dict(bytes=metric[\"printed_type_bytes\"], sha256=metric[\"printed_type_sha256\"])",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 189,
+      "line": 362,
+      "end_line": 362,
+      "source": "assert item[\"actual_raw_byte_identity\"] is metric[\"raw_type_byte_identity\"] and item[\"lexical_identity\"] is True",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 190,
+      "line": 363,
+      "end_line": 363,
+      "source": "assert item[\"canonical_sha256\"] == metric[\"canonical_type_sha256\"] and item[\"axioms\"][\"actual\"] == actual_axioms[short]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 191,
+      "line": 364,
+      "end_line": 364,
+      "source": "assert item[\"body\"] == dict(characters=metric[\"body_characters\"], bytes=metric[\"body_bytes\"], sha256=metric[\"body_sha256\"])",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 192,
+      "line": 365,
+      "end_line": 365,
+      "source": "assert len(full_variant_keys) == len(set(full_variant_keys)), \"FULL repeated on an unchanged module variant\"",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 193,
+      "line": 366,
+      "end_line": 366,
+      "source": "assert load(\"original-source-index.json\")[\"sources\"] == [bound[\"original_audit\"]]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 194,
+      "line": 368,
+      "end_line": 368,
+      "source": "assert digest(original) == bound[\"original_audit\"][\"sha256\"] and len(original.splitlines()) == bound[\"original_audit\"][\"lines\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 195,
+      "line": 372,
+      "end_line": 372,
+      "source": "assert audit_source.count(addition) == 1 and audit_source.index(addition) < audit_source.index(b\"/-!\")",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 196,
+      "line": 374,
+      "end_line": 374,
+      "source": "assert audit_source == original",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 197,
+      "line": 376,
+      "end_line": 376,
+      "source": "assert jobs[audit_stem][\"kind\"] == \"audit\" and jobs[audit_stem][\"exit_code\"] == 0",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 198,
+      "line": 378,
+      "end_line": 378,
+      "source": "assert digest(raw_audit) == bound[\"audit\"][\"log_sha256\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    },
+    {
+      "assertion": 199,
+      "line": 380,
+      "end_line": 380,
+      "source": "assert dependencies and int(dependencies.group(1)) == bound[\"audit\"][\"dependencies\"]",
+      "disposition": "preserve_generic_guard_obligation"
+    }
+  ],
+  "additional_H33_obligations": [
+    "three private bodies receive the same local guards as public bodies",
+    "three exact sizeOf clauses in the exact mutual group",
+    "seven proper-subexpression call contracts and three review-only signatures pinned",
+    "all23 introduced-type entries pinned and actual source intro/lambda inventories correlated",
+    "complete insertion-map owner and metadata retained"
+  ],
+  "unchanged_generic_ranges": [
+    [
+      1,
+      32
+    ],
+    [
+      36,
+      166
+    ],
+    [
+      171,
+      177
+    ],
+    [
+      182,
+      187
+    ],
+    [
+      189,
+      196
+    ],
+    [
+      205,
+      212
+    ],
+    [
+      218,
+      228
+    ],
+    [
+      232,
+      233
+    ],
+    [
+      240,
+      249
+    ],
+    [
+      251,
+      384
+    ]
+  ],
+  "range_note": "Listed ranges describe the basis. Some contain literal source names or schemas that require the specified H33 value substitution. Every generic obligation remains; H32-only contract facts are replaced, not silently dropped."
+}

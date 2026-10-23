@@ -1,0 +1,57 @@
+--- variants/v2/InternedFreshOrdinaryNodeCounterGrowth.lean
++++ variants/v3/InternedFreshOrdinaryNodeCounterGrowth.lean
+@@ -15,6 +15,7 @@
+   rw [(SourceCurrentAllocatedFiniteOrdinaryReservations.run_next computation state).1]
+   omega
+ 
++omit [DecidableEq (EdgeKey Symbol Guard)] in
+ /-- Sequential outcomes retain the node supply on completion or pending return. -/
+ private theorem bind_mono (outcome : Outcome Symbol Guard First)
+     (next : First → State Symbol Guard → Outcome Symbol Guard Result)
+@@ -40,7 +41,9 @@
+   split
+   · split <;> exact Nat.le_refl _
+   · apply bind_mono _ _ state
+-    · exact Nat.le_trans reserved (later _ _)
++    · exact Nat.le_trans reserved
++        (later (.interned (Cache.intern state.nodes (muKey depth ordinary)).1.identity)
++          {state with nodes := (Cache.intern state.nodes (muKey depth ordinary)).2})
+     · intro bodyValue afterBody
+       exact Nat.le_refl _
+ 
+@@ -50,7 +53,7 @@
+     (environment : List (Value Symbol Guard)) (state : State Symbol Guard) :
+     state.nodes.next ≤ (build expression environment state).state.nodes.next := by
+   cases expression with
+-  | empty | var index => exact Nat.le_refl _
++  | empty | var index => simp only [build, Outcome.state]; exact Nat.le_refl _
+   | node edges =>
+       simp only [build]
+       exact bind_mono _ _ state (buildEdges_mono edges environment state)
+@@ -82,7 +85,7 @@
+     (environment : List (Value Symbol Guard)) (state : State Symbol Guard) :
+     state.nodes.next ≤ (buildMany expression environment state).state.nodes.next := by
+   cases expression with
+-  | nil => exact Nat.le_refl _
++  | nil => simp only [buildMany, Outcome.state]; exact Nat.le_refl _
+   | cons first rest =>
+       simp only [buildMany]
+       apply bind_mono _ _ state (build_mono first environment state)
+@@ -97,14 +100,15 @@
+     (environment : List (Value Symbol Guard)) (state : State Symbol Guard) :
+     state.nodes.next ≤ (buildEdges expression environment state).state.nodes.next := by
+   cases expression with
+-  | nil => exact Nat.le_refl _
++  | nil => simp only [buildEdges, Outcome.state]; exact Nat.le_refl _
+   | cons first rest =>
+       cases first with
+       | mk symbol constraint children =>
+           simp only [buildEdges]
+           apply bind_mono _ _ state (buildMany_mono children environment state)
+           intro values next
+-          apply bind_mono _ _ next (work_mono (makeEdge symbol constraint values) next)
++          apply bind_mono (work (makeEdge symbol constraint values) next) _ next
++            (work_mono (makeEdge symbol constraint values) next)
+           intro edge afterEdge
+           apply bind_mono _ _ afterEdge (buildEdges_mono rest environment afterEdge)
+           intro edges final

@@ -1,0 +1,7 @@
+/-- Actual Mu request branches retain the node supply through their callback. -/
+private theorem request_mono (smart : Bool) (depth ordinary : Value Symbol Guard)
+    (callback : InternedBinderProtocol.Reference → State Symbol Guard →
+      Outcome Symbol Guard (Value Symbol Guard))
+    (state : State Symbol Guard)
+    (later : ∀ name current, current.nodes.next ≤ (callback name current).state.nodes.next) :
+    state.nodes.next ≤ (request smart depth ordinary callback state).state.nodes.next

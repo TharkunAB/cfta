@@ -1,0 +1,65 @@
+{
+  "status": "SOURCE_ONLY_COUNTER_BOUNDARY_CLEAR_WITH_EXPLICIT_CALLBACK_CONDITION",
+  "observed_at": "2026-10-23T12:07:02+02:00",
+  "question": "Lower next-counter monotonicity for arbitrary warm constructor heaps and every outcome",
+  "findings": [
+    "Finite Work.run has both exact counter equations in run_next with no Valid or Dense premise. Natural reservation counts are nonnegative.",
+    "Both original and repaired syntax-directed build/buildMany/buildEdges only compose identity states, Work.run, sequential intern reservations and payload-only record updates. Their lower-counter preservation is operationally valid for arbitrary initial states and both pending/done outcomes; it is not a new checked theorem here.",
+    "Generic request is not counter-monotone for an unrestricted callback. On a miss, a callback can return a reset state; the request preserves those reset counters on both callback outcomes.",
+    "For a reusable callback boundary, require only the two coordinatewise incoming next lower bounds at every callback invocation actually used. Include pending as well as done via Outcome.state. No completion, Valid, Dense, Facts, availability, language or exact result premise is needed.",
+    "For one fixed miss, the literal weakest required facts are the original request node/edge counter cutoffs below the outcome counters of the actual interned-name/allocated-state callback. Preserving the larger allocated node counter is sufficient but stronger. No callback premise is needed on hit or already-pending lookup branches.",
+    "Existing Grows contains only four table extensions. Neither it alone nor Grows with Valid implies counter monotonicity on arbitrary warm heaps with unused counter gaps.",
+    "Native optionalBinder calls MaybeMu.maybeMu. Its concrete callback executes FreshOrdinaryStoredSubstitution.execute, which directly uses repaired FreshOrdinaryConstruction.build. A bound only for the old NestedConstruction.build does not close this endpoint.",
+    "The direct concrete repaired path avoids importing source Facts/admission merely to use callback_eq or maybeMu_eq. Prove its operational counter property for arbitrary syntax/current state, then compose the concrete callback, two probes and request."
+  ],
+  "minimum_callback_condition": {
+    "reusable": "For each invoked name/current pair, current.nodes.next and current.edges.next are each no greater than the corresponding counter in (callback name current).state.",
+    "single_reachable_miss": "It suffices to bound that one actual callback outcome by the original request counters, at the reserved allocated state. This does not retain the reservation increment or prove issued-history safety.",
+    "outcome_scope": [
+      "done",
+      "pending"
+    ],
+    "not_required": [
+      "success",
+      "Dense",
+      "Valid",
+      "Facts",
+      "payload coherence",
+      "resident result",
+      "semantic law"
+    ]
+  },
+  "induction_shape": {
+    "bind": "Case split on Outcome. Pending keeps the first state. Done applies the later coordinatewise bounds at the actual completed state, then composes inequalities.",
+    "work": "Use Work.run_next for both counters. No cache validity or density is required.",
+    "request": "Lookup hit and pending preserve the literal state. A miss increments nodes only, invokes the actual callback, then changes only nodeRecords on done. Pending propagates the exact callback state.",
+    "mutual": "Three simultaneous sizeOf-expression inductions: build, buildMany and buildEdges. Generalize environment/current state. Node and union use their list IH then Work; list cons composes actual first/rest states; edge cons composes children, makeEdge, rest; binder derives callback bounds from the strict body IH plus withoutSelfReference Work, then threads both probes and request.",
+    "repaired": "Repeat the same mutual shape for FreshOrdinaryConstruction; ordinaryLevel changes only the name argument, not state updates. This is required for the direct actual optionalBinder endpoint."
+  },
+  "static_counterexamples": [
+    {
+      "boundary": "Unrestricted generic request callback",
+      "example": "Choose nonzero incoming counters and a Mu-key miss. Let its callback ignore its name and allocated state and return empty counters. A done callback causes only nodeRecords to be updated afterward; a pending callback is propagated. Either outcome can end below both incoming counters."
+    },
+    {
+      "boundary": "Grows plus Valid is insufficient",
+      "example": "Keep all tables and issued maps empty. A before counter7 and after counter0 both satisfy Valid, and all four table-extension fields of Grows hold. Counter lower preservation does not follow."
+    }
+  ],
+  "scope_limits": [
+    "This is a source-level planning assessment. No new declaration or proof body is provided.",
+    "Counter preservation does not certify resident identities below counters, freshness, issued-history retention, density, word range/capacity, constructor completion or Mu/public-pass correctness.",
+    "The raw native optionalBinder correspondence is recorded. Later allocated/checked wrapper transport remains a separate endpoint check.",
+    "H32 theorem and checkpoint claims are unchanged."
+  ],
+  "read_scope": "Whole Growth, DenseIdentities, repaired constructor, repaired stored substitution and MaybeMu files read. Other defining sources read in the bounded ranges recorded by source-index.json; no whole-library claim.",
+  "ownership": "Independent source assessment by Guard. Arity is preparing the separate pipeline assessment; this package does not claim its authorship.",
+  "diagnostics": [
+    {
+      "kind": "EXPLORATORY_READ_PATH_MISS",
+      "detail": "One exploratory rg included absent SourceRecursiveIntersectionHeap.lean. The actual SourceRecursiveIntersectionNative -> MaybeMu -> repaired stored substitution path was then read and pinned. No prepared tool or proof was run."
+    }
+  ],
+  "compiler_or_prepared_program_execution": false,
+  "repository_mutation_or_external_post": false
+}

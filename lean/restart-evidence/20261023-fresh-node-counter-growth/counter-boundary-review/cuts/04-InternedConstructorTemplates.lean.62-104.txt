@@ -1,0 +1,43 @@
+structure State (Symbol Guard : Type) where
+  edges : Cache.State (EdgeKey Symbol Guard)
+  nodes : Cache.State NodeKey
+  edgeRecords : Table (EdgeKey Symbol Guard) (EdgeValue Symbol Guard)
+  nodeRecords : Table NodeKey (Value Symbol Guard)
+
+/-- Both source cache families and both record maps start empty. -/
+def empty : State Symbol Guard := ⟨Cache.emptyState, Cache.emptyState, fun _ => none, fun _ => none⟩
+
+/-- Every counter retains its own reservation and canonical-key invariant. -/
+def Valid (state : State Symbol Guard) : Prop := Cache.Valid state.edges ∧ Cache.Valid state.nodes
+
+/-- Empty independent caches satisfy both reservation invariants. -/
+theorem empty_valid : Valid (empty (Symbol := Symbol) (Guard := Guard)) := ⟨Cache.empty_valid, Cache.empty_valid⟩
+
+/-- Later operations preserve both identity tables and both record tables. -/
+structure Grows (before after : State Symbol Guard) : Prop where
+  edges : Extends before.edges.table after.edges.table
+  nodes : Extends before.nodes.table after.nodes.table
+  edgeRecords : Extends before.edgeRecords after.edgeRecords
+  nodeRecords : Extends before.nodeRecords after.nodeRecords
+
+theorem grows_refl (state : State Symbol Guard) : Grows state state :=
+  ⟨extends_refl _, extends_refl _, extends_refl _, extends_refl _⟩
+
+theorem grows_trans (first : Grows before middle) (second : Grows middle after) : Grows before after :=
+  ⟨extends_trans first.edges second.edges, extends_trans first.nodes second.nodes,
+    extends_trans first.edgeRecords second.edgeRecords, extends_trans first.nodeRecords second.nodeRecords⟩
+
+/-- An edge request computes its record only from the canonical entry returned by its own cache. -/
+def edgeStep [DecidableEq (EdgeKey Symbol Guard)] (key : EdgeKey Symbol Guard)
+    (identify : Interned (EdgeKey Symbol Guard) → EdgeValue Symbol Guard) (state : State Symbol Guard) :
+    EdgeValue Symbol Guard × State Symbol Guard :=
+  let entry := Cache.intern state.edges key
+  let records := keepFirst state.edgeRecords key (identify entry.1)
+  ((records key).getD (identify entry.1), {state with edges := entry.2, edgeRecords := records})
+
+/-- A node request preserves the first complete record attached to its structural key. -/
+def nodeStep (key : NodeKey) (identify : Interned NodeKey → Value Symbol Guard) (state : State Symbol Guard) :
+    Value Symbol Guard × State Symbol Guard :=
+  let entry := Cache.intern state.nodes key
+  let records := keepFirst state.nodeRecords key (identify entry.1)
+  ((records key).getD (identify entry.1), {state with nodes := entry.2, nodeRecords := records})

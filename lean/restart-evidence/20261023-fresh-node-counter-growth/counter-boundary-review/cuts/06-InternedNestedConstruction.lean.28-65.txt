@@ -1,0 +1,38 @@
+/-- A finite execution either returns its actual record or identifies a pending canonical request. -/
+inductive Outcome (Symbol Guard Result : Type) where
+  | done (value : Result) (state : InternedConstructorTemplates.State Symbol Guard)
+  | pending (key : NodeKey) (state : InternedConstructorTemplates.State Symbol Guard)
+
+/-- Later source effects run only after the earlier record has completed. -/
+def Outcome.bind (outcome : Outcome Symbol Guard First)
+    (next : First → InternedConstructorTemplates.State Symbol Guard → Outcome Symbol Guard Result) : Outcome Symbol Guard Result :=
+  match outcome with
+  | .done value state => next value state
+  | .pending key state => .pending key state
+
+/-- Execute an existing finite ordinary constructor with its exact two-cache operations. -/
+def work [DecidableEq (EdgeKey Symbol Guard)] (computation : Work Symbol Guard Result)
+    (state : InternedConstructorTemplates.State Symbol Guard) : Outcome Symbol Guard Result :=
+  let result := run computation state
+  .done result.1 result.2
+
+/-- Raw Mu construction retains its binder; smart construction applies the source cleanup. -/
+def finish (smart : Bool) (value : Value Symbol Guard) : Value Symbol Guard :=
+  if smart then cleanup value else value
+
+/-- Actual Mu readback starts only after both complete probe records are available. -/
+def request [DecidableEq (EdgeKey Symbol Guard)] (smart : Bool) (depth ordinary : Value Symbol Guard)
+    (callback : Reference → InternedConstructorTemplates.State Symbol Guard → Outcome Symbol Guard (Value Symbol Guard))
+    (state : InternedConstructorTemplates.State Symbol Guard) : Outcome Symbol Guard (Value Symbol Guard) :=
+  let key := muKey depth ordinary
+  match state.nodes.table key with
+  | some _ =>
+      match state.nodeRecords key with
+      | some value => .done (finish smart value) state
+      | none => .pending key state
+  | none =>
+      let entry := Cache.intern state.nodes key
+      let allocated := {state with nodes := entry.2}
+      (callback (.interned entry.1.identity) allocated).bind fun bodyValue afterBody =>
+        let candidate := Value.mu entry.1 bodyValue depth ordinary
+        let records := keepFirst afterBody.nodeRecords key candidate

@@ -1,0 +1,4 @@
+/-- Actual ordered child construction retains the node supply on every outcome. -/
+theorem buildMany_mono [DecidableEq (EdgeKey Symbol Guard)] (expression : List (Syntax Symbol Guard))
+    (environment : List (Value Symbol Guard)) (state : State Symbol Guard) :
+    state.nodes.next ≤ (buildMany expression environment state).state.nodes.next

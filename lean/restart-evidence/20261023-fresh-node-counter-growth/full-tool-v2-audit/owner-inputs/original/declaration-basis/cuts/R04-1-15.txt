@@ -1,0 +1,15 @@
+import MicroCFTA.InternedNestedConstruction
+
+/-!
+# Actual state growth in arbitrary nested construction schedules
+
+Every completed or pending execution preserves the canonical caches and
+all earlier payloads. The proof follows the nested expression directly.
+It does not require a successful callback or a supplied stable key law.
+-/
+namespace MicroCFTA.InternedNestedConstruction
+open Cache InternedConstructorTemplates
+
+/-- Read the exact state at normal return or at the first pending readback. -/
+def Outcome.state : Outcome Symbol Guard Result → InternedConstructorTemplates.State Symbol Guard
+  | .done _ state | .pending _ state => state

@@ -1,0 +1,9 @@
+/-- Execute the same stored plan with the repaired ordinary-probe scheduler. -/
+def execute [DecidableEq (EdgeKey Symbol Guard)] (value : Value Symbol Guard) (environment : Environment Symbol Guard)
+    (state : State Symbol Guard) : Outcome Symbol Guard (Value Symbol Guard) :=
+  InternedFreshOrdinaryConstruction.build (encode (leaves value) [] value) ((leaves value).map (input environment)) state
+
+/-- Repaired source unfolding replaces the same outer recursive reference. -/
+def unfold [DecidableEq (EdgeKey Symbol Guard)] (value : Value Symbol Guard) (state : State Symbol Guard) :
+    Outcome Symbol Guard (Value Symbol Guard) :=
+  match value with

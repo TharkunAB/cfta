@@ -1,0 +1,9 @@
+
+/-- Mu entry allocates the actual extended domain before requesting the two original bodies. -/
+def compileMu (domain : Interned DomainKey) (left right : Value Symbol Guard) : Code Symbol Guard (Value Symbol Guard) :=
+  match identity left, identity right with
+  | some first, some second =>
+      .enter domain left right first second fun entered =>
+        .node ⟨entered, body left, body right⟩ fun value =>
+          .optionalBinder (pair first second) value .pure
+  | _, _ => unsupported left right

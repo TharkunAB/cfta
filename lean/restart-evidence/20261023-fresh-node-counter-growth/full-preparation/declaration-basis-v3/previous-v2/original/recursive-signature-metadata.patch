@@ -1,0 +1,72 @@
+--- drafts/mutual-induction-v1.json
++++ mutual-induction.json
+@@ -1,5 +1,5 @@
+ {
+-  "status": "REVIEW_ONLY_COMPLETE_RECURSIVE_THEOREM_TYPES",
++  "status": "REVIEW_ONLY_RECURSIVE_SIGNATURES_WITH_STRICT_CASE_CALL_RESTRICTIONS",
+   "fixed_context_parameters": [
+     "Symbol : Type",
+     "Guard : Type",
+@@ -8,29 +8,6 @@
+   "fully_generalized_arguments": [
+     "environment : List (Value Symbol Guard)",
+     "state : InternedConstructorTemplates.State Symbol Guard"
+-  ],
+-  "recursive_hypotheses": [
+-    {
+-      "name": "build_mono",
+-      "full_type_file": "build-mono-IH.lean.txt",
+-      "sha256": "0621633496b6a81ecb7301adc0bcb778ac5d0552e2a7de180f8a0c8ebcc3c74b",
+-      "current_structural_parameter": "expression",
+-      "measure": "sizeOf expression"
+-    },
+-    {
+-      "name": "buildMany_mono",
+-      "full_type_file": "many-mono-IH.lean.txt",
+-      "sha256": "22ba617d35bf8d11b5fe5227425c45d687cd7d6bfacc8089fda56e3b8f52a38d",
+-      "current_structural_parameter": "expression",
+-      "measure": "sizeOf expression"
+-    },
+-    {
+-      "name": "buildEdges_mono",
+-      "full_type_file": "edges-mono-IH.lean.txt",
+-      "sha256": "dccb699f6013511e709fd64ee367683032947b72a1d8d992376378b920725a6d",
+-      "current_structural_parameter": "expression",
+-      "measure": "sizeOf expression"
+-    }
+   ],
+   "termination_clause_per_public_theorem": "termination_by sizeOf expression",
+   "recursive_call_sites": {
+@@ -54,5 +31,31 @@
+   "outcomes_covered": [
+     "done",
+     "pending"
+-  ]
++  ],
++  "recursive_signatures": [
++    {
++      "name": "build_mono",
++      "full_type_file": "build-mono-IH.lean.txt",
++      "sha256": "0621633496b6a81ecb7301adc0bcb778ac5d0552e2a7de180f8a0c8ebcc3c74b",
++      "current_structural_parameter": "expression",
++      "measure": "sizeOf expression"
++    },
++    {
++      "name": "buildMany_mono",
++      "full_type_file": "many-mono-IH.lean.txt",
++      "sha256": "22ba617d35bf8d11b5fe5227425c45d687cd7d6bfacc8089fda56e3b8f52a38d",
++      "current_structural_parameter": "expression",
++      "measure": "sizeOf expression"
++    },
++    {
++      "name": "buildEdges_mono",
++      "full_type_file": "edges-mono-IH.lean.txt",
++      "sha256": "dccb699f6013511e709fd64ee367683032947b72a1d8d992376378b920725a6d",
++      "current_structural_parameter": "expression",
++      "measure": "sizeOf expression"
++    }
++  ],
++  "signature_interpretation": "The three full forall types describe recursive theorem signatures. They are not unrestricted induction hypotheses. Only the proper-subexpression calls in recursive-call-contracts.json are available during proof construction.",
++  "recursive_call_contracts": "recursive-call-contracts.json",
++  "termination_obligations_are_not_public_premises": true
+ }

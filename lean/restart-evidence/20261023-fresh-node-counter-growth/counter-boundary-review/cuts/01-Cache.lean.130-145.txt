@@ -1,0 +1,16 @@
+structure State (Key : Type) where
+  next : Nat
+  issued : Nat → Option Key
+  table : Table Key (Interned Key)
+
+/-- Every table entry has its own key and an identity reserved for that key. -/
+def Valid (state : State Key) : Prop :=
+  (∀ ident key, state.issued ident = some key → ident < state.next) ∧
+  (∀ key value, state.table key = some value →
+    value.key = key ∧ state.issued value.identity = some key)
+
+/-- Reserve the next identity. This models the atomic fetch-and-add step. -/
+def reserve (state : State Key) (key : Key) : Interned Key × State Key :=
+  (⟨state.next, key⟩,
+    {state with
+      next := state.next + 1

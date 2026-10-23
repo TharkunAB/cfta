@@ -1,0 +1,55 @@
+--- previous-v2/context.lean.txt
++++ context.lean.txt
+@@ -6,4 +6,3 @@
+ open InternedNestedConstruction (Syntax EdgeSyntax Outcome work request)
+ open InternedFreshOrdinaryConstruction
+ variable {Symbol Guard First Result : Type}
+-variable [DecidableEq (EdgeKey Symbol Guard)]
+--- previous-v2/private-bind.lean.txt
++++ private-bind.lean.txt
+@@ -1,4 +1,3 @@
+-omit [DecidableEq (EdgeKey Symbol Guard)] in
+ /-- Sequential outcomes retain the node supply on completion or pending return. -/
+ private theorem bind_mono (outcome : Outcome Symbol Guard First)
+     (next : First → State Symbol Guard → Outcome Symbol Guard Result)
+--- previous-v2/private-work.lean.txt
++++ private-work.lean.txt
+@@ -1,4 +1,4 @@
+ /-- Actual Work cannot reduce the node supply. -/
+-private theorem work_mono (computation : Work Symbol Guard Result)
++private theorem work_mono [DecidableEq (EdgeKey Symbol Guard)] (computation : Work Symbol Guard Result)
+     (state : State Symbol Guard) :
+     state.nodes.next ≤ (run computation state).2.nodes.next
+--- previous-v2/private-request.lean.txt
++++ private-request.lean.txt
+@@ -1,5 +1,5 @@
+ /-- Actual Mu request branches retain the node supply through their callback. -/
+-private theorem request_mono (smart : Bool) (depth ordinary : Value Symbol Guard)
++private theorem request_mono [DecidableEq (EdgeKey Symbol Guard)] (smart : Bool) (depth ordinary : Value Symbol Guard)
+     (callback : InternedBinderProtocol.Reference → State Symbol Guard →
+       Outcome Symbol Guard (Value Symbol Guard))
+     (state : State Symbol Guard)
+--- previous-v2/public-build.lean.txt
++++ public-build.lean.txt
+@@ -1,4 +1,4 @@
+ /-- Actual repaired construction retains the node supply on every outcome. -/
+-theorem build_mono (expression : Syntax Symbol Guard)
++theorem build_mono [DecidableEq (EdgeKey Symbol Guard)] (expression : Syntax Symbol Guard)
+     (environment : List (Value Symbol Guard)) (state : State Symbol Guard) :
+     state.nodes.next ≤ (build expression environment state).state.nodes.next
+--- previous-v2/public-many.lean.txt
++++ public-many.lean.txt
+@@ -1,4 +1,4 @@
+ /-- Actual ordered child construction retains the node supply on every outcome. -/
+-theorem buildMany_mono (expression : List (Syntax Symbol Guard))
++theorem buildMany_mono [DecidableEq (EdgeKey Symbol Guard)] (expression : List (Syntax Symbol Guard))
+     (environment : List (Value Symbol Guard)) (state : State Symbol Guard) :
+     state.nodes.next ≤ (buildMany expression environment state).state.nodes.next
+--- previous-v2/public-edges.lean.txt
++++ public-edges.lean.txt
+@@ -1,4 +1,4 @@
+ /-- Actual ordered edge construction retains the node supply on every outcome. -/
+-theorem buildEdges_mono (expression : List (EdgeSyntax Symbol Guard))
++theorem buildEdges_mono [DecidableEq (EdgeKey Symbol Guard)] (expression : List (EdgeSyntax Symbol Guard))
+     (environment : List (Value Symbol Guard)) (state : State Symbol Guard) :
+     state.nodes.next ≤ (buildEdges expression environment state).state.nodes.next

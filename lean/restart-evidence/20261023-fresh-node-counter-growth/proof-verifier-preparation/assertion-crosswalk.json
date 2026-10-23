@@ -1,0 +1,1406 @@
+{
+  "status": "STATIC_FINAL_SOURCE_ASSERTION_CROSSWALK",
+  "observed_at": "2026-10-23T13:20:37.796670+02:00",
+  "basis_lines": 384,
+  "basis_assertions": 199,
+  "selected_lines": 402,
+  "selected_assertions": 212,
+  "exact_assertion_expressions": 169,
+  "rows": [
+    {
+      "basis_line": 30,
+      "basis_expression": "digest(raw_data) == '4b5abbcae64b1ddac1a0965424e1df8672280c2ca377672a9f00b73e9c3b88a6'",
+      "selected_line": null,
+      "status": "H32_SPECIFIC_SCOPE_OR_SCHEMA_REPLACED",
+      "replacement_scope": "H33 module/data pin, actual declaration/body schema, six-body local inventories and exact ordered headers; see complete adaptation.patch"
+    },
+    {
+      "basis_line": 31,
+      "basis_expression": "not re.search('__H\\\\d+_', raw_data.decode())",
+      "selected_line": 31,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 34,
+      "basis_expression": "[m['key'] for m in modules] == ['pair_inventory_rebase']",
+      "selected_line": null,
+      "status": "H32_SPECIFIC_SCOPE_OR_SCHEMA_REPLACED",
+      "replacement_scope": "H33 module/data pin, actual declaration/body schema, six-body local inventories and exact ordered headers; see complete adaptation.patch"
+    },
+    {
+      "basis_line": 35,
+      "basis_expression": "[m['source_cap'] for m in modules] == [180]",
+      "selected_line": 35,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 36,
+      "basis_expression": "[m['specs'] for m in modules] == [[['rebase', 'theorem']]]",
+      "selected_line": null,
+      "status": "H32_SPECIFIC_SCOPE_OR_SCHEMA_REPLACED",
+      "replacement_scope": "H33 module/data pin, actual declaration/body schema, six-body local inventories and exact ordered headers; see complete adaptation.patch"
+    },
+    {
+      "basis_line": 45,
+      "basis_expression": "actual == set(jobs)",
+      "selected_line": 45,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 47,
+      "basis_expression": "metrics['actual_jobs'] == len(actual)",
+      "selected_line": 47,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 48,
+      "basis_expression": "metrics['source_jobs'] == sum((j['kind'] in {'strict', 'full'} for j in jobs.values()))",
+      "selected_line": 48,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 49,
+      "basis_expression": "metrics['focused_build_jobs'] == sum((j['kind'] == 'focused_build' for j in jobs.values()))",
+      "selected_line": 49,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 50,
+      "basis_expression": "metrics['audit_jobs'] == sum((j['kind'] == 'audit' for j in jobs.values())) == 1",
+      "selected_line": 50,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 51,
+      "basis_expression": "metrics['actual_jobs'] == sum((metrics[k] for k in ['source_jobs', 'focused_build_jobs', 'audit_jobs']))",
+      "selected_line": 51,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 52,
+      "basis_expression": "metrics['failed_jobs'] == sum((j['exit_code'] != 0 for j in jobs.values()))",
+      "selected_line": 52,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 53,
+      "basis_expression": "metrics['warned_source_exit_zero_jobs'] == sum((j['kind'] in {'strict', 'full'} and j['exit_code'] == 0 and bool(j['source_warnings']) for j in jobs.values()))",
+      "selected_line": 53,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 89,
+      "basis_expression": "history['status'] == 'ROOT_ACCEPTED'",
+      "selected_line": 89,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 90,
+      "basis_expression": "set(history) == {'status', 'selected_sources', 'variants', 'artifacts', 'patches', 'rejected_public_types'}",
+      "selected_line": 90,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 91,
+      "basis_expression": "history['selected_sources'] == {m['source_path']: m['source_sha256'] for m in modules}",
+      "selected_line": 91,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 94,
+      "basis_expression": "variants and len(variants) == len(history['variants']) and (len(artifacts) == len(history['artifacts']))",
+      "selected_line": 94,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 95,
+      "basis_expression": "not set(variants) & set(artifacts)",
+      "selected_line": 95,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 118,
+      "basis_expression": "len(rejected) == len(history['rejected_public_types']) == metrics['rejected_public_type_jobs']",
+      "selected_line": 118,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 125,
+      "basis_expression": "cut['status'] == 'COMPLETE_TERMINAL_METADATA_CUT_BEFORE_CLOSING_TOOLS'",
+      "selected_line": 125,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 126,
+      "basis_expression": "[p for p, code in metadata_jobs.items() if code != 0] == bound['metadata_failure_paths']",
+      "selected_line": 126,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 127,
+      "basis_expression": "cut['failed_jobs'] == sum((code != 0 for code in metadata_jobs.values()))",
+      "selected_line": 127,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 138,
+      "basis_expression": "selection == {m['source_path']: dict(sha256=m['source_sha256'], lines=m['source_lines'], strict=m['strict'], full=m['full']) for m in modules}",
+      "selected_line": 138,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 139,
+      "basis_expression": "json.loads(pinned(bound['frozen_modules'])) == {m['name']: m['source_sha256'] for m in modules}",
+      "selected_line": 139,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 365,
+      "basis_expression": "len(full_variant_keys) == len(set(full_variant_keys))",
+      "selected_line": 383,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 366,
+      "basis_expression": "load('original-source-index.json')['sources'] == [bound['original_audit']]",
+      "selected_line": 384,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 368,
+      "basis_expression": "digest(original) == bound['original_audit']['sha256'] and len(original.splitlines()) == bound['original_audit']['lines']",
+      "selected_line": 386,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 374,
+      "basis_expression": "audit_source == original",
+      "selected_line": 392,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 376,
+      "basis_expression": "jobs[audit_stem]['kind'] == 'audit' and jobs[audit_stem]['exit_code'] == 0",
+      "selected_line": 394,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 378,
+      "basis_expression": "digest(raw_audit) == bound['audit']['log_sha256']",
+      "selected_line": 396,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 380,
+      "basis_expression": "dependencies and int(dependencies.group(1)) == bound['audit']['dependencies']",
+      "selected_line": 398,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 19,
+      "basis_expression": "not path.is_absolute() and '..' not in path.parts",
+      "selected_line": 19,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 25,
+      "basis_expression": "len(data) == record['bytes'] and digest(data) == record['sha256']",
+      "selected_line": 25,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 56,
+      "basis_expression": "receipt['exit_code'] == job['exit_code'] and receipt['observed_at']",
+      "selected_line": 56,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 57,
+      "basis_expression": "receipt['log'] == stem + '.log' and receipt['limits'] == stem + '.limits.json'",
+      "selected_line": 57,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 59,
+      "basis_expression": "re.fullmatch('[0-9a-f]{64}', job['log_sha256']) and digest(raw) == job['log_sha256']",
+      "selected_line": 59,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 60,
+      "basis_expression": "load(receipt['limits']) == {'memory.max': '4294967296', 'memory.high': '4294967296', 'memory.swap.max': '0'}",
+      "selected_line": 60,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 62,
+      "basis_expression": "0 <= usage['age_seconds'] <= 600 and usage['remaining_percent'] > 1",
+      "selected_line": 136,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 63,
+      "basis_expression": "receipt['wrapper'][1:5] == ['--mem', '4G', '--time', '5m']",
+      "selected_line": 63,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 64,
+      "basis_expression": "job['kind'] in {'strict', 'full', 'focused_build', 'audit'}",
+      "selected_line": 64,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 98,
+      "basis_expression": "re.fullmatch('[0-9a-f]{64}', record['sha256']) and digest(data) == record['sha256']",
+      "selected_line": 98,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 105,
+      "basis_expression": "all((stem + suffix in artifacts for suffix in ['.json', '.log', '.limits.json', '.usage.json']))",
+      "selected_line": 105,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 111,
+      "basis_expression": "patch['reason'].strip() and patch['before'] in variants and (patch['after'] in variants)",
+      "selected_line": 111,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 112,
+      "basis_expression": "patch['module'] == variants[patch['before']]['module'] == variants[patch['after']]['module']",
+      "selected_line": 112,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 113,
+      "basis_expression": "patch['path'] in artifacts and artifacts[patch['path']]['sha256'] == patch['sha256']",
+      "selected_line": 113,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 116,
+      "basis_expression": "read(patch['path']).decode() == expected",
+      "selected_line": 116,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 120,
+      "basis_expression": "stem in jobs and jobs[stem]['kind'] == 'full' and (jobs[stem]['exit_code'] == 0)",
+      "selected_line": 120,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 121,
+      "basis_expression": "record['raw_sha256'] == jobs[stem]['log_sha256'] and record['reason'].strip()",
+      "selected_line": 121,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 122,
+      "basis_expression": "record['artifacts'] and all((path in artifacts for path in record['artifacts']))",
+      "selected_line": 122,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 129,
+      "basis_expression": "relative.startswith('root-metadata-history/') and relative.endswith('.json') and (relative in artifacts)",
+      "selected_line": 129,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 130,
+      "basis_expression": "type(code) is int",
+      "selected_line": 130,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 132,
+      "basis_expression": "receipt['exit_code'] == code and receipt['observed_at'] and (Path(receipt['command'][0]).name not in {'lean', 'lake'})",
+      "selected_line": 132,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 133,
+      "basis_expression": "all((relative[:-5] + suffix in artifacts for suffix in ['.json', '.log', '.limits.json', '.usage.json', '.source.py', '.peaks.txt']))",
+      "selected_line": 133,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 134,
+      "basis_expression": "load(relative[:-5] + '.limits.json') == {'memory.max': '4294967296', 'memory.high': '4294967296', 'memory.swap.max': '0'}",
+      "selected_line": 134,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 136,
+      "basis_expression": "0 <= usage['age_seconds'] <= 600 and usage['remaining_percent'] > 1",
+      "selected_line": 136,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 146,
+      "basis_expression": "re.fullmatch('[0-9a-f]{64}', m['source_sha256']) and digest(source) == m['source_sha256']",
+      "selected_line": 146,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 147,
+      "basis_expression": "source == read(m['strict'] + '.source.lean') and 0 < len(source.splitlines()) == m['source_lines'] <= m['source_cap']",
+      "selected_line": 147,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 148,
+      "basis_expression": "read(m['strict'] + '.log') == b'' and jobs[m['strict']]['kind'] == 'strict'",
+      "selected_line": 148,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 149,
+      "basis_expression": "jobs[m['strict']]['module'] == name and jobs[m['strict']]['exit_code'] == 0",
+      "selected_line": 149,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 150,
+      "basis_expression": "jobs[m['full']]['kind'] == 'full' and jobs[m['full']]['module'] == name and (jobs[m['full']]['exit_code'] == 0)",
+      "selected_line": 150,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 151,
+      "basis_expression": "jobs[m['strict']]['errors'] == jobs[m['strict']]['source_warnings'] == jobs[m['full']]['errors'] == jobs[m['full']]['source_warnings'] == 0",
+      "selected_line": 151,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 152,
+      "basis_expression": "m['full'] not in rejected and source.rstrip().endswith(('end MicroCFTA.' + name).encode())",
+      "selected_line": 152,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 153,
+      "basis_expression": "any((v['module'] == name and read(path) == source for path, v in variants.items()))",
+      "selected_line": 153,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 155,
+      "basis_expression": "gate['status'] == 'ACCEPTED_STRICT_SOURCE' and gate['source_sha256'] == m['source_sha256']",
+      "selected_line": 155,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 156,
+      "basis_expression": "gate['source_lines'] == m['source_lines'] and gate['source_cap'] == m['source_cap']",
+      "selected_line": 156,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 157,
+      "basis_expression": "gate['selected_strict'] == m['strict'] and gate['strict_log_bytes'] == 0 and (gate['public_heads'] == shorts)",
+      "selected_line": 157,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 158,
+      "basis_expression": "gate['receipt_sha256'] == digest(read(m['strict'] + '.json'))",
+      "selected_line": 158,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 159,
+      "basis_expression": "gate['module'] == name and gate['root_default_limit_check'] and gate['all_linters']",
+      "selected_line": 159,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 160,
+      "basis_expression": "gate['declaration_gate'] == m['declaration_gate']['path'] and gate['body_gate'] == m['body_gate']['path']",
+      "selected_line": 160,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 162,
+      "basis_expression": "body_gate['status'] == 'ACCEPTED_COMPLETE_BODY_FOR_STRICT_CHECK' and body_gate['module'] == name",
+      "selected_line": null,
+      "status": "H32_SPECIFIC_SCOPE_OR_SCHEMA_REPLACED",
+      "replacement_scope": "H33 module/data pin, actual declaration/body schema, six-body local inventories and exact ordered headers; see complete adaptation.patch"
+    },
+    {
+      "basis_line": 163,
+      "basis_expression": "body_gate['source_sha256'] == m['source_sha256'] and body_gate['source_lines'] == m['source_lines']",
+      "selected_line": 163,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 164,
+      "basis_expression": "body_gate['whole_source_hard_stop'] == m['source_cap']",
+      "selected_line": null,
+      "status": "H32_SPECIFIC_SCOPE_OR_SCHEMA_REPLACED",
+      "replacement_scope": "H33 module/data pin, actual declaration/body schema, six-body local inventories and exact ordered headers; see complete adaptation.patch"
+    },
+    {
+      "basis_line": 165,
+      "basis_expression": "body_gate['exact_declaration_gate_sha256'] == m['declaration_gate']['sha256']",
+      "selected_line": null,
+      "status": "H32_SPECIFIC_SCOPE_OR_SCHEMA_REPLACED",
+      "replacement_scope": "H33 module/data pin, actual declaration/body schema, six-body local inventories and exact ordered headers; see complete adaptation.patch"
+    },
+    {
+      "basis_line": 166,
+      "basis_expression": "body_gate['independent_body_review_sha256'] == m['body_review']['sha256']",
+      "selected_line": null,
+      "status": "H32_SPECIFIC_SCOPE_OR_SCHEMA_REPLACED",
+      "replacement_scope": "H33 module/data pin, actual declaration/body schema, six-body local inventories and exact ordered headers; see complete adaptation.patch"
+    },
+    {
+      "basis_line": 167,
+      "basis_expression": "body_gate['root_complete_source_lines_read'] == m['source_lines'] and body_gate['all_six_fragments_exact']",
+      "selected_line": null,
+      "status": "H32_SPECIFIC_SCOPE_OR_SCHEMA_REPLACED",
+      "replacement_scope": "H33 module/data pin, actual declaration/body schema, six-body local inventories and exact ordered headers; see complete adaptation.patch"
+    },
+    {
+      "basis_line": 168,
+      "basis_expression": "body_gate['public_let_occurrences'] == 3 and body_gate['local_haves'] == 2 and (body_gate['local_lets'] == 1)",
+      "selected_line": null,
+      "status": "H32_SPECIFIC_SCOPE_OR_SCHEMA_REPLACED",
+      "replacement_scope": "H33 module/data pin, actual declaration/body schema, six-body local inventories and exact ordered headers; see complete adaptation.patch"
+    },
+    {
+      "basis_line": 169,
+      "basis_expression": "body_gate['local_obtains'] == 1 and body_gate['obtained_fields'] == 5 and body_gate['all_lambda_types_reviewed']",
+      "selected_line": null,
+      "status": "H32_SPECIFIC_SCOPE_OR_SCHEMA_REPLACED",
+      "replacement_scope": "H33 module/data pin, actual declaration/body schema, six-body local inventories and exact ordered headers; see complete adaptation.patch"
+    },
+    {
+      "basis_line": 170,
+      "basis_expression": "body_gate['helper_count'] == 0 and body_gate['induction'] is False and body_gate['agreement_derived_not_assumed'] and body_gate['same_full_wrapper']",
+      "selected_line": null,
+      "status": "H32_SPECIFIC_SCOPE_OR_SCHEMA_REPLACED",
+      "replacement_scope": "H33 module/data pin, actual declaration/body schema, six-body local inventories and exact ordered headers; see complete adaptation.patch"
+    },
+    {
+      "basis_line": 171,
+      "basis_expression": "body_gate['default_declaration_limits'] and body_gate['all_linters']",
+      "selected_line": null,
+      "status": "H32_SPECIFIC_SCOPE_OR_SCHEMA_REPLACED",
+      "replacement_scope": "H33 module/data pin, actual declaration/body schema, six-body local inventories and exact ordered headers; see complete adaptation.patch"
+    },
+    {
+      "basis_line": 172,
+      "basis_expression": "json.loads(pinned(m['body_review']))['status'] == 'CLEAR'",
+      "selected_line": null,
+      "status": "H32_SPECIFIC_SCOPE_OR_SCHEMA_REPLACED",
+      "replacement_scope": "H33 module/data pin, actual declaration/body schema, six-body local inventories and exact ordered headers; see complete adaptation.patch"
+    },
+    {
+      "basis_line": 174,
+      "basis_expression": "declaration['status'] == 'ACCEPTED_EXACT_DECLARATIONS_BEFORE_BODY' and declaration['module'] == name",
+      "selected_line": 172,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 175,
+      "basis_expression": "declaration['public_heads'] == shorts and declaration['contracts_sha256'] == m['manifest']['sha256']",
+      "selected_line": null,
+      "status": "H32_SPECIFIC_SCOPE_OR_SCHEMA_REPLACED",
+      "replacement_scope": "H33 module/data pin, actual declaration/body schema, six-body local inventories and exact ordered headers; see complete adaptation.patch"
+    },
+    {
+      "basis_line": 176,
+      "basis_expression": "declaration['whole_source_hard_stop'] == m['source_cap'] and declaration['default_declaration_limits'] and declaration['all_linters']",
+      "selected_line": 175,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 177,
+      "basis_expression": "declaration['insertion_map_sha256'] == m['layout']['sha256']",
+      "selected_line": null,
+      "status": "H32_SPECIFIC_SCOPE_OR_SCHEMA_REPLACED",
+      "replacement_scope": "H33 module/data pin, actual declaration/body schema, six-body local inventories and exact ordered headers; see complete adaptation.patch"
+    },
+    {
+      "basis_line": 178,
+      "basis_expression": "declaration['root_whole_context_lines_read'] == 18 and declaration['root_whole_public_header_lines_read'] == 37",
+      "selected_line": null,
+      "status": "H32_SPECIFIC_SCOPE_OR_SCHEMA_REPLACED",
+      "replacement_scope": "H33 module/data pin, actual declaration/body schema, six-body local inventories and exact ordered headers; see complete adaptation.patch"
+    },
+    {
+      "basis_line": 179,
+      "basis_expression": "declaration['root_all_public_lets_and_introduced_field_types_read'] and declaration['root_all_local_have_let_obtain_and_lambda_types_read'] and (declaration['compiled_fragments'] == 6) and (declaration['compiled_fragment_lines'] == 61)",
+      "selected_line": null,
+      "status": "H32_SPECIFIC_SCOPE_OR_SCHEMA_REPLACED",
+      "replacement_scope": "H33 module/data pin, actual declaration/body schema, six-body local inventories and exact ordered headers; see complete adaptation.patch"
+    },
+    {
+      "basis_line": 180,
+      "basis_expression": "declaration['public_let_occurrences'] == 3 and declaration['body_lets'] == 1 and (declaration['body_haves'] == 2) and (declaration['helpers'] == 0)",
+      "selected_line": null,
+      "status": "H32_SPECIFIC_SCOPE_OR_SCHEMA_REPLACED",
+      "replacement_scope": "H33 module/data pin, actual declaration/body schema, six-body local inventories and exact ordered headers; see complete adaptation.patch"
+    },
+    {
+      "basis_line": 181,
+      "basis_expression": "declaration['body_obtains'] == 1 and declaration['obtain_fields'] == 5 and (declaration['induction'] is False) and declaration['agreement_derived_not_assumed'] and declaration['same_full_wrapper'] and (declaration['new_execution_or_resources_claimed'] is False)",
+      "selected_line": null,
+      "status": "H32_SPECIFIC_SCOPE_OR_SCHEMA_REPLACED",
+      "replacement_scope": "H33 module/data pin, actual declaration/body schema, six-body local inventories and exact ordered headers; see complete adaptation.patch"
+    },
+    {
+      "basis_line": 185,
+      "basis_expression": "list(manifest) == [f['file'] for f in fragments] and [f['order'] for f in fragments] == list(range(1, len(fragments) + 1))",
+      "selected_line": 186,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 195,
+      "basis_expression": "source.startswith(data['context.lean.txt']) and source.count(data['context.lean.txt']) == 1",
+      "selected_line": 197,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 201,
+      "basis_expression": "[positions[s][0] for s in shorts] == sorted((positions[s][0] for s in shorts))",
+      "selected_line": null,
+      "status": "H32_SPECIFIC_SCOPE_OR_SCHEMA_REPLACED",
+      "replacement_scope": "H33 module/data pin, actual declaration/body schema, six-body local inventories and exact ordered headers; see complete adaptation.patch"
+    },
+    {
+      "basis_line": 218,
+      "basis_expression": "matched == sorted(matched) and len(set(matched)) == len(matched)",
+      "selected_line": 221,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 234,
+      "basis_expression": "schema['private_helpers'] == schema['new_definitions'] == schema['typed_show_fragments'] == [] and schema['induction'] is None",
+      "selected_line": null,
+      "status": "H32_SPECIFIC_SCOPE_OR_SCHEMA_REPLACED",
+      "replacement_scope": "H33 module/data pin, actual declaration/body schema, six-body local inventories and exact ordered headers; see complete adaptation.patch"
+    },
+    {
+      "basis_line": 235,
+      "basis_expression": "schema['local_have_names'] == ['included', 'agreement'] and schema['local_let_names'] == ['next'] and (schema['body_intro_names'] == [])",
+      "selected_line": null,
+      "status": "H32_SPECIFIC_SCOPE_OR_SCHEMA_REPLACED",
+      "replacement_scope": "H33 module/data pin, actual declaration/body schema, six-body local inventories and exact ordered headers; see complete adaptation.patch"
+    },
+    {
+      "basis_line": 236,
+      "basis_expression": "schema['local_obtain_groups'] == [['nextCurrent', 'sameSource', 'sameRoots', 'leftValid', 'rightValid']] and schema['compiled_contract_count'] == 6 and (schema['compiled_contract_lines'] == 61)",
+      "selected_line": null,
+      "status": "H32_SPECIFIC_SCOPE_OR_SCHEMA_REPLACED",
+      "replacement_scope": "H33 module/data pin, actual declaration/body schema, six-body local inventories and exact ordered headers; see complete adaptation.patch"
+    },
+    {
+      "basis_line": 237,
+      "basis_expression": "[item['name'] for item in schema['public_let_occurrences']] == ['ordered', 'next', 'ordered'] and schema['compiled_contract_order'] == list(manifest)",
+      "selected_line": null,
+      "status": "H32_SPECIFIC_SCOPE_OR_SCHEMA_REPLACED",
+      "replacement_scope": "H33 module/data pin, actual declaration/body schema, six-body local inventories and exact ordered headers; see complete adaptation.patch"
+    },
+    {
+      "basis_line": 238,
+      "basis_expression": "re.findall(b'\\\\blet[ \\\\t]+([^ \\\\t:=\\\\n]+)', data['public-header.lean.txt']) == [b'ordered', b'next', b'ordered'] and len(re.findall(b'\\\\blet\\\\b', data['public-header.lean.txt'])) == 3",
+      "selected_line": null,
+      "status": "H32_SPECIFIC_SCOPE_OR_SCHEMA_REPLACED",
+      "replacement_scope": "H33 module/data pin, actual declaration/body schema, six-body local inventories and exact ordered headers; see complete adaptation.patch"
+    },
+    {
+      "basis_line": 239,
+      "basis_expression": "schema['future_local_lambda_binders_only'] == dict(included=['root', 'member'], canonical_admission=['handle', 'pair', 'value', 'stored']) and schema['additional_have_let_show_obtain_helper_or_induction_authorized'] is False",
+      "selected_line": null,
+      "status": "H32_SPECIFIC_SCOPE_OR_SCHEMA_REPLACED",
+      "replacement_scope": "H33 module/data pin, actual declaration/body schema, six-body local inventories and exact ordered headers; see complete adaptation.patch"
+    },
+    {
+      "basis_line": 243,
+      "basis_expression": "public == [(kind, short) for short, kind in specs]",
+      "selected_line": 258,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 250,
+      "basis_expression": "helpers == schema['private_helpers'] == []",
+      "selected_line": null,
+      "status": "H32_SPECIFIC_SCOPE_OR_SCHEMA_REPLACED",
+      "replacement_scope": "H33 module/data pin, actual declaration/body schema, six-body local inventories and exact ordered headers; see complete adaptation.patch"
+    },
+    {
+      "basis_line": 254,
+      "basis_expression": "tool_gate['status'] == 'ACCEPTED_EXACT_TOOLS_FOR_SELECTED_STRICT_SOURCE' and tool_gate['source_sha256'] == m['source_sha256']",
+      "selected_line": 272,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 255,
+      "basis_expression": "tool_gate['public_heads'] == shorts and tool_gate['materializer_activation'] and tool_gate['sole_FULL_activation'] and tool_gate['reader_activation_after_actual_FULL']",
+      "selected_line": 273,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 265,
+      "basis_expression": "printer == source + tail.encode() and len(tail.splitlines()) == 11 + 3 * len(specs)",
+      "selected_line": 283,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 266,
+      "basis_expression": "len(printer.splitlines()) == m['source_lines'] + len(tail.splitlines()) == tool_gate['diagnostic_tail_lines'] + m['source_lines']",
+      "selected_line": 284,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 267,
+      "basis_expression": "all((printer.decode().splitlines().count('set_option ' + option) == 1 for option in options))",
+      "selected_line": 285,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 268,
+      "basis_expression": "all((printer.decode().splitlines().count(d + namespace + short) == 1 for short, kind in specs for d in ['#check @', '#print ', '#print axioms ']))",
+      "selected_line": 286,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 274,
+      "basis_expression": "(report['source_sha256'], report['source_lines'], report['printer_sha256']) == (m['source_sha256'], m['source_lines'], digest(printer))",
+      "selected_line": 292,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 275,
+      "basis_expression": "report['log_sha256'] == digest(raw) and report['log_bytes'] == len(raw)",
+      "selected_line": 293,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 276,
+      "basis_expression": "report['receipt_sha256'] == digest(read(m['full'] + '.json')) and report['owned_public_job_exit'] == 0",
+      "selected_line": 294,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 277,
+      "basis_expression": "all((report[k] for k in ['all_eight_printer_settings', 'exact_module_and_diagnostic_tail', 'diagnostic_limits_after_module_only', 'no_omissions']))",
+      "selected_line": 295,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 278,
+      "basis_expression": "(report['pp_option_count'], report['linter_option_count'], report['diagnostic_limit_count']) == (7, 1, 2)",
+      "selected_line": 296,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 279,
+      "basis_expression": "report['configured_paths'] == {k: str(path.resolve()) for k, path in dict(source=evidence / m['snapshot'], printer=evidence / (m['full'] + '.source.lean'), raw=evidence / (m['full'] + '.log'), receipt=evidence / (m['full'] + '.json')).items()}",
+      "selected_line": 297,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 280,
+      "basis_expression": "[(h['head'], h['kind']) for h in report['heads']] == [(namespace + short, kind) for short, kind in specs]",
+      "selected_line": 298,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 282,
+      "basis_expression": "not re.search('sorryAx|\\\\b(?:warning|error)(?:\\\\([^)]*\\\\))?:|failed to pretty print|pp\\\\.rawOnError|maximum recursion depth|maximum number of heartbeats|\u22ef|\u2026|\\\\.\\\\.\\\\.', log)",
+      "selected_line": 300,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 288,
+      "basis_expression": "starts == sorted(starts, key=lambda match: match.start()) and (not log[:starts[0].start()].strip())",
+      "selected_line": 306,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 339,
+      "basis_expression": "''.join(reconstructed) == log and set(report['retained_slices']) == set(retained_names)",
+      "selected_line": 357,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 342,
+      "basis_expression": "review['status'] == 'ACCEPTED_COMPLETE_PUBLIC_TYPES_AND_INSTALLED' and review['source_sha256'] == m['source_sha256'] and (review['source_lines'] == m['source_lines'])",
+      "selected_line": 360,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 343,
+      "basis_expression": "review['root_manual_complete_TYPEs'] is True and review['goal_status'] == 'ACTIVE_INCOMPLETE'",
+      "selected_line": 361,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 344,
+      "basis_expression": "review['readback_sha256'] == m['readback']['sha256']",
+      "selected_line": 362,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 345,
+      "basis_expression": "review['independent_complete_TYPE_review_sha256'] == m['type_review']['sha256'] and independent['status'] == 'CLEAR'",
+      "selected_line": 363,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 346,
+      "basis_expression": "set(review['TYPEs']) == set(shorts)",
+      "selected_line": 364,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 350,
+      "basis_expression": "review['module'] == name and review['scope'] == m['scope']",
+      "selected_line": 368,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 351,
+      "basis_expression": "review['BODY_review'] == dict(complete_retention=True, programmatic_only=True, whole_body_manual_read_claimed=False)",
+      "selected_line": 369,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 352,
+      "basis_expression": "independent['scope'] == 'INDEPENDENT_COMPLETE_ACTUAL_PUBLIC_TYPE_AND_READBACK_REVIEW'",
+      "selected_line": 370,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 353,
+      "basis_expression": "independent['module'] == name and independent['source_sha256'] == m['source_sha256']",
+      "selected_line": 371,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 354,
+      "basis_expression": "independent['source_lines'] == m['source_lines'] and independent['public_heads'] == [namespace + short for short in shorts]",
+      "selected_line": 372,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 355,
+      "basis_expression": "independent['ownership']['reviewer_math_author'] is False",
+      "selected_line": 373,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 357,
+      "basis_expression": "manual['checked_TYPEs_complete'] == shorts and manual['printed_TYPEs_manual'] is manual['BODYs_manual'] is False",
+      "selected_line": 375,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 372,
+      "basis_expression": "audit_source.count(addition) == 1 and audit_source.index(addition) < audit_source.index(b'/-!')",
+      "selected_line": 390,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 66,
+      "basis_expression": "job['module'] in by_name and re.fullmatch('[0-9a-f]{64}', job['source_sha256'])",
+      "selected_line": 66,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 67,
+      "basis_expression": "receipt['source'] == stem + '.source.lean' and receipt['sha256'] == job['source_sha256']",
+      "selected_line": 67,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 69,
+      "basis_expression": "digest(source) == job['source_sha256']",
+      "selected_line": 69,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 70,
+      "basis_expression": "len(receipt['command']) == 3 and Path(receipt['command'][0]).name == 'lean'",
+      "selected_line": 70,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 71,
+      "basis_expression": "receipt['command'][1] == '-Dlinter.all=true' and Path(receipt['command'][-1]).resolve() == (evidence / receipt['source']).resolve()",
+      "selected_line": 71,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 72,
+      "basis_expression": "len(re.findall('^.+?:\\\\d+:\\\\d+: error(?:\\\\([^)]*\\\\))?:', raw.decode(), re.M)) == job['errors']",
+      "selected_line": 72,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 73,
+      "basis_expression": "len(re.findall('^.+?:\\\\d+:\\\\d+: warning(?:\\\\([^)]*\\\\))?:', raw.decode(), re.M)) == job['source_warnings']",
+      "selected_line": 73,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 77,
+      "basis_expression": "job['source_sha256'] is None and 'source' not in receipt and ('sha256' not in receipt)",
+      "selected_line": 77,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 79,
+      "basis_expression": "len(receipt['command']) == 5 and Path(receipt['command'][0]).name == 'lake'",
+      "selected_line": 79,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 80,
+      "basis_expression": "receipt['command'][1:] == ['-d', str(root / 'lean'), 'build', target]",
+      "selected_line": 80,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 81,
+      "basis_expression": "receipt['exit_code'] == 0 and (not re.search('\\\\berror(?:\\\\([^)]*\\\\))?:', raw.decode()))",
+      "selected_line": 81,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 84,
+      "basis_expression": "build and int(build.group(1)) == expected['build_jobs']",
+      "selected_line": 84,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 85,
+      "basis_expression": "re.findall('(?m)^warning: .+$', raw.decode()) == expected['warnings']",
+      "selected_line": 85,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 86,
+      "basis_expression": "all(('InternedFreshOrdinaryClosedCompletion.lean:24:5:' in warning for warning in expected['warnings']))",
+      "selected_line": 86,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 87,
+      "basis_expression": "job['module'] is None if job['kind'] == 'audit' else job['module'] in by_name",
+      "selected_line": 87,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 100,
+      "basis_expression": "record['module'] in by_name and record['reason'].strip()",
+      "selected_line": 100,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 101,
+      "basis_expression": "0 < len(data.splitlines()) == record['lines'] <= by_name[record['module']]['source_cap']",
+      "selected_line": 101,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 103,
+      "basis_expression": "len(data) == record['bytes']",
+      "selected_line": 103,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 107,
+      "basis_expression": "any((v['module'] == job['module'] and v['sha256'] == job['source_sha256'] and (read(path) == read(stem + '.source.lean')) for path, v in variants.items()))",
+      "selected_line": 107,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 188,
+      "basis_expression": "[{k: v for k, v in f.items() if k not in {'owner', 'path'}} for f in fragments] == [{k: v for k, v in f.items() if k != 'owner'} for f in layout]",
+      "selected_line": null,
+      "status": "H32_SPECIFIC_SCOPE_OR_SCHEMA_REPLACED",
+      "replacement_scope": "H33 module/data pin, actual declaration/body schema, six-body local inventories and exact ordered headers; see complete adaptation.patch"
+    },
+    {
+      "basis_line": 192,
+      "basis_expression": "digest(raw_fragment) == f['sha256'] and len(raw_fragment.splitlines()) == f['lines']",
+      "selected_line": 194,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 193,
+      "basis_expression": "manifest[f['file']] == f['sha256']",
+      "selected_line": 195,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 199,
+      "basis_expression": "source.count(header) == 1 and source.index(header) >= len(data['context.lean.txt'])",
+      "selected_line": 202,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 216,
+      "basis_expression": "scope.count(fragment) == 1",
+      "selected_line": 219,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 221,
+      "basis_expression": "re.findall(b'\\\\bhave[ \\\\t]+([^ \\\\t:\\\\n]+)', body) == [n.encode() for n in expected['have_names']]",
+      "selected_line": 233,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 222,
+      "basis_expression": "len(re.findall(b'\\\\bhave\\\\b', body)) == len(expected['have_names'])",
+      "selected_line": 234,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 223,
+      "basis_expression": "re.findall(b'\\\\blet[ \\\\t]+([^ \\\\t:=\\\\n]+)', body) == [n.encode() for n in expected['let_names']]",
+      "selected_line": 235,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 224,
+      "basis_expression": "len(re.findall(b'\\\\blet\\\\b', body)) == len(expected['let_names'])",
+      "selected_line": 236,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 225,
+      "basis_expression": "re.findall(b'\\\\bby_cases[ \\\\t]+([^ \\\\t:\\\\n]+)', body) == [n.encode() for n in expected['by_cases_names']]",
+      "selected_line": 237,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 226,
+      "basis_expression": "re.findall(b'\\\\bcases[ \\\\t]+([^ \\\\t:\\\\n]+)[ \\\\t]*:', body) == [n.encode() for n in expected['case_equations']]",
+      "selected_line": 238,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 228,
+      "basis_expression": "groups == expected['obtain_groups'] and len(re.findall(b'\\\\bobtain\\\\b', body)) == len(groups)",
+      "selected_line": 240,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 229,
+      "basis_expression": "re.findall(b'\\\\bintro[ \\\\t]+([^\\\\n]+)', body) == [b'root member'] and len(re.findall(b'\\\\bintro\\\\b', body)) == 1",
+      "selected_line": null,
+      "status": "H32_SPECIFIC_SCOPE_OR_SCHEMA_REPLACED",
+      "replacement_scope": "H33 module/data pin, actual declaration/body schema, six-body local inventories and exact ordered headers; see complete adaptation.patch"
+    },
+    {
+      "basis_line": 231,
+      "basis_expression": "b'    intro root member\\n' in included and re.findall(b'\\\\bfun[ \\\\t]+([^\\\\n]*?)=>', body) == [b'handle pair value stored ']",
+      "selected_line": null,
+      "status": "H32_SPECIFIC_SCOPE_OR_SCHEMA_REPLACED",
+      "replacement_scope": "H33 module/data pin, actual declaration/body schema, six-body local inventories and exact ordered headers; see complete adaptation.patch"
+    },
+    {
+      "basis_line": 232,
+      "basis_expression": "not re.search(b'\\\\binduction\\\\b', body)",
+      "selected_line": 245,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 233,
+      "basis_expression": "not re.search(b'\\\\b(?:show|suffices|haveI|letI)\\\\b', body) and (not re.search(b'\\\\bobtain\\\\b(?:(?!:=).)*:(?!=)', body, re.S))",
+      "selected_line": 246,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 252,
+      "basis_expression": "(root / m['source_path']).read_bytes() == source",
+      "selected_line": 270,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 258,
+      "basis_expression": "pinned(active) == pinned(archived) and tool_gate['installed_tools'][active['path']] == active['sha256']",
+      "selected_line": 276,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 286,
+      "basis_expression": "len(matches) == 1",
+      "selected_line": 326,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 295,
+      "basis_expression": "len(delimiters) == 1",
+      "selected_line": 313,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 298,
+      "basis_expression": "len(axiom_matches) == 1",
+      "selected_line": 316,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 308,
+      "basis_expression": "len(matches) == 1",
+      "selected_line": 326,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 313,
+      "basis_expression": "normalized == canonical(declared) and raw_identity is metric['raw_type_byte_identity']",
+      "selected_line": 331,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 314,
+      "basis_expression": "len(checked.encode()) == metric['type_bytes'] and len(checked) == metric['type_characters'] and (digest(checked.encode()) == metric['type_sha256'])",
+      "selected_line": 332,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 315,
+      "basis_expression": "len(checked.splitlines()) == metric['type_logical_lines'] and checked.count('\\n') == metric['type_line_feeds'] and (checked.endswith('\\n') == metric['type_final_newline'])",
+      "selected_line": 333,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 316,
+      "basis_expression": "len(declared.encode()) == metric['printed_type_bytes'] and digest(declared.encode()) == metric['printed_type_sha256']",
+      "selected_line": 334,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 317,
+      "basis_expression": "digest(normalized.encode()) == metric['canonical_type_sha256']",
+      "selected_line": 335,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 318,
+      "basis_expression": "not any((token in checked + declared for token in ['_private', '\u271d', '\u2020', '\u2021']))",
+      "selected_line": 336,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 319,
+      "basis_expression": "not any((re.search(re.escape(namespace + helper) + \"(?![\\\\w'])\", checked + declared) for helper in helpers))",
+      "selected_line": 337,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 320,
+      "basis_expression": "all((head_report[k] for k in ['check_print_type_identity', 'check_print_type_lexical_identity', 'unique_complete_type_body_delimiter', 'actual_axioms_within_standard_allowed']))",
+      "selected_line": 338,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 321,
+      "basis_expression": "head_report['check_print_type_byte_identity'] is raw_identity",
+      "selected_line": 339,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 322,
+      "basis_expression": "head_report['private_namespace_helpers_checked'] == helpers and head_report['private_type_spellings_checked'] == ['_private', '\u271d', '\u2020', '\u2021'] and (head_report['private_public_type_names'] is False)",
+      "selected_line": 340,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 323,
+      "basis_expression": "head_report['checked_type_characters'] == len(checked) and head_report['checked_type_bytes'] == len(checked.encode()) and (head_report['checked_type_sha256'] == metric['type_sha256'])",
+      "selected_line": 341,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 324,
+      "basis_expression": "head_report['printed_type_bytes'] == metric['printed_type_bytes'] and head_report['printed_type_characters'] == len(declared) and (head_report['printed_type_sha256'] == metric['printed_type_sha256'])",
+      "selected_line": 342,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 325,
+      "basis_expression": "head_report['normalized_type_characters'] == len(normalized) and head_report['canonical_type_sha256'] == metric['canonical_type_sha256']",
+      "selected_line": 343,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 326,
+      "basis_expression": "head_report['body_characters'] == len(body) == metric['body_characters'] and len(body.encode()) == metric['body_bytes']",
+      "selected_line": 344,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 327,
+      "basis_expression": "body.startswith('fun ') and len(body) > 50 and (digest(body.encode()) == metric['body_sha256'])",
+      "selected_line": 345,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 329,
+      "basis_expression": "values or (axiom.group(1) == 'does not depend on any axioms' and (not printed[axiom.end():].strip()))",
+      "selected_line": 347,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 331,
+      "basis_expression": "axioms == head_report['actual_axioms'] == metric['actual_axioms'] and set(axioms) <= {'Classical.choice', 'Quot.sound', 'propext'}",
+      "selected_line": 349,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 332,
+      "basis_expression": "head_report['actual_standard_three_axioms'] == (set(axioms) == {'Classical.choice', 'Quot.sound', 'propext'})",
+      "selected_line": 350,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 349,
+      "basis_expression": "review['TYPEs'][short] == dict(sha256=metric['type_sha256'], bytes=metric['type_bytes'], logical_lines=metric['type_logical_lines'], actual_axioms=actual_axioms[short])",
+      "selected_line": 367,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 360,
+      "basis_expression": "item['checked_type'] == dict(logical_lines=metric['type_logical_lines'], LF=metric['type_line_feeds'], final_LF=metric['type_final_newline'], characters=metric['type_characters'], bytes=metric['type_bytes'], sha256=metric['type_sha256'])",
+      "selected_line": 378,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 361,
+      "basis_expression": "item['printed_type'] == dict(bytes=metric['printed_type_bytes'], sha256=metric['printed_type_sha256'])",
+      "selected_line": 379,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 362,
+      "basis_expression": "item['actual_raw_byte_identity'] is metric['raw_type_byte_identity'] and item['lexical_identity'] is True",
+      "selected_line": 380,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 363,
+      "basis_expression": "item['canonical_sha256'] == metric['canonical_type_sha256'] and item['axioms']['actual'] == actual_axioms[short]",
+      "selected_line": 381,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 364,
+      "basis_expression": "item['body'] == dict(characters=metric['body_characters'], bytes=metric['body_bytes'], sha256=metric['body_sha256'])",
+      "selected_line": 382,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 75,
+      "basis_expression": "not re.search('^\\\\s*set_option (?:maxHeartbeats|maxRecDepth|linter\\\\.)', source.decode(), re.M)",
+      "selected_line": 75,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 109,
+      "basis_expression": "stem + '.source.lean' in artifacts",
+      "selected_line": 109,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 248,
+      "basis_expression": "found",
+      "selected_line": 263,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 272,
+      "basis_expression": "len(matching) == 1",
+      "selected_line": 290,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    },
+    {
+      "basis_line": 337,
+      "basis_expression": "retained == text.encode() and report['retained_slices'][filename] == dict(bytes=len(retained), sha256=digest(retained))",
+      "selected_line": 355,
+      "status": "EXACT_AST_EXPRESSION_RETAINED",
+      "replacement_scope": null
+    }
+  ],
+  "selected_import_or_execution": false,
+  "selected_source_sha256": "e3a7dbe25344315aba725cc63b502fd5efe6e2fba78ef50d53d5e96bc8479716"
+}

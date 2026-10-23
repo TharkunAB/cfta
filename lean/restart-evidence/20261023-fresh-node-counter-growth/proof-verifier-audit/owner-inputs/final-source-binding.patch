@@ -1,0 +1,11 @@
+--- H33/unbound-data-digest-verifier.py
++++ H33/verify-proofs.py
+@@ -27,7 +27,7 @@
+ def canonical(text):
+     return re.sub(r"[ \t\r\n]+", " ", text).strip(" \t\r\n")
+ raw_data = read("bound-data.json")
+-assert digest(raw_data) == "__H33_BOUND_DATA_SHA256__"
++assert digest(raw_data) == "511742ee2076a23736fd42427ee6081c9548848ca305c65b5bfa448036a8eb73"
+ assert not re.search(r"__H\d+_", raw_data.decode()), "Unbound evidence input"
+ bound = json.loads(raw_data)
+ modules = bound["modules"]

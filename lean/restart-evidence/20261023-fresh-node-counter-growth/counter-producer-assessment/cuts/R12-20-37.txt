@@ -1,0 +1,18 @@
+/-- The source substitutes the actual old pair name before callback normalization. -/
+def callback [DecidableEq (EdgeKey Symbol Guard)] (old : Reference) (body : Value Symbol Guard)
+    (name : Reference) (state : State Symbol Guard) : Outcome Symbol Guard (Value Symbol Guard) :=
+  (InternedFreshOrdinaryStoredSubstitution.execute body (replacement old (.reference name)) state).bind
+    fun value after => work (withoutSelfReference name value) after
+
+/-- Source Mu construction performs the two actual normalized probes before its canonical request. -/
+def construct [DecidableEq (EdgeKey Symbol Guard)] (old : Reference) (body : Value Symbol Guard)
+    (state : State Symbol Guard) : Outcome Symbol Guard (Value Symbol Guard) :=
+  (callback old body .depth state).bind fun depth afterDepth =>
+  (callback old body (.uninterned (InternedFreshOrdinaryConstruction.ordinaryLevel depth)) afterDepth).bind
+    fun ordinary afterOrdinary => request true depth ordinary (callback old body) afterOrdinary
+
+/-- Source intersection constructs a binder only when its exact pair name remains free. -/
+def maybeMu [DecidableEq (EdgeKey Symbol Guard)] (key : Nat × Nat) (body : Value Symbol Guard)
+    (state : State Symbol Guard) : Outcome Symbol Guard (Value Symbol Guard) :=
+  if Reference.intersection key.1 key.2 ∈ body.free then construct (.intersection key.1 key.2) body state
+  else .done body state

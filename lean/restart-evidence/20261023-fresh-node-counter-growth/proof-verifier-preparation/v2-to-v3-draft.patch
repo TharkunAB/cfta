@@ -1,0 +1,43 @@
+--- H33/declaration-v2-verifier-draft.py
++++ H33/declaration-v3-verifier-draft.py
+@@ -167,16 +167,18 @@
+     assert all(body_gate[k] for k in ["root_complete_source_read", "root_all_six_bodies_read", "root_all_ten_fragments_read", "root_all_23_scoped_types_and_seven_restricted_calls_read", "actual_repaired_pending_included", "default_declaration_limits", "all_linters"])
+     assert (body_gate["haves"], body_gate["lets"], body_gate["obtains"], body_gate["termination_by_count"]) == (2, 1, 0, 3)
+     assert body_gate["private_helpers"] == m["private_helpers"] and body_gate["public_heads"] == shorts
+-    assert body_gate["private_unused_instance_omitted"] and body_gate["actual_state_arguments_and_base_equations_explicit"] and body_gate["strict1_failed_source_and_diagnostics_retained"]
++    assert all(body_gate[k] for k in ["private_bind_has_no_unused_instance", "all_five_instance_headers_read", "all_six_body_texts_unchanged", "actual_state_arguments_and_base_equations_explicit", "strict1_failed_source_and_diagnostics_retained", "strict2_warning_and_failed_metadata_selection_retained"])
+     declaration = json.loads(pinned(m["declaration_gate"]))
+     assert declaration["status"] == "ACCEPTED_EXACT_DECLARATIONS_BEFORE_BODY" and declaration["module"] == name
+     assert declaration["public_heads"] == shorts and declaration["private_helpers"] == m["private_helpers"]
+     assert declaration["contracts_sha256"] == m["manifest"]["sha256"] and declaration["insertion_map_sha256"] == m["layout"]["sha256"]
+     assert declaration["whole_source_hard_stop"] == m["source_cap"] and declaration["default_declaration_limits"] and declaration["all_linters"]
+-    assert [declaration[k] for k in ["compiled_fragments", "compiled_fragment_lines", "root_whole_context_lines_read", "root_whole_public_header_lines_read", "root_whole_private_header_lines_read", "root_whole_local_compiled_fragment_lines_read"]] == [10, 47, 9, 12, 19, 7]
++    assert [declaration[k] for k in ["compiled_fragments", "compiled_fragment_lines", "root_whole_context_lines_read", "root_whole_public_header_lines_read", "root_whole_private_header_lines_read", "root_whole_local_compiled_fragment_lines_read"]] == [10, 45, 8, 12, 18, 7]
+     assert all(declaration[k] for k in ["root_all_public_and_private_header_types_read", "root_all_local_have_let_and_lambda_types_read", "root_all_three_recursive_signatures_and_seven_restricted_call_types_read", "root_all_23_scoped_introduced_types_read", "generalized_environment_and_full_heap", "callback_pending_bound_derived_not_public_premise", "same_repaired_executor_outcome_state", "no_public_Dense_Valid_Facts_Good_success_or_counter_oracle"])
+     assert [declaration[k] for k in ["body_haves", "body_lets", "body_obtains", "helpers", "recursive_calls", "termination_by_count"]] == [2, 1, 0, 3, 7, 3]
+-    assert declaration["contract_root"] == "declaration-plan-v2" and declaration["private_bind_omit_prefix_complete_read"] and declaration["unused_private_instance_removed"] and declaration["all_public_and_local_and_recursive_types_unchanged"]
++    assert declaration["contract_root"] == "declaration-plan-v3" and declaration["unused_private_instance_removed"] and declaration["all_public_and_local_and_recursive_types_unchanged"]
++    assert declaration["explicit_instance_heads"] == ["work_mono", "request_mono"] + shorts and declaration["global_instance_declaration"] is False and declaration["omit_directives"] == 0
++    assert all(declaration[k] for k in ["root_all_five_explicit_instance_headers_read", "public_requirements_and_conclusions_unchanged", "strict2_warning_and_failed_metadata_selection_retained"])
+     assert declaration["recursive_mutual_induction"] and declaration["tactic_induction"] is False and declaration["native_Scan_H23_or_resource_result_claimed"] is False
+     manifest = json.loads(pinned(m["manifest"]))
+     schema = json.loads(pinned(m["schema"]))
+@@ -247,7 +249,7 @@
+     assert schema["private_helpers"] == m["private_helpers"] == ["work_mono", "bind_mono", "request_mono"]
+     assert schema["public_heads"] == schema["public_mutual_group"] == shorts and schema["new_definitions"] == schema["new_predicates_or_structures"] == schema["typed_show_fragments"] == schema["local_induction_names"] == []
+     assert schema["recursive_function_proofs_not_tactic_induction"] and schema["no_additional_helpers_haves_lets_obtains_shows_or_IH_authorized"]
+-    assert schema["compiled_contract_count"] == 10 and schema["compiled_contract_lines"] == 46 and schema["compiled_contract_order"] == list(manifest)
++    assert schema["compiled_contract_count"] == 10 and schema["compiled_contract_lines"] == 45 and schema["compiled_contract_order"] == list(manifest)
+     assert schema["local_have_names_by_owner"] == {n: m["bodies"][n]["have_names"] for n in all_shorts} and schema["local_let_names_by_owner"] == {n: m["bodies"][n]["let_names"] for n in all_shorts}
+     assert schema["local_obtain_groups"] == schema["by_cases_names"] == schema["case_equation_names"] == [] and schema["public_premises"] == ["DecidableEq (EdgeKey Symbol Guard)"]
+     for record in m["review_only"]:
+@@ -261,6 +263,9 @@
+             assert found, line
+             helpers.append(found.group(1))
+     assert helpers == schema["private_helpers"] == m["private_helpers"]
++    assert not re.search(rb"(?m)^\s*(?:variable[ \t]+\[|omit\b)", source)
++    assert all(source.count(("theorem " + short + " [DecidableEq (EdgeKey Symbol Guard)]").encode()) == 1 for short in ["work_mono", "request_mono"] + shorts)
++    assert b"theorem bind_mono [" not in source
+     if args.live:
+         assert (root / m["source_path"]).read_bytes() == source
+     tool_gate = json.loads(pinned(m["tool_gate"]))

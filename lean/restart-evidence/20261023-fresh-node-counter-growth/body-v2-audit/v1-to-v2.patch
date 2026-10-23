@@ -1,0 +1,11 @@
+--- variants/v1/InternedFreshOrdinaryNodeCounterGrowth.lean
++++ variants/v2/InternedFreshOrdinaryNodeCounterGrowth.lean
+@@ -68,7 +68,7 @@
+           current.nodes.next ≤ (callback name current).state.nodes.next := by
+         intro name current
+         exact bind_mono _ _ current (build_mono body (.reference name :: environment) current)
+-          (fun value afterBody => work_mono (withoutSelfReference name value) afterBody)
++          (fun value after => work_mono (withoutSelfReference name value) after)
+       simp only [build]
+       apply bind_mono _ _ state (preserved .depth state)
+       intro depth afterDepth

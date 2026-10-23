@@ -1,0 +1,4 @@
+      let callback : InternedBinderProtocol.Reference → State Symbol Guard →
+          Outcome Symbol Guard (Value Symbol Guard) :=
+        fun name current => (build body (.reference name :: environment) current).bind
+          fun value next => work (withoutSelfReference name value) next

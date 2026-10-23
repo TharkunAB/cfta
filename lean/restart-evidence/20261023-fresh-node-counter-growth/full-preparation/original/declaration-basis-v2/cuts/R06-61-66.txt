@@ -1,0 +1,6 @@
+/-- Separate canonical counters plus immutable first-writer record payloads. -/
+structure State (Symbol Guard : Type) where
+  edges : Cache.State (EdgeKey Symbol Guard)
+  nodes : Cache.State NodeKey
+  edgeRecords : Table (EdgeKey Symbol Guard) (EdgeValue Symbol Guard)
+  nodeRecords : Table NodeKey (Value Symbol Guard)

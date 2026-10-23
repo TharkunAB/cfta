@@ -1,0 +1,30 @@
+--- H32/proof-commit.py
++++ H33/proof-commit.py
+@@ -1,4 +1,4 @@
+-exec(compile(open('/tmp/mcfta-pair-inventory-rebase-root-common.py').read(), '/tmp/mcfta-pair-inventory-rebase-root-common.py', 'exec'))
++exec(compile(open('/tmp/mcfta-fresh-node-counter-growth-root-common.py').read(), '/tmp/mcfta-fresh-node-counter-growth-root-common.py', 'exec'))
+ assert git('branch', '--show-current').strip() == 'formalize'
+ assert git('rev-parse', 'HEAD').strip() == START
+ assert not git('diff', '--cached', '--name-only').strip()
+@@ -6,9 +6,9 @@
+ for mode, live in [('normal', False), ('live', True)]:
+     report = load(HERE / ('proof-evidence-' + mode + '.json'))
+     assert report['status'] == 'PASS' and report['live'] is live
+-    assert report['actual_jobs'] == 3 and report['selected_modules'] == 1
+-    assert report['public_theorems'] == 1 and report['failed_jobs'] == 0
+-    assert report['audit_dependencies'] == 75528 and report['new_lean_lake_jobs'] == 0
++    assert report['actual_jobs'] == 5 and report['selected_modules'] == 1
++    assert report['public_theorems'] == 3 and report['failed_jobs'] == 1
++    assert report['audit_dependencies'] == 75541 and report['new_lean_lake_jobs'] == 0
+ selected = load(HERE / 'selected-sources.json')
+ assert len(selected) == 1
+ paths = sorted(selected) + ['lean/MicroCFTA/Audit.lean']
+@@ -19,7 +19,7 @@
+ subprocess.run(['git', 'diff', '--check', '--', *paths], cwd=ROOT, check=True)
+ subprocess.run(['git', 'add', '--', *paths], cwd=ROOT, check=True)
+ assert set(git('diff', '--cached', '--name-only').splitlines()) == set(paths)
+-subprocess.run(['git', 'commit', '--quiet', '-m', 'Preserve cached pair meaning in the enlarged inventory'], cwd=ROOT, check=True)
++subprocess.run(['git', 'commit', '--quiet', '-m', 'Prove node counter growth in repaired construction'], cwd=ROOT, check=True)
+ proof = git('rev-parse', 'HEAD').strip()
+ assert git('rev-parse', proof + '^').strip() == START
+ assert set(git('diff-tree', '--no-commit-id', '--name-only', '-r', proof).splitlines()) == set(paths)

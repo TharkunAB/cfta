@@ -1,0 +1,21 @@
+import MicroCFTA.InternedFreshOrdinaryConstruction
+import MicroCFTA.InternedNestedConstructionGrowth
+
+/-!
+# Unrestricted validity and growth for the repaired executor
+
+The proof needs only cache validity. It includes pending outcomes and
+all effects of children whose returned edges are later removed.
+-/
+namespace MicroCFTA.InternedFreshOrdinaryGrowth
+open Cache InternedConstructorTemplates
+open InternedNestedConstruction (Syntax EdgeSyntax Outcome work request bind_correct work_correct)
+open InternedFreshOrdinaryConstruction
+
+mutual
+/-- Any nested construction preserves validity and every previously completed record, including on failure. -/
+theorem build_correct [DecidableEq (EdgeKey Symbol Guard)] (expression : Syntax Symbol Guard)
+    (environment : List (Value Symbol Guard)) (state : InternedConstructorTemplates.State Symbol Guard) (valid : InternedConstructorTemplates.Valid state) :
+    InternedConstructorTemplates.Valid (build expression environment state).state ∧ Grows state (build expression environment state).state := by
+  cases expression with
+  | empty | var index => simp only [build, Outcome.state]; exact ⟨valid, grows_refl _⟩

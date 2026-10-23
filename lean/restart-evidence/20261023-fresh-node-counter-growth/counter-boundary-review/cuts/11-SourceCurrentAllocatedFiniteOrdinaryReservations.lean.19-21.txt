@@ -1,0 +1,3 @@
+theorem intern_next (state : Cache.State Key) (key : Key) :
+    (Cache.intern state key).2.next = state.next + (if (state.table key).isNone then 1 else 0) := by
+  cases found : state.table key <;> simp [Cache.intern, found, Cache.reserve, Cache.install]

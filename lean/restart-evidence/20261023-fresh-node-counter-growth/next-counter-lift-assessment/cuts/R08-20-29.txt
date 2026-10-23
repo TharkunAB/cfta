@@ -1,0 +1,10 @@
+
+/-- A comparison retains the complete checked state and a separate pair memo. -/
+structure State (width : Nat) : Type 1 where
+  /-- Retain the native machine and all equality operation caches. -/
+  checked : SourceEqualityNativeDemand.State width
+  /-- Store the captured operand pair and its eventual returned edge. -/
+  memo : FlatMemoThunk.State (Nat × Nat) (Edge × Edge) Edge
+
+/-- Each phase retains the handles that must receive the returned edge. -/
+inductive Control : Type 1 where

@@ -1,0 +1,36 @@
+/-- Child evaluation retains all previous records in both successful and pending outcomes. -/
+theorem buildMany_correct [DecidableEq (EdgeKey Symbol Guard)] (expression : List (Syntax Symbol Guard))
+    (environment : List (Value Symbol Guard)) (state : InternedConstructorTemplates.State Symbol Guard) (valid : InternedConstructorTemplates.Valid state) :
+    InternedConstructorTemplates.Valid (buildMany expression environment state).state ∧ Grows state (buildMany expression environment state).state := by
+  cases expression with
+  | nil => simp only [buildMany, Outcome.state]; exact ⟨valid, grows_refl _⟩
+  | cons first rest =>
+      simp only [buildMany]
+      apply bind_correct _ _ state (build_correct first environment state valid)
+      intro value next nextValid
+      apply bind_correct _ _ next (buildMany_correct rest environment next nextValid)
+      intro values final finalValid
+      exact ⟨finalValid, grows_refl _⟩
+termination_by sizeOf expression
+
+/-- Separate edge construction preserves the node and edge histories across nested child evaluation. -/
+theorem buildEdges_correct [DecidableEq (EdgeKey Symbol Guard)] (expression : List (EdgeSyntax Symbol Guard))
+    (environment : List (Value Symbol Guard)) (state : InternedConstructorTemplates.State Symbol Guard) (valid : InternedConstructorTemplates.Valid state) :
+    InternedConstructorTemplates.Valid (buildEdges expression environment state).state ∧ Grows state (buildEdges expression environment state).state := by
+  cases expression with
+  | nil => simp only [buildEdges, Outcome.state]; exact ⟨valid, grows_refl _⟩
+  | cons first rest =>
+      cases first with
+      | mk symbol constraint children =>
+          simp only [buildEdges]
+          apply bind_correct _ _ state (buildMany_correct children environment state valid)
+          intro values next nextValid
+          apply bind_correct _ _ next (work_correct (makeEdge symbol constraint values) next nextValid)
+          intro edge afterEdge edgeValid
+          apply bind_correct _ _ afterEdge (buildEdges_correct rest environment afterEdge edgeValid)
+          intro edges final finalValid
+          exact ⟨finalValid, grows_refl _⟩
+termination_by sizeOf expression
+end
+
+end MicroCFTA.InternedFreshOrdinaryGrowth

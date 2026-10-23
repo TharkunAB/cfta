@@ -1,0 +1,13 @@
+ ∀ {Symbol Guard : Type}
+  [inst : DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (expression : List.{0} (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard))
+  (environment : List.{0} (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (state : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  @LE.le.{0} Nat instLENat
+    (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+      (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard state))
+    (@MicroCFTA.Cache.State.next MicroCFTA.InternedBinderProtocol.NodeKey
+      (@MicroCFTA.InternedConstructorTemplates.State.nodes Symbol Guard
+        (@MicroCFTA.InternedNestedConstruction.Outcome.state Symbol Guard
+          (List.{0} (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+          (@MicroCFTA.InternedFreshOrdinaryConstruction.buildEdges Symbol Guard inst expression environment state))))

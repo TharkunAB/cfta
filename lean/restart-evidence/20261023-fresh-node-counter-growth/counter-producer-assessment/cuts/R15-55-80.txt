@@ -1,0 +1,26 @@
+theorem prefix_bound {control next : Control A} {before after : Checked width}
+    (actual : Trace fuel control before next after) (good : Good before) (fields : Fields control before)
+    (stored : Stored bound before.native.machine.heap)
+    (certificate : ControlAt control before bound post) :
+    SourceCurrentAllocatedRecursiveMassTrace.InputsThrough fuel bound control before ∧
+      ControlAt next after (massAfter fuel bound) post ∧ Good after ∧ Fields next after ∧
+      Stored (massAfter fuel bound) after.native.machine.heap ∧
+      after.native.machine.heap.nodes.next ≤ before.native.machine.heap.nodes.next + credit fuel bound ∧
+      after.native.machine.heap.edges.next ≤ before.native.machine.heap.edges.next + credit fuel bound ∧
+      after.native.machine.domains.next ≤ before.native.machine.domains.next + fuel := by
+  obtain ⟨produced, final⟩ := widths actual good fields stored certificate
+  obtain ⟨lastGood, lastFields, lastStore, nodes, edges⟩ :=
+    SourceCurrentAllocatedRecursiveMassTrace.prefix_bound actual good fields stored produced
+  exact ⟨produced, final, lastGood, lastFields, lastStore, nodes, edges,
+    SourceCurrentAllocatedRecursiveMassTrace.domain_prefix_bound actual⟩
+
+/-- Original successful payload reads compute the initial bound for every actual certified prefix. -/
+theorem initial {control next : Control A} {before after : Checked width}
+    (actual : Trace fuel control before next after) (good : Good before) (fields : Fields control before)
+    (certificate : ControlAt control before (initialBound before.native.machine.heap) post) :
+    SourceCurrentAllocatedRecursiveMassTrace.InputsThrough fuel (initialBound before.native.machine.heap) control before ∧
+      ControlAt next after (massAfter fuel (initialBound before.native.machine.heap)) post ∧ Good after ∧ Fields next after ∧
+      Stored (massAfter fuel (initialBound before.native.machine.heap)) after.native.machine.heap ∧
+      after.native.machine.heap.nodes.next ≤ before.native.machine.heap.nodes.next + credit fuel (initialBound before.native.machine.heap) ∧
+      after.native.machine.heap.edges.next ≤ before.native.machine.heap.edges.next + credit fuel (initialBound before.native.machine.heap) ∧
+      after.native.machine.domains.next ≤ before.native.machine.domains.next + fuel :=

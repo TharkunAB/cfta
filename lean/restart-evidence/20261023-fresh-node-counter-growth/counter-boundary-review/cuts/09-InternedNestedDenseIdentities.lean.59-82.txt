@@ -1,0 +1,24 @@
+theorem bind_dense (outcome : Outcome Symbol Guard First)
+    (next : First → State Symbol Guard → Outcome Symbol Guard Result)
+    (first : Dense outcome.state)
+    (later : ∀ value state, Dense state → Dense (next value state).state) :
+    Dense (outcome.bind next).state := by
+  cases outcome with
+  | pending => exact first
+  | done value state => exact later value state first
+
+/-- A Mu reservation installs its canonical entry before evaluating its body. -/
+theorem request_dense [DecidableEq (EdgeKey Symbol Guard)] (smart : Bool)
+    (depth ordinary : Value Symbol Guard)
+    (callback : InternedBinderProtocol.Reference → State Symbol Guard → Outcome Symbol Guard (Value Symbol Guard))
+    (state : State Symbol Guard) (dense : Dense state)
+    (bodyDense : ∀ name current, Dense current → Dense (callback name current).state) :
+    Dense (request smart depth ordinary callback state).state := by
+  unfold request
+  dsimp only
+  split
+  · split <;> exact dense
+  · apply bind_dense
+    · exact bodyDense _ _ ⟨dense.1, Cache.intern_dense _ _ dense.2⟩
+    · intro value after afterDense
+      exact afterDense

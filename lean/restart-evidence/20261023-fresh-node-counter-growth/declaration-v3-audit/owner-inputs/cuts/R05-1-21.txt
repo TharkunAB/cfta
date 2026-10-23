@@ -1,0 +1,21 @@
+import MicroCFTA.InternedConstructorTemplates
+
+/-!
+# Constructor reservation counts
+
+The observed Work trace records each actual request and its initial lookup.
+Only a miss reserves an identity in sequential Work.
+Atomic traces count every reservation, including candidates that lose an insert.
+The results do not bound other callers or repeated host evaluations.
+-/
+namespace MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryReservations
+open Cache InternedConstructorTemplates
+open InternedBinderProtocol (NodeKey)
+
+section Cache
+variable {Key : Type} [DecidableEq Key]
+
+/-- A hit consumes no identity; a miss consumes one identity. -/
+theorem intern_next (state : Cache.State Key) (key : Key) :
+    (Cache.intern state key).2.next = state.next + (if (state.table key).isNone then 1 else 0) := by
+  cases found : state.table key <;> simp [Cache.intern, found, Cache.reserve, Cache.install]

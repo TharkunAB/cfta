@@ -1,0 +1,1 @@
+Paused historical FULL-tool review. All selected207 lines, exact bases/deltas,79 payload pins,68 assertions and20-line tail were reviewed before Root paused for the declaration V2 revision. No activation is approved. The actual strict1 log is retained. This unsealed draft is not a final CLEAR audit. No selected tool was imported, run or installed.

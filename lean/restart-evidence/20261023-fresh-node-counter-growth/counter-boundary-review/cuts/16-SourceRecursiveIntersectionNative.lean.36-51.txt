@@ -1,0 +1,16 @@
+def step [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] (emptyGuard : Guard) (conjoin : Guard → Guard → Guard)
+    (code : Code Symbol Guard A) (state : SourceRecursiveIntersectionThunks.State width Symbol Guard) : Outcome width Symbol Guard A :=
+  match code with
+  | .pure value => .done value state
+  | .fail failure => .failed failure state
+  | .work job next =>
+      let actual := InternedConstructorTemplates.run job state.machine.heap
+      .yielded (next actual.1) (advance state { state.machine with heap := actual.2 })
+  | .enter domain left right first second next =>
+      let entered := SourceRecursiveIntersectionEnvironment.enter state.machine.domains domain.key left right first second
+      .yielded (next entered.1) (advance state { state.machine with domains := entered.2 })
+  | .read name next => .yielded (next (SourcePreparedSharedRows.read state.machine.heap name)) state
+  | .optionalBinder key body next =>
+      match SourceRecursiveIntersectionMaybeMu.maybeMu key body state.machine.heap with
+      | .done value after => .yielded (next value) (advance state { state.machine with heap := after })
+      | .pending pending after => .blocked (.constructor pending) code (advance state { state.machine with heap := after })

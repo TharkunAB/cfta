@@ -1,0 +1,4 @@
+/-- Actual repaired construction retains the node supply on every outcome. -/
+theorem build_mono (expression : Syntax Symbol Guard)
+    (environment : List (Value Symbol Guard)) (state : State Symbol Guard) :
+    state.nodes.next ≤ (build expression environment state).state.nodes.next

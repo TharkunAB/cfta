@@ -1,0 +1,34 @@
+--- basis/prepare-full.py.txt
++++ selected/prepare-full.py
+@@ -22,19 +22,19 @@
+ assert '-Dlinter.all=true' in receipt['command']
+ assert (receipt_path.parent / receipt['log']).resolve() == (HERE / (stem + '.log')).resolve()
+ assert (HERE / (stem + '.log')).read_bytes() == b''
+-contract_root = HERE / 'declaration-plan'
++contract_root = HERE / 'declaration-plan-v2'
+ contracts_raw = (contract_root / 'contracts.json').read_bytes()
+ assert hashlib.sha256(contracts_raw).hexdigest() == expected_contracts_sha
+ contracts = json.loads(contracts_raw)
+ layout_raw = (contract_root / 'insertion-map.json').read_bytes()
+-assert hashlib.sha256(layout_raw).hexdigest() == 'f75587f8d480b31319dc34cdc9aedcd320adc7f767623f6b20a60088ad880131'
++assert hashlib.sha256(layout_raw).hexdigest() == '9753eb52b4a5f9a6fc679b3741e99b758cf35601d0d55617d47188b7778ba0b9'
+ layout = json.loads(layout_raw)
+ assert len(contracts) == int(expected_contracts_count) == 10
+ for (filename, expected_digest), record in zip(contracts.items(), layout['compiled_fragments'], strict=True):
+     fragment = (contract_root / filename).read_bytes()
+     assert filename == record['file'] and hashlib.sha256(fragment).hexdigest() == expected_digest == record['sha256']
+     assert len(fragment.splitlines()) == record['lines']
+-gate = json.loads((HERE / 'root-declaration-gate.json').read_bytes())
++gate = json.loads((HERE / 'root-declaration-gate-v2.json').read_bytes())
+ assert gate['status'] == 'ACCEPTED_EXACT_DECLARATIONS_BEFORE_BODY'
+ assert gate['module'] == name and gate['public_heads'] == [short for short, _kind in specs]
+ assert gate['contracts_sha256'] == expected_contracts_sha
+@@ -44,7 +44,7 @@
+ assert gate['root_all_three_recursive_signatures_and_seven_restricted_call_types_read']
+ assert gate['root_all_23_scoped_introduced_types_read'] and gate['root_all_13_relevant_live_API_cuts_read']
+ assert gate['root_whole_context_lines_read'] == 9 and gate['root_whole_public_header_lines_read'] == 12
+-assert gate['root_whole_private_header_lines_read'] == 18 and gate['root_whole_local_compiled_fragment_lines_read'] == 7
++assert gate['root_whole_private_header_lines_read'] == 19 and gate['root_whole_local_compiled_fragment_lines_read'] == 7
+ assert gate['private_helpers'] == ['work_mono', 'bind_mono', 'request_mono']
+ assert re.fullmatch(r'[0-9a-f]{64}', gate['independent_review_sha256'])
+ context = (contract_root / 'context.lean.txt').read_bytes()

@@ -1,0 +1,53 @@
+theorem ordinary_complete
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (bits : Nat) (source : InternedConstructorTemplates.State Symbol Guard)
+    (facts : InternedNestedFacts.Facts source)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inputModel : InputMeaning (view source (guardHolds formulas solver)))
+    (inputRanked : RankedInput (view source (guardHolds formulas solver)) inputModel.valid)
+    (parentEntry : Interned InternedBinderProtocol.NodeKey)
+    (parentRows : List Edge) (parentDepth : Nat)
+    (original : OriginalInput source (inputOf (.node parentEntry parentRows parentDepth [])))
+    (available : Available source (.node parentEntry parentRows parentDepth []))
+    (admitted : inputModel.valid (inputOf (.node parentEntry parentRows parentDepth [])))
+    (entries : List (Symbol × List Edge))
+    (iteration : SourceCurrentMergeGrouping.Iteration
+      (SourceCurrentPrependGrouping.fromRows (fun edge : Edge => edge.entry.key.symbol)
+        parentRows) entries)
+    (initialDomains : Cache.State IntersectionFlatMemoKeyDomain.DomainKey)
+    (initialValid : Cache.Valid initialDomains)
+    (before : Wrapper (bits + 2))
+    (stable : Stable (view source (guardHolds formulas solver)) inputModel inputRanked
+      (guardHolds formulas solver) before)
+    (good : Good before.checked)
+    (contextual : SourceCurrentAllocatedNativeContextCache.Contextual
+      (view source (guardHolds formulas solver)) inputModel inputRanked
+      (guardHolds formulas solver) before.checked.native)
+    (semantic : SemanticReady before.checked.native.machine.heap)
+    (growth : Grows source before.checked.native.machine.heap)
+    (history : Extends source.nodes.issued before.checked.native.machine.heap.nodes.issued)
+    (allocations : SourceRecursiveIntersectionDomainAllocation.Trace
+      (SourceRecursiveIntersectionSourceInventory.domains source)
+      initialDomains before.checked.native.machine.domains)
+    (idle : NativeIdle before.checked.native)
+    (room : SourceCurrentAllocatedNativeResourceForecast.Room bits
+      ⟨source.nodes.next, source.edges.next,
+        initialDomains.next + (SourceRecursiveIntersectionSourceInventory.domains source).length, 0⟩) :
+    ∃ (fuels : Fin entries.length → Nat) (kept : Fin entries.length → List Edge)
+      (states : Fin (entries.length + 1) → Wrapper (bits + 2)),
+      let middle := states (Fin.last entries.length)
+      let output := (List.ofFn kept).flatten
+      let built := run (makeNode output) middle.checked.native.machine.heap
+      let after : Wrapper (bits + 2) :=
+        { middle with checked :=
+          { middle.checked with native := (SourceRecursiveIntersectionThunks.advance
+            middle.checked.native { middle.checked.native.machine with heap := built.2 }) } }
+      states 0 = before ∧
+      (∀ index : Fin entries.length,
+        SourceCurrentOriginalRowClusterScan.execute (fuels index)
+          (.cluster (entries.get index).2.reverse []) (states index.castSucc) =
+          .done (kept index) (states index.succ) ∧
+        (∀ edge ∈ kept index, edge ∈ (entries.get index).2.reverse) ∧
+        (kept index).length ≤ (entries.get index).2.reverse.length) ∧
+      (∀ index : Fin (entries.length + 1),

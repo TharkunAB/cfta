@@ -1,0 +1,59 @@
+mutual
+/-- Arbitrary nested source construction preserves both complete canonical identity supplies. -/
+theorem build_dense [DecidableEq (EdgeKey Symbol Guard)] (expression : Syntax Symbol Guard)
+    (environment : List (Value Symbol Guard)) (state : State Symbol Guard) (dense : Dense state) :
+    Dense (build expression environment state).state := by
+  cases expression with
+  | empty | var index => simpa only [build, Outcome.state] using dense
+  | node edges =>
+      simp only [build]
+      exact bind_dense _ _ (buildEdges_dense edges environment state dense)
+        (fun values current currentDense => run_dense (makeNode values) current currentDense)
+  | union members =>
+      simp only [build]
+      exact bind_dense _ _ (buildMany_dense members environment state dense)
+        (fun values current currentDense => run_dense (makeUnion values) current currentDense)
+  | binder smart body =>
+      let callback := fun name current => (build body (.reference name :: environment) current).bind
+        fun value next => work (withoutSelfReference name value) next
+      have preserved : ∀ name current, Dense current → Dense (callback name current).state := by
+        intro name current currentDense
+        exact bind_dense _ _ (build_dense body _ current currentDense)
+          (fun value after afterDense => run_dense (withoutSelfReference name value) after afterDense)
+      rw [build]
+      change Dense ((callback .depth state).bind fun depth afterDepth =>
+        (callback (.uninterned depth.depth) afterDepth).bind fun ordinary afterOrdinary =>
+          request smart depth ordinary callback afterOrdinary).state
+      exact bind_dense _ _ (preserved .depth state dense) (fun depth afterDepth depthDense =>
+        bind_dense _ _ (preserved (.uninterned depth.depth) afterDepth depthDense)
+          (fun ordinary afterOrdinary ordinaryDense =>
+            request_dense smart depth ordinary callback afterOrdinary ordinaryDense preserved))
+termination_by sizeOf expression
+
+/-- Ordered child execution preserves both dense identity supplies. -/
+theorem buildMany_dense [DecidableEq (EdgeKey Symbol Guard)] (expressions : List (Syntax Symbol Guard))
+    (environment : List (Value Symbol Guard)) (state : State Symbol Guard) (dense : Dense state) :
+    Dense (buildMany expressions environment state).state := by
+  cases expressions with
+  | nil => simpa only [buildMany, Outcome.state] using dense
+  | cons first rest =>
+      simp only [buildMany]
+      exact bind_dense _ _ (build_dense first environment state dense) (fun value after afterDense =>
+        bind_dense _ _ (buildMany_dense rest environment after afterDense) (fun _ _ finalDense => finalDense))
+termination_by sizeOf expressions
+
+/-- Edge and child execution preserve both dense identity supplies. -/
+theorem buildEdges_dense [DecidableEq (EdgeKey Symbol Guard)] (expressions : List (EdgeSyntax Symbol Guard))
+    (environment : List (Value Symbol Guard)) (state : State Symbol Guard) (dense : Dense state) :
+    Dense (buildEdges expressions environment state).state := by
+  cases expressions with
+  | nil => simpa only [buildEdges, Outcome.state] using dense
+  | cons first rest =>
+      cases first with
+      | mk symbol constraint children =>
+          simp only [buildEdges]
+          exact bind_dense _ _ (buildMany_dense children environment state dense) (fun values after afterDense =>
+            bind_dense _ _ (run_dense (makeEdge symbol constraint values) after afterDense) (fun edge next nextDense =>
+              bind_dense _ _ (buildEdges_dense rest environment next nextDense) (fun _ _ finalDense => finalDense)))
+termination_by sizeOf expressions
+end

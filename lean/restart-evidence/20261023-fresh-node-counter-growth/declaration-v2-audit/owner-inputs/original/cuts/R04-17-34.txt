@@ -1,0 +1,18 @@
+/-- Consecutive effects preserve validity and compose their actual record-table growth. -/
+theorem bind_correct (outcome : Outcome Symbol Guard First)
+    (next : First → InternedConstructorTemplates.State Symbol Guard → Outcome Symbol Guard Result)
+    (before : InternedConstructorTemplates.State Symbol Guard)
+    (first : InternedConstructorTemplates.Valid outcome.state ∧ Grows before outcome.state)
+    (later : ∀ value state, InternedConstructorTemplates.Valid state → InternedConstructorTemplates.Valid (next value state).state ∧ Grows state (next value state).state) :
+    InternedConstructorTemplates.Valid (outcome.bind next).state ∧ Grows before (outcome.bind next).state := by
+  cases outcome with
+  | pending key state => exact first
+  | done value state =>
+      have result := later value state first.1
+      exact ⟨result.1, grows_trans first.2 result.2⟩
+
+/-- Existing ordinary constructor work retains its actual canonical state effects. -/
+theorem work_correct [DecidableEq (EdgeKey Symbol Guard)] (computation : Work Symbol Guard Result)
+    (state : InternedConstructorTemplates.State Symbol Guard) (valid : InternedConstructorTemplates.Valid state) :
+    InternedConstructorTemplates.Valid (work computation state).state ∧ Grows state (work computation state).state :=
+  InternedConstructorTemplates.run_correct computation state valid

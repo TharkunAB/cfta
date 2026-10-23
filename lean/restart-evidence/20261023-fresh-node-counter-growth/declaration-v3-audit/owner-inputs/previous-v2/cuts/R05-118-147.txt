@@ -1,0 +1,30 @@
+/-- A node request changes only its own supply. -/
+theorem nodeStep_next (key : NodeKey) (identify : Interned NodeKey → Value Symbol Guard)
+    (state : State Symbol Guard) :
+    (nodeStep key identify state).2.nodes.next = state.nodes.next + (if (state.nodes.table key).isNone then 1 else 0) ∧
+    (nodeStep key identify state).2.edges.next = state.edges.next := by
+  exact ⟨intern_next state.nodes key, rfl⟩
+
+/-- An edge request changes only its own supply. -/
+theorem edgeStep_next (key : EdgeKey Symbol Guard)
+    (identify : Interned (EdgeKey Symbol Guard) → EdgeValue Symbol Guard) (state : State Symbol Guard) :
+    (edgeStep key identify state).2.edges.next = state.edges.next + (if (state.edges.table key).isNone then 1 else 0) ∧
+    (edgeStep key identify state).2.nodes.next = state.nodes.next := by
+  exact ⟨intern_next state.edges key, rfl⟩
+
+/-- Both final counters equal their initial counters plus actual recorded misses. -/
+theorem run_next (work : Work Symbol Guard Result) (state : State Symbol Guard) :
+    (run work state).2.nodes.next = state.nodes.next + nodeReservations (observe work state) ∧
+    (run work state).2.edges.next = state.edges.next + edgeReservations (observe work state) := by
+  induction work generalizing state with
+  | pure value => simp [run, observe, nodeReservations, edgeReservations]
+  | node key identify next ih =>
+      have tail := ih (nodeStep key identify state).1 (nodeStep key identify state).2
+      have one := nodeStep_next key identify state
+      simp only [run, observe, nodeReservations, edgeReservations]
+      omega
+  | edge key identify next ih =>
+      have tail := ih (edgeStep key identify state).1 (edgeStep key identify state).2
+      have one := edgeStep_next key identify state
+      simp only [run, observe, nodeReservations, edgeReservations]
+      omega

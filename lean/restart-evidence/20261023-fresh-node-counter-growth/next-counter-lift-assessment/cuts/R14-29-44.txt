@@ -1,0 +1,16 @@
+inductive Outcome (Symbol Guard Result : Type) where
+  | done (value : Result) (state : InternedConstructorTemplates.State Symbol Guard)
+  | pending (key : NodeKey) (state : InternedConstructorTemplates.State Symbol Guard)
+
+/-- Later source effects run only after the earlier record has completed. -/
+def Outcome.bind (outcome : Outcome Symbol Guard First)
+    (next : First → InternedConstructorTemplates.State Symbol Guard → Outcome Symbol Guard Result) : Outcome Symbol Guard Result :=
+  match outcome with
+  | .done value state => next value state
+  | .pending key state => .pending key state
+
+/-- Execute an existing finite ordinary constructor with its exact two-cache operations. -/
+def work [DecidableEq (EdgeKey Symbol Guard)] (computation : Work Symbol Guard Result)
+    (state : InternedConstructorTemplates.State Symbol Guard) : Outcome Symbol Guard Result :=
+  let result := run computation state
+  .done result.1 result.2

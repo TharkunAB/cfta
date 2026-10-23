@@ -1,0 +1,18 @@
+def request [DecidableEq (EdgeKey Symbol Guard)] (smart : Bool) (depth ordinary : Value Symbol Guard)
+    (callback : Reference → InternedConstructorTemplates.State Symbol Guard → Outcome Symbol Guard (Value Symbol Guard))
+    (state : InternedConstructorTemplates.State Symbol Guard) : Outcome Symbol Guard (Value Symbol Guard) :=
+  let key := muKey depth ordinary
+  match state.nodes.table key with
+  | some _ =>
+      match state.nodeRecords key with
+      | some value => .done (finish smart value) state
+      | none => .pending key state
+  | none =>
+      let entry := Cache.intern state.nodes key
+      let allocated := {state with nodes := entry.2}
+      (callback (.interned entry.1.identity) allocated).bind fun bodyValue afterBody =>
+        let candidate := Value.mu entry.1 bodyValue depth ordinary
+        let records := keepFirst afterBody.nodeRecords key candidate
+        .done (finish smart ((records key).getD candidate)) {afterBody with nodeRecords := records}
+
+mutual

@@ -1,0 +1,191 @@
+{
+  "compiled_fragments": [
+    {
+      "order": 1,
+      "file": "context.lean.txt",
+      "role": "context",
+      "owner": "module",
+      "lines": 8,
+      "sha256": "3e8b8bc1137381bd7b0ead90bbf92e95c8c58e7449a5fe02f7796bfe269db7b2"
+    },
+    {
+      "order": 2,
+      "file": "private-work.lean.txt",
+      "role": "private-header",
+      "owner": "work_mono",
+      "lines": 4,
+      "sha256": "56e7a891ba3d7ccf2bcea7c0ee92c0d56c2482f3441b34d01d8ac317b5fdf85f",
+      "future_body_attachment": " := by\n",
+      "remove_only_final_LF_before_attachment": true
+    },
+    {
+      "order": 3,
+      "file": "private-bind.lean.txt",
+      "role": "private-header",
+      "owner": "bind_mono",
+      "lines": 7,
+      "sha256": "47043b5e7b6be96811209a2ffcbdc1ecbb7f4a35b5eec1380d53172f256ea78e",
+      "future_body_attachment": " := by\n",
+      "remove_only_final_LF_before_attachment": true
+    },
+    {
+      "order": 4,
+      "file": "private-request.lean.txt",
+      "role": "private-header",
+      "owner": "request_mono",
+      "lines": 7,
+      "sha256": "8ff6974ce805b96902fc0e8cce9198acf940e195325248d1d5186db95bdef684",
+      "future_body_attachment": " := by\n",
+      "remove_only_final_LF_before_attachment": true
+    },
+    {
+      "order": 5,
+      "file": "local-reserved.lean.txt",
+      "role": "local-have-header",
+      "owner": "request_mono",
+      "lines": 1,
+      "sha256": "cf20a2ce5ce47b1356db63c49223f181850076d7c1c04c7acf093d1614ce8a4b",
+      "future_body_attachment": " := by\n",
+      "remove_only_final_LF_before_attachment": true,
+      "activation": "request_mono proof, before the actual request branch split"
+    },
+    {
+      "order": 6,
+      "file": "public-build.lean.txt",
+      "role": "public-header",
+      "owner": "build_mono",
+      "lines": 4,
+      "sha256": "4eaae9e2e04c2c55252daf30c4657a84aaaf40eed489f43e4e55fe666c2a2efc",
+      "future_body_attachment": " := by\n",
+      "remove_only_final_LF_before_attachment": true
+    },
+    {
+      "order": 7,
+      "file": "local-callback.lean.txt",
+      "role": "body-let-binding",
+      "owner": "build_mono",
+      "lines": 4,
+      "sha256": "650782d79b373bd920f3225992c799b239497a36dc35040e62aa10e071f59f2e",
+      "activation": "build_mono binder smart body branch, with the actual environment/state generalized"
+    },
+    {
+      "order": 8,
+      "file": "local-preserved.lean.txt",
+      "role": "local-have-header",
+      "owner": "build_mono",
+      "lines": 2,
+      "sha256": "d3ea2bf4b13ad2a5515d309c1289f103b1e8b2fab4303119a6114c0beeb51464",
+      "future_body_attachment": " := by\n",
+      "remove_only_final_LF_before_attachment": true,
+      "activation": "build_mono binder smart body branch, with the actual environment/state generalized"
+    },
+    {
+      "order": 9,
+      "file": "public-many.lean.txt",
+      "role": "public-header",
+      "owner": "buildMany_mono",
+      "lines": 4,
+      "sha256": "0e60dbce93a725412cfd7dce9e8fabae1c210661138c7f03f82d29e79e391fbf",
+      "future_body_attachment": " := by\n",
+      "remove_only_final_LF_before_attachment": true
+    },
+    {
+      "order": 10,
+      "file": "public-edges.lean.txt",
+      "role": "public-header",
+      "owner": "buildEdges_mono",
+      "lines": 4,
+      "sha256": "33db041f954b88f8f3b61641fc36a2a0510e05ac57e3965bb73a67ef9021a139",
+      "future_body_attachment": " := by\n",
+      "remove_only_final_LF_before_attachment": true
+    }
+  ],
+  "required_group_syntax": {
+    "mutual_open": "before public-build.lean.txt, after all three private helper proofs",
+    "mutual_close": "after buildEdges_mono proof and its termination_by clause",
+    "namespace_close": "end MicroCFTA.InternedFreshOrdinaryNodeCounterGrowth"
+  },
+  "schema": {
+    "status": "EXACT_DECLARATIONS_AND_INDUCTION_SCHEMAS_ONLY_NO_BODY_AUTHORIZATION",
+    "module": "InternedFreshOrdinaryNodeCounterGrowth",
+    "public_heads": [
+      "build_mono",
+      "buildMany_mono",
+      "buildEdges_mono"
+    ],
+    "private_helpers": [
+      "work_mono",
+      "bind_mono",
+      "request_mono"
+    ],
+    "new_definitions": [],
+    "new_predicates_or_structures": [],
+    "public_premises": [
+      "DecidableEq (EdgeKey Symbol Guard)"
+    ],
+    "no_Dense_Valid_Facts_Good_success_or_callback_public_premise": true,
+    "public_mutual_group": [
+      "build_mono",
+      "buildMany_mono",
+      "buildEdges_mono"
+    ],
+    "recursive_function_proofs_not_tactic_induction": true,
+    "local_induction_names": [],
+    "local_have_names_by_owner": {
+      "work_mono": [],
+      "bind_mono": [],
+      "request_mono": [
+        "reserved"
+      ],
+      "build_mono": [
+        "preserved"
+      ],
+      "buildMany_mono": [],
+      "buildEdges_mono": []
+    },
+    "local_let_names_by_owner": {
+      "work_mono": [],
+      "bind_mono": [],
+      "request_mono": [],
+      "build_mono": [
+        "callback"
+      ],
+      "buildMany_mono": [],
+      "buildEdges_mono": []
+    },
+    "local_obtain_groups": [],
+    "typed_show_fragments": [],
+    "by_cases_names": [],
+    "case_equation_names": [],
+    "no_additional_helpers_haves_lets_obtains_shows_or_IH_authorized": true,
+    "source_target": [
+      120,
+      155
+    ],
+    "source_hard_stop": 180,
+    "default_declaration_limits": true,
+    "all_linters": true,
+    "compiled_contract_order": [
+      "context.lean.txt",
+      "private-work.lean.txt",
+      "private-bind.lean.txt",
+      "private-request.lean.txt",
+      "local-reserved.lean.txt",
+      "public-build.lean.txt",
+      "local-callback.lean.txt",
+      "local-preserved.lean.txt",
+      "public-many.lean.txt",
+      "public-edges.lean.txt"
+    ],
+    "compiled_contract_count": 10,
+    "compiled_contract_lines": 45,
+    "scope_excludes_native_Scan_H23_fixed_source_counter_and_resources": true,
+    "recursive_signature_files_review_only": [
+      "build-mono-IH.lean.txt",
+      "many-mono-IH.lean.txt",
+      "edges-mono-IH.lean.txt"
+    ],
+    "recursive_calls_and_strict_decreases": "recursive-call-contracts.json",
+    "introduced_lambda_and_pattern_types": "introduced-types.json"
+  }
+}

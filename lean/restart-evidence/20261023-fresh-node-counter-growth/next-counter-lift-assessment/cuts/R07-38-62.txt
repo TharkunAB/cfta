@@ -1,0 +1,25 @@
+
+/-- Actual physical and domain effects retain both native memo families. -/
+def advance (state : State width Symbol Guard) (after : Machine Symbol Guard) : State width Symbol Guard :=
+  { state with machine := after }
+
+/-- Cache growth preserves pending cells as well as complete memo observations. -/
+theorem advance_valid [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] (width : Nat) (emptyGuard : Guard)
+    (conjoin : Guard → Guard → Guard) (state : State width Symbol Guard) (valid : Valid width emptyGuard conjoin state)
+    (after : Machine Symbol Guard) (checked : SourceRecursiveIntersectionKernel.Valid after) (growth : Extension state.machine after) :
+    Valid width emptyGuard conjoin (advance state after) :=
+  ⟨checked, FlatMemoThunk.Valid.map _ _ _ _ valid.nodes (fun cell good => nodeGood_grows emptyGuard conjoin _ after growth cell good),
+    FlatMemoThunk.Valid.map _ _ _ _ valid.edges (fun cell good => edgeGood_grows emptyGuard conjoin _ after growth cell good)⟩
+
+/-- Node demand keeps the edge family and the source machine unchanged. -/
+def demandNode (handle : Nat) (state : State width Symbol Guard) :
+    FlatMemoThunk.Observation (NodeRequest Symbol Guard) (Value Symbol Guard) × State width Symbol Guard :=
+  let (observation, nodes) := FlatMemoThunk.demand handle state.nodes
+  (observation, { state with nodes := nodes })
+
+/-- Edge demand keeps the node family and the source machine unchanged. -/
+def demandEdge (handle : Nat) (state : State width Symbol Guard) :
+    FlatMemoThunk.Observation (EdgeRequest Symbol Guard) (EdgeValue Symbol Guard) × State width Symbol Guard :=
+  let (observation, edges) := FlatMemoThunk.demand handle state.edges
+  (observation, { state with edges := edges })
+

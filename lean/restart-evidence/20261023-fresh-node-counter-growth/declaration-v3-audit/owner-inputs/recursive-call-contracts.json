@@ -1,0 +1,117 @@
+{
+  "status": "EXACT_REVIEW_ONLY_SMALLER_EXPRESSION_CALL_TYPES_AND_TERMINATION_OBLIGATIONS",
+  "fixed": [
+    "Symbol : Type",
+    "Guard : Type",
+    "DecidableEq (EdgeKey Symbol Guard)"
+  ],
+  "generalized": [
+    "environment : List (Value Symbol Guard)",
+    "state : State Symbol Guard"
+  ],
+  "mutual_theorem_order": [
+    "build_mono",
+    "buildMany_mono",
+    "buildEdges_mono"
+  ],
+  "measure": "sizeOf expression",
+  "calls": [
+    {
+      "owner": "build_mono",
+      "case": "Syntax.node edges",
+      "callee": "buildEdges_mono",
+      "smaller_expression": "edges",
+      "smaller_expression_type": "List (EdgeSyntax Symbol Guard)",
+      "full_callable_smaller_result_type": "∀ (environment : List (Value Symbol Guard)) (state : State Symbol Guard), state.nodes.next ≤ (buildEdges edges environment state).state.nodes.next",
+      "strict_termination_obligation": "sizeOf (edges : List (EdgeSyntax Symbol Guard)) < sizeOf (Syntax.node edges : Syntax Symbol Guard)",
+      "actual_invocation_instances": [
+        "buildEdges_mono edges environment state"
+      ],
+      "restriction": "This call is available only in the named constructor/list case after its structural decrease. It is not a premise or an arbitrary-expression oracle."
+    },
+    {
+      "owner": "build_mono",
+      "case": "Syntax.union members",
+      "callee": "buildMany_mono",
+      "smaller_expression": "members",
+      "smaller_expression_type": "List (Syntax Symbol Guard)",
+      "full_callable_smaller_result_type": "∀ (environment : List (Value Symbol Guard)) (state : State Symbol Guard), state.nodes.next ≤ (buildMany members environment state).state.nodes.next",
+      "strict_termination_obligation": "sizeOf (members : List (Syntax Symbol Guard)) < sizeOf (Syntax.union members : Syntax Symbol Guard)",
+      "actual_invocation_instances": [
+        "buildMany_mono members environment state"
+      ],
+      "restriction": "This call is available only in the named constructor/list case after its structural decrease. It is not a premise or an arbitrary-expression oracle."
+    },
+    {
+      "owner": "build_mono",
+      "case": "Syntax.binder smart body",
+      "callee": "build_mono",
+      "smaller_expression": "body",
+      "smaller_expression_type": "Syntax Symbol Guard",
+      "full_callable_smaller_result_type": "∀ (environment : List (Value Symbol Guard)) (state : State Symbol Guard), state.nodes.next ≤ (build body environment state).state.nodes.next",
+      "strict_termination_obligation": "sizeOf (body : Syntax Symbol Guard) < sizeOf (Syntax.binder smart body : Syntax Symbol Guard)",
+      "actual_invocation_instances": [
+        "build_mono body (.reference name :: environment) current for arbitrary Reference name and actual current State; this derives preserved",
+        "preserved .depth state for the first probe",
+        "preserved (.uninterned (ordinaryLevel depth)) afterDepth for the second probe",
+        "preserved (.interned entry.1.identity) allocated for the actual request miss callback, through request_mono; entry/allocated are the existing request internal values, not new local lets"
+      ],
+      "restriction": "This call is available only in the named constructor/list case after its structural decrease. It is not a premise or an arbitrary-expression oracle."
+    },
+    {
+      "owner": "buildMany_mono",
+      "case": "List.cons first rest",
+      "callee": "build_mono",
+      "smaller_expression": "first",
+      "smaller_expression_type": "Syntax Symbol Guard",
+      "full_callable_smaller_result_type": "∀ (environment : List (Value Symbol Guard)) (state : State Symbol Guard), state.nodes.next ≤ (build first environment state).state.nodes.next",
+      "strict_termination_obligation": "sizeOf (first : Syntax Symbol Guard) < sizeOf (first :: rest : List (Syntax Symbol Guard))",
+      "actual_invocation_instances": [
+        "build_mono first environment state"
+      ],
+      "restriction": "This call is available only in the named constructor/list case after its structural decrease. It is not a premise or an arbitrary-expression oracle."
+    },
+    {
+      "owner": "buildMany_mono",
+      "case": "List.cons first rest",
+      "callee": "buildMany_mono",
+      "smaller_expression": "rest",
+      "smaller_expression_type": "List (Syntax Symbol Guard)",
+      "full_callable_smaller_result_type": "∀ (environment : List (Value Symbol Guard)) (state : State Symbol Guard), state.nodes.next ≤ (buildMany rest environment state).state.nodes.next",
+      "strict_termination_obligation": "sizeOf (rest : List (Syntax Symbol Guard)) < sizeOf (first :: rest : List (Syntax Symbol Guard))",
+      "actual_invocation_instances": [
+        "buildMany_mono rest environment next for the actual first-child returned state next"
+      ],
+      "restriction": "This call is available only in the named constructor/list case after its structural decrease. It is not a premise or an arbitrary-expression oracle."
+    },
+    {
+      "owner": "buildEdges_mono",
+      "case": "List.cons (EdgeSyntax.mk symbol constraint children) rest",
+      "callee": "buildMany_mono",
+      "smaller_expression": "children",
+      "smaller_expression_type": "List (Syntax Symbol Guard)",
+      "full_callable_smaller_result_type": "∀ (environment : List (Value Symbol Guard)) (state : State Symbol Guard), state.nodes.next ≤ (buildMany children environment state).state.nodes.next",
+      "strict_termination_obligation": "sizeOf (children : List (Syntax Symbol Guard)) < sizeOf (EdgeSyntax.mk symbol constraint children :: rest : List (EdgeSyntax Symbol Guard))",
+      "actual_invocation_instances": [
+        "buildMany_mono children environment state"
+      ],
+      "restriction": "This call is available only in the named constructor/list case after its structural decrease. It is not a premise or an arbitrary-expression oracle."
+    },
+    {
+      "owner": "buildEdges_mono",
+      "case": "List.cons (EdgeSyntax.mk symbol constraint children) rest",
+      "callee": "buildEdges_mono",
+      "smaller_expression": "rest",
+      "smaller_expression_type": "List (EdgeSyntax Symbol Guard)",
+      "full_callable_smaller_result_type": "∀ (environment : List (Value Symbol Guard)) (state : State Symbol Guard), state.nodes.next ≤ (buildEdges rest environment state).state.nodes.next",
+      "strict_termination_obligation": "sizeOf (rest : List (EdgeSyntax Symbol Guard)) < sizeOf (EdgeSyntax.mk symbol constraint children :: rest : List (EdgeSyntax Symbol Guard))",
+      "actual_invocation_instances": [
+        "buildEdges_mono rest environment afterEdge for the actual makeEdge returned state afterEdge"
+      ],
+      "restriction": "This call is available only in the named constructor/list case after its structural decrease. It is not a premise or an arbitrary-expression oracle."
+    }
+  ],
+  "no_tactic_induction_or_named_IH": true,
+  "termination_owned_by": "Each future public theorem body must pass its own termination_by sizeOf expression check. No termination result is claimed here.",
+  "existing_pattern": "InternedFreshOrdinaryGrowth has the same proper-expression recursive call graph and generalized environment/state, with its additional validity premise. That proof is a structural guide only."
+}
