@@ -1089,8 +1089,9 @@ lpoGreater precedence rank = greater
 
 {- | The lexicographic path order on ground terms, total: the generated
 variables are constants below all function symbols, in the order of their
-names. Two terms that differ only in their type annotations compare by the
-annotations.
+names. The path order compares the terms without their type annotations.
+Two terms that differ only in their type annotations compare by the
+annotations. Thus the order is transitive.
 -}
 lpoCompare :: [T.Text] -> (Symbol -> Bool) -> Term -> Term -> Ordering
 lpoCompare precedence isVar s t
@@ -1104,11 +1105,14 @@ lpoCompare precedence isVar s t
         | otherwise = precedenceKey precedence symbol arity
     greater a b = case (spine a, spine b) of
         ((Term f [_], as), (Term g [_], bs)) ->
-            any (\ai -> ai == b || greater ai b) as
+            any (\ai -> erasedEqual ai b || greater ai b) as
                 || (key f (length as) > key g (length bs) && all (greater a) bs)
                 || (f == g && length as == length bs && lexicographic as bs && all (greater a) bs)
         _ -> False
     lexicographic (a : as) (b : bs)
-        | a == b = lexicographic as bs
+        | erasedEqual a b = lexicographic as bs
         | otherwise = greater a b
     lexicographic _ _ = False
+    erasedEqual (Term "app" [_, f, x]) (Term "app" [_, g, y]) = erasedEqual f g && erasedEqual x y
+    erasedEqual (Term f [_]) (Term g [_]) = f == g
+    erasedEqual a b = a == b
