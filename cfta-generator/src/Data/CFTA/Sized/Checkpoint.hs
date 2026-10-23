@@ -14,8 +14,10 @@ a checkpoint with its graph.
 an earlier process. It rejects a checkpoint of another route, of another
 version of the route, or of another graph. An edit to a graph can change the
 order of its terms. Thus the position of a checkpoint has no meaning in an
-edited graph. 'resume' compares the two graphs row by row, so a new order of
-the transitions of one state also makes a checkpoint stale.
+edited graph. 'resume' compares the two graphs row by row. A new order of the
+transitions of one state also makes a checkpoint stale: the ranks of a size
+class follow the order of the rows (ADR 4), so the new order can change the
+listing.
 
 'relocate' finds a term in a graph and gives a checkpoint at that term. Use it
 only when you want to continue in an edited graph. It does not continue the
