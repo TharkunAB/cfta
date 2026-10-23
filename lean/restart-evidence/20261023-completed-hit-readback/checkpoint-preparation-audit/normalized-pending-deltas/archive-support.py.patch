@@ -1,0 +1,13 @@
+--- H26-pending/token-renamed/archive-support.py
++++ H27/archive-support.py
+@@ -7,8 +7,8 @@
+ target = HERE / 'completed-root-support'
+ target.mkdir()
+ files = {}
+-for source in sorted(Path('/tmp').glob('mcfta-both-miss-native-covered-*')):
+-    if not source.is_file() or source.name.startswith('mcfta-both-miss-native-covered-support-1'):
++for source in sorted(Path('/tmp').glob('mcfta-completed-hit-readback-*')):
++    if not source.is_file() or source.name.startswith('mcfta-completed-hit-readback-support-1'):
+         continue
+     shutil.copyfile(source, target / source.name)
+     files[source.name] = hashlib.sha256(source.read_bytes()).hexdigest()

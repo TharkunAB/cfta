@@ -1,0 +1,147 @@
+import MicroCFTA.SourceCurrentSameSymbolEdgeStable
+
+namespace MicroCFTA.SourceCurrentSameSymbolEdgeHitReadback
+open Cache Language InternedConstructorTemplates IntersectSchedule
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Edge" => EdgeValue Symbol Guard
+local notation "Wrapper" => SourceCurrentSameSymbolEdgeControl.State
+local notation "run" => SourceCurrentSameSymbolEdgeControl.execute
+local notation "advance" => SourceCurrentSameSymbolEdgeControl.step
+variable {width : Nat}
+
+/-! Read only completed published-pair effects. No native execution is produced. -/
+
+private theorem yielded_done [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (control next : SourceCurrentSameSymbolEdgeControl.Control)
+    (before middle after : Wrapper width) (result : Edge)
+    (one : advance control before = .yielded next middle)
+    (done : run fuel control before = .done result after) :
+    ∃ rest, run rest next middle = .done result after := by
+  cases fuel with
+  | zero => cases done
+  | succ fuel =>
+      exact ⟨fuel, by simpa only [SourceCurrentSameSymbolEdgeControl.execute, one] using done⟩
+
+private theorem ret_checked [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (value result : Edge) (pending : List Nat) (before after : Wrapper width)
+    (done : run fuel (.ret value pending) before = .done result after) :
+    after.checked = before.checked := by
+  induction pending generalizing fuel before with
+  | nil =>
+      cases fuel with
+      | zero => cases done
+      | succ fuel =>
+          obtain ⟨_, rfl⟩ := SourceCurrentSameSymbolEdgeControl.Outcome.done.inj (by
+            simpa only [SourceCurrentSameSymbolEdgeControl.execute,
+              SourceCurrentSameSymbolEdgeControl.step] using done)
+          rfl
+  | cons handle pending ih =>
+      cases fuel with
+      | zero => cases done
+      | succ fuel =>
+          apply ih fuel {before with memo := FlatMemoThunk.finish handle value before.memo}
+          simpa only [SourceCurrentSameSymbolEdgeControl.execute,
+            SourceCurrentSameSymbolEdgeControl.step] using done
+
+/-- Read the checked-state effect of the same completed published-pair call. -/
+theorem completed_hit_checked [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (semanticView : View Symbol) (model : InputMeaning semanticView)
+    (ranked : RankedInput semanticView model.valid) (holds : Guard → Term Symbol → Bool)
+    (fuel : Nat) (left right result : Edge) (before after : Wrapper width)
+    (stable : SourceCurrentSameSymbolEdgeStable.Stable semanticView model ranked holds before)
+    (present :
+      (∃ handle, before.memo.table (left.entry.identity, right.entry.identity) = some handle) ∨
+      (∃ handle, before.memo.table (right.entry.identity, left.entry.identity) = some handle))
+    (done : SourceCurrentSameSymbolEdgeControl.execute fuel (.call (left, right) []) before =
+      .done result after) :
+    after.checked = before.checked := by
+  cases found : before.memo.table (left.entry.identity, right.entry.identity) with
+  | some handle =>
+      obtain ⟨⟨captured, status⟩, stored, _⟩ :=
+        stable.valid.linked (left.entry.identity, right.entry.identity) handle found
+      obtain ⟨value, phase⟩ := stable.returned handle _ stored
+      change status = .returned value at phase
+      subst status
+      obtain ⟨remaining, tail⟩ := yielded_done fuel
+        (.call (left, right) []) (.demand handle []) before before after result
+        (by simp only [SourceCurrentSameSymbolEdgeControl.step,
+          FlatMemoThunk.lookup_hit (left.entry.identity, right.entry.identity)
+            (left, right) before.memo handle found]) done
+      obtain ⟨rest, last⟩ := yielded_done remaining
+        (.demand handle []) (.ret value []) before before after result
+        (by simp only [SourceCurrentSameSymbolEdgeControl.step,
+          FlatMemoThunk.demand_ready handle before.memo captured value stored]) tail
+      exact ret_checked rest value result [] before after last
+  | none =>
+      have reversePresent : ∃ handle,
+          before.memo.table (right.entry.identity, left.entry.identity) = some handle := by
+        rcases present with ⟨handle, original⟩ | ⟨handle, reverse⟩
+        · rw [found] at original
+          cases original
+        · exact ⟨handle, reverse⟩
+      obtain ⟨handle, reverse⟩ := reversePresent
+      have swap : right.entry.identity < left.entry.identity := by
+        apply Classical.byContradiction
+        intro denied
+        obtain ⟨canonical, canonicalPresent⟩ :=
+          stable.canonical right.entry.identity left.entry.identity handle reverse
+        by_cases forward : left.entry.identity < right.entry.identity
+        · simp only [forward, ↓reduceIte] at canonicalPresent
+          rw [found] at canonicalPresent
+          cases canonicalPresent
+        · rw [Nat.le_antisymm (Nat.le_of_not_gt denied)
+            (Nat.le_of_not_gt forward)] at reverse found
+          rw [found] at reverse
+          cases reverse
+      obtain ⟨⟨captured, status⟩, stored, _⟩ :=
+        stable.valid.linked (right.entry.identity, left.entry.identity) handle reverse
+      obtain ⟨value, phase⟩ := stable.returned handle _ stored
+      change status = .returned value at phase
+      subst status
+      let published : FlatMemoThunk.State (Nat × Nat) (Edge × Edge) Edge :=
+        (FlatMemoThunk.lookupOrInsert
+          (left.entry.identity, right.entry.identity) (left, right) before.memo).2
+      let current : Wrapper width :=
+        {before with memo := (FlatMemoThunk.demand before.memo.next published).2}
+      have allocated : published.cells before.memo.next = some ⟨(left, right), .suspended⟩ := by
+        exact (FlatMemoThunk.lookup_miss (left.entry.identity, right.entry.identity)
+          (left, right) before.memo found).2.2
+      have currentReverse :
+          current.memo.table (right.entry.identity, left.entry.identity) = some handle := by
+        simpa only [current, FlatMemoThunk.demand, allocated, FlatMemoThunk.setStatus] using
+          (FlatMemoThunk.lookup_extends (left.entry.identity, right.entry.identity)
+            (left, right) before.memo (right.entry.identity, left.entry.identity) handle reverse)
+      have currentStored : current.memo.cells handle = some ⟨captured, .returned value⟩ := by
+        exact ((FlatMemoThunk.lookup_returned
+          (left.entry.identity, right.entry.identity) (left, right) before.memo _
+          (FlatMemoThunk.Valid.map before.memo _ _ _ stable.valid (fun _ _ => True.intro))).trans
+          (FlatMemoThunk.demand_returned before.memo.next published)) handle captured value stored
+      obtain ⟨remaining, tail⟩ := yielded_done fuel
+        (.call (left, right) []) (.demand before.memo.next []) before
+        {before with memo := published} after result
+        (by simp only [SourceCurrentSameSymbolEdgeControl.step,
+          published, FlatMemoThunk.lookupOrInsert, found]) done
+      obtain ⟨orderedFuel, orderedTail⟩ := yielded_done remaining
+        (.demand before.memo.next []) (.order before.memo.next (left, right) [])
+        {before with memo := published} current after result
+        (by simp only [SourceCurrentSameSymbolEdgeControl.step,
+          FlatMemoThunk.demand, allocated, current]) tail
+      obtain ⟨reverseFuel, reverseTail⟩ := yielded_done orderedFuel
+        (.order before.memo.next (left, right) []) (.call (right, left) [before.memo.next])
+        current current after result
+        (by simp only [SourceCurrentSameSymbolEdgeControl.step, swap, ↓reduceIte]) orderedTail
+      obtain ⟨demandFuel, demandTail⟩ := yielded_done reverseFuel
+        (.call (right, left) [before.memo.next]) (.demand handle [before.memo.next])
+        current current after result
+        (by simp only [SourceCurrentSameSymbolEdgeControl.step,
+          FlatMemoThunk.lookup_hit (right.entry.identity, left.entry.identity)
+            (right, left) current.memo handle currentReverse]) reverseTail
+      obtain ⟨rest, last⟩ := yielded_done demandFuel
+        (.demand handle [before.memo.next]) (.ret value [before.memo.next])
+        current current after result
+        (by simp only [SourceCurrentSameSymbolEdgeControl.step,
+          FlatMemoThunk.demand_ready handle current.memo captured value currentStored]) demandTail
+      exact ret_checked rest value result [before.memo.next] current after last
+
+end MicroCFTA.SourceCurrentSameSymbolEdgeHitReadback

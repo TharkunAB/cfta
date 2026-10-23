@@ -1,0 +1,7 @@
+
+/-- Empty calls need no inventory entry. Every other call uses an inventory key. -/
+inductive Trace (inventory : List DomainKey) : Cache.State DomainKey → Cache.State DomainKey → Prop where
+  | refl (state : Cache.State DomainKey) : Trace inventory state state
+  | make (earlier : Trace inventory before middle) (key : DomainKey)
+      (member : key = emptyKey ∨ key ∈ inventory) :
+      Trace inventory before (IntersectionEmptyDomain.make middle key).2

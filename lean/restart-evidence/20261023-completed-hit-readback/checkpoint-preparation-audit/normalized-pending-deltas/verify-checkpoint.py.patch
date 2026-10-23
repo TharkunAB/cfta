@@ -1,0 +1,11 @@
+--- H26-pending/token-renamed/verify-checkpoint.py
++++ H27/verify-checkpoint.py
+@@ -26,7 +26,7 @@
+ assert result.returncode == 0, result.stderr
+ preserved = json.loads(result.stdout)
+ (HERE / 'preservation-final.json').write_text(json.dumps(preserved, indent=2) + '\n')
+-assert preserved['status'] == 'PASS' and preserved['baseline_files'] == 102314
++assert preserved['status'] == 'PASS' and preserved['baseline_files'] == 104210
+ baseline = json.loads((HERE / 'starting-files.json').read_text())
+ selected = json.loads((HERE / 'selected-sources.json').read_text())
+ new_modules = sum(name not in baseline for name in selected)

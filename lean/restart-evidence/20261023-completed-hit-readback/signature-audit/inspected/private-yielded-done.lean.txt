@@ -1,0 +1,6 @@
+private theorem yielded_done [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (control next : SourceCurrentSameSymbolEdgeControl.Control)
+    (before middle after : Wrapper width) (result : Edge)
+    (one : advance control before = .yielded next middle)
+    (done : run fuel control before = .done result after) :
+    ∃ rest, run rest next middle = .done result after

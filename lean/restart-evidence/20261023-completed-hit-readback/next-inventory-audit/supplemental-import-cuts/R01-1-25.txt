@@ -1,0 +1,25 @@
+import MicroCFTA.SourceCurrentSameSymbolEdgeComparison
+import MicroCFTA.SourceCurrentAllocatedRecursivePrefixAdmission
+
+namespace MicroCFTA.SourceCurrentSameSymbolEdgeComparisonDomains
+open Cache Language IntersectSchedule InternedConstructorTemplates InternedEdgeResidency
+open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionThunks SourceRecursiveIntersectionCode
+open SourceRecursiveIntersectionInputView InternedProbeProvenance
+open SourceCurrentAllocatedNativePhysicalCompletion (Good)
+open SourceEqualityRequiredSemanticCache (SemanticReady)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Edge" => EdgeValue Symbol Guard
+local notation "Wrapper" => SourceCurrentSameSymbolEdgeControl.State
+local notation "Stable" => SourceCurrentSameSymbolEdgeStable.Stable
+local notation "NativeIdle" => SourceRecursiveIntersectionNative.Idle
+local notation "guardHolds" => (@SourceEqualityPCSGuard.holds FullSyntax.Formula FormulaExecutable.formulaDecidableEq)
+
+private theorem original_of_readback
+    (source : InternedConstructorTemplates.State Symbol Guard) (facts : InternedNestedFacts.Facts source)
+    (value : Value Symbol Guard) (input : Input) (available : Available source value)
+    (complete : IntersectionFlatMemoKey.input value.referenceOf = some input)
+    (original : OriginalInput source input) : Original value := by
+  obtain ⟨witness, witnessOriginal, witnessAvailable, witnessCodec⟩ := original
+  have witnessRead := payload_readback source facts witness witnessAvailable input witnessCodec
+  have actualRead := payload_readback source facts value available input complete

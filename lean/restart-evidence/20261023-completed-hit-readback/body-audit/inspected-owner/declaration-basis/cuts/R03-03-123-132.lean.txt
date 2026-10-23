@@ -1,0 +1,10 @@
+def setStatus (handle : Nat) (status : Status Value) (state : State Key Request Value) : State Key Request Value :=
+  match state.cells handle with
+  | none => state
+  | some cell => { state with cells := put state.cells handle { cell with status := status } }
+
+/-- A phase change retains the published table and original request. -/
+theorem setStatus_cell (handle : Nat) (status : Status Value) (state : State Key Request Value)
+    (cell : Cell Request Value) (stored : state.cells handle = some cell) :
+    (setStatus handle status state).cells handle = some { cell with status := status } := by
+  simp [setStatus, stored, put]

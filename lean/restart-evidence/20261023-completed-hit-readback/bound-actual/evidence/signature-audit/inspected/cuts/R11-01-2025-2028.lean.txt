@@ -1,0 +1,4 @@
+protected theorem Nat.le_antisymm {n m : Nat} (h₁ : LE.le n m) (h₂ : LE.le m n) : Eq n m :=
+  match h₁ with
+  | Nat.le.refl   => rfl
+  | Nat.le.step h => absurd (Nat.lt_of_le_of_lt h h₂) (Nat.lt_irrefl n)

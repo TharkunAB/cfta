@@ -1,0 +1,31 @@
+        have reversePresent : ∃ handle, before.memo.table (right.entry.identity, left.entry.identity) = some handle := by
+          rcases present with ⟨handle, original⟩ | ⟨handle, reverse⟩
+          · rw [found] at original
+            cases original
+          · exact ⟨handle, reverse⟩
+        obtain ⟨handle, reverse⟩ := reversePresent
+        have swap : right.entry.identity < left.entry.identity := by
+          apply Classical.byContradiction
+          intro denied
+          obtain ⟨canonical, canonicalPresent⟩ :=
+            stable.canonical right.entry.identity left.entry.identity handle reverse
+          by_cases forward : left.entry.identity < right.entry.identity
+          · have original : before.memo.table (left.entry.identity, right.entry.identity) = some canonical := by
+              simpa only [forward, ↓reduceIte] using canonicalPresent
+            rw [found] at original
+            cases original
+          · have same : left.entry.identity = right.entry.identity := by omega
+            have original : before.memo.table (left.entry.identity, right.entry.identity) = some handle := by
+              simpa only [same] using reverse
+            rw [found] at original
+            cases original
+        obtain ⟨result, stored, resident, law⟩ :=
+          read_ready semanticView model ranked holds right left before coherent stable rightResident leftResident handle reverse
+        have bounded := stable.valid.bounded handle _ stored
+        obtain ⟨after, done, same⟩ := reverse_ready left right result before handle found reverse stored bounded swap
+        have forward : ¬ left.entry.identity < right.entry.identity := by omega
+        refine ⟨result, after, done, same, resident, ?_⟩
+        simpa only [swap, forward, ↓reduceIte] using law
+  obtain ⟨result, after, done, same, resident, law⟩ := progress
+  have resultResident : EdgeResident after.checked.native.machine.heap result := by
+    simpa only [same] using resident

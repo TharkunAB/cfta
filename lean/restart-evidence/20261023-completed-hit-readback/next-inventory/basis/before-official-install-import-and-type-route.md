@@ -1,0 +1,7 @@
+# Import and type correlation for a future signature gate
+
+The planned consumer needs the existing ComparisonDomains, OriginalRowPhysicalMeaning and AllocatedNativeCoveredQuery modules, plus accepted SameSymbolEdgeHitReadback. ComparisonDomains already imports AllocatedRecursivePrefixAdmission. FormulaExecutable supplies the public Formula equality argument for a future local guardHolds notation; the same explicit holds must appear in every source view, finite model, rank, Stable and Contextual occurrence.
+
+No context or theorem header is authored here. The H27 import remains pending until root confirms its actual official installation. The other public API paths and exact full source identities are in source-index.json. The next fresh declaration gate must verify the final context/import paths and every actual typed local statement before a body.
+
+H15 is instantiated with finiteInputMeaning and finiteRankedInput for the SAME FiniteInput. The native Covered predicate refers to that FiniteInput and the same source view/holds. H27 uses this exact Stable context but returns only checked equality. H7 miss_readback retains the same ordered full Edge records and checked endpoints. Both physical and admission certificates use that same edgeBody request and returned EdgeResident post. The global inventory is domains source, and its arbitrary initial cache remains initialDomains throughout.

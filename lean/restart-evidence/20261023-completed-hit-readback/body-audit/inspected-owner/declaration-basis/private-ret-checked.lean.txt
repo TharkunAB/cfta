@@ -1,0 +1,4 @@
+private theorem ret_checked [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (value result : Edge) (pending : List Nat) (before after : Wrapper width)
+    (done : run fuel (.ret value pending) before = .done result after) :
+    after.checked = before.checked

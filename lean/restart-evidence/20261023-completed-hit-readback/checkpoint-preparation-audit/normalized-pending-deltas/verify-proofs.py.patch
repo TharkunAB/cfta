@@ -1,0 +1,114 @@
+--- H26-pending/token-renamed/verify-proofs.py
++++ H27/verify-proofs.py
+@@ -1,4 +1,4 @@
+-"""Check saved both-miss-native-covered evidence. This script does not run Lean."""
++"""Check saved completed-hit-readback evidence. This script does not run Lean."""
+ import argparse
+ import difflib
+ import hashlib
+@@ -11,7 +11,7 @@
+ parser.add_argument("--live", action="store_true")
+ args = parser.parse_args()
+ root = args.root.resolve()
+-evidence = root / "lean/restart-evidence/20261023-both-miss-native-covered"
++evidence = root / "lean/restart-evidence/20261023-completed-hit-readback"
+ def load(name):
+     return json.loads((evidence / name).read_text())
+ def digest(data):
+@@ -31,7 +31,7 @@
+ jobs = json.loads("__H27_JOBS_JSON__")
+ rejected = json.loads("__H27_REJECTED_PUBLIC_STEMS_JSON__")
+ assert re.fullmatch(r"[0-9a-f]{64}", selected_sha)
+-assert jobs and all(stem.startswith("both-miss-native-covered-") for stem in jobs)
++assert jobs and all(stem.startswith("completed-hit-readback-") for stem in jobs)
+ assert strict_stem in jobs and full_stem in jobs and audit_stem in jobs
+ assert jobs[strict_stem][0] == jobs[full_stem][0] == jobs[audit_stem][0] == 0
+ assert jobs[strict_stem][1] == selected_sha and jobs[strict_stem][3:] == jobs[full_stem][3:] == [0, 0]
+@@ -133,49 +133,9 @@
+     contract_data[filename] = data
+ context = contract_data["context.lean.txt"]
+ assert source.startswith(context)
+-contract_order = ["context.lean.txt", "public-header.lean.txt", "local-bindings.lean.txt",
+-    "local-raw-scope.lean.txt", "local-raw-covered.lean.txt", "local-ordered-inputs.lean.txt",
+-    "local-ready.lean.txt", "local-fields.lean.txt", "local-certificate.lean.txt", "local-final-covered.lean.txt"]
+-assert list(contracts) == contract_order
+-layout_raw = (evidence / "signature-plan/insertion-map.json").read_bytes()
+-scope_raw = (evidence / "signature-plan/local-declaration-scope.json").read_bytes()
+-assert digest(layout_raw) == "7f196aa83f059b8578831bca37abc4109d7d7962ada7eded679ca1945ae9820d"
+-assert digest(scope_raw) == "2e3f29eab0be263e06da7850c19811991362e65661079009d9b88e5a9776e6ba"
+-layout, local_scope = json.loads(layout_raw), json.loads(scope_raw)
+-assert [item["file"] for item in layout] == contract_order
+-assert [item["insertion_order"] for item in layout] == list(range(10))
+-for item in layout:
+-    data = contract_data[item["file"]]
+-    assert digest(data) == item["sha256"] and len(data) == item["bytes"] and len(data.splitlines()) == item["lines"]
+-local_let_names = ["ordered", "request"]
+-local_names = ["rawScope", "rawCovered", "orderedInputs", "ready", "fields", "certificate", "finalCovered"]
+-assert local_scope["local_let_names"] == local_let_names and local_scope["local_have_names"] == local_names
+-assert all(local_scope[key] == [] for key in ["typed_show_fragments", "local_IH_fragments", "private_helpers", "new_global_definitions"])
+-assert source.count(context) == 1
+-header = contract_data["public-header.lean.txt"].rstrip(b"\n") + b" := by\n"
+-assert source.count(header) == 1 and source.index(header) >= len(context)
+-body_start = source.index(header) + len(header)
+-body_end = source.rindex(("end MicroCFTA." + name).encode())
+-public_body = source[body_start:body_end]
+-positions = []
+-for item in layout[2:]:
+-    fragment = contract_data[item["file"]]
+-    if item["kind"] == "local_have":
+-        fragment = fragment.rstrip(b"\n") + b" := by\n"
+-    else:
+-        assert item["kind"] == "local_let_bindings"
+-    assert public_body.count(fragment) == 1, item["file"]
+-    positions.append(public_body.index(fragment))
+-assert positions == sorted(positions) and len(set(positions)) == len(positions)
+-assert re.findall(rb"\bhave[ \t]+([^ \t:\n]+)", public_body) == [local.encode() for local in local_names]
+-assert len(re.findall(rb"\bhave\b", public_body)) == len(local_names)
+-assert re.findall(rb"\blet[ \t]+([^ \t:=\n]+)", public_body) == [local.encode() for local in local_let_names]
+-assert len(re.findall(rb"\blet\b", public_body)) == len(local_let_names)
+-assert not re.search(rb"\b(?:show|induction)\b", public_body)
+-shape_review = load("root-declaration-review.json")
+-assert shape_review["local_names"] == local_names and shape_review["local_let_names"] == local_let_names
+-assert shape_review["local_induction"] is None and shape_review["typed_show_fragments"] == []
+-assert shape_review["private_names"] == []
++assert False, "__H27_EXACT_DECLARATION_FRAGMENT_CHECK_PENDING__"
++# Replace this non-bindable STOP only through an independently reviewed exact-declaration overlay.
++# No public/private/local fragment shape is accepted by this pending program.
+ public = re.findall(r"(?m)^\s*(?:(?:noncomputable|unsafe|partial)\s+)?(def|theorem|lemma|abbrev|opaque|instance|structure|inductive)\s+([^\s(\[{:=]+)", source.decode())
+ assert public == [(kind, short) for short, kind in specs]
+ helpers = []
+@@ -184,7 +144,7 @@
+         declaration = re.match(r"^\s*(?:(?:noncomputable|unsafe|partial)\s+)?private\s+(?:(?:noncomputable|unsafe|partial)\s+)?(?:def|theorem|lemma|abbrev|opaque|instance|structure|inductive)\s+([^\s(\[{:=]+)", line)
+         assert declaration, ("unsupported private declaration", line)
+         helpers.append(declaration.group(1))
+-assert helpers == [], "This module permits no private declarations"
++assert helpers == json.loads("__H27_PRIVATE_NAMES_JSON__"), "Only exact approved private declarations are permitted"
+ declaration_review = load("root-declaration-review.json")
+ assert declaration_review["status"] == "ROOT_DECLARATION_REVIEW_CLEAR"
+ assert declaration_review["module"] == "MicroCFTA." + name
+@@ -196,13 +156,13 @@
+ if args.live:
+     assert (root / source_path).read_bytes() == source
+ original = (evidence / "original-sources/Audit.original.lean.txt").read_bytes()
+-assert digest(original) == "b616bb97d542e1494bfbef2d6c3c77365c28731ff8a8a612e59533b44bc783e3" and len(original.splitlines()) == 3131
+-assert load("original-source-index.json")["sources"] == [dict(path="lean/MicroCFTA/Audit.lean", snapshot="original-sources/Audit.original.lean.txt", lines=3131, sha256=digest(original))]
++assert digest(original) == "ce6ee1df0944d6b51005e49b8b17fe2185961c984bbd6bfe460cfde5bd1d6fa9" and len(original.splitlines()) == 3132
++assert load("original-source-index.json")["sources"] == [dict(path="lean/MicroCFTA/Audit.lean", snapshot="original-sources/Audit.original.lean.txt", lines=3132, sha256=digest(original))]
+ addition = b"import MicroCFTA.__H27_MODULE_NAME__\n"
+ audit_source = (root / "lean/MicroCFTA/Audit.lean").read_bytes()
+ assert audit_source.count(addition) == 1 and audit_source.replace(addition, b"", 1) == original
+ assert audit_source.index(addition) < audit_source.index(b"/-!")
+-report = load("public-readback/both-miss-native-covered-full-readback.json")
++report = load("public-readback/completed-hit-readback-full-readback.json")
+ printer = (evidence / (full_stem + ".source.lean")).read_bytes()
+ raw = (evidence / (full_stem + ".log")).read_bytes()
+ options = ["maxRecDepth 30000", "maxHeartbeats 0", "linter.all true", "pp.explicit true", "pp.fullNames true", "pp.proofs true",
+@@ -285,7 +245,7 @@
+     assert head_report["actual_standard_three_axioms"] == (actual_axioms == allowed)
+     actual_by_head[short] = sorted(actual_axioms)
+     for suffix, text in [("public-type", checked), ("printed-public-type", declared), ("body", body), ("axioms", axiom_output)]:
+-        filename = "both-miss-native-covered-" + short + "-" + suffix + ".txt"
++        filename = "completed-hit-readback-" + short + "-" + suffix + ".txt"
+         retained = (evidence / "public-readback" / filename).read_bytes()
+         assert retained == text.encode() and report["retained_slices"][filename] == dict(bytes=len(retained), sha256=digest(retained))
+         retained_names.append(filename)

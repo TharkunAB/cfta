@@ -1,0 +1,18 @@
+      have reversePresent : ∃ handle,
+          before.memo.table (right.entry.identity, left.entry.identity) = some handle
+
+      have swap : right.entry.identity < left.entry.identity
+
+      let published : FlatMemoThunk.State (Nat × Nat) (Edge × Edge) Edge :=
+        (FlatMemoThunk.lookupOrInsert
+          (left.entry.identity, right.entry.identity) (left, right) before.memo).2
+      let current : Wrapper width :=
+        {before with memo := (FlatMemoThunk.demand before.memo.next published).2}
+
+      have allocated : published.cells before.memo.next = some ⟨(left, right), .suspended⟩
+
+      have currentReverse :
+          current.memo.table (right.entry.identity, left.entry.identity) = some handle
+
+      have currentStored : current.memo.cells handle = some ⟨captured, .returned value⟩
+

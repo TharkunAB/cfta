@@ -1,0 +1,37 @@
+/-- Retained source facts can strengthen the cell interpretation without table effects. -/
+theorem Valid.map (state : State Key Request Value) (keyOf : Request → Key → Prop)
+    (first second : Cell Request Value → Prop) (valid : Valid keyOf first state)
+    (retained : ∀ cell, first cell → second cell) : Valid keyOf second state :=
+  ⟨valid.bounded, valid.linked, fun handle cell stored => retained cell (valid.checked handle cell stored)⟩
+
+/-- A hit returns the original thunk. A miss publishes a suspended request. -/
+def lookupOrInsert [DecidableEq Key] (key : Key) (request : Request) (state : State Key Request Value) :
+    Nat × State Key Request Value :=
+  match state.table key with
+  | some handle => (handle, state)
+  | none => (state.next, ⟨put state.table key state.next,
+      put state.cells state.next ⟨request, .suspended⟩, state.next + 1⟩)
+
+/-- A published key cannot replace its original request with a later candidate. -/
+theorem lookup_hit [DecidableEq Key] (key : Key) (request : Request) (state : State Key Request Value)
+    (handle : Nat) (stored : state.table key = some handle) :
+    lookupOrInsert key request state = (handle, state) := by
+  simp only [lookupOrInsert, stored]
+
+/-- Miss publication installs the original suspended request before evaluation. -/
+theorem lookup_miss [DecidableEq Key] (key : Key) (request : Request) (state : State Key Request Value)
+    (missing : state.table key = none) :
+    (lookupOrInsert key request state).1 = state.next ∧
+    (lookupOrInsert key request state).2.table key = some state.next ∧
+    (lookupOrInsert key request state).2.cells state.next = some ⟨request, .suspended⟩ := by
+  simp [lookupOrInsert, missing, put]
+
+/-- Publication retains every earlier key and thunk identity. -/
+theorem lookup_extends [DecidableEq Key] (key : Key) (request : Request) (state : State Key Request Value) :
+    Extends state.table (lookupOrInsert key request state).2.table := by
+  cases found : state.table key with
+  | some handle => simpa only [lookupOrInsert, found] using extends_refl state.table
+  | none =>
+    intro other handle stored
+    have different : other ≠ key := by intro same; subst other; rw [found] at stored; cases stored
+    simpa only [lookupOrInsert, found, put, ite_eq_right different] using stored

@@ -1,0 +1,20 @@
+--- initial-complete.lean.txt
++++ preflight-unused-bindings.lean.txt
+@@ -31,7 +31,7 @@
+   | nil =>
+       cases fuel with
+       | zero => cases done
+-      | succ fuel =>
++      | succ _ =>
+           obtain ⟨_, rfl⟩ := SourceCurrentSameSymbolEdgeControl.Outcome.done.inj (by
+             simpa only [SourceCurrentSameSymbolEdgeControl.execute,
+               SourceCurrentSameSymbolEdgeControl.step] using done)
+@@ -84,7 +84,7 @@
+       have swap : right.entry.identity < left.entry.identity := by
+         apply Classical.byContradiction
+         intro denied
+-        obtain ⟨canonical, canonicalPresent⟩ :=
++        obtain ⟨_, canonicalPresent⟩ :=
+           stable.canonical right.entry.identity left.entry.identity handle reverse
+         by_cases forward : left.entry.identity < right.entry.identity
+         · simp only [forward, ↓reduceIte] at canonicalPresent

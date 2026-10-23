@@ -1,0 +1,23 @@
+/-- Actual physical traces derive admission at each reached publication and in every final cell. -/
+theorem Trace.covered [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (branches : Branches (width := width) source holds inputs)
+    {fuel : Nat} {control next : Control A} {before after : Checked width}
+    (trace : Trace fuel control before next after) (post : Machine Symbol Guard → A → Prop)
+    (good : Good before) (semantic : SemanticReady before.native.machine.heap)
+    (growth : Grows source before.native.machine.heap)
+    (history : Extends source.nodes.issued before.native.machine.heap.nodes.issued)
+    (fields : Fields control before) (covered : Covered inputs before.native)
+    (certificate : ControlCertified source holds inputs control before.native.machine post) :
+    Covered inputs after.native ∧ ControlCertified source holds inputs next after.native.machine post := by
+  induction trace with
+  | refl => exact ⟨covered, certificate⟩
+  | cons control before resume reached final result fuel physical one tail ih =>
+      have effects := yielded_effects control resume before reached good semantic physical fields one
+      have admitted := SourceCurrentAllocatedNativeAdmissionExecution.step_covered inputs control before covered
+        (current source holds inputs control before.native.machine post certificate)
+      have reachedCovered : Covered inputs reached.native := by simpa only [one, Outcome.state] using admitted
+      have nextCertificate := yielded_certified source holds inputs branches control resume before reached post good semantic
+        growth history physical fields certificate one
+      exact ih effects.1 effects.2.1 (grows_trans growth effects.2.2.1.heap)
+        (extends_trans history effects.2.2.1.history) effects.2.2.2 reachedCovered nextCertificate
+end MicroCFTA.SourceCurrentAllocatedNativeAdmissionTrace

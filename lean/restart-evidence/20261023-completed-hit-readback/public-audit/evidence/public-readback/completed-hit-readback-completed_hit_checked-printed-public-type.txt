@@ -1,0 +1,102 @@
+ ∀ {width : Nat}
+  [inst : DecidableEq.{1} (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (semanticView : MicroCFTA.IntersectSchedule.View (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+  (model :
+    @MicroCFTA.IntersectSchedule.InputMeaning (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      semanticView)
+  (ranked :
+    @MicroCFTA.IntersectSchedule.RankedInput (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      semanticView
+      (@MicroCFTA.IntersectSchedule.InputMeaning.valid (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        semanticView model))
+  (holds :
+    MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Bool)
+  (fuel : Nat)
+  (left right result :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before after : MicroCFTA.SourceCurrentSameSymbolEdgeControl.State width),
+  @MicroCFTA.SourceCurrentSameSymbolEdgeStable.Stable width semanticView model ranked holds before →
+    Or
+        (@Exists.{1} Nat fun handle =>
+          @Eq.{1} (Option.{0} Nat)
+            (@MicroCFTA.FlatMemoThunk.State.table (Prod.{0, 0} Nat Nat)
+              (Prod.{0, 0}
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (@MicroCFTA.SourceCurrentSameSymbolEdgeControl.State.memo width before)
+              (@Prod.mk.{0, 0} Nat Nat
+                (@MicroCFTA.Cache.Interned.identity
+                  (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) left))
+                (@MicroCFTA.Cache.Interned.identity
+                  (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) right))))
+            (@Option.some.{0} Nat handle))
+        (@Exists.{1} Nat fun handle =>
+          @Eq.{1} (Option.{0} Nat)
+            (@MicroCFTA.FlatMemoThunk.State.table (Prod.{0, 0} Nat Nat)
+              (Prod.{0, 0}
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (@MicroCFTA.SourceCurrentSameSymbolEdgeControl.State.memo width before)
+              (@Prod.mk.{0, 0} Nat Nat
+                (@MicroCFTA.Cache.Interned.identity
+                  (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) right))
+                (@MicroCFTA.Cache.Interned.identity
+                  (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) left))))
+            (@Option.some.{0} Nat handle)) →
+      @Eq.{2} (MicroCFTA.SourceCurrentSameSymbolEdgeControl.Outcome width)
+          (@MicroCFTA.SourceCurrentSameSymbolEdgeControl.execute width inst inst_1 fuel
+            (MicroCFTA.SourceCurrentSameSymbolEdgeControl.Control.call
+              (@Prod.mk.{0, 0}
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                left right)
+              (@List.nil.{0} Nat))
+            before)
+          (@MicroCFTA.SourceCurrentSameSymbolEdgeControl.Outcome.done width result after) →
+        @Eq.{2} (MicroCFTA.SourceEqualityNativeDemand.State width)
+          (@MicroCFTA.SourceCurrentSameSymbolEdgeControl.State.checked width after)
+          (@MicroCFTA.SourceCurrentSameSymbolEdgeControl.State.checked width before)

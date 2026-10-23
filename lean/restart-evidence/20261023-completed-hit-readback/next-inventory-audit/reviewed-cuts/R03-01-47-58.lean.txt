@@ -1,0 +1,12 @@
+/-- Read the checked-state effect of the same completed published-pair call. -/
+theorem completed_hit_checked [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (semanticView : View Symbol) (model : InputMeaning semanticView)
+    (ranked : RankedInput semanticView model.valid) (holds : Guard → Term Symbol → Bool)
+    (fuel : Nat) (left right result : Edge) (before after : Wrapper width)
+    (stable : SourceCurrentSameSymbolEdgeStable.Stable semanticView model ranked holds before)
+    (present :
+      (∃ handle, before.memo.table (left.entry.identity, right.entry.identity) = some handle) ∨
+      (∃ handle, before.memo.table (right.entry.identity, left.entry.identity) = some handle))
+    (done : SourceCurrentSameSymbolEdgeControl.execute fuel (.call (left, right) []) before =
+      .done result after) :
+    after.checked = before.checked := by

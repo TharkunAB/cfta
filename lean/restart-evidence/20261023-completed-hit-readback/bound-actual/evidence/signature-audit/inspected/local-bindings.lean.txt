@@ -1,0 +1,5 @@
+      let published : FlatMemoThunk.State (Nat × Nat) (Edge × Edge) Edge :=
+        (FlatMemoThunk.lookupOrInsert
+          (left.entry.identity, right.entry.identity) (left, right) before.memo).2
+      let current : Wrapper width :=
+        {before with memo := (FlatMemoThunk.demand before.memo.next published).2}

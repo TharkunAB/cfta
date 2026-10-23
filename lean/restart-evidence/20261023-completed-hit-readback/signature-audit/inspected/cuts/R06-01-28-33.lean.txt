@@ -1,0 +1,6 @@
+/-- Table growth preserves all previously stored entries. -/
+def Extends (before after : Table Key Value) : Prop :=
+  ∀ key value, before key = some value → after key = some value
+
+theorem extends_refl (table : Table Key Value) : Extends table table := fun _ _ h => h
+

@@ -1,0 +1,84 @@
+--- accepted-H27-pending/verify-proofs.py
++++ H27-exact-declaration-overlay/verify-proofs.py
+@@ -133,9 +133,78 @@
+     contract_data[filename] = data
+ context = contract_data["context.lean.txt"]
+ assert source.startswith(context)
+-assert False, "__H27_EXACT_DECLARATION_FRAGMENT_CHECK_PENDING__"
+-# Replace this non-bindable STOP only through an independently reviewed exact-declaration overlay.
+-# No public/private/local fragment shape is accepted by this pending program.
++layout_raw = (evidence / "signature-plan/insertion-map.json").read_bytes()
++schema_raw = (evidence / "signature-plan/declaration-schema.json").read_bytes()
++manifest_raw = (evidence / "signature-plan/contracts.json").read_bytes()
++assert digest(layout_raw) == "014efecf04c5e1637ea6deb5beaf34791af1db1427f1a69b7acd59b70d7232b9"
++assert digest(schema_raw) == "4b3997b220f15fdb4dd95d1b91bb2a33439362c66c3f70d8fcdac7bc455aa993"
++assert digest(manifest_raw) == "2008ff8495d37ab8c5bc42fd1b231895c4f9d4f9c6ce82942273ccb90188cdaf"
++layout, declaration_schema, manifest = json.loads(layout_raw), json.loads(schema_raw), json.loads(manifest_raw)
++compiled = layout["compiled_fragments"]
++contract_order = ['context.lean.txt', 'private-yielded-done.lean.txt', 'private-ret-checked.lean.txt', 'public-header.lean.txt', 'local-reverse-present.lean.txt', 'local-swap.lean.txt', 'local-bindings.lean.txt', 'local-allocated.lean.txt', 'local-current-reverse.lean.txt', 'local-current-stored.lean.txt']
++assert list(contracts) == list(manifest) == contract_order
++assert [item["file"] for item in compiled] == contract_order and [item["order"] for item in compiled] == list(range(1, 11))
++assert declaration_schema["compiled_contract_order"] == contract_order and declaration_schema["module"] == name
++assert declaration_schema["public_heads"] == [namespace + short for short in short_names]
++assert declaration_schema["private_helpers"] == ["yielded_done", "ret_checked"]
++for item in compiled:
++    filename, data = item["file"], contract_data[item["file"]]
++    assert contracts[filename] == dict(path="signature-plan/" + filename, lines=item["lines"], sha256=item["sha256"])
++    assert digest(data) == manifest[filename] == item["sha256"] and len(data.splitlines()) == item["lines"]
++assert source.count(context) == 1
++headers, positions = [], []
++for item in compiled[1:4]:
++    assert item["role"] == ("public-header" if item["file"] == "public-header.lean.txt" else "private-header")
++    assert item["future_body_attachment"] == " := by\n"
++    header = contract_data[item["file"]].rstrip(b"\n") + b" := by\n"
++    assert source.count(header) == 1 and source.index(header) >= len(context)
++    headers.append(header); positions.append(source.index(header))
++assert positions == sorted(positions) and len(set(positions)) == 3
++body_end = source.rindex(("end MicroCFTA." + name).encode())
++yielded_body = source[positions[0] + len(headers[0]):positions[1]]
++ret_body = source[positions[1] + len(headers[1]):positions[2]]
++public_body = source[positions[2] + len(headers[2]):body_end]
++proof_bodies = yielded_body + ret_body + public_body
++local_positions = []
++for item in compiled[4:]:
++    fragment = contract_data[item["file"]]
++    if item["role"] == "local-have":
++        assert item["future_body_attachment"] == " := by\n"
++        fragment = fragment.rstrip(b"\n") + b" := by\n"
++    else:
++        assert item["role"] == "literal-local-bindings"
++    assert public_body.count(fragment) == 1, item["file"]
++    local_positions.append(public_body.index(fragment))
++assert local_positions == sorted(local_positions) and len(set(local_positions)) == 6
++local_names = ["reversePresent", "swap", "allocated", "currentReverse", "currentStored"]
++local_let_names = ["published", "current"]
++assert declaration_schema["all_have_names_including_inferred"] == local_names
++assert declaration_schema["all_let_names_including_inferred"] == local_let_names
++assert re.findall(rb"\bhave[ \t]+([^ \t:\n]+)", public_body) == [local.encode() for local in local_names]
++assert len(re.findall(rb"\bhave\b", proof_bodies)) == len(local_names)
++assert re.findall(rb"\blet[ \t]+([^ \t:=\n]+)", public_body) == [local.encode() for local in local_let_names]
++assert len(re.findall(rb"\blet\b", proof_bodies)) == len(local_let_names)
++assert not re.search(rb"\b(?:show|suffices|haveI|letI)\b", proof_bodies)
++assert not re.search(rb"\bobtain\b(?:(?!:=).)*:(?!=)", proof_bodies, re.S)
++assert not re.search(rb"\binduction\b", yielded_body + public_body)
++assert len(re.findall(rb"\binduction\b", ret_body)) == 1
++assert len(re.findall(rb"(?m)^[ \t]*induction pending generalizing fuel before with$", ret_body)) == 1
++ih_raw = (evidence / "signature-plan/ret-checked-IH.review-only.lean.txt").read_bytes()
++assert digest(ih_raw) == "13a467c00d4b37a54d95965e7a96c30b93ea95a792b690aee3cd278f57907fa4"
++assert ih_raw not in source
++shape_review = load("root-declaration-review.json")
++assert shape_review["private_names"] == declaration_schema["private_helpers"]
++assert shape_review["local_names"] == local_names and shape_review["local_let_names"] == local_let_names
++assert shape_review["local_induction"] == declaration_schema["helper_induction"]
++assert shape_review["local_induction"]["helper"] == "ret_checked"
++assert shape_review["local_induction"]["inducted"] == "pending : List Nat"
++assert shape_review["local_induction"]["generalized"] == ["fuel : Nat", "before : Wrapper width"]
++assert shape_review["local_induction"]["fixed"] == ["value : Edge", "result : Edge", "after : Wrapper width"]
++assert shape_review["local_induction"]["generated_IH_sha256"] == digest(ih_raw)
++assert shape_review["local_induction"]["generated_IH_repeated_as_typed_local_in_source"] is False
++assert shape_review["typed_show_fragments"] == declaration_schema["typed_show_fragments"] == []
++assert declaration_schema["additional_typed_obtain_or_local_property"] == [] and declaration_schema["public_local_induction"] is None
++assert declaration_schema["new_global_definitions"] == []
+ public = re.findall(r"(?m)^\s*(?:(?:noncomputable|unsafe|partial)\s+)?(def|theorem|lemma|abbrev|opaque|instance|structure|inductive)\s+([^\s(\[{:=]+)", source.decode())
+ assert public == [(kind, short) for short, kind in specs]
+ helpers = []

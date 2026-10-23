@@ -1,0 +1,7 @@
+/-- The graph view separates interned payload reads from recursive scheduling. -/
+structure View (Symbol : Type) where
+  rows : Nat → List (Row Symbol)
+  body : Nat → Input
+  members : Nat → List Input
+  free : Input → List Nat
+  copy : Input → Shape (Payload Symbol)

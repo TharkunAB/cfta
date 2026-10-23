@@ -1,0 +1,92 @@
+--- H27/verify-preservation.py
++++ H26/verify-preservation.py
+@@ -11,7 +11,7 @@
+     return subprocess.check_output(['git', *args], cwd=ROOT, text=True)
+ 
+ base = json.loads((HERE / 'starting-files.json').read_text())
+-assert len(base) == 104210
++assert len(base) == 102314
+ changed = []
+ for name, pin in base.items():
+     path = ROOT / name
+@@ -25,28 +25,28 @@
+ selected = json.loads((HERE / 'selected-sources.json').read_text())
+ gate = json.loads((HERE / 'selected-source-gate.json').read_text())
+ assert gate['status'] == 'ROOT_ACCEPTED'
+-assert gate['path'] == 'lean/MicroCFTA/__H27_MODULE_NAME__.lean'
+-assert isinstance(gate['lines'], int) and 0 < gate['lines'] <= int('__H27_SOURCE_HARD_STOP__')
++assert gate['path'] == 'lean/MicroCFTA/SourceCurrentSameSymbolEdgeOriginalRowsCovered.lean'
++assert isinstance(gate['lines'], int) and 0 < gate['lines'] <= int('180')
+ assert sha(HERE / gate['snapshot']) == gate['sha256']
+ expected = {gate['path']: (gate['sha256'], gate['lines'])}
+ assert set(selected) == set(expected)
+ for name, (expected_sha, lines) in expected.items():
+     assert selected[name]['sha256'] == expected_sha and sha(ROOT / name) == expected_sha
+     assert len((ROOT / name).read_bytes().splitlines()) == lines
+-new_module = 'lean/MicroCFTA/__H27_MODULE_NAME__.lean'
++new_module = 'lean/MicroCFTA/SourceCurrentSameSymbolEdgeOriginalRowsCovered.lean'
+ assert new_module not in base
+-assert 'lean/notes-current-completed-hit-readback.md' not in base
+-assert (ROOT / 'lean/notes-current-completed-hit-readback.md').is_file()
++assert 'lean/notes-current-both-miss-native-covered.md' not in base
++assert (ROOT / 'lean/notes-current-both-miss-native-covered.md').is_file()
+ assert json.loads((HERE / 'frozen-modules.json').read_text()) == {
+     Path(name).stem: pin['sha256'] for name, pin in selected.items()}
+ assert set(changed) == set(documents) | (set(selected) & set(base)) | {'lean/MicroCFTA/Audit.lean'}, changed
+ start = (HERE / 'starting-head.txt').read_text().strip()
+-assert start == 'd8503f911255e53beb8904dacd7d978349ec7887'
++assert start == '6ca7ff763c6e18d69904b4e860c11f7959eb3d13'
+ audit_original = HERE / 'original-sources/Audit.original.lean.txt'
+-assert sha(audit_original) == 'ce6ee1df0944d6b51005e49b8b17fe2185961c984bbd6bfe460cfde5bd1d6fa9'
+-assert len(audit_original.read_bytes().splitlines()) == 3132
++assert sha(audit_original) == 'b616bb97d542e1494bfbef2d6c3c77365c28731ff8a8a612e59533b44bc783e3'
++assert len(audit_original.read_bytes().splitlines()) == 3131
+ audit = (ROOT / 'lean/MicroCFTA/Audit.lean').read_bytes()
+-addition = b'import MicroCFTA.__H27_MODULE_NAME__\n'
++addition = b'import MicroCFTA.SourceCurrentSameSymbolEdgeOriginalRowsCovered\n'
+ assert audit.count(addition) == 1 and audit.replace(addition, b'', 1) == audit_original.read_bytes()
+ assert audit.index(addition) < audit.index(b'/-!')
+ for name in documents:
+@@ -55,13 +55,13 @@
+ marker = '# Current formalization findings\n\n## Haskell fix handoff for external work\n\n'
+ marker += (HERE / 'haskell-repair-index.md').read_text().rstrip() + '\n\n'
+ assert (ROOT / 'FINDINGS.md').read_text().startswith(marker)
+-previous = json.loads((ROOT / 'lean/restart-evidence/20261023-both-miss-native-covered/preservation-final.json').read_text())
++previous = json.loads((ROOT / 'lean/restart-evidence/20261023-pair-request-admission/preservation-final.json').read_text())
+ archives = dict(previous['frozen_entry_archives'])
+ registries = dict(previous['frozen_manifests'])
+-assert len(registries) == 310 and sum(pin['checked'] for pin in registries.values()) == 1404
++assert len(registries) == 309 and sum(pin['checked'] for pin in registries.values()) == 1403
+ assert len(archives) == 5
+-assert 'lean/restart-evidence/20261023-both-miss-native-covered/frozen-modules.json' not in registries
+-registries['lean/restart-evidence/20261023-both-miss-native-covered/frozen-modules.json'] = {'checked': 1}
++assert 'lean/restart-evidence/20261023-pair-request-admission/frozen-modules.json' not in registries
++registries['lean/restart-evidence/20261023-pair-request-admission/frozen-modules.json'] = {'checked': 1}
+ frozen = {}
+ for name in registries:
+     entries = json.loads((ROOT / name).read_text())
+@@ -75,7 +75,7 @@
+             assert entry['sha256'] == expected and sha(ROOT / entry['snapshot']) == expected
+             assert sha(ROOT / source) == entry['current_sha256']
+     frozen[name] = {'checked': len(entries), 'manifest_sha256': sha(ROOT / name)}
+-assert len(frozen) == 311 and sum(pin['checked'] for pin in frozen.values()) == 1405
++assert len(frozen) == 310 and sum(pin['checked'] for pin in frozen.values()) == 1404
+ for name, args in [('starting-stashes.txt', ('stash', 'list', '--format=%gd %H %s')),
+                    ('starting-worktrees.txt', ('worktree', 'list', '--porcelain'))]:
+     actual, expected = git(*args), (HERE / name).read_text()
+@@ -115,13 +115,13 @@
+     and name != 'lean/MicroCFTA/Audit.lean' and name not in selected for name in base)
+ assert older_sources == sum(name.startswith('lean/MicroCFTA/') and name.endswith('.lean')
+     and name != 'lean/MicroCFTA/Audit.lean' for name in base)
+-assert older_sources == 3642
++assert older_sources == 3641
+ report = dict(status='PASS', baseline_files=len(base), changed=sorted(changed),
+               unchanged_haskell_files=len(hs), added_haskell_archive_files=len(added_hs), unchanged_package_files=len(active),
+               unchanged_older_non_audit_sources=older_sources,
+               frozen_registry_count=len(frozen), frozen_entries=sum(item['checked'] for item in frozen.values()),
+               frozen_manifests=frozen, frozen_entry_archives=archives,
+-              audit_only_new_import=True, new_completed_hit_readback_absent_baseline=True,
++              audit_only_new_import=True, new_both_miss_native_covered_absent_baseline=True,
+               stashes_preserved=True, other_worktrees_preserved=True,
+               haskell_fix_registry_first_and_retained=True, archived_components=len(components))
+ print(json.dumps(report, indent=2))
