@@ -13,6 +13,7 @@ module Data.CFTA.Gen.Internal.Flat (
 
     -- * Imported automata
     fromAutomaton,
+    fromAutomatonWithLeaves,
     fromAutomatonUpToDepth,
 
     -- * Choices
@@ -28,6 +29,7 @@ module Data.CFTA.Gen.Internal.Flat (
 
 import qualified Data.Array as Array
 import Data.Hashable (Hashable)
+import qualified Data.Map.Strict as Map
 import qualified Data.Text as Text
 import Data.Typeable (Typeable)
 import qualified Test.QuickCheck as QC
@@ -42,6 +44,7 @@ import Data.CFTA.Gen.Internal.Query (cardinality)
 import Data.CFTA.Gen.Internal.Recursive
 import Data.CFTA.Gen.Internal.Static
 import Data.CFTA.Gen.Internal.Support (relabel)
+import Data.CFTA.Gen.Internal.Table (LeafSource)
 import Data.CFTA.Gen.Internal.Types
 import Data.CFTA.Gen.Label (Label (..))
 import Data.CFTA.Gen.Sig (On (..))
@@ -93,23 +96,37 @@ constraints, because its count sums over accepting runs.
 fromAutomaton ::
     (Ord symbol, Hashable symbol, Typeable symbol, Ord key) =>
     (symbol -> key) -> Node symbol -> Gen symbol (Term symbol)
-fromAutomaton order root = withRecipe (Imported Nothing order root) $ readAutomaton order root
+fromAutomaton order root = withRecipe (Imported Nothing order root) $ readAutomaton Map.empty order root
+
+{- | Read an automaton whose nullary symbols can stand for many leaves.
+
+A symbol in the map is a 'LeafSource'. Its transition accepts the leaves of
+the source, each of size one, and the source does not list them. The terms keep
+the user symbols, so 'Data.CFTA.Gen.rankOfTerm' ranks a leaf with the inverse of
+the source. A symbol of the map with children is an ordinary symbol. The
+generator is recursive, counted by size, as for a cyclic automaton, also when
+the automaton has no cycle.
+-}
+fromAutomatonWithLeaves ::
+    (Ord symbol, Hashable symbol, Typeable symbol, Ord key) =>
+    Map.Map symbol (LeafSource symbol) -> (symbol -> key) -> Node symbol -> Gen symbol (Term symbol)
+fromAutomatonWithLeaves leaves order root = readAutomaton leaves order root
 
 -- | Read the terms an automaton accepts up to a constructor-depth bound. A leaf has depth zero.
 fromAutomatonUpToDepth ::
     (Ord symbol, Hashable symbol, Typeable symbol, Ord key) =>
     (symbol -> key) -> Depth -> Node symbol -> Gen symbol (Term symbol)
 fromAutomatonUpToDepth order depth graph =
-    withRecipe (Imported (Just depth) order graph) $ readAutomaton order $ Common.boundDepth depth graph
+    withRecipe (Imported (Just depth) order graph) $ readAutomaton Map.empty order $ Common.boundDepth depth graph
 
 -- | The language of an automaton: finite when acyclic, counted by size otherwise.
 readAutomaton ::
     (Ord symbol, Hashable symbol, Typeable symbol, Ord key) =>
-    (symbol -> key) -> Node symbol -> Gen symbol (Term symbol)
-readAutomaton order root
-    | Common.numNestedMu root == 0 = Transparent $ finiteAutomaton order root
+    Map.Map symbol (LeafSource symbol) -> (symbol -> key) -> Node symbol -> Gen symbol (Term symbol)
+readAutomaton leaves order root
+    | Common.numNestedMu root == 0 && Map.null leaves = Transparent $ finiteAutomaton order root
     | otherwise = Cyclic $ do
-        index <- automatonIndex order root
+        index <- automatonIndex leafOf order root
         pure $
             Recursive
                 supportNode
@@ -123,7 +140,8 @@ readAutomaton order root
     supportNode = relabel Label root
     -- The term of a member is the accepted user term under 'Label', and the
     -- automaton checks every symbol of it.
-    position = automatonTermPosition order root
+    leafOf = (`Map.lookup` leaves)
+    position = automatonTermPosition leafOf order root
     positions term = maybe [] (either (const []) (\found -> [CheckedRank found True]) . position) $ userTerm term
 
 -- | Choose uniformly from a finite non-empty list.

@@ -47,6 +47,8 @@ module Data.CFTA.Gen (
 
     -- * Imported automata and datatypes
     fromAutomaton,
+    fromAutomatonWithLeaves,
+    LeafSource (..),
     fromAutomatonUpToDepth,
     fromDatatype,
     fromDatatypeUpToDepth,
@@ -129,6 +131,7 @@ module Data.CFTA.Gen (
 ) where
 
 import Data.Hashable (Hashable)
+import qualified Data.Map.Strict as Map
 import Data.String (fromString)
 import Data.Text (Text)
 import Data.Typeable (Typeable)
@@ -137,12 +140,13 @@ import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint)
 import Data.CFTA.Gen.Error
 import Data.CFTA.Gen.Internal.Automaton (datatypeDecoder, declarationOrder, undecodableConstructor)
-import Data.CFTA.Gen.Internal.Flat hiding (fromAutomaton, fromAutomatonUpToDepth)
+import Data.CFTA.Gen.Internal.Flat hiding (fromAutomaton, fromAutomatonUpToDepth, fromAutomatonWithLeaves)
 import qualified Data.CFTA.Gen.Internal.Flat as Flat
 import Data.CFTA.Gen.Internal.Grouped
 import Data.CFTA.Gen.Internal.Inspection (Inspection (..), InspectionSymbol (..), drawInspection)
 import Data.CFTA.Gen.Internal.Query
 import Data.CFTA.Gen.Internal.Recur
+import Data.CFTA.Gen.Internal.Table (LeafSource (..))
 import Data.CFTA.Gen.Internal.Types
 import Data.CFTA.Gen.Label (Label (..), surface)
 import Data.CFTA.Gen.Sig (On (..), Sig (..), sigResult)
@@ -197,6 +201,26 @@ fromAutomaton ::
     (Ord symbol, Hashable symbol, Typeable symbol) =>
     Node symbol -> Gen symbol (Term symbol)
 fromAutomaton = Flat.fromAutomaton id
+
+{- | Read an automaton whose nullary symbols can stand for many leaves.
+
+A symbol in the map is a 'LeafSource': a count, a decoder from a rank to a
+leaf, and the inverse of the decoder. The transition of the symbol accepts the
+leaves of the source, each of size one, and nothing lists them. So an integer
+interval of a million values costs the same as one value. The terms keep the
+user symbols: 'rankOfTerm' ranks a leaf with the inverse of its source.
+
+The generator is counted by size, as for a cyclic automaton, also when the
+automaton has no cycle. Apply 'upToSize' for a finite generator. Within a
+node, the leaves of a source come where its symbol comes in the order of
+'fromAutomaton'. An ambiguous automaton is rejected, as in 'fromAutomaton'. The
+leaves of two sources of the same node must differ, because the count does not
+test it.
+-}
+fromAutomatonWithLeaves ::
+    (Ord symbol, Hashable symbol, Typeable symbol) =>
+    Map.Map symbol (LeafSource symbol) -> Node symbol -> Gen symbol (Term symbol)
+fromAutomatonWithLeaves leaves = Flat.fromAutomatonWithLeaves leaves id
 
 {- | Read the terms an automaton accepts up to a constructor-depth bound.
 
