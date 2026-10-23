@@ -38,6 +38,11 @@ conditions hold:
 4. The query is well sorted. The solver checks this condition: a query that
    fails the sort check gives 'Unknown'.
 
+A theory ("Data.CFTA.Refinement.Theory") gives interpretations that meet
+the first two conditions: its definitions are the meanings of the names, and
+its constructors are free. 'Data.CFTA.Refinement.Theory.theoryInterpretations'
+also gives the datatypes that have a value.
+
 Combine this solver with another through 'Data.CFTA.Refinement.fallback'.
 -}
 module Data.CFTA.Refinement.Ground (
