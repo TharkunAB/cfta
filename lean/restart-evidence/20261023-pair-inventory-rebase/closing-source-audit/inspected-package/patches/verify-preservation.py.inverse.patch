@@ -1,0 +1,85 @@
+--- H32/verify-preservation.py
++++ H31/verify-preservation.py
+@@ -11,7 +11,7 @@
+     return subprocess.check_output(['git', *args], cwd=ROOT, text=True)
+ 
+ base = json.loads((HERE / 'starting-files.json').read_text())
+-assert len(base) == 112408
++assert len(base) == 111320
+ changed = []
+ for name, pin in base.items():
+     path = ROOT / name
+@@ -23,7 +23,7 @@
+              'lean/SYSTEM.md', 'lean/API-COVERAGE.md', 'lean/COVERAGE.md',
+              'lean/notes-proof-status-20261017.md', 'lean/notes-current-system-claim.md']
+ selected = json.loads((HERE / 'selected-sources.json').read_text())
+-specs = [('SourceCurrentAllocatedNativePairInventoryRebase', 'selected-source-gate.json', 180, ['rebase'])]
++specs = [('SourceCurrentOriginalRowRebuildAdmission', 'selected-source-gate.json', 180, ['rebuilt_admitted'])]
+ expected = {}
+ for module, gate_name, cap, heads in specs:
+     name = 'lean/MicroCFTA/' + module + '.lean'
+@@ -39,16 +39,16 @@
+     assert selected[name]['sha256'] == expected_sha and sha(ROOT / name) == expected_sha
+     assert len((ROOT / name).read_bytes().splitlines()) == lines
+ assert all(name not in base for name in selected)
+-assert 'lean/notes-current-pair-inventory-rebase.md' not in base
+-assert (ROOT / 'lean/notes-current-pair-inventory-rebase.md').is_file()
++assert 'lean/notes-current-rebuild-admission.md' not in base
++assert (ROOT / 'lean/notes-current-rebuild-admission.md').is_file()
+ assert json.loads((HERE / 'frozen-modules.json').read_text()) == {
+     Path(name).stem: pin['sha256'] for name, pin in selected.items()}
+ assert set(changed) == set(documents) | (set(selected) & set(base)) | {'lean/MicroCFTA/Audit.lean'}, changed
+ start = (HERE / 'starting-head.txt').read_text().strip()
+-assert start == 'fb1949b3cf44911f25ac105403879a259fc8056a'
++assert start == '825d83243f4e69b39b2211598d92e15c427f88ed'
+ audit_original = HERE / 'original-sources/Audit.original.lean.txt'
+-assert sha(audit_original) == '3474b4adb87e8657faf95802a43938881ec79a19ee3835f44ba31ec6d8e54a01'
+-assert len(audit_original.read_bytes().splitlines()) == 3139
++assert sha(audit_original) == '0578808bf26b311291a002a52574fc77363ee84f1ba3f82f14ce270427965c2e'
++assert len(audit_original.read_bytes().splitlines()) == 3138
+ audit = (ROOT / 'lean/MicroCFTA/Audit.lean').read_bytes()
+ additions = [('import MicroCFTA.' + module + '\n').encode() for module, _gate, _cap, _heads in specs]
+ restored = audit
+@@ -62,13 +62,13 @@
+ marker = '# Current formalization findings\n\n## Haskell fix handoff for external work\n\n'
+ marker += (HERE / 'haskell-repair-index.md').read_text().rstrip() + '\n\n'
+ assert (ROOT / 'FINDINGS.md').read_text().startswith(marker)
+-previous = json.loads((ROOT / 'lean/restart-evidence/20261023-rebuild-admission/preservation-final.json').read_text())
++previous = json.loads((ROOT / 'lean/restart-evidence/20261023-group-admission/preservation-final.json').read_text())
+ archives = dict(previous['frozen_entry_archives'])
+ registries = dict(previous['frozen_manifests'])
+-assert len(registries) == 315 and sum(pin['checked'] for pin in registries.values()) == 1411
++assert len(registries) == 314 and sum(pin['checked'] for pin in registries.values()) == 1410
+ assert len(archives) == 5
+-assert 'lean/restart-evidence/20261023-rebuild-admission/frozen-modules.json' not in registries
+-registries['lean/restart-evidence/20261023-rebuild-admission/frozen-modules.json'] = {'checked': 1}
++assert 'lean/restart-evidence/20261023-group-admission/frozen-modules.json' not in registries
++registries['lean/restart-evidence/20261023-group-admission/frozen-modules.json'] = {'checked': 1}
+ frozen = {}
+ for name in registries:
+     entries = json.loads((ROOT / name).read_text())
+@@ -82,7 +82,7 @@
+             assert entry['sha256'] == expected and sha(ROOT / entry['snapshot']) == expected
+             assert sha(ROOT / source) == entry['current_sha256']
+     frozen[name] = {'checked': len(entries), 'manifest_sha256': sha(ROOT / name)}
+-assert len(frozen) == 316 and sum(pin['checked'] for pin in frozen.values()) == 1412
++assert len(frozen) == 315 and sum(pin['checked'] for pin in frozen.values()) == 1411
+ for name, args in [('starting-stashes.txt', ('stash', 'list', '--format=%gd %H %s')),
+                    ('starting-worktrees.txt', ('worktree', 'list', '--porcelain'))]:
+     actual, expected = git(*args), (HERE / name).read_text()
+@@ -122,13 +122,13 @@
+     and name != 'lean/MicroCFTA/Audit.lean' and name not in selected for name in base)
+ assert older_sources == sum(name.startswith('lean/MicroCFTA/') and name.endswith('.lean')
+     and name != 'lean/MicroCFTA/Audit.lean' for name in base)
+-assert older_sources == 3649
++assert older_sources == 3648
+ report = dict(status='PASS', baseline_files=len(base), changed=sorted(changed),
+               unchanged_haskell_files=len(hs), added_haskell_archive_files=len(added_hs), unchanged_package_files=len(active),
+               unchanged_older_non_audit_sources=older_sources,
+               frozen_registry_count=len(frozen), frozen_entries=sum(item['checked'] for item in frozen.values()),
+               frozen_manifests=frozen, frozen_entry_archives=archives,
+-              audit_only_new_import=True, new_pair_inventory_rebase_module_absent_baseline=True,
++              audit_only_new_import=True, new_rebuild_admission_module_absent_baseline=True,
+               stashes_preserved=True, other_worktrees_preserved=True,
+               haskell_fix_registry_first_and_retained=True, archived_components=len(components))
+ print(json.dumps(report, indent=2))

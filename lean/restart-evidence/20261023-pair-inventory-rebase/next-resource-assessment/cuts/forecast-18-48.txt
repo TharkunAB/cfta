@@ -1,0 +1,31 @@
+structure Profile where
+  /-- Upper bound on the issued node counter. -/
+  nodes : Nat
+  /-- Upper bound on the issued edge counter. -/
+  edges : Nat
+  /-- Upper bound on the domain counter. -/
+  domains : Nat
+  /-- Upper bound on every stored payload mass. -/
+  mass : Nat
+
+/-- Each component of the first profile is at most the second component. -/
+def Le (first last : Profile) : Prop :=
+  first.nodes ≤ last.nodes ∧ first.edges ≤ last.edges ∧
+    first.domains ≤ last.domains ∧ first.mass ≤ last.mass
+
+/-- A profile bounds itself. -/
+theorem Le.refl (profile : Profile) : Le profile profile :=
+  ⟨Nat.le_refl _, Nat.le_refl _, Nat.le_refl _, Nat.le_refl _⟩
+
+/-- Component bounds compose. -/
+theorem Le.trans {first middle last : Profile} (one : Le first middle) (two : Le middle last) :
+    Le first last :=
+  ⟨Nat.le_trans one.1 two.1, Nat.le_trans one.2.1 two.2.1,
+    Nat.le_trans one.2.2.1 two.2.2.1, Nat.le_trans one.2.2.2 two.2.2.2⟩
+
+/-- Forecast one query with the complete initial instruction and mass bounds. -/
+def step (profile : Profile) : Profile :=
+  let instructions := instructionBound profile.nodes profile.edges profile.mass
+  let constructors := credit instructions profile.mass
+  ⟨profile.nodes + constructors, profile.edges + constructors,
+    profile.domains + instructions, massAfter instructions profile.mass⟩

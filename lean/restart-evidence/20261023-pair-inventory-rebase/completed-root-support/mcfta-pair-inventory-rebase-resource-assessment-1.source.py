@@ -1,0 +1,9 @@
+exec(compile(open('/tmp/mcfta-pair-inventory-rebase-root-common.py').read(), '/tmp/mcfta-pair-inventory-rebase-root-common.py', 'exec'))
+assessment = Path('/tmp/mcfta-next-source-resource-assessment')
+checked_package(assessment, 'b472d41575b59c31bd432fc426826810f00efcd178ddd0946b006e8a3b00c301', '0b75a7de5bfc82a959ab149c327e98787ec2025629e63bf0f897a6fd8833f37b')
+assert sha(assessment / 'note.md') == '052ac6b6ac3cbf2747b093f74969e05125386b4eafebc6bb78d986224c29e514'
+assert load(HERE / 'selected-source-gate.json')['source_lines'] == 77
+archive(assessment, 'next-resource-assessment')
+with (HERE / 'current-progress.md').open('a') as output:
+    output.write('\n## First strict result and next resource scope\n\nThe unchanged77-line source passed strict1 with all linters and default limits.\nThe raw strict log is empty. No Lean repair was needed.\nThe complete public TYPE, FULL output and aggregate Audit remain pending.\nThe frozen resource assessment is source-only planning evidence.\nIt records a symbolic obstruction to deriving new-source Room from old Room alone.\nIt is not an actual H23 execution counterexample.\nGrows retains tables and records. It has no numeric counter-growth field.\nA proposed history bridge retains the same original domain-cache endpoints,\nbut needs a genuine source node-counter inequality and a new exact declaration gate.\nA new logical segment at the current populated cache is a different statement.\nThe full same-run numeric forecast and stronger reservation remain open.\nNo new resource theorem, fixed-width result or later generated execution is claimed.\nH6 constructed_node_calls remains strongest combined. The goal remains ACTIVE and incomplete.\n')
+print('Retained source-only resource assessment and actual strict result; FULL and Audit remain pending.')

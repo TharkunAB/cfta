@@ -1,0 +1,15 @@
+variable {oldView newView : View SourceSymbol}
+  {before : FiniteInput oldView} {after : FiniteInput newView}
+
+/-- Actual old node admission is retained by the new valid input domain. -/
+theorem Agreement.node_inputs (agreement : Agreement before after) {request : NodeRequest SourceSymbol SourceGuard}
+    (admitted : NodeInputs oldView (finiteInputMeaning oldView before) request) :
+    NodeInputs newView (finiteInputMeaning newView after) request :=
+  ⟨admitted.1, admitted.2.1, agreement.valid _ admitted.2.2.1, agreement.valid _ admitted.2.2.2⟩
+
+/-- Actual old child admission is retained for both stored row operands. -/
+theorem Agreement.edge_inputs (agreement : Agreement before after) {request : EdgeRequest SourceSymbol SourceGuard}
+    (admitted : EdgeInputs oldView (finiteInputMeaning oldView before) request) :
+    EdgeInputs newView (finiteInputMeaning newView after) request :=
+  ⟨fun child member => ⟨(admitted.1 child member).1, agreement.valid _ (admitted.1 child member).2⟩,
+    fun child member => ⟨(admitted.2 child member).1, agreement.valid _ (admitted.2 child member).2⟩⟩

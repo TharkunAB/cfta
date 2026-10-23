@@ -1,0 +1,15 @@
+/-- The resource conditions describe only the fixed source and initial domain supply. -/
+structure Resources (bits : Nat) (source : InternedConstructorTemplates.State Symbol Guard)
+    (inventory : List DomainKey) (initial : Cache.State DomainKey) : Prop where
+  /-- Original operands have complete physical source records. -/
+  facts : Facts source
+  /-- The initial finite inventory is closed under actual original domain entry. -/
+  closed : SourceCurrentAllocatedRecursiveDomainCode.Closed source inventory
+  /-- The initial domain cache has canonical stored identities. -/
+  valid : Cache.Valid initial
+  /-- Original node identities fit the source key field. -/
+  nodes : source.nodes.next < 2 ^ bits
+  /-- Original edge identities fit the source row field. -/
+  edges : source.edges.next ≤ 2 ^ (bits + 2)
+  /-- The complete initial domain inventory fits the remaining identity supply. -/
+  room : initial.next + inventory.length < 2 ^ (bits + 1)

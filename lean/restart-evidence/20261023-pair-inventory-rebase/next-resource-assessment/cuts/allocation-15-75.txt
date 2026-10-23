@@ -1,0 +1,61 @@
+
+/-- Empty calls need no inventory entry. Every other call uses an inventory key. -/
+inductive Trace (inventory : List DomainKey) : Cache.State DomainKey → Cache.State DomainKey → Prop where
+  | refl (state : Cache.State DomainKey) : Trace inventory state state
+  | make (earlier : Trace inventory before middle) (key : DomainKey)
+      (member : key = emptyKey ∨ key ∈ inventory) :
+      Trace inventory before (IntersectionEmptyDomain.make middle key).2
+
+variable {inventory : List DomainKey} {before middle after : Cache.State DomainKey}
+
+/-- An empty call preserves the exact current state. -/
+theorem Trace.empty (earlier : Trace inventory before middle) :
+    Trace inventory before (IntersectionEmptyDomain.make middle emptyKey).2 :=
+  .make earlier emptyKey (Or.inl rfl)
+
+/-- Every inventory member can be passed to the actual domain constructor. -/
+theorem Trace.step (earlier : Trace inventory before middle) (key : DomainKey)
+    (member : key ∈ inventory) :
+    Trace inventory before (IntersectionEmptyDomain.make middle key).2 :=
+  .make earlier key (Or.inr member)
+
+/-- Domain traces contain only actual intern calls and unchanged empty calls. -/
+theorem Trace.interns (trace : Trace inventory before after) :
+    CacheFiniteInterning.Trace inventory before after := by
+  induction trace with
+  | refl => exact .refl _
+  | make _ key member ih =>
+    by_cases empty : key = emptyKey
+    · simpa [IntersectionEmptyDomain.make, empty] using ih
+    · have present := member.resolve_left empty
+      simpa [IntersectionEmptyDomain.make, empty] using
+        CacheFiniteInterning.Trace.intern ih key present
+
+/-- Two actual histories can be joined at the same cache. -/
+theorem Trace.trans (first : Trace inventory before middle)
+    (last : Trace inventory middle after) : Trace inventory before after := by
+  induction last with
+  | refl => exact first
+  | make _ key member ih => exact .make ih key member
+
+/-- The actual domain history preserves cache validity. -/
+theorem Trace.valid (trace : Trace inventory before after) (valid : Cache.Valid before) :
+    Cache.Valid after := trace.interns.valid valid
+
+/-- The history retains every earlier canonical table entry. -/
+theorem Trace.extends (trace : Trace inventory before after) :
+    Cache.Extends before.table after.table := trace.interns.extends
+
+/-- A miss spends an initial missing-key credit. -/
+theorem Trace.potential (trace : Trace inventory before after) :
+    after.next + CacheFiniteInterning.missing inventory after ≤
+      before.next + CacheFiniteInterning.missing inventory before := trace.interns.potential
+
+/-- Initially present keys do not require new identities. -/
+theorem Trace.next_le_missing (trace : Trace inventory before after) :
+    after.next ≤ before.next + CacheFiniteInterning.missing inventory before :=
+  trace.interns.next_le_missing
+
+/-- The static inventory bounds the supply after any number of calls. -/
+theorem Trace.next_le (trace : Trace inventory before after) :
+    after.next ≤ before.next + inventory.length := trace.interns.next_le

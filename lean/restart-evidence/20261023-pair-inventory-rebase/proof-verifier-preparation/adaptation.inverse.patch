@@ -1,0 +1,89 @@
+--- H32/verify-proofs.py
++++ H31/verify-proofs.py
+@@ -1,4 +1,4 @@
+-"""Check saved pair-inventory-rebase evidence without running Lean or Lake."""
++"""Check saved rebuild-admission evidence without running Lean or Lake."""
+ import argparse
+ import difflib
+ import hashlib
+@@ -11,7 +11,7 @@
+ parser.add_argument("--live", action="store_true")
+ args = parser.parse_args()
+ root = args.root.resolve()
+-evidence = root / "lean/restart-evidence/20261023-pair-inventory-rebase"
++evidence = root / "lean/restart-evidence/20261023-rebuild-admission"
+ def digest(data):
+     return hashlib.sha256(data).hexdigest()
+ def read(relative):
+@@ -27,13 +27,13 @@
+ def canonical(text):
+     return re.sub(r"[ \t\r\n]+", " ", text).strip(" \t\r\n")
+ raw_data = read("bound-data.json")
+-assert digest(raw_data) == "4b5abbcae64b1ddac1a0965424e1df8672280c2ca377672a9f00b73e9c3b88a6"
++assert digest(raw_data) == "7887ffda3d4cdae36892fccef1bb62a33b76b590bad89c815615aee65fe59959"
+ assert not re.search(r"__H\d+_", raw_data.decode()), "Unbound evidence input"
+ bound = json.loads(raw_data)
+ modules = bound["modules"]
+-assert [m["key"] for m in modules] == ["pair_inventory_rebase"]
++assert [m["key"] for m in modules] == ["rebuild_admission"]
+ assert [m["source_cap"] for m in modules] == [180]
+-assert [m["specs"] for m in modules] == [[["rebase", "theorem"]]]
++assert [m["specs"] for m in modules] == [[["rebuilt_admitted", "theorem"]]]
+ by_name = {m["name"]: m for m in modules}
+ jobs = json.loads(pinned(bound["job_history"]))
+ actual = set()
+@@ -164,10 +164,10 @@
+     assert body_gate["whole_source_hard_stop"] == m["source_cap"]
+     assert body_gate["exact_declaration_gate_sha256"] == m["declaration_gate"]["sha256"]
+     assert body_gate["independent_body_review_sha256"] == m["body_review"]["sha256"]
+-    assert body_gate["root_complete_source_lines_read"] == m["source_lines"] and body_gate["all_six_fragments_exact"]
+-    assert body_gate["public_let_occurrences"] == 3 and body_gate["local_haves"] == 2 and body_gate["local_lets"] == 1
+-    assert body_gate["local_obtains"] == 1 and body_gate["obtained_fields"] == 5 and body_gate["all_lambda_types_reviewed"]
+-    assert body_gate["helper_count"] == 0 and body_gate["induction"] is False and body_gate["agreement_derived_not_assumed"] and body_gate["same_full_wrapper"]
++    assert body_gate["root_complete_source_lines_read"] == m["source_lines"] and body_gate["all_five_fragments_exact"]
++    assert body_gate["public_lets"] == 4 and body_gate["local_haves"] == body_gate["local_lets"] == 0
++    assert body_gate["local_obtains"] == 1 and body_gate["introduced_arrow_fields"] == 3
++    assert body_gate["helper_count"] == 0 and body_gate["induction"] is False
+     assert body_gate["default_declaration_limits"] and body_gate["all_linters"]
+     assert json.loads(pinned(m["body_review"]))["status"] == "CLEAR"
+     declaration = json.loads(pinned(m["declaration_gate"]))
+@@ -175,10 +175,10 @@
+     assert declaration["public_heads"] == shorts and declaration["contracts_sha256"] == m["manifest"]["sha256"]
+     assert declaration["whole_source_hard_stop"] == m["source_cap"] and declaration["default_declaration_limits"] and declaration["all_linters"]
+     assert declaration["insertion_map_sha256"] == m["layout"]["sha256"]
+-    assert declaration["root_whole_context_lines_read"] == 18 and declaration["root_whole_public_header_lines_read"] == 37
+-    assert declaration["root_all_public_lets_and_introduced_field_types_read"] and declaration["root_all_local_have_let_obtain_and_lambda_types_read"] and declaration["compiled_fragments"] == 6 and declaration["compiled_fragment_lines"] == 61
+-    assert declaration["public_let_occurrences"] == 3 and declaration["body_lets"] == 1 and declaration["body_haves"] == 2 and declaration["helpers"] == 0
+-    assert declaration["body_obtains"] == 1 and declaration["obtain_fields"] == 5 and declaration["induction"] is False and declaration["agreement_derived_not_assumed"] and declaration["same_full_wrapper"] and declaration["new_execution_or_resources_claimed"] is False
++    assert declaration["root_whole_context_lines_read"] == 28 and declaration["root_whole_public_header_lines_read"] == 50
++    assert declaration["root_all_public_lets_and_introduced_field_types_read"] and declaration["compiled_fragments"] == 5
++    assert declaration["public_lets"] == 4 and declaration["body_lets"] == declaration["body_haves"] == declaration["helpers"] == 0
++    assert declaration["explicit_intro_fields"] == 3 and declaration["explicit_obtain_fields"] == 2 and declaration["induction"] is False
+     manifest = json.loads(pinned(m["manifest"]))
+     schema = json.loads(pinned(m["schema"]))
+     fragments = m["fragments"]
+@@ -226,17 +226,15 @@
+         assert re.findall(rb"\bcases[ \t]+([^ \t:\n]+)[ \t]*:", body) == [n.encode() for n in expected["case_equations"]]
+         groups = [[n.strip().decode() for n in g.split(b",")] for g in re.findall(rb"(?s)\bobtain[ \t]+\xe2\x9f\xa8(.*?)\xe2\x9f\xa9[ \t\r\n]*:=", body)]
+         assert groups == expected["obtain_groups"] and len(re.findall(rb"\bobtain\b", body)) == len(groups)
+-        assert re.findall(rb"\bintro[ \t]+([^\n]+)", body) == [b"root member"] and len(re.findall(rb"\bintro\b", body)) == 1
+-        included = body[body.index(data["local-included.lean.txt"].rstrip(b"\n") + b" := by\n"):body.index(data["local-agreement.lean.txt"].rstrip(b"\n") + b" := by\n")]
+-        assert b"    intro root member\n" in included and re.findall(rb"\bfun[ \t]+([^\n]*?)=>", body) == [b"handle pair value stored "]
++        assert re.findall(rb"\bintro[ \t]+([^\n]+)", body) == [b"finalContextual finalGrowth finalHistory"] and len(re.findall(rb"\bintro\b", body)) == 1
+         assert not re.search(rb"\binduction\b", body)
+         assert not re.search(rb"\b(?:show|suffices|haveI|letI)\b", body) and not re.search(rb"\bobtain\b(?:(?!:=).)*:(?!=)", body, re.S)
+-    assert schema["private_helpers"] == schema["new_definitions"] == schema["typed_show_fragments"] == [] and schema["induction"] is None
+-    assert schema["local_have_names"] == ["included", "agreement"] and schema["local_let_names"] == ["next"] and schema["body_intro_names"] == []
+-    assert schema["local_obtain_groups"] == [["nextCurrent", "sameSource", "sameRoots", "leftValid", "rightValid"]] and schema["compiled_contract_count"] == 6 and schema["compiled_contract_lines"] == 61
+-    assert [item["name"] for item in schema["public_let_occurrences"]] == ["ordered", "next", "ordered"] and schema["compiled_contract_order"] == list(manifest)
+-    assert re.findall(rb"\blet[ \t]+([^ \t:=\n]+)", data["public-header.lean.txt"]) == [b"ordered", b"next", b"ordered"] and len(re.findall(rb"\blet\b", data["public-header.lean.txt"])) == 3
+-    assert schema["future_local_lambda_binders_only"] == dict(included=["root", "member"], canonical_admission=["handle", "pair", "value", "stored"]) and schema["additional_have_let_show_obtain_helper_or_induction_authorized"] is False
++    assert schema["private_helpers"] == schema["global_definitions"] == schema["global_predicates_or_structures"] == schema["typed_show_fragments"] == []
++    assert schema["local_have_names"] == schema["body_let_names"] == [] and schema["induction"] is None
++    assert schema["public_let_names"] == ["middle", "output", "built", "after"]
++    assert re.findall(rb"\blet[ \t]+([^ \t:=\n]+)", data["public-header.lean.txt"]) == [n.encode() for n in schema["public_let_names"]]
++    assert len(re.findall(rb"\blet\b", data["public-header.lean.txt"])) == 4 and schema["local_intro_names"] == ["finalContextual", "finalGrowth", "finalHistory"]
++    assert [item["names"] for item in schema["local_obtains"]] == [["middleCurrent", "middleAdmitted"]]
+     for record in m["review_only"]:
+         pinned(record)
+     public = re.findall(r"(?m)^\s*(?:(?:noncomputable|unsafe|partial)\s+)?(def|theorem|lemma|abbrev|opaque|instance|structure|inductive)\s+([^\s(\[{:=]+)", source.decode())

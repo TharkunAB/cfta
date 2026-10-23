@@ -1,0 +1,25 @@
+/-- Actual heap growth and two current operands determine the expanded input inventory. -/
+def extend (inventory : Inventory) (target : InternedConstructorTemplates.State Symbol Guard)
+    (facts : InternedNestedFacts.Facts target) (growth : Grows inventory.source target)
+    (history : Extends inventory.source.nodes.issued target.nodes.issued)
+    (left right : Value Symbol Guard) (leftAvailable : Available target left) (rightAvailable : Available target right)
+    (leftClosed : left.free = []) (rightClosed : right.free = []) : Inventory := by
+  let roots := inventory.roots ++ [left, right]
+  have available : Values target roots := by
+    intro root member
+    rcases List.mem_append.mp member with old | next
+    · exact (inventory.available root old).grows inventory.source target growth history
+    · simp only [List.mem_cons, List.not_mem_nil, or_false] at next
+      rcases next with rfl | rfl
+      · exact leftAvailable
+      · exact rightAvailable
+  have closed : ∀ root ∈ roots, root.free = [] := by
+    intro root member
+    rcases List.mem_append.mp member with old | next
+    · exact inventory.closed root old
+    · simp only [List.mem_cons, List.not_mem_nil, or_false] at next
+      rcases next with rfl | rfl
+      · exact leftClosed
+      · exact rightClosed
+  exact ⟨target, facts, roots,
+    SourceCurrentAllocatedNativeGrownInventory.closed_originals target facts roots available closed, available, closed⟩

@@ -1,0 +1,19 @@
+import MicroCFTA.SourceCurrentAllocatedNativeInventoryState
+
+/-!
+# Actual pre-query inventory rebase
+
+The new inventory uses the current constructor heap and two closed resident
+operands. Actual record growth retains each old root and its exact ranks.
+The same native cells and equality operations remain at this query entry.
+No query execution or future range condition is required.
+-/
+namespace MicroCFTA.SourceCurrentAllocatedNativeInventoryRebase
+open Cache Language IntersectSchedule InternedConstructorTemplates InternedProbeProvenance
+open InternedNestedProvenance (Values)
+open SourceRecursiveIntersectionInputView
+open SourceCurrentAllocatedNativeInventoryState (Inventory At)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Checked" => SourceEqualityNativeDemand.State
+variable {width : Nat}

@@ -1,0 +1,24 @@
+/-- Current facts retain only the original source and already executed allocations. -/
+structure Current (source : InternedConstructorTemplates.State Symbol Guard)
+    (inventory : List IntersectionFlatMemoKeyDomain.DomainKey)
+    (initial : Cache.State IntersectionFlatMemoKeyDomain.DomainKey) (state : Checked width) : Prop where
+  /-- Both native memo families and the equality fields are valid. -/
+  good : Good state
+  /-- The current heap retains its semantic readiness. -/
+  semantic : SemanticReady state.native.machine.heap
+  /-- The current heap retains every original source record. -/
+  growth : Grows source state.native.machine.heap
+  /-- The current heap retains every original issued identity. -/
+  history : Cache.Extends source.nodes.issued state.native.machine.heap.nodes.issued
+  /-- The current domain cache follows the actual past allocations. -/
+  domains : Allocation inventory initial state.native.machine.domains
+
+/-- The initial checked state has an empty actual domain allocation history. -/
+theorem initial (source : InternedConstructorTemplates.State Symbol Guard)
+    (inventory : List IntersectionFlatMemoKeyDomain.DomainKey) (state : Checked width)
+    (good : Good state) (semantic : SemanticReady state.native.machine.heap)
+    (same : state.native.machine.heap = source) :
+    Current source inventory state.native.machine.domains state := by
+  refine ⟨good, semantic, ?_, ?_, .refl _⟩
+  · rw [same]; exact grows_refl _
+  · rw [same]; exact Cache.extends_refl _

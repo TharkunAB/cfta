@@ -1,0 +1,6 @@
+/-- View growth preserves admission and exact ranks of every old valid input. -/
+structure Agreement (before : FiniteInput oldView) (after : FiniteInput newView) : Prop where
+  valid : ∀ input, before.valid input → after.valid input
+  rank : ∀ input, before.valid input → ∀ rank term,
+    inputAt (finiteRanks newView after) input rank term ↔ inputAt (finiteRanks oldView before) input rank term
+

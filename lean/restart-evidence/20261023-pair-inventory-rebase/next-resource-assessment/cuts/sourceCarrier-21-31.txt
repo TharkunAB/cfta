@@ -1,0 +1,11 @@
+/-- The initial issued range contains every available original binder identity. -/
+def names (source : InternedConstructorTemplates.State Symbol Guard) : List Nat :=
+  List.range source.nodes.next
+
+/-- The initial range supplies every independently sorted source operand pair. -/
+def pairs (source : InternedConstructorTemplates.State Symbol Guard) : List (Nat × Nat) :=
+  (names source).flatMap fun left => (names source).map (SourceRecursiveIntersectionControl.pair left)
+
+/-- All canonical domains use subsets of the initial identities and pairs. -/
+def domains (source : InternedConstructorTemplates.State Symbol Guard) : List DomainKey :=
+  inventory (names source) (pairs source)

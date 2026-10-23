@@ -1,0 +1,13 @@
+/-- Enlarging the initial carriers retains every supported key. -/
+theorem Supported.mono {binders moreBinders : List Nat} {pairs morePairs : List (Nat × Nat)} {key : DomainKey}
+    (supported : Supported binders pairs key) (namesIncluded : binders ⊆ moreBinders)
+    (pairsIncluded : pairs ⊆ morePairs) : Supported moreBinders morePairs key :=
+  ⟨supported.canonical, supported.typed, fun _ member => namesIncluded (supported.names _ member),
+    fun _ member => pairsIncluded (supported.seen _ member)⟩
+
+/-- Enlarging the initial carriers retains every enumerated key. -/
+theorem inventory_mono (binders moreBinders : List Nat) (pairs morePairs : List (Nat × Nat))
+    (namesIncluded : binders ⊆ moreBinders) (pairsIncluded : pairs ⊆ morePairs) :
+    inventory binders pairs ⊆ inventory moreBinders morePairs := by
+  intro key member
+  exact mem_of_supported ((supported_of_mem member).mono namesIncluded pairsIncluded)

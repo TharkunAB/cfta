@@ -1,0 +1,34 @@
+{
+  "status": "EXACT_TYPE_REVIEW_ONLY_NO_PROOF_BODIES",
+  "body_local_let": {
+    "next": "Inventory",
+    "binding_fragment": "local-next.lean.txt"
+  },
+  "obtain_fields_in_next_scope": {
+    "nextCurrent": "At formulas solver next state.checked",
+    "sameSource": "next.source = state.checked.native.machine.heap",
+    "sameRoots": "next.roots = inventory.roots ++ [left, right]",
+    "leftValid": "(next.inputs holds).valid (inputOf left)",
+    "rightValid": "(next.inputs holds).valid (inputOf right)"
+  },
+  "local_have_types": {
+    "included": "\u2200 root \u2208 inventory.roots, root \u2208 next.roots",
+    "agreement": "SourceCurrentAllocatedNativeContextRebase.Agreement oldInputs (next.inputs holds)"
+  },
+  "included_lambda_binder_types": {
+    "root": "Value Symbol Guard",
+    "member": "root \u2208 inventory.roots"
+  },
+  "canonical_admission_lambda_binder_types": {
+    "handle": "Nat",
+    "pair": "Edge \u00d7 Edge",
+    "value": "Edge",
+    "stored": "state.memo.cells handle = some \u27e8pair, .returned value\u27e9"
+  },
+  "lambda_result_type": "let ordered := if pair.2.entry.identity < pair.1.entry.identity then (pair.2, pair.1) else pair\nSourceCurrentAllocatedNativeContextCache.EdgeInputs (view next.source holds)\n  (finiteInputMeaning (view next.source holds) (next.inputs holds))\n  (SourceRecursiveIntersectionThunks.EdgeRequest.mk IntersectionEmptyDomain.emptyDomain\n    (Prod.fst ordered) (Prod.snd ordered))",
+  "no_other_body_locals_or_IH_planned": true,
+  "direct_final_component_calls": [
+    "SourceCurrentSameSymbolEdgeModelTransport.rebase",
+    "SourceCurrentAllocatedNativeContextRebase.Agreement.edge_inputs"
+  ]
+}

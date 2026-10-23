@@ -1,0 +1,11 @@
+[2026-10-23T11:19:36.304935+02:00] CLEAR. This is an independent complete H32 body source review before strict compilation.
+Read all77 source lines, every exact public/local fragment, five obtained types and lambda binders. Read the whole native rebase82 and H24 pair transport41, plus all14 indexed public cuts312 lines. Nine source identities and29 import-route identities/edges match.
+All3 source-owner pins and39 declaration pins cover complete file sets. Only exact top-level controls are excluded. The six STRING fragments match hashes, line counts, unique occurrences and insertion order.
+One local next binding computes the existing extend inventory from the same state.checked heap and genuine Good/current/resident/closed evidence. The single native rebase call supplies exactly nextCurrent/sameSource/sameRoots/leftValid/rightValid.
+The two typed haves derive old-root inclusion and Agreement. This is the same public agreement producer and target closed_originals construction as native rebase. Agreement is not a premise or changed-model oracle.
+H24 transports Stable once, retaining both soundness and bounded completeness under the finite model/ranks. Genuine canonical old captured admission is explicit for every actual returned cell, including unreferenced cells. Agreement.edge_inputs transports it pointwise to the computed target.
+The full Wrapper remains literal state. Both appended operands become valid; equal or already-valid operands are allowed. No strict domain-growth, new execution, Room, WordRanges, global Trace rebase, Haskell or public-pass result is asserted.
+There is one body let, two haves and one five-field obtain. There is no helper, extra definition, show, induction, source option or proof hole. All final components use the actual same-state witnesses.
+The77-line source is below the soft target because existing APIs suffice. Hard180 and default limits remain unchanged. Compiler elaboration remains unchecked and Root-owned.
+One reviewer-only body comparison included the module separator LF. The exact standalone body plus that LF matches; the diagnostic and correction are retained without source changes.
+Root authored the body. Arity authored declarations. Required reviewed declarations. Guard did not author this body or declaration package. No compiler, prepared script, Git, network, board or repository action ran.

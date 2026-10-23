@@ -1,0 +1,18 @@
+import MicroCFTA.SourceCurrentAllocatedNativeInventoryRebase
+import MicroCFTA.SourceCurrentSameSymbolEdgeModelTransport
+
+namespace MicroCFTA.SourceCurrentAllocatedNativePairInventoryRebase
+open Cache Language IntersectSchedule InternedConstructorTemplates InternedProbeProvenance
+open SourceRecursiveIntersectionInputView
+open SourceCurrentAllocatedNativeInventoryState (Inventory At)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Edge" => EdgeValue Symbol Guard
+local notation "Wrapper" => SourceCurrentSameSymbolEdgeControl.State
+local notation "guardHolds" => (@SourceEqualityPCSGuard.holds FullSyntax.Formula FormulaExecutable.formulaDecidableEq)
+variable {width : Nat}
+variable (formulas : SourceGuards.Formulas FullSyntax.Formula)
+variable (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+local notation "holds" => guardHolds formulas solver
+local notation "oldView" => view inventory.source holds
+local notation "oldInputs" => inventory.inputs holds

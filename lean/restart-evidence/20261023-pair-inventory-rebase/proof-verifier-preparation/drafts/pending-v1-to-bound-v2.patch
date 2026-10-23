@@ -1,0 +1,11 @@
+--- H32/pending-verifier-v1
++++ H32/actual-bound-verifier-v2
+@@ -27,7 +27,7 @@
+ def canonical(text):
+     return re.sub(r"[ \t\r\n]+", " ", text).strip(" \t\r\n")
+ raw_data = read("bound-data.json")
+-assert digest(raw_data) == "__H32_BOUND_DATA_SHA256__"
++assert digest(raw_data) == "4b5abbcae64b1ddac1a0965424e1df8672280c2ca377672a9f00b73e9c3b88a6"
+ assert not re.search(r"__H\d+_", raw_data.decode()), "Unbound evidence input"
+ bound = json.loads(raw_data)
+ modules = bound["modules"]

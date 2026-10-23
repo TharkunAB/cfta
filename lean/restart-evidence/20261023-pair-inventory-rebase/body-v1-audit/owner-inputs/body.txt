@@ -1,0 +1,19 @@
+  let next : Inventory := SourceCurrentAllocatedNativeInventoryRebase.extend inventory
+    state.checked.native.machine.heap good.native.machine.1 current.growth current.history
+    left right leftAvailable rightAvailable leftClosed rightClosed
+  obtain ⟨nextCurrent, sameSource, sameRoots, leftValid, rightValid⟩ :=
+    SourceCurrentAllocatedNativeInventoryRebase.rebase formulas solver inventory state.checked
+      good current left right leftAvailable rightAvailable leftClosed rightClosed
+  have included : ∀ root ∈ inventory.roots, root ∈ next.roots := by
+    intro root member
+    exact List.mem_append.mpr (Or.inl member)
+  have agreement : SourceCurrentAllocatedNativeContextRebase.Agreement oldInputs (next.inputs holds) := by
+    exact SourceCurrentAllocatedNativeAdmittedQuery.inventory_agreement
+      inventory.source state.checked.native.machine.heap inventory.facts good.native.machine.1
+      current.growth current.history holds inventory.roots inventory.originals
+      inventory.available inventory.closed next.roots next.available next.closed included
+  exact ⟨nextCurrent,
+    SourceCurrentSameSymbolEdgeModelTransport.rebase oldInputs (next.inputs holds)
+      agreement holds state stable admitted,
+    (fun handle pair value stored => agreement.edge_inputs (admitted handle pair value stored)),
+    sameSource, sameRoots, leftValid, rightValid, agreement⟩
