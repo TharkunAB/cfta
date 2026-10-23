@@ -14,11 +14,13 @@ import qualified Test.QuickCheck.Gen as QCGen
 import qualified Test.QuickCheck.Random as QCRandom
 
 import qualified Data.CFTA as FTA
-import Data.CFTA.Constraint (Constraint, equalityConstraint, noConstraint)
+import Data.CFTA.Constraint (Constraint, Guard (..), equalityConstraint, noConstraint, semanticConstraint)
 import qualified Data.CFTA.Equality as ECTA
 import Data.CFTA.Gen.Internal.Table (unambiguousRows)
-import Data.CFTA.Gen.TypedArithmeticLanguage (arithAutomaton)
+import Data.CFTA.Gen.TypedArithmeticLanguage (ArithType, arithAutomaton)
+import Data.CFTA.Gen.Typing (TypingState)
 import Data.CFTA.Gen.UntypedExpressionLanguage (expressionAutomaton)
+import Data.CFTA.Generic (Constructor (..))
 import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), Size (..))
 import Data.CFTA.Sized (countOfSize, sized, sizedStates, termsOfSize, unrankOfSize)
 import Data.CFTA.Sized.Prefix
@@ -44,10 +46,18 @@ spec = describe "Data.CFTA.Sized.Prefix" $ do
     fixture "untyped expressions" expressionAutomaton
     fixture "overlapping alternatives" overlapping
     fixture "typed arithmetic" (arithAutomaton 2)
-    it "rejects a constrained automaton" $ do
-        let equal = equalityConstraint $ ECTA.mkEqConstraints [[ECTA.path [0], ECTA.path [1]]]
-            constrained = automaton "s" [("s", [FTA.Transition (sym "g") ["q", "q"] equal]), ("q", [leaf "a", leaf "b"])]
-        either Just (const Nothing) (prefixCompletions 6 constrained) `shouldBe` Just ConstrainedTransition
+    it "counts the terms of the fixtures with equality constraints up to their bounds" $
+        [completionCount $ start sizeBound equalPairs, completionCount $ start 7 equalArithmetic] `shouldBe` [4, 38]
+    fixture "equal pairs" equalPairs
+    fixtureUpTo 7 "typed arithmetic with equal operands and branches" equalArithmetic
+    it "offers only the equal child after the first child of a pair" $ do
+        let completions = start sizeBound equalPairs
+        fmap nextTokens (afterPrefix completions [(sym "g", 2), (sym "b", 0)]) `shouldBe` Just [((sym "b", 0), 1)]
+        isJust (afterPrefix completions [(sym "g", 2), (sym "b", 0), (sym "a", 0)]) `shouldBe` False
+    it "rejects a guard beyond equality constraints" $ do
+        let different = semanticConstraint $ Not $ Same (ECTA.path [0]) (ECTA.path [1])
+            guarded = automaton "s" [("s", [FTA.Transition (sym "g") ["q", "q"] different]), ("q", [leaf "a", leaf "b"])]
+        either Just (const Nothing) (prefixCompletions 6 guarded) `shouldBe` Just GuardedTransition
     it "has no completion below size one" $ do
         let completions = start 0 expressionAutomaton
         completionCount completions `shouldBe` 0
@@ -55,12 +65,18 @@ spec = describe "Data.CFTA.Sized.Prefix" $ do
         isComplete completions `shouldBe` False
         isJust (sampleCompletion completions) `shouldBe` False
 
-{- | The checks of the completions of an automaton up to 'sizeBound', each
-against the accepted terms that 'termsOfSize' lists.
+-- | The checks of the completions of an automaton up to 'sizeBound'.
+fixture :: (Ord state, Ord symbol, Show symbol) => String -> FTA.FTA state symbol Constraint -> Spec
+fixture = fixtureUpTo sizeBound
+
+{- | The checks of the completions of an automaton up to a bound, each against
+the accepted terms that 'termsOfSize' lists.
 -}
-fixture ::
-    forall state symbol. (Ord state, Ord symbol, Show symbol) => String -> FTA.FTA state symbol Constraint -> Spec
-fixture name graph = describe name $ do
+fixtureUpTo ::
+    forall state symbol.
+    (Ord state, Ord symbol, Show symbol) =>
+    Integer -> String -> FTA.FTA state symbol Constraint -> Spec
+fixtureUpTo bound name graph = describe name $ do
     it "lists the size classes in order for the empty prefix" $
         completionTerms empty `shouldBe` accepted
     it "offers each next token with the number of accepted terms that start with the prefix and the token" $
@@ -118,7 +134,7 @@ fixture name graph = describe name $ do
                         $ sized
                         $ fromRight (error "a state of a valid automaton is a valid initial state")
                         $ FTA.mkFTA state (Map.toList $ FTA.transitionTable graph)
-            forM_ [1 .. sizeBound] $ \size -> do
+            forM_ [1 .. bound] $ \size -> do
                 let Cardinality count = countOfSize alone (Size size)
                     classOf found = (termsOfSize found (Size size), [unrankOfSize found (Size size) (ClassRank rank) | rank <- [-1 .. count]])
                 (size, countOfSize shared (Size size), classOf shared) `shouldBe` (size, Cardinality count, classOf alone)
@@ -128,10 +144,10 @@ fixture name graph = describe name $ do
             (prefix, brute prefix) `shouldBe` (prefix, 0)
   where
     plain = FTA.dropConstraints graph
-    empty = start sizeBound graph
+    empty = start bound graph
     after prefix = fromMaybe (error $ "no completions after " <> show prefix) $ afterPrefix empty prefix
     classes = either (error . show) id $ sized graph
-    accepted = concat [termsOfSize classes (Size size) | size <- [1 .. sizeBound]]
+    accepted = concat [termsOfSize classes (Size size) | size <- [1 .. bound]]
     preorders = map preorder accepted
     prefixes = nubOrd $ concatMap inits preorders
     brute :: [(symbol, Int)] -> Integer
@@ -149,7 +165,7 @@ fixture name graph = describe name $ do
     invalid =
         take 5 [prefix <> [token] | prefix <- prefixes, token <- alphabet, token `notElem` map fst (nextTokens $ after prefix)]
             <> take 3 [tokens <> [token] | tokens <- preorders, token <- alphabet]
-            <> take 3 (map preorder $ termsOfSize classes (Size $ sizeBound + 1))
+            <> take 3 (map preorder $ termsOfSize classes (Size $ bound + 1))
 
 -- | The largest size of the completions.
 sizeBound :: Integer
@@ -166,6 +182,26 @@ unambiguous = unambiguousRows . Map.map (map void) . FTA.transitionTable
 -- | The tokens of a term in preorder.
 preorder :: Term symbol -> [(symbol, Int)]
 preorder (Term.Node symbol children) = (symbol, length children) : concatMap preorder children
+
+{- | The recursive pairs of "Data.CFTA.Gen.Equality.RecursiveGenSpec", with a
+second leaf: the two children of a pair are equal.
+-}
+equalPairs :: FTA.FTA String Symbol Constraint
+equalPairs = automaton "s" [("s", [leaf "a", leaf "b", FTA.Transition (sym "g") ["s", "s"] equal])]
+  where
+    equal = equalityConstraint $ ECTA.mkEqConstraints [[ECTA.path [0], ECTA.path [1]]]
+
+{- | The typed arithmetic, as in "Data.CFTA.Gen.TypingSpec", with equal
+operands of a sum and equal branches of a conditional.
+-}
+equalArithmetic :: FTA.FTA (TypingState ArithType) Constructor Constraint
+equalArithmetic = FTA.annotate annotation (arithAutomaton 2)
+  where
+    annotation _ transition = case constructorName $ FTA.transitionSymbol transition of
+        "Plus" -> equal 0 1
+        "If" -> equal 1 2
+        _ -> noConstraint
+    equal left right = equalityConstraint $ ECTA.mkEqConstraints [[ECTA.path [left], ECTA.path [right]]]
 
 -- | A recursion in which @f(a)@ and @f(f(a))@ have two runs.
 overlapping :: FTA.FTA String Symbol Constraint
