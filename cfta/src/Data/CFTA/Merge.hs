@@ -207,8 +207,8 @@ merge3 base left right = case conflicts of
     graph = D.sourceGraph . L.source
     -- The pairs collect the conflicts in their first component, as a writer does.
     (conflicts, (start, rows, exclusions)) =
-        (,,)
-            <$> (fromMaybe (FTA.initialState $ graph base) <$> mergeKey StartConflict (initial base) (initial left) (initial right))
+        (,,) . fromMaybe (FTA.initialState $ graph base)
+            <$> mergeKey StartConflict (initial base) (initial left) (initial right)
             <*> byKey mergeRow (table base) (table left) (table right)
             <*> byKey (\name -> mergeKey (ExclusionConflict name)) (L.exclusions base) (L.exclusions left) (L.exclusions right)
     initial = Just . FTA.initialState . graph

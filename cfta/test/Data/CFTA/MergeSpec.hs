@@ -340,10 +340,8 @@ mutate original = do
                 )
             ,
                 ( 1
-                , (\table' -> (start current, table', exclusions current))
-                    <$> ( Map.union table . Map.fromList
-                            <$> forM ["a", "b"] (\state -> (state,) <$> (sublistOf productionNames >>= mapM (randomProduction ("a" : "b" : present))))
-                        )
+                , (\table' -> (start current, table', exclusions current)) . Map.union table . Map.fromList
+                    <$> forM ["a", "b"] (\state -> (state,) <$> (sublistOf productionNames >>= mapM (randomProduction ("a" : "b" : present))))
                 )
             , (2, (\excluded -> (start current, table, excluded)) <$> exclusionMap)
             , (1, (\initial -> (initial, table, exclusions current)) <$> elements present)
