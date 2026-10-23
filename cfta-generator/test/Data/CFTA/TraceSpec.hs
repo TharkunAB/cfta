@@ -1,20 +1,23 @@
 module Data.CFTA.TraceSpec (spec) where
 
+import Control.Exception (evaluate)
 import Control.Monad (foldM, forM_, replicateM)
 import Data.Containers.ListUtils (nubOrd)
 import Data.Hashable (Hashable)
 import Data.List (sort)
 import GHC.Generics (Generic)
-import Test.Hspec (Expectation, Spec, describe, it, shouldBe)
+import System.Timeout (timeout)
+import Test.Hspec (Expectation, Spec, describe, it, shouldBe, shouldReturn)
 
 import qualified Data.CFTA as FTA
+import Data.CFTA.Constraint (noConstraint)
 import qualified Data.CFTA.Gen as Gen
 import qualified Data.CFTA.Gen.Refinement.StateMachineTraceLanguage as Typed
 import Data.CFTA.Index (Cardinality (..), ClassRank (..), Size (..), everyRank)
 import Data.CFTA.Interned (fromFTA)
 import Data.CFTA.Lowering (Expansion (..))
 import qualified Data.CFTA.Lowering as Lowering
-import Data.CFTA.Sized (Sized, countOfSize, rankOfSize, sized, termsOfSize, unrankOfSize)
+import Data.CFTA.Sized (Sized, countOfSize, rankOfSize, sized, sizedReference, termsOfSize, unrankOfSize)
 import Data.CFTA.Template (excludePrefixesFTA)
 import Data.CFTA.Trace
 
@@ -79,6 +82,39 @@ unrolled bound StateMachine{machineInitial, machineSteps, machineNext, machineFi
         | count < bound = (count + 1,) <$> machineNext state step
         | otherwise = Nothing
 
+-- | The typed stack of the trace benchmark language.
+typedStack :: StateMachine Typed.StackState Typed.Command
+typedStack = StateMachine (Typed.StackState []) commands next (const True)
+  where
+    commands =
+        map Typed.Push [Typed.IntValue 0, Typed.IntValue 1, Typed.BoolValue False, Typed.BoolValue True]
+            <> [Typed.Add, Typed.And, Typed.Equal, Typed.Not, Typed.Pop]
+    next state command = snd <$> Typed.modelStep state command
+
+-- | What a command of the typed stack does, without the types of the values.
+data Shape = Pushes | Pops | Combines | Negates
+    deriving (Eq, Ord, Show)
+
+-- | The shape of a command of the typed stack.
+shape :: Typed.Command -> Shape
+shape (Typed.Push _) = Pushes
+shape Typed.Pop = Pops
+shape Typed.Not = Negates
+shape _ = Combines
+
+{- | The automaton of the traces of 'Push' and 'Pop' whose step at the given
+place from the end is 'Push'. It has one more state than the place.
+-}
+pushFromEnd :: Int -> FTA.PlainFTA Int (TraceSymbol StackStep)
+pushFromEnd place =
+    either (error . show) id
+        $ FTA.mkFTA 0
+        $ (0, [step Push 0, step Pop 0, step Push 1])
+            : [(state, [step Push (state + 1), step Pop (state + 1)]) | state <- [1 .. place - 1]]
+                <> [(place, [FTA.Transition End [] noConstraint])]
+  where
+    step symbol child = FTA.Transition (Step symbol) [child] noConstraint
+
 -- | Every sequence of the steps.
 free :: [step] -> StateMachine () step
 free steps = StateMachine () steps (\_ _ -> Just ()) (const True)
@@ -125,6 +161,36 @@ checkLength machine length_ = do
     forM_ [0 .. count - 1] $ \rank ->
         (rankOfSize classes =<< unrankOfSize classes size (ClassRank rank)) `shouldBe` Just (size, ClassRank rank)
 
+-- | The sequences of a length that are a trace of the first machine followed by a trace of the second, by brute force.
+concatenated :: (Ord step) => StateMachine left step -> StateMachine right step -> Int -> [[step]]
+concatenated before after length_ =
+    [ steps
+    | steps <- replicateM length_ $ nubOrd $ machineSteps before <> machineSteps after
+    , or [runs before (take split steps) && runs after (drop split steps) | split <- [0 .. length_]]
+    ]
+
+{- | Whether each state has at most one transition for each symbol. Then each
+term has at most one run, and 'sized' uses its count table.
+-}
+deterministic :: (Ord state, Ord symbol) => FTA.FTA state symbol annotation -> Bool
+deterministic automaton =
+    and
+        [ length symbols == length (nubOrd symbols)
+        | state <- FTA.states automaton
+        , let symbols = map FTA.transitionSymbol $ FTA.transitionsFrom automaton state
+        ]
+
+{- | Check that an automaton is deterministic, and that the count table of
+'sized' and the route of 'sizedReference' give the same classes in the same
+order, up to a length.
+-}
+checkRoutes :: (Ord state, Ord step, Show step) => FTA.PlainFTA state (TraceSymbol step) -> Int -> Expectation
+checkRoutes automaton maximumLength = do
+    deterministic automaton `shouldBe` True
+    let reference = either (error . show) id $ sizedReference automaton
+    forM_ [0 .. maximumLength] $ \length_ ->
+        termsOfSize (classesOf automaton) (sizeOf length_) `shouldBe` termsOfSize reference (sizeOf length_)
+
 -- | Check 'feasibility' on a sequence against a run of the state machine.
 checkFeasibility :: (Ord state, Show state, Ord step, Show step) => StateMachine state step -> [step] -> Expectation
 checkFeasibility machine@StateMachine{machineInitial, machineNext, machineFinal} steps =
@@ -162,14 +228,9 @@ spec = describe "Data.CFTA.Trace" $ do
             forM_ (rank : Gen.shrinkRank generator rank) $ \candidate ->
                 (fmap (runs $ stack 3) . traceSteps <$> Gen.unrank generator candidate) `shouldBe` Right (Just True)
     it "counts the typed stack traces of the trace benchmark language" $ do
-        let empty = Typed.StackState []
-            commands =
-                map Typed.Push [Typed.IntValue 0, Typed.IntValue 1, Typed.BoolValue False, Typed.BoolValue True]
-                    <> [Typed.Add, Typed.And, Typed.Equal, Typed.Not, Typed.Pop]
-            typed = StateMachine empty commands (\state command -> snd <$> Typed.modelStep state command) (const True)
-            classes = classesOf $ traceAutomaton typed
+        let classes = classesOf $ traceAutomaton typedStack
         forM_ [0 .. 8] $ \length_ ->
-            countOfSize classes (sizeOf length_) `shouldBe` Cardinality (Typed.traceCount length_ empty)
+            countOfSize classes (sizeOf length_) `shouldBe` Cardinality (Typed.traceCount length_ $ Typed.StackState [])
     it "gives the shortest prefix that has no run and the state in which its last symbol fails" $ do
         feasibility (traceAutomaton handle) [Open, Read, Close] `shouldBe` Right [Closed]
         feasibility (traceAutomaton handle) [Open, Read, Close, Read, Open]
@@ -225,3 +286,46 @@ spec = describe "Data.CFTA.Trace" $ do
             fmap sort (tracesOf fineTraces length_)
                 `shouldBe` Just (sort [steps | steps <- replicateM length_ fine, runs handle (map coarse steps)])
             fmap sort (tracesOf image length_) `shouldBe` Just (sort $ bruteForce handle length_)
+    it "determinizes with one state for each reached set of states, up to 2^n - 1" $
+        forM_ [1 .. 5] $ \place -> do
+            let result = determinize $ pushFromEnd place
+            length (FTA.states result) `shouldBe` 2 ^ place
+            checkRoutes result 8
+            forM_ [0 .. 8] $ \length_ ->
+                fmap sort (tracesOf result length_)
+                    `shouldBe` Just
+                        ( sort
+                            [ steps
+                            | steps <- replicateM length_ [Push, Pop]
+                            , length_ >= place
+                            , take 1 (drop (length_ - place) steps) == [Push]
+                            ]
+                        )
+    it "concatenates two trace languages with one run for each trace" $ do
+        let sessions = handle{machineFinal = (== Closed)}
+            result = concatenate (traceAutomaton atMostTwoReads) (traceAutomaton sessions)
+        checkRoutes result 7
+        forM_ [0 .. 7] $ \length_ ->
+            fmap sort (tracesOf result length_) `shouldBe` Just (sort $ concatenated atMostTwoReads sessions length_)
+        -- The generators accept the result, and they count the same traces.
+        Gen.cardinality (Gen.upToSize (sizeOf 7) $ Gen.fromAutomaton $ fromFTA result)
+            `shouldBe` Right (Cardinality $ fromIntegral $ sum [length $ concatenated atMostTwoReads sessions length_ | length_ <- [0 .. 7]])
+        -- A sequence of reads splits in one more way than its length, and it is one trace.
+        let reads_ = concatenate (traceAutomaton $ free [Read]) (traceAutomaton $ free [Read])
+        checkRoutes reads_ 7
+        forM_ [0 .. 7] $ \length_ -> tracesOf reads_ length_ `shouldBe` Just [replicate length_ Read]
+        -- The count table counts the 2^40 traces of 40 steps without a list of them.
+        let words_ = classesOf $ concatenate (traceAutomaton $ free [Open, Read]) (traceAutomaton $ free [Open, Read])
+        timeout 10000000 (evaluate $ countOfSize words_ $ sizeOf 40) `shouldReturn` Just (2 ^ (40 :: Int))
+    it "projects to a coarser step alphabet with one run for each trace" $ do
+        let typed = traceAutomaton typedStack
+            image = either (error . show) id $ FTA.mapSymbols (fmap shape) typed
+            reference = either (error . show) id $ sizedReference image
+            result = project shape typed
+        -- Two pushes of one shape go to different stacks, so the image has two runs of a trace.
+        deterministic image `shouldBe` False
+        checkRoutes result 6
+        forM_ [0 .. 5] $ \length_ -> do
+            fmap sort (tracesOf result length_)
+                `shouldBe` Just (sort $ nubOrd $ map (map shape) $ bruteForce typedStack length_)
+            countOfSize (classesOf result) (sizeOf length_) `shouldBe` countOfSize reference (sizeOf length_)
