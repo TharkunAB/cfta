@@ -5,6 +5,7 @@ import Data.Containers.ListUtils (nubOrd)
 import Data.List (sort)
 import qualified Data.Map.Strict as Map
 import qualified Data.Text as Text
+import Data.Word (Word64)
 import Test.Hspec (Spec, describe, it, shouldBe, shouldSatisfy)
 import Test.Hspec.QuickCheck (modifyMaxSuccess)
 import Test.QuickCheck (Property, counterexample, (.&&.), (===))
@@ -16,7 +17,7 @@ import Data.CFTA.Equality (numNestedMu)
 import qualified Data.CFTA.Equality as ECTA
 import qualified Data.CFTA.Gen as Gen
 import Data.CFTA.Gen.Reference (Automaton (..), AutomatonEdge (..), automatonNode, closedAutomaton)
-import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), Size (..), Weight)
+import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), Size (..), Weight (..))
 import Data.CFTA.Interned (toFTA)
 import Data.CFTA.Refinement (Entailment (Entailment))
 import Data.CFTA.Sized
@@ -126,11 +127,31 @@ spec = describe "Data.CFTA.Sized" $ do
             void (Checkpoint.relocate checkpoint graph $ term "g" [term "a" [], term "b" []])
                 `shouldBe` Left (QueryFailed ResidualGuard)
     describe "Data.CFTA.Sized.Checkpoint, sampling" $ do
-        it "gives the words of splitmix64.c" $ do
-            take 3 (Checkpoint.splitMix64 0) `shouldBe` [0xe220a8397b1dcdaf, 0x6e789e6aa1b965f4, 0x06c45d188009454f]
-            -- The first words of the test of SplitMix64 in the Rust crate rand_xoshiro.
-            take 3 (Checkpoint.splitMix64 1477776061723855037)
-                `shouldBe` [1985237415132408290, 2979275885539914483, 13511426838097143398]
+        it "gives the words of splitmix64.c"
+            $
+            -- The first three words of the reference splitmix64.c of Sebastiano
+            -- Vigna (https://prng.di.unimi.it/splitmix64.c), compiled and run
+            -- with its state x set to each seed. The last seed is also the
+            -- test of SplitMix64 in the Rust crate rand_xoshiro.
+            forM_
+                [ (0, [16294208416658607535, 7960286522194355700, 487617019471545679])
+                , (1, [10451216379200822465, 13757245211066428519, 17911839290282890590])
+                , (42, [13679457532755275413, 2949826092126892291, 5139283748462763858])
+                , (maxBound, [16490336266968443936, 16834447057089888969, 4048727598324417001])
+                , (1477776061723855037, [1985237415132408290, 2979275885539914483, 13511426838097143398])
+                ]
+            $ \(seed, expected) -> take 3 (Checkpoint.splitMix64 seed) `shouldBe` expected
+        it "draws as the documentation of the module says" $
+            -- Uniform runs with 9 terms (one word and rejection) and with more
+            -- than 2^64 terms (two words), and a weighted run.
+            forM_ [(7, Nothing), (81, Nothing), (7, Just $ Map.fromList [(1, 1), (2, 4), (5, 3)])] $ \(bound, weights) ->
+                forM_ [0, 1, 42] $ \seed -> do
+                    let graph = automaton "s" binary
+                        classes = either (error . show) id $ sized graph
+                        run =
+                            either (error . show) id $ Checkpoint.resumeSampling (Checkpoint.startSampling bound weights seed graph) graph weights
+                    forM_ (zip [0 .. 19] run) $ \(index, (found, _)) ->
+                        rankOfSize classes found `shouldBe` Just (documentedDraw classes bound weights seed index)
         it "resumes at every cut as the run without a cut"
             $ forM_
                 [(graph, weights) | graph <- filter (/= automaton "e" [("e", [])]) listings, weights <- [Nothing, Just sizeWeights]]
@@ -383,6 +404,37 @@ listings =
     ]
   where
     equalChildren = equalityConstraint $ ECTA.mkEqConstraints [[ECTA.path [0], ECTA.path [1]]]
+
+{- | The size and class rank of draw @i@, by the steps in the documentation of
+"Data.CFTA.Sized.Checkpoint", with only 'Checkpoint.splitMix64'.
+-}
+documentedDraw :: Sized Symbol -> Size -> Maybe (Map.Map Size Weight) -> Word64 -> Integer -> (Size, ClassRank)
+documentedDraw classes bound weights seed index = case weights of
+    Nothing ->
+        let (rank, _) = value (sum $ map snd counts) stream
+         in locate rank counts
+    Just weighted ->
+        let drawn = [(size, weight) | (size, Weight weight) <- Map.toAscList weighted, count size > 0]
+            (ticket, rest) = value (sum $ map snd drawn) stream
+            (selected, _) = locate ticket drawn
+         in (selected, ClassRank $ fst $ value (count selected) rest)
+  where
+    count size = let Cardinality total = countOfSize classes size in total
+    counts = [(size, count size) | size <- [1 .. bound]]
+    stream = Checkpoint.splitMix64 $ Checkpoint.splitMix64 seed !! fromInteger index
+    -- The value below a bound, with the words that it reads.
+    value 1 input = (0, input)
+    value n input =
+        let bits = length $ takeWhile (\b -> 2 ^ b <= n - 1) [0 :: Int ..]
+            k = (bits + 63) `div` 64
+            (taken, rest) = splitAt k input
+            v = sum [toInteger u * 2 ^ (64 * j) | (j, u) <- zip [0 :: Int ..] taken] `mod` 2 ^ bits
+         in if v < n then (v, rest) else value n rest
+    -- The entry whose range of values holds the value, and the place in that range.
+    locate v ((size, width) : later)
+        | v < width = (size, ClassRank v)
+        | otherwise = locate (v - width) later
+    locate _ [] = error "a value beyond the last range"
 
 -- | The run of draws from the listing of a graph up to 'listingBound', with seed seven.
 sampled :: Maybe (Map.Map Size Weight) -> FTA.FTA String Symbol Constraint -> [(Term Symbol, SamplingCheckpoint String)]
