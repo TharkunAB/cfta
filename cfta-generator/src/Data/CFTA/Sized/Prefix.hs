@@ -83,11 +83,13 @@ run. 'decided' gives the 'Completions' of the current prefix, the same as
 'prefixCompletionsWith' and 'afterPrefix' give. A query for counts needs
 every candidate decided, so it gains nothing from the walk.
 
-With equality constraints, the walk takes its candidates from an automaton of
-the terms of each exact size up to the bound, restricted to the prefix, whose
-enumerator ("Data.CFTA.Enumeration") solves the equalities by unification. A
-token is then offered at the first completion that the enumerator gives, so
-the tokens are exact without a list of the terms up to the bound. The counts
+With equality constraints, a query first tries the fillings of the pending
+states, up to 'fillingsBeforeProduct' of them. Then it takes its candidates
+from an automaton of the terms of each exact size up to the bound, restricted
+to the prefix, whose enumerator ("Data.CFTA.Enumeration") solves the
+equalities by unification; the walk builds it once, and its later queries use
+it at once. A token is offered at the first completion that either route
+gives, so the tokens are exact without a list of the terms up to the bound. The counts
 are not: an equality class that joins two pending nodes makes the count of
 their fillings more than a product of their counts, so 'decided' and the
 counts still list the candidates.
@@ -136,6 +138,8 @@ module Data.CFTA.Sized.Prefix (
     -- * Verdicts on demand
     Deciding,
     deciding,
+    decidingWithCap,
+    fillingsBeforeProduct,
     decidingPrefix,
     decidingStep,
     decidingTokens,
@@ -145,7 +149,7 @@ module Data.CFTA.Sized.Prefix (
 import Control.Monad (foldM, void)
 import Data.Containers.ListUtils (nubOrd)
 import Data.Either (fromRight)
-import Data.IORef (modifyIORef', newIORef, readIORef)
+import Data.IORef (IORef, modifyIORef', newIORef, readIORef, writeIORef)
 import qualified Data.IntMap.Lazy as IntMap
 import Data.List (genericDrop, genericIndex, genericLength, genericReplicate, genericTake)
 import qualified Data.Map.Strict as Map
@@ -302,6 +306,10 @@ data Deciding = Deciding
     , decidingRuns :: Set.Set Run
     -- ^ The runs on the prefix that can have a candidate within the budget.
     , decidingMachine :: Machine
+    , decidingCap :: Int
+    -- ^ The number of fillings that a query tries before the product, with equality constraints.
+    , decidingFellBack :: IORef Bool
+    -- ^ Whether a query of the walk has used the product: then the later queries use it at once.
     , decidingProduct :: Maybe (Node Symbol)
     {- ^ With equality constraints, the automaton of the terms of each exact
     size up to the bound, restricted to the prefix: its enumeration gives the
@@ -340,7 +348,31 @@ data Machine = Machine
 decided yet.
 -}
 deciding :: (Ord state) => Entailment -> Size -> FTA.FTA state Symbol Constraint -> IO Deciding
-deciding entailment (Size bound) automaton = do
+deciding = decidingWithCap fillingsBeforeProduct
+
+{- | The number of fillings of the pending states that a query of a walk tries
+for a token, with equality constraints, before it builds the product by size
+('decidingWithCap'). The fillings ignore the equality classes that join two
+pending nodes, so a query can need very many of them; the product solves
+those classes by unification, but its construction costs more than a few
+fillings. After the first query that uses the product, the later queries of
+the walk use it at once.
+
+On the probe of the walk, the queries of the typed arithmetic with three
+children needed at most 160 fillings up to 21 nodes, and a few queries of the
+sums and the pairs needed thousands. So the queries of the arithmetic stay in
+the fillings, and those of the sums and the pairs pay 256 fillings once.
+-}
+fillingsBeforeProduct :: Int
+fillingsBeforeProduct = 256
+
+{- | 'deciding' with the number of fillings that a query tries before the
+product by size. With 0, every query of an automaton with equality
+constraints enumerates the product. Both routes give the same verdicts.
+-}
+decidingWithCap :: (Ord state) => Int -> Entailment -> Size -> FTA.FTA state Symbol Constraint -> IO Deciding
+decidingWithCap cap entailment (Size bound) automaton = do
+    fellBack <- newIORef False
     (stateVerdict, constraintVerdict) <- memoryOfVerdicts entailment numberedRows
     let machine =
             Machine
@@ -371,6 +403,8 @@ deciding entailment (Size bound) automaton = do
             , decidingPending = [path []]
             , decidingRuns = Set.fromList $ filter (runFits machine bound) [([machineInitial machine], [], False)]
             , decidingMachine = machine
+            , decidingCap = cap
+            , decidingFellBack = fellBack
             , decidingProduct =
                 if any (any (hasEqualities . FTA.transitionConstraint)) (FTA.transitionTable $ FTA.trim automaton)
                     then Just $ fromFTA $ FTA.trim $ bySize bound automaton
@@ -481,15 +515,17 @@ with equality constraints, the product restricted to the prefix and the token.
 
 Without equality constraints, the candidates of a run are the fillings of its
 pending states. With them, a filling can break an equality class that joins
-two pending nodes, and the search would try fillings until one holds. So the
-candidates are then the terms of the product, which the enumerator builds
-with the equalities solved: the first one is a completion, and none means
-that there is none.
+two pending nodes, and the search would try fillings until one holds. So
+after the cap of fillings, the candidates are the terms of the product,
+which the enumerator builds with the equalities solved: the first one is a
+completion, and none means that there is none.
 -}
 afterRuns :: Deciding -> (Symbol, Int) -> IO (Set.Set Run, [Run] -> [IO Verdict], Maybe (Node Symbol))
 afterRuns walk token = case decidingPending walk of
     [] -> pure (Set.empty, const [], Nothing)
     here : _ -> do
+        fellBack <- readIORef $ decidingFellBack walk
+        let cap = if fellBack then 0 else decidingCap walk
         found <-
             traverse
                 decideRun
@@ -498,7 +534,7 @@ afterRuns walk token = case decidingPending walk of
                 , (children, index) <- Map.findWithDefault [] token $ IntMap.findWithDefault Map.empty top $ machineTokens machine
                 , runFits machine budget (children <> rest, [], False)
                 ]
-        pure (Set.fromList (catMaybes found), verdictsOf, restricted)
+        pure (Set.fromList (catMaybes found), verdictsOf cap, restricted)
   where
     restricted = case decidingPending walk of
         here : _ -> restrictAt (unPath here) (TemplateNode (fst token) (replicate (snd token) Hole)) <$> decidingProduct walk
@@ -526,16 +562,27 @@ afterRuns walk token = case decidingPending walk of
                     Yes -> go open flag rest
                     Unknown -> go open True rest
             | otherwise = go (obligation : open) flag rest
-    -- The verdicts of the candidates of the runs, smallest first.
-    verdictsOf [] = []
-    verdictsOf runs = case restricted of
-        Just node -> map (machineState machine $ machineInitial machine) $ Enumeration.terms node
-        Nothing ->
-            [ candidateVerdict run terms
-            | size <- [0 .. budget]
-            , run@(stack, _, _) <- runs
-            , terms <- fillings (machineClasses machine) stack size
-            ]
+    -- The verdicts of the candidates of the runs: the fillings, smallest
+    -- first; with equality constraints, after the cap, the terms of the product.
+    verdictsOf _ [] = []
+    verdictsOf cap runs = case restricted of
+        Just node -> capped cap node (fillingVerdicts runs)
+        Nothing -> fillingVerdicts runs
+    -- The first fillings up to the cap, then the terms of the product if a
+    -- filling remains. The list is lazy, so a query that ends in the
+    -- fillings builds no product. The product notes that the walk uses it,
+    -- with a verdict 'No' that changes no answer.
+    capped _ _ [] = []
+    capped 0 node _ =
+        (writeIORef (decidingFellBack walk) True >> pure No)
+            : map (machineState machine $ machineInitial machine) (Enumeration.terms node)
+    capped left node (verdict : rest) = verdict : capped (left - 1) node rest
+    fillingVerdicts runs =
+        [ candidateVerdict run terms
+        | size <- [0 .. budget]
+        , run@(stack, _, _) <- runs
+        , terms <- fillings (machineClasses machine) stack size
+        ]
     candidateVerdict (stack, open, flag) terms =
         andVerdicts $
             [pure Unknown | flag]

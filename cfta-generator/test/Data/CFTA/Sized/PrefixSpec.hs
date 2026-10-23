@@ -50,13 +50,15 @@ spec = describe "Data.CFTA.Sized.Prefix" $ do
     it "counts the terms of the fixtures with equality constraints up to their bounds" $
         [completionCount $ start sizeBound equalPairs, completionCount $ start 7 equalArithmetic] `shouldBe` [4, 38]
     fixture "equal pairs" equalPairs
-    describe "walks the prefixes of automata with equality constraints as the listed completions, without a solver" $ do
-        it "on equal pairs" $ walksAsListing 6 equalPairs
-        it "on equal sums" $ walksAsListing 7 equalSums
-        it "on typed arithmetic with equal operands and branches, with three children"
-            $ walksAsListing 7
-            $ either (error . show) id
-            $ FTA.mapSymbols (Symbol . Text.pack . show) equalArithmetic
+    describe "walks the prefixes of automata with equality constraints as the listed completions, without a solver" $
+        forM_ [("", Nothing), (", with the product at once", Just 0), (", with the product after one filling", Just 1)] $
+            \(route, cap) -> do
+                it ("on equal pairs" <> route) $ walksAsListing (maybe deciding decidingWithCap cap) 6 equalPairs
+                it ("on equal sums" <> route) $ walksAsListing (maybe deciding decidingWithCap cap) 7 equalSums
+                it ("on typed arithmetic with equal operands and branches, with three children" <> route)
+                    $ walksAsListing (maybe deciding decidingWithCap cap) 7
+                    $ either (error . show) id
+                    $ FTA.mapSymbols (Symbol . Text.pack . show) equalArithmetic
     fixtureUpTo 7 "typed arithmetic with equal operands and branches" equalArithmetic
     it "offers only the equal child after the first child of a pair" $ do
         let completions = start sizeBound equalPairs
@@ -325,8 +327,13 @@ equalSums =
 one more token: the step is 'Nothing' exactly where 'afterPrefix' of the listed
 completions is, and the walk offers the tokens of 'nextTokens'.
 -}
-walksAsListing :: (Ord state) => Integer -> FTA.FTA state Symbol Constraint -> IO ()
-walksAsListing bound graph = do
+walksAsListing ::
+    (Ord state) =>
+    (Entailment -> Size -> FTA.FTA state Symbol Constraint -> IO Deciding) ->
+    Integer ->
+    FTA.FTA state Symbol Constraint ->
+    IO ()
+walksAsListing walking bound graph = do
     let eager = start bound graph
         tokens =
             nubOrd
@@ -334,7 +341,7 @@ walksAsListing bound graph = do
                 | transition <- concat $ Map.elems $ FTA.transitionTable graph
                 ]
         prefixes = nubOrd $ concat [inits tokens' | term <- completionTerms eager, tokens' <- [preorder term]]
-    walk <- deciding unusedSolver (Size bound) graph
+    walk <- walking unusedSolver (Size bound) graph
     forM_ (prefixes <> [prefix <> [token] | prefix <- prefixes, token <- tokens]) $ \prefix -> do
         walked <- walkTo walk prefix
         let expected = afterPrefix eager prefix
