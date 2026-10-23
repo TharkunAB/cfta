@@ -35,6 +35,11 @@ Wilf, and Feat (ranking).
 - **Depth**: the longest root-to-leaf path of a term, in edges; a leaf has
   depth 0. TATA's *height* counts a constant as 1, so height = depth + 1.
   **Mu depth** is the nesting depth of `Mu` binders, a different quantity.
+- **Linearization**: the texts around the children of each symbol, which give
+  the text of a term: the first text, the text of the first child, the second
+  text, and so on. A lowering gives a term; a linearization gives a text. Do
+  not call the texts of a symbol a template: a template belongs to a template
+  lowering.
 
 ## Constraints
 

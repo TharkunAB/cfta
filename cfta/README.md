@@ -1113,6 +1113,7 @@ productivity; they do not prove that arbitrary transition guards are satisfiable
 | `Data.CFTA.Refinement.Lattice` | Exact counting and lexicographic ranking of the integer points of a linear formula, without enumeration, and `latticeEntailment`, which decides bounded linear integer implications without a solver. |
 | `Data.CFTA.Refinement.LiquidFixpoint` | The Z3-backed `Entailment`. |
 | `Data.CFTA.Simple` | The automata defined as simply as possible, on explicit-state automata: membership by recursion on the term, the terms up to a depth by filtering every tree, and the textbook union, product, and depth bound. It is slow, and the tests check the other modules against it. |
+| `Data.CFTA.Lark` | A plain automaton as a Lark grammar for the constrained decoders llguidance and XGrammar, with a linearization that gives the text of each term. |
 | `Data.CFTA.Term` | Concrete terms: `Term symbol`, built and matched with the pattern `Node symbol children`, with `child`, `arity`, `flatten`, and the conversions to and from `Data.Tree`. |
 | `Data.Tree` from `containers` | The automaton views of `toTree`, for `drawTree`. |
 
