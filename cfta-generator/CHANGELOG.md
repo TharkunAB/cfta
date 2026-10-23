@@ -139,8 +139,9 @@ tree automata of `cfta`, with QuickCheck integration.
   pruning; a guard the solver cannot decide is `GuardUnknown`.
 - `Data.CFTA.Inclusion`: `inclusionUpTo` decides whether one explicit
   automaton accepts every term of another up to a size bound. The result is
-  `IncludedUpTo` with the bound, or `NotIncluded` with a smallest term that
-  the first automaton accepts and the second rejects. For each size, it
+  `IncludedUpTo` with the bound, or `NotIncluded` with a smallest
+  counterexample: a term that the first automaton accepts and the second
+  rejects. For each size, it
   compares the count of the first automaton with the count of the
   intersection, with `Data.CFTA.Sized`. It accepts only automata without
   constraints. A constraint is `ConstrainedLeft` or `ConstrainedRight`.

@@ -20,8 +20,8 @@ spec :: Spec
 spec = describe "Data.CFTA.Inclusion" $ do
     it "agrees with a search of the size classes of the left automaton" $
         overPairs (inclusionUpTo bound) `shouldBe` overPairs (\left right -> Right $ search left right)
-    it "gives a witness that the left automaton accepts, that the right rejects, and that no smaller term separates" $
-        overPairs witnessCheck `shouldBe` overPairs (\left right -> Just $ smallestDifference left right)
+    it "gives a counterexample that the left automaton accepts, that the right rejects, and that no smaller term separates" $
+        overPairs counterexampleCheck `shouldBe` overPairs (\left right -> Just $ smallestDifference left right)
     it "finds a missing tree at the first size where the languages differ, and not at rank zero" $ do
         -- The binary trees with five nodes are g(a, g(a, a)) and then
         -- g(g(a, a), a). The right combs have only the first.
@@ -37,7 +37,7 @@ spec = describe "Data.CFTA.Inclusion" $ do
         let copies = [("trimmed", inclusions (FTA.trim padded)), ("reordered", inclusions (reordered padded))]
             inclusions copy = (inclusionUpTo bound padded copy, inclusionUpTo bound copy padded)
         copies `shouldBe` [(name, (Right (IncludedUpTo bound), Right (IncludedUpTo bound))) | name <- ["trimmed", "reordered"]]
-    it "gives the same witness for reordered copies of the two automata" $
+    it "gives the same counterexample for reordered copies of the two automata" $
         overPairs (\left right -> inclusionUpTo bound (reordered left) (reordered right))
             `shouldBe` overPairs (inclusionUpTo bound)
     it "rejects an automaton with a constraint" $ do
@@ -57,17 +57,19 @@ search :: FTA.PlainFTA String Symbol -> FTA.PlainFTA String Symbol -> Inclusion 
 search left right =
     case [found | size <- [1 .. bound], found <- termsOfSize classes size, not (FTA.accepts right found)] of
         [] -> IncludedUpTo bound
-        witness : _ -> NotIncluded witness
+        counterexample : _ -> NotIncluded counterexample
   where
     classes = either (error . show) id $ sized left
 
-{- | Whether the left automaton accepts the witness and the right automaton
-rejects it, with the size of the witness. 'Nothing' when the witness fails.
+{- | Whether the left automaton accepts the counterexample and the right
+automaton rejects it, with the size of the counterexample. 'Nothing' when the
+counterexample fails.
 -}
-witnessCheck :: FTA.PlainFTA String Symbol -> FTA.PlainFTA String Symbol -> Maybe (Maybe Size)
-witnessCheck left right = case inclusionUpTo bound left right of
-    Right (NotIncluded witness)
-        | FTA.accepts left witness && not (FTA.accepts right witness) -> Just $ Just $ Size $ toInteger $ length witness
+counterexampleCheck :: FTA.PlainFTA String Symbol -> FTA.PlainFTA String Symbol -> Maybe (Maybe Size)
+counterexampleCheck left right = case inclusionUpTo bound left right of
+    Right (NotIncluded counterexample)
+        | FTA.accepts left counterexample && not (FTA.accepts right counterexample) ->
+            Just $ Just $ Size $ toInteger $ length counterexample
         | otherwise -> Nothing
     Right (IncludedUpTo _) -> Just Nothing
     Left _ -> Nothing

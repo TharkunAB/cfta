@@ -1,11 +1,11 @@
 {- | The inclusion of the language of one tree automaton in the language of
-another, up to a size bound, with a witness.
+another, up to a size bound, with a counterexample.
 
 'inclusionUpTo' decides whether the right automaton accepts every term of the
 left automaton with at most the given number of nodes. When it does not, the
-result is a smallest term that the left automaton accepts and the right
-automaton rejects. Two automata are equivalent up to a bound when each
-includes the other up to that bound.
+result is a smallest counterexample: a term that the left automaton accepts
+and the right automaton rejects. Two automata are equivalent up to a bound
+when each includes the other up to that bound.
 
 The decision compares counts. For each size from one to the bound, it counts
 the terms of the left automaton and the terms of the intersection of the two
@@ -14,11 +14,11 @@ size class is a subset of the size class of the left automaton.
 'countOfSize' counts each distinct term once, also when an automaton has
 several runs for one term. Thus the two counts are equal exactly when the
 right automaton accepts every term of the size class. At the first size where
-the counts differ, the witness is the first term of the size class of the left
-automaton that 'FTA.accepts' rejects for the right automaton. This is the term
-with the smallest class rank. The order of a size class does not depend on the
-order of the rows or on the names of the states, so reordered copies of the
-two automata give the same witness.
+the counts differ, the counterexample is the first term of the size class of
+the left automaton that 'FTA.accepts' rejects for the right automaton. This is
+the term with the smallest class rank. The order of a size class does not
+depend on the order of the rows or on the names of the states, so reordered
+copies of the two automata give the same counterexample.
 
 An ambiguous automaton has several runs for some terms. 'sized' uses the
 count table only when no state has two transitions that accept one term.
@@ -30,9 +30,9 @@ This version accepts only automata without constraints: each transition must
 have 'noConstraint'. A constraint gives 'ConstrainedLeft' or
 'ConstrainedRight'. The module does not remove a constraint, because
 'FTA.dropConstraints' is an over-approximation. Without the constraints of
-the left automaton, the witness could be a term that the left automaton
-rejects. Without the constraints of the right automaton, the check could miss
-a term that the right automaton rejects.
+the left automaton, the counterexample could be a term that the left
+automaton rejects. Without the constraints of the right automaton, the check
+could miss a term that the right automaton rejects.
 
 'FTA.intersect' gives each transition the pair of the two constraints.
 'conjoinConstraints' joins each pair into one 'Data.CFTA.Constraint.Constraint',
@@ -61,9 +61,10 @@ data Inclusion symbol
       most this number of nodes. Larger terms are not checked.
       -}
       IncludedUpTo !Size
-    | {- | A term that the left automaton accepts and the right automaton
-      rejects. No term with fewer nodes has this property, and no term of the
-      same size has a smaller class rank in the left automaton.
+    | {- | A counterexample: a term that the left automaton accepts and the
+      right automaton rejects. No counterexample has fewer nodes, and no
+      counterexample of the same size has a smaller class rank in the left
+      automaton.
       -}
       NotIncluded !(Term symbol)
     deriving (Eq, Show)
@@ -77,7 +78,7 @@ data InclusionError
     deriving (Eq, Show)
 
 {- | Whether the right automaton accepts every term of the left automaton with
-at most the given number of nodes, or a smallest term that it rejects.
+at most the given number of nodes, or a smallest counterexample.
 
 The check reads every row of the two automata for constraints, also a row
 that the initial state cannot reach. A bound below one gives 'IncludedUpTo'
