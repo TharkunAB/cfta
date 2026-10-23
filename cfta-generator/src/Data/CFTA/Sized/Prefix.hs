@@ -59,20 +59,32 @@ continue with it. This is exact, but the first query lists every accepted
 term up to the bound. The completions are in the order of
 'Data.CFTA.Sized.sized'.
 
-A guard beyond equality constraints is not checked here, so
-'prefixCompletions' rejects it.
+'prefixCompletions' rejects a guard beyond equality constraints.
+'prefixCompletionsWith' takes a solver, an 'Entailment', and lists the terms
+of the automaton with each constraint reduced to its equality constraints. The
+solver decides each such term: it accepts it ('Yes'), rejects it ('No'), or
+does not decide it ('Unknown'). The rejected terms go. A token is offered
+('nextTokens') when the solver accepts one of its completions, rejected when
+it rejects all of them, and undecided ('undecidedTokens') otherwise. An
+undecided token is neither offered nor rejected. The counts, the lists, the
+ranks, and the samples cover the accepted completions; 'undecidedTerms' lists
+the others.
 -}
 module Data.CFTA.Sized.Prefix (
     Completions,
     CompletionsError (..),
     prefixCompletions,
+    prefixCompletionsWith,
     afterToken,
     afterPrefix,
     completionPrefix,
     nextTokens,
+    undecidedTokens,
     isComplete,
+    completeVerdict,
     completionCount,
     completionTerms,
+    undecidedTerms,
     unrankCompletion,
     sampleCompletion,
 ) where
@@ -80,6 +92,7 @@ module Data.CFTA.Sized.Prefix (
 import Control.Monad (foldM, void)
 import Data.Containers.ListUtils (nubOrd)
 import Data.Either (fromRight)
+import Data.IORef (modifyIORef', newIORef, readIORef)
 import qualified Data.IntMap.Lazy as IntMap
 import Data.List (genericDrop, genericIndex, genericLength, genericReplicate, genericTake)
 import qualified Data.Map.Strict as Map
@@ -88,10 +101,13 @@ import qualified Data.Set as Set
 import qualified Test.QuickCheck as QC
 
 import qualified Data.CFTA as FTA
-import Data.CFTA.Constraint (Constraint, noConstraint, residual)
+import Data.CFTA.Constraint (Constraint, equalities, equalityConstraint, noConstraint, residual)
 import qualified Data.CFTA.Gen.Internal.Table as Ordinary
 import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), Size (..))
-import Data.CFTA.Sized (Sized, countOfSize, sizedStates, termsOfSize, unrankOfSize)
+import Data.CFTA.Refinement.Evaluate (evaluateConstraint)
+import Data.CFTA.Refinement.Verdict (Entailment, Verdict (..), andVerdicts, orVerdicts)
+import Data.CFTA.Sized (Sized, countOfSize, sized, sizedStates, termsOfSize, unrankOfSize)
+import Data.CFTA.Symbol (Symbol)
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
 
@@ -108,8 +124,11 @@ data Completions symbol = Completions
 data Route symbol
     = -- | The stacks of pending states that have a completion within the budget, for an automaton without constraints.
       Stacks !(Tables symbol) !(Set.Set [Int])
-    | -- | The completions in order, each with its tokens after the prefix, for an automaton with equality constraints.
-      Listed [(Term symbol, [(symbol, Int)])]
+    | {- | The completions in order, each with its tokens after the prefix and
+      whether the solver accepted it ('Yes') or did not decide it ('Unknown'),
+      for an automaton with constraints.
+      -}
+      Listed [(Term symbol, [(symbol, Int)], Verdict)]
 
 -- | The automaton for the queries, with each state as its number.
 data Tables symbol = Tables
@@ -144,7 +163,7 @@ prefixCompletions (Size bound) automaton
     | otherwise =
         Right
             $ Completions [] bound
-            $ Listed [(term, preorder term) | size <- [1 .. bound], term <- termsOfSize (stateClasses initial) (Size size)]
+            $ Listed [(term, preorder term, Yes) | size <- [1 .. bound], term <- termsOfSize (stateClasses initial) (Size size)]
   where
     reached = FTA.transitionTable $ FTA.trim automaton
     initial = FTA.initialState automaton
@@ -174,8 +193,43 @@ prefixCompletions (Size bound) automaton
         fromRight (error "prefixCompletions: an automaton without a guard has size classes") $
             sizedStates automaton
 
+{- | The completions of the empty prefix of an automaton with guards, which the
+solver decides on each term. The candidates are the terms that the automaton
+accepts with each constraint reduced to its equality constraints: an
+over-approximation, which the solver checks again on every candidate. A
+candidate that the solver rejects ('No') goes. The others stay, as accepted
+('Yes') or as undecided ('Unknown').
+
+The verdict of a term is 'Yes' when the guards of some run all hold, 'No' when
+each run has a guard that fails, and 'Unknown' otherwise, in the three-valued
+logic of 'andVerdicts' and 'orVerdicts'. A guard of a run is decided even when
+another guard of the run is 'Unknown', so this verdict is 'No' in some cases
+where 'Data.CFTA.Refinement.Denotation.accepts' is 'Unknown'. The two agree
+on 'Yes'. The solver decides each guard at most once on each subterm.
+
+An automaton without a guard beyond equality constraints gives the result of
+'prefixCompletions', and the solver is not called.
+-}
+prefixCompletionsWith ::
+    (Ord state) => Entailment -> Size -> FTA.FTA state Symbol Constraint -> IO (Completions Symbol)
+prefixCompletionsWith entailment (Size bound) automaton = case prefixCompletions (Size bound) automaton of
+    Right completions -> pure completions
+    Left _ -> do
+        found <- termVerdicts entailment automaton candidates
+        pure
+            $ Completions [] bound
+            $ Listed [(term, preorder term, verdict) | (term, verdict) <- zip candidates found, verdict /= No]
+  where
+    candidates = [term | size <- [1 .. bound], term <- termsOfSize equalitiesOnly (Size size)]
+    equalitiesOnly =
+        fromRight (error "prefixCompletionsWith: an automaton with equality constraints has size classes")
+            $ sized
+            $ FTA.mapConstraints (equalityConstraint . equalities) automaton
+
 {- | The completions after one more token. 'Nothing' when no completion
-starts with the prefix and the token.
+starts with the prefix and the token. With a solver, the result is 'Nothing'
+only when the solver rejects every candidate; the completions after an
+undecided token are all undecided.
 -}
 afterToken :: (Ord symbol) => Completions symbol -> (symbol, Int) -> Maybe (Completions symbol)
 afterToken completions token = case completionsRoute completions of
@@ -190,7 +244,7 @@ afterToken completions token = case completionsRoute completions of
                     ]
          in if Set.null kept then Nothing else Just $ after $ Stacks tables kept
     Listed listed ->
-        let kept = [(term, rest) | (term, next : rest) <- listed, next == token]
+        let kept = [(term, rest, verdict) | (term, next : rest, verdict) <- listed, next == token]
          in if null kept then Nothing else Just $ after $ Listed kept
   where
     budget = completionsBudget completions - 1
@@ -208,7 +262,9 @@ completionPrefix = reverse . completionsPrefix
 
 {- | The tokens that can come next, in ascending order, each with the number of
 completions that start with the prefix and the token. A token that is not in
-the list has no completion.
+the list has no completion. With a solver, a token is in the list when the
+solver accepts one of its completions, and the number counts the accepted
+completions. The token can have undecided completions too.
 -}
 nextTokens :: (Ord symbol) => Completions symbol -> [((symbol, Int), Cardinality)]
 nextTokens completions = case completionsRoute completions of
@@ -223,13 +279,40 @@ nextTokens completions = case completionsRoute completions of
                     ]
         , Just after <- [afterToken completions token]
         ]
-    Listed listed -> Map.toList $ Map.fromListWith (+) [(next, 1) | (_, next : _) <- listed]
+    Listed listed -> Map.toList $ Map.fromListWith (+) [(next, 1) | (_, next : _, Yes) <- listed]
+
+{- | The tokens that the solver neither offers nor rejects, in ascending order:
+the solver accepts no completion that starts with the prefix and the token,
+and it does not decide some of them. Each token has the number of its
+undecided completions. A token in neither this list nor 'nextTokens' is
+rejected: the solver rejects each of its completions.
+-}
+undecidedTokens :: (Ord symbol) => Completions symbol -> [((symbol, Int), Cardinality)]
+undecidedTokens completions = case completionsRoute completions of
+    Stacks _ _ -> []
+    Listed listed ->
+        [ (token, undecided)
+        | (token, (Cardinality 0, undecided)) <-
+            Map.toList $
+                Map.fromListWith add [(next, if verdict == Yes then (1, 0) else (0, 1)) | (_, next : _, verdict) <- listed]
+        ]
+  where
+    add (accepted, undecided) (accepted', undecided') = (accepted + accepted', undecided + undecided')
 
 -- | Whether the prefix is the preorder of an accepted term within the bound.
 isComplete :: Completions symbol -> Bool
-isComplete completions = case completionsRoute completions of
-    Stacks _ stacks -> Set.member [] stacks
-    Listed listed -> any (null . snd) listed
+isComplete = (== Yes) . completeVerdict
+
+{- | Whether the prefix is the preorder of an accepted term within the bound:
+'Yes' or 'No', or 'Unknown' when the prefix is a term that the solver does not
+decide.
+-}
+completeVerdict :: Completions symbol -> Verdict
+completeVerdict completions = case completionsRoute completions of
+    Stacks _ stacks -> if Set.member [] stacks then Yes else No
+    Listed listed -> case [verdict | (_, [], verdict) <- listed] of
+        verdict : _ -> verdict
+        [] -> No
 
 -- | The number of completions.
 completionCount :: (Ord symbol) => Completions symbol -> Cardinality
@@ -245,7 +328,7 @@ completionTerms completions = case completionsRoute completions of
     Stacks tables stacks
         | tablesUnambiguous tables -> listed tables stacks
         | otherwise -> nubOrd $ listed tables stacks
-    Listed terms -> map fst terms
+    Listed terms -> [term | (term, _, Yes) <- terms]
   where
     prefix = completionPrefix completions
     listed tables stacks =
@@ -254,6 +337,14 @@ completionTerms completions = case completionsRoute completions of
         , stack <- Set.toList stacks
         , terms <- fillings tables stack size
         ]
+
+{- | The completions that the solver does not decide, each once, in order.
+Without a solver, the list is empty.
+-}
+undecidedTerms :: Completions symbol -> [Term symbol]
+undecidedTerms completions = case completionsRoute completions of
+    Stacks _ _ -> []
+    Listed terms -> [term | (term, _, Unknown) <- terms]
 
 {- | The completion at a rank in the order of 'completionTerms'. 'Nothing'
 when the rank is outside the completions. The rank is a place among the
@@ -341,6 +432,30 @@ unrankFilling tables budget (state : rest) size rank = go 1 rank
       where
         Cardinality count = countOfSize classes (Size first)
         inner = restCounts `genericIndex` (size - first)
+
+{- | The verdict of the initial state on each term, as 'prefixCompletionsWith'
+defines it. The verdict of each state on each subterm is kept.
+-}
+termVerdicts :: (Ord state) => Entailment -> FTA.FTA state Symbol Constraint -> [Term Symbol] -> IO [Verdict]
+termVerdicts entailment automaton terms = do
+    known <- newIORef Map.empty
+    let verdictOf state term@(Term.Node symbol children) = do
+            found <- Map.lookup (state, term) <$> readIORef known
+            case found of
+                Just verdict -> pure verdict
+                Nothing -> do
+                    verdict <-
+                        orVerdicts
+                            [ andVerdicts $
+                                zipWith verdictOf (FTA.transitionChildren transition) children
+                                    <> [evaluateConstraint entailment (FTA.transitionConstraint transition) term]
+                            | transition <- FTA.transitionsFrom automaton state
+                            , FTA.transitionSymbol transition == symbol
+                            , length (FTA.transitionChildren transition) == length children
+                            ]
+                    modifyIORef' known $ Map.insert (state, term) verdict
+                    pure verdict
+    traverse (verdictOf $ FTA.initialState automaton) terms
 
 -- | The tokens of a term in preorder.
 preorder :: Term symbol -> [(symbol, Int)]
