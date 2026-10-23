@@ -1,0 +1,28 @@
+
+/-- A published thunk can be suspended, under evaluation, or complete. -/
+inductive Status (Value : Type) where
+  | suspended
+  | evaluating
+  | returned (value : Value)
+
+/-- A thunk retains its original request in every evaluation phase. -/
+structure Cell (Request Value : Type) where
+  request : Request
+  status : Status Value
+
+/-- The effective table stores logical thunk identities. -/
+structure State (Key Request Value : Type) where
+  table : Table Key Nat
+  cells : Table Nat (Cell Request Value)
+  next : Nat
+
+/-- The initial table has no published or allocated thunk. -/
+def empty : State Key Request Value := ⟨fun _ => none, fun _ => none, 0⟩
+
+/-- Every table entry identifies its original request and an allocated cell. -/
+structure Valid (keyOf : Request → Key → Prop) (good : Cell Request Value → Prop)
+    (state : State Key Request Value) : Prop where
+  bounded : ∀ handle cell, state.cells handle = some cell → handle < state.next
+  linked : ∀ key handle, state.table key = some handle →
+    ∃ cell, state.cells handle = some cell ∧ keyOf cell.request key
+  checked : ∀ handle cell, state.cells handle = some cell → good cell

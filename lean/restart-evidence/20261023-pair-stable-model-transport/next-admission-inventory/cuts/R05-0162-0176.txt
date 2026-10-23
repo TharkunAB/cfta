@@ -1,0 +1,15 @@
+
+/-- Demand either starts the original request or observes its current phase. -/
+inductive Observation (Request Value : Type) where
+  | absent
+  | evaluate (request : Request)
+  | busy
+  | ready (value : Value)
+
+/-- Demand starts a suspended thunk without removing its published key. -/
+def demand (handle : Nat) (state : State Key Request Value) : Observation Request Value × State Key Request Value :=
+  match state.cells handle with
+  | none => (.absent, state)
+  | some cell => match cell.status with
+    | .suspended => (.evaluate cell.request, setStatus handle .evaluating state)
+    | .evaluating => (.busy, state)

@@ -1,0 +1,28 @@
+import MicroCFTA.SourceCurrentAllocatedNativeContextRebase
+import MicroCFTA.SourceCurrentAllocatedNativePhysicalCache
+
+/-!
+# Causal request admission in every native memo phase
+
+Every stored request retains admitted operands and covered seen-pair names.
+This property applies to suspended, evaluating, and returned cells.
+Lookup must establish coverage before it publishes a new request.
+Demand and finish change only the phase of the original stored request.
+
+The invariant has no result-language law. Physical key validity remains
+separate. It identifies an original stored request with a requested hit.
+Actual code execution must still derive each new request's coverage.
+-/
+namespace MicroCFTA.SourceCurrentAllocatedNativeAdmissionCache
+open Cache Language IntersectSchedule InternedConstructorTemplates InternedProbeProvenance
+open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionThunks
+open SourceCurrentAllocatedNativeContextCache (NodeInputs EdgeInputs)
+open SourceCurrentAllocatedNativeContextRebase (SeenCovered SeenAdmitted)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Native" => SourceRecursiveIntersectionThunks.State
+variable {width : Nat} {view : View Symbol}
+
+/-- All stored cells retain the same request property in every phase. -/
+def Requests (property : Request → Prop) (state : FlatMemoThunk.State Key Request Answer) : Prop :=
+  ∀ handle cell, state.cells handle = some cell → property cell.request

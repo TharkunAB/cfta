@@ -1,0 +1,23 @@
+--- declaration-basis.lean.txt
++++ SourceCurrentSameSymbolEdgeModelTransport.lean
+@@ -23,6 +23,19 @@
+         (finiteInputMeaning oldView before)
+         ⟨IntersectionEmptyDomain.emptyDomain, ordered.1, ordered.2⟩) :
+     SourceCurrentSameSymbolEdgeStable.Stable newView
+-      (finiteInputMeaning newView after) (finiteRankedInput newView after) holds state
++      (finiteInputMeaning newView after) (finiteRankedInput newView after) holds state := by
++  refine ⟨⟨stable.valid.bounded, stable.valid.linked, ?_⟩,
++    stable.returned, stable.canonical⟩
++  intro handle cell stored
++  obtain ⟨leftResident, rightResident, law⟩ := stable.valid.checked handle cell stored
++  refine ⟨leftResident, rightResident, ?_⟩
++  rcases cell with ⟨pair, status⟩
++  cases status with
++  | suspended | evaluating => trivial
++  | returned value =>
++      exact ⟨law.1,
++        SourceCurrentAllocatedNativeContextRebase.edge_law agreement holds
++          _ value (admitted handle pair value stored)
++          (SourceCurrentAllocatedNativePairAdmission.empty_seen before) law.2⟩
+ 
+ end MicroCFTA.SourceCurrentSameSymbolEdgeModelTransport

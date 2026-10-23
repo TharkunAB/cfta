@@ -1,0 +1,16 @@
+/-- Retain the same populated pair memo under admitted finite input agreement. -/
+theorem rebase
+    {width : Nat} {oldView newView : View Symbol}
+    (before : FiniteInput oldView) (after : FiniteInput newView)
+    (agreement : SourceCurrentAllocatedNativeContextRebase.Agreement before after)
+    (holds : Guard → Term Symbol → Bool) (state : Wrapper width)
+    (stable : SourceCurrentSameSymbolEdgeStable.Stable oldView
+      (finiteInputMeaning oldView before) (finiteRankedInput oldView before) holds state)
+    (admitted : ∀ (handle : Nat) (pair : Edge × Edge) (value : Edge),
+      state.memo.cells handle = some ⟨pair, .returned value⟩ →
+      let ordered := if pair.2.entry.identity < pair.1.entry.identity then (pair.2, pair.1) else pair
+      SourceCurrentAllocatedNativeContextCache.EdgeInputs oldView
+        (finiteInputMeaning oldView before)
+        ⟨IntersectionEmptyDomain.emptyDomain, ordered.1, ordered.2⟩) :
+    SourceCurrentSameSymbolEdgeStable.Stable newView
+      (finiteInputMeaning newView after) (finiteRankedInput newView after) holds state

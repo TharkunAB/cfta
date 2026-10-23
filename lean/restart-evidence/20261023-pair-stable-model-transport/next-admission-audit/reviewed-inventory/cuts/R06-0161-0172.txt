@@ -1,0 +1,12 @@
+private theorem call_image [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (left right result : Edge) (before after : Wrapper width)
+    (valid : FlatMemoThunk.Valid (fun pair target => key pair = target) (fun _ => True) before.memo)
+    (returned : ∀ handle cell, before.memo.cells handle = some cell → ∃ value, cell.status = .returned value)
+    (done : run fuel (.call (left, right) []) before = .done result after) :
+    (before.memo.table (key (left, right)) ≠ none ∧ after.memo = before.memo) ∨
+      (before.memo.table (key (left, right)) = none ∧
+        (¬ right.entry.identity < left.entry.identity ∨ before.memo.table (key (right, left)) ≠ none) ∧
+        after.memo = written (left, right) result before.memo) ∨
+      (right.entry.identity < left.entry.identity ∧ before.memo.table (key (left, right)) = none ∧
+        before.memo.table (key (right, left)) = none ∧
+        after.memo = written (right, left) result (written (left, right) result before.memo)) := by

@@ -1,0 +1,16 @@
+/-- Old child and seen-pair admission retain both contextual edge bounds across views. -/
+theorem edge_law (agreement : Agreement before after) (holds : SourceGuard → Term SourceSymbol → Bool)
+    (request : EdgeRequest SourceSymbol SourceGuard) (result : EdgeValue SourceSymbol SourceGuard)
+    (admitted : EdgeInputs oldView (finiteInputMeaning oldView before) request)
+    (seen : SeenCovered before request.domain.key)
+    (law : EdgeLaw oldView (finiteInputMeaning oldView before) (finiteRankedInput oldView before) holds request result) :
+    EdgeLaw newView (finiteInputMeaning newView after) (finiteRankedInput newView after) holds request result := by
+  constructor
+  · intro _ output sound term accepted
+    have old := law.sound admitted output (agreement.sound_pairs seen sound) term accepted
+    exact ⟨(agreement.row_language holds request.left (fun child member => (admitted.1 child member).2) term).mpr old.1,
+      (agreement.row_language holds request.right (fun child member => (admitted.2 child member).2) term).mpr old.2⟩
+  · intro _ bound output complete first second bounded term left right
+    exact law.complete admitted bound output (agreement.complete_pairs seen complete) first second bounded term
+      ((agreement.row_rank holds request.left (fun child member => (admitted.1 child member).2) first term).mp left)
+      ((agreement.row_rank holds request.right (fun child member => (admitted.2 child member).2) second term).mp right)

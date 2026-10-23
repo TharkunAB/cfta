@@ -1,0 +1,15 @@
+/-- Valid payloads and canonical identities give independent least input semantics. -/
+structure FiniteInput (view : View Symbol) where
+  valid : Input → Prop
+  representative : Nat → Input
+  identity_exact : ∀ input, valid input → input ≠ .empty → representative (identity input) = inputRepresentative input
+  body_valid : ∀ name, valid (.mu name) → valid (view.body name)
+  reference_valid : ∀ name, valid (.ref name) → valid (.mu name)
+  row_valid : ∀ name, valid (.node name) → ∀ row ∈ view.rows name, ∀ child ∈ row.children, valid child
+  union_valid : ∀ name, valid (.union name) → ∀ child ∈ view.members name, valid child
+  copy_exact : ∀ input, valid input → closed view input = true → ∀ environment,
+    meaning environment (view.copy input) = fun term => ∃ rank, InputDerivation view input rank term
+
+/-- Identity-indexed input ranks contain only independent finite derivations. -/
+def finiteRanks (view : View Symbol) (inputs : FiniteInput view) (name rank : Nat) : Lang Symbol :=
+  InputDerivation view (inputs.representative name) rank

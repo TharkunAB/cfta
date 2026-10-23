@@ -1,0 +1,90 @@
+--- predecessors/update-documents.py
++++ update-documents.py
+@@ -7,19 +7,19 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ ROOT = HERE.parents[2]
+-SOURCE_SHA = '__H24_SOURCE_SHA__'
+-SOURCE_LINES = int('__H24_SOURCE_LINES__')
+-assert 0 < SOURCE_LINES <= int('__H24_SOURCE_HARD_STOP__')
+-strict, full, audit_stem = '__H24_SELECTED_STRICT_STEM__', '__H24_SELECTED_FULL_STEM__', '__H24_AUDIT_STEM__'
++SOURCE_SHA = '69a294d6519b9029480175702b8025b1b1a32a1d2328e3c24b6ad0916972610f'
++SOURCE_LINES = int('41')
++assert 0 < SOURCE_LINES <= int('120')
++strict, full, audit_stem = 'pair-stable-model-transport-strict-1', 'pair-stable-model-transport-public-1', 'pair-stable-model-transport-audit-1'
+ metrics = {
+-    'actual_jobs': int('__H24_ACTUAL_JOBS__'),
+-    'source_jobs': int('__H24_SOURCE_JOBS__'),
+-    'audit_jobs': int('__H24_AUDIT_JOBS__'),
+-    'failed_jobs': int('__H24_FAILED_JOBS__'),
+-    'warned_source_exit_zero_jobs': int('__H24_WARNED_SOURCE_EXIT_ZERO_JOBS__'),
+-    'rejected_public_type_jobs': int('__H24_REJECTED_PUBLIC_TYPE_JOBS__'),
+-    'audit_build_jobs': int('__H24_AUDIT_BUILD_JOBS__'),
+-    'audit_dependencies': int('__H24_AUDIT_DEPENDENCIES__'),
++    'actual_jobs': int('3'),
++    'source_jobs': int('2'),
++    'audit_jobs': int('1'),
++    'failed_jobs': int('0'),
++    'warned_source_exit_zero_jobs': int('0'),
++    'rejected_public_type_jobs': int('0'),
++    'audit_build_jobs': int('3641'),
++    'audit_dependencies': int('75502'),
+ }
+ start = (HERE / 'starting-head.txt').read_text().strip()
+ assert start == '0d03a28e82f9f3d0b5dfbba16bc919fb16c422cb'
+@@ -29,7 +29,7 @@
+ assert subprocess.check_output(['git', 'branch', '--show-current'], cwd=ROOT, text=True).strip() == 'formalize'
+ now = datetime.datetime.now().astimezone().strftime('%Y-%m-%d %H:%M %Z')
+ gate = json.loads((HERE / 'selected-source-gate.json').read_text())
+-source_path = 'lean/MicroCFTA/__H24_MODULE_NAME__.lean'
++source_path = 'lean/MicroCFTA/SourceCurrentSameSymbolEdgeModelTransport.lean'
+ assert gate['status'] == 'ROOT_ACCEPTED' and gate['path'] == source_path
+ source = (ROOT / source_path).read_bytes()
+ assert hashlib.sha256(source).hexdigest() == gate['sha256'] == SOURCE_SHA
+@@ -37,13 +37,13 @@
+ assert source == (HERE / (strict + '.source.lean')).read_bytes() and (HERE / (strict + '.log')).read_bytes() == b''
+ assert json.loads((HERE / (strict + '.json')).read_text())['exit_code'] == 0
+ raw = (HERE / (full + '.log')).read_bytes()
+-assert hashlib.sha256(raw).hexdigest() == '__H24_FULL_RAW_SHA__'
++assert hashlib.sha256(raw).hexdigest() == '60e482e706203117cc772e4ac8a2b0040d1463474ad9015c7d40b98ce268a230'
+ assert json.loads((HERE / (full + '.json')).read_text())['exit_code'] == 0
+ readback = json.loads((HERE / 'public-readback/pair-stable-model-transport-full-readback.json').read_text())
+ assert readback['source_sha256'] == SOURCE_SHA and readback['source_lines'] == SOURCE_LINES
+ assert readback['log_sha256'] == hashlib.sha256(raw).hexdigest() and readback['log_bytes'] == len(raw)
+-head_specs = json.loads('__H24_HEAD_SPECS_JSON__')
+-assert [spec[0] for spec in head_specs] == json.loads('__H24_PUBLIC_HEAD_NAMES_JSON__')
++head_specs = json.loads('[["rebase", "4eaaf82ba9e58cac4adf879eb745c56dd08e8a6f01aae675c1b281b8553c97f2", "4eaaf82ba9e58cac4adf879eb745c56dd08e8a6f01aae675c1b281b8553c97f2", "10b208001752e629ac32e1bb0d3495801f7423aff563ce9bbe6e128c2527ebb7", true, "public-readback/pair-stable-model-transport-rebase-public-type.txt", "public-readback/pair-stable-model-transport-rebase-printed-public-type.txt", "[\\"Quot.sound\\", \\"propext\\"]"]]')
++assert [spec[0] for spec in head_specs] == json.loads('["rebase"]')
+ assert head_specs and readback['owned_public_job_exit'] == 0 and readback['no_omissions'] and len(readback['heads']) == len(head_specs)
+ review = json.loads((HERE / 'root-full-review.json').read_text())
+ assert review['complete_public_type_root_review'] == review['independent_complete_public_type_review'] == 'CLEAR'
+@@ -54,7 +54,7 @@
+ checked_types, printed_types = {}, {}
+ for short, type_sha, printed_sha, canonical_sha, raw_identity, type_path, printed_path, axioms_json in head_specs:
+     head = heads[short]
+-    assert head['head'] == 'MicroCFTA.__H24_MODULE_NAME__.' + short
++    assert head['head'] == 'MicroCFTA.SourceCurrentSameSymbolEdgeModelTransport.' + short
+     assert head['check_print_type_identity'] and head['check_print_type_lexical_identity'] and head['unique_complete_type_body_delimiter']
+     checked = (HERE / type_path).read_bytes()
+     printed = (HERE / printed_path).read_bytes()
+@@ -71,9 +71,9 @@
+     proof_report = json.loads((HERE / ('proof-evidence-' + mode + '.json')).read_text())
+     assert proof_report['status'] == 'PASS' and proof_report['live'] is expected_live
+     assert all(proof_report[key] == value for key, value in metrics.items())
+-    assert proof_report['audit_log_sha256'] == '__H24_AUDIT_SHA__'
++    assert proof_report['audit_log_sha256'] == '5bc7b23b962b868cfcc39caf495984abaf32cb35628b17f1212cadaca1e23437'
+ audit = (HERE / (audit_stem + '.log')).read_bytes()
+-assert hashlib.sha256(audit).hexdigest() == proof_report['audit_log_sha256'] == '__H24_AUDIT_SHA__'
++assert hashlib.sha256(audit).hexdigest() == proof_report['audit_log_sha256'] == '5bc7b23b962b868cfcc39caf495984abaf32cb35628b17f1212cadaca1e23437'
+ assert json.loads((HERE / (audit_stem + '.json')).read_text())['exit_code'] == 0
+ assert f"Build completed successfully ({metrics['audit_build_jobs']} jobs).".encode() in audit
+ assert f"{metrics['audit_dependencies']} MicroCFTA theorems".encode() in audit
+@@ -123,7 +123,7 @@
+ Selected source: {SOURCE_LINES} lines, SHA `{SOURCE_SHA}`.
+ Selected clean strict: `{strict}`. Selected FULL: `{full}`.
+ Strict has a literal-empty log. Default declaration limits and all linters remain.
+-The source hard stop is {int('__H24_SOURCE_HARD_STOP__')} lines. Diagnostic options follow the complete module.
++The source hard stop is {int('120')} lines. Diagnostic options follow the complete module.
+ FULL retains {len(raw)} raw bytes. Complete TYPEs agree under four-character ASCII whitespace normalization.
+ {type_summary}
+ Root and an independent reviewer read each complete checked public TYPE.

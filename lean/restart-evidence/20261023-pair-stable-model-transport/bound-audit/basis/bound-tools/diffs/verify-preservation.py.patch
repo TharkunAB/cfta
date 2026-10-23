@@ -1,0 +1,30 @@
+--- predecessors/verify-preservation.py
++++ verify-preservation.py
+@@ -25,15 +25,15 @@
+ selected = json.loads((HERE / 'selected-sources.json').read_text())
+ gate = json.loads((HERE / 'selected-source-gate.json').read_text())
+ assert gate['status'] == 'ROOT_ACCEPTED'
+-assert gate['path'] == 'lean/MicroCFTA/__H24_MODULE_NAME__.lean'
+-assert isinstance(gate['lines'], int) and 0 < gate['lines'] <= int('__H24_SOURCE_HARD_STOP__')
++assert gate['path'] == 'lean/MicroCFTA/SourceCurrentSameSymbolEdgeModelTransport.lean'
++assert isinstance(gate['lines'], int) and 0 < gate['lines'] <= int('120')
+ assert sha(HERE / gate['snapshot']) == gate['sha256']
+ expected = {gate['path']: (gate['sha256'], gate['lines'])}
+ assert set(selected) == set(expected)
+ for name, (expected_sha, lines) in expected.items():
+     assert selected[name]['sha256'] == expected_sha and sha(ROOT / name) == expected_sha
+     assert len((ROOT / name).read_bytes().splitlines()) == lines
+-new_module = 'lean/MicroCFTA/__H24_MODULE_NAME__.lean'
++new_module = 'lean/MicroCFTA/SourceCurrentSameSymbolEdgeModelTransport.lean'
+ assert new_module not in base
+ assert 'lean/notes-current-pair-stable-model-transport.md' not in base
+ assert (ROOT / 'lean/notes-current-pair-stable-model-transport.md').is_file()
+@@ -46,7 +46,7 @@
+ assert sha(audit_original) == 'f3f370610be0dddc7b2f21b77af15f21cc11774a95b8ecf93cd63748b6ed9145'
+ assert len(audit_original.read_bytes().splitlines()) == 3129
+ audit = (ROOT / 'lean/MicroCFTA/Audit.lean').read_bytes()
+-addition = b'import MicroCFTA.__H24_MODULE_NAME__\n'
++addition = b'import MicroCFTA.SourceCurrentSameSymbolEdgeModelTransport\n'
+ assert audit.count(addition) == 1 and audit.replace(addition, b'', 1) == audit_original.read_bytes()
+ assert audit.index(addition) < audit.index(b'/-!')
+ for name in documents:

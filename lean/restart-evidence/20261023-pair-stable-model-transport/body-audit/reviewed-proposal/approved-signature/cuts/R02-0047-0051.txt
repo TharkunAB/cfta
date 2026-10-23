@@ -1,0 +1,5 @@
+/-- Retained source facts can strengthen the cell interpretation without table effects. -/
+theorem Valid.map (state : State Key Request Value) (keyOf : Request → Key → Prop)
+    (first second : Cell Request Value → Prop) (valid : Valid keyOf first state)
+    (retained : ∀ cell, first cell → second cell) : Valid keyOf second state :=
+  ⟨valid.bounded, valid.linked, fun handle cell stored => retained cell (valid.checked handle cell stored)⟩
