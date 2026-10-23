@@ -7,6 +7,9 @@ import Data.List (sort)
 import qualified Data.Set as Set
 import Test.Hspec (Spec, describe, it, shouldBe, shouldSatisfy)
 
+import Data.Either (isRight)
+
+import qualified Data.CFTA as FTA
 import Data.CFTA.Gen (Gen)
 import qualified Data.CFTA.Gen as Gen
 import Data.CFTA.Gen.ManySorted
@@ -64,6 +67,24 @@ bounded signature = case signatureGen signature of
 members :: Gen String (Term String) -> [Term String]
 members generator = either (error . show) id (Gen.values generator)
 
+-- | Every term with the given number of nodes, over the symbols of the signature and one more, with any arity from zero to three.
+untypedTerms :: Int -> [Term String]
+untypedTerms size =
+    [ Node symbol children
+    | symbol <- ["zero", "one", "add", "lt", "ite", "foo"]
+    , arity <- [0 .. 3]
+    , children <- split arity (size - 1)
+    ]
+  where
+    split 0 0 = [[]]
+    split 0 _ = []
+    split n budget =
+        [ first : rest
+        | firstSize <- [1 .. budget]
+        , first <- untypedTerms firstSize
+        , rest <- split (n - 1 :: Int) (budget - firstSize)
+        ]
+
 spec :: Spec
 spec = describe "Data.CFTA.Gen.ManySorted" $ do
     let generator = bounded arithmetic
@@ -120,6 +141,19 @@ spec = describe "Data.CFTA.Gen.ManySorted" $ do
     it "names the child when only the child is in error" $
         typeCheck arithmetic (Node "add" [Node "zero" [], Node "add" [Node "one" [], Node "lt" [Node "one" [], Node "one" []]]])
             `shouldBe` Left (WrongChildSort (path [ChildIndex 1]) "add" [Int, Int] [Just Int, Just Bool])
+
+    it "rejects a term whose sort is not a root sort" $
+        typeCheck arithmetic{sortedRoots = [Int]} (Node "lt" [Node "zero" [], Node "zero" []])
+            `shouldBe` Left (NotRootSort Bool)
+
+    it "accepts exactly the terms that the automaton accepts, among untyped terms" $ do
+        automaton <- either (fail . show) pure $ signatureAutomaton arithmetic{sortedRoots = [Bool]}
+        let untyped = concatMap untypedTerms [1 .. 5]
+        length untyped `shouldSatisfy` (> 1000)
+        mapM_
+            (\term -> (isRight (typeCheck arithmetic{sortedRoots = [Bool]} term), term) `shouldBe` (FTA.accepts automaton term, term))
+            untyped
+        length (filter (isRight . typeCheck arithmetic{sortedRoots = [Bool]}) untyped) `shouldSatisfy` (> 0)
 
     it "rejects an unknown sort" $
         failure (signatureGen arithmetic{sortedSorts = [Int]}) `shouldBe` Just (UnknownSort Bool)

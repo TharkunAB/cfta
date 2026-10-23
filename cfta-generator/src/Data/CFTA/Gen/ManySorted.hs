@@ -169,6 +169,8 @@ data TypeError sort symbol
         [sort]
         -- | The sorts of the children, from left to right. A child that is not well-typed has no sort.
         [Maybe sort]
+    | -- | The term is well-typed at the root, but its sort is not a root sort.
+      NotRootSort !sort
     deriving (Eq, Show)
 
 {- | Check that a term is a term of the signature, and find its sort.
@@ -179,15 +181,20 @@ accept at that argument. The error names the first such node in preorder. A
 child that is not well-typed has no sort, so its parent is not in error for
 that child. The error then names the node in that child.
 
-This function does not test whether the sort of the term is a root sort.
+The sort of the term must be a root sort. Then 'typeCheck' accepts exactly the
+terms that 'signatureAutomaton' accepts.
 -}
 typeCheck ::
     (Ord sort, Ord symbol) =>
     SortedSignature sort symbol ->
     Term symbol ->
     Either (TypeError sort symbol) sort
-typeCheck signature = check []
+typeCheck signature term0 = check [] term0 >>= rootSort
   where
+    rootSort sort'
+        | sort' `elem` sortedRoots signature = Right sort'
+        | otherwise = Left $ NotRootSort sort'
+
     functions = Map.fromList [(functionSymbol function, function) | function <- sortedFunctions signature]
 
     check reversed term = case Map.lookup symbol functions of
