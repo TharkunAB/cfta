@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
--- | Complete readable snapshots of graphs.
+-- | Complete readable snapshots of graphs and checkpoints.
 module Data.CFTA.Serialization.Text (
     StateCodec (..),
     TextError (..),
@@ -16,6 +16,12 @@ module Data.CFTA.Serialization.Text (
     CommentTarget (..),
     printGraphNotesWith,
     parseGraphNotesWith,
+
+    -- * Checkpoints
+    printCheckpoint,
+    parseCheckpoint,
+    printCheckpointWith,
+    parseCheckpointWith,
 ) where
 
 import Control.Applicative ((<|>))
@@ -37,6 +43,7 @@ import Numeric (showHex)
 import Text.Read (readEither)
 
 import qualified Data.CFTA as FTA
+import Data.CFTA.Checkpoint (Checkpoint (..))
 import qualified Data.CFTA.Constraint as C
 import Data.CFTA.Equality.Constraint (
     EqConstraints (EqConstraints, EqContradiction),
@@ -44,7 +51,7 @@ import Data.CFTA.Equality.Constraint (
     unPathEClass,
  )
 import qualified Data.CFTA.Formula as F
-import Data.CFTA.Index (ChildIndex (ChildIndex))
+import Data.CFTA.Index (ChildIndex (ChildIndex), ClassRank (ClassRank), Size (Size))
 import Data.CFTA.Path (Path (Path), unPath)
 import Data.CFTA.Symbol (Symbol (RefinedSymbol, Symbol), symbolRefinement, symbolText, valueName)
 
@@ -154,14 +161,57 @@ parseGraphNotesWith ::
     (Ord state) => StateCodec state -> Text -> Either (TextError state) (Notes state, FTA.PlainFTA state Symbol)
 parseGraphNotesWith = readGraph . decodeState
 
+{- | Print a checkpoint with state labels from their 'Show' instance. The
+text holds the query and the sized rank of the next term, then the text of
+'printGraph' for the graph.
+-}
+printCheckpoint :: (Show state) => Checkpoint state -> Text
+printCheckpoint = renderCheckpoint (Text.pack . show)
+
+-- | Print a checkpoint with an explicit typed state codec.
+printCheckpointWith :: StateCodec state -> Checkpoint state -> Text
+printCheckpointWith = renderCheckpoint . encodeState
+
+-- | Read a checkpoint with its state's 'Read' instance, and validate its graph.
+parseCheckpoint :: (Ord state, Read state) => Text -> Either (TextError state) (Checkpoint state)
+parseCheckpoint = readCheckpoint (readEither . Text.unpack)
+
+-- | Read a checkpoint with an explicit typed state codec.
+parseCheckpointWith :: (Ord state) => StateCodec state -> Text -> Either (TextError state) (Checkpoint state)
+parseCheckpointWith = readCheckpoint . decodeState
+
 -- | Render graph rows with their complete transition constraints, and the doc comments that the lookup gives.
 renderGraph :: (state -> Text) -> NoteLookup state -> FTA.PlainFTA state Symbol -> Text
-renderGraph encode notes = built . graphText "graph" encode transition notes
+renderGraph encode notes = built . plainGraphText encode notes
+
+-- | Render the graph format.
+plainGraphText :: (state -> Text) -> NoteLookup state -> FTA.PlainFTA state Symbol -> Builder
+plainGraphText encode = graphText "graph" encode transition
   where
     transition edge = "  " <> edgeText encode edge <> obligation (FTA.transitionConstraint edge) <> ";\n"
     obligation constraint
         | constraint == C.noConstraint = mempty
         | otherwise = " where " <> constraintText constraint
+
+-- | Render the query and the next sized rank, then the graph in the graph format.
+renderCheckpoint :: (state -> Text) -> Checkpoint state -> Text
+renderCheckpoint encode checkpoint =
+    built $
+        "checkpoint 1;\nquery "
+            <> nameText (checkpointRoute checkpoint)
+            <> " "
+            <> integerText (checkpointVersion checkpoint)
+            <> ";\nbound "
+            <> integerText bound
+            <> ";\nnext "
+            <> integerText size
+            <> " "
+            <> integerText rank
+            <> ";\n\n"
+            <> plainGraphText encode noNotes (checkpointGraph checkpoint)
+  where
+    Size bound = checkpointBound checkpoint
+    (Size size, ClassRank rank) = checkpointNext checkpoint
 
 -- | Render the shared version, initial state, and finite row table, each item after its doc comment.
 graphText ::
@@ -352,10 +402,55 @@ readGraph ::
     Text ->
     Either (TextError state) (Notes state, FTA.PlainFTA state Symbol)
 readGraph decode input = do
-    (notes, (initial, rows)) <- runParser (graphParser "graph" decode (graphTransitionParser decode) <* noComment) input
-    foldM_ distinct Set.empty $ map fst rows
-    graph <- first InvalidGraph $ FTA.mkFTA initial rows
-    pure (notesOf notes, graph)
+    (comments, rows) <- runParser (plainGraphParser decode) input
+    graph <- validGraph rows
+    pure (notesOf comments, graph)
+
+{- | Read the graph format: the header, the initial state, and the rows with
+their constraints, and the doc comments of the file and of the states.
+-}
+plainGraphParser ::
+    (Text -> Either String state) ->
+    A.Parser ([NoteEntry state], (state, [(state, [FTA.Transition state Symbol C.Constraint])]))
+plainGraphParser decode = graphParser "graph" decode (graphTransitionParser decode) <* noComment
+
+-- | Check that each state has one row, then check the graph as 'FTA.mkFTA' does.
+validGraph ::
+    (Ord state) =>
+    (state, [(state, [FTA.Transition state Symbol C.Constraint])]) -> Either (TextError state) (FTA.PlainFTA state Symbol)
+validGraph (initial, rows) = do
+    distinctStates rows
+    first InvalidGraph $ FTA.mkFTA initial rows
+
+-- | Read the query, the next sized rank, and the graph of a checkpoint.
+readCheckpoint :: (Ord state) => (Text -> Either String state) -> Text -> Either (TextError state) (Checkpoint state)
+readCheckpoint decode input = do
+    (route, version, bound, next, rows) <- runParser parser input
+    graph <- validGraph rows
+    pure $ Checkpoint graph route version bound next
+  where
+    parser = do
+        keyword "checkpoint"
+        format <- integerParser
+        unless (format == 1) $ fail "unsupported checkpoint version; expected 1"
+        token ";"
+        keyword "query"
+        route <- nameParser
+        version <- integerParser
+        token ";"
+        keyword "bound"
+        bound <- integerParser
+        token ";"
+        keyword "next"
+        size <- integerParser
+        rank <- integerParser
+        token ";"
+        (_, rows) <- plainGraphParser decode
+        pure (route, version, Size bound, (Size size, ClassRank rank), rows)
+
+-- | Reject a second row for a state.
+distinctStates :: (Ord state) => [(state, rows)] -> Either (TextError state) ()
+distinctStates = foldM_ distinct Set.empty . map fst
   where
     distinct seen state
         | Set.member state seen = Left $ DuplicateState state
