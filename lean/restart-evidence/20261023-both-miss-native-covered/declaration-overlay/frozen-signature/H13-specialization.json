@@ -1,0 +1,60 @@
+{
+  "status": "EXACT_FORWARD_AND_REVERSE_TEXT_PASS",
+  "original_header_sha256": "b58b560c3c70dcac3eb825d3f35275ee4e4032400a781b25cfc0fc2af82bce66",
+  "new_header_without_doc_sha256": "bfa2aaa85f3d2d185067ced89f3c36927736fd45ff107a63b44929f6cb626639",
+  "public_header_sha256": "41ba0c705d0ff6a6de29d07d5c4ffbc8da50bef810851aef9f92300eb9e27c90",
+  "operations": [
+    {
+      "before": "    (inputModel : InputMeaning (view source (guardHolds formulas solver)))\n    (inputRanked : RankedInput (view source (guardHolds formulas solver)) inputModel.valid)\n",
+      "after": "    (inputs : FiniteInput (view source (guardHolds formulas solver)))\n",
+      "reason": "Specialize H13 to one exact finite input interpretation and its ranks."
+    },
+    {
+      "before": "    (leftClosed : leftParent.free = []) (rightClosed : rightParent.free = [])\n",
+      "after": "    (leftClosed : leftParent.free = []) (rightClosed : rightParent.free = [])\n    (leftAdmitted : inputs.valid (inputOf leftParent))\n    (rightAdmitted : inputs.valid (inputOf rightParent))\n",
+      "reason": "Expose genuine admission of the same two actual parents."
+    },
+    {
+      "before": "    (stable : Stable (view source (guardHolds formulas solver)) inputModel inputRanked\n      (guardHolds formulas solver) before)\n",
+      "after": "    (stable : Stable (view source (guardHolds formulas solver))\n      (finiteInputMeaning (view source (guardHolds formulas solver)) inputs)\n      (finiteRankedInput (view source (guardHolds formulas solver)) inputs)\n      (guardHolds formulas solver) before)\n",
+      "reason": "Use the SAME finite model and ranks in incoming Stable."
+    },
+    {
+      "before": "    (contextual : SourceCurrentAllocatedNativeContextCache.Contextual\n      (view source (guardHolds formulas solver)) inputModel inputRanked\n      (guardHolds formulas solver) before.checked.native)\n",
+      "after": "    (contextual : SourceCurrentAllocatedNativeContextCache.Contextual\n      (view source (guardHolds formulas solver))\n      (finiteInputMeaning (view source (guardHolds formulas solver)) inputs)\n      (finiteRankedInput (view source (guardHolds formulas solver)) inputs)\n      (guardHolds formulas solver) before.checked.native)\n",
+      "reason": "Use the SAME finite model and ranks in incoming native Contextual."
+    },
+    {
+      "before": "    (semantic : SemanticReady before.checked.native.machine.heap)\n",
+      "after": "    (semantic : SemanticReady before.checked.native.machine.heap)\n    (covered : Covered inputs before.checked.native)\n",
+      "reason": "Retain genuine all-phase admission of every populated initial native cell."
+    },
+    {
+      "before": "        (semanticView := view source (guardHolds formulas solver)) (model := inputModel)\n        (ranked := inputRanked) (semanticHolds := guardHolds formulas solver)\n",
+      "after": "        (semanticView := view source (guardHolds formulas solver))\n        (model := finiteInputMeaning (view source (guardHolds formulas solver)) inputs)\n        (ranked := finiteRankedInput (view source (guardHolds formulas solver)) inputs)\n        (semanticHolds := guardHolds formulas solver)\n",
+      "reason": "Retain the exact contextual Receipt specialized to the SAME finite input."
+    },
+    {
+      "before": "          (view source (guardHolds formulas solver)) inputModel inputRanked\n          (guardHolds formulas solver) request value) \u2227\n",
+      "after": "          (view source (guardHolds formulas solver))\n          (finiteInputMeaning (view source (guardHolds formulas solver)) inputs)\n          (finiteRankedInput (view source (guardHolds formulas solver)) inputs)\n          (guardHolds formulas solver) request value) \u2227\n",
+      "reason": "Retain the exact H13 returned canonical EdgeLaw."
+    },
+    {
+      "before": "      Stable (view source (guardHolds formulas solver)) inputModel inputRanked\n        (guardHolds formulas solver) after \u2227\n",
+      "after": "      Stable (view source (guardHolds formulas solver))\n        (finiteInputMeaning (view source (guardHolds formulas solver)) inputs)\n        (finiteRankedInput (view source (guardHolds formulas solver)) inputs)\n        (guardHolds formulas solver) after \u2227\n",
+      "reason": "Retain final Stable in the SAME finite semantic context."
+    },
+    {
+      "before": "          after.memo.cells reversedHandle = some \u27e8(right, left), .returned result\u27e9)\n",
+      "after": "          after.memo.cells reversedHandle = some \u27e8(right, left), .returned result\u27e9) \u2227\n      Covered inputs after.checked.native\n",
+      "reason": "Append native Covered only, after the entire unchanged H13 witness tuple."
+    }
+  ],
+  "all_H13_fields_and_outputs_recovered_by_exact_inverse": true,
+  "new_entry_premises": [
+    "inputs.valid (inputOf leftParent)",
+    "inputs.valid (inputOf rightParent)",
+    "Covered inputs before.checked.native"
+  ],
+  "only_new_output": "Covered inputs after.checked.native"
+}

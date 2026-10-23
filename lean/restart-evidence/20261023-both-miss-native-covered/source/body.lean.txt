@@ -1,0 +1,61 @@
+  dsimp only
+  let ordered := if right.entry.identity < left.entry.identity then (right, left) else (left, right)
+  let request : EdgeRequest Symbol Guard := ⟨IntersectionEmptyDomain.emptyDomain, ordered.1, ordered.2⟩
+  obtain ⟨leftInputs, _⟩ :=
+    SourceCurrentOriginalRowPhysicalMeaning.row_inputs_meaning source facts
+      (guardHolds formulas solver)
+      (finiteInputMeaning (view source (guardHolds formulas solver)) inputs)
+      leftParent left leftOriginal leftAvailable leftClosed leftAdmitted leftMember
+  obtain ⟨rightInputs, _⟩ :=
+    SourceCurrentOriginalRowPhysicalMeaning.row_inputs_meaning source facts
+      (guardHolds formulas solver)
+      (finiteInputMeaning (view source (guardHolds formulas solver)) inputs)
+      rightParent right rightOriginal rightAvailable rightClosed rightAdmitted rightMember
+  have rawScope : EdgeScope source ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩ := by
+    refine ⟨resident_edges source facts.linked leftParent leftAvailable.resident left leftMember,
+      resident_edges source facts.linked rightParent rightAvailable.resident right rightMember,
+      ?_, ?_, ?_⟩
+    · intro child member
+      exact (leftInputs child member).1
+    · intro child member
+      exact (rightInputs child member).1
+    · intro _ member
+      cases member
+  have rawCovered : EdgeCovered inputs ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩ := by
+    exact ⟨⟨leftInputs, rightInputs⟩,
+      SourceCurrentAllocatedNativePairAdmission.empty_seen inputs⟩
+  have orderedInputs : EdgeScope source request ∧ EdgeCovered inputs request := by
+    by_cases swap : right.entry.identity < left.entry.identity
+    · simp only [request, ordered, swap, ↓reduceIte]
+      exact ⟨⟨rawScope.rightResident, rawScope.leftResident,
+        rawScope.right, rawScope.left, rawScope.bindings⟩,
+        ⟨⟨rightInputs, leftInputs⟩,
+          SourceCurrentAllocatedNativePairAdmission.empty_seen inputs⟩⟩
+    · simpa only [request, ordered, swap, ↓reduceIte] using And.intro rawScope rawCovered
+  have ready : EdgeReady before.checked.native.machine request := by
+    exact ⟨empty_domain _, edge_grows source _ growth _ orderedInputs.1.leftResident,
+      edge_grows source _ growth _ orderedInputs.1.rightResident⟩
+  have fields : Fields (.edgeBody request .pure) before.checked := by
+    exact ⟨ready, fun _ => True.intro⟩
+  have certificate : ControlCertified source (guardHolds formulas solver) inputs
+      (.edgeBody request .pure) before.checked.native.machine
+      (fun final value => EdgeResident final.heap value) := by
+    refine ⟨orderedInputs.1, orderedInputs.2, ?_⟩
+    intro _ _ _ _ _ resident
+    exact resident
+  obtain ⟨fuel, nativeFuel, handle, result, after, done, receipt, afterStable, afterIdle,
+      tables, retained, stored, cell, reversed⟩ :=
+    SourceCurrentSameSymbolEdgeOriginalRows.both_miss_complete bits source facts formulas solver
+      (finiteInputMeaning (view source (guardHolds formulas solver)) inputs)
+      (finiteRankedInput (view source (guardHolds formulas solver)) inputs)
+      leftParent rightParent leftOriginal rightOriginal leftAvailable rightAvailable
+      leftClosed rightClosed left right leftMember rightMember symbols before stable
+      missing reverseMissing good contextual semantic growth history idle room
+  have finalCovered : Covered inputs after.checked.native := by
+    exact (SourceCurrentAllocatedNativeAdmissionTrace.Trace.covered source
+      (guardHolds formulas solver) inputs
+      (SourceCurrentAllocatedNativeCoveredQuery.branches source facts (guardHolds formulas solver) inputs)
+      receipt.trace (fun final value => EdgeResident final.heap value)
+      good semantic growth history fields covered certificate).1
+  exact ⟨fuel, nativeFuel, handle, result, after, done, receipt, afterStable, afterIdle,
+    tables, retained, stored, cell, reversed, finalCovered⟩

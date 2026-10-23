@@ -1,0 +1,30 @@
+--- accepted-pending/verify-preservation.py
++++ actual-bound-proposed/verify-preservation.py
+@@ -25,15 +25,15 @@
+ selected = json.loads((HERE / 'selected-sources.json').read_text())
+ gate = json.loads((HERE / 'selected-source-gate.json').read_text())
+ assert gate['status'] == 'ROOT_ACCEPTED'
+-assert gate['path'] == 'lean/MicroCFTA/__H26_MODULE_NAME__.lean'
+-assert isinstance(gate['lines'], int) and 0 < gate['lines'] <= int('__H26_SOURCE_HARD_STOP__')
++assert gate['path'] == 'lean/MicroCFTA/SourceCurrentSameSymbolEdgeOriginalRowsCovered.lean'
++assert isinstance(gate['lines'], int) and 0 < gate['lines'] <= int('180')
+ assert sha(HERE / gate['snapshot']) == gate['sha256']
+ expected = {gate['path']: (gate['sha256'], gate['lines'])}
+ assert set(selected) == set(expected)
+ for name, (expected_sha, lines) in expected.items():
+     assert selected[name]['sha256'] == expected_sha and sha(ROOT / name) == expected_sha
+     assert len((ROOT / name).read_bytes().splitlines()) == lines
+-new_module = 'lean/MicroCFTA/__H26_MODULE_NAME__.lean'
++new_module = 'lean/MicroCFTA/SourceCurrentSameSymbolEdgeOriginalRowsCovered.lean'
+ assert new_module not in base
+ assert 'lean/notes-current-both-miss-native-covered.md' not in base
+ assert (ROOT / 'lean/notes-current-both-miss-native-covered.md').is_file()
+@@ -46,7 +46,7 @@
+ assert sha(audit_original) == 'b616bb97d542e1494bfbef2d6c3c77365c28731ff8a8a612e59533b44bc783e3'
+ assert len(audit_original.read_bytes().splitlines()) == 3131
+ audit = (ROOT / 'lean/MicroCFTA/Audit.lean').read_bytes()
+-addition = b'import MicroCFTA.__H26_MODULE_NAME__\n'
++addition = b'import MicroCFTA.SourceCurrentSameSymbolEdgeOriginalRowsCovered\n'
+ assert audit.count(addition) == 1 and audit.replace(addition, b'', 1) == audit_original.read_bytes()
+ assert audit.index(addition) < audit.index(b'/-!')
+ for name in documents:

@@ -1,0 +1,24 @@
+/-- Complete a ready pair comparison and retain its canonical result law and memo records. -/
+theorem ready_complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (semanticView : View Symbol) (model : InputMeaning semanticView)
+    (ranked : RankedInput semanticView model.valid) (holds : Guard → Term Symbol → Bool)
+    (left right : Edge) (before : Wrapper width)
+    (coherent : InternedRecordCoherence.Coherent before.checked.native.machine.heap)
+    (stable : SourceCurrentSameSymbolEdgeStable.Stable semanticView model ranked holds before)
+    (leftResident : EdgeResident before.checked.native.machine.heap left)
+    (rightResident : EdgeResident before.checked.native.machine.heap right)
+    (present :
+      (∃ handle, before.memo.table (left.entry.identity, right.entry.identity) = some handle) ∨
+      (∃ handle, before.memo.table (right.entry.identity, left.entry.identity) = some handle)) :
+    ∃ (result : Edge) (after : Wrapper width),
+      SourceCurrentSameSymbolEdgeControl.execute 7 (.call (left, right) []) before =
+        .done result after ∧
+      after.checked = before.checked ∧
+      EdgeResident after.checked.native.machine.heap result ∧
+      (let ordered := if right.entry.identity < left.entry.identity then (right, left) else (left, right)
+       SourceCurrentAllocatedNativeContextCache.EdgeLaw semanticView model ranked holds
+         ⟨IntersectionEmptyDomain.emptyDomain, ordered.1, ordered.2⟩ result) ∧
+      SourceCurrentSameSymbolEdgeStable.Stable semanticView model ranked holds after ∧
+      Cache.Extends before.memo.table after.memo.table ∧
+      FlatMemoThunk.Returned before.memo after.memo := by
+  have progress :

@@ -1,0 +1,31 @@
+/-- Independent finite derivations satisfy every rank law used by completeness. -/
+def finiteRankedInput (view : View Symbol) (inputs : FiniteInput view) : RankedInput view inputs.valid where
+  languages := finiteRanks view inputs
+  body := by
+    intro name valid rank term accepted
+    have derivation := (finiteRanks_exact view inputs (.mu name) valid rank term).mp accepted
+    cases derivation with
+    | binder body less =>
+      exact ⟨_, less, (finiteRanks_exact view inputs _ (inputs.body_valid name valid) _ term).mpr body⟩
+  row := by
+    intro name valid rank term accepted
+    have derivation := (finiteRanks_exact view inputs (.node name) valid rank term).mp accepted
+    cases derivation with
+    | node row member terms children guard =>
+      refine ⟨row, member, terms, rfl, ?_, guard⟩
+      exact SymbolicInternedView.all₂_scoped_imp _ _ _ _ ((input_forest_exact view rank _ _).mp children) (by
+        intro child present output _ accepted
+        obtain ⟨smaller, bounded, derivation⟩ := accepted
+        exact (finiteRanks_exact view inputs child (inputs.row_valid name valid row member child present) rank output).mpr
+          (input_derivation_mono view child smaller rank bounded output derivation))
+  union := by
+    intro name valid rank term accepted
+    have derivation := (finiteRanks_exact view inputs (.union name) valid rank term).mp accepted
+    cases derivation with
+    | union member body less =>
+      exact ⟨_, member, (finiteRanks_exact view inputs _ (inputs.union_valid name valid _ member) rank term).mpr
+        (input_derivation_mono view _ _ rank less term body)⟩
+  copy := by
+    intro input valid isClosed rank term accepted environment
+    rw [inputs.copy_exact input valid isClosed environment]
+    exact ⟨rank, (finiteRanks_exact view inputs input valid rank term).mp accepted⟩

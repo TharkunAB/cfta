@@ -1,0 +1,19 @@
+/-- Every bound source name retains an original available Mu in the fixed input heap. -/
+def OriginalBindings (source : InternedConstructorTemplates.State Symbol Guard) (domain : DomainKey) : Prop :=
+  ∀ name ∈ SourceRecursiveIntersectionDomain.names domain, OriginalInput source (.mu name)
+
+/-- A node request retains original available operands and original source bindings. -/
+structure NodeScope (source : InternedConstructorTemplates.State Symbol Guard) (request : NodeRequest Symbol Guard) : Prop where
+  left : Original request.left
+  right : Original request.right
+  leftAvailable : Available source request.left
+  rightAvailable : Available source request.right
+  bindings : OriginalBindings source request.domain.key
+
+/-- A row request retains original resident edges, complete original children, and source bindings. -/
+structure EdgeScope (source : InternedConstructorTemplates.State Symbol Guard) (request : EdgeRequest Symbol Guard) : Prop where
+  leftResident : InternedEdgeResidency.EdgeResident source request.left
+  rightResident : InternedEdgeResidency.EdgeResident source request.right
+  left : ∀ child ∈ request.left.children, Original child
+  right : ∀ child ∈ request.right.children, Original child
+  bindings : OriginalBindings source request.domain.key

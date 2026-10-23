@@ -1,0 +1,21 @@
+import MicroCFTA.SourceEqualityNativeDemandTrace
+import MicroCFTA.FlatMemoThunkReturned
+import MicroCFTA.IntersectionEmptyDomain
+
+namespace MicroCFTA.SourceCurrentSameSymbolEdgeControl
+open InternedConstructorTemplates
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Edge" => EdgeValue Symbol Guard
+variable {width : Nat}
+
+/-!
+# Same-symbol edge comparison
+
+Publish the original pair before demand and numeric operand ordering.
+Keep the pair memo separate from the native memo tables.
+A completed miss supplies its body trace and captured operands.
+Completion and semantic intersection require separate proofs.
+-/
+
+/-- A comparison retains the complete checked state and a separate pair memo. -/

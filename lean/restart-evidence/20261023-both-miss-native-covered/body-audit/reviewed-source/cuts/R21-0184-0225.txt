@@ -1,0 +1,42 @@
+/-- Independent finite derivations satisfy the input equations used by soundness. -/
+def finiteInputMeaning (view : View Symbol) (inputs : FiniteInput view) : InputMeaning view where
+  valid := inputs.valid
+  languages := finiteLanguages view inputs
+  body_valid := inputs.body_valid
+  body_exact := by
+    intro name valid
+    funext term
+    apply propext
+    change inputLanguage (finiteLanguages view inputs) (.mu name) term ↔ _
+    rw [finiteLanguages_exact view inputs (.mu name) valid, input_binder_exact,
+      finiteLanguages_exact view inputs (view.body name) (inputs.body_valid name valid)]
+  reference_valid := inputs.reference_valid
+  row_valid := inputs.row_valid
+  row_exact := by
+    intro name valid term
+    change inputLanguage (finiteLanguages view inputs) (.node name) term ↔ _
+    rw [finiteLanguages_exact view inputs (.node name) valid, input_node_exact]
+    constructor
+    · rintro ⟨row, member, terms, same, children, guard⟩
+      refine ⟨row, member, terms, same, ?_, guard⟩
+      exact SymbolicInternedView.all₂_scoped_imp _ _ _ _ children (by
+        intro child present output _ accepted
+        exact (finiteLanguages_exact view inputs child (inputs.row_valid name valid row member child present) output).mpr accepted)
+    · rintro ⟨row, member, terms, same, children, guard⟩
+      refine ⟨row, member, terms, same, ?_, guard⟩
+      exact SymbolicInternedView.all₂_scoped_imp _ _ _ _ children (by
+        intro child present output _ accepted
+        exact (finiteLanguages_exact view inputs child (inputs.row_valid name valid row member child present) output).mp accepted)
+  union_valid := inputs.union_valid
+  union_exact := by
+    intro name valid term
+    change inputLanguage (finiteLanguages view inputs) (.union name) term ↔ _
+    rw [finiteLanguages_exact view inputs (.union name) valid, input_union_exact]
+    constructor <;> rintro ⟨child, member, accepted⟩
+    · exact ⟨child, member, (finiteLanguages_exact view inputs child (inputs.union_valid name valid child member) term).mpr accepted⟩
+    · exact ⟨child, member, (finiteLanguages_exact view inputs child (inputs.union_valid name valid child member) term).mp accepted⟩
+  copy_exact := by
+    intro input valid isClosed environment
+    rw [inputs.copy_exact input valid isClosed environment]
+    funext term
+    exact propext (finiteLanguages_exact view inputs input valid term).symm

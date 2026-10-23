@@ -1,0 +1,8 @@
+/-- A demanded edge body retains the original request before its actual prefix runs. -/
+def ControlCertified [DecidableEq (EdgeKey Symbol Guard)]
+    (control : Control A) (state : Machine Symbol Guard) (post : Machine Symbol Guard → A → Prop) : Prop :=
+  match control with
+  | .code code => Certified source holds inputs code state post
+  | .edgeBody request next => EdgeScope source request ∧ EdgeCovered inputs request ∧
+      ∀ value after, SourceRecursiveIntersectionKernel.Valid after → Extension state after → SemanticReady after.heap →
+        EdgeResident after.heap value → Certified source holds inputs (next value) after post

@@ -1,0 +1,8 @@
+theorem Trace.next_le_missing (trace : Trace inventory before after) :
+    after.next ≤ before.next + CacheFiniteInterning.missing inventory before :=
+  trace.interns.next_le_missing
+
+/-- The static inventory bounds the supply after any number of calls. -/
+theorem Trace.next_le (trace : Trace inventory before after) :
+    after.next ≤ before.next + inventory.length := trace.interns.next_le
+

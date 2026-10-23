@@ -1,0 +1,8 @@
+private theorem tail_done [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (control next : Control) (before middle after : State width) (result : Edge)
+    (one : step control before = .yielded next middle)
+    (done : execute fuel control before = .done result after) :
+    ∃ rest, execute rest next middle = .done result after := by
+  cases fuel with
+  | zero => cases done
+  | succ fuel => exact ⟨fuel, by simpa only [execute, one] using done⟩

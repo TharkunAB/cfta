@@ -1,0 +1,7 @@
+/-- Actual source node and checked edge branches derive both static certificate families. -/
+theorem branches [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (source : InternedConstructorTemplates.State Symbol Guard) (facts : InternedNestedFacts.Facts source)
+    (holds : Guard → Term Symbol → Bool) (inputs : FiniteInput (view source holds)) :
+    SourceCurrentAllocatedNativeAdmissionTrace.Branches (width := width) source holds inputs :=
+  ⟨SourceCurrentAllocatedNativeAdmissionNodeCertificates.node_certified source facts holds inputs,
+    SourceCurrentAllocatedNativeAdmissionEdgeCertificates.body_certified source facts holds inputs⟩

@@ -1,0 +1,16 @@
+/-- Retain original children in the fixed model and read their physical row language. -/
+theorem row_inputs_meaning
+    (source : InternedConstructorTemplates.State Symbol Guard)
+    (facts : InternedNestedFacts.Facts source)
+    (holds : Guard → Term Symbol → Bool)
+    (inputModel : InputMeaning (view source holds))
+    (parent : Value Symbol Guard) (row : Edge)
+    (original : OriginalInput source (inputOf parent))
+    (available : Available source parent)
+    (closed : parent.free = [])
+    (admitted : inputModel.valid (inputOf parent))
+    (member : row ∈ InternedEdgeResidency.nodeEdges parent) :
+    (∀ child ∈ row.children, Original child ∧ inputModel.valid (inputOf child)) ∧
+      ∀ ambient : InternedGuardedLanguage.Env Symbol,
+        RowLanguage holds inputModel.languages row =
+          InternedGuardedLanguage.edgeMeaning holds ambient row := by

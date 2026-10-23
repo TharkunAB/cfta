@@ -1,0 +1,43 @@
+contract_order = ["context.lean.txt", "public-header.lean.txt", "local-bindings.lean.txt",
+    "local-raw-scope.lean.txt", "local-raw-covered.lean.txt", "local-ordered-inputs.lean.txt",
+    "local-ready.lean.txt", "local-fields.lean.txt", "local-certificate.lean.txt", "local-final-covered.lean.txt"]
+assert list(contracts) == contract_order
+layout_raw = (evidence / "signature-plan/insertion-map.json").read_bytes()
+scope_raw = (evidence / "signature-plan/local-declaration-scope.json").read_bytes()
+assert digest(layout_raw) == "7f196aa83f059b8578831bca37abc4109d7d7962ada7eded679ca1945ae9820d"
+assert digest(scope_raw) == "2e3f29eab0be263e06da7850c19811991362e65661079009d9b88e5a9776e6ba"
+layout, local_scope = json.loads(layout_raw), json.loads(scope_raw)
+assert [item["file"] for item in layout] == contract_order
+assert [item["insertion_order"] for item in layout] == list(range(10))
+for item in layout:
+    data = contract_data[item["file"]]
+    assert digest(data) == item["sha256"] and len(data) == item["bytes"] and len(data.splitlines()) == item["lines"]
+local_let_names = ["ordered", "request"]
+local_names = ["rawScope", "rawCovered", "orderedInputs", "ready", "fields", "certificate", "finalCovered"]
+assert local_scope["local_let_names"] == local_let_names and local_scope["local_have_names"] == local_names
+assert all(local_scope[key] == [] for key in ["typed_show_fragments", "local_IH_fragments", "private_helpers", "new_global_definitions"])
+assert source.count(context) == 1
+header = contract_data["public-header.lean.txt"].rstrip(b"\n") + b" := by\n"
+assert source.count(header) == 1 and source.index(header) >= len(context)
+body_start = source.index(header) + len(header)
+body_end = source.rindex(("end MicroCFTA." + name).encode())
+public_body = source[body_start:body_end]
+positions = []
+for item in layout[2:]:
+    fragment = contract_data[item["file"]]
+    if item["kind"] == "local_have":
+        fragment = fragment.rstrip(b"\n") + b" := by\n"
+    else:
+        assert item["kind"] == "local_let_bindings"
+    assert public_body.count(fragment) == 1, item["file"]
+    positions.append(public_body.index(fragment))
+assert positions == sorted(positions) and len(set(positions)) == len(positions)
+assert re.findall(rb"\bhave[ \t]+([^ \t:\n]+)", public_body) == [local.encode() for local in local_names]
+assert len(re.findall(rb"\bhave\b", public_body)) == len(local_names)
+assert re.findall(rb"\blet[ \t]+([^ \t:=\n]+)", public_body) == [local.encode() for local in local_let_names]
+assert len(re.findall(rb"\blet\b", public_body)) == len(local_let_names)
+assert not re.search(rb"\b(?:show|induction)\b", public_body)
+shape_review = load("root-declaration-review.json")
+assert shape_review["local_names"] == local_names and shape_review["local_let_names"] == local_let_names
+assert shape_review["local_induction"] is None and shape_review["typed_show_fragments"] == []
+assert shape_review["private_names"] == []

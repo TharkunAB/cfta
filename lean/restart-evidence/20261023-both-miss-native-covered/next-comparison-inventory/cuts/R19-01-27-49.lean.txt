@@ -1,0 +1,23 @@
+variable (source : InternedConstructorTemplates.State Symbol Guard)
+  (holds : Guard → Term Symbol → Bool) (inputs : FiniteInput (view source holds))
+
+/-- Static source branch proofs certify code without executing a recursive request. -/
+structure Branches [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] : Prop where
+  nodes : ∀ request : NodeRequest Symbol Guard, NodeScope source request → NodeCovered inputs request →
+    ∀ machine : Machine Symbol Guard, SourceRecursiveIntersectionKernel.Valid machine → SemanticReady machine.heap →
+    NodeReady machine request → Grows source machine.heap → Extends source.nodes.issued machine.heap.nodes.issued →
+    Certified source holds inputs (compileNode request) machine (fun after value => Available after.heap value)
+  edges : ∀ request : EdgeRequest Symbol Guard, EdgeScope source request → EdgeCovered inputs request →
+    ∀ (before after : Checked width) (code : Code Symbol Guard (EdgeValue Symbol Guard)),
+    SourceRecursiveIntersectionKernel.Valid before.native.machine → SemanticReady before.native.machine.heap →
+    EdgeReady before.native.machine request → body request .pure before = .yielded (.code code) after →
+    Certified source holds inputs code after.native.machine (fun final value => EdgeResident final.heap value)
+
+/-- A demanded edge body retains the original request before its actual prefix runs. -/
+def ControlCertified [DecidableEq (EdgeKey Symbol Guard)]
+    (control : Control A) (state : Machine Symbol Guard) (post : Machine Symbol Guard → A → Prop) : Prop :=
+  match control with
+  | .code code => Certified source holds inputs code state post
+  | .edgeBody request next => EdgeScope source request ∧ EdgeCovered inputs request ∧
+      ∀ value after, SourceRecursiveIntersectionKernel.Valid after → Extension state after → SemanticReady after.heap →
+        EdgeResident after.heap value → Certified source holds inputs (next value) after post

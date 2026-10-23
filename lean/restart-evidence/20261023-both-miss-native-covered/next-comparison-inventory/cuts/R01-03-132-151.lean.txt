@@ -1,0 +1,20 @@
+private theorem ret_done [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (value result : Edge) (pending : List Nat) (before after : State width)
+    (done : execute fuel (.ret value pending) before = .done result after) :
+    value = result ∧ after.checked = before.checked ∧
+      after.memo = pending.foldl (fun memo handle => FlatMemoThunk.finish handle value memo) before.memo := by
+  induction fuel generalizing pending before with
+  | zero => cases done
+  | succ fuel ih =>
+      cases pending with
+      | nil =>
+          have same : value = result ∧ before = after := by
+            simpa only [execute, step, Outcome.done.injEq] using done
+          rcases same with ⟨rfl, rfl⟩
+          exact ⟨rfl, rfl, rfl⟩
+      | cons handle pending =>
+          have tail : execute fuel (.ret value pending)
+              {before with memo := FlatMemoThunk.finish handle value before.memo} = .done result after := by
+            simpa only [execute, step] using done
+          obtain ⟨same, checked, memo⟩ := ih pending _ tail
+          exact ⟨same, checked, by simpa only [List.foldl] using memo⟩
