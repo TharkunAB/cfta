@@ -3,7 +3,7 @@
 -- | The readable text format: exact round trips, stable printing, errors, and ranks.
 module Main (main) where
 
-import Control.Monad (forM_)
+import Control.Monad (forM_, void)
 import qualified Data.Map.Strict as Map
 import qualified Data.Set as Set
 import Data.Text (Text)
@@ -35,6 +35,8 @@ import Data.CFTA.Refinement.LiquidFixpoint (withZ3)
 import Data.CFTA.Serialization.Text (StateCodec (..), TextError (..))
 import qualified Data.CFTA.Serialization.Text as T
 import qualified Data.CFTA.Sized as Sized
+import Data.CFTA.Sized.Checkpoint (Checkpoint (..), CheckpointError (..))
+import qualified Data.CFTA.Sized.Checkpoint as Checkpoint
 import Data.CFTA.Symbol (Symbol (RefinedSymbol, Symbol), valueName)
 
 main :: IO ()
@@ -147,6 +149,79 @@ spec = do
         it "are the same after a round trip" $
             forM_ (filter ((/= "all-forms") . fst) graphs) $ \(_, graph) ->
                 sameRanks graph $ must $ T.parseGraph $ T.printGraph graph
+
+    describe "checkpoints" $ do
+        it "resume at every cut as the listing without a cut, after the checkpoint and the graph are printed and read" $
+            forM_ listed $ \graph -> do
+                let entries = must $ Checkpoint.resume (Checkpoint.start 7 graph) graph
+                    listing = map fst entries
+                    reopened = must $ T.parseGraphWith strings $ T.printGraphWith strings graph
+                forM_ (zip [0 ..] $ Checkpoint.start 7 graph : map snd entries) $ \(cut, checkpoint) -> do
+                    let saved = must $ T.parseCheckpointWith strings $ T.printCheckpointWith strings checkpoint
+                    (take cut listing <>) . map fst <$> Checkpoint.resume saved reopened `shouldBe` Right listing
+
+        it "reject a checkpoint for an edited graph as stale" $ do
+            let edited = must $ FTA.replaceRows (Map.singleton "q" $ Just [FTA.Transition "n" ["leaf"] noConstraint]) ordinary
+                saved = must $ T.parseCheckpoint $ T.printCheckpoint $ Checkpoint.start 7 ordinary
+            void (Checkpoint.resume saved edited) `shouldBe` Left (StaleRow "q")
+            void (Checkpoint.resume saved ordinary) `shouldBe` Right ()
+
+        it "reject a guard beyond equality constraints, which needs a solver" $
+            void (Checkpoint.resume (Checkpoint.start 7 liquid) liquid) `shouldBe` Left (QueryFailed Sized.ResidualGuard)
+
+        it "keep every checkpoint" $
+            forM_ checkpoints $ \checkpoint -> do
+                roundTrip T.printCheckpoint T.parseCheckpoint checkpoint
+                roundTrip (T.printCheckpointWith strings) (T.parseCheckpointWith strings) checkpoint
+
+        it "print the query and the next sized rank, then the printed graph" $ do
+            let graph = must $ FTA.mkFTA "tree" [("tree", [leaf "leaf", FTA.Transition "node" ["tree", "tree"] noConstraint])]
+                printed = T.printCheckpointWith strings (Checkpoint.start 7 graph){checkpointNext = (5, 1)}
+            printed
+                `shouldBe` Text.unlines
+                    [ "checkpoint 1;"
+                    , "query sized 1;"
+                    , "bound 7;"
+                    , "next 5 1;"
+                    , ""
+                    , "graph 1;"
+                    , "start tree;"
+                    , ""
+                    , "state tree {"
+                    , "  leaf;"
+                    , "  node(tree, tree);"
+                    , "}"
+                    , ""
+                    ]
+            printed `shouldSatisfy` Text.isSuffixOf (T.printGraphWith strings graph)
+
+        it "give the line of a syntax error" $ do
+            case T.parseCheckpointWith strings "checkpoint 1;\nquery sized 1;\nbound 7;\nnext 5;\n\ngraph 1;\nstart s;\nstate s {}" of
+                Left (SyntaxError line _ _) -> line `shouldBe` 4
+                other -> expectationFailure $ show other
+            T.parseCheckpointWith strings "checkpoint 2;\nquery sized 1;\nbound 7;\nnext 1 0;\ngraph 1;\nstart s;\nstate s {}"
+                `shouldSatisfy` either (const True) (const False)
+
+-- | The graphs whose listing needs no solver, and a recursive graph with equal children.
+listed :: [FTA.PlainFTA String Symbol]
+listed =
+    [graph | (name, graph) <- graphs, name `elem` ["ordinary", "recursive", "equality", "empty"]]
+        <> [ must $
+                FTA.mkFTA "s" [("s", [leaf "a", leaf "b", FTA.Transition "f" ["s"] noConstraint, FTA.Transition "g" ["s", "s"] equal])]
+           ]
+
+-- | A checkpoint for each graph, and checkpoints with unusual route names and large or negative numbers.
+checkpoints :: [Checkpoint String]
+checkpoints =
+    [Checkpoint.start 7 graph | (_, graph) <- graphs]
+        <> [ (Checkpoint.start 7 ordinary)
+                { checkpointRoute = name
+                , checkpointVersion = -1
+                , checkpointBound = 10 ^ (30 :: Int)
+                , checkpointNext = (10 ^ (40 :: Int), 2 ^ (100 :: Int))
+                }
+           | name <- names
+           ]
 
 -- | A comment on the file and on each state of a graph, from 'commentTexts' in turn.
 graphComments :: FTA.PlainFTA String Symbol -> Map.Map (T.CommentTarget String) Text
@@ -267,18 +342,20 @@ graphs =
     , ("empty", must $ FTA.mkFTA "empty" [("empty", [])])
     , ("all-forms", allForms)
     ]
-  where
-    ordinary =
-        must $
-            FTA.mkFTA
-                "s"
-                [ ("s", [FTA.Transition "f" ["p"] noConstraint, FTA.Transition "f" ["q"] noConstraint])
-                , ("p", [FTA.Transition "a" ["dead"] noConstraint, FTA.Transition "z" ["leaf"] noConstraint])
-                , ("q", [FTA.Transition "m" ["leaf"] noConstraint])
-                , ("leaf", [leaf "k", leaf "k"])
-                , ("dead", [])
-                , ("unreachable", [leaf "unused"])
-                ]
+
+-- | A graph with a dead row, an unreachable row, and a repeated alternative.
+ordinary :: FTA.PlainFTA String Symbol
+ordinary =
+    must $
+        FTA.mkFTA
+            "s"
+            [ ("s", [FTA.Transition "f" ["p"] noConstraint, FTA.Transition "f" ["q"] noConstraint])
+            , ("p", [FTA.Transition "a" ["dead"] noConstraint, FTA.Transition "z" ["leaf"] noConstraint])
+            , ("q", [FTA.Transition "m" ["leaf"] noConstraint])
+            , ("leaf", [leaf "k", leaf "k"])
+            , ("dead", [])
+            , ("unreachable", [leaf "unused"])
+            ]
 
 -- | Pairs of atoms with a refinement each, under a constraint.
 liquid :: FTA.PlainFTA String Symbol
