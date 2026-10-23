@@ -1,0 +1,9 @@
+Given one existing Inventory and a SAME populated current Wrapper, use its actual Good, old At, old Stable and canonical old returned-pair admission.
+Take the actual closed resident rebuilt value already returned by H23; do not assume its membership in either input model.
+Use existing InventoryRebase.extend/rebase with that exact value in both operand slots. Its target source is the current heap and roots are old.roots ++ [value,value].
+Derive the old-to-target finite-input Agreement, old-valid inclusion and exact old ranks from physical growth and root inclusion.
+Derive target validity of the rebuilt input from its newly listed actual root; no final Agreement, admission or result-law premise is supplied.
+Return native At, pair Stable and canonical captured returned-request admission for the SAME literal Wrapper under the target computed model and ranks.
+No execution or result changes. Existing H23 language/effect fields remain with the caller's original witness.
+Do not assert strict domain inclusion without a separate novelty condition. Do not infer new Room, WordRanges, global Trace or source-key bounds.
+An optional one-root variant replaces the two appended occurrences by one. This is a plain prospective contract. It is not a Lean header, body, checked theorem or authorization.

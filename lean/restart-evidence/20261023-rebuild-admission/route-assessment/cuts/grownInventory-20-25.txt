@@ -1,0 +1,6 @@
+theorem closed_originals (target : State Symbol Guard) (facts : InternedNestedFacts.Facts target)
+    (roots : List (Value Symbol Guard)) (available : Values target roots)
+    (closed : ∀ root ∈ roots, root.free = []) : ∀ root ∈ roots, Original root :=
+  fun root member => SourceRecursiveIntersectionOriginalOutput.closed_original root target facts.coherent
+    (available root member) (closed root member)
+

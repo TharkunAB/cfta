@@ -1,0 +1,11 @@
+/-- All-phase coverage derives the weaker admission invariant on actual returned cells. -/
+theorem Covered.admitted {inputs : FiniteInput view} {state : Native width Symbol Guard}
+    (covered : Covered inputs state) :
+    SourceCurrentAllocatedNativeInputModelTransport.Admitted view (finiteInputMeaning view inputs) state :=
+  ⟨fun handle _request _result found => (covered.nodes handle _ found).1,
+    fun handle _request _result found => (covered.edges handle _ found).1⟩
+
+/-- The same actual returned cells retain covered names for every seen pair. -/
+theorem Covered.seen_admitted {inputs : FiniteInput view} {state : Native width Symbol Guard}
+    (covered : Covered inputs state) : SeenAdmitted inputs state :=
+  ⟨fun handle _request _result found => (covered.nodes handle _ found).2,

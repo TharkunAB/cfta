@@ -1,0 +1,60 @@
+{
+  "status": "EXACT_PROPOSED_FIELD_TYPES_REVIEW_ONLY_NO_BODIES",
+  "public_let_scope": "    let middle := states (Fin.last entries.length)\n    let output := (List.ofFn kept).flatten\n    let built := run (makeNode output) middle.checked.native.machine.heap\n    let after : Wrapper (bits + 2) :=\n      { middle with checked :=\n        { middle.checked with native := (SourceRecursiveIntersectionThunks.advance\n          middle.checked.native { middle.checked.native.machine with heap := built.2 }) } }\n",
+  "public_let_types": {
+    "middle": "Wrapper (bits + 2)",
+    "output": "List Edge",
+    "built": "Value Symbol Guard \u00d7 InternedConstructorTemplates.State Symbol Guard",
+    "after": "Wrapper (bits + 2)"
+  },
+  "intro_names_in_order": [
+    "finalContextual",
+    "finalGrowth",
+    "finalHistory"
+  ],
+  "intro_types_in_public_let_scope": {
+    "finalContextual": "SourceCurrentAllocatedNativeContextCache.Contextual\n  inputView inputModel inputRanked holds after.checked.native",
+    "finalGrowth": "Grows inventory.source after.checked.native.machine.heap",
+    "finalHistory": "Extends inventory.source.nodes.issued after.checked.native.machine.heap.nodes.issued"
+  },
+  "body_prologue": "dsimp only",
+  "obtain_names_in_order": [
+    "middleCurrent",
+    "middleAdmitted"
+  ],
+  "obtain_field_types": {
+    "middleCurrent": "Current (states (Fin.last entries.length)).checked",
+    "middleAdmitted": "\u2200 (handle : Nat) (pair : Edge \u00d7 Edge) (value : Edge),\n  (states (Fin.last entries.length)).memo.cells handle = some \u27e8pair, .returned value\u27e9 \u2192\n  PairInputs (if pair.2.entry.identity < pair.1.entry.identity then (pair.2, pair.1) else pair)"
+  },
+  "obtain_source_API": "SourceCurrentOriginalRowGroupAdmission.groups_admitted at Fin.last entries.length for these exact supplied inputs, fuels, kept and states",
+  "typeclass_arguments": [
+    "DecidableEq Symbol",
+    "DecidableEq (EdgeKey Symbol Guard)"
+  ],
+  "inferred_extra_locals": [],
+  "have_types": [],
+  "let_types": [],
+  "typed_show_types": [],
+  "induction_or_generated_IH": null,
+  "closed_intro_types_using_public_let_definitions": {
+    "finalContextual": "let middle := states (Fin.last entries.length)\nlet output := (List.ofFn kept).flatten\nlet built := run (makeNode output) middle.checked.native.machine.heap\nlet after : Wrapper (bits + 2) :=\n  { middle with checked :=\n    { middle.checked with native := (SourceRecursiveIntersectionThunks.advance\n      middle.checked.native { middle.checked.native.machine with heap := built.2 }) } }\nSourceCurrentAllocatedNativeContextCache.Contextual\n  inputView inputModel inputRanked holds after.checked.native",
+    "finalGrowth": "let middle := states (Fin.last entries.length)\nlet output := (List.ofFn kept).flatten\nlet built := run (makeNode output) middle.checked.native.machine.heap\nlet after : Wrapper (bits + 2) :=\n  { middle with checked :=\n    { middle.checked with native := (SourceRecursiveIntersectionThunks.advance\n      middle.checked.native { middle.checked.native.machine with heap := built.2 }) } }\nGrows inventory.source after.checked.native.machine.heap",
+    "finalHistory": "let middle := states (Fin.last entries.length)\nlet output := (List.ofFn kept).flatten\nlet built := run (makeNode output) middle.checked.native.machine.heap\nlet after : Wrapper (bits + 2) :=\n  { middle with checked :=\n    { middle.checked with native := (SourceRecursiveIntersectionThunks.advance\n      middle.checked.native { middle.checked.native.machine with heap := built.2 }) } }\nExtends inventory.source.nodes.issued after.checked.native.machine.heap.nodes.issued"
+  },
+  "intro_types_definitionally_equal_after_reduction": {
+    "finalContextual": "SourceCurrentAllocatedNativeContextCache.Contextual inputView inputModel inputRanked holds\n  (SourceRecursiveIntersectionThunks.advance (states (Fin.last entries.length)).checked.native\n    { (states (Fin.last entries.length)).checked.native.machine with heap :=\n      (run (makeNode ((List.ofFn kept).flatten))\n        (states (Fin.last entries.length)).checked.native.machine.heap).2 })",
+    "finalGrowth": "Grows inventory.source\n  (run (makeNode ((List.ofFn kept).flatten))\n    (states (Fin.last entries.length)).checked.native.machine.heap).2",
+    "finalHistory": "Extends inventory.source.nodes.issued\n  (run (makeNode ((List.ofFn kept).flatten))\n    (states (Fin.last entries.length)).checked.native.machine.heap).2.nodes.issued"
+  },
+  "final_At_field_order": [
+    "contextual",
+    "covered",
+    "growth",
+    "history"
+  ],
+  "coverage_projection_types_review_only": {
+    "middleCurrent.covered.nodes": "SourceCurrentAllocatedNativeAdmissionCache.Requests\n  (SourceCurrentAllocatedNativeAdmissionCache.NodeCovered inputs)\n  (states (Fin.last entries.length)).checked.native.nodes",
+    "middleCurrent.covered.edges": "SourceCurrentAllocatedNativeAdmissionCache.Requests\n  (SourceCurrentAllocatedNativeAdmissionCache.EdgeCovered inputs)\n  (states (Fin.last entries.length)).checked.native.edges"
+  },
+  "coverage_type_caution": "Covered inputs beforeNative and Covered inputs afterNative have different full state indices. Reconstruct the final Covered fields from these two projections. Only their Requests types reduce through literal unchanged tables."
+}

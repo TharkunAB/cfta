@@ -1,0 +1,98 @@
+--- H30/verify-proofs.py
++++ H31-pending/verify-proofs.py
+@@ -1,4 +1,4 @@
+-"""Check saved group-admission evidence without running Lean or Lake."""
++"""Check saved rebuild-admission evidence without running Lean or Lake."""
+ import argparse
+ import difflib
+ import hashlib
+@@ -11,7 +11,7 @@
+ parser.add_argument("--live", action="store_true")
+ args = parser.parse_args()
+ root = args.root.resolve()
+-evidence = root / "lean/restart-evidence/20261023-group-admission"
++evidence = root / "lean/restart-evidence/20261023-rebuild-admission"
+ def digest(data):
+     return hashlib.sha256(data).hexdigest()
+ def read(relative):
+@@ -27,13 +27,13 @@
+ def canonical(text):
+     return re.sub(r"[ \t\r\n]+", " ", text).strip(" \t\r\n")
+ raw_data = read("bound-data.json")
+-assert digest(raw_data) == "2f5bab0543581602061ee4b530d1ecfb1ca62d3a3228e46363d0390d3a321060"
++assert digest(raw_data) == "__H31_BOUND_DATA_SHA256__"
+ assert not re.search(r"__H\d+_", raw_data.decode()), "Unbound evidence input"
+ bound = json.loads(raw_data)
+ modules = bound["modules"]
+-assert [m["key"] for m in modules] == ["group_admission"]
++assert [m["key"] for m in modules] == ["rebuild_admission"]
+ assert [m["source_cap"] for m in modules] == [180]
+-assert [m["specs"] for m in modules] == [[["groups_admitted", "theorem"]]]
++assert [m["specs"] for m in modules] == [[["rebuilt_admitted", "theorem"]]]
+ by_name = {m["name"]: m for m in modules}
+ jobs = json.loads(pinned(bound["job_history"]))
+ actual = set()
+@@ -151,11 +151,6 @@
+     assert jobs[m["strict"]]["errors"] == jobs[m["strict"]]["source_warnings"] == jobs[m["full"]]["errors"] == jobs[m["full"]]["source_warnings"] == 0
+     assert m["full"] not in rejected and source.rstrip().endswith(("end MicroCFTA." + name).encode())
+     assert any(v["module"] == name and read(path) == source for path, v in variants.items())
+-    alias = json.loads(pinned(bound["source_alias"]))
+-    assert alias["status"] == "EXACT_WORKING_COPY_RETAINED_BEFORE_ONCE_ONLY_MATERIALIZER"
+-    assert alias["old_path"] == m["snapshot"] and alias["source_sha256"] == m["source_sha256"]
+-    assert alias["frozen_variant_and_strict_source_unchanged"] and alias["mathematical_source_change"] is False
+-    assert read(alias["retained_path"]) == source
+     gate = json.loads(pinned(m["selected_gate"]))
+     assert gate["status"] == "ACCEPTED_STRICT_SOURCE" and gate["source_sha256"] == m["source_sha256"]
+     assert gate["source_lines"] == m["source_lines"] and gate["source_cap"] == m["source_cap"]
+@@ -169,8 +164,10 @@
+     assert body_gate["whole_source_hard_stop"] == m["source_cap"]
+     assert body_gate["exact_declaration_gate_sha256"] == m["declaration_gate"]["sha256"]
+     assert body_gate["independent_body_review_sha256"] == m["body_review"]["sha256"]
+-    assert body_gate["root_complete_source_lines_read"] == m["source_lines"] and body_gate["all_ten_fragments_exact"]
+-    assert body_gate["local_haves"] == 4 and body_gate["local_obtains"] == 2 and body_gate["generated_Fin_IH_reviewed"]
++    assert body_gate["root_complete_source_lines_read"] == m["source_lines"] and body_gate["all_five_fragments_exact"]
++    assert body_gate["public_lets"] == 4 and body_gate["local_haves"] == body_gate["local_lets"] == 0
++    assert body_gate["local_obtains"] == 1 and body_gate["introduced_arrow_fields"] == 3
++    assert body_gate["helper_count"] == 0 and body_gate["induction"] is False
+     assert body_gate["default_declaration_limits"] and body_gate["all_linters"]
+     assert json.loads(pinned(m["body_review"]))["status"] == "CLEAR"
+     declaration = json.loads(pinned(m["declaration_gate"]))
+@@ -178,8 +175,10 @@
+     assert declaration["public_heads"] == shorts and declaration["contracts_sha256"] == m["manifest"]["sha256"]
+     assert declaration["whole_source_hard_stop"] == m["source_cap"] and declaration["default_declaration_limits"] and declaration["all_linters"]
+     assert declaration["insertion_map_sha256"] == m["layout"]["sha256"]
+-    assert declaration["root_whole_context_lines_read"] == 28 and declaration["root_whole_public_header_lines_read"] == 38
+-    assert declaration["root_all_local_contracts_and_generated_IH_read"]
++    assert declaration["root_whole_context_lines_read"] == 28 and declaration["root_whole_public_header_lines_read"] == 50
++    assert declaration["root_all_public_lets_and_introduced_field_types_read"] and declaration["compiled_fragments"] == 5
++    assert declaration["public_lets"] == 4 and declaration["body_lets"] == declaration["body_haves"] == declaration["helpers"] == 0
++    assert declaration["explicit_intro_fields"] == 3 and declaration["explicit_obtain_fields"] == 2 and declaration["induction"] is False
+     manifest = json.loads(pinned(m["manifest"]))
+     schema = json.loads(pinned(m["schema"]))
+     fragments = m["fragments"]
+@@ -227,17 +226,17 @@
+         assert re.findall(rb"\bcases[ \t]+([^ \t:\n]+)[ \t]*:", body) == [n.encode() for n in expected["case_equations"]]
+         groups = [[n.strip().decode() for n in g.split(b",")] for g in re.findall(rb"(?s)\bobtain[ \t]+\xe2\x9f\xa8(.*?)\xe2\x9f\xa9[ \t\r\n]*:=", body)]
+         assert groups == expected["obtain_groups"] and len(re.findall(rb"\bobtain\b", body)) == len(groups)
+-        assert body.count(b"Fin.induction") == len(re.findall(rb"\binduction\b", body)) == 1
+-        assert not re.search(rb"(?m)^\s*induction\b", body)
++        assert re.findall(rb"\bintro[ \t]+([^\n]+)", body) == [b"finalContextual finalGrowth finalHistory"] and len(re.findall(rb"\bintro\b", body)) == 1
++        assert not re.search(rb"\binduction\b", body)
+         assert not re.search(rb"\b(?:show|suffices|haveI|letI)\b", body) and not re.search(rb"\bobtain\b(?:(?!:=).)*:(?!=)", body, re.S)
+     assert schema["private_helpers"] == schema["global_definitions"] == schema["global_predicates_or_structures"] == schema["typed_show_fragments"] == []
+-    assert schema["local_have_names"] == ["reversed", "included", "found", "contents"] and schema["local_let_names"] == []
+-    assert schema["induction"]["eliminator"] == "Fin.induction" and schema["induction"]["generalized"] == []
+-    assert schema["induction"]["new_hypothesis_or_final_certificate_premise"] is False
++    assert schema["local_have_names"] == schema["body_let_names"] == [] and schema["induction"] is None
++    assert schema["public_let_names"] == ["middle", "output", "built", "after"]
++    assert re.findall(rb"\blet[ \t]+([^ \t:=\n]+)", data["public-header.lean.txt"]) == [n.encode() for n in schema["public_let_names"]]
++    assert len(re.findall(rb"\blet\b", data["public-header.lean.txt"])) == 4 and schema["local_intro_names"] == ["finalContextual", "finalGrowth", "finalHistory"]
++    assert [item["names"] for item in schema["local_obtains"]] == [["middleCurrent", "middleAdmitted"]]
+     for record in m["review_only"]:
+-        reviewed = pinned(record)
+-        if record["path"].endswith("generated-IH.lean.txt"):
+-            assert reviewed not in source, "Generated IH schemas are review-only"
++        pinned(record)
+     public = re.findall(r"(?m)^\s*(?:(?:noncomputable|unsafe|partial)\s+)?(def|theorem|lemma|abbrev|opaque|instance|structure|inductive)\s+([^\s(\[{:=]+)", source.decode())
+     assert public == [(kind, short) for short, kind in specs]
+     helpers = []

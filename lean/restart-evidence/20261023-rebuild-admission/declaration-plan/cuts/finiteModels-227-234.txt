@@ -1,0 +1,8 @@
+/-- Independent finite derivations satisfy every rank law used by completeness. -/
+def finiteRankedInput (view : View Symbol) (inputs : FiniteInput view) : RankedInput view inputs.valid where
+  languages := finiteRanks view inputs
+  body := by
+    intro name valid rank term accepted
+    have derivation := (finiteRanks_exact view inputs (.mu name) valid rank term).mp accepted
+    cases derivation with
+    | binder body less =>

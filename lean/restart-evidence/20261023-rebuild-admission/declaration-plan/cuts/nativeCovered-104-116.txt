@@ -1,0 +1,13 @@
+/-- Request coverage applies to all cells, including suspended and running cells. -/
+structure Covered (inputs : FiniteInput view) (state : Native width Symbol Guard) : Prop where
+  nodes : Requests (NodeCovered inputs) state.nodes
+  edges : Requests (EdgeCovered inputs) state.edges
+
+/-- Empty native tables derive coverage without a result or request premise. -/
+theorem initial_covered (inputs : FiniteInput view) (width : Nat) (machine : Machine Symbol Guard) :
+    Covered inputs (initial width machine) := ⟨Requests.empty _, Requests.empty _⟩
+
+/-- Machine effects do not change stored requests in either native table. -/
+theorem advance_covered (inputs : FiniteInput view) (state : Native width Symbol Guard)
+    (after : Machine Symbol Guard) (covered : Covered inputs state) : Covered inputs (advance state after) :=
+  ⟨covered.nodes, covered.edges⟩

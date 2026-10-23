@@ -1,0 +1,7 @@
+/-- Independent finite derivations satisfy the input equations used by soundness. -/
+def finiteInputMeaning (view : View Symbol) (inputs : FiniteInput view) : InputMeaning view where
+  valid := inputs.valid
+  languages := finiteLanguages view inputs
+  body_valid := inputs.body_valid
+  body_exact := by
+    intro name valid

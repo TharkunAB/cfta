@@ -1,0 +1,5 @@
+/-- The domain is the union of actual input reachability from listed physical roots. -/
+def Reachable (source : InternedConstructorTemplates.State Symbol Guard) (holds : Guard → Term Symbol → Bool)
+    (roots : List (Value Symbol Guard)) (input : Input) : Prop :=
+  ∃ root ∈ roots, InputReach (view source holds) (inputOf root) input
+

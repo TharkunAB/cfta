@@ -1,0 +1,25 @@
+variable (source target : State Symbol Guard)
+  (sourceFacts : InternedNestedFacts.Facts source) (targetFacts : InternedNestedFacts.Facts target)
+  (growth : Grows source target) (history : Extends source.nodes.issued target.nodes.issued)
+  (holds : Guard → Term Symbol → Bool)
+  (roots : List (Value Symbol Guard)) (originals : ∀ root ∈ roots, Original root)
+  (available : Values source roots) (closed : ∀ root ∈ roots, root.free = [])
+  (targetRoots : List (Value Symbol Guard)) (targetAvailable : Values target targetRoots)
+  (targetClosed : ∀ root ∈ targetRoots, root.free = [])
+  (included : ∀ root ∈ roots, root ∈ targetRoots)
+
+local notation "oldInputs" => SourceCurrentAllocatedNativeInputInventoryModels.finiteInput
+  source sourceFacts holds roots originals available closed
+local notation "newInputs" => SourceCurrentAllocatedNativeInputInventoryModels.finiteInput
+  target targetFacts holds targetRoots (closed_originals target targetFacts targetRoots targetAvailable targetClosed)
+    targetAvailable targetClosed
+
+include growth history included
+
+/-- The actual larger target inventory admits every old valid input. -/
+theorem valid_grows (input : Input) (valid : (oldInputs).valid input) : (newInputs).valid input := by
+  obtain ⟨root, member, reached⟩ := reachable_grows
+    source target sourceFacts targetFacts growth history holds roots originals available closed input valid
+  exact ⟨root, included root member, reached⟩
+
+/-- Every old admitted input retains the same rank in the actual target inventory. -/

@@ -1,0 +1,14 @@
+theorem node [DecidableEq (EdgeKey Symbol Guard)] (edges : List (EdgeValue Symbol Guard))
+    (state : State Symbol Guard) (ready : Ready state) (resident : Edges state edges) (closed : ClosedEdges edges) :
+    Keeps state (run (makeNode edges) state).2 ∧
+      Available (run (makeNode edges) state).2 (run (makeNode edges) state).1 ∧
+      (run (makeNode edges) state).1.free = [] ∧ Ordinary (run (makeNode edges) state).1 := by
+  have facts := ready.semantic.1.normal.facts
+  have checked := InternedNestedFacts.node_verified edges state facts resident
+  refine ⟨⟨⟨SourceRecursiveIntersectionSemanticHeap.node edges state ready.semantic resident,
+    InternedNestedCoverage.run_covered _ state facts.coherent.valid ready.covered,
+    InternedOpenDepthReadback.preserve state _ ready.depth (InternedShallowHeap.makeNode_noNewMu edges state)⟩,
+    checked.growth, checked.history⟩, checked.result _ _ rfl,
+    MergedColdReaderClosedInputs.makeNode_closed edges state facts resident closed,
+    node_ordinary edges state facts resident⟩
+

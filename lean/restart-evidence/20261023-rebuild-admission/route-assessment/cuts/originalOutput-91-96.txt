@@ -1,0 +1,6 @@
+theorem closed_original (value : Value Symbol Guard) (state : State Symbol Guard) (coherent : Coherent state)
+    (available : Available state value) (closed : value.free = []) : Original value := by
+  apply original_of_free value state coherent available
+  intro name member
+  rw [closed] at member
+  cases member

@@ -1,0 +1,11 @@
+theorem contextual (view : View Symbol) (before after : FiniteInput view)
+    (same : before.representative = after.representative) (holds : Guard → Term Symbol → Bool)
+    (state : Native width Symbol Guard)
+    (admitted : Admitted view (finiteInputMeaning view before) state)
+    (valid : Contextual view (finiteInputMeaning view before) (finiteRankedInput view before) holds state) :
+    Contextual view (finiteInputMeaning view after) (finiteRankedInput view after) holds state :=
+  ⟨fun handle request result found => node_law view before after same holds request result
+      (admitted.nodes handle request result found) (valid.nodes handle request result found),
+    fun handle request result found => edge_law view before after same holds request result
+      (admitted.edges handle request result found) (valid.edges handle request result found)⟩
+

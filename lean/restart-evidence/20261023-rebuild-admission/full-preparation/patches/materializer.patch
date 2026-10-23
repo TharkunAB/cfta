@@ -1,0 +1,45 @@
+--- H30/materializer.py
++++ H31/materializer.py
+@@ -7,8 +7,8 @@
+ HERE = Path(__file__).resolve().parent
+ stem, expected_sha, expected_lines, expected_context_sha, expected_context_lines, expected_contracts_sha, expected_contracts_count = sys.argv[1:]
+ assert all(len(value) == 64 and set(value) <= set('0123456789abcdef') for value in [expected_sha, expected_context_sha, expected_contracts_sha])
+-name = 'SourceCurrentOriginalRowGroupAdmission'
+-specs = [('groups_admitted', 'theorem')]
++name = 'SourceCurrentOriginalRowRebuildAdmission'
++specs = [('rebuilt_admitted', 'theorem')]
+ source_path = HERE / (stem + '.source.lean')
+ source = source_path.read_bytes()
+ assert hashlib.sha256(source).hexdigest() == expected_sha
+@@ -27,9 +27,9 @@
+ assert hashlib.sha256(contracts_raw).hexdigest() == expected_contracts_sha
+ contracts = json.loads(contracts_raw)
+ layout_raw = (contract_root / 'insertion-map.json').read_bytes()
+-assert hashlib.sha256(layout_raw).hexdigest() == 'b9e6acceef4730ac851a95dd5fa067cb600d77030fc2e4288b99893e075a5747'
++assert hashlib.sha256(layout_raw).hexdigest() == '92c8a8647b3e63ebeeb8b12a667db62ac654017a89a244804db649c9ed248690'
+ layout = json.loads(layout_raw)
+-assert len(contracts) == int(expected_contracts_count) == 10
++assert len(contracts) == int(expected_contracts_count) == 5
+ for (filename, expected_digest), record in zip(contracts.items(), layout['compiled_fragments'], strict=True):
+     fragment = (contract_root / filename).read_bytes()
+     assert filename == record['file'] and hashlib.sha256(fragment).hexdigest() == expected_digest == record['sha256']
+@@ -40,8 +40,8 @@
+ assert gate['contracts_sha256'] == expected_contracts_sha
+ assert gate['insertion_map_sha256'] == hashlib.sha256(layout_raw).hexdigest()
+ assert gate['whole_source_hard_stop'] == 180 and gate['default_declaration_limits'] and gate['all_linters']
+-assert gate['root_all_local_contracts_and_generated_IH_read']
+-assert gate['root_whole_context_lines_read'] == 28 and gate['root_whole_public_header_lines_read'] == 38
++assert gate['root_all_public_lets_and_introduced_field_types_read']
++assert gate['root_whole_context_lines_read'] == 28 and gate['root_whole_public_header_lines_read'] == 50
+ assert re.fullmatch(r'[0-9a-f]{64}', gate['independent_review_sha256'])
+ context = (contract_root / 'context.lean.txt').read_bytes()
+ assert source.startswith(context)
+@@ -65,7 +65,7 @@
+ assert tail.encode() == (HERE / 'full-preparation/diagnostic-tail.lean.txt').read_bytes()
+ snapshot = HERE / (name + '.lean')
+ printer = HERE / (name + '.full.lean')
+-actual_headers = HERE / 'actual-group-headers.lean.txt'
++actual_headers = HERE / 'actual-rebuild-headers.lean.txt'
+ assert not snapshot.exists() and not printer.exists() and not actual_headers.exists()
+ snapshot.write_bytes(source)
+ printer.write_bytes(source + tail.encode())

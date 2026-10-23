@@ -1,0 +1,25 @@
+theorem query_complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (inventory : Inventory) (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (state : Checked width) (good : Good state) (current : At formulas solver inventory state)
+    (scopedCache : SourceCurrentAllocatedNativeScopeCache.Scoped state.native)
+    (semantic : SemanticReady state.native.machine.heap) (idle : SourceRecursiveIntersectionNative.Idle state.native)
+    (left right : Value Symbol Guard)
+    (leftAvailable : Available state.native.machine.heap left) (rightAvailable : Available state.native.machine.heap right)
+    (leftClosed : left.free = []) (rightClosed : right.free = [])
+    (ranges : WordRanges (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) state) :
+    ∃ next : Inventory, ∃ fuel value after,
+      next.source = state.native.machine.heap ∧ next.roots = inventory.roots ++ [left, right] ∧
+      SourceCurrentAllocatedNativeCoveredQuery.Receipt next.source formulas solver
+        (next.inputs (SourceEqualityPCSGuard.holds formulas solver)) fuel left right state value after ∧
+      At formulas solver next after := by
+  obtain ⟨available, closed, fuel, value, after, receipt⟩ :=
+    SourceCurrentAllocatedNativeCoveredQuery.generated_complete inventory.source inventory.facts formulas solver
+      inventory.roots inventory.originals inventory.available inventory.closed state good current.contextual current.covered
+      scopedCache semantic idle current.growth current.history left right leftAvailable rightAvailable leftClosed rightClosed ranges
+  let next : Inventory := ⟨state.native.machine.heap, good.native.machine.1, inventory.roots ++ [left, right],
+    SourceCurrentAllocatedNativeGrownInventory.closed_originals state.native.machine.heap good.native.machine.1
+      (inventory.roots ++ [left, right]) available closed, available, closed⟩
+  exact ⟨next, fuel, value, after, rfl, rfl, receipt,
+    receipt.contextual, receipt.covered, receipt.extension.heap, receipt.extension.history⟩
+

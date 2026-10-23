@@ -1,0 +1,7 @@
+/-- Execute empty-child removal, canonical edge ordering, and the ordinary node-cache request. -/
+def makeNode (edges : List (EdgeValue Symbol Guard)) : Work Symbol Guard (Value Symbol Guard) :=
+  let kept := canonicalEdges (surviving edges)
+  match kept with
+  | [] => .pure .empty
+  | first :: rest => .node (.node ((first :: rest).map (fun edge => edge.entry.identity)))
+      (identifyNode (first :: rest)) Work.pure

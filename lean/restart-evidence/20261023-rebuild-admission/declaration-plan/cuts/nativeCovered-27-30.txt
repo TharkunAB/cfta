@@ -1,0 +1,4 @@
+def Requests (property : Request → Prop) (state : FlatMemoThunk.State Key Request Answer) : Prop :=
+  ∀ handle cell, state.cells handle = some cell → property cell.request
+
+/-- Empty memo tables have no request admission obligation. -/

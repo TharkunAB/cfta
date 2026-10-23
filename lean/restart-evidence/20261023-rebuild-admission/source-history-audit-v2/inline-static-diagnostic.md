@@ -1,0 +1,1 @@
+The first inline data check stopped at a public fragment occurrence assertion. The stored public header ends with LF; the source attaches ` := by` before that LF. The corrected data check uses the exact header without that final LF and requires the exact body attachment. No owner source, prepared tool, proof job or root metadata job failed or changed.
