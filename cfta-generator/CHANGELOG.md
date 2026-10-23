@@ -137,6 +137,8 @@ tree automata of `cfta`, with QuickCheck integration.
   classes up to a size bound with a solver that decides every guard on each
   built term, so a liquid automaton has an exact route that needs no
   pruning; a guard the solver cannot decide is `GuardUnknown`.
+  `sizedStates` gives the classes of each state, with one table for all the
+  states.
 - `Data.CFTA.Sized.Prefix`: the completions of a prefix in preorder, within a
   size bound, for an automaton without constraints. `nextTokens` gives the
   tokens that can come next, each with its number of completions.

@@ -1,6 +1,7 @@
 -- | Shared size indexing for ordinary, possibly recursive automata.
 module Data.CFTA.Gen.Internal.Table (
     tableIndex,
+    tableIndexes,
     tablePosition,
     minimumSizes,
     unambiguousRows,
@@ -45,6 +46,13 @@ before supplying ordinary rows. This worker does not interpret constraints.
 tableIndex ::
     (Ord state) => state -> Map.Map state [FTA.Transition state symbol ()] -> SizeIndex (Term symbol)
 tableIndex initial rows = fst (stateTable rows) initial
+
+{- | The size index of each state of the rows, as 'tableIndex' gives it.
+Apply the function to the rows once: the states then share one table.
+-}
+tableIndexes ::
+    (Ord state) => Map.Map state [FTA.Transition state symbol ()] -> state -> SizeIndex (Term symbol)
+tableIndexes rows = fst (stateTable rows)
 
 {- | Find the size class and the position in it of a term that the initial
 state accepts, as 'tableIndex' selects the term.

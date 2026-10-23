@@ -253,8 +253,10 @@ ambiguity. A guard beyond equality
 constraints is `ResidualGuard`. `sizedUpTo` builds the classes up to a size
 bound with a solver that decides every guard on each term, as
 `denotationAtMost` does by depth, so it also takes a liquid automaton whose
-guards pruning did not discharge. An interned automaton enters through
-`toFTA` of `Data.CFTA.Interned`.
+guards pruning did not discharge. `sizedStates` gives the classes of each
+state, as `sized` gives them with that state as the initial state, with one
+table for all the states. An interned automaton enters through `toFTA` of
+`Data.CFTA.Interned`.
 
 ```haskell
 module Main (main) where

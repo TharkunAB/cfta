@@ -39,13 +39,15 @@ every guard, so it needs no pruning: it is the exact route for a liquid
 automaton whose guards pruning did not discharge.
 'sized' gives the same sequence. It counts, ranks, and unranks with the count
 table when the automaton has no constraint and its rows are unambiguous.
-It uses the reference otherwise.
+It uses the reference otherwise. 'sizedStates' gives the classes of each
+state, with one table for all the states.
 -}
 module Data.CFTA.Sized (
     Sized,
     SizedError (..),
     sized,
     sizedReference,
+    sizedStates,
     sizedUpTo,
     termsOfSize,
     countOfSize,
@@ -100,27 +102,40 @@ reach has a guard beyond equality constraints.
 sized ::
     (Ord state, Ord symbol) =>
     FTA.FTA state symbol Constraint -> Either SizedError (Sized symbol)
-sized automaton
+sized automaton = ($ FTA.initialState automaton) <$> sizedStates automaton
+
+{- | The size classes of each state of an automaton, with one count table for
+all the states. For each state that the initial state reaches, the classes
+are those that 'sized' gives with that state as the initial state.
+
+The result is 'ResidualGuard' when a transition that the initial state can
+reach has a guard beyond equality constraints. A rank query of a state
+builds a position table for that state.
+-}
+sizedStates ::
+    (Ord state, Ord symbol) =>
+    FTA.FTA state symbol Constraint -> Either SizedError (state -> Sized symbol)
+sizedStates automaton
     | all (all ((== noConstraint) . FTA.transitionConstraint)) (FTA.transitionTable automaton)
     , Ordinary.unambiguousRows rows =
-        let index = Ordinary.tableIndex initial rows
-            count = countAtSize index
-            unrank size (ClassRank rank)
-                | rank >= 0 && Cardinality rank < count size =
-                    Just $ rankedValue $ sizeClassSelect index size (ClassRank rank)
-                | otherwise = Nothing
-            position = Ordinary.tablePosition initial rows
-         in Right
-                Sized
+        Right $ \state ->
+            let index = indexOf state
+                count = countAtSize index
+                unrank size (ClassRank rank)
+                    | rank >= 0 && Cardinality rank < count size =
+                        Just $ rankedValue $ sizeClassSelect index size (ClassRank rank)
+                    | otherwise = Nothing
+                position = Ordinary.tablePosition state rows
+             in Sized
                     { sizedTerms = \size -> [term | rank <- everyClassRank (count size), Just term <- [unrank size rank]]
                     , sizedCount = count
                     , sizedUnrank = unrank
                     , sizedRank = fmap (\(SizedRank size rank) -> (size, rank)) . position
                     }
-    | otherwise = sizedReference automaton
+    | otherwise = referenceStates automaton
   where
-    initial = FTA.initialState automaton
     rows = Map.map (map void) $ sortedRows automaton
+    indexOf = Ordinary.tableIndexes rows
     everyClassRank (Cardinality total) = map ClassRank [0 .. total - 1]
 
 {- | The size classes of an automaton, each built from its definition.
@@ -129,9 +144,16 @@ The result is 'ResidualGuard' when a transition that the initial state can
 reach has a guard beyond equality constraints.
 -}
 sizedReference :: (Ord state, Ord symbol) => FTA.FTA state symbol Constraint -> Either SizedError (Sized symbol)
-sizedReference automaton
+sizedReference automaton = ($ FTA.initialState automaton) <$> referenceStates automaton
+
+{- | The size classes of each state of an automaton, each built from its
+definition, as 'sizedReference' builds them for the initial state.
+-}
+referenceStates ::
+    (Ord state, Ord symbol) => FTA.FTA state symbol Constraint -> Either SizedError (state -> Sized symbol)
+referenceStates automaton
     | any (any (residual . FTA.transitionConstraint)) (FTA.transitionTable $ FTA.trim automaton) = Left ResidualGuard
-    | otherwise = Right $ fromClasses $ classAt $ FTA.initialState automaton
+    | otherwise = Right $ fromClasses . classAt
   where
     rows = sortedRows automaton
 
