@@ -4,6 +4,13 @@
 
 Before release, the package was called `microcfta`.
 
+- `Data.CFTA.Lark`: `larkGrammar` writes the texts of the terms of a plain
+  automaton as a context-free grammar in the Lark syntax of llguidance and
+  XGrammar. A `Linearization` gives each symbol the texts around its
+  children, and `linearize` gives the text of a term. Each state is a rule
+  and each transition an alternative. A constraint, the empty language, an
+  empty text for a symbol without children, and a wrong number of texts are
+  errors. The caller decides whether two terms can have the same text.
 - `Data.CFTA.replaceRows` applies row replacements and deletions to an
   existing explicit automaton. It shares unchanged rows and validates the
   complete result after the batch. The original automaton stays unchanged.
