@@ -67,6 +67,14 @@ spec = describe "source documents" $ do
         Document.applyPatch (Document.patch document $ take 1 forward) document
             `shouldBe` Left (InvalidGraph $ FTA.DanglingState Extra)
 
+    it "set the initial state, which must have a row after the complete batch" $ do
+        let start = FTA.initialState . Document.sourceGraph
+        start (edited [SetStart Atom]) `shouldBe` Atom
+        start (edited [SetStart Atom, SetStart Extra, PutRow Extra [production "leaf" [] "leaf"], DeleteRow Expr])
+            `shouldBe` Extra
+        Document.applyEdits [SetStart Extra] document `shouldBe` Left (InvalidGraph $ FTA.MissingInitialState Extra)
+        Document.applyEdits [DeleteRow Expr] document `shouldBe` Left (InvalidGraph $ FTA.MissingInitialState Expr)
+
     it "conjoin the facts of each production" $
         map FTA.transitionConstraint (rowOf Expr $ Document.compileGraph document)
             `shouldBe` [foldl1 conjoinConstraints $ Map.elems pairFacts]
