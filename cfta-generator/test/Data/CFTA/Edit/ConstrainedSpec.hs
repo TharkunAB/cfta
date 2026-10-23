@@ -160,6 +160,26 @@ spec = describe "Data.CFTA.Edit.Constrained" $ do
             counted <- sizedUpTo partialSolver 4 (fst $ plainSymbols $ edits result)
             either (\failure -> case failure of GuardUnknown _ _ -> "unknown"; _ -> "other") (const "decided") counted
                 `shouldBe` "unknown"
+        it "has one run for each edit, with the solver deciding each guard" $ do
+            found <- forM guardFixtures $ \(name, automaton, given) -> do
+                result <- either (error . show) id <$> guardedEditAutomaton fullSolver automaton given
+                let (plain, _) = plainSymbols (edits result)
+                classes <- either (error . show) id <$> sizedUpTo fullSolver (Size $ bound + 1) plain
+                let counted = [edit | size <- [1 .. bound + 1], edit <- termsOfSize classes (Size size)]
+                counts <- mapM (runsWith (decidedBy fullSolver) plain) counted
+                pure (name, [edit | (edit, count) <- zip counted counts, count /= 1])
+            found `shouldBe` [(name, []) | (name, _, _) <- guardFixtures]
+        it "tells a term that the solver does not decide from a term that the automaton does not accept" $ do
+            found <-
+                forM
+                    [ (partialSolver, leafGuard eitherAboveOne, symbolTerm "g" [symbolTerm "f" [number 3], number 1])
+                    , (fullSolver, leafGuard eitherAboveOne, symbolTerm "g" [symbolTerm "f" [number 1], number 1])
+                    , (partialSolver, twoGuardedRuns, symbolTerm "g" [number 3])
+                    , (fullSolver, twoGuardedRuns, symbolTerm "g" [number 3])
+                    ]
+                    $ \(solver, automaton, given) -> either Just (const Nothing) <$> guardedEditAutomaton solver automaton given
+            found
+                `shouldBe` [Just UndecidedTerm, Just (EditFailure NotAccepted), Just UndecidedRuns, Just (EditFailure SeveralRuns)]
   where
     isWrap edit = kindOf edit == "wrap"
     acyclic = ["pinned", "shifted", "equal pairs", "two runs"]
@@ -385,16 +405,18 @@ runsOf check automaton state subterm@(Term.Node symbol children) =
 
 -- | The number of runs of an edit automaton on an edit, with the equalities checked.
 runs :: FTA.PlainFTA ConstrainedState (EditSymbol String) -> Term (EditSymbol String) -> Integer
-runs automaton = go (FTA.initialState automaton)
+runs automaton = runIdentity . runsWith (\constraint subterm -> pure $ equalitiesHold constraint subterm) automaton
+
+-- | The number of runs of an automaton on a term. The first argument decides a constraint on a term.
+runsWith ::
+    (Monad m, Ord state, Eq symbol) =>
+    (Constraint -> Term symbol -> m Bool) -> FTA.PlainFTA state symbol -> Term symbol -> m Integer
+runsWith check automaton = go (FTA.initialState automaton)
   where
-    go state found@(Term.Node symbol children) =
-        sum
-            [ product (zipWith go childStates children)
-            | FTA.Transition other childStates constraint <- FTA.transitionsFrom automaton state
-            , other == symbol
-            , length childStates == length children
-            , equalitiesHold constraint found
-            ]
+    go state subterm@(Term.Node symbol children) =
+        fmap sum $ forM (FTA.transitionsFrom automaton state) $ \(FTA.Transition other childStates constraint) -> do
+            holds <- if other == symbol && length childStates == length children then check constraint subterm else pure False
+            if holds then product <$> zipWithM go childStates children else pure 0
 
 -- | The terms over the alphabet of the automaton with at most 'bound' nodes.
 candidates :: (Ord symbol) => FTA.PlainFTA String symbol -> [Term symbol]
@@ -523,6 +545,10 @@ guardedUnwraps =
 -- | The term k(w(v(3))).
 guardedUnwrapsTerm :: Term Symbol
 guardedUnwrapsTerm = symbolTerm "k" [symbolTerm "w" [symbolTerm "v" [number 3]]]
+
+-- | g(n) with a guard that the number is above one, or g(n) without a guard: two runs for one term.
+twoGuardedRuns :: FTA.PlainFTA String Symbol
+twoGuardedRuns = fromRows "s" [("s", [guardedAt "g" ["n"] $ Satisfies (path [0]) aboveOne, symbolNode "g" ["n"]]), ("n", numbers)]
 
 -- | The leaves with the numbers 1, 2, and 3.
 numbers :: [FTA.Transition String Symbol Constraint]

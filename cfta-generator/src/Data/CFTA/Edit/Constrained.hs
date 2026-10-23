@@ -100,6 +100,7 @@ module Data.CFTA.Edit.Constrained (
     ConstrainedState (..),
     ConstrainedEdits (..),
     LeftOut (..),
+    GuardedEditError (..),
     constrainedEditAutomaton,
     guardedEditAutomaton,
     plainSymbols,
@@ -177,6 +178,18 @@ data LeftOut
       UndecidedGuard
     deriving (Eq, Ord, Show)
 
+-- | Why a term has no edit automaton under guards.
+data GuardedEditError
+    = -- | The automaton does not accept the term ('NotAccepted'), or it has two runs for it that hold ('SeveralRuns').
+      EditFailure !EditError
+    | -- | The solver does not decide whether the automaton accepts the term.
+      UndecidedTerm
+    | {- | The automaton accepts the term with one run, and the solver does
+      not decide whether another run holds.
+      -}
+      UndecidedRuns
+    deriving (Eq, Show)
+
 -- | What the edited term has at a path of a constraint.
 data Kind symbol
     = -- | A fixed subterm.
@@ -224,25 +237,47 @@ constrainedEditAutomaton ::
     (Ord state, Ord symbol) => FTA.PlainFTA state symbol -> Term symbol -> Either EditError (ConstrainedEdits symbol)
 constrainedEditAutomaton automaton given
     | any (any (residual . FTA.transitionConstraint)) (FTA.transitionTable automaton) = Left ConstrainedAutomaton
-    | otherwise = runIdentity $ editsWith holdsOn (\_ _ -> pure Unknown) automaton given
+    | otherwise = runIdentity $ editsWith holdsOn (\_ _ -> pure Unknown) runError automaton given
   where
     -- Without a residual guard, the equalities decide a constraint, and no atom is left to decide.
     holdsOn constraint term = pure $ if equalitiesHold constraint term then Yes else No
+    -- The equalities decide each run, so the runs are none or more than one.
+    runError verdicts = if null verdicts then NotAccepted else SeveralRuns
 
 {- | The valid edits of a term under an automaton with guards, with a solver
 that decides them.
 
-The term must have exactly one run whose constraints the solver does not
-refute, and the solver must decide that run. A term without such a run gives
-'NotAccepted', and a term with more than one gives 'SeveralRuns'. Count the
-result with 'Data.CFTA.Sized.sizedUpTo' over the symbols of 'plainSymbols'.
+The term must have exactly one run, and the solver must decide it. When the
+solver refutes every run, the result is 'EditFailure' 'NotAccepted', and when
+it decides two runs, 'EditFailure' 'SeveralRuns'. When it decides no run and
+does not refute one, the result is 'UndecidedTerm'. When it decides one run
+and does not refute another, the result is 'UndecidedRuns': the automaton
+accepts the term, but the run of the edits is not known.
+
+The solver decides the guards of the run, the guards on fixed paths of each
+site, and for each position, whether each state of the automaton accepts the
+subterm there: the states of the hole of a context wrap. That is one check
+for each state at each position, also where the position has no context wrap
+with a term. Count the result with 'Data.CFTA.Sized.sizedUpTo' over the
+symbols of 'plainSymbols'.
 -}
 guardedEditAutomaton ::
-    (Ord state) => Entailment -> FTA.PlainFTA state Symbol -> Term Symbol -> IO (Either EditError (ConstrainedEdits Symbol))
+    (Ord state) =>
+    Entailment ->
+    FTA.PlainFTA state Symbol ->
+    Term Symbol ->
+    IO (Either GuardedEditError (ConstrainedEdits Symbol))
 guardedEditAutomaton entailment =
     editsWith
         (evaluateConstraint entailment)
         (\atom observed -> evaluateGuardWithShape entailment (fmap (uncurry Observed) . observed) atom)
+        runError
+  where
+    runError verdicts = case (length $ filter (== Yes) verdicts, length $ filter (== Unknown) verdicts) of
+        (0, 0) -> EditFailure NotAccepted
+        (0, _) -> UndecidedTerm
+        (1, _) -> UndecidedRuns
+        _ -> EditFailure SeveralRuns
 
 {- | The edit automaton with plain symbols, and the decoding of its terms to
 edits.
@@ -276,22 +311,24 @@ plainSymbols automaton = (encoded, decode)
     decode (Term.Node symbol children) = Term.Node (Map.findWithDefault (Material symbol) symbol labelsOf) (map decode children)
 
 {- | The edits of a term, with the verdict of a constraint on a whole term,
-and the verdict of a guard atom from the observations at its paths.
+and the verdict of a guard atom from the observations at its paths. The
+edits need exactly one run of the term, with the verdict 'Yes'. Otherwise
+the result is the error of the verdicts of the runs that the check does not
+refute.
 -}
 editsWith ::
     (Monad m, Ord state, Ord symbol) =>
     (Constraint -> Term symbol -> m Verdict) ->
     (Guard -> (Path -> Maybe (symbol, Leafness)) -> m Verdict) ->
+    ([Verdict] -> failure) ->
     FTA.PlainFTA state symbol ->
     Term symbol ->
-    m (Either EditError (ConstrainedEdits symbol))
-editsWith check decideAtom automaton given = do
+    m (Either failure (ConstrainedEdits symbol))
+editsWith check decideAtom runError automaton given = do
     found <- runsFrom (FTA.initialState automaton) given
     case found of
-        [] -> pure $ Left NotAccepted
         [(Yes, run)] -> Right <$> fromRun run
-        [_] -> pure $ Left NotAccepted
-        _ -> pure $ Left SeveralRuns
+        _ -> pure $ Left $ runError $ map fst found
   where
     rows = Map.toList $ FTA.transitionTable automaton
     rootedAt state =

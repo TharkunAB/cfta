@@ -176,6 +176,9 @@ tree automata of `cfta`, with QuickCheck integration.
   `UndecidedGuard` when the solver does not decide an atom on fixed paths or
   the fixed part of a site. `plainSymbols` gives the edit automaton over
   `Symbol`, for `sizedUpTo`, and the decoding of its terms to edits.
+  `GuardedEditError` tells a term that the solver does not decide
+  (`UndecidedTerm`, or `UndecidedRuns` for an accepted term whose second run
+  is not decided) from a term that the automaton does not accept.
 - Terms are `Term symbol` from `Data.CFTA.Term` of `cfta`:
   `fromAutomaton`, `fromAutomatonUpToDepth`, `termAt`, `rankOf`, `ranksOf`,
   `rankOfTerm`, `surface`, and the refinement witnesses take and give `Term`

@@ -347,7 +347,10 @@ fixed paths, or whether a state accepts the fixed part of a site. In an
 automaton with guards on many states, most context wraps are
 `ConstrainedHole`. Count the result with `sizedUpTo` over the symbols of
 `plainSymbols`, which also decodes each counted term to an edit for
-`applyEdit`.
+`applyEdit`. The term needs one run that the solver decides. When the solver
+does not decide whether the automaton accepts the term, the error is
+`UndecidedTerm`, not `NotAccepted`. When it decides one run and not another,
+the error is `UndecidedRuns`.
 
 ## Equality-constrained generators
 
