@@ -39,13 +39,16 @@ import qualified Data.Set as Set
 
 {- | Select a graph and the remaining templates for the existing oracle.
 Unsupported input or a rejected result keeps the original graph and full list.
-A local traversal table shares rebuilt program nodes.
+A local traversal table shares rebuilt program nodes. The remaining templates
+depend on the templates only, so a partial application computes them once for
+all its graphs.
 -}
 preparePruning :: [Template Symbol] -> Node Symbol -> (Node Symbol, [Template Symbol])
-preparePruning templates root = fromRight (root, templates) prepared
+preparePruning templates = \root -> fromRight (root, templates) (prepared root)
   where
     selected = filter eligible templates
-    prepared = do
+    residual = residualTemplates selected templates
+    prepared root = do
         compiled <- compileTemplates selected root
         (before, beforeOpaque) <- graph True (4096, 65536) compiled
         ( Map.size before
@@ -60,7 +63,7 @@ preparePruning templates root = fromRight (root, templates) prepared
                 + Set.size afterOpaque
                 + Set.size (afterOpaque `Set.difference` beforeOpaque)
             )
-            `seq` pure (reduced, residualTemplates selected templates)
+            `seq` pure (reduced, residual)
 
 -- | Admit only application patterns whose annotation positions are holes.
 eligible :: Template Symbol -> Bool

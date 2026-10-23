@@ -21,7 +21,7 @@ import qualified Data.Map.Strict as Map
 import Data.Proxy (Proxy (..))
 import qualified Specftacular.CompiledPruning as Compile
 import qualified Specftacular.DecisionTree as DT
-import Specftacular.Pruning (prunedTerms)
+import Specftacular.Pruning (prunedPrograms, prunedTerms)
 import Specftacular.Rewriting
 import Specftacular.Types
 import Specftacular.Utils
@@ -1069,9 +1069,24 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..}
         templates
             | canPrune && skeletonTemplates = filter annotationFree (pruningTemplates skeletonSig lvl rules)
             | otherwise = []
+        -- One partial application, so that the parts share the remaining templates.
+        prepare = preparePruning templates
+        -- 'generalizeCarriers' does not read the annotations, so each program
+        -- is enumerated without its typings, and a typing of the partial
+        -- program prunes it (see 'prunedPrograms').
         typingsOf space =
-            let (pruningRoot, oracleTemplates) = preparePruning templates (refold space)
-             in mapMaybe (generalizeCarriers skeletonSig phase_variables . npTerm') (prunedTerms oracleTemplates pruningRoot)
+            let (pruningRoot, oracleTemplates) = prepare (refold space)
+             in mapMaybe
+                    (generalizeCarriersWithin typeDepth skeletonSig phase_variables . npTerm')
+                    ( prunedPrograms
+                        (startTyping monomorphic)
+                        (\n -> extendTyping typeDepth skeletonSig n . npTerm')
+                        (\typing n -> canonicalVariables (holeTypeOf typing n))
+                        (constantFits typeDepth skeletonSig)
+                        (flip typeAdmits)
+                        oracleTemplates
+                        pruningRoot
+                    )
     bucket lvl typings tc s = do
         bucketStart <- getMonotonicTimeNSec
         let bucketTemplates
@@ -1085,8 +1100,9 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..}
                     -- as for the phase 4 skeletons (see 'spineParts').
                     pure
                         [ canonicalTypes (npTerm' t)
-                        | space <- searchSpaceParts termSplit stecta lvl tc
-                        , let (pruningRoot, oracleTemplates) = preparePruning bucketTemplates (refold space)
+                        | let prepare = preparePruning bucketTemplates
+                        , space <- searchSpaceParts termSplit stecta lvl tc
+                        , let (pruningRoot, oracleTemplates) = prepare (refold space)
                         , t <- prunedTerms oracleTemplates pruningRoot
                         ]
             Nothing -> do
@@ -1198,7 +1214,7 @@ searchSpace StEcta{..} lvl tc =
 because its reduction can make overlapping type alternatives.
 -}
 preparePruning :: [Template Symbol] -> Node Symbol -> (Node Symbol, [Template Symbol])
-preparePruning templates = Bi.first mergeTypeAlternatives . Compile.preparePruning templates
+preparePruning templates = let prepare = Compile.preparePruning templates in Bi.first mergeTypeAlternatives . prepare
 
 -- | 'searchSpace' in disjoint parts, one for each shape of the left spine (see 'spineParts').
 searchSpaceParts :: Int -> StEcta -> Int -> TypeSkeleton -> [Node Symbol]
