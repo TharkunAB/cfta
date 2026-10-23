@@ -5,7 +5,7 @@ import Data.Containers.ListUtils (nubOrd)
 import Data.List (sort)
 import qualified Data.Map.Strict as Map
 import qualified Data.Text as Text
-import Test.Hspec (Spec, describe, it, shouldBe)
+import Test.Hspec (Spec, describe, it, shouldBe, shouldSatisfy)
 import Test.Hspec.QuickCheck (modifyMaxSuccess)
 import Test.QuickCheck (Property, counterexample, (.&&.), (===))
 import qualified Test.QuickCheck as QC
@@ -16,11 +16,11 @@ import Data.CFTA.Equality (numNestedMu)
 import qualified Data.CFTA.Equality as ECTA
 import qualified Data.CFTA.Gen as Gen
 import Data.CFTA.Gen.Reference (Automaton (..), AutomatonEdge (..), automatonNode, closedAutomaton)
-import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), Size (..))
+import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), Size (..), Weight)
 import Data.CFTA.Interned (toFTA)
 import Data.CFTA.Refinement (Entailment (Entailment))
 import Data.CFTA.Sized
-import Data.CFTA.Sized.Checkpoint (Checkpoint (..), CheckpointError (..))
+import Data.CFTA.Sized.Checkpoint (Checkpoint (..), CheckpointError (..), SamplingCheckpoint (..))
 import qualified Data.CFTA.Sized.Checkpoint as Checkpoint
 import Data.CFTA.Symbol (Symbol (Symbol))
 import Data.CFTA.Term (Term)
@@ -124,6 +124,69 @@ spec = describe "Data.CFTA.Sized" $ do
                 checkpoint = Checkpoint.start 3 graph
             void (Checkpoint.resume checkpoint graph) `shouldBe` Left (QueryFailed ResidualGuard)
             void (Checkpoint.relocate checkpoint graph $ term "g" [term "a" [], term "b" []])
+                `shouldBe` Left (QueryFailed ResidualGuard)
+    describe "Data.CFTA.Sized.Checkpoint, sampling" $ do
+        it "gives the words of splitmix64.c" $
+            take 3 (Checkpoint.splitMix64 0) `shouldBe` [0xe220a8397b1dcdaf, 0x6e789e6aa1b965f4, 0x06c45d188009454f]
+        it "resumes at every cut as the run without a cut"
+            $ forM_
+                [(graph, weights) | graph <- filter (/= automaton "e" [("e", [])]) listings, weights <- [Nothing, Just sizeWeights]]
+            $ \(graph, weights) -> do
+                let entries = take 40 $ sampled weights graph
+                    run = map fst entries
+                forM_ (zip [0 ..] $ Checkpoint.startSampling listingBound weights 7 graph : map snd entries) $ \(cut, checkpoint) ->
+                    (take cut run <>) . take (40 - cut) . map fst <$> Checkpoint.resumeSampling checkpoint graph weights
+                        `shouldBe` Right run
+        it "draws from a listing with more terms than a word counts" $ do
+            -- The binary trees with 40 inner nodes alone are more than 2^64.
+            let graph = automaton "s" binary
+                classes = either (error . show) id $ sized graph
+                run = either (error . show) id $ Checkpoint.resumeSampling (Checkpoint.startSampling 81 Nothing 7 graph) graph Nothing
+                resumed = either (error . show) id $ Checkpoint.resumeSampling (snd $ run !! 9) graph Nothing
+            sum [count | size <- [1 .. 81], let Cardinality count = countOfSize classes size]
+                `shouldSatisfy` (> 2 ^ (64 :: Int))
+            forM_ (take 20 run) $ \(found, _) -> fmap fst (rankOfSize classes found) `shouldSatisfy` maybe False (<= 81)
+            map fst (take 10 resumed) `shouldBe` map fst (take 10 $ drop 10 run)
+        it "gives each term of the listing the same chance without weights" $ do
+            -- Up to size seven, nine binary trees.
+            let graph = automaton "s" binary
+                listed = concatMap (termsOfSize $ either (error . show) id $ sized graph) [1 .. listingBound]
+                counts = Map.fromListWith (+) [(found, 1 :: Int) | found <- map fst $ take 9000 $ sampled Nothing graph]
+            Map.keys counts `shouldBe` sort listed
+            Map.elems counts `shouldSatisfy` all (\count -> count > 850 && count < 1150)
+        it "selects a size by its weight, then each term of that size with the same chance" $ do
+            -- Size two has no terms, so sizes one and five have the chances one in four and three in four.
+            let graph = automaton "s" binary
+                weights = Just $ Map.fromList [(1, 1), (2, 4), (5, 3)]
+                counts = Map.fromListWith (+) [(found, 1 :: Int) | found <- map fst $ take 4000 $ sampled weights graph]
+            map length (Map.keys counts) `shouldBe` [1, 5, 5]
+            Map.elems counts `shouldSatisfy` all (\count -> count > 850 && count < 1150) . take 1
+            Map.elems counts `shouldSatisfy` all (\count -> count > 1350 && count < 1650) . drop 1
+        it "rejects an edited graph, other weights, another generator, and another route" $ do
+            let graph = automaton "s" deadRow
+                edited = either (error . show) id $ FTA.replaceRows (Map.singleton "q" $ Just [node "n" ["leaf"]]) graph
+                checkpoint = Checkpoint.startSampling listingBound Nothing 7 graph
+                from saved target weights = void $ Checkpoint.resumeSampling saved target weights
+            from checkpoint edited Nothing `shouldBe` Left (StaleRow "q")
+            from checkpoint graph (Just sizeWeights) `shouldBe` Left StaleWeights
+            from checkpoint{samplingPrngVersion = 2} graph Nothing `shouldBe` Left (UnknownPrng Checkpoint.prng 2)
+            from checkpoint{samplingVersion = 2} graph Nothing `shouldBe` Left (UnknownRoute Checkpoint.sampleRoute 2)
+        it "rejects invalid weights, a listing with nothing to draw, and a negative number of draws" $ do
+            let graph = automaton "s" binary
+                from weights target = void $ Checkpoint.resumeSampling (Checkpoint.startSampling listingBound weights 7 target) target weights
+                weighted = Just . Map.fromList
+            from (weighted [(2, 0)]) graph `shouldBe` Left (InvalidWeight 2 0)
+            from (weighted [(0, 1)]) graph `shouldBe` Left (InvalidWeight 0 1)
+            from (weighted [(listingBound + 1, 1)]) graph `shouldBe` Left (InvalidWeight (listingBound + 1) 1)
+            from (weighted [(2, 1)]) graph `shouldBe` Left NothingToDraw
+            from Nothing (automaton "e" [("e", [])]) `shouldBe` Left NothingToDraw
+            void
+                (Checkpoint.resumeSampling (Checkpoint.startSampling listingBound Nothing 7 graph){samplingDraws = -1} graph Nothing)
+                `shouldBe` Left (InvalidDraws (-1))
+        it "rejects a guard beyond equality constraints" $ do
+            let different = semanticConstraint $ Not $ Same (ECTA.path [0]) (ECTA.path [1])
+                graph = automaton "s" [("s", [FTA.Transition (sym "g") ["q", "q"] different]), ("q", [leaf "a", leaf "b"])]
+            void (Checkpoint.resumeSampling (Checkpoint.startSampling 3 Nothing 7 graph) graph Nothing)
                 `shouldBe` Left (QueryFailed ResidualGuard)
 
 -- | The classes of size one to 'sizeBound' are the accepted terms of each size, each once, and the ranks invert.
@@ -317,6 +380,16 @@ listings =
     ]
   where
     equalChildren = equalityConstraint $ ECTA.mkEqConstraints [[ECTA.path [0], ECTA.path [1]]]
+
+-- | The run of draws from the listing of a graph up to 'listingBound', with seed seven.
+sampled :: Maybe (Map.Map Size Weight) -> FTA.FTA String Symbol Constraint -> [(Term Symbol, SamplingCheckpoint String)]
+sampled weights graph =
+    either (error . show) id $
+        Checkpoint.resumeSampling (Checkpoint.startSampling listingBound weights 7 graph) graph weights
+
+-- | Weights of sizes up to 'listingBound', with a size of no terms in some listings.
+sizeWeights :: Map.Map Size Weight
+sizeWeights = Map.fromList [(1, 1), (3, 2), (6, 1), (7, 5)]
 
 -- | Binary trees: a leaf, or a node with two trees.
 binary :: [(String, [FTA.Transition String Symbol Constraint])]
