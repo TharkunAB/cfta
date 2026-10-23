@@ -24,9 +24,9 @@ table shared with the cyclic import ('Data.CFTA.Gen.fromAutomaton'):
   left-major.
 * A term that several transitions accept keeps its first place.
 
-The route @sized@ of "Data.CFTA.Sized.Checkpoint" names this order. A change
-to the order must increase the version of that route, so that an old
-checkpoint does not resume in the new order.
+The routes @sized@ and @sized-sample@ of "Data.CFTA.Sized.Checkpoint" use
+this order. A change to the order must increase the versions of both routes,
+so that an old checkpoint does not resume in the new order.
 
 The count table reads these original rows. Importing through interned nodes
 can trim dead edges or remove duplicate edges. Those changes can change
