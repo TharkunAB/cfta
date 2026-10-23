@@ -2,6 +2,7 @@ module Main (main) where
 
 import Test.Hspec (hspec)
 
+import qualified Data.CFTA.Gen.CompiledRankSpec
 import qualified Data.CFTA.Gen.Equality.DatatypeGenSpec
 import qualified Data.CFTA.Gen.Equality.GenSpec
 import qualified Data.CFTA.Gen.Equality.IFCExpressionGenSpec
@@ -22,6 +23,7 @@ main :: IO ()
 main =
     hspec $ do
         Data.CFTA.RankedSpec.spec
+        Data.CFTA.Gen.CompiledRankSpec.spec
         Data.CFTA.GenSpec.spec
         Data.CFTA.Gen.Equality.DatatypeGenSpec.spec
         Data.CFTA.Gen.Equality.GenSpec.spec
