@@ -17,6 +17,9 @@ a prefix and answers these queries:
   'sampleCompletion': the completions, counted, listed, unranked, and
   sampled uniformly.
 
+A decoder that writes a term one token at a time can use 'nextTokens' to
+reject an invalid token at once, before it writes the rest of the term.
+
 The count of a prefix is the sum of the counts that 'nextTokens' gives, plus
 one when the prefix is complete. A complete prefix has no next token.
 
@@ -43,7 +46,9 @@ slowest. Each pending node goes through its sizes in ascending order, and
 through each size class in the order of "Data.CFTA.Sized". For the empty
 prefix, this is the order of 'Data.CFTA.Sized.sized'. The stacks are in
 lexicographic order of their states, and the states are in the order of
-their 'Ord' instance.
+their 'Ord' instance. The rank of a completion is its place among the
+completions of this prefix. It is not the rank of the term in the whole
+language.
 
 The automaton must have no constraint: an equality constraint or a guard is
 not checked here, so 'prefixCompletions' rejects it.
@@ -242,7 +247,8 @@ completionTerms completions
         ]
 
 {- | The completion at a rank in the order of 'completionTerms'. 'Nothing'
-when the rank is outside the completions.
+when the rank is outside the completions. The rank is a place among the
+completions of this prefix, not the rank of the term in the whole language.
 -}
 unrankCompletion :: (Ord symbol) => Completions symbol -> Rank -> Maybe (Term symbol)
 unrankCompletion completions (Rank rank)
