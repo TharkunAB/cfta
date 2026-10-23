@@ -7,6 +7,13 @@
 - `Data.CFTA.Sized.termsOfSizeFrom`: the terms of a size class from a class
   rank on. Where the count table applies, it does not build the terms before
   the class rank.
+- Add `Data.CFTA.Sized.Checkpoint`: resume a size-ordered listing of the
+  terms of a graph, also in a new process. `start` gives the checkpoint before
+  the first term. `resume` builds the size classes again and gives the terms
+  after a checkpoint, each with the checkpoint after it. It rejects a
+  checkpoint of another route, route version, or graph, and names the first
+  row that differs. `relocate` finds a term in an edited graph. A graph with a
+  guard beyond equality constraints needs a solver: `resume` rejects it.
 
 Before release, the package was called `microcfta-generator`.
 

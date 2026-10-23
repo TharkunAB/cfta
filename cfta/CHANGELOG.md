@@ -4,6 +4,10 @@
 
 - Generalize refinement formulas with global predicate applications and named
   data sorts. Unsupported Z3 interpretations return `Unknown`.
+- Add `Data.CFTA.Checkpoint`: a saved position in a size-ordered listing of
+  the terms of a graph. It holds the graph, the query route and its version,
+  the size bound, and the sized rank of the next term. `cfta-generator`
+  resumes it, and `cfta-serialization` prints and reads it.
 
 Before release, the package was called `microcfta`.
 
