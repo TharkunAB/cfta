@@ -60,7 +60,7 @@ module Data.CFTA.Enumeration (
 ) where
 
 import Control.Applicative (Alternative (..))
-import Control.Monad (MonadPlus, forM_, guard, mzero, unless, when, zipWithM)
+import Control.Monad (MonadPlus, forM_, guard, mzero, unless, void, when, zipWithM)
 import Control.Monad.State.Strict (MonadState, gets, modify')
 import qualified Control.Monad.State.Strict as State
 import qualified Data.Foldable as Foldable
@@ -916,7 +916,7 @@ enumerateFully' ::
     ExpansionOrder a ->
     (a -> UVar -> Either (TermFragment symbol) (Node symbol) -> EnumerateM symbol (Bool, a)) ->
     EnumerateM symbol ()
-enumerateFully' ost order oracle = () <$ enumerateUntil' Nothing (\_ _ n -> n) enumerateNode ost order oracle
+enumerateFully' ost order oracle = void (enumerateUntil' Nothing (\_ _ n -> n) enumerateNode ost order oracle)
 
 {- | Enumerate until the root term is complete, with optional oracle pruning.
 

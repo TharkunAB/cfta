@@ -103,7 +103,7 @@ prunedPrograms start extend holeKey fits admits templates =
         case order pending candidates of
             Just uv -> Just uv
             Nothing -> find (\uv -> uvarToInt uv `IntSet.notMember` types) candidates
-    atTypes (pending, types, _, _) uv = uvarToInt uv `IntSet.member` types && all ((/= uv) . snd) (concat pending)
+    atTypes (pending, types, _, _) uv = uvarToInt uv `IntSet.member` types && all (all ((/= uv) . snd)) pending
     recordTypes (pending, types, open, typing) uv input = do
         let types' = case input of
                 Left fragment -> typePositions (uvarToInt uv `IntSet.member` types) fragment types
