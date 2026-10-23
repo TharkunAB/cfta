@@ -5,6 +5,7 @@ import Test.Hspec (hspec)
 import qualified Data.CFTA.Edit.SetsSpec
 import qualified Data.CFTA.Edit.TreesSpec
 import qualified Data.CFTA.Edit.BetweenSpec
+import qualified Data.CFTA.Edit.ConstrainedSpec
 import qualified Data.CFTA.EditSpec
 import qualified Data.CFTA.Gen.Equality.DatatypeGenSpec
 import qualified Data.CFTA.Gen.Equality.GenSpec
@@ -42,3 +43,4 @@ main =
         Data.CFTA.Edit.TreesSpec.spec
         Data.CFTA.Edit.BetweenSpec.spec
         Data.CFTA.EditSpec.spec
+        Data.CFTA.Edit.ConstrainedSpec.spec
