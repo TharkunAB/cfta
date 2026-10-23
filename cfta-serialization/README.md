@@ -1,6 +1,7 @@
 # cfta-serialization
 
-Read and write complete FTA, ECTA, and LTA graphs and editable language values.
+Read and write complete FTA, ECTA, and LTA graphs, editable language values,
+and query checkpoints.
 `Data.CFTA.Serialization.Text` provides one readable format. It retains full
 refinements, every constraint constructor, individual source facts, named
 exclusions, cycles, empty/dead rows, repeated alternatives, and child order.
@@ -18,6 +19,7 @@ Redex, Nanopass, EDN, and KDL, and explains why the format has its own syntax.
 | `PlainFTA state Symbol` | `printGraph` | `parseGraph` | `graph 1;` |
 | `Document state` | `printDocument` | `parseDocument` | `document 1;` |
 | `Language state` | `printLanguage` | `parseLanguage` | `language 1;` |
+| `Checkpoint state` | `printCheckpoint` | `parseCheckpoint` | `checkpoint 1;` |
 
 Printers return `Text`. Parsers return `Either (TextError state) value`.
 `explainTextError` reports a syntax line/column or a checked source error.
@@ -39,8 +41,9 @@ data State = Atom | Expr deriving (Eq, Ord, Show, Read)
 ```
 
 For custom or portable state labels, use `StateCodec state` and the corresponding
-`printGraphWith`/`parseGraphWith`, `printDocumentWith`/`parseDocumentWith`, or
-`printLanguageWith`/`parseLanguageWith` functions. The codec contains
+`printGraphWith`/`parseGraphWith`, `printDocumentWith`/`parseDocumentWith`,
+`printLanguageWith`/`parseLanguageWith`, or
+`printCheckpointWith`/`parseCheckpointWith` functions. The codec contains
 `encodeState :: state -> Text` and `decodeState :: Text -> Either String state`.
 The snapshot printer handles quoting. For a graph with `Text` state names:
 
@@ -193,10 +196,56 @@ in `Data.CFTA.Language`. `put production`, `put row`, and `delete row` are the
 source edits `PutTransition`, `PutRow`, and `DeleteRow`. An update does not
 name the language it changes: apply it with `Language.update`, which checks it.
 
+## Checkpoints
+
+`printCheckpoint` and `parseCheckpoint` store a `Checkpoint` of
+`Data.CFTA.Checkpoint`: a saved position in a size-ordered listing of the
+terms of a graph. `Data.CFTA.Sized.Checkpoint` of
+[cfta-generator](../cfta-generator/README.md) makes and resumes it.
+
+```text
+checkpoint 1;
+query sized 1;
+bound 7;
+next 5 1;
+
+graph 1;
+start tree;
+
+state tree {
+  leaf;
+  node(tree, tree);
+}
+```
+
+`query` gives the route and its version. The route and its version fix the
+order of the listing. `bound` gives the largest size in the listing. `next`
+gives the sized rank of the next term: its size, then its class rank. The
+remaining text is the text of `printGraph` for the graph. Thus the checkpoint
+holds its graph, and the printed graph is the identity of the checkpoint. No
+hash is necessary, and one file is sufficient to resume.
+
+To resume in a new process, read the checkpoint and the current graph. Here
+the states are text, as with `textStates` above:
+
+```haskell
+saved <- either (fail . T.explainTextError) pure $ T.parseCheckpointWith textStates checkpointText
+graph <- either (fail . T.explainTextError) pure $ T.parseGraphWith textStates graphText
+rest <- either (fail . show) pure $ Checkpoint.resume saved graph
+```
+
+`resume` builds the size classes of the graph again. It rejects a graph that
+is not equal to the graph of the checkpoint, and names the first row that
+differs. A new order of the transitions of one state also makes a checkpoint
+stale, although the listing can keep its order. To resume the saved version,
+use `checkpointGraph saved` as the graph. To continue in an edited graph, use
+`relocate`: it does not continue the old listing.
+
 ## Ranks after reopening
 
-A file stores the graph only: no query state, count tables, solver state, or
-host functions. Build the same query again after reading, for example with
-`Sized.sizedUpTo` and a solver. The reopened graph is equal to the saved graph,
+A graph file stores the graph only: no query state, count tables, solver
+state, or host functions. A checkpoint file also stores a query and a
+position, but no count tables or solver state. Build the same query again
+after reading, for example with `Sized.sizedUpTo` and a solver. The reopened graph is equal to the saved graph,
 so it gives the same counts, terms, and ranks. An edit can change the ranks.
 `FTA.terms` ignores constraints, and `FTA.accepts` does not solve guards.

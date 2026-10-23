@@ -8,3 +8,7 @@
   it again gives the same text.
 - Add `printUpdate` and `parseUpdate`: the text form `update 1;` of a
   `Language.Update`, one statement for each operation.
+- Add `printCheckpoint` and `parseCheckpoint`: the text form `checkpoint 1;`
+  of a `Checkpoint`. It holds the query route and its version, the size
+  bound, and the sized rank of the next term, then the text of `printGraph`
+  for the graph.
