@@ -1,0 +1,11 @@
+H38 exact declaration-only proposal. Root accepted the source-only investigation before these fragments were authored. No mathematical body or stub is included.
+The module has one public outcomeState definition and two public counter theorems. The accessor returns the full existing Pair.State at all five Scan outcomes without instances. Only the theorems carry the existing two inline equality instances.
+The six compiled STRING fragments have29 lines: context9, public15 and local5. The pairGrowth local fact names the same actual Pair.step result through H37 public outcomeState; first names the same actual Scan.step result through the new accessor.
+All24 scoped pattern/IH type entries are explicit. Pair.done common has Edge type; Scan.done values has List Edge type. Pair next controls and Scan next controls have distinct defining types. The two observed equation families have ten exact specializations.
+The list splits declare all pivot/candidate/tail fields. The only induction generalizes control/state over fuel, and the sole predecessor call is ih next after in the actual yielded case. No helper, new predicate/packet/structure, let, obtain, lambda, by_cases, typed show or unrestricted recursion is proposed.
+Pair.done selects a conditional Scan control but keeps the actual after state. The accessor discards control, so no identity split or identity assumption is required.
+The plain definition header attachment is literal :=. The theorem/local-have attachments are literal := by. Only final header LF removal is authorized before attachment. No attachment heuristic is proposed.
+Retain all owner/layout/inventory metadata. The copied H37 schema basis and exact field deltas record the adaptation. Nested copied pins and FROZEN controls are included in this package manifest.
+Target85–115 whole source lines, cap140, and shorter sound source without padding remain Root-accepted scope. Defaults and all linters stay enabled. Exact independent declaration review and Root acceptance must precede any body or compiler.
+No H23 finite-chain/rebuild, source-initial counter order, upper resource, admission, Mu, Haskell or full public-pass result is claimed.
+Guard authored this declaration package. Root owns future body authorship and compiler jobs. Required will independently review these declarations.

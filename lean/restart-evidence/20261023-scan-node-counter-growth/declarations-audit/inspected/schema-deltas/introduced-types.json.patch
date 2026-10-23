@@ -1,0 +1,588 @@
+--- H37/introduced-types.json
++++ H38/introduced-types.json
+@@ -14,7 +14,7 @@
+       "ignored_constructor_arguments": [
+         {
+           "position": 1,
+-          "type": "SourceCurrentSameSymbolEdgeControl.Control",
++          "type": "SourceCurrentOriginalRowClusterScan.Control",
+           "binder": "_"
+         }
+       ]
+@@ -32,7 +32,7 @@
+       "ignored_constructor_arguments": [
+         {
+           "position": 1,
+-          "type": "InternedConstructorTemplates.EdgeValue Symbol Guard",
++          "type": "List (InternedConstructorTemplates.EdgeValue Symbol Guard)",
+           "binder": "_"
+         }
+       ]
+@@ -91,7 +91,7 @@
+         },
+         {
+           "position": 2,
+-          "type": "SourceCurrentSameSymbolEdgeControl.Control",
++          "type": "SourceCurrentOriginalRowClusterScan.Control",
+           "binder": "_"
+         }
+       ]
+@@ -99,171 +99,169 @@
+     {
+       "owner": "step_mono",
+       "activation": "cases control with",
+-      "pattern": "call request pending",
+-      "binders": [
+-        {
+-          "name": "request",
+-          "type": "InternedConstructorTemplates.EdgeValue Symbol Guard \u00d7 InternedConstructorTemplates.EdgeValue Symbol Guard"
+-        },
+-        {
+-          "name": "pending",
+-          "type": "List Nat"
+-        }
+-      ]
++      "pattern": "cluster candidates keptReversed",
++      "binders": [
++        {
++          "name": "candidates",
++          "type": "List (InternedConstructorTemplates.EdgeValue Symbol Guard)"
++        },
++        {
++          "name": "keptReversed",
++          "type": "List (InternedConstructorTemplates.EdgeValue Symbol Guard)"
++        }
++      ]
++    },
++    {
++      "owner": "step_mono",
++      "activation": "cases candidates with",
++      "pattern": "nil",
++      "binders": [],
++      "scope": "Control.cluster"
++    },
++    {
++      "owner": "step_mono",
++      "activation": "cases candidates with",
++      "pattern": "cons pivot tail",
++      "binders": [
++        {
++          "name": "pivot",
++          "type": "InternedConstructorTemplates.EdgeValue Symbol Guard"
++        },
++        {
++          "name": "tail",
++          "type": "List (InternedConstructorTemplates.EdgeValue Symbol Guard)"
++        }
++      ],
++      "scope": "Control.cluster"
+     },
+     {
+       "owner": "step_mono",
+       "activation": "cases control with",
+-      "pattern": "demand handle pending",
+-      "binders": [
+-        {
+-          "name": "handle",
+-          "type": "Nat"
+-        },
+-        {
+-          "name": "pending",
+-          "type": "List Nat"
+-        }
+-      ]
++      "pattern": "scan pivot remaining incomparableReversed keptReversed",
++      "binders": [
++        {
++          "name": "pivot",
++          "type": "InternedConstructorTemplates.EdgeValue Symbol Guard"
++        },
++        {
++          "name": "remaining",
++          "type": "List (InternedConstructorTemplates.EdgeValue Symbol Guard)"
++        },
++        {
++          "name": "incomparableReversed",
++          "type": "List (InternedConstructorTemplates.EdgeValue Symbol Guard)"
++        },
++        {
++          "name": "keptReversed",
++          "type": "List (InternedConstructorTemplates.EdgeValue Symbol Guard)"
++        }
++      ]
++    },
++    {
++      "owner": "step_mono",
++      "activation": "cases remaining with",
++      "pattern": "nil",
++      "binders": [],
++      "scope": "Control.scan"
++    },
++    {
++      "owner": "step_mono",
++      "activation": "cases remaining with",
++      "pattern": "cons candidate tail",
++      "binders": [
++        {
++          "name": "candidate",
++          "type": "InternedConstructorTemplates.EdgeValue Symbol Guard"
++        },
++        {
++          "name": "tail",
++          "type": "List (InternedConstructorTemplates.EdgeValue Symbol Guard)"
++        }
++      ],
++      "scope": "Control.scan"
+     },
+     {
+       "owner": "step_mono",
+       "activation": "cases control with",
+-      "pattern": "order handle request pending",
+-      "binders": [
+-        {
+-          "name": "handle",
+-          "type": "Nat"
+-        },
+-        {
+-          "name": "request",
+-          "type": "InternedConstructorTemplates.EdgeValue Symbol Guard \u00d7 InternedConstructorTemplates.EdgeValue Symbol Guard"
+-        },
+-        {
+-          "name": "pending",
+-          "type": "List Nat"
+-        }
+-      ]
+-    },
+-    {
+-      "owner": "step_mono",
+-      "activation": "cases control with",
+-      "pattern": "native body pending",
+-      "binders": [
+-        {
+-          "name": "body",
+-          "type": "SourceEqualityNativeDemand.Control Edge"
+-        },
+-        {
+-          "name": "pending",
+-          "type": "List Nat"
+-        }
+-      ]
+-    },
+-    {
+-      "owner": "step_mono",
+-      "activation": "cases control with",
+-      "pattern": "ret value pending",
+-      "binders": [
+-        {
+-          "name": "value",
+-          "type": "InternedConstructorTemplates.EdgeValue Symbol Guard"
+-        },
+-        {
+-          "name": "pending",
+-          "type": "List Nat"
+-        }
+-      ]
+-    },
+-    {
+-      "owner": "step_mono",
+-      "activation": "cases observed : (FlatMemoThunk.demand handle state.memo).1 with",
+-      "pattern": "absent",
+-      "binders": [],
+-      "scope": "Control.demand"
+-    },
+-    {
+-      "owner": "step_mono",
+-      "activation": "cases observed : (FlatMemoThunk.demand handle state.memo).1 with",
+-      "pattern": "evaluate request",
+-      "binders": [
+-        {
+-          "name": "request",
+-          "type": "InternedConstructorTemplates.EdgeValue Symbol Guard \u00d7 InternedConstructorTemplates.EdgeValue Symbol Guard"
+-        }
+-      ],
+-      "scope": "Control.demand"
+-    },
+-    {
+-      "owner": "step_mono",
+-      "activation": "cases observed : (FlatMemoThunk.demand handle state.memo).1 with",
+-      "pattern": "busy",
+-      "binders": [],
+-      "scope": "Control.demand"
+-    },
+-    {
+-      "owner": "step_mono",
+-      "activation": "cases observed : (FlatMemoThunk.demand handle state.memo).1 with",
+-      "pattern": "ready value",
+-      "binders": [
+-        {
+-          "name": "value",
+-          "type": "InternedConstructorTemplates.EdgeValue Symbol Guard"
+-        }
+-      ],
+-      "scope": "Control.demand"
+-    },
+-    {
+-      "owner": "step_mono",
+-      "activation": "cases observed : SourceEqualityNativeDemand.step body state.checked with",
++      "pattern": "comparison pivot candidate tail incomparableReversed keptReversed inner",
++      "binders": [
++        {
++          "name": "pivot",
++          "type": "InternedConstructorTemplates.EdgeValue Symbol Guard"
++        },
++        {
++          "name": "candidate",
++          "type": "InternedConstructorTemplates.EdgeValue Symbol Guard"
++        },
++        {
++          "name": "tail",
++          "type": "List (InternedConstructorTemplates.EdgeValue Symbol Guard)"
++        },
++        {
++          "name": "incomparableReversed",
++          "type": "List (InternedConstructorTemplates.EdgeValue Symbol Guard)"
++        },
++        {
++          "name": "keptReversed",
++          "type": "List (InternedConstructorTemplates.EdgeValue Symbol Guard)"
++        },
++        {
++          "name": "inner",
++          "type": "SourceCurrentSameSymbolEdgeControl.Control"
++        }
++      ]
++    },
++    {
++      "owner": "step_mono",
++      "activation": "cases observed : SourceCurrentSameSymbolEdgeControl.step inner state with",
+       "pattern": "yielded next after",
+       "binders": [
+         {
+           "name": "next",
+-          "type": "SourceEqualityNativeDemand.Control Edge"
+-        },
+-        {
+-          "name": "after",
+-          "type": "SourceEqualityNativeDemand.State width"
+-        }
+-      ],
+-      "scope": "Control.native"
+-    },
+-    {
+-      "owner": "step_mono",
+-      "activation": "cases observed : SourceEqualityNativeDemand.step body state.checked with",
+-      "pattern": "done value after",
+-      "binders": [
+-        {
+-          "name": "value",
+-          "type": "InternedConstructorTemplates.EdgeValue Symbol Guard"
+-        },
+-        {
+-          "name": "after",
+-          "type": "SourceEqualityNativeDemand.State width"
+-        }
+-      ],
+-      "scope": "Control.native"
+-    },
+-    {
+-      "owner": "step_mono",
+-      "activation": "cases observed : SourceEqualityNativeDemand.step body state.checked with",
+-      "pattern": "failed failure after",
+-      "binders": [
+-        {
+-          "name": "failure",
++          "type": "SourceCurrentSameSymbolEdgeControl.Control"
++        },
++        {
++          "name": "after",
++          "type": "SourceCurrentSameSymbolEdgeControl.State width"
++        }
++      ],
++      "scope": "Control.comparison"
++    },
++    {
++      "owner": "step_mono",
++      "activation": "cases observed : SourceCurrentSameSymbolEdgeControl.step inner state with",
++      "pattern": "done common after",
++      "binders": [
++        {
++          "name": "common",
++          "type": "InternedConstructorTemplates.EdgeValue Symbol Guard"
++        },
++        {
++          "name": "after",
++          "type": "SourceCurrentSameSymbolEdgeControl.State width"
++        }
++      ],
++      "scope": "Control.comparison"
++    },
++    {
++      "owner": "step_mono",
++      "activation": "cases observed : SourceCurrentSameSymbolEdgeControl.step inner state with",
++      "pattern": "failed reason after",
++      "binders": [
++        {
++          "name": "reason",
+           "type": "SourceRecursiveIntersectionKernel.Failure"
+         },
+         {
+           "name": "after",
+-          "type": "SourceEqualityNativeDemand.State width"
+-        }
+-      ],
+-      "scope": "Control.native"
+-    },
+-    {
+-      "owner": "step_mono",
+-      "activation": "cases observed : SourceEqualityNativeDemand.step body state.checked with",
++          "type": "SourceCurrentSameSymbolEdgeControl.State width"
++        }
++      ],
++      "scope": "Control.comparison"
++    },
++    {
++      "owner": "step_mono",
++      "activation": "cases observed : SourceCurrentSameSymbolEdgeControl.step inner state with",
+       "pattern": "constraintError message after",
+       "binders": [
+         {
+@@ -272,53 +270,30 @@
+         },
+         {
+           "name": "after",
+-          "type": "SourceEqualityNativeDemand.State width"
+-        }
+-      ],
+-      "scope": "Control.native"
+-    },
+-    {
+-      "owner": "step_mono",
+-      "activation": "cases observed : SourceEqualityNativeDemand.step body state.checked with",
++          "type": "SourceCurrentSameSymbolEdgeControl.State width"
++        }
++      ],
++      "scope": "Control.comparison"
++    },
++    {
++      "owner": "step_mono",
++      "activation": "cases observed : SourceCurrentSameSymbolEdgeControl.step inner state with",
+       "pattern": "blocked reason next after",
+       "binders": [
+         {
+           "name": "reason",
+-          "type": "SourceEqualityNativeDemand.Blocked"
++          "type": "SourceCurrentSameSymbolEdgeControl.Blocked"
+         },
+         {
+           "name": "next",
+-          "type": "SourceEqualityNativeDemand.Control Edge"
+-        },
+-        {
+-          "name": "after",
+-          "type": "SourceEqualityNativeDemand.State width"
+-        }
+-      ],
+-      "scope": "Control.native"
+-    },
+-    {
+-      "owner": "step_mono",
+-      "activation": "cases pending with",
+-      "pattern": "nil",
+-      "binders": [],
+-      "scope": "Control.ret"
+-    },
+-    {
+-      "owner": "step_mono",
+-      "activation": "cases pending with",
+-      "pattern": "cons handle pending",
+-      "binders": [
+-        {
+-          "name": "handle",
+-          "type": "Nat"
+-        },
+-        {
+-          "name": "pending",
+-          "type": "List Nat"
+-        }
+-      ],
+-      "scope": "Control.ret"
++          "type": "SourceCurrentSameSymbolEdgeControl.Control"
++        },
++        {
++          "name": "after",
++          "type": "SourceCurrentSameSymbolEdgeControl.State width"
++        }
++      ],
++      "scope": "Control.comparison"
+     },
+     {
+       "owner": "execute_mono",
+@@ -337,58 +312,61 @@
+         },
+         {
+           "name": "ih",
+-          "type": "\u2200 (control : SourceCurrentSameSymbolEdgeControl.Control) (state : SourceCurrentSameSymbolEdgeControl.State width),\n  state.checked.native.machine.heap.nodes.next \u2264\n    (outcomeState (SourceCurrentSameSymbolEdgeControl.execute fuel control state)).checked.native.machine.heap.nodes.next"
+-        }
+-      ]
+-    },
+-    {
+-      "owner": "execute_mono",
+-      "activation": "cases observed : SourceCurrentSameSymbolEdgeControl.step control state with",
++          "type": "∀ (control : SourceCurrentOriginalRowClusterScan.Control) (state : SourceCurrentSameSymbolEdgeControl.State width),\n  state.checked.native.machine.heap.nodes.next ≤\n    (outcomeState (SourceCurrentOriginalRowClusterScan.execute fuel control state)).checked.native.machine.heap.nodes.next"
++        }
++      ]
++    },
++    {
++      "owner": "execute_mono",
++      "activation": "cases observed : SourceCurrentOriginalRowClusterScan.step control state with",
+       "pattern": "yielded next after",
+       "binders": [
+         {
+           "name": "next",
+-          "type": "SourceCurrentSameSymbolEdgeControl.Control"
+-        },
+-        {
+-          "name": "after",
+-          "type": "SourceCurrentSameSymbolEdgeControl.State width"
+-        }
+-      ]
+-    },
+-    {
+-      "owner": "execute_mono",
+-      "activation": "cases observed : SourceCurrentSameSymbolEdgeControl.step control state with",
+-      "pattern": "done value after",
+-      "binders": [
+-        {
+-          "name": "value",
+-          "type": "InternedConstructorTemplates.EdgeValue Symbol Guard"
+-        },
+-        {
+-          "name": "after",
+-          "type": "SourceCurrentSameSymbolEdgeControl.State width"
+-        }
+-      ]
+-    },
+-    {
+-      "owner": "execute_mono",
+-      "activation": "cases observed : SourceCurrentSameSymbolEdgeControl.step control state with",
+-      "pattern": "failed failure after",
+-      "binders": [
+-        {
+-          "name": "failure",
++          "type": "SourceCurrentOriginalRowClusterScan.Control"
++        },
++        {
++          "name": "after",
++          "type": "SourceCurrentSameSymbolEdgeControl.State width"
++        }
++      ],
++      "scope": "successor fuel"
++    },
++    {
++      "owner": "execute_mono",
++      "activation": "cases observed : SourceCurrentOriginalRowClusterScan.step control state with",
++      "pattern": "done values after",
++      "binders": [
++        {
++          "name": "values",
++          "type": "List (InternedConstructorTemplates.EdgeValue Symbol Guard)"
++        },
++        {
++          "name": "after",
++          "type": "SourceCurrentSameSymbolEdgeControl.State width"
++        }
++      ],
++      "scope": "successor fuel"
++    },
++    {
++      "owner": "execute_mono",
++      "activation": "cases observed : SourceCurrentOriginalRowClusterScan.step control state with",
++      "pattern": "failed reason after",
++      "binders": [
++        {
++          "name": "reason",
+           "type": "SourceRecursiveIntersectionKernel.Failure"
+         },
+         {
+           "name": "after",
+           "type": "SourceCurrentSameSymbolEdgeControl.State width"
+         }
+-      ]
+-    },
+-    {
+-      "owner": "execute_mono",
+-      "activation": "cases observed : SourceCurrentSameSymbolEdgeControl.step control state with",
++      ],
++      "scope": "successor fuel"
++    },
++    {
++      "owner": "execute_mono",
++      "activation": "cases observed : SourceCurrentOriginalRowClusterScan.step control state with",
+       "pattern": "constraintError message after",
+       "binders": [
+         {
+@@ -399,11 +377,12 @@
+           "name": "after",
+           "type": "SourceCurrentSameSymbolEdgeControl.State width"
+         }
+-      ]
+-    },
+-    {
+-      "owner": "execute_mono",
+-      "activation": "cases observed : SourceCurrentSameSymbolEdgeControl.step control state with",
++      ],
++      "scope": "successor fuel"
++    },
++    {
++      "owner": "execute_mono",
++      "activation": "cases observed : SourceCurrentOriginalRowClusterScan.step control state with",
+       "pattern": "blocked reason next after",
+       "binders": [
+         {
+@@ -412,17 +391,18 @@
+         },
+         {
+           "name": "next",
+-          "type": "SourceCurrentSameSymbolEdgeControl.Control"
+-        },
+-        {
+-          "name": "after",
+-          "type": "SourceCurrentSameSymbolEdgeControl.State width"
+-        }
+-      ]
++          "type": "SourceCurrentOriginalRowClusterScan.Control"
++        },
++        {
++          "name": "after",
++          "type": "SourceCurrentSameSymbolEdgeControl.State width"
++        }
++      ],
++      "scope": "successor fuel"
+     }
+   ],
+   "local_have_names": [
+-    "nativeGrowth",
++    "pairGrowth",
+     "first"
+   ],
+   "local_let_names": [],
+@@ -430,17 +410,7 @@
+   "explicit_lambda_groups": [],
+   "local_obtain_groups": [],
+   "typed_show_fragments": [],
+-  "condition_facts": {
+-    "owner": "step_mono",
+-    "scope": "Control.order",
+-    "positive": {
+-      "name": "reversed",
+-      "type": "request.2.entry.identity < request.1.entry.identity"
+-    },
+-    "negative": {
+-      "name": "reversed",
+-      "type": "\u00ac request.2.entry.identity < request.1.entry.identity"
+-    }
+-  },
++  "condition_facts": [],
++  "named_equation_binders": "Each observed name has the exact scope and five specialized types in case-equations.json. No extra actual binder is introduced.",
+   "new_body_types_or_names_beyond_this_inventory_authorized": false
+ }

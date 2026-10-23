@@ -1,0 +1,1 @@
+The retained author-inline-diff-count diagnostic corrected an assertion about unified-diff line count before a partial data write. It is an author static diagnostic. It is not a selected verifier, compiler or Root metadata job.

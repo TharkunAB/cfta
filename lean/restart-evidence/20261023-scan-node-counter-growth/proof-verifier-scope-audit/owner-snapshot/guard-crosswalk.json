@@ -1,0 +1,2226 @@
+{
+  "status": "PLAN_ONLY_ALL_227_H37_ASSERTIONS_ENUMERATED",
+  "basis_assertions": 227,
+  "exact_generic_AST_with_multiplicity": 174,
+  "inherited_scope_data_or_accessor_obligations": 53,
+  "new_H38_scope_obligations": 2,
+  "rows": [
+    {
+      "order": 1,
+      "basis_line": 19,
+      "basis_expression": "not path.is_absolute() and '..' not in path.parts",
+      "basis_AST_sha256": "48878cf0af025e75fe8764a4ba279977c977c2ac2931f6709f89cd101682fc47",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "not path.is_absolute() and '..' not in path.parts",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 2,
+      "basis_line": 25,
+      "basis_expression": "len(data) == record['bytes'] and digest(data) == record['sha256']",
+      "basis_AST_sha256": "4c085123aacf6619d8b59c58f507d96a3fe9eaac4ebdcca3a26b2690fa3bb181",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "len(data) == record['bytes'] and digest(data) == record['sha256']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 3,
+      "basis_line": 30,
+      "basis_expression": "digest(raw_data) == '1e12cb608db0a52a00d4e4838d72777a2ee3607e34a15d13904fcc83b4174985'",
+      "basis_AST_sha256": "00ef1b0663f4642e2c29b53428086c23f099acad5897c79de90ce53648ee9e5b",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "digest(raw_data) == '__H38_ACTUAL_BOUND_DATA_SHA256__'",
+      "policy": "Use the exact H38 replacement expression; binding digest remains rejecting until actual final data."
+    },
+    {
+      "order": 4,
+      "basis_line": 31,
+      "basis_expression": "not re.search('__H\\\\d+_', raw_data.decode())",
+      "basis_AST_sha256": "89bedb1da41a8642d70949df74d3c9bf7440cf76670119c649610ed1e2c47539",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "not re.search('__H\\\\d+_', raw_data.decode())",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 5,
+      "basis_line": 34,
+      "basis_expression": "[m['key'] for m in modules] == ['pair_node_counter_growth']",
+      "basis_AST_sha256": "7f8df30f8f0494c50ec9fc55a973d3e62e0b8e1bbbd386bd0a0606fb6d8c463f",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "[m['key'] for m in modules] == ['scan_node_counter_growth']",
+      "policy": "Use the exact H38 replacement expression; binding digest remains rejecting until actual final data."
+    },
+    {
+      "order": 6,
+      "basis_line": 35,
+      "basis_expression": "[m['source_cap'] for m in modules] == [160]",
+      "basis_AST_sha256": "4dcb555696551c76299a3a713ac43ce15eaf15d85ce17b6e3f6541fdd4f1e9d8",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "[m['source_cap'] for m in modules] == [140]",
+      "policy": "Use the exact H38 replacement expression; binding digest remains rejecting until actual final data."
+    },
+    {
+      "order": 7,
+      "basis_line": 36,
+      "basis_expression": "[m['specs'] for m in modules] == [[['outcomeState', 'def'], ['step_mono', 'theorem'], ['execute_mono', 'theorem']]]",
+      "basis_AST_sha256": "91ff6240c61f18b694c922f6318cc2fdf61862802cb0d99ec85b9263a9e5bbec",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "[m['specs'] for m in modules] == [[['outcomeState', 'def'], ['step_mono', 'theorem'], ['execute_mono', 'theorem']]]",
+      "policy": "Keep expression; bind exact H38 schema/data below. No guard is dropped."
+    },
+    {
+      "order": 8,
+      "basis_line": 45,
+      "basis_expression": "actual == set(jobs)",
+      "basis_AST_sha256": "acdb1c852500c47b75362a1f9f11f4ec861ca3f00bb9465339e965656018d732",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "actual == set(jobs)",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 9,
+      "basis_line": 47,
+      "basis_expression": "metrics['actual_jobs'] == len(actual)",
+      "basis_AST_sha256": "2abf551364bb6045723a4fbc5d3216d099ac979e4f0293046af557792d8d1fb2",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "metrics['actual_jobs'] == len(actual)",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 10,
+      "basis_line": 48,
+      "basis_expression": "metrics['source_jobs'] == sum((j['kind'] in {'strict', 'full'} for j in jobs.values()))",
+      "basis_AST_sha256": "013e6021253a9f89121377135845947e50b68ebef1c312e461104ef21a1a2309",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "metrics['source_jobs'] == sum((j['kind'] in {'strict', 'full'} for j in jobs.values()))",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 11,
+      "basis_line": 49,
+      "basis_expression": "metrics['focused_build_jobs'] == sum((j['kind'] == 'focused_build' for j in jobs.values()))",
+      "basis_AST_sha256": "6ae39c5e39f7c9dd4095f00a477746cf70b96ba7dcdb46c54c9f7308d53ecbb8",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "metrics['focused_build_jobs'] == sum((j['kind'] == 'focused_build' for j in jobs.values()))",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 12,
+      "basis_line": 50,
+      "basis_expression": "metrics['audit_jobs'] == sum((j['kind'] == 'audit' for j in jobs.values())) == 1",
+      "basis_AST_sha256": "9fc15988886f3db64f6807c7f4d096d9404e2c900694d20d5b9fbd94aa680f78",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "metrics['audit_jobs'] == sum((j['kind'] == 'audit' for j in jobs.values())) == 1",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 13,
+      "basis_line": 51,
+      "basis_expression": "metrics['actual_jobs'] == sum((metrics[k] for k in ['source_jobs', 'focused_build_jobs', 'audit_jobs']))",
+      "basis_AST_sha256": "9f8e88042edc776f2c86b786ed96b5c2c2095e1fca6d8e0e6213482819ccf1ab",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "metrics['actual_jobs'] == sum((metrics[k] for k in ['source_jobs', 'focused_build_jobs', 'audit_jobs']))",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 14,
+      "basis_line": 52,
+      "basis_expression": "metrics['failed_jobs'] == sum((j['exit_code'] != 0 for j in jobs.values()))",
+      "basis_AST_sha256": "7e52b4e76dfca63dac0924d3bb8567cb7de259267b4fa4c499a02301a093ff33",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "metrics['failed_jobs'] == sum((j['exit_code'] != 0 for j in jobs.values()))",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 15,
+      "basis_line": 53,
+      "basis_expression": "metrics['warned_source_exit_zero_jobs'] == sum((j['kind'] in {'strict', 'full'} and j['exit_code'] == 0 and bool(j['source_warnings']) for j in jobs.values()))",
+      "basis_AST_sha256": "8fa04ea082c1ea738c3307a616cb6d197b41f3b2c7101a0943a894f5ad70622e",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "metrics['warned_source_exit_zero_jobs'] == sum((j['kind'] in {'strict', 'full'} and j['exit_code'] == 0 and bool(j['source_warnings']) for j in jobs.values()))",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 16,
+      "basis_line": 56,
+      "basis_expression": "receipt['exit_code'] == job['exit_code'] and receipt['observed_at']",
+      "basis_AST_sha256": "de57a5827c5f2f844ded01cffaf8a9052b3fd3a5c3c44fae7edb9a7b1a09f22c",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "receipt['exit_code'] == job['exit_code'] and receipt['observed_at']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 17,
+      "basis_line": 57,
+      "basis_expression": "receipt['log'] == stem + '.log' and receipt['limits'] == stem + '.limits.json'",
+      "basis_AST_sha256": "a237e58a8146a46b3c2c127474a4221b1c7a5b848654d8e00cd888e1439dd9ee",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "receipt['log'] == stem + '.log' and receipt['limits'] == stem + '.limits.json'",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 18,
+      "basis_line": 59,
+      "basis_expression": "re.fullmatch('[0-9a-f]{64}', job['log_sha256']) and digest(raw) == job['log_sha256']",
+      "basis_AST_sha256": "15c91f898f571535a99afc9dec12f46541c7c6b747b419b9febcf29ddf0b6721",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "re.fullmatch('[0-9a-f]{64}', job['log_sha256']) and digest(raw) == job['log_sha256']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 19,
+      "basis_line": 60,
+      "basis_expression": "load(receipt['limits']) == {'memory.max': '4294967296', 'memory.high': '4294967296', 'memory.swap.max': '0'}",
+      "basis_AST_sha256": "749a87b1c0e3d1a4f4b5b06d6089fe2ed377fbb6af13042dd395112c71e2c4f6",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "load(receipt['limits']) == {'memory.max': '4294967296', 'memory.high': '4294967296', 'memory.swap.max': '0'}",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 20,
+      "basis_line": 62,
+      "basis_expression": "0 <= usage['age_seconds'] <= 600 and usage['remaining_percent'] > 1",
+      "basis_AST_sha256": "c4475e9da3752a073ce8f74b0c61c6e2cd8da41d6118adefd3a14cf2e9b32ae8",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "0 <= usage['age_seconds'] <= 600 and usage['remaining_percent'] > 1",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 21,
+      "basis_line": 63,
+      "basis_expression": "receipt['wrapper'][1:5] == ['--mem', '4G', '--time', '5m']",
+      "basis_AST_sha256": "4d9ea92dbd37a6741551c22213294c91103b80d59dedc140ca0adb50a53918b9",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "receipt['wrapper'][1:5] == ['--mem', '4G', '--time', '5m']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 22,
+      "basis_line": 64,
+      "basis_expression": "job['kind'] in {'strict', 'full', 'focused_build', 'audit'}",
+      "basis_AST_sha256": "f0cbfb6f1caccd758d83af8114fb1061a461128f5775cdeda98d482afbc42c0d",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "job['kind'] in {'strict', 'full', 'focused_build', 'audit'}",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 23,
+      "basis_line": 66,
+      "basis_expression": "job['module'] in by_name and re.fullmatch('[0-9a-f]{64}', job['source_sha256'])",
+      "basis_AST_sha256": "d41c5241498e1f752f505c9bd8b5d99721a5e6dd6db12d8c797eba504721f6cb",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "job['module'] in by_name and re.fullmatch('[0-9a-f]{64}', job['source_sha256'])",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 24,
+      "basis_line": 67,
+      "basis_expression": "receipt['source'] == stem + '.source.lean' and receipt['sha256'] == job['source_sha256']",
+      "basis_AST_sha256": "75ea2c89aac16ac9302019ebf5a3cc493e5255374ae28102705a07ec21c4a3a1",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "receipt['source'] == stem + '.source.lean' and receipt['sha256'] == job['source_sha256']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 25,
+      "basis_line": 69,
+      "basis_expression": "digest(source) == job['source_sha256']",
+      "basis_AST_sha256": "8847fd8e639ca5d5e375691d1827074aed05a39faf83760a3b8200fc7d52e3c9",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "digest(source) == job['source_sha256']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 26,
+      "basis_line": 70,
+      "basis_expression": "len(receipt['command']) == 3 and Path(receipt['command'][0]).name == 'lean'",
+      "basis_AST_sha256": "4e4b7c210ab999c29e7282a0a7bd953d93630de0166e50651404ca1dca84ddc2",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "len(receipt['command']) == 3 and Path(receipt['command'][0]).name == 'lean'",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 27,
+      "basis_line": 71,
+      "basis_expression": "receipt['command'][1] == '-Dlinter.all=true' and Path(receipt['command'][-1]).resolve() == (evidence / receipt['source']).resolve()",
+      "basis_AST_sha256": "0c39f0a72f1580d46bf141736a0feb050038a39288c5448a78646d50d86f4074",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "receipt['command'][1] == '-Dlinter.all=true' and Path(receipt['command'][-1]).resolve() == (evidence / receipt['source']).resolve()",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 28,
+      "basis_line": 72,
+      "basis_expression": "len(re.findall('^.+?:\\\\d+:\\\\d+: error(?:\\\\([^)]*\\\\))?:', raw.decode(), re.M)) == job['errors']",
+      "basis_AST_sha256": "f820a0f5ff77b04c7587ca6ba2f4eadd00953b70ea13bf3a3310834967b53bb0",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "len(re.findall('^.+?:\\\\d+:\\\\d+: error(?:\\\\([^)]*\\\\))?:', raw.decode(), re.M)) == job['errors']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 29,
+      "basis_line": 73,
+      "basis_expression": "len(re.findall('^.+?:\\\\d+:\\\\d+: warning(?:\\\\([^)]*\\\\))?:', raw.decode(), re.M)) == job['source_warnings']",
+      "basis_AST_sha256": "7ee72d4ddad5168c4438e7ce94a54fdfcaee9a073af92d9050f2a645c53584ee",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "len(re.findall('^.+?:\\\\d+:\\\\d+: warning(?:\\\\([^)]*\\\\))?:', raw.decode(), re.M)) == job['source_warnings']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 30,
+      "basis_line": 75,
+      "basis_expression": "not re.search('^\\\\s*set_option (?:maxHeartbeats|maxRecDepth|linter\\\\.)', source.decode(), re.M)",
+      "basis_AST_sha256": "7d5048055b552700c561f4dfeadeee4798a84c96b9cf728b043eb075d8070691",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "not re.search('^\\\\s*set_option (?:maxHeartbeats|maxRecDepth|linter\\\\.)', source.decode(), re.M)",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 31,
+      "basis_line": 77,
+      "basis_expression": "job['source_sha256'] is None and 'source' not in receipt and ('sha256' not in receipt)",
+      "basis_AST_sha256": "4e4ef38f6d5d64d02b2ac35843a3d031c7d64144997951eccfdfa66a1057be57",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "job['source_sha256'] is None and 'source' not in receipt and ('sha256' not in receipt)",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 32,
+      "basis_line": 79,
+      "basis_expression": "len(receipt['command']) == 5 and Path(receipt['command'][0]).name == 'lake'",
+      "basis_AST_sha256": "dff6863f6adb6631b780f5fd86e68713a1713b5769e2fb0c2e2e1b9b63d85a33",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "len(receipt['command']) == 5 and Path(receipt['command'][0]).name == 'lake'",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 33,
+      "basis_line": 80,
+      "basis_expression": "receipt['command'][1:] == ['-d', str(root / 'lean'), 'build', target]",
+      "basis_AST_sha256": "8b2bd9967c597c608d46eb73fc408d088bb969532e0c72e0e42e460641180c1b",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "receipt['command'][1:] == ['-d', str(root / 'lean'), 'build', target]",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 34,
+      "basis_line": 81,
+      "basis_expression": "receipt['exit_code'] == 0 and (not re.search('\\\\berror(?:\\\\([^)]*\\\\))?:', raw.decode()))",
+      "basis_AST_sha256": "f057853fe7932de7c6e1a061608c0f6ff2b0dfb9991be6aac69f4b917ae0180f",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "receipt['exit_code'] == 0 and (not re.search('\\\\berror(?:\\\\([^)]*\\\\))?:', raw.decode()))",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 35,
+      "basis_line": 84,
+      "basis_expression": "build and int(build.group(1)) == expected['build_jobs']",
+      "basis_AST_sha256": "a3a9f47a7db5c46914b2865e25bde0deee40c94dcb3877bf4655848331bd4848",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "build and int(build.group(1)) == expected['build_jobs']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 36,
+      "basis_line": 85,
+      "basis_expression": "re.findall('(?m)^warning: .+$', raw.decode()) == expected['warnings']",
+      "basis_AST_sha256": "2ce9fc24e0aae62bbdb917033b829763f3c32a4ec278aa396fd6ae399860dfa1",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "re.findall('(?m)^warning: .+$', raw.decode()) == expected['warnings']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 37,
+      "basis_line": 86,
+      "basis_expression": "all(('InternedFreshOrdinaryClosedCompletion.lean:24:5:' in warning for warning in expected['warnings']))",
+      "basis_AST_sha256": "6dd9ec3962e3681894eb913bb6e81c3d5f9bda6ca6221586450b6912cdeb2cce",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "all(('InternedFreshOrdinaryClosedCompletion.lean:24:5:' in warning for warning in expected['warnings']))",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 38,
+      "basis_line": 87,
+      "basis_expression": "job['module'] is None if job['kind'] == 'audit' else job['module'] in by_name",
+      "basis_AST_sha256": "d322795aff0265eb6131b35cb88aa5220ada735c0aac169644eccee6685ef19f",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "job['module'] is None if job['kind'] == 'audit' else job['module'] in by_name",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 39,
+      "basis_line": 91,
+      "basis_expression": "history['status'] == 'ROOT_ACCEPTED'",
+      "basis_AST_sha256": "903a142f2bd97c54dd71901cd30af975983122a5b4a6f98ca7fabf07a241625e",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "history['status'] == 'ROOT_ACCEPTED'",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 40,
+      "basis_line": 92,
+      "basis_expression": "set(history) == {'status', 'selected_sources', 'variants', 'artifacts', 'patches', 'rejected_public_types'}",
+      "basis_AST_sha256": "d0f8ccd6445e3aa610ef000a913587a39aab310adada0e22f789ab71f2cc144d",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "set(history) == {'status', 'selected_sources', 'variants', 'artifacts', 'patches', 'rejected_public_types'}",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 41,
+      "basis_line": 93,
+      "basis_expression": "history['selected_sources'] == {m['source_path']: m['source_sha256'] for m in modules}",
+      "basis_AST_sha256": "06e17c7535231ad1515572d95fda0d22223397746576e629b767a0197ddae6f4",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "history['selected_sources'] == {m['source_path']: m['source_sha256'] for m in modules}",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 42,
+      "basis_line": 96,
+      "basis_expression": "variants and len(variants) == len(history['variants']) and (len(artifacts) == len(history['artifacts']))",
+      "basis_AST_sha256": "3cda52937325690f971d49018bfc7ba9303fa317492c9b888891737506fdad58",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "variants and len(variants) == len(history['variants']) and (len(artifacts) == len(history['artifacts']))",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 43,
+      "basis_line": 97,
+      "basis_expression": "not set(variants) & set(artifacts)",
+      "basis_AST_sha256": "d010cac0946cc24d78294fd67299b544628c511c398a4153f2ee09434d413a9e",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "not set(variants) & set(artifacts)",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 44,
+      "basis_line": 100,
+      "basis_expression": "re.fullmatch('[0-9a-f]{64}', record['sha256']) and digest(data) == record['sha256']",
+      "basis_AST_sha256": "6cc27669c2bebc46ffced421d9b4192eb453538f83d0f9e26603cf1863710e46",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "re.fullmatch('[0-9a-f]{64}', record['sha256']) and digest(data) == record['sha256']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 45,
+      "basis_line": 102,
+      "basis_expression": "record['module'] in by_name and record['reason'].strip()",
+      "basis_AST_sha256": "4dcc8bc0948c43870819f0235a27da22bbd1689b4e7aa73b24b61383a709c28d",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "record['module'] in by_name and record['reason'].strip()",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 46,
+      "basis_line": 103,
+      "basis_expression": "0 < len(data.splitlines()) == record['lines'] <= by_name[record['module']]['source_cap']",
+      "basis_AST_sha256": "67524d61410588ccf6e988f1147ddcedb1ca280d399272ba2175a9eee17a5ecd",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "0 < len(data.splitlines()) == record['lines'] <= by_name[record['module']]['source_cap']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 47,
+      "basis_line": 105,
+      "basis_expression": "len(data) == record['bytes']",
+      "basis_AST_sha256": "4deccfa51361a7b081b6c0f675016ef6a382dd07d69ff53c488bebcd27748adb",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "len(data) == record['bytes']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 48,
+      "basis_line": 107,
+      "basis_expression": "all((stem + suffix in artifacts for suffix in ['.json', '.log', '.limits.json', '.usage.json']))",
+      "basis_AST_sha256": "01a24e7d2c71342388fb68c4276190d8e20d856cdd64817ea49b0bacaa2b2688",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "all((stem + suffix in artifacts for suffix in ['.json', '.log', '.limits.json', '.usage.json']))",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 49,
+      "basis_line": 109,
+      "basis_expression": "any((v['module'] == job['module'] and v['sha256'] == job['source_sha256'] and (read(path) == read(stem + '.source.lean')) for path, v in variants.items()))",
+      "basis_AST_sha256": "17db95b7f5c99b100ee477d22dca18b0de5e2a8c4005d59cc5653db37bc63635",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "any((v['module'] == job['module'] and v['sha256'] == job['source_sha256'] and (read(path) == read(stem + '.source.lean')) for path, v in variants.items()))",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 50,
+      "basis_line": 111,
+      "basis_expression": "stem + '.source.lean' in artifacts",
+      "basis_AST_sha256": "0d2384646353d2062484308e678e5a63503199d6f7aedf5c765d893fe61b280f",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "stem + '.source.lean' in artifacts",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 51,
+      "basis_line": 113,
+      "basis_expression": "patch['reason'].strip() and patch['before'] in variants and (patch['after'] in variants)",
+      "basis_AST_sha256": "15a8ef8cfaaa075683d2cb1287dff4119090b025e32483ead821a9e6f28ceb4a",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "patch['reason'].strip() and patch['before'] in variants and (patch['after'] in variants)",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 52,
+      "basis_line": 114,
+      "basis_expression": "patch['module'] == variants[patch['before']]['module'] == variants[patch['after']]['module']",
+      "basis_AST_sha256": "685b8598f911bcaf471a1c27978e03e55eecdb70ec7f168e6b83beb9827b97e5",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "patch['module'] == variants[patch['before']]['module'] == variants[patch['after']]['module']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 53,
+      "basis_line": 115,
+      "basis_expression": "patch['path'] in artifacts and artifacts[patch['path']]['sha256'] == patch['sha256']",
+      "basis_AST_sha256": "c63fd9b8c012fad7318c4c5cccfd7c2e8fe67056639ddef38a00a5dbe8be1936",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "patch['path'] in artifacts and artifacts[patch['path']]['sha256'] == patch['sha256']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 54,
+      "basis_line": 118,
+      "basis_expression": "read(patch['path']).decode() == expected",
+      "basis_AST_sha256": "ed4668293474621524dd87093d4e6c82191e121126678df17c6593dafce99464",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "read(patch['path']).decode() == expected",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 55,
+      "basis_line": 120,
+      "basis_expression": "len(rejected) == len(history['rejected_public_types']) == metrics['rejected_public_type_jobs']",
+      "basis_AST_sha256": "ae74f115b3866c14be1efe69df2933d28c2cb330043cad7b8f1c58c99c666492",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "len(rejected) == len(history['rejected_public_types']) == metrics['rejected_public_type_jobs']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 56,
+      "basis_line": 122,
+      "basis_expression": "stem in jobs and jobs[stem]['kind'] == 'full' and (jobs[stem]['exit_code'] == 0)",
+      "basis_AST_sha256": "e3b335c7d5f8290124dced49a399f1e9413e4238e2df0072d2b47930447b8db4",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "stem in jobs and jobs[stem]['kind'] == 'full' and (jobs[stem]['exit_code'] == 0)",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 57,
+      "basis_line": 123,
+      "basis_expression": "record['raw_sha256'] == jobs[stem]['log_sha256'] and record['reason'].strip()",
+      "basis_AST_sha256": "6e2424701dcc0cd86b450d0f8bc579daf79b0469c9a2b46329197bbbae267026",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "record['raw_sha256'] == jobs[stem]['log_sha256'] and record['reason'].strip()",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 58,
+      "basis_line": 124,
+      "basis_expression": "record['artifacts'] and all((path in artifacts for path in record['artifacts']))",
+      "basis_AST_sha256": "759a1e993eb445b157666d22780d36d4d9d4a484286367a572a5a1685dda8923",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "record['artifacts'] and all((path in artifacts for path in record['artifacts']))",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 59,
+      "basis_line": 127,
+      "basis_expression": "cut['status'] == 'COMPLETE_TERMINAL_METADATA_CUT_BEFORE_CLOSING_TOOLS'",
+      "basis_AST_sha256": "4dd539ff022d43e27d45806f8cf792dec575bf40e9e8f35350d359733563b3c6",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "cut['status'] == 'COMPLETE_TERMINAL_METADATA_CUT_BEFORE_CLOSING_TOOLS'",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 60,
+      "basis_line": 128,
+      "basis_expression": "[p for p, code in metadata_jobs.items() if code != 0] == bound['metadata_failure_paths']",
+      "basis_AST_sha256": "8b95ee0c7e38f6e6d6ec41faccec19df1eae88416336dc5159bb563fcef6d708",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "[p for p, code in metadata_jobs.items() if code != 0] == bound['metadata_failure_paths']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 61,
+      "basis_line": 129,
+      "basis_expression": "cut['failed_jobs'] == sum((code != 0 for code in metadata_jobs.values()))",
+      "basis_AST_sha256": "7c1b1d6d82e077189abcd77461b1ace7884a3f4a58e0b9e86220dadcfb5e430c",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "cut['failed_jobs'] == sum((code != 0 for code in metadata_jobs.values()))",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 62,
+      "basis_line": 131,
+      "basis_expression": "relative.startswith('root-metadata-history/') and relative.endswith('.json') and (relative in artifacts)",
+      "basis_AST_sha256": "89305338b2758434db3d45255a7d607c5338ffa3d1c167fb4db00e5e4216253e",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "relative.startswith('root-metadata-history/') and relative.endswith('.json') and (relative in artifacts)",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 63,
+      "basis_line": 132,
+      "basis_expression": "type(code) is int",
+      "basis_AST_sha256": "4f8d7e485948295cfaae7f9174d2292f154758f58efea2caa805c0b325c9b396",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "type(code) is int",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 64,
+      "basis_line": 134,
+      "basis_expression": "receipt['exit_code'] == code and receipt['observed_at'] and (Path(receipt['command'][0]).name not in {'lean', 'lake'})",
+      "basis_AST_sha256": "cbc1ffd852ca041916111397890578717c6e2e2984d750993cedee1fabd21a08",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "receipt['exit_code'] == code and receipt['observed_at'] and (Path(receipt['command'][0]).name not in {'lean', 'lake'})",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 65,
+      "basis_line": 135,
+      "basis_expression": "all((relative[:-5] + suffix in artifacts for suffix in ['.json', '.log', '.limits.json', '.usage.json', '.source.py', '.peaks.txt']))",
+      "basis_AST_sha256": "2f5aed769209e11f63ff3d71f31750cdacfa5d63ff49d1e17de84ef1f25798aa",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "all((relative[:-5] + suffix in artifacts for suffix in ['.json', '.log', '.limits.json', '.usage.json', '.source.py', '.peaks.txt']))",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 66,
+      "basis_line": 136,
+      "basis_expression": "load(relative[:-5] + '.limits.json') == {'memory.max': '4294967296', 'memory.high': '4294967296', 'memory.swap.max': '0'}",
+      "basis_AST_sha256": "c000252e04ed00df4ebfb85e7a8365f5be018c20e3dac0d6e1c64dcb8a87c7a4",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "load(relative[:-5] + '.limits.json') == {'memory.max': '4294967296', 'memory.high': '4294967296', 'memory.swap.max': '0'}",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 67,
+      "basis_line": 138,
+      "basis_expression": "0 <= usage['age_seconds'] <= 600 and usage['remaining_percent'] > 1",
+      "basis_AST_sha256": "c4475e9da3752a073ce8f74b0c61c6e2cd8da41d6118adefd3a14cf2e9b32ae8",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "0 <= usage['age_seconds'] <= 600 and usage['remaining_percent'] > 1",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 68,
+      "basis_line": 140,
+      "basis_expression": "selection == {m['source_path']: dict(sha256=m['source_sha256'], lines=m['source_lines'], strict=m['strict'], full=m['full']) for m in modules}",
+      "basis_AST_sha256": "e5f7abd99b61a4a790634b5d13040a56b3fd01602928e131ae3b94fb11057c15",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "selection == {m['source_path']: dict(sha256=m['source_sha256'], lines=m['source_lines'], strict=m['strict'], full=m['full']) for m in modules}",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 69,
+      "basis_line": 141,
+      "basis_expression": "json.loads(pinned(bound['frozen_modules'])) == {m['name']: m['source_sha256'] for m in modules}",
+      "basis_AST_sha256": "24d224fbbcdf02b165d434a6c48f846616916258bf060ccb46bf7fa64b67e4c9",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "json.loads(pinned(bound['frozen_modules'])) == {m['name']: m['source_sha256'] for m in modules}",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 70,
+      "basis_line": 148,
+      "basis_expression": "re.fullmatch('[0-9a-f]{64}', m['source_sha256']) and digest(source) == m['source_sha256']",
+      "basis_AST_sha256": "873fd2eee2c23ee60a05fbc82035daf5589a5d0b9625b1e5fdcbc3ec6f0b9550",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "re.fullmatch('[0-9a-f]{64}', m['source_sha256']) and digest(source) == m['source_sha256']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 71,
+      "basis_line": 149,
+      "basis_expression": "source == read(m['strict'] + '.source.lean') and 0 < len(source.splitlines()) == m['source_lines'] <= m['source_cap']",
+      "basis_AST_sha256": "a0b74f625293eef9786ea327181a93305bf420cf4953cdd5e7c1ec5a8765a171",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "source == read(m['strict'] + '.source.lean') and 0 < len(source.splitlines()) == m['source_lines'] <= m['source_cap']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 72,
+      "basis_line": 150,
+      "basis_expression": "read(m['strict'] + '.log') == b'' and jobs[m['strict']]['kind'] == 'strict'",
+      "basis_AST_sha256": "bd411093eaca8652c503c1756f3fd562f77f638023be8be745f03adf0a506c68",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "read(m['strict'] + '.log') == b'' and jobs[m['strict']]['kind'] == 'strict'",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 73,
+      "basis_line": 151,
+      "basis_expression": "jobs[m['strict']]['module'] == name and jobs[m['strict']]['exit_code'] == 0",
+      "basis_AST_sha256": "53be95779cb2f86729638556637e99ad4b65b088e3cb9d1f444b1fe226d50295",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "jobs[m['strict']]['module'] == name and jobs[m['strict']]['exit_code'] == 0",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 74,
+      "basis_line": 152,
+      "basis_expression": "jobs[m['full']]['kind'] == 'full' and jobs[m['full']]['module'] == name and (jobs[m['full']]['exit_code'] == 0)",
+      "basis_AST_sha256": "ada96041c3606bf7fe92aa1e144790276b422af080e4646e35c98887d24a2d6d",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "jobs[m['full']]['kind'] == 'full' and jobs[m['full']]['module'] == name and (jobs[m['full']]['exit_code'] == 0)",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 75,
+      "basis_line": 153,
+      "basis_expression": "jobs[m['strict']]['errors'] == jobs[m['strict']]['source_warnings'] == jobs[m['full']]['errors'] == jobs[m['full']]['source_warnings'] == 0",
+      "basis_AST_sha256": "2d185ae6a762e3bbea85c11c6012e373928b812d5e5aabf3818cb05c61b098cb",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "jobs[m['strict']]['errors'] == jobs[m['strict']]['source_warnings'] == jobs[m['full']]['errors'] == jobs[m['full']]['source_warnings'] == 0",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 76,
+      "basis_line": 154,
+      "basis_expression": "m['full'] not in rejected and source.rstrip().endswith(('end MicroCFTA.' + name).encode())",
+      "basis_AST_sha256": "8827da4a55e31f892847b2c58c02000be9345a4cd51f6c81cd662e6fc5a64f3b",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "m['full'] not in rejected and source.rstrip().endswith(('end MicroCFTA.' + name).encode())",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 77,
+      "basis_line": 155,
+      "basis_expression": "any((v['module'] == name and read(path) == source for path, v in variants.items()))",
+      "basis_AST_sha256": "03fc8aeb84f97ae91c07e561dafef260aa012bf9e0c1a516a01fca6a50573050",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "any((v['module'] == name and read(path) == source for path, v in variants.items()))",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 78,
+      "basis_line": 157,
+      "basis_expression": "gate['status'] == 'ACCEPTED_STRICT_SOURCE' and gate['source_sha256'] == m['source_sha256']",
+      "basis_AST_sha256": "829bf0aa3295160621c7096dc4e49caff5f946de373f72e3ed19ff84f0c03e04",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "gate['status'] == 'ACCEPTED_STRICT_SOURCE' and gate['source_sha256'] == m['source_sha256']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 79,
+      "basis_line": 158,
+      "basis_expression": "gate['source_lines'] == m['source_lines'] and gate['source_cap'] == m['source_cap']",
+      "basis_AST_sha256": "541a7595f7d010d51656d69821867b2b047b242451d94ace525d2e3e2e61df83",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "gate['source_lines'] == m['source_lines'] and gate['source_cap'] == m['source_cap']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 80,
+      "basis_line": 159,
+      "basis_expression": "gate['selected_strict'] == m['strict'] and gate['strict_log_bytes'] == 0 and (gate['public_heads'] == shorts)",
+      "basis_AST_sha256": "3f5ad926bf0c9ae548973c1159c4a7ca084b29ccc31e954b52f3da058cf8bb5f",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "gate['selected_strict'] == m['strict'] and gate['strict_log_bytes'] == 0 and (gate['public_heads'] == shorts)",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 81,
+      "basis_line": 160,
+      "basis_expression": "gate['receipt_sha256'] == digest(read(m['strict'] + '.json'))",
+      "basis_AST_sha256": "02add7e83be20635bbbe4040304d9d69a926176c9898254c8b8c6744a11a1623",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "gate['receipt_sha256'] == digest(read(m['strict'] + '.json'))",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 82,
+      "basis_line": 161,
+      "basis_expression": "gate['module'] == name and gate['root_default_limit_check'] and gate['all_linters']",
+      "basis_AST_sha256": "3a654dadfccdb5c80a2f869c9891794c0a87ffc81b5df053b55e812912652083",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "gate['module'] == name and gate['root_default_limit_check'] and gate['all_linters']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 83,
+      "basis_line": 162,
+      "basis_expression": "gate['declaration_gate'] == m['declaration_gate']['path'] and gate['body_gate'] == m['body_gate']['path']",
+      "basis_AST_sha256": "6ce895461f0fe5b8149e132818f449f695a795e9d009968b6db543aeb1886226",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "gate['declaration_gate'] == m['declaration_gate']['path'] and gate['body_gate'] == m['body_gate']['path']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 84,
+      "basis_line": 164,
+      "basis_expression": "body_gate['status'] == 'ACCEPTED_COMPLETE_BODY_BEFORE_FIRST_COMPILER' and body_gate['module'] == name",
+      "basis_AST_sha256": "629d79f23460895c2952a5502a12405485213e1e665e24a7cfc4571faf1653ed",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "body_gate['status'] == 'ACCEPTED_COMPLETE_BODY_BEFORE_FIRST_COMPILER' and body_gate['module'] == name",
+      "policy": "Keep expression; bind exact H38 schema/data below. No guard is dropped."
+    },
+    {
+      "order": 85,
+      "basis_line": 165,
+      "basis_expression": "body_gate['source_sha256'] == m['source_sha256'] and body_gate['source_lines'] == m['source_lines']",
+      "basis_AST_sha256": "96e233ae07437adf0f78b1a3432faa728b77e295da38b6a3d443bda7b25fb187",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "body_gate['source_sha256'] == m['source_sha256'] and body_gate['source_lines'] == m['source_lines']",
+      "policy": "Keep expression; bind exact H38 schema/data below. No guard is dropped."
+    },
+    {
+      "order": 86,
+      "basis_line": 166,
+      "basis_expression": "body_gate['source_cap'] == m['source_cap']",
+      "basis_AST_sha256": "c64b54853d467a26d9f0ccd4d7697fd004de77de8950e3d4643a316171adc9a1",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "body_gate['source_cap'] == m['source_cap']",
+      "policy": "Keep expression; bind exact H38 schema/data below. No guard is dropped."
+    },
+    {
+      "order": 87,
+      "basis_line": 167,
+      "basis_expression": "body_gate['root_complete_source_read'] and body_gate['body_source'] == m['body_source'] and (read(body_gate['body_source']) == source)",
+      "basis_AST_sha256": "c6da81f15ff2e3c54a00d68bbe259379fdc21eaf402f9c67d04e20c4470fd34b",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "body_gate['root_complete_source_read'] and body_gate['body_source'] == m['body_source'] and (read(body_gate['body_source']) == source)",
+      "policy": "Keep expression; bind exact H38 schema/data below. No guard is dropped."
+    },
+    {
+      "order": 88,
+      "basis_line": 168,
+      "basis_expression": "body_gate['independent_review_sha256'] == m['body_review']['sha256'] and json.loads(pinned(m['body_review']))['status'] == 'CLEAR'",
+      "basis_AST_sha256": "20e713bb656a54a5fa1462ccb2ecd17852b865eafdead59c86ce2da3668915d9",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "body_gate['independent_review_sha256'] == m['body_review']['sha256'] and json.loads(pinned(m['body_review']))['status'] == 'CLEAR'",
+      "policy": "Keep expression; bind exact H38 schema/data below. No guard is dropped."
+    },
+    {
+      "order": 89,
+      "basis_line": 169,
+      "basis_expression": "all((body_gate[k] for k in ['complete_public_types_context_and_28_scoped_types_read', 'all_14_equation_specializations_five_accessor_equations_and_generalized_IH_read', 'same_actual_state_all_five_outcomes', 'default_declaration_limits', 'all_linters']))",
+      "basis_AST_sha256": "4eba7a223f6bc2232714dbcf041ebf16ceb2b74da7e930d79cde071393fb18e6",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "all(body_gate[k] for k in ['complete_public_types_context_and_24_scoped_types_read', 'all_10_equation_specializations_five_accessor_equations_and_generalized_IH_read', 'same_actual_state_all_five_outcomes', 'no_ID_split_or_counter_premise', 'default_declaration_limits', 'all_linters'])",
+      "policy": "Use the exact H38 replacement expression; binding digest remains rejecting until actual final data."
+    },
+    {
+      "order": 90,
+      "basis_line": 170,
+      "basis_expression": "(body_gate['exact_contracts'], body_gate['exact_contract_lines']) == (7, 29)",
+      "basis_AST_sha256": "4efae68f5a228797833a6574442f36f172c3adb92c099e8eaedeb5d7685c14d6",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "(body_gate['exact_contracts'], body_gate['exact_contract_lines']) == (6, 29)",
+      "policy": "Use the exact H38 replacement expression; binding digest remains rejecting until actual final data."
+    },
+    {
+      "order": 91,
+      "basis_line": 171,
+      "basis_expression": "body_gate['first_strict_authorized'] and body_gate['full_or_official_install_authorized'] is False",
+      "basis_AST_sha256": "bf96ce744ab53f63a933ca45efe62a1be1f56a6f1960a831c9cc37b91281beb4",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "body_gate['first_strict_authorized'] and body_gate['full_or_official_install_authorized'] is False",
+      "policy": "Keep expression; bind exact H38 schema/data below. No guard is dropped."
+    },
+    {
+      "order": 92,
+      "basis_line": 172,
+      "basis_expression": "body_gate['sole_IH_call'] == 'ih next after'",
+      "basis_AST_sha256": "3c2cba588209f8c101ae8f97ec583456b292f9b91bebd57358d2031f0e08c90a",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "body_gate['sole_IH_call'] == 'ih next after'",
+      "policy": "Keep expression; bind exact H38 schema/data below. No guard is dropped."
+    },
+    {
+      "order": 93,
+      "basis_line": 174,
+      "basis_expression": "declaration['status'] == 'ACCEPTED_EXACT_DECLARATIONS_BEFORE_BODY' and declaration['module'] == name",
+      "basis_AST_sha256": "270acee9282e92884e456cc23886c50832208b83ec28bb802b9148b6de67ba6e",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "declaration['status'] == 'ACCEPTED_EXACT_DECLARATIONS_BEFORE_BODY' and declaration['module'] == name",
+      "policy": "Keep expression; bind exact H38 schema/data below. No guard is dropped."
+    },
+    {
+      "order": 94,
+      "basis_line": 175,
+      "basis_expression": "declaration['public_heads'] == shorts and declaration['private_helpers'] == m['private_helpers']",
+      "basis_AST_sha256": "d23141a2ce76923d78d2e3e7a8300d48d52ce32f70f66ec3a87fa1495b323712",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "declaration['public_heads'] == shorts and declaration['private_helpers'] == m['private_helpers']",
+      "policy": "Keep expression; bind exact H38 schema/data below. No guard is dropped."
+    },
+    {
+      "order": 95,
+      "basis_line": 176,
+      "basis_expression": "declaration['contracts_sha256'] == m['manifest']['sha256'] and declaration['insertion_map_sha256'] == m['layout']['sha256']",
+      "basis_AST_sha256": "6d1dfea18b9f71bac5608ed320daa356fbb6aff0a0677409da0a46f35df96dfc",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "declaration['contracts_sha256'] == m['manifest']['sha256'] and declaration['insertion_map_sha256'] == m['layout']['sha256']",
+      "policy": "Keep expression; bind exact H38 schema/data below. No guard is dropped."
+    },
+    {
+      "order": 96,
+      "basis_line": 177,
+      "basis_expression": "declaration['whole_source_hard_stop'] == m['source_cap'] and declaration['default_declaration_limits'] and declaration['all_linters']",
+      "basis_AST_sha256": "e45f6b1d07b891f97d7b125684dbaddec005830eefc663d13b45c233395e29dd",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "declaration['whole_source_hard_stop'] == m['source_cap'] and declaration['default_declaration_limits'] and declaration['all_linters']",
+      "policy": "Keep expression; bind exact H38 schema/data below. No guard is dropped."
+    },
+    {
+      "order": 97,
+      "basis_line": 178,
+      "basis_expression": "[declaration[k] for k in ['root_whole_context_lines_read', 'root_whole_public_header_lines_read', 'root_whole_private_header_lines_read', 'root_whole_local_compiled_fragment_lines_read']] == [9, 15, 0, 5]",
+      "basis_AST_sha256": "099f05d16cc4a0c2e3f06f857c3deab9fef0fbef29608fd51eedb4b66f43bf32",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "[declaration[k] for k in ['root_context_lines_read', 'root_public_header_lines_read', 'root_local_compiled_fragment_lines_read']] == [9, 15, 5]",
+      "policy": "Use the exact H38 replacement expression; binding digest remains rejecting until actual final data."
+    },
+    {
+      "order": 98,
+      "basis_line": 179,
+      "basis_expression": "all((declaration[k] for k in ['root_all_public_and_private_header_types_read', 'root_all_28_scoped_introduced_types_read', 'root_all_schema_layout_owner_attachment_and_body_inventory_metadata_read', 'root_all_14_specialized_equation_types_read', 'root_all_five_accessor_equations_read', 'root_complete_generalized_fuel_IH_three_lines_read', 'root_all_11_relevant_live_API_cuts_241_lines_read', 'root_all_seven_public_import_routes_checked', 'external_checked_step_mono_is_not_local_recursion']))",
+      "basis_AST_sha256": "6b2ae9d02262d61913e9ab5eedec390fc7f6decf80f56b432fee4892998676b3",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "all(declaration[k] for k in ['root_all_public_private_local_header_types_and_all_schema_metadata_read', 'root_all_24_scoped_introduced_types_read', 'root_all_10_specialized_equation_types_read', 'root_all_five_accessor_equations_and_complete_three_line_generalized_fuel_IH_read', 'root_all_7_relevant_live_API_cuts_172_lines_read', 'root_all_seven_public_import_routes_checked', 'Pair_and_Scan_done_payload_and_control_types_distinct', 'plain_def_and_by_theorem_attachments_exact', 'external_public_H37_step_mono_is_not_local_recursion'])",
+      "policy": "Use the exact H38 replacement expression; binding digest remains rejecting until actual final data."
+    },
+    {
+      "order": 99,
+      "basis_line": 180,
+      "basis_expression": "[declaration[k] for k in ['body_haves', 'body_lets', 'body_obtains', 'helpers', 'recursive_calls', 'termination_by_count']] == [2, 0, 0, 0, 0, 0]",
+      "basis_AST_sha256": "05365ae215ac12c85bbe77c97a9a3d863eb09eae791a5c30f7a0a87bd3f3ad6f",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "[declaration[k] for k in ['body_haves', 'body_lets', 'body_obtains', 'helpers', 'recursive_calls', 'termination_by_count']] == [2, 0, 0, 0, 0, 0]",
+      "policy": "Keep expression; bind exact H38 schema/data below. No guard is dropped."
+    },
+    {
+      "order": 100,
+      "basis_line": 181,
+      "basis_expression": "declaration['restricted_induction_call'] == 'ih next after' and re.fullmatch('[0-9a-f]{64}', declaration['independent_review_sha256'])",
+      "basis_AST_sha256": "62429097551093a41835cb94fdedf1749e8a8271346564d017192a28d262baed",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "declaration['restricted_induction_call'] == 'ih next after' and re.fullmatch('[0-9a-f]{64}', declaration['independent_review_sha256'])",
+      "policy": "Keep expression; bind exact H38 schema/data below. No guard is dropped."
+    },
+    {
+      "order": 101,
+      "basis_line": 182,
+      "basis_expression": "declaration['induction'] is True and declaration['goal_status'] == 'ACTIVE_INCOMPLETE'",
+      "basis_AST_sha256": "7b0facb98f26dcef9cba7ae47ac1aba9b2a4f79ab8af775a50448be1ca223d6e",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "declaration['induction'] is True and declaration['goal_status'] == 'ACTIVE_INCOMPLETE'",
+      "policy": "Keep expression; bind exact H38 schema/data below. No guard is dropped."
+    },
+    {
+      "order": 102,
+      "basis_line": 186,
+      "basis_expression": "list(manifest) == [f['file'] for f in fragments] and [f['order'] for f in fragments] == list(range(1, len(fragments) + 1))",
+      "basis_AST_sha256": "59991a8fffcda6064bd12ab3c573f2b9c14b32bc626c505e76ea0eee71ae729e",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "list(manifest) == [f['file'] for f in fragments] and [f['order'] for f in fragments] == list(range(1, len(fragments) + 1))",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 103,
+      "basis_line": 189,
+      "basis_expression": "[{k: v for k, v in f.items() if k != 'path'} for f in fragments] == layout['compiled_fragments']",
+      "basis_AST_sha256": "d227bd8600093ec168fcb8d59266d3bebecf873ae2de4bfdad53a2fd2b72f4c7",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "[{k: v for k, v in f.items() if k != 'path'} for f in fragments] == layout['compiled_fragments']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 104,
+      "basis_line": 190,
+      "basis_expression": "layout['schema'] == schema and json.loads(pinned(m['declaration_layout'])) == m['declaration_layout_values']",
+      "basis_AST_sha256": "bc9c066b9bd4b7a94610b490472e1a0d2eb77c1055c56bde796fd9af3e28114c",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "layout['schema'] == schema and json.loads(pinned(m['declaration_layout'])) == m['declaration_layout_values']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 105,
+      "basis_line": 194,
+      "basis_expression": "digest(raw_fragment) == f['sha256'] and len(raw_fragment.splitlines()) == f['lines']",
+      "basis_AST_sha256": "d1667d000e96003ae5be1c7dfc7a1e5dff8dc3229f3307897040b48b571420ff",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "digest(raw_fragment) == f['sha256'] and len(raw_fragment.splitlines()) == f['lines']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 106,
+      "basis_line": 195,
+      "basis_expression": "manifest[f['file']] == f['sha256']",
+      "basis_AST_sha256": "d7d9940477c5e108de7aa473daae61f1063d5393d3bf9467cc8119b019352e44",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "manifest[f['file']] == f['sha256']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 107,
+      "basis_line": 197,
+      "basis_expression": "source.startswith(data['context.lean.txt']) and source.count(data['context.lean.txt']) == 1",
+      "basis_AST_sha256": "d0d22495291e6c753562111905828942fe4f07757ddf9ee71b0cce85c99feeb4",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "source.startswith(data['context.lean.txt']) and source.count(data['context.lean.txt']) == 1",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 108,
+      "basis_line": 198,
+      "basis_expression": "m['header_attachments'] == {'outcomeState': ' :=\\n', 'step_mono': ' := by\\n', 'execute_mono': ' := by\\n'}",
+      "basis_AST_sha256": "2ef2bfcdb09ee2942c0f8b50c62d3c7766f2120086650e0dab63fb6a77b57d37",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "m['header_attachments'] == {'outcomeState': ' :=\\n', 'step_mono': ' := by\\n', 'execute_mono': ' := by\\n'}",
+      "policy": "Keep expression; bind exact H38 schema/data below. No guard is dropped."
+    },
+    {
+      "order": 109,
+      "basis_line": 203,
+      "basis_expression": "source.count(header) == 1 and source.index(header) >= len(data['context.lean.txt'])",
+      "basis_AST_sha256": "f957499b9b67cee0862f868ebf787966a1d0c592277bdb0847b06c805f501a2d",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "source.count(header) == 1 and source.index(header) >= len(data['context.lean.txt'])",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 110,
+      "basis_line": 205,
+      "basis_expression": "[positions[s][0] for s in all_shorts] == sorted((positions[s][0] for s in all_shorts))",
+      "basis_AST_sha256": "7f9ee868b95b79e3a6d601e1b51bc82364f0ae20d5822407a9f7bf1db3ca2d65",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "[positions[s][0] for s in all_shorts] == sorted((positions[s][0] for s in all_shorts))",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 111,
+      "basis_line": 220,
+      "basis_expression": "scope.count(fragment) == 1",
+      "basis_AST_sha256": "04bd3a1b0f749fe9f7a517b8e06db4df517e2d59dae00bd529880ffdc9bfa650",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "scope.count(fragment) == 1",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 112,
+      "basis_line": 222,
+      "basis_expression": "matched == sorted(matched) and len(set(matched)) == len(matched)",
+      "basis_AST_sha256": "ccf45fa8b98cbdbc355e32c35718294168a706931c1c1209bc49ad7cfdc36398",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "matched == sorted(matched) and len(set(matched)) == len(matched)",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 113,
+      "basis_line": 226,
+      "basis_expression": "len(types['entries']) == 28 and set(inventory['bodies']) == set(all_shorts)",
+      "basis_AST_sha256": "30c3e2410235dee0860a103cb3b99a1fd939766bd30f9cab25d455af0d7c52d9",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "len(types['entries']) == 24 and set(inventory['bodies']) == set(all_shorts)",
+      "policy": "Use the exact H38 replacement expression; binding digest remains rejecting until actual final data."
+    },
+    {
+      "order": 114,
+      "basis_line": 227,
+      "basis_expression": "not re.search(b'(?m)^\\\\s*(?:mutual|termination_by)\\\\b', source)",
+      "basis_AST_sha256": "6f336d8da09c81ac5f95312b5a0dd6825d917910036fb6e0fc13c194b14d6ae7",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "not re.search(b'(?m)^\\\\s*(?:mutual|termination_by)\\\\b', source)",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 115,
+      "basis_line": 230,
+      "basis_expression": "equations == m['case_equations'] and len(equations['families']) == 3 and (sum((len(e['specialized_types']) for e in equations['families'])) == 14)",
+      "basis_AST_sha256": "c89c3d35bb52740c25ccfb1cc67f6085b3fbff07bc4ea68a10a1c23a4accceb8",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "equations == m['case_equations'] and len(equations['families']) == 2 and sum(len(e['specialized_types']) for e in equations['families']) == 10",
+      "policy": "Use the exact H38 replacement expression; binding digest remains rejecting until actual final data."
+    },
+    {
+      "order": 116,
+      "basis_line": 231,
+      "basis_expression": "induction == m['induction_contract'] and induction['owner'] == 'execute_mono' and (induction['activation'] == schema['induction_activation'])",
+      "basis_AST_sha256": "f43d40bbbe3aef95cf22f27498fc428666ded5407775ca772c55611285eb9b9f",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "induction == m['induction_contract'] and induction['owner'] == 'execute_mono' and (induction['activation'] == schema['induction_activation'])",
+      "policy": "Keep expression; bind exact H38 schema/data below. No guard is dropped."
+    },
+    {
+      "order": 117,
+      "basis_line": 232,
+      "basis_expression": "reviewed['execute-IH.lean.txt'].decode().rstrip('\\n') == induction['generated_IH_type'] and len(reviewed['execute-IH.lean.txt'].splitlines()) == 3",
+      "basis_AST_sha256": "09d752bf8f8d80474729bddca149a4493a8bd21cefda50f577d2dde1e5d6cce4",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "reviewed['execute-IH.lean.txt'].decode().rstrip('\\n') == induction['generated_IH_type'] and len(reviewed['execute-IH.lean.txt'].splitlines()) == 3",
+      "policy": "Keep expression; bind exact H38 schema/data below. No guard is dropped."
+    },
+    {
+      "order": 118,
+      "basis_line": 233,
+      "basis_expression": "induction['generalized'] == ['control', 'state'] and induction['calls'][0]['next_type'] == 'SourceCurrentSameSymbolEdgeControl.Control' and (induction['calls'][0]['after_type'] == 'SourceCurrentSameSymbolEdgeControl.State width')",
+      "basis_AST_sha256": "c91ab92b9bd01d5b1ef5b5fae4368e3c2be78c6bf333b923f284e35cf1d45657",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "induction['generalized'] == ['control', 'state'] and induction['calls'][0]['next_type'] == 'SourceCurrentOriginalRowClusterScan.Control' and induction['calls'][0]['after_type'] == 'SourceCurrentSameSymbolEdgeControl.State width'",
+      "policy": "Use the exact H38 replacement expression; binding digest remains rejecting until actual final data."
+    },
+    {
+      "order": 119,
+      "basis_line": 234,
+      "basis_expression": "induction['fixed'] == ['width', 'DecidableEq Symbol', 'DecidableEq (EdgeKey Symbol Guard)']",
+      "basis_AST_sha256": "cc4364eb00c4ae52eef4a089779e85655edb05a1cad0c81195ea86f843b00ee6",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "induction['fixed'] == ['width', 'DecidableEq Symbol', 'DecidableEq (EdgeKey Symbol Guard)']",
+      "policy": "Keep expression; bind exact H38 schema/data below. No guard is dropped."
+    },
+    {
+      "order": 120,
+      "basis_line": 235,
+      "basis_expression": "induction['calls'][0]['term'] == 'ih next after' and len(induction['calls']) == induction['calls'][0]['count'] == 1 and (induction['unrestricted_induction_oracle'] is False)",
+      "basis_AST_sha256": "73aa2704220adcf1214d82b8c4e161317184738b6956aed4d5792f8e07fb0931",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "induction['calls'][0]['term'] == 'ih next after' and len(induction['calls']) == induction['calls'][0]['count'] == 1 and (induction['unrestricted_induction_oracle'] is False)",
+      "policy": "Keep expression; bind exact H38 schema/data below. No guard is dropped."
+    },
+    {
+      "order": 121,
+      "basis_line": 237,
+      "basis_expression": "bodies[equation['owner']].count(equation['activation'].encode()) == 1",
+      "basis_AST_sha256": "172c4f6ff3d102003bde30365d4742faeb5eb5a19931dbc9812b704f2fb4bc0c",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "bodies[equation['owner']].count(equation['activation'].encode()) == 1",
+      "policy": "Keep expression; bind exact H38 schema/data below. No guard is dropped."
+    },
+    {
+      "order": 122,
+      "basis_line": 239,
+      "basis_expression": "accessor == m['accessor_equations'] and len(accessor['equations']) == 5 and accessor['public_total_full_state'] and (accessor['equality_instances'] == [])",
+      "basis_AST_sha256": "706285d891d55eaba057acdacfa4423e53e4e13a25b70858bf8995fadaa72f6a",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "accessor == m['accessor_equations'] and len(accessor['equations']) == 5 and accessor['public_total_full_state'] and (accessor['equality_instances'] == [])",
+      "policy": "Keep expression; bind exact H38 schema/data below. No guard is dropped."
+    },
+    {
+      "order": 123,
+      "basis_line": 240,
+      "basis_expression": "bodies['outcomeState'].strip() == b'match outcome with\\n  | .yielded _ state | .done _ state | .failed _ state | .constraintError _ state | .blocked _ _ state => state'",
+      "basis_AST_sha256": "78e851bc66db308c2765e5006f8e129b3254c4ba4db72a1b442ac05808a3f1d6",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "bodies['outcomeState'].strip() == b'match outcome with\\n  | .yielded _ state | .done _ state | .failed _ state | .constraintError _ state | .blocked _ _ state => state'",
+      "policy": "Keep expression; bind exact H38 schema/data below. No guard is dropped."
+    },
+    {
+      "order": 124,
+      "basis_line": 243,
+      "basis_expression": "len(re.findall(b'\\\\bcases\\\\b', body)) == sum((item.startswith('cases ') for item in inventory['bodies'][short]['case_activations'])) and all((body.count(item.encode()) == 1 for item in inventory['bodies'][short]['case_activations']))",
+      "basis_AST_sha256": "3605dd8439293799abd566f0117794ac10e1859b3578de7501ebdf99849cdf51",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "len(re.findall(b'\\\\bcases\\\\b', body)) == sum((item.startswith('cases ') for item in inventory['bodies'][short]['case_activations'])) and all((body.count(item.encode()) == 1 for item in inventory['bodies'][short]['case_activations']))",
+      "policy": "Keep expression; bind exact H38 schema/data below. No guard is dropped."
+    },
+    {
+      "order": 125,
+      "basis_line": 244,
+      "basis_expression": "re.findall(b'\\\\bhave[ \\\\t]+([^ \\\\t:\\\\n]+)', body) == [n.encode() for n in expected['have_names']]",
+      "basis_AST_sha256": "b341a0601d1d3241bbf9c6da2900fc79f23d537fa9c82d3dc52cfc689bfe045f",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "re.findall(b'\\\\bhave[ \\\\t]+([^ \\\\t:\\\\n]+)', body) == [n.encode() for n in expected['have_names']]",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 126,
+      "basis_line": 245,
+      "basis_expression": "len(re.findall(b'\\\\bhave\\\\b', body)) == len(expected['have_names'])",
+      "basis_AST_sha256": "85cd5d167ec8c202320ebfb914d08956fc4163ef1c59358a83ca0245912d392d",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "len(re.findall(b'\\\\bhave\\\\b', body)) == len(expected['have_names'])",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 127,
+      "basis_line": 246,
+      "basis_expression": "re.findall(b'\\\\blet[ \\\\t]+([^ \\\\t:=\\\\n]+)', body) == [n.encode() for n in expected['let_names']]",
+      "basis_AST_sha256": "383b1885ff765ed8bbf24985d924c6d3d77ba6ec1c9b94980b04d5916476b542",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "re.findall(b'\\\\blet[ \\\\t]+([^ \\\\t:=\\\\n]+)', body) == [n.encode() for n in expected['let_names']]",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 128,
+      "basis_line": 247,
+      "basis_expression": "len(re.findall(b'\\\\blet\\\\b', body)) == len(expected['let_names'])",
+      "basis_AST_sha256": "86c3ba9fecd79343babd579cbdff088b4bacb2d53bfa044c80b7266a650dabd4",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "len(re.findall(b'\\\\blet\\\\b', body)) == len(expected['let_names'])",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 129,
+      "basis_line": 248,
+      "basis_expression": "re.findall(b'\\\\bby_cases[ \\\\t]+([^ \\\\t:\\\\n]+)', body) == [n.encode() for n in expected['by_cases_names']]",
+      "basis_AST_sha256": "e512035627d1a6d6ddc31585340ab9b1466b39374e3e997e20a05b98cd197a56",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "re.findall(b'\\\\bby_cases[ \\\\t]+([^ \\\\t:\\\\n]+)', body) == [n.encode() for n in expected['by_cases_names']]",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 130,
+      "basis_line": 249,
+      "basis_expression": "re.findall(b'\\\\bcases[ \\\\t]+([^ \\\\t:\\\\n]+)[ \\\\t]*:', body) == [n.encode() for n in expected['case_equations']]",
+      "basis_AST_sha256": "1e5d8d51370704440820c4be1d316898566288d07dcc9ac94189483ade450202",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "re.findall(b'\\\\bcases[ \\\\t]+([^ \\\\t:\\\\n]+)[ \\\\t]*:', body) == [n.encode() for n in expected['case_equations']]",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 131,
+      "basis_line": 251,
+      "basis_expression": "groups == expected['obtain_groups'] and len(re.findall(b'\\\\bobtain\\\\b', body)) == len(groups)",
+      "basis_AST_sha256": "524f6ba459ba2f7dffa90cd9f5bc1eadd1b796aa209ff3d0adba2de108c378b5",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "groups == expected['obtain_groups'] and len(re.findall(b'\\\\bobtain\\\\b', body)) == len(groups)",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 132,
+      "basis_line": 252,
+      "basis_expression": "re.findall(b'\\\\bintro[ \\\\t]+([^\\\\n]+)', body) == [n.encode() for n in expected['intro_groups']]",
+      "basis_AST_sha256": "918ac2857a152301fd777470a5c384debd16d829c3f9ca9bd5a438a5acddc50c",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "re.findall(b'\\\\bintro[ \\\\t]+([^\\\\n]+)', body) == [n.encode() for n in expected['intro_groups']]",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 133,
+      "basis_line": 253,
+      "basis_expression": "re.findall(b'\\\\bfun[ \\\\t]+([^\\\\n]*?)=>', body) == [n.encode() for n in expected['lambda_groups']]",
+      "basis_AST_sha256": "5aabde23247906ed0e0c1f993ac2cac323348b33044c3a37ddb8867804ba4eff",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "re.findall(b'\\\\bfun[ \\\\t]+([^\\\\n]*?)=>', body) == [n.encode() for n in expected['lambda_groups']]",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 134,
+      "basis_line": 256,
+      "basis_expression": "patterns == expected['case_pattern_groups'] and all((part in patterns or (short == 'outcomeState' and any((part in group for group in patterns))) for part in inventory['bodies'][short]['case_patterns']))",
+      "basis_AST_sha256": "2771282a4b9bde04dbff5b2b74690fd9c68b3bcbc6a82558d132e5222da4dbe5",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "patterns == expected['case_pattern_groups'] and all((part in patterns or (short == 'outcomeState' and any((part in group for group in patterns))) for part in inventory['bodies'][short]['case_patterns']))",
+      "policy": "Keep expression; bind exact H38 schema/data below. No guard is dropped."
+    },
+    {
+      "order": 135,
+      "basis_line": 257,
+      "basis_expression": "all((n in allowed for group in expected['intro_groups'] + expected['lambda_groups'] for n in group.split()))",
+      "basis_AST_sha256": "a28e37db1bce63cadbab39671bf53e9be5a29db3b40db25cd17b8e23dddaf75a",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "all((n in allowed for group in expected['intro_groups'] + expected['lambda_groups'] for n in group.split()))",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 136,
+      "basis_line": 258,
+      "basis_expression": "all((n in allowed | {'call', 'demand', 'order', 'native', 'ret', 'absent', 'evaluate', 'busy', 'ready', 'nil', 'cons', 'zero', 'succ', 'yielded', 'done', 'failed', 'constraintError', 'blocked', '.yielded', '.done', '.failed', '.constraintError', '.blocked', '_', '|'} for group in patterns for n in group.split()))",
+      "basis_AST_sha256": "deef0e32f2ef0080fb71574f772396d28e8f3d7f14509813cf663409748044f8",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "all(n in allowed | {'cluster', 'scan', 'comparison', 'nil', 'cons', 'zero', 'succ', 'yielded', 'done', 'failed', 'constraintError', 'blocked', '.yielded', '.done', '.failed', '.constraintError', '.blocked', '_', '|'} for group in patterns for n in group.split())",
+      "policy": "Use the exact H38 replacement expression; binding digest remains rejecting until actual final data."
+    },
+    {
+      "order": 137,
+      "basis_line": 259,
+      "basis_expression": "re.findall(b'\\\\binduction[ \\\\t]+([^\\\\n]+)', body) == ([induction['activation'].removeprefix('induction ').encode()] if short == 'execute_mono' else [])",
+      "basis_AST_sha256": "45cabb1ac801ad463ab8d5a0a6274b910a1813201b11a76b651d0ad3e247faf4",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "re.findall(b'\\\\binduction[ \\\\t]+([^\\\\n]+)', body) == ([induction['activation'].removeprefix('induction ').encode()] if short == 'execute_mono' else [])",
+      "policy": "Keep expression; bind exact H38 schema/data below. No guard is dropped."
+    },
+    {
+      "order": 138,
+      "basis_line": 260,
+      "basis_expression": "not re.search(b'\\\\b(?:show|suffices|haveI|letI)\\\\b', body) and (not re.search(b'\\\\bobtain\\\\b(?:(?!:=).)*:(?!=)', body, re.S))",
+      "basis_AST_sha256": "76998b0b76125b3e94a9274a2e20df3079503dba6cf7fa4dc9256f849cd00622",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "not re.search(b'\\\\b(?:show|suffices|haveI|letI)\\\\b', body) and (not re.search(b'\\\\bobtain\\\\b(?:(?!:=).)*:(?!=)', body, re.S))",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 139,
+      "basis_line": 261,
+      "basis_expression": "re.findall(b'\\\\boutcomeState\\\\b', body) == [b'outcomeState'] * expected['accessor_uses']",
+      "basis_AST_sha256": "5074189921b99789cb1a71d24fa13aa6cca488ff743aaae50a601f0f1cab781f",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "re.findall(b'\\\\boutcomeState\\\\b', body) == [b'outcomeState'] * expected['accessor_uses']",
+      "policy": "Keep expression; bind exact H38 schema/data below. No guard is dropped."
+    },
+    {
+      "order": 140,
+      "basis_line": 263,
+      "basis_expression": "len(re.findall(b'(?m)^[ \\\\t]*exact ' + re.escape(external) + b' body state\\\\.checked[ \\\\t]*$', body)) == body.count(external) == (1 if short == 'step_mono' else 0)",
+      "basis_AST_sha256": "a170e1f4524005391cf3a511fc989993d56c679fba0dd0338884512553de6b84",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "len(re.findall(rb'(?m)^[ \\t]*exact ' + re.escape(external) + rb' inner state[ \\t]*$', body)) == body.count(external) == (1 if short == 'step_mono' else 0)",
+      "policy": "Use the exact H38 replacement expression; binding digest remains rejecting until actual final data."
+    },
+    {
+      "order": 141,
+      "basis_line": 265,
+      "basis_expression": "not re.search(b'\\\\b' + short.encode() + b'\\\\b', body)",
+      "basis_AST_sha256": "b00f5832b983da56ce4a32e9087d8f45441742f191159033d2b7dd74016b2e4d",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "not re.search(b'\\\\b' + short.encode() + b'\\\\b', body)",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 142,
+      "basis_line": 267,
+      "basis_expression": "dependencies == [n.encode() for n in expected['proof_dependencies']] and all((all_shorts.index(n.decode()) < all_shorts.index(short) for n in dependencies))",
+      "basis_AST_sha256": "fef647a3758f06ca16d28200827690725b2ce634eef6a236f492d27de514dc3a",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "dependencies == [n.encode() for n in expected['proof_dependencies']] and all((all_shorts.index(n.decode()) < all_shorts.index(short) for n in dependencies))",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 143,
+      "basis_line": 269,
+      "basis_expression": "schema['induction_owner'] == 'execute_mono' and schema['restricted_induction_call_terms'] == ['ih next after']",
+      "basis_AST_sha256": "2580576c1634e9749907bc73950956cc1a5a37a57f0f9b1e5d51d9ffa04dda4a",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "schema['induction_owner'] == 'execute_mono' and schema['restricted_induction_call_terms'] == ['ih next after']",
+      "policy": "Keep expression; bind exact H38 schema/data below. No guard is dropped."
+    },
+    {
+      "order": 144,
+      "basis_line": 270,
+      "basis_expression": "[len(re.findall(b'\\\\bih\\\\b', bodies[n])) for n in all_shorts] == [0, 0, 2]",
+      "basis_AST_sha256": "487377d489d47abb9aefb6268c663b1af794ce0a76dc9d6b6d1b670067854751",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "[len(re.findall(b'\\\\bih\\\\b', bodies[n])) for n in all_shorts] == [0, 0, 2]",
+      "policy": "Keep expression; bind exact H38 schema/data below. No guard is dropped."
+    },
+    {
+      "order": 145,
+      "basis_line": 272,
+      "basis_expression": "yielded and re.findall(b'\\\\bih[ \\\\t]+([A-Za-z_][A-Za-z_0-9]*)[ \\\\t]+([A-Za-z_][A-Za-z_0-9]*)', yielded.group(1)) == [(b'next', b'after')]",
+      "basis_AST_sha256": "8c3e319890deccaa85042f5adf0bfa67fc97c4d0463ea4d1fb450aebd5e5432c",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "yielded and re.findall(b'\\\\bih[ \\\\t]+([A-Za-z_][A-Za-z_0-9]*)[ \\\\t]+([A-Za-z_][A-Za-z_0-9]*)', yielded.group(1)) == [(b'next', b'after')]",
+      "policy": "Keep expression; bind exact H38 schema/data below. No guard is dropped."
+    },
+    {
+      "order": 146,
+      "basis_line": 273,
+      "basis_expression": "bodies['execute_mono'].count(b'ih next after') == 1",
+      "basis_AST_sha256": "72e001c54302c72e07b2c743d157910009bd8d4e2f0371ac636ed601666562ab",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "bodies['execute_mono'].count(b'ih next after') == 1",
+      "policy": "Keep expression; bind exact H38 schema/data below. No guard is dropped."
+    },
+    {
+      "order": 147,
+      "basis_line": 274,
+      "basis_expression": "schema['private_helpers'] == m['private_helpers'] == []",
+      "basis_AST_sha256": "8d492044701919a737e79d19a844a57ea7fc6711b9619d91f736fc1e683c118d",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "schema['private_helpers'] == m['private_helpers'] == []",
+      "policy": "Keep expression; bind exact H38 schema/data below. No guard is dropped."
+    },
+    {
+      "order": 148,
+      "basis_line": 275,
+      "basis_expression": "schema['public_heads'] == specs and schema['new_definitions'] == ['outcomeState'] and (schema['new_predicates_or_structures'] == schema['typed_show_fragments'] == []) and (schema['local_induction_names'] == ['ih'])",
+      "basis_AST_sha256": "371341c81db9f824080df8f24aa8f74f263080c8cb62f1a2b6d6dcc0cb8784b3",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "schema['public_heads'] == specs and schema['new_definitions'] == ['outcomeState'] and (schema['new_predicates_or_structures'] == schema['typed_show_fragments'] == []) and (schema['local_induction_names'] == ['ih'])",
+      "policy": "Keep expression; bind exact H38 schema/data below. No guard is dropped."
+    },
+    {
+      "order": 149,
+      "basis_line": 276,
+      "basis_expression": "schema['recursive_calls'] == [] and schema['termination_by_count'] == 0 and (schema['extra_unreviewed_named_or_typed_body_fragments_authorized'] is False)",
+      "basis_AST_sha256": "66af47bc90890095040327811b0664d09be09b70aca3dadfab02e357178d9a24",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "schema['recursive_calls'] == [] and schema['termination_by_count'] == 0 and (schema['extra_unreviewed_named_or_typed_body_fragments_authorized'] is False)",
+      "policy": "Keep expression; bind exact H38 schema/data below. No guard is dropped."
+    },
+    {
+      "order": 150,
+      "basis_line": 277,
+      "basis_expression": "schema['compiled_contract_count'] == 7 and schema['compiled_contract_lines'] == 29 and (schema['compiled_contract_order'] == list(manifest))",
+      "basis_AST_sha256": "151a13001905ef91fafb70a638eca6ba0a76966d81ae0eae079fb5fcc84a6da9",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "schema['compiled_contract_count'] == 6 and schema['compiled_contract_lines'] == 29 and schema['compiled_contract_order'] == list(manifest)",
+      "policy": "Use the exact H38 replacement expression; binding digest remains rejecting until actual final data."
+    },
+    {
+      "order": 151,
+      "basis_line": 278,
+      "basis_expression": "schema['local_have_names_by_owner'] == {n: m['bodies'][n]['have_names'] for n in all_shorts} and schema['local_let_names_by_owner'] == {n: m['bodies'][n]['let_names'] for n in all_shorts}",
+      "basis_AST_sha256": "a78b1a15b6b2e0da70aa3464f8a54a9303947f211d6324e4b0b6f600fef24a96",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "schema['local_have_names_by_owner'] == {n: m['bodies'][n]['have_names'] for n in all_shorts} and schema['local_let_names_by_owner'] == {n: m['bodies'][n]['let_names'] for n in all_shorts}",
+      "policy": "Keep expression; bind exact H38 schema/data below. No guard is dropped."
+    },
+    {
+      "order": 152,
+      "basis_line": 279,
+      "basis_expression": "schema['local_obtain_groups'] == [] and schema['by_cases_names'] == ['reversed'] and (schema['case_equation_names_by_owner'] == {n: m['bodies'][n]['case_equations'] for n in all_shorts})",
+      "basis_AST_sha256": "c0e608f570c629ddba0e6b6ae07f33e99cb323354d44730905e2b16d6acae8af",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "schema['local_obtain_groups'] == [] and schema['by_cases_names'] == [] and schema['case_equation_names_by_owner'] == {n: m['bodies'][n]['case_equations'] for n in all_shorts}",
+      "policy": "Use the exact H38 replacement expression; binding digest remains rejecting until actual final data."
+    },
+    {
+      "order": 153,
+      "basis_line": 283,
+      "basis_expression": "public == [(kind, short) for short, kind in specs]",
+      "basis_AST_sha256": "3c5116d3ab3973d090e24f7d5d35bb0312703db5abe57da2a1d66bca9b6a2f10",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "public == [(kind, short) for short, kind in specs]",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 154,
+      "basis_line": 288,
+      "basis_expression": "found",
+      "basis_AST_sha256": "f95cbd3acae470302ea2defce2729a7ddf4031091cfd2dc5641e1296f7c37ca4",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "found",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 155,
+      "basis_line": 290,
+      "basis_expression": "helpers == schema['private_helpers'] == m['private_helpers']",
+      "basis_AST_sha256": "b3b9fbdcfb77c984b4638b1f6484d1f51987089fa3be0255da5574be15f0aa02",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "helpers == schema['private_helpers'] == m['private_helpers']",
+      "policy": "Keep expression; bind exact H38 schema/data below. No guard is dropped."
+    },
+    {
+      "order": 156,
+      "basis_line": 291,
+      "basis_expression": "not re.search(b'(?m)^\\\\s*(?:variable[ \\\\t]+\\\\[|omit\\\\b)', source)",
+      "basis_AST_sha256": "fd25a32594a79aec14e8b0958ad3f1f123b81494bbae1467a29515136e415a83",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "not re.search(b'(?m)^\\\\s*(?:variable[ \\\\t]+\\\\[|omit\\\\b)', source)",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 157,
+      "basis_line": 292,
+      "basis_expression": "all((source.count(('theorem ' + short + ' [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]').encode()) == 1 for short, kind in specs if kind == 'theorem'))",
+      "basis_AST_sha256": "4205efb310e35efc4abf4562e55f66e42dd14dc909de28921e66721d0801041c",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "all((source.count(('theorem ' + short + ' [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]').encode()) == 1 for short, kind in specs if kind == 'theorem'))",
+      "policy": "Keep expression; bind exact H38 schema/data below. No guard is dropped."
+    },
+    {
+      "order": 158,
+      "basis_line": 293,
+      "basis_expression": "schema['global_instance_declaration'] is False and schema['omit_directives'] == 0",
+      "basis_AST_sha256": "35ff444799224f0ff0d37e31fb6cca2ef7a526988b14e55fd34ad3750b674a40",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "schema['global_instance_declaration'] is False and schema['omit_directives'] == 0",
+      "policy": "Keep expression; bind exact H38 schema/data below. No guard is dropped."
+    },
+    {
+      "order": 159,
+      "basis_line": 294,
+      "basis_expression": "schema['explicit_instance_heads'] == ['step_mono', 'execute_mono']",
+      "basis_AST_sha256": "2f8136bd0650bab1e03e68fe0c6de6100c6babf951ef2b54e6187e114a9967f0",
+      "classification": "H38_SCOPE_OR_BOUND_DATA_ADAPTER",
+      "proposed_expression": "schema['explicit_instance_heads'] == ['step_mono', 'execute_mono']",
+      "policy": "Keep expression; bind exact H38 schema/data below. No guard is dropped."
+    },
+    {
+      "order": 160,
+      "basis_line": 296,
+      "basis_expression": "(root / m['source_path']).read_bytes() == source",
+      "basis_AST_sha256": "463da3e6e7e56c0c8cc0356945593ca900b11f7d2834014f7a49888498b5c5d0",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "(root / m['source_path']).read_bytes() == source",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 161,
+      "basis_line": 298,
+      "basis_expression": "tool_gate['status'] == 'ACCEPTED_EXACT_TOOLS_FOR_SELECTED_STRICT_SOURCE' and tool_gate['source_sha256'] == m['source_sha256']",
+      "basis_AST_sha256": "2361ba96cfd52a5386bff30c43c81e069df567737aa46c15b9f078d0def8b952",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "tool_gate['status'] == 'ACCEPTED_EXACT_TOOLS_FOR_SELECTED_STRICT_SOURCE' and tool_gate['source_sha256'] == m['source_sha256']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 162,
+      "basis_line": 299,
+      "basis_expression": "tool_gate['public_heads'] == shorts and tool_gate['materializer_activation'] and tool_gate['sole_FULL_activation'] and tool_gate['reader_activation_after_actual_FULL']",
+      "basis_AST_sha256": "c9fefa13fc1f51b1c223592f2b31844d96511337cff3fb268f38e6038a648747",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "tool_gate['public_heads'] == shorts and tool_gate['materializer_activation'] and tool_gate['sole_FULL_activation'] and tool_gate['reader_activation_after_actual_FULL']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 163,
+      "basis_line": 302,
+      "basis_expression": "pinned(active) == pinned(archived) and tool_gate['installed_tools'][active['path']] == active['sha256']",
+      "basis_AST_sha256": "d22ce410062e8ee9d90621438c2ce4458a3346e9c7c34c628e5c6f23a7c2447d",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "pinned(active) == pinned(archived) and tool_gate['installed_tools'][active['path']] == active['sha256']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 164,
+      "basis_line": 309,
+      "basis_expression": "printer == source + tail.encode() and len(tail.splitlines()) == 11 + 3 * len(specs)",
+      "basis_AST_sha256": "f314b40a7d952ee2a62c240022fd09b827428759bc19106aa935c4a926f1de28",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "printer == source + tail.encode() and len(tail.splitlines()) == 11 + 3 * len(specs)",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 165,
+      "basis_line": 310,
+      "basis_expression": "len(printer.splitlines()) == m['source_lines'] + len(tail.splitlines()) == tool_gate['diagnostic_tail_lines'] + m['source_lines']",
+      "basis_AST_sha256": "b842dd38f970b20df705e94e2c0876fe2357423d79590ce3c8750f446676c7e5",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "len(printer.splitlines()) == m['source_lines'] + len(tail.splitlines()) == tool_gate['diagnostic_tail_lines'] + m['source_lines']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 166,
+      "basis_line": 311,
+      "basis_expression": "all((printer.decode().splitlines().count('set_option ' + option) == 1 for option in options))",
+      "basis_AST_sha256": "a083acf74bba5e4e580f6411c571d06dd6dda778fbf3dc95d1a8ad992e43c537",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "all((printer.decode().splitlines().count('set_option ' + option) == 1 for option in options))",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 167,
+      "basis_line": 312,
+      "basis_expression": "all((printer.decode().splitlines().count(d + namespace + short) == 1 for short, kind in specs for d in ['#check @', '#print ', '#print axioms ']))",
+      "basis_AST_sha256": "37c64e961017fdc3cec4cce990e6c50ef3ebc57b0c80f09199359a20774ab20a",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "all((printer.decode().splitlines().count(d + namespace + short) == 1 for short, kind in specs for d in ['#check @', '#print ', '#print axioms ']))",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 168,
+      "basis_line": 316,
+      "basis_expression": "len(matching) == 1",
+      "basis_AST_sha256": "fc074aeebe4db11d40ac3f57e3a619bb3e33e349b9b1e52c1ff605e6ceb2474d",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "len(matching) == 1",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 169,
+      "basis_line": 318,
+      "basis_expression": "(report['source_sha256'], report['source_lines'], report['printer_sha256']) == (m['source_sha256'], m['source_lines'], digest(printer))",
+      "basis_AST_sha256": "5e2e4c2e42c854b89f7d0c51dd5946c0922deecb53a7224745d2e54cfb5ffc6b",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "(report['source_sha256'], report['source_lines'], report['printer_sha256']) == (m['source_sha256'], m['source_lines'], digest(printer))",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 170,
+      "basis_line": 319,
+      "basis_expression": "report['log_sha256'] == digest(raw) and report['log_bytes'] == len(raw)",
+      "basis_AST_sha256": "bfce3ed8345075b303dc568de9a2a362c5c339cd714faaa9ae3f8050b6c1012c",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "report['log_sha256'] == digest(raw) and report['log_bytes'] == len(raw)",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 171,
+      "basis_line": 320,
+      "basis_expression": "report['receipt_sha256'] == digest(read(m['full'] + '.json')) and report['owned_public_job_exit'] == 0",
+      "basis_AST_sha256": "3989518699ec82d1c5c0df863fefea10dde57aee6e30e391b7efb279473e1ddc",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "report['receipt_sha256'] == digest(read(m['full'] + '.json')) and report['owned_public_job_exit'] == 0",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 172,
+      "basis_line": 321,
+      "basis_expression": "all((report[k] for k in ['all_eight_printer_settings', 'exact_module_and_diagnostic_tail', 'diagnostic_limits_after_module_only', 'no_omissions']))",
+      "basis_AST_sha256": "582bbf70c6e8ce2ac401643a9626b9b6418d90833de084096b4882958f6d21c4",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "all((report[k] for k in ['all_eight_printer_settings', 'exact_module_and_diagnostic_tail', 'diagnostic_limits_after_module_only', 'no_omissions']))",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 173,
+      "basis_line": 322,
+      "basis_expression": "(report['pp_option_count'], report['linter_option_count'], report['diagnostic_limit_count']) == (7, 1, 2)",
+      "basis_AST_sha256": "c61f0b5fdffd5e5d9680711cfb724902e16e779942c6c1482ba768c3cb6995ce",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "(report['pp_option_count'], report['linter_option_count'], report['diagnostic_limit_count']) == (7, 1, 2)",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 174,
+      "basis_line": 323,
+      "basis_expression": "report['configured_paths'] == {k: str(path.resolve()) for k, path in dict(source=evidence / m['snapshot'], printer=evidence / (m['full'] + '.source.lean'), raw=evidence / (m['full'] + '.log'), receipt=evidence / (m['full'] + '.json')).items()}",
+      "basis_AST_sha256": "a0c9c2015cece1f01e96cb02304ddc244c23a81ecc663fee56238f5d71a33565",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "report['configured_paths'] == {k: str(path.resolve()) for k, path in dict(source=evidence / m['snapshot'], printer=evidence / (m['full'] + '.source.lean'), raw=evidence / (m['full'] + '.log'), receipt=evidence / (m['full'] + '.json')).items()}",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 175,
+      "basis_line": 324,
+      "basis_expression": "[(h['head'], h['kind']) for h in report['heads']] == [(namespace + short, kind) for short, kind in specs]",
+      "basis_AST_sha256": "f59cd759ac8c35340a07ac34a2e8cd61ef48971e1139c8cffecec9daa5abc677",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "[(h['head'], h['kind']) for h in report['heads']] == [(namespace + short, kind) for short, kind in specs]",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 176,
+      "basis_line": 326,
+      "basis_expression": "not re.search('sorryAx|\\\\b(?:warning|error)(?:\\\\([^)]*\\\\))?:|failed to pretty print|pp\\\\.rawOnError|maximum recursion depth|maximum number of heartbeats|\u22ef|\u2026|\\\\.\\\\.\\\\.', log)",
+      "basis_AST_sha256": "fa49e5b878231bb8698529287e30274ab6a506841645edf4a9854640e7f75b24",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "not re.search('sorryAx|\\\\b(?:warning|error)(?:\\\\([^)]*\\\\))?:|failed to pretty print|pp\\\\.rawOnError|maximum recursion depth|maximum number of heartbeats|\u22ef|\u2026|\\\\.\\\\.\\\\.', log)",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 177,
+      "basis_line": 330,
+      "basis_expression": "len(matches) == 1",
+      "basis_AST_sha256": "e42f3c7e0f6f68ddaac5b4c649a2f3dd2b142a6d687c524b8fbfbd1abccc752d",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "len(matches) == 1",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 178,
+      "basis_line": 332,
+      "basis_expression": "starts == sorted(starts, key=lambda match: match.start()) and (not log[:starts[0].start()].strip())",
+      "basis_AST_sha256": "77160a99dcf5fe6276cfbf7ced1b6c8e0d9fd9e21323f4e0ae181eb2248c579c",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "starts == sorted(starts, key=lambda match: match.start()) and (not log[:starts[0].start()].strip())",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 179,
+      "basis_line": 339,
+      "basis_expression": "len(delimiters) == 1",
+      "basis_AST_sha256": "1b75a57a82005f346cfd3ab2c9dbb405d2e3cb0cc67dcafd8183209488f3fbb9",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "len(delimiters) == 1",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 180,
+      "basis_line": 342,
+      "basis_expression": "len(axiom_matches) == 1",
+      "basis_AST_sha256": "b4e53aa86ef51471e036de4e6f76ec5bc6ec8ca7547132929ccb17b561d6d73f",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "len(axiom_matches) == 1",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 181,
+      "basis_line": 352,
+      "basis_expression": "len(matches) == 1",
+      "basis_AST_sha256": "e42f3c7e0f6f68ddaac5b4c649a2f3dd2b142a6d687c524b8fbfbd1abccc752d",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "len(matches) == 1",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 182,
+      "basis_line": 357,
+      "basis_expression": "normalized == canonical(declared) and raw_identity is metric['raw_type_byte_identity']",
+      "basis_AST_sha256": "2155937a0c2a7e58c78c1dfc183db5096ee771bbe7f4aa8fa164fea6c15bd894",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "normalized == canonical(declared) and raw_identity is metric['raw_type_byte_identity']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 183,
+      "basis_line": 358,
+      "basis_expression": "len(checked.encode()) == metric['type_bytes'] and len(checked) == metric['type_characters'] and (digest(checked.encode()) == metric['type_sha256'])",
+      "basis_AST_sha256": "f5187fc360e163245be669d7948394e1e11fa7c881b1d0db1024753e2b01a3c3",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "len(checked.encode()) == metric['type_bytes'] and len(checked) == metric['type_characters'] and (digest(checked.encode()) == metric['type_sha256'])",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 184,
+      "basis_line": 359,
+      "basis_expression": "len(checked.splitlines()) == metric['type_logical_lines'] and checked.count('\\n') == metric['type_line_feeds'] and (checked.endswith('\\n') == metric['type_final_newline'])",
+      "basis_AST_sha256": "1bf3623950734f575b9b81e745bc06afaf331aebb44d8dfe4d592cea6055fe2e",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "len(checked.splitlines()) == metric['type_logical_lines'] and checked.count('\\n') == metric['type_line_feeds'] and (checked.endswith('\\n') == metric['type_final_newline'])",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 185,
+      "basis_line": 360,
+      "basis_expression": "len(declared.encode()) == metric['printed_type_bytes'] and digest(declared.encode()) == metric['printed_type_sha256']",
+      "basis_AST_sha256": "328e8bbc1dc152aeb954ce25303d1398fc478063b83ab3040ca71e8d97ca7c04",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "len(declared.encode()) == metric['printed_type_bytes'] and digest(declared.encode()) == metric['printed_type_sha256']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 186,
+      "basis_line": 361,
+      "basis_expression": "digest(normalized.encode()) == metric['canonical_type_sha256']",
+      "basis_AST_sha256": "943345fa3c31a386b004acf6e05e84c372e526878d71bae0d59453ad0e11b2a6",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "digest(normalized.encode()) == metric['canonical_type_sha256']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 187,
+      "basis_line": 362,
+      "basis_expression": "not any((token in checked + declared for token in ['_private', '\u271d', '\u2020', '\u2021']))",
+      "basis_AST_sha256": "3af75862bcea3b4709b6a27558db056bde1fdbf5efa3502d7bed780aa4078890",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "not any((token in checked + declared for token in ['_private', '\u271d', '\u2020', '\u2021']))",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 188,
+      "basis_line": 363,
+      "basis_expression": "not any((re.search(re.escape(namespace + helper) + \"(?![\\\\w'])\", checked + declared) for helper in helpers))",
+      "basis_AST_sha256": "94eb4957a1151ae2b8032c28dddfb6ec5e6e863f67e8a57009d89eaf60b1bdf4",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "not any((re.search(re.escape(namespace + helper) + \"(?![\\\\w'])\", checked + declared) for helper in helpers))",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 189,
+      "basis_line": 364,
+      "basis_expression": "all((head_report[k] for k in ['check_print_type_identity', 'check_print_type_lexical_identity', 'unique_complete_type_body_delimiter', 'actual_axioms_within_standard_allowed']))",
+      "basis_AST_sha256": "20c7d170302747acb498c674d1e48ba16ccb330f764b076e24be995f313a190f",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "all((head_report[k] for k in ['check_print_type_identity', 'check_print_type_lexical_identity', 'unique_complete_type_body_delimiter', 'actual_axioms_within_standard_allowed']))",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 190,
+      "basis_line": 365,
+      "basis_expression": "head_report['check_print_type_byte_identity'] is raw_identity",
+      "basis_AST_sha256": "d25ec9dbc7809c55f10c35595b6831d283564975c05e021cdae6c5452b61e64a",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "head_report['check_print_type_byte_identity'] is raw_identity",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 191,
+      "basis_line": 366,
+      "basis_expression": "head_report['private_namespace_helpers_checked'] == helpers and head_report['private_type_spellings_checked'] == ['_private', '\u271d', '\u2020', '\u2021'] and (head_report['private_public_type_names'] is False)",
+      "basis_AST_sha256": "7242eb46e9b6426669a1f3f6fa227de98c2c0865f6545d3d4aafba5cf3241efa",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "head_report['private_namespace_helpers_checked'] == helpers and head_report['private_type_spellings_checked'] == ['_private', '\u271d', '\u2020', '\u2021'] and (head_report['private_public_type_names'] is False)",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 192,
+      "basis_line": 367,
+      "basis_expression": "head_report['checked_type_characters'] == len(checked) and head_report['checked_type_bytes'] == len(checked.encode()) and (head_report['checked_type_sha256'] == metric['type_sha256'])",
+      "basis_AST_sha256": "4a57fe711e3e5670a704f9f3794b6a0ac95c227c0cb002d7a8f684dde1b380ee",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "head_report['checked_type_characters'] == len(checked) and head_report['checked_type_bytes'] == len(checked.encode()) and (head_report['checked_type_sha256'] == metric['type_sha256'])",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 193,
+      "basis_line": 368,
+      "basis_expression": "head_report['printed_type_bytes'] == metric['printed_type_bytes'] and head_report['printed_type_characters'] == len(declared) and (head_report['printed_type_sha256'] == metric['printed_type_sha256'])",
+      "basis_AST_sha256": "e9104428e85394f39088bd6ff318d5a5c4b21427a0e5d1fe124c4303f70fe91c",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "head_report['printed_type_bytes'] == metric['printed_type_bytes'] and head_report['printed_type_characters'] == len(declared) and (head_report['printed_type_sha256'] == metric['printed_type_sha256'])",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 194,
+      "basis_line": 369,
+      "basis_expression": "head_report['normalized_type_characters'] == len(normalized) and head_report['canonical_type_sha256'] == metric['canonical_type_sha256']",
+      "basis_AST_sha256": "d5b469c75615de99587ea9cc29c4530960ee7b4b78de63433e10b822c6a17f6c",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "head_report['normalized_type_characters'] == len(normalized) and head_report['canonical_type_sha256'] == metric['canonical_type_sha256']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 195,
+      "basis_line": 370,
+      "basis_expression": "head_report['body_characters'] == len(body) == metric['body_characters'] and len(body.encode()) == metric['body_bytes']",
+      "basis_AST_sha256": "6cfc0f47a90c6f106870f72721c171a75c1f4614185c3518f73aa5ae2df584e3",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "head_report['body_characters'] == len(body) == metric['body_characters'] and len(body.encode()) == metric['body_bytes']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 196,
+      "basis_line": 371,
+      "basis_expression": "body.startswith('fun ') and len(body) > 50 and (digest(body.encode()) == metric['body_sha256'])",
+      "basis_AST_sha256": "c7205943f2007cfce959c0d7b67ab55707b11de3add9ca4bc10bf2323a04a128",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "body.startswith('fun ') and len(body) > 50 and (digest(body.encode()) == metric['body_sha256'])",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 197,
+      "basis_line": 373,
+      "basis_expression": "values or (axiom.group(1) == 'does not depend on any axioms' and (not printed[axiom.end():].strip()))",
+      "basis_AST_sha256": "76cf175d31318a033c0bb017e0e6715464cf52dfa5b25ff218fa7c769d71a716",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "values or (axiom.group(1) == 'does not depend on any axioms' and (not printed[axiom.end():].strip()))",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 198,
+      "basis_line": 375,
+      "basis_expression": "axioms == head_report['actual_axioms'] == metric['actual_axioms'] and set(axioms) <= {'Classical.choice', 'Quot.sound', 'propext'}",
+      "basis_AST_sha256": "9ad25d6471508a2efa56a19e16f7cdcf6d98b36255a487284b8c465e51626185",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "axioms == head_report['actual_axioms'] == metric['actual_axioms'] and set(axioms) <= {'Classical.choice', 'Quot.sound', 'propext'}",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 199,
+      "basis_line": 376,
+      "basis_expression": "head_report['actual_standard_three_axioms'] == (set(axioms) == {'Classical.choice', 'Quot.sound', 'propext'})",
+      "basis_AST_sha256": "aabb0ea873fe45a7b65e4fd60f466e124436487256c2e2fe7ff2c2c6dee6dd7b",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "head_report['actual_standard_three_axioms'] == (set(axioms) == {'Classical.choice', 'Quot.sound', 'propext'})",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 200,
+      "basis_line": 381,
+      "basis_expression": "retained == text.encode() and report['retained_slices'][filename] == dict(bytes=len(retained), sha256=digest(retained))",
+      "basis_AST_sha256": "f047658a3cf21ec8148709bc1697ccf6a73bc3c2f8c7714f821e851fbff96812",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "retained == text.encode() and report['retained_slices'][filename] == dict(bytes=len(retained), sha256=digest(retained))",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 201,
+      "basis_line": 383,
+      "basis_expression": "''.join(reconstructed) == log and set(report['retained_slices']) == set(retained_names)",
+      "basis_AST_sha256": "1e1c1539aaa3ebd6d20f67dbc8262a3936d9482918a3a2345a50d4bcf6fbc518",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "''.join(reconstructed) == log and set(report['retained_slices']) == set(retained_names)",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 202,
+      "basis_line": 386,
+      "basis_expression": "review['status'] == 'ACCEPTED_COMPLETE_PUBLIC_TYPES_AND_INSTALLED' and review['source_sha256'] == m['source_sha256'] and (review['source_lines'] == m['source_lines'])",
+      "basis_AST_sha256": "ee469e297e054f2c5ff2b64e73e23dab979fce3a8816fc5242d56ddb2c427e69",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "review['status'] == 'ACCEPTED_COMPLETE_PUBLIC_TYPES_AND_INSTALLED' and review['source_sha256'] == m['source_sha256'] and (review['source_lines'] == m['source_lines'])",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 203,
+      "basis_line": 387,
+      "basis_expression": "review['root_manual_complete_TYPEs'] is True and review['goal_status'] == 'ACTIVE_INCOMPLETE'",
+      "basis_AST_sha256": "e6b48a918c21e33b039300eb42a75404709e94815dc7bae5d3d10c85a1f987c0",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "review['root_manual_complete_TYPEs'] is True and review['goal_status'] == 'ACTIVE_INCOMPLETE'",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 204,
+      "basis_line": 388,
+      "basis_expression": "review['readback_sha256'] == m['readback']['sha256']",
+      "basis_AST_sha256": "1d310cba89b65184fb90940d3d99828ce67fcef28210683f97b3a3e7c7cec7d9",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "review['readback_sha256'] == m['readback']['sha256']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 205,
+      "basis_line": 389,
+      "basis_expression": "review['independent_complete_TYPE_review_sha256'] == m['type_review']['sha256'] and independent['status'] == 'CLEAR'",
+      "basis_AST_sha256": "8a2dee39eaf4e7936d6987669ac4cdf0662449f14a5f8b251fd6b64ac3fc5a7f",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "review['independent_complete_TYPE_review_sha256'] == m['type_review']['sha256'] and independent['status'] == 'CLEAR'",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 206,
+      "basis_line": 390,
+      "basis_expression": "set(review['TYPEs']) == set(shorts)",
+      "basis_AST_sha256": "caae0e5f85b8a0ef428b83cb9774f3b89f0b414c8a7f9bd705fb2a7ef19f0b34",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "set(review['TYPEs']) == set(shorts)",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 207,
+      "basis_line": 393,
+      "basis_expression": "review['TYPEs'][short] == dict(sha256=metric['type_sha256'], bytes=metric['type_bytes'], logical_lines=metric['type_logical_lines'], actual_axioms=actual_axioms[short])",
+      "basis_AST_sha256": "e2e1872a9845f9bd860f4160c5a82f710a674d8ed8e6e9a5625afb6639ec1ed4",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "review['TYPEs'][short] == dict(sha256=metric['type_sha256'], bytes=metric['type_bytes'], logical_lines=metric['type_logical_lines'], actual_axioms=actual_axioms[short])",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 208,
+      "basis_line": 394,
+      "basis_expression": "review['module'] == name and review['scope'] == m['scope']",
+      "basis_AST_sha256": "1ca92840126048a06c4fd7aadb61174701ce1fc0fc3eb29393bbe2f8722dba49",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "review['module'] == name and review['scope'] == m['scope']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 209,
+      "basis_line": 395,
+      "basis_expression": "review['BODY_review'] == dict(complete_retention=True, programmatic_only=True, whole_body_manual_read_claimed=False)",
+      "basis_AST_sha256": "58cf5ee506e9f40dbf359ecf7c3f5fe3c2a90aa3ae2047dc3214090225165e7a",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "review['BODY_review'] == dict(complete_retention=True, programmatic_only=True, whole_body_manual_read_claimed=False)",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 210,
+      "basis_line": 396,
+      "basis_expression": "independent['scope'] == 'INDEPENDENT_COMPLETE_ACTUAL_PUBLIC_TYPE_AND_READBACK_REVIEW'",
+      "basis_AST_sha256": "50e66cf6133214c1e9f117e66536bc85665468ac8fc56302a4941b0397876c83",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "independent['scope'] == 'INDEPENDENT_COMPLETE_ACTUAL_PUBLIC_TYPE_AND_READBACK_REVIEW'",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 211,
+      "basis_line": 397,
+      "basis_expression": "independent['module'] == name and independent['source_sha256'] == m['source_sha256']",
+      "basis_AST_sha256": "53f8f79511e3b93eaccb94265498cc9af5873d0e52974abaeb7d3be66183427c",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "independent['module'] == name and independent['source_sha256'] == m['source_sha256']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 212,
+      "basis_line": 398,
+      "basis_expression": "independent['source_lines'] == m['source_lines'] and independent['public_heads'] == [namespace + short for short in shorts]",
+      "basis_AST_sha256": "6d358cbe09364edb7fa19fd48821f12c954e086a556ab5ae58d60d57838c4e31",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "independent['source_lines'] == m['source_lines'] and independent['public_heads'] == [namespace + short for short in shorts]",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 213,
+      "basis_line": 399,
+      "basis_expression": "independent['ownership']['reviewer_math_author'] is False",
+      "basis_AST_sha256": "50f4cab555edb7a200ef2a3ba3447847b0c2ae4b47ebfc848b8c765c1b3234ee",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "independent['ownership']['reviewer_math_author'] is False",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 214,
+      "basis_line": 401,
+      "basis_expression": "manual['checked_TYPEs_complete'] == shorts and manual['printed_TYPEs_manual'] is manual['BODYs_manual'] is False",
+      "basis_AST_sha256": "b41991bb6c762e8b50e143d5050abb71c09b02825c622cd343bf70b3afcabddf",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "manual['checked_TYPEs_complete'] == shorts and manual['printed_TYPEs_manual'] is manual['BODYs_manual'] is False",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 215,
+      "basis_line": 404,
+      "basis_expression": "item['checked_type'] == dict(logical_lines=metric['type_logical_lines'], LF=metric['type_line_feeds'], final_LF=metric['type_final_newline'], characters=metric['type_characters'], bytes=metric['type_bytes'], sha256=metric['type_sha256'])",
+      "basis_AST_sha256": "624e01383dff9109ef3d316fc577861ced565d650282f1cbe5d1b7f833535857",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "item['checked_type'] == dict(logical_lines=metric['type_logical_lines'], LF=metric['type_line_feeds'], final_LF=metric['type_final_newline'], characters=metric['type_characters'], bytes=metric['type_bytes'], sha256=metric['type_sha256'])",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 216,
+      "basis_line": 405,
+      "basis_expression": "item['printed_type'] == dict(bytes=metric['printed_type_bytes'], sha256=metric['printed_type_sha256'])",
+      "basis_AST_sha256": "e7dea202f054ad05074ce73a2407eb1e8901c04cfc5b2c2e2574c9fe3aef752a",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "item['printed_type'] == dict(bytes=metric['printed_type_bytes'], sha256=metric['printed_type_sha256'])",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 217,
+      "basis_line": 406,
+      "basis_expression": "item['actual_raw_byte_identity'] is metric['raw_type_byte_identity'] and item['lexical_identity'] is True",
+      "basis_AST_sha256": "d5fdb512a416fb0e3b93247316abbbec1dcb2f722cf2c168aefc6a5ff92372ae",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "item['actual_raw_byte_identity'] is metric['raw_type_byte_identity'] and item['lexical_identity'] is True",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 218,
+      "basis_line": 407,
+      "basis_expression": "item['canonical_sha256'] == metric['canonical_type_sha256'] and item['axioms']['actual'] == actual_axioms[short]",
+      "basis_AST_sha256": "749295c4311d260dbd8349bc7272c63a6daf75639585376db5726a6219657da6",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "item['canonical_sha256'] == metric['canonical_type_sha256'] and item['axioms']['actual'] == actual_axioms[short]",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 219,
+      "basis_line": 408,
+      "basis_expression": "item['body'] == dict(characters=metric['body_characters'], bytes=metric['body_bytes'], sha256=metric['body_sha256'])",
+      "basis_AST_sha256": "b4b1152e4d1eab0ba0622ae3f1351362e8b798126fa7fc2a1e4b48cf24290e02",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "item['body'] == dict(characters=metric['body_characters'], bytes=metric['body_bytes'], sha256=metric['body_sha256'])",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 220,
+      "basis_line": 409,
+      "basis_expression": "len(full_variant_keys) == len(set(full_variant_keys))",
+      "basis_AST_sha256": "8fb15f42993ce38bcf830d119edc146d5bed19c0a1d2da0e6ccf79a7f60f62f5",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "len(full_variant_keys) == len(set(full_variant_keys))",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 221,
+      "basis_line": 410,
+      "basis_expression": "load('original-source-index.json')['sources'] == [bound['original_audit']]",
+      "basis_AST_sha256": "99b5cae50151d8269ecba01e2c347c14c1eb1ab8951f255e09fdbe0f8df4b52b",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "load('original-source-index.json')['sources'] == [bound['original_audit']]",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 222,
+      "basis_line": 412,
+      "basis_expression": "digest(original) == bound['original_audit']['sha256'] and len(original.splitlines()) == bound['original_audit']['lines']",
+      "basis_AST_sha256": "a960d6ed3c0f08095ab08bc94df10300eb01cde8e11fed8700224f05674e69bd",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "digest(original) == bound['original_audit']['sha256'] and len(original.splitlines()) == bound['original_audit']['lines']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 223,
+      "basis_line": 416,
+      "basis_expression": "audit_source.count(addition) == 1 and audit_source.index(addition) < audit_source.index(b'/-!')",
+      "basis_AST_sha256": "3227ac276d4ff5fb60706b1b33126e6a2e77ca576642e4e79806cabacae5715a",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "audit_source.count(addition) == 1 and audit_source.index(addition) < audit_source.index(b'/-!')",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 224,
+      "basis_line": 418,
+      "basis_expression": "audit_source == original",
+      "basis_AST_sha256": "bb9cb8b6e5a9de5baf3ece46f6dae4e5e7fb467bbca3d836810b5a2069b988b5",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "audit_source == original",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 225,
+      "basis_line": 420,
+      "basis_expression": "jobs[audit_stem]['kind'] == 'audit' and jobs[audit_stem]['exit_code'] == 0",
+      "basis_AST_sha256": "08bc708cc7bd1d17889d8d08606e57fc7597bdebf351782c8f34e82f48a0f3a8",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "jobs[audit_stem]['kind'] == 'audit' and jobs[audit_stem]['exit_code'] == 0",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 226,
+      "basis_line": 422,
+      "basis_expression": "digest(raw_audit) == bound['audit']['log_sha256']",
+      "basis_AST_sha256": "fa431876bffc469a28d48f801006014e72b1ae0d271fca1ec445711dc38d47c8",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "digest(raw_audit) == bound['audit']['log_sha256']",
+      "policy": "Keep exact AST and multiplicity."
+    },
+    {
+      "order": 227,
+      "basis_line": 424,
+      "basis_expression": "dependencies and int(dependencies.group(1)) == bound['audit']['dependencies']",
+      "basis_AST_sha256": "e98cb66dd92c0fc316eb2cb4d74d20b4151b73b90ca35f5545a0eccad174c62e",
+      "classification": "EXACT_GENERIC_RETAIN_WITH_MULTIPLICITY",
+      "proposed_expression": "dependencies and int(dependencies.group(1)) == bound['audit']['dependencies']",
+      "policy": "Keep exact AST and multiplicity."
+    }
+  ],
+  "generic_AST_multiplicities": {
+    "48878cf0af025e75fe8764a4ba279977c977c2ac2931f6709f89cd101682fc47": 1,
+    "4c085123aacf6619d8b59c58f507d96a3fe9eaac4ebdcca3a26b2690fa3bb181": 1,
+    "89bedb1da41a8642d70949df74d3c9bf7440cf76670119c649610ed1e2c47539": 1,
+    "acdb1c852500c47b75362a1f9f11f4ec861ca3f00bb9465339e965656018d732": 1,
+    "2abf551364bb6045723a4fbc5d3216d099ac979e4f0293046af557792d8d1fb2": 1,
+    "013e6021253a9f89121377135845947e50b68ebef1c312e461104ef21a1a2309": 1,
+    "6ae39c5e39f7c9dd4095f00a477746cf70b96ba7dcdb46c54c9f7308d53ecbb8": 1,
+    "9fc15988886f3db64f6807c7f4d096d9404e2c900694d20d5b9fbd94aa680f78": 1,
+    "9f8e88042edc776f2c86b786ed96b5c2c2095e1fca6d8e0e6213482819ccf1ab": 1,
+    "7e52b4e76dfca63dac0924d3bb8567cb7de259267b4fa4c499a02301a093ff33": 1,
+    "8fa04ea082c1ea738c3307a616cb6d197b41f3b2c7101a0943a894f5ad70622e": 1,
+    "de57a5827c5f2f844ded01cffaf8a9052b3fd3a5c3c44fae7edb9a7b1a09f22c": 1,
+    "a237e58a8146a46b3c2c127474a4221b1c7a5b848654d8e00cd888e1439dd9ee": 1,
+    "15c91f898f571535a99afc9dec12f46541c7c6b747b419b9febcf29ddf0b6721": 1,
+    "749a87b1c0e3d1a4f4b5b06d6089fe2ed377fbb6af13042dd395112c71e2c4f6": 1,
+    "c4475e9da3752a073ce8f74b0c61c6e2cd8da41d6118adefd3a14cf2e9b32ae8": 2,
+    "4d9ea92dbd37a6741551c22213294c91103b80d59dedc140ca0adb50a53918b9": 1,
+    "f0cbfb6f1caccd758d83af8114fb1061a461128f5775cdeda98d482afbc42c0d": 1,
+    "d41c5241498e1f752f505c9bd8b5d99721a5e6dd6db12d8c797eba504721f6cb": 1,
+    "75ea2c89aac16ac9302019ebf5a3cc493e5255374ae28102705a07ec21c4a3a1": 1,
+    "8847fd8e639ca5d5e375691d1827074aed05a39faf83760a3b8200fc7d52e3c9": 1,
+    "4e4b7c210ab999c29e7282a0a7bd953d93630de0166e50651404ca1dca84ddc2": 1,
+    "0c39f0a72f1580d46bf141736a0feb050038a39288c5448a78646d50d86f4074": 1,
+    "f820a0f5ff77b04c7587ca6ba2f4eadd00953b70ea13bf3a3310834967b53bb0": 1,
+    "7ee72d4ddad5168c4438e7ce94a54fdfcaee9a073af92d9050f2a645c53584ee": 1,
+    "7d5048055b552700c561f4dfeadeee4798a84c96b9cf728b043eb075d8070691": 1,
+    "4e4ef38f6d5d64d02b2ac35843a3d031c7d64144997951eccfdfa66a1057be57": 1,
+    "dff6863f6adb6631b780f5fd86e68713a1713b5769e2fb0c2e2e1b9b63d85a33": 1,
+    "8b2bd9967c597c608d46eb73fc408d088bb969532e0c72e0e42e460641180c1b": 1,
+    "f057853fe7932de7c6e1a061608c0f6ff2b0dfb9991be6aac69f4b917ae0180f": 1,
+    "a3a9f47a7db5c46914b2865e25bde0deee40c94dcb3877bf4655848331bd4848": 1,
+    "2ce9fc24e0aae62bbdb917033b829763f3c32a4ec278aa396fd6ae399860dfa1": 1,
+    "6dd9ec3962e3681894eb913bb6e81c3d5f9bda6ca6221586450b6912cdeb2cce": 1,
+    "d322795aff0265eb6131b35cb88aa5220ada735c0aac169644eccee6685ef19f": 1,
+    "903a142f2bd97c54dd71901cd30af975983122a5b4a6f98ca7fabf07a241625e": 1,
+    "d0f8ccd6445e3aa610ef000a913587a39aab310adada0e22f789ab71f2cc144d": 1,
+    "06e17c7535231ad1515572d95fda0d22223397746576e629b767a0197ddae6f4": 1,
+    "3cda52937325690f971d49018bfc7ba9303fa317492c9b888891737506fdad58": 1,
+    "d010cac0946cc24d78294fd67299b544628c511c398a4153f2ee09434d413a9e": 1,
+    "6cc27669c2bebc46ffced421d9b4192eb453538f83d0f9e26603cf1863710e46": 1,
+    "4dcc8bc0948c43870819f0235a27da22bbd1689b4e7aa73b24b61383a709c28d": 1,
+    "67524d61410588ccf6e988f1147ddcedb1ca280d399272ba2175a9eee17a5ecd": 1,
+    "4deccfa51361a7b081b6c0f675016ef6a382dd07d69ff53c488bebcd27748adb": 1,
+    "01a24e7d2c71342388fb68c4276190d8e20d856cdd64817ea49b0bacaa2b2688": 1,
+    "17db95b7f5c99b100ee477d22dca18b0de5e2a8c4005d59cc5653db37bc63635": 1,
+    "0d2384646353d2062484308e678e5a63503199d6f7aedf5c765d893fe61b280f": 1,
+    "15a8ef8cfaaa075683d2cb1287dff4119090b025e32483ead821a9e6f28ceb4a": 1,
+    "685b8598f911bcaf471a1c27978e03e55eecdb70ec7f168e6b83beb9827b97e5": 1,
+    "c63fd9b8c012fad7318c4c5cccfd7c2e8fe67056639ddef38a00a5dbe8be1936": 1,
+    "ed4668293474621524dd87093d4e6c82191e121126678df17c6593dafce99464": 1,
+    "ae74f115b3866c14be1efe69df2933d28c2cb330043cad7b8f1c58c99c666492": 1,
+    "e3b335c7d5f8290124dced49a399f1e9413e4238e2df0072d2b47930447b8db4": 1,
+    "6e2424701dcc0cd86b450d0f8bc579daf79b0469c9a2b46329197bbbae267026": 1,
+    "759a1e993eb445b157666d22780d36d4d9d4a484286367a572a5a1685dda8923": 1,
+    "4dd539ff022d43e27d45806f8cf792dec575bf40e9e8f35350d359733563b3c6": 1,
+    "8b95ee0c7e38f6e6d6ec41faccec19df1eae88416336dc5159bb563fcef6d708": 1,
+    "7c1b1d6d82e077189abcd77461b1ace7884a3f4a58e0b9e86220dadcfb5e430c": 1,
+    "89305338b2758434db3d45255a7d607c5338ffa3d1c167fb4db00e5e4216253e": 1,
+    "4f8d7e485948295cfaae7f9174d2292f154758f58efea2caa805c0b325c9b396": 1,
+    "cbc1ffd852ca041916111397890578717c6e2e2984d750993cedee1fabd21a08": 1,
+    "2f5aed769209e11f63ff3d71f31750cdacfa5d63ff49d1e17de84ef1f25798aa": 1,
+    "c000252e04ed00df4ebfb85e7a8365f5be018c20e3dac0d6e1c64dcb8a87c7a4": 1,
+    "e5f7abd99b61a4a790634b5d13040a56b3fd01602928e131ae3b94fb11057c15": 1,
+    "24d224fbbcdf02b165d434a6c48f846616916258bf060ccb46bf7fa64b67e4c9": 1,
+    "873fd2eee2c23ee60a05fbc82035daf5589a5d0b9625b1e5fdcbc3ec6f0b9550": 1,
+    "a0b74f625293eef9786ea327181a93305bf420cf4953cdd5e7c1ec5a8765a171": 1,
+    "bd411093eaca8652c503c1756f3fd562f77f638023be8be745f03adf0a506c68": 1,
+    "53be95779cb2f86729638556637e99ad4b65b088e3cb9d1f444b1fe226d50295": 1,
+    "ada96041c3606bf7fe92aa1e144790276b422af080e4646e35c98887d24a2d6d": 1,
+    "2d185ae6a762e3bbea85c11c6012e373928b812d5e5aabf3818cb05c61b098cb": 1,
+    "8827da4a55e31f892847b2c58c02000be9345a4cd51f6c81cd662e6fc5a64f3b": 1,
+    "03fc8aeb84f97ae91c07e561dafef260aa012bf9e0c1a516a01fca6a50573050": 1,
+    "829bf0aa3295160621c7096dc4e49caff5f946de373f72e3ed19ff84f0c03e04": 1,
+    "541a7595f7d010d51656d69821867b2b047b242451d94ace525d2e3e2e61df83": 1,
+    "3f5ad926bf0c9ae548973c1159c4a7ca084b29ccc31e954b52f3da058cf8bb5f": 1,
+    "02add7e83be20635bbbe4040304d9d69a926176c9898254c8b8c6744a11a1623": 1,
+    "3a654dadfccdb5c80a2f869c9891794c0a87ffc81b5df053b55e812912652083": 1,
+    "6ce895461f0fe5b8149e132818f449f695a795e9d009968b6db543aeb1886226": 1,
+    "59991a8fffcda6064bd12ab3c573f2b9c14b32bc626c505e76ea0eee71ae729e": 1,
+    "d227bd8600093ec168fcb8d59266d3bebecf873ae2de4bfdad53a2fd2b72f4c7": 1,
+    "bc9c066b9bd4b7a94610b490472e1a0d2eb77c1055c56bde796fd9af3e28114c": 1,
+    "d1667d000e96003ae5be1c7dfc7a1e5dff8dc3229f3307897040b48b571420ff": 1,
+    "d7d9940477c5e108de7aa473daae61f1063d5393d3bf9467cc8119b019352e44": 1,
+    "d0d22495291e6c753562111905828942fe4f07757ddf9ee71b0cce85c99feeb4": 1,
+    "f957499b9b67cee0862f868ebf787966a1d0c592277bdb0847b06c805f501a2d": 1,
+    "7f9ee868b95b79e3a6d601e1b51bc82364f0ae20d5822407a9f7bf1db3ca2d65": 1,
+    "04bd3a1b0f749fe9f7a517b8e06db4df517e2d59dae00bd529880ffdc9bfa650": 1,
+    "ccf45fa8b98cbdbc355e32c35718294168a706931c1c1209bc49ad7cfdc36398": 1,
+    "6f336d8da09c81ac5f95312b5a0dd6825d917910036fb6e0fc13c194b14d6ae7": 1,
+    "b341a0601d1d3241bbf9c6da2900fc79f23d537fa9c82d3dc52cfc689bfe045f": 1,
+    "85cd5d167ec8c202320ebfb914d08956fc4163ef1c59358a83ca0245912d392d": 1,
+    "383b1885ff765ed8bbf24985d924c6d3d77ba6ec1c9b94980b04d5916476b542": 1,
+    "86c3ba9fecd79343babd579cbdff088b4bacb2d53bfa044c80b7266a650dabd4": 1,
+    "e512035627d1a6d6ddc31585340ab9b1466b39374e3e997e20a05b98cd197a56": 1,
+    "1e5d8d51370704440820c4be1d316898566288d07dcc9ac94189483ade450202": 1,
+    "524f6ba459ba2f7dffa90cd9f5bc1eadd1b796aa209ff3d0adba2de108c378b5": 1,
+    "918ac2857a152301fd777470a5c384debd16d829c3f9ca9bd5a438a5acddc50c": 1,
+    "5aabde23247906ed0e0c1f993ac2cac323348b33044c3a37ddb8867804ba4eff": 1,
+    "a28e37db1bce63cadbab39671bf53e9be5a29db3b40db25cd17b8e23dddaf75a": 1,
+    "76998b0b76125b3e94a9274a2e20df3079503dba6cf7fa4dc9256f849cd00622": 1,
+    "b00f5832b983da56ce4a32e9087d8f45441742f191159033d2b7dd74016b2e4d": 1,
+    "fef647a3758f06ca16d28200827690725b2ce634eef6a236f492d27de514dc3a": 1,
+    "3c5116d3ab3973d090e24f7d5d35bb0312703db5abe57da2a1d66bca9b6a2f10": 1,
+    "f95cbd3acae470302ea2defce2729a7ddf4031091cfd2dc5641e1296f7c37ca4": 1,
+    "fd25a32594a79aec14e8b0958ad3f1f123b81494bbae1467a29515136e415a83": 1,
+    "463da3e6e7e56c0c8cc0356945593ca900b11f7d2834014f7a49888498b5c5d0": 1,
+    "2361ba96cfd52a5386bff30c43c81e069df567737aa46c15b9f078d0def8b952": 1,
+    "c9fefa13fc1f51b1c223592f2b31844d96511337cff3fb268f38e6038a648747": 1,
+    "d22ce410062e8ee9d90621438c2ce4458a3346e9c7c34c628e5c6f23a7c2447d": 1,
+    "f314b40a7d952ee2a62c240022fd09b827428759bc19106aa935c4a926f1de28": 1,
+    "b842dd38f970b20df705e94e2c0876fe2357423d79590ce3c8750f446676c7e5": 1,
+    "a083acf74bba5e4e580f6411c571d06dd6dda778fbf3dc95d1a8ad992e43c537": 1,
+    "37c64e961017fdc3cec4cce990e6c50ef3ebc57b0c80f09199359a20774ab20a": 1,
+    "fc074aeebe4db11d40ac3f57e3a619bb3e33e349b9b1e52c1ff605e6ceb2474d": 1,
+    "5e2e4c2e42c854b89f7d0c51dd5946c0922deecb53a7224745d2e54cfb5ffc6b": 1,
+    "bfce3ed8345075b303dc568de9a2a362c5c339cd714faaa9ae3f8050b6c1012c": 1,
+    "3989518699ec82d1c5c0df863fefea10dde57aee6e30e391b7efb279473e1ddc": 1,
+    "582bbf70c6e8ce2ac401643a9626b9b6418d90833de084096b4882958f6d21c4": 1,
+    "c61f0b5fdffd5e5d9680711cfb724902e16e779942c6c1482ba768c3cb6995ce": 1,
+    "a0c9c2015cece1f01e96cb02304ddc244c23a81ecc663fee56238f5d71a33565": 1,
+    "f59cd759ac8c35340a07ac34a2e8cd61ef48971e1139c8cffecec9daa5abc677": 1,
+    "fa49e5b878231bb8698529287e30274ab6a506841645edf4a9854640e7f75b24": 1,
+    "e42f3c7e0f6f68ddaac5b4c649a2f3dd2b142a6d687c524b8fbfbd1abccc752d": 2,
+    "77160a99dcf5fe6276cfbf7ced1b6c8e0d9fd9e21323f4e0ae181eb2248c579c": 1,
+    "1b75a57a82005f346cfd3ab2c9dbb405d2e3cb0cc67dcafd8183209488f3fbb9": 1,
+    "b4e53aa86ef51471e036de4e6f76ec5bc6ec8ca7547132929ccb17b561d6d73f": 1,
+    "2155937a0c2a7e58c78c1dfc183db5096ee771bbe7f4aa8fa164fea6c15bd894": 1,
+    "f5187fc360e163245be669d7948394e1e11fa7c881b1d0db1024753e2b01a3c3": 1,
+    "1bf3623950734f575b9b81e745bc06afaf331aebb44d8dfe4d592cea6055fe2e": 1,
+    "328e8bbc1dc152aeb954ce25303d1398fc478063b83ab3040ca71e8d97ca7c04": 1,
+    "943345fa3c31a386b004acf6e05e84c372e526878d71bae0d59453ad0e11b2a6": 1,
+    "3af75862bcea3b4709b6a27558db056bde1fdbf5efa3502d7bed780aa4078890": 1,
+    "94eb4957a1151ae2b8032c28dddfb6ec5e6e863f67e8a57009d89eaf60b1bdf4": 1,
+    "20c7d170302747acb498c674d1e48ba16ccb330f764b076e24be995f313a190f": 1,
+    "d25ec9dbc7809c55f10c35595b6831d283564975c05e021cdae6c5452b61e64a": 1,
+    "7242eb46e9b6426669a1f3f6fa227de98c2c0865f6545d3d4aafba5cf3241efa": 1,
+    "4a57fe711e3e5670a704f9f3794b6a0ac95c227c0cb002d7a8f684dde1b380ee": 1,
+    "e9104428e85394f39088bd6ff318d5a5c4b21427a0e5d1fe124c4303f70fe91c": 1,
+    "d5b469c75615de99587ea9cc29c4530960ee7b4b78de63433e10b822c6a17f6c": 1,
+    "6cfc0f47a90c6f106870f72721c171a75c1f4614185c3518f73aa5ae2df584e3": 1,
+    "c7205943f2007cfce959c0d7b67ab55707b11de3add9ca4bc10bf2323a04a128": 1,
+    "76cf175d31318a033c0bb017e0e6715464cf52dfa5b25ff218fa7c769d71a716": 1,
+    "9ad25d6471508a2efa56a19e16f7cdcf6d98b36255a487284b8c465e51626185": 1,
+    "aabb0ea873fe45a7b65e4fd60f466e124436487256c2e2fe7ff2c2c6dee6dd7b": 1,
+    "f047658a3cf21ec8148709bc1697ccf6a73bc3c2f8c7714f821e851fbff96812": 1,
+    "1e1c1539aaa3ebd6d20f67dbc8262a3936d9482918a3a2345a50d4bcf6fbc518": 1,
+    "ee469e297e054f2c5ff2b64e73e23dab979fce3a8816fc5242d56ddb2c427e69": 1,
+    "e6b48a918c21e33b039300eb42a75404709e94815dc7bae5d3d10c85a1f987c0": 1,
+    "1d310cba89b65184fb90940d3d99828ce67fcef28210683f97b3a3e7c7cec7d9": 1,
+    "8a2dee39eaf4e7936d6987669ac4cdf0662449f14a5f8b251fd6b64ac3fc5a7f": 1,
+    "caae0e5f85b8a0ef428b83cb9774f3b89f0b414c8a7f9bd705fb2a7ef19f0b34": 1,
+    "e2e1872a9845f9bd860f4160c5a82f710a674d8ed8e6e9a5625afb6639ec1ed4": 1,
+    "1ca92840126048a06c4fd7aadb61174701ce1fc0fc3eb29393bbe2f8722dba49": 1,
+    "58cf5ee506e9f40dbf359ecf7c3f5fe3c2a90aa3ae2047dc3214090225165e7a": 1,
+    "50e66cf6133214c1e9f117e66536bc85665468ac8fc56302a4941b0397876c83": 1,
+    "53f8f79511e3b93eaccb94265498cc9af5873d0e52974abaeb7d3be66183427c": 1,
+    "6d358cbe09364edb7fa19fd48821f12c954e086a556ab5ae58d60d57838c4e31": 1,
+    "50f4cab555edb7a200ef2a3ba3447847b0c2ae4b47ebfc848b8c765c1b3234ee": 1,
+    "b41991bb6c762e8b50e143d5050abb71c09b02825c622cd343bf70b3afcabddf": 1,
+    "624e01383dff9109ef3d316fc577861ced565d650282f1cbe5d1b7f833535857": 1,
+    "e7dea202f054ad05074ce73a2407eb1e8901c04cfc5b2c2e2574c9fe3aef752a": 1,
+    "d5fdb512a416fb0e3b93247316abbbec1dcb2f722cf2c168aefc6a5ff92372ae": 1,
+    "749295c4311d260dbd8349bc7272c63a6daf75639585376db5726a6219657da6": 1,
+    "b4b1152e4d1eab0ba0622ae3f1351362e8b798126fa7fc2a1e4b48cf24290e02": 1,
+    "8fb15f42993ce38bcf830d119edc146d5bed19c0a1d2da0e6ccf79a7f60f62f5": 1,
+    "99b5cae50151d8269ecba01e2c347c14c1eb1ab8951f255e09fdbe0f8df4b52b": 1,
+    "a960d6ed3c0f08095ab08bc94df10300eb01cde8e11fed8700224f05674e69bd": 1,
+    "3227ac276d4ff5fb60706b1b33126e6a2e77ca576642e4e79806cabacae5715a": 1,
+    "bb9cb8b6e5a9de5baf3ece46f6dae4e5e7fb467bbca3d836810b5a2069b988b5": 1,
+    "08bc708cc7bd1d17889d8d08606e57fc7597bdebf351782c8f34e82f48a0f3a8": 1,
+    "fa431876bffc469a28d48f801006014e72b1ae0d271fca1ec445711dc38d47c8": 1,
+    "e98cb66dd92c0fc316eb2cb4d74d20b4151b73b90ca35f5545a0eccad174c62e": 1
+  }
+}

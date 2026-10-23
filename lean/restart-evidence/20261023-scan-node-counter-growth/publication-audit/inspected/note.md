@@ -1,0 +1,4 @@
+This is source-only selected publication preparation under the accepted Root and independent scope gates. Complete sealed H37 bases, exact forward/inverse literal recipes, patches and every generic AST assertion are retained. Observed actual history/Audit data are bound from the accepted current records. Proof SHA stays runtime-only. The final verifier review and both saved modes remain runtime requirements.
+
+The three publication programs total 101 lines and 44 assertions. They retain explicit root/cwd=/ dual modes before proof/docs, the exact module-plus-Audit proof payload, sealed local publication, all old sealed paths indexed, filesystem/index/HEAD blob-mode equality, refs and a clean tree. The local publisher runs zero network commands. Root owns the separately authorized later push.
+No selected program was executed, imported or installed. No Git command, compiler, network operation or repository write occurred during preparation.

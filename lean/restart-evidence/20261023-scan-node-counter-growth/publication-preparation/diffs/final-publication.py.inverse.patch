@@ -1,0 +1,41 @@
+--- selected/final-publication.py
++++ basis/final-publication.py
+@@ -1,18 +1,18 @@
+ import hashlib,json,subprocess
+ from pathlib import Path
+-R=Path('/home/tritlo/Code/mcfta');H=R/'lean/restart-evidence/20261023-scan-node-counter-growth'
++R=Path('/home/tritlo/Code/mcfta');H=R/'lean/restart-evidence/20261023-pair-node-counter-growth'
+ def git(*a):return subprocess.check_output(['git',*a],cwd=R)
+ publication=json.loads((H/'publication-gate.json').read_text());assert publication['status']=='ROOT_ACCEPTED'
+ assert publication['publication_scope']=='LOCAL_ONLY' and publication['network_publication']=='AUTHORIZED_PENDING_ROOT_PUSH'
+ proof=publication['proof_commit'];assert len(proof)==40 and set(proof)<=set('0123456789abcdef')
+-assert (H/'starting-head.txt').read_text().strip()=='527a5cd981b6b406cf7078ac2fe96c288379afb7'
++assert (H/'starting-head.txt').read_text().strip()=='de085728ebe1e905ae339eaba8d26348126e5ada'
+ assert git('rev-parse','HEAD').decode().strip()==(H/'proof-commit.txt').read_text().strip()==proof
+ assert git('branch','--show-current').decode().strip()=='formalize'
+-assert git('rev-parse','codex/backup-scan-node-counter-growth-20261023-1812').decode().strip()==(H/'starting-head.txt').read_text().strip()
++assert git('rev-parse','codex/backup-pair-node-counter-growth-20261023-1656').decode().strip()==(H/'starting-head.txt').read_text().strip()
+ assert git('rev-parse','main').decode().strip()=='ed73f5997f1c07e2961d06e6e290d1de38319dad'
+ assert git('rev-parse','origin/main').decode().strip()=='794903b3fbad3becb8b28736fc33463760731fc7'
+ subprocess.run(['/usr/bin/python3',str(H/'verify-seal.py')],check=True)
+-files=['NEXT-PROMPT.md','HANDOFF.md','FINDINGS.md','lean/README.md','lean/SYSTEM.md','lean/API-COVERAGE.md','lean/COVERAGE.md','lean/notes-proof-status-20261017.md','lean/notes-current-system-claim.md','lean/notes-current-scan-node-counter-growth.md']
++files=['NEXT-PROMPT.md','HANDOFF.md','FINDINGS.md','lean/README.md','lean/SYSTEM.md','lean/API-COVERAGE.md','lean/COVERAGE.md','lean/notes-proof-status-20261017.md','lean/notes-current-system-claim.md','lean/notes-current-pair-node-counter-growth.md']
+ subprocess.run(['git','diff','--check','--',*files],cwd=R,check=True)
+ subprocess.run(['git','add','-f','--',*files,str(H.relative_to(R))],cwd=R,check=True)
+ selected=git('diff','--cached','--name-only').decode().splitlines()
+@@ -26,7 +26,7 @@
+   relative=str(p.relative_to(R))
+   assert relative in index_names,relative
+   sealed_paths+=1
+-subprocess.run(['git','commit','--quiet','-m',json.loads('"Preserve row cluster scan counter proof evidence"')],cwd=R,check=True)
++subprocess.run(['git','commit','--quiet','-m',json.loads('"Preserve pair control counter proof evidence"')],cwd=R,check=True)
+ head=git('rev-parse','HEAD').decode().strip()
+ assert not git('status','--porcelain')
+ head_entries={}
+@@ -43,5 +43,5 @@
+ assert index==head_entries
+ subprocess.run(['/usr/bin/python3',str(H/'verify-seal.py')],check=True)
+ report={'status':'LOCAL_PASS','checkpoint':head,'proof':(H/'proof-commit.txt').read_text().strip(),'work_status':'continuing_at_user_request','filesystem_index_head_equal':True,'tracked_blobs_and_modes':len(index),'all_sealed_paths_in_index':sealed_paths,'clean':not bool(git('status','--porcelain')),'publication':'AUTHORIZED_PENDING_ROOT_PUSH','network_commands_executed':0,'selected_proof':json.loads((H/'verification.json').read_text()),'preservation':json.loads((H/'preservation-final.json').read_text())}
+-Path('/tmp/mcfta-scan-node-counter-growth-local-publication.json').write_text(json.dumps(report,indent=2)+'\n')
++Path('/tmp/mcfta-pair-node-counter-growth-local-publication.json').write_text(json.dumps(report,indent=2)+'\n')
+ print(json.dumps({k:v for k,v in report.items() if k not in ['selected_proof','preservation']}))

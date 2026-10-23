@@ -1,0 +1,1 @@
+Two reviewer-only static checks were corrected. The actual update has38 lines, not39 as described in the task cue. A summary attempted len() on the numeric archived_components field. The corrected checks use actual bytes and actual field types. No prepared tool, source, document, proof or Root metadata job was changed or run.

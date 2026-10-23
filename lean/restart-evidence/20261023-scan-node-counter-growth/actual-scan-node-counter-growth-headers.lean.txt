@@ -1,0 +1,17 @@
+/-- Read the complete state in every actual scan outcome. -/
+def outcomeState (outcome : SourceCurrentOriginalRowClusterScan.Outcome width) :
+    SourceCurrentSameSymbolEdgeControl.State width :=
+
+/-- One scan step retains or increases its actual constructor node counter. -/
+theorem step_mono [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (control : SourceCurrentOriginalRowClusterScan.Control)
+    (state : SourceCurrentSameSymbolEdgeControl.State width) :
+    state.checked.native.machine.heap.nodes.next ≤
+      (outcomeState (SourceCurrentOriginalRowClusterScan.step control state)).checked.native.machine.heap.nodes.next := by
+
+/-- Every finite scan outcome retains or increases its input node counter. -/
+theorem execute_mono [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (control : SourceCurrentOriginalRowClusterScan.Control)
+    (state : SourceCurrentSameSymbolEdgeControl.State width) :
+    state.checked.native.machine.heap.nodes.next ≤
+      (outcomeState (SourceCurrentOriginalRowClusterScan.execute fuel control state)).checked.native.machine.heap.nodes.next := by

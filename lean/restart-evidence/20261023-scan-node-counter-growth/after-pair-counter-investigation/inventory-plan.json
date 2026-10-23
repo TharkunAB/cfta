@@ -1,0 +1,140 @@
+{
+  "status": "PROSPECTIVE_TYPE_AND_BODY_INVENTORY_ONLY_NOT_EXACT_DECLARATIONS",
+  "proposed_module": "SourceCurrentOriginalRowClusterScanNodeCounterGrowth",
+  "public_heads": [
+    {
+      "name": "outcomeState",
+      "kind": "def",
+      "input": "actual Scan.Outcome width",
+      "output": "the exact existing full Pair.State width",
+      "instances": [],
+      "cases": [
+        "yielded",
+        "done",
+        "failed",
+        "constraintError",
+        "blocked"
+      ],
+      "residual_control": "discard only the control field; retain exact state, checked native caches and pair memo"
+    },
+    {
+      "name": "step_mono",
+      "kind": "theorem",
+      "input": "arbitrary Scan.Control and Pair.State width",
+      "conclusion": "input node counter <= node counter in actual Scan.step outcomeState",
+      "instances": [
+        "DecidableEq Symbol",
+        "DecidableEq (EdgeKey Symbol Guard)"
+      ]
+    },
+    {
+      "name": "execute_mono",
+      "kind": "theorem",
+      "input": "arbitrary fuel, Scan.Control and Pair.State width",
+      "conclusion": "input node counter <= node counter in actual Scan.execute outcomeState",
+      "instances": [
+        "DecidableEq Symbol",
+        "DecidableEq (EdgeKey Symbol Guard)"
+      ]
+    }
+  ],
+  "private_helpers": [],
+  "new_predicates_structures_packets": [],
+  "expected_body_haves": [
+    {
+      "owner": "step_mono",
+      "proposed_name": "pairGrowth",
+      "type_role": "input counter <= counter in H37 public outcomeState of the SAME Pair.step inner state"
+    },
+    {
+      "owner": "execute_mono",
+      "proposed_name": "first",
+      "type_role": "input counter <= counter in this module accessor of SAME Scan.step control state"
+    }
+  ],
+  "expected_body_lets_obtains_lambdas_typed_shows": [],
+  "expected_step_case_scopes": [
+    {
+      "case": "cluster",
+      "fields": [
+        "candidates:List Edge",
+        "keptReversed:List Edge"
+      ],
+      "subcases": [
+        "nil",
+        "cons pivot:Edge tail:List Edge"
+      ],
+      "effect": "same full state"
+    },
+    {
+      "case": "scan",
+      "fields": [
+        "pivot:Edge",
+        "remaining:List Edge",
+        "incomparableReversed:List Edge",
+        "keptReversed:List Edge"
+      ],
+      "subcases": [
+        "nil",
+        "cons candidate:Edge tail:List Edge"
+      ],
+      "effect": "same full state"
+    },
+    {
+      "case": "comparison",
+      "fields": [
+        "pivot:Edge",
+        "candidate:Edge",
+        "tail:List Edge",
+        "incomparableReversed:List Edge",
+        "keptReversed:List Edge",
+        "inner:Pair.Control"
+      ],
+      "actual_equation": "Pair.step inner state = actual outcome",
+      "subcases": [
+        "yielded next:Pair.Control after:Pair.State width",
+        "done common:Edge after:Pair.State width",
+        "failed reason:Kernel.Failure after:Pair.State width",
+        "constraintError message:String after:Pair.State width",
+        "blocked reason:Pair.Blocked next:Pair.Control after:Pair.State width"
+      ],
+      "effect": "Scan retains exactly the actual after state in every branch; Pair.done becomes Scan.yielded"
+    }
+  ],
+  "expected_execute_induction": {
+    "target": "fuel",
+    "generalized": [
+      "control:Scan.Control",
+      "state:Pair.State width"
+    ],
+    "fixed": [
+      "width",
+      "two equality instances"
+    ],
+    "zero": "Scan.execute zero yields original full state",
+    "successor": "use first, split the SAME actual Scan.step outcome",
+    "actual_equation_subcases": 5,
+    "IH_name_proposal": "ih",
+    "only_IH_call_arguments": [
+      "actual yielded next control",
+      "actual yielded after state"
+    ],
+    "IH_branch": "yielded only",
+    "terminal_branches": [
+      "done values:List Edge after:Pair.State width",
+      "failed reason:Kernel.Failure after:Pair.State width",
+      "constraintError message:String after:Pair.State width",
+      "blocked reason:Pair.Blocked next:Scan.Control after:Pair.State width"
+    ],
+    "composition": "Nat.le_trans of actual first-step bound and predecessor-fuel IH"
+  },
+  "equation_families_proposed": {
+    "step_pair_outcome": 5,
+    "execute_scan_outcome": 5
+  },
+  "identity_by_cases_required": false,
+  "induction_in_step": false,
+  "mutual_recursion_or_termination_by": false,
+  "resume_API_present_or_proposed": false,
+  "additional_typed_local_binders": "Exact fragments and every inferred scoped binder must be enumerated in a later independent declaration gate; no new body is authorized here."
+}

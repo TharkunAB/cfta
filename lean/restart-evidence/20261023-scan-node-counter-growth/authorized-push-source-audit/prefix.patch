@@ -1,0 +1,19 @@
+--- /tmp/mcfta-pair-node-counter-growth-authorized-push-1.source.py
++++ /tmp/mcfta-scan-node-counter-growth-authorized-push.py
+@@ -1,5 +1,5 @@
+-exec(compile(open('/tmp/mcfta-pair-node-counter-growth-root-common.py').read(), '/tmp/mcfta-pair-node-counter-growth-root-common.py', 'exec'))
+-publication = load(Path('/tmp/mcfta-pair-node-counter-growth-local-publication.json'))
++exec(compile(open('/tmp/mcfta-scan-node-counter-growth-root-common.py').read(), '/tmp/mcfta-scan-node-counter-growth-root-common.py', 'exec'))
++publication = load(Path('/tmp/mcfta-scan-node-counter-growth-local-publication.json'))
+ assert publication['status'] == 'LOCAL_PASS' and publication['filesystem_index_head_equal']
+ assert publication['clean'] and not git('status', '--porcelain')
+ checkpoint = git('rev-parse', 'HEAD').strip()
+@@ -19,7 +19,7 @@
+ assert remote_head() == START
+ subprocess.run(command + ['push', 'origin', 'HEAD:refs/heads/formalize'], cwd=ROOT, check=True)
+ assert remote_head() == checkpoint
+-report_path = Path('/tmp/mcfta-pair-node-counter-growth-remote-publication.json')
++report_path = Path('/tmp/mcfta-scan-node-counter-growth-remote-publication.json')
+ assert not report_path.exists()
+ report = dict(status='PUSHED_AND_REMOTE_VERIFIED', branch='formalize',
+     destination='git@github.com:TharkunAB/cfta.git', previous=START,

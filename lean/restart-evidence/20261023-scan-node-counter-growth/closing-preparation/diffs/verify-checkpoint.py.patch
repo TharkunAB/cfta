@@ -1,0 +1,24 @@
+--- basis/verify-checkpoint.py
++++ selected/verify-checkpoint.py
+@@ -4,9 +4,9 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ ROOT = HERE.parents[2]
+-AUDIT_SHA = '18eebc67eff772ba1d8b6ce6f87caf8765b9abc83e5f4c4e50356ef0a7585665'
+-AUDIT_JOBS = int('3656')
+-AUDIT_DEPENDENCIES = int('75572')
++AUDIT_SHA = 'af9fe15604f945bff58c40f0dcb25eb28968537594769903b69950cad34bcbb8'
++AUDIT_JOBS = int('3657')
++AUDIT_DEPENDENCIES = int('75584')
+ for mode, label in [([], 'normal'), (['--live'], 'live')]:
+     result = subprocess.run(['/usr/bin/python3', str(HERE / 'verify-proofs.py'),
+         '--root', str(ROOT), *mode], cwd='/', capture_output=True, text=True)
+@@ -26,7 +26,7 @@
+ assert result.returncode == 0, result.stderr
+ preserved = json.loads(result.stdout)
+ (HERE / 'preservation-final.json').write_text(json.dumps(preserved, indent=2) + '\n')
+-assert preserved['status'] == 'PASS' and preserved['baseline_files'] == 122017
++assert preserved['status'] == 'PASS' and preserved['baseline_files'] == 124005
+ baseline = json.loads((HERE / 'starting-files.json').read_text())
+ selected = json.loads((HERE / 'selected-sources.json').read_text())
+ new_modules = sum(name not in baseline for name in selected)

@@ -1,0 +1,454 @@
+{
+  "status": "ALL73_BASIS_ASSERTIONS_REQUIRE_RETENTION_THROUGH_ONLY_EXPLICIT_ADAPTERS",
+  "basis_assertion_count": 73,
+  "assertions": [
+    {
+      "file": "prepare-full.py",
+      "line": 9,
+      "complete_expression": "all((len(value) == 64 and set(value) <= set('0123456789abcdef') for value in [expected_sha, expected_context_sha, expected_contracts_sha]))",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 14,
+      "complete_expression": "hashlib.sha256(source).hexdigest() == expected_sha",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 15,
+      "complete_expression": "len(source.splitlines()) == int(expected_lines) and 1 <= int(expected_lines) <= 160",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 18,
+      "complete_expression": "receipt['exit_code'] == 0 and receipt['observed_at']",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 19,
+      "complete_expression": "receipt['sha256'] == expected_sha",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 20,
+      "complete_expression": "(receipt_path.parent / receipt['source']).resolve() == source_path.resolve()",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 21,
+      "complete_expression": "Path(receipt['command'][-1]).resolve() == source_path.resolve()",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 22,
+      "complete_expression": "'-Dlinter.all=true' in receipt['command']",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 23,
+      "complete_expression": "(receipt_path.parent / receipt['log']).resolve() == (HERE / (stem + '.log')).resolve()",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 24,
+      "complete_expression": "(HERE / (stem + '.log')).read_bytes() == b''",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 27,
+      "complete_expression": "hashlib.sha256(contracts_raw).hexdigest() == expected_contracts_sha",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 30,
+      "complete_expression": "hashlib.sha256(layout_raw).hexdigest() == 'bafb3250634ad76bb14933097e4eae22e2c7ce29690ab3bbc2018a84b53d6fb5'",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 32,
+      "complete_expression": "len(contracts) == int(expected_contracts_count) == 7",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 35,
+      "complete_expression": "filename == record['file'] and hashlib.sha256(fragment).hexdigest() == expected_digest == record['sha256']",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 36,
+      "complete_expression": "len(fragment.splitlines()) == record['lines']",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 38,
+      "complete_expression": "gate['status'] == 'ACCEPTED_EXACT_DECLARATIONS_BEFORE_BODY'",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 39,
+      "complete_expression": "gate['module'] == name and gate['public_heads'] == [short for short, _kind in specs] and (gate['public_kinds'] == [list(spec) for spec in specs])",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 40,
+      "complete_expression": "gate['contracts_sha256'] == expected_contracts_sha",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 41,
+      "complete_expression": "gate['insertion_map_sha256'] == hashlib.sha256(layout_raw).hexdigest()",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 42,
+      "complete_expression": "gate['whole_source_hard_stop'] == 160 and gate['default_declaration_limits'] and gate['all_linters']",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 43,
+      "complete_expression": "gate['root_all_public_and_private_header_types_read'] and gate['root_all_schema_layout_owner_attachment_and_body_inventory_metadata_read']",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 44,
+      "complete_expression": "gate['root_all_28_scoped_introduced_types_read'] and gate['root_all_14_specialized_equation_types_read']",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 45,
+      "complete_expression": "gate['root_all_five_accessor_equations_read']",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 46,
+      "complete_expression": "gate['root_complete_generalized_fuel_IH_three_lines_read'] and gate['restricted_induction_call'] == 'ih next after'",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 47,
+      "complete_expression": "gate['external_checked_step_mono_is_not_local_recursion']",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 48,
+      "complete_expression": "gate['root_all_11_relevant_live_API_cuts_241_lines_read'] and gate['root_all_seven_public_import_routes_checked']",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 49,
+      "complete_expression": "gate['body_haves'] == 2 and gate['body_lets'] == gate['body_obtains'] == 0 and (gate['helpers'] == 0)",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 50,
+      "complete_expression": "gate['induction'] and gate['recursive_calls'] == gate['termination_by_count'] == 0",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 51,
+      "complete_expression": "gate['root_whole_context_lines_read'] == 9 and gate['root_whole_public_header_lines_read'] == 15",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 52,
+      "complete_expression": "gate['root_whole_private_header_lines_read'] == 0 and gate['root_whole_local_compiled_fragment_lines_read'] == 5",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 53,
+      "complete_expression": "gate['private_helpers'] == []",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 54,
+      "complete_expression": "re.fullmatch('[0-9a-f]{64}', gate['independent_review_sha256'])",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 56,
+      "complete_expression": "source.startswith(context)",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 57,
+      "complete_expression": "hashlib.sha256(context).hexdigest() == expected_context_sha",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 58,
+      "complete_expression": "len(context.splitlines()) == int(expected_context_lines) == 9",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 63,
+      "complete_expression": "source.count(header) == 1 and source.index(header) >= len(context)",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 65,
+      "complete_expression": "positions == sorted(positions)",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 66,
+      "complete_expression": "source.rstrip().endswith(('end MicroCFTA.' + name).encode())",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 67,
+      "complete_expression": "b'set_option maxRecDepth' not in source and b'set_option maxHeartbeats' not in source",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 74,
+      "complete_expression": "len(tail.splitlines()) == 11 + 3 * len(specs) == 20",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 75,
+      "complete_expression": "tail.encode() == (HERE / 'full-preparation/diagnostic-tail.lean.txt').read_bytes()",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "prepare-full.py",
+      "line": 79,
+      "complete_expression": "not snapshot.exists() and (not printer.exists()) and (not actual_headers.exists())",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "check-full-public.py",
+      "line": 13,
+      "complete_expression": "re.fullmatch('[0-9a-f]{64}', args.expected_source_sha256)",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "check-full-public.py",
+      "line": 16,
+      "complete_expression": "hashlib.sha256(source_raw).hexdigest() == args.expected_source_sha256",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "check-full-public.py",
+      "line": 17,
+      "complete_expression": "1 <= len(source.splitlines()) <= int('160')",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "check-full-public.py",
+      "line": 21,
+      "complete_expression": "public == [(kind, short) for short, kind in specs]",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "check-full-public.py",
+      "line": 27,
+      "complete_expression": "source.rstrip().endswith('end MicroCFTA.SourceCurrentSameSymbolEdgeControlNodeCounterGrowth')",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "check-full-public.py",
+      "line": 28,
+      "complete_expression": "not re.search('(?m)^\\\\s*set_option\\\\s+(?:maxRecDepth|maxHeartbeats)\\\\b', source)",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "check-full-public.py",
+      "line": 29,
+      "complete_expression": "printer_raw == source_raw + tail.encode('utf-8')",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "check-full-public.py",
+      "line": 31,
+      "complete_expression": "printer.splitlines().count('set_option ' + option) == 1",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "check-full-public.py",
+      "line": 34,
+      "complete_expression": "printer.splitlines().count(directive + namespace + short) == 1",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "check-full-public.py",
+      "line": 35,
+      "complete_expression": "not re.search('sorryAx|\\\\b(?:warning|error)(?:\\\\([^)]*\\\\))?:|failed to pretty print|pp\\\\.rawOnError|maximum recursion depth|maximum number of heartbeats|\u22ef|\u2026|\\\\.\\\\.\\\\.', log)",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "check-full-public.py",
+      "line": 37,
+      "complete_expression": "receipt['exit_code'] == 0 and receipt['observed_at']",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "check-full-public.py",
+      "line": 38,
+      "complete_expression": "(args.receipt.parent / receipt['source']).resolve() == args.printer.resolve()",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "check-full-public.py",
+      "line": 39,
+      "complete_expression": "(args.receipt.parent / receipt['log']).resolve() == args.raw.resolve()",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "check-full-public.py",
+      "line": 40,
+      "complete_expression": "receipt['sha256'] == hashlib.sha256(printer_raw).hexdigest()",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "check-full-public.py",
+      "line": 41,
+      "complete_expression": "Path(receipt['command'][-1]).resolve() == args.printer.resolve()",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "check-full-public.py",
+      "line": 42,
+      "complete_expression": "'-Dlinter.all=true' in receipt['command']",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "check-full-public.py",
+      "line": 47,
+      "complete_expression": "declaration",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "check-full-public.py",
+      "line": 49,
+      "complete_expression": "private == json.loads('[]')",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "check-full-public.py",
+      "line": 54,
+      "complete_expression": "len(found) == 1",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "check-full-public.py",
+      "line": 56,
+      "complete_expression": "starts == sorted(starts, key=lambda match: match.start()) and (not log[:starts[0].start()].strip())",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "check-full-public.py",
+      "line": 65,
+      "complete_expression": "len(delimiters) == 1",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "check-full-public.py",
+      "line": 68,
+      "complete_expression": "len(reports) == 1",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "check-full-public.py",
+      "line": 78,
+      "complete_expression": "len(candidates) == 1",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "check-full-public.py",
+      "line": 81,
+      "complete_expression": "normalize(checked) == normalize(declared)",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "check-full-public.py",
+      "line": 84,
+      "complete_expression": "spelling not in checked + declared",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "check-full-public.py",
+      "line": 86,
+      "complete_expression": "not re.search(re.escape(namespace + helper) + \"(?![\\\\w'])\", checked + declared)",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "check-full-public.py",
+      "line": 87,
+      "complete_expression": "body.startswith('fun ') and len(body) > 50",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "check-full-public.py",
+      "line": 91,
+      "complete_expression": "report",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "check-full-public.py",
+      "line": 94,
+      "complete_expression": "not axiom_text.strip()",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "check-full-public.py",
+      "line": 96,
+      "complete_expression": "axioms <= allowed",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    },
+    {
+      "file": "check-full-public.py",
+      "line": 120,
+      "complete_expression": "not readback.exists() and all((not (args.output_dir / filename).exists() for filename in artifacts))",
+      "planned_treatment": "Exact known literal/gate-schema adapter only; retain all other AST and every conjunct meaning. No selected source exists in this plan."
+    }
+  ],
+  "four_ASCII_normalization": "re.sub(r'[ \\t\\r\\n]+', ' ', text).strip(' \\t\\r\\n')",
+  "raw_identity_policy": "Retain actual checked/printed raw Boolean and both raw hashes separately from lexical equality.",
+  "allowed_axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "empty_axiom_set_allowed": true,
+  "no_BODY_manual_review_claim": true,
+  "external_Root_gates": "Cgroup caps/usage, active-archived installation identity, singleton FULL selection and complete failure/history retention remain Root-owned. No process runner is added or weakened."
+}

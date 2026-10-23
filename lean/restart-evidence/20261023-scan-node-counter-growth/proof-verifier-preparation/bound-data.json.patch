@@ -1,0 +1,708 @@
+--- basis/bound-data.json
++++ bound-data.json
+@@ -1,17 +1,17 @@
+ {
+-  "schema": "H37_ONE_PUBLIC_FULL_STATE_DEF_TWO_THEOREMS_NO_HELPERS_RESTRICTED_FUEL_IH_SAVED_PROOF_EVIDENCE",
+-  "scope": "Actual pair step/execute node-counter lower bounds on the same full outcomeState.checked.native, all five tags and arbitrary warm states. No Scan, H23, source order or upper resource lift.",
++  "schema": "H38_ONE_PUBLIC_FULL_SCAN_STATE_DEF_TWO_THEOREMS_NO_HELPERS_RESTRICTED_FUEL_IH_SAVED_PROOF_EVIDENCE",
++  "scope": "Actual Scan step/execute node-counter lower bounds on the same full Pair outcomeState.checked.native, all five tags and arbitrary warm states. H23 observed-chain composition, fixed-source order and upper/global resources remain separate.",
+   "modules": [
+     {
+-      "key": "pair_node_counter_growth",
+-      "name": "SourceCurrentSameSymbolEdgeControlNodeCounterGrowth",
+-      "source_path": "lean/MicroCFTA/SourceCurrentSameSymbolEdgeControlNodeCounterGrowth.lean",
+-      "snapshot": "SourceCurrentSameSymbolEdgeControlNodeCounterGrowth.lean",
+-      "source_sha256": "6cfaf5e340d26b8c838f51d93fb3ae0e03b098510ca41b5021ada4e96b72c2e8",
+-      "source_lines": 96,
+-      "source_cap": 160,
+-      "strict": "root-pair-node-counter-growth-strict-1",
+-      "full": "root-pair-node-counter-growth-full-1",
++      "key": "scan_node_counter_growth",
++      "name": "SourceCurrentOriginalRowClusterScanNodeCounterGrowth",
++      "source_path": "lean/MicroCFTA/SourceCurrentOriginalRowClusterScanNodeCounterGrowth.lean",
++      "snapshot": "SourceCurrentOriginalRowClusterScanNodeCounterGrowth.lean",
++      "source_sha256": "7db9cd645899e31a3f04149e0ea8bd27f8e5c55c336aab872f8c286c04822cb7",
++      "source_lines": 80,
++      "source_cap": 140,
++      "strict": "root-scan-node-counter-growth-strict-1",
++      "full": "root-scan-node-counter-growth-full-1",
+       "specs": [
+         [
+           "outcomeState",
+@@ -26,48 +26,48 @@
+           "theorem"
+         ]
+       ],
+-      "prefix": "pair-node-counter-growth",
++      "prefix": "scan-node-counter-growth",
+       "private_helpers": [],
+       "selected_gate": {
+         "path": "selected-source-gate.json",
+-        "bytes": 912,
+-        "sha256": "ea93ee430b305acbbe0a517746f36d4b48645be9eed7363d4257e8fab4fb7b4b"
++        "bytes": 913,
++        "sha256": "8c64158aa3fafc45c6ece46982e9fcbd592f3826d7e4971f788187e4dbe20d2b"
+       },
+       "declaration_gate": {
+         "path": "root-declaration-gate.json",
+-        "bytes": 1993,
+-        "sha256": "afc6120ee7ef3d48c3ae84413e64bcaf8b10f3fe028936dda54701568303be3a"
++        "bytes": 1896,
++        "sha256": "184650d45a52c8640eacbf0aec53bd58e8b8455ff7af6f0c557246037d0dec3d"
+       },
+       "body_gate": {
+         "path": "root-body-gate.json",
+-        "bytes": 871,
+-        "sha256": "44a391510133df026107d9dfbf3bc5288c8c04bca6a5bfa446d2a792e96fce41"
++        "bytes": 962,
++        "sha256": "f681713b96b773b5460ec7f5257b814eb776572a9ab26dba6c1565b2e119c578"
+       },
+       "body_source": "root-body-v1.lean",
+       "body_review": {
+         "path": "body-audit/review.json",
+-        "bytes": 2878,
+-        "sha256": "d2958a1a4474423c019c2095d973adf8fe75efdaab4ca4c712ace74d14f31a29"
++        "bytes": 1733,
++        "sha256": "836ffcd4c8dba5009bec35b276f5db2180ece7e8a381bb14bdd4118cf57384fa"
+       },
+       "manifest": {
+-        "path": "declaration-plan/contracts.json",
+-        "bytes": 678,
+-        "sha256": "52775c2e982913ea7f57bfc08ac0f11d3c1715454e14d26a4d4c07c0bbf854b7"
++        "path": "declarations/contracts.json",
++        "bytes": 579,
++        "sha256": "762d76caab35c4d579be7f26c047338c593c0a4fb3b964195b8823fab41508bb"
+       },
+       "schema": {
+-        "path": "declaration-plan/declaration-schema.json",
+-        "bytes": 2396,
+-        "sha256": "162b60a85de84bb90610af073d575cc9fbb23876e17fbeab70537d393dd72519"
++        "path": "declarations/declaration-schema.json",
++        "bytes": 2451,
++        "sha256": "0bc775c5f443dbdd9305bb7fa7683a3a51b4070ac2d7103fc396cadbcfdc3964"
+       },
+       "layout": {
+-        "path": "declaration-plan/insertion-map.json",
+-        "bytes": 5459,
+-        "sha256": "bafb3250634ad76bb14933097e4eae22e2c7ce29690ab3bbc2018a84b53d6fb5"
++        "path": "declarations/insertion-map.json",
++        "bytes": 5219,
++        "sha256": "7dba9f5bed23ba82145cd612fa979e65f757702e354d352380942cc1809c012f"
+       },
+       "declaration_layout": {
+-        "path": "declaration-plan/declaration-layout.json",
+-        "bytes": 911,
+-        "sha256": "742388507ae1838f340911b589832e1a61ab62da740ddf346a47abc271bd33a2"
++        "path": "declarations/declaration-layout.json",
++        "bytes": 876,
++        "sha256": "7852cf448effa3a162b9aa202239780186c02fe441ffbfbddf2e4e9a2d792016"
+       },
+       "declaration_layout_values": {
+         "status": "EXACT_DECLARATIONS_ONLY_LAYOUT",
+@@ -81,8 +81,7 @@
+         "local_fragments": {
+           "outcomeState": [],
+           "step_mono": [
+-            "local-reversed.lean.txt",
+-            "local-nativeGrowth.lean.txt"
++            "local-pairGrowth.lean.txt"
+           ],
+           "execute_mono": [
+             "local-first.lean.txt"
+@@ -97,49 +96,49 @@
+         "generated_IH": "induction-contract.json",
+         "default_declaration_limits": true,
+         "all_linters": true,
+-        "whole_source_hard_stop": 160,
+-        "declarations_owner": "Arity",
++        "whole_source_hard_stop": 140,
++        "declarations_owner": "Guard",
+         "future_body_owner": "Root"
+       },
+       "root_full": {
+         "path": "root-full-review.json",
+-        "bytes": 2323,
+-        "sha256": "270ebf47c6a84d7eaae0ba01bbdff606f40eda852b1d406156ff69323cbb29e0"
++        "bytes": 2327,
++        "sha256": "7eef6d5d73efc7f783cdf4aee752258d1821f419b7a00e76b8a958095644b884"
+       },
+       "type_review": {
+         "path": "public-type-audit/review.json",
+-        "bytes": 7842,
+-        "sha256": "79e70ce91c2bb25c3b72c5e1b4c07f087d80f0dda362b20e4e6c87afeb956115"
++        "bytes": 7877,
++        "sha256": "d4aaa4503e20af5f008b171352ae8334035c9fa745433702cacacd3686887bd8"
+       },
+       "readback": {
+-        "path": "full-readback/pair-node-counter-growth-full-readback.json",
+-        "bytes": 7165,
+-        "sha256": "976d9461f2767b1cc13bfb741f5aab78fe0bbd9d157d3844fdb200caf896b52d"
++        "path": "full-readback/scan-node-counter-growth-full-readback.json",
++        "bytes": 7169,
++        "sha256": "84aa85524516d933823b3aa9c3d402119b0c7bd8c433d47e22cc0f6661b7b0f6"
+       },
+       "tool_gate": {
+         "path": "root-full-tool-gate.json",
+-        "bytes": 1320,
+-        "sha256": "e320433e4bcd46447ce94e7efcb37a975c31d795b7cf1e8f7a831978d250ed99"
++        "bytes": 1321,
++        "sha256": "3073ab5d87787e70ae78d4a048f3ce5798f57c5bc9ad27a9885c23a9f5f900f6"
+       },
+       "reader_active": {
+         "path": "check-full-public.py",
+-        "bytes": 8524,
+-        "sha256": "dea6d6c6cf771ce445db8f5b24b5016dc180ae1428053d25e3ad72477c8c7bba"
++        "bytes": 8526,
++        "sha256": "f667c71186f6ec05b041ef101bae931c5d21ff531c210adc90d141b668759821"
+       },
+       "reader_archived": {
+         "path": "full-preparation/selected/check-full-public.py",
+-        "bytes": 8524,
+-        "sha256": "dea6d6c6cf771ce445db8f5b24b5016dc180ae1428053d25e3ad72477c8c7bba"
++        "bytes": 8526,
++        "sha256": "f667c71186f6ec05b041ef101bae931c5d21ff531c210adc90d141b668759821"
+       },
+       "materializer_active": {
+         "path": "prepare-full.py",
+-        "bytes": 6290,
+-        "sha256": "18f7cecb70556dba24e0892b40fdce985a0193db1079f03e613f914a4e4537d9"
++        "bytes": 6260,
++        "sha256": "6a70de83bdc55b8c85ff0c72460f48cead4f262146ff23b63e34c0be9f36a128"
+       },
+       "materializer_archived": {
+         "path": "full-preparation/selected/prepare-full.py",
+-        "bytes": 6290,
+-        "sha256": "18f7cecb70556dba24e0892b40fdce985a0193db1079f03e613f914a4e4537d9"
++        "bytes": 6260,
++        "sha256": "6a70de83bdc55b8c85ff0c72460f48cead4f262146ff23b63e34c0be9f36a128"
+       },
+       "headers": {
+         "outcomeState": "public-outcomeState.lean.txt",
+@@ -158,8 +157,8 @@
+           "role": "context",
+           "owner": "module",
+           "lines": 9,
+-          "sha256": "e476735442f75080a96217d6dd55a16e5b3b5e84727b0045de5b75fb5dc2c5bb",
+-          "path": "declaration-plan/context.lean.txt"
++          "sha256": "541979721b8d65e30cbc80d4f45d59b8ab6395a61b1bb2a48df065e4a1f3d982",
++          "path": "declarations/context.lean.txt"
+         },
+         {
+           "order": 2,
+@@ -167,10 +166,10 @@
+           "role": "public-header",
+           "owner": "outcomeState",
+           "lines": 3,
+-          "sha256": "acbbe614baf8b70dc8fe87f6f4345b8fccadcc3ec2c726e4e336e157c15ac4d2",
++          "sha256": "ead0a5e56d5a06363beea7772d50f96342438d743977eeb8e9b9d62ae0ac25f0",
+           "future_body_attachment": " :=\n",
+           "remove_only_final_LF_before_attachment": true,
+-          "path": "declaration-plan/public-outcomeState.lean.txt"
++          "path": "declarations/public-outcomeState.lean.txt"
+         },
+         {
+           "order": 3,
+@@ -178,55 +177,45 @@
+           "role": "public-header",
+           "owner": "step_mono",
+           "lines": 6,
+-          "sha256": "b3377dab512fb9e4501aa67686b6e03a25a58de7f5507722ffda3fffb8499dc1",
++          "sha256": "6833d1905b1f9acbd4e5ef9d0f5bbe87ddf102405da8b9408a3fd2351b59933c",
+           "future_body_attachment": " := by\n",
+           "remove_only_final_LF_before_attachment": true,
+-          "path": "declaration-plan/public-step.lean.txt"
++          "path": "declarations/public-step.lean.txt"
+         },
+         {
+           "order": 4,
+-          "file": "local-reversed.lean.txt",
+-          "role": "local-by-cases",
+-          "owner": "step_mono",
+-          "lines": 1,
+-          "sha256": "d216e08351b79c0a3d872d3af75cee3ce34a41fdb1ecd9d81e4f1c8cb68d6d72",
+-          "activation": "Control.order case; exact branch condition, no body attachment",
+-          "path": "declaration-plan/local-reversed.lean.txt"
+-        },
+-        {
+-          "order": 5,
+-          "file": "local-nativeGrowth.lean.txt",
++          "file": "local-pairGrowth.lean.txt",
+           "role": "local-have-header",
+           "owner": "step_mono",
+-          "lines": 2,
+-          "sha256": "ff90ccd18e004605b7d0eed638c60c80436ccb9e55dc14c86eabc1bf942fdcd4",
++          "lines": 3,
++          "sha256": "fd1dd764e5f3643df5fd4d1fe74a6b730bd28255a72383f90dc5a4bb65be7d73",
+           "future_body_attachment": " := by\n",
+           "remove_only_final_LF_before_attachment": true,
+-          "activation": "Control.native case, before splitting the actual checked step",
+-          "path": "declaration-plan/local-nativeGrowth.lean.txt"
+-        },
+-        {
+-          "order": 6,
++          "activation": "Control.comparison case, before splitting the SAME actual Pair.step outcome",
++          "path": "declarations/local-pairGrowth.lean.txt"
++        },
++        {
++          "order": 5,
+           "file": "public-execute.lean.txt",
+           "role": "public-header",
+           "owner": "execute_mono",
+           "lines": 6,
+-          "sha256": "068665049753a1a017a0b8ce393ae51a2e668578557ade03dd12db19278869c9",
++          "sha256": "beb77f94c31ec775643304e5b27efd9dc71ae678df5d696e881c4f9fd5df5c14",
+           "future_body_attachment": " := by\n",
+           "remove_only_final_LF_before_attachment": true,
+-          "path": "declaration-plan/public-execute.lean.txt"
+-        },
+-        {
+-          "order": 7,
++          "path": "declarations/public-execute.lean.txt"
++        },
++        {
++          "order": 6,
+           "file": "local-first.lean.txt",
+           "role": "local-have-header",
+           "owner": "execute_mono",
+           "lines": 2,
+-          "sha256": "6de5e4ead81f7f37e406d291b917939eaebd2f0f4a3caa345d7845f79106017a",
++          "sha256": "3cc81918a2797cf2d53714b37d3fdf6337a9224e5e90a325ba264111c3cd8bf0",
+           "future_body_attachment": " := by\n",
+           "remove_only_final_LF_before_attachment": true,
+-          "activation": "successor fuel case, before splitting the actual pair step",
+-          "path": "declaration-plan/local-first.lean.txt"
++          "activation": "successor fuel case, before splitting the SAME actual Scan.step outcome",
++          "path": "declarations/local-first.lean.txt"
+         }
+       ],
+       "bodies": {
+@@ -242,43 +231,40 @@
+           ],
+           "proof_dependencies": [],
+           "case_equations": [],
+-          "accessor_uses": 0
++          "accessor_uses": 0,
++          "qualified_accessor_uses": 0,
++          "own_accessor_uses": 0
+         },
+         "step_mono": {
+           "have_names": [
+-            "nativeGrowth"
++            "pairGrowth"
+           ],
+           "let_names": [],
+           "obtain_groups": [],
+-          "by_cases_names": [
+-            "reversed"
+-          ],
++          "by_cases_names": [],
+           "intro_groups": [],
+           "lambda_groups": [],
+           "case_pattern_groups": [
+-            "call request pending",
+-            "demand handle pending",
+-            "absent",
+-            "evaluate request",
+-            "busy",
+-            "ready value",
+-            "order handle request pending",
+-            "native body pending",
++            "cluster candidates keptReversed",
++            "nil",
++            "cons pivot tail",
++            "scan pivot remaining incomparableReversed keptReversed",
++            "nil",
++            "cons candidate tail",
++            "comparison pivot candidate tail incomparableReversed keptReversed inner",
+             "yielded next after",
+-            "done value after",
+-            "failed failure after",
++            "done common after",
++            "failed reason after",
+             "constraintError message after",
+-            "blocked reason next after",
+-            "ret value pending",
+-            "nil",
+-            "cons handle pending"
++            "blocked reason next after"
+           ],
+           "proof_dependencies": [],
+           "case_equations": [
+-            "observed",
+             "observed"
+           ],
+-          "accessor_uses": 11
++          "accessor_uses": 11,
++          "qualified_accessor_uses": 6,
++          "own_accessor_uses": 5
+         },
+         "execute_mono": {
+           "have_names": [
+@@ -293,8 +279,8 @@
+             "zero",
+             "succ fuel ih",
+             "yielded next after",
+-            "done value after",
+-            "failed failure after",
++            "done values after",
++            "failed reason after",
+             "constraintError message after",
+             "blocked reason next after"
+           ],
+@@ -304,40 +290,42 @@
+           "case_equations": [
+             "observed"
+           ],
+-          "accessor_uses": 6
++          "accessor_uses": 6,
++          "qualified_accessor_uses": 0,
++          "own_accessor_uses": 6
+         }
+       },
+       "head_metrics": {
+         "outcomeState": {
+-          "type_bytes": 140,
+-          "type_characters": 136,
++          "type_bytes": 141,
++          "type_characters": 137,
+           "type_logical_lines": 2,
+           "type_line_feeds": 1,
+           "type_final_newline": false,
+-          "type_sha256": "b67f5ae14be2d62553765cc37cc482ed6d2b933ed4d2eb4de7e64f50e592da33",
+-          "printed_type_bytes": 144,
+-          "printed_type_sha256": "a0c7e9ecb1497cac2ce331760ed204ae93f528b763d0405104a9ac00556474a7",
++          "type_sha256": "07bda9847d6e6ae0e9f75d916aed0fea6213d546fce6b175b29138c6220ed05e",
++          "printed_type_bytes": 145,
++          "printed_type_sha256": "61f6f2dc08c95fef087bd421fd3c3035e355253d4daf167fed07e524736dac65",
+           "raw_type_byte_identity": false,
+-          "canonical_type_sha256": "88d51fcac12f7bfa4c0f8174d5dc968310afa98a25536bdd67d0cd194f2b8b52",
+-          "body_bytes": 360,
+-          "body_characters": 360,
+-          "body_sha256": "deb57d054b8c7e88a699f2fe05d5fb4daa6b7160bb49be827e9c4ca519922680",
++          "canonical_type_sha256": "cc5d7f4f13c1931ea39c68f546841675279f2883572dd362fec0dfbdd2905fa4",
++          "body_bytes": 362,
++          "body_characters": 362,
++          "body_sha256": "e02325b198e2b6bf58aa147dcb03ebe5efb46bd19308b149b0a28d334782b457",
+           "actual_axioms": []
+         },
+         "step_mono": {
+-          "type_bytes": 2532,
+-          "type_characters": 2530,
++          "type_bytes": 2535,
++          "type_characters": 2533,
+           "type_logical_lines": 35,
+           "type_line_feeds": 34,
+           "type_final_newline": false,
+-          "type_sha256": "4fe90636f8357a287f121de75f615ada7db1bd10bba671aa527532f4180c33bb",
+-          "printed_type_bytes": 2532,
+-          "printed_type_sha256": "4fe90636f8357a287f121de75f615ada7db1bd10bba671aa527532f4180c33bb",
++          "type_sha256": "69ac91638b3215e8fdad0d04b0cafc6f135436d1284005c6f0da074e9e6c940d",
++          "printed_type_bytes": 2535,
++          "printed_type_sha256": "69ac91638b3215e8fdad0d04b0cafc6f135436d1284005c6f0da074e9e6c940d",
+           "raw_type_byte_identity": true,
+-          "canonical_type_sha256": "77a8f6b55939489ee43ee72b4f3b3efa28559ce3bee77818f2913b5ee9103db6",
+-          "body_bytes": 767652,
+-          "body_characters": 767626,
+-          "body_sha256": "a3c6e1570eb1690eac54f4048ee1edb9a1771ceaab1f22845b9423fe88475493",
++          "canonical_type_sha256": "757e3f9c4d860767f54c4997f494f807c767afbac61acf34351da79d26c952ef",
++          "body_bytes": 374699,
++          "body_characters": 374681,
++          "body_sha256": "6782eddd48f52aa347798365bcfa17e21af03573d217461c767ac20dd9bc29d3",
+           "actual_axioms": [
+             "Classical.choice",
+             "Quot.sound",
+@@ -345,19 +333,19 @@
+           ]
+         },
+         "execute_mono": {
+-          "type_bytes": 2553,
+-          "type_characters": 2551,
++          "type_bytes": 2556,
++          "type_characters": 2554,
+           "type_logical_lines": 35,
+           "type_line_feeds": 34,
+           "type_final_newline": false,
+-          "type_sha256": "19bf8eee199dd22f7d02a9e91996111185fc44b0fee0a1772bf37590452366bd",
+-          "printed_type_bytes": 2553,
+-          "printed_type_sha256": "19bf8eee199dd22f7d02a9e91996111185fc44b0fee0a1772bf37590452366bd",
+-          "raw_type_byte_identity": true,
+-          "canonical_type_sha256": "ec82cc425e3e27a8c49e805236995fd0a110fce8136ba11e2a49947e3e9101dc",
+-          "body_bytes": 268784,
+-          "body_characters": 268770,
+-          "body_sha256": "3264c0bf4a161bacd8cb999dc5b8613326beef1ae86a5615217c66b8e23de7ce",
++          "type_sha256": "ec95ff3c3e060b0cf359123b7e08804b015764efe445a3dba5e0fe5616c5e750",
++          "printed_type_bytes": 2576,
++          "printed_type_sha256": "c256a98bcf6dbbb48d0b129af79aee10f50f6144e6bbbdc7837b8b88c493e6b2",
++          "raw_type_byte_identity": false,
++          "canonical_type_sha256": "8919da900d227e61b7421816b9597eb7ff48485a7dedef0b9e872403c3876045",
++          "body_bytes": 269584,
++          "body_characters": 269570,
++          "body_sha256": "5104a115ec87b5f979ae4bc12564e0935ffeb20ed5416b939730bf63995e577e",
+           "actual_axioms": [
+             "Classical.choice",
+             "Quot.sound",
+@@ -367,45 +355,45 @@
+       },
+       "review_only": [
+         {
+-          "path": "declaration-plan/introduced-types.json",
+-          "bytes": 11973,
+-          "sha256": "439344f2b608f07df39ae1a849f056fa5288827e528c82297bbe757fbec2f6ee"
+-        },
+-        {
+-          "path": "declaration-plan/body-inventories.json",
+-          "bytes": 3207,
+-          "sha256": "c8d1e099555229b702ea78a727d3cb9fc5c27879b6ec8cdfdbdeba244855221b"
+-        },
+-        {
+-          "path": "declaration-plan/case-equations.json",
+-          "bytes": 3281,
+-          "sha256": "13b1854ffe02552c341a0e498c9f00dd3c02d1e596eda42e3b10cd590964d670"
+-        },
+-        {
+-          "path": "declaration-plan/induction-contract.json",
+-          "bytes": 1292,
+-          "sha256": "db93effe7312ba3a93ab3bda4fbb20686681a45598cd1b4c2271a66e410358c6"
+-        },
+-        {
+-          "path": "declaration-plan/execute-IH.lean.txt",
+-          "bytes": 290,
+-          "sha256": "c7fbd19dec1e867ccda5ddfe5f1d37fa6550035837475395631e9f1aec2b9e8c"
+-        },
+-        {
+-          "path": "declaration-plan/accessor-equations.json",
+-          "bytes": 862,
+-          "sha256": "28f6e49fc4c7c8540c7ce52e7b7d31269da5f1f80e8cd27a393e4746eb58464d"
++          "path": "declarations/execute-IH.lean.txt",
++          "bytes": 292,
++          "sha256": "de692daf5dbc5030e934e3b1e0df4e217b3f8b8f5147ca5053dd588a47deefaa"
++        },
++        {
++          "path": "declarations/introduced-types.json",
++          "bytes": 11835,
++          "sha256": "f790a8719a72f4c062ce4290e5c309fa9db28e593f24e366fd593f0546f4d534"
++        },
++        {
++          "path": "declarations/case-equations.json",
++          "bytes": 2571,
++          "sha256": "3b32ba8422b2df07ef9794b0a3f7caa4dd88bcec7a1eef9116c49b5290e67e52"
++        },
++        {
++          "path": "declarations/accessor-equations.json",
++          "bytes": 867,
++          "sha256": "c86c1ddba7dcad9635a8549ce801d22f13ca90a6363587e47f9a0884dc2ded4e"
++        },
++        {
++          "path": "declarations/body-inventories.json",
++          "bytes": 3704,
++          "sha256": "8ce4059590a772cf9b19a4947601b1e6e9c911fd5f43534852041f8dbb8bcca0"
++        },
++        {
++          "path": "declarations/induction-contract.json",
++          "bytes": 1289,
++          "sha256": "7cfdba0864757f46f6ed04508b38280dd8510dbecab13c00bf13d3d51517f6b9"
+         }
+       ],
+       "scope": {
+-        "same_actual_pair_outcome_checked_native_machine_heap": true,
++        "same_actual_scan_outcome_checked_native_machine_heap": true,
+         "arbitrary_state_control_width_and_fuel": true,
+         "yielded_done_failed_constraintError_blocked": true,
+         "node_counter_monotone": true,
+         "accessor_total_full_state_without_instances": true,
+         "only_DecidableEq_Symbol_and_EdgeKey_on_theorems": true,
+         "actual_yielded_IH_state_retained": true,
+-        "Scan_H23_lift_claimed": false,
++        "H23_counter_lift_claimed": false,
+         "fixed_source_counter_order_claimed": false,
+         "upper_bounds_Room_WordRanges_domain_Trace_or_resources_claimed": false,
+         "public_pass_claimed": false,
+@@ -417,62 +405,49 @@
+         "families": [
+           {
+             "owner": "step_mono",
+-            "scope": "Control.demand",
++            "scope": "Control.comparison",
+             "name": "observed",
+-            "activation": "cases observed : (FlatMemoThunk.demand handle state.memo).1 with",
+-            "actual_type": "FlatMemoThunk.Observation (InternedConstructorTemplates.EdgeValue Symbol Guard \u00d7 InternedConstructorTemplates.EdgeValue Symbol Guard) (InternedConstructorTemplates.EdgeValue Symbol Guard)",
+-            "type_family": "(FlatMemoThunk.demand handle state.memo).1 = actual",
++            "activation": "cases observed : SourceCurrentSameSymbolEdgeControl.step inner state with",
++            "actual_type": "SourceCurrentSameSymbolEdgeControl.Outcome width",
++            "type_family": "SourceCurrentSameSymbolEdgeControl.step inner state = actual",
+             "specialized_types": {
+-              "absent": "(FlatMemoThunk.demand handle state.memo).1 = FlatMemoThunk.Observation.absent",
+-              "evaluate": "(FlatMemoThunk.demand handle state.memo).1 = FlatMemoThunk.Observation.evaluate request",
+-              "busy": "(FlatMemoThunk.demand handle state.memo).1 = FlatMemoThunk.Observation.busy",
+-              "ready": "(FlatMemoThunk.demand handle state.memo).1 = FlatMemoThunk.Observation.ready value"
+-            }
+-          },
+-          {
+-            "owner": "step_mono",
+-            "scope": "Control.native",
+-            "name": "observed",
+-            "activation": "cases observed : SourceEqualityNativeDemand.step body state.checked with",
+-            "actual_type": "SourceEqualityNativeDemand.Outcome width Edge",
+-            "type_family": "SourceEqualityNativeDemand.step body state.checked = actual",
+-            "specialized_types": {
+-              "yielded": "SourceEqualityNativeDemand.step body state.checked = SourceEqualityNativeDemand.Outcome.yielded next after",
+-              "done": "SourceEqualityNativeDemand.step body state.checked = SourceEqualityNativeDemand.Outcome.done value after",
+-              "failed": "SourceEqualityNativeDemand.step body state.checked = SourceEqualityNativeDemand.Outcome.failed failure after",
+-              "constraintError": "SourceEqualityNativeDemand.step body state.checked = SourceEqualityNativeDemand.Outcome.constraintError message after",
+-              "blocked": "SourceEqualityNativeDemand.step body state.checked = SourceEqualityNativeDemand.Outcome.blocked reason next after"
++              "yielded": "SourceCurrentSameSymbolEdgeControl.step inner state = SourceCurrentSameSymbolEdgeControl.Outcome.yielded next after",
++              "done": "SourceCurrentSameSymbolEdgeControl.step inner state = SourceCurrentSameSymbolEdgeControl.Outcome.done common after",
++              "failed": "SourceCurrentSameSymbolEdgeControl.step inner state = SourceCurrentSameSymbolEdgeControl.Outcome.failed reason after",
++              "constraintError": "SourceCurrentSameSymbolEdgeControl.step inner state = SourceCurrentSameSymbolEdgeControl.Outcome.constraintError message after",
++              "blocked": "SourceCurrentSameSymbolEdgeControl.step inner state = SourceCurrentSameSymbolEdgeControl.Outcome.blocked reason next after"
+             }
+           },
+           {
+             "owner": "execute_mono",
+             "scope": "successor fuel",
+             "name": "observed",
+-            "activation": "cases observed : SourceCurrentSameSymbolEdgeControl.step control state with",
+-            "actual_type": "SourceCurrentSameSymbolEdgeControl.Outcome width",
+-            "type_family": "SourceCurrentSameSymbolEdgeControl.step control state = actual",
++            "activation": "cases observed : SourceCurrentOriginalRowClusterScan.step control state with",
++            "actual_type": "SourceCurrentOriginalRowClusterScan.Outcome width",
++            "type_family": "SourceCurrentOriginalRowClusterScan.step control state = actual",
+             "specialized_types": {
+-              "yielded": "SourceCurrentSameSymbolEdgeControl.step control state = SourceCurrentSameSymbolEdgeControl.Outcome.yielded next after",
+-              "done": "SourceCurrentSameSymbolEdgeControl.step control state = SourceCurrentSameSymbolEdgeControl.Outcome.done value after",
+-              "failed": "SourceCurrentSameSymbolEdgeControl.step control state = SourceCurrentSameSymbolEdgeControl.Outcome.failed failure after",
+-              "constraintError": "SourceCurrentSameSymbolEdgeControl.step control state = SourceCurrentSameSymbolEdgeControl.Outcome.constraintError message after",
+-              "blocked": "SourceCurrentSameSymbolEdgeControl.step control state = SourceCurrentSameSymbolEdgeControl.Outcome.blocked reason next after"
++              "yielded": "SourceCurrentOriginalRowClusterScan.step control state = SourceCurrentOriginalRowClusterScan.Outcome.yielded next after",
++              "done": "SourceCurrentOriginalRowClusterScan.step control state = SourceCurrentOriginalRowClusterScan.Outcome.done values after",
++              "failed": "SourceCurrentOriginalRowClusterScan.step control state = SourceCurrentOriginalRowClusterScan.Outcome.failed reason after",
++              "constraintError": "SourceCurrentOriginalRowClusterScan.step control state = SourceCurrentOriginalRowClusterScan.Outcome.constraintError message after",
++              "blocked": "SourceCurrentOriginalRowClusterScan.step control state = SourceCurrentOriginalRowClusterScan.Outcome.blocked reason next after"
+             }
+           }
+         ],
+         "actual_is_review_only_family_index_not_extra_body_binder": true,
+-        "additional_equation_families": []
++        "additional_equation_families": [],
++        "list_splits": "Exact unannotated candidates/remaining splits have scoped constructor fields in introduced-types.json; no extra equation names."
+       },
+       "accessor_equations": {
+         "status": "REVIEW_ONLY_REQUIRED_DEFINITION_EQUATIONS_NOT_A_DEFINITION_BODY",
+         "owner": "outcomeState",
+         "output_type": "SourceCurrentSameSymbolEdgeControl.State width",
+         "equations": {
+-          "yielded": "outcomeState (SourceCurrentSameSymbolEdgeControl.Outcome.yielded next state) = state",
+-          "done": "outcomeState (SourceCurrentSameSymbolEdgeControl.Outcome.done value state) = state",
+-          "failed": "outcomeState (SourceCurrentSameSymbolEdgeControl.Outcome.failed failure state) = state",
+-          "constraintError": "outcomeState (SourceCurrentSameSymbolEdgeControl.Outcome.constraintError message state) = state",
+-          "blocked": "outcomeState (SourceCurrentSameSymbolEdgeControl.Outcome.blocked reason next state) = state"
++          "yielded": "outcomeState (SourceCurrentOriginalRowClusterScan.Outcome.yielded next state) = state",
++          "done": "outcomeState (SourceCurrentOriginalRowClusterScan.Outcome.done values state) = state",
++          "failed": "outcomeState (SourceCurrentOriginalRowClusterScan.Outcome.failed reason state) = state",
++          "constraintError": "outcomeState (SourceCurrentOriginalRowClusterScan.Outcome.constraintError message state) = state",
++          "blocked": "outcomeState (SourceCurrentOriginalRowClusterScan.Outcome.blocked reason next state) = state"
+         },
+         "equality_instances": [],
+         "public_total_full_state": true,
+@@ -496,14 +471,14 @@
+         "zero_pattern": "zero",
+         "successor_pattern": "succ fuel ih",
+         "generated_IH_name": "ih",
+-        "generated_IH_type": "\u2200 (control : SourceCurrentSameSymbolEdgeControl.Control) (state : SourceCurrentSameSymbolEdgeControl.State width),\n  state.checked.native.machine.heap.nodes.next \u2264\n    (outcomeState (SourceCurrentSameSymbolEdgeControl.execute fuel control state)).checked.native.machine.heap.nodes.next",
++        "generated_IH_type": "\u2200 (control : SourceCurrentOriginalRowClusterScan.Control) (state : SourceCurrentSameSymbolEdgeControl.State width),\n  state.checked.native.machine.heap.nodes.next \u2264\n    (outcomeState (SourceCurrentOriginalRowClusterScan.execute fuel control state)).checked.native.machine.heap.nodes.next",
+         "generated_IH_file": "execute-IH.lean.txt",
+         "calls": [
+           {
+             "term": "ih next after",
+-            "scope": "only the actual pair step yielded case",
++            "scope": "only the actual Scan step yielded case",
+             "decreasing_argument": "predecessor fuel from succ fuel ih",
+-            "next_type": "SourceCurrentSameSymbolEdgeControl.Control",
++            "next_type": "SourceCurrentOriginalRowClusterScan.Control",
+             "after_type": "SourceCurrentSameSymbolEdgeControl.State width",
+             "count": 1
+           }
+@@ -521,30 +496,32 @@
+   ],
+   "selection": {
+     "path": "selected-sources.json",
+-    "bytes": 293,
+-    "sha256": "1245acaf506e9c54ccb91bb5689c160bdbaa200c58aae7234f792f5c448caafa"
++    "bytes": 294,
++    "sha256": "aa4c48611dc6d1fe6d791512ba2d82b73d958ae45edf8a9ffbfdb57b3335fe45"
+   },
+   "frozen_modules": {
+     "path": "frozen-modules.json",
+-    "bytes": 128,
+-    "sha256": "4ead29f43e3eacffb9dcd549f9f5e66126a14e306b1ddadc7903f8b0e5ea3984"
++    "bytes": 129,
++    "sha256": "a9ff7a8c6dc319c97f9273f8e06994f12e5f0307416bebd18f8e3fafe2f2a67a"
+   },
+   "history": {
+     "path": "source-history-gate.json",
+-    "bytes": 228954,
+-    "sha256": "2fd749cdc1138a5531941e10f9735ec63741047860a5d7232125423f8e403d1a"
++    "bytes": 183320,
++    "sha256": "70c275499b83c169977d69d0c9996652736f24605195f1efc7fd150978c2b678"
+   },
+   "job_history": {
+     "path": "job-history.json",
+-    "bytes": 1023,
+-    "sha256": "b9fa448dab44a44883ce2b486202aa76e5ca0be9385e6a7cc3c6728b2afb560b"
++    "bytes": 1025,
++    "sha256": "d8409b90ddab28953346e6c7103e060dd38d5a50fdead5c4a7316bfffd9a1de6"
+   },
+   "metadata_cut": {
+     "path": "root-metadata-history-cut.json",
+-    "bytes": 1846,
+-    "sha256": "d826f494ba5d31df39c4fb456ee02e76ea1fd80b1743724b14423ddb36144a28"
+-  },
+-  "metadata_failure_paths": [],
++    "bytes": 2135,
++    "sha256": "93c6a454ce9523993aa13ce768bf025b5223879b8af30947e56609e5495fd940"
++  },
++  "metadata_failure_paths": [
++    "root-metadata-history/mcfta-scan-node-counter-growth-accept-next-consumer-investigation-1.json"
++  ],
+   "focused_builds": {},
+   "metrics": {
+     "actual_jobs": 3,
+@@ -556,10 +533,10 @@
+     "rejected_public_type_jobs": 0
+   },
+   "audit": {
+-    "stem": "root-pair-node-counter-growth-audit-1",
+-    "build_jobs": 3656,
+-    "dependencies": 75572,
+-    "log_sha256": "18eebc67eff772ba1d8b6ce6f87caf8765b9abc83e5f4c4e50356ef0a7585665",
++    "stem": "root-scan-node-counter-growth-audit-1",
++    "build_jobs": 3657,
++    "dependencies": 75584,
++    "log_sha256": "af9fe15604f945bff58c40f0dcb25eb28968537594769903b69950cad34bcbb8",
+     "warnings": [
+       "warning: MicroCFTA/InternedFreshOrdinaryClosedCompletion.lean:24:5: Variable name `inputs` is not explicitly referenced."
+     ]
+@@ -567,17 +544,17 @@
+   "original_audit": {
+     "path": "lean/MicroCFTA/Audit.lean",
+     "snapshot": "original-sources/Audit.original.lean.txt",
+-    "lines": 3144,
+-    "sha256": "7bdd945140a975dd1537be82d71ce5e34bf40fc3ceef0df3a9d3d5972d02c4ca"
++    "lines": 3145,
++    "sha256": "4b39f17903d76604a38774c485883d9b7ceeebf07aba9d2aac063a0064874057"
+   },
+   "history_review": {
+     "path": "root-source-history-review.json",
+-    "bytes": 1379,
+-    "sha256": "3e332874f2084754278470aa95bfecde10cdca180bc03a8c607c6312bd782c60"
++    "bytes": 1401,
++    "sha256": "19de24a649a0b77c2cd045023212d77d7298d7acce658224d200c723af192bff"
+   },
+   "history_peer": {
+     "path": "source-history-audit/review.json",
+-    "bytes": 3869,
+-    "sha256": "ea827e6e8d6caff921919ea38855a8d94d8a232c67b2ec2ceb9233b7a496b613"
++    "bytes": 3949,
++    "sha256": "31c4c8e63c27bd9c6384f97ce686348aa901175c00d5d90494ecc2389d3dd88f"
+   }
+ }

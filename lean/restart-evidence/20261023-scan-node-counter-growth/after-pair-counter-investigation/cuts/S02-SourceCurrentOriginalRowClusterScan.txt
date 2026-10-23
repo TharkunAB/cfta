@@ -1,0 +1,22 @@
+/-- Retain the scan lists and the current comparison control. -/
+inductive Control : Type 1 where
+  /-- Start a cluster with the retained rows in reverse order. -/
+  | cluster (candidates keptReversed : List Edge)
+  /-- Compare the pivot with the remaining rows. -/
+  | scan (pivot : Edge) (remaining incomparableReversed keptReversed : List Edge)
+  /-- Retain the scan frame while one comparison advances. -/
+  | comparison (pivot candidate : Edge)
+      (tail incomparableReversed keptReversed : List Edge) (inner : PairControl)
+
+/-- Retain the actual state in each scan outcome. -/
+inductive Outcome (width : Nat) : Type 1 where
+  /-- Retain the next control and the full comparison state. -/
+  | yielded (control : Control) (state : PairState width)
+  /-- Return the retained rows and the full comparison state. -/
+  | done (values : List Edge) (state : PairState width)
+  /-- Retain the native failure and the actual state. -/
+  | failed (reason : SourceRecursiveIntersectionKernel.Failure) (state : PairState width)
+  /-- Retain the constraint error and the actual state. -/
+  | constraintError (message : String) (state : PairState width)
+  /-- Retain the blockage, exact residual control and actual state. -/
+  | blocked (reason : PairBlocked) (control : Control) (state : PairState width)

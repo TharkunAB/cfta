@@ -1,0 +1,6 @@
+/-- One scan step retains or increases its actual constructor node counter. -/
+theorem step_mono [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (control : SourceCurrentOriginalRowClusterScan.Control)
+    (state : SourceCurrentSameSymbolEdgeControl.State width) :
+    state.checked.native.machine.heap.nodes.next ≤
+      (outcomeState (SourceCurrentOriginalRowClusterScan.step control state)).checked.native.machine.heap.nodes.next

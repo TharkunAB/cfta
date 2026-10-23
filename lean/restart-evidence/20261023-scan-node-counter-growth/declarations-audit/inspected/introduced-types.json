@@ -1,0 +1,416 @@
+{
+  "status": "REVIEW_ONLY_ALL_SCOPED_PATTERN_TYPES_AND_GENERATED_IH",
+  "entries": [
+    {
+      "owner": "outcomeState",
+      "activation": "match outcome with",
+      "pattern": ".yielded _ state",
+      "binders": [
+        {
+          "name": "state",
+          "type": "SourceCurrentSameSymbolEdgeControl.State width"
+        }
+      ],
+      "ignored_constructor_arguments": [
+        {
+          "position": 1,
+          "type": "SourceCurrentOriginalRowClusterScan.Control",
+          "binder": "_"
+        }
+      ]
+    },
+    {
+      "owner": "outcomeState",
+      "activation": "match outcome with",
+      "pattern": ".done _ state",
+      "binders": [
+        {
+          "name": "state",
+          "type": "SourceCurrentSameSymbolEdgeControl.State width"
+        }
+      ],
+      "ignored_constructor_arguments": [
+        {
+          "position": 1,
+          "type": "List (InternedConstructorTemplates.EdgeValue Symbol Guard)",
+          "binder": "_"
+        }
+      ]
+    },
+    {
+      "owner": "outcomeState",
+      "activation": "match outcome with",
+      "pattern": ".failed _ state",
+      "binders": [
+        {
+          "name": "state",
+          "type": "SourceCurrentSameSymbolEdgeControl.State width"
+        }
+      ],
+      "ignored_constructor_arguments": [
+        {
+          "position": 1,
+          "type": "SourceRecursiveIntersectionKernel.Failure",
+          "binder": "_"
+        }
+      ]
+    },
+    {
+      "owner": "outcomeState",
+      "activation": "match outcome with",
+      "pattern": ".constraintError _ state",
+      "binders": [
+        {
+          "name": "state",
+          "type": "SourceCurrentSameSymbolEdgeControl.State width"
+        }
+      ],
+      "ignored_constructor_arguments": [
+        {
+          "position": 1,
+          "type": "String",
+          "binder": "_"
+        }
+      ]
+    },
+    {
+      "owner": "outcomeState",
+      "activation": "match outcome with",
+      "pattern": ".blocked _ _ state",
+      "binders": [
+        {
+          "name": "state",
+          "type": "SourceCurrentSameSymbolEdgeControl.State width"
+        }
+      ],
+      "ignored_constructor_arguments": [
+        {
+          "position": 1,
+          "type": "SourceCurrentSameSymbolEdgeControl.Blocked",
+          "binder": "_"
+        },
+        {
+          "position": 2,
+          "type": "SourceCurrentOriginalRowClusterScan.Control",
+          "binder": "_"
+        }
+      ]
+    },
+    {
+      "owner": "step_mono",
+      "activation": "cases control with",
+      "pattern": "cluster candidates keptReversed",
+      "binders": [
+        {
+          "name": "candidates",
+          "type": "List (InternedConstructorTemplates.EdgeValue Symbol Guard)"
+        },
+        {
+          "name": "keptReversed",
+          "type": "List (InternedConstructorTemplates.EdgeValue Symbol Guard)"
+        }
+      ]
+    },
+    {
+      "owner": "step_mono",
+      "activation": "cases candidates with",
+      "pattern": "nil",
+      "binders": [],
+      "scope": "Control.cluster"
+    },
+    {
+      "owner": "step_mono",
+      "activation": "cases candidates with",
+      "pattern": "cons pivot tail",
+      "binders": [
+        {
+          "name": "pivot",
+          "type": "InternedConstructorTemplates.EdgeValue Symbol Guard"
+        },
+        {
+          "name": "tail",
+          "type": "List (InternedConstructorTemplates.EdgeValue Symbol Guard)"
+        }
+      ],
+      "scope": "Control.cluster"
+    },
+    {
+      "owner": "step_mono",
+      "activation": "cases control with",
+      "pattern": "scan pivot remaining incomparableReversed keptReversed",
+      "binders": [
+        {
+          "name": "pivot",
+          "type": "InternedConstructorTemplates.EdgeValue Symbol Guard"
+        },
+        {
+          "name": "remaining",
+          "type": "List (InternedConstructorTemplates.EdgeValue Symbol Guard)"
+        },
+        {
+          "name": "incomparableReversed",
+          "type": "List (InternedConstructorTemplates.EdgeValue Symbol Guard)"
+        },
+        {
+          "name": "keptReversed",
+          "type": "List (InternedConstructorTemplates.EdgeValue Symbol Guard)"
+        }
+      ]
+    },
+    {
+      "owner": "step_mono",
+      "activation": "cases remaining with",
+      "pattern": "nil",
+      "binders": [],
+      "scope": "Control.scan"
+    },
+    {
+      "owner": "step_mono",
+      "activation": "cases remaining with",
+      "pattern": "cons candidate tail",
+      "binders": [
+        {
+          "name": "candidate",
+          "type": "InternedConstructorTemplates.EdgeValue Symbol Guard"
+        },
+        {
+          "name": "tail",
+          "type": "List (InternedConstructorTemplates.EdgeValue Symbol Guard)"
+        }
+      ],
+      "scope": "Control.scan"
+    },
+    {
+      "owner": "step_mono",
+      "activation": "cases control with",
+      "pattern": "comparison pivot candidate tail incomparableReversed keptReversed inner",
+      "binders": [
+        {
+          "name": "pivot",
+          "type": "InternedConstructorTemplates.EdgeValue Symbol Guard"
+        },
+        {
+          "name": "candidate",
+          "type": "InternedConstructorTemplates.EdgeValue Symbol Guard"
+        },
+        {
+          "name": "tail",
+          "type": "List (InternedConstructorTemplates.EdgeValue Symbol Guard)"
+        },
+        {
+          "name": "incomparableReversed",
+          "type": "List (InternedConstructorTemplates.EdgeValue Symbol Guard)"
+        },
+        {
+          "name": "keptReversed",
+          "type": "List (InternedConstructorTemplates.EdgeValue Symbol Guard)"
+        },
+        {
+          "name": "inner",
+          "type": "SourceCurrentSameSymbolEdgeControl.Control"
+        }
+      ]
+    },
+    {
+      "owner": "step_mono",
+      "activation": "cases observed : SourceCurrentSameSymbolEdgeControl.step inner state with",
+      "pattern": "yielded next after",
+      "binders": [
+        {
+          "name": "next",
+          "type": "SourceCurrentSameSymbolEdgeControl.Control"
+        },
+        {
+          "name": "after",
+          "type": "SourceCurrentSameSymbolEdgeControl.State width"
+        }
+      ],
+      "scope": "Control.comparison"
+    },
+    {
+      "owner": "step_mono",
+      "activation": "cases observed : SourceCurrentSameSymbolEdgeControl.step inner state with",
+      "pattern": "done common after",
+      "binders": [
+        {
+          "name": "common",
+          "type": "InternedConstructorTemplates.EdgeValue Symbol Guard"
+        },
+        {
+          "name": "after",
+          "type": "SourceCurrentSameSymbolEdgeControl.State width"
+        }
+      ],
+      "scope": "Control.comparison"
+    },
+    {
+      "owner": "step_mono",
+      "activation": "cases observed : SourceCurrentSameSymbolEdgeControl.step inner state with",
+      "pattern": "failed reason after",
+      "binders": [
+        {
+          "name": "reason",
+          "type": "SourceRecursiveIntersectionKernel.Failure"
+        },
+        {
+          "name": "after",
+          "type": "SourceCurrentSameSymbolEdgeControl.State width"
+        }
+      ],
+      "scope": "Control.comparison"
+    },
+    {
+      "owner": "step_mono",
+      "activation": "cases observed : SourceCurrentSameSymbolEdgeControl.step inner state with",
+      "pattern": "constraintError message after",
+      "binders": [
+        {
+          "name": "message",
+          "type": "String"
+        },
+        {
+          "name": "after",
+          "type": "SourceCurrentSameSymbolEdgeControl.State width"
+        }
+      ],
+      "scope": "Control.comparison"
+    },
+    {
+      "owner": "step_mono",
+      "activation": "cases observed : SourceCurrentSameSymbolEdgeControl.step inner state with",
+      "pattern": "blocked reason next after",
+      "binders": [
+        {
+          "name": "reason",
+          "type": "SourceCurrentSameSymbolEdgeControl.Blocked"
+        },
+        {
+          "name": "next",
+          "type": "SourceCurrentSameSymbolEdgeControl.Control"
+        },
+        {
+          "name": "after",
+          "type": "SourceCurrentSameSymbolEdgeControl.State width"
+        }
+      ],
+      "scope": "Control.comparison"
+    },
+    {
+      "owner": "execute_mono",
+      "activation": "induction fuel generalizing control state with",
+      "pattern": "zero",
+      "binders": []
+    },
+    {
+      "owner": "execute_mono",
+      "activation": "induction fuel generalizing control state with",
+      "pattern": "succ fuel ih",
+      "binders": [
+        {
+          "name": "fuel",
+          "type": "Nat"
+        },
+        {
+          "name": "ih",
+          "type": "∀ (control : SourceCurrentOriginalRowClusterScan.Control) (state : SourceCurrentSameSymbolEdgeControl.State width),\n  state.checked.native.machine.heap.nodes.next ≤\n    (outcomeState (SourceCurrentOriginalRowClusterScan.execute fuel control state)).checked.native.machine.heap.nodes.next"
+        }
+      ]
+    },
+    {
+      "owner": "execute_mono",
+      "activation": "cases observed : SourceCurrentOriginalRowClusterScan.step control state with",
+      "pattern": "yielded next after",
+      "binders": [
+        {
+          "name": "next",
+          "type": "SourceCurrentOriginalRowClusterScan.Control"
+        },
+        {
+          "name": "after",
+          "type": "SourceCurrentSameSymbolEdgeControl.State width"
+        }
+      ],
+      "scope": "successor fuel"
+    },
+    {
+      "owner": "execute_mono",
+      "activation": "cases observed : SourceCurrentOriginalRowClusterScan.step control state with",
+      "pattern": "done values after",
+      "binders": [
+        {
+          "name": "values",
+          "type": "List (InternedConstructorTemplates.EdgeValue Symbol Guard)"
+        },
+        {
+          "name": "after",
+          "type": "SourceCurrentSameSymbolEdgeControl.State width"
+        }
+      ],
+      "scope": "successor fuel"
+    },
+    {
+      "owner": "execute_mono",
+      "activation": "cases observed : SourceCurrentOriginalRowClusterScan.step control state with",
+      "pattern": "failed reason after",
+      "binders": [
+        {
+          "name": "reason",
+          "type": "SourceRecursiveIntersectionKernel.Failure"
+        },
+        {
+          "name": "after",
+          "type": "SourceCurrentSameSymbolEdgeControl.State width"
+        }
+      ],
+      "scope": "successor fuel"
+    },
+    {
+      "owner": "execute_mono",
+      "activation": "cases observed : SourceCurrentOriginalRowClusterScan.step control state with",
+      "pattern": "constraintError message after",
+      "binders": [
+        {
+          "name": "message",
+          "type": "String"
+        },
+        {
+          "name": "after",
+          "type": "SourceCurrentSameSymbolEdgeControl.State width"
+        }
+      ],
+      "scope": "successor fuel"
+    },
+    {
+      "owner": "execute_mono",
+      "activation": "cases observed : SourceCurrentOriginalRowClusterScan.step control state with",
+      "pattern": "blocked reason next after",
+      "binders": [
+        {
+          "name": "reason",
+          "type": "SourceCurrentSameSymbolEdgeControl.Blocked"
+        },
+        {
+          "name": "next",
+          "type": "SourceCurrentOriginalRowClusterScan.Control"
+        },
+        {
+          "name": "after",
+          "type": "SourceCurrentSameSymbolEdgeControl.State width"
+        }
+      ],
+      "scope": "successor fuel"
+    }
+  ],
+  "local_have_names": [
+    "pairGrowth",
+    "first"
+  ],
+  "local_let_names": [],
+  "explicit_intro_groups": [],
+  "explicit_lambda_groups": [],
+  "local_obtain_groups": [],
+  "typed_show_fragments": [],
+  "condition_facts": [],
+  "named_equation_binders": "Each observed name has the exact scope and five specialized types in case-equations.json. No extra actual binder is introduced.",
+  "new_body_types_or_names_beyond_this_inventory_authorized": false
+}

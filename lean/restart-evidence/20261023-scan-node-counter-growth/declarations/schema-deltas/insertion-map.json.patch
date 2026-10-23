@@ -1,0 +1,178 @@
+--- H37/insertion-map.json
++++ H38/insertion-map.json
+@@ -1,6 +1,6 @@
+ {
+   "status": "EXACT_STRING_FRAGMENT_INSERTION_MAP_NO_BODIES",
+-  "module": "SourceCurrentSameSymbolEdgeControlNodeCounterGrowth",
++  "module": "SourceCurrentOriginalRowClusterScanNodeCounterGrowth",
+   "compiled_fragments": [
+     {
+       "order": 1,
+@@ -8,7 +8,7 @@
+       "role": "context",
+       "owner": "module",
+       "lines": 9,
+-      "sha256": "e476735442f75080a96217d6dd55a16e5b3b5e84727b0045de5b75fb5dc2c5bb"
++      "sha256": "541979721b8d65e30cbc80d4f45d59b8ab6395a61b1bb2a48df065e4a1f3d982"
+     },
+     {
+       "order": 2,
+@@ -16,7 +16,7 @@
+       "role": "public-header",
+       "owner": "outcomeState",
+       "lines": 3,
+-      "sha256": "acbbe614baf8b70dc8fe87f6f4345b8fccadcc3ec2c726e4e336e157c15ac4d2",
++      "sha256": "ead0a5e56d5a06363beea7772d50f96342438d743977eeb8e9b9d62ae0ac25f0",
+       "future_body_attachment": " :=\n",
+       "remove_only_final_LF_before_attachment": true
+     },
+@@ -26,55 +26,46 @@
+       "role": "public-header",
+       "owner": "step_mono",
+       "lines": 6,
+-      "sha256": "b3377dab512fb9e4501aa67686b6e03a25a58de7f5507722ffda3fffb8499dc1",
++      "sha256": "6833d1905b1f9acbd4e5ef9d0f5bbe87ddf102405da8b9408a3fd2351b59933c",
+       "future_body_attachment": " := by\n",
+       "remove_only_final_LF_before_attachment": true
+     },
+     {
+       "order": 4,
+-      "file": "local-reversed.lean.txt",
+-      "role": "local-by-cases",
++      "file": "local-pairGrowth.lean.txt",
++      "role": "local-have-header",
+       "owner": "step_mono",
+-      "lines": 1,
+-      "sha256": "d216e08351b79c0a3d872d3af75cee3ce34a41fdb1ecd9d81e4f1c8cb68d6d72",
+-      "activation": "Control.order case; exact branch condition, no body attachment"
++      "lines": 3,
++      "sha256": "fd1dd764e5f3643df5fd4d1fe74a6b730bd28255a72383f90dc5a4bb65be7d73",
++      "future_body_attachment": " := by\n",
++      "remove_only_final_LF_before_attachment": true,
++      "activation": "Control.comparison case, before splitting the SAME actual Pair.step outcome"
+     },
+     {
+       "order": 5,
+-      "file": "local-nativeGrowth.lean.txt",
+-      "role": "local-have-header",
+-      "owner": "step_mono",
+-      "lines": 2,
+-      "sha256": "ff90ccd18e004605b7d0eed638c60c80436ccb9e55dc14c86eabc1bf942fdcd4",
+-      "future_body_attachment": " := by\n",
+-      "remove_only_final_LF_before_attachment": true,
+-      "activation": "Control.native case, before splitting the actual checked step"
+-    },
+-    {
+-      "order": 6,
+       "file": "public-execute.lean.txt",
+       "role": "public-header",
+       "owner": "execute_mono",
+       "lines": 6,
+-      "sha256": "068665049753a1a017a0b8ce393ae51a2e668578557ade03dd12db19278869c9",
++      "sha256": "beb77f94c31ec775643304e5b27efd9dc71ae678df5d696e881c4f9fd5df5c14",
+       "future_body_attachment": " := by\n",
+       "remove_only_final_LF_before_attachment": true
+     },
+     {
+-      "order": 7,
++      "order": 6,
+       "file": "local-first.lean.txt",
+       "role": "local-have-header",
+       "owner": "execute_mono",
+       "lines": 2,
+-      "sha256": "6de5e4ead81f7f37e406d291b917939eaebd2f0f4a3caa345d7845f79106017a",
++      "sha256": "3cc81918a2797cf2d53714b37d3fdf6337a9224e5e90a325ba264111c3cd8bf0",
+       "future_body_attachment": " := by\n",
+       "remove_only_final_LF_before_attachment": true,
+-      "activation": "successor fuel case, before splitting the actual pair step"
++      "activation": "successor fuel case, before splitting the SAME actual Scan.step outcome"
+     }
+   ],
+   "schema": {
+     "status": "EXACT_DECLARATION_AND_LOCAL_INDUCTION_SCHEMA_ONLY",
+-    "module": "SourceCurrentSameSymbolEdgeControlNodeCounterGrowth",
++    "module": "SourceCurrentOriginalRowClusterScanNodeCounterGrowth",
+     "public_heads": [
+       [
+         "outcomeState",
+@@ -104,7 +95,7 @@
+     "local_have_names_by_owner": {
+       "outcomeState": [],
+       "step_mono": [
+-        "nativeGrowth"
++        "pairGrowth"
+       ],
+       "execute_mono": [
+         "first"
+@@ -119,13 +110,10 @@
+     "explicit_intro_groups": [],
+     "explicit_lambda_groups": [],
+     "typed_show_fragments": [],
+-    "by_cases_names": [
+-      "reversed"
+-    ],
++    "by_cases_names": [],
+     "case_equation_names_by_owner": {
+       "outcomeState": [],
+       "step_mono": [
+-        "observed",
+         "observed"
+       ],
+       "execute_mono": [
+@@ -142,17 +130,16 @@
+       "ih next after"
+     ],
+     "termination_by_count": 0,
+-    "introduced_type_entries": 28,
+-    "case_equation_families": 3,
+-    "case_equation_specializations": 14,
+-    "compiled_contract_count": 7,
++    "introduced_type_entries": 24,
++    "case_equation_families": 2,
++    "case_equation_specializations": 10,
++    "compiled_contract_count": 6,
+     "compiled_contract_lines": 29,
+     "compiled_contract_order": [
+       "context.lean.txt",
+       "public-outcomeState.lean.txt",
+       "public-step.lean.txt",
+-      "local-reversed.lean.txt",
+-      "local-nativeGrowth.lean.txt",
++      "local-pairGrowth.lean.txt",
+       "public-execute.lean.txt",
+       "local-first.lean.txt"
+     ],
+@@ -160,17 +147,20 @@
+     "public_header_lines": 15,
+     "local_fragment_lines": 5,
+     "whole_source_target": [
+-      90,
+-      125
++      85,
++      115
+     ],
+-    "whole_source_hard_stop": 160,
++    "whole_source_hard_stop": 140,
+     "no_padding": true,
++    "below_target_without_padding_allowed": true,
+     "default_declaration_limits": true,
+     "all_linters": true,
+     "extra_unreviewed_named_or_typed_body_fragments_authorized": false,
+-    "all_five_pair_outcome_tags_included": true,
++    "all_five_pair_and_scan_outcome_tags_included": true,
++    "identity_by_cases_count": 0,
+     "success_validity_counter_oracle_or_replacement_state_premise": false,
+-    "source_initial_order_upper_resources_Scan_H23_Mu_Haskell_or_wholepass_claimed": false
++    "source_initial_order_upper_resources_H23_Mu_Haskell_or_wholepass_claimed": false,
++    "resume_API_or_resume_theorem": false
+   },
+   "review_only": [
+     "execute-IH.lean.txt",
+@@ -182,6 +172,6 @@
+   ],
+   "default_declaration_limits": true,
+   "all_linters": true,
+-  "declarations_owner": "Arity",
++  "declarations_owner": "Guard",
+   "future_body_owner": "Root"
+ }

@@ -1,0 +1,1 @@
+One orchestration request before source authoring had an extra JavaScript parenthesis. It failed parsing before any tool statement. The corrected read-only request passed. No selected source, Root metadata or proof job failed.

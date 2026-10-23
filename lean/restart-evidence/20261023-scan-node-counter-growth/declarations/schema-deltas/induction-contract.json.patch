@@ -1,0 +1,20 @@
+--- H37/induction-contract.json
++++ H38/induction-contract.json
+@@ -15,14 +15,14 @@
+   "zero_pattern": "zero",
+   "successor_pattern": "succ fuel ih",
+   "generated_IH_name": "ih",
+-  "generated_IH_type": "\u2200 (control : SourceCurrentSameSymbolEdgeControl.Control) (state : SourceCurrentSameSymbolEdgeControl.State width),\n  state.checked.native.machine.heap.nodes.next \u2264\n    (outcomeState (SourceCurrentSameSymbolEdgeControl.execute fuel control state)).checked.native.machine.heap.nodes.next",
++  "generated_IH_type": "∀ (control : SourceCurrentOriginalRowClusterScan.Control) (state : SourceCurrentSameSymbolEdgeControl.State width),\n  state.checked.native.machine.heap.nodes.next ≤\n    (outcomeState (SourceCurrentOriginalRowClusterScan.execute fuel control state)).checked.native.machine.heap.nodes.next",
+   "generated_IH_file": "execute-IH.lean.txt",
+   "calls": [
+     {
+       "term": "ih next after",
+-      "scope": "only the actual pair step yielded case",
++      "scope": "only the actual Scan step yielded case",
+       "decreasing_argument": "predecessor fuel from succ fuel ih",
+-      "next_type": "SourceCurrentSameSymbolEdgeControl.Control",
++      "next_type": "SourceCurrentOriginalRowClusterScan.Control",
+       "after_type": "SourceCurrentSameSymbolEdgeControl.State width",
+       "count": 1
+     }

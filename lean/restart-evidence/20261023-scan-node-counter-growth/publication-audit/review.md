@@ -1,0 +1,5 @@
+# H38 publication source review
+
+CLEAR. All101 selected lines and101 basis lines read. Exact literal reconstruction and44 AST guard correspondences pass. Both standalone modes use explicit --root and cwd /. Actual verifier/data hashes are checked before execution. The proof committer requires both PASS reports before its exact2-file commit. Local publication requires the accepted LOCAL_ONLY gate, actual proof HEAD, baseline refs and seal. Scoped staging, all sealed paths in index, clean tree and full tracked blob/mode equality remain. No network command exists. Root push is separately authorized and pending.
+
+Arity authored the older H23 foundation and the H38 saved-verifier adaptation. Required authored these selected tool adaptations. Root authored the current proof and templates. This is an independent current tool/payload review. It is not an independent reproof of Arity-authored foundations. No prepared program was run or imported. No Git, compiler, network or repository operation was performed.

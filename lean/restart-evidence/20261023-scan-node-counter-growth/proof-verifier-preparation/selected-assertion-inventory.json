@@ -1,0 +1,1154 @@
+{
+  "status": "ALL_SELECTED_ASSERTIONS_STATICALLY_INDEXED",
+  "assertions": 229,
+  "exact_inherited_generic": 174,
+  "inherited_scope_or_bound_data": 53,
+  "new_qualified_and_own_accessor_obligations": 2,
+  "rows": [
+    {
+      "line": 19,
+      "expression": "not path.is_absolute() and '..' not in path.parts",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 25,
+      "expression": "len(data) == record['bytes'] and digest(data) == record['sha256']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 30,
+      "expression": "digest(raw_data) == 'b7cfd56338e0a5ce704d697aa495a9d76e3d034536d752f6dd32b77e5da6e909'",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 31,
+      "expression": "not re.search('__H\\\\d+_', raw_data.decode())",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 34,
+      "expression": "[m['key'] for m in modules] == ['scan_node_counter_growth']",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 35,
+      "expression": "[m['source_cap'] for m in modules] == [140]",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 36,
+      "expression": "[m['specs'] for m in modules] == [[['outcomeState', 'def'], ['step_mono', 'theorem'], ['execute_mono', 'theorem']]]",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 45,
+      "expression": "actual == set(jobs)",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 47,
+      "expression": "metrics['actual_jobs'] == len(actual)",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 48,
+      "expression": "metrics['source_jobs'] == sum((j['kind'] in {'strict', 'full'} for j in jobs.values()))",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 49,
+      "expression": "metrics['focused_build_jobs'] == sum((j['kind'] == 'focused_build' for j in jobs.values()))",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 50,
+      "expression": "metrics['audit_jobs'] == sum((j['kind'] == 'audit' for j in jobs.values())) == 1",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 51,
+      "expression": "metrics['actual_jobs'] == sum((metrics[k] for k in ['source_jobs', 'focused_build_jobs', 'audit_jobs']))",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 52,
+      "expression": "metrics['failed_jobs'] == sum((j['exit_code'] != 0 for j in jobs.values()))",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 53,
+      "expression": "metrics['warned_source_exit_zero_jobs'] == sum((j['kind'] in {'strict', 'full'} and j['exit_code'] == 0 and bool(j['source_warnings']) for j in jobs.values()))",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 56,
+      "expression": "receipt['exit_code'] == job['exit_code'] and receipt['observed_at']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 57,
+      "expression": "receipt['log'] == stem + '.log' and receipt['limits'] == stem + '.limits.json'",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 59,
+      "expression": "re.fullmatch('[0-9a-f]{64}', job['log_sha256']) and digest(raw) == job['log_sha256']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 60,
+      "expression": "load(receipt['limits']) == {'memory.max': '4294967296', 'memory.high': '4294967296', 'memory.swap.max': '0'}",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 62,
+      "expression": "0 <= usage['age_seconds'] <= 600 and usage['remaining_percent'] > 1",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 63,
+      "expression": "receipt['wrapper'][1:5] == ['--mem', '4G', '--time', '5m']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 64,
+      "expression": "job['kind'] in {'strict', 'full', 'focused_build', 'audit'}",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 66,
+      "expression": "job['module'] in by_name and re.fullmatch('[0-9a-f]{64}', job['source_sha256'])",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 67,
+      "expression": "receipt['source'] == stem + '.source.lean' and receipt['sha256'] == job['source_sha256']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 69,
+      "expression": "digest(source) == job['source_sha256']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 70,
+      "expression": "len(receipt['command']) == 3 and Path(receipt['command'][0]).name == 'lean'",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 71,
+      "expression": "receipt['command'][1] == '-Dlinter.all=true' and Path(receipt['command'][-1]).resolve() == (evidence / receipt['source']).resolve()",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 72,
+      "expression": "len(re.findall('^.+?:\\\\d+:\\\\d+: error(?:\\\\([^)]*\\\\))?:', raw.decode(), re.M)) == job['errors']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 73,
+      "expression": "len(re.findall('^.+?:\\\\d+:\\\\d+: warning(?:\\\\([^)]*\\\\))?:', raw.decode(), re.M)) == job['source_warnings']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 75,
+      "expression": "not re.search('^\\\\s*set_option (?:maxHeartbeats|maxRecDepth|linter\\\\.)', source.decode(), re.M)",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 77,
+      "expression": "job['source_sha256'] is None and 'source' not in receipt and ('sha256' not in receipt)",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 79,
+      "expression": "len(receipt['command']) == 5 and Path(receipt['command'][0]).name == 'lake'",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 80,
+      "expression": "receipt['command'][1:] == ['-d', str(root / 'lean'), 'build', target]",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 81,
+      "expression": "receipt['exit_code'] == 0 and (not re.search('\\\\berror(?:\\\\([^)]*\\\\))?:', raw.decode()))",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 84,
+      "expression": "build and int(build.group(1)) == expected['build_jobs']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 85,
+      "expression": "re.findall('(?m)^warning: .+$', raw.decode()) == expected['warnings']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 86,
+      "expression": "all(('InternedFreshOrdinaryClosedCompletion.lean:24:5:' in warning for warning in expected['warnings']))",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 87,
+      "expression": "job['module'] is None if job['kind'] == 'audit' else job['module'] in by_name",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 91,
+      "expression": "history['status'] == 'ROOT_ACCEPTED'",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 92,
+      "expression": "set(history) == {'status', 'selected_sources', 'variants', 'artifacts', 'patches', 'rejected_public_types'}",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 93,
+      "expression": "history['selected_sources'] == {m['source_path']: m['source_sha256'] for m in modules}",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 96,
+      "expression": "variants and len(variants) == len(history['variants']) and (len(artifacts) == len(history['artifacts']))",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 97,
+      "expression": "not set(variants) & set(artifacts)",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 100,
+      "expression": "re.fullmatch('[0-9a-f]{64}', record['sha256']) and digest(data) == record['sha256']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 102,
+      "expression": "record['module'] in by_name and record['reason'].strip()",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 103,
+      "expression": "0 < len(data.splitlines()) == record['lines'] <= by_name[record['module']]['source_cap']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 105,
+      "expression": "len(data) == record['bytes']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 107,
+      "expression": "all((stem + suffix in artifacts for suffix in ['.json', '.log', '.limits.json', '.usage.json']))",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 109,
+      "expression": "any((v['module'] == job['module'] and v['sha256'] == job['source_sha256'] and (read(path) == read(stem + '.source.lean')) for path, v in variants.items()))",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 111,
+      "expression": "stem + '.source.lean' in artifacts",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 113,
+      "expression": "patch['reason'].strip() and patch['before'] in variants and (patch['after'] in variants)",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 114,
+      "expression": "patch['module'] == variants[patch['before']]['module'] == variants[patch['after']]['module']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 115,
+      "expression": "patch['path'] in artifacts and artifacts[patch['path']]['sha256'] == patch['sha256']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 118,
+      "expression": "read(patch['path']).decode() == expected",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 120,
+      "expression": "len(rejected) == len(history['rejected_public_types']) == metrics['rejected_public_type_jobs']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 122,
+      "expression": "stem in jobs and jobs[stem]['kind'] == 'full' and (jobs[stem]['exit_code'] == 0)",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 123,
+      "expression": "record['raw_sha256'] == jobs[stem]['log_sha256'] and record['reason'].strip()",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 124,
+      "expression": "record['artifacts'] and all((path in artifacts for path in record['artifacts']))",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 127,
+      "expression": "cut['status'] == 'COMPLETE_TERMINAL_METADATA_CUT_BEFORE_CLOSING_TOOLS'",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 128,
+      "expression": "[p for p, code in metadata_jobs.items() if code != 0] == bound['metadata_failure_paths']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 129,
+      "expression": "cut['failed_jobs'] == sum((code != 0 for code in metadata_jobs.values()))",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 131,
+      "expression": "relative.startswith('root-metadata-history/') and relative.endswith('.json') and (relative in artifacts)",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 132,
+      "expression": "type(code) is int",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 134,
+      "expression": "receipt['exit_code'] == code and receipt['observed_at'] and (Path(receipt['command'][0]).name not in {'lean', 'lake'})",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 135,
+      "expression": "all((relative[:-5] + suffix in artifacts for suffix in ['.json', '.log', '.limits.json', '.usage.json', '.source.py', '.peaks.txt']))",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 136,
+      "expression": "load(relative[:-5] + '.limits.json') == {'memory.max': '4294967296', 'memory.high': '4294967296', 'memory.swap.max': '0'}",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 138,
+      "expression": "0 <= usage['age_seconds'] <= 600 and usage['remaining_percent'] > 1",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 140,
+      "expression": "selection == {m['source_path']: dict(sha256=m['source_sha256'], lines=m['source_lines'], strict=m['strict'], full=m['full']) for m in modules}",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 141,
+      "expression": "json.loads(pinned(bound['frozen_modules'])) == {m['name']: m['source_sha256'] for m in modules}",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 148,
+      "expression": "re.fullmatch('[0-9a-f]{64}', m['source_sha256']) and digest(source) == m['source_sha256']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 149,
+      "expression": "source == read(m['strict'] + '.source.lean') and 0 < len(source.splitlines()) == m['source_lines'] <= m['source_cap']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 150,
+      "expression": "read(m['strict'] + '.log') == b'' and jobs[m['strict']]['kind'] == 'strict'",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 151,
+      "expression": "jobs[m['strict']]['module'] == name and jobs[m['strict']]['exit_code'] == 0",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 152,
+      "expression": "jobs[m['full']]['kind'] == 'full' and jobs[m['full']]['module'] == name and (jobs[m['full']]['exit_code'] == 0)",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 153,
+      "expression": "jobs[m['strict']]['errors'] == jobs[m['strict']]['source_warnings'] == jobs[m['full']]['errors'] == jobs[m['full']]['source_warnings'] == 0",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 154,
+      "expression": "m['full'] not in rejected and source.rstrip().endswith(('end MicroCFTA.' + name).encode())",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 155,
+      "expression": "any((v['module'] == name and read(path) == source for path, v in variants.items()))",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 157,
+      "expression": "gate['status'] == 'ACCEPTED_STRICT_SOURCE' and gate['source_sha256'] == m['source_sha256']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 158,
+      "expression": "gate['source_lines'] == m['source_lines'] and gate['source_cap'] == m['source_cap']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 159,
+      "expression": "gate['selected_strict'] == m['strict'] and gate['strict_log_bytes'] == 0 and (gate['public_heads'] == shorts)",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 160,
+      "expression": "gate['receipt_sha256'] == digest(read(m['strict'] + '.json'))",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 161,
+      "expression": "gate['module'] == name and gate['root_default_limit_check'] and gate['all_linters']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 162,
+      "expression": "gate['declaration_gate'] == m['declaration_gate']['path'] and gate['body_gate'] == m['body_gate']['path']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 164,
+      "expression": "body_gate['status'] == 'ACCEPTED_COMPLETE_BODY_BEFORE_FIRST_COMPILER' and body_gate['module'] == name",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 165,
+      "expression": "body_gate['source_sha256'] == m['source_sha256'] and body_gate['source_lines'] == m['source_lines']",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 166,
+      "expression": "body_gate['source_cap'] == m['source_cap']",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 167,
+      "expression": "body_gate['root_complete_source_read'] and body_gate['body_source'] == m['body_source'] and (read(body_gate['body_source']) == source)",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 168,
+      "expression": "body_gate['independent_review_sha256'] == m['body_review']['sha256'] and json.loads(pinned(m['body_review']))['status'] == 'CLEAR'",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 169,
+      "expression": "all((body_gate[k] for k in ['complete_public_types_context_and_24_scoped_types_read', 'all_10_equation_specializations_five_accessor_equations_and_generalized_IH_read', 'same_actual_state_all_five_outcomes', 'no_ID_split_or_counter_premise', 'default_declaration_limits', 'all_linters']))",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 170,
+      "expression": "(body_gate['exact_contracts'], body_gate['exact_contract_lines']) == (6, 29)",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 171,
+      "expression": "body_gate['first_strict_authorized'] and body_gate['full_or_official_install_authorized'] is False",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 172,
+      "expression": "body_gate['sole_IH_call'] == 'ih next after'",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 174,
+      "expression": "declaration['status'] == 'ACCEPTED_EXACT_DECLARATIONS_BEFORE_BODY' and declaration['module'] == name",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 175,
+      "expression": "declaration['public_heads'] == shorts and declaration['private_helpers'] == m['private_helpers']",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 176,
+      "expression": "declaration['contracts_sha256'] == m['manifest']['sha256'] and declaration['insertion_map_sha256'] == m['layout']['sha256']",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 177,
+      "expression": "declaration['whole_source_hard_stop'] == m['source_cap'] and declaration['default_declaration_limits'] and declaration['all_linters']",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 178,
+      "expression": "[declaration[k] for k in ['root_context_lines_read', 'root_public_header_lines_read', 'root_local_compiled_fragment_lines_read']] == [9, 15, 5]",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 179,
+      "expression": "all((declaration[k] for k in ['root_all_public_private_local_header_types_and_all_schema_metadata_read', 'root_all_24_scoped_introduced_types_read', 'root_all_10_specialized_equation_types_read', 'root_all_five_accessor_equations_and_complete_three_line_generalized_fuel_IH_read', 'root_all_7_relevant_live_API_cuts_172_lines_read', 'root_all_seven_public_import_routes_checked', 'Pair_and_Scan_done_payload_and_control_types_distinct', 'plain_def_and_by_theorem_attachments_exact', 'external_public_H37_step_mono_is_not_local_recursion']))",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 180,
+      "expression": "[declaration[k] for k in ['body_haves', 'body_lets', 'body_obtains', 'helpers', 'recursive_calls', 'termination_by_count']] == [2, 0, 0, 0, 0, 0]",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 181,
+      "expression": "declaration['restricted_induction_call'] == 'ih next after' and re.fullmatch('[0-9a-f]{64}', declaration['independent_review_sha256'])",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 182,
+      "expression": "declaration['induction'] is True and declaration['goal_status'] == 'ACTIVE_INCOMPLETE'",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 186,
+      "expression": "list(manifest) == [f['file'] for f in fragments] and [f['order'] for f in fragments] == list(range(1, len(fragments) + 1))",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 189,
+      "expression": "[{k: v for k, v in f.items() if k != 'path'} for f in fragments] == layout['compiled_fragments']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 190,
+      "expression": "layout['schema'] == schema and json.loads(pinned(m['declaration_layout'])) == m['declaration_layout_values']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 194,
+      "expression": "digest(raw_fragment) == f['sha256'] and len(raw_fragment.splitlines()) == f['lines']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 195,
+      "expression": "manifest[f['file']] == f['sha256']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 197,
+      "expression": "source.startswith(data['context.lean.txt']) and source.count(data['context.lean.txt']) == 1",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 198,
+      "expression": "m['header_attachments'] == {'outcomeState': ' :=\\n', 'step_mono': ' := by\\n', 'execute_mono': ' := by\\n'}",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 203,
+      "expression": "source.count(header) == 1 and source.index(header) >= len(data['context.lean.txt'])",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 205,
+      "expression": "[positions[s][0] for s in all_shorts] == sorted((positions[s][0] for s in all_shorts))",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 220,
+      "expression": "scope.count(fragment) == 1",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 222,
+      "expression": "matched == sorted(matched) and len(set(matched)) == len(matched)",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 226,
+      "expression": "len(types['entries']) == 24 and set(inventory['bodies']) == set(all_shorts)",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 227,
+      "expression": "not re.search(b'(?m)^\\\\s*(?:mutual|termination_by)\\\\b', source)",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 230,
+      "expression": "equations == m['case_equations'] and len(equations['families']) == 2 and (sum((len(e['specialized_types']) for e in equations['families'])) == 10)",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 231,
+      "expression": "induction == m['induction_contract'] and induction['owner'] == 'execute_mono' and (induction['activation'] == schema['induction_activation'])",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 232,
+      "expression": "reviewed['execute-IH.lean.txt'].decode().rstrip('\\n') == induction['generated_IH_type'] and len(reviewed['execute-IH.lean.txt'].splitlines()) == 3",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 233,
+      "expression": "induction['generalized'] == ['control', 'state'] and induction['calls'][0]['next_type'] == 'SourceCurrentOriginalRowClusterScan.Control' and (induction['calls'][0]['after_type'] == 'SourceCurrentSameSymbolEdgeControl.State width')",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 234,
+      "expression": "induction['fixed'] == ['width', 'DecidableEq Symbol', 'DecidableEq (EdgeKey Symbol Guard)']",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 235,
+      "expression": "induction['calls'][0]['term'] == 'ih next after' and len(induction['calls']) == induction['calls'][0]['count'] == 1 and (induction['unrestricted_induction_oracle'] is False)",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 237,
+      "expression": "bodies[equation['owner']].count(equation['activation'].encode()) == 1",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 239,
+      "expression": "accessor == m['accessor_equations'] and len(accessor['equations']) == 5 and accessor['public_total_full_state'] and (accessor['equality_instances'] == [])",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 240,
+      "expression": "bodies['outcomeState'].strip() == b'match outcome with\\n  | .yielded _ state | .done _ state | .failed _ state | .constraintError _ state | .blocked _ _ state => state'",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 243,
+      "expression": "len(re.findall(b'\\\\bcases\\\\b', body)) == sum((item.startswith('cases ') for item in inventory['bodies'][short]['case_activations'])) and all((body.count(item.encode()) == 1 for item in inventory['bodies'][short]['case_activations']))",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 244,
+      "expression": "re.findall(b'\\\\bhave[ \\\\t]+([^ \\\\t:\\\\n]+)', body) == [n.encode() for n in expected['have_names']]",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 245,
+      "expression": "len(re.findall(b'\\\\bhave\\\\b', body)) == len(expected['have_names'])",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 246,
+      "expression": "re.findall(b'\\\\blet[ \\\\t]+([^ \\\\t:=\\\\n]+)', body) == [n.encode() for n in expected['let_names']]",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 247,
+      "expression": "len(re.findall(b'\\\\blet\\\\b', body)) == len(expected['let_names'])",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 248,
+      "expression": "re.findall(b'\\\\bby_cases[ \\\\t]+([^ \\\\t:\\\\n]+)', body) == [n.encode() for n in expected['by_cases_names']]",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 249,
+      "expression": "re.findall(b'\\\\bcases[ \\\\t]+([^ \\\\t:\\\\n]+)[ \\\\t]*:', body) == [n.encode() for n in expected['case_equations']]",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 251,
+      "expression": "groups == expected['obtain_groups'] and len(re.findall(b'\\\\bobtain\\\\b', body)) == len(groups)",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 252,
+      "expression": "re.findall(b'\\\\bintro[ \\\\t]+([^\\\\n]+)', body) == [n.encode() for n in expected['intro_groups']]",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 253,
+      "expression": "re.findall(b'\\\\bfun[ \\\\t]+([^\\\\n]*?)=>', body) == [n.encode() for n in expected['lambda_groups']]",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 256,
+      "expression": "patterns == expected['case_pattern_groups'] and all((part in patterns or (short == 'outcomeState' and any((part in group for group in patterns))) for part in inventory['bodies'][short]['case_patterns']))",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 257,
+      "expression": "all((n in allowed for group in expected['intro_groups'] + expected['lambda_groups'] for n in group.split()))",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 258,
+      "expression": "all((n in allowed | {'cluster', 'scan', 'comparison', 'nil', 'cons', 'zero', 'succ', 'yielded', 'done', 'failed', 'constraintError', 'blocked', '.yielded', '.done', '.failed', '.constraintError', '.blocked', '_', '|'} for group in patterns for n in group.split()))",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 259,
+      "expression": "re.findall(b'\\\\binduction[ \\\\t]+([^\\\\n]+)', body) == ([induction['activation'].removeprefix('induction ').encode()] if short == 'execute_mono' else [])",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 260,
+      "expression": "not re.search(b'\\\\b(?:show|suffices|haveI|letI)\\\\b', body) and (not re.search(b'\\\\bobtain\\\\b(?:(?!:=).)*:(?!=)', body, re.S))",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 261,
+      "expression": "re.findall(b'\\\\boutcomeState\\\\b', body) == [b'outcomeState'] * expected['accessor_uses']",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 263,
+      "expression": "len(re.findall(b'(?m)^[ \\\\t]*\\\\(' + re.escape(accessor_external) + b'[ \\\\t]*$', body)) == (1 if short == 'step_mono' else 0) and len(re.findall(b'(?m)^[ \\\\t]*' + re.escape(accessor_external) + b'\\\\] using pairGrowth[ \\\\t]*$', body)) == (5 if short == 'step_mono' else 0) and (body.count(accessor_external) == (6 if short == 'step_mono' else 0) == expected['qualified_accessor_uses'])",
+      "classification": "H38_QUALIFIED_AND_OWN_ACCESSOR_SCOPE"
+    },
+    {
+      "line": 264,
+      "expression": "re.findall(b'\\\\boutcomeState\\\\b', body.replace(accessor_external, b'H37PairAccessor')) == [b'outcomeState'] * expected['own_accessor_uses']",
+      "classification": "H38_QUALIFIED_AND_OWN_ACCESSOR_SCOPE"
+    },
+    {
+      "line": 266,
+      "expression": "len(re.findall(b'(?m)^[ \\\\t]*exact ' + re.escape(external) + b' inner state[ \\\\t]*$', body)) == body.count(external) == (1 if short == 'step_mono' else 0)",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 268,
+      "expression": "not re.search(b'\\\\b' + short.encode() + b'\\\\b', body)",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 270,
+      "expression": "dependencies == [n.encode() for n in expected['proof_dependencies']] and all((all_shorts.index(n.decode()) < all_shorts.index(short) for n in dependencies))",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 272,
+      "expression": "schema['induction_owner'] == 'execute_mono' and schema['restricted_induction_call_terms'] == ['ih next after']",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 273,
+      "expression": "[len(re.findall(b'\\\\bih\\\\b', bodies[n])) for n in all_shorts] == [0, 0, 2]",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 275,
+      "expression": "yielded and re.findall(b'\\\\bih[ \\\\t]+([A-Za-z_][A-Za-z_0-9]*)[ \\\\t]+([A-Za-z_][A-Za-z_0-9]*)', yielded.group(1)) == [(b'next', b'after')]",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 276,
+      "expression": "bodies['execute_mono'].count(b'ih next after') == 1",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 277,
+      "expression": "schema['private_helpers'] == m['private_helpers'] == []",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 278,
+      "expression": "schema['public_heads'] == specs and schema['new_definitions'] == ['outcomeState'] and (schema['new_predicates_or_structures'] == schema['typed_show_fragments'] == []) and (schema['local_induction_names'] == ['ih'])",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 279,
+      "expression": "schema['recursive_calls'] == [] and schema['termination_by_count'] == 0 and (schema['extra_unreviewed_named_or_typed_body_fragments_authorized'] is False)",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 280,
+      "expression": "schema['compiled_contract_count'] == 6 and schema['compiled_contract_lines'] == 29 and (schema['compiled_contract_order'] == list(manifest))",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 281,
+      "expression": "schema['local_have_names_by_owner'] == {n: m['bodies'][n]['have_names'] for n in all_shorts} and schema['local_let_names_by_owner'] == {n: m['bodies'][n]['let_names'] for n in all_shorts}",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 282,
+      "expression": "schema['local_obtain_groups'] == [] and schema['by_cases_names'] == [] and (schema['case_equation_names_by_owner'] == {n: m['bodies'][n]['case_equations'] for n in all_shorts})",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 286,
+      "expression": "public == [(kind, short) for short, kind in specs]",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 291,
+      "expression": "found",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 293,
+      "expression": "helpers == schema['private_helpers'] == m['private_helpers']",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 294,
+      "expression": "not re.search(b'(?m)^\\\\s*(?:variable[ \\\\t]+\\\\[|omit\\\\b)', source)",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 295,
+      "expression": "all((source.count(('theorem ' + short + ' [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]').encode()) == 1 for short, kind in specs if kind == 'theorem'))",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 296,
+      "expression": "schema['global_instance_declaration'] is False and schema['omit_directives'] == 0",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 297,
+      "expression": "schema['explicit_instance_heads'] == ['step_mono', 'execute_mono']",
+      "classification": "INHERITED_SCOPE_OR_BOUND_DATA"
+    },
+    {
+      "line": 299,
+      "expression": "(root / m['source_path']).read_bytes() == source",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 301,
+      "expression": "tool_gate['status'] == 'ACCEPTED_EXACT_TOOLS_FOR_SELECTED_STRICT_SOURCE' and tool_gate['source_sha256'] == m['source_sha256']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 302,
+      "expression": "tool_gate['public_heads'] == shorts and tool_gate['materializer_activation'] and tool_gate['sole_FULL_activation'] and tool_gate['reader_activation_after_actual_FULL']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 305,
+      "expression": "pinned(active) == pinned(archived) and tool_gate['installed_tools'][active['path']] == active['sha256']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 312,
+      "expression": "printer == source + tail.encode() and len(tail.splitlines()) == 11 + 3 * len(specs)",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 313,
+      "expression": "len(printer.splitlines()) == m['source_lines'] + len(tail.splitlines()) == tool_gate['diagnostic_tail_lines'] + m['source_lines']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 314,
+      "expression": "all((printer.decode().splitlines().count('set_option ' + option) == 1 for option in options))",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 315,
+      "expression": "all((printer.decode().splitlines().count(d + namespace + short) == 1 for short, kind in specs for d in ['#check @', '#print ', '#print axioms ']))",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 319,
+      "expression": "len(matching) == 1",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 321,
+      "expression": "(report['source_sha256'], report['source_lines'], report['printer_sha256']) == (m['source_sha256'], m['source_lines'], digest(printer))",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 322,
+      "expression": "report['log_sha256'] == digest(raw) and report['log_bytes'] == len(raw)",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 323,
+      "expression": "report['receipt_sha256'] == digest(read(m['full'] + '.json')) and report['owned_public_job_exit'] == 0",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 324,
+      "expression": "all((report[k] for k in ['all_eight_printer_settings', 'exact_module_and_diagnostic_tail', 'diagnostic_limits_after_module_only', 'no_omissions']))",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 325,
+      "expression": "(report['pp_option_count'], report['linter_option_count'], report['diagnostic_limit_count']) == (7, 1, 2)",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 326,
+      "expression": "report['configured_paths'] == {k: str(path.resolve()) for k, path in dict(source=evidence / m['snapshot'], printer=evidence / (m['full'] + '.source.lean'), raw=evidence / (m['full'] + '.log'), receipt=evidence / (m['full'] + '.json')).items()}",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 327,
+      "expression": "[(h['head'], h['kind']) for h in report['heads']] == [(namespace + short, kind) for short, kind in specs]",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 329,
+      "expression": "not re.search('sorryAx|\\\\b(?:warning|error)(?:\\\\([^)]*\\\\))?:|failed to pretty print|pp\\\\.rawOnError|maximum recursion depth|maximum number of heartbeats|\u22ef|\u2026|\\\\.\\\\.\\\\.', log)",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 333,
+      "expression": "len(matches) == 1",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 335,
+      "expression": "starts == sorted(starts, key=lambda match: match.start()) and (not log[:starts[0].start()].strip())",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 342,
+      "expression": "len(delimiters) == 1",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 345,
+      "expression": "len(axiom_matches) == 1",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 355,
+      "expression": "len(matches) == 1",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 360,
+      "expression": "normalized == canonical(declared) and raw_identity is metric['raw_type_byte_identity']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 361,
+      "expression": "len(checked.encode()) == metric['type_bytes'] and len(checked) == metric['type_characters'] and (digest(checked.encode()) == metric['type_sha256'])",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 362,
+      "expression": "len(checked.splitlines()) == metric['type_logical_lines'] and checked.count('\\n') == metric['type_line_feeds'] and (checked.endswith('\\n') == metric['type_final_newline'])",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 363,
+      "expression": "len(declared.encode()) == metric['printed_type_bytes'] and digest(declared.encode()) == metric['printed_type_sha256']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 364,
+      "expression": "digest(normalized.encode()) == metric['canonical_type_sha256']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 365,
+      "expression": "not any((token in checked + declared for token in ['_private', '\u271d', '\u2020', '\u2021']))",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 366,
+      "expression": "not any((re.search(re.escape(namespace + helper) + \"(?![\\\\w'])\", checked + declared) for helper in helpers))",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 367,
+      "expression": "all((head_report[k] for k in ['check_print_type_identity', 'check_print_type_lexical_identity', 'unique_complete_type_body_delimiter', 'actual_axioms_within_standard_allowed']))",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 368,
+      "expression": "head_report['check_print_type_byte_identity'] is raw_identity",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 369,
+      "expression": "head_report['private_namespace_helpers_checked'] == helpers and head_report['private_type_spellings_checked'] == ['_private', '\u271d', '\u2020', '\u2021'] and (head_report['private_public_type_names'] is False)",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 370,
+      "expression": "head_report['checked_type_characters'] == len(checked) and head_report['checked_type_bytes'] == len(checked.encode()) and (head_report['checked_type_sha256'] == metric['type_sha256'])",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 371,
+      "expression": "head_report['printed_type_bytes'] == metric['printed_type_bytes'] and head_report['printed_type_characters'] == len(declared) and (head_report['printed_type_sha256'] == metric['printed_type_sha256'])",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 372,
+      "expression": "head_report['normalized_type_characters'] == len(normalized) and head_report['canonical_type_sha256'] == metric['canonical_type_sha256']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 373,
+      "expression": "head_report['body_characters'] == len(body) == metric['body_characters'] and len(body.encode()) == metric['body_bytes']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 374,
+      "expression": "body.startswith('fun ') and len(body) > 50 and (digest(body.encode()) == metric['body_sha256'])",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 376,
+      "expression": "values or (axiom.group(1) == 'does not depend on any axioms' and (not printed[axiom.end():].strip()))",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 378,
+      "expression": "axioms == head_report['actual_axioms'] == metric['actual_axioms'] and set(axioms) <= {'Classical.choice', 'Quot.sound', 'propext'}",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 379,
+      "expression": "head_report['actual_standard_three_axioms'] == (set(axioms) == {'Classical.choice', 'Quot.sound', 'propext'})",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 384,
+      "expression": "retained == text.encode() and report['retained_slices'][filename] == dict(bytes=len(retained), sha256=digest(retained))",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 386,
+      "expression": "''.join(reconstructed) == log and set(report['retained_slices']) == set(retained_names)",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 389,
+      "expression": "review['status'] == 'ACCEPTED_COMPLETE_PUBLIC_TYPES_AND_INSTALLED' and review['source_sha256'] == m['source_sha256'] and (review['source_lines'] == m['source_lines'])",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 390,
+      "expression": "review['root_manual_complete_TYPEs'] is True and review['goal_status'] == 'ACTIVE_INCOMPLETE'",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 391,
+      "expression": "review['readback_sha256'] == m['readback']['sha256']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 392,
+      "expression": "review['independent_complete_TYPE_review_sha256'] == m['type_review']['sha256'] and independent['status'] == 'CLEAR'",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 393,
+      "expression": "set(review['TYPEs']) == set(shorts)",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 396,
+      "expression": "review['TYPEs'][short] == dict(sha256=metric['type_sha256'], bytes=metric['type_bytes'], logical_lines=metric['type_logical_lines'], actual_axioms=actual_axioms[short])",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 397,
+      "expression": "review['module'] == name and review['scope'] == m['scope']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 398,
+      "expression": "review['BODY_review'] == dict(complete_retention=True, programmatic_only=True, whole_body_manual_read_claimed=False)",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 399,
+      "expression": "independent['scope'] == 'INDEPENDENT_COMPLETE_ACTUAL_PUBLIC_TYPE_AND_READBACK_REVIEW'",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 400,
+      "expression": "independent['module'] == name and independent['source_sha256'] == m['source_sha256']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 401,
+      "expression": "independent['source_lines'] == m['source_lines'] and independent['public_heads'] == [namespace + short for short in shorts]",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 402,
+      "expression": "independent['ownership']['reviewer_math_author'] is False",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 404,
+      "expression": "manual['checked_TYPEs_complete'] == shorts and manual['printed_TYPEs_manual'] is manual['BODYs_manual'] is False",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 407,
+      "expression": "item['checked_type'] == dict(logical_lines=metric['type_logical_lines'], LF=metric['type_line_feeds'], final_LF=metric['type_final_newline'], characters=metric['type_characters'], bytes=metric['type_bytes'], sha256=metric['type_sha256'])",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 408,
+      "expression": "item['printed_type'] == dict(bytes=metric['printed_type_bytes'], sha256=metric['printed_type_sha256'])",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 409,
+      "expression": "item['actual_raw_byte_identity'] is metric['raw_type_byte_identity'] and item['lexical_identity'] is True",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 410,
+      "expression": "item['canonical_sha256'] == metric['canonical_type_sha256'] and item['axioms']['actual'] == actual_axioms[short]",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 411,
+      "expression": "item['body'] == dict(characters=metric['body_characters'], bytes=metric['body_bytes'], sha256=metric['body_sha256'])",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 412,
+      "expression": "len(full_variant_keys) == len(set(full_variant_keys))",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 413,
+      "expression": "load('original-source-index.json')['sources'] == [bound['original_audit']]",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 415,
+      "expression": "digest(original) == bound['original_audit']['sha256'] and len(original.splitlines()) == bound['original_audit']['lines']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 419,
+      "expression": "audit_source.count(addition) == 1 and audit_source.index(addition) < audit_source.index(b'/-!')",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 421,
+      "expression": "audit_source == original",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 423,
+      "expression": "jobs[audit_stem]['kind'] == 'audit' and jobs[audit_stem]['exit_code'] == 0",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 425,
+      "expression": "digest(raw_audit) == bound['audit']['log_sha256']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    },
+    {
+      "line": 427,
+      "expression": "dependencies and int(dependencies.group(1)) == bound['audit']['dependencies']",
+      "classification": "EXACT_INHERITED_GENERIC"
+    }
+  ]
+}

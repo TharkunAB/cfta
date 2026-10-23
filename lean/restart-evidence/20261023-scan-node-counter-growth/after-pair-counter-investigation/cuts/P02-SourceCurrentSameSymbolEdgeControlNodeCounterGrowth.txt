@@ -1,0 +1,20 @@
+  | native body pending =>
+      have nativeGrowth : state.checked.native.machine.heap.nodes.next ≤
+          (SourceEqualityNativeDemand.step body state.checked).state.native.machine.heap.nodes.next := by
+        exact SourceEqualityNativeDemandNodeCounterGrowth.step_mono body state.checked
+      cases observed : SourceEqualityNativeDemand.step body state.checked with
+      | yielded next after =>
+          simpa only [SourceCurrentSameSymbolEdgeControl.step, observed, outcomeState,
+            SourceEqualityNativeDemand.Outcome.state] using nativeGrowth
+      | done value after =>
+          simpa only [SourceCurrentSameSymbolEdgeControl.step, observed, outcomeState,
+            SourceEqualityNativeDemand.Outcome.state] using nativeGrowth
+      | failed failure after =>
+          simpa only [SourceCurrentSameSymbolEdgeControl.step, observed, outcomeState,
+            SourceEqualityNativeDemand.Outcome.state] using nativeGrowth
+      | constraintError message after =>
+          simpa only [SourceCurrentSameSymbolEdgeControl.step, observed, outcomeState,
+            SourceEqualityNativeDemand.Outcome.state] using nativeGrowth
+      | blocked reason next after =>
+          simpa only [SourceCurrentSameSymbolEdgeControl.step, observed, outcomeState,
+            SourceEqualityNativeDemand.Outcome.state] using nativeGrowth

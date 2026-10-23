@@ -1,0 +1,18 @@
+/-- Count edge-cache misses in the recorded request list. -/
+def edgeReservations : List (Request Symbol Guard) → Nat
+  | [] => 0
+  | .node _ _ :: rest => edgeReservations rest
+  | .edge _ miss :: rest => (if miss then 1 else 0) + edgeReservations rest
+
+/-- Observe the literal request order and the selected actual continuations. -/
+def observe (work : Work Symbol Guard Result) (state : State Symbol Guard) : List (Request Symbol Guard) :=
+  match work with
+  | .pure _ => []
+  | .node key identify next =>
+      .node key (state.nodes.table key).isNone ::
+        observe (next (nodeStep key identify state).1) (nodeStep key identify state).2
+  | .edge key identify next =>
+      .edge key (state.edges.table key).isNone ::
+        observe (next (edgeStep key identify state).1) (edgeStep key identify state).2
+
+omit [DecidableEq (EdgeKey Symbol Guard)] in

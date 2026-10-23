@@ -1,0 +1,162 @@
+--- H37/body-inventories.json
++++ H38/body-inventories.json
+@@ -2,16 +2,6 @@
+   "status": "EXACT_PLANNED_BODY_BINDERS_NO_BODIES",
+   "bodies": {
+     "outcomeState": {
+-      "case_activations": [
+-        "match outcome with"
+-      ],
+-      "case_patterns": [
+-        ".yielded _ state",
+-        ".done _ state",
+-        ".failed _ state",
+-        ".constraintError _ state",
+-        ".blocked _ _ state"
+-      ],
+       "have_names": [],
+       "let_names": [],
+       "obtain_groups": [],
+@@ -23,73 +13,69 @@
+       "recursive_theorem_calls": [],
+       "termination_by_count": 0,
+       "induction_count": 0,
++      "case_activations": [
++        "match outcome with"
++      ],
++      "case_patterns": [
++        ".yielded _ state",
++        ".done _ state",
++        ".failed _ state",
++        ".constraintError _ state",
++        ".blocked _ _ state"
++      ],
+       "definition_match_count": 1
+     },
+     "step_mono": {
+-      "case_activations": [
+-        "cases control with",
+-        "cases observed : (FlatMemoThunk.demand handle state.memo).1 with",
+-        "cases observed : SourceEqualityNativeDemand.step body state.checked with",
+-        "cases pending with"
+-      ],
+-      "case_patterns": [
+-        "call request pending",
+-        "demand handle pending",
+-        "order handle request pending",
+-        "native body pending",
+-        "ret value pending",
+-        "absent",
+-        "evaluate request",
+-        "busy",
+-        "ready value",
+-        "yielded next after",
+-        "done value after",
+-        "failed failure after",
+-        "constraintError message after",
+-        "blocked reason next after",
+-        "nil",
+-        "cons handle pending"
+-      ],
+       "have_names": [
+-        "nativeGrowth"
++        "pairGrowth"
+       ],
+       "let_names": [],
+       "obtain_groups": [],
+       "intro_groups": [],
+       "lambda_groups": [],
+       "typed_show_fragments": [],
+-      "by_cases_names": [
+-        "reversed"
+-      ],
++      "by_cases_names": [],
+       "equation_names": [
+-        "observed",
+         "observed"
+       ],
+       "recursive_theorem_calls": [],
+       "termination_by_count": 0,
+       "induction_count": 0,
++      "case_activations": [
++        "cases control with",
++        "cases candidates with",
++        "cases remaining with",
++        "cases observed : SourceCurrentSameSymbolEdgeControl.step inner state with"
++      ],
++      "case_patterns": [
++        "cluster candidates keptReversed",
++        "nil",
++        "cons pivot tail",
++        "scan pivot remaining incomparableReversed keptReversed",
++        "nil",
++        "cons candidate tail",
++        "comparison pivot candidate tail incomparableReversed keptReversed inner",
++        "yielded next after",
++        "done common after",
++        "failed reason after",
++        "constraintError message after",
++        "blocked reason next after"
++      ],
+       "external_public_dependencies": [
+-        "SourceEqualityNativeDemandNodeCounterGrowth.step_mono"
++        "SourceCurrentSameSymbolEdgeControlNodeCounterGrowth.step_mono",
++        "SourceCurrentSameSymbolEdgeControlNodeCounterGrowth.outcomeState"
+       ],
+       "external_qualified_step_mono_token_count": 1,
+       "external_token_owner": "step_mono",
++      "external_exact_command": "exact SourceCurrentSameSymbolEdgeControlNodeCounterGrowth.step_mono inner state",
+       "local_dependencies": [
+         "outcomeState"
+-      ]
++      ],
++      "identity_split_count": 0,
++      "actual_pair_done_value_type": "InternedConstructorTemplates.EdgeValue Symbol Guard",
++      "actual_pair_yielded_control_type": "SourceCurrentSameSymbolEdgeControl.Control"
+     },
+     "execute_mono": {
+-      "case_activations": [
+-        "cases observed : SourceCurrentSameSymbolEdgeControl.step control state with"
+-      ],
+-      "case_patterns": [
+-        "zero",
+-        "succ fuel ih",
+-        "yielded next after",
+-        "done value after",
+-        "failed failure after",
+-        "constraintError message after",
+-        "blocked reason next after"
+-      ],
+       "have_names": [
+         "first"
+       ],
+@@ -105,6 +91,18 @@
+       "recursive_theorem_calls": [],
+       "termination_by_count": 0,
+       "induction_count": 1,
++      "case_activations": [
++        "cases observed : SourceCurrentOriginalRowClusterScan.step control state with"
++      ],
++      "case_patterns": [
++        "zero",
++        "succ fuel ih",
++        "yielded next after",
++        "done values after",
++        "failed reason after",
++        "constraintError message after",
++        "blocked reason next after"
++      ],
+       "induction_activation": "induction fuel generalizing control state with",
+       "IH_calls": [
+         "ih next after"
+@@ -112,7 +110,9 @@
+       "local_dependencies": [
+         "outcomeState",
+         "step_mono"
+-      ]
++      ],
++      "actual_scan_done_value_type": "List (InternedConstructorTemplates.EdgeValue Symbol Guard)",
++      "actual_scan_yielded_control_type": "SourceCurrentOriginalRowClusterScan.Control"
+     }
+   },
+   "additional_have_let_obtain_intro_lambda_show_or_induction_names": []

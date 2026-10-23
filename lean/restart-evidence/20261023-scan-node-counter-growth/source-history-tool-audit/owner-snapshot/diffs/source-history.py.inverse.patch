@@ -1,0 +1,60 @@
+--- selected/source-history.py
++++ basis/source-history.py
+@@ -1,4 +1,4 @@
+-exec(compile(open('/tmp/mcfta-scan-node-counter-growth-root-common.py').read(), '/tmp/mcfta-scan-node-counter-growth-root-common.py', 'exec'))
++exec(compile(open('/tmp/mcfta-pair-node-counter-growth-root-common.py').read(), '/tmp/mcfta-pair-node-counter-growth-root-common.py', 'exec'))
+ import datetime
+ import re
+ import shutil
+@@ -6,7 +6,7 @@
+ metadata = HERE / 'root-metadata-history'
+ metadata.mkdir()
+ metadata_jobs = {}
+-for path in sorted(Path('/tmp').glob('mcfta-scan-node-counter-growth-*.json')):
++for path in sorted(Path('/tmp').glob('mcfta-pair-node-counter-growth-*.json')):
+     item = load(path)
+     if not isinstance(item, dict) or 'wrapper' not in item or 'exit_code' not in item:
+         continue
+@@ -21,7 +21,7 @@
+ save('root-metadata-history-cut.json', dict(status='COMPLETE_TERMINAL_METADATA_CUT_BEFORE_CLOSING_TOOLS',
+     observed_at=datetime.datetime.now(datetime.timezone.utc).isoformat(), jobs=metadata_jobs, failed_jobs=len(failures),
+     later_receipts='The one-time completed-root-support collection retains all closing receipts after this cut.'))
+-specs = {'root-scan-node-counter-growth-strict-1': ('strict', NAME), 'root-scan-node-counter-growth-full-1': ('full', NAME), 'root-scan-node-counter-growth-audit-1': ('audit', None)}
++specs = {'root-pair-node-counter-growth-strict-1': ('strict', NAME), 'root-pair-node-counter-growth-full-1': ('full', NAME), 'root-pair-node-counter-growth-audit-1': ('audit', None)}
+ actual = {}
+ for path in HERE.glob('*.json'):
+     item = load(path)
+@@ -39,13 +39,13 @@
+     assert load(HERE / receipt['limits']) == {'memory.max': '4294967296', 'memory.high': '4294967296', 'memory.swap.max': '0'}
+     usage = load(HERE / (stem + '.usage.json'))
+     assert 0 <= usage['age_seconds'] <= 600 and usage['remaining_percent'] > 1
+-assert (HERE / 'root-scan-node-counter-growth-strict-1.log').read_bytes() == b''
++assert (HERE / 'root-pair-node-counter-growth-strict-1.log').read_bytes() == b''
+ assert all(job['exit_code'] == job['errors'] == job['source_warnings'] == 0 for job in jobs.values())
+ save('job-history.json', jobs)
+ variant_path = 'variants/v1/' + NAME + '.lean'
+ source = HERE / variant_path
+ lines = len(source.read_bytes().splitlines())
+-assert lines == 80 and lines <= 140
++assert lines == 96 and lines <= 160
+ variants = [dict(module=NAME, path=variant_path, sha256=sha(source), lines=lines,
+     reason='The single reviewed body passed its first strict check and sole complete public-output check unchanged.')]
+ assert sha(source) == sha(HERE / (NAME + '.lean')) == load(HERE / 'selected-source-gate.json')['source_sha256']
+@@ -59,7 +59,7 @@
+ selection = load(HERE / 'selected-sources.json')
+ save('source-history-gate.json', dict(status='ROOT_ACCEPTED', selected_sources={path: pin['sha256'] for path, pin in selection.items()},
+     variants=variants, artifacts=artifacts, patches=[], rejected_public_types=[]))
+-raw = (HERE / 'root-scan-node-counter-growth-audit-1.log').read_text()
++raw = (HERE / 'root-pair-node-counter-growth-audit-1.log').read_text()
+ build = re.search(r'Build completed successfully \((\d+) jobs\)\.', raw)
+ dependencies = re.search(r'Checked axiom dependencies of (\d+) MicroCFTA theorems', raw)
+ assert build and dependencies
+@@ -71,7 +71,7 @@
+     warned_source_exit_zero_jobs=sum(job['kind'] in {'strict', 'full'} and job['exit_code'] == 0 and job['source_warnings'] > 0 for job in jobs.values()),
+     rejected_public_type_jobs=0)
+ save('actual-proof-cut.json', dict(status='ACTUAL_AUDIT_AND_HISTORY_BOUND', metrics=metrics,
+-    audit=dict(stem='root-scan-node-counter-growth-audit-1', build_jobs=int(build.group(1)), dependencies=int(dependencies.group(1)), log_sha256=sha(HERE / 'root-scan-node-counter-growth-audit-1.log'), warnings=warnings),
++    audit=dict(stem='root-pair-node-counter-growth-audit-1', build_jobs=int(build.group(1)), dependencies=int(dependencies.group(1)), log_sha256=sha(HERE / 'root-pair-node-counter-growth-audit-1.log'), warnings=warnings),
+     metadata_jobs=len(metadata_jobs), failed_metadata_jobs=len(failures), metadata_failure_paths=failures,
+     variants=len(variants), patches=0, artifacts=len(artifacts), source_history_sha256=sha(HERE / 'source-history-gate.json'),
+     original_Audit_sha256=sha(HERE / 'original-sources/Audit.original.lean.txt')))

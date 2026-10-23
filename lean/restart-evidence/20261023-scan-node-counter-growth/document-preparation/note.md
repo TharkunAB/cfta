@@ -1,0 +1,4 @@
+This is source-only selected document preparation under the accepted Root and independent scope gates. Complete sealed H37 bases, exact forward/inverse literal recipes, patches and every generic AST assertion are retained. Observed actual history/Audit data are bound from the accepted current records. Proof SHA stays runtime-only. The final verifier review and both saved modes remain runtime requirements.
+
+The writer remains 88 lines and 25 assertions. The two full templates are conditional writer inputs, not current documents or future success reports. They retain the accurate five-outcome Scan counter scope, old H23 results and separate new counter composition. The writer keeps all nine LF inverses, the full FINDINGS repair index FIRST, actual dual saved reports and exact proof commit checks before any write.
+No selected program was executed, imported or installed. No Git command, compiler, network operation or repository write occurred during preparation.
