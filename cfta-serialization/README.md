@@ -18,6 +18,7 @@ Redex, Nanopass, EDN, and KDL, and explains why the format has its own syntax.
 | `PlainFTA state Symbol` | `printGraph` | `parseGraph` | `graph 1;` |
 | `Document state` | `printDocument` | `parseDocument` | `document 1;` |
 | `Language state` | `printLanguage` | `parseLanguage` | `language 1;` |
+| `Definitions` | `printDefinitions` | `parseDefinitions` | `definitions 1;` |
 
 Printers return `Text`. Parsers return `Either (TextError state) value`.
 `explainTextError` reports a syntax line/column or a checked source error.
@@ -153,8 +154,14 @@ named `v`, distinct from the distinguished value abbreviated as `v`.
 Sorts are `int`, `real`, `bool`, `function([SORT, ...], RESULT)`, and
 `named(NAME, [SORT, ...])`. For example, `named(List, [int])` retains a named
 type constructor and its arguments. Predicate and type names use the same
-escaping as other names. The format stores their references; it does not
-supply their definitions or a solver context.
+escaping as other names. A `language 1;` file stores their references. A
+`definitions 1;` file stores predicate definitions
+(`Data.CFTA.Refinement.Definition`), one statement for each predicate:
+
+```text
+definitions 1;
+predicate between [x: int, lo: int, hi: int] = and(le(var(lo), var(x)), le(var(x), var(hi)));
+```
 
 These are representations of existing typed constructors. A query backend still
 needs to support the stored constraints. Exact storage does not establish that

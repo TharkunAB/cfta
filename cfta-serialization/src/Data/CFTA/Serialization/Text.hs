@@ -27,6 +27,10 @@ module Data.CFTA.Serialization.Text (
     parseUpdate,
     printUpdateWith,
     parseUpdateWith,
+
+    -- * Predicate definitions
+    printDefinitions,
+    parseDefinitions,
 ) where
 
 import Control.Applicative ((<|>))
@@ -60,6 +64,7 @@ import qualified Data.CFTA.Formula as F
 import Data.CFTA.Index (ChildIndex (ChildIndex))
 import qualified Data.CFTA.Language as L
 import Data.CFTA.Path (Path (Path), unPath)
+import Data.CFTA.Refinement.Definition (Definition (..), Definitions)
 import Data.CFTA.Symbol (Symbol (RefinedSymbol, Symbol), symbolRefinement, symbolText, valueName)
 import Data.CFTA.Template (Template (..))
 
@@ -150,6 +155,47 @@ parseUpdate = readUpdate (readEither . Text.unpack)
 -- | Read an update with an explicit typed state codec.
 parseUpdateWith :: StateCodec state -> Text -> Either (TextError state) (L.Update state)
 parseUpdateWith codec = readUpdate (decodeState codec)
+
+{- | Print predicate definitions, one statement for each predicate, in name order.
+
+@
+definitions 1;
+predicate between [x: int, lo: int, hi: int] = and(le(var(lo), var(x)), le(var(x), var(hi)));
+@
+-}
+printDefinitions :: Definitions -> Text
+printDefinitions definitions = built $ "definitions 1;\n" <> foldMap definition (Map.toList definitions)
+  where
+    definition (F.Name name, Definition parameters body) =
+        "predicate "
+            <> nameText name
+            <> " "
+            <> listText [nameText parameter <> ": " <> sortText sort | (F.Name parameter, sort) <- parameters]
+            <> " = "
+            <> formulaText body
+            <> ";\n"
+
+{- | Read predicate definitions. Two definitions of one name are an error.
+
+The result has no state labels, so the state type of the error is free.
+-}
+parseDefinitions :: Text -> Either (TextError state) Definitions
+parseDefinitions = runParser $ do
+    keyword "definitions"
+    version <- integerParser
+    unless (version == 1) $ fail "unsupported definitions version; expected 1"
+    token ";"
+    entries <- untilEnd definition
+    Map.mapKeys F.Name <$> namedMap "predicate" entries
+  where
+    definition = do
+        keyword "predicate"
+        name <- nameParser
+        parameters <- bracketed $ (,) <$> (F.Name <$> nameParser <* token ":") <*> sortParser
+        token "="
+        body <- formulaParser
+        token ";"
+        pure (name, Definition parameters body)
 
 -- | Render graph rows with their complete transition constraints.
 renderGraph :: (state -> Text) -> FTA.PlainFTA state Symbol -> Text
