@@ -150,6 +150,7 @@ specificity template = case template of
     TemplateNode _ parts -> 2 + sum (map specificity parts)
     AnyPrefix parts -> sum (map specificity parts)
     TemplatePrefix _ parts -> 1 + sum (map specificity parts)
+    NamedHole _ -> 0
 
 {- | The terms of a language with at most a bound of nodes, before and after
 an exclusion.
