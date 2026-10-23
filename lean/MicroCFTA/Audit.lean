@@ -1,3 +1,4 @@
+import MicroCFTA.EnumerationUntilBridge
 import MicroCFTA.SourceCurrentOriginalRowClusterScanNodeCounterGrowth
 import MicroCFTA.SourceCurrentSameSymbolEdgeControlNodeCounterGrowth
 import MicroCFTA.SourceEqualityNativeDemandNodeCounterGrowth
