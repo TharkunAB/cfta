@@ -44,6 +44,7 @@ module Data.CFTA.Extension (
 ) where
 
 import Control.Monad (forM_, unless)
+import Data.Either (fromRight)
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
 import qualified Data.Set as Set
@@ -129,7 +130,7 @@ checkExtension lowering earlier later = do
     failures = Lowering.checkProductions lowering earlier later
     -- The later automaton without the reported productions, for the contexts and the smallest terms.
     proved =
-        either (const $ error "cfta-generator bug: removing productions gave an invalid automaton") id $
+        fromRight (error "cfta-generator bug: removing productions gave an invalid automaton") $
             FTA.replaceRows
                 ( Map.mapWithKey
                     (\state productions -> Just [production | production <- productions, (state, production) `notElem` reported])
