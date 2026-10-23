@@ -32,8 +32,9 @@ conditions hold:
    equality of values is the equality of the logic.
 3. Each declared sort has a value. 'IntSort', 'RealSort', and 'BoolSort' have
    values, a function sort has a value when its result sort has one, and a
-   named sort has a value when 'inhabitedSorts' contains it. The solver
-   checks this condition: when it fails, a 'No' becomes 'Unknown'.
+   named sort has a value when 'inhabitedSorts' contains it. A name with a
+   function interpretation has a fixed meaning, so its sort needs no value.
+   The solver checks this condition: when it fails, a 'No' becomes 'Unknown'.
 4. The query is well sorted. The solver checks this condition: a query that
    fails the sort check gives 'Unknown'.
 
@@ -43,6 +44,8 @@ module Data.CFTA.Refinement.Ground (
     Value (..),
     Interpretations (..),
     groundEntailment,
+    termValue,
+    formulaValue,
 ) where
 
 import Control.Monad (zipWithM)
@@ -98,7 +101,11 @@ groundEntailment interpretations definitions declarations assumptions =
   where
     prepare = unfoldKeeping (Map.map fst $ interpretedPredicates interpretations) definitions
     unfolded = traverse (prepare declarations) assumptions
-    allInhabited = all (inhabited (inhabitedSorts interpretations) . snd) declarations
+    -- A name with a function interpretation has a fixed meaning, so it needs no value of its sort.
+    allInhabited =
+        all
+            (inhabited (inhabitedSorts interpretations) . snd)
+            [declaration | declaration@(name, _) <- declarations, name `Map.notMember` interpretedFunctions interpretations]
 
 -- | Whether a sort has a value. A function sort has a constant function when its result sort has a value.
 inhabited :: Set Sort -> Sort -> Bool
