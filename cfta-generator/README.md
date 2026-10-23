@@ -297,10 +297,15 @@ term that several transitions accept at its first place.
 terms of another automaton. An edit keeps the state of its position: a
 replacement gives the position another term of its state, and a wrap puts a
 new node of that state above the old subterm, as one of its children.
+A context wrap puts a new term with one hole above the old subterm, deeper
+than a wrap does, and an unwrap gives the position a child of its old subterm
+that the state accepts.
 `editAutomaton automaton term` gives an automaton with one root symbol for
-each edit site (`ReplaceAt`, and `WrapAt` with a transition index and a child
-index). The children of the root are the new material, so the size of an edit
-is one more than the size of its new material, and the size-major order of
+each edit site (`ReplaceAt`, `WrapAt` and `ContextAt` with a transition index
+and a child index, and `UnwrapAt` with a child index). The children of the
+root are the new material, so the size of a replacement is one more than the
+size of its new material, an unwrap has size 1, a context wrap has the size of
+its new term without the hole, and the size-major order of
 `Data.CFTA.Sized` or of the generator import gives the smallest edits first.
 `applyEdit term edit` gives the edited term. Two edits can give one edited
 term, for example a replacement at the root and a deeper edit, so the
