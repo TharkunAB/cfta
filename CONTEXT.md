@@ -41,9 +41,10 @@ Wilf, and Feat (ranking).
   not call the texts of a symbol a template: a template belongs to a template
   lowering. A *linearization by state* gives the texts by the state and the
   symbol of a transition, so the text of a term depends on its run.
-- **Brackets**: an opening and a closing text around the text of a state. The
-  text in brackets has the term of the text inside, so a term with brackets
-  has more than one text.
+- **Brackets**: an opening and a closing text around the text of a state: the
+  state itself, or another state whose terms then count as terms of the
+  state. The text in brackets has the term of the text inside, so a term with
+  brackets has more than one text.
 
 ## Constraints
 
