@@ -9,12 +9,16 @@ lowering is exact.
 
 'unfold' checks the sorts of the complete original formula first. An unused
 argument disappears in the unfolding, so a later check cannot see it.
+
+'unfoldKeeping' keeps the predicates of a signature map in place, so that
+another solver can interpret them.
 -}
 module Data.CFTA.Refinement.Definition (
     Definition (..),
     Definitions,
     DefinitionError (..),
     unfold,
+    unfoldKeeping,
 ) where
 
 import Control.Monad (forM_, unless, when)
@@ -43,7 +47,7 @@ type Definitions = Map Name Definition
 
 -- | Why a formula does not unfold.
 data DefinitionError
-    = -- | A predicate has no definition.
+    = -- | A predicate has no definition and no signature.
       UndefinedPredicate !Name
     | -- | An application of a predicate has the wrong number of arguments: the parameters, then the arguments.
       ArityMismatch !Name !Int !Int
@@ -74,10 +78,23 @@ Every quantifier of the original formula and of the bodies stays, so the
 result has the same meaning as the original formula.
 -}
 unfold :: Definitions -> [(Name, Sort)] -> Formula -> Either DefinitionError Formula
-unfold definitions declarations original = do
-    checkFormula definitions (Map.fromList declarations) original
+unfold = unfoldKeeping Map.empty
+
+{- | 'unfold', but keep the predicates of the signature map in place.
+
+The signature map gives the parameter sorts of predicates that have no
+definition. The sort check reads these sorts. Defined predicates in the
+arguments of such a predicate unfold. A definition of the same name takes
+precedence over a signature.
+-}
+unfoldKeeping :: Map Name [Sort] -> Definitions -> [(Name, Sort)] -> Formula -> Either DefinitionError Formula
+unfoldKeeping kept definitions declarations original = do
+    checkFormula signatures (Map.fromList declarations) original
     expand Set.empty original
   where
+    -- The parameter sorts of each predicate that the check accepts.
+    signatures = Map.map (map snd . definitionParameters) definitions <> kept
+
     -- Replace the predicates. The active set holds the definitions that are unfolding now.
     expand :: Set Name -> Formula -> Either DefinitionError Formula
     expand active formula = case formula of
@@ -89,13 +106,16 @@ unfold definitions declarations original = do
         Atom relation left right -> Atom relation <$> expandTerm active left <*> expandTerm active right
         Forall bindings inner -> Forall bindings <$> expand active inner
         Exists bindings inner -> Exists bindings <$> expand active inner
-        Predicate name arguments -> do
-            Definition parameters body <- maybe (Left $ UndefinedPredicate name) Right $ Map.lookup name definitions
-            when (name `Set.member` active) $ Left $ DefinitionCycle name
-            checkDefinition definitions name parameters body
-            expandedArguments <- traverse (expandTerm active) arguments
-            expandedBody <- expand (Set.insert name active) body
-            first (SubstitutionFailed name) $ substituteChecked (zip (map fst parameters) expandedArguments) expandedBody
+        Predicate name arguments -> case Map.lookup name definitions of
+            Nothing
+                | name `Map.member` kept -> Predicate name <$> traverse (expandTerm active) arguments
+                | otherwise -> Left $ UndefinedPredicate name
+            Just (Definition parameters body) -> do
+                when (name `Set.member` active) $ Left $ DefinitionCycle name
+                checkDefinition signatures name parameters body
+                expandedArguments <- traverse (expandTerm active) arguments
+                expandedBody <- expand (Set.insert name active) body
+                first (SubstitutionFailed name) $ substituteChecked (zip (map fst parameters) expandedArguments) expandedBody
 
     expandTerm :: Set Name -> Term -> Either DefinitionError Term
     expandTerm active term = case term of
@@ -112,11 +132,11 @@ unfold definitions declarations original = do
         Cast inner sort -> (`Cast` sort) <$> expandTerm active inner
 
 -- | Check a body: distinct parameters, no free names, and the sorts under the parameters.
-checkDefinition :: Definitions -> Name -> [(Name, Sort)] -> Formula -> Either DefinitionError ()
-checkDefinition definitions predicate parameters body = do
+checkDefinition :: Map Name [Sort] -> Name -> [(Name, Sort)] -> Formula -> Either DefinitionError ()
+checkDefinition signatures predicate parameters body = do
     checkBinders parameters
     closed (Set.fromList $ map fst parameters) body
-    checkFormula definitions (Map.fromList parameters) body
+    checkFormula signatures (Map.fromList parameters) body
   where
     closed :: Set Name -> Formula -> Either DefinitionError ()
     closed bound formula = case formula of
@@ -155,11 +175,12 @@ checkBinders bindings = go Set.empty bindings
         | name `Set.member` seen = Left $ DuplicateBinder name
         | otherwise = go (Set.insert name seen) rest
 
-{- | Check the sorts of a formula. The map gives the sorts of the names in scope.
-The application of a predicate must fit the parameters of its definition.
+{- | Check the sorts of a formula. The first map gives the parameter sorts of
+each predicate, and the second map gives the sorts of the names in scope. The
+application of a predicate must fit its parameter sorts.
 -}
-checkFormula :: Definitions -> Map Name Sort -> Formula -> Either DefinitionError ()
-checkFormula definitions = go
+checkFormula :: Map Name [Sort] -> Map Name Sort -> Formula -> Either DefinitionError ()
+checkFormula signatures = go
   where
     go :: Map Name Sort -> Formula -> Either DefinitionError ()
     go sorts formula = case formula of
@@ -178,12 +199,12 @@ checkFormula definitions = go
         Forall bindings inner -> checkBinders bindings >> go (Map.fromList bindings <> sorts) inner
         Exists bindings inner -> checkBinders bindings >> go (Map.fromList bindings <> sorts) inner
         Predicate name arguments -> do
-            Definition parameters _ <- maybe (Left $ UndefinedPredicate name) Right $ Map.lookup name definitions
+            parameters <- maybe (Left $ UndefinedPredicate name) Right $ Map.lookup name signatures
             unless (length parameters == length arguments)
                 $ Left
                 $ ArityMismatch name (length parameters) (length arguments)
             argumentSorts <- traverse (termSort sorts) arguments
-            forM_ (zip3 [0 ..] (map snd parameters) argumentSorts) $ \(index, expected, found) ->
+            forM_ (zip3 [0 ..] parameters argumentSorts) $ \(index, expected, found) ->
                 unless (expected == found) $ Left $ ArgumentSort name index expected found
 
     termSort :: Map Name Sort -> Term -> Either DefinitionError Sort
