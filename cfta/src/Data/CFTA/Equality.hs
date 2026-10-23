@@ -114,12 +114,13 @@ module Data.CFTA.Equality (
     module Data.CFTA.Enumeration,
     UVar,
     uvarToInt,
+    intToUVar,
 ) where
 
 import Data.CFTA.Enumeration
 import Data.CFTA.Equality.Constraint
 import Data.CFTA.Equality.Operations
-import Data.CFTA.Internal.UnionFind (UVar, uvarToInt)
+import Data.CFTA.Internal.UnionFind (UVar, intToUVar, uvarToInt)
 import Data.CFTA.Interned
 import Data.CFTA.Path
 import Data.CFTA.Template
