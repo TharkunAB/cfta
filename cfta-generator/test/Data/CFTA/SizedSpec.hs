@@ -126,8 +126,11 @@ spec = describe "Data.CFTA.Sized" $ do
             void (Checkpoint.relocate checkpoint graph $ term "g" [term "a" [], term "b" []])
                 `shouldBe` Left (QueryFailed ResidualGuard)
     describe "Data.CFTA.Sized.Checkpoint, sampling" $ do
-        it "gives the words of splitmix64.c" $
+        it "gives the words of splitmix64.c" $ do
             take 3 (Checkpoint.splitMix64 0) `shouldBe` [0xe220a8397b1dcdaf, 0x6e789e6aa1b965f4, 0x06c45d188009454f]
+            -- The first words of the test of SplitMix64 in the Rust crate rand_xoshiro.
+            take 3 (Checkpoint.splitMix64 1477776061723855037)
+                `shouldBe` [1985237415132408290, 2979275885539914483, 13511426838097143398]
         it "resumes at every cut as the run without a cut"
             $ forM_
                 [(graph, weights) | graph <- filter (/= automaton "e" [("e", [])]) listings, weights <- [Nothing, Just sizeWeights]]
