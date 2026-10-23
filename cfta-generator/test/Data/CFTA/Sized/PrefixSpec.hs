@@ -50,26 +50,13 @@ spec = describe "Data.CFTA.Sized.Prefix" $ do
     it "counts the terms of the fixtures with equality constraints up to their bounds" $
         [completionCount $ start sizeBound equalPairs, completionCount $ start 7 equalArithmetic] `shouldBe` [4, 38]
     fixture "equal pairs" equalPairs
-    it "walks the prefixes of automata with equality constraints as the listed completions, without a solver" $
-        forM_ [("equal pairs", 6, equalPairs), ("equal sums", 7, equalSums)] $ \(name, bound, graph) -> do
-            let eager = start bound graph
-                tokens =
-                    nubOrd
-                        [ (FTA.transitionSymbol transition, length $ FTA.transitionChildren transition)
-                        | transition <- concat $ Map.elems $ FTA.transitionTable graph
-                        ]
-                prefixes = nubOrd $ concat [inits tokens' | term <- completionTerms eager, tokens' <- [preorder term]]
-            walk <- deciding unusedSolver (Size bound) graph
-            forM_ (prefixes <> [prefix <> [token] | prefix <- prefixes, token <- tokens]) $ \prefix -> do
-                walked <- walkTo walk prefix
-                let expected = afterPrefix eager prefix
-                (name, prefix, isJust walked) `shouldBe` (name, prefix, isJust expected)
-                case (walked, expected) of
-                    (Just found, Just after) -> do
-                        verdicts <- decidingTokens found
-                        (name, prefix, verdicts)
-                            `shouldBe` (name, prefix, (if isComplete after then Yes else No, [(token, Yes) | (token, _) <- nextTokens after]))
-                    _ -> pure ()
+    describe "walks the prefixes of automata with equality constraints as the listed completions, without a solver" $ do
+        it "on equal pairs" $ walksAsListing 6 equalPairs
+        it "on equal sums" $ walksAsListing 7 equalSums
+        it "on typed arithmetic with equal operands and branches, with three children"
+            $ walksAsListing 7
+            $ either (error . show) id
+            $ FTA.mapSymbols (Symbol . Text.pack . show) equalArithmetic
     fixtureUpTo 7 "typed arithmetic with equal operands and branches" equalArithmetic
     it "offers only the equal child after the first child of a pair" $ do
         let completions = start sizeBound equalPairs
@@ -333,6 +320,31 @@ equalSums =
         [("s", [leaf "zero", leaf "one", FTA.Transition (sym "add") ["s", "s"] equal, node "multiply" ["s", "s"]])]
   where
     equal = equalityConstraint $ ECTA.mkEqConstraints [[ECTA.path [0], ECTA.path [1]]]
+
+{- | A walk on every prefix of every accepted term, and every such prefix with
+one more token: the step is 'Nothing' exactly where 'afterPrefix' of the listed
+completions is, and the walk offers the tokens of 'nextTokens'.
+-}
+walksAsListing :: (Ord state) => Integer -> FTA.FTA state Symbol Constraint -> IO ()
+walksAsListing bound graph = do
+    let eager = start bound graph
+        tokens =
+            nubOrd
+                [ (FTA.transitionSymbol transition, length $ FTA.transitionChildren transition)
+                | transition <- concat $ Map.elems $ FTA.transitionTable graph
+                ]
+        prefixes = nubOrd $ concat [inits tokens' | term <- completionTerms eager, tokens' <- [preorder term]]
+    walk <- deciding unusedSolver (Size bound) graph
+    forM_ (prefixes <> [prefix <> [token] | prefix <- prefixes, token <- tokens]) $ \prefix -> do
+        walked <- walkTo walk prefix
+        let expected = afterPrefix eager prefix
+        (prefix, isJust walked) `shouldBe` (prefix, isJust expected)
+        case (walked, expected) of
+            (Just found, Just after) -> do
+                verdicts <- decidingTokens found
+                (prefix, verdicts)
+                    `shouldBe` (prefix, (if isComplete after then Yes else No, [(token, Yes) | (token, _) <- nextTokens after]))
+            _ -> pure ()
 
 -- | A walk after the tokens of a prefix, the first token first.
 walkTo :: Deciding -> [(Symbol, Int)] -> IO (Maybe Deciding)
