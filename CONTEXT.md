@@ -101,6 +101,19 @@ Wilf, and Feat (ranking).
   symbol of the term.
 - **Occurrence**: the token of one recursion probe.
 
+## Prefixes
+
+- **Token**: one node of a term in preorder: its symbol and its number of
+  children. Not the token of an occurrence.
+- **Prefix**: the first tokens of the preorder of a term
+  (`preorderPrefix`, `excludePrefixesFTA`). A *child prefix* of a count
+  table, the first children of a transition, is a different thing.
+- **Pending state**: the state of a subterm that a prefix does not reach.
+  Each run of an automaton on the nodes of a prefix gives a stack of pending
+  states, in preorder.
+- **Completion**: an accepted term within a size bound whose preorder starts
+  with a prefix.
+
 ## Generators
 
 - **Choice index**: the position of an alternative in a generator choice.
