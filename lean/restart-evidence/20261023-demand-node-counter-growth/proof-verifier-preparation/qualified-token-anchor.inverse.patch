@@ -1,0 +1,11 @@
+--- verify-proofs.py
++++ original-v1/verify-proofs.py
+@@ -256,7 +256,7 @@
+         assert not re.search(rb"\b(?:show|suffices|haveI|letI)\b", body) and not re.search(rb"\bobtain\b(?:(?!:=).)*:(?!=)", body, re.S)
+         assert re.findall(rb"\blift_native\b", body) == ([b"lift_native"] if short == "step_mono" else [])
+         external = b"SourceRecursiveIntersectionNativeNodeCounterGrowth.step_mono"
+-        assert len(re.findall(rb"(?m)^[ \t]*exact " + re.escape(external) + rb"[ \t]*$", body)) == body.count(external) == (1 if short == "step_mono" else 0)
++        assert len(re.findall(rb"(?<![\w.])" + re.escape(external) + rb"(?![\w'])", body)) == body.count(external) == (1 if short == "step_mono" else 0)
+         raw_body, body = body, body.replace(external, b"H35NativeStep")
+         assert not re.search(rb"\b" + short.encode() + rb"\b", body)
+         dependencies = re.findall(rb"\b(step_mono|execute_mono|resume_mono)\b", body)

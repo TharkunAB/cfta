@@ -1,0 +1,271 @@
+{
+  "whole_basis_lines": 101,
+  "AST_assertions": 44,
+  "rows": [
+    {
+      "basis_file": "run-standalone-proof-evidence.py",
+      "line": 4,
+      "expression": "mode in ('normal', 'live')",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "run-standalone-proof-evidence.py",
+      "line": 6,
+      "expression": "gate['status'] == 'ACCEPTED_WHOLE_REVIEWED_FOR_STANDALONE_DUAL_MODE_EXECUTION'",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "run-standalone-proof-evidence.py",
+      "line": 7,
+      "expression": "sha(HERE / 'verify-proofs.py') == gate['verifier_sha256']",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "run-standalone-proof-evidence.py",
+      "line": 8,
+      "expression": "sha(HERE / 'bound-data.json') == gate['bound_data_sha256']",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "run-standalone-proof-evidence.py",
+      "line": 10,
+      "expression": "not report_path.exists()",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "run-standalone-proof-evidence.py",
+      "line": 17,
+      "expression": "not path.exists()",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "run-standalone-proof-evidence.py",
+      "line": 19,
+      "expression": "result.returncode == 0",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "run-standalone-proof-evidence.py",
+      "line": 21,
+      "expression": "report['status'] == 'PASS' and report['live'] is (mode == 'live')",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "run-standalone-proof-evidence.py",
+      "line": 22,
+      "expression": "report['actual_jobs'] == int('3') and report['selected_modules'] == 1",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "run-standalone-proof-evidence.py",
+      "line": 23,
+      "expression": "report['public_theorems'] == 3 and report['failed_jobs'] == int('0')",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "run-standalone-proof-evidence.py",
+      "line": 24,
+      "expression": "report['new_lean_lake_jobs'] == 0",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "proof-commit.py",
+      "line": 2,
+      "expression": "git('branch', '--show-current').strip() == 'formalize'",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "proof-commit.py",
+      "line": 3,
+      "expression": "git('rev-parse', 'HEAD').strip() == START",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "proof-commit.py",
+      "line": 4,
+      "expression": "not git('diff', '--cached', '--name-only').strip()",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "proof-commit.py",
+      "line": 5,
+      "expression": "load(HERE / 'root-source-history-review.json')['status'] == 'ACCEPTED_COMPLETE_SELECTED_SOURCE_AND_ACTUAL_HISTORY'",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "proof-commit.py",
+      "line": 8,
+      "expression": "report['status'] == 'PASS' and report['live'] is live",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "proof-commit.py",
+      "line": 9,
+      "expression": "report['actual_jobs'] == int('3') and report['selected_modules'] == 1",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "proof-commit.py",
+      "line": 10,
+      "expression": "report['public_theorems'] == 3 and report['failed_jobs'] == int('0')",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "proof-commit.py",
+      "line": 11,
+      "expression": "report['audit_dependencies'] == int('75556') and report['new_lean_lake_jobs'] == 0",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "proof-commit.py",
+      "line": 13,
+      "expression": "len(selected) == 1",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "proof-commit.py",
+      "line": 15,
+      "expression": "set(git('diff', '--name-only').splitlines()) == {'lean/MicroCFTA/Audit.lean'}",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "proof-commit.py",
+      "line": 17,
+      "expression": "sha(ROOT / path) == pin['sha256']",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "proof-commit.py",
+      "line": 18,
+      "expression": "(ROOT / path).read_bytes() == (HERE / (Path(path).stem + '.lean')).read_bytes()",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "proof-commit.py",
+      "line": 21,
+      "expression": "set(git('diff', '--cached', '--name-only').splitlines()) == set(paths)",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "proof-commit.py",
+      "line": 24,
+      "expression": "git('rev-parse', proof + '^').strip() == START",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "proof-commit.py",
+      "line": 25,
+      "expression": "set(git('diff-tree', '--no-commit-id', '--name-only', '-r', proof).splitlines()) == set(paths)",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "proof-commit.py",
+      "line": 26,
+      "expression": "not (HERE / 'proof-commit.txt').exists()",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "final-publication.py",
+      "line": 5,
+      "expression": "publication['status'] == 'ROOT_ACCEPTED'",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "final-publication.py",
+      "line": 6,
+      "expression": "publication['publication_scope'] == 'LOCAL_ONLY' and publication['network_publication'] == 'AUTHORIZED_PENDING_ROOT_PUSH'",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "final-publication.py",
+      "line": 7,
+      "expression": "len(proof) == 40 and set(proof) <= set('0123456789abcdef')",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "final-publication.py",
+      "line": 8,
+      "expression": "(H / 'starting-head.txt').read_text().strip() == 'a295f1f72153365c886484cbeea933809acbc3f7'",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "final-publication.py",
+      "line": 9,
+      "expression": "git('rev-parse', 'HEAD').decode().strip() == (H / 'proof-commit.txt').read_text().strip() == proof",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "final-publication.py",
+      "line": 10,
+      "expression": "git('branch', '--show-current').decode().strip() == 'formalize'",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "final-publication.py",
+      "line": 11,
+      "expression": "git('rev-parse', 'codex/backup-native-node-counter-growth-20261023-1441').decode().strip() == (H / 'starting-head.txt').read_text().strip()",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "final-publication.py",
+      "line": 12,
+      "expression": "git('rev-parse', 'main').decode().strip() == 'ed73f5997f1c07e2961d06e6e290d1de38319dad'",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "final-publication.py",
+      "line": 13,
+      "expression": "git('rev-parse', 'origin/main').decode().strip() == '794903b3fbad3becb8b28736fc33463760731fc7'",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "final-publication.py",
+      "line": 19,
+      "expression": "all((n in files or n.startswith(str(H.relative_to(R)) + '/') for n in selected))",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "final-publication.py",
+      "line": 27,
+      "expression": "relative in index_names",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "final-publication.py",
+      "line": 31,
+      "expression": "not git('status', '--porcelain')",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "final-publication.py",
+      "line": 35,
+      "expression": "kind == 'blob'",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "final-publication.py",
+      "line": 36,
+      "expression": "hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\\x00' + data).hexdigest() == blob",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "final-publication.py",
+      "line": 37,
+      "expression": "('100755' if p.stat().st_mode & 73 else '100644') == mode",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "final-publication.py",
+      "line": 42,
+      "expression": "stage == '0'",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    },
+    {
+      "basis_file": "final-publication.py",
+      "line": 43,
+      "expression": "index == head_entries",
+      "proposed_action": "PRESERVE_GUARD_AND_BIND_ONLY_CHECKPOINT_OR_FUTURE_ACTUAL_DATA"
+    }
+  ],
+  "no_guard_removal_or_algorithm_change_authorized": true
+}

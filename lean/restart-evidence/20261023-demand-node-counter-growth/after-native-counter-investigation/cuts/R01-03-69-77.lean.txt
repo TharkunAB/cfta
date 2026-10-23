@@ -1,0 +1,9 @@
+/-- Resuming an actual outcome retains or increases its current constructor node counter. -/
+theorem resume_mono [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (emptyGuard : Guard) (conjoin : Guard → Guard → Guard) (fuel : Nat)
+    (outcome : SourceRecursiveIntersectionNative.Outcome width Symbol Guard A) :
+    outcome.state.machine.heap.nodes.next ≤
+      (SourceRecursiveIntersectionNative.resume emptyGuard conjoin fuel outcome).state.machine.heap.nodes.next := by
+  cases outcome with
+  | yielded code state => exact execute_mono emptyGuard conjoin fuel code state
+  | done | failed | blocked => exact Nat.le_refl _

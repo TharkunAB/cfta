@@ -1,0 +1,870 @@
+{
+  "status": "PASS_EXACT_AST_EXPRESSIONS_WITH_MULTIPLICITY",
+  "generic_count": 174,
+  "selected_assertion_count": 224,
+  "rows": [
+    {
+      "expression": "not path.is_absolute() and '..' not in path.parts",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "len(data) == record['bytes'] and digest(data) == record['sha256']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "not re.search('__H\\\\d+_', raw_data.decode())",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "actual == set(jobs)",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "metrics['actual_jobs'] == len(actual)",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "metrics['source_jobs'] == sum((j['kind'] in {'strict', 'full'} for j in jobs.values()))",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "metrics['focused_build_jobs'] == sum((j['kind'] == 'focused_build' for j in jobs.values()))",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "metrics['audit_jobs'] == sum((j['kind'] == 'audit' for j in jobs.values())) == 1",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "metrics['actual_jobs'] == sum((metrics[k] for k in ['source_jobs', 'focused_build_jobs', 'audit_jobs']))",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "metrics['failed_jobs'] == sum((j['exit_code'] != 0 for j in jobs.values()))",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "metrics['warned_source_exit_zero_jobs'] == sum((j['kind'] in {'strict', 'full'} and j['exit_code'] == 0 and bool(j['source_warnings']) for j in jobs.values()))",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "receipt['exit_code'] == job['exit_code'] and receipt['observed_at']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "receipt['log'] == stem + '.log' and receipt['limits'] == stem + '.limits.json'",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "re.fullmatch('[0-9a-f]{64}', job['log_sha256']) and digest(raw) == job['log_sha256']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "load(receipt['limits']) == {'memory.max': '4294967296', 'memory.high': '4294967296', 'memory.swap.max': '0'}",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "0 <= usage['age_seconds'] <= 600 and usage['remaining_percent'] > 1",
+      "required_occurrences": 2,
+      "actual_occurrences": 2
+    },
+    {
+      "expression": "receipt['wrapper'][1:5] == ['--mem', '4G', '--time', '5m']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "job['kind'] in {'strict', 'full', 'focused_build', 'audit'}",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "job['module'] in by_name and re.fullmatch('[0-9a-f]{64}', job['source_sha256'])",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "receipt['source'] == stem + '.source.lean' and receipt['sha256'] == job['source_sha256']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "digest(source) == job['source_sha256']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "len(receipt['command']) == 3 and Path(receipt['command'][0]).name == 'lean'",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "receipt['command'][1] == '-Dlinter.all=true' and Path(receipt['command'][-1]).resolve() == (evidence / receipt['source']).resolve()",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "len(re.findall('^.+?:\\\\d+:\\\\d+: error(?:\\\\([^)]*\\\\))?:', raw.decode(), re.M)) == job['errors']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "len(re.findall('^.+?:\\\\d+:\\\\d+: warning(?:\\\\([^)]*\\\\))?:', raw.decode(), re.M)) == job['source_warnings']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "not re.search('^\\\\s*set_option (?:maxHeartbeats|maxRecDepth|linter\\\\.)', source.decode(), re.M)",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "job['source_sha256'] is None and 'source' not in receipt and ('sha256' not in receipt)",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "len(receipt['command']) == 5 and Path(receipt['command'][0]).name == 'lake'",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "receipt['command'][1:] == ['-d', str(root / 'lean'), 'build', target]",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "receipt['exit_code'] == 0 and (not re.search('\\\\berror(?:\\\\([^)]*\\\\))?:', raw.decode()))",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "build and int(build.group(1)) == expected['build_jobs']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "re.findall('(?m)^warning: .+$', raw.decode()) == expected['warnings']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "all(('InternedFreshOrdinaryClosedCompletion.lean:24:5:' in warning for warning in expected['warnings']))",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "job['module'] is None if job['kind'] == 'audit' else job['module'] in by_name",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "history['status'] == 'ROOT_ACCEPTED'",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "set(history) == {'status', 'selected_sources', 'variants', 'artifacts', 'patches', 'rejected_public_types'}",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "history['selected_sources'] == {m['source_path']: m['source_sha256'] for m in modules}",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "variants and len(variants) == len(history['variants']) and (len(artifacts) == len(history['artifacts']))",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "not set(variants) & set(artifacts)",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "re.fullmatch('[0-9a-f]{64}', record['sha256']) and digest(data) == record['sha256']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "record['module'] in by_name and record['reason'].strip()",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "0 < len(data.splitlines()) == record['lines'] <= by_name[record['module']]['source_cap']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "len(data) == record['bytes']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "all((stem + suffix in artifacts for suffix in ['.json', '.log', '.limits.json', '.usage.json']))",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "any((v['module'] == job['module'] and v['sha256'] == job['source_sha256'] and (read(path) == read(stem + '.source.lean')) for path, v in variants.items()))",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "stem + '.source.lean' in artifacts",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "patch['reason'].strip() and patch['before'] in variants and (patch['after'] in variants)",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "patch['module'] == variants[patch['before']]['module'] == variants[patch['after']]['module']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "patch['path'] in artifacts and artifacts[patch['path']]['sha256'] == patch['sha256']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "read(patch['path']).decode() == expected",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "len(rejected) == len(history['rejected_public_types']) == metrics['rejected_public_type_jobs']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "stem in jobs and jobs[stem]['kind'] == 'full' and (jobs[stem]['exit_code'] == 0)",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "record['raw_sha256'] == jobs[stem]['log_sha256'] and record['reason'].strip()",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "record['artifacts'] and all((path in artifacts for path in record['artifacts']))",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "cut['status'] == 'COMPLETE_TERMINAL_METADATA_CUT_BEFORE_CLOSING_TOOLS'",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "[p for p, code in metadata_jobs.items() if code != 0] == bound['metadata_failure_paths']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "cut['failed_jobs'] == sum((code != 0 for code in metadata_jobs.values()))",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "relative.startswith('root-metadata-history/') and relative.endswith('.json') and (relative in artifacts)",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "type(code) is int",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "receipt['exit_code'] == code and receipt['observed_at'] and (Path(receipt['command'][0]).name not in {'lean', 'lake'})",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "all((relative[:-5] + suffix in artifacts for suffix in ['.json', '.log', '.limits.json', '.usage.json', '.source.py', '.peaks.txt']))",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "load(relative[:-5] + '.limits.json') == {'memory.max': '4294967296', 'memory.high': '4294967296', 'memory.swap.max': '0'}",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "selection == {m['source_path']: dict(sha256=m['source_sha256'], lines=m['source_lines'], strict=m['strict'], full=m['full']) for m in modules}",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "json.loads(pinned(bound['frozen_modules'])) == {m['name']: m['source_sha256'] for m in modules}",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "re.fullmatch('[0-9a-f]{64}', m['source_sha256']) and digest(source) == m['source_sha256']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "source == read(m['strict'] + '.source.lean') and 0 < len(source.splitlines()) == m['source_lines'] <= m['source_cap']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "read(m['strict'] + '.log') == b'' and jobs[m['strict']]['kind'] == 'strict'",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "jobs[m['strict']]['module'] == name and jobs[m['strict']]['exit_code'] == 0",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "jobs[m['full']]['kind'] == 'full' and jobs[m['full']]['module'] == name and (jobs[m['full']]['exit_code'] == 0)",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "jobs[m['strict']]['errors'] == jobs[m['strict']]['source_warnings'] == jobs[m['full']]['errors'] == jobs[m['full']]['source_warnings'] == 0",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "m['full'] not in rejected and source.rstrip().endswith(('end MicroCFTA.' + name).encode())",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "any((v['module'] == name and read(path) == source for path, v in variants.items()))",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "gate['status'] == 'ACCEPTED_STRICT_SOURCE' and gate['source_sha256'] == m['source_sha256']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "gate['source_lines'] == m['source_lines'] and gate['source_cap'] == m['source_cap']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "gate['selected_strict'] == m['strict'] and gate['strict_log_bytes'] == 0 and (gate['public_heads'] == shorts)",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "gate['receipt_sha256'] == digest(read(m['strict'] + '.json'))",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "gate['module'] == name and gate['root_default_limit_check'] and gate['all_linters']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "gate['declaration_gate'] == m['declaration_gate']['path'] and gate['body_gate'] == m['body_gate']['path']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "list(manifest) == [f['file'] for f in fragments] and [f['order'] for f in fragments] == list(range(1, len(fragments) + 1))",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "[{k: v for k, v in f.items() if k != 'path'} for f in fragments] == layout['compiled_fragments']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "layout['schema'] == schema and json.loads(pinned(m['declaration_layout'])) == m['declaration_layout_values']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "digest(raw_fragment) == f['sha256'] and len(raw_fragment.splitlines()) == f['lines']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "manifest[f['file']] == f['sha256']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "source.startswith(data['context.lean.txt']) and source.count(data['context.lean.txt']) == 1",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "source.count(header) == 1 and source.index(header) >= len(data['context.lean.txt'])",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "[positions[s][0] for s in all_shorts] == sorted((positions[s][0] for s in all_shorts))",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "scope.count(fragment) == 1",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "matched == sorted(matched) and len(set(matched)) == len(matched)",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "not re.search(b'(?m)^\\\\s*(?:mutual|termination_by)\\\\b', source)",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "re.findall(b'\\\\bhave[ \\\\t]+([^ \\\\t:\\\\n]+)', body) == [n.encode() for n in expected['have_names']]",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "len(re.findall(b'\\\\bhave\\\\b', body)) == len(expected['have_names'])",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "re.findall(b'\\\\blet[ \\\\t]+([^ \\\\t:=\\\\n]+)', body) == [n.encode() for n in expected['let_names']]",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "len(re.findall(b'\\\\blet\\\\b', body)) == len(expected['let_names'])",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "re.findall(b'\\\\bby_cases[ \\\\t]+([^ \\\\t:\\\\n]+)', body) == [n.encode() for n in expected['by_cases_names']]",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "re.findall(b'\\\\bcases[ \\\\t]+([^ \\\\t:\\\\n]+)[ \\\\t]*:', body) == [n.encode() for n in expected['case_equations']]",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "groups == expected['obtain_groups'] and len(re.findall(b'\\\\bobtain\\\\b', body)) == len(groups)",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "re.findall(b'\\\\bintro[ \\\\t]+([^\\\\n]+)', body) == [n.encode() for n in expected['intro_groups']]",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "re.findall(b'\\\\bfun[ \\\\t]+([^\\\\n]*?)=>', body) == [n.encode() for n in expected['lambda_groups']]",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "all((n in allowed for group in expected['intro_groups'] + expected['lambda_groups'] for n in group.split()))",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "not re.search(b'\\\\b(?:show|suffices|haveI|letI)\\\\b', body) and (not re.search(b'\\\\bobtain\\\\b(?:(?!:=).)*:(?!=)', body, re.S))",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "not re.search(b'\\\\b' + short.encode() + b'\\\\b', body)",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "dependencies == [n.encode() for n in expected['proof_dependencies']] and all((all_shorts.index(n.decode()) < all_shorts.index(short) for n in dependencies))",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "public == [(kind, short) for short, kind in specs]",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "found",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "not re.search(b'(?m)^\\\\s*(?:variable[ \\\\t]+\\\\[|omit\\\\b)', source)",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "(root / m['source_path']).read_bytes() == source",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "tool_gate['status'] == 'ACCEPTED_EXACT_TOOLS_FOR_SELECTED_STRICT_SOURCE' and tool_gate['source_sha256'] == m['source_sha256']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "tool_gate['public_heads'] == shorts and tool_gate['materializer_activation'] and tool_gate['sole_FULL_activation'] and tool_gate['reader_activation_after_actual_FULL']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "pinned(active) == pinned(archived) and tool_gate['installed_tools'][active['path']] == active['sha256']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "printer == source + tail.encode() and len(tail.splitlines()) == 11 + 3 * len(specs)",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "len(printer.splitlines()) == m['source_lines'] + len(tail.splitlines()) == tool_gate['diagnostic_tail_lines'] + m['source_lines']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "all((printer.decode().splitlines().count('set_option ' + option) == 1 for option in options))",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "all((printer.decode().splitlines().count(d + namespace + short) == 1 for short, kind in specs for d in ['#check @', '#print ', '#print axioms ']))",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "len(matching) == 1",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "(report['source_sha256'], report['source_lines'], report['printer_sha256']) == (m['source_sha256'], m['source_lines'], digest(printer))",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "report['log_sha256'] == digest(raw) and report['log_bytes'] == len(raw)",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "report['receipt_sha256'] == digest(read(m['full'] + '.json')) and report['owned_public_job_exit'] == 0",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "all((report[k] for k in ['all_eight_printer_settings', 'exact_module_and_diagnostic_tail', 'diagnostic_limits_after_module_only', 'no_omissions']))",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "(report['pp_option_count'], report['linter_option_count'], report['diagnostic_limit_count']) == (7, 1, 2)",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "report['configured_paths'] == {k: str(path.resolve()) for k, path in dict(source=evidence / m['snapshot'], printer=evidence / (m['full'] + '.source.lean'), raw=evidence / (m['full'] + '.log'), receipt=evidence / (m['full'] + '.json')).items()}",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "[(h['head'], h['kind']) for h in report['heads']] == [(namespace + short, kind) for short, kind in specs]",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "not re.search('sorryAx|\\\\b(?:warning|error)(?:\\\\([^)]*\\\\))?:|failed to pretty print|pp\\\\.rawOnError|maximum recursion depth|maximum number of heartbeats|⋯|…|\\\\.\\\\.\\\\.', log)",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "len(matches) == 1",
+      "required_occurrences": 2,
+      "actual_occurrences": 2
+    },
+    {
+      "expression": "starts == sorted(starts, key=lambda match: match.start()) and (not log[:starts[0].start()].strip())",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "len(delimiters) == 1",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "len(axiom_matches) == 1",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "normalized == canonical(declared) and raw_identity is metric['raw_type_byte_identity']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "len(checked.encode()) == metric['type_bytes'] and len(checked) == metric['type_characters'] and (digest(checked.encode()) == metric['type_sha256'])",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "len(checked.splitlines()) == metric['type_logical_lines'] and checked.count('\\n') == metric['type_line_feeds'] and (checked.endswith('\\n') == metric['type_final_newline'])",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "len(declared.encode()) == metric['printed_type_bytes'] and digest(declared.encode()) == metric['printed_type_sha256']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "digest(normalized.encode()) == metric['canonical_type_sha256']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "not any((token in checked + declared for token in ['_private', '✝', '†', '‡']))",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "not any((re.search(re.escape(namespace + helper) + \"(?![\\\\w'])\", checked + declared) for helper in helpers))",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "all((head_report[k] for k in ['check_print_type_identity', 'check_print_type_lexical_identity', 'unique_complete_type_body_delimiter', 'actual_axioms_within_standard_allowed']))",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "head_report['check_print_type_byte_identity'] is raw_identity",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "head_report['private_namespace_helpers_checked'] == helpers and head_report['private_type_spellings_checked'] == ['_private', '✝', '†', '‡'] and (head_report['private_public_type_names'] is False)",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "head_report['checked_type_characters'] == len(checked) and head_report['checked_type_bytes'] == len(checked.encode()) and (head_report['checked_type_sha256'] == metric['type_sha256'])",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "head_report['printed_type_bytes'] == metric['printed_type_bytes'] and head_report['printed_type_characters'] == len(declared) and (head_report['printed_type_sha256'] == metric['printed_type_sha256'])",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "head_report['normalized_type_characters'] == len(normalized) and head_report['canonical_type_sha256'] == metric['canonical_type_sha256']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "head_report['body_characters'] == len(body) == metric['body_characters'] and len(body.encode()) == metric['body_bytes']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "body.startswith('fun ') and len(body) > 50 and (digest(body.encode()) == metric['body_sha256'])",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "values or (axiom.group(1) == 'does not depend on any axioms' and (not printed[axiom.end():].strip()))",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "axioms == head_report['actual_axioms'] == metric['actual_axioms'] and set(axioms) <= {'Classical.choice', 'Quot.sound', 'propext'}",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "head_report['actual_standard_three_axioms'] == (set(axioms) == {'Classical.choice', 'Quot.sound', 'propext'})",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "retained == text.encode() and report['retained_slices'][filename] == dict(bytes=len(retained), sha256=digest(retained))",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "''.join(reconstructed) == log and set(report['retained_slices']) == set(retained_names)",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "review['status'] == 'ACCEPTED_COMPLETE_PUBLIC_TYPES_AND_INSTALLED' and review['source_sha256'] == m['source_sha256'] and (review['source_lines'] == m['source_lines'])",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "review['root_manual_complete_TYPEs'] is True and review['goal_status'] == 'ACTIVE_INCOMPLETE'",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "review['readback_sha256'] == m['readback']['sha256']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "review['independent_complete_TYPE_review_sha256'] == m['type_review']['sha256'] and independent['status'] == 'CLEAR'",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "set(review['TYPEs']) == set(shorts)",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "review['TYPEs'][short] == dict(sha256=metric['type_sha256'], bytes=metric['type_bytes'], logical_lines=metric['type_logical_lines'], actual_axioms=actual_axioms[short])",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "review['module'] == name and review['scope'] == m['scope']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "review['BODY_review'] == dict(complete_retention=True, programmatic_only=True, whole_body_manual_read_claimed=False)",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "independent['scope'] == 'INDEPENDENT_COMPLETE_ACTUAL_PUBLIC_TYPE_AND_READBACK_REVIEW'",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "independent['module'] == name and independent['source_sha256'] == m['source_sha256']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "independent['source_lines'] == m['source_lines'] and independent['public_heads'] == [namespace + short for short in shorts]",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "independent['ownership']['reviewer_math_author'] is False",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "manual['checked_TYPEs_complete'] == shorts and manual['printed_TYPEs_manual'] is manual['BODYs_manual'] is False",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "item['checked_type'] == dict(logical_lines=metric['type_logical_lines'], LF=metric['type_line_feeds'], final_LF=metric['type_final_newline'], characters=metric['type_characters'], bytes=metric['type_bytes'], sha256=metric['type_sha256'])",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "item['printed_type'] == dict(bytes=metric['printed_type_bytes'], sha256=metric['printed_type_sha256'])",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "item['actual_raw_byte_identity'] is metric['raw_type_byte_identity'] and item['lexical_identity'] is True",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "item['canonical_sha256'] == metric['canonical_type_sha256'] and item['axioms']['actual'] == actual_axioms[short]",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "item['body'] == dict(characters=metric['body_characters'], bytes=metric['body_bytes'], sha256=metric['body_sha256'])",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "len(full_variant_keys) == len(set(full_variant_keys))",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "load('original-source-index.json')['sources'] == [bound['original_audit']]",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "digest(original) == bound['original_audit']['sha256'] and len(original.splitlines()) == bound['original_audit']['lines']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "audit_source.count(addition) == 1 and audit_source.index(addition) < audit_source.index(b'/-!')",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "audit_source == original",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "jobs[audit_stem]['kind'] == 'audit' and jobs[audit_stem]['exit_code'] == 0",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "digest(raw_audit) == bound['audit']['log_sha256']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    },
+    {
+      "expression": "dependencies and int(dependencies.group(1)) == bound['audit']['dependencies']",
+      "required_occurrences": 1,
+      "actual_occurrences": 1
+    }
+  ],
+  "scope_specific_guards": 50,
+  "all_raw_bodies_retained_in_bodies": true,
+  "external_dependency_view_only": "One exact complete fully qualified H35 token in step_mono only. Raw body is restored after the two exact generic recursion/dependency assertions."
+}

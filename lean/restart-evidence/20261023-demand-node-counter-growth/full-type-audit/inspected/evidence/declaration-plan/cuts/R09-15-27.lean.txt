@@ -1,0 +1,13 @@
+local notation "Symbol" => Label FullSyntax.Formula
+local notation "Guard" => Constraint FullSyntax.Formula
+local notation "source" => SourceMemoGate.unconstrained
+local notation "top" => SourceEqualityConstraintConstructors.top (Formula := FullSyntax.Formula)
+
+/-- Actual source guard structural comparison decides equality of its complete syntax. -/
+def guardDecidableEq : DecidableEq (SourceGuards.Guard FullSyntax.Formula) :=
+  fun first second => decidable_of_iff (GuardStructuralOrder.compareGuard first second = .eq) (GuardStructuralOrder.guard_eq first second)
+
+local instance : DecidableEq (SourceGuards.Guard FullSyntax.Formula) := guardDecidableEq
+
+/-- Actual source constraint conjunction uses source structural guard order. -/
+noncomputable def conjoin : Guard → Guard → Guard := SourceEqualityConstraintConstructors.conjoin GuardStructuralOrder.le

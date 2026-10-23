@@ -1,0 +1,14 @@
+/-- Source code keeps its continuation at every physical effect and recursive request. -/
+inductive Code (Symbol Guard : Type) : Type → Type 1 where
+  | pure (value : A) : Code Symbol Guard A
+  | fail (failure : Failure) : Code Symbol Guard A
+  | work {X : Type} (job : Work Symbol Guard X) (next : X → Code Symbol Guard A) : Code Symbol Guard A
+  | enter (domain : Interned DomainKey) (left right : Value Symbol Guard) (first second : Nat)
+      (next : Interned DomainKey → Code Symbol Guard A) : Code Symbol Guard A
+  | read (name : Nat) (next : Option (Value Symbol Guard) → Code Symbol Guard A) : Code Symbol Guard A
+  | optionalBinder (key : Nat × Nat) (body : Value Symbol Guard)
+      (next : Value Symbol Guard → Code Symbol Guard A) : Code Symbol Guard A
+  | node (request : NodeRequest Symbol Guard) (next : Value Symbol Guard → Code Symbol Guard A) : Code Symbol Guard A
+  | edge (request : EdgeRequest Symbol Guard) (next : EdgeValue Symbol Guard → Code Symbol Guard A) : Code Symbol Guard A
+  | finishNode (handle : Nat) (value : Value Symbol Guard) (next : Code Symbol Guard A) : Code Symbol Guard A
+  | finishEdge (handle : Nat) (value : EdgeValue Symbol Guard) (next : Code Symbol Guard A) : Code Symbol Guard A

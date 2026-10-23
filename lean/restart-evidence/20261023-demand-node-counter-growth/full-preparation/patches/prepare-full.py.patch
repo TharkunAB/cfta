@@ -1,0 +1,60 @@
+--- basis/prepare-full.py
++++ selected/prepare-full.py
+@@ -7,7 +7,7 @@
+ HERE = Path(__file__).resolve().parent
+ stem, expected_sha, expected_lines, expected_context_sha, expected_context_lines, expected_contracts_sha, expected_contracts_count = sys.argv[1:]
+ assert all(len(value) == 64 and set(value) <= set('0123456789abcdef') for value in [expected_sha, expected_context_sha, expected_contracts_sha])
+-name = 'SourceRecursiveIntersectionNativeNodeCounterGrowth'
++name = 'SourceEqualityNativeDemandNodeCounterGrowth'
+ specs = [('step_mono', 'theorem'), ('execute_mono', 'theorem'), ('resume_mono', 'theorem')]
+ source_path = HERE / (stem + '.source.lean')
+ source = source_path.read_bytes()
+@@ -27,9 +27,9 @@
+ assert hashlib.sha256(contracts_raw).hexdigest() == expected_contracts_sha
+ contracts = json.loads(contracts_raw)
+ layout_raw = (contract_root / 'insertion-map.json').read_bytes()
+-assert hashlib.sha256(layout_raw).hexdigest() == 'ce25643ab724242c5c3a711e762c739cd80880c1bd5a5655271a511df9b6efed'
++assert hashlib.sha256(layout_raw).hexdigest() == '0469db607f9204634b631ad17b420f051f2e073ac1f7f1cb19b23001baeec57e'
+ layout = json.loads(layout_raw)
+-assert len(contracts) == int(expected_contracts_count) == 6
++assert len(contracts) == int(expected_contracts_count) == 7
+ for (filename, expected_digest), record in zip(contracts.items(), layout['compiled_fragments'], strict=True):
+     fragment = (contract_root / filename).read_bytes()
+     assert filename == record['file'] and hashlib.sha256(fragment).hexdigest() == expected_digest == record['sha256']
+@@ -41,19 +41,20 @@
+ assert gate['insertion_map_sha256'] == hashlib.sha256(layout_raw).hexdigest()
+ assert gate['whole_source_hard_stop'] == 160 and gate['default_declaration_limits'] and gate['all_linters']
+ assert gate['root_all_public_and_private_header_types_read'] and gate['root_all_schema_layout_owner_attachment_and_body_inventory_metadata_read']
+-assert gate['root_all_twelve_scoped_introduced_types_read'] and gate['root_all_six_specialized_equation_types_read']
++assert gate['root_all_ten_scoped_introduced_types_read'] and gate['root_all_five_specialized_equation_types_read']
+ assert gate['root_complete_generalized_fuel_IH_three_lines_read'] and gate['restricted_induction_call'] == 'ih next after'
+-assert gate['root_all_16_relevant_live_API_cuts_278_lines_read'] and gate['root_all_seven_public_import_routes_checked']
+-assert gate['body_haves'] == 2 and gate['body_lets'] == gate['body_obtains'] == 0 and gate['helpers'] == 0
++assert gate['external_native_step_mono_is_not_local_recursion']
++assert gate['root_all_15_relevant_live_API_cuts_257_lines_read'] and gate['root_all_ten_public_import_routes_checked']
++assert gate['body_haves'] == 2 and gate['body_lets'] == gate['body_obtains'] == 0 and gate['helpers'] == 1
+ assert gate['induction'] and gate['recursive_calls'] == gate['termination_by_count'] == 0
+-assert gate['root_whole_context_lines_read'] == 7 and gate['root_whole_public_header_lines_read'] == 18
+-assert gate['root_whole_private_header_lines_read'] == 0 and gate['root_whole_local_compiled_fragment_lines_read'] == 4
+-assert gate['private_helpers'] == []
++assert gate['root_whole_context_lines_read'] == 8 and gate['root_whole_public_header_lines_read'] == 17
++assert gate['root_whole_private_header_lines_read'] == 4 and gate['root_whole_local_compiled_fragment_lines_read'] == 5
++assert gate['private_helpers'] == ['lift_native']
+ assert re.fullmatch(r'[0-9a-f]{64}', gate['independent_review_sha256'])
+ context = (contract_root / 'context.lean.txt').read_bytes()
+ assert source.startswith(context)
+ assert hashlib.sha256(context).hexdigest() == expected_context_sha
+-assert len(context.splitlines()) == int(expected_context_lines) == 7
++assert len(context.splitlines()) == int(expected_context_lines) == 8
+ headers, positions = [], []
+ for filename in ['public-step.lean.txt', 'public-execute.lean.txt', 'public-resume.lean.txt']:
+     header = (contract_root / filename).read_bytes().rstrip(b'\n') + b' := by\n'
+@@ -72,7 +73,7 @@
+ assert tail.encode() == (HERE / 'full-preparation/diagnostic-tail.lean.txt').read_bytes()
+ snapshot = HERE / (name + '.lean')
+ printer = HERE / (name + '.full.lean')
+-actual_headers = HERE / 'actual-native-node-counter-growth-headers.lean.txt'
++actual_headers = HERE / 'actual-demand-node-counter-growth-headers.lean.txt'
+ assert not snapshot.exists() and not printer.exists() and not actual_headers.exists()
+ snapshot.write_bytes(source)
+ printer.write_bytes(source + tail.encode())

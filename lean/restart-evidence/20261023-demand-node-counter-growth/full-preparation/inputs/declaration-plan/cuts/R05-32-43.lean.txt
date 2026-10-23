@@ -1,0 +1,12 @@
+/-- Every native row lookup and demand leaves the source machine unchanged at its immediate observation. -/
+theorem edge_step_machine [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (emptyGuard : Guard) (conjoin : Guard → Guard → Guard) (request : EdgeRequest Symbol Guard)
+    (next : EdgeValue Symbol Guard → Code Symbol Guard A) (state : SourceRecursiveIntersectionThunks.State width Symbol Guard) :
+    (step emptyGuard conjoin (.edge request next) state).state.machine = state.machine := by
+  cases lookup : lookupEdge width request state with
+  | mk handle chosen =>
+    have chosenMachine : chosen.machine = state.machine := by simpa only [lookup] using lookupEdge_machine request state
+    cases demand : demandEdge handle chosen with
+    | mk observation current =>
+      have currentMachine : current.machine = chosen.machine := by simpa only [demand] using demandEdge_machine handle chosen
+      cases observation <;> simpa only [step, lookup, demand, Outcome.state] using currentMachine.trans chosenMachine

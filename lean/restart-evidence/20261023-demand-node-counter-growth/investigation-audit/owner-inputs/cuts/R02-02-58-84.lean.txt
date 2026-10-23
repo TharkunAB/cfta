@@ -1,0 +1,27 @@
+/-- Sentinel demand retains the canonical empty equality-field allocation before direct edge interning. -/
+def sentinel (request : EdgeRequest Symbol Guard) (next : EdgeValue Symbol Guard → Code Symbol Guard Output)
+    (state : State width) : Outcome width Output :=
+  .yielded (.code ((SourceEqualityNativeCheckedCode.sentinel request.left).bind next))
+    {state with operations := SourceEqualityMkEdgeAllocation.emptyField state.operations}
+
+/-- Check a published original edge before compiling any child request. -/
+noncomputable def body (request : EdgeRequest Symbol Guard) (next : EdgeValue Symbol Guard → Code Symbol Guard Output)
+    (state : State width) : Outcome width Output :=
+  if request.left.children.length ≠ request.right.children.length then sentinel request next state
+  else
+    match SourceEqualityConstraintFieldLookup.load request.left.entry.key.constraint state.operations.constraints with
+    | .error message => .constraintError message state
+    | .ok none => .blocked (.missingField request.left.entry.key.constraint) (.edgeBody request next) state
+    | .ok (some first) =>
+        match SourceEqualityConstraintFieldLookup.load request.right.entry.key.constraint state.operations.constraints with
+        | .error message => .constraintError message state
+        | .ok none => .blocked (.missingField request.right.entry.key.constraint) (.edgeBody request next) state
+        | .ok (some second) =>
+            let checked := SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second
+              request.left.children.length request.right.children.length state.operations
+            let after := {state with operations := checked.2}
+            match checked.1 with
+            | .error message => .constraintError message after
+            | .ok .mismatch | .ok .rejected => sentinel request next after
+            | .ok (.ready combined) =>
+                .yielded (.code ((SourceEqualityNativeCheckedCode.children request.domain request.left request.right combined).bind next)) after

@@ -1,0 +1,600 @@
+{
+  "basis_assertions": 71,
+  "selected_assertions": 72,
+  "all_generic_guard_families_retained": true,
+  "basis": {
+    "prepare-full.py": [
+      {
+        "line": 9,
+        "expression": "all(len(value) == 64 and set(value) <= set('0123456789abcdef') for value in [expected_sha, expected_context_sha, expected_contracts_sha])"
+      },
+      {
+        "line": 14,
+        "expression": "hashlib.sha256(source).hexdigest() == expected_sha"
+      },
+      {
+        "line": 15,
+        "expression": "len(source.splitlines()) == int(expected_lines) and 1 <= int(expected_lines) <= 160"
+      },
+      {
+        "line": 18,
+        "expression": "receipt['exit_code'] == 0 and receipt['observed_at']"
+      },
+      {
+        "line": 19,
+        "expression": "receipt['sha256'] == expected_sha"
+      },
+      {
+        "line": 20,
+        "expression": "(receipt_path.parent / receipt['source']).resolve() == source_path.resolve()"
+      },
+      {
+        "line": 21,
+        "expression": "Path(receipt['command'][-1]).resolve() == source_path.resolve()"
+      },
+      {
+        "line": 22,
+        "expression": "'-Dlinter.all=true' in receipt['command']"
+      },
+      {
+        "line": 23,
+        "expression": "(receipt_path.parent / receipt['log']).resolve() == (HERE / (stem + '.log')).resolve()"
+      },
+      {
+        "line": 24,
+        "expression": "(HERE / (stem + '.log')).read_bytes() == b''"
+      },
+      {
+        "line": 27,
+        "expression": "hashlib.sha256(contracts_raw).hexdigest() == expected_contracts_sha"
+      },
+      {
+        "line": 30,
+        "expression": "hashlib.sha256(layout_raw).hexdigest() == 'ce25643ab724242c5c3a711e762c739cd80880c1bd5a5655271a511df9b6efed'"
+      },
+      {
+        "line": 32,
+        "expression": "len(contracts) == int(expected_contracts_count) == 6"
+      },
+      {
+        "line": 38,
+        "expression": "gate['status'] == 'ACCEPTED_EXACT_DECLARATIONS_BEFORE_BODY'"
+      },
+      {
+        "line": 39,
+        "expression": "gate['module'] == name and gate['public_heads'] == [short for short, _kind in specs]"
+      },
+      {
+        "line": 40,
+        "expression": "gate['contracts_sha256'] == expected_contracts_sha"
+      },
+      {
+        "line": 41,
+        "expression": "gate['insertion_map_sha256'] == hashlib.sha256(layout_raw).hexdigest()"
+      },
+      {
+        "line": 42,
+        "expression": "gate['whole_source_hard_stop'] == 160 and gate['default_declaration_limits'] and gate['all_linters']"
+      },
+      {
+        "line": 43,
+        "expression": "gate['root_all_public_and_private_header_types_read'] and gate['root_all_schema_layout_owner_attachment_and_body_inventory_metadata_read']"
+      },
+      {
+        "line": 44,
+        "expression": "gate['root_all_twelve_scoped_introduced_types_read'] and gate['root_all_six_specialized_equation_types_read']"
+      },
+      {
+        "line": 45,
+        "expression": "gate['root_complete_generalized_fuel_IH_three_lines_read'] and gate['restricted_induction_call'] == 'ih next after'"
+      },
+      {
+        "line": 46,
+        "expression": "gate['root_all_16_relevant_live_API_cuts_278_lines_read'] and gate['root_all_seven_public_import_routes_checked']"
+      },
+      {
+        "line": 47,
+        "expression": "gate['body_haves'] == 2 and gate['body_lets'] == gate['body_obtains'] == 0 and gate['helpers'] == 0"
+      },
+      {
+        "line": 48,
+        "expression": "gate['induction'] and gate['recursive_calls'] == gate['termination_by_count'] == 0"
+      },
+      {
+        "line": 49,
+        "expression": "gate['root_whole_context_lines_read'] == 7 and gate['root_whole_public_header_lines_read'] == 18"
+      },
+      {
+        "line": 50,
+        "expression": "gate['root_whole_private_header_lines_read'] == 0 and gate['root_whole_local_compiled_fragment_lines_read'] == 4"
+      },
+      {
+        "line": 51,
+        "expression": "gate['private_helpers'] == []"
+      },
+      {
+        "line": 52,
+        "expression": "re.fullmatch(r'[0-9a-f]{64}', gate['independent_review_sha256'])"
+      },
+      {
+        "line": 54,
+        "expression": "source.startswith(context)"
+      },
+      {
+        "line": 55,
+        "expression": "hashlib.sha256(context).hexdigest() == expected_context_sha"
+      },
+      {
+        "line": 56,
+        "expression": "len(context.splitlines()) == int(expected_context_lines) == 7"
+      },
+      {
+        "line": 62,
+        "expression": "positions == sorted(positions)"
+      },
+      {
+        "line": 63,
+        "expression": "source.rstrip().endswith(('end MicroCFTA.' + name).encode())"
+      },
+      {
+        "line": 64,
+        "expression": "b'set_option maxRecDepth' not in source and b'set_option maxHeartbeats' not in source"
+      },
+      {
+        "line": 71,
+        "expression": "len(tail.splitlines()) == 11 + 3 * len(specs) == 20"
+      },
+      {
+        "line": 72,
+        "expression": "tail.encode() == (HERE / 'full-preparation/diagnostic-tail.lean.txt').read_bytes()"
+      },
+      {
+        "line": 76,
+        "expression": "not snapshot.exists() and not printer.exists() and not actual_headers.exists()"
+      },
+      {
+        "line": 35,
+        "expression": "filename == record['file'] and hashlib.sha256(fragment).hexdigest() == expected_digest == record['sha256']"
+      },
+      {
+        "line": 36,
+        "expression": "len(fragment.splitlines()) == record['lines']"
+      },
+      {
+        "line": 60,
+        "expression": "source.count(header) == 1 and source.index(header) >= len(context)"
+      }
+    ],
+    "check-full-public.py": [
+      {
+        "line": 13,
+        "expression": "re.fullmatch(r\"[0-9a-f]{64}\", args.expected_source_sha256)"
+      },
+      {
+        "line": 16,
+        "expression": "hashlib.sha256(source_raw).hexdigest() == args.expected_source_sha256"
+      },
+      {
+        "line": 17,
+        "expression": "1 <= len(source.splitlines()) <= int(\"160\")"
+      },
+      {
+        "line": 21,
+        "expression": "public == [(kind, short) for short, kind in specs]"
+      },
+      {
+        "line": 27,
+        "expression": "source.rstrip().endswith(\"end MicroCFTA.SourceRecursiveIntersectionNativeNodeCounterGrowth\")"
+      },
+      {
+        "line": 28,
+        "expression": "not re.search(r\"(?m)^\\s*set_option\\s+(?:maxRecDepth|maxHeartbeats)\\b\", source)"
+      },
+      {
+        "line": 29,
+        "expression": "printer_raw == source_raw + tail.encode(\"utf-8\")"
+      },
+      {
+        "line": 35,
+        "expression": "not re.search(r\"sorryAx|\\b(?:warning|error)(?:\\([^)]*\\))?:|failed to pretty print|pp\\.rawOnError|maximum recursion depth|maximum number of heartbeats|\u22ef|\u2026|\\.\\.\\.\", log)"
+      },
+      {
+        "line": 37,
+        "expression": "receipt[\"exit_code\"] == 0 and receipt[\"observed_at\"]"
+      },
+      {
+        "line": 38,
+        "expression": "(args.receipt.parent / receipt[\"source\"]).resolve() == args.printer.resolve()"
+      },
+      {
+        "line": 39,
+        "expression": "(args.receipt.parent / receipt[\"log\"]).resolve() == args.raw.resolve()"
+      },
+      {
+        "line": 40,
+        "expression": "receipt[\"sha256\"] == hashlib.sha256(printer_raw).hexdigest()"
+      },
+      {
+        "line": 41,
+        "expression": "Path(receipt[\"command\"][-1]).resolve() == args.printer.resolve()"
+      },
+      {
+        "line": 42,
+        "expression": "\"-Dlinter.all=true\" in receipt[\"command\"]"
+      },
+      {
+        "line": 49,
+        "expression": "private == json.loads('[]')"
+      },
+      {
+        "line": 56,
+        "expression": "starts == sorted(starts, key=lambda match: match.start()) and not log[:starts[0].start()].strip()"
+      },
+      {
+        "line": 120,
+        "expression": "not readback.exists() and all(not (args.output_dir / filename).exists() for filename in artifacts)"
+      },
+      {
+        "line": 31,
+        "expression": "printer.splitlines().count(\"set_option \" + option) == 1"
+      },
+      {
+        "line": 54,
+        "expression": "len(found) == 1"
+      },
+      {
+        "line": 65,
+        "expression": "len(delimiters) == 1"
+      },
+      {
+        "line": 68,
+        "expression": "len(reports) == 1"
+      },
+      {
+        "line": 78,
+        "expression": "len(candidates) == 1"
+      },
+      {
+        "line": 81,
+        "expression": "normalize(checked) == normalize(declared)"
+      },
+      {
+        "line": 87,
+        "expression": "body.startswith(\"fun \") and len(body) > 50"
+      },
+      {
+        "line": 96,
+        "expression": "axioms <= allowed"
+      },
+      {
+        "line": 34,
+        "expression": "printer.splitlines().count(directive + namespace + short) == 1"
+      },
+      {
+        "line": 47,
+        "expression": "declaration"
+      },
+      {
+        "line": 84,
+        "expression": "spelling not in checked + declared"
+      },
+      {
+        "line": 86,
+        "expression": "not re.search(re.escape(namespace + helper) + r\"(?![\\w'])\", checked + declared)"
+      },
+      {
+        "line": 91,
+        "expression": "report"
+      },
+      {
+        "line": 94,
+        "expression": "not axiom_text.strip()"
+      }
+    ]
+  },
+  "selected": {
+    "prepare-full.py": [
+      {
+        "line": 9,
+        "expression": "all(len(value) == 64 and set(value) <= set('0123456789abcdef') for value in [expected_sha, expected_context_sha, expected_contracts_sha])"
+      },
+      {
+        "line": 14,
+        "expression": "hashlib.sha256(source).hexdigest() == expected_sha"
+      },
+      {
+        "line": 15,
+        "expression": "len(source.splitlines()) == int(expected_lines) and 1 <= int(expected_lines) <= 160"
+      },
+      {
+        "line": 18,
+        "expression": "receipt['exit_code'] == 0 and receipt['observed_at']"
+      },
+      {
+        "line": 19,
+        "expression": "receipt['sha256'] == expected_sha"
+      },
+      {
+        "line": 20,
+        "expression": "(receipt_path.parent / receipt['source']).resolve() == source_path.resolve()"
+      },
+      {
+        "line": 21,
+        "expression": "Path(receipt['command'][-1]).resolve() == source_path.resolve()"
+      },
+      {
+        "line": 22,
+        "expression": "'-Dlinter.all=true' in receipt['command']"
+      },
+      {
+        "line": 23,
+        "expression": "(receipt_path.parent / receipt['log']).resolve() == (HERE / (stem + '.log')).resolve()"
+      },
+      {
+        "line": 24,
+        "expression": "(HERE / (stem + '.log')).read_bytes() == b''"
+      },
+      {
+        "line": 27,
+        "expression": "hashlib.sha256(contracts_raw).hexdigest() == expected_contracts_sha"
+      },
+      {
+        "line": 30,
+        "expression": "hashlib.sha256(layout_raw).hexdigest() == '0469db607f9204634b631ad17b420f051f2e073ac1f7f1cb19b23001baeec57e'"
+      },
+      {
+        "line": 32,
+        "expression": "len(contracts) == int(expected_contracts_count) == 7"
+      },
+      {
+        "line": 38,
+        "expression": "gate['status'] == 'ACCEPTED_EXACT_DECLARATIONS_BEFORE_BODY'"
+      },
+      {
+        "line": 39,
+        "expression": "gate['module'] == name and gate['public_heads'] == [short for short, _kind in specs]"
+      },
+      {
+        "line": 40,
+        "expression": "gate['contracts_sha256'] == expected_contracts_sha"
+      },
+      {
+        "line": 41,
+        "expression": "gate['insertion_map_sha256'] == hashlib.sha256(layout_raw).hexdigest()"
+      },
+      {
+        "line": 42,
+        "expression": "gate['whole_source_hard_stop'] == 160 and gate['default_declaration_limits'] and gate['all_linters']"
+      },
+      {
+        "line": 43,
+        "expression": "gate['root_all_public_and_private_header_types_read'] and gate['root_all_schema_layout_owner_attachment_and_body_inventory_metadata_read']"
+      },
+      {
+        "line": 44,
+        "expression": "gate['root_all_ten_scoped_introduced_types_read'] and gate['root_all_five_specialized_equation_types_read']"
+      },
+      {
+        "line": 45,
+        "expression": "gate['root_complete_generalized_fuel_IH_three_lines_read'] and gate['restricted_induction_call'] == 'ih next after'"
+      },
+      {
+        "line": 46,
+        "expression": "gate['external_native_step_mono_is_not_local_recursion']"
+      },
+      {
+        "line": 47,
+        "expression": "gate['root_all_15_relevant_live_API_cuts_257_lines_read'] and gate['root_all_ten_public_import_routes_checked']"
+      },
+      {
+        "line": 48,
+        "expression": "gate['body_haves'] == 2 and gate['body_lets'] == gate['body_obtains'] == 0 and gate['helpers'] == 1"
+      },
+      {
+        "line": 49,
+        "expression": "gate['induction'] and gate['recursive_calls'] == gate['termination_by_count'] == 0"
+      },
+      {
+        "line": 50,
+        "expression": "gate['root_whole_context_lines_read'] == 8 and gate['root_whole_public_header_lines_read'] == 17"
+      },
+      {
+        "line": 51,
+        "expression": "gate['root_whole_private_header_lines_read'] == 4 and gate['root_whole_local_compiled_fragment_lines_read'] == 5"
+      },
+      {
+        "line": 52,
+        "expression": "gate['private_helpers'] == ['lift_native']"
+      },
+      {
+        "line": 53,
+        "expression": "re.fullmatch(r'[0-9a-f]{64}', gate['independent_review_sha256'])"
+      },
+      {
+        "line": 55,
+        "expression": "source.startswith(context)"
+      },
+      {
+        "line": 56,
+        "expression": "hashlib.sha256(context).hexdigest() == expected_context_sha"
+      },
+      {
+        "line": 57,
+        "expression": "len(context.splitlines()) == int(expected_context_lines) == 8"
+      },
+      {
+        "line": 63,
+        "expression": "positions == sorted(positions)"
+      },
+      {
+        "line": 64,
+        "expression": "source.rstrip().endswith(('end MicroCFTA.' + name).encode())"
+      },
+      {
+        "line": 65,
+        "expression": "b'set_option maxRecDepth' not in source and b'set_option maxHeartbeats' not in source"
+      },
+      {
+        "line": 72,
+        "expression": "len(tail.splitlines()) == 11 + 3 * len(specs) == 20"
+      },
+      {
+        "line": 73,
+        "expression": "tail.encode() == (HERE / 'full-preparation/diagnostic-tail.lean.txt').read_bytes()"
+      },
+      {
+        "line": 77,
+        "expression": "not snapshot.exists() and not printer.exists() and not actual_headers.exists()"
+      },
+      {
+        "line": 35,
+        "expression": "filename == record['file'] and hashlib.sha256(fragment).hexdigest() == expected_digest == record['sha256']"
+      },
+      {
+        "line": 36,
+        "expression": "len(fragment.splitlines()) == record['lines']"
+      },
+      {
+        "line": 61,
+        "expression": "source.count(header) == 1 and source.index(header) >= len(context)"
+      }
+    ],
+    "check-full-public.py": [
+      {
+        "line": 13,
+        "expression": "re.fullmatch(r\"[0-9a-f]{64}\", args.expected_source_sha256)"
+      },
+      {
+        "line": 16,
+        "expression": "hashlib.sha256(source_raw).hexdigest() == args.expected_source_sha256"
+      },
+      {
+        "line": 17,
+        "expression": "1 <= len(source.splitlines()) <= int(\"160\")"
+      },
+      {
+        "line": 21,
+        "expression": "public == [(kind, short) for short, kind in specs]"
+      },
+      {
+        "line": 27,
+        "expression": "source.rstrip().endswith(\"end MicroCFTA.SourceEqualityNativeDemandNodeCounterGrowth\")"
+      },
+      {
+        "line": 28,
+        "expression": "not re.search(r\"(?m)^\\s*set_option\\s+(?:maxRecDepth|maxHeartbeats)\\b\", source)"
+      },
+      {
+        "line": 29,
+        "expression": "printer_raw == source_raw + tail.encode(\"utf-8\")"
+      },
+      {
+        "line": 35,
+        "expression": "not re.search(r\"sorryAx|\\b(?:warning|error)(?:\\([^)]*\\))?:|failed to pretty print|pp\\.rawOnError|maximum recursion depth|maximum number of heartbeats|\u22ef|\u2026|\\.\\.\\.\", log)"
+      },
+      {
+        "line": 37,
+        "expression": "receipt[\"exit_code\"] == 0 and receipt[\"observed_at\"]"
+      },
+      {
+        "line": 38,
+        "expression": "(args.receipt.parent / receipt[\"source\"]).resolve() == args.printer.resolve()"
+      },
+      {
+        "line": 39,
+        "expression": "(args.receipt.parent / receipt[\"log\"]).resolve() == args.raw.resolve()"
+      },
+      {
+        "line": 40,
+        "expression": "receipt[\"sha256\"] == hashlib.sha256(printer_raw).hexdigest()"
+      },
+      {
+        "line": 41,
+        "expression": "Path(receipt[\"command\"][-1]).resolve() == args.printer.resolve()"
+      },
+      {
+        "line": 42,
+        "expression": "\"-Dlinter.all=true\" in receipt[\"command\"]"
+      },
+      {
+        "line": 49,
+        "expression": "private == json.loads('[\"lift_native\"]')"
+      },
+      {
+        "line": 56,
+        "expression": "starts == sorted(starts, key=lambda match: match.start()) and not log[:starts[0].start()].strip()"
+      },
+      {
+        "line": 120,
+        "expression": "not readback.exists() and all(not (args.output_dir / filename).exists() for filename in artifacts)"
+      },
+      {
+        "line": 31,
+        "expression": "printer.splitlines().count(\"set_option \" + option) == 1"
+      },
+      {
+        "line": 54,
+        "expression": "len(found) == 1"
+      },
+      {
+        "line": 65,
+        "expression": "len(delimiters) == 1"
+      },
+      {
+        "line": 68,
+        "expression": "len(reports) == 1"
+      },
+      {
+        "line": 78,
+        "expression": "len(candidates) == 1"
+      },
+      {
+        "line": 81,
+        "expression": "normalize(checked) == normalize(declared)"
+      },
+      {
+        "line": 87,
+        "expression": "body.startswith(\"fun \") and len(body) > 50"
+      },
+      {
+        "line": 96,
+        "expression": "axioms <= allowed"
+      },
+      {
+        "line": 34,
+        "expression": "printer.splitlines().count(directive + namespace + short) == 1"
+      },
+      {
+        "line": 47,
+        "expression": "declaration"
+      },
+      {
+        "line": 84,
+        "expression": "spelling not in checked + declared"
+      },
+      {
+        "line": 86,
+        "expression": "not re.search(re.escape(namespace + helper) + r\"(?![\\w'])\", checked + declared)"
+      },
+      {
+        "line": 91,
+        "expression": "report"
+      },
+      {
+        "line": 94,
+        "expression": "not axiom_text.strip()"
+      }
+    ]
+  },
+  "extra_H36_fact_guard": "assert gate['external_native_step_mono_is_not_local_recursion']",
+  "families": [
+    "seven CLI/actual SHA-lines-cap/owned strict receipt and literal-empty all-linter log",
+    "complete exact contracts, context, insertion map and actual accepted Root schema",
+    "ordered unique public headers/module end/default source limits/three absent outputs before writes",
+    "exact 20-line post-module printer directives and settings, owned FULL input/raw/receipt identities",
+    "complete public/private inventory, automatic private scan and all helper/privacy markers absent TYPE",
+    "unique complete TYPE/BODY delimiter, raw checked/printed retention and actual Boolean",
+    "four-ASCII-only lexical identity, both actual hashes and no omission/diagnostic output",
+    "complete BODY, twelve retained slices, standard axiom subset including empty and output nonoverwrite"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "status": "REVIEW_ONLY_RESTRICTED_ACTUAL_FUEL_INDUCTION",
+  "owner": "execute_mono",
+  "activation": "induction fuel generalizing control state with",
+  "target": "fuel",
+  "generalized": [
+    "control",
+    "state"
+  ],
+  "fixed": [
+    "width",
+    "Output",
+    "DecidableEq Symbol",
+    "DecidableEq (EdgeKey Symbol Guard)"
+  ],
+  "zero_pattern": "zero",
+  "successor_pattern": "succ fuel ih",
+  "generated_IH_name": "ih",
+  "generated_IH_type": "∀ (control : SourceEqualityNativeDemand.Control Output) (state : SourceEqualityNativeDemand.State width),\n  state.native.machine.heap.nodes.next ≤\n    (SourceEqualityNativeDemand.execute fuel control state).state.native.machine.heap.nodes.next",
+  "generated_IH_file": "execute-IH.lean.txt",
+  "calls": [
+    {
+      "term": "ih next after",
+      "scope": "only the actual step yielded case",
+      "decreasing_argument": "predecessor fuel from succ fuel ih",
+      "next_type": "SourceEqualityNativeDemand.Control Output",
+      "after_type": "SourceEqualityNativeDemand.State width",
+      "count": 1
+    }
+  ],
+  "unrestricted_induction_oracle": false,
+  "other_terminal_tags": [
+    "done",
+    "failed",
+    "constraintError",
+    "blocked"
+  ],
+  "termination_by_count": 0
+}

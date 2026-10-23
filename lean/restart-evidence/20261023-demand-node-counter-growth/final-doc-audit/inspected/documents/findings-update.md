@@ -1,0 +1,37 @@
+## Node-counter growth in checked demand execution
+
+Updated: 2026-10-23 16:42 CEST. Proof checkpoint: `d179692fdb`.
+Start: `86b6dd3038`. Imported main remains `794903b3f`.
+Read `lean/notes-current-demand-node-counter-growth.md`.
+
+The three checked theorems bound the input node counter by the counter
+in the SAME checked-demand step, finite execute or resume outcome state.
+They cover yielded, done, failed, constraintError and blocked outcomes.
+They permit arbitrary initial states, controls, output types, widths and finite fuel.
+The public statements require only the two existing equality instances and inputs.
+They have no validity, readiness, success, callback-bound or final-counter premise.
+The native-code branch uses H35 step_mono and retains the actual native outcome.
+The direct edge branch uses the checked-demand heap observation.
+The edge-body branch uses the exact native-state observation.
+Fuel induction composes the first bound with the actual yielded control and full state.
+Resumption compares the supplied outcome state with the actual resumed state.
+No earlier source, constructor order or counterexample changes.
+Pair/Scan/H23 lifting, fixed-source initial counter order and original global
+domain-history transport remain separate proof targets.
+Upper bounds, Room, WordRanges, complete resources, generated execution, Mu/full pass,
+practical width, Haskell and solver correspondence, and convergence remain open.
+H6 constructed_node_calls remains strongest combined. The goal is ACTIVE and incomplete.
+
+The unchanged 80-line source passed its first strict check with an empty log.
+The sole complete public output check passed.
+The aggregate Audit passed with 3655 build jobs and 75560 theorem dependency checks.
+It replayed one older unused-variable warning. The new source has no warning.
+Root and an independent reviewer read all three complete checked public TYPEs.
+Actual raw TYPE byte identity and four-ASCII-whitespace lexical identity are true
+for all three public theorems. Complete BODY retention was checked programmatically.
+The baseline contains 120276 files/modes, 3653 older Lean sources,
+298 Haskell files and 207 package files. No Haskell repair was needed.
+FINDINGS keeps its external Haskell repair index FIRST.
+H35 was pushed and remote-verified at `86b6dd30387c62a1f8f46e1914824695c4a0e908`.
+This record precedes the H36 seal and push. It claims neither result.
+Standing authorization permits pushing formalize after the verified local seal.

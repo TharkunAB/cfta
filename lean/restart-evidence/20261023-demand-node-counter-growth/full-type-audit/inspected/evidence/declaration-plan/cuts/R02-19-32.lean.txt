@@ -1,0 +1,14 @@
+/-- Every checked-body observation retains the complete native state. -/
+theorem body_native (request : EdgeRequest Symbol Guard) (next : EdgeValue Symbol Guard → Code Symbol Guard Output)
+    (state : State width) : (body request next state).state.native = state.native := by
+  unfold body
+  split
+  · rfl
+  · split
+    · rfl
+    · rfl
+    · split
+      · rfl
+      · rfl
+      · dsimp only
+        split <;> rfl

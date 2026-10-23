@@ -1,0 +1,20 @@
+private theorem lift_heap (operations : SourceEqualityConstraintMemoAllocation.State)
+    (outcome : SourceRecursiveIntersectionNative.Outcome width Symbol Guard Output) :
+    (lift operations outcome).state.native.machine.heap = outcome.state.machine.heap := by
+  cases outcome <;> rfl
+
+/-- Actual edge publication and demand leave the physical constructor heap unchanged. -/
+theorem step_edge_heap [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (request : EdgeRequest Symbol Guard) (next : EdgeValue Symbol Guard → Code Symbol Guard Output)
+    (state : State width) :
+    (step (.code (.edge request next)) state).state.native.machine.heap = state.native.machine.heap := by
+  cases lookup : lookupEdge width request state.native with
+  | mk handle chosen =>
+      have chosenMachine : chosen.machine = state.native.machine := by
+        simpa only [lookup] using SourceRecursiveIntersectionNative.lookupEdge_machine request state.native
+      cases demand : demandEdge handle chosen with
+      | mk observation current =>
+          have currentMachine : current.machine = chosen.machine := by
+            simpa only [demand] using SourceRecursiveIntersectionNative.demandEdge_machine handle chosen
+          cases observation <;> simpa only [step, lookup, demand, Outcome.state] using
+            congrArg (fun machine => machine.heap) (currentMachine.trans chosenMachine)

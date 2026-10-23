@@ -1,0 +1,26 @@
+/-- Every finite native outcome retains or increases its input constructor node counter. -/
+theorem execute_mono [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (emptyGuard : Guard) (conjoin : Guard → Guard → Guard) (fuel : Nat)
+    (code : Code Symbol Guard A) (state : SourceRecursiveIntersectionThunks.State width Symbol Guard) :
+    state.machine.heap.nodes.next ≤
+      (SourceRecursiveIntersectionNative.execute emptyGuard conjoin fuel code state).state.machine.heap.nodes.next := by
+  induction fuel generalizing code state with
+  | zero => exact Nat.le_refl _
+  | succ fuel ih =>
+      have first : state.machine.heap.nodes.next ≤
+          (SourceRecursiveIntersectionNative.step emptyGuard conjoin code state).state.machine.heap.nodes.next := by
+        exact step_mono emptyGuard conjoin code state
+      cases observed : SourceRecursiveIntersectionNative.step emptyGuard conjoin code state with
+      | yielded next after =>
+          simp only [observed, SourceRecursiveIntersectionNative.Outcome.state] at first
+          simpa only [SourceRecursiveIntersectionNative.execute, observed] using
+            Nat.le_trans first (ih next after)
+      | done value after =>
+          simpa only [SourceRecursiveIntersectionNative.execute, observed,
+            SourceRecursiveIntersectionNative.Outcome.state] using first
+      | failed failure after =>
+          simpa only [SourceRecursiveIntersectionNative.execute, observed,
+            SourceRecursiveIntersectionNative.Outcome.state] using first
+      | blocked reason next after =>
+          simpa only [SourceRecursiveIntersectionNative.execute, observed,
+            SourceRecursiveIntersectionNative.Outcome.state] using first

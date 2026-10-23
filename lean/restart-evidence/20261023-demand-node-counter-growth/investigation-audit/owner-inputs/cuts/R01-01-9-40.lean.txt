@@ -1,0 +1,32 @@
+/-- One native step retains or increases its actual constructor node counter. -/
+theorem step_mono [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (emptyGuard : Guard) (conjoin : Guard → Guard → Guard) (code : Code Symbol Guard A)
+    (state : SourceRecursiveIntersectionThunks.State width Symbol Guard) :
+    state.machine.heap.nodes.next ≤
+      (SourceRecursiveIntersectionNative.step emptyGuard conjoin code state).state.machine.heap.nodes.next := by
+  cases code with
+  | pure | fail | enter | read | finishNode | finishEdge => exact Nat.le_refl _
+  | work job next =>
+      simp only [SourceRecursiveIntersectionNative.step,
+        SourceRecursiveIntersectionNative.Outcome.state, SourceRecursiveIntersectionThunks.advance]
+      rw [(SourceCurrentAllocatedFiniteOrdinaryReservations.run_next job state.machine.heap).1]
+      exact Nat.le_add_right _ _
+  | optionalBinder key body next =>
+      have growth : state.machine.heap.nodes.next ≤
+          (SourceRecursiveIntersectionMaybeMu.maybeMu key body state.machine.heap).state.nodes.next := by
+        exact InternedFreshOrdinaryStoredNodeCounterGrowth.maybeMu_mono key body state.machine.heap
+      cases constructed : SourceRecursiveIntersectionMaybeMu.maybeMu key body state.machine.heap with
+      | done value after =>
+          simpa only [SourceRecursiveIntersectionNative.step, constructed,
+            SourceRecursiveIntersectionNative.Outcome.state, SourceRecursiveIntersectionThunks.advance,
+            InternedNestedConstruction.Outcome.state] using growth
+      | pending pending after =>
+          simpa only [SourceRecursiveIntersectionNative.step, constructed,
+            SourceRecursiveIntersectionNative.Outcome.state, SourceRecursiveIntersectionThunks.advance,
+            InternedNestedConstruction.Outcome.state] using growth
+  | node request next =>
+      rw [SourceRecursiveIntersectionNative.node_step_machine]
+      exact Nat.le_refl _
+  | edge request next =>
+      rw [SourceRecursiveIntersectionNative.edge_step_machine]
+      exact Nat.le_refl _

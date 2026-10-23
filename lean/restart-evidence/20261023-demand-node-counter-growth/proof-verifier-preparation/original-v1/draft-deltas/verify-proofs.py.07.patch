@@ -1,0 +1,10 @@
+--- drafts/07-before-case-activation-guard/verify-proofs.py.txt
++++ drafts/08-before-Audit-history-binding/verify-proofs.py.txt
+@@ -236,6 +236,7 @@
+         assert bodies[equation["owner"]].count(equation["activation"].encode()) == 1
+     for short, body in bodies.items():
+         expected = m["bodies"][short]
++        assert len(re.findall(rb"\bcases\b", body)) == len(inventory["bodies"][short]["case_activations"]) and all(body.count(item.encode()) == 1 for item in inventory["bodies"][short]["case_activations"])
+         assert re.findall(rb"\bhave[ \t]+([^ \t:\n]+)", body) == [n.encode() for n in expected["have_names"]]
+         assert len(re.findall(rb"\bhave\b", body)) == len(expected["have_names"])
+         assert re.findall(rb"\blet[ \t]+([^ \t:=\n]+)", body) == [n.encode() for n in expected["let_names"]]

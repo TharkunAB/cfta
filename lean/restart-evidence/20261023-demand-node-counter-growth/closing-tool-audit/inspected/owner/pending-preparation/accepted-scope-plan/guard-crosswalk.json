@@ -1,0 +1,317 @@
+{
+  "status": "ALL_BASIS_GUARDS_RETAINED_IN_PROPOSED_SCOPE",
+  "AST_assertions": [
+    {
+      "file": "verify-preservation.py",
+      "line": 14,
+      "expression": "len(base) == 118574"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 37,
+      "expression": "set(selected) == set(expected)"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 41,
+      "expression": "all(name not in base for name in selected)"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 42,
+      "expression": "'lean/notes-current-native-node-counter-growth.md' not in base"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 43,
+      "expression": "(ROOT / 'lean/notes-current-native-node-counter-growth.md').is_file()"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 44,
+      "expression": "json.loads((HERE / 'frozen-modules.json').read_text()) == {\n    Path(name).stem: pin['sha256'] for name, pin in selected.items()}"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 46,
+      "expression": "set(changed) == set(documents) | (set(selected) & set(base)) | {'lean/MicroCFTA/Audit.lean'}"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 48,
+      "expression": "start == 'a295f1f72153365c886484cbeea933809acbc3f7'"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 50,
+      "expression": "sha(audit_original) == '1f3a43b7fb26827dc930bdddc7d6ee2f0c543cc53821c897ad5062d776f3320f'"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 51,
+      "expression": "len(audit_original.read_bytes().splitlines()) == 3142"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 58,
+      "expression": "restored == audit_original.read_bytes()"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 64,
+      "expression": "(ROOT / 'FINDINGS.md').read_text().startswith(marker)"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 68,
+      "expression": "len(registries) == 318 and sum(pin['checked'] for pin in registries.values()) == 1414"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 69,
+      "expression": "len(archives) == 5"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 70,
+      "expression": "'lean/restart-evidence/20261023-stored-node-counter-growth/frozen-modules.json' not in registries"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 85,
+      "expression": "len(frozen) == 319 and sum(pin['checked'] for pin in frozen.values()) == 1415"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 95,
+      "expression": "git('branch', '--show-current').strip() == 'formalize'"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 97,
+      "expression": "local_main == 'ed73f5997f1c07e2961d06e6e290d1de38319dad'"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 98,
+      "expression": "git('rev-parse', 'main').strip() == local_main"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 99,
+      "expression": "git('rev-parse', 'origin/main').strip() == (HERE / 'starting-main.txt').read_text().strip()"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 105,
+      "expression": "hs <= tracked_hs"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 113,
+      "expression": "active == {name for name in tracked if name.split('/')[0] in {'cfta', 'cfta-generator', 'cfta-ghc', 'decision-model'}}"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 114,
+      "expression": "len(hs) == 298 and len(active) == 207"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 115,
+      "expression": "not set(changed) & (hs | active)"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 123,
+      "expression": "older_sources == sum(name.startswith('lean/MicroCFTA/') and name.endswith('.lean')\n    and name != 'lean/MicroCFTA/Audit.lean' for name in base)"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 125,
+      "expression": "older_sources == 3652"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 18,
+      "expression": "path.is_file()"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 19,
+      "expression": "('100755' if path.stat().st_mode & 0o111 else '100644') == pin['mode']"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 31,
+      "expression": "gate['status'] == 'ACCEPTED_STRICT_SOURCE'"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 32,
+      "expression": "gate['source_cap'] == cap and gate['public_heads'] == heads"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 33,
+      "expression": "isinstance(gate['source_lines'], int) and 0 < gate['source_lines'] <= cap"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 34,
+      "expression": "sha(HERE / (module + '.lean')) == gate['source_sha256']"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 35,
+      "expression": "selected[name]['strict'] == gate['selected_strict'] and selected[name]['lines'] == gate['source_lines']"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 39,
+      "expression": "selected[name]['sha256'] == expected_sha and sha(ROOT / name) == expected_sha"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 40,
+      "expression": "len((ROOT / name).read_bytes().splitlines()) == lines"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 56,
+      "expression": "audit.count(addition) == 1 and audit.index(addition) < audit.index(b'/-!')"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 61,
+      "expression": "(ROOT / name).read_text().replace((HERE / update).read_text() + '\\n', '', 1) == git('show', start + ':' + name)"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 75,
+      "expression": "len(entries) == registries[name]['checked']"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 94,
+      "expression": "actual == expected"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 109,
+      "expression": "name.startswith(str(HERE.relative_to(ROOT)) + '/')"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 112,
+      "expression": "matches and any((ROOT / old).read_bytes() == data for old in matches)"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 118,
+      "expression": "{str(p.relative_to(HERE / component)) for p in (HERE / component).rglob('*') if p.is_file()} == set(files)"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 77,
+      "expression": "sha(ROOT / name) == registries[name]['manifest_sha256']"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 120,
+      "expression": "sha(HERE / component / name) == expected"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 82,
+      "expression": "entry['sha256'] == expected and sha(ROOT / entry['snapshot']) == expected"
+    },
+    {
+      "file": "verify-preservation.py",
+      "line": 83,
+      "expression": "sha(ROOT / source) == entry['current_sha256']"
+    },
+    {
+      "file": "seal-checkpoint.py",
+      "line": 19,
+      "expression": "len(data) < 90 * 1024 * 1024"
+    },
+    {
+      "file": "verify-seal.py",
+      "line": 10,
+      "expression": "len(data) == entry['bytes'] and hashlib.sha256(data).hexdigest() == entry['sha256']"
+    },
+    {
+      "file": "verify-seal.py",
+      "line": 14,
+      "expression": "hashlib.sha256((HERE / name).read_bytes()).hexdigest() == expected"
+    },
+    {
+      "file": "verify-checkpoint.py",
+      "line": 26,
+      "expression": "result.returncode == 0"
+    },
+    {
+      "file": "verify-checkpoint.py",
+      "line": 29,
+      "expression": "preserved['status'] == 'PASS' and preserved['baseline_files'] == 118574"
+    },
+    {
+      "file": "verify-checkpoint.py",
+      "line": 33,
+      "expression": "len(selected) == 1 and new_modules == 1"
+    },
+    {
+      "file": "verify-checkpoint.py",
+      "line": 15,
+      "expression": "result.returncode == 0"
+    },
+    {
+      "file": "verify-checkpoint.py",
+      "line": 17,
+      "expression": "report['status'] == 'PASS' and report['actual_jobs'] == int('3') and report['failed_jobs'] == int('0')"
+    },
+    {
+      "file": "verify-checkpoint.py",
+      "line": 18,
+      "expression": "report['source_jobs'] == int('2') and report['focused_build_jobs'] == int('0') and report['audit_jobs'] == int('1') and report['selected_modules'] == 1"
+    },
+    {
+      "file": "verify-checkpoint.py",
+      "line": 19,
+      "expression": "report['audit_build_jobs'] == AUDIT_JOBS and report['audit_dependencies'] == AUDIT_DEPENDENCIES"
+    },
+    {
+      "file": "verify-checkpoint.py",
+      "line": 20,
+      "expression": "report['audit_log_sha256'] == AUDIT_SHA"
+    },
+    {
+      "file": "verify-checkpoint.py",
+      "line": 21,
+      "expression": "report['warned_source_exit_zero_jobs'] == int('0')"
+    },
+    {
+      "file": "verify-checkpoint.py",
+      "line": 22,
+      "expression": "report['rejected_public_type_jobs'] == int('0')"
+    }
+  ],
+  "assertions_total": 59,
+  "line_count_total": 236,
+  "families": [
+    "all baseline file hashes and modes",
+    "actual dynamic selected source gates and sole new module",
+    "exact original Audit import inverse",
+    "nine additive LF document inverses and FINDINGS repair index first",
+    "all frozen registries/entry overrides with exact old hashes",
+    "stashes/other worktrees/branch/START/main references",
+    "Haskell/package sets and archive provenance",
+    "complete archived-component sets including nested controls",
+    "explicit-root cwd=/ normal and live saved proof modes",
+    "all actual job/Audit metrics bound only from accepted actual cut",
+    "one-time support and exact self-exclusion",
+    "mandatory checkpoint rerun before seal writes",
+    "byte-identical verify-seal and local zero-network operation"
+  ]
+}

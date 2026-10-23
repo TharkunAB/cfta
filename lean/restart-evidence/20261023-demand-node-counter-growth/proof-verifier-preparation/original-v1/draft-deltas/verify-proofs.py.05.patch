@@ -1,0 +1,20 @@
+--- drafts/05-before-FULL-binding/verify-proofs.py.txt
++++ drafts/06-FULL-actual-pending-acceptance/verify-proofs.py.txt
+@@ -27,7 +27,7 @@
+ def canonical(text):
+     return re.sub(r"[ \t\r\n]+", " ", text).strip(" \t\r\n")
+ raw_data = read("bound-data.json")
+-assert digest(raw_data) == "51083ba5aeba7f2eefd95f201fd11fb2e5a8c7b23ce5451319379ea4473b8eaa"
++assert digest(raw_data) == "61779b67e343482591ca1d521fed9b187cc34eb63f38a9b42648120c091e14a3"
+ assert not re.search(r"__H\d+_", raw_data.decode()), "Unbound evidence input"
+ bound = json.loads(raw_data)
+ modules = bound["modules"]
+@@ -372,7 +372,7 @@
+         actual_axioms[short] = axioms
+         for suffix, text in [("public-type", checked), ("printed-public-type", declared), ("body", body), ("axioms", axiom_output)]:
+             filename = m["prefix"] + "-" + short + "-" + suffix + ".txt"
+-            retained = read("public-readback/" + filename)
++            retained = read("full-output/" + filename)
+             assert retained == text.encode() and report["retained_slices"][filename] == dict(bytes=len(retained), sha256=digest(retained))
+             retained_names.append(filename)
+     assert "".join(reconstructed) == log and set(report["retained_slices"]) == set(retained_names)

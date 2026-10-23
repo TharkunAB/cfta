@@ -1,0 +1,5 @@
+/-- Resumption retains or increases the node counter in its supplied outcome state. -/
+theorem resume_mono [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (outcome : SourceEqualityNativeDemand.Outcome width Output) :
+    outcome.state.native.machine.heap.nodes.next ≤
+      (SourceEqualityNativeDemand.resume fuel outcome).state.native.machine.heap.nodes.next
