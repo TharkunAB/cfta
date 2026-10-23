@@ -35,22 +35,58 @@ spec = describe "Data.CFTA.Inclusion" $ do
         inclusionUpTo bound fOfATwice fOfAOrB `shouldBe` Right (IncludedUpTo bound)
     it "makes an automaton equivalent to its trimmed and its reordered copies" $ do
         let copies = [("trimmed", inclusions (FTA.trim padded)), ("reordered", inclusions (reordered padded))]
-            inclusions copy = (inclusionUpTo bound padded copy, inclusionUpTo bound copy padded)
-        copies `shouldBe` [(name, (Right (IncludedUpTo bound), Right (IncludedUpTo bound))) | name <- ["trimmed", "reordered"]]
-    it "gives the same counterexample for reordered copies of the two automata" $
+            inclusions copy =
+                ( (inclusionUpTo bound padded copy, inclusionUpTo bound copy padded)
+                , (inclusion padded copy, inclusion copy padded)
+                )
+        copies
+            `shouldBe` [ (name, ((Right (IncludedUpTo bound), Right (IncludedUpTo bound)), (Right Included, Right Included)))
+                       | name <- ["trimmed", "reordered"]
+                       ]
+    it "gives the same counterexample for reordered copies of the two automata" $ do
         overPairs (\left right -> inclusionUpTo bound (reordered left) (reordered right))
             `shouldBe` overPairs (inclusionUpTo bound)
+        overPairs (\left right -> inclusion (reordered left) (reordered right)) `shouldBe` overPairs inclusion
     it "rejects an automaton with a constraint" $ do
         let equal = equalityConstraint $ ECTA.mkEqConstraints [[ECTA.path [0], ECTA.path [1]]]
             pairs = automaton "s" [("s", [FTA.Transition (sym "g") ["q", "q"] equal]), ("q", [leaf "a", leaf "b"])]
         inclusionUpTo bound pairs trees `shouldBe` Left ConstrainedLeft
         inclusionUpTo bound trees pairs `shouldBe` Left ConstrainedRight
+        inclusion pairs trees `shouldBe` Left ConstrainedLeft
+        inclusion trees pairs `shouldBe` Left ConstrainedRight
     it "includes every automaton up to a bound below one" $
         inclusionUpTo 0 treesOverAB trees `shouldBe` Right (IncludedUpTo 0)
+    it "agrees with the bounded check on every pair" $
+        -- The largest smallest counterexample of a pair has five nodes, so
+        -- the bound shows each counterexample.
+        overPairs (\left right -> upToBound <$> inclusion left right) `shouldBe` overPairs (inclusionUpTo bound)
+    it "shows the inclusion of two infinite languages, which no bound shows" $ do
+        inclusion chainsBySix evenChains `shouldBe` Right Included
+        inclusionUpTo bound chainsBySix evenChains `shouldBe` Right (IncludedUpTo bound)
+        (inclusion evenChains evenChainsByFour, inclusion evenChainsByFour evenChains)
+            `shouldBe` (Right Included, Right Included)
+        inclusion evenChains chainsBySix `shouldBe` Right (NotIncluded $ chain 2)
+    it "finds the smallest counterexample above the bound of the other tests" $ do
+        -- The lengths 0, 3, 6, 9, and so on, against the lengths 0, 3, 6, 12,
+        -- 18, and so on: the chain of length 9 is missing.
+        let byThree = automaton "d0" [("d0", [leaf "a", node "f" ["d2"]]), ("d1", [node "f" ["d0"]]), ("d2", [node "f" ["d1"]])]
+            bySixOrThree =
+                automaton "s" $
+                    ("s", [leaf "a", node "f" ["c5"], node "f" ["t2"]])
+                        : ("t0", [leaf "a"])
+                        : [("t" <> show length', [node "f" ["t" <> show (length' - 1)]]) | length' <- [1 .. 2 :: Int]]
+                            <> sixRows
+        inclusion byThree bySixOrThree `shouldBe` Right (NotIncluded $ chain 9)
+        inclusion byThree bySixOrThree `shouldBe` inclusionUpTo 20 byThree bySixOrThree
 
 -- | The largest size that the tests check.
 bound :: Size
 bound = 7
+
+-- | The result of an exact check as the bounded check up to 'bound' gives it.
+upToBound :: Inclusion Symbol -> Inclusion Symbol
+upToBound Included = IncludedUpTo bound
+upToBound other = other
 
 -- | The first term of the left automaton, by size and then by class rank, that the right automaton rejects.
 search :: FTA.PlainFTA String Symbol -> FTA.PlainFTA String Symbol -> Inclusion Symbol
@@ -63,7 +99,7 @@ search left right =
 
 {- | Whether the left automaton accepts the counterexample and the right
 automaton rejects it, with the size of the counterexample. 'Nothing' when the
-counterexample fails.
+counterexample fails, or for an error or 'Included'.
 -}
 counterexampleCheck :: FTA.PlainFTA String Symbol -> FTA.PlainFTA String Symbol -> Maybe (Maybe Size)
 counterexampleCheck left right = case inclusionUpTo bound left right of
@@ -72,7 +108,7 @@ counterexampleCheck left right = case inclusionUpTo bound left right of
             Just $ Just $ Size $ toInteger $ length counterexample
         | otherwise -> Nothing
     Right (IncludedUpTo _) -> Just Nothing
-    Left _ -> Nothing
+    _ -> Nothing
 
 -- | The smallest size of a term over the alphabet that the left automaton accepts and the right rejects.
 smallestDifference :: FTA.PlainFTA String Symbol -> FTA.PlainFTA String Symbol -> Maybe Size
@@ -97,7 +133,9 @@ fixtures =
         , automaton "s" [("s", [leaf "a", node "g" ["s", "s"], node "g" ["l", "s"]]), ("l", [leaf "a"])]
         )
     , ("chains", automaton "s" [("s", [leaf "a", node "f" ["s"]])])
-    , ("chains of even length", automaton "s" [("s", [leaf "a", node "f" ["o"]]), ("o", [node "f" ["s"]])])
+    , ("chains of even length", evenChains)
+    , ("chains of even length, by residues modulo four", evenChainsByFour)
+    , ("chains with a length divisible by six", chainsBySix)
     , ("f(a) or f(b)", fOfAOrB)
     , ("f(a), with two runs", fOfATwice)
     , ("the empty language", automaton "s" [("s", [])])
@@ -124,6 +162,36 @@ padded =
         , ("dead", [node "f" ["dead"]])
         , ("unreachable", [leaf "b"])
         ]
+
+-- | The chains f(...f(a)) with an even number of f nodes.
+evenChains :: FTA.PlainFTA String Symbol
+evenChains = automaton "s" [("s", [leaf "a", node "f" ["o"]]), ("o", [node "f" ["s"]])]
+
+{- | The chains with an even number of f nodes, as the union of the lengths 0
+and 2 modulo 4. The state r accepts the lengths that are k modulo 4.
+-}
+evenChainsByFour :: FTA.PlainFTA String Symbol
+evenChainsByFour =
+    automaton
+        "s"
+        [ ("s", [leaf "a", node "f" ["r3"], node "f" ["r1"]])
+        , ("r0", [leaf "a", node "f" ["r3"]])
+        , ("r1", [node "f" ["r0"]])
+        , ("r2", [node "f" ["r1"]])
+        , ("r3", [node "f" ["r2"]])
+        ]
+
+-- | The chains whose number of f nodes is divisible by six.
+chainsBySix :: FTA.PlainFTA String Symbol
+chainsBySix = automaton "c0" sixRows
+
+-- | The rows of 'chainsBySix'. The state ck accepts the lengths that are k modulo 6.
+sixRows :: [(String, [FTA.Transition String Symbol Constraint])]
+sixRows = ("c0", [leaf "a", node "f" ["c5"]]) : [("c" <> show k, [node "f" ["c" <> show (k - 1)]]) | k <- [1 .. 5 :: Int]]
+
+-- | The chain with the given number of f nodes.
+chain :: Int -> Term Symbol
+chain length' = iterate (\below -> term "f" [below]) (term "a" []) !! length'
 
 -- | The terms f(a) and f(b), each with one run.
 fOfAOrB :: FTA.PlainFTA String Symbol
