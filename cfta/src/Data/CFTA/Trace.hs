@@ -1,12 +1,12 @@
 {-# LANGUAGE DeriveFunctor #-}
 
-{- | Trace languages: the step sequences that a description of a state
-machine accepts, as the terms of a finite tree automaton.
+{- | Trace languages: the step sequences that a state machine accepts, as the
+terms of a finite tree automaton.
 
-A 'Description' has an initial state, a list of steps, the next state of a
-step in a state, and the states in which a trace can end. A step can run in a
-state when it has a next state there: this is the precondition of the step.
-The next state is its postcondition. A trace of the steps @s1 ... sn@ is the
+A 'StateMachine' has an initial state, a list of steps, the next state of a
+step in a state, and the final states, in which a trace can end. A step can
+run in a state when it has a next state there: this is the precondition of
+the step. A trace of the steps @s1 ... sn@ is the
 right spine @Step s1 (Step s2 (... (Step sn End)))@, so the preorder of the
 term is the trace, and a prefix of a trace is a preorder prefix of its term.
 A trace of @n@ steps has size @n + 1@.
@@ -17,7 +17,7 @@ automaton has at most one transition for each state and symbol, so each trace
 has one run. Thus the automaton is unambiguous, and "Data.CFTA.Sized" and the
 generators of @cfta-generator@ count, rank, unrank, sample, and shrink its
 traces exactly. Operations on automata apply to it: 'Data.CFTA.intersect'
-gives the traces of two descriptions over one step type, and
+gives the traces of two state machines over one step type, and
 'Data.CFTA.Lowering.lift' gives the traces whose lowering is a trace.
 
 'feasibility' runs a sequence of steps from the root of an automaton. It
@@ -26,7 +26,7 @@ symbol fails.
 -}
 module Data.CFTA.Trace (
     TraceSymbol (..),
-    Description (..),
+    StateMachine (..),
     traceAutomaton,
     traceTerm,
     traceSteps,
@@ -54,39 +54,39 @@ data TraceSymbol step
 
 instance (Hashable step) => Hashable (TraceSymbol step)
 
--- | A state machine: the precondition and the postcondition of each step over an abstract state.
-data Description state step = Description
-    { descriptionInitial :: state
+-- | A state machine over an abstract state: the precondition and the next state of each step, and the final states.
+data StateMachine state step = StateMachine
+    { machineInitial :: state
     -- ^ The state before the first step.
-    , descriptionSteps :: [step]
+    , machineSteps :: [step]
     -- ^ The steps.
-    , descriptionNext :: state -> step -> Maybe state
+    , machineNext :: state -> step -> Maybe state
     {- ^ The state after a step. 'Nothing' when the precondition of the step
     is false in the state.
     -}
-    , descriptionFinal :: state -> Bool
+    , machineFinal :: state -> Bool
     -- ^ Whether a trace can end in the state.
     }
 
-{- | The automaton of the traces of a description. Each state that the initial
+{- | The automaton of the traces of a state machine. Each state that the initial
 state reaches is a state of the automaton. A state has an 'End' leaf when it
 is final, and a 'Step' transition to the next state for each step whose
 precondition is true in it. A state from which no final state is reachable
 keeps its row, so 'feasibility' finds the step whose precondition is false.
 'FTA.trim' removes these states.
 -}
-traceAutomaton :: (Ord state, Ord step) => Description state step -> PlainFTA state (TraceSymbol step)
-traceAutomaton Description{descriptionInitial, descriptionSteps, descriptionNext, descriptionFinal} =
+traceAutomaton :: (Ord state, Ord step) => StateMachine state step -> PlainFTA state (TraceSymbol step)
+traceAutomaton StateMachine{machineInitial, machineSteps, machineNext, machineFinal} =
     -- Each child is a reached state, and each symbol has one arity, so validation cannot fail.
-    fromRight (error "traceAutomaton: the automaton of a description is valid")
-        $ FTA.mkFTA descriptionInitial
-        $ explore row FTA.transitionChildren descriptionInitial
+    fromRight (error "traceAutomaton: the automaton of a state machine is valid")
+        $ FTA.mkFTA machineInitial
+        $ explore row FTA.transitionChildren machineInitial
   where
     row state =
-        [Transition End [] noConstraint | descriptionFinal state]
+        [Transition End [] noConstraint | machineFinal state]
             <> [ Transition (Step step) [next] noConstraint
-               | step <- descriptionSteps
-               , Just next <- [descriptionNext state step]
+               | step <- machineSteps
+               , Just next <- [machineNext state step]
                ]
 
 -- | The term of a sequence of steps.
