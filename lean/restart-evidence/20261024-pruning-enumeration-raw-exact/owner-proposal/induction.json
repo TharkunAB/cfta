@@ -1,0 +1,49 @@
+{
+  "owner": "runStaged_exact",
+  "count": 1,
+  "kind": "structural List induction",
+  "target": "inputs",
+  "generalized": [
+    "before",
+    "after",
+    "result"
+  ],
+  "placement": "after childExact is proved, before introducing observed",
+  "branches": [
+    {
+      "name": "nil",
+      "constructors": []
+    },
+    {
+      "name": "cons",
+      "binders": [
+        {
+          "name": "input",
+          "type": "InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended"
+        },
+        {
+          "name": "rest",
+          "type": "List (InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended)"
+        },
+        {
+          "name": "ih",
+          "type": "∀ (before after : EnumerationState.State Symbol Constraint) (result : Option (List (Fragments.Fragment Symbol))), let staged := rest.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1)); Success (SourcePruningEnumerationEdgeTraversal.runStaged staged) before result after → SourcePruningEnumerationEdgeTraversal.runStaged staged before = [.ok (result, after)]"
+        }
+      ]
+    }
+  ],
+  "full_IH_type": "∀ (before after : EnumerationState.State Symbol Constraint) (result : Option (List (Fragments.Fragment Symbol))), let staged := rest.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1)); Success (SourcePruningEnumerationEdgeTraversal.runStaged staged) before result after → SourcePruningEnumerationEdgeTraversal.runStaged staged before = [.ok (result, after)]",
+  "restricted_calls": [
+    {
+      "callee": "ih",
+      "arguments": [
+        "middle",
+        "after",
+        "tailResult",
+        "tailSuccess"
+      ],
+      "restriction": "rest is the immediate structural tail of input :: rest; the SAME actual observed tail Success is consumed"
+    }
+  ],
+  "termination": "List induction supplied by the core List recursor; no recursion declaration, sizeOf obligation or forall-input oracle"
+}

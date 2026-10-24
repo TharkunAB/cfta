@@ -1,0 +1,125 @@
+{
+  "families": [
+    {
+      "owner": "runStaged_exact",
+      "scope": "childExact",
+      "family": "Value",
+      "equation": null,
+      "target": "value",
+      "constructors": [
+        "empty",
+        "reference name",
+        "node entry edges depth free",
+        "union entry members depth free",
+        "mu entry body depthShape ordinaryShape"
+      ],
+      "typed_payloads": "scoped-types.json",
+      "reason": "Empty rejects; reference unsupported; three remaining constructors split terminal and encode directly, preserving full scs only for ordinary writes"
+    },
+    {
+      "owner": "runStaged_exact",
+      "scope": "structural cons",
+      "family": "Option actual child action",
+      "equation": "preparedChild",
+      "actual_type": "SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) bucket value = childChoice",
+      "specializations": [
+        {
+          "case": "none",
+          "type": "SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) bucket value = none",
+          "binders": []
+        },
+        {
+          "case": "some childAction",
+          "type": "SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) bucket value = some childAction",
+          "binders": [
+            {
+              "name": "childAction",
+              "type": "EnumerateM Symbol Constraint (Fragments.Fragment Symbol)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "owner": "prepare_exact",
+      "scope": "allowed branch only",
+      "family": "Option actual project",
+      "equation": "projected",
+      "actual_type": "SourcePruningEnumerationConstraint.project edge.entry.key.constraint = projectedChoice",
+      "specializations": [
+        {
+          "case": "none",
+          "type": "SourcePruningEnumerationConstraint.project edge.entry.key.constraint = none",
+          "binders": []
+        },
+        {
+          "case": "some pair",
+          "type": "SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some pair",
+          "binders": [
+            {
+              "name": "pair",
+              "type": "List EqualityTrie.Trie × Option Constraint"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "owner": "prepare_exact",
+      "scope": "actual children continuation",
+      "family": "Option childrenResult",
+      "equation": null,
+      "target": "childrenResult",
+      "constructors": [
+        "none",
+        "some fragments"
+      ],
+      "typed_payloads": [
+        {
+          "name": "fragments",
+          "type": "List (Fragments.Fragment Symbol)"
+        }
+      ]
+    },
+    {
+      "owner": "prepare_exact",
+      "scope": "actual successful parent fragment residual",
+      "family": "Option residual",
+      "equation": null,
+      "target": "residual",
+      "constructors": [
+        "none",
+        "some guard"
+      ],
+      "typed_payloads": [
+        {
+          "name": "guard",
+          "type": "Constraint"
+        }
+      ]
+    }
+  ],
+  "conditions": [
+    {
+      "file": "condition-terminal.lean.txt",
+      "owner": "runStaged_exact",
+      "scope": "childExact node/union/mu",
+      "positive_type": "bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) = true",
+      "negative_type": "¬ bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) = true"
+    },
+    {
+      "file": "condition-allowed.lean.txt",
+      "owner": "prepare_exact",
+      "scope": "before project inspection",
+      "positive_type": "arityAllows edge.children.length scs = true",
+      "negative_type": "¬ arityAllows edge.children.length scs = true"
+    }
+  ],
+  "structural_induction": "induction.json",
+  "equation_family_count": 2,
+  "equation_specialization_count": 4,
+  "constructor_case_family_count": 3,
+  "by_cases_syntactic_count": 2,
+  "child_terminal_condition_multiplicity": "One literal by_cases fragment can apply in the remaining three stored-node goals; all constructor payload fields are separately inventoried. No duplicate literal is required.",
+  "preservation": "No Graph or native heap is inspected. Rejection before project, actual unsupported None state, full exact success after state retained."
+}

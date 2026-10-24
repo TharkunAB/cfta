@@ -1,0 +1,7 @@
+import MicroCFTA.SourcePruningEnumerationRawExact
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+#check @MicroCFTA.SourcePruningEnumerationRawExact.runStaged_exact
+#print axioms MicroCFTA.SourcePruningEnumerationRawExact.runStaged_exact
+#check @MicroCFTA.SourcePruningEnumerationRawExact.prepare_exact
+#print axioms MicroCFTA.SourcePruningEnumerationRawExact.prepare_exact

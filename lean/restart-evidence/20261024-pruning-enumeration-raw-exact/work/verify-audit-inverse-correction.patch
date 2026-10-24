@@ -1,0 +1,14 @@
+--- before-actual-audit-position
++++ actual-audit-position
+@@ -71,8 +71,9 @@
+     elif name == 'lean/MicroCFTA/Audit.lean':
+         addition = audit_change['prefix'].encode()
+         assert addition == b'import MicroCFTA.SourcePruningEnumerationRawExact\n'
+-        assert sha(data) == audit_change['after_sha256'] and data.startswith(addition)
+-        data = data[len(addition):]
++        preceding = b'import MicroCFTA.SourcePruningEnumerationCheckedRows\n'
++        assert sha(data) == audit_change['after_sha256'] and data.startswith(preceding + addition)
++        data = preceding + data[len(preceding) + len(addition):]
+         assert sha(data) == audit_change['before_sha256']
+         changed.append(name)
+     assert hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\0' + data).hexdigest() == blob, name

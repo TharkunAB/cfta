@@ -1,0 +1,95 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-o", "/tmp/mcfta-pruning-enumeration-raw-exact-20261024/strict.olean", "-R", "/tmp/mcfta-pruning-enumeration-raw-exact-20261024/strict-3", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-pruning-enumeration-raw-exact-20261024/strict-3/MicroCFTA/SourcePruningEnumerationRawExact.lean"], "exit_code": 1, "raw_bytes": 4809, "raw_sha256": "a4be3fbd9f39f2281eb8a33412b33ce4665f9c8d9caabac259fc5bfa10c19160", "source_sha256": "10d61857c915ba2156301eec355f01981b46b41a9faf7a02c4b2e30fb5627184"}
+/tmp/mcfta-pruning-enumeration-raw-exact-20261024/strict-3/MicroCFTA/SourcePruningEnumerationRawExact.lean:139:13: error: unsolved goals
+case pos.some.none
+scs : List Suspended
+edge : InternedConstructorTemplates.EdgeValue Symbol Constraint
+before after : State Symbol Constraint
+result : Option (Fragments.Fragment Symbol)
+allowed : arityAllows edge.children.length scs = true
+tries : List EqualityTrie.Trie
+residual : Option Constraint
+projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual)
+inputs : List (InternedConstructorTemplates.Value Symbol Constraint × List Suspended) :=
+  List.map
+    (fun indexed =>
+      (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)))
+    edge.children.zipIdx
+childrenAfter : State Symbol Constraint
+observed :
+  Except.ok (result, after) ∈
+    (SourcePruningEnumerationEdgeTraversal.runStaged
+          (List.map
+            (fun indexed =>
+              (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                SourcePruningEnumerationShallowChild.prepareChild
+                  (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                  indexed.fst))
+            edge.children.zipIdx) >>=
+        fun childrenResult =>
+        match childrenResult with
+        | none => StateT.pure none
+        | some fragments => do
+          EnumerationSchedule.recordResidual residual (Fragments.Fragment.node edge.entry.key.symbol fragments)
+          StateT.pure (some (Fragments.Fragment.node edge.entry.key.symbol fragments)))
+      (suspendedState tries.length before)
+stagedSame :
+  List.map (fun input => (input.fst, input.snd, SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst))
+      inputs =
+    List.map
+      (fun indexed =>
+        (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+          SourcePruningEnumerationShallowChild.prepareChild
+            (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)) indexed.fst))
+      edge.children.zipIdx
+prefixExact :
+  (List.mapM suspend tries >>= fun own =>
+        StateT.pure
+          (edge.entry.key.symbol,
+            List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd own,
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd own) indexed.fst))
+              edge.children.zipIdx,
+            residual))
+      before =
+    [Except.ok
+        ((edge.entry.key.symbol,
+            List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx,
+            residual),
+          suspendedState tries.length before)]
+childrenSuccess :
+  Except.ok (none, childrenAfter) ∈
+    SourcePruningEnumerationEdgeTraversal.runStaged
+      (List.map
+        (fun indexed =>
+          (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+            SourcePruningEnumerationShallowChild.prepareChild
+              (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)) indexed.fst))
+        edge.children.zipIdx)
+      (suspendedState tries.length before)
+continued : Except.ok (result, after) ∈ ExceptT.mk [Except.ok (none, childrenAfter)]
+⊢ ExceptT.mk [Except.ok (none, childrenAfter)] = [Except.ok (result, after)]
+/tmp/mcfta-pruning-enumeration-raw-exact-20261024/strict-3/MicroCFTA/SourcePruningEnumerationRawExact.lean:146:2: error: unsolved goals
+case neg
+scs : List Suspended
+edge : InternedConstructorTemplates.EdgeValue Symbol Constraint
+before after : State Symbol Constraint
+result : Option (Fragments.Fragment Symbol)
+allowed : ¬arityAllows edge.children.length scs = true
+observed : Except.ok (result, after) ∈ ExceptT.mk []
+⊢ (reject >>= fun packet => do
+        let childrenResult ← SourcePruningEnumerationEdgeTraversal.runStaged packet.snd.fst
+        match childrenResult with
+          | none => pure none
+          | some fragments => do
+            EnumerationSchedule.recordResidual packet.snd.snd (Fragments.Fragment.node packet.fst fragments)
+            pure (some (Fragments.Fragment.node packet.fst fragments)))
+      before =
+    [Except.ok (result, after)]

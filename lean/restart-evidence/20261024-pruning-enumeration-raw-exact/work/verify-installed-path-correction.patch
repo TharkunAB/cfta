@@ -1,0 +1,11 @@
+--- before-actual-installed-path
++++ actual-installed-path
+@@ -155,7 +155,7 @@
+     assert (here / 'work' / name / 'raw.log').read_bytes() == b''
+ audit = (here / 'work/audit-1/raw.log').read_text()
+ checks = load('work/build-summary.json')
+-assert 'Build completed successfully (' + str(checks['installed_jobs']) + ' jobs).' in (here / 'work/installed-build-1/raw.log').read_text()
++assert 'Build completed successfully (' + str(checks['installed_jobs']) + ' jobs).' in (here / 'work/installed-1/raw.log').read_text()
+ assert 'Checked axiom dependencies of ' + str(checks['axiom_dependency_checks']) + ' MicroCFTA theorems.' in audit
+ assert 'Build completed successfully (' + str(checks['audit_jobs']) + ' jobs).' in audit
+ assert len(re.findall(r'^warning:', audit, re.M)) == 1 and 'InternedFreshOrdinaryClosedCompletion.lean:24:5' in audit

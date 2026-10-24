@@ -1,0 +1,34 @@
+MicroCFTA.SourcePruningEnumerationRawExact.runStaged_exact : ∀
+  (inputs :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) ×
+        List MicroCFTA.EnumerationState.Suspended))
+  (before after :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (result : Option (List (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol))),
+  have staged :=
+    List.map
+      (fun input =>
+        (input.fst, input.snd, MicroCFTA.SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst))
+      inputs;
+  MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.SourcePruningEnumerationEdgeTraversal.runStaged staged) before
+      result after →
+    MicroCFTA.SourcePruningEnumerationEdgeTraversal.runStaged staged before = [Except.ok (result, after)]
+'MicroCFTA.SourcePruningEnumerationRawExact.runStaged_exact' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourcePruningEnumerationRawExact.prepare_exact : ∀ (scs : List MicroCFTA.EnumerationState.Suspended)
+  (edge :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (action :
+    MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+      (Option (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)))
+  (before after :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (result : Option (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)),
+  MicroCFTA.SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action →
+    MicroCFTA.EnumerationCorrectness.Success action before result after → action before = [Except.ok (result, after)]
+'MicroCFTA.SourcePruningEnumerationRawExact.prepare_exact' depends on axioms: [propext, Classical.choice, Quot.sound]

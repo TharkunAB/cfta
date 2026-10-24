@@ -1,0 +1,5 @@
+/-- The residual-recording clause of actual edge enumeration. -/
+def recordResidual (residual : Option Guard) (fragment : Fragment Symbol) : EnumerateM Symbol Guard Unit :=
+  match residual with
+  | none => pure ()
+  | some guard => modify fun state => {state with obligations := (guard, fragment) :: state.obligations}

@@ -1,0 +1,12 @@
+have prefixExact : (tries.mapM suspend >>= fun own =>
+    pure (edge.entry.key.symbol,
+      edge.children.zipIdx.map (fun indexed =>
+        (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 own,
+          SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint)
+            (descendScs indexed.2 scs ++ descendScs indexed.2 own) indexed.1)), residual)) before =
+    [.ok ((edge.entry.key.symbol,
+      edge.children.zipIdx.map (fun indexed =>
+        (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries),
+          SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint)
+            (descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries)) indexed.1)), residual),
+      suspendedState tries.length before)]

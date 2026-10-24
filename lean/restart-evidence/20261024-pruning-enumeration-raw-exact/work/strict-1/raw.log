@@ -1,0 +1,103 @@
+/tmp/mcfta-pruning-enumeration-raw-exact-20261024/strict-1/MicroCFTA/SourcePruningEnumerationRawExact.lean:30:4: error: Alternative `empty` has not been provided
+/tmp/mcfta-pruning-enumeration-raw-exact-20261024/strict-1/MicroCFTA/SourcePruningEnumerationRawExact.lean:30:4: error: Alternative `reference` has not been provided
+/tmp/mcfta-pruning-enumeration-raw-exact-20261024/strict-1/MicroCFTA/SourcePruningEnumerationRawExact.lean:30:4: error: Alternative `node` has not been provided
+/tmp/mcfta-pruning-enumeration-raw-exact-20261024/strict-1/MicroCFTA/SourcePruningEnumerationRawExact.lean:30:4: error: Alternative `union` has not been provided
+/tmp/mcfta-pruning-enumeration-raw-exact-20261024/strict-1/MicroCFTA/SourcePruningEnumerationRawExact.lean:30:4: error: Alternative `mu` has not been provided
+/tmp/mcfta-pruning-enumeration-raw-exact-20261024/strict-1/MicroCFTA/SourcePruningEnumerationRawExact.lean:31:4: error: Case tag `empty` not found.
+
+Note: There are no cases to select.
+/tmp/mcfta-pruning-enumeration-raw-exact-20261024/strict-1/MicroCFTA/SourcePruningEnumerationRawExact.lean:48:86: error: Application type mismatch: The argument
+  observed
+has type
+  List
+    (InternedConstructorTemplates.Value Symbol Constraint ×
+      List Suspended × Option (EnumerateM Symbol Constraint (Fragments.Fragment Symbol)))
+of sort `Type` but is expected to have type
+  Success (pure (some [])) before result after
+of sort `Prop` in the application
+  (success_pure (some []) result before after).mp observed
+/tmp/mcfta-pruning-enumeration-raw-exact-20261024/strict-1/MicroCFTA/SourcePruningEnumerationRawExact.lean:51:4: error: Tactic `rfl` failed: Expected the goal to be a binary relation
+
+Hint: Reflexivity tactics can only be used on goals of the form `x ~ x` or `R x x`
+
+case nil
+childExact :
+  ∀ (bucket : List Suspended) (value : InternedConstructorTemplates.Value Symbol Constraint)
+    (childAction : EnumerateM Symbol Constraint (Fragments.Fragment Symbol)) (start finish : State Symbol Constraint)
+    (fragment : Fragments.Fragment Symbol),
+    SourcePruningEnumerationShallowChild.prepareChild bucket value = some childAction →
+      Success childAction start fragment finish → childAction start = [Except.ok (fragment, finish)]
+before : State Symbol Constraint
+observed : List
+  (InternedConstructorTemplates.Value Symbol Constraint ×
+    List Suspended × Option (EnumerateM Symbol Constraint (Fragments.Fragment Symbol))) :=
+  List.map (fun input => (input.fst, input.snd, SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst))
+    []
+⊢ Success (SourcePruningEnumerationEdgeTraversal.runStaged observed) before (some []) before →
+    SourcePruningEnumerationEdgeTraversal.runStaged observed before = [Except.ok (some [], before)]
+/tmp/mcfta-pruning-enumeration-raw-exact-20261024/strict-1/MicroCFTA/SourcePruningEnumerationRawExact.lean:55:4: error: Alternative `none` has not been provided
+/tmp/mcfta-pruning-enumeration-raw-exact-20261024/strict-1/MicroCFTA/SourcePruningEnumerationRawExact.lean:55:4: error: Alternative `some` has not been provided
+/tmp/mcfta-pruning-enumeration-raw-exact-20261024/strict-1/MicroCFTA/SourcePruningEnumerationRawExact.lean:56:4: error: Case tag `none` not found.
+
+Note: There are no cases to select.
+/tmp/mcfta-pruning-enumeration-raw-exact-20261024/strict-1/MicroCFTA/SourcePruningEnumerationRawExact.lean:91:4: error: Alternative `none` has not been provided
+/tmp/mcfta-pruning-enumeration-raw-exact-20261024/strict-1/MicroCFTA/SourcePruningEnumerationRawExact.lean:91:4: error: Alternative `some` has not been provided
+/tmp/mcfta-pruning-enumeration-raw-exact-20261024/strict-1/MicroCFTA/SourcePruningEnumerationRawExact.lean:92:4: error: Case tag `none` not found.
+
+Note: There are no cases to select.
+/tmp/mcfta-pruning-enumeration-raw-exact-20261024/strict-1/MicroCFTA/SourcePruningEnumerationRawExact.lean:146:4: error: Tactic `subst` failed: did not find equation for eliminating 'action'
+
+case neg
+scs : List Suspended
+edge : InternedConstructorTemplates.EdgeValue Symbol Constraint
+action : EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol))
+before after : State Symbol Constraint
+result : Option (Fragments.Fragment Symbol)
+observed : Success action before result after
+allowed : ¬arityAllows edge.children.length scs = true
+prepared :
+  (match
+      if false = true then
+        match SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+        | none => none
+        | some (tries, residual) =>
+          some do
+            let own ← List.mapM suspend tries
+            pure
+                (edge.entry.key.symbol,
+                  List.map
+                    (fun indexed =>
+                      (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd own,
+                        SourcePruningEnumerationShallowChild.prepareChild
+                          (descendScs indexed.snd scs ++ descendScs indexed.snd own) indexed.fst))
+                    edge.children.zipIdx,
+                  residual)
+      else some reject with
+    | none => none
+    | some prefixAction =>
+      some do
+        let packet ← prefixAction
+        let childrenResult ← SourcePruningEnumerationEdgeTraversal.runStaged packet.snd.fst
+        match childrenResult with
+          | none => pure none
+          | some fragments => do
+            EnumerationSchedule.recordResidual packet.snd.snd (Fragments.Fragment.node packet.fst fragments)
+            pure (some (Fragments.Fragment.node packet.fst fragments))) =
+    some action
+⊢ action before = [Except.ok (result, after)]
+/tmp/mcfta-pruning-enumeration-raw-exact-20261024/strict-1/MicroCFTA/SourcePruningEnumerationRawExact.lean:145:59: error: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourcePruningEnumerationEdgeTraversal.prepare, SourcePruningEnumerationEdgePrefix.prepare, allowed,
+    Option.some.injEq] at prepared
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-raw-exact-20261024/strict-1/MicroCFTA/SourcePruningEnumerationRawExact.lean:145:71: error: This simp argument is unused:
+  Option.some.injEq
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourcePruningEnumerationEdgeTraversal.prepare, SourcePruningEnumerationEdgePrefix.prepare, allowed,
+    ↓reduceIte] at prepared
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

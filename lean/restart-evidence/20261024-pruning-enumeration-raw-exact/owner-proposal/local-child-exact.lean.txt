@@ -1,0 +1,7 @@
+have childExact : ∀ (bucket : List EnumerationState.Suspended)
+    (value : InternedConstructorTemplates.Value Symbol Constraint)
+    (childAction : EnumerateM Symbol Constraint (Fragments.Fragment Symbol))
+    (start finish : EnumerationState.State Symbol Constraint)
+    (fragment : Fragments.Fragment Symbol),
+    SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) bucket value = some childAction →
+      Success childAction start fragment finish → childAction start = [.ok (fragment, finish)]

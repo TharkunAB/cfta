@@ -1,0 +1,154 @@
+{
+  "packets": [
+    {
+      "owner": "runStaged_exact",
+      "scope": "cons destruct input",
+      "api": "Prod cases",
+      "fields": [
+        {
+          "name": "value",
+          "type": "InternedConstructorTemplates.Value Symbol Constraint"
+        },
+        {
+          "name": "bucket",
+          "type": "List EnumerationState.Suspended"
+        }
+      ]
+    },
+    {
+      "owner": "runStaged_exact",
+      "scope": "nil observed pure",
+      "api": "success_pure (some []) result before after",
+      "fields": [
+        {
+          "name": "resultSame",
+          "type": "result = some []"
+        },
+        {
+          "name": "afterSame",
+          "type": "after = before"
+        }
+      ]
+    },
+    {
+      "owner": "runStaged_exact",
+      "scope": "cons unsupported observed pure",
+      "api": "success_pure none result before after",
+      "fields": [
+        {
+          "name": "resultSame",
+          "type": "result = none"
+        },
+        {
+          "name": "afterSame",
+          "type": "after = before"
+        }
+      ]
+    },
+    {
+      "owner": "runStaged_exact",
+      "scope": "cons some actual head bind",
+      "api": "success_bind on the actual runStaged head action",
+      "fields": [
+        {
+          "name": "fragment",
+          "type": "Fragments.Fragment Symbol"
+        },
+        {
+          "name": "middle",
+          "type": "EnumerationState.State Symbol Constraint"
+        },
+        {
+          "name": "headSuccess",
+          "type": "Success childAction before fragment middle"
+        },
+        {
+          "name": "tailBindSuccess",
+          "type": "Success (SourcePruningEnumerationEdgeTraversal.runStaged (rest.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))) >>= fun tailResult => pure (tailResult.map (fun tail => fragment :: tail))) middle result after"
+        }
+      ]
+    },
+    {
+      "owner": "runStaged_exact",
+      "scope": "cons some actual tail bind",
+      "api": "success_bind on the actual runStaged rest continuation",
+      "fields": [
+        {
+          "name": "tailResult",
+          "type": "Option (List (Fragments.Fragment Symbol))"
+        },
+        {
+          "name": "last",
+          "type": "EnumerationState.State Symbol Constraint"
+        },
+        {
+          "name": "tailSuccess",
+          "type": "Success (SourcePruningEnumerationEdgeTraversal.runStaged (rest.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1)))) middle tailResult last"
+        },
+        {
+          "name": "mappedSuccess",
+          "type": "Success (pure (tailResult.map (fun tail => fragment :: tail)) : EnumerateM Symbol Constraint (Option (List (Fragments.Fragment Symbol)))) last result after"
+        }
+      ]
+    },
+    {
+      "owner": "runStaged_exact",
+      "scope": "cons final pure",
+      "api": "success_pure after the actual tail bind",
+      "fields": [
+        {
+          "name": "resultSame",
+          "type": "result = tailResult.map (fun tail => fragment :: tail)"
+        },
+        {
+          "name": "afterSame",
+          "type": "after = last"
+        }
+      ]
+    },
+    {
+      "owner": "prepare_exact",
+      "scope": "project some pair",
+      "api": "Prod cases",
+      "fields": [
+        {
+          "name": "tries",
+          "type": "List EqualityTrie.Trie"
+        },
+        {
+          "name": "residual",
+          "type": "Option Constraint"
+        }
+      ]
+    },
+    {
+      "owner": "prepare_exact",
+      "scope": "actual children after prefixExact rewrite",
+      "api": "success_bind on actual children action/continuation",
+      "fields": [
+        {
+          "name": "childrenResult",
+          "type": "Option (List (Fragments.Fragment Symbol))"
+        },
+        {
+          "name": "childrenAfter",
+          "type": "EnumerationState.State Symbol Constraint"
+        },
+        {
+          "name": "childrenSuccess",
+          "type": "Success (SourcePruningEnumerationEdgeTraversal.runStaged (inputs.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1)))) (suspendedState tries.length before) childrenResult childrenAfter"
+        },
+        {
+          "name": "continued",
+          "type": "Success (match childrenResult with | none => pure none | some fragments => EnumerationSchedule.recordResidual residual (Fragments.Fragment.node edge.entry.key.symbol fragments) >>= fun _ => pure (some (Fragments.Fragment.node edge.entry.key.symbol fragments))) childrenAfter result after"
+        }
+      ]
+    }
+  ],
+  "packet_count": 8,
+  "field_count": 22,
+  "all_fields_including_discarded": true,
+  "state_substitution": "cons final pure substitutes last by after before headExact/tailExact; prepare cases may eliminate result/after through singleton membership directly, without extra named equality haves",
+  "childExact_obtains": 0,
+  "childExact_reason": "literal raw singleton membership can be case-eliminated without additional obtain binders"
+}

@@ -1,0 +1,19 @@
+--- strict-3
++++ strict-4
+@@ -137,7 +137,7 @@
+         (runStaged_exact inputs (suspendedState tries.length before) childrenAfter childrenResult childrenSuccess)]
+       cases childrenResult with
+       | none =>
+-        simp_all [Success, pure, StateT.pure, ExceptT.pure, ExceptT.run]
++        simp_all [Success, pure, StateT.pure, ExceptT.pure, ExceptT.mk, ExceptT.run]
+       | some fragments =>
+         cases residual <;>
+           simp_all [EnumerationSchedule.recordResidual, Success, bind, pure,
+@@ -146,6 +146,6 @@
+   · simp only [SourcePruningEnumerationEdgeTraversal.prepare,
+       SourcePruningEnumerationEdgePrefix.prepare, allowed, Bool.false_eq_true, ↓reduceIte, Option.some.injEq] at prepared
+     subst action
+-    simp [Success, reject, bind, StateT.bind, ExceptT.bind, ExceptT.run] at observed
++    simp [Success, reject, bind, StateT.bind, ExceptT.bind, ExceptT.mk, ExceptT.run] at observed
+ 
+ end MicroCFTA.SourcePruningEnumerationRawExact

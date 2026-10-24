@@ -1,0 +1,16 @@
+local instance traversalMonadList : Monad List where
+  pure value := [value]
+  bind values continuation := values.flatMap continuation
+
+/-- Run captured child actions in order and retain the actual state at the first unsupported child. -/
+def runStaged : List (InternedConstructorTemplates.Value Symbol Constraint ×
+    List EnumerationState.Suspended ×
+    Option (EnumerateM Symbol Constraint (Fragments.Fragment Symbol))) →
+    EnumerateM Symbol Constraint (Option (List (Fragments.Fragment Symbol)))
+ :=
+  fun stages => match stages with
+  | [] => pure (some [])
+  | (_, _, none) :: _ => pure none
+  | (_, _, some childAction) :: rest =>
+      childAction >>= fun fragment =>
+        runStaged rest >>= fun result => pure (result.map (fun tail => fragment :: tail))

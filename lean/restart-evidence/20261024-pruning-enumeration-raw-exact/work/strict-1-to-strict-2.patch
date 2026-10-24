@@ -1,0 +1,69 @@
+--- /tmp/mcfta-pruning-enumeration-raw-exact-20261024/strict-1/MicroCFTA/SourcePruningEnumerationRawExact.lean
++++ /tmp/mcfta-pruning-enumeration-raw-exact-20261024/authored/MicroCFTA/SourcePruningEnumerationRawExact.lean
+@@ -19,6 +19,7 @@
+         (EnumGuard := Constraint) input.2 input.1))
+     Success (SourcePruningEnumerationEdgeTraversal.runStaged staged) before result after →
+       SourcePruningEnumerationEdgeTraversal.runStaged staged before = [.ok (result, after)] := by
++  dsimp only
+   have childExact : ∀ (bucket : List EnumerationState.Suspended)
+     (value : InternedConstructorTemplates.Value Symbol Constraint)
+     (childAction : EnumerateM Symbol Constraint (Fragments.Fragment Symbol))
+@@ -28,16 +29,16 @@
+       Success childAction start fragment finish → childAction start = [.ok (fragment, finish)] := by
+     intro bucket value childAction start finish fragment childPrepared childObserved
+     cases value with
+-    case empty =>
++    | empty =>
+       simp only [SourcePruningEnumerationShallowChild.prepareChild, Option.some.injEq] at childPrepared
+       subst childAction
+       simp [Success, reject, ExceptT.run] at childObserved
+-    case reference name =>
++    | reference name =>
+       simp [SourcePruningEnumerationShallowChild.prepareChild] at childPrepared
+-    all_goals
++    | node | union | mu =>
+       by_cases terminal : bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) = true
+       · simp [SourcePruningEnumerationShallowChild.prepareChild, terminal] at childPrepared
+-      · simp only [SourcePruningEnumerationShallowChild.prepareChild, terminal, ↓reduceIte,
++      · simp only [SourcePruningEnumerationShallowChild.prepareChild, terminal, Bool.false_eq_true, ↓reduceIte,
+           SourcePruningEnumerationNodes.encodeNode, Option.some.injEq] at childPrepared
+         subst childAction
+         simp_all [Success, allocate, inheritAncestry, setValue, bind, get, getThe,
+@@ -53,13 +54,13 @@
+     intro observed
+     obtain ⟨value, bucket⟩ := input
+     cases preparedChild : SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) bucket value with
+-    case none =>
++    | none =>
+       simp only [List.map_cons, preparedChild, SourcePruningEnumerationEdgeTraversal.runStaged] at observed ⊢
+       obtain ⟨resultSame, afterSame⟩ := (success_pure none result before after).mp observed
+       subst result
+       subst after
+       rfl
+-    case some childAction =>
++    | some childAction =>
+       simp only [List.map_cons, preparedChild, SourcePruningEnumerationEdgeTraversal.runStaged] at observed ⊢
+       obtain ⟨fragment, middle, headSuccess, tailBindSuccess⟩ := (success_bind _ _ _ _ _).mp observed
+       obtain ⟨tailResult, last, tailSuccess, mappedSuccess⟩ := (success_bind _ _ _ _ _).mp tailBindSuccess
+@@ -89,10 +90,10 @@
+   by_cases allowed : arityAllows edge.children.length scs = true
+   ·
+     cases projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+-    case none =>
++    | none =>
+       simp [SourcePruningEnumerationEdgeTraversal.prepare,
+         SourcePruningEnumerationEdgePrefix.prepare, allowed, projected] at prepared
+-    case some pair =>
++    | some pair =>
+       obtain ⟨tries, residual⟩ := pair
+       simp only [SourcePruningEnumerationEdgeTraversal.prepare,
+         SourcePruningEnumerationEdgePrefix.prepare, allowed, ↓reduceIte,
+@@ -142,7 +143,7 @@
+           simp_all [EnumerationSchedule.recordResidual, Success, bind, pure,
+             modify, modifyGet, ExceptT.run]
+   · simp only [SourcePruningEnumerationEdgeTraversal.prepare,
+-      SourcePruningEnumerationEdgePrefix.prepare, allowed, ↓reduceIte, Option.some.injEq] at prepared
++      SourcePruningEnumerationEdgePrefix.prepare, allowed, Bool.false_eq_true, ↓reduceIte, Option.some.injEq] at prepared
+     subst action
+     simp [Success, reject, bind, ExceptT.run] at observed
+ 

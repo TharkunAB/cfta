@@ -1,0 +1,43 @@
+--- strict-2
++++ strict-3
+@@ -42,7 +42,9 @@
+           SourcePruningEnumerationNodes.encodeNode, Option.some.injEq] at childPrepared
+         subst childAction
+         simp_all [Success, allocate, inheritAncestry, setValue, bind, get, getThe,
+-          MonadStateOf.get, set, pure, modify, modifyGet, ExceptT.run]
++          MonadStateOf.get, set, pure, modify, modifyGet, MonadStateOf.modifyGet,
++          StateT.pure, StateT.bind, StateT.get, StateT.set, StateT.modifyGet,
++          ExceptT.bind, ExceptT.pure, ExceptT.bindCont, ExceptT.mk, ExceptT.run]
+   induction inputs generalizing before after result with
+   | nil =>
+     intro observed
+@@ -128,23 +130,22 @@
+       unfold Success at observed
+       rw [bind_single _ _ _ _ _ prefixExact] at observed ⊢
+       rw [← stagedSame] at observed ⊢
++      dsimp only at observed ⊢
+       obtain ⟨childrenResult, childrenAfter, childrenSuccess, continued⟩ :=
+-        (success_bind (SourcePruningEnumerationEdgeTraversal.runStaged
+-          (inputs.map (fun input => (input.1, input.2,
+-            SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))))
+-          _ _ _ _).mp observed
++        (success_bind _ _ (suspendedState tries.length before) result after).mp observed
+       rw [bind_single _ _ _ _ _
+         (runStaged_exact inputs (suspendedState tries.length before) childrenAfter childrenResult childrenSuccess)]
+       cases childrenResult with
+       | none =>
+-        simp_all [Success, pure, ExceptT.run]
++        simp_all [Success, pure, StateT.pure, ExceptT.pure, ExceptT.run]
+       | some fragments =>
+         cases residual <;>
+           simp_all [EnumerationSchedule.recordResidual, Success, bind, pure,
+-            modify, modifyGet, ExceptT.run]
++            modify, modifyGet, MonadStateOf.modifyGet, StateT.modifyGet, StateT.bind,
++            StateT.pure, ExceptT.bind, ExceptT.pure, ExceptT.bindCont, ExceptT.mk, ExceptT.run]
+   · simp only [SourcePruningEnumerationEdgeTraversal.prepare,
+       SourcePruningEnumerationEdgePrefix.prepare, allowed, Bool.false_eq_true, ↓reduceIte, Option.some.injEq] at prepared
+     subst action
+-    simp [Success, reject, bind, ExceptT.run] at observed
++    simp [Success, reject, bind, StateT.bind, ExceptT.bind, ExceptT.run] at observed
+ 
+ end MicroCFTA.SourcePruningEnumerationRawExact

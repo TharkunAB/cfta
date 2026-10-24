@@ -1,0 +1,9 @@
+# Actual installed-attempt path review
+
+CLEAR at 2026-10-24 16:44:30 CEST. Root's correction changes exactly one literal in the previously reviewed verifier: `work/installed-build-1/raw.log` becomes `work/installed-1/raw.log`. Replacing that one occurrence in the complete preserved source reproduces the complete current source byte-for-byte. All checks and every other source byte remain unchanged. The original seal-script review remains immutable.
+
+Preserved area/verify-before-installed-path.py:222 lines/13534B, SHA-256 `aa915d1454bc52a4873c56d2a1138dcd8f3289ea03061c0eae7b1601c0bf7bd1`. Current /tmp/mcfta-pruning-enumeration-raw-exact-20261024-verify.py:222 lines/13528B, SHA-256 `8bb487f20da10891e573b13374bbdb6be1fcc82145dc2fe80ce7b4d784820fa3`. Exact area/verify-installed-path-correction.patch:844B, SHA-256 `d139006c91c8babf4b51579d885ac988fea52147800f26157b181f9bbe35961d`.
+
+The actual installed-1/report.json records exit0 and matches the full550B raw log, which reports623 completed jobs and only the unchanged old warning. Report327B SHA-256 `3cf624b990d78f65ccef1a3bd667f7f9fc794a214ba17bcc57326805ab8111d8`; raw SHA-256 `ef5b3a89174544e47f59676d96e22158c7dce45223cd3c8ad90ff4d8f1b38d12`. No installed-build-1 directory exists. Retain the actual installed-1 name in build-summary/attempt/cap inventories; do not rename evidence or repeat the build.
+
+This is a bounded source/data review only. An initial reviewer read incorrectly used the future archive's work/ prefix in the live area; the two missing-file reads were corrected to the actual area-root paths before comparison. They were not compiler, Root metadata or candidate failures. No prepared script/compiler/import, Git/network/board or repository mutation occurred. Later rendered docs, Audit, seal and publication outcomes are outside this review.

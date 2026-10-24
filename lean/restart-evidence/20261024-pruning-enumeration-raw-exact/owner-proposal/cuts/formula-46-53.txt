@@ -1,0 +1,8 @@
+inductive Formula where
+  | top
+  | and (parts : List Formula)
+  | bottom
+  | or (parts : List Formula)
+  | not (inner : Formula)
+  | atom (relation : Relation) (left right : Term)
+  | forall (bound : List (Name × ValueSort)) (inner : Formula)

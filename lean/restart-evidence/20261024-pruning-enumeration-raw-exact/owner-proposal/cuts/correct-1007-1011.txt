@@ -1,0 +1,5 @@
+/-- A pure result leaves the complete state unchanged. -/
+theorem success_pure (value result : α) (before after : State Symbol Guard) :
+    Success (pure value) before result after ↔ result = value ∧ after = before := by
+  simp [Success, pure, StateT.pure, ExceptT.pure, ExceptT.mk, ExceptT.run, eq_comm]
+
