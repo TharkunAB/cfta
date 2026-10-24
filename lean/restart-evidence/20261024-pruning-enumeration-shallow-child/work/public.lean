@@ -1,0 +1,7 @@
+import MicroCFTA.SourcePruningEnumerationShallowChild
+set_option pp.deepTerms true
+set_option pp.maxSteps 100000
+#check @MicroCFTA.SourcePruningEnumerationShallowChild.prepareChild
+#check @MicroCFTA.SourcePruningEnumerationShallowChild.prepareChild_complete
+#print axioms MicroCFTA.SourcePruningEnumerationShallowChild.prepareChild
+#print axioms MicroCFTA.SourcePruningEnumerationShallowChild.prepareChild_complete

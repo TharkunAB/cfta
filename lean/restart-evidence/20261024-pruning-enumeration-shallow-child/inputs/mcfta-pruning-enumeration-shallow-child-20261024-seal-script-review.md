@@ -1,0 +1,45 @@
+# Shallow-child checkpoint: script source review
+
+Reviewed at 2026-10-24T09:20:43.792099+02:00. **SOURCE ADAPTER REVIEW CLEAR; final owner schema and actual outcomes remain unbound.** No blocking finding in the current five programs.
+
+Root authored these scripts and owns the mathematical bodies, compiler and Git operations. I authored the immutable adapter plan and this independent source review. I read all five current programs, complete predecessor sources and all five stored diffs. Hash/difflib checks confirm each predecessor is the exact final action-checkpoint source and each stored patch equals the complete source delta. I also read the full prospective assessment, historical summary and Guard descendant-truncation report. Only file/hash/JSON/AST operations were used. No prepared program/import, compiler, Git/network/board operation or repository mutation occurred. Only this report was created.
+
+Current source is check33/documents51/archive82/verify216/publication74: **456 lines/115 AST assertions**. Reduction from the prior525/148 removes only prior-component current V1/V2 repair and56+2 prospective-owner checks, with the replacement bindings described below. The prior action seal and all historical proof/failure/owner evidence remain baseline-protected. This is not permission to omit a future actual shallow-child failure or revision.
+
+## Exact accepted adapters
+
+- New baseline/module/evidence/note/resource/backup literals consistently use ba082e74bae4063fe845503022e21e131c0eb800, SourcePruningEnumerationShallowChild and the 20261024 shallow-child prefix. Main remains74250bd889685da436cdbfe32ac4b5a0878ffd09. Baseline130410 and backup0908 match the previously checked saved metadata. There is no copied old source135, job count, failed-attempt list or proof SHA as a new fact.
+- Check changes only the area literal. It retains snapshot-before-invocation, module-relative path, optional olean output, warningAsError/all-linter flags and default limits, existing Lake interface, complete combined raw stream, hashes/byte counts and propagated exit. No extra wrapper or parser is introduced.
+- Documents preserves exact proof-parent gate, actual build-summary replacement, absent-note check, nine baseline-before checks and exact inverse metadata. Its new FINDINGS insertion is before the preceding action heading, below the complete external repair index. It names only the new source plus Audit in proof metadata. No templates or live changes are reviewed as completed: the writer still depends on future actual inputs.
+- Archive prechecks the exact external assessment, prior post-publication-summary and current descendant review before mkdir; the existing absent-destination, tracked worktree/index cleanliness and six current review gates remain. The complete area, actual attempts/resource donors, actual frozen owner, production source/note and complete manifest are retained. It still executes and asserts the saved verifier only when Root later runs it. The active archive-1 receipt is intentionally post-seal and must be retained by the next checkpoint.
+- Verify uses the initial body-gate.json for the active owner. Only the old action-specific body-gate-v2/declaration-v1/failed-source1/origin/review bindings are removed. Likewise only the old current source-plan56/result-payload2 and their historical exact source inventories/review hashes are removed. Their previous evidence remains unchanged in the full baseline. Generic dynamic report/failure/raw/input/cap and active-owner checks are retained.
+- The public inventory still requires exactly one def, one theorem, two complete public signatures and two actual axiom reports. Exact names now come from the pinned insertion-map public_headers under the fixed new namespace, filtered by def/theorem kind. Actual sets must match the readback JSON and may be empty or standard allowed subsets. No claim that both use all standard axioms is made.
+- Publication changes only checkpoint area/evidence/previous literals. It retains runtime head/spec/commits/file-count, formalize branch and explicit destination, fetch URL and singleton --push --all guard, clean tree, manifest and complete filesystem/index/HEAD blob/mode equality. Ordinary explicit nonforce HEAD push, bounded remote queries and final remote-SHA verification remain. No future successful publication is inferred.
+
+All generic guard families remain: safe complete manifest/file set; every baseline blob/mode and exactly nine document inverses plus one Audit import; exact proof parent and fixed source/Audit delta; refs/stashes/worktrees/backup; production/installed/selected-source identity; forbidden sorry/admit/unsafe/project axiom/options and extra source declarations; actual frozen owner pins and literal contract/body-gate binding; source/cut/import identities including external-stdlib path handling; exact report-directory/failed sets and retained input/raw hash/bytes/status; selected strict literal-empty log and all-linter flags; complete selected public output/no display omission; exact public/axiom inventory; actual installed/Audit metrics and only identified older warning; all six resource suffixes and exact limits/usage stems;4GiB max/high/swap0 and fresh≤600s/>1% usage; repair index first; local publication and exact singleton ordinary formalize push controls.
+
+## Prospective and prior-history bindings
+
+Archive copies the correct **26 immediate action-checkpoint inputs**: three six-artifact archive/local-publication/push bundles, five standard area result/spec/log files, exact publication.py, post-publication-summary.json and the external action-next-assessment.md. It does not select the older outer consumer. The assessment is copied to previous-publication/next-assessment.md and verified at SHAa541676697b4e64a47fcef735e86cf940ccc6301128cb6c7a5cca203d8b649f3. The historical summary is bound to the actual previous baseline, ACTIVE_INCOMPLETE, completed component status and that assessment hash. Its historical next_assessment_is_currently_sealed=false is not rewritten. Previous actual commit counts remain runtime metadata.
+
+Guard’s complete source-only descendant report has SHA dbe80d1c3bb14fdb72cc7035e9a937311f793683dcdc3a031b9ea39bcb1915d0 and is required/pinned in the new inputs. Its conclusion is diagnostic truncation behavior, **no established native bug**. The archive Index accurately distinguishes ordinary children retaining original scs from Mu/retained-union cutoff allocation with empty scs. It excludes language-nonemptiness below a marker. It does not invent preservation of discarded descendant obligations, all-unions-recursive semantics, or a runtime reproduction. Terminal merging, selected-root exposure, graph/ID/index/memo2/constraint projection, full driver/language, concrete typing, resources/runtime/convergence remain open; H6 strongest combined and ACTIVE/incomplete remain explicit.
+
+## Explicit unresolved schema gate
+
+No actual frozen shallow-child owner was supplied for this review. The current source expects nested FROZEN.pins bytes/hash, pins_count/compiler_evidence/source_count/local/global counts, proposed_hard_cap220, literal STRING contracts and body-gate.json; source-index path/snapshot/start/end cuts; defining_import_sources LIST; and public_headers LIST of name/kind objects. These are **conditional adapters**, not certified facts about a future owner. Its real complete file set/counts, source/cut/import schema, public-header metadata, declaration inventory and220 cap must be read and checked before final binding or execution. A separate actual-schema delta review is required if any differs. No source/body hash, successful strict/public/build/Audit, axiom set, rendered document, seal or publication has been assumed. Source/Math/body gates remain separate.
+
+The prior immutable action evidence is not reopened or changed. The removal of old component-specialized assertions is the approved mapping to this new checkpoint, not a generic guard exception. Existing scoped mathematical reviews do not become a proof/compiler claim for the new component.
+
+## Exact reviewed source identities
+
+| Input | Lines | Bytes | SHA-256 |
+| --- | ---: | ---: | --- |
+| check.py | 33 | 1641 | `d980fbed7dc28533682238430e54517a23fc1a1996e68c6092b63797123eac50` |
+| documents.py | 51 | 2694 | `7ef2744d680b78ad2bf983d0d1c04a708cc437debcdf3697e76652afc285051c` |
+| archive.py | 82 | 5161 | `4e830ce4be6f081248273490d49d4cacddf14f7b99c7ab632daabec3650f480d` |
+| verify.py | 216 | 12955 | `4ae431f8b66deaf519420f4b19fbc15c86c3974618b288c22a0e43d049717c87` |
+| publication.py | 74 | 3866 | `df0aef78b4ec2dbc12ef5cff1b9db3e5fbb995c20a139d86d55f4d3d6fdc51b8` |
+| adapter plan | 57 | 11462 | `b8d1adc0f6d46e9f6ab084b2c2cd9711758368eff11e683407d8a5cbc5a16b6e` |
+| descendant review | 66 | 10167 | `dbe80d1c3bb14fdb72cc7035e9a937311f793683dcdc3a031b9ea39bcb1915d0` |
+
+No blocking source finding. This immutable review covers only the current preparation bytes and explicitly leaves final owner and actual execution/evidence gates open.

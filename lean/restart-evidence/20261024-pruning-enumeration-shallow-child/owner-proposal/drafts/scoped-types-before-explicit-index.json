@@ -1,0 +1,215 @@
+{
+  "headers": [
+    {
+      "name": "EnumGuard",
+      "type": "Type",
+      "scope": "module variable; independent of NativeGuard"
+    },
+    {
+      "name": "NativeGuard",
+      "type": "Type",
+      "scope": "module variable; independent of EnumGuard"
+    },
+    {
+      "name": "Symbol",
+      "type": "Type",
+      "scope": "local notation for SourcePruningTemplates.Symbol; fixed full label alias, not a generic variable"
+    },
+    {
+      "name": "scs",
+      "type": "List EnumerationState.Suspended",
+      "scope": "prepareChild and prepareChild_complete"
+    },
+    {
+      "name": "value",
+      "type": "InternedConstructorTemplates.Value Symbol NativeGuard",
+      "scope": "prepareChild and prepareChild_complete"
+    },
+    {
+      "name": "heap",
+      "type": "InternedConstructorTemplates.State Symbol NativeGuard",
+      "scope": "prepareChild_complete"
+    },
+    {
+      "name": "before",
+      "type": "EnumerationState.State Symbol EnumGuard",
+      "scope": "prepareChild_complete"
+    },
+    {
+      "name": "coherent",
+      "type": "InternedRecordCoherence.Coherent heap",
+      "scope": "prepareChild_complete"
+    },
+    {
+      "name": "available",
+      "type": "InternedProbeProvenance.Available heap value",
+      "scope": "prepareChild_complete"
+    },
+    {
+      "name": "closed",
+      "type": "value.free = []",
+      "scope": "prepareChild_complete"
+    },
+    {
+      "name": "realized",
+      "type": "PendingRealized heap before",
+      "scope": "prepareChild_complete"
+    },
+    {
+      "name": "aligned",
+      "type": "before.counter = before.values.length",
+      "scope": "prepareChild_complete"
+    },
+    {
+      "name": "nonterminal",
+      "type": "scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = false",
+      "scope": "prepareChild_complete"
+    },
+    {
+      "name": "node",
+      "type": "Nat",
+      "scope": "common existential; derived by available_readback"
+    },
+    {
+      "name": "fragment",
+      "type": "Fragments.Fragment Symbol",
+      "scope": "empty-branch negated existential"
+    },
+    {
+      "name": "after",
+      "type": "EnumerationState.State Symbol EnumGuard",
+      "scope": "empty-branch negated existential"
+    },
+    {
+      "name": "action",
+      "type": "EnumerateM Symbol EnumGuard (Fragments.Fragment Symbol)",
+      "scope": "nonempty output existential"
+    },
+    {
+      "name": "after",
+      "type": "EnumerationState.State Symbol EnumGuard",
+      "scope": "nonempty output existential"
+    }
+  ],
+  "proof_intros": [
+    {
+      "name": "emptyValue",
+      "type": "value = .empty",
+      "scope": "first implication"
+    },
+    {
+      "name": "nonempty",
+      "type": "value ≠ .empty",
+      "scope": "second implication"
+    }
+  ],
+  "lambda_binders": [
+    {
+      "name": "sc",
+      "type": "EnumerationState.Suspended",
+      "scope": "definition terminal-test lambda"
+    },
+    {
+      "name": "sc",
+      "type": "EnumerationState.Suspended",
+      "scope": "public nonterminal premise lambda"
+    },
+    {
+      "name": "uv",
+      "type": "Nat",
+      "scope": "definition allocation continuation"
+    },
+    {
+      "name": "_",
+      "type": "Unit",
+      "scope": "definition ordinary raw-write continuation"
+    },
+    {
+      "name": "uv",
+      "type": "Nat",
+      "scope": "proof node-case action witness allocation continuation"
+    },
+    {
+      "name": "_",
+      "type": "Unit",
+      "scope": "proof node-case action witness write continuation"
+    },
+    {
+      "name": "uv",
+      "type": "Nat",
+      "scope": "proof union-case action witness allocation continuation"
+    },
+    {
+      "name": "uv",
+      "type": "Nat",
+      "scope": "proof mu-case action witness allocation continuation"
+    },
+    {
+      "name": "bound",
+      "type": "before.counter < (allocated (some node) before).values.length",
+      "scope": "explicit existential elimination for allocatedBound"
+    },
+    {
+      "name": "_",
+      "type": "(allocated (some node) before).values[before.counter] = .unenumerated (some node) []",
+      "depends_on": "bound supplies getElem index proof",
+      "scope": "same elimination; exact getElem type is (allocated (some node) before).values[before.counter]'bound = .unenumerated (some node) []"
+    }
+  ],
+  "local_instance": {
+    "name": "childMonadList",
+    "type": "Monad List",
+    "visibility": "local",
+    "universe": "List : Type u → Type u; implicit α β : Type u in fields",
+    "fields": [
+      {
+        "name": "pure",
+        "type": "{α : Type u} → α → List α",
+        "binders": [
+          {
+            "name": "value",
+            "type": "α"
+          }
+        ],
+        "term": "[value]"
+      },
+      {
+        "name": "bind",
+        "type": "{α β : Type u} → List α → (α → List β) → List β",
+        "binders": [
+          {
+            "name": "values",
+            "type": "List α"
+          },
+          {
+            "name": "continuation",
+            "type": "α → List β"
+          }
+        ],
+        "term": "values.flatMap continuation"
+      }
+    ],
+    "global_instance_count": 0,
+    "public_Monad_parameter": false
+  },
+  "local_haves": [
+    {
+      "name": "allocatedHandleSame",
+      "type": "allocatedHandle = node",
+      "scope": "nonempty allocation result"
+    },
+    {
+      "name": "allocatedBound",
+      "type": "before.counter < (allocated (some node) before).values.length",
+      "scope": "after substituting allocatedHandle"
+    },
+    {
+      "name": "writtenHandleSame",
+      "type": "writtenHandle = node",
+      "scope": "ordinary node write result"
+    }
+  ],
+  "no_other_local_have_let_show_obtain_or_helper_authorized": true,
+  "constructor_binders_file": "case-inventory.json",
+  "obtain_fields_file": "obtain-inventory.json"
+}

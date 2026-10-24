@@ -1,0 +1,49 @@
+{
+  "observed_at": "2026-10-24T07:28:21.992995+00:00",
+  "status": "ROOT_ACCEPTS_EXACT_DECLARATION_BODY_GATE",
+  "baseline": "ba082e74bae4063fe845503022e21e131c0eb800",
+  "main": "74250bd889685da436cdbfe32ac4b5a0878ffd09",
+  "owner": "/tmp/mcfta-pruning-enumeration-shallow-child-20261024-proposal",
+  "frozen_sha256": "10e690acb6656596322e523659735c53bb03f6409c7d88ec866ad43a1989aeee",
+  "pins_sha256": "4c41f091123caf1c14182b5c1b406cdea16e6498623ab61a41b7fb99414c16ef",
+  "independent_declaration_review_sha256": "47b208645f026cc0cd44863e1295688477bba492d6545d3f9cfdb18dd53b93fe",
+  "contracts": {
+    "context.lean.txt": "import MicroCFTA.SourcePruningEnumerationWrites\n\nnamespace MicroCFTA.SourcePruningEnumerationShallowChild\nopen Fragments EnumerationState EnumerationCorrectness\nopen InternedConstructorTemplates InternedProbeProvenance\nopen SourcePruningEnumerationNodes SourcePruningEnumerationObservation\nlocal notation \"Symbol\" => SourcePruningTemplates.Symbol\nvariable {EnumGuard NativeGuard : Type}\n\nlocal instance childMonadList : Monad List where\n  pure value := [value]\n  bind values continuation := values.flatMap continuation\n",
+    "prepareChild-header.lean.txt": "/-- Prepare the supported nonterminal child branches from their complete native value. -/\ndef prepareChild (scs : List EnumerationState.Suspended)\n    (value : InternedConstructorTemplates.Value Symbol NativeGuard) :\n    Option (EnumerateM Symbol EnumGuard (Fragments.Fragment Symbol))\n",
+    "public-header.lean.txt": "/-- Derive the actual child action, fresh slot and complete realized final state. -/\ntheorem prepareChild_complete\n    (heap : InternedConstructorTemplates.State Symbol NativeGuard)\n    (before : EnumerationState.State Symbol EnumGuard)\n    (scs : List EnumerationState.Suspended) (value : InternedConstructorTemplates.Value Symbol NativeGuard)\n    (coherent : InternedRecordCoherence.Coherent heap)\n    (available : InternedProbeProvenance.Available heap value) (closed : value.free = [])\n    (realized : PendingRealized heap before) (aligned : before.counter = before.values.length)\n    (nonterminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = false) :\n    \u2203 node : Nat, encodeNode value = some node \u2227 lookupNode heap node = some value \u2227\n      (value = .empty \u2192\n        prepareChild scs value = some (reject : EnumerateM Symbol EnumGuard (Fragments.Fragment Symbol)) \u2227\n        \u00ac \u2203 (fragment : Fragments.Fragment Symbol) (after : EnumerationState.State Symbol EnumGuard),\n          Success (reject : EnumerateM Symbol EnumGuard (Fragments.Fragment Symbol)) before fragment after) \u2227\n      (value \u2260 .empty \u2192\n        \u2203 (action : EnumerateM Symbol EnumGuard (Fragments.Fragment Symbol))\n          (after : EnumerationState.State Symbol EnumGuard),\n          prepareChild scs value = some action \u2227 Success action before (.hole before.counter) after \u2227\n          after = (match value with\n            | .node _ _ _ _ =>\n                {allocated (some node) before with values :=\n                  (allocated (some node) before).values.set before.counter (.unenumerated (some node) scs)}\n            | _ => allocated (some node) before) \u2227\n          after.values[before.counter]? = some (.unenumerated (some node)\n            (match value with | .node _ _ _ _ => scs | _ => [])) \u2227\n          after.counter = before.counter + 1 \u2227 after.counter = after.values.length \u2227\n          PendingRealized heap after)\n",
+    "condition-terminal.lean.txt": "if scs.any (fun sc => EqualityTrie.isTerminal sc.trie) then\n",
+    "local-allocatedHandleSame.lean.txt": "have allocatedHandleSame : allocatedHandle = node\n",
+    "local-allocatedBound.lean.txt": "have allocatedBound : before.counter < (allocated (some node) before).values.length\n",
+    "local-writtenHandleSame.lean.txt": "have writtenHandleSame : writtenHandle = node\n"
+  },
+  "root_read": {
+    "contract_lines": 47,
+    "scoped_obtain_fields": 15,
+    "obtains": 3,
+    "typed_haves": 3,
+    "proof_intros": 2,
+    "proof_cases": 5,
+    "sources": 16,
+    "cuts": 29,
+    "cut_lines": 461,
+    "import_identities": 25,
+    "routes": 12,
+    "checked_import_edges": 82
+  },
+  "local_instance_count": 1,
+  "global_instance_count": 0,
+  "helpers": 0,
+  "proof_let_show_count": 0,
+  "induction": false,
+  "budget": {
+    "target": [
+      100,
+      170
+    ],
+    "hard_cap": 220
+  },
+  "preparation_history": "One guessed prepare-header filename was corrected to actual prepareChild-header; no Lean/compiler or candidate program ran. Verifier metadata key was adapted from presumed public_headers to actual public_heads, retaining all pre-schema source bytes and review; no verifier has run.",
+  "scope": "Actual no-terminal child actions and fresh-state realization. Recursive cutoff drops scs as documented; no concrete-language or discarded-equality preservation claim. Full native graph/ID/index/typing/driver/runtime/solver/convergence goals remain.",
+  "prior_goal_turn": "PROGRESS: proved, sealed and remote-verified three commits through ba082e74b.",
+  "goal": "ACTIVE_INCOMPLETE"
+}

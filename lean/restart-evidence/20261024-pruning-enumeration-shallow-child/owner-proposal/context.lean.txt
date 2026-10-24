@@ -1,0 +1,12 @@
+import MicroCFTA.SourcePruningEnumerationWrites
+
+namespace MicroCFTA.SourcePruningEnumerationShallowChild
+open Fragments EnumerationState EnumerationCorrectness
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+local notation "Symbol" => SourcePruningTemplates.Symbol
+variable {EnumGuard NativeGuard : Type}
+
+local instance childMonadList : Monad List where
+  pure value := [value]
+  bind values continuation := values.flatMap continuation

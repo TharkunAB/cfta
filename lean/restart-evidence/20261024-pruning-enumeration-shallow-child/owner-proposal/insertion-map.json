@@ -1,0 +1,109 @@
+{
+  "owner": "/tmp/mcfta-pruning-enumeration-shallow-child-20261024-proposal",
+  "all_fragments": [
+    {
+      "file": "context.lean.txt",
+      "bytes": 519,
+      "sha256": "212fe077b062df4287ff051147f783405b5d3bee8560d8f52d2b50cbf325abd5",
+      "lines": 12
+    },
+    {
+      "file": "prepareChild-header.lean.txt",
+      "bytes": 286,
+      "sha256": "77bb8a7515e6f620b87c45858aaf9c12950e243be7babb08bfaff9459fef840f",
+      "lines": 4
+    },
+    {
+      "file": "public-header.lean.txt",
+      "bytes": 1943,
+      "sha256": "598977afa321d83aec6d73d0d9148476d4f0f7ab5a6951033d8711e12a4642ca",
+      "lines": 27
+    },
+    {
+      "file": "condition-terminal.lean.txt",
+      "bytes": 60,
+      "sha256": "9ca5f2c2143a70667df2bac38fad4881a61266a5734f8a22e1d8dc3e717714a2",
+      "lines": 1
+    },
+    {
+      "file": "local-allocatedHandleSame.lean.txt",
+      "bytes": 50,
+      "sha256": "10e755bf453f6b6d2ef4033e039a841eb1998efa6b206886ab599dc192ee04dd",
+      "lines": 1
+    },
+    {
+      "file": "local-allocatedBound.lean.txt",
+      "bytes": 84,
+      "sha256": "6fc6dbb055425eff49aa22bae7cdcfae9be125b9077621d2bf481fda944ad396",
+      "lines": 1
+    },
+    {
+      "file": "local-writtenHandleSame.lean.txt",
+      "bytes": 46,
+      "sha256": "578e54512f6e34203c2b485b74fa9b6c3574ba7f41f8e6b916c4f3972e0fbcfe",
+      "lines": 1
+    }
+  ],
+  "compiled_contracts": [
+    "context.lean.txt",
+    "prepareChild-header.lean.txt",
+    "public-header.lean.txt",
+    "condition-terminal.lean.txt",
+    "local-allocatedHandleSame.lean.txt",
+    "local-allocatedBound.lean.txt",
+    "local-writtenHandleSame.lean.txt"
+  ],
+  "context": {
+    "file": "context.lean.txt",
+    "placement": "module start; contains the sole named local Monad List instance"
+  },
+  "public_heads": [
+    {
+      "name": "prepareChild",
+      "kind": "def",
+      "file": "prepareChild-header.lean.txt",
+      "attachment": " :=\n",
+      "visibility": "public"
+    },
+    {
+      "name": "prepareChild_complete",
+      "kind": "theorem",
+      "file": "public-header.lean.txt",
+      "attachment": " := by\n",
+      "visibility": "public"
+    }
+  ],
+  "conditions": [
+    {
+      "file": "condition-terminal.lean.txt",
+      "owner": "prepareChild",
+      "expected_count": 1,
+      "layout": "Prefix the first line with current indentation. Keep all literal bytes after the first-line indentation."
+    }
+  ],
+  "locals": [
+    {
+      "file": "local-allocatedHandleSame.lean.txt",
+      "owner": "prepareChild_complete",
+      "scope": "nonempty branch after allocation obtain; before constructor cases",
+      "attachment": " := by\n",
+      "expected_count": 1
+    },
+    {
+      "file": "local-allocatedBound.lean.txt",
+      "owner": "prepareChild_complete",
+      "scope": "nonempty branch after subst allocatedHandle; before constructor cases",
+      "attachment": " := by\n",
+      "expected_count": 1
+    },
+    {
+      "file": "local-writtenHandleSame.lean.txt",
+      "owner": "prepareChild_complete",
+      "scope": "node case after write obtain",
+      "attachment": " := by\n",
+      "expected_count": 1
+    }
+  ],
+  "body_free": true,
+  "literal_matching": "Only prefix the first line of each local fragment. There are no continuation lines in local fragments."
+}

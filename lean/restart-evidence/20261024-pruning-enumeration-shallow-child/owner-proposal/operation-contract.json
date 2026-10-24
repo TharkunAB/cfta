@@ -1,0 +1,56 @@
+{
+  "prepareChild": {
+    "input_order": [
+      "scs",
+      "value"
+    ],
+    "result_type": "Option (EnumerateM Symbol EnumGuard (Fragments.Fragment Symbol))",
+    "heap_argument": false,
+    "branches_in_order": [
+      {
+        "pattern": ".empty",
+        "result": "some actual reject; no allocation, encoding test or terminal test"
+      },
+      {
+        "pattern": ".reference _",
+        "result": "none; unresolved-reference source fault has no modeled action in this partial operation"
+      },
+      {
+        "pattern": ".node _ _ _ _ | .union _ _ _ _ | .mu _ _ _ _",
+        "steps": [
+          "Test the single literal scs.any terminal condition. True returns none.",
+          "For false, inspect the actual encodeNode value. None returns none.",
+          "Some node returns the existing allocate (some node) action, with its returned fresh uv.",
+          "Within that action, the node constructor runs raw setValue uv (.unenumerated (some node) scs), then returns the hole.",
+          "Union and Mu return the hole after allocation. They do not run the ordinary raw write."
+        ]
+      }
+    ],
+    "empty_test": "constructor match; Value has no required DecidableEq instance",
+    "terminal_branch": "deferred; no supplied fallback callback",
+    "option_none": "unrepresented operation, distinct from some reject and every EnumerateM error",
+    "order_and_duplicates": "Keep the original ordered scs list unchanged in the ordinary raw write.",
+    "state": "Use only existing EnumerationState actions. No native heap carrier, Graph or counter oracle."
+  },
+  "prepareChild_complete": {
+    "common_packet": [
+      "derived actual encoding",
+      "complete lookupNode readback"
+    ],
+    "empty": [
+      "actual prepareChild result is some reject",
+      "reject has no successful branch"
+    ],
+    "nonempty": [
+      "actual action returned by prepareChild",
+      "actual Success at the same before state",
+      "fresh hole uses before.counter",
+      "exact after record, including allocated recursion ancestry",
+      "fresh slot contains original scs for node and [] for Union/Mu",
+      "supply increments by one and stays aligned",
+      "every pending slot remains realized in the same native heap"
+    ],
+    "no_full_frame_claim": true,
+    "no_suspended_language_preservation_claim": true
+  }
+}

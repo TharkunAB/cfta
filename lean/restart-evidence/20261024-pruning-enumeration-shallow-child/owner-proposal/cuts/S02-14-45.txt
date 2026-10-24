@@ -1,0 +1,32 @@
+
+/-- Encode empty or a stored node identity. Free references have no handle. -/
+def encodeNode (value : Value Symbol Guard) : Option Nat :=
+  match value with
+  | .empty => some 0
+  | .reference _ => none
+  | .node entry _ _ _ | .union entry _ _ _ | .mu entry _ _ _ => some (entry.identity + 1)
+
+/-- Read the complete payload only for the requested canonical winner. -/
+def lookupNode (heap : State Symbol Guard) (node : Nat) : Option (Value Symbol Guard) :=
+  match node with
+  | 0 => some .empty
+  | identity + 1 =>
+      match heap.nodes.issued identity with
+      | none => none
+      | some key =>
+          match heap.nodes.table key with
+          | none => none
+          | some entry => if entry.identity = identity then heap.nodeRecords key else none
+
+/-- A closed available value derives its exact handle and complete readback. -/
+theorem available_readback (heap : State Symbol Guard) (value : Value Symbol Guard)
+    (coherent : InternedRecordCoherence.Coherent heap)
+    (available : Available heap value) (closed : value.free = []) :
+    ∃ node, encodeNode value = some node ∧ lookupNode heap node = some value := by
+  cases value with
+  | empty => exact ⟨0, rfl, rfl⟩
+  | reference => cases closed
+  | node entry _ _ _ | union entry _ _ _ | mu entry _ _ _ =>
+      have canonical : heap.nodes.table entry.key = some entry :=
+        InternedFreshProbeKeys.resident_entry heap coherent _ available.resident entry rfl
+      have issued : heap.nodes.issued entry.identity = some entry.key :=

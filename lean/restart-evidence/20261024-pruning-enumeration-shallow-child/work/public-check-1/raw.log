@@ -1,0 +1,55 @@
+@MicroCFTA.SourcePruningEnumerationShallowChild.prepareChild : {EnumGuard NativeGuard : Type} →
+  List MicroCFTA.EnumerationState.Suspended →
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol NativeGuard →
+      Option
+        (MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol EnumGuard
+          (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol))
+@MicroCFTA.SourcePruningEnumerationShallowChild.prepareChild_complete : ∀ {EnumGuard NativeGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (before : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (scs : List MicroCFTA.EnumerationState.Suspended)
+  (value : MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol NativeGuard),
+  MicroCFTA.InternedRecordCoherence.Coherent heap →
+    ∀ (available : MicroCFTA.InternedProbeProvenance.Available heap value) (closed : value.free = []),
+      MicroCFTA.SourcePruningEnumerationObservation.PendingRealized heap before →
+        before.counter = before.values.length →
+          (scs.any fun sc => MicroCFTA.EqualityTrie.isTerminal sc.trie) = false →
+            ∃ node,
+              MicroCFTA.SourcePruningEnumerationNodes.encodeNode value = some node ∧
+                MicroCFTA.SourcePruningEnumerationNodes.lookupNode heap node = some value ∧
+                  (value = MicroCFTA.InternedConstructorTemplates.Value.empty →
+                      MicroCFTA.SourcePruningEnumerationShallowChild.prepareChild scs value =
+                          some MicroCFTA.EnumerationState.reject ∧
+                        ¬∃ fragment after,
+                            MicroCFTA.EnumerationCorrectness.Success MicroCFTA.EnumerationState.reject before fragment
+                              after) ∧
+                    (value ≠ MicroCFTA.InternedConstructorTemplates.Value.empty →
+                      ∃ action after,
+                        MicroCFTA.SourcePruningEnumerationShallowChild.prepareChild scs value = some action ∧
+                          MicroCFTA.EnumerationCorrectness.Success action before
+                              (MicroCFTA.Fragments.Fragment.hole before.counter) after ∧
+                            (after =
+                                match value, available, closed with
+                                | MicroCFTA.InternedConstructorTemplates.Value.node entry edges depth free, available,
+                                  closed =>
+                                  have __src := MicroCFTA.EnumerationState.allocated (some node) before;
+                                  { counter := __src.counter, representatives := __src.representatives,
+                                    values :=
+                                      (MicroCFTA.EnumerationState.allocated (some node) before).values.set
+                                        before.counter
+                                        (MicroCFTA.EnumerationState.UVarValue.unenumerated (some node) scs),
+                                    obligations := __src.obligations, recursionAncestry := __src.recursionAncestry,
+                                    expansionAncestry := __src.expansionAncestry }
+                                | x, available, closed => MicroCFTA.EnumerationState.allocated (some node) before) ∧
+                              after.values[before.counter]? =
+                                  some
+                                    (MicroCFTA.EnumerationState.UVarValue.unenumerated (some node)
+                                      (match value, available, closed with
+                                      | MicroCFTA.InternedConstructorTemplates.Value.node entry edges depth free,
+                                        available, closed => scs
+                                      | x, available, closed => [])) ∧
+                                after.counter = before.counter + 1 ∧
+                                  after.counter = after.values.length ∧
+                                    MicroCFTA.SourcePruningEnumerationObservation.PendingRealized heap after)
+'MicroCFTA.SourcePruningEnumerationShallowChild.prepareChild' depends on axioms: [propext]
+'MicroCFTA.SourcePruningEnumerationShallowChild.prepareChild_complete' depends on axioms: [propext, Quot.sound]

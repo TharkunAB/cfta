@@ -1,0 +1,57 @@
+# Shallow-child checkpoint: exact script adapter plan
+
+Source-only plan at 2026-10-24T09:17:29.301947+02:00. Root owns new scripts, declarations/body gates, compiler and Git operations. I read all five complete current action-checkpoint scripts: check33/documents51/archive82/verify285/publication74, total525 lines/148 AST assertions. I read the complete next assessment and post-publication summary and checked the new saved baseline and prior input paths/hashes. I authored neither the preceding mathematical body nor the forthcoming shallow-child declarations. This plan authorizes no script/body/declaration implementation or execution. Only this report was written; no compiler/import/prepared execution, Git, network/board or repository mutation occurred.
+
+## Fixed current inputs
+
+New area prefix: `/tmp/mcfta-pruning-enumeration-shallow-child-20261024`; module SourcePruningEnumerationShallowChild; baseline ba082e74bae4063fe845503022e21e131c0eb800; main74250bd889685da436cdbfe32ac4b5a0878ffd09; backup codex/backup-pruning-enumeration-shallow-child-20261024-0908. Actual baseline reports clean/pull PASS and130410 tracked files. Saved tree SHA1667562af53dd71deba0272e31bb5bdb77f8536349a313e3225acab74eb6f7cf matches the complete saved tree and count. The backup value matches saved refs. No live Git query was made.
+
+Use the matching new evidence, module/source/note, resource-prefix, Audit import and report labels. Do not mechanically rename every historical action path: the immediately preceding publication source must remain the action checkpoint. Future frozen owner, body gate, source bytes/lines/cap, actual attempts/failures/build counts, exact two public names/kinds/axiom sets and new proof/publication SHAs stay unbound until observed. Do not inherit the previous source135/owner79/cap220 or its one actual strict failure as new facts.
+
+## Minimal changes by script
+
+| Script | Required changes and retained behavior |
+| --- | --- |
+| check.py33 | New area literal only. Keep snapshot-before-invocation, module-relative path, optional olean output, strict default all-linter flags, Lake caller interface, complete combined raw output, exact source/raw hashes and bytes, and propagated exit status. |
+| documents.py51 | New area/baseline/module/note/proof-path literals and fresh shallow-child templates. Keep proof-parent gate, actual build-summary marker substitution, absent note, nine baseline-before checks and exact recorded insertion inverses. In FINDINGS insert before `## Executable outer narrowing and enumeration actions` so all six external repair handoffs remain FIRST. Do not reuse old action claims or its failure narrative. |
+| archive.py82 | New area/evidence/current-owner path/production source/note/verification input/index scope. Replace action-only prospective56+2 and V2-review preconditions with existence checks for this checkpoint’s actual next assessment, its historical post-publication summary and Guard’s forthcoming descendant-truncation review before mkdir. Retain original immutable inputs without rewriting their statuses. Keep absent archive, clean tracked/index gates, actual reviews, complete area/input copy, manifest, compressed baseline tree and asserted verification result. Copy exactly prior26 below. |
+| verify.py285 | New baseline130410/backup/module/import/note labels; actual frozen owner schema and public two-head inventory. Remove only the preceding component-specific V1/V2 and56+2 validation blocks described below. Add exact assessment/summary/Guard-review bindings. Retain all generic preservation, ownership, actual-history/public/raw/axiom and resource guards. Adapt final schema only after reading actual frozen JSON. |
+| publication.py74 | New area/evidence and previous=ba082e74. Keep runtime spec/head/commits/file count, explicit formalize/destination, singleton push URL check, manifest, full filesystem/index/HEAD blob-and-mode equality, clean state, ordinary explicit nonforce push and remote SHA verification. No fixed future commit count or success claim. |
+
+## History changes that are required, not guard exceptions
+
+The predecessor verifier actively binds body-gate-v2.json, declaration-v1, origin-v1 controls,74 old payloads, source-check-1 failed input/raw and the declaration-v2 review. These describe the **preceding action component’s actual repair**, not a generic requirement that every new component fail first. New shallow-child owner has no V1/V2 history yet. Bind its actual initial body gate and owner; remove that old specialized block and old current declaration-v2/seal-script-v2 report requirements. Retain generic exact report/failure/input/cap validation unchanged. If an actual new revision occurs later, preserve and review it separately at that time. The old owner/gates/raw failure/reviews remain protected by the complete130410-file baseline and previous sealed evidence.
+
+Likewise the predecessor’s current source-plan56-payload/result-payload-addendum2-payload checks, their21-source31-cut864-line inventories, nested schemas and hardcoded original HOLD/resolution review hashes belong to that old action checkpoint. Do not copy or require them as a new shallow-child plan. Their entire sealed history stays baseline-protected. Replace these current-plan checks with the exact new prospective inputs below. Never reinterpret the old HOLD or source-order assessment as a new compiler/setup failure.
+
+The anticipated new declaration schema is nested `FROZEN.pins: {bytes,sha256}`, safe relative object pins, source-index snapshots/cuts and literal STRING contracts. Verify the actual forthcoming keys and complete recursive file set; exclude only exact top-level pins.json/FROZEN.json. Nested controls remain payload-pinned. Preserve literal fragment equality and body-gate binding, not digest-versus-literal comparison. The predecessor defining_import_sources is LIST35; do not assume35,18 sources,4 contracts/73lines,16 routes79edges or a particular new list/map shape without the new owner. Keep external stdlib paths supported. Public count remains two per assigned scope; use actual approved names/kinds and per-head actual axiom reports, with standard allowed subsets including empty. Local/global/helper/type inventories and mathematical cap must come from the new exact gate.
+
+## New prospective inputs and exact prior26
+
+The assessment’s **actual path is external**: `/tmp/mcfta-pruning-enumeration-action-20261024-next-assessment.md`,4397 bytes/SHAa541676697b4e64a47fcef735e86cf940ccc6301128cb6c7a5cca203d8b649f3. It is not action-area/next-assessment.md. Copy this exact source to a documented new archive name such as previous-publication/next-assessment.md; use its pinned identity. The historical summary at action-area/post-publication-summary.json is1025 bytes/SHAfb208aec5d7c9bc05a89a782811022d4e1dfddf56859ad72727235bfe065fd67. It binds baseline ba082e74, main, prior evidence manifest345, tracked130410 and the exact assessment path/hash. Its `next_assessment_is_currently_sealed=false` is true at its original observation cut; retain it unchanged even after the new checkpoint archives that assessment. Do not alter the old seal.
+
+Guard’s descendant-truncation review is forthcoming. Keep its actual path/hash/verdict rejecting until delivered; require it before mutation. Do not use it to claim general child closure from cached free=[] alone. The proposed bounded scope is nonterminal shallow-child constructor dispatch, literal allocation/write/return, exact slot/counter/ancestry/scs and realization. Mu/Union allocation and ordinary write distinctions, Empty rejection and honest no-terminal boundary must remain. It is not the selected-root expander or a whole-driver/Graph/ID/callback-language proof. New statements remain separately gated; this plan authors none.
+
+The **immediate action checkpoint** prefix supplies26 prior post-seal inputs: archive-1/local-publication-1/authorized-push-1 × `json,log,limits.json,usage.json,source.py,peaks.txt` (18); action-area seal-result.json, local-publication.json, remote-publication.json, push.log and publication-spec.json (5); exact action-publication.py (1); action-area/post-publication-summary.json (1); the external action-next-assessment.md (1). All26 exist. Do not select the older enumeration-outer consumer. Preserve actual prior commit metadata without rewriting its commit count. The prior immutable evidence has345 manifest payloads/346 physical files; SHA256SUMS remains0c77262a17277a7f58f9749eaaa7ccc752d7b83e3f37a3096519efd39b475fa9. I checked this file’s hash and counts without rewriting it.
+
+## Generic guards that remain unchanged
+
+Keep safe complete manifests; every baseline blob/mode and exact nine-document/Audit inverses; refs/stashes/worktrees/backup; exact new-source-plus-Audit proof delta/parent; strict/production/installed identity; no sorry/admit/unsafe/project axiom/new proof-limit overrides; frozen complete pin/source/cut/import identities and exact source inventory; actual report-directory/failure sets; retained raw failed input; selected strict literally empty; warningAsError/all linters; complete public output/no ellipsis; exact actual two-head/axiom map within standard allowed set; actual installed/Audit log metrics and only the identified old replay warning; all six resource donor suffixes and exact limits/usage stem sets;4GiB max/high/swap0 and5m policy with fresh≤600s/>1% usage; full six-fix index first; complete local publication and singleton ordinary formalize push checks. Active archive-1 stays intentionally post-seal and is carried forward by the next checkpoint. New failed attempts must be retained if they occur, not predicted or hidden.
+
+Templates and evidence must retain H6 strongest combined/ACTIVE incomplete, all earlier proofs and optimized core, no Haskell changes, and genuine open native Graph/ID/constraints/typing/template/index/memo/lazy-effects/scheduling/resource/runtime/convergence boundaries. Add no future successful checks, seal, publication or push statements before actual receipts. No broad framework or unrelated algorithm changes are needed.
+
+## Exact basis identities
+
+| Input | Lines | Bytes | SHA-256 |
+| --- | ---: | ---: | --- |
+| action-check.py | 33 | 1634 | `a3bca2591347494aa8ecb2ab41bb4e56bb51be6c0720e3e89988856232f6c065` |
+| action-documents.py | 51 | 2663 | `ab5f047ef0c9adb56fd122ea84be99c6eee2514f1a3e0e89f760404d8fe2353f` |
+| action-archive.py | 82 | 4944 | `f622c811f1f62fa25264d4eecc33767d38288c29014708b57f92a1283e1bede3` |
+| action-verify.py | 285 | 17624 | `d03057a8819a0737defc86da90bfcaab519249f7b6acbd1deff78c0fafc97970` |
+| action-publication.py | 74 | 3852 | `e74c6720afb2c58b5684b76130b656d158eac1a2ea078c84229553d92506d105` |
+| next assessment | 17 | 4397 | `a541676697b4e64a47fcef735e86cf940ccc6301128cb6c7a5cca203d8b649f3` |
+| post-publication summary | 18 | 1025 | `fb208aec5d7c9bc05a89a782811022d4e1dfddf56859ad72727235bfe065fd67` |
+| new baseline.json | 9 | 311 | `21ec77a7160f130551d5e924fe028d4d94b1a7f34999a637337ddf177b9c9320` |
+| prior SHA256SUMS | 345 | 39888 | `0c77262a17277a7f58f9749eaaa7ccc752d7b83e3f37a3096519efd39b475fa9` |
+
+A read-only initial lookup used the nonexistent action-area/next-assessment.md path; the exact external path was then read. This is a reviewer path diagnostic, not a compiler or setup failure. Only this plan was created. Frozen owner/source and final adapted scripts still require independent review.

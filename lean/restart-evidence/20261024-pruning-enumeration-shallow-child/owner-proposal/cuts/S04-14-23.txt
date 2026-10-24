@@ -1,0 +1,10 @@
+open Language Fragments
+
+local instance : Monad List where
+  pure value := [value]
+  bind values continuation := values.flatMap continuation
+
+/-- The existing checked path-trie model supplies suspended equality variables. -/
+abbrev Suspended := EqualityTrie.Suspended Nat
+
+/-- Use the source-equivalent checked trie descent. -/

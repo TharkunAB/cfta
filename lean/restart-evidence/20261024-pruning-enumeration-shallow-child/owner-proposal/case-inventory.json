@@ -1,0 +1,233 @@
+{
+  "constructor_family": "InternedConstructorTemplates.Value Symbol NativeGuard",
+  "constructors": [
+    {
+      "constructor": "empty",
+      "fields": []
+    },
+    {
+      "constructor": "reference",
+      "fields": [
+        {
+          "name": "name",
+          "type": "InternedBinderProtocol.Reference"
+        }
+      ]
+    },
+    {
+      "constructor": "node",
+      "fields": [
+        {
+          "name": "entry",
+          "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+        },
+        {
+          "name": "edges",
+          "type": "List (InternedConstructorTemplates.EdgeValue Symbol NativeGuard)"
+        },
+        {
+          "name": "depth",
+          "type": "Nat"
+        },
+        {
+          "name": "free",
+          "type": "List InternedBinderProtocol.Reference"
+        }
+      ]
+    },
+    {
+      "constructor": "union",
+      "fields": [
+        {
+          "name": "entry",
+          "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+        },
+        {
+          "name": "members",
+          "type": "List (InternedConstructorTemplates.Value Symbol NativeGuard)"
+        },
+        {
+          "name": "depth",
+          "type": "Nat"
+        },
+        {
+          "name": "free",
+          "type": "List InternedBinderProtocol.Reference"
+        }
+      ]
+    },
+    {
+      "constructor": "mu",
+      "fields": [
+        {
+          "name": "entry",
+          "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+        },
+        {
+          "name": "body",
+          "type": "InternedConstructorTemplates.Value Symbol NativeGuard"
+        },
+        {
+          "name": "depthShape",
+          "type": "InternedConstructorTemplates.Value Symbol NativeGuard"
+        },
+        {
+          "name": "ordinaryShape",
+          "type": "InternedConstructorTemplates.Value Symbol NativeGuard"
+        }
+      ]
+    }
+  ],
+  "definition_matches": [
+    {
+      "scope": "outer prepareChild match",
+      "patterns": [
+        ".empty",
+        ".reference _",
+        ".node _ _ _ _ | .union _ _ _ _ | .mu _ _ _ _"
+      ],
+      "named_constructor_fields": false,
+      "types": "Use constructor field positions above; each underscore is anonymous."
+    },
+    {
+      "scope": "encodeNode result in the shared nonterminal branch",
+      "patterns": [
+        "none",
+        "some node"
+      ],
+      "binder": {
+        "name": "node",
+        "type": "Nat"
+      }
+    },
+    {
+      "scope": "allocated action continuation",
+      "patterns": [
+        ".node _ _ _ _",
+        "_"
+      ],
+      "named_constructor_fields": false,
+      "wildcard_reachable": "Only Union/Mu reach wildcard after outer case selection."
+    }
+  ],
+  "public_matches": [
+    {
+      "scope": "nonempty exact after record",
+      "patterns": [
+        ".node _ _ _ _",
+        "_"
+      ],
+      "named_constructor_fields": false
+    },
+    {
+      "scope": "nonempty exact fresh payload scs",
+      "patterns": [
+        ".node _ _ _ _",
+        "_"
+      ],
+      "named_constructor_fields": false
+    }
+  ],
+  "proof_cases": [
+    {
+      "scope": "second implication after common allocation and handle substitution",
+      "target": "value",
+      "method": "cases value with",
+      "equation_name": null,
+      "constructors": [
+        {
+          "constructor": "empty",
+          "fields": []
+        },
+        {
+          "constructor": "reference",
+          "fields": [
+            {
+              "name": "name",
+              "type": "InternedBinderProtocol.Reference"
+            }
+          ]
+        },
+        {
+          "constructor": "node",
+          "fields": [
+            {
+              "name": "entry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+            },
+            {
+              "name": "edges",
+              "type": "List (InternedConstructorTemplates.EdgeValue Symbol NativeGuard)"
+            },
+            {
+              "name": "depth",
+              "type": "Nat"
+            },
+            {
+              "name": "free",
+              "type": "List InternedBinderProtocol.Reference"
+            }
+          ]
+        },
+        {
+          "constructor": "union",
+          "fields": [
+            {
+              "name": "entry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+            },
+            {
+              "name": "members",
+              "type": "List (InternedConstructorTemplates.Value Symbol NativeGuard)"
+            },
+            {
+              "name": "depth",
+              "type": "Nat"
+            },
+            {
+              "name": "free",
+              "type": "List InternedBinderProtocol.Reference"
+            }
+          ]
+        },
+        {
+          "constructor": "mu",
+          "fields": [
+            {
+              "name": "entry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+            },
+            {
+              "name": "body",
+              "type": "InternedConstructorTemplates.Value Symbol NativeGuard"
+            },
+            {
+              "name": "depthShape",
+              "type": "InternedConstructorTemplates.Value Symbol NativeGuard"
+            },
+            {
+              "name": "ordinaryShape",
+              "type": "InternedConstructorTemplates.Value Symbol NativeGuard"
+            }
+          ]
+        }
+      ],
+      "specialization": "Substitute that actual constructor for value in encoded, decoded, available, closed, nonempty, allocatedEncoded. The allocation state does not change.",
+      "reference_exclusion": "closed specializes to [name] = []; derive False.",
+      "empty_exclusion": "nonempty specializes to .empty ≠ .empty; derive False."
+    }
+  ],
+  "conditions": [
+    {
+      "scope": "prepareChild shared node/union/mu case",
+      "condition": "scs.any (fun sc => EqualityTrie.isTerminal sc.trie)",
+      "true_result": "none",
+      "false_result": "inspect encodeNode value",
+      "source_file": "condition-terminal.lean.txt"
+    }
+  ],
+  "proof_by_cases_count": 0,
+  "named_case_equations": [],
+  "induction": null,
+  "recursive_calls": []
+}

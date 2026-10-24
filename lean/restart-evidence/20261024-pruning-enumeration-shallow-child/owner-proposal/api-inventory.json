@@ -1,0 +1,108 @@
+{
+  "existing_APIs": [
+    {
+      "name": "SourcePruningEnumerationNodes.available_readback",
+      "source": "S02",
+      "cut": [
+        35,
+        45
+      ],
+      "result_fields": "readback obtain in obtain-inventory.json"
+    },
+    {
+      "name": "SourcePruningEnumerationWrites.allocate_available_realized",
+      "source": "S01",
+      "cut": [
+        16,
+        39
+      ],
+      "result_fields": "allocation obtain in obtain-inventory.json; no decoded lookup in this API"
+    },
+    {
+      "name": "SourcePruningEnumerationWrites.write_available_realized",
+      "source": "S01",
+      "cut": [
+        41,
+        65
+      ],
+      "result_fields": "write obtain in obtain-inventory.json; it derives a separate encoded handle"
+    },
+    {
+      "name": "EnumerationState.allocated",
+      "source": "S04",
+      "cut": [
+        568,
+        576
+      ],
+      "type": "(node : Option Nat) → (state : EnumerationState.State Symbol EnumGuard) → EnumerationState.State Symbol EnumGuard",
+      "behavior": "Exact state record includes values append, counter successor and recursionAncestry update."
+    },
+    {
+      "name": "EnumerationState.allocate_exact",
+      "source": "S04",
+      "cut": [
+        578,
+        580
+      ],
+      "type": "∀ (node : Option Nat) (state : EnumerationState.State Symbol EnumGuard), allocate node state = [.ok (state.counter, allocated node state)]"
+    },
+    {
+      "name": "EnumerationState.allocated_supply",
+      "source": "S04",
+      "cut": [
+        581,
+        585
+      ],
+      "type": "∀ (node : Option Nat) (state : EnumerationState.State Symbol EnumGuard), state.counter = state.values.length → (allocated node state).counter = (allocated node state).values.length"
+    },
+    {
+      "name": "EnumerationState.allocated_slot",
+      "source": "S04",
+      "cut": [
+        587,
+        592
+      ],
+      "type": "∀ (node : Option Nat) (state : EnumerationState.State Symbol EnumGuard), state.counter = state.values.length → (allocated node state).values[state.counter]? = some (.unenumerated node [])"
+    },
+    {
+      "name": "EnumerationCorrectness.success_bind",
+      "source": "S05",
+      "cut": [
+        55,
+        62
+      ],
+      "type": "∀ (action : EnumerateM Symbol EnumGuard α) (next : α → EnumerateM Symbol EnumGuard β) (before : EnumerationState.State Symbol EnumGuard) (value : β) (after : EnumerationState.State Symbol EnumGuard), Success (action >>= next) before value after ↔ ∃ middle intermediate, Success action before middle intermediate ∧ Success (next middle) intermediate value after",
+      "use": "Assemble the actual action with the actual allocation/write middle states; do not assume the composite success."
+    },
+    {
+      "name": "EnumerationCorrectness.success_pure",
+      "source": "S05",
+      "cut": [
+        1007,
+        1010
+      ],
+      "type": "∀ (value result : α) (before after : EnumerationState.State Symbol EnumGuard), Success (pure value) before result after ↔ result = value ∧ after = before"
+    },
+    {
+      "name": "List.getElem?_eq_some_iff",
+      "source": "S15",
+      "cut": [
+        229,
+        237
+      ],
+      "type": "{l : List α} → l[i]? = some a ↔ ∃ h : i < l.length, l[i] = a",
+      "use": "Eliminate its existential with the two inventoried binders."
+    },
+    {
+      "name": "List.length_set",
+      "source": "S16",
+      "cut": [
+        92,
+        98
+      ],
+      "type": "{as : List α} → {i : Nat} → {a : α} → (as.set i a).length = as.length"
+    }
+  ],
+  "no_new_helper_API": true,
+  "generated_constructor_injectivity": "Option.some.inj identifies two actual encode witnesses; this adds no output law."
+}

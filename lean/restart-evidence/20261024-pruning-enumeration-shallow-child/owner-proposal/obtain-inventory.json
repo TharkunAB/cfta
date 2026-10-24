@@ -1,0 +1,131 @@
+{
+  "obtain_count": 3,
+  "field_count": 15,
+  "obtains": [
+    {
+      "id": "readback",
+      "owner": "prepareChild_complete",
+      "scope": "common, before implication split",
+      "api": "SourcePruningEnumerationNodes.available_readback",
+      "arguments": [
+        "heap",
+        "value",
+        "coherent",
+        "available",
+        "closed"
+      ],
+      "fields": [
+        {
+          "name": "node",
+          "type": "Nat"
+        },
+        {
+          "name": "encoded",
+          "type": "encodeNode value = some node"
+        },
+        {
+          "name": "decoded",
+          "type": "lookupNode heap node = some value"
+        }
+      ]
+    },
+    {
+      "id": "allocation",
+      "owner": "prepareChild_complete",
+      "scope": "nonempty branch, before cases value",
+      "api": "SourcePruningEnumerationWrites.allocate_available_realized",
+      "arguments": [
+        "heap",
+        "before",
+        "value",
+        "coherent",
+        "available",
+        "closed",
+        "realized",
+        "aligned"
+      ],
+      "fields": [
+        {
+          "name": "allocatedHandle",
+          "type": "Nat"
+        },
+        {
+          "name": "allocatedEncoded",
+          "type": "encodeNode value = some allocatedHandle"
+        },
+        {
+          "name": "allocation",
+          "type": "Success (allocate (some allocatedHandle)) before before.counter (allocated (some allocatedHandle) before)"
+        },
+        {
+          "name": "allocatedSlot",
+          "type": "(allocated (some allocatedHandle) before).values[before.counter]? = some (.unenumerated (some allocatedHandle) [])"
+        },
+        {
+          "name": "allocatedRealized",
+          "type": "PendingRealized heap (allocated (some allocatedHandle) before)"
+        }
+      ],
+      "substitution": "Use allocatedHandleSame and subst allocatedHandle. Every later allocation field uses node. This is witness identification, not a second allocation."
+    },
+    {
+      "id": "write",
+      "owner": "prepareChild_complete",
+      "scope": "ordinary node constructor only",
+      "api": "SourcePruningEnumerationWrites.write_available_realized",
+      "arguments": [
+        "heap",
+        "allocated (some node) before",
+        "(.node entry edges depth free)",
+        "before.counter",
+        "scs",
+        "coherent",
+        "available",
+        "closed",
+        "allocatedRealized",
+        "allocatedBound"
+      ],
+      "fields": [
+        {
+          "name": "writtenHandle",
+          "type": "Nat"
+        },
+        {
+          "name": "after",
+          "type": "EnumerationState.State Symbol EnumGuard"
+        },
+        {
+          "name": "writtenEncoded",
+          "type": "encodeNode (.node entry edges depth free) = some writtenHandle"
+        },
+        {
+          "name": "written",
+          "type": "Success (setValue before.counter (.unenumerated (some writtenHandle) scs)) (allocated (some node) before) () after"
+        },
+        {
+          "name": "afterShape",
+          "type": "after = {allocated (some node) before with values := (allocated (some node) before).values.set before.counter (.unenumerated (some writtenHandle) scs)}"
+        },
+        {
+          "name": "afterSlot",
+          "type": "after.values[before.counter]? = some (.unenumerated (some writtenHandle) scs)"
+        },
+        {
+          "name": "afterRealized",
+          "type": "PendingRealized heap after"
+        }
+      ],
+      "substitution": "Use writtenHandleSame and subst writtenHandle. Every later write field uses the common node."
+    }
+  ],
+  "bound_elimination": {
+    "fact": "List.getElem?_eq_some_iff.mp allocatedSlot",
+    "exact_type": "∃ bound : before.counter < (allocated (some node) before).values.length, (allocated (some node) before).values[before.counter]'bound = .unenumerated (some node) []",
+    "elimination": "Exists.elim; two lambda binders are in scoped-types.json. Do not use conjunction projection .1.",
+    "new_obtain": false
+  },
+  "handle_identification_terms": {
+    "allocatedHandleSame": "Option.some.inj (allocatedEncoded.symm.trans encoded)",
+    "writtenHandleSame": "Option.some.inj (writtenEncoded.symm.trans encoded)"
+  }
+}
