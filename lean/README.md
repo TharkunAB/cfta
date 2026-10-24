@@ -1,5 +1,47 @@
 # cfta formal model
 
+## Finite checked-row construction histories
+
+Updated: 2026-10-24. Main `74250bd88` is incorporated.
+Proof: `da9d7f4629af46291018cbfe3545d85e264cfe6d`.
+Read `lean/notes-current-pruning-enumeration-checked-rows.md`.
+
+The finite history uses actual checked-build operation/native projections.
+Genuine native prework Keeps reaches each constructor input. Initial Valid
+and Ready, Cached, same physical read, stored Ready and conditional accepted
+child availability/closure stay explicit. No check-true or desired result
+is assumed. Native prework does not cover separate operation-table effects.
+
+Finite induction derives all-boundary operation Valid and native histories.
+It derives suffix Keeps, final row residency and all-row child closure.
+The actual node constructor supplies parent availability/closure and history.
+Every selected normalized row has a finite request index, derived acceptance,
+actual receipt at the named successor states, complete returned fields and
+present equality projection. Valid tries, exact path readback, residual choice
+and all-start own arity remain. Canonical duplicates need no unique origin.
+
+The earlier selected-row consumer can use the derived origin/history. This
+component adds no enumeration action or duplicate action packet. Inherited
+arity, pending realization and enumeration Frame stay separate inputs.
+Unsupported terminal behavior and noncomputable equality accessors remain.
+
+The first strict input passes with a literal empty log under all linters and warnings as errors. No failed compiler attempt or proof-limit change occurred. The installed build, complete public readback and Audit pass. All 132 public-output lines retain the complete signature without display omissions.
+The installed build passes 1066 jobs. Audit passes 3697 jobs and
+76195 dependency checks, with the unchanged older warning.
+checked_rows_selected_origin reports exactly propext, Classical.choice and Quot.sound. No project axiom is added.
+All frozen declarations, scoped types, reviews and actual raw inputs remain.
+The preceding selected-row checkpoint's26 post-seal inputs remain. Its
+assessment was already sealed. Older strict/display/setup failures and gate
+history remain protected. No Haskell changes. Six repair handoffs stay first.
+
+All-producer origins/edits, terminal intersection/assimilation/emptiness,
+slot/count/ancestry effects, selector, native Graph/ID/index/memo2, extraction/
+signed bounds, cutoff language and full typing/pruning/driver/runtime/solver/
+resources/convergence remain open. H6 stays strongest combined. H23 and all
+earlier work and the optimized core remain. The complete goal stays ACTIVE
+and incomplete. This record precedes evidence and push.
+
+
 ## Checked row origin through native node normalization
 
 Updated: 2026-10-24. Main `74250bd88` is incorporated.
