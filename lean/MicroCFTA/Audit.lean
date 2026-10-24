@@ -1,3 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationDispatch
 import MicroCFTA.SourcePruningEnumerationFinish
 import MicroCFTA.SourcePruningEnumerationEnabledEmpty
 import MicroCFTA.SourcePruningEnumerationAssimilation
