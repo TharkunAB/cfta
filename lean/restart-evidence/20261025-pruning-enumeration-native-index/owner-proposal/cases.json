@@ -1,0 +1,193 @@
+{
+  "groups": [
+    {
+      "scope": "candidate.unenumerated",
+      "kind": "case binder",
+      "binders": [
+        {
+          "name": "node",
+          "type": "Option Nat"
+        },
+        {
+          "name": "scs",
+          "type": "List EnumerationState.Suspended"
+        }
+      ]
+    },
+    {
+      "scope": "candidate.node.none",
+      "kind": "case binder",
+      "binders": []
+    },
+    {
+      "scope": "candidate.node.some",
+      "kind": "case binder",
+      "binders": [
+        {
+          "name": "handle",
+          "type": "Nat"
+        }
+      ]
+    },
+    {
+      "scope": "candidate.enumerated",
+      "kind": "case binder",
+      "binders": [
+        {
+          "name": "fragment",
+          "type": "Fragments.Fragment Symbol"
+        }
+      ]
+    },
+    {
+      "scope": "candidate.eliminated",
+      "kind": "case binder",
+      "binders": []
+    },
+    {
+      "scope": "count.nil",
+      "kind": "case binder",
+      "binders": []
+    },
+    {
+      "scope": "count.cons",
+      "kind": "case binder",
+      "binders": [
+        {
+          "name": "sc",
+          "type": "EnumerationState.Suspended"
+        },
+        {
+          "name": "rest",
+          "type": "List EnumerationState.Suspended"
+        }
+      ]
+    },
+    {
+      "scope": "count_complete.nil",
+      "kind": "case binder",
+      "binders": []
+    },
+    {
+      "scope": "count_complete.cons",
+      "kind": "case binder",
+      "binders": [
+        {
+          "name": "sc",
+          "type": "EnumerationState.Suspended"
+        },
+        {
+          "name": "rest",
+          "type": "List EnumerationState.Suspended"
+        }
+      ]
+    },
+    {
+      "scope": "gained_complete.grownFlags.generalized",
+      "kind": "generalize binder",
+      "binders": [
+        {
+          "name": "slotValue",
+          "type": "EnumerationState.UVarValue Symbol"
+        },
+        {
+          "name": "slotValueSame",
+          "type": "((before.core.values[slot]?).getD .eliminated) = slotValue"
+        }
+      ]
+    },
+    {
+      "scope": "gained_complete.grownFlags.unenumerated",
+      "kind": "case binder",
+      "binders": [
+        {
+          "name": "node",
+          "type": "Option Nat"
+        },
+        {
+          "name": "scs",
+          "type": "List EnumerationState.Suspended"
+        }
+      ]
+    },
+    {
+      "scope": "gained_complete.grownFlags.enumerated",
+      "kind": "case binder",
+      "binders": [
+        {
+          "name": "fragment",
+          "type": "Fragments.Fragment Symbol"
+        }
+      ]
+    },
+    {
+      "scope": "gained_complete.grownFlags.eliminated",
+      "kind": "case binder",
+      "binders": []
+    },
+    {
+      "scope": "gained_complete.grownFlags.node.none",
+      "kind": "case binder",
+      "binders": []
+    },
+    {
+      "scope": "gained_complete.grownFlags.node.some",
+      "kind": "case binder",
+      "binders": [
+        {
+          "name": "oldHandle",
+          "type": "Nat"
+        }
+      ]
+    },
+    {
+      "scope": "gained_complete.grownFlags.lookup.none",
+      "kind": "match equation",
+      "binders": [
+        {
+          "name": "oldLookup",
+          "type": "lookupNode heap oldHandle = none"
+        }
+      ]
+    },
+    {
+      "scope": "gained_complete.grownFlags.lookup.some",
+      "kind": "match equation",
+      "binders": [
+        {
+          "name": "oldValue",
+          "type": "InternedConstructorTemplates.Value Symbol NativeGuard"
+        },
+        {
+          "name": "oldLookup",
+          "type": "lookupNode heap oldHandle = some oldValue"
+        }
+      ]
+    },
+    {
+      "scope": "gained_complete.writtenFlags.same",
+      "kind": "condition",
+      "binders": [
+        {
+          "name": "same",
+          "type": "slot = target"
+        }
+      ]
+    },
+    {
+      "scope": "gained_complete.writtenFlags.other",
+      "kind": "condition",
+      "binders": [
+        {
+          "name": "same",
+          "type": "slot ≠ target"
+        }
+      ]
+    }
+  ],
+  "count": 19,
+  "definition_bind_syntax": "Option.bind callbacks, not let declarations. Missing candidate/root observations return none through Option.bind.",
+  "nativeValue_constructor_split": false,
+  "gained_actualPrefix": "Definitionally reduce the existing actualPrefix premise and invert singleton equality inside afterSame; no extra named inversion result.",
+  "writtenFlags_lookup": "Nat equality split only; use getElem?_set_self inside and getElem?_set_ne off target."
+}

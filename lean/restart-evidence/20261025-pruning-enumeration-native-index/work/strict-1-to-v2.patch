@@ -1,0 +1,27 @@
+--- strict-1
++++ v2
+@@ -115,11 +115,13 @@
+     recursionAncestry := fun other => if other = target then
+       (before.core.expansionAncestry ++ before.core.recursionAncestry target).eraseDups
+       else before.core.recursionAncestry other} := by
+-    change [.ok ((), {before.core with
++    change [(Except.ok ((), {before.core with
+       values := before.core.values.set target (.unenumerated (some handle) (incomingScs ++ oldScs))
+       recursionAncestry := fun other => if other = target then
+         (before.core.expansionAncestry ++ before.core.recursionAncestry target).eraseDups
+-        else before.core.recursionAncestry other})] = [.ok ((), after)] at actualPrefix
++        else before.core.recursionAncestry other}) :
++          Except EnumerationState.Error (Unit × EnumerationState.State Symbol EnumGuard))] =
++      [Except.ok ((), after)] at actualPrefix
+     exact (Prod.mk.inj (Except.ok.inj (List.cons.inj actualPrefix).1)).2.symm
+   have grownFlags : ∀ (slot : Nat),
+     candidate nextHeap ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot) := by
+@@ -152,7 +154,7 @@
+     · subst slot
+       simp only [List.getElem?_set_self inside, Option.getD_some, candidate, decoded,
+         Option.map_some, ↓reduceIte]
+-    · simpa only [List.getElem?_set_ne (Ne.symm same), if_neg same] using grownFlags slot
++    · simpa only [List.getElem?_set_ne (Ne.symm same), ite_eq_right same] using grownFlags slot
+   refine ⟨fuel, ⟨{before.core with
+     values := before.core.values.set target (.unenumerated (some handle) (incomingScs ++ oldScs))},
+     fun slot => if slot = target then

@@ -1,0 +1,38 @@
+--- candidate/documents.py
++++ basis/documents.py
+@@ -4,8 +4,8 @@
+ from pathlib import Path
+ 
+ root = Path('/home/tritlo/Code/mcfta')
+-area = Path('/tmp/mcfta-pruning-enumeration-native-index-20261025')
+-baseline = 'ab0ba1287abe1ca172a1f35c510b711ed749001a'
++area = Path('/tmp/mcfta-pruning-enumeration-terminal-20261024')
++baseline = '04822017ec505dd481a7c67979c77655cb1fec70'
+ proof = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=root).decode().strip()
+ assert subprocess.check_output(['git', 'rev-list', '--parents', '-n', '1', proof], cwd=root).decode().split() == [proof, baseline]
+ checks = json.loads((area / 'build-summary.json').read_text())
+@@ -25,7 +25,7 @@
+ note = expand((area / 'current-note.md').read_text())
+ note = note.replace('Main: `74250bd889685da436cdbfe32ac4b5a0878ffd09`, incorporated.',
+     'Main: `74250bd889685da436cdbfe32ac4b5a0878ffd09`, incorporated.\nProof: `' + proof + '`.')
+-destination = root / 'lean/notes-current-pruning-enumeration-native-index.md'
++destination = root / 'lean/notes-current-pruning-enumeration-terminal.md'
+ assert not destination.exists()
+ destination.write_text(note)
+ (area / 'current-note.md').write_text(note)
+@@ -39,7 +39,7 @@
+     path = root / name
+     before = path.read_text()
+     assert path.read_bytes() == subprocess.check_output(['git', 'show', baseline + ':' + name], cwd=root)
+-    position = before.index('## Checked terminal-arm composition') if name == 'FINDINGS.md' else before.index('\n') + 1
++    position = before.index('## Storage and waiting counts through the checked fold') if name == 'FINDINGS.md' else before.index('\n') + 1
+     after = before[:position] + prefix + before[position:]
+     path.write_text(after)
+     changes[name] = dict(insertion_character=position, inserted=prefix,
+@@ -47,5 +47,5 @@
+         after_sha256=hashlib.sha256(after.encode()).hexdigest())
+ (area / 'document-changes.json').write_text(json.dumps(changes, indent=2) + '\n')
+ (area / 'proof-commit.json').write_text(json.dumps(dict(commit=proof, baseline=baseline,
+-    paths=['lean/MicroCFTA/SourcePruningEnumerationNativeIndex.lean', 'lean/MicroCFTA/Audit.lean']), indent=2) + '\n')
++    paths=['lean/MicroCFTA/SourcePruningEnumerationTerminal.lean', 'lean/MicroCFTA/Audit.lean']), indent=2) + '\n')
+ print(json.dumps(dict(documents=paths, note=str(destination), proof=proof)))

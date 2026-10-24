@@ -1,0 +1,14 @@
+theorem initial_correct (graph : Graph Symbol Guard) (roots : Nat → Nat) (root : Nat) :
+    Correct graph roots (EnumerationExpandableIndex.initial graph root) := by
+  refine ⟨rfl, ?_, EnumerationCanonicalWaiting.initial_correct roots root⟩
+  intro uv
+  cases uv <;> simp [EnumerationExpandableIndex.initial, EnumerationState.initial]
+
+/-- Fresh allocation preserves both maintained indexes. -/
+theorem allocate_correct (graph : Graph Symbol Guard) (roots : Nat → Nat) (node : Option Nat)
+    (state : Cached Symbol Guard) (correct : Correct graph roots state) :
+    Correct graph roots (EnumerationExpandableIndex.allocate graph node state) := by
+  refine ⟨allocated_supply node state.core correct.aligned, ?_,
+    EnumerationCanonicalWaiting.allocate_correct roots state.core.values node state.waiting correct.waiting⟩
+  intro uv
+  by_cases before : uv < state.core.values.length

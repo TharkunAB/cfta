@@ -1,0 +1,61 @@
+--- basis/archive.py
++++ candidate/archive.py
+@@ -6,12 +6,12 @@
+ from pathlib import Path
+ 
+ root = Path('/home/tritlo/Code/mcfta')
+-area = Path('/tmp/mcfta-pruning-enumeration-terminal-20261024')
+-evidence = root / 'lean/restart-evidence/20261024-pruning-enumeration-terminal'
++area = Path('/tmp/mcfta-pruning-enumeration-native-index-20261025')
++evidence = root / 'lean/restart-evidence/20261025-pruning-enumeration-native-index'
+ assert not evidence.exists()
+ custody = json.loads((area / 'prior-custody-index.json').read_text())
+ assert len(custody) == 26 and len({pin['target'] for pin in custody}) == 26
+-assert hashlib.sha256((area / 'prior-custody-index.json').read_bytes()).hexdigest() == '6f9984db794cfbbc4f64907cb4898ec7e6624bbf719cd6aefe0426923d0b78c8'
++assert hashlib.sha256((area / 'prior-custody-index.json').read_bytes()).hexdigest() == 'eaa51d5e2c495972ed633423b73ceeb2494e3f89deb4d08bfb0386af7fb00b72'
+ summary = json.loads((area / 'previous-publication/post-publication-summary.json').read_text())
+ assert [pin['source'] for pin in custody] == summary['next_custody_inputs']
+ for pin in custody:
+@@ -19,11 +19,11 @@
+     data = (area / 'previous-publication' / pin['target']).read_bytes()
+     assert len(data) == pin['bytes'] and hashlib.sha256(data).hexdigest() == pin['sha256']
+ assert {p.name for p in (area / 'previous-publication').iterdir()} == {pin['target'] for pin in custody}
+-assert Path('/tmp/mcfta-pruning-enumeration-terminal-20261024-source-review.md').is_file()
++assert Path('/tmp/mcfta-pruning-enumeration-native-index-20261025-source-review.md').is_file()
+ for args in [('diff', '--quiet'), ('diff', '--cached', '--quiet')]:
+     subprocess.run(['git', *args], cwd=root, check=True)
+ for name in ['declaration', 'model', 'public', 'document', 'seal-script', 'root']:
+-    assert Path('/tmp/mcfta-pruning-enumeration-terminal-20261024-' + name + '-review.md').is_file()
++    assert Path('/tmp/mcfta-pruning-enumeration-native-index-20261025-' + name + '-review.md').is_file()
+ evidence.mkdir()
+ for path in sorted(area.rglob('*')):
+     if not path.is_file():
+@@ -36,21 +36,21 @@
+         target.write_bytes(path.read_bytes())
+ inputs = evidence / 'inputs'
+ inputs.mkdir()
+-for pattern in ['mcfta-pruning-enumeration-terminal-20261024-*']:
++for pattern in ['mcfta-pruning-enumeration-native-index-20261025-*']:
+     for path in sorted(Path('/tmp').glob(pattern)):
+-        if path.is_file() and not path.name.startswith('mcfta-pruning-enumeration-terminal-20261024-archive-1.'):
++        if path.is_file() and not path.name.startswith('mcfta-pruning-enumeration-native-index-20261025-archive-1.'):
+             shutil.copyfile(path, inputs / path.name)
+-shutil.copytree('/tmp/mcfta-pruning-enumeration-terminal-20261024-proposal', evidence / 'owner-proposal')
++shutil.copytree('/tmp/mcfta-pruning-enumeration-native-index-20261025-proposal', evidence / 'owner-proposal')
+ prior = evidence / 'previous-publication'
+ prior.mkdir()
+ for pin in custody:
+     shutil.copyfile(area / 'previous-publication' / pin['target'], prior / pin['target'])
+ production = evidence / 'production-sources'
+ production.mkdir()
+-shutil.copyfile(root / 'lean/MicroCFTA/SourcePruningEnumerationTerminal.lean', production / 'SourcePruningEnumerationTerminal.lean')
+-shutil.copyfile(root / 'lean/notes-current-pruning-enumeration-terminal.md', evidence / 'current-note.md')
+-shutil.copyfile('/tmp/mcfta-pruning-enumeration-terminal-20261024-verify.py', evidence / 'verify-checkpoint.py')
+-(evidence / 'INDEX.md').write_text('# Checked terminal-arm composition\n\nThe staged action uses the existing TerminalPrefix, ordered Fold and IncomingNode at their SAME returned endpoints. Incoming Empty rejects before Prefix. Prefix preserves the actual recorded order and duplicates. Its distinct sorted nonwinner keys are used only for waiting transfer. Fold [] stops before IncomingNode, incoming count gains or a returned fragment. Unmatched raw shapes and native/worker interruptions remain explicit existing Sum/Except outcomes.\n\nOn a successful Fold singleton, IncomingNode performs the actual representative read, checked query when the old handle is present, then value write and ancestry inheritance before Empty rejection. The read endpoint and write/inherit prefix endpoint stay distinct. Raw [] returns no successful enum state. A successful row returns Fragment.hole winner at its actual written state; it does not install an enumerated hole at winner. The later enumerateOutUVarWith store at the captured original uv remains separate.\n\nThe action returns the moved waiting map with its outer read/staging endpoint. That pair is staging data, not the final waiting table for a returned raw state. gained_correct independently derives the logical gained-only count map at the actual incoming write/inherit prefix, including an Empty rejection. Its fixed roots and external waiting parameters do not establish native IntMap/index extraction. Canonical zero-entry facts remain necessary for map equality.\n\nThe finite producer assumes genuine initial Safe/Roots/counts, pending slots, current native Context/realization, an available closed nonempty incoming Value and allocated suspended references. It derives one actual Prefix, Fold and IncomingNode execution with retained bounds, current Post/receipt/language evidence and separate read/write endpoints. Current reached Fold.Ranges and conditional incoming WordRanges are explicit; no successful future execution is assumed. Runtime early Empty is outside this nonempty producer domain.\n\nThe selected interface is run, gained_correct and run_complete. One local named List Monad header is selected, with no LawfulMonad or new carrier. Root selected300–450 ordinary lines and hard650 before owner/body freeze. Actual immutable owner metadata supplies the complete literal contracts, counts and exact schema. No check outcome is predicted.\n\nWork retains all137786 baseline files/modes/refs/stashes/worktrees, nine exact document inverses, one Audit prepend, all real failed input/raw reports, complete public output/actual allowed axiom subsets and all six-artifact resource families. Exactly26 prior FoldInvariants publication inputs and separately sealed assessment/peer context remain protected. The current fresh owner is copied once. Earlier amendments and revisions stay baseline history. No current revision or failure is invented.\n\nRun verify-checkpoint.py with an explicit repository root. Force-add every manifest path and SHA256SUMS, including ignored logs. Publication requires every sealed path in HEAD, exact filesystem/index/tree/modes and a singleton destination for ordinary formalize push. Root supplies actual build/public/axiom outcomes after execution. No future check, seal or push result is asserted.\n\nOuter terminal/descendant partitioning, root-flag provenance, later original-uv installation, native maintained indexes/Int extraction, initial-only mixed-query admission, Safe/LiveRoots preservation and the complete shared driver remain open. H6 stays strongest; the whole goal is ACTIVE and incomplete. Full typing/pruning/solver/runtime/resource/convergence boundaries remain. The optimized core and earlier proofs stay protected. The six imported Haskell repair handoffs remain first in FINDINGS. No Haskell source change is claimed.\n')
++shutil.copyfile(root / 'lean/MicroCFTA/SourcePruningEnumerationNativeIndex.lean', production / 'SourcePruningEnumerationNativeIndex.lean')
++shutil.copyfile(root / 'lean/notes-current-pruning-enumeration-native-index.md', evidence / 'current-note.md')
++shutil.copyfile('/tmp/mcfta-pruning-enumeration-native-index-20261025-verify.py', evidence / 'verify-checkpoint.py')
++(evidence / 'INDEX.md').write_text('# Native terminal scheduling indexes\n\nThe selected interface is candidate, count, write, count_complete and gained_complete. It reuses existing Cached state and the native recursiveBoundary classifier, including both Mu and InternedUnion. There is no Graph parameter or new carrier. One local List Monad instance serves the actual enum prefix. The selected source budget is260–420 ordinary lines, hard560. Actual owner controls supply the complete literal contracts and local inventory.\n\nNative gained/lost updates already resolve references through current UnionFind roots. The count action follows those reads. gained_complete consumes the SAME actual Terminal write/inherit observation, old stored value, initial index alignment/native flags/counts/Roots, Keeps between the actual heaps and the actual new decoded value at the next heap. It derives finite cached-write execution, exact raw fields and returned flags/counts/Roots/alignment through Cached.frame. No desired successful final index is an input premise. The earlier moved waiting pair remains staging data.\n\nWork retains all138475 baseline files/modes/refs/stashes/worktrees, nine exact document inverses, one Audit prepend, all actual failed inputs/raw reports, complete public output/actual allowed axiom subsets and every six-artifact resource family. Exactly26 prior Terminal publication inputs and the separately sealed assessment/peer context remain protected. The current owner is copied once. Existing Terminal owner revisions, gates and failures remain baseline history. No current revision or failure is invented.\n\nRun verify-checkpoint.py only after Root selects the exact owner/source and actual receipts. Force-add every manifest path and SHA256SUMS, including ignored logs. Publication requires every sealed path in HEAD, exact filesystem/index/tree/modes and a singleton destination for ordinary formalize push. Root supplies actual public/build/axiom outcomes after execution. No check, seal or push success is asserted in advance.\n\nMachine bounds and native map/set extraction, original-root flags, terminal partitioning, later captured original-uv installation, initial-only range admission, Safe/LiveRoots and full driver correspondence remain open. H6 stays strongest. The whole goal is ACTIVE and incomplete. The optimized core, previous proofs and six imported Haskell repair handoffs remain protected. Those handoffs remain first in FINDINGS. No Haskell change is claimed.\n')
+ 
+ files = sorted(p for p in evidence.rglob('*') if p.is_file())
+ (evidence / 'SHA256SUMS').write_text(''.join(hashlib.sha256(p.read_bytes()).hexdigest() + '  ' + p.relative_to(evidence).as_posix() + '\n' for p in files))

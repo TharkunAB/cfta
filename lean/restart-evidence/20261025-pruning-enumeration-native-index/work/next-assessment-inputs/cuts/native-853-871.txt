@@ -1,0 +1,19 @@
+
+-- | Find the next UVar that can be expanded without violating dependencies.
+nextExpandableUVar :: ([UVar] -> Maybe UVar) -> EnumerateM symbol ExpandableUVarResult
+nextExpandableUVar choose = do
+    mbCandidates <- findExpandableUVars
+    return $ case mbCandidates of
+        Nothing -> ExpansionDone
+        Just candidates
+            | IntSet.null candidates -> ExpansionStuck
+            | otherwise ->
+                -- The candidate list is only forced if the caller looks at it,
+                -- so the default order pays nothing for this.
+                ExpansionNext $
+                    case choose (map intToUVar $ IntSet.toAscList candidates) of
+                        Just preferred
+                            | IntSet.member (uvarToInt preferred) candidates ->
+                                preferred
+                        _ -> intToUVar (IntSet.findMin candidates)
+

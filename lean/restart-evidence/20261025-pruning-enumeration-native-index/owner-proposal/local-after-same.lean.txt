@@ -1,0 +1,5 @@
+have afterSame : after = {before.core with
+    values := before.core.values.set target (.unenumerated (some handle) (incomingScs ++ oldScs))
+    recursionAncestry := fun other => if other = target then
+      (before.core.expansionAncestry ++ before.core.recursionAncestry target).eraseDups
+      else before.core.recursionAncestry other}

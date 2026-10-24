@@ -1,0 +1,5 @@
+/-- Slots that can initiate work, before suspended dependencies are removed. -/
+def candidate (graph : Graph Symbol Guard) : UVarValue Symbol → Bool
+  | .unenumerated (some node) scs =>
+      match graph.node node with | .recursive _ => !scs.isEmpty | _ => true
+  | _ => false

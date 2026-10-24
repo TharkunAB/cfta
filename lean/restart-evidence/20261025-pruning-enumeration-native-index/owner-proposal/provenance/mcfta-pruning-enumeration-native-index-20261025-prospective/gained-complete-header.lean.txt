@@ -1,0 +1,23 @@
+theorem gained_complete
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (before : EnumerationExpandableIndex.Cached Symbol EnumGuard)
+    (target : Nat) (oldNode : Option Nat) (oldScs incomingScs : List EnumerationState.Suspended)
+    (handle : Nat) (value : InternedConstructorTemplates.Value Symbol NativeGuard)
+    (roots : Nat → Nat) (paths : Roots before.core.representatives roots)
+    (stored : before.core.values[target]? = some (.unenumerated oldNode oldScs))
+    (decoded : lookupNode heap handle = some value)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (flags : ∀ (slot : Nat),
+      candidate heap ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot)) :
+    ∃ (fuel : Nat) (after : EnumerationExpandableIndex.Cached Symbol EnumGuard),
+      (∀ extra, write heap (fuel + extra) target
+        (.unenumerated (some handle) (incomingScs ++ oldScs)) incomingScs [] before = some after) ∧
+      after.core = {before.core with
+        values := before.core.values.set target (.unenumerated (some handle) (incomingScs ++ oldScs))} ∧
+      after.expandable = (fun slot => if slot = target then
+        !(MergedOrdinaryHeight.recursiveBoundary value && (incomingScs ++ oldScs).isEmpty)
+        else before.expandable slot) ∧
+      after.waiting = EnumerationCanonicalWaiting.count roots 1 incomingScs before.waiting ∧
+      EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
+      (∀ (slot : Nat),
+        candidate heap ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot))

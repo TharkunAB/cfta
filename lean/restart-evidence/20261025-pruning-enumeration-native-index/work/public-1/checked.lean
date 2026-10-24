@@ -1,0 +1,15 @@
+import MicroCFTA.SourcePruningEnumerationNativeIndex
+
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+
+#check @MicroCFTA.SourcePruningEnumerationNativeIndex.candidate
+#print axioms MicroCFTA.SourcePruningEnumerationNativeIndex.candidate
+#check @MicroCFTA.SourcePruningEnumerationNativeIndex.count
+#print axioms MicroCFTA.SourcePruningEnumerationNativeIndex.count
+#check @MicroCFTA.SourcePruningEnumerationNativeIndex.write
+#print axioms MicroCFTA.SourcePruningEnumerationNativeIndex.write
+#check @MicroCFTA.SourcePruningEnumerationNativeIndex.count_complete
+#print axioms MicroCFTA.SourcePruningEnumerationNativeIndex.count_complete
+#check @MicroCFTA.SourcePruningEnumerationNativeIndex.gained_complete
+#print axioms MicroCFTA.SourcePruningEnumerationNativeIndex.gained_complete

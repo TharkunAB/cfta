@@ -1,0 +1,30 @@
+inductive Next where
+  | done | stuck | expand (uv : Nat)
+  deriving DecidableEq, Repr
+
+/-- An invalid ordering hint falls back to the first available variable. -/
+def pickNext (preference : List Nat → Option Nat) : Option (List Nat) → Next
+  | none => .done
+  | some [] => .stuck
+  | some (first :: rest) =>
+      match preference (first :: rest) with
+      | some preferred => if preferred ∈ first :: rest then .expand preferred else .expand first
+      | none => .expand first
+
+/-- Expand one selected UVar and store its fragment. -/
+def enumerateOut (graph : Graph Symbol Guard) (fuel uv : Nat) :
+    EnumerateM Symbol Guard (Fragment Symbol) := do
+  match ← getValue (fuel + 1) uv with
+  | .unenumerated (some node) scs =>
+      let root ← representative (fuel + 1) uv
+      let ancestry := (← get).recursionAncestry root
+      modify fun state => {state with expansionAncestry := (
+        match graph.node node with
+        | .recursive _ => (recursionKey node scs :: ancestry).eraseDups
+        | _ => ancestry)}
+      let fragment ← enumerateNode graph fuel scs
+        (match graph.node node with | .recursive body => body | _ => node)
+      modify fun state => {state with expansionAncestry := []}
+      setValue root (.enumerated fragment)
+      pure fragment
+  | _ => reject

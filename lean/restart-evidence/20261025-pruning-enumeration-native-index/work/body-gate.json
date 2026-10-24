@@ -1,0 +1,125 @@
+{
+  "status": "ACCEPTED_BEFORE_ANY_BODY_OR_ACTIVATION",
+  "accepted_at": "2026-10-25T00:51:53.673538+02:00",
+  "owner": "/tmp/mcfta-pruning-enumeration-native-index-20261025-proposal",
+  "frozen_sha256": "e0e0bb82643a4a9b6042a30be28076cfac57584543ac680ceb988de9ee710eef",
+  "pins_sha256": "78c6237af890654c4b26ea793666534b14ccf19ccd25c24c14a244953319b781",
+  "contracts": {
+    "candidate-header.lean.txt": "def candidate\n    (heap : InternedConstructorTemplates.State Symbol NativeGuard)\n    (value : EnumerationState.UVarValue Symbol) : Option Bool\n",
+    "context.lean.txt": "import MicroCFTA.SourcePruningEnumerationTerminal\nimport MicroCFTA.SourceUnionFindRoot\nimport MicroCFTA.MergedOrdinaryHeight\nimport MicroCFTA.EnumerationExpandableIndex\n\nnamespace MicroCFTA.SourcePruningEnumerationNativeIndex\nopen EnumerationState EnumerationSchedule SourcePruningEnumerationNodes\nlocal notation \"Symbol\" => SourcePruningTemplates.Symbol\nvariable {EnumGuard NativeGuard : Type}\n",
+    "count-complete-header.lean.txt": "theorem count_complete\n    (forest : UnionFind.Forest) (roots : Nat \u2192 Nat)\n    (paths : Roots forest roots) (scs : List EnumerationState.Suspended) :\n    \u2203 (fuel : Nat), \u2200 (extra : Nat) (change : Int) (waiting : EnumerationWaitingIndex.Waiting),\n      count (fuel + extra) forest change scs waiting =\n        some (EnumerationCanonicalWaiting.count roots change scs waiting)\n",
+    "count-header.lean.txt": "def count\n    (fuel : Nat) (forest : UnionFind.Forest) (change : Int)\n    (scs : List EnumerationState.Suspended) (waiting : EnumerationWaitingIndex.Waiting) :\n    Option EnumerationWaitingIndex.Waiting\n",
+    "gained-complete-header.lean.txt": "theorem gained_complete\n    (heap nextHeap : InternedConstructorTemplates.State Symbol NativeGuard)\n    (kept : SourceEqualityRequiredCache.Keeps heap nextHeap)\n    (before : EnumerationExpandableIndex.Cached Symbol EnumGuard)\n    (after : EnumerationState.State Symbol EnumGuard)\n    (target : Nat) (oldNode : Option Nat) (oldScs incomingScs : List EnumerationState.Suspended)\n    (handle : Nat) (value : InternedConstructorTemplates.Value Symbol NativeGuard)\n    (roots : Nat \u2192 Nat) (paths : Roots before.core.representatives roots)\n    (stored : before.core.values[target]? = some (.unenumerated oldNode oldScs))\n    (decoded : lookupNode nextHeap handle = some value)\n    (aligned : before.core.counter = before.core.values.length)\n    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)\n    (flags : \u2200 (slot : Nat),\n      candidate heap ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))\n    (actualPrefix : ExceptT.run ((do\n      setValue target (.unenumerated (some handle) (incomingScs ++ oldScs))\n      inheritAncestry target) before.core) = [.ok ((), after)]) :\n    \u2203 (fuel : Nat) (written : EnumerationExpandableIndex.Cached Symbol EnumGuard),\n      (\u2200 (extra : Nat), write nextHeap (fuel + extra) target\n        (.unenumerated (some handle) (incomingScs ++ oldScs)) incomingScs [] before = some written) \u2227\n      written.core = {before.core with\n        values := before.core.values.set target (.unenumerated (some handle) (incomingScs ++ oldScs))} \u2227\n      written.expandable = (fun (slot : Nat) => if slot = target then\n        !(MergedOrdinaryHeight.recursiveBoundary value && (incomingScs ++ oldScs).isEmpty)\n        else before.expandable slot) \u2227\n      written.waiting = EnumerationCanonicalWaiting.count roots 1 incomingScs before.waiting \u2227\n      (EnumerationExpandableIndex.frame after written).core = after \u2227\n      after.counter = after.values.length \u2227 Roots after.representatives roots \u2227\n      EnumerationCanonicalWaiting.Correct roots after.values written.waiting \u2227\n      (\u2200 (slot : Nat),\n        candidate nextHeap ((after.values[slot]?).getD .eliminated) = some (written.expandable slot))\n",
+    "instance-header.lean.txt": "local instance nativeIndexMonadList : Monad List\n",
+    "local-after-same.lean.txt": "have afterSame : after = {before.core with\n    values := before.core.values.set target (.unenumerated (some handle) (incomingScs ++ oldScs))\n    recursionAncestry := fun other => if other = target then\n      (before.core.expansionAncestry ++ before.core.recursionAncestry target).eraseDups\n      else before.core.recursionAncestry other}\n",
+    "local-grown-flags.lean.txt": "have grownFlags : \u2200 (slot : Nat),\n    candidate nextHeap ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot)\n",
+    "local-inside.lean.txt": "have inside : target < before.core.values.length\n",
+    "local-root-run.lean.txt": "have rootRun : SourceUnionFindRoot.root (headFuel + tailFuel + extra) forest sc.var =\n      some (roots sc.var)\n",
+    "local-written-flags.lean.txt": "have writtenFlags : \u2200 (slot : Nat),\n    candidate nextHeap (((before.core.values.set target\n      (.unenumerated (some handle) (incomingScs ++ oldScs)))[slot]?).getD .eliminated) =\n      some (if slot = target then\n        !(MergedOrdinaryHeight.recursiveBoundary value && (incomingScs ++ oldScs).isEmpty)\n        else before.expandable slot)\n",
+    "write-header.lean.txt": "def write\n    (heap : InternedConstructorTemplates.State Symbol NativeGuard)\n    (fuel target : Nat) (value : EnumerationState.UVarValue Symbol)\n    (gained lost : List EnumerationState.Suspended)\n    (before : EnumerationExpandableIndex.Cached Symbol EnumGuard) :\n    Option (EnumerationExpandableIndex.Cached Symbol EnumGuard)\n"
+  },
+  "schema": {
+    "module": "MicroCFTA.SourcePruningEnumerationNativeIndex",
+    "public_heads": [
+      {
+        "name": "candidate",
+        "kind": "def",
+        "file": "candidate-header.lean.txt",
+        "attachment": " :=\n"
+      },
+      {
+        "name": "count",
+        "kind": "def",
+        "file": "count-header.lean.txt",
+        "attachment": " :=\n"
+      },
+      {
+        "name": "write",
+        "kind": "def",
+        "file": "write-header.lean.txt",
+        "attachment": " :=\n"
+      },
+      {
+        "name": "count_complete",
+        "kind": "theorem",
+        "file": "count-complete-header.lean.txt",
+        "attachment": " := by\n"
+      },
+      {
+        "name": "gained_complete",
+        "kind": "theorem",
+        "file": "gained-complete-header.lean.txt",
+        "attachment": " := by\n"
+      }
+    ],
+    "public_head_order": [
+      "candidate",
+      "count",
+      "write",
+      "count_complete",
+      "gained_complete"
+    ],
+    "contract_count": 12,
+    "contract_lines": 76,
+    "context_lines": 9,
+    "public_header_lines": 50,
+    "definition_count": 3,
+    "theorem_count": 2,
+    "proof_local_have_count": 5,
+    "proof_local_let_count": 0,
+    "definition_local_let_count": 0,
+    "new_types": [],
+    "new_carriers": [],
+    "new_predicates": [],
+    "helpers": [],
+    "local_instance_count": 1,
+    "global_instance_count": 0,
+    "LawfulMonad_count": 0,
+    "obtain_count": 4,
+    "obtain_field_count": 8,
+    "scoped_type_count": 99,
+    "induction_count": 1,
+    "IH_count": 1,
+    "source_count": 15,
+    "cut_count": 24,
+    "cut_lines": 304,
+    "route_count": 13,
+    "route_source_count": 22,
+    "target_source_lines": [
+      260,
+      420
+    ],
+    "proposed_hard_cap": 560,
+    "compiler_evidence": false,
+    "bodies_present": false
+  },
+  "script_frozen_sha256": "083c3e0fe1ceed38411149c45cd9b823b13b92142cc5e1fd4dc7bd781c18582e",
+  "usage_overlay_frozen_sha256": "fba5ef339140a591f9dbf90e91e7bb2f87bab8e7005753fe6f013ae20787c658",
+  "reviews": {
+    "setup": {
+      "path": "/tmp/mcfta-pruning-enumeration-native-index-20261025-setup-review.md",
+      "sha256": "3e51aaa7cee3f19ab5dbaafdf7d5d23a61b71772708a464ee2745d6005dafa69"
+    },
+    "source": {
+      "path": "/tmp/mcfta-pruning-enumeration-native-index-20261025-source-review.md",
+      "sha256": "b5a64e13e8d9f5e2c218a2df5329b03e0f80e892ad777483c97aaf75d82822b4"
+    },
+    "declaration": {
+      "path": "/tmp/mcfta-pruning-enumeration-native-index-20261025-declaration-review.md",
+      "sha256": "90807205b03f337f0326a222a3dbf5088abafcbea0fe96bcf4193a5f375cf34f"
+    },
+    "seal-script": {
+      "path": "/tmp/mcfta-pruning-enumeration-native-index-20261025-seal-script-review.md",
+      "sha256": "29b5cdce277b83aa6c8cceb650397d65c5891234866baddf5cda5d6de99cf912"
+    }
+  },
+  "personal_review": "All12 exact contracts76lines,99 scoped entries,4packets8fields,IHand304cutlines plus complete stdlib self-set header read. All110 owner pins/exact112files15live sources24cuts22import identities13routes verified. All471 final script lines,both templates,all5actual bases and inverse recipes read/verified; all72scriptpins/exact74files verify. Originalowner unchanged; tiny three-unused-binding overlay verified. Full H6 statement read. Root owns all bodies.",
+  "source_budget": [
+    260,
+    420
+  ],
+  "hard_cap": 560,
+  "limits": "Lean4.34.1 default limits, all linters and warnings as errors. Serial4GiB memory/high,swap0,five minutes. No new axiom or desired count/write success premise.",
+  "activation": "not yet",
+  "bodies": "not yet"
+}

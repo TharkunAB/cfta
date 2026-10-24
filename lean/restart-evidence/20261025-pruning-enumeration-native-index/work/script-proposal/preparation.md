@@ -1,0 +1,11 @@
+# NativeIndex script preparation
+
+Timestamp: 2026-10-25 00:50:44 CEST. Status: FINAL source-only proposal. I authored these five adapters and templates. Root owns activation and execution.
+
+The five complete active Terminal bases and471 selected candidate lines are retained. Ten exact forward/inverse patches and Unicode-character replacement spans reconstruct both endpoints. Changes are checkpoint paths, module/note names, baseline/backup/custody identities, source-review binding and selected archive text. Earlier unselected candidates, source-pin correction and note precision history remain in provenance. No guard algorithm changed.
+
+The actual owner is the unchanged110-payload proposal, FROZEN e0e0bb82643a4a9b6042a30be28076cfac57584543ac680ceb988de9ee710eef. Its12 literal STRING contracts/76lines, five ordered heads, one local Monad/zero globals/hard560 fit the existing readers. All15 whole-source identities,24 exact cuts/304lines and22 project import identities match. These are data checks, not a claim of manual whole-source review. The separate three-binder usage overlay remains in the area and is included by the recursive archive. It changes no contract or script reader.
+
+The verifier binds source review b5a64e13e8d9f5e2c218a2df5329b03e0f80e892ad777483c97aaf75d82822b4. It retains all138475 baseline blobs/modes, narrow app-ref exception, nine document inverses, Audit prepend, actual source/report/failure/public-axiom inventories and six-artifact resource families. Exact26 prior Terminal inputs and the separately sealed assessment peer stay protected. The publication guard still requires every manifest path in HEAD, full filesystem/index/tree equality and a singleton ordinary formalize destination.
+
+The templates state the SAME actual Terminal write/inherit prefix, initial flags/counts/Roots/alignment, actual heap Keeps and new decoded value. Cached.frame attaches indexes to the actual state. Machine extraction, provenance, later store, Safe/LiveRoots and full driver remain open; H6 stays strongest and the six Haskell repairs stay first. All validation fields remain actual-result placeholders. No parser, prepared program, compiler, Git/network, activation or repository edit occurred. Root must read the final package and obtain independent Guard review before activation.

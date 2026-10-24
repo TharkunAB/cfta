@@ -1,0 +1,17 @@
+{- | Find every expandable UVar that no suspended constraint waits for.
+
+The state keeps the expandable slots and the representatives of the UVars
+that suspended constraints name. Slots merged into another UVar are marked
+'UVarEliminated', so every expandable slot is a representative, and the
+blocked ones are the keys of '_waitingUVars'.
+
+'Nothing' means no candidates remain. @Just empty@ means candidates exist, but
+all of them are blocked by suspended constraints.
+-}
+findExpandableUVars :: EnumerateM symbol (Maybe IntSet.IntSet)
+findExpandableUVars = do
+    candidates <- gets _expandableUVars
+    waiting <- gets _waitingUVars
+    return $
+        if IntSet.null candidates
+            then Nothing

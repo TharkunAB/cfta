@@ -1,0 +1,31 @@
+{
+  "count": 1,
+  "IH_count": 1,
+  "theorem": "count_complete",
+  "induction": "induction scs with",
+  "fixed": [
+    "forest",
+    "roots",
+    "paths"
+  ],
+  "generalized": [],
+  "uniform_binders_under_result": [
+    "extra : Nat",
+    "change : Int",
+    "waiting : EnumerationWaitingIndex.Waiting"
+  ],
+  "IH": {
+    "name": "ih",
+    "scope": "count_complete.cons",
+    "type": "∃ (tailFuel : Nat), ∀ (extra : Nat) (change : Int) (waiting : EnumerationWaitingIndex.Waiting), count (tailFuel + extra) forest change rest waiting = some (EnumerationCanonicalWaiting.count roots change rest waiting)"
+  },
+  "nil": {
+    "scs": "[]"
+  },
+  "cons": {
+    "sc": "EnumerationState.Suspended",
+    "rest": "List EnumerationState.Suspended"
+  },
+  "fuel_witness": "headFuel + tailFuel (Root authors expression after gate)",
+  "source_specific": "Finite actual SourceUnionFindRoot.root lookups only; no callback success/singleton assumption."
+}

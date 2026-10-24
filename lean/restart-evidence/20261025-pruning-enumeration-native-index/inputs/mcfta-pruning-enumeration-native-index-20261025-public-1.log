@@ -1,0 +1,84 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-R", "/tmp/mcfta-pruning-enumeration-native-index-20261025/public-1", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-pruning-enumeration-native-index-20261025/public-1/checked.lean"], "exit_code": 0, "raw_bytes": 6408, "raw_sha256": "8a496c330b37a5de4d6b5beba8b0b406dad76bb32b884c183aeb5e1c3e96a9be", "source_sha256": "0dc21b2cf65515a900ac784a7c35ceaa574120205d4ab6ba61c3d15fac7cf220"}
+@MicroCFTA.SourcePruningEnumerationNativeIndex.candidate : {NativeGuard : Type} →
+  MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard →
+    MicroCFTA.EnumerationState.UVarValue MicroCFTA.SourcePruningTemplates.Symbol → Option Bool
+'MicroCFTA.SourcePruningEnumerationNativeIndex.candidate' depends on axioms: [propext]
+MicroCFTA.SourcePruningEnumerationNativeIndex.count : Nat →
+  MicroCFTA.UnionFind.Forest →
+    Int →
+      List MicroCFTA.EnumerationState.Suspended →
+        MicroCFTA.EnumerationWaitingIndex.Waiting → Option MicroCFTA.EnumerationWaitingIndex.Waiting
+'MicroCFTA.SourcePruningEnumerationNativeIndex.count' depends on axioms: [propext]
+@MicroCFTA.SourcePruningEnumerationNativeIndex.write : {EnumGuard NativeGuard : Type} →
+  MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard →
+    Nat →
+      Nat →
+        MicroCFTA.EnumerationState.UVarValue MicroCFTA.SourcePruningTemplates.Symbol →
+          List MicroCFTA.EnumerationState.Suspended →
+            List MicroCFTA.EnumerationState.Suspended →
+              MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol EnumGuard →
+                Option (MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+'MicroCFTA.SourcePruningEnumerationNativeIndex.write' depends on axioms: [propext]
+MicroCFTA.SourcePruningEnumerationNativeIndex.count_complete : ∀ (forest : MicroCFTA.UnionFind.Forest)
+  (roots : Nat → Nat),
+  MicroCFTA.EnumerationSchedule.Roots forest roots →
+    ∀ (scs : List MicroCFTA.EnumerationState.Suspended),
+      ∃ fuel,
+        ∀ (extra : Nat) (change : Int) (waiting : MicroCFTA.EnumerationWaitingIndex.Waiting),
+          MicroCFTA.SourcePruningEnumerationNativeIndex.count (fuel + extra) forest change scs waiting =
+            some (MicroCFTA.EnumerationCanonicalWaiting.count roots change scs waiting)
+'MicroCFTA.SourcePruningEnumerationNativeIndex.count_complete' depends on axioms: [propext]
+@MicroCFTA.SourcePruningEnumerationNativeIndex.gained_complete : ∀ {EnumGuard NativeGuard : Type}
+  (heap nextHeap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard),
+  MicroCFTA.SourceEqualityRequiredCache.Keeps heap nextHeap →
+    ∀ (before : MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+      (after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard) (target : Nat)
+      (oldNode : Option Nat) (oldScs incomingScs : List MicroCFTA.EnumerationState.Suspended) (handle : Nat)
+      (value : MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+      (roots : Nat → Nat),
+      MicroCFTA.EnumerationSchedule.Roots before.core.representatives roots →
+        before.core.values[target]? = some (MicroCFTA.EnumerationState.UVarValue.unenumerated oldNode oldScs) →
+          MicroCFTA.SourcePruningEnumerationNodes.lookupNode nextHeap handle = some value →
+            before.core.counter = before.core.values.length →
+              MicroCFTA.EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting →
+                (∀ (slot : Nat),
+                    MicroCFTA.SourcePruningEnumerationNativeIndex.candidate heap
+                        (before.core.values[slot]?.getD MicroCFTA.EnumerationState.UVarValue.eliminated) =
+                      some (before.expandable slot)) →
+                  ((MicroCFTA.EnumerationState.setValue target
+                              (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle)
+                                (incomingScs ++ oldScs)) >>=
+                            fun __r => MicroCFTA.EnumerationState.inheritAncestry target)
+                          before.core).run =
+                      [Except.ok ((), after)] →
+                    ∃ fuel written,
+                      (∀ (extra : Nat),
+                          MicroCFTA.SourcePruningEnumerationNativeIndex.write nextHeap (fuel + extra) target
+                              (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle) (incomingScs ++ oldScs))
+                              incomingScs [] before =
+                            some written) ∧
+                        (written.core =
+                            have __src := before.core;
+                            { counter := __src.counter, representatives := __src.representatives,
+                              values :=
+                                before.core.values.set target
+                                  (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle)
+                                    (incomingScs ++ oldScs)),
+                              obligations := __src.obligations, recursionAncestry := __src.recursionAncestry,
+                              expansionAncestry := __src.expansionAncestry }) ∧
+                          (written.expandable = fun slot =>
+                              if slot = target then
+                                !(MicroCFTA.MergedOrdinaryHeight.recursiveBoundary value &&
+                                    (incomingScs ++ oldScs).isEmpty)
+                              else before.expandable slot) ∧
+                            written.waiting =
+                                MicroCFTA.EnumerationCanonicalWaiting.count roots 1 incomingScs before.waiting ∧
+                              (MicroCFTA.EnumerationExpandableIndex.frame after written).core = after ∧
+                                after.counter = after.values.length ∧
+                                  MicroCFTA.EnumerationSchedule.Roots after.representatives roots ∧
+                                    MicroCFTA.EnumerationCanonicalWaiting.Correct roots after.values written.waiting ∧
+                                      ∀ (slot : Nat),
+                                        MicroCFTA.SourcePruningEnumerationNativeIndex.candidate nextHeap
+                                            (after.values[slot]?.getD MicroCFTA.EnumerationState.UVarValue.eliminated) =
+                                          some (written.expandable slot)
+'MicroCFTA.SourcePruningEnumerationNativeIndex.gained_complete' depends on axioms: [propext, Quot.sound]

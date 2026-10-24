@@ -1,0 +1,7 @@
+theorem count_complete
+    (forest : UnionFind.Forest) (roots : Nat → Nat)
+    (paths : Roots forest roots) (change : Int)
+    (scs : List EnumerationState.Suspended) (waiting : EnumerationWaitingIndex.Waiting) :
+    ∃ fuel, ∀ extra,
+      count (fuel + extra) forest change scs waiting =
+        some (EnumerationCanonicalWaiting.count roots change scs waiting)

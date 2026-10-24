@@ -1,0 +1,25 @@
+  if incoming = .empty then (.ok (some []), beforeCaller, queries, before, waiting)
+  else
+    match ExceptT.run (SourcePruningEnumerationTerminalPrefix.run representativeFuel first rest waiting before) with
+    | [.ok ((recorded, winner, moved), joined)] =>
+      match SourcePruningEnumerationFold.run checkEmpty nativeFuel p h recorded beforeCaller joined winner queries with
+      | (foldResult, foldCaller, foldQueries, foldOuter) =>
+        match foldResult with
+        | .error foldFault => (.error (.inr (.inl foldFault)), foldCaller, foldQueries, foldOuter, moved)
+        | .ok none => (.ok none, foldCaller, foldQueries, foldOuter, moved)
+        | .ok (some foldRaw) =>
+          match foldRaw with
+          | [] => (.ok (some []), foldCaller, foldQueries, foldOuter, moved)
+          | [.ok ((), folded)] =>
+            match SourcePruningEnumerationIncomingNode.run checkEmpty representativeFuel nativeFuel p h
+                foldCaller folded winner incoming incomingScs foldQueries with
+            | (incomingResult, afterCaller, savedQueries, read) =>
+              match incomingResult with
+              | .error incomingFault => (.error (.inr (.inl incomingFault)), afterCaller, savedQueries, read, moved)
+              | .ok none => (.ok none, afterCaller, savedQueries, read, moved)
+              | .ok (some incomingRaw) =>
+                (.ok (some (incomingRaw.map fun row => match row with
+                  | .error error => .error error
+                  | .ok result => .ok (.hole winner, result.2))), afterCaller, savedQueries, read, moved)
+          | stoppedRaw => (.error (.inr (.inr stoppedRaw)), foldCaller, foldQueries, foldOuter, moved)
+    | prefixRaw => (.error (.inl prefixRaw), beforeCaller, queries, before, waiting)

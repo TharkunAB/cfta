@@ -1,0 +1,80 @@
+{
+  "packets": [
+    {
+      "scope": "count_complete.cons",
+      "name": "tail",
+      "api": "ih",
+      "fields": [
+        {
+          "name": "tailFuel",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "tailRun",
+          "type": "∀ (extra : Nat) (change : Int) (waiting : EnumerationWaitingIndex.Waiting), count (tailFuel + extra) forest change rest waiting = some (EnumerationCanonicalWaiting.count roots change rest waiting)",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "count_complete.cons",
+      "name": "rootPath",
+      "api": "paths sc.var",
+      "fields": [
+        {
+          "name": "size",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "path",
+          "type": "UnionFind.Reaches forest sc.var (roots sc.var) size",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "count_complete.cons",
+      "name": "head",
+      "api": "SourceUnionFindRoot.root_terminates forest sc.var (roots sc.var) size path",
+      "fields": [
+        {
+          "name": "headFuel",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "headRun",
+          "type": "SourceUnionFindRoot.root headFuel forest sc.var = some (roots sc.var)",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "gained_complete",
+      "name": "count",
+      "api": "count_complete before.core.representatives roots paths incomingScs",
+      "fields": [
+        {
+          "name": "fuel",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "countRun",
+          "type": "∀ (extra : Nat) (change : Int) (waiting : EnumerationWaitingIndex.Waiting), count (fuel + extra) before.core.representatives change incomingScs waiting = some (EnumerationCanonicalWaiting.count roots change incomingScs waiting)",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    }
+  ],
+  "count": 4,
+  "field_count": 8,
+  "all_fields_used": true,
+  "no_other_named_obtains_planned": true
+}

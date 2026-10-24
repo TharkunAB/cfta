@@ -1,0 +1,85 @@
+{
+  "owner": "/tmp/mcfta-pruning-enumeration-native-index-20261025-proposal",
+  "scope_source_identity": {
+    "bytes": 27295,
+    "sha256": "8d16eb68911f2d18440cbe8ea05880a4de6431d1d9cf281fff0e29ce9393f8bd"
+  },
+  "replacements": [
+    {
+      "target": "scoped-types.json",
+      "json_path": [
+        "entries",
+        49
+      ],
+      "before": {
+        "scope": "candidate.enumerated",
+        "name": "fragment",
+        "type": "Fragments.Fragment Symbol",
+        "kind": "case binder",
+        "used": true
+      },
+      "after": {
+        "scope": "candidate.enumerated",
+        "name": "fragment",
+        "type": "Fragments.Fragment Symbol",
+        "kind": "case binder",
+        "used": false,
+        "reason": "The native classifier returns some false without inspecting the enumerated fragment.",
+        "Root_authored_binding": "anonymous constructor payload"
+      }
+    },
+    {
+      "target": "scoped-types.json",
+      "json_path": [
+        "entries",
+        84
+      ],
+      "before": {
+        "scope": "gained_complete.grownFlags.enumerated",
+        "name": "fragment",
+        "type": "Fragments.Fragment Symbol",
+        "kind": "case binder",
+        "used": true
+      },
+      "after": {
+        "scope": "gained_complete.grownFlags.enumerated",
+        "name": "fragment",
+        "type": "Fragments.Fragment Symbol",
+        "kind": "case binder",
+        "used": false,
+        "reason": "The classifier-growth branch returns the same constant false without inspecting the fragment.",
+        "Root_authored_binding": "anonymous constructor payload"
+      }
+    },
+    {
+      "target": "scoped-types.json",
+      "json_path": [
+        "entries",
+        76
+      ],
+      "before": {
+        "scope": "gained_complete.inside",
+        "name": "elementEquality",
+        "type": "before.core.values[target]'bound = .unenumerated oldNode oldScs",
+        "kind": "Exists.elim binder",
+        "used": true
+      },
+      "after": {
+        "scope": "gained_complete.inside",
+        "name": "elementEquality",
+        "type": "before.core.values[target]'bound = .unenumerated oldNode oldScs",
+        "kind": "Exists.elim binder",
+        "used": false,
+        "reason": "Exists.elim returns the bound and does not inspect the element equality.",
+        "Root_authored_binding": "_elementEquality"
+      }
+    }
+  ],
+  "record_count": 3,
+  "application": "Apply only these exact entry-object replacements as an authoritative usage overlay. Original field names are descriptive metadata labels; Root_authored_binding states anonymous payload or _elementEquality. No type/name/count/header in the original owner is overwritten.",
+  "scoped_type_count": 99,
+  "contract_count": 12,
+  "contract_lines": 76,
+  "compiler_evidence": false,
+  "pre_body_static_correction": true
+}
