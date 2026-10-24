@@ -30,8 +30,9 @@ The package was imported from
 [`TharkunAB/specftacular` at `948a246`](https://github.com/TharkunAB/specftacular/tree/948a24694256758e53925d3bd498efe05f668f51).
 
 The flag `--tests N` sets the number of random cases (1000 by default). The
-search also uses eight separately seeded random cases and 32 integer-boundary
-and list cases. These reject the recorded overflow
+search also uses eight separately seeded random cases, 40 integer-boundary
+and list cases, and 16 cases with two-element lists and a predicate that
+selects one element. These reject the recorded overflow
 and list counterexamples. Testing does not prove a law. A false law can still
 affect the rules that prune later terms. `--recheck N` tests each new law
 again on N random cases of sizes 1 to 8 and drops a law that one of them
