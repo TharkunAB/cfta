@@ -1,0 +1,1 @@
+Source/data inspection found that the actual active body-gate.json already binds V3. The retained earlier gates are v1-before-prefix-escape/body-gate.json and v2-before-slot-annotation/body-gate.json. The anticipated body-gate-v3.json did not exist. No selected program ran. The final candidate therefore retains the original verifier unchanged.

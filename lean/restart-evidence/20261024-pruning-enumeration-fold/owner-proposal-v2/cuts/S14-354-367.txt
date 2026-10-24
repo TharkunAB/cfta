@@ -1,0 +1,14 @@
+@[simp, grind =] theorem mem_cons : a ∈ b :: l ↔ a = b ∨ a ∈ l :=
+  ⟨fun h => by cases h <;> simp [Membership.mem, *],
+   fun | Or.inl rfl => by constructor | Or.inr h => by constructor; assumption⟩
+
+theorem eq_or_mem_of_mem_cons {a b : α} {l : List α} :
+    a ∈ b :: l → a = b ∨ a ∈ l := List.mem_cons.mp
+
+-- This pattern may be excessively general:
+-- it fires anytime we ae thinking about membership of lists,
+-- and constructing a list via `cons`, even if the elements are unrelated.
+-- Nevertheless in practice it is quite helpful!
+grind_pattern eq_or_mem_of_mem_cons => b :: l, a ∈ l
+
+theorem mem_cons_self {a : α} {l : List α} : a ∈ a :: l := .head ..

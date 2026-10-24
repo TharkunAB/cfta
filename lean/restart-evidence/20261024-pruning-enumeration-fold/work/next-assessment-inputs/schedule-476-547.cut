@@ -1,0 +1,72 @@
+theorem representatives_scan (values : List (UVarValue Symbol)) (roots : Nat → Nat)
+    (fuel : Nat) (scs : List Suspended) (before after : State Symbol Guard) (recorded : List Nat)
+    (valid : ScanValid values roots before)
+    (success : Success (scs.mapM fun sc => representative fuel sc.var) before recorded after) :
+    ScanValid values roots after ∧ recorded = scs.map (fun sc => roots sc.var) := by
+  obtain ⟨preserved, related⟩ := mapM_sound (fun sc => representative fuel sc.var)
+    (ScanValid values roots) (fun sc root => root = roots sc.var)
+    (fun sc before root after valid success => representative_scan values roots before after fuel sc.var root valid success)
+    scs before after recorded valid success
+  exact ⟨preserved, all₂_map_eq _ _ _ related⟩
+
+/-- Successful concrete union exposes its exact forest update and retains all values. -/
+theorem unionVariables_success (fuel left right : Nat) (before after : State Symbol Guard) :
+    Success (unionVariables fuel left right) before () after ↔
+      ∃ forest, UnionFind.union fuel fuel before.representatives left right = some forest ∧
+        after = {before with representatives := forest} := by
+  cases result : UnionFind.union fuel fuel before.representatives left right with
+  | none =>
+      simp [Success, unionVariables, result, EnumerationState.failure, bind, get, getThe, MonadStateOf.get,
+        pure, StateT.bind, StateT.get, ExceptT.bind, ExceptT.pure, ExceptT.bindCont, ExceptT.mk, ExceptT.run]
+  | some forest =>
+      simp only [Success, union_exact fuel left right before forest result, ExceptT.run]
+      simp
+
+/-- The terminal union loop retains old slots while it joins the selected classes. -/
+structure Merging (values : List (UVarValue Symbol)) (roots : Nat → Nat) (selected : List Nat)
+    (state : State Symbol Guard) : Prop where
+  values : state.values = values
+  total : UnionFind.Total state.representatives
+  joined : Joined roots selected state.representatives
+  oldRoots : ∀ uv, IsRoot state.representatives uv → roots uv = uv
+
+/-- The pre-scan establishes the union-loop invariant for the first selected class. -/
+theorem merging_initial (values : List (UVarValue Symbol)) (roots : Nat → Nat)
+    (state : State Symbol Guard) (first : Nat) (valid : ScanValid values roots state) :
+    Merging values roots [roots first] state := by
+  refine ⟨valid.values, ?_, joined_single state.representatives roots valid.roots first, ?_⟩
+  · intro uv
+    obtain ⟨size, path⟩ := valid.roots uv
+    exact ⟨roots uv, size, path⟩
+  · intro uv root
+    exact (root_iff state.representatives roots valid.roots uv).mp root
+
+/-- The actual next union extends the selected group and creates no new root indices. -/
+theorem merging_step (values : List (UVarValue Symbol)) (roots : Nat → Nat) (selected : List Nat)
+    (fuel first next : Nat) (before after : State Symbol Guard)
+    (valid : Merging values roots selected before) (firstSelected : roots first ∈ selected)
+    (success : Success (unionVariables fuel first next) before () after) :
+    Merging values roots (roots next :: selected) after := by
+  obtain ⟨forest, unionResult, rfl⟩ := (unionVariables_success fuel first next before after).mp success
+  refine ⟨valid.values, (UnionFind.union_correct valid.total unionResult).1,
+    joined_union before.representatives valid.total roots selected valid.joined fuel first next firstSelected forest unionResult, ?_⟩
+  intro uv root
+  exact valid.oldRoots uv (union_no_new_root before.representatives valid.total fuel first next forest unionResult uv root)
+
+/-- The actual batched terminal unions join every selected class, including duplicates. -/
+theorem terminal_unions (values : List (UVarValue Symbol)) (roots : Nat → Nat)
+    (selected : List Nat) (fuel first : Nat) (rest : List Suspended) (before after : State Symbol Guard)
+    (valid : Merging values roots selected before) (firstSelected : roots first ∈ selected)
+    (success : Success (rest.forM fun sc => unionVariables fuel first sc.var) before () after) :
+    Merging values roots (rest.foldl (fun selected sc => roots sc.var :: selected) selected) after := by
+  induction rest generalizing selected before with
+  | nil =>
+      obtain ⟨_, same⟩ := (success_pure () () before after).mp success
+      subst after
+      exact valid
+  | cons sc rest ih =>
+      change Success (unionVariables fuel first sc.var >>= fun _ => rest.forM fun sc => unionVariables fuel first sc.var)
+        before () after at success
+      obtain ⟨ignored, middle, firstSuccess, continued⟩ := (success_bind _ _ _ _ _).mp success
+      cases ignored
+      have validMiddle := merging_step values roots selected fuel first sc.var before middle valid firstSelected firstSuccess

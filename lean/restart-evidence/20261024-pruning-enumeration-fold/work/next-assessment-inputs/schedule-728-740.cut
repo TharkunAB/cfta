@@ -1,0 +1,13 @@
+theorem merging_representative (values : List (UVarValue Symbol)) (roots : Nat → Nat) (selected : List Nat)
+    (fuel uv target : Nat) (before after : State Symbol Guard) (valid : Merging values roots selected before)
+    (success : Success (representative fuel uv) before target after) :
+    Merging values roots selected after ∧ ∃ count, UnionFind.Reaches after.representatives uv target count := by
+  obtain ⟨found, lookup, rfl, rfl⟩ := (representative_success fuel uv before after target).mp success
+  refine ⟨⟨valid.values, UnionFind.findRoot_total valid.total lookup, ?_, ?_⟩, ?_⟩
+  · intro left right
+    exact (UnionFind.findRoot_classes valid.total lookup left right).trans (valid.joined left right)
+  · intro other root
+    exact valid.oldRoots other ((findRoot_isRoot before.representatives valid.total fuel uv found lookup other).mp root)
+  · exact ⟨found.size, (UnionFind.findRoot_correct fuel before.representatives uv found lookup).2
+      (UnionFind.findRoot_correct fuel before.representatives uv found lookup).1⟩
+

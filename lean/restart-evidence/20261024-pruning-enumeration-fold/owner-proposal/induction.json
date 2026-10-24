@@ -1,0 +1,49 @@
+{
+  "count": 1,
+  "scope": "run_complete",
+  "literal": "induction sources generalizing inventory beforeCaller before memos with",
+  "constructors": [
+    "nil",
+    "cons source rest ih"
+  ],
+  "generalized": {
+    "inventory": "Inventory",
+    "beforeCaller": "Caller width",
+    "before": "EnumerationState.State Symbol EnumGuard",
+    "memos": "Memos"
+  },
+  "automatically_dependent_generalized": [
+    "initial",
+    "realized",
+    "targetPending",
+    "selected",
+    "ranges"
+  ],
+  "IH_name": "ih",
+  "IH_type": "\u2200 (inventory : Inventory) (beforeCaller : Caller width) (before : EnumerationState.State Symbol EnumGuard) (memos : Memos),\n  Context formulas solver inventory beforeCaller memos \u2192\n  PendingRealized beforeCaller.checked.native.machine.heap before \u2192\n  (\u2203 (node : Option Nat) (scs : List EnumerationState.Suspended), before.values[target]? = some (.unenumerated node scs)) \u2192\n  (\u2200 source \u2208 rest, before.values[source]? = some .eliminated \u2228 \u2203 (node : Option Nat) (scs : List EnumerationState.Suspended), before.values[source]? = some (.unenumerated node scs)) \u2192\n  Ranges checkEmpty rest beforeCaller before target memos.query \u2192\n    \u2203 (fuel p h : Nat)\n      (raw : List (Except EnumerationState.Error (Unit \u00d7 EnumerationState.State Symbol EnumGuard)))\n      (afterCaller : Caller width) (after : EnumerationState.State Symbol EnumGuard)\n      (savedQueries : Queries) (final : Memos) (next : Inventory),\n      (\u2200 extra P H, p \u2264 P \u2192 h \u2264 H \u2192\n        run checkEmpty (fuel + extra) P H rest beforeCaller before target memos.query =\n          (.ok (some raw), afterCaller, savedQueries, after)) \u2227\n      Post formulas solver next beforeCaller afterCaller final \u2227 final.query = savedQueries \u2227\n      PendingRealized afterCaller.checked.native.machine.heap after \u2227\n      (raw = [] \u2228 raw = [.ok ((), after)]) \u2227\n      (raw = [.ok ((), after)] \u2192\n        (\u2203 (node : Option Nat) (scs : List EnumerationState.Suspended),\n          after.values[target]? = some (.unenumerated node scs)) \u2227\n        \u2200 source \u2208 rest, source \u2260 target \u2192 after.values[source]? = some .eliminated) \u2227\n      (\u2200 (slot : Nat), before.values[slot]? = some .eliminated \u2192 after.values[slot]? = some .eliminated) \u2227\n      after.values.length = before.values.length \u2227\n      after.representatives = before.representatives \u2227 after.counter = before.counter \u2227\n      after.obligations = before.obligations \u2227 after.expansionAncestry = before.expansionAncestry \u2227\n      (\u2200 slot, slot \u2260 target \u2192 after.recursionAncestry slot = before.recursionAncestry slot) \u2227\n      (raw = [] \u2192\n        \u2203 (\u00abprefix\u00bb : List Nat) (source : Nat) (suffix : List Nat)\n          (prefixCaller : Caller width) (prefixEnum : EnumerationState.State Symbol EnumGuard)\n          (prefixQueries : Queries) (action : EnumerateM Symbol EnumGuard Unit),\n          rest = \u00abprefix\u00bb ++ source :: suffix \u2227\n          (\u2200 extra P H, p \u2264 P \u2192 h \u2264 H \u2192\n            run checkEmpty (fuel + extra) P H \u00abprefix\u00bb beforeCaller before target memos.query =\n              (.ok (some [.ok ((), prefixEnum)]), prefixCaller, prefixQueries, prefixEnum)) \u2227\n          (\u2200 extra P H, p \u2264 P \u2192 h \u2264 H \u2192\n            SourcePruningEnumerationDispatch.dispatch checkEmpty (fuel + extra) P H\n              prefixCaller prefixEnum source target prefixQueries =\n                (.ok (some action), afterCaller, savedQueries)) \u2227\n          ExceptT.run (action prefixEnum) = [] \u2227 after = prefixEnum)\n",
+  "IH_call_count": 1,
+  "IH_call_inputs": [
+    "headInventory",
+    "headCaller",
+    "headAfter",
+    "headMemos",
+    "headPost.context",
+    "headRealized",
+    "headTarget",
+    "headSelected",
+    "tailRanges"
+  ],
+  "IH_target": "literal run_complete result specialized to rest; no successful-tail assumption",
+  "definition_recursion": [
+    {
+      "name": "run",
+      "argument": "sources",
+      "recursive_input": "rest; only after actual singleton success"
+    },
+    {
+      "name": "Ranges",
+      "argument": "sources",
+      "recursive_input": "rest; under actual dispatch and singleton implications"
+    }
+  ]
+}

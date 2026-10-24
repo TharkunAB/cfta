@@ -1,0 +1,19 @@
+--- basis/verify.py
++++ candidate/verify.py
+@@ -108,14 +108,14 @@
+ assert len(re.findall(rb'^local instance ', source, re.M)) == frozen['local_instance_count']
+ assert frozen['global_instance_count'] == 0
+ assert len(source.splitlines()) <= frozen['proposed_hard_cap']
+-assert sha((here / 'owner-proposal/FROZEN.json').read_bytes()) == load('work/body-gate.json')['frozen_sha256']
++assert sha((here / 'owner-proposal/FROZEN.json').read_bytes()) == load('work/body-gate-v2.json')['frozen_sha256']
+ assert {p.relative_to(here / 'owner-proposal').as_posix() for p in (here / 'owner-proposal').rglob('*') if p.is_file()} == set(pins) | {'pins.json', 'FROZEN.json'}
+ for name, pin in pins.items():
+     assert not Path(name).is_absolute() and '..' not in Path(name).parts
+     data = (here / 'owner-proposal' / name).read_bytes()
+     assert len(data) == pin['bytes'] and sha(data) == pin['sha256']
+ contracts = load('owner-proposal/contracts.json')
+-assert contracts == load('work/body-gate.json')['contracts']
++assert contracts == load('work/body-gate-v2.json')['contracts']
+ for name, literal in contracts.items():
+     assert isinstance(literal, str)
+     data = (here / 'owner-proposal' / name).read_bytes()

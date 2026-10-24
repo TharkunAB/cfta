@@ -1,0 +1,8 @@
+have changedFrame :
+          (∀ slot, before.values[slot]? = some .eliminated →
+            (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))).values[slot]? = some .eliminated) ∧
+          (∀ remaining ∈ rest,
+            (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))).values[remaining]? = some .eliminated ∨
+              ∃ (node : Option Nat) (scs : List EnumerationState.Suspended),
+                (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))).values[remaining]? =
+                  some (.unenumerated node scs))

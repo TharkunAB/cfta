@@ -1,0 +1,6 @@
+/-- An actual trace to an inner return retains word checks at the exact appended continuation. -/
+theorem WordRanges.after_body [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (control : Control A) (next : A → Code Symbol Guard B) (state after : State width)
+    (ranges : WordRanges (control.bind next) state) (fuel : Nat) (value : A)
+    (trace : Steps fuel control state (.code (.pure value)) after) : WordRanges (.code (next value)) after := by
+  have appended := trace.bind _ _ _ _ _ next

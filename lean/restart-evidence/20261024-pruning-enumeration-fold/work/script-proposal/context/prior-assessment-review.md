@@ -1,0 +1,13 @@
+[2026-10-24 20:51:15 CEST] FINAL — PROSPECTIVE SOURCE ASSESSMENT CLEAR; no declaration/body authority.
+
+Read /tmp/mcfta-pruning-enumeration-dispatch-20261024-next-assessment.md, 7838 bytes, SHA256 cd767f5a5e549c3a7d7feb9a80b22c217834f3d387686a03e8c2f552a0bdb796. Independently verified all nine whole-source byte/hash pins and all fifteen exact LF-retaining cut pins/591 lines. Relevant declarations and native operations were personally read; current Dispatch435 was already whole-reviewed at fb2dcd0c1c5ba5abee27afeda86cb676682590f232b9c24ac75a759f843e970d.
+
+The proposed source order is correct. Enumeration.hs728–747 records representatives before unions, reads the winner, transfers counts from distinct old roots excluding it, then assimilates the ORIGINAL ordered list with duplicates/winner retained. The suffix must execute each captured action once at the current enum state and retain the reached native Caller/query pair even at first rejection/interruption. A rejection does not manufacture a completed fold.
+
+The important distinction is explicit and accurate: Schedule.representatives_scan, terminal_unions and merging_representative consume Success premises; CanonicalUnion.recorded_transfer_correct consumes THREE actual prefix successes. They identify observations already supplied and do not produce them. Execution.representative_terminates/unionVariables_terminates derive finite primitive successes from Total. Generic mapM/forM termination additionally requires pointwise finite-step/retention proofs. A new mixed Caller/query fold still needs its own common-bound composition. An observed-prefix input permits only a suffix theorem until the actual prefix is constructed.
+
+Safe-entry and per-reached-request WordRanges must remain concrete obligations, without assuming fold/action success. Current slots plus earlier exact writes/no-ops can derive later safe entries. Post.context and final.query provide the correct memo-threading route. No global query callback law or Graph intersection equality is justified.
+
+CanonicalWaiting.assimilation_correct applies from actual reads and concatenated references. PureSelection.assimilate_correct still requires its Graph law. Native indexes/count-width extraction remain separate. Node merging is also separate: native515–526 writes and inherits ancestry BEFORE rejection, unlike assimilation. A fake source slot would change that operation.
+
+The estimate200–320 is prospective. Full prefix construction, suspended-slot origins, incoming-node merging and whole-driver correspondence remain open; H6/ACTIVE unchanged. No new owner, header, body, compiler/program/import, Git/network/board or repository mutation occurred.

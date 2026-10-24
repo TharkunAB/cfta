@@ -1,0 +1,547 @@
+{
+  "packets": [
+    {
+      "scope": "headPacket",
+      "api": "targetPending",
+      "name": "targetInput",
+      "fields": [
+        {
+          "name": "targetNode",
+          "type": "Option Nat",
+          "used": true
+        },
+        {
+          "name": "targetScs",
+          "type": "List EnumerationState.Suspended",
+          "used": true
+        },
+        {
+          "name": "targetPendingStored",
+          "type": "before.values[target]? = some (.unenumerated targetNode targetScs)",
+          "used": true
+        }
+      ]
+    },
+    {
+      "scope": "headPacket/slots pending source",
+      "api": "sourceSelected",
+      "name": "sourceInput",
+      "fields": [
+        {
+          "name": "sourceNode",
+          "type": "Option Nat",
+          "used": true
+        },
+        {
+          "name": "sourceScs",
+          "type": "List EnumerationState.Suspended",
+          "used": true
+        },
+        {
+          "name": "sourcePendingStored",
+          "type": "before.values[source]? = some (.unenumerated sourceNode sourceScs)",
+          "used": true
+        }
+      ]
+    },
+    {
+      "scope": "headPacket",
+      "api": "SourcePruningEnumerationDispatch.dispatch_complete",
+      "name": "dispatch",
+      "fields": [
+        {
+          "name": "dispatchFuel",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "dispatchP",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "dispatchH",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "action",
+          "type": "EnumerateM Symbol EnumGuard Unit",
+          "used": true
+        },
+        {
+          "name": "dispatchCaller",
+          "type": "Caller width",
+          "used": true
+        },
+        {
+          "name": "dispatchQueries",
+          "type": "Queries",
+          "used": true
+        },
+        {
+          "name": "dispatchMemos",
+          "type": "Memos",
+          "used": true
+        },
+        {
+          "name": "dispatchInventory",
+          "type": "Inventory",
+          "used": true
+        },
+        {
+          "name": "dispatchStable",
+          "type": "\u2200 extra P H, dispatchP \u2264 P \u2192 dispatchH \u2264 H \u2192 SourcePruningEnumerationDispatch.dispatch checkEmpty (dispatchFuel + extra) P H beforeCaller before source target memos.query = (.ok (some action), dispatchCaller, dispatchQueries)",
+          "used": true
+        },
+        {
+          "name": "dispatchPost",
+          "type": "Post formulas solver dispatchInventory beforeCaller dispatchCaller dispatchMemos",
+          "used": true
+        },
+        {
+          "name": "dispatchQuerySame",
+          "type": "dispatchMemos.query = dispatchQueries",
+          "used": true
+        },
+        {
+          "name": "unchangedRealized",
+          "type": "PendingRealized dispatchCaller.checked.native.machine.heap before",
+          "used": true
+        },
+        {
+          "name": "noopOutcome",
+          "type": "(source = target \u2228 before.values[source]? = some .eliminated) \u2192 ExceptT.run (action before) = [.ok ((), before)] \u2227 dispatchCaller = beforeCaller \u2227 dispatchMemos = memos \u2227 dispatchInventory = inventory",
+          "used": true
+        },
+        {
+          "name": "changedOutcome",
+          "type": "source \u2260 target \u2192 before.values[source]? \u2260 some .eliminated \u2192 \u2203 (sourceNode targetNode merged : Option Nat) (sourceScs targetScs : List EnumerationState.Suspended), (before.values[source]? = some (.unenumerated sourceNode sourceScs)) \u2227 (before.values[target]? = some (.unenumerated targetNode targetScs)) \u2227 (ExceptT.run (action before) = (if merged = some 0 then [] else [.ok ((), assimilated before target source (.unenumerated merged (sourceScs ++ targetScs)))])) \u2227 (merged \u2260 some 0 \u2192 (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))).values[target]? = some (.unenumerated merged (sourceScs ++ targetScs)) \u2227 (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))).values[source]? = some .eliminated \u2227 PendingRealized dispatchCaller.checked.native.machine.heap (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs)))) \u2227 ((sourceNode = none \u2228 targetNode = none) \u2192 merged = sourceNode.orElse (fun _ => targetNode) \u2227 dispatchCaller = beforeCaller \u2227 dispatchMemos = memos \u2227 dispatchInventory = inventory) \u2227 (\u2200 leftHandle rightHandle, sourceNode = some leftHandle \u2192 targetNode = some rightHandle \u2192 \u2203 (left right query replacement : Node) (queried : SourceEqualityNativeDemand.State width) (handle : Nat), lookupNode beforeCaller.checked.native.machine.heap leftHandle = some left \u2227 lookupNode beforeCaller.checked.native.machine.heap rightHandle = some right \u2227 dispatchInventory.source = beforeCaller.checked.native.machine.heap \u2227 dispatchInventory.roots = inventory.roots ++ [left, right] \u2227 SourceCurrentAllocatedTargetQuery.Receipt formulas solver dispatchInventory left right beforeCaller.checked query queried memos \u2227 merged = some handle \u2227 encodeNode replacement = some handle \u2227 lookupNode dispatchCaller.checked.native.machine.heap handle = some replacement \u2227 InternedProbeProvenance.Available dispatchCaller.checked.native.machine.heap replacement \u2227 replacement.free = [] \u2227 (\u2200 ambient term, InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term \u2194 InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient left term \u2227 InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient right term) \u2227 (checkEmpty = false \u2192 replacement = query \u2227 dispatchCaller = SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge \u2227 dispatchMemos = memos) \u2227 (checkEmpty = true \u2192 \u2203 reached answer guardSaved, SourceEndpointMemo.run query memos.query = (reached, guardSaved) \u2227 SourceEndpointMemoCorrect.Checked queried.native.machine.heap memos.query (SourceCurrentEmptinessMerge.reaches query) (reached, guardSaved) \u2227 (\u2200 P H, dispatchP \u2264 P \u2192 dispatchH \u2264 H \u2192 SourcePruningEnumerationEnabledEmpty.check P H query queried beforeCaller.fourth memos.query = (.done answer dispatchCaller.checked dispatchCaller.fourth, guardSaved)) \u2227 dispatchQueries = guardSaved \u2227 replacement = (if answer then .empty else query) \u2227 (reached = false \u2192 answer = false \u2227 dispatchCaller.checked = queried \u2227 dispatchCaller.fourth = beforeCaller.fourth \u2227 dispatchMemos = {memos with query := guardSaved}) \u2227 (reached = true \u2192 \u2203 (reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula), dispatchCaller.checked = SourceCurrentAllocatedQueryMemo.advancePhysical queried reachedPhysical \u2227 \u2203 actual : SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query (SourceCurrentAllocatedNativeEffects.physical queried) answer reachedPhysical dispatchCaller.fourth, SourceCurrentConjunctionGlobalMemos.CallReads actual {memos with query := guardSaved} dispatchMemos)))",
+          "used": true
+        }
+      ]
+    },
+    {
+      "scope": "headPacket/non-noop",
+      "api": "changedOutcome different notEliminated",
+      "name": "changed",
+      "fields": [
+        {
+          "name": "sourceNode",
+          "type": "Option Nat",
+          "used": true
+        },
+        {
+          "name": "targetNode",
+          "type": "Option Nat",
+          "used": true
+        },
+        {
+          "name": "merged",
+          "type": "Option Nat",
+          "used": true
+        },
+        {
+          "name": "sourceScs",
+          "type": "List EnumerationState.Suspended",
+          "used": true
+        },
+        {
+          "name": "targetScs",
+          "type": "List EnumerationState.Suspended",
+          "used": true
+        },
+        {
+          "name": "sourceStored",
+          "type": "before.values[source]? = some (.unenumerated sourceNode sourceScs)",
+          "used": true
+        },
+        {
+          "name": "targetStored",
+          "type": "before.values[target]? = some (.unenumerated targetNode targetScs)",
+          "used": true
+        },
+        {
+          "name": "actionRaw",
+          "type": "ExceptT.run (action before) = (if merged = some 0 then [] else [.ok ((), assimilated before target source (.unenumerated merged (sourceScs ++ targetScs)))])",
+          "used": true
+        },
+        {
+          "name": "surviving",
+          "type": "merged \u2260 some 0 \u2192 (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))).values[target]? = some (.unenumerated merged (sourceScs ++ targetScs)) \u2227 (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))).values[source]? = some .eliminated \u2227 PendingRealized dispatchCaller.checked.native.machine.heap (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs)))",
+          "used": true
+        },
+        {
+          "name": "optionalOutcome",
+          "type": "(sourceNode = none \u2228 targetNode = none) \u2192 merged = sourceNode.orElse (fun _ => targetNode) \u2227 dispatchCaller = beforeCaller \u2227 dispatchMemos = memos \u2227 dispatchInventory = inventory",
+          "used": false,
+          "skip_reason": "The fold uses the actual raw/state and Post packet; optional input classification was proved by Dispatch."
+        },
+        {
+          "name": "presentOutcome",
+          "type": "\u2200 leftHandle rightHandle, sourceNode = some leftHandle \u2192 targetNode = some rightHandle \u2192 \u2203 (left right query replacement : Node) (queried : SourceEqualityNativeDemand.State width) (handle : Nat), lookupNode beforeCaller.checked.native.machine.heap leftHandle = some left \u2227 lookupNode beforeCaller.checked.native.machine.heap rightHandle = some right \u2227 dispatchInventory.source = beforeCaller.checked.native.machine.heap \u2227 dispatchInventory.roots = inventory.roots ++ [left, right] \u2227 SourceCurrentAllocatedTargetQuery.Receipt formulas solver dispatchInventory left right beforeCaller.checked query queried memos \u2227 merged = some handle \u2227 encodeNode replacement = some handle \u2227 lookupNode dispatchCaller.checked.native.machine.heap handle = some replacement \u2227 InternedProbeProvenance.Available dispatchCaller.checked.native.machine.heap replacement \u2227 replacement.free = [] \u2227 (\u2200 ambient term, InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term \u2194 InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient left term \u2227 InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient right term) \u2227 (checkEmpty = false \u2192 replacement = query \u2227 dispatchCaller = SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge \u2227 dispatchMemos = memos) \u2227 (checkEmpty = true \u2192 \u2203 reached answer guardSaved, SourceEndpointMemo.run query memos.query = (reached, guardSaved) \u2227 SourceEndpointMemoCorrect.Checked queried.native.machine.heap memos.query (SourceCurrentEmptinessMerge.reaches query) (reached, guardSaved) \u2227 (\u2200 P H, dispatchP \u2264 P \u2192 dispatchH \u2264 H \u2192 SourcePruningEnumerationEnabledEmpty.check P H query queried beforeCaller.fourth memos.query = (.done answer dispatchCaller.checked dispatchCaller.fourth, guardSaved)) \u2227 dispatchQueries = guardSaved \u2227 replacement = (if answer then .empty else query) \u2227 (reached = false \u2192 answer = false \u2227 dispatchCaller.checked = queried \u2227 dispatchCaller.fourth = beforeCaller.fourth \u2227 dispatchMemos = {memos with query := guardSaved}) \u2227 (reached = true \u2192 \u2203 (reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula), dispatchCaller.checked = SourceCurrentAllocatedQueryMemo.advancePhysical queried reachedPhysical \u2227 \u2203 actual : SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query (SourceCurrentAllocatedNativeEffects.physical queried) answer reachedPhysical dispatchCaller.fourth, SourceCurrentConjunctionGlobalMemos.CallReads actual {memos with query := guardSaved} dispatchMemos))",
+          "used": false,
+          "skip_reason": "No query/guard/language packet is duplicated or re-proved by the fold."
+        }
+      ]
+    },
+    {
+      "scope": "headPacket/nonempty",
+      "api": "surviving empty",
+      "name": "survived",
+      "fields": [
+        {
+          "name": "targetAfterStored",
+          "type": "(assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))).values[target]? = some (.unenumerated merged (sourceScs ++ targetScs))",
+          "used": true
+        },
+        {
+          "name": "sourceAfterStored",
+          "type": "(assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))).values[source]? = some .eliminated",
+          "used": true
+        },
+        {
+          "name": "changedRealized",
+          "type": "PendingRealized dispatchCaller.checked.native.machine.heap (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs)))",
+          "used": true
+        }
+      ]
+    },
+    {
+      "scope": "cons",
+      "api": "headPacket",
+      "name": "head",
+      "fields": [
+        {
+          "name": "headFuel",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "headP",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "headH",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "action",
+          "type": "EnumerateM Symbol EnumGuard Unit",
+          "used": true
+        },
+        {
+          "name": "headCaller",
+          "type": "Caller width",
+          "used": true
+        },
+        {
+          "name": "headAfter",
+          "type": "EnumerationState.State Symbol EnumGuard",
+          "used": true
+        },
+        {
+          "name": "headQueries",
+          "type": "Queries",
+          "used": true
+        },
+        {
+          "name": "headMemos",
+          "type": "Memos",
+          "used": true
+        },
+        {
+          "name": "headInventory",
+          "type": "Inventory",
+          "used": true
+        },
+        {
+          "name": "headRun",
+          "type": "\u2200 extra P H, headP \u2264 P \u2192 headH \u2264 H \u2192 SourcePruningEnumerationDispatch.dispatch checkEmpty (headFuel + extra) P H beforeCaller before source target memos.query = (.ok (some action), headCaller, headQueries)",
+          "used": true
+        },
+        {
+          "name": "headPost",
+          "type": "Post formulas solver headInventory beforeCaller headCaller headMemos",
+          "used": true
+        },
+        {
+          "name": "headQuerySame",
+          "type": "headMemos.query = headQueries",
+          "used": true
+        },
+        {
+          "name": "headRealized",
+          "type": "PendingRealized headCaller.checked.native.machine.heap headAfter",
+          "used": true
+        },
+        {
+          "name": "headShape",
+          "type": "ExceptT.run (action before) = [] \u2228 ExceptT.run (action before) = [.ok ((), headAfter)]",
+          "used": true
+        },
+        {
+          "name": "headRejectedSame",
+          "type": "ExceptT.run (action before) = [] \u2192 headAfter = before",
+          "used": true
+        },
+        {
+          "name": "headTarget",
+          "type": "\u2203 (node : Option Nat) (scs : List EnumerationState.Suspended), headAfter.values[target]? = some (.unenumerated node scs)",
+          "used": true
+        },
+        {
+          "name": "headSelected",
+          "type": "\u2200 remaining \u2208 rest, headAfter.values[remaining]? = some .eliminated \u2228 \u2203 (node : Option Nat) (scs : List EnumerationState.Suspended), headAfter.values[remaining]? = some (.unenumerated node scs)",
+          "used": true
+        },
+        {
+          "name": "headSource",
+          "type": "source \u2260 target \u2192 ExceptT.run (action before) = [.ok ((), headAfter)] \u2192 headAfter.values[source]? = some .eliminated",
+          "used": true
+        },
+        {
+          "name": "headEliminated",
+          "type": "\u2200 slot, before.values[slot]? = some .eliminated \u2192 headAfter.values[slot]? = some .eliminated",
+          "used": true
+        },
+        {
+          "name": "headLength",
+          "type": "headAfter.values.length = before.values.length",
+          "used": true
+        },
+        {
+          "name": "headRepresentatives",
+          "type": "headAfter.representatives = before.representatives",
+          "used": true
+        },
+        {
+          "name": "headCounter",
+          "type": "headAfter.counter = before.counter",
+          "used": true
+        },
+        {
+          "name": "headObligations",
+          "type": "headAfter.obligations = before.obligations",
+          "used": true
+        },
+        {
+          "name": "headExpansion",
+          "type": "headAfter.expansionAncestry = before.expansionAncestry",
+          "used": true
+        },
+        {
+          "name": "headAncestry",
+          "type": "\u2200 slot, slot \u2260 target \u2192 headAfter.recursionAncestry slot = before.recursionAncestry slot",
+          "used": true
+        }
+      ]
+    },
+    {
+      "scope": "cons/successful head",
+      "api": "ih headInventory headCaller headAfter headMemos headPost.context headRealized headTarget headSelected tailRanges",
+      "name": "tail",
+      "fields": [
+        {
+          "name": "tailFuel",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "tailP",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "tailH",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "tailRaw",
+          "type": "List (Except EnumerationState.Error (Unit \u00d7 EnumerationState.State Symbol EnumGuard))",
+          "used": true
+        },
+        {
+          "name": "tailCaller",
+          "type": "Caller width",
+          "used": true
+        },
+        {
+          "name": "tailAfter",
+          "type": "EnumerationState.State Symbol EnumGuard",
+          "used": true
+        },
+        {
+          "name": "tailQueries",
+          "type": "Queries",
+          "used": true
+        },
+        {
+          "name": "tailMemos",
+          "type": "Memos",
+          "used": true
+        },
+        {
+          "name": "tailInventory",
+          "type": "Inventory",
+          "used": true
+        },
+        {
+          "name": "tailRun",
+          "type": "\u2200 extra P H, tailP \u2264 P \u2192 tailH \u2264 H \u2192 run checkEmpty (tailFuel + extra) P H rest headCaller headAfter target headMemos.query = (.ok (some tailRaw), tailCaller, tailQueries, tailAfter)",
+          "used": true
+        },
+        {
+          "name": "tailPost",
+          "type": "Post formulas solver tailInventory headCaller tailCaller tailMemos",
+          "used": true
+        },
+        {
+          "name": "tailQuerySame",
+          "type": "tailMemos.query = tailQueries",
+          "used": true
+        },
+        {
+          "name": "tailRealized",
+          "type": "PendingRealized tailCaller.checked.native.machine.heap tailAfter",
+          "used": true
+        },
+        {
+          "name": "tailShape",
+          "type": "tailRaw = [] \u2228 tailRaw = [.ok ((), tailAfter)]",
+          "used": true
+        },
+        {
+          "name": "tailCompleted",
+          "type": "tailRaw = [.ok ((), tailAfter)] \u2192 (\u2203 (node : Option Nat) (scs : List EnumerationState.Suspended), tailAfter.values[target]? = some (.unenumerated node scs)) \u2227 \u2200 remaining \u2208 rest, remaining \u2260 target \u2192 tailAfter.values[remaining]? = some .eliminated",
+          "used": true
+        },
+        {
+          "name": "tailEliminated",
+          "type": "\u2200 slot, headAfter.values[slot]? = some .eliminated \u2192 tailAfter.values[slot]? = some .eliminated",
+          "used": true
+        },
+        {
+          "name": "tailLength",
+          "type": "tailAfter.values.length = headAfter.values.length",
+          "used": true
+        },
+        {
+          "name": "tailRepresentatives",
+          "type": "tailAfter.representatives = headAfter.representatives",
+          "used": true
+        },
+        {
+          "name": "tailCounter",
+          "type": "tailAfter.counter = headAfter.counter",
+          "used": true
+        },
+        {
+          "name": "tailObligations",
+          "type": "tailAfter.obligations = headAfter.obligations",
+          "used": true
+        },
+        {
+          "name": "tailExpansion",
+          "type": "tailAfter.expansionAncestry = headAfter.expansionAncestry",
+          "used": true
+        },
+        {
+          "name": "tailAncestry",
+          "type": "\u2200 slot, slot \u2260 target \u2192 tailAfter.recursionAncestry slot = headAfter.recursionAncestry slot",
+          "used": true
+        },
+        {
+          "name": "tailRejection",
+          "type": "tailRaw = [] \u2192 \u2203 (prefix : List Nat) (rejectSource : Nat) (suffix : List Nat) (prefixCaller : Caller width) (prefixEnum : EnumerationState.State Symbol EnumGuard) (prefixQueries : Queries) (rejectAction : EnumerateM Symbol EnumGuard Unit), (rest = prefix ++ rejectSource :: suffix) \u2227 (\u2200 extra P H, tailP \u2264 P \u2192 tailH \u2264 H \u2192 run checkEmpty (tailFuel + extra) P H prefix headCaller headAfter target headMemos.query = (.ok (some [.ok ((), prefixEnum)]), prefixCaller, prefixQueries, prefixEnum)) \u2227 (\u2200 extra P H, tailP \u2264 P \u2192 tailH \u2264 H \u2192 SourcePruningEnumerationDispatch.dispatch checkEmpty (tailFuel + extra) P H prefixCaller prefixEnum rejectSource target prefixQueries = (.ok (some rejectAction), tailCaller, tailQueries)) \u2227 (ExceptT.run (rejectAction prefixEnum) = []) \u2227 (tailAfter = prefixEnum)",
+          "used": true
+        }
+      ]
+    },
+    {
+      "scope": "cons/tail rejection",
+      "api": "tailRejection tailRejected",
+      "name": "first rejection",
+      "fields": [
+        {
+          "name": "prefix",
+          "type": "List Nat",
+          "used": true
+        },
+        {
+          "name": "rejectSource",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "suffix",
+          "type": "List Nat",
+          "used": true
+        },
+        {
+          "name": "prefixCaller",
+          "type": "Caller width",
+          "used": true
+        },
+        {
+          "name": "prefixEnum",
+          "type": "EnumerationState.State Symbol EnumGuard",
+          "used": true
+        },
+        {
+          "name": "prefixQueries",
+          "type": "Queries",
+          "used": true
+        },
+        {
+          "name": "rejectAction",
+          "type": "EnumerateM Symbol EnumGuard Unit",
+          "used": true
+        },
+        {
+          "name": "split",
+          "type": "rest = prefix ++ rejectSource :: suffix",
+          "used": true
+        },
+        {
+          "name": "prefixRun",
+          "type": "\u2200 extra P H, tailP \u2264 P \u2192 tailH \u2264 H \u2192 run checkEmpty (tailFuel + extra) P H prefix headCaller headAfter target headMemos.query = (.ok (some [.ok ((), prefixEnum)]), prefixCaller, prefixQueries, prefixEnum)",
+          "used": true
+        },
+        {
+          "name": "rejectRun",
+          "type": "\u2200 extra P H, tailP \u2264 P \u2192 tailH \u2264 H \u2192 SourcePruningEnumerationDispatch.dispatch checkEmpty (tailFuel + extra) P H prefixCaller prefixEnum rejectSource target prefixQueries = (.ok (some rejectAction), tailCaller, tailQueries)",
+          "used": true
+        },
+        {
+          "name": "rejectRaw",
+          "type": "ExceptT.run (rejectAction prefixEnum) = []",
+          "used": true
+        },
+        {
+          "name": "rejectedAfter",
+          "type": "tailAfter = prefixEnum",
+          "used": true
+        }
+      ]
+    }
+  ],
+  "count": 8,
+  "field_count": 94,
+  "skipped_fields": [
+    {
+      "packet": "changed",
+      "field": "optionalOutcome",
+      "reason": "The fold uses the actual raw/state and Post packet; optional input classification was proved by Dispatch."
+    },
+    {
+      "packet": "changed",
+      "field": "presentOutcome",
+      "reason": "No query/guard/language packet is duplicated or re-proved by the fold."
+    }
+  ],
+  "note": "All producer packet fields are listed, including unused nested semantic outcomes. Local head and IH packets contain no copied query/guard receipt."
+}

@@ -1,0 +1,784 @@
+{
+  "definition_cases": [
+    {
+      "scope": "run",
+      "constructor": "sources nil",
+      "fields": []
+    },
+    {
+      "scope": "run",
+      "constructor": "sources cons",
+      "fields": [
+        {
+          "name": "source",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "rest",
+          "type": "List Nat",
+          "used": true
+        }
+      ]
+    },
+    {
+      "scope": "run/observation",
+      "constructor": "error",
+      "fields": [
+        {
+          "name": "fault",
+          "type": "SourceEqualityNativeDemand.Outcome width Node \u2295 SourceCurrentAllocatedConjunctionWorker.Outcome width",
+          "used": true
+        }
+      ]
+    },
+    {
+      "scope": "run/observation",
+      "constructor": "ok none",
+      "fields": []
+    },
+    {
+      "scope": "run/observation",
+      "constructor": "ok some",
+      "fields": [
+        {
+          "name": "action",
+          "type": "EnumerateM Symbol EnumGuard Unit",
+          "used": true
+        }
+      ]
+    },
+    {
+      "scope": "run/raw",
+      "constructor": "exact singleton ok Unit",
+      "fields": [
+        {
+          "name": "after",
+          "type": "EnumerationState.State Symbol EnumGuard",
+          "used": true
+        }
+      ]
+    },
+    {
+      "scope": "run/raw",
+      "constructor": "all other lists preserved verbatim",
+      "fields": []
+    },
+    {
+      "scope": "Ranges",
+      "constructor": "sources nil",
+      "fields": []
+    },
+    {
+      "scope": "Ranges",
+      "constructor": "sources cons",
+      "fields": [
+        {
+          "name": "source",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "rest",
+          "type": "List Nat",
+          "used": true
+        }
+      ]
+    },
+    {
+      "scope": "Ranges/head pending-pair",
+      "constructor": "some unenumerated some left / some unenumerated some right",
+      "fields": [
+        {
+          "name": "left",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "right",
+          "type": "Nat",
+          "used": true
+        }
+      ]
+    },
+    {
+      "scope": "Ranges/head decoded-pair",
+      "constructor": "some first / some second",
+      "fields": [
+        {
+          "name": "first",
+          "type": "Node",
+          "used": true
+        },
+        {
+          "name": "second",
+          "type": "Node",
+          "used": true
+        }
+      ]
+    },
+    {
+      "scope": "Ranges/head",
+      "constructor": "all other source/target/lookup shapes",
+      "fields": []
+    },
+    {
+      "scope": "run/observation product",
+      "constructor": "actual triple unpack",
+      "fields": [
+        {
+          "name": "reachedCaller",
+          "type": "Caller width",
+          "used": true
+        },
+        {
+          "name": "savedQueries",
+          "type": "Queries",
+          "used": true
+        }
+      ]
+    }
+  ],
+  "proof_cases": [
+    {
+      "scope": "run_complete",
+      "constructor": "nil",
+      "fields": []
+    },
+    {
+      "scope": "run_complete",
+      "constructor": "cons",
+      "fields": [
+        {
+          "name": "source",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "rest",
+          "type": "List Nat",
+          "used": true
+        },
+        {
+          "name": "ih",
+          "type": "\u2200 (inventory : Inventory) (beforeCaller : Caller width) (before : EnumerationState.State Symbol EnumGuard) (memos : Memos),\n  Context formulas solver inventory beforeCaller memos \u2192\n  PendingRealized beforeCaller.checked.native.machine.heap before \u2192\n  (\u2203 (node : Option Nat) (scs : List EnumerationState.Suspended), before.values[target]? = some (.unenumerated node scs)) \u2192\n  (\u2200 source \u2208 rest, before.values[source]? = some .eliminated \u2228 \u2203 (node : Option Nat) (scs : List EnumerationState.Suspended), before.values[source]? = some (.unenumerated node scs)) \u2192\n  Ranges checkEmpty rest beforeCaller before target memos.query \u2192\n    \u2203 (fuel p h : Nat)\n      (raw : List (Except EnumerationState.Error (Unit \u00d7 EnumerationState.State Symbol EnumGuard)))\n      (afterCaller : Caller width) (after : EnumerationState.State Symbol EnumGuard)\n      (savedQueries : Queries) (final : Memos) (next : Inventory),\n      (\u2200 extra P H, p \u2264 P \u2192 h \u2264 H \u2192\n        run checkEmpty (fuel + extra) P H rest beforeCaller before target memos.query =\n          (.ok (some raw), afterCaller, savedQueries, after)) \u2227\n      Post formulas solver next beforeCaller afterCaller final \u2227 final.query = savedQueries \u2227\n      PendingRealized afterCaller.checked.native.machine.heap after \u2227\n      (raw = [] \u2228 raw = [.ok ((), after)]) \u2227\n      (raw = [.ok ((), after)] \u2192\n        (\u2203 (node : Option Nat) (scs : List EnumerationState.Suspended),\n          after.values[target]? = some (.unenumerated node scs)) \u2227\n        \u2200 source \u2208 rest, source \u2260 target \u2192 after.values[source]? = some .eliminated) \u2227\n      (\u2200 slot, before.values[slot]? = some .eliminated \u2192 after.values[slot]? = some .eliminated) \u2227\n      after.values.length = before.values.length \u2227\n      after.representatives = before.representatives \u2227 after.counter = before.counter \u2227\n      after.obligations = before.obligations \u2227 after.expansionAncestry = before.expansionAncestry \u2227\n      (\u2200 slot, slot \u2260 target \u2192 after.recursionAncestry slot = before.recursionAncestry slot) \u2227\n      (raw = [] \u2192\n        \u2203 (prefix : List Nat) (source : Nat) (suffix : List Nat)\n          (prefixCaller : Caller width) (prefixEnum : EnumerationState.State Symbol EnumGuard)\n          (prefixQueries : Queries) (action : EnumerateM Symbol EnumGuard Unit),\n          rest = prefix ++ source :: suffix \u2227\n          (\u2200 extra P H, p \u2264 P \u2192 h \u2264 H \u2192\n            run checkEmpty (fuel + extra) P H prefix beforeCaller before target memos.query =\n              (.ok (some [.ok ((), prefixEnum)]), prefixCaller, prefixQueries, prefixEnum)) \u2227\n          (\u2200 extra P H, p \u2264 P \u2192 h \u2264 H \u2192\n            SourcePruningEnumerationDispatch.dispatch checkEmpty (fuel + extra) P H\n              prefixCaller prefixEnum source target prefixQueries =\n                (.ok (some action), afterCaller, savedQueries)) \u2227\n          ExceptT.run (action prefixEnum) = [] \u2227 after = prefixEnum)\n",
+          "used": true
+        }
+      ]
+    },
+    {
+      "scope": "headPacket/sourceSelected",
+      "constructor": "eliminated",
+      "fields": [
+        {
+          "name": "storedEliminated",
+          "type": "before.values[source]? = some .eliminated",
+          "used": true
+        }
+      ]
+    },
+    {
+      "scope": "headPacket/sourceSelected",
+      "constructor": "pending",
+      "fields": [
+        {
+          "name": "sourceNode",
+          "type": "Option Nat",
+          "used": true
+        },
+        {
+          "name": "sourceScs",
+          "type": "List EnumerationState.Suspended",
+          "used": true
+        },
+        {
+          "name": "sourcePendingStored",
+          "type": "before.values[source]? = some (.unenumerated sourceNode sourceScs)",
+          "used": true
+        }
+      ]
+    },
+    {
+      "scope": "cons/headShape",
+      "constructor": "rejected",
+      "fields": [
+        {
+          "name": "headRejected",
+          "type": "ExceptT.run (action before) = []",
+          "used": true
+        }
+      ]
+    },
+    {
+      "scope": "cons/headShape",
+      "constructor": "completed",
+      "fields": [
+        {
+          "name": "headCompleted",
+          "type": "ExceptT.run (action before) = [.ok ((), headAfter)]",
+          "used": true
+        }
+      ]
+    },
+    {
+      "scope": "cons/tailShape",
+      "constructor": "rejected",
+      "fields": [
+        {
+          "name": "tailRejected",
+          "type": "tailRaw = []",
+          "used": true
+        }
+      ]
+    },
+    {
+      "scope": "cons/tailShape",
+      "constructor": "completed",
+      "fields": [
+        {
+          "name": "tailSucceeded",
+          "type": "tailRaw = [.ok ((), tailAfter)]",
+          "used": true
+        }
+      ]
+    },
+    {
+      "scope": "cons/completed membership",
+      "constructor": "head equality or tail member",
+      "fields": [
+        {
+          "name": "memberHead",
+          "type": "remaining = source",
+          "used": true
+        },
+        {
+          "name": "memberRest",
+          "type": "remaining \u2208 rest",
+          "used": true
+        }
+      ]
+    },
+    {
+      "scope": "changedFrame/remaining initial selected",
+      "constructor": "eliminated or pending",
+      "fields": [
+        {
+          "name": "oldEliminated",
+          "type": "before.values[remaining]? = some .eliminated",
+          "used": true
+        },
+        {
+          "name": "oldNode",
+          "type": "Option Nat",
+          "used": true
+        },
+        {
+          "name": "oldScs",
+          "type": "List EnumerationState.Suspended",
+          "used": true
+        },
+        {
+          "name": "oldPending",
+          "type": "before.values[remaining]? = some (.unenumerated oldNode oldScs)",
+          "used": true
+        }
+      ]
+    }
+  ],
+  "conditions": [
+    {
+      "scope": "headPacket/noop",
+      "name": "same",
+      "condition": "source = target",
+      "negative": "source \u2260 target"
+    },
+    {
+      "scope": "headPacket/non-same",
+      "name": "eliminated",
+      "condition": "before.values[source]? = some .eliminated",
+      "negative": "before.values[source]? \u2260 some .eliminated"
+    },
+    {
+      "scope": "headPacket/non-noop",
+      "name": "empty",
+      "condition": "merged = some 0",
+      "negative": "merged \u2260 some 0"
+    },
+    {
+      "scope": "changedFrame/retained eliminated",
+      "name": "atTarget",
+      "condition": "slot = target",
+      "negative": "slot \u2260 target"
+    },
+    {
+      "scope": "changedFrame/retained eliminated",
+      "name": "atSource",
+      "condition": "slot = source",
+      "negative": "slot \u2260 source"
+    },
+    {
+      "scope": "changedFrame/remaining",
+      "name": "remainingTarget",
+      "condition": "remaining = target",
+      "negative": "remaining \u2260 target"
+    },
+    {
+      "scope": "changedFrame/remaining",
+      "name": "remainingSource",
+      "condition": "remaining = source",
+      "negative": "remaining \u2260 source"
+    }
+  ],
+  "intro_groups": [
+    {
+      "scope": "Ranges/tail implication",
+      "fields": [
+        {
+          "name": "nativeFuel",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "p",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "h",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "action",
+          "type": "EnumerateM Symbol EnumGuard Unit",
+          "used": true
+        },
+        {
+          "name": "afterCaller",
+          "type": "Caller width",
+          "used": true
+        },
+        {
+          "name": "saved",
+          "type": "Queries",
+          "used": true
+        },
+        {
+          "name": "after",
+          "type": "EnumerationState.State Symbol EnumGuard",
+          "used": true
+        },
+        {
+          "name": "dispatched",
+          "type": "SourcePruningEnumerationDispatch.dispatch checkEmpty nativeFuel p h beforeCaller before source target queries = (.ok (some action), afterCaller, saved)",
+          "used": true
+        },
+        {
+          "name": "completed",
+          "type": "ExceptT.run (action before) = [.ok ((), after)]",
+          "used": true
+        }
+      ]
+    },
+    {
+      "scope": "changedFrame/initial eliminated",
+      "fields": [
+        {
+          "name": "slot",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "oldEliminated",
+          "type": "before.values[slot]? = some .eliminated",
+          "used": true
+        }
+      ]
+    },
+    {
+      "scope": "changedFrame/remaining",
+      "fields": [
+        {
+          "name": "remaining",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "member",
+          "type": "remaining \u2208 rest",
+          "used": true
+        }
+      ]
+    },
+    {
+      "scope": "headPacket/source elimination",
+      "fields": [
+        {
+          "name": "different",
+          "type": "source \u2260 target",
+          "used": true
+        },
+        {
+          "name": "completed",
+          "type": "ExceptT.run (action before) = [.ok ((), headAfter)]",
+          "used": true
+        }
+      ]
+    },
+    {
+      "scope": "headPacket/rejection entry",
+      "fields": [
+        {
+          "name": "rejected",
+          "type": "ExceptT.run (action before) = []",
+          "used": true
+        }
+      ]
+    },
+    {
+      "scope": "cons/public completed",
+      "fields": [
+        {
+          "name": "completed",
+          "type": "tailRaw = [.ok ((), tailAfter)]",
+          "used": true
+        }
+      ]
+    },
+    {
+      "scope": "cons/public processed source",
+      "fields": [
+        {
+          "name": "remaining",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "member",
+          "type": "remaining \u2208 source :: rest",
+          "used": true
+        },
+        {
+          "name": "different",
+          "type": "remaining \u2260 target",
+          "used": true
+        }
+      ]
+    },
+    {
+      "scope": "cons/public prior eliminated",
+      "fields": [
+        {
+          "name": "slot",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "stored",
+          "type": "before.values[slot]? = some .eliminated",
+          "used": true
+        }
+      ]
+    },
+    {
+      "scope": "cons/public ancestry",
+      "fields": [
+        {
+          "name": "slot",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "different",
+          "type": "slot \u2260 target",
+          "used": true
+        }
+      ]
+    },
+    {
+      "scope": "cons/public first rejection",
+      "fields": [
+        {
+          "name": "rejected",
+          "type": "tailRaw = []",
+          "used": true
+        }
+      ]
+    },
+    {
+      "scope": "headRun",
+      "fields": [
+        {
+          "name": "extra",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "P",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "H",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "largeP",
+          "type": "headP \u2264 P",
+          "used": true
+        },
+        {
+          "name": "largeH",
+          "type": "headH \u2264 H",
+          "used": true
+        }
+      ]
+    },
+    {
+      "scope": "headAt",
+      "fields": [
+        {
+          "name": "extra",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "P",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "H",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "largeP",
+          "type": "max headP tailP \u2264 P",
+          "used": true
+        },
+        {
+          "name": "largeH",
+          "type": "max headH tailH \u2264 H",
+          "used": true
+        }
+      ]
+    },
+    {
+      "scope": "tailAt",
+      "fields": [
+        {
+          "name": "extra",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "P",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "H",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "largeP",
+          "type": "max headP tailP \u2264 P",
+          "used": true
+        },
+        {
+          "name": "largeH",
+          "type": "max headH tailH \u2264 H",
+          "used": true
+        }
+      ]
+    },
+    {
+      "scope": "nil stable",
+      "fields": [
+        {
+          "name": "extra",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "P",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "H",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "largeP",
+          "type": "0 \u2264 P",
+          "used": true
+        },
+        {
+          "name": "largeH",
+          "type": "0 \u2264 H",
+          "used": true
+        }
+      ]
+    },
+    {
+      "scope": "cons/head-rejection stable",
+      "fields": [
+        {
+          "name": "extra",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "P",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "H",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "largeP",
+          "type": "headP \u2264 P",
+          "used": true
+        },
+        {
+          "name": "largeH",
+          "type": "headH \u2264 H",
+          "used": true
+        }
+      ]
+    },
+    {
+      "scope": "cons/composed stable",
+      "fields": [
+        {
+          "name": "extra",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "P",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "H",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "largeP",
+          "type": "max headP tailP \u2264 P",
+          "used": true
+        },
+        {
+          "name": "largeH",
+          "type": "max headH tailH \u2264 H",
+          "used": true
+        }
+      ]
+    },
+    {
+      "scope": "cons/lifted prefix stable",
+      "fields": [
+        {
+          "name": "extra",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "P",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "H",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "largeP",
+          "type": "max headP tailP \u2264 P",
+          "used": true
+        },
+        {
+          "name": "largeH",
+          "type": "max headH tailH \u2264 H",
+          "used": true
+        }
+      ]
+    },
+    {
+      "scope": "cons/lifted reject stable",
+      "fields": [
+        {
+          "name": "extra",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "P",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "H",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "largeP",
+          "type": "max headP tailP \u2264 P",
+          "used": true
+        },
+        {
+          "name": "largeH",
+          "type": "max headH tailH \u2264 H",
+          "used": true
+        }
+      ]
+    }
+  ],
+  "lambda_groups": [
+    {
+      "scope": "selected rest",
+      "fields": [
+        {
+          "name": "remaining",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "member",
+          "type": "remaining \u2208 rest",
+          "used": true
+        }
+      ]
+    },
+    {
+      "scope": "head selected initial inheritance",
+      "fields": [
+        {
+          "name": "remaining",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "member",
+          "type": "remaining \u2208 rest",
+          "used": true
+        }
+      ]
+    }
+  ],
+  "no_Value_constructor_cases": true,
+  "no_Native_outcome_case_elimination": true,
+  "unexpected_raw_policy": "Retain whole raw list, including [], errors, mixed or multiple results. Only exact singleton ok Unit recurses."
+}

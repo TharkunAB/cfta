@@ -1,0 +1,17 @@
+# Fold final model review
+
+2026-10-24T21:28:53+02:00. FINAL — CLEAR, independent source/model review. Root authored every body; I authored no mathematical code here.
+
+Read the complete implementation and all subsequent exact deltas. Final source is 353 lines/22663 bytes, SHA256 `0a5ae94315af7024fc4cc80bcc00163996fceaf95568969df73401fea9c2db16`. It equals the actual strict-4 input. All 14 V3 literal fragments occur exactly once. Gate SHA256 `30dda616d854dd38f840ccc531f270a8010a93d5c1e9c9611e5c9fe262024418` binds the exact V3 contracts and FROZEN `9d96c6b71120812b76a5a1d8521f2aa387e7658d6479d7d76c0dbdf0fed22217` before that revised input.
+
+The only public heads are run, Ranges and run_complete. Actual eight typed haves, two definition lets, existing producer/obtain fields and the one list IH match the reviewed inventory. The changed optional/present classification fields are explicitly unused. No helper, instance, new carrier, hidden action, output-law premise or limit override appears. Explicit Nat annotations and quoted prefix retain the intended types.
+
+Run performs one literal dispatch per reached original list occurrence. It runs the returned action once at the current enumeration state. Only an exact singleton success continues. All other raw lists remain complete, including errors, rejection and multiple rows. Native/worker observations and codec absence remain distinct. The outer Caller/Queries retain the reached native state; the outer enumeration state remains the last completed prefix endpoint. Duplicates and target occurrences are retained.
+
+The proof derives the head packet from actual dispatch_complete and the initial slot domain. No-op and Empty-rejection branches preserve the enumeration state; nonempty uses the actual assimilated state and both stored-slot facts. The explicit two-write frame preserves eliminated slots and remaining domains. The recursive Ranges obligation follows from the SAME actual head dispatch/action equations; it assumes no desired Success. The sole IH consumes the derived Context, realization and remaining domain.
+
+Native bounds combine by addition, worker bounds by maxima. Post.trans threads the actual changing inventories and Memos; final.query matches runtime Queries. The completion and first-rejection branches use those SAME common bounds. Rejection exposes an actual successful ordered prefix, the actual rejecting action and the identical enumeration endpoint. Counters, forest, length, obligations, expansion ancestry and off-target recursion ancestry are retained as stated.
+
+Failure history was read and byte/hash checked: strict1 reserved identifier; strict2 ambiguous constructors plus three default-heartbeat failures; strict3 equality substitution and unreduced tuple-match rewrites. Strict4 reverses the supplied equality and reduces the two tuple matches before rewriting. Actual strict4 report SHA256 `226988bf7fe6b2efe12d4e97d72095cfe589e4d8616a86284ac287f3b65219df` records PASS with literal-empty raw output and unchanged default limits/all linters/warnings-as-errors. Executable definitions did not change during proof repairs.
+
+This is the supplied-list assimilation suffix. Representative/union/waiting-prefix construction, incoming-node merge, native indices/extraction and full-driver/H6 closure remain open. No compiler, selected program or repository mutation was executed for this review. No public/build/Audit/seal/push result is inferred.

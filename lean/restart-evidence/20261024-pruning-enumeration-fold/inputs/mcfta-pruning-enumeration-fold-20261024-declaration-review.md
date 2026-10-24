@@ -1,0 +1,15 @@
+# Fold declaration review
+
+2026-10-24T21:14:49+02:00. FINAL — CLEAR, source-only exact declaration review.
+
+Reviewed the frozen owner `/tmp/mcfta-pruning-enumeration-fold-20261024-proposal`. Its exact file set contains 70 payloads and 72 files. Each safe relative object pin includes bytes and SHA256. Only the two top-level controls are excluded. Pins SHA256: `130919d25f39e731c654434dc66c6f40acedab07484d9379e609bb4044d63c38`. FROZEN SHA256: `e044312247f6ce8ffe8c60bd172160ab212c86917cd441936e06e15e24aeda91`. Contracts SHA256: `4e4a90ed98ea062962b97b887d29e822a14379f68d246bbdedeee0f9645bd8a8`.
+
+I read all 14 literal contracts, 135 lines, all 308 scoped entries, cases, eight obtains with 94 fields, insertion instructions, provenance and the complete 38-line induction hypothesis. The three ordered heads are noncomputable `run`, Prop definition `Ranges`, and theorem `run_complete`. Definition attachments use plain `:=`; the theorem uses `:= by`. Eight typed haves and two definition lets are inventoried. Continuation indentation fits the specified insertion depths. There are no instances, helper declarations, new state carriers or assumed output laws. The one List induction generalizes the actual inventory, Caller, enumeration state and Memos. Its sole recursive use has the derived head Post/context, realization, target and remaining-slot domain.
+
+All 15 full snapshots equal live source bytes. All 20 cuts, 415 lines, equal their inclusive source ranges and were read. All 32 defining import identities and 14 literal routes match live imports: 53 route-edge occurrences, 31 unique edges. External List APIs are separately identified.
+
+The native source applies assimilation to the original ordered representative list, including duplicates. This component starts at that supplied list. It does not construct or identify the union/count-transfer prefix. The proposed run retains complete native/worker observations, codec absence and entire raw lists. Only an exact successful singleton advances the enumeration state. Rejection retains the actual last completed prefix state and reached Caller/query pair.
+
+The finite theorem has genuine Context, all-slot realization, pending target, selected-slot domain and the explicit recursive WordRanges premise. That premise is conditional on actual dispatch and singleton equations; it does not assume that a successful transition exists. Head and tail bounds combine by addition/maxima. Post.trans permits the actual changing inventories. The first-rejection certificate uses the SAME final common bounds and actual successful prefix endpoint. It does not infer future success from an observed-success lemma.
+
+The removed redundant realization alias remains in provenance. The actual producer field is retained. The two unused changed classification fields are explicitly marked. The 600-line cap remains the accepted scope. No bodies, parser/compiler or selected scripts were executed. This clearance does not accept a body or establish full native indices, terminal preparation, extraction, full-driver correctness or H6 completion.

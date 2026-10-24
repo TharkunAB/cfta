@@ -1,0 +1,31 @@
+--- v2/complete-header.lean.txt
++++ v3/complete-header.lean.txt
+@@ -27,7 +27,7 @@
+         (∃ (node : Option Nat) (scs : List EnumerationState.Suspended),
+           after.values[target]? = some (.unenumerated node scs)) ∧
+         ∀ source ∈ sources, source ≠ target → after.values[source]? = some .eliminated) ∧
+-      (∀ slot, before.values[slot]? = some .eliminated → after.values[slot]? = some .eliminated) ∧
++      (∀ (slot : Nat), before.values[slot]? = some .eliminated → after.values[slot]? = some .eliminated) ∧
+       after.values.length = before.values.length ∧
+       after.representatives = before.representatives ∧ after.counter = before.counter ∧
+       after.obligations = before.obligations ∧ after.expansionAncestry = before.expansionAncestry ∧
+--- v2/local-head-packet.lean.txt
++++ v3/local-head-packet.lean.txt
+@@ -16,7 +16,7 @@
+             headAfter.values[remaining]? = some (.unenumerated node scs)) ∧
+         (source ≠ target → ExceptT.run (action before) = [.ok ((), headAfter)] →
+           headAfter.values[source]? = some .eliminated) ∧
+-        (∀ slot, before.values[slot]? = some .eliminated → headAfter.values[slot]? = some .eliminated) ∧
++        (∀ (slot : Nat), before.values[slot]? = some .eliminated → headAfter.values[slot]? = some .eliminated) ∧
+         headAfter.values.length = before.values.length ∧
+         headAfter.representatives = before.representatives ∧ headAfter.counter = before.counter ∧
+         headAfter.obligations = before.obligations ∧ headAfter.expansionAncestry = before.expansionAncestry ∧
+--- v2/local-changed-frame.lean.txt
++++ v3/local-changed-frame.lean.txt
+@@ -1,5 +1,5 @@
+ have changedFrame :
+-          (∀ slot, before.values[slot]? = some .eliminated →
++          (∀ (slot : Nat), before.values[slot]? = some .eliminated →
+             (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))).values[slot]? = some .eliminated) ∧
+           (∀ remaining ∈ rest,
+             (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))).values[remaining]? = some .eliminated ∨

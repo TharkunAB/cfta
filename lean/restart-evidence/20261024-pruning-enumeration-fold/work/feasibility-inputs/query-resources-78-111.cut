@@ -1,0 +1,34 @@
+/-- Initial profile headroom constructs the full query receipt and its exact resource return. -/
+theorem finite (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : SourceCurrentAllocatedNativeInventoryState.Inventory)
+    (bits rows arity bound : Nat) (left right : Value Symbol Guard) (before : Checked (bits + 2))
+    (ready : Ready before) (admitted : SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory before)
+    (stored : Stored before.native) (outputStored : OutputStored before.native)
+    (leftAvailable : Available before.native.machine.heap left)
+    (rightAvailable : Available before.native.machine.heap right)
+    (leftClosed : left.free = []) (rightClosed : right.free = [])
+    (leftShape : NodeShape rows arity left) (rightShape : NodeShape rows arity right)
+    (heights : max (height left) (height right) ≤ bound)
+    (nodes : before.native.machine.heap.nodes.next + N rows arity bound ≤ 2 ^ bits)
+    (edges : before.native.machine.heap.edges.next + N rows arity bound ≤ 2 ^ (bits + 2))
+    (memos : EndpointMemoGateTrace.Memos) (valid : EndpointMemoGateTrace.Valid before.native.machine.heap memos) :
+    ∃ next value after requests,
+      SourceCurrentAllocatedTargetQuery.Receipt formulas solver next left right before value after memos ∧
+      Stored after.native ∧ OutputStored after.native ∧ NodeShape (rows * rows) (max arity 1) value ∧
+      height value ≤ height left ∧ height value ≤ height right ∧
+      Trace before.native.machine.heap after.native.machine.heap requests ∧
+      nodeRequests requests + edgeRequests requests ≤ N rows arity bound ∧ Capacity bits after ∧
+      after.native.machine.heap.nodes.next ≤ before.native.machine.heap.nodes.next + N rows arity bound ∧
+      after.native.machine.heap.edges.next ≤ before.native.machine.heap.edges.next + N rows arity bound := by
+  have initial : Capacity bits before := ⟨by omega, by omega⟩
+  have ranges := SourceCurrentAllocatedFiniteOrdinaryWords.node_of_domain bits before ready.good
+    initial.1 initial.2 left right leftAvailable rightAvailable
+    (NodeShape.domain left leftShape) (NodeShape.domain right rightShape)
+  obtain ⟨next, value, after, _source, _roots, receipt⟩ := SourceCurrentAllocatedTargetQuery.finite
+    formulas solver inventory left right before ready admitted leftAvailable rightAvailable leftClosed rightClosed ranges memos valid
+  obtain ⟨finalStored, finalOutput, profile, firstHeight, secondHeight, requests, work, counted, finalNodes, finalEdges⟩ :=
+    counted bits rows arity bound receipt.actual ready stored outputStored leftAvailable rightAvailable
+      leftShape rightShape heights initial
+  exact ⟨next, value, after, requests, receipt, finalStored, finalOutput, profile, firstHeight, secondHeight,
+    work, counted, ⟨by omega, by omega⟩, finalNodes, finalEdges⟩

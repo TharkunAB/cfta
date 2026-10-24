@@ -1,0 +1,14 @@
+  let fuel := scanFuel + unionFuel + rootFuel
+  have scanMore : Success ((first :: rest).mapM fun sc => representative fuel sc.var) before recorded scanned := by
+    have extended := retains_mapM _ _ (fun (sc : Suspended) => representative_moreFuel scanFuel (unionFuel + rootFuel) sc.var) (first :: rest) _ _ _ scan
+    simpa [fuel, Nat.add_assoc] using extended
+  have unionsMore : Success (rest.forM fun sc => unionVariables fuel first.var sc.var) scanned () united := by
+    have extended := retains_forM _ _ (fun (sc : Suspended) => unionVariables_moreFuel unionFuel (scanFuel + rootFuel) first.var sc.var) rest _ _ _ unions
+    simpa [fuel, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using extended
+  have resolutionMore : Success (representative fuel first.var) united winner resolved := by
+    have extended := representative_moreFuel rootFuel (scanFuel + unionFuel) first.var _ _ _ resolution
+    simpa [fuel, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using extended
+  refine ⟨fuel, winner, after, ?_, afterSatisfies, afterPending⟩
+  unfold mergeTerminal
+  exact (success_bind _ _ _ _ _).mpr ⟨recorded, scanned, scanMore,
+    (success_bind _ _ _ _ _).mpr ⟨(), united, unionsMore,

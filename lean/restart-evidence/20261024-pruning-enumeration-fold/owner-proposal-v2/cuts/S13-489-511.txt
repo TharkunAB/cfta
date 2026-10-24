@@ -1,0 +1,23 @@
+-- | Merge the source UVar into the target UVar, intersecting their constraints.
+assimilateUvarVal ::
+    (Hashable symbol, Typeable symbol) => UVar -> UVar -> EnumerateM symbol ()
+assimilateUvarVal uvTarg uvSrc
+    | uvTarg == uvSrc = return ()
+    | otherwise = do
+        values <- gets _uvarValues
+        let srcVal = values IntMap.! uvarToInt uvSrc
+        let targVal = values IntMap.! uvarToInt uvTarg
+        case srcVal of
+            UVarEliminated -> return () -- Happens from duplicate constraints
+            _ -> do
+                checkEmpty <- gets _constrainedRecursion
+                let v = intersectUVarValue checkEmpty srcVal targVal
+                guard $ not $ hasEmptyContents v
+                -- The suspended constraints of the source move to the
+                -- target, in the same class, so no count changes.
+                writeUVarValue Sequence.Empty Sequence.Empty uvTarg v
+                writeUVarValue Sequence.Empty Sequence.Empty uvSrc UVarEliminated
+                modify' $ \s -> case IntMap.lookup (uvarToInt uvSrc) (_recursionAncestry s) of
+                    Nothing -> s
+                    Just ancestry -> s{_recursionAncestry = IntMap.insertWith HashSet.union (uvarToInt uvTarg) ancestry (_recursionAncestry s)}
+

@@ -1,0 +1,3 @@
+V2 quotes the reserved Lean identifier `prefix` as `«prefix»`. The public header has three occurrences. The same quotation is applied to dependent IH, field and scoped-type strings. The insertion map binds the new header bytes and V2 owner path. All other original payload bytes remain unchanged, including the 15 source snapshots and 20 cuts.
+
+Root's actual strict-1 failed during parsing. Its 911-byte raw log, report and exact failed source are retained. The original V1 owner and independent clearance remain immutable. This correction changes no binder meaning, type, premise, action or proof method. No body, parser, compiler or candidate execution was performed here. Root will re-gate V2 before continuing.

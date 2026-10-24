@@ -1,0 +1,82 @@
+--- strict-1
++++ strict-2
+@@ -101,12 +101,12 @@
+       after.obligations = before.obligations ∧ after.expansionAncestry = before.expansionAncestry ∧
+       (∀ slot, slot ≠ target → after.recursionAncestry slot = before.recursionAncestry slot) ∧
+       (raw = [] →
+-        ∃ (prefix : List Nat) (source : Nat) (suffix : List Nat)
++        ∃ («prefix» : List Nat) (source : Nat) (suffix : List Nat)
+           (prefixCaller : Caller width) (prefixEnum : EnumerationState.State Symbol EnumGuard)
+           (prefixQueries : Queries) (action : EnumerateM Symbol EnumGuard Unit),
+-          sources = prefix ++ source :: suffix ∧
++          sources = «prefix» ++ source :: suffix ∧
+           (∀ extra P H, p ≤ P → h ≤ H →
+-            run checkEmpty (fuel + extra) P H prefix beforeCaller before target memos.query =
++            run checkEmpty (fuel + extra) P H «prefix» beforeCaller before target memos.query =
+               (.ok (some [.ok ((), prefixEnum)]), prefixCaller, prefixQueries, prefixEnum)) ∧
+           (∀ extra P H, p ≤ P → h ≤ H →
+             SourcePruningEnumerationDispatch.dispatch checkEmpty (fuel + extra) P H
+@@ -213,14 +213,14 @@
+       by_cases empty : merged = some 0
+       · refine ⟨dispatchFuel, dispatchP, dispatchH, action, dispatchCaller, before, dispatchQueries,
+           dispatchMemos, dispatchInventory, dispatchStable, dispatchPost, dispatchQuerySame,
+-          unchangedRealized, .inl (by simpa only [if_pos empty] using actionRaw), ?_,
++          unchangedRealized, .inl (by simpa only [ite_eq_left empty] using actionRaw), ?_,
+           ⟨targetNode, targetScs, targetStored⟩, ?_, ?_, ?_, rfl, rfl, rfl, rfl, rfl, ?_⟩
+         · intro _rejected
+           rfl
+         · intro remaining member
+           exact selected remaining (by simp [member])
+         · intro _different completed
+-          rw [actionRaw, if_pos empty] at completed
++          rw [actionRaw, ite_eq_left empty] at completed
+           cases completed
+         · intro slot oldEliminated
+           exact oldEliminated
+@@ -262,17 +262,17 @@
+         refine ⟨dispatchFuel, dispatchP, dispatchH, action, dispatchCaller,
+           assimilated before target source (.unenumerated merged (sourceScs ++ targetScs)), dispatchQueries,
+           dispatchMemos, dispatchInventory, dispatchStable, dispatchPost, dispatchQuerySame,
+-          changedRealized, .inr (by simpa only [if_neg empty] using actionRaw), ?_,
++          changedRealized, .inr (by simpa only [ite_eq_right empty] using actionRaw), ?_,
+           ⟨merged, sourceScs ++ targetScs, targetAfterStored⟩, changedFrame.2, ?_, changedFrame.1,
+           ?_, rfl, rfl, rfl, rfl, ?_⟩
+         · intro rejected
+-          rw [actionRaw, if_neg empty] at rejected
++          rw [actionRaw, ite_eq_right empty] at rejected
+           cases rejected
+         · intro _different _completed
+           exact sourceAfterStored
+         · simp only [assimilated, List.length_set]
+         · intro slot different
+-          simp only [assimilated, if_neg different]
++          simp only [assimilated, ite_eq_right different]
+     obtain ⟨headFuel, headP, headH, action, headCaller, headAfter, headQueries, headMemos, headInventory,
+       headRun, headPost, headQuerySame, headRealized, headShape, headRejectedSame, headTarget, headSelected,
+       headSource, headEliminated, headLength, headRepresentatives, headCounter, headObligations,
+@@ -317,7 +317,7 @@
+         tailCounter.trans headCounter, tailObligations.trans headObligations, tailExpansion.trans headExpansion,
+         ?_, ?_⟩
+       · intro extra P H largeP largeH
+-        simp only [run, headAt extra P H largeP largeH, headCompleted]
++        rw [run, headAt extra P H largeP largeH, headCompleted]
+         rw [← headQuerySame]
+         exact tailAt extra P H largeP largeH
+       · intro completed
+@@ -332,13 +332,13 @@
+       · intro slot different
+         exact (tailAncestry slot different).trans (headAncestry slot different)
+       · intro rejected
+-        obtain ⟨prefix, rejectSource, suffix, prefixCaller, prefixEnum, prefixQueries, rejectAction,
++        obtain ⟨«prefix», rejectSource, suffix, prefixCaller, prefixEnum, prefixQueries, rejectAction,
+           split, prefixRun, rejectRun, rejectRaw, rejectedAfter⟩ := tailRejection rejected
+-        refine ⟨source :: prefix, rejectSource, suffix, prefixCaller, prefixEnum, prefixQueries, rejectAction,
++        refine ⟨source :: «prefix», rejectSource, suffix, prefixCaller, prefixEnum, prefixQueries, rejectAction,
+           ?_, ?_, ?_, rejectRaw, rejectedAfter⟩
+         · simp only [List.cons_append, split]
+         · intro extra P H largeP largeH
+-          simp only [run, headAt extra P H largeP largeH, headCompleted]
++          rw [run, headAt extra P H largeP largeH, headCompleted]
+           rw [← headQuerySame]
+           simpa only [Nat.add_assoc, Nat.add_left_comm, Nat.add_comm] using prefixRun (headFuel + extra) P H
+             (Nat.le_trans (Nat.le_max_right _ _) largeP) (Nat.le_trans (Nat.le_max_right _ _) largeH)

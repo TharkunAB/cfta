@@ -1,0 +1,25 @@
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Guard
+local notation "Edge" => EdgeValue Symbol Guard
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "EqValue" => SourceEqualityConstraintAllocation.Value
+local notation "MergeMemo" => SourceCurrentMemoMergeGraph.Memo Symbol Guard
+local notation "Fourth" => SourceCurrentEmptinessMemo.Memo
+
+/-- Outer requests use the allocated inherited identity and tagged node reference. -/
+abbrev NodeKey := Option Nat × InternedBinderProtocol.NodeRef
+
+/-- Reduced-edge requests use a separate family keyed by the complete edge identity. -/
+abbrev EdgeKey := Option Nat × Nat
+
+/-- Every published node cell retains both complete original arguments. -/
+structure NodeRequest where
+  inherited : EqValue
+  value : Node
+
+/-- Every published edge cell retains both complete original arguments. -/
+structure EdgeRequest where
+  inherited : EqValue
+  value : Edge
+

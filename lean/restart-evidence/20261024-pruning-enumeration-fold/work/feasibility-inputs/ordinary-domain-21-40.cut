@@ -1,0 +1,20 @@
+inductive Node : Value Symbol Guard → Prop where
+  | empty : Node .empty
+  | ordinary (rows : Rows edges) : Node (.node entry edges depth free)
+
+/-- Each actual row has domain children, with no guard restriction. -/
+inductive Rows : List (EdgeValue Symbol Guard) → Prop where
+  | nil : Rows []
+  | cons (children : Children edge.children) (rest : Rows edges) : Rows (edge :: edges)
+
+/-- An ordered child forest contains only domain values. -/
+inductive Children : List (Value Symbol Guard) → Prop where
+  | nil : Children []
+  | cons (first : Node value) (rest : Children values) : Children (value :: values)
+end
+
+/-- The edge domain depends on the complete ordered child records. -/
+def Edge (edge : EdgeValue Symbol Guard) : Prop := Children edge.children
+
+/-- Membership in a domain child list gives the complete child domain. -/
+theorem Children.member {values : List (Value Symbol Guard)} (domain : Children values)

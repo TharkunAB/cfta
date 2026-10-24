@@ -1,0 +1,27 @@
+[2026-10-24 20:59:58 CEST] FINAL — SOURCE DESIGN CLEAR; Root selects the exact interface before declarations.
+
+Use Root's raw-preserving result: `(Except (DemandOutcome ⊕ WorkerOutcome) (Option R)) × Caller × Queries × EnumState`, with R the existing list of Except EnumerationState.Error (Unit × EnumState). No new outcome carrier or shared native/enumeration monad is needed. An empty source list returns the current successful singleton. For each ORIGINAL ordered occurrence, compute dispatch once, run its captured action once at the current enum state, and recurse ONLY on exact `[.ok ((), next)]`. Preserve any other raw list verbatim: rejection[], errors, mixed/multiple rows and malformed results must not be truncated or relabeled.
+
+The outer enum field is the last completed prefix state. On native interruption, codec absence or other raw termination, retain that field together with the reached Caller and saved Queries. On completion it equals the singleton's state. In particular, a rejected step retains its new native/guard effects while leaving the enum endpoint at that step's entry. Exact Demand controls/tags and worker faults remain intact. Returning these observations does not implement resume.
+
+The producer should assume genuine initial Context/PendingRealized, an actual pending target and a concrete initial pending/eliminated/equal list domain. Derive later safe entries from exact target/source writes and unchanged other slots. Duplicates and the winner remain in order; earlier eliminated or equal sources become no-ops. No representative, union or count-transfer prefix is constructed here.
+
+One source-specific recursive range Prop is justified. Require the actual head's conditional decoded-pair WordRanges. Require tail ranges under UNIVERSAL implications from literal computed dispatch equality and raw singleton equality at its returned Caller/Queries/enum state. Such implications assume no successful step exists; completion derives existence separately. Existing TargetGraph.FoldRanges130–141 is analogous prior art, not a directly applicable raw-fold adapter. Context alone does not supply WordRanges.
+
+Use dispatch_complete to construct each stage, then structural list induction. Post.trans71–75 explicitly permits changing inventories: pass Post.context and existential logical Memos onward, with final.query identifying runtime Queries. Combine native/P/H bounds by sums or maxima over the processed prefix. Exact stable dispatch/action equality preserves the same endpoints at larger bounds. Generic Retains transports only successful observations; it is vacuous for rejection[] and cannot alone prove first-rejection stability. Existing monadic fold termination handles enum state, not this complete caller/error result.
+
+Derive finished-singleton or first-rejection, actual prefix endpoints and all-slot realization. Do not assume step/fold Success, callback laws, Graph intersection laws or desired final states. Full prefix construction, native flag origins, indexes/count-width/host extraction, incoming-node merge and whole-driver language remain open. H6 stays strongest; goal ACTIVE. No declaration/body, compiler/program/import, Git/network/board or repository edit occurred.
+
+Whole and LF-retaining concatenated cut pins:
+
+| Source | Bytes | Whole SHA256 | Cuts | Cut SHA256 |
+| --- | ---: | --- | --- | --- |
+| /tmp/mcfta-pruning-enumeration-dispatch-20261024-next-assessment.md | 7838 | cd767f5a5e549c3a7d7feb9a80b22c217834f3d387686a03e8c2f552a0bdb796 | all | cd767f5a5e549c3a7d7feb9a80b22c217834f3d387686a03e8c2f552a0bdb796 |
+| /home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationDispatch.lean | 30270 | fb2dcd0c1c5ba5abee27afeda86cb676682590f232b9c24ac75a759f843e970d | 22–90,93–174 | 999c5a4b0478d2fac965b142caac5b21e013da5fc30f7fe3e33921dbece80379 |
+| /home/tritlo/Code/mcfta/cfta/src/Data/CFTA/Enumeration.hs | 71269 | 949c484539483f0e646b069899be127a57f0897353b24b92e51a5d90654cec07 | 489–530,728–747 | 1d8488c22d915ae74d2c60f7f8c1bcdb3fe00eb2447791b412e9b47d6d49edfd |
+| /home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationState.lean | 33489 | 83a898b883ec7b52469bccd87e8afa4f7abb320e3c935bf48f3d80ad77003cc4 | 66–105,144–174 | 3a4058b93370088851eccf239f21077516231dfcd193a7dddb05c2103d20b9e0 |
+| /home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedPartialInvariant.lean | 5356 | 5162416df367a97e743e2a0d38601026bb15862dc4c648fa518ad0308a919bc0 | 25–45,65–75 | 96f7865ce2b5711088d19502516b3b411a0fe68bc2cccf929d9ba4157de87dec |
+| /home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationExecution.lean | 30176 | b81e03600e03085ec32fc8c85026ca4af562593764b28d6f8dd776eb3ac98346 | 33–36,351–430 | 1f3ba50863a9930834f6af3ff8043e5d024828a775264fbb86e235772c453670 |
+| /home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedTargetGraph.lean | 11362 | 7685d0546656c13d3048580cc33abf1bd448da3b89be56ebf60bb9e6c7719395 | 130–146 | 8972126510bfaae16dd328b94913630b37033dab485a2e6644143ced811651ad |
+| /home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedNativeRequestBounds.lean | 11750 | a839f5aec103d0965a9b97b7cbf476293d927b01edc15bc96ed54dd0cfc7636d | 126–155 | 17f2e91db4664813cffd192731128ea1a2f8064f27889005eb8585587534a0d0 |
+| /home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationCorrectness.lean | 76898 | 087b96d593bb42cea0b61b2742b43d4a41ce5a2d990e300c8d15700e2eb0672d | 276–282 | d784ea9664a90a66cfbe58fffc602a646d86b70776265e73ec00314248e457bf |

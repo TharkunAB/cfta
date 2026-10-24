@@ -1,0 +1,23 @@
+have headPacket :
+      ∃ (headFuel headP headH : Nat) (action : EnumerateM Symbol EnumGuard Unit)
+        (headCaller : Caller width) (headAfter : EnumerationState.State Symbol EnumGuard)
+        (headQueries : Queries) (headMemos : Memos) (headInventory : Inventory),
+        (∀ extra P H, headP ≤ P → headH ≤ H →
+          SourcePruningEnumerationDispatch.dispatch checkEmpty (headFuel + extra) P H
+            beforeCaller before source target memos.query = (.ok (some action), headCaller, headQueries)) ∧
+        Post formulas solver headInventory beforeCaller headCaller headMemos ∧ headMemos.query = headQueries ∧
+        PendingRealized headCaller.checked.native.machine.heap headAfter ∧
+        (ExceptT.run (action before) = [] ∨ ExceptT.run (action before) = [.ok ((), headAfter)]) ∧
+        (ExceptT.run (action before) = [] → headAfter = before) ∧
+        (∃ (node : Option Nat) (scs : List EnumerationState.Suspended),
+          headAfter.values[target]? = some (.unenumerated node scs)) ∧
+        (∀ remaining ∈ rest, headAfter.values[remaining]? = some .eliminated ∨
+          ∃ (node : Option Nat) (scs : List EnumerationState.Suspended),
+            headAfter.values[remaining]? = some (.unenumerated node scs)) ∧
+        (source ≠ target → ExceptT.run (action before) = [.ok ((), headAfter)] →
+          headAfter.values[source]? = some .eliminated) ∧
+        (∀ slot, before.values[slot]? = some .eliminated → headAfter.values[slot]? = some .eliminated) ∧
+        headAfter.values.length = before.values.length ∧
+        headAfter.representatives = before.representatives ∧ headAfter.counter = before.counter ∧
+        headAfter.obligations = before.obligations ∧ headAfter.expansionAncestry = before.expansionAncestry ∧
+        (∀ slot, slot ≠ target → headAfter.recursionAncestry slot = before.recursionAncestry slot)

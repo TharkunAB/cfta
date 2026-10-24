@@ -1,0 +1,33 @@
+--- strict-3
++++ strict-4
+@@ -278,7 +278,7 @@
+       headSource, headEliminated, headLength, headRepresentatives, headCounter, headObligations,
+       headExpansion, headAncestry⟩ := headPacket
+     rcases headShape with headRejected | headCompleted
+-    · obtain rfl := headRejectedSame headRejected
++    · obtain rfl := (headRejectedSame headRejected).symm
+       refine ⟨headFuel, headP, headH, [], headCaller, before, headQueries, headMemos, headInventory,
+         ?_, headPost, headQuerySame, headRealized, .inl rfl, ?_, headEliminated,
+         headLength, headRepresentatives, headCounter, headObligations, headExpansion, headAncestry, ?_⟩
+@@ -317,7 +317,9 @@
+         tailCounter.trans headCounter, tailObligations.trans headObligations, tailExpansion.trans headExpansion,
+         ?_, ?_⟩
+       · intro extra P H largeP largeH
+-        rw [run, headAt extra P H largeP largeH, headCompleted]
++        rw [run, headAt extra P H largeP largeH]
++        dsimp only
++        rw [headCompleted]
+         rw [← headQuerySame]
+         exact tailAt extra P H largeP largeH
+       · intro completed
+@@ -338,7 +340,9 @@
+           ?_, ?_, ?_, rejectRaw, rejectedAfter⟩
+         · simp only [List.cons_append, split]
+         · intro extra P H largeP largeH
+-          rw [run, headAt extra P H largeP largeH, headCompleted]
++          rw [run, headAt extra P H largeP largeH]
++          dsimp only
++          rw [headCompleted]
+           rw [← headQuerySame]
+           simpa only [Nat.add_assoc, Nat.add_left_comm, Nat.add_comm] using prefixRun (headFuel + extra) P H
+             (Nat.le_trans (Nat.le_max_right _ _) largeP) (Nat.le_trans (Nat.le_max_right _ _) largeH)

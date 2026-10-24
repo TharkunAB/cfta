@@ -1,0 +1,12 @@
+/-- A transfer fold maintains the count view under the matching ghost redirect fold. -/
+theorem moveMany_correct (target : Nat) (sources : List Nat) (roots : Nat → Nat)
+    (values : List (UVarValue Symbol)) (waiting : EnumerationWaitingIndex.Waiting)
+    (correct : Correct roots values waiting) :
+    Correct (sources.foldl (fun previous source => redirect target source previous) roots) values
+      (moveMany target sources waiting) := by
+  induction sources generalizing roots waiting with
+  | nil => exact correct
+  | cons source rest ih =>
+      simpa only [moveMany, List.foldl_cons] using
+        ih (redirect target source roots) (move target source waiting)
+          (move_correct target source roots values waiting correct)

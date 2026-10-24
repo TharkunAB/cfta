@@ -1,0 +1,508 @@
+ALL UNIQUE LITERAL TYPES
+T1: Type
+T2: Nat
+T3: SourceGuards.Formulas FullSyntax.Formula
+T4: SourceGuards.Entailment FullSyntax.Formula
+T5: Inventory
+T6: Caller width
+T7: EnumerationState.State Symbol EnumGuard
+T8: List Nat
+T9: Bool
+T10: Memos
+T11: Queries
+T12: Context formulas solver inventory beforeCaller memos
+T13: PendingRealized beforeCaller.checked.native.machine.heap before
+T14: Option Nat
+T15: List EnumerationState.Suspended
+T16: Ranges checkEmpty sources beforeCaller before target memos.query
+T17: EnumerateM Symbol EnumGuard Unit
+T18: before.values[target]? = some (.unenumerated targetNode targetScs)
+T19: before.values[source]? = some (.unenumerated sourceNode sourceScs)
+T20: ∀ extra P H, dispatchP ≤ P → dispatchH ≤ H → SourcePruningEnumerationDispatch.dispatch checkEmpty (dispatchFuel + extra) P H beforeCaller before source target memos.query = (.ok (some action), dispatchCaller, dispatchQueries)
+T21: Post formulas solver dispatchInventory beforeCaller dispatchCaller dispatchMemos
+T22: dispatchMemos.query = dispatchQueries
+T23: PendingRealized dispatchCaller.checked.native.machine.heap before
+T24: (source = target ∨ before.values[source]? = some .eliminated) → ExceptT.run (action before) = [.ok ((), before)] ∧ dispatchCaller = beforeCaller ∧ dispatchMemos = memos ∧ dispatchInventory = inventory
+T25: source ≠ target → before.values[source]? ≠ some .eliminated → ∃ (sourceNode targetNode merged : Option Nat) (sourceScs targetScs : List EnumerationState.Suspended), (before.values[source]? = some (.unenumerated sourceNode sourceScs)) ∧ (before.values[target]? = some (.unenumerated targetNode targetScs)) ∧ (ExceptT.run (action before) = (if merged = some 0 then [] else [.ok ((), assimilated before target source (.unenumerated merged (sourceScs ++ targetScs)))])) ∧ (merged ≠ some 0 → (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))).values[target]? = some (.unenumerated merged (sourceScs ++ targetScs)) ∧ (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))).values[source]? = some .eliminated ∧ PendingRealized dispatchCaller.checked.native.machine.heap (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs)))) ∧ ((sourceNode = none ∨ targetNode = none) → merged = sourceNode.orElse (fun _ => targetNode) ∧ dispatchCaller = beforeCaller ∧ dispatchMemos = memos ∧ dispatchInventory = inventory) ∧ (∀ leftHandle rightHandle, sourceNode = some leftHandle → targetNode = some rightHandle → ∃ (left right query replacement : Node) (queried : SourceEqualityNativeDemand.State width) (handle : Nat), lookupNode beforeCaller.checked.native.machine.heap leftHandle = some left ∧ lookupNode beforeCaller.checked.native.machine.heap rightHandle = some right ∧ dispatchInventory.source = beforeCaller.checked.native.machine.heap ∧ dispatchInventory.roots = inventory.roots ++ [left, right] ∧ SourceCurrentAllocatedTargetQuery.Receipt formulas solver dispatchInventory left right beforeCaller.checked query queried memos ∧ merged = some handle ∧ encodeNode replacement = some handle ∧ lookupNode dispatchCaller.checked.native.machine.heap handle = some replacement ∧ InternedProbeProvenance.Available dispatchCaller.checked.native.machine.heap replacement ∧ replacement.free = [] ∧ (∀ ambient term, InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term ↔ InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient left term ∧ InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient right term) ∧ (checkEmpty = false → replacement = query ∧ dispatchCaller = SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge ∧ dispatchMemos = memos) ∧ (checkEmpty = true → ∃ reached answer guardSaved, SourceEndpointMemo.run query memos.query = (reached, guardSaved) ∧ SourceEndpointMemoCorrect.Checked queried.native.machine.heap memos.query (SourceCurrentEmptinessMerge.reaches query) (reached, guardSaved) ∧ (∀ P H, dispatchP ≤ P → dispatchH ≤ H → SourcePruningEnumerationEnabledEmpty.check P H query queried beforeCaller.fourth memos.query = (.done answer dispatchCaller.checked dispatchCaller.fourth, guardSaved)) ∧ dispatchQueries = guardSaved ∧ replacement = (if answer then .empty else query) ∧ (reached = false → answer = false ∧ dispatchCaller.checked = queried ∧ dispatchCaller.fourth = beforeCaller.fourth ∧ dispatchMemos = {memos with query := guardSaved}) ∧ (reached = true → ∃ (reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula), dispatchCaller.checked = SourceCurrentAllocatedQueryMemo.advancePhysical queried reachedPhysical ∧ ∃ actual : SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query (SourceCurrentAllocatedNativeEffects.physical queried) answer reachedPhysical dispatchCaller.fourth, SourceCurrentConjunctionGlobalMemos.CallReads actual {memos with query := guardSaved} dispatchMemos)))
+T26: ExceptT.run (action before) = (if merged = some 0 then [] else [.ok ((), assimilated before target source (.unenumerated merged (sourceScs ++ targetScs)))])
+T27: merged ≠ some 0 → (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))).values[target]? = some (.unenumerated merged (sourceScs ++ targetScs)) ∧ (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))).values[source]? = some .eliminated ∧ PendingRealized dispatchCaller.checked.native.machine.heap (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs)))
+T28: (sourceNode = none ∨ targetNode = none) → merged = sourceNode.orElse (fun _ => targetNode) ∧ dispatchCaller = beforeCaller ∧ dispatchMemos = memos ∧ dispatchInventory = inventory
+T29: ∀ leftHandle rightHandle, sourceNode = some leftHandle → targetNode = some rightHandle → ∃ (left right query replacement : Node) (queried : SourceEqualityNativeDemand.State width) (handle : Nat), lookupNode beforeCaller.checked.native.machine.heap leftHandle = some left ∧ lookupNode beforeCaller.checked.native.machine.heap rightHandle = some right ∧ dispatchInventory.source = beforeCaller.checked.native.machine.heap ∧ dispatchInventory.roots = inventory.roots ++ [left, right] ∧ SourceCurrentAllocatedTargetQuery.Receipt formulas solver dispatchInventory left right beforeCaller.checked query queried memos ∧ merged = some handle ∧ encodeNode replacement = some handle ∧ lookupNode dispatchCaller.checked.native.machine.heap handle = some replacement ∧ InternedProbeProvenance.Available dispatchCaller.checked.native.machine.heap replacement ∧ replacement.free = [] ∧ (∀ ambient term, InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term ↔ InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient left term ∧ InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient right term) ∧ (checkEmpty = false → replacement = query ∧ dispatchCaller = SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge ∧ dispatchMemos = memos) ∧ (checkEmpty = true → ∃ reached answer guardSaved, SourceEndpointMemo.run query memos.query = (reached, guardSaved) ∧ SourceEndpointMemoCorrect.Checked queried.native.machine.heap memos.query (SourceCurrentEmptinessMerge.reaches query) (reached, guardSaved) ∧ (∀ P H, dispatchP ≤ P → dispatchH ≤ H → SourcePruningEnumerationEnabledEmpty.check P H query queried beforeCaller.fourth memos.query = (.done answer dispatchCaller.checked dispatchCaller.fourth, guardSaved)) ∧ dispatchQueries = guardSaved ∧ replacement = (if answer then .empty else query) ∧ (reached = false → answer = false ∧ dispatchCaller.checked = queried ∧ dispatchCaller.fourth = beforeCaller.fourth ∧ dispatchMemos = {memos with query := guardSaved}) ∧ (reached = true → ∃ (reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula), dispatchCaller.checked = SourceCurrentAllocatedQueryMemo.advancePhysical queried reachedPhysical ∧ ∃ actual : SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query (SourceCurrentAllocatedNativeEffects.physical queried) answer reachedPhysical dispatchCaller.fourth, SourceCurrentConjunctionGlobalMemos.CallReads actual {memos with query := guardSaved} dispatchMemos))
+T30: (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))).values[target]? = some (.unenumerated merged (sourceScs ++ targetScs))
+T31: (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))).values[source]? = some .eliminated
+T32: PendingRealized dispatchCaller.checked.native.machine.heap (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs)))
+T33: ∀ extra P H, headP ≤ P → headH ≤ H → SourcePruningEnumerationDispatch.dispatch checkEmpty (headFuel + extra) P H beforeCaller before source target memos.query = (.ok (some action), headCaller, headQueries)
+T34: Post formulas solver headInventory beforeCaller headCaller headMemos
+T35: headMemos.query = headQueries
+T36: PendingRealized headCaller.checked.native.machine.heap headAfter
+T37: ExceptT.run (action before) = [] ∨ ExceptT.run (action before) = [.ok ((), headAfter)]
+T38: ExceptT.run (action before) = [] → headAfter = before
+T39: ∃ (node : Option Nat) (scs : List EnumerationState.Suspended), headAfter.values[target]? = some (.unenumerated node scs)
+T40: ∀ remaining ∈ rest, headAfter.values[remaining]? = some .eliminated ∨ ∃ (node : Option Nat) (scs : List EnumerationState.Suspended), headAfter.values[remaining]? = some (.unenumerated node scs)
+T41: source ≠ target → ExceptT.run (action before) = [.ok ((), headAfter)] → headAfter.values[source]? = some .eliminated
+T42: ∀ slot, before.values[slot]? = some .eliminated → headAfter.values[slot]? = some .eliminated
+T43: headAfter.values.length = before.values.length
+T44: headAfter.representatives = before.representatives
+T45: headAfter.counter = before.counter
+T46: headAfter.obligations = before.obligations
+T47: headAfter.expansionAncestry = before.expansionAncestry
+T48: ∀ slot, slot ≠ target → headAfter.recursionAncestry slot = before.recursionAncestry slot
+T49: List (Except EnumerationState.Error (Unit × EnumerationState.State Symbol EnumGuard))
+T50: ∀ extra P H, tailP ≤ P → tailH ≤ H → run checkEmpty (tailFuel + extra) P H rest headCaller headAfter target headMemos.query = (.ok (some tailRaw), tailCaller, tailQueries, tailAfter)
+T51: Post formulas solver tailInventory headCaller tailCaller tailMemos
+T52: tailMemos.query = tailQueries
+T53: PendingRealized tailCaller.checked.native.machine.heap tailAfter
+T54: tailRaw = [] ∨ tailRaw = [.ok ((), tailAfter)]
+T55: tailRaw = [.ok ((), tailAfter)] → (∃ (node : Option Nat) (scs : List EnumerationState.Suspended), tailAfter.values[target]? = some (.unenumerated node scs)) ∧ ∀ remaining ∈ rest, remaining ≠ target → tailAfter.values[remaining]? = some .eliminated
+T56: ∀ slot, headAfter.values[slot]? = some .eliminated → tailAfter.values[slot]? = some .eliminated
+T57: tailAfter.values.length = headAfter.values.length
+T58: tailAfter.representatives = headAfter.representatives
+T59: tailAfter.counter = headAfter.counter
+T60: tailAfter.obligations = headAfter.obligations
+T61: tailAfter.expansionAncestry = headAfter.expansionAncestry
+T62: ∀ slot, slot ≠ target → tailAfter.recursionAncestry slot = headAfter.recursionAncestry slot
+T63: tailRaw = [] → ∃ (prefix : List Nat) (rejectSource : Nat) (suffix : List Nat) (prefixCaller : Caller width) (prefixEnum : EnumerationState.State Symbol EnumGuard) (prefixQueries : Queries) (rejectAction : EnumerateM Symbol EnumGuard Unit), (rest = prefix ++ rejectSource :: suffix) ∧ (∀ extra P H, tailP ≤ P → tailH ≤ H → run checkEmpty (tailFuel + extra) P H prefix headCaller headAfter target headMemos.query = (.ok (some [.ok ((), prefixEnum)]), prefixCaller, prefixQueries, prefixEnum)) ∧ (∀ extra P H, tailP ≤ P → tailH ≤ H → SourcePruningEnumerationDispatch.dispatch checkEmpty (tailFuel + extra) P H prefixCaller prefixEnum rejectSource target prefixQueries = (.ok (some rejectAction), tailCaller, tailQueries)) ∧ (ExceptT.run (rejectAction prefixEnum) = []) ∧ (tailAfter = prefixEnum)
+T64: rest = prefix ++ rejectSource :: suffix
+T65: ∀ extra P H, tailP ≤ P → tailH ≤ H → run checkEmpty (tailFuel + extra) P H prefix headCaller headAfter target headMemos.query = (.ok (some [.ok ((), prefixEnum)]), prefixCaller, prefixQueries, prefixEnum)
+T66: ∀ extra P H, tailP ≤ P → tailH ≤ H → SourcePruningEnumerationDispatch.dispatch checkEmpty (tailFuel + extra) P H prefixCaller prefixEnum rejectSource target prefixQueries = (.ok (some rejectAction), tailCaller, tailQueries)
+T67: ExceptT.run (rejectAction prefixEnum) = []
+T68: tailAfter = prefixEnum
+T69: SourceEqualityNativeDemand.Outcome width Node ⊕ SourceCurrentAllocatedConjunctionWorker.Outcome width
+T70: Node
+T71: ∀ (inventory : Inventory) (beforeCaller : Caller width) (before : EnumerationState.State Symbol EnumGuard) (memos : Memos),
+  Context formulas solver inventory beforeCaller memos →
+  PendingRealized beforeCaller.checked.native.machine.heap before →
+  (∃ (node : Option Nat) (scs : List EnumerationState.Suspended), before.values[target]? = some (.unenumerated node scs)) →
+  (∀ source ∈ rest, before.values[source]? = some .eliminated ∨ ∃ (node : Option Nat) (scs : List EnumerationState.Suspended), before.values[source]? = some (.unenumerated node scs)) →
+  Ranges checkEmpty rest beforeCaller before target memos.query →
+    ∃ (fuel p h : Nat)
+      (raw : List (Except EnumerationState.Error (Unit × EnumerationState.State Symbol EnumGuard)))
+      (afterCaller : Caller width) (after : EnumerationState.State Symbol EnumGuard)
+      (savedQueries : Queries) (final : Memos) (next : Inventory),
+      (∀ extra P H, p ≤ P → h ≤ H →
+        run checkEmpty (fuel + extra) P H rest beforeCaller before target memos.query =
+          (.ok (some raw), afterCaller, savedQueries, after)) ∧
+      Post formulas solver next beforeCaller afterCaller final ∧ final.query = savedQueries ∧
+      PendingRealized afterCaller.checked.native.machine.heap after ∧
+      (raw = [] ∨ raw = [.ok ((), after)]) ∧
+      (raw = [.ok ((), after)] →
+        (∃ (node : Option Nat) (scs : List EnumerationState.Suspended),
+          after.values[target]? = some (.unenumerated node scs)) ∧
+        ∀ source ∈ rest, source ≠ target → after.values[source]? = some .eliminated) ∧
+      (∀ slot, before.values[slot]? = some .eliminated → after.values[slot]? = some .eliminated) ∧
+      after.values.length = before.values.length ∧
+      after.representatives = before.representatives ∧ after.counter = before.counter ∧
+      after.obligations = before.obligations ∧ after.expansionAncestry = before.expansionAncestry ∧
+      (∀ slot, slot ≠ target → after.recursionAncestry slot = before.recursionAncestry slot) ∧
+      (raw = [] →
+        ∃ (prefix : List Nat) (source : Nat) (suffix : List Nat)
+          (prefixCaller : Caller width) (prefixEnum : EnumerationState.State Symbol EnumGuard)
+          (prefixQueries : Queries) (action : EnumerateM Symbol EnumGuard Unit),
+          rest = prefix ++ source :: suffix ∧
+          (∀ extra P H, p ≤ P → h ≤ H →
+            run checkEmpty (fuel + extra) P H prefix beforeCaller before target memos.query =
+              (.ok (some [.ok ((), prefixEnum)]), prefixCaller, prefixQueries, prefixEnum)) ∧
+          (∀ extra P H, p ≤ P → h ≤ H →
+            SourcePruningEnumerationDispatch.dispatch checkEmpty (fuel + extra) P H
+              prefixCaller prefixEnum source target prefixQueries =
+                (.ok (some action), afterCaller, savedQueries)) ∧
+          ExceptT.run (action prefixEnum) = [] ∧ after = prefixEnum)
+
+T72: before.values[source]? = some .eliminated
+T73: ExceptT.run (action before) = []
+T74: ExceptT.run (action before) = [.ok ((), headAfter)]
+T75: tailRaw = []
+T76: tailRaw = [.ok ((), tailAfter)]
+T77: remaining = source
+T78: remaining ∈ rest
+T79: before.values[remaining]? = some .eliminated
+T80: before.values[remaining]? = some (.unenumerated oldNode oldScs)
+T81: SourcePruningEnumerationDispatch.dispatch checkEmpty nativeFuel p h beforeCaller before source target queries = (.ok (some action), afterCaller, saved)
+T82: ExceptT.run (action before) = [.ok ((), after)]
+T83: before.values[slot]? = some .eliminated
+T84: source ≠ target
+T85: remaining ∈ source :: rest
+T86: remaining ≠ target
+T87: slot ≠ target
+T88: headP ≤ P
+T89: headH ≤ H
+T90: max headP tailP ≤ P
+T91: max headH tailH ≤ H
+T92: 0 ≤ P
+T93: 0 ≤ H
+T94: source = target
+T95: before.values[source]? ≠ some .eliminated
+T96: merged = some 0
+T97: merged ≠ some 0
+T98: slot = target
+T99: slot = source
+T100: slot ≠ source
+T101: remaining = target
+T102: remaining ≠ source
+T103: (∀ slot, before.values[slot]? = some .eliminated →
+            (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))).values[slot]? = some .eliminated) ∧
+          (∀ remaining ∈ rest,
+            (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))).values[remaining]? = some .eliminated ∨
+              ∃ (node : Option Nat) (scs : List EnumerationState.Suspended),
+                (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))).values[remaining]? =
+                  some (.unenumerated node scs))
+T104: ∀ extra P H, max headP tailP ≤ P → max headH tailH ≤ H →
+        SourcePruningEnumerationDispatch.dispatch checkEmpty (headFuel + tailFuel + extra) P H
+          beforeCaller before source target memos.query = (.ok (some action), headCaller, headQueries)
+T105: ∃ (headFuel headP headH : Nat) (action : EnumerateM Symbol EnumGuard Unit)
+        (headCaller : Caller width) (headAfter : EnumerationState.State Symbol EnumGuard)
+        (headQueries : Queries) (headMemos : Memos) (headInventory : Inventory),
+        (∀ extra P H, headP ≤ P → headH ≤ H →
+          SourcePruningEnumerationDispatch.dispatch checkEmpty (headFuel + extra) P H
+            beforeCaller before source target memos.query = (.ok (some action), headCaller, headQueries)) ∧
+        Post formulas solver headInventory beforeCaller headCaller headMemos ∧ headMemos.query = headQueries ∧
+        PendingRealized headCaller.checked.native.machine.heap headAfter ∧
+        (ExceptT.run (action before) = [] ∨ ExceptT.run (action before) = [.ok ((), headAfter)]) ∧
+        (ExceptT.run (action before) = [] → headAfter = before) ∧
+        (∃ (node : Option Nat) (scs : List EnumerationState.Suspended),
+          headAfter.values[target]? = some (.unenumerated node scs)) ∧
+        (∀ remaining ∈ rest, headAfter.values[remaining]? = some .eliminated ∨
+          ∃ (node : Option Nat) (scs : List EnumerationState.Suspended),
+            headAfter.values[remaining]? = some (.unenumerated node scs)) ∧
+        (source ≠ target → ExceptT.run (action before) = [.ok ((), headAfter)] →
+          headAfter.values[source]? = some .eliminated) ∧
+        (∀ slot, before.values[slot]? = some .eliminated → headAfter.values[slot]? = some .eliminated) ∧
+        headAfter.values.length = before.values.length ∧
+        headAfter.representatives = before.representatives ∧ headAfter.counter = before.counter ∧
+        headAfter.obligations = before.obligations ∧ headAfter.expansionAncestry = before.expansionAncestry ∧
+        (∀ slot, slot ≠ target → headAfter.recursionAncestry slot = before.recursionAncestry slot)
+T106: if source = target then True else
+      match before.values[source]?, before.values[target]? with
+      | some (.unenumerated (some left) _), some (.unenumerated (some right) _) =>
+          match lookupNode beforeCaller.checked.native.machine.heap left,
+              lookupNode beforeCaller.checked.native.machine.heap right with
+          | some first, some second => SourceCurrentAllocatedNativeRequestBounds.WordRanges
+              (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain first second))
+              beforeCaller.checked
+          | _, _ => True
+      | _, _ => True
+T107: source = target ∨ before.values[source]? = some .eliminated ∨
+        ∃ (sourceNode targetNode : Option Nat) (sourceScs targetScs : List EnumerationState.Suspended),
+          before.values[source]? = some (.unenumerated sourceNode sourceScs) ∧
+          before.values[target]? = some (.unenumerated targetNode targetScs)
+T108: before.values[source]? = some .eliminated ∨
+        ∃ (node : Option Nat) (scs : List EnumerationState.Suspended),
+          before.values[source]? = some (.unenumerated node scs)
+T109: ∀ extra P H, max headP tailP ≤ P → max headH tailH ≤ H →
+        run checkEmpty (headFuel + tailFuel + extra) P H rest headCaller headAfter target headMemos.query =
+          (.ok (some tailRaw), tailCaller, tailQueries, tailAfter)
+T110: Ranges checkEmpty rest headCaller headAfter target headMemos.query
+T111: (Except (SourceEqualityNativeDemand.Outcome width Node ⊕
+        SourceCurrentAllocatedConjunctionWorker.Outcome width)
+        (Option (EnumerateM Symbol EnumGuard Unit))) × Caller width × Queries
+T112: ∃ (node : Option Nat) (scs : List EnumerationState.Suspended), before.values[target]? = some (.unenumerated node scs)
+T113: ∀ source ∈ sources, before.values[source]? = some .eliminated ∨ ∃ (node : Option Nat) (scs : List EnumerationState.Suspended), before.values[source]? = some (.unenumerated node scs)
+ALL SCOPED BINDERS
+1 context/EnumGuard: T1 (binder)
+2 context/width: T2 (binder)
+3 public/formulas: T3 (binder)
+4 public/solver: T4 (binder)
+5 public/inventory: T5 (binder)
+6 public/beforeCaller: T6 (binder)
+7 public/before: T7 (binder)
+8 public/sources: T8 (binder)
+9 public/checkEmpty: T9 (binder)
+10 public/target: T2 (binder)
+11 public/memos: T10 (binder)
+12 public/nativeFuel: T2 (binder)
+13 public/p: T2 (binder)
+14 public/h: T2 (binder)
+15 public/queries: T11 (binder)
+16 complete-header.lean.txt/formulas: T3 (literal scoped binder)
+17 complete-header.lean.txt/solver: T4 (literal scoped binder)
+18 complete-header.lean.txt/inventory: T5 (literal scoped binder)
+19 complete-header.lean.txt/beforeCaller: T6 (literal scoped binder)
+20 complete-header.lean.txt/before: T7 (literal scoped binder)
+21 complete-header.lean.txt/sources: T8 (literal scoped binder)
+22 complete-header.lean.txt/checkEmpty: T9 (literal scoped binder)
+23 complete-header.lean.txt/target: T2 (literal scoped binder)
+24 complete-header.lean.txt/memos: T10 (literal scoped binder)
+25 complete-header.lean.txt/initial: T12 (literal scoped binder)
+26 complete-header.lean.txt/realized: T13 (literal scoped binder)
+27 complete-header.lean.txt/node: T14 (literal scoped binder)
+28 complete-header.lean.txt/scs: T15 (literal scoped binder)
+29 complete-header.lean.txt/node: T14 (literal scoped binder)
+30 complete-header.lean.txt/scs: T15 (literal scoped binder)
+31 complete-header.lean.txt/ranges: T16 (literal scoped binder)
+32 complete-header.lean.txt/fuel: T2 (literal scoped binder)
+33 complete-header.lean.txt/p: T2 (literal scoped binder)
+34 complete-header.lean.txt/h: T2 (literal scoped binder)
+35 complete-header.lean.txt/afterCaller: T6 (literal scoped binder)
+36 complete-header.lean.txt/after: T7 (literal scoped binder)
+37 complete-header.lean.txt/savedQueries: T11 (literal scoped binder)
+38 complete-header.lean.txt/final: T10 (literal scoped binder)
+39 complete-header.lean.txt/next: T5 (literal scoped binder)
+40 complete-header.lean.txt/node: T14 (literal scoped binder)
+41 complete-header.lean.txt/scs: T15 (literal scoped binder)
+42 complete-header.lean.txt/prefix: T8 (literal scoped binder)
+43 complete-header.lean.txt/source: T2 (literal scoped binder)
+44 complete-header.lean.txt/suffix: T8 (literal scoped binder)
+45 complete-header.lean.txt/prefixCaller: T6 (literal scoped binder)
+46 complete-header.lean.txt/prefixEnum: T7 (literal scoped binder)
+47 complete-header.lean.txt/prefixQueries: T11 (literal scoped binder)
+48 complete-header.lean.txt/action: T17 (literal scoped binder)
+49 context.lean.txt/EnumGuard: T1 (literal scoped binder)
+50 context.lean.txt/width: T2 (literal scoped binder)
+51 local-changed-frame.lean.txt/node: T14 (literal scoped binder)
+52 local-changed-frame.lean.txt/scs: T15 (literal scoped binder)
+53 local-head-packet.lean.txt/headFuel: T2 (literal scoped binder)
+54 local-head-packet.lean.txt/headP: T2 (literal scoped binder)
+55 local-head-packet.lean.txt/headH: T2 (literal scoped binder)
+56 local-head-packet.lean.txt/action: T17 (literal scoped binder)
+57 local-head-packet.lean.txt/headCaller: T6 (literal scoped binder)
+58 local-head-packet.lean.txt/headAfter: T7 (literal scoped binder)
+59 local-head-packet.lean.txt/headQueries: T11 (literal scoped binder)
+60 local-head-packet.lean.txt/headMemos: T10 (literal scoped binder)
+61 local-head-packet.lean.txt/headInventory: T5 (literal scoped binder)
+62 local-head-packet.lean.txt/node: T14 (literal scoped binder)
+63 local-head-packet.lean.txt/scs: T15 (literal scoped binder)
+64 local-head-packet.lean.txt/node: T14 (literal scoped binder)
+65 local-head-packet.lean.txt/scs: T15 (literal scoped binder)
+66 local-slots.lean.txt/sourceNode: T14 (literal scoped binder)
+67 local-slots.lean.txt/targetNode: T14 (literal scoped binder)
+68 local-slots.lean.txt/sourceScs: T15 (literal scoped binder)
+69 local-slots.lean.txt/targetScs: T15 (literal scoped binder)
+70 local-source-selected.lean.txt/node: T14 (literal scoped binder)
+71 local-source-selected.lean.txt/scs: T15 (literal scoped binder)
+72 ranges-header.lean.txt/checkEmpty: T9 (literal scoped binder)
+73 ranges-header.lean.txt/sources: T8 (literal scoped binder)
+74 ranges-header.lean.txt/beforeCaller: T6 (literal scoped binder)
+75 ranges-header.lean.txt/before: T7 (literal scoped binder)
+76 ranges-header.lean.txt/target: T2 (literal scoped binder)
+77 ranges-header.lean.txt/queries: T11 (literal scoped binder)
+78 run-header.lean.txt/checkEmpty: T9 (literal scoped binder)
+79 run-header.lean.txt/nativeFuel: T2 (literal scoped binder)
+80 run-header.lean.txt/p: T2 (literal scoped binder)
+81 run-header.lean.txt/h: T2 (literal scoped binder)
+82 run-header.lean.txt/sources: T8 (literal scoped binder)
+83 run-header.lean.txt/beforeCaller: T6 (literal scoped binder)
+84 run-header.lean.txt/before: T7 (literal scoped binder)
+85 run-header.lean.txt/target: T2 (literal scoped binder)
+86 run-header.lean.txt/queries: T11 (literal scoped binder)
+87 headPacket/targetInput/targetNode: T14 (obtain)
+88 headPacket/targetInput/targetScs: T15 (obtain)
+89 headPacket/targetInput/targetPendingStored: T18 (obtain)
+90 headPacket/slots pending source/sourceInput/sourceNode: T14 (obtain)
+91 headPacket/slots pending source/sourceInput/sourceScs: T15 (obtain)
+92 headPacket/slots pending source/sourceInput/sourcePendingStored: T19 (obtain)
+93 headPacket/dispatch/dispatchFuel: T2 (obtain)
+94 headPacket/dispatch/dispatchP: T2 (obtain)
+95 headPacket/dispatch/dispatchH: T2 (obtain)
+96 headPacket/dispatch/action: T17 (obtain)
+97 headPacket/dispatch/dispatchCaller: T6 (obtain)
+98 headPacket/dispatch/dispatchQueries: T11 (obtain)
+99 headPacket/dispatch/dispatchMemos: T10 (obtain)
+100 headPacket/dispatch/dispatchInventory: T5 (obtain)
+101 headPacket/dispatch/dispatchStable: T20 (obtain)
+102 headPacket/dispatch/dispatchPost: T21 (obtain)
+103 headPacket/dispatch/dispatchQuerySame: T22 (obtain)
+104 headPacket/dispatch/unchangedRealized: T23 (obtain)
+105 headPacket/dispatch/noopOutcome: T24 (obtain)
+106 headPacket/dispatch/changedOutcome: T25 (obtain)
+107 headPacket/non-noop/changed/sourceNode: T14 (obtain)
+108 headPacket/non-noop/changed/targetNode: T14 (obtain)
+109 headPacket/non-noop/changed/merged: T14 (obtain)
+110 headPacket/non-noop/changed/sourceScs: T15 (obtain)
+111 headPacket/non-noop/changed/targetScs: T15 (obtain)
+112 headPacket/non-noop/changed/sourceStored: T19 (obtain)
+113 headPacket/non-noop/changed/targetStored: T18 (obtain)
+114 headPacket/non-noop/changed/actionRaw: T26 (obtain)
+115 headPacket/non-noop/changed/surviving: T27 (obtain)
+116 headPacket/non-noop/changed/optionalOutcome: T28 (obtain)
+117 headPacket/non-noop/changed/presentOutcome: T29 (obtain)
+118 headPacket/nonempty/survived/targetAfterStored: T30 (obtain)
+119 headPacket/nonempty/survived/sourceAfterStored: T31 (obtain)
+120 headPacket/nonempty/survived/changedRealized: T32 (obtain)
+121 cons/head/headFuel: T2 (obtain)
+122 cons/head/headP: T2 (obtain)
+123 cons/head/headH: T2 (obtain)
+124 cons/head/action: T17 (obtain)
+125 cons/head/headCaller: T6 (obtain)
+126 cons/head/headAfter: T7 (obtain)
+127 cons/head/headQueries: T11 (obtain)
+128 cons/head/headMemos: T10 (obtain)
+129 cons/head/headInventory: T5 (obtain)
+130 cons/head/headRun: T33 (obtain)
+131 cons/head/headPost: T34 (obtain)
+132 cons/head/headQuerySame: T35 (obtain)
+133 cons/head/headRealized: T36 (obtain)
+134 cons/head/headShape: T37 (obtain)
+135 cons/head/headRejectedSame: T38 (obtain)
+136 cons/head/headTarget: T39 (obtain)
+137 cons/head/headSelected: T40 (obtain)
+138 cons/head/headSource: T41 (obtain)
+139 cons/head/headEliminated: T42 (obtain)
+140 cons/head/headLength: T43 (obtain)
+141 cons/head/headRepresentatives: T44 (obtain)
+142 cons/head/headCounter: T45 (obtain)
+143 cons/head/headObligations: T46 (obtain)
+144 cons/head/headExpansion: T47 (obtain)
+145 cons/head/headAncestry: T48 (obtain)
+146 cons/successful head/tail/tailFuel: T2 (obtain)
+147 cons/successful head/tail/tailP: T2 (obtain)
+148 cons/successful head/tail/tailH: T2 (obtain)
+149 cons/successful head/tail/tailRaw: T49 (obtain)
+150 cons/successful head/tail/tailCaller: T6 (obtain)
+151 cons/successful head/tail/tailAfter: T7 (obtain)
+152 cons/successful head/tail/tailQueries: T11 (obtain)
+153 cons/successful head/tail/tailMemos: T10 (obtain)
+154 cons/successful head/tail/tailInventory: T5 (obtain)
+155 cons/successful head/tail/tailRun: T50 (obtain)
+156 cons/successful head/tail/tailPost: T51 (obtain)
+157 cons/successful head/tail/tailQuerySame: T52 (obtain)
+158 cons/successful head/tail/tailRealized: T53 (obtain)
+159 cons/successful head/tail/tailShape: T54 (obtain)
+160 cons/successful head/tail/tailCompleted: T55 (obtain)
+161 cons/successful head/tail/tailEliminated: T56 (obtain)
+162 cons/successful head/tail/tailLength: T57 (obtain)
+163 cons/successful head/tail/tailRepresentatives: T58 (obtain)
+164 cons/successful head/tail/tailCounter: T59 (obtain)
+165 cons/successful head/tail/tailObligations: T60 (obtain)
+166 cons/successful head/tail/tailExpansion: T61 (obtain)
+167 cons/successful head/tail/tailAncestry: T62 (obtain)
+168 cons/successful head/tail/tailRejection: T63 (obtain)
+169 cons/tail rejection/first rejection/prefix: T8 (obtain)
+170 cons/tail rejection/first rejection/rejectSource: T2 (obtain)
+171 cons/tail rejection/first rejection/suffix: T8 (obtain)
+172 cons/tail rejection/first rejection/prefixCaller: T6 (obtain)
+173 cons/tail rejection/first rejection/prefixEnum: T7 (obtain)
+174 cons/tail rejection/first rejection/prefixQueries: T11 (obtain)
+175 cons/tail rejection/first rejection/rejectAction: T17 (obtain)
+176 cons/tail rejection/first rejection/split: T64 (obtain)
+177 cons/tail rejection/first rejection/prefixRun: T65 (obtain)
+178 cons/tail rejection/first rejection/rejectRun: T66 (obtain)
+179 cons/tail rejection/first rejection/rejectRaw: T67 (obtain)
+180 cons/tail rejection/first rejection/rejectedAfter: T68 (obtain)
+181 run/source: T2 (definition case)
+182 run/rest: T8 (definition case)
+183 run/observation/fault: T69 (definition case)
+184 run/observation/action: T17 (definition case)
+185 run/raw/after: T7 (definition case)
+186 Ranges/source: T2 (definition case)
+187 Ranges/rest: T8 (definition case)
+188 Ranges/head pending-pair/left: T2 (definition case)
+189 Ranges/head pending-pair/right: T2 (definition case)
+190 Ranges/head decoded-pair/first: T70 (definition case)
+191 Ranges/head decoded-pair/second: T70 (definition case)
+192 run/observation product/reachedCaller: T6 (definition case)
+193 run/observation product/savedQueries: T11 (definition case)
+194 run_complete/source: T2 (proof case)
+195 run_complete/rest: T8 (proof case)
+196 run_complete/ih: T71 (proof case)
+197 headPacket/sourceSelected/storedEliminated: T72 (proof case)
+198 headPacket/sourceSelected/sourceNode: T14 (proof case)
+199 headPacket/sourceSelected/sourceScs: T15 (proof case)
+200 headPacket/sourceSelected/sourcePendingStored: T19 (proof case)
+201 cons/headShape/headRejected: T73 (proof case)
+202 cons/headShape/headCompleted: T74 (proof case)
+203 cons/tailShape/tailRejected: T75 (proof case)
+204 cons/tailShape/tailSucceeded: T76 (proof case)
+205 cons/completed membership/memberHead: T77 (proof case)
+206 cons/completed membership/memberRest: T78 (proof case)
+207 changedFrame/remaining initial selected/oldEliminated: T79 (proof case)
+208 changedFrame/remaining initial selected/oldNode: T14 (proof case)
+209 changedFrame/remaining initial selected/oldScs: T15 (proof case)
+210 changedFrame/remaining initial selected/oldPending: T80 (proof case)
+211 Ranges/tail implication/nativeFuel: T2 (intro)
+212 Ranges/tail implication/p: T2 (intro)
+213 Ranges/tail implication/h: T2 (intro)
+214 Ranges/tail implication/action: T17 (intro)
+215 Ranges/tail implication/afterCaller: T6 (intro)
+216 Ranges/tail implication/saved: T11 (intro)
+217 Ranges/tail implication/after: T7 (intro)
+218 Ranges/tail implication/dispatched: T81 (intro)
+219 Ranges/tail implication/completed: T82 (intro)
+220 changedFrame/initial eliminated/slot: T2 (intro)
+221 changedFrame/initial eliminated/oldEliminated: T83 (intro)
+222 changedFrame/remaining/remaining: T2 (intro)
+223 changedFrame/remaining/member: T78 (intro)
+224 headPacket/source elimination/different: T84 (intro)
+225 headPacket/source elimination/completed: T74 (intro)
+226 headPacket/rejection entry/rejected: T73 (intro)
+227 cons/public completed/completed: T76 (intro)
+228 cons/public processed source/remaining: T2 (intro)
+229 cons/public processed source/member: T85 (intro)
+230 cons/public processed source/different: T86 (intro)
+231 cons/public prior eliminated/slot: T2 (intro)
+232 cons/public prior eliminated/stored: T83 (intro)
+233 cons/public ancestry/slot: T2 (intro)
+234 cons/public ancestry/different: T87 (intro)
+235 cons/public first rejection/rejected: T75 (intro)
+236 headRun/extra: T2 (intro)
+237 headRun/P: T2 (intro)
+238 headRun/H: T2 (intro)
+239 headRun/largeP: T88 (intro)
+240 headRun/largeH: T89 (intro)
+241 headAt/extra: T2 (intro)
+242 headAt/P: T2 (intro)
+243 headAt/H: T2 (intro)
+244 headAt/largeP: T90 (intro)
+245 headAt/largeH: T91 (intro)
+246 tailAt/extra: T2 (intro)
+247 tailAt/P: T2 (intro)
+248 tailAt/H: T2 (intro)
+249 tailAt/largeP: T90 (intro)
+250 tailAt/largeH: T91 (intro)
+251 nil stable/extra: T2 (intro)
+252 nil stable/P: T2 (intro)
+253 nil stable/H: T2 (intro)
+254 nil stable/largeP: T92 (intro)
+255 nil stable/largeH: T93 (intro)
+256 cons/head-rejection stable/extra: T2 (intro)
+257 cons/head-rejection stable/P: T2 (intro)
+258 cons/head-rejection stable/H: T2 (intro)
+259 cons/head-rejection stable/largeP: T88 (intro)
+260 cons/head-rejection stable/largeH: T89 (intro)
+261 cons/composed stable/extra: T2 (intro)
+262 cons/composed stable/P: T2 (intro)
+263 cons/composed stable/H: T2 (intro)
+264 cons/composed stable/largeP: T90 (intro)
+265 cons/composed stable/largeH: T91 (intro)
+266 cons/lifted prefix stable/extra: T2 (intro)
+267 cons/lifted prefix stable/P: T2 (intro)
+268 cons/lifted prefix stable/H: T2 (intro)
+269 cons/lifted prefix stable/largeP: T90 (intro)
+270 cons/lifted prefix stable/largeH: T91 (intro)
+271 cons/lifted reject stable/extra: T2 (intro)
+272 cons/lifted reject stable/P: T2 (intro)
+273 cons/lifted reject stable/H: T2 (intro)
+274 cons/lifted reject stable/largeP: T90 (intro)
+275 cons/lifted reject stable/largeH: T91 (intro)
+276 selected rest/remaining: T2 (lambda)
+277 selected rest/member: T78 (lambda)
+278 head selected initial inheritance/remaining: T2 (lambda)
+279 head selected initial inheritance/member: T78 (lambda)
+280 headPacket/noop/same: T94 (condition positive)
+281 headPacket/noop/not_same: T84 (condition negative)
+282 headPacket/non-same/eliminated: T72 (condition positive)
+283 headPacket/non-same/not_eliminated: T95 (condition negative)
+284 headPacket/non-noop/empty: T96 (condition positive)
+285 headPacket/non-noop/not_empty: T97 (condition negative)
+286 changedFrame/retained eliminated/atTarget: T98 (condition positive)
+287 changedFrame/retained eliminated/not_atTarget: T87 (condition negative)
+288 changedFrame/retained eliminated/atSource: T99 (condition positive)
+289 changedFrame/retained eliminated/not_atSource: T100 (condition negative)
+290 changedFrame/remaining/remainingTarget: T101 (condition positive)
+291 changedFrame/remaining/not_remainingTarget: T86 (condition negative)
+292 changedFrame/remaining/remainingSource: T77 (condition positive)
+293 changedFrame/remaining/not_remainingSource: T102 (condition negative)
+294 local-changed-frame.lean.txt/changedFrame: T103 (local have header)
+295 local-head-at.lean.txt/headAt: T104 (local have header)
+296 local-head-packet.lean.txt/headPacket: T105 (local have header)
+297 local-head-ranges.lean.txt/headRanges: T106 (local have header)
+298 local-slots.lean.txt/slots: T107 (local have header)
+299 local-source-selected.lean.txt/sourceSelected: T108 (local have header)
+300 local-tail-at.lean.txt/tailAt: T109 (local have header)
+301 local-tail-ranges.lean.txt/tailRanges: T110 (local have header)
+302 definition-observation.lean.txt/observation: T111 (definition let header)
+303 definition-raw.lean.txt/raw: T49 (definition let header)
+304 run_complete/initial: T12 (premise)
+305 run_complete/realized: T13 (premise)
+306 run_complete/targetPending: T112 (premise)
+307 run_complete/selected: T113 (premise)
+308 run_complete/ranges: T16 (premise)

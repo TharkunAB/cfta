@@ -1,0 +1,16 @@
+
+/-- The source's deleted-winner key set gives exactly the merged root map. -/
+theorem redirect_fold_eq (roots : Nat → Nat) (selected : List Nat) (target : Nat) (sources : List Nat)
+    (keys : ∀ key, key ∈ sources ↔ key ∈ selected ∧ key ≠ target) :
+    sources.foldl (fun previous source => EnumerationCanonicalWaiting.redirect target source previous) roots =
+      mergedRoots roots selected target := by
+  funext uv
+  rw [redirect_fold_apply]
+  unfold mergedRoots
+  by_cases member : roots uv ∈ selected
+  · by_cases atTarget : roots uv = target
+    · simp [atTarget]
+    · have present := (keys (roots uv)).mpr ⟨member, atTarget⟩
+      simp [member, present]
+  · have absent : roots uv ∉ sources := fun present => member ((keys (roots uv)).mp present).1
+    simp [member, absent]

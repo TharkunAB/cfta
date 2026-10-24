@@ -1,0 +1,1 @@
+This unactivated source draft records the proposed V2 owner-path amendment. It was not frozen or activated. Root subsequently retained a real strict-2 failure and selected V3 explicit Nat binders. All V2 draft sources and patches remain unchanged. The final amendment must use the separately frozen V3 owner.

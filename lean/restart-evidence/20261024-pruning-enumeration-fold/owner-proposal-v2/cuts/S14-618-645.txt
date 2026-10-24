@@ -1,0 +1,28 @@
+@[simp] theorem getElem?_set_self {l : List α} {i : Nat} {a : α} (h : i < l.length) :
+    (l.set i a)[i]? = some a := by
+  simp_all
+
+/-- This differs from `getElem?_set_self` by monadically mapping `Function.const _ a` over the `Option`
+returned by `l[i]?`. -/
+theorem getElem?_set_self' {l : List α} {i : Nat} {a : α} :
+    (set l i a)[i]? = Function.const _ a <$> l[i]? := by
+  by_cases h : i < l.length
+  · simp [getElem?_set_self h, getElem?_eq_getElem h]
+  · simp only [Nat.not_lt] at h
+    simpa [getElem?_eq_none_iff.2 h]
+
+@[simp] theorem getElem_set_ne {l : List α} {i j : Nat} (h : i ≠ j) {a : α}
+    (hj : j < (l.set i a).length) :
+    (l.set i a)[j] = l[j]'(by simp at hj; exact hj) :=
+  match l, i, j with
+  | [], _, _ => by simp
+  | _ :: _, 0, 0 => by contradiction
+  | _ :: _, 0, _ + 1 => by simp
+  | _ :: _, _ + 1, 0 => by simp
+  | _ :: l, i + 1, j + 1 => by
+    have g : i ≠ j := h ∘ congrArg (· + 1)
+    simp [getElem_set_ne g]
+
+@[simp] theorem getElem?_set_ne {l : List α} {i j : Nat} (h : i ≠ j) {a : α}  :
+    (l.set i a)[j]? = l[j]? := by
+  by_cases hj : j < (l.set i a).length

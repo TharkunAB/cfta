@@ -1,0 +1,13 @@
+# Ordered checked pending-slot assimilation
+
+The selected suffix uses the ORIGINAL ordered recorded list, including duplicates and the winner. It starts after the supplied observed representative/union/count-transfer prefix. It does not construct that prefix, merge the incoming node or claim full terminal completion.
+
+For each reached occurrence, run computes dispatch once and executes its captured action once at the current enumeration state. Only the exact successful singleton advances the suffix. Rejection, enum errors, mixed/multiple raw rows and malformed results remain literal. Native/worker interruptions and model-domain absence remain distinct. The returned Caller/query pair retains reached native effects; the enum field is the last completed prefix state. No whole-fold resume is implemented.
+
+The finite theorem starts from genuine Context, all-slot realization, a pending target and selected pending/eliminated source slots. The recursive Ranges proposition constrains reached two-present requests and tails at actual singleton transitions. It does not assume that a successful transition exists. The result derives stable bounds, full Post and query identity, all-slot realization, exact state frames and either completion or an actual first-rejection prefix/action witness. H6 remains strongest; goal ACTIVE/incomplete.
+
+Work retains the complete baseline, actual frozen contracts, all raw inputs, reports, real failures and complete resource receipts. Prior publication retains exactly26 actual inputs. Its primary next assessment and independent review are already sealed. Older Dispatch histories remain protected by baseline. Fold strict-1 failed to parse the unquoted reserved prefix binder. V2 quotes that binder. Strict-2 retained unresolved slot types and default-heartbeat timeouts. V3 explicitly annotates the three preservation binders as Nat, matching the typed inventory. Full V1/V2 owners and gates remain. All actual failed inputs/raw/reports/caps remain in work. Later results use the actual work ledger; no raised limit is assumed.
+
+Run verify-checkpoint.py with --root set to the repository root. All baseline blobs/modes/refs/stashes/worktrees, nine exact document inverses, one Audit prepend, complete actual public signatures/axiom subsets and cap families remain checked. Force-add every manifest path and SHA256SUMS, including ignored raw logs. Publication requires all sealed paths in HEAD, exact index/tree/files/modes, singleton push URL and ordinary formalize push.
+
+No future check, seal or publication success is assumed. Six imported Haskell repair handoffs remain first in FINDINGS. No native flag/index/container extraction, code generation, solver, full-driver, runtime/resource or convergence result is claimed.

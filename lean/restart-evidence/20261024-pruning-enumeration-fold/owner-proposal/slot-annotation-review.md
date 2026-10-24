@@ -1,0 +1,3 @@
+V3 adds the existing intended Nat type to the eliminated-slot preservation binder. The public complete header, local head packet and local changed-frame contract contain the same annotation. Corresponding IH, obtain and scoped strings retain it. Ancestry quantifiers are unchanged.
+
+Root's actual strict-2 input, 1955-byte log and report are retained. The log records ambiguous dotted constructors and three default-heartbeat timeouts. No new execution result or causal proof is claimed. V1/V2 remain immutable. The correction adds no premise, helper, instance, action, type or proof limit. No body or compiler was run here.

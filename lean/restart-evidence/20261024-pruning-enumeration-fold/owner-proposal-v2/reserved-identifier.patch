@@ -1,0 +1,18 @@
+--- v1/complete-header.lean.txt
++++ v2/complete-header.lean.txt
+@@ -33,12 +33,12 @@
+       after.obligations = before.obligations ∧ after.expansionAncestry = before.expansionAncestry ∧
+       (∀ slot, slot ≠ target → after.recursionAncestry slot = before.recursionAncestry slot) ∧
+       (raw = [] →
+-        ∃ (prefix : List Nat) (source : Nat) (suffix : List Nat)
++        ∃ («prefix» : List Nat) (source : Nat) (suffix : List Nat)
+           (prefixCaller : Caller width) (prefixEnum : EnumerationState.State Symbol EnumGuard)
+           (prefixQueries : Queries) (action : EnumerateM Symbol EnumGuard Unit),
+-          sources = prefix ++ source :: suffix ∧
++          sources = «prefix» ++ source :: suffix ∧
+           (∀ extra P H, p ≤ P → h ≤ H →
+-            run checkEmpty (fuel + extra) P H prefix beforeCaller before target memos.query =
++            run checkEmpty (fuel + extra) P H «prefix» beforeCaller before target memos.query =
+               (.ok (some [.ok ((), prefixEnum)]), prefixCaller, prefixQueries, prefixEnum)) ∧
+           (∀ extra P H, p ≤ P → h ≤ H →
+             SourcePruningEnumerationDispatch.dispatch checkEmpty (fuel + extra) P H
