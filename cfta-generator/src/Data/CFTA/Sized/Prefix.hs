@@ -69,6 +69,21 @@ it rejects all of them, and undecided ('undecidedTokens') otherwise. An
 undecided token is neither offered nor rejected. The counts, the lists, the
 ranks, and the samples cover the accepted completions; 'undecidedTerms' lists
 the others.
+
+'withWeights' gives each symbol a weight, a non-negative 'Rational'. The weight
+of a term is the product of the weights of the symbols of its nodes.
+'nextTokenWeights' gives the total weight of the completions after each token,
+'tokenProbability' the probability of a token after the prefix, and
+'sampleWeighted' draws a completion in proportion to its weight. A decoder
+that mixes the scores of a model with a grammar needs this mass of the
+grammatical completions; see Park, Wang, Berg-Kirkpatrick, Polikarpova, and
+D'Antoni, /Grammar-Aligned Decoding/, NeurIPS 2024 (arXiv:2405.21047). Here
+the mass is exact for a weight that is a product over the nodes, not for the
+distribution of a language model. With unambiguous rows and no constraint,
+the weights of a state are a convolution over its transitions, as the counts
+are. Otherwise they are sums over the listed completions. Weights on the
+symbols, not on the transitions, give each completion one weight, also when
+two runs accept it.
 -}
 module Data.CFTA.Sized.Prefix (
     Completions,
@@ -87,6 +102,14 @@ module Data.CFTA.Sized.Prefix (
     undecidedTerms,
     unrankCompletion,
     sampleCompletion,
+
+    -- * Weights
+    withWeights,
+    completionWeight,
+    nextTokenWeights,
+    tokenProbability,
+    sampleWeighted,
+    drawCompletion,
 ) where
 
 import Control.Monad (foldM, void)
@@ -97,6 +120,7 @@ import qualified Data.IntMap.Lazy as IntMap
 import Data.List (genericDrop, genericIndex, genericLength, genericReplicate, genericTake)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe, listToMaybe)
+import Data.Ratio (denominator, numerator)
 import qualified Data.Set as Set
 import qualified Test.QuickCheck as QC
 
@@ -117,6 +141,8 @@ data Completions symbol = Completions
     -- ^ The prefix, the last token first.
     , completionsBudget :: !Integer
     -- ^ The number of nodes that the pending nodes can have together.
+    , completionsWeight :: symbol -> Rational
+    -- ^ The weight of each symbol.
     , completionsRoute :: Route symbol
     }
 
@@ -140,6 +166,8 @@ data Tables symbol = Tables
     -- ^ The size classes of each state, built when a query reads them.
     , tablesUnambiguous :: Bool
     -- ^ Whether each term has at most one run from each state.
+    , tablesWeights :: IntMap.IntMap [Rational]
+    -- ^ The total weight of the terms of each state, for each size from zero, when the rows are unambiguous.
     }
 
 -- | Why the completions of an automaton cannot be built.
@@ -159,10 +187,10 @@ prefixCompletions ::
 prefixCompletions (Size bound) automaton
     | any (any (residual . FTA.transitionConstraint)) reached = Left GuardedTransition
     | all (all ((== noConstraint) . FTA.transitionConstraint)) reached =
-        Right $ Completions [] bound $ Stacks tables $ Set.fromList $ filter (fits tables bound) [[number initial]]
+        Right $ emptyPrefix bound $ Stacks tables $ Set.fromList $ filter (fits tables bound) [[number initial]]
     | otherwise =
         Right
-            $ Completions [] bound
+            $ emptyPrefix bound
             $ Listed [(term, preorder term, Yes) | size <- [1 .. bound], term <- termsOfSize (stateClasses initial) (Size size)]
   where
     reached = FTA.transitionTable $ FTA.trim automaton
@@ -188,6 +216,7 @@ prefixCompletions (Size bound) automaton
                 IntMap.fromList [(number state, size) | (state, Size size) <- Map.toList $ Ordinary.minimumSizes rows]
             , tablesClasses = IntMap.fromList [(number state, stateClasses state) | state <- Map.keys rows]
             , tablesUnambiguous = Ordinary.unambiguousRows $ Map.map (map void) rows
+            , tablesWeights = stateWeights (const 1) $ tablesTokens tables
             }
     stateClasses =
         fromRight (error "prefixCompletions: an automaton without a guard has size classes") $
@@ -219,7 +248,7 @@ prefixCompletionsWith entailment (Size bound) automaton = case prefixCompletions
     Left _ -> do
         found <- termVerdicts entailment automaton candidates
         pure
-            $ Completions [] bound
+            $ emptyPrefix bound
             $ Listed [(term, preorder term, verdict) | (term, verdict) <- zip candidates found, verdict /= No]
   where
     candidates = [term | size <- [1 .. bound], term <- termsOfSize equalitiesOnly (Size size)]
@@ -227,6 +256,10 @@ prefixCompletionsWith entailment (Size bound) automaton = case prefixCompletions
         fromRight (error "prefixCompletionsWith: an automaton with equality constraints has size classes")
             $ sized
             $ FTA.mapConstraints (equalityConstraint . equalities) automaton
+
+-- | The completions of the empty prefix, with the weight one for each symbol.
+emptyPrefix :: Integer -> Route symbol -> Completions symbol
+emptyPrefix bound = Completions [] bound (const 1)
 
 {- | The completions after one more token. 'Nothing' when no completion
 starts with the prefix and the token. With a solver, the result is 'Nothing'
@@ -250,7 +283,12 @@ afterToken completions token = case completionsRoute completions of
          in if null kept then Nothing else Just $ after $ Listed kept
   where
     budget = completionsBudget completions - 1
-    after = Completions (token : completionsPrefix completions) budget
+    after route =
+        completions
+            { completionsPrefix = token : completionsPrefix completions
+            , completionsBudget = budget
+            , completionsRoute = route
+            }
 
 {- | The completions after more tokens, the first token first. 'Nothing' when
 no completion starts with the prefix and the tokens.
@@ -384,6 +422,174 @@ sampleCompletion completions
   where
     Cardinality count = completionCount completions
 
+-- Weights
+
+{- | The completions with a weight for each symbol, which must not be
+negative. The weight of a term is the product of the weights of the symbols
+of its nodes, the nodes of the prefix included. A completion is a term, not a
+run, so its weight does not depend on the run that accepts it. Without
+'withWeights', each symbol has the weight one, and the weight of the
+completions is their number.
+-}
+withWeights :: (symbol -> Rational) -> Completions symbol -> Completions symbol
+withWeights weight completions =
+    completions
+        { completionsWeight = weight
+        , completionsRoute = case completionsRoute completions of
+            Stacks tables stacks -> Stacks tables{tablesWeights = stateWeights weight $ tablesTokens tables} stacks
+            listed -> listed
+        }
+
+{- | The total weight of the completions. With unambiguous rows and no
+constraint, it is a convolution of the weights of the pending states.
+Otherwise it is the sum of the weights of the listed completions.
+-}
+completionWeight :: (Ord symbol) => Completions symbol -> Rational
+completionWeight completions = case completionsRoute completions of
+    Stacks tables stacks
+        | tablesUnambiguous tables ->
+            prefixWeight completions * sum [sum $ stackWeights tables budget stack | stack <- Set.toList stacks]
+    _ -> sum $ map (termWeight $ completionsWeight completions) $ completionTerms completions
+  where
+    budget = completionsBudget completions
+
+{- | The tokens of 'nextTokens', each with the total weight of the completions
+that start with the prefix and the token. A token with completions whose
+weight is zero has the weight zero.
+-}
+nextTokenWeights :: (Ord symbol) => Completions symbol -> [((symbol, Int), Rational)]
+nextTokenWeights completions =
+    [ (token, maybe 0 completionWeight $ afterToken completions token)
+    | (token, _) <- nextTokens completions
+    ]
+
+{- | The probability of a token after the prefix: the weight of the completions
+that continue with it, divided by the weight of the completions. The weight of
+the prefix is in both, so it cancels. 'Nothing' when the completions have the
+weight zero. A token without a completion has the probability zero.
+-}
+tokenProbability :: (Ord symbol) => Completions symbol -> (symbol, Int) -> Maybe Rational
+tokenProbability completions token
+    | total <= 0 = Nothing
+    | otherwise = Just $ maybe 0 completionWeight (afterToken completions token) / total
+  where
+    total = completionWeight completions
+
+{- | A generator of the completions, each with a probability in proportion to
+its weight. 'Nothing' when the completions have the weight zero. Each choice
+scales its weights to integers and draws one of them, so the probabilities
+are exact.
+-}
+sampleWeighted :: (Ord symbol) => Completions symbol -> Maybe (QC.Gen (Term symbol))
+sampleWeighted = drawCompletion chooseInteger
+  where
+    chooseInteger weights = do
+        let scale = foldr (lcm . denominator) 1 weights
+            scaled = [numerator (weight * fromInteger scale) | weight <- weights]
+        drawn <- QC.chooseInteger (0, sum scaled - 1)
+        pure $ length $ takeWhile (<= drawn) $ scanl1 (+) scaled
+
+{- | A completion, drawn with a function that chooses an index of a list of
+weights. 'Nothing' when the completions have the weight zero. The draw gives
+each completion a probability in proportion to its weight when the function
+chooses the index @i@ with the probability of the weight @i@ over the sum of
+the weights, as the function of 'sampleWeighted' does.
+
+With unambiguous rows and no constraint, the draw chooses the size and the
+stack of pending states, then the size of each pending node, then the
+transition of each node, each in proportion to the weights of its
+completions. Otherwise it chooses one listed completion. The order of the
+choices inside a size class follows the transitions, not the class ranks of
+"Data.CFTA.Sized", so with the weight one for each symbol the probabilities
+are uniform, but one draw can give another completion than 'sampleCompletion'.
+-}
+drawCompletion :: (Monad m, Ord symbol) => ([Rational] -> m Int) -> Completions symbol -> Maybe (m (Term symbol))
+drawCompletion choose completions
+    | completionWeight completions <= 0 = Nothing
+    | otherwise = Just $ case completionsRoute completions of
+        Stacks tables stacks
+            | tablesUnambiguous tables -> do
+                let options =
+                        [ (stack, size, weights `genericIndex` size)
+                        | size <- [0 .. budget]
+                        , (stack, weights) <- [(stack, stackWeights tables budget stack) | stack <- Set.toList stacks]
+                        ]
+                index <- choose [stackWeight | (_, _, stackWeight) <- options]
+                let (stack, size, _) = options !! index
+                fill (completionPrefix completions) <$> drawFilling tables stack size
+        _ -> do
+            let terms = completionTerms completions
+            index <- choose $ map (termWeight weight) terms
+            pure $ terms !! index
+  where
+    budget = completionsBudget completions
+    weight = completionsWeight completions
+    -- The terms of a stack of pending states with the given total size.
+    drawFilling _ [] _ = pure []
+    drawFilling tables (state : rest) size = do
+        let restWeights = stackWeights tables size rest
+            options =
+                [ (first, weightsOf tables state `genericIndex` first * restWeights `genericIndex` (size - first)) | first <- [1 .. size]
+                ]
+        index <- choose $ map snd options
+        let first = fst $ options !! index
+        (:) <$> drawTerm tables state first <*> drawFilling tables rest (size - first)
+    -- A term of a state with the given size.
+    drawTerm tables state size = do
+        let options =
+                [ (symbol, children, weight symbol * stackWeights tables (size - 1) children `genericIndex` (size - 1))
+                | ((symbol, _), childLists) <- Map.toList $ IntMap.findWithDefault Map.empty state $ tablesTokens tables
+                , children <- childLists
+                ]
+        index <- choose [optionWeight | (_, _, optionWeight) <- options]
+        let (symbol, children, _) = options !! index
+        Term.Node symbol <$> drawFilling tables children (size - 1)
+
+-- | The weight of the nodes of the prefix.
+prefixWeight :: Completions symbol -> Rational
+prefixWeight completions = product [completionsWeight completions symbol | (symbol, _) <- completionsPrefix completions]
+
+-- | The weight of a term: the product of the weights of its symbols.
+termWeight :: (symbol -> Rational) -> Term symbol -> Rational
+termWeight weight = foldr ((*) . weight) 1
+
+{- | The total weight of the terms of each state for each size from zero: a
+choice over the transitions of the state, each the weight of its symbol times
+the product of the weights of its children, with one node for the
+transition. The rows must be unambiguous, so that each term has one run.
+-}
+stateWeights :: (symbol -> Rational) -> IntMap.IntMap (Map.Map (symbol, Int) [[Int]]) -> IntMap.IntMap [Rational]
+stateWeights weight tokens = table
+  where
+    table = IntMap.map (\byToken -> map (weightAt byToken) [0 ..]) tokens
+    weightAt _ 0 = 0
+    weightAt byToken size =
+        sum
+            [ weight symbol * childWeights (size - 1) children `genericIndex` (size - 1)
+            | ((symbol, _), childLists) <- Map.toList byToken
+            , children <- childLists
+            ]
+    -- The weights of the children of a transition, up to a total size.
+    childWeights degree children =
+        products degree [genericTake (degree + 1) $ IntMap.findWithDefault (repeat 0) child table | child <- children]
+
+-- | The weights of the terms of a state, for each size from zero.
+weightsOf :: Tables symbol -> Int -> [Rational]
+weightsOf tables state = IntMap.findWithDefault (repeat 0) state $ tablesWeights tables
+
+-- | The weight of the fillings of a stack of pending states, for each total size from zero to the budget.
+stackWeights :: Tables symbol -> Integer -> [Int] -> [Rational]
+stackWeights tables budget stack = products budget [genericTake (budget + 1) $ weightsOf tables state | state <- stack]
+
+{- | The product of polynomials up to a degree: each polynomial is its list of
+coefficients from degree zero, and the result has the coefficients from zero
+to the degree.
+-}
+products :: (Num value) => Integer -> [[value]] -> [value]
+products degree = foldr convolve (1 : genericReplicate degree 0)
+  where
+    convolve left right = [sum $ zipWith (*) (reverse $ genericTake (size + 1) left) right | size <- [0 .. degree]]
+
 -- | Whether a stack of pending states has a filling within the budget.
 fits :: Tables symbol -> Integer -> [Int] -> Bool
 fits tables budget stack = maybe False ((<= budget) . sum) $ traverse (`IntMap.lookup` tablesMinimum tables) stack
@@ -396,11 +602,10 @@ classesOf tables state = tablesClasses tables IntMap.! state
 from zero to the budget. The rows must be unambiguous.
 -}
 stackCounts :: Tables symbol -> Integer -> [Int] -> [Integer]
-stackCounts tables budget = foldr (convolve . stateCounts) (1 : genericReplicate budget 0)
+stackCounts tables budget = products budget . map stateCounts
   where
     stateCounts state =
         0 : [count | size <- [1 .. budget], let Cardinality count = countOfSize (classesOf tables state) (Size size)]
-    convolve left right = [sum $ zipWith (*) (reverse $ genericTake (size + 1) left) right | size <- [0 .. budget]]
 
 {- | The fillings of a stack of pending states with the given total size, in
 order: the term of the first pending node varies slowest.

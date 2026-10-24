@@ -318,6 +318,15 @@ gives the offered tokens, `undecidedTokens` the tokens that the solver neither
 offers nor rejects, and `undecidedTerms` the completions that it does not
 decide.
 
+`withWeights` gives each symbol a weight, a non-negative `Rational`, and the
+weight of a term is the product of the weights of its nodes.
+`nextTokenWeights` gives the total weight of the completions after each next
+token, `tokenProbability` the probability of a token after the prefix, and
+`sampleWeighted` draws a completion in proportion to its weight. This is the
+mass that grammar-aligned decoding needs (Park et al., *Grammar-Aligned
+Decoding*, NeurIPS 2024), exact for a weight that is a product over the
+nodes. With the weight one for each symbol, the weights are the counts.
+
 ## Equality-constrained generators
 
 An equality generator is a `Gen Symbol`, with the name `ECTAGen`. Each
