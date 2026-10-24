@@ -1,5 +1,33 @@
 # Current system claim
 
+## Stored enumeration-node handles
+
+Updated: 2026-10-24. Main `74250bd88` is incorporated.
+Proof: `31eaa5af6b65fc4f6a00107607f42d16a3dfef29`.
+Read `lean/notes-current-pruning-enumeration-nodes.md`.
+
+A computed heap decoder now derives exact complete-value readback for closed
+available inputs under Coherent. It checks the issued key and canonical winner
+before the payload. Missing entries and losing reservations return none. Actual
+Keeps growth preserves every successful lookup. Empty0/positiveID+1 is a model
+handle convention; raw native NodeId extraction and raw UVar IDs stay separate.
+
+Strict checking and the installed build pass. Audit passes 3680 jobs and 76095
+dependency checks, with one older warning and no new-source warning. All four
+signatures and two actual axiom reports were read. Both reports contain only
+propext and Quot.sound. The failed first proof and frozen proposal remain.
+
+Next derive initial pending-slot realization and connect actual observations
+to complete available closed Values. Preserve realization through frames, cache
+growth and actual slot writes. Then compose outer narrow, typing and memo2 with
+typedTypes. Native extraction, graph realization, global helper canonicality,
+mutation histories, selected-current protection, cached scheduling, semantic
+pruning, phase 4, resources, practical width, runtime/solver and convergence stay
+open. H6 remains strongest combined. H23 stays queued. No Haskell source changes.
+FINDINGS keeps its external repair index FIRST. All six recorded fixes are on
+main. The full goal is ACTIVE and incomplete. This precedes evidence and push.
+
+
 ## Actual interned-node narrowing and emptiness
 
 Updated: 2026-10-24. Main `74250bd88` is incorporated.
