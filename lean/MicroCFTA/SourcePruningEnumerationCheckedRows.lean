@@ -1,0 +1,193 @@
+import MicroCFTA.SourcePruningEnumerationSelectedRow
+
+namespace MicroCFTA.SourcePruningEnumerationCheckedRows
+open InternedConstructorTemplates EnumerationState EnumerationCorrectness
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+
+/-- A finite actual checked-constructor history gives every selected parent row its checked origin. -/
+theorem checked_rows_selected_origin [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)]
+    (count : Nat) (symbols : Fin count → Symbol) (originals : Fin count → Constraint)
+    (stored : Fin count → SourceEqualityConstraintAllocation.Value)
+    (children : Fin count → List (InternedConstructorTemplates.Value Symbol Constraint))
+    (operations : Fin (count + 1) → SourceEqualityConstraintMemoAllocation.State)
+    (heaps : Fin (count + 1) → InternedConstructorTemplates.State Symbol Constraint)
+    (inputs : Fin count → InternedConstructorTemplates.State Symbol Constraint)
+    (initialValid : SourceEqualityConstraintMemoAllocation.Valid (operations 0))
+    (initialReady : SourceEqualityRequiredCache.Ready (heaps 0))
+    (prework : ∀ index : Fin count,
+      SourceEqualityRequiredCache.Keeps (heaps index.castSucc) (inputs index))
+    (cached : ∀ index : Fin count, SourceEqualityGuardReadback.Cached (originals index).equalities)
+    (physical : ∀ index : Fin count,
+      SourceEqualityPhysicalPayload.read (originals index).equalities = .ok (stored index).payload)
+    (storedReady : ∀ index : Fin count,
+      SourceEqualityConstraintAllocation.Ready (operations index.castSucc).constraints (stored index))
+    (available : ∀ index : Fin count,
+      SourceEqualityMkEdgeAllocation.accepted (originals index) (children index).length = true →
+        InternedNestedProvenance.Values (inputs index) (children index))
+    (closed : ∀ index : Fin count,
+      SourceEqualityMkEdgeAllocation.accepted (originals index) (children index).length = true →
+        MergedColdReaderClosedInputs.ClosedValues (children index))
+    (operationNext : ∀ index : Fin count, operations index.succ =
+      (SourceEqualityMkEdgeAllocation.build (symbols index) (stored index) (originals index).guard
+        (children index) (operations index.castSucc) (inputs index)).2.1)
+    (heapNext : ∀ index : Fin count, heaps index.succ =
+      (SourceEqualityMkEdgeAllocation.build (symbols index) (stored index) (originals index).guard
+        (children index) (operations index.castSucc) (inputs index)).2.2) :
+    let built := fun index : Fin count => InternedConstructorTemplates.run
+      (SourceEqualityMkEdgeAllocation.work (symbols index) (originals index) (children index)
+        (SourceEqualityMkEdgeAllocation.accepted (originals index) (children index).length)) (inputs index)
+    let rows := List.ofFn (fun index : Fin count => (built index).1)
+    let parent := InternedConstructorTemplates.run (InternedConstructorTemplates.makeNode rows) (heaps (Fin.last count))
+    (∀ boundary : Fin (count + 1),
+      SourceEqualityConstraintMemoAllocation.Valid (operations boundary) ∧
+      SourceEqualityRequiredCache.Keeps (heaps 0) (heaps boundary) ∧
+      ∀ index : Fin count, index.val < boundary.val →
+        SourceEqualityRequiredCache.Keeps (built index).2 (heaps boundary)) ∧
+    InternedNestedProvenance.Edges (heaps (Fin.last count)) rows ∧
+    MergedColdReaderClosedInputs.ClosedEdges rows ∧
+    SourceEqualityRequiredCache.Keeps (heaps (Fin.last count)) parent.2 ∧
+    SourceEqualityRequiredCache.Keeps (heaps 0) parent.2 ∧
+    SourceEqualityRequiredCache.Ready parent.2 ∧ InternedProbeProvenance.Available parent.2 parent.1 ∧
+    parent.1.free = [] ∧
+    ∀ edge ∈ InternedEdgeResidency.nodeEdges parent.1,
+      ∃ index : Fin count, edge = (built index).1 ∧
+        SourceEqualityMkEdgeAllocation.accepted (originals index) (children index).length = true ∧
+        (SourceEqualityMkEdgeAllocation.check (stored index) (originals index).guard
+          (children index).length (operations index.castSucc)).1 = .ok true ∧
+        SourceEqualityMkEdgeAllocation.build (symbols index) (stored index) (originals index).guard
+          (children index) (operations index.castSucc) (inputs index) =
+          (.ok edge, operations index.succ, heaps index.succ) ∧
+        edge.entry.key.symbol = symbols index ∧ edge.entry.key.constraint = originals index ∧
+        edge.children = children index ∧
+        ∃ classes : EqualityNormalize.Constraints,
+          SourceCompactGuards.sourceEqualities edge.entry.key.constraint = some classes ∧
+          SourcePruningEnumerationConstraint.project edge.entry.key.constraint =
+            some (EnumerationEquality.readClasses classes,
+              if (SourceCompactGuards.positive edge.entry.key.constraint.guard).isSome
+                then none else some edge.entry.key.constraint) ∧
+          (∀ trie ∈ EnumerationEquality.readClasses classes, EqualityTrie.Valid trie) ∧
+          (∀ paths ∈ classes, ∀ path,
+            path ∈ EqualityTrie.fromPathTrie (EnumerationEquality.classTrie paths) ↔ path ∈ paths) ∧
+          ∀ start : Nat, arityAllows edge.children.length
+            (suspendedVars start (EnumerationEquality.readClasses classes)) = true := by
+  let actualBuilt (index : Fin count) : InternedConstructorTemplates.EdgeValue Symbol Constraint ×
+        InternedConstructorTemplates.State Symbol Constraint :=
+      InternedConstructorTemplates.run (SourceEqualityMkEdgeAllocation.work (symbols index) (originals index)
+        (children index) (SourceEqualityMkEdgeAllocation.accepted (originals index) (children index).length)) (inputs index)
+  let actualRows : List (InternedConstructorTemplates.EdgeValue Symbol Constraint) :=
+      List.ofFn (fun index : Fin count => (actualBuilt index).1)
+  let actualParent : InternedConstructorTemplates.Value Symbol Constraint ×
+        InternedConstructorTemplates.State Symbol Constraint :=
+      InternedConstructorTemplates.run (InternedConstructorTemplates.makeNode actualRows) (heaps (Fin.last count))
+  have chain : ∀ boundary : Fin (count + 1),
+      SourceEqualityConstraintMemoAllocation.Valid (operations boundary) ∧
+      SourceEqualityRequiredCache.Keeps (heaps 0) (heaps boundary) ∧
+      ∀ index : Fin count, index.val < boundary.val →
+        SourceEqualityRequiredCache.Keeps (actualBuilt index).2 (heaps boundary) := by
+    apply Fin.induction
+    · refine ⟨initialValid, SourceEqualityRequiredCache.pure_keeps _ initialReady, ?_⟩
+      intro earlier processed
+      exact False.elim (Nat.not_lt_zero earlier.val processed)
+    · intro index ih
+      obtain ⟨_stepChecked, stepReceipt, stepValid, _stepGrowth, stepKept, _stepResident,
+        _stepSymbol, _stepGuard, _stepChildren, _stepClasses, _stepSource, _stepProjected,
+        _stepTries, _stepPaths, _stepArity⟩ :=
+        SourcePruningEnumerationCheckedArity.checked_projected_arity
+          (symbols index) (originals index) (stored index) (children index)
+          (operations index.castSucc) (inputs index) (cached index) (physical index)
+          (storedReady index) ih.1 (prework index).ready (available index)
+      have operationAfter : operations index.succ =
+        SourceEqualityMkEdgeAllocation.outputState
+          (SourceEqualityMkEdgeAllocation.check (stored index) (originals index).guard
+            (children index).length (operations index.castSucc)).2
+          (SourceEqualityMkEdgeAllocation.accepted (originals index) (children index).length) := by
+        rw [operationNext index, stepReceipt]
+      have heapAfter : heaps index.succ = (actualBuilt index).2 := by
+        rw [heapNext index, stepReceipt]
+      refine ⟨?_, ?_, ?_⟩
+      · rw [operationAfter]
+        exact stepValid
+      · rw [heapAfter]
+        exact ih.2.1.trans ((prework index).trans stepKept)
+      · intro earlier processed
+        by_cases same : earlier = index
+        · subst earlier
+          rw [heapAfter]
+          exact SourceEqualityRequiredCache.pure_keeps _ stepKept.ready
+        ·
+          have earlierLess : earlier.val < index.val := by
+            exact Nat.lt_of_le_of_ne (Nat.le_of_lt_succ processed)
+              (fun equal => same (Fin.ext equal))
+          rw [heapAfter]
+          exact (ih.2.2 earlier earlierLess).trans ((prework index).trans stepKept)
+  have rowPackets : ∀ index : Fin count,
+      InternedEdgeResidency.EdgeResident (heaps (Fin.last count)) (actualBuilt index).1 ∧
+      MergedColdReaderClosedInputs.ClosedValues (actualBuilt index).1.children := by
+    intro index
+    obtain ⟨_rowChecked, _rowReceipt, _rowValid, _rowGrowth, _rowKept, rowResident,
+      _rowSymbol, _rowGuard, rowChildren, _rowClasses, _rowSource, _rowProjected,
+      _rowTries, _rowPaths, _rowArity⟩ :=
+      SourcePruningEnumerationCheckedArity.checked_projected_arity
+        (symbols index) (originals index) (stored index) (children index)
+        (operations index.castSucc) (inputs index) (cached index) (physical index)
+        (storedReady index) (chain index.castSucc).1 (prework index).ready (available index)
+    change (actualBuilt index).1.children =
+      (if SourceEqualityMkEdgeAllocation.accepted (originals index) (children index).length
+        then children index else [.empty]) at rowChildren
+    constructor
+    · exact InternedEdgeResidency.edge_grows _ _
+        ((chain (Fin.last count)).2.2 index index.isLt).growth _ rowResident
+    · rw [rowChildren]
+      cases keepEq : SourceEqualityMkEdgeAllocation.accepted (originals index) (children index).length
+      case false =>
+        simp only [Bool.false_eq_true, ↓reduceIte]
+        intro value member
+        simp only [List.mem_singleton] at member
+        subst value
+        rfl
+      case true =>
+        simpa only [↓reduceIte] using closed index keepEq
+  have rowsResident : InternedNestedProvenance.Edges (heaps (Fin.last count)) actualRows := by
+    intro edge member
+    obtain ⟨index, rowEq⟩ := List.mem_ofFn.mp member
+    exact rowEq ▸ (rowPackets index).1
+  have rowsClosed : MergedColdReaderClosedInputs.ClosedEdges actualRows := by
+    intro edge member
+    obtain ⟨index, rowEq⟩ := List.mem_ofFn.mp member
+    exact rowEq ▸ (rowPackets index).2
+  obtain ⟨parentKept, parentAvailable, parentClosed, _parentOrdinary⟩ :=
+    SourceEqualityRequiredCache.node actualRows (heaps (Fin.last count))
+      (chain (Fin.last count)).2.1.ready rowsResident rowsClosed
+  have normalized : InternedEdgeResidency.nodeEdges actualParent.1 =
+        InternedConstructorTemplates.canonicalEdges (InternedConstructorTemplates.surviving actualRows) := by
+    exact EqualityLeafProjectionPhysical.makeNode_edges actualRows (heaps (Fin.last count))
+      (chain (Fin.last count)).2.1.ready.semantic.1.normal.facts.coherent
+      (chain (Fin.last count)).2.1.ready.semantic.1.normal.facts.linked rowsResident
+  refine ⟨chain, rowsResident, rowsClosed, parentKept,
+    (chain (Fin.last count)).2.1.trans parentKept, parentKept.ready,
+    parentAvailable, parentClosed, ?_⟩
+  intro edge selected
+  obtain ⟨inputMember, _live⟩ :=
+    (EqualityLeafProjectionPhysical.normalized_member (heaps (Fin.last count))
+      (chain (Fin.last count)).2.1.ready.semantic.1.normal.facts.coherent
+      actualRows rowsResident edge).mp (normalized ▸ selected)
+  obtain ⟨index, indexEq⟩ := List.mem_ofFn.mp inputMember
+  obtain ⟨accepted, checked, receipt, _selectedValid, _selectedGrowth,
+    rowSymbol, rowGuard, selectedChildren, _selectedNormalized, _selectedInput,
+    _selectedLive, _selectedParentKept, _selectedTotalKept, _selectedReady,
+    _selectedAvailable, _selectedClosed, classes, source, projected,
+    validTries, pathReadback, ownArity⟩ :=
+    SourcePruningEnumerationSelectedRow.selected_projected_arity
+      (symbols index) (originals index) (stored index) (children index)
+      (operations index.castSucc) (inputs index) (heaps (Fin.last count)) actualRows
+      (cached index) (physical index) (storedReady index) (chain index.castSucc).1
+      (prework index).ready (available index)
+      ((chain (Fin.last count)).2.2 index index.isLt) rowsResident rowsClosed
+      (by rw [indexEq]; exact selected)
+  subst edge
+  refine ⟨index, rfl, accepted, checked, ?_, rowSymbol, rowGuard, selectedChildren,
+    classes, source, projected, validTries, pathReadback, ownArity⟩
+  rw [operationNext index, heapNext index, receipt]
+
+end MicroCFTA.SourcePruningEnumerationCheckedRows
