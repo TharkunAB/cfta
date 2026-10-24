@@ -1,0 +1,36 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-R", "/tmp/mcfta-cached-selection-20261024/union-check-2", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-cached-selection-20261024/union-check-2/checked.lean"], "exit_code": 1, "raw_bytes": 1638, "raw_sha256": "9a1bedac85610df96c93256ab7003063909e0571883792941b59b5e38381592f", "source_sha256": "5eb8abce1791eefe3d08c53f227aec0cb2d98b4c5c22f3685ac9df70c1d0caa6"}
+/tmp/mcfta-cached-selection-20261024/union-check-2/checked.lean:105:105: error: unsolved goals
+Symbol Guard : Type
+graph : Graph Symbol Guard
+roots : Nat → Nat
+state : Cached Symbol Guard
+correct : EnumerationPureSelection.Correct graph roots state
+paths : Roots state.core.representatives roots
+fuel : Nat
+first : Suspended
+rest : List Suspended
+united after : State Symbol Guard
+target : Nat
+sources : List Nat
+unions : Success (rest.forM fun sc => unionVariables fuel first.var sc.var) state.core () united
+winner : Success (representative fuel first.var) united target after
+keys : ∀ (key : Nat), key ∈ sources ↔ key ∈ List.map (fun sc => roots sc.var) (first :: rest) ∧ key ≠ target
+selected : List Nat := List.foldl (fun selected sc => roots sc.var :: selected) [roots first.var] rest
+joined :
+  Merging state.core.values roots (List.foldl (fun selected sc => roots sc.var :: selected) [roots first.var] rest)
+    united
+resolved : Merging state.core.values roots selected after
+count : Nat
+path : UnionFind.Reaches after.representatives first.var target count
+firstSelected : roots first.var ∈ selected
+actualRoots : Roots after.representatives (mergedRoots roots selected target)
+key : Nat
+⊢ (∃ a, a ∈ rest ∧ roots a.var = key) ∨ key = roots first.var ↔
+    key = roots first.var ∨ ∃ a, a ∈ rest ∧ roots a.var = key
+/tmp/mcfta-cached-selection-20261024/union-check-2/checked.lean:106:20: error: This simp argument is unused:
+  resolve_members
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [selected]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

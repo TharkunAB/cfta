@@ -1,0 +1,152 @@
+/tmp/mcfta-cached-selection-20261024/combined-check-1/checked.lean:319:4: error: don't know how to synthesize implicit argument `Symbol`
+  @Correct (?m.9 roots root) roots [UVarValue.unenumerated (some root) []] fun x => none
+context:
+Symbol Guard : Type
+roots : Nat → Nat
+root : Nat
+⊢ Type
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+/tmp/mcfta-cached-selection-20261024/combined-check-1/checked.lean:319:18: error: don't know how to synthesize implicit argument `α`
+  @List.cons (UVarValue (?m.9 roots root)) (UVarValue.unenumerated (some root) []) []
+context:
+Symbol Guard : Type
+roots : Nat → Nat
+root : Nat
+⊢ Type
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+/tmp/mcfta-cached-selection-20261024/combined-check-1/checked.lean:319:18: error: don't know how to synthesize implicit argument `α`
+  @List.nil (UVarValue (?m.9 roots root))
+context:
+Symbol Guard : Type
+roots : Nat → Nat
+root : Nat
+⊢ Type
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+/tmp/mcfta-cached-selection-20261024/combined-check-1/checked.lean:319:19: error: don't know how to synthesize implicit argument `Symbol`
+  @UVarValue.unenumerated (?m.9 roots root) (some root) []
+context:
+Symbol Guard : Type
+roots : Nat → Nat
+root : Nat
+⊢ Type
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+/tmp/mcfta-cached-selection-20261024/combined-check-1/checked.lean:320:91: error(lean.unknownIdentifier): Unknown identifier `Symbol`
+/tmp/mcfta-cached-selection-20261024/combined-check-1/checked.lean:362:67: error: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.extra.unnecessarySeqFocus false`
+/tmp/mcfta-cached-selection-20261024/combined-check-1/checked.lean:366:69: error: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.extra.unnecessarySeqFocus false`
+/tmp/mcfta-cached-selection-20261024/combined-check-1/checked.lean:368:71: error: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.extra.unnecessarySeqFocus false`
+/tmp/mcfta-cached-selection-20261024/combined-check-1/checked.lean:370:69: error: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.extra.unnecessarySeqFocus false`
+/tmp/mcfta-cached-selection-20261024/combined-check-1/checked.lean:384:17: error: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.extra.unnecessarySeqFocus false`
+/tmp/mcfta-cached-selection-20261024/combined-check-1/checked.lean:406:11: error: unknown tactic
+/tmp/mcfta-cached-selection-20261024/combined-check-1/checked.lean:403:59: error: unsolved goals
+Symbol : Type
+target source : Nat
+roots : Nat → Nat
+values : List (UVarValue Symbol)
+waiting : EnumerationWaitingIndex.Waiting
+correct : Correct roots values waiting
+same : ¬target = source
+old : ∀ (key : Nat), waiting key = EnumerationWaitingIndex.encode (total roots values key)
+key : Nat
+transferred :
+  total (redirect target source roots) values key =
+    if key = source then 0
+    else if key = target then total roots values source + total roots values target else total roots values key
+sourceValue : waiting source = none
+encoded : none = EnumerationWaitingIndex.encode (total roots values source)
+⊢ total roots values source = 0
+/tmp/mcfta-cached-selection-20261024/combined-check-1/checked.lean:402:11: error: unsolved goals
+case neg.none
+Symbol : Type
+target source : Nat
+roots : Nat → Nat
+values : List (UVarValue Symbol)
+waiting : EnumerationWaitingIndex.Waiting
+correct : Correct roots values waiting
+same : ¬target = source
+old : ∀ (key : Nat), waiting key = EnumerationWaitingIndex.encode (total roots values key)
+key : Nat
+transferred :
+  total (redirect target source roots) values key =
+    if key = source then 0
+    else if key = target then total roots values source + total roots values target else total roots values key
+sourceValue : waiting source = none
+sourceZero : total roots values source = 0
+⊢ move target source waiting key = EnumerationWaitingIndex.encode (total (redirect target source roots) values key)
+/tmp/mcfta-cached-selection-20261024/combined-check-1/checked.lean:401:4: error: Alternative `some` has not been provided
+/tmp/mcfta-cached-selection-20261024/combined-check-1/checked.lean:480:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  EnumerationWaitingIndex.total key
+    (((List.map (canonicalValue roots) values).set target (canonicalValue roots merged)).set source
+      UVarValue.eliminated)
+in the target expression
+  EnumerationWaitingIndex.total key (List.map (canonicalValue roots) values) =
+    EnumerationWaitingIndex.total key
+      (((List.map (canonicalValue roots) values).set target (canonicalValue roots merged)).set source
+        (canonicalValue roots UVarValue.eliminated))
+
+Symbol : Type
+roots : Nat → Nat
+values : List (UVarValue Symbol)
+target source : Nat
+oldSource oldTarget merged : UVarValue Symbol
+different : target ≠ source
+sourceRead : values[source]? = some oldSource
+targetRead : values[target]? = some oldTarget
+mergedRefs : references merged = references oldSource ++ references oldTarget
+waiting : EnumerationWaitingIndex.Waiting
+correct : EnumerationWaitingIndex.Correct (List.map (canonicalValue roots) values) waiting
+key : Nat
+targetStored : (List.map (canonicalValue roots) values)[target]? = some (canonicalValue roots oldTarget)
+sourceStored :
+  ((List.map (canonicalValue roots) values).set target (canonicalValue roots merged))[source]? =
+    some (canonicalValue roots oldSource)
+mergedCount :
+  EnumerationWaitingIndex.occurrences key (references (canonicalValue roots merged)) =
+    EnumerationWaitingIndex.occurrences key (references (canonicalValue roots oldSource)) +
+      EnumerationWaitingIndex.occurrences key (references (canonicalValue roots oldTarget))
+⊢ EnumerationWaitingIndex.total key (List.map (canonicalValue roots) values) =
+    EnumerationWaitingIndex.total key
+      (((List.map (canonicalValue roots) values).set target (canonicalValue roots merged)).set source
+        (canonicalValue roots UVarValue.eliminated))
+/tmp/mcfta-cached-selection-20261024/combined-check-1/checked.lean:580:37: error: unexpected token 'partial'; expected '[', '{', '|', '⦃' or term
+/tmp/mcfta-cached-selection-20261024/combined-check-1/checked.lean:580:45: error: unexpected identifier; expected 'abbrev', 'axiom', 'builtin_initialize', 'class', 'coinductive', 'def', 'example', 'inductive', 'initialize', 'instance', 'opaque', 'structure' or 'theorem'
+/tmp/mcfta-cached-selection-20261024/combined-check-1/checked.lean:580:114: error: unexpected token ')'; expected 'abbrev', 'axiom', 'builtin_initialize', 'class', 'coinductive', 'def', 'example', 'inductive', 'initialize', 'instance', 'opaque', 'structure' or 'theorem'
+/tmp/mcfta-cached-selection-20261024/combined-check-1/checked.lean:609:49: error: This simp argument is unused:
+  different
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [assimilate, assimilated, atSource, Ne.symm different, targetBound]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-cached-selection-20261024/combined-check-1/checked.lean:683:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+Symbol Guard : Type
+graph : Graph Symbol Guard
+roots : Nat → Nat
+state : Cached Symbol Guard
+correct : Correct graph roots state
+candidatesSame :
+  EnumerationIndexSelection.candidates state =
+    (List.foldl (collectPure graph roots) ([], []) state.core.values.zipIdx).fst
+blocked :
+  ∀ (uv : Nat),
+    state.waiting uv ≠ none ↔ uv ∈ (List.foldl (collectPure graph roots) ([], []) state.core.values.zipIdx).snd
+⊢ (have candidates := (List.foldl (collectPure graph roots) ([], []) state.core.values.zipIdx).fst;
+    if candidates.isEmpty = true then none else some (List.filter (fun uv => (state.waiting uv).isNone) candidates)) =
+    let summary := List.foldl (collectPure graph roots) ([], []) state.core.values.zipIdx;
+    if summary.fst.isEmpty = true then none else some (List.filter (fun uv => !decide (uv ∈ summary.snd)) summary.fst)

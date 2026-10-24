@@ -1,0 +1,51 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-R", "/tmp/mcfta-cached-selection-20261024/root-frame-check-1", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-cached-selection-20261024/root-frame-check-1/checked.lean"], "exit_code": 1, "raw_bytes": 2936, "raw_sha256": "1a5009fc65d324160f19a3599e6b72b0b8acb3124441bb36438f0cd7003b1653", "source_sha256": "2f06e986012f5abe98fb974c84598290bcb224a8ff2d1783d23399e976387e53"}
+/tmp/mcfta-cached-selection-20261024/root-frame-check-1/checked.lean:88:2: error: missing doc string for public field Frame.counter
+
+Note: This linter can be disabled with `set_option linter.missingDocs false`
+/tmp/mcfta-cached-selection-20261024/root-frame-check-1/checked.lean:89:2: error: missing doc string for public field Frame.values
+
+Note: This linter can be disabled with `set_option linter.missingDocs false`
+/tmp/mcfta-cached-selection-20261024/root-frame-check-1/checked.lean:90:2: error: missing doc string for public field Frame.obligations
+
+Note: This linter can be disabled with `set_option linter.missingDocs false`
+/tmp/mcfta-cached-selection-20261024/root-frame-check-1/checked.lean:91:2: error: missing doc string for public field Frame.recursionAncestry
+
+Note: This linter can be disabled with `set_option linter.missingDocs false`
+/tmp/mcfta-cached-selection-20261024/root-frame-check-1/checked.lean:92:2: error: missing doc string for public field Frame.expansionAncestry
+
+Note: This linter can be disabled with `set_option linter.missingDocs false`
+/tmp/mcfta-cached-selection-20261024/root-frame-check-1/checked.lean:93:2: error: missing doc string for public field Frame.reaches
+
+Note: This linter can be disabled with `set_option linter.missingDocs false`
+/tmp/mcfta-cached-selection-20261024/root-frame-check-1/checked.lean:119:14: error(lean.unknownIdentifier): Unknown identifier `before`
+/tmp/mcfta-cached-selection-20261024/root-frame-check-1/checked.lean:125:14: error(lean.unknownIdentifier): Unknown identifier `before`
+/tmp/mcfta-cached-selection-20261024/root-frame-check-1/checked.lean:191:24: error(lean.unknownIdentifier): Unknown identifier `before.values.zipIdx`
+/tmp/mcfta-cached-selection-20261024/root-frame-check-1/checked.lean:191:88: error(lean.unknownIdentifier): Unknown identifier `before`
+/tmp/mcfta-cached-selection-20261024/root-frame-check-1/checked.lean:192:82: error(lean.unknownIdentifier): Unknown identifier `before`
+/tmp/mcfta-cached-selection-20261024/root-frame-check-1/checked.lean:183:96: error: unsolved goals
+Symbol Guard : Type
+graph : Graph Symbol Guard
+fuel : Nat
+after : State Symbol Guard
+result : Option (List Nat)
+readState : State Symbol Guard
+continued :
+  Success
+    (do
+      let summary ← List.foldlM (collect graph fuel) ([], []) readState.values.zipIdx
+      finishScan summary)
+    readState result after
+total : UnionFind.Total readState.representatives
+success :
+  Success
+    (do
+      let state ← get
+      let summary ← List.foldlM (collect graph fuel) ([], []) state.values.zipIdx
+      finishScan summary)
+    readState result after
+read : Success get readState readState readState
+summary : List Nat × List Nat
+scanned : State Symbol Guard
+traversed : Success (List.foldlM (collect graph fuel) ([], []) readState.values.zipIdx) readState summary scanned
+final : Success (finishScan summary) scanned result after
+⊢ Frame readState after

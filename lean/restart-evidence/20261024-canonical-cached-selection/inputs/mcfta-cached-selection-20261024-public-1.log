@@ -1,0 +1,395 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-R", "/tmp/mcfta-cached-selection-20261024/public-1", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-cached-selection-20261024/public-1/checked.lean"], "exit_code": 0, "raw_bytes": 29632, "raw_sha256": "b9ba2bb242a76cf70ea3d5de5f442ffa6dc058725bb8937a8f40749b5ec9549b", "source_sha256": "0ee3a8b1df9b7ea5100a458473befc3a1b7af11c7f4b6a1220d9a7f3052fa151"}
+MicroCFTA.SourceUnionFindRoot.root : Nat → MicroCFTA.UnionFind.Forest → Nat → Option.{0} Nat
+MicroCFTA.SourceUnionFindRoot.root_eq : ∀ (fuel : Nat) (forest : MicroCFTA.UnionFind.Forest) (uv : Nat),
+  Eq.{1} (MicroCFTA.SourceUnionFindRoot.root fuel forest uv)
+    (Option.map.{0, 0} MicroCFTA.UnionFind.Result.representative (MicroCFTA.UnionFind.findRoot fuel forest uv))
+MicroCFTA.SourceUnionFindRoot.root_correct : ∀ (fuel : Nat) (forest : MicroCFTA.UnionFind.Forest)
+  (uv representative : Nat),
+  Eq.{1} (MicroCFTA.SourceUnionFindRoot.root fuel forest uv) (some.{0} representative) →
+    Exists.{1} fun size => MicroCFTA.UnionFind.Reaches forest uv representative size
+MicroCFTA.SourceUnionFindRoot.root_terminates : ∀ (forest : MicroCFTA.UnionFind.Forest) (uv representative size : Nat),
+  MicroCFTA.UnionFind.Reaches forest uv representative size →
+    Exists.{1} fun fuel => Eq.{1} (MicroCFTA.SourceUnionFindRoot.root fuel forest uv) (some.{0} representative)
+MicroCFTA.SourceUnionFindRoot.root_moreFuel : ∀ (fuel extra : Nat) (forest : MicroCFTA.UnionFind.Forest)
+  (uv representative : Nat),
+  Eq.{1} (MicroCFTA.SourceUnionFindRoot.root fuel forest uv) (some.{0} representative) →
+    Eq.{1} (MicroCFTA.SourceUnionFindRoot.root (HAdd.hAdd.{0, 0, 0} fuel extra) forest uv) (some.{0} representative)
+@MicroCFTA.EnumerationCompressionFrame.Frame : {Symbol Guard : Type} →
+  MicroCFTA.EnumerationState.State Symbol Guard → MicroCFTA.EnumerationState.State Symbol Guard → Prop
+@MicroCFTA.EnumerationCompressionFrame.Frame.refl : ∀ {Symbol Guard : Type}
+  (state : MicroCFTA.EnumerationState.State Symbol Guard), MicroCFTA.EnumerationCompressionFrame.Frame state state
+@MicroCFTA.EnumerationCompressionFrame.Frame.trans : ∀ {Symbol Guard : Type}
+  {before middle after : MicroCFTA.EnumerationState.State Symbol Guard},
+  MicroCFTA.EnumerationCompressionFrame.Frame before middle →
+    MicroCFTA.EnumerationCompressionFrame.Frame middle after → MicroCFTA.EnumerationCompressionFrame.Frame before after
+@MicroCFTA.EnumerationCompressionFrame.Frame.total : ∀ {Symbol Guard : Type}
+  {before after : MicroCFTA.EnumerationState.State Symbol Guard},
+  MicroCFTA.EnumerationCompressionFrame.Frame before after →
+    MicroCFTA.UnionFind.Total before.representatives → MicroCFTA.UnionFind.Total after.representatives
+@MicroCFTA.EnumerationCompressionFrame.pure_frame : ∀ {Symbol Guard α : Type} (value result : α)
+  (before after : MicroCFTA.EnumerationState.State Symbol Guard),
+  MicroCFTA.EnumerationCorrectness.Success (pure.{0, 0} value) before result after →
+    MicroCFTA.EnumerationCompressionFrame.Frame before after
+@MicroCFTA.EnumerationCompressionFrame.get_frame : ∀ {Symbol Guard : Type}
+  (before after value : MicroCFTA.EnumerationState.State Symbol Guard),
+  MicroCFTA.EnumerationCorrectness.Success get.{0, 0} before value after →
+    MicroCFTA.EnumerationCompressionFrame.Frame before after
+@MicroCFTA.EnumerationCompressionFrame.representative_frame : ∀ {Symbol Guard : Type} (fuel uv root : Nat)
+  (before after : MicroCFTA.EnumerationState.State Symbol Guard),
+  MicroCFTA.UnionFind.Total before.representatives →
+    MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationState.representative fuel uv) before root after →
+      MicroCFTA.EnumerationCompressionFrame.Frame before after
+@MicroCFTA.EnumerationCompressionFrame.getValue_frame : ∀ {Symbol Guard : Type} (fuel uv : Nat)
+  (before after : MicroCFTA.EnumerationState.State Symbol Guard) (value : MicroCFTA.EnumerationState.UVarValue Symbol),
+  MicroCFTA.UnionFind.Total before.representatives →
+    MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationState.getValue fuel uv) before value after →
+      MicroCFTA.EnumerationCompressionFrame.Frame before after ∧
+        Exists.{1} fun root =>
+          Exists.{1} fun size =>
+            MicroCFTA.UnionFind.Reaches before.representatives uv root size ∧
+              MicroCFTA.UnionFind.Reaches after.representatives uv root size ∧
+                Eq.{1} (getElem?.{0, 0, 0} before.values root) (some.{0} value)
+@MicroCFTA.EnumerationCompressionFrame.findExpandable_frame : ∀ {Symbol Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph Symbol Guard) (fuel : Nat)
+  (before after : MicroCFTA.EnumerationState.State Symbol Guard) (result : Option.{0} (List.{0} Nat)),
+  MicroCFTA.UnionFind.Total before.representatives →
+    MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationState.findExpandable graph fuel) before result
+        after →
+      MicroCFTA.EnumerationCompressionFrame.Frame before after
+@MicroCFTA.EnumerationCanonicalWaiting.canonicalValue : {Symbol : Type} →
+  (Nat → Nat) → MicroCFTA.EnumerationState.UVarValue Symbol → MicroCFTA.EnumerationState.UVarValue Symbol
+MicroCFTA.EnumerationCanonicalWaiting.count : (Nat → Nat) →
+  Int →
+    List.{0} MicroCFTA.EnumerationState.Suspended →
+      MicroCFTA.EnumerationWaitingIndex.Waiting → MicroCFTA.EnumerationWaitingIndex.Waiting
+@MicroCFTA.EnumerationCanonicalWaiting.replace : {Symbol : Type} →
+  (Nat → Nat) →
+    MicroCFTA.EnumerationState.UVarValue Symbol →
+      MicroCFTA.EnumerationState.UVarValue Symbol →
+        MicroCFTA.EnumerationWaitingIndex.Waiting → MicroCFTA.EnumerationWaitingIndex.Waiting
+@MicroCFTA.EnumerationCanonicalWaiting.Correct : {Symbol : Type} →
+  (Nat → Nat) →
+    List.{0} (MicroCFTA.EnumerationState.UVarValue Symbol) → MicroCFTA.EnumerationWaitingIndex.Waiting → Prop
+MicroCFTA.EnumerationCanonicalWaiting.redirect : Nat → Nat → (Nat → Nat) → Nat → Nat
+MicroCFTA.EnumerationCanonicalWaiting.move : Nat →
+  Nat → MicroCFTA.EnumerationWaitingIndex.Waiting → MicroCFTA.EnumerationWaitingIndex.Waiting
+MicroCFTA.EnumerationCanonicalWaiting.moveMany : Nat →
+  List.{0} Nat → MicroCFTA.EnumerationWaitingIndex.Waiting → MicroCFTA.EnumerationWaitingIndex.Waiting
+@MicroCFTA.EnumerationCanonicalWaiting.references_canonicalValue : ∀ {Symbol : Type} (roots : Nat → Nat)
+  (value : MicroCFTA.EnumerationState.UVarValue Symbol),
+  Eq.{1} (MicroCFTA.EnumerationSchedule.references (MicroCFTA.EnumerationCanonicalWaiting.canonicalValue roots value))
+    (List.map.{0, 0} (fun sc => { trie := sc.trie, var := roots sc.var })
+      (MicroCFTA.EnumerationSchedule.references value))
+@MicroCFTA.EnumerationCanonicalWaiting.candidate_canonicalValue : ∀ {Symbol Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph Symbol Guard) (roots : Nat → Nat)
+  (value : MicroCFTA.EnumerationState.UVarValue Symbol),
+  Eq.{1} (MicroCFTA.EnumerationState.candidate graph (MicroCFTA.EnumerationCanonicalWaiting.canonicalValue roots value))
+    (MicroCFTA.EnumerationState.candidate graph value)
+@MicroCFTA.EnumerationCanonicalWaiting.replace_correct : ∀ {Symbol : Type} (roots : Nat → Nat)
+  (values : List.{0} (MicroCFTA.EnumerationState.UVarValue Symbol)) (index : Nat)
+  (old new : MicroCFTA.EnumerationState.UVarValue Symbol),
+  Eq.{1} (getElem?.{0, 0, 0} values index) (some.{0} old) →
+    ∀ (waiting : MicroCFTA.EnumerationWaitingIndex.Waiting),
+      MicroCFTA.EnumerationCanonicalWaiting.Correct roots values waiting →
+        MicroCFTA.EnumerationCanonicalWaiting.Correct roots (List.set.{0} values index new)
+          (MicroCFTA.EnumerationCanonicalWaiting.replace roots old new waiting)
+@MicroCFTA.EnumerationCanonicalWaiting.allocate_correct : ∀ {Symbol : Type} (roots : Nat → Nat)
+  (values : List.{0} (MicroCFTA.EnumerationState.UVarValue Symbol)) (node : Option.{0} Nat)
+  (waiting : MicroCFTA.EnumerationWaitingIndex.Waiting),
+  MicroCFTA.EnumerationCanonicalWaiting.Correct roots values waiting →
+    MicroCFTA.EnumerationCanonicalWaiting.Correct roots
+      (HAppend.hAppend.{0, 0, 0} values
+        (List.cons.{0} (MicroCFTA.EnumerationState.UVarValue.unenumerated node List.nil.{0}) List.nil.{0}))
+      waiting
+@MicroCFTA.EnumerationCanonicalWaiting.initial_correct : ∀ {Symbol : Type} (roots : Nat → Nat) (root : Nat),
+  MicroCFTA.EnumerationCanonicalWaiting.Correct roots
+    (List.cons.{0} (MicroCFTA.EnumerationState.UVarValue.unenumerated (some.{0} root) List.nil.{0}) List.nil.{0})
+    fun x => none.{0}
+@MicroCFTA.EnumerationCanonicalWaiting.support_exact : ∀ {Symbol : Type} (roots : Nat → Nat)
+  (values : List.{0} (MicroCFTA.EnumerationState.UVarValue Symbol))
+  (waiting : MicroCFTA.EnumerationWaitingIndex.Waiting),
+  MicroCFTA.EnumerationCanonicalWaiting.Correct roots values waiting →
+    ∀ (key : Nat),
+      Ne.{1} (waiting key) none.{0} ↔
+        Exists.{1} fun value =>
+          Membership.mem.{0, 0} values value ∧
+            Exists.{1} fun sc =>
+              Membership.mem.{0, 0} (MicroCFTA.EnumerationSchedule.references value) sc ∧ Eq.{1} (roots sc.var) key
+@MicroCFTA.EnumerationCanonicalWaiting.move_correct : ∀ {Symbol : Type} (target source : Nat) (roots : Nat → Nat)
+  (values : List.{0} (MicroCFTA.EnumerationState.UVarValue Symbol))
+  (waiting : MicroCFTA.EnumerationWaitingIndex.Waiting),
+  MicroCFTA.EnumerationCanonicalWaiting.Correct roots values waiting →
+    MicroCFTA.EnumerationCanonicalWaiting.Correct (MicroCFTA.EnumerationCanonicalWaiting.redirect target source roots)
+      values (MicroCFTA.EnumerationCanonicalWaiting.move target source waiting)
+@MicroCFTA.EnumerationCanonicalWaiting.moveMany_correct : ∀ {Symbol : Type} (target : Nat) (sources : List.{0} Nat)
+  (roots : Nat → Nat) (values : List.{0} (MicroCFTA.EnumerationState.UVarValue Symbol))
+  (waiting : MicroCFTA.EnumerationWaitingIndex.Waiting),
+  MicroCFTA.EnumerationCanonicalWaiting.Correct roots values waiting →
+    MicroCFTA.EnumerationCanonicalWaiting.Correct
+      (List.foldl.{0, 0} (fun previous source => MicroCFTA.EnumerationCanonicalWaiting.redirect target source previous)
+        roots sources)
+      values (MicroCFTA.EnumerationCanonicalWaiting.moveMany target sources waiting)
+@MicroCFTA.EnumerationCanonicalWaiting.assimilation_correct : ∀ {Symbol : Type} (roots : Nat → Nat)
+  (values : List.{0} (MicroCFTA.EnumerationState.UVarValue Symbol)) (target source : Nat)
+  (oldSource oldTarget merged : MicroCFTA.EnumerationState.UVarValue Symbol),
+  Ne.{1} target source →
+    Eq.{1} (getElem?.{0, 0, 0} values source) (some.{0} oldSource) →
+      Eq.{1} (getElem?.{0, 0, 0} values target) (some.{0} oldTarget) →
+        Eq.{1} (MicroCFTA.EnumerationSchedule.references merged)
+            (HAppend.hAppend.{0, 0, 0} (MicroCFTA.EnumerationSchedule.references oldSource)
+              (MicroCFTA.EnumerationSchedule.references oldTarget)) →
+          ∀ (waiting : MicroCFTA.EnumerationWaitingIndex.Waiting),
+            MicroCFTA.EnumerationCanonicalWaiting.Correct roots values waiting →
+              MicroCFTA.EnumerationCanonicalWaiting.Correct roots
+                (List.set.{0} (List.set.{0} values target merged) source
+                  MicroCFTA.EnumerationState.UVarValue.eliminated)
+                waiting
+@MicroCFTA.EnumerationPureSelection.Correct : {Symbol Guard : Type} →
+  MicroCFTA.EnumerationState.Graph Symbol Guard →
+    (Nat → Nat) → MicroCFTA.EnumerationExpandableIndex.Cached Symbol Guard → Prop
+@MicroCFTA.EnumerationPureSelection.write : {Symbol Guard : Type} →
+  MicroCFTA.EnumerationState.Graph Symbol Guard →
+    (Nat → Nat) →
+      Nat →
+        MicroCFTA.EnumerationState.UVarValue Symbol →
+          MicroCFTA.EnumerationExpandableIndex.Cached Symbol Guard →
+            Option.{0} (MicroCFTA.EnumerationExpandableIndex.Cached Symbol Guard)
+@MicroCFTA.EnumerationPureSelection.transfer : {Symbol Guard : Type} →
+  Nat →
+    List.{0} Nat →
+      MicroCFTA.EnumerationExpandableIndex.Cached Symbol Guard →
+        MicroCFTA.EnumerationExpandableIndex.Cached Symbol Guard
+@MicroCFTA.EnumerationPureSelection.initial_correct : ∀ {Symbol Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph Symbol Guard) (roots : Nat → Nat) (root : Nat),
+  MicroCFTA.EnumerationPureSelection.Correct graph roots (MicroCFTA.EnumerationExpandableIndex.initial graph root)
+@MicroCFTA.EnumerationPureSelection.allocate_correct : ∀ {Symbol Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph Symbol Guard) (roots : Nat → Nat) (node : Option.{0} Nat)
+  (state : MicroCFTA.EnumerationExpandableIndex.Cached Symbol Guard),
+  MicroCFTA.EnumerationPureSelection.Correct graph roots state →
+    MicroCFTA.EnumerationPureSelection.Correct graph roots
+      (MicroCFTA.EnumerationExpandableIndex.allocate graph node state)
+@MicroCFTA.EnumerationPureSelection.write_correct : ∀ {Symbol Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph Symbol Guard) (roots : Nat → Nat) (uv : Nat)
+  (value : MicroCFTA.EnumerationState.UVarValue Symbol)
+  (before after : MicroCFTA.EnumerationExpandableIndex.Cached Symbol Guard),
+  MicroCFTA.EnumerationPureSelection.Correct graph roots before →
+    Eq.{1} (MicroCFTA.EnumerationPureSelection.write graph roots uv value before) (some.{0} after) →
+      MicroCFTA.EnumerationPureSelection.Correct graph roots after
+@MicroCFTA.EnumerationPureSelection.frame_correct : ∀ {Symbol Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph Symbol Guard) (roots : Nat → Nat)
+  (state : MicroCFTA.EnumerationExpandableIndex.Cached Symbol Guard)
+  (core : MicroCFTA.EnumerationState.State Symbol Guard),
+  MicroCFTA.EnumerationPureSelection.Correct graph roots state →
+    Eq.{1} core.values state.core.values →
+      Eq.{1} core.counter state.core.counter →
+        MicroCFTA.EnumerationPureSelection.Correct graph roots (MicroCFTA.EnumerationExpandableIndex.frame core state)
+@MicroCFTA.EnumerationPureSelection.transfer_correct : ∀ {Symbol Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph Symbol Guard) (roots : Nat → Nat) (target : Nat) (sources : List.{0} Nat)
+  (state : MicroCFTA.EnumerationExpandableIndex.Cached Symbol Guard),
+  MicroCFTA.EnumerationPureSelection.Correct graph roots state →
+    MicroCFTA.EnumerationPureSelection.Correct graph
+      (List.foldl.{0, 0}
+        (fun currentRoots source => MicroCFTA.EnumerationCanonicalWaiting.redirect target source currentRoots) roots
+        sources)
+      (MicroCFTA.EnumerationPureSelection.transfer target sources state)
+@MicroCFTA.EnumerationPureSelection.assimilate : {Symbol Guard : Type} →
+  MicroCFTA.EnumerationState.Graph Symbol Guard →
+    Nat →
+      Nat →
+        MicroCFTA.EnumerationState.UVarValue Symbol →
+          MicroCFTA.EnumerationExpandableIndex.Cached Symbol Guard →
+            MicroCFTA.EnumerationExpandableIndex.Cached Symbol Guard
+@MicroCFTA.EnumerationPureSelection.assimilate_correct : ∀ {Symbol Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph Symbol Guard) (roots : Nat → Nat)
+  (state : MicroCFTA.EnumerationExpandableIndex.Cached Symbol Guard),
+  MicroCFTA.EnumerationPureSelection.Correct graph roots state →
+    ∀ (target source : Nat) (oldSource oldTarget merged : MicroCFTA.EnumerationState.UVarValue Symbol),
+      Ne.{1} target source →
+        Eq.{1} (getElem?.{0, 0, 0} state.core.values source) (some.{0} oldSource) →
+          Eq.{1} (getElem?.{0, 0, 0} state.core.values target) (some.{0} oldTarget) →
+            Eq.{1} (MicroCFTA.EnumerationState.intersectValues graph oldSource oldTarget) (some.{0} merged) →
+              MicroCFTA.EnumerationPureSelection.Correct graph roots
+                (MicroCFTA.EnumerationPureSelection.assimilate graph target source merged state)
+@MicroCFTA.EnumerationPureSelection.assimilate_source : ∀ {Symbol Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph Symbol Guard) (roots : Nat → Nat)
+  (state : MicroCFTA.EnumerationExpandableIndex.Cached Symbol Guard),
+  MicroCFTA.EnumerationPureSelection.Correct graph roots state →
+    ∀ (target source : Nat) (sourceNode targetNode : Option.{0} Nat)
+      (sourceScs targetScs : List.{0} MicroCFTA.EnumerationState.Suspended)
+      (merged : MicroCFTA.EnumerationState.UVarValue Symbol),
+      Ne.{1} target source →
+        Eq.{1} (getElem?.{0, 0, 0} state.core.values source)
+            (some.{0} (MicroCFTA.EnumerationState.UVarValue.unenumerated sourceNode sourceScs)) →
+          Eq.{1} (getElem?.{0, 0, 0} state.core.values target)
+              (some.{0} (MicroCFTA.EnumerationState.UVarValue.unenumerated targetNode targetScs)) →
+            Eq.{1}
+                (MicroCFTA.EnumerationState.intersectValues graph
+                  (MicroCFTA.EnumerationState.UVarValue.unenumerated sourceNode sourceScs)
+                  (MicroCFTA.EnumerationState.UVarValue.unenumerated targetNode targetScs))
+                (some.{0} merged) →
+              Eq.{1} (MicroCFTA.EnumerationState.hasEmptyContents graph merged) false →
+                MicroCFTA.EnumerationPureSelection.Correct graph roots
+                    (MicroCFTA.EnumerationPureSelection.assimilate graph target source merged state) ∧
+                  Eq.{1} (MicroCFTA.EnumerationState.assimilate graph target source state.core)
+                    (List.cons.{0}
+                      (Except.ok.{0, 0}
+                        (Prod.mk.{0, 0} ()
+                          (MicroCFTA.EnumerationPureSelection.assimilate graph target source merged state).core))
+                      List.nil.{0})
+@MicroCFTA.EnumerationPureSelection.candidates_exact : ∀ {Symbol Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph Symbol Guard) (roots : Nat → Nat)
+  (state : MicroCFTA.EnumerationExpandableIndex.Cached Symbol Guard),
+  MicroCFTA.EnumerationPureSelection.Correct graph roots state →
+    Eq.{1} (MicroCFTA.EnumerationIndexSelection.candidates state)
+      (MicroCFTA.EnumerationUntil.remaining graph state.core)
+@MicroCFTA.EnumerationPureSelection.find : {Symbol Guard : Type} →
+  MicroCFTA.EnumerationExpandableIndex.Cached Symbol Guard → Option.{0} (List.{0} Nat)
+@MicroCFTA.EnumerationPureSelection.next : {Symbol Guard : Type} →
+  (List.{0} Nat → Option.{0} Nat) →
+    MicroCFTA.EnumerationExpandableIndex.Cached Symbol Guard → MicroCFTA.EnumerationState.Next
+@MicroCFTA.EnumerationPureSelection.findAction : {Symbol Guard : Type} →
+  MicroCFTA.EnumerationCPS.Computation (MicroCFTA.EnumerationExpandableIndex.Cached Symbol Guard)
+    (Option.{0} (List.{0} Nat))
+@MicroCFTA.EnumerationPureSelection.findAction_represents : ∀ {Symbol Guard : Type},
+  MicroCFTA.EnumerationCPS.Represents (fun {Result} => MicroCFTA.EnumerationPureSelection.findAction) fun state =>
+    List.cons.{0} (Prod.mk.{0, 0} (MicroCFTA.EnumerationPureSelection.find state) state) List.nil.{0}
+@MicroCFTA.EnumerationPureSelection.find_exact : ∀ {Symbol Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph Symbol Guard) (roots : Nat → Nat)
+  (state : MicroCFTA.EnumerationExpandableIndex.Cached Symbol Guard),
+  MicroCFTA.EnumerationPureSelection.Correct graph roots state →
+    Eq.{1} (MicroCFTA.EnumerationPureSelection.find state)
+      (have summary :=
+        List.foldl.{0, 0} (MicroCFTA.EnumerationSchedule.collectPure graph roots)
+          (Prod.mk.{0, 0} List.nil.{0} List.nil.{0}) (List.zipIdx.{0} state.core.values);
+      MicroCFTA.EnumerationSchedule.offered (Prod.fst.{0, 0} summary) (Prod.snd.{0, 0} summary))
+@MicroCFTA.EnumerationPureSelection.scan_agrees : ∀ {Symbol Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph Symbol Guard) (roots : Nat → Nat)
+  (state : MicroCFTA.EnumerationExpandableIndex.Cached Symbol Guard),
+  MicroCFTA.EnumerationPureSelection.Correct graph roots state →
+    MicroCFTA.EnumerationSchedule.Roots state.core.representatives roots →
+      ∀ (fuel : Nat) (result : Option.{0} (List.{0} Nat)) (after : MicroCFTA.EnumerationState.State Symbol Guard),
+        MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationState.findExpandable graph fuel) state.core
+            result after →
+          Eq.{1} result (MicroCFTA.EnumerationPureSelection.find state) ∧
+            MicroCFTA.EnumerationCompressionFrame.Frame state.core after
+@MicroCFTA.EnumerationPureSelection.scan_complete : ∀ {Symbol Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph Symbol Guard) (roots : Nat → Nat)
+  (state : MicroCFTA.EnumerationExpandableIndex.Cached Symbol Guard),
+  MicroCFTA.EnumerationPureSelection.Correct graph roots state →
+    MicroCFTA.EnumerationSchedule.Roots state.core.representatives roots →
+      Exists.{1} fun fuel =>
+        Exists.{1} fun after =>
+          MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationState.findExpandable graph fuel) state.core
+              (MicroCFTA.EnumerationPureSelection.find state) after ∧
+            MicroCFTA.EnumerationCompressionFrame.Frame state.core after
+MicroCFTA.EnumerationCanonicalUnion.mergedRoots : (Nat → Nat) → List.{0} Nat → Nat → Nat → Nat
+MicroCFTA.EnumerationCanonicalUnion.roots_idempotent : ∀ (forest : MicroCFTA.UnionFind.Forest) (roots : Nat → Nat),
+  MicroCFTA.EnumerationSchedule.Roots forest roots → ∀ (uv : Nat), Eq.{1} (roots (roots uv)) (roots uv)
+@MicroCFTA.EnumerationCanonicalUnion.merging_roots : ∀ {Symbol Guard : Type}
+  (values : List.{0} (MicroCFTA.EnumerationState.UVarValue Symbol)) (roots : Nat → Nat) (selected : List.{0} Nat)
+  (state : MicroCFTA.EnumerationState.State Symbol Guard),
+  MicroCFTA.EnumerationSchedule.Merging values roots selected state →
+    ∀ (first target count : Nat),
+      Membership.mem.{0, 0} selected (roots first) →
+        MicroCFTA.UnionFind.Reaches state.representatives first target count →
+          MicroCFTA.EnumerationSchedule.Roots state.representatives
+            (MicroCFTA.EnumerationCanonicalUnion.mergedRoots roots selected target)
+MicroCFTA.EnumerationCanonicalUnion.redirect_fold_eq : ∀ (roots : Nat → Nat) (selected : List.{0} Nat) (target : Nat)
+  (sources : List.{0} Nat),
+  (∀ (key : Nat), Membership.mem.{0, 0} sources key ↔ Membership.mem.{0, 0} selected key ∧ Ne.{1} key target) →
+    Eq.{1}
+      (List.foldl.{0, 0} (fun previous source => MicroCFTA.EnumerationCanonicalWaiting.redirect target source previous)
+        roots sources)
+      (MicroCFTA.EnumerationCanonicalUnion.mergedRoots roots selected target)
+@MicroCFTA.EnumerationCanonicalUnion.terminal_transfer_correct : ∀ {Symbol Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph Symbol Guard) (roots : Nat → Nat)
+  (state : MicroCFTA.EnumerationExpandableIndex.Cached Symbol Guard),
+  MicroCFTA.EnumerationPureSelection.Correct graph roots state →
+    MicroCFTA.EnumerationSchedule.Roots state.core.representatives roots →
+      ∀ (fuel : Nat) (first : MicroCFTA.EnumerationState.Suspended)
+        (rest : List.{0} MicroCFTA.EnumerationState.Suspended)
+        (united after : MicroCFTA.EnumerationState.State Symbol Guard) (target : Nat) (sources : List.{0} Nat),
+        MicroCFTA.EnumerationCorrectness.Success
+            (List.forM.{0, 0, 0} rest fun sc => MicroCFTA.EnumerationState.unionVariables fuel first.var sc.var)
+            state.core () united →
+          MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationState.representative fuel first.var) united
+              target after →
+            (∀ (key : Nat),
+                Membership.mem.{0, 0} sources key ↔
+                  Membership.mem.{0, 0} (List.map.{0, 0} (fun sc => roots sc.var) (List.cons.{0} first rest)) key ∧
+                    Ne.{1} key target) →
+              MicroCFTA.EnumerationPureSelection.Correct graph
+                  (MicroCFTA.EnumerationCanonicalUnion.mergedRoots roots
+                    (List.map.{0, 0} (fun sc => roots sc.var) (List.cons.{0} first rest)) target)
+                  (MicroCFTA.EnumerationPureSelection.transfer target sources
+                    (MicroCFTA.EnumerationExpandableIndex.frame after state)) ∧
+                MicroCFTA.EnumerationSchedule.Roots after.representatives
+                  (MicroCFTA.EnumerationCanonicalUnion.mergedRoots roots
+                    (List.map.{0, 0} (fun sc => roots sc.var) (List.cons.{0} first rest)) target)
+@MicroCFTA.EnumerationCanonicalUnion.recorded_transfer_correct : ∀ {Symbol Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph Symbol Guard) (roots : Nat → Nat)
+  (state : MicroCFTA.EnumerationExpandableIndex.Cached Symbol Guard),
+  MicroCFTA.EnumerationPureSelection.Correct graph roots state →
+    MicroCFTA.EnumerationSchedule.Roots state.core.representatives roots →
+      ∀ (fuel : Nat) (first : MicroCFTA.EnumerationState.Suspended)
+        (rest : List.{0} MicroCFTA.EnumerationState.Suspended) (recorded : List.{0} Nat)
+        (scanned united after : MicroCFTA.EnumerationState.State Symbol Guard) (target : Nat) (sources : List.{0} Nat),
+        MicroCFTA.EnumerationCorrectness.Success
+            (List.mapM.{0, 0, 0} (fun sc => MicroCFTA.EnumerationState.representative fuel sc.var)
+              (List.cons.{0} first rest))
+            state.core recorded scanned →
+          MicroCFTA.EnumerationCorrectness.Success
+              (List.forM.{0, 0, 0} rest fun sc => MicroCFTA.EnumerationState.unionVariables fuel first.var sc.var)
+              scanned () united →
+            MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationState.representative fuel first.var) united
+                target after →
+              (∀ (key : Nat),
+                  Membership.mem.{0, 0} sources key ↔ Membership.mem.{0, 0} recorded key ∧ Ne.{1} key target) →
+                MicroCFTA.EnumerationPureSelection.Correct graph
+                    (MicroCFTA.EnumerationCanonicalUnion.mergedRoots roots recorded target)
+                    (MicroCFTA.EnumerationPureSelection.transfer target sources
+                      (MicroCFTA.EnumerationExpandableIndex.frame after state)) ∧
+                  MicroCFTA.EnumerationSchedule.Roots after.representatives
+                    (MicroCFTA.EnumerationCanonicalUnion.mergedRoots roots recorded target)
+'MicroCFTA.SourceUnionFindRoot.root_eq' depends on axioms: [propext]
+'MicroCFTA.SourceUnionFindRoot.root_correct' depends on axioms: [propext]
+'MicroCFTA.SourceUnionFindRoot.root_terminates' depends on axioms: [propext]
+'MicroCFTA.SourceUnionFindRoot.root_moreFuel' depends on axioms: [propext]
+'MicroCFTA.EnumerationCompressionFrame.Frame.refl' does not depend on any axioms
+'MicroCFTA.EnumerationCompressionFrame.Frame.trans' does not depend on any axioms
+'MicroCFTA.EnumerationCompressionFrame.Frame.total' does not depend on any axioms
+'MicroCFTA.EnumerationCompressionFrame.pure_frame' depends on axioms: [propext]
+'MicroCFTA.EnumerationCompressionFrame.get_frame' depends on axioms: [propext]
+'MicroCFTA.EnumerationCompressionFrame.representative_frame' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationCompressionFrame.getValue_frame' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationCompressionFrame.findExpandable_frame' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationCanonicalWaiting.references_canonicalValue' depends on axioms: [propext]
+'MicroCFTA.EnumerationCanonicalWaiting.candidate_canonicalValue' depends on axioms: [propext]
+'MicroCFTA.EnumerationCanonicalWaiting.replace_correct' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationCanonicalWaiting.allocate_correct' depends on axioms: [propext]
+'MicroCFTA.EnumerationCanonicalWaiting.initial_correct' depends on axioms: [propext]
+'MicroCFTA.EnumerationCanonicalWaiting.support_exact' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+'MicroCFTA.EnumerationCanonicalWaiting.move_correct' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationCanonicalWaiting.moveMany_correct' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationCanonicalWaiting.assimilation_correct' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationPureSelection.initial_correct' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationPureSelection.allocate_correct' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationPureSelection.write_correct' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationPureSelection.frame_correct' depends on axioms: [propext]
+'MicroCFTA.EnumerationPureSelection.transfer_correct' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationPureSelection.assimilate_correct' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationPureSelection.assimilate_source' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationPureSelection.candidates_exact' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationPureSelection.findAction_represents' does not depend on any axioms
+'MicroCFTA.EnumerationPureSelection.find_exact' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+'MicroCFTA.EnumerationPureSelection.scan_agrees' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+'MicroCFTA.EnumerationPureSelection.scan_complete' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+'MicroCFTA.EnumerationCanonicalUnion.roots_idempotent' depends on axioms: [propext]
+'MicroCFTA.EnumerationCanonicalUnion.merging_roots' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationCanonicalUnion.redirect_fold_eq' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationCanonicalUnion.terminal_transfer_correct' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]
+'MicroCFTA.EnumerationCanonicalUnion.recorded_transfer_correct' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]

@@ -1,0 +1,42 @@
+/tmp/mcfta-cached-selection-20261024/union-check-1/checked.lean:44:32: error: invalid `▸` notation, expected result type of cast is 
+  target ∈ selected
+however, the equality 
+  same
+of type 
+  roots first = roots target
+does not contain the expected result type on either the left or the right hand side
+/tmp/mcfta-cached-selection-20261024/union-check-1/checked.lean:104:105: error: unsolved goals
+Symbol Guard : Type
+graph : Graph Symbol Guard
+roots : Nat → Nat
+state : Cached Symbol Guard
+correct : EnumerationPureSelection.Correct graph roots state
+paths : Roots state.core.representatives roots
+fuel : Nat
+first : Suspended
+rest : List Suspended
+united after : State Symbol Guard
+target : Nat
+sources : List Nat
+unions : Success (rest.forM fun sc => unionVariables fuel first.var sc.var) state.core () united
+winner : Success (representative fuel first.var) united target after
+keys : ∀ (key : Nat), key ∈ sources ↔ key ∈ List.map (fun sc => roots sc.var) (first :: rest) ∧ key ≠ target
+selected : List Nat := List.foldl (fun selected sc => roots sc.var :: selected) [roots first.var] rest
+joined :
+  Merging state.core.values roots (List.foldl (fun selected sc => roots sc.var :: selected) [roots first.var] rest)
+    united
+resolved : Merging state.core.values roots selected after
+count : Nat
+path : UnionFind.Reaches after.representatives first.var target count
+firstSelected : roots first.var ∈ selected
+actualRoots : Roots after.representatives (mergedRoots roots selected target)
+key : Nat
+⊢ ((key = roots first.var ∨ key ∈ []) ∨ ∃ sc, sc ∈ rest ∧ roots sc.var = key) ↔
+    key = roots first.var ∨ ∃ sc, sc ∈ rest ∧ roots sc.var = key
+/tmp/mcfta-cached-selection-20261024/union-check-1/checked.lean:105:42: error: This simp argument is unused:
+  List.mem_singleton
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [selected, resolve_members, List.map_cons, List.mem_cons, List.mem_map]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

@@ -1,0 +1,13 @@
+# Pure representative worker: precompile review
+
+Reviewed at 2026-10-24 01:30 CEST. **SOURCE CLEAR** for the whole 67-line candidate `/tmp/mcfta-cached-selection-20261024-pure-root.lean`, SHA256 `83e4cca222e43535bd10b33ef11c4a323132cbe399fd59dee76180ff27ef219f`. Root authored this code. I authored no candidate body and ran no Lean/compiler command, prepared program, or repository mutation.
+
+The pure worker follows exactly the source's `UnionFind.root` cases: follow a stored parent; return the current ID for a stored root or missing entry. It constructs no replacement forest. Fuel zero returns none, consistently with the existing finite lookup model. This finite observation is not an extra Haskell outcome.
+
+`root_eq` states the exact representative projection of the existing compressing `findRoot` at the same bound, for arbitrary forests and IDs. Its induction fixes the forest and generalizes the queried ID. This is sufficient because descent reads the unchanged input forest. Compression happens only while the recursive call returns. The parent branch splits the actual recursive Option result, after which both projections reduce to the same expression. No totality premise is needed for this bounded identity, including cycles and insufficient fuel.
+
+`root_correct` extracts the actual successful `findRoot` result and its finite path. The equality substitution has the correct orientation from the found representative to the requested representative. `root_terminates` uses the exact live `findRoot_terminates` witness, then finite-path uniqueness to identify its returned representative. `root_moreFuel` uses the exact whole-result stability theorem `findRoot_moreFuel` and projects its representative. All helper names, argument orders, and conclusions were checked in the live `lean/MicroCFTA/UnionFind.lean`, SHA256 `3668867a41890e4721c301092a06c48d3bd757a8eede4b92340fe5db80119a14`. The Haskell source is `cfta/src/Data/CFTA/Internal/UnionFind.hs`, SHA256 `096db1d6a4d693cebfc9cb643486434baee93e3379c5a411d3edd556d102d434`.
+
+There is no extra semantic, size, success, or total-forest premise in the bounded equality or successful-path statement. Termination requires the supplied finite path, as intended. The source review found no type/proof defect. Elaboration and kernel acceptance remain Root's first capped compile gate.
+
+This is only the source root worker and its lookup facts. It does not yet establish canonical cache maintenance, a whole-state compression relation, observer congruence, or shared-driver correspondence. The companion observation review remains `/tmp/mcfta-cached-selection-20261024-observation-review.md`, SHA256 `37ac650dba40afe66336b06cf180a03e00a8e00cf79cd4bb0a67a7a4e365c85d`.

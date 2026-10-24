@@ -1,0 +1,51 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-R", "/tmp/mcfta-cached-selection-20261024/combined-check-3", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-cached-selection-20261024/combined-check-3/checked.lean"], "exit_code": 1, "raw_bytes": 2303, "raw_sha256": "414091af70a88d35a948148716f0dbacb245c026e7f5757abd7c6fb939e6a645", "source_sha256": "e3b7b5adcd6731985d8ddfd121f4505e492e75ae2d6b282051a2dfe41bf0db9a"}
+/tmp/mcfta-cached-selection-20261024/combined-check-3/checked.lean:360:6: error: unsolved goals
+case pos
+target source : Nat
+roots : Nat → Nat
+first : Suspended
+rest : List Suspended
+different : ¬source = target
+ih :
+  EnumerationWaitingIndex.occurrences source
+      (List.map (fun sc => { trie := sc.trie, var := if roots sc.var = source then target else roots sc.var }) rest) =
+    0
+named : roots first.var = source
+⊢ ¬target = source
+/tmp/mcfta-cached-selection-20261024/combined-check-3/checked.lean:367:10: error: unsolved goals
+case pos
+target source : Nat
+roots : Nat → Nat
+first : Suspended
+rest : List Suspended
+different : ¬source = target
+ih :
+  EnumerationWaitingIndex.occurrences target
+      (List.map (fun sc => { trie := sc.trie, var := if roots sc.var = source then target else roots sc.var }) rest) =
+    EnumerationWaitingIndex.occurrences source (List.map (fun sc => { trie := sc.trie, var := roots sc.var }) rest) +
+      EnumerationWaitingIndex.occurrences target (List.map (fun sc => { trie := sc.trie, var := roots sc.var }) rest)
+atSource : ¬target = source
+namedTarget : roots first.var = target
+⊢ 1 +
+      (EnumerationWaitingIndex.occurrences source (List.map (fun sc => { trie := sc.trie, var := roots sc.var }) rest) +
+        EnumerationWaitingIndex.occurrences target
+          (List.map (fun sc => { trie := sc.trie, var := roots sc.var }) rest)) =
+    EnumerationWaitingIndex.occurrences source (List.map (fun sc => { trie := sc.trie, var := roots sc.var }) rest) +
+      (1 +
+        EnumerationWaitingIndex.occurrences target (List.map (fun sc => { trie := sc.trie, var := roots sc.var }) rest))
+/tmp/mcfta-cached-selection-20261024/combined-check-3/checked.lean:369:8: error: unsolved goals
+case pos
+target source : Nat
+roots : Nat → Nat
+key : Nat
+first : Suspended
+rest : List Suspended
+different : ¬source = target
+ih :
+  EnumerationWaitingIndex.occurrences key
+      (List.map (fun sc => { trie := sc.trie, var := if roots sc.var = source then target else roots sc.var }) rest) =
+    EnumerationWaitingIndex.occurrences key (List.map (fun sc => { trie := sc.trie, var := roots sc.var }) rest)
+atSource : ¬key = source
+atTarget : ¬key = target
+named : roots first.var = source
+⊢ (if target = key then 1 else 0) = if source = key then 1 else 0

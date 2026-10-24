@@ -1,0 +1,98 @@
+import MicroCFTA.SourceUnionFindRoot
+import MicroCFTA.EnumerationCanonicalUnion
+
+set_option pp.universes true
+
+#check @MicroCFTA.SourceUnionFindRoot.root
+#check @MicroCFTA.SourceUnionFindRoot.root_eq
+#check @MicroCFTA.SourceUnionFindRoot.root_correct
+#check @MicroCFTA.SourceUnionFindRoot.root_terminates
+#check @MicroCFTA.SourceUnionFindRoot.root_moreFuel
+#check @MicroCFTA.EnumerationCompressionFrame.Frame
+#check @MicroCFTA.EnumerationCompressionFrame.Frame.refl
+#check @MicroCFTA.EnumerationCompressionFrame.Frame.trans
+#check @MicroCFTA.EnumerationCompressionFrame.Frame.total
+#check @MicroCFTA.EnumerationCompressionFrame.pure_frame
+#check @MicroCFTA.EnumerationCompressionFrame.get_frame
+#check @MicroCFTA.EnumerationCompressionFrame.representative_frame
+#check @MicroCFTA.EnumerationCompressionFrame.getValue_frame
+#check @MicroCFTA.EnumerationCompressionFrame.findExpandable_frame
+#check @MicroCFTA.EnumerationCanonicalWaiting.canonicalValue
+#check @MicroCFTA.EnumerationCanonicalWaiting.count
+#check @MicroCFTA.EnumerationCanonicalWaiting.replace
+#check @MicroCFTA.EnumerationCanonicalWaiting.Correct
+#check @MicroCFTA.EnumerationCanonicalWaiting.redirect
+#check @MicroCFTA.EnumerationCanonicalWaiting.move
+#check @MicroCFTA.EnumerationCanonicalWaiting.moveMany
+#check @MicroCFTA.EnumerationCanonicalWaiting.references_canonicalValue
+#check @MicroCFTA.EnumerationCanonicalWaiting.candidate_canonicalValue
+#check @MicroCFTA.EnumerationCanonicalWaiting.replace_correct
+#check @MicroCFTA.EnumerationCanonicalWaiting.allocate_correct
+#check @MicroCFTA.EnumerationCanonicalWaiting.initial_correct
+#check @MicroCFTA.EnumerationCanonicalWaiting.support_exact
+#check @MicroCFTA.EnumerationCanonicalWaiting.move_correct
+#check @MicroCFTA.EnumerationCanonicalWaiting.moveMany_correct
+#check @MicroCFTA.EnumerationCanonicalWaiting.assimilation_correct
+#check @MicroCFTA.EnumerationPureSelection.Correct
+#check @MicroCFTA.EnumerationPureSelection.write
+#check @MicroCFTA.EnumerationPureSelection.transfer
+#check @MicroCFTA.EnumerationPureSelection.initial_correct
+#check @MicroCFTA.EnumerationPureSelection.allocate_correct
+#check @MicroCFTA.EnumerationPureSelection.write_correct
+#check @MicroCFTA.EnumerationPureSelection.frame_correct
+#check @MicroCFTA.EnumerationPureSelection.transfer_correct
+#check @MicroCFTA.EnumerationPureSelection.assimilate
+#check @MicroCFTA.EnumerationPureSelection.assimilate_correct
+#check @MicroCFTA.EnumerationPureSelection.assimilate_source
+#check @MicroCFTA.EnumerationPureSelection.candidates_exact
+#check @MicroCFTA.EnumerationPureSelection.find
+#check @MicroCFTA.EnumerationPureSelection.next
+#check @MicroCFTA.EnumerationPureSelection.findAction
+#check @MicroCFTA.EnumerationPureSelection.findAction_represents
+#check @MicroCFTA.EnumerationPureSelection.find_exact
+#check @MicroCFTA.EnumerationPureSelection.scan_agrees
+#check @MicroCFTA.EnumerationPureSelection.scan_complete
+#check @MicroCFTA.EnumerationCanonicalUnion.mergedRoots
+#check @MicroCFTA.EnumerationCanonicalUnion.roots_idempotent
+#check @MicroCFTA.EnumerationCanonicalUnion.merging_roots
+#check @MicroCFTA.EnumerationCanonicalUnion.redirect_fold_eq
+#check @MicroCFTA.EnumerationCanonicalUnion.terminal_transfer_correct
+#check @MicroCFTA.EnumerationCanonicalUnion.recorded_transfer_correct
+#print axioms MicroCFTA.SourceUnionFindRoot.root_eq
+#print axioms MicroCFTA.SourceUnionFindRoot.root_correct
+#print axioms MicroCFTA.SourceUnionFindRoot.root_terminates
+#print axioms MicroCFTA.SourceUnionFindRoot.root_moreFuel
+#print axioms MicroCFTA.EnumerationCompressionFrame.Frame.refl
+#print axioms MicroCFTA.EnumerationCompressionFrame.Frame.trans
+#print axioms MicroCFTA.EnumerationCompressionFrame.Frame.total
+#print axioms MicroCFTA.EnumerationCompressionFrame.pure_frame
+#print axioms MicroCFTA.EnumerationCompressionFrame.get_frame
+#print axioms MicroCFTA.EnumerationCompressionFrame.representative_frame
+#print axioms MicroCFTA.EnumerationCompressionFrame.getValue_frame
+#print axioms MicroCFTA.EnumerationCompressionFrame.findExpandable_frame
+#print axioms MicroCFTA.EnumerationCanonicalWaiting.references_canonicalValue
+#print axioms MicroCFTA.EnumerationCanonicalWaiting.candidate_canonicalValue
+#print axioms MicroCFTA.EnumerationCanonicalWaiting.replace_correct
+#print axioms MicroCFTA.EnumerationCanonicalWaiting.allocate_correct
+#print axioms MicroCFTA.EnumerationCanonicalWaiting.initial_correct
+#print axioms MicroCFTA.EnumerationCanonicalWaiting.support_exact
+#print axioms MicroCFTA.EnumerationCanonicalWaiting.move_correct
+#print axioms MicroCFTA.EnumerationCanonicalWaiting.moveMany_correct
+#print axioms MicroCFTA.EnumerationCanonicalWaiting.assimilation_correct
+#print axioms MicroCFTA.EnumerationPureSelection.initial_correct
+#print axioms MicroCFTA.EnumerationPureSelection.allocate_correct
+#print axioms MicroCFTA.EnumerationPureSelection.write_correct
+#print axioms MicroCFTA.EnumerationPureSelection.frame_correct
+#print axioms MicroCFTA.EnumerationPureSelection.transfer_correct
+#print axioms MicroCFTA.EnumerationPureSelection.assimilate_correct
+#print axioms MicroCFTA.EnumerationPureSelection.assimilate_source
+#print axioms MicroCFTA.EnumerationPureSelection.candidates_exact
+#print axioms MicroCFTA.EnumerationPureSelection.findAction_represents
+#print axioms MicroCFTA.EnumerationPureSelection.find_exact
+#print axioms MicroCFTA.EnumerationPureSelection.scan_agrees
+#print axioms MicroCFTA.EnumerationPureSelection.scan_complete
+#print axioms MicroCFTA.EnumerationCanonicalUnion.roots_idempotent
+#print axioms MicroCFTA.EnumerationCanonicalUnion.merging_roots
+#print axioms MicroCFTA.EnumerationCanonicalUnion.redirect_fold_eq
+#print axioms MicroCFTA.EnumerationCanonicalUnion.terminal_transfer_correct
+#print axioms MicroCFTA.EnumerationCanonicalUnion.recorded_transfer_correct
