@@ -400,9 +400,9 @@ data SearchOptions = SearchOptions
     , searchCompletionAllocLimit :: Word64
     -- ^ The bytes that the completion of one law may allocate.
     , searchCompletionFuel :: Int
-    {- ^ The number of critical pairs that the completion of one law may
-    take (0: no limit). Then the law keeps the rules that its completion
-    has (see 'addLaw').
+    {- ^ The completion of one law may take 2^K critical pairs for this K
+    (0: no limit). Then the law keeps the rules that its completion has
+    (see 'addLaw').
     -}
     , searchRecheck :: Int
     {- ^ The number of extra test cases of small sizes on which a new law is
@@ -642,10 +642,10 @@ parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.p
         O.option
             O.auto
             ( O.long "completion-fuel"
-                <> O.metavar "N"
+                <> O.metavar "K"
                 <> O.value completionFuelDefault
                 <> O.help
-                    "Stop the completion of a law after N critical pairs, and keep the rules that it has (default 30000; 0: no limit)"
+                    "Stop the completion of a law after 2^K critical pairs, and keep the rules that it has (default 15, 32768 pairs; 0: no limit)"
             )
     recheckOption =
         O.option
@@ -825,7 +825,7 @@ searchPhases
                         , completionTimeout = completionTimeoutSetting
                         , completionMemLimit = completionMemLimitSetting
                         , completionAllocLimit = completionAllocLimitSetting
-                        , completionFuel = if completionFuelSetting > 0 then Just completionFuelSetting else Nothing
+                        , completionFuel = if completionFuelSetting > 0 then Just (2 ^ min 62 completionFuelSetting) else Nothing
                         , recheckCount = recheckSetting
                         , lawSink = sink
                         , stopAfter = stopSetting
@@ -1592,17 +1592,17 @@ completions that end.
 completionBudget :: Word64
 completionBudget = 256 * 1024 * 1024 * 1024
 
-{- | The default number of critical pairs that the completion of one law may
-take (@--completion-fuel@; 0: no limit). A pair costs about 1 MiB of
-allocation at HugeLists, so the fuel stops a completion at about 30 GiB,
+{- | The default fuel of the completion of one law (@--completion-fuel@):
+2^15 = 32768 critical pairs (0: no limit). A pair costs about 1 MiB of
+allocation at HugeLists, so the fuel stops a completion at about 32 GiB,
 and the law keeps the rules that it has. At HugeLists 7-p4, 78 completions
 ran over the allocation budget and kept only the rules of their laws; they
-took 76 % of the time of the completion. With this fuel, 6-p4 gives the same
-laws in 15 % less time, and 7-p4 runs in 41 % of the time (see the
-comparison with Spectacular).
+took 76 % of the time of the completion. With a fuel of 30000 pairs, 6-p4
+gave the same laws in 15 % less time, and 7-p4 ran in 41 % of the time
+(see the comparison with Spectacular).
 -}
 completionFuelDefault :: Int
-completionFuelDefault = 30000
+completionFuelDefault = 15
 
 {- | The completed rules of a law, if their computation stays within the
 limits of the completion (see 'completionTimeout', 'completionMemLimit',
