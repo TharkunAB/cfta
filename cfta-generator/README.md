@@ -316,7 +316,11 @@ accepted terms up to the bound and keep those with the prefix. With guards,
 listed term. A token is then offered, rejected, or undecided: `nextTokens`
 gives the offered tokens, `undecidedTokens` the tokens that the solver neither
 offers nor rejects, and `undecidedTerms` the completions that it does not
-decide.
+decide. A decoder that walks one path of tokens can use `deciding`,
+`decidingStep`, and `decidingTokens` instead: they ask the solver only about
+the candidates that the prefix can still reach, and only until a verdict is
+known, and they keep the verdicts for the whole walk. `decided` gives the
+`Completions` of the current prefix.
 
 `withWeights` gives each symbol a weight, a non-negative `Rational`, and the
 weight of a term is the product of the weights of its nodes.

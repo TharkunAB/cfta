@@ -3,7 +3,7 @@ module Data.CFTA.Sized.PrefixGuardSpec (spec) where
 import Control.Monad (forM, forM_, when, zipWithM)
 import Data.Containers.ListUtils (nubOrd)
 import Data.IORef (IORef, modifyIORef', newIORef, readIORef)
-import Data.List (genericLength, inits, isPrefixOf, sort)
+import Data.List (genericLength, inits, isPrefixOf, sort, sortOn)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe, isJust)
 import qualified Data.Text as Text
@@ -39,6 +39,8 @@ spec = describe "Data.CFTA.Sized.Prefix with a solver" $ do
             agreesWithSearch bound graph
         it "accepts the terms that the reference denotation accepts, and rejects the terms that it rejects" $
             agreesWithDenotation bound graph
+        it "walks each prefix to the results of prefixCompletionsWith, alone and with a shared memory" $
+            walksAsEager bound graph
     it "offers, leaves undecided, and rejects one token each after a pair node" $ do
         completions <- prefixCompletionsWith partialEntailment 3 guardedPairs
         let after = afterToken completions (sym "g", 2)
@@ -107,6 +109,32 @@ spec = describe "Data.CFTA.Sized.Prefix with a solver" $ do
         -- the accepted ones, each once, and no undecided one.
         fmap sort (drawCompletion (\weights -> [index | (index, weight) <- zip [0 ..] weights, weight > 0]) after)
             `shouldBe` Just (sort $ completionTerms after)
+    it "decides each guard at most once in a walk that decides every prefix" $ do
+        (counted, calls) <- countingEntailment partialEntailment
+        _ <- prefixCompletionsWith counted 7 guardedLists
+        eagerCalls <- readIORef calls
+        (walking, walkCalls) <- countingEntailment partialEntailment
+        start <- deciding walking 7 guardedLists
+        forM_ (nubOrd $ concatMap (inits . preorder) $ candidates 7 guardedLists) $ \prefix -> do
+            walked <- walkTo start prefix
+            forM_ walked $ \walk -> do
+                _ <- decidingTokens walk
+                completions <- decided walk
+                length (completionTerms completions) `seq` pure ()
+        made <- readIORef walkCalls
+        made `shouldBe` eagerCalls
+    it "asks the solver no more often than prefixCompletionsWith on one path, and less often by steps alone" $ do
+        (counted, calls) <- countingEntailment partialEntailment
+        _ <- prefixCompletionsWith counted 7 guardedLists
+        eagerCalls <- readIORef calls
+        (walking, walkCalls) <- countingEntailment partialEntailment
+        path <- firstOffered =<< deciding walking 7 guardedLists
+        maskCalls <- readIORef walkCalls
+        (stepping, stepCalls) <- countingEntailment partialEntailment
+        stepped <- (`walkTo` path) =<< deciding stepping 7 guardedLists
+        made <- readIORef stepCalls
+        length path `shouldSatisfy` (> 1)
+        (isJust stepped, maskCalls <= eagerCalls, made < eagerCalls) `shouldBe` (True, True, True)
     it "rejects a constrained automaton without a solver" $
         either Just (const Nothing) (prefixCompletions 3 guardedPairs) `shouldBe` Just GuardedTransition
 
@@ -120,14 +148,14 @@ agreesWithSearch bound graph = do
     completions <- prefixCompletionsWith partialEntailment (Size bound) graph
     let terms = candidates bound graph
     verdicts <- forM terms (searchVerdict partialEntailment graph)
-    let decided = zip (map preorder terms) verdicts
-        with verdict prefix = [tokens | (tokens, found) <- decided, found == verdict, prefix `isPrefixOf` tokens]
+    let searched = zip (map preorder terms) verdicts
+        with verdict prefix = [tokens | (tokens, found) <- searched, found == verdict, prefix `isPrefixOf` tokens]
         counts verdict prefix =
             Map.fromListWith
                 (+)
                 [(tokens !! length prefix, 1 :: Integer) | tokens <- with verdict prefix, length tokens > length prefix]
-        verdictOf prefix = fromMaybe No $ lookup prefix [(tokens, found) | (tokens, found) <- decided, found /= No]
-    forM_ (nubOrd $ concatMap (inits . fst) decided) $ \prefix -> do
+        verdictOf prefix = fromMaybe No $ lookup prefix [(tokens, found) | (tokens, found) <- searched, found /= No]
+    forM_ (nubOrd $ concatMap (inits . fst) searched) $ \prefix -> do
         let accepted = counts Yes prefix
             undecided = counts Unknown prefix
             live = not (null $ with Yes prefix) || not (null $ with Unknown prefix)
@@ -158,6 +186,53 @@ agreesWithSearch bound graph = do
                       ]
                     )
                     `shouldBe` (prefix, [])
+
+{- | A walk to every prefix of every term over the symbols, from a fresh walk
+and from one walk whose memory every prefix shares: its step gives 'Nothing'
+exactly where 'afterPrefix' does, its tokens are those of 'nextTokens' and
+'undecidedTokens', and its decided completions are those of
+'prefixCompletionsWith' after the prefix.
+-}
+walksAsEager :: Integer -> FTA.FTA String Symbol Constraint -> IO ()
+walksAsEager bound graph = do
+    eager <- prefixCompletionsWith partialEntailment (Size bound) graph
+    shared <- deciding partialEntailment (Size bound) graph
+    forM_ (nubOrd $ concatMap (inits . preorder) $ candidates bound graph) $ \prefix -> do
+        fresh <- deciding partialEntailment (Size bound) graph
+        forM_ [("fresh", fresh), ("shared", shared)] $ \(name, start) -> do
+            walked <- walkTo start prefix
+            let expected = afterPrefix eager prefix
+            (name, prefix, isJust walked) `shouldBe` (name, prefix, isJust expected)
+            case (walked, expected) of
+                (Just walk, Just after) -> do
+                    tokens <- decidingTokens walk
+                    (name, prefix, tokens)
+                        `shouldBe` ( name
+                                   , prefix
+                                   ,
+                                       ( completeVerdict after
+                                       , sortOn fst $
+                                            [(token, Yes) | (token, _) <- nextTokens after]
+                                                <> [(token, Unknown) | (token, _) <- undecidedTokens after]
+                                       )
+                                   )
+                    completions <- decided walk
+                    (name, prefix, summary completions) `shouldBe` (name, prefix, summary after)
+                _ -> pure ()
+  where
+    summary completions =
+        ( nextTokens completions
+        , undecidedTokens completions
+        , completeVerdict completions
+        , completionTerms completions
+        , undecidedTerms completions
+        , completionCount completions
+        )
+
+-- | A walk after the tokens of a prefix, the first token first.
+walkTo :: Deciding -> [(Symbol, Int)] -> IO (Maybe Deciding)
+walkTo walk [] = pure (Just walk)
+walkTo walk (token : rest) = decidingStep walk token >>= maybe (pure Nothing) (`walkTo` rest)
 
 {- | 'Yes' of the reference denotation is 'Yes' here, and its 'No' is 'No' here.
 The verdict here can be 'No' where the reference is 'Unknown'.
@@ -300,6 +375,18 @@ partialEntailment = Entailment $ \antecedent consequent ->
                 if antecedent == valueIs 2
                     then Yes
                     else if antecedent == valueIs 1 then No else Unknown
+
+{- | The tokens of a walk that takes an offered token at each step, one with
+the most children first, until no token is offered.
+-}
+firstOffered :: Deciding -> IO [(Symbol, Int)]
+firstOffered walk = do
+    (_, tokens) <- decidingTokens walk
+    case sortOn (negate . snd) [token | (token, Yes) <- tokens] of
+        token : _ -> do
+            next <- decidingStep walk token
+            maybe (pure []) (fmap (token :) . firstOffered) next
+        [] -> pure []
 
 -- | A solver and the number of the questions that it answers.
 countingEntailment :: Entailment -> IO (Entailment, IORef Int)
