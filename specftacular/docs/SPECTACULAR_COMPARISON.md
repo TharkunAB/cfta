@@ -237,6 +237,24 @@ budget and three over the 4 GiB memory limit. The limit measures the
 growth of the live heap of the process, which the twelve threads share, so
 it can differ between runs.
 
+Other flags give the same 1,413 laws at this revision. A second run with
+the flags of the table took 6,089 seconds under a load of 1.7 to 5.8.
+Without `--enumerate-ahead`, no background thread holds the parts of the
+next types, so the live heap is smaller and the collections take less
+time. All runs use `-N12 -M44G` and `--type-depth 2 --recheck 2000`. The
+load was 1.7 to 6.9 during them, so the seconds are upper bounds.
+
+| Flags | Seconds | GC seconds (elapsed) | Maximum residency GB | Peak RSS GiB | Over the memory limit |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| `--enumerate-ahead`, `-qg -A64m` (the table) | 6,381 ˡ | 2,765 | 18.4 | 38.3 | 3 |
+| `--enumerate-ahead`, `-qn4 -F3 -A64m` | 5,049 | 1,388 | 15.8 | 45.4 | 3 |
+| `-qg -A64m` | 5,159 | 1,293 | 11.8 | 28.9 | 0 |
+| `-qn4 -A64m` | 4,256 | 372 | 12.4 | 30.7 | 0 |
+
+Without `--enumerate-ahead`, the completions of the three laws over the
+memory limit run out of their fuel instead, so the background threads
+trigger the limit.
+
 The law counts differ from those of earlier revisions in some
 configurations, for example HugeLists 4-p4 (122 against 125 at
 `cf1bee8f`) and 5-p4 (291 against 305). With `--type-depth 2`, the law
