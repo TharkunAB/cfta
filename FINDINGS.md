@@ -22,6 +22,33 @@ record the type-depth and LPO validation. General proofs remain separate.
 All earlier repair entries and evidence remain below.
 
 
+## Generated scalar node views incorporated
+
+Updated: 2026-10-24. Main: `c4f7319acf84213fccc8ea389487d4176e4f0b62`.
+Merge: `a7d667f628ee060501126efaf9d19bfe37ecfb72`.
+Read `lean/notes-current-generated-node-views.md`.
+
+PR #113 adds cfta-th and its scalar NodeView declaration producer. The merge
+changes ten paths and adds seven files. Core runtime and all previous Lean
+sources remain byte-identical. The focused Nix test passed four examples,
+including all 38 typed terms and ranks. Six successful splices and five
+rejection checks compile. The refinement example compares values and unrank;
+it does not test its rank function. Formatting and package checks passed.
+Three independent reviews found no concrete defect. No local Haskell repair.
+FINDINGS keeps the external repair index FIRST. All five repairs remain merged.
+
+The new producer still needs its declaration/error, scalar metadata and valid
+build/read correspondence proofs. TH, Generic, native names and custom HasFTA
+laws remain explicit boundaries. Equal languages alone do not give equal ranks.
+No Lean source changed. The preceding strict checks and Audit apply to the same
+bytes; no Lean check was repeated for this merge. H6 remains strongest combined.
+The concrete templateOracle observation results remain checked. Next continue
+recordTypes/typedTypes and the generated scalar-view frontend contract.
+Full-pipeline, canonical-history, cached-driver, phase-4, resources, practical
+width, solver and convergence gaps remain. H23 remains queued. The full goal
+is ACTIVE and incomplete. This record precedes the authorized push.
+
+
 ## Concrete template oracle observation proof
 
 Updated: 2026-10-24. Proof: `eae961a679a76ce4c94cea3cad3fd90ae99eb404`.
