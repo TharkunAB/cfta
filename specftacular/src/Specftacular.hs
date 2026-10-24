@@ -640,7 +640,11 @@ parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.p
             )
     completionFuelOption =
         O.option
-            O.auto
+            ( O.eitherReader $ \text ->
+                case TR.readMaybe text of
+                    Just k | k >= 0 && k <= completionFuelMax -> Right k
+                    _ -> Left completionFuelMessage
+            )
             ( O.long "completion-fuel"
                 <> O.metavar "K"
                 <> O.value completionFuelDefault
@@ -767,6 +771,8 @@ searchPhases
         do
             when (maybe False (< 0) typeDepthSetting) $
                 fail "type depth must be a nonnegative integer"
+            when (completionFuelSetting < 0 || completionFuelSetting > completionFuelMax) $
+                fail completionFuelMessage
             -- Threads write whole diagnostic lines.
             when parallelSetting $ hSetBuffering stderr LineBuffering
             sink <- newIORef []
@@ -825,7 +831,7 @@ searchPhases
                         , completionTimeout = completionTimeoutSetting
                         , completionMemLimit = completionMemLimitSetting
                         , completionAllocLimit = completionAllocLimitSetting
-                        , completionFuel = if completionFuelSetting > 0 then Just (2 ^ min 62 completionFuelSetting) else Nothing
+                        , completionFuel = if completionFuelSetting > 0 then Just (2 ^ completionFuelSetting) else Nothing
                         , recheckCount = recheckSetting
                         , lawSink = sink
                         , stopAfter = stopSetting
@@ -1603,6 +1609,14 @@ gave the same laws in 15 % less time, and 7-p4 ran in 41 % of the time
 -}
 completionFuelDefault :: Int
 completionFuelDefault = 15
+
+-- | The largest exponent of the fuel of a completion: 2^62 pairs fit in an 'Int'.
+completionFuelMax :: Int
+completionFuelMax = 62
+
+-- | The error for an exponent of the fuel out of its range.
+completionFuelMessage :: String
+completionFuelMessage = "completion fuel must be an integer from 0 to " ++ show completionFuelMax
 
 {- | The completed rules of a law, if their computation stays within the
 limits of the completion (see 'completionTimeout', 'completionMemLimit',
