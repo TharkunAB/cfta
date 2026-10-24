@@ -1,0 +1,43 @@
+{
+  "observed_at": "2026-10-24T16:53:11.062741+00:00",
+  "status": "ROOT_BODY_GATE_CLEAR",
+  "frozen_sha256": "900790dda1833ad6c4a1cb2113e9bbb86af28f5c647a9e1fa4fb524718d894f0",
+  "contracts": {
+    "context.lean.txt": "import MicroCFTA.SourcePruningEnumerationIntersectionWrite\n\nnamespace MicroCFTA.SourcePruningEnumerationAssimilation\nopen EnumerationState EnumerationCorrectness\nopen SourcePruningEnumerationNodes SourcePruningEnumerationObservation\nlocal notation \"Symbol\" => SourcePruningTemplates.Symbol\nlocal notation \"Constraint\" => SourceSymbolicIndex.Constraint FullSyntax.Formula\nvariable {EnumGuard : Type} {width : Nat}\n",
+    "instance-header.lean.txt": "local instance assimilationMonadList : Monad List\n",
+    "public-finish.lean.txt": "/-- Reject Empty before target replacement, source elimination and ancestry transfer. -/\ndef finish (source target resultHandle : Nat)\n    (sourceScs targetScs : List EnumerationState.Suspended)\n    (result : InternedConstructorTemplates.Value Symbol Constraint) :\n    EnumerateM Symbol EnumGuard Unit\n",
+    "public-complete.lean.txt": "/-- Derive both actual branches of disabled-pruning pending-slot assimilation. -/\ntheorem pending_assimilation_complete\n    [DecidableEq Symbol] [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)]\n    (formulas : SourceGuards.Formulas FullSyntax.Formula)\n    (solver : SourceGuards.Entailment FullSyntax.Formula)\n    (inventory : SourceCurrentAllocatedNativeInventoryState.Inventory)\n    (nativeBefore : SourceEqualityNativeDemand.State width)\n    (before : EnumerationState.State Symbol EnumGuard)\n    (source target sourceHandle targetHandle : Nat)\n    (sourceScs targetScs : List EnumerationState.Suspended)\n    (ready : SourceCurrentConjunctionClassScan.Ready nativeBefore)\n    (admitted : SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory nativeBefore)\n    (memos : EndpointMemoGateTrace.Memos)\n    (globals : EndpointMemoGateTrace.Valid nativeBefore.native.machine.heap memos)\n    (realized : PendingRealized nativeBefore.native.machine.heap before)\n    (sourceStored : before.values[source]? = some (.unenumerated (some sourceHandle) sourceScs))\n    (targetStored : before.values[target]? = some (.unenumerated (some targetHandle) targetScs))\n    (different : target \u2260 source)\n    (ranges : match lookupNode nativeBefore.native.machine.heap sourceHandle,\n        lookupNode nativeBefore.native.machine.heap targetHandle with\n      | some left, some right => SourceCurrentAllocatedNativeRequestBounds.WordRanges\n          (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right)) nativeBefore\n      | _, _ => True) :\n    \u2203 (left right : InternedConstructorTemplates.Value Symbol Constraint)\n      (next : SourceCurrentAllocatedNativeInventoryState.Inventory)\n      (result : InternedConstructorTemplates.Value Symbol Constraint)\n      (nativeAfter : SourceEqualityNativeDemand.State width) (resultHandle : Nat),\n      lookupNode nativeBefore.native.machine.heap sourceHandle = some left \u2227\n      lookupNode nativeBefore.native.machine.heap targetHandle = some right \u2227\n      next.source = nativeBefore.native.machine.heap \u2227 next.roots = inventory.roots ++ [left, right] \u2227\n      SourceCurrentAllocatedTargetQuery.Receipt formulas solver next left right nativeBefore result nativeAfter memos \u2227\n      encodeNode result = some resultHandle \u2227 lookupNode nativeAfter.native.machine.heap resultHandle = some result \u2227\n      (result = .empty \u2192\n        ExceptT.run (finish (EnumGuard := EnumGuard) source target resultHandle sourceScs targetScs result before) = []) \u2227\n      (result \u2260 .empty \u2192 \u2203 after : EnumerationState.State Symbol EnumGuard,\n        ExceptT.run (finish (EnumGuard := EnumGuard) source target resultHandle sourceScs targetScs result before) =\n          [.ok ((), after)] \u2227\n        after = assimilated before target source (.unenumerated (some resultHandle) (sourceScs ++ targetScs)) \u2227\n        after.values[target]? = some (.unenumerated (some resultHandle) (sourceScs ++ targetScs)) \u2227\n        after.values[source]? = some .eliminated \u2227\n        PendingRealized nativeAfter.native.machine.heap after)\n",
+    "local-raw.lean.txt": "have raw : ExceptT.run (finish (EnumGuard := EnumGuard) source target resultHandle sourceScs targetScs result before) =\n        [.ok ((), assimilated before target source (.unenumerated (some resultHandle) (sourceScs ++ targetScs)))]\n",
+    "local-source-inside.lean.txt": "have sourceInside : source < before.values.length\n"
+  },
+  "reviews": {
+    "source": "c5b70697396d13f3cded69f3641fbeb08d87390befb4b9cb14f8e78670c1ca3c",
+    "declaration": "1a1e3d1823e2b19d75728ad653e831de09f9c9cfd294ca2978444a6ff6afedd3",
+    "seal-script": "1d13411be9860dbae2e669d302f910e4e67bd98fca34f1a5661f001dd07937a5"
+  },
+  "metadata_overlay_frozen_sha256": "6b6c5acaa048362c097870ed009a35ceaf18696bc9272e72d848bb27feb6268b",
+  "effective_obtain_metadata_sha256": "bd5ab907af16b45bc9902d7b1ca06795eb249f3f0e9d218e43488977b0f3b495",
+  "unused_fields": [
+    "written"
+  ],
+  "script_frozen_sha256": "d78a086395b202552b9ae0913ad9871767ab697716fd84e9c905f6dd970f9e1e",
+  "activated_scripts": {
+    "check": "bb6dab0db637e21640a54231fb0c304b28fcf2c96680a9ac9185d50450283471",
+    "documents": "f362b845039d9524883fa170dcd7a88e7fe6d8901b364ed90982d27edfca7bbd",
+    "archive": "b82404971656be22f506a10b572ffe913f30b7cb4b0496c763f411f6bce2984d",
+    "verify": "f677703b95d9346a1b4e7fdb5cabcb6b293297283536ddf86fc471c4c7aadeab",
+    "publication": "d94024649164aa5dee327e185ad9c505cc4683c5e55334e4179367525ddbcdc1"
+  },
+  "root_full_read": {
+    "contract_lines": 58,
+    "scoped_types": 104,
+    "obtain_fields": 22,
+    "cuts": 21,
+    "cut_lines": 355,
+    "script_lines": 466,
+    "all_source_and_route_hashes_verified": true,
+    "all_forward_inverse_patches_exact": true
+  },
+  "body_scope": "One finish action; local singleton/flatMap Monad List; one producer; two declared haves; all declared case/obtain/intro scopes; no new helper, receipt, type, carrier, law, induction or proof-limit change.",
+  "goal": "ACTIVE_INCOMPLETE"
+}

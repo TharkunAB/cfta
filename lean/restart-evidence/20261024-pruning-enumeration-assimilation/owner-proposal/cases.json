@@ -1,0 +1,139 @@
+{
+  "definition_match": {
+    "scrutinee": "result",
+    "type": "InternedConstructorTemplates.Value Symbol Constraint",
+    "alternatives": [
+      {
+        "pattern": ".empty",
+        "binders": [],
+        "action_shape": "existing reject; no writes or ancestry"
+      },
+      {
+        "pattern": "_",
+        "binders": [],
+        "action_shape": "existing target setValue, source setValue eliminated, ancestry modify in that order"
+      }
+    ],
+    "nonempty_wildcard_has_no_binder": true
+  },
+  "definition_ancestry_condition": {
+    "literal": "other = target",
+    "type": "Prop",
+    "then_type": "List EnumerationState.RecursionKey",
+    "else_type": "List EnumerationState.RecursionKey",
+    "Nat_decidability": "existing Nat equality; no new instance"
+  },
+  "proof_constructor_cases": {
+    "command": "cases result with",
+    "scope": "local raw have inside nonempty implication",
+    "before_fixed": true,
+    "branches": [
+      {
+        "constructor": "empty",
+        "binders": [],
+        "empty_contradiction": "nonempty rfl",
+        "output_endpoint": "assimilated before target source (.unenumerated (some resultHandle) (sourceScs ++ targetScs))"
+      },
+      {
+        "constructor": "reference",
+        "binders": [
+          {
+            "name": "name",
+            "type": "InternedBinderProtocol.Reference"
+          }
+        ],
+        "empty_contradiction": null,
+        "output_endpoint": "assimilated before target source (.unenumerated (some resultHandle) (sourceScs ++ targetScs))"
+      },
+      {
+        "constructor": "node",
+        "binders": [
+          {
+            "name": "entry",
+            "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+          },
+          {
+            "name": "edges",
+            "type": "List (InternedConstructorTemplates.EdgeValue Symbol Constraint)"
+          },
+          {
+            "name": "depth",
+            "type": "Nat"
+          },
+          {
+            "name": "free",
+            "type": "List InternedBinderProtocol.Reference"
+          }
+        ],
+        "empty_contradiction": null,
+        "output_endpoint": "assimilated before target source (.unenumerated (some resultHandle) (sourceScs ++ targetScs))"
+      },
+      {
+        "constructor": "union",
+        "binders": [
+          {
+            "name": "entry",
+            "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+          },
+          {
+            "name": "members",
+            "type": "List (InternedConstructorTemplates.Value Symbol Constraint)"
+          },
+          {
+            "name": "depth",
+            "type": "Nat"
+          },
+          {
+            "name": "free",
+            "type": "List InternedBinderProtocol.Reference"
+          }
+        ],
+        "empty_contradiction": null,
+        "output_endpoint": "assimilated before target source (.unenumerated (some resultHandle) (sourceScs ++ targetScs))"
+      },
+      {
+        "constructor": "mu",
+        "binders": [
+          {
+            "name": "entry",
+            "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+          },
+          {
+            "name": "body",
+            "type": "InternedConstructorTemplates.Value Symbol Constraint"
+          },
+          {
+            "name": "depthShape",
+            "type": "InternedConstructorTemplates.Value Symbol Constraint"
+          },
+          {
+            "name": "ordinaryShape",
+            "type": "InternedConstructorTemplates.Value Symbol Constraint"
+          }
+        ],
+        "empty_contradiction": null,
+        "output_endpoint": "assimilated before target source (.unenumerated (some resultHandle) (sourceScs ++ targetScs))"
+      }
+    ]
+  },
+  "proof_fresh_elimination": {
+    "command": "cases fresh",
+    "type": "(.unenumerated (some node) scs) = .eliminated",
+    "generated_binders": [],
+    "reason": "distinct UVarValue constructors"
+  },
+  "proof_substitutions": [
+    {
+      "name": "middle",
+      "equation": "middleSame"
+    },
+    {
+      "name": "result",
+      "equation": "isEmpty",
+      "scope": "Empty implication only"
+    }
+  ],
+  "by_cases_count": 0,
+  "induction_count": 0,
+  "IH_count": 0
+}

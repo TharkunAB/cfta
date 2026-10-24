@@ -1,0 +1,15 @@
+--- strict-1/SourcePruningEnumerationAssimilation.lean
++++ strict-2/SourcePruningEnumerationAssimilation.lean
+@@ -29,10 +29,10 @@
+   | _ => do
+       setValue target (.unenumerated (some resultHandle) (sourceScs ++ targetScs))
+       setValue source .eliminated
+-      modify fun state => {state with recursionAncestry := fun other =>
++      modify fun state => {state with recursionAncestry := (fun other =>
+         if other = target then
+           (state.recursionAncestry source ++ state.recursionAncestry target).eraseDups
+-        else state.recursionAncestry other}
++        else state.recursionAncestry other)}
+ 
+ /-- Derive both actual branches of disabled-pruning pending-slot assimilation. -/
+ theorem pending_assimilation_complete

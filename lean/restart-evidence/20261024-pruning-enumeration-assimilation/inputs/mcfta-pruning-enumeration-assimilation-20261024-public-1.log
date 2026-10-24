@@ -1,0 +1,82 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-R", "/tmp/mcfta-pruning-enumeration-assimilation-20261024/public-1", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-pruning-enumeration-assimilation-20261024/public-1/checked.lean"], "exit_code": 0, "raw_bytes": 6161, "raw_sha256": "2b05c31b83deabf289cbf978b0b16983d7f3aa1e97d037f3c4895be9566a404e", "source_sha256": "7fe0d9d5c91e69afd6ee6dee11dd5bf77c6fe26fa696526878840997bda713c6"}
+@MicroCFTA.SourcePruningEnumerationAssimilation.finish : {EnumGuard : Type} →
+  Nat →
+    Nat →
+      Nat →
+        List MicroCFTA.EnumerationState.Suspended →
+          List MicroCFTA.EnumerationState.Suspended →
+            MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+              MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol EnumGuard Unit
+'MicroCFTA.SourcePruningEnumerationAssimilation.finish' depends on axioms: [propext]
+@MicroCFTA.SourcePruningEnumerationAssimilation.pending_assimilation_complete : ∀ {EnumGuard : Type} {width : Nat}
+  [inst : DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (nativeBefore : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (before : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (source target sourceHandle targetHandle : Nat) (sourceScs targetScs : List MicroCFTA.EnumerationState.Suspended),
+  MicroCFTA.SourceCurrentConjunctionClassScan.Ready nativeBefore →
+    MicroCFTA.SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory nativeBefore →
+      ∀ (memos : MicroCFTA.EndpointMemoGateTrace.Memos),
+        MicroCFTA.EndpointMemoGateTrace.Valid nativeBefore.native.machine.heap memos →
+          MicroCFTA.SourcePruningEnumerationObservation.PendingRealized nativeBefore.native.machine.heap before →
+            before.values[source]? =
+                some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some sourceHandle) sourceScs) →
+              before.values[target]? =
+                  some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some targetHandle) targetScs) →
+                target ≠ source →
+                  (match
+                      MicroCFTA.SourcePruningEnumerationNodes.lookupNode nativeBefore.native.machine.heap sourceHandle,
+                      MicroCFTA.SourcePruningEnumerationNodes.lookupNode nativeBefore.native.machine.heap
+                        targetHandle with
+                    | some left, some right =>
+                      MicroCFTA.SourceCurrentAllocatedNativeRequestBounds.WordRanges
+                        (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                          (MicroCFTA.SourceRecursiveIntersectionCode.requestNode
+                            MicroCFTA.IntersectionEmptyDomain.emptyDomain left right))
+                        nativeBefore
+                    | x, x_1 => True) →
+                    ∃ left right next result nativeAfter resultHandle,
+                      MicroCFTA.SourcePruningEnumerationNodes.lookupNode nativeBefore.native.machine.heap sourceHandle =
+                          some left ∧
+                        MicroCFTA.SourcePruningEnumerationNodes.lookupNode nativeBefore.native.machine.heap
+                              targetHandle =
+                            some right ∧
+                          next.source = nativeBefore.native.machine.heap ∧
+                            next.roots = inventory.roots ++ [left, right] ∧
+                              MicroCFTA.SourceCurrentAllocatedTargetQuery.Receipt formulas solver next left right
+                                  nativeBefore result nativeAfter memos ∧
+                                MicroCFTA.SourcePruningEnumerationNodes.encodeNode result = some resultHandle ∧
+                                  MicroCFTA.SourcePruningEnumerationNodes.lookupNode nativeAfter.native.machine.heap
+                                        resultHandle =
+                                      some result ∧
+                                    (result = MicroCFTA.InternedConstructorTemplates.Value.empty →
+                                        (MicroCFTA.SourcePruningEnumerationAssimilation.finish source target
+                                              resultHandle sourceScs targetScs result before).run =
+                                          []) ∧
+                                      (result ≠ MicroCFTA.InternedConstructorTemplates.Value.empty →
+                                        ∃ after,
+                                          (MicroCFTA.SourcePruningEnumerationAssimilation.finish source target
+                                                  resultHandle sourceScs targetScs result before).run =
+                                              [Except.ok ((), after)] ∧
+                                            after =
+                                                MicroCFTA.EnumerationCorrectness.assimilated before target source
+                                                  (MicroCFTA.EnumerationState.UVarValue.unenumerated (some resultHandle)
+                                                    (sourceScs ++ targetScs)) ∧
+                                              after.values[target]? =
+                                                  some
+                                                    (MicroCFTA.EnumerationState.UVarValue.unenumerated
+                                                      (some resultHandle) (sourceScs ++ targetScs)) ∧
+                                                after.values[source]? =
+                                                    some MicroCFTA.EnumerationState.UVarValue.eliminated ∧
+                                                  MicroCFTA.SourcePruningEnumerationObservation.PendingRealized
+                                                    nativeAfter.native.machine.heap after)
+'MicroCFTA.SourcePruningEnumerationAssimilation.pending_assimilation_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

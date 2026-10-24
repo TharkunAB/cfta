@@ -1,0 +1,159 @@
+{
+  "obtain_count": 3,
+  "producer_obtain_count": 1,
+  "producer_field_count": 18,
+  "field_count": 22,
+  "packets": [
+    {
+      "name": "currentIntersectionWrite",
+      "api": "SourcePruningEnumerationIntersectionWrite.pending_intersection_write",
+      "fields": [
+        {
+          "name": "left",
+          "type": "InternedConstructorTemplates.Value Symbol Constraint",
+          "used": true
+        },
+        {
+          "name": "right",
+          "type": "InternedConstructorTemplates.Value Symbol Constraint",
+          "used": true
+        },
+        {
+          "name": "next",
+          "type": "SourceCurrentAllocatedNativeInventoryState.Inventory",
+          "used": true
+        },
+        {
+          "name": "result",
+          "type": "InternedConstructorTemplates.Value Symbol Constraint",
+          "used": true
+        },
+        {
+          "name": "nativeAfter",
+          "type": "SourceEqualityNativeDemand.State width",
+          "used": true
+        },
+        {
+          "name": "resultHandle",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "middle",
+          "type": "EnumerationState.State Symbol EnumGuard",
+          "used": true
+        },
+        {
+          "name": "leftDecoded",
+          "type": "lookupNode nativeBefore.native.machine.heap sourceHandle = some left",
+          "used": true
+        },
+        {
+          "name": "rightDecoded",
+          "type": "lookupNode nativeBefore.native.machine.heap targetHandle = some right",
+          "used": true
+        },
+        {
+          "name": "nextSource",
+          "type": "next.source = nativeBefore.native.machine.heap",
+          "used": true
+        },
+        {
+          "name": "nextRoots",
+          "type": "next.roots = inventory.roots ++ [left, right]",
+          "used": true
+        },
+        {
+          "name": "receipt",
+          "type": "SourceCurrentAllocatedTargetQuery.Receipt formulas solver next left right nativeBefore result nativeAfter memos",
+          "used": true
+        },
+        {
+          "name": "encoded",
+          "type": "encodeNode result = some resultHandle",
+          "used": true
+        },
+        {
+          "name": "decoded",
+          "type": "lookupNode nativeAfter.native.machine.heap resultHandle = some result",
+          "used": true
+        },
+        {
+          "name": "written",
+          "type": "Success (setValue target (.unenumerated (some resultHandle) (sourceScs ++ targetScs))) before () middle",
+          "used": true
+        },
+        {
+          "name": "middleSame",
+          "type": "middle = {before with values := before.values.set target (.unenumerated (some resultHandle) (sourceScs ++ targetScs))}",
+          "used": true
+        },
+        {
+          "name": "middleStored",
+          "type": "middle.values[target]? = some (.unenumerated (some resultHandle) (sourceScs ++ targetScs))",
+          "used": true
+        },
+        {
+          "name": "middleRealized",
+          "type": "PendingRealized nativeAfter.native.machine.heap middle",
+          "used": true
+        }
+      ],
+      "count": 18,
+      "call_count": 1,
+      "scope": "whole theorem before implications; subst middle using middleSame afterwards"
+    },
+    {
+      "name": "eliminatedMembership",
+      "api": "List.mem_or_eq_of_mem_set (List.mem_of_getElem? stored)",
+      "form": "obtain old | fresh",
+      "fields": [
+        {
+          "name": "old",
+          "type": "(.unenumerated (some node) scs) ∈ before.values.set target (.unenumerated (some resultHandle) (sourceScs ++ targetScs))",
+          "used": true
+        },
+        {
+          "name": "fresh",
+          "type": "(.unenumerated (some node) scs) = .eliminated",
+          "used": true
+        }
+      ],
+      "count": 2,
+      "scope": "all-slot realization subproof; alternatives not simultaneous assumptions"
+    },
+    {
+      "name": "oldPendingSlot",
+      "api": "List.getElem?_of_mem old",
+      "fields": [
+        {
+          "name": "oldSlot",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "oldStored",
+          "type": "(before.values.set target (.unenumerated (some resultHandle) (sourceScs ++ targetScs)))[oldSlot]? = some (.unenumerated (some node) scs)",
+          "used": true
+        }
+      ],
+      "count": 2,
+      "scope": "old alternative of eliminatedMembership"
+    }
+  ],
+  "skipped_fields": [],
+  "after_middle_substitution": [
+    {
+      "name": "written",
+      "type": "Success (setValue target (.unenumerated (some resultHandle) (sourceScs ++ targetScs))) before () {before with values := before.values.set target (.unenumerated (some resultHandle) (sourceScs ++ targetScs))}"
+    },
+    {
+      "name": "middleStored",
+      "type": "({before with values := before.values.set target (.unenumerated (some resultHandle) (sourceScs ++ targetScs))}).values[target]? = some (.unenumerated (some resultHandle) (sourceScs ++ targetScs))"
+    },
+    {
+      "name": "middleRealized",
+      "type": "PendingRealized nativeAfter.native.machine.heap {before with values := before.values.set target (.unenumerated (some resultHandle) (sourceScs ++ targetScs))}"
+    }
+  ]
+}

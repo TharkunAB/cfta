@@ -1,0 +1,140 @@
+--- candidate/verify.py
++++ basis/verify.py
+@@ -1,4 +1,4 @@
+-"""Verify checked native pending-slot assimilation and the complete preserved baseline."""
++"""Verify checked native intersection writes and the complete preserved baseline."""
+ import argparse
+ import gzip
+ import hashlib
+@@ -10,8 +10,8 @@
+ parser = argparse.ArgumentParser(description=__doc__)
+ parser.add_argument('--root', type=Path, required=True)
+ root = parser.parse_args().root.resolve()
+-here = root / 'lean/restart-evidence/20261024-pruning-enumeration-assimilation'
+-baseline = 'abaedc712a305d7c92d049045f73647eb7e384fc'
++here = root / 'lean/restart-evidence/20261024-pruning-enumeration-intersection-write'
++baseline = '5678ef1bbd33a9acc0c016ea9bde0debda4922e3'
+ main = '74250bd889685da436cdbfe32ac4b5a0878ffd09'
+ 
+ def sha(data):
+@@ -40,7 +40,7 @@
+     subprocess.run(['git', *args], cwd=root, check=True)
+ assert git('rev-list', '--parents', '-n', '1', proof).decode().split() == [proof, baseline]
+ assert set(git('diff-tree', '--no-commit-id', '--name-only', '-r', proof).decode().splitlines()) == {
+-    'lean/MicroCFTA/SourcePruningEnumerationAssimilation.lean', 'lean/MicroCFTA/Audit.lean'}
++    'lean/MicroCFTA/SourcePruningEnumerationIntersectionWrite.lean', 'lean/MicroCFTA/Audit.lean'}
+ tree = gzip.decompress((here / 'work/baseline-tree.txt.gz').read_bytes())
+ assert tree == git('ls-tree', '-r', '-z', baseline)
+ assert sha(tree) == load('work/baseline.json')['tree_sha256']
+@@ -70,14 +70,14 @@
+         changed.append(name)
+     elif name == 'lean/MicroCFTA/Audit.lean':
+         addition = audit_change['prefix'].encode()
+-        assert addition == b'import MicroCFTA.SourcePruningEnumerationAssimilation\n'
++        assert addition == b'import MicroCFTA.SourcePruningEnumerationIntersectionWrite\n'
+         assert sha(data) == audit_change['after_sha256'] and data.startswith(addition)
+         data = data[len(addition):]
+         assert sha(data) == audit_change['before_sha256']
+         changed.append(name)
+     assert hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\0' + data).hexdigest() == blob, name
+     count += 1
+-assert count == 133579 and len(changed) == 10
++assert count == 133271 and len(changed) == 10
+ assert git('stash', 'list', '--format=%gd %H %s') == (here / 'work/baseline-stashes.txt').read_bytes()
+ worktrees = (here / 'work/baseline-worktrees.txt').read_bytes()
+ assert git('worktree', 'list', '--porcelain') == worktrees.replace(
+@@ -86,12 +86,12 @@
+     value, ref = line.split()
+     if ref not in ['refs/heads/formalize', 'refs/remotes/origin/formalize'] and not ref.startswith('refs/codex/turn-diffs/'):
+         assert git('rev-parse', ref).decode().strip() == value, ref
+-assert git('rev-parse', 'codex/backup-pruning-enumeration-assimilation-20261024-1837').decode().strip() == baseline
++assert git('rev-parse', 'codex/backup-checked-native-result-20261024-1755').decode().strip() == baseline
+ 
+ checks = load('work/build-summary.json')
+-source = (root / 'lean/MicroCFTA/SourcePruningEnumerationAssimilation.lean').read_bytes()
+-assert source == (here / 'production-sources/SourcePruningEnumerationAssimilation.lean').read_bytes()
+-assert source == (here / 'work' / checks['successful_source_attempt'] / 'MicroCFTA/SourcePruningEnumerationAssimilation.lean').read_bytes()
++source = (root / 'lean/MicroCFTA/SourcePruningEnumerationIntersectionWrite.lean').read_bytes()
++assert source == (here / 'production-sources/SourcePruningEnumerationIntersectionWrite.lean').read_bytes()
++assert source == (here / 'work' / checks['successful_source_attempt'] / 'MicroCFTA/SourcePruningEnumerationIntersectionWrite.lean').read_bytes()
+ assert sha(source) == load('work/installation.json')['source_sha256']
+ assert len(source.splitlines()) == checks['source_lines']
+ assert not re.search(rb'\b(?:sorry|admit|axiom|unsafe|set_option)\b', source)
+@@ -181,7 +181,7 @@
+ assert axioms == decls['axioms']
+ assert len(decls['theorems']) == sum(item['kind'] == 'theorem' for item in headers)
+ assert len(decls['definitions']) == sum(item['kind'] == 'def' for item in headers)
+-namespace = 'MicroCFTA.SourcePruningEnumerationAssimilation.'
++namespace = 'MicroCFTA.SourcePruningEnumerationIntersectionWrite.'
+ assert decls['definitions'] == [namespace + item['name'] for item in headers if item['kind'] == 'def']
+ assert decls['theorems'] == [namespace + item['name'] for item in headers if item['kind'] == 'theorem']
+ assert set(decls['definitions'] + decls['theorems']) == set(decls['declarations'])
+@@ -189,40 +189,42 @@
+     assert set(names) <= {'Classical.choice', 'Quot.sound', 'propext'}
+ failed_seals = checks['failed_seal_attempts']
+ receipt_stems = ['refresh-1', 'baseline-1'] + checks['attempts'] + failed_seals
+-prefix = 'mcfta-pruning-enumeration-assimilation-20261024-'
+-expected_stems = {prefix + stem for stem in receipt_stems}
++prefix = 'mcfta-pruning-enumeration-intersection-write-20261024-'
++prep_prefix = 'mcfta-checked-native-result-20261024-'
++expected_stems = {(prep_prefix if stem in ['refresh-1', 'baseline-1'] else prefix) + stem for stem in receipt_stems}
+ for suffix in ['limits.json', 'usage.json']:
+     paths = list((here / 'inputs').glob('*.' + suffix))
+     assert {path.name.removesuffix('.' + suffix) for path in paths} == expected_stems
+ for stem in receipt_stems:
++    receipt_prefix = prep_prefix if stem in ['refresh-1', 'baseline-1'] else prefix
+     for suffix in ['json', 'log', 'limits.json', 'usage.json', 'source.py', 'peaks.txt']:
+-        assert (here / 'inputs' / (prefix + stem + '.' + suffix)).is_file()
+-    receipt = load('inputs/' + prefix + stem + '.json')
++        assert (here / 'inputs' / (receipt_prefix + stem + '.' + suffix)).is_file()
++    receipt = load('inputs/' + receipt_prefix + stem + '.json')
+     assert receipt['exit_code'] == (1 if stem in failed or stem in failed_seals else 0)
+-    limits = load('inputs/' + prefix + stem + '.limits.json')
++    limits = load('inputs/' + receipt_prefix + stem + '.limits.json')
+     assert limits == {'memory.max': '4294967296', 'memory.high': '4294967296', 'memory.swap.max': '0'}
+-    usage = load('inputs/' + prefix + stem + '.usage.json')
++    usage = load('inputs/' + receipt_prefix + stem + '.usage.json')
+     assert 0 <= usage['age_seconds'] <= 600 and usage['remaining_percent'] > 1
+ for name in ['declaration', 'model', 'public', 'document', 'seal-script', 'root']:
+-    assert (here / 'inputs' / ('mcfta-pruning-enumeration-assimilation-20261024-' + name + '-review.md')).is_file()
+-assert (root / 'lean/notes-current-pruning-enumeration-assimilation.md').read_bytes() == (here / 'current-note.md').read_bytes()
+-findings = (root / 'FINDINGS.md').read_text().split('## Checked pending-slot assimilation without conservative emptiness', 1)[0]
++    assert (here / 'inputs' / ('mcfta-pruning-enumeration-intersection-write-20261024-' + name + '-review.md')).is_file()
++assert (root / 'lean/notes-current-pruning-enumeration-intersection-write.md').read_bytes() == (here / 'current-note.md').read_bytes()
++findings = (root / 'FINDINGS.md').read_text().split('## Checked intersection result in an actual pending slot', 1)[0]
+ assert '## Haskell fix handoff for external work' in findings and findings.count('| Fixed by ') == 6
+ assert 'All six repairs are in the imported main history.' in findings
+ prior = load('previous-publication/remote-publication.json')
+ assert prior['status'] == 'PUSHED_AND_REMOTE_VERIFIED' and prior['remote_head'] == baseline
+ assert load('previous-publication/publication-spec.json')['head'] == baseline
+ custody = load('work/prior-custody-index.json')
+-assert sha((here / 'work/prior-custody-index.json').read_bytes()) == '0951f75d30d1eac92bd80251888977e2b5abc8923ed248151098b970011a5f9f'
+-assert len(custody) == 26 and len({pin['target'] for pin in custody}) == 26
+-assert len({pin['source'] for pin in custody}) == 26
++assert sha((here / 'work/prior-custody-index.json').read_bytes()) == '0c4bf86bc474b55796aa6f3fe4ce2874bef6227d0e8ff8b1d07ba6f9929d175a'
++assert len(custody) == 39 and len({pin['target'] for pin in custody}) == 39
++assert len({pin['source'] for pin in custody}) == 39
+ assert {p.name for p in (here / 'previous-publication').iterdir()} == {pin['target'] for pin in custody}
+ for pin in custody:
+     assert not Path(pin['target']).is_absolute() and '..' not in Path(pin['target']).parts
+     data = (here / 'previous-publication' / pin['target']).read_bytes()
+     assert len(data) == pin['bytes'] and sha(data) == pin['sha256']
+-assessment = (here / 'previous-publication/mcfta-pruning-enumeration-intersection-write-20261024-next-assessment.md').read_bytes()
+-assert sha(assessment) == '4c7f4ce1020ef8f4362bf3ca2f93cb3af0cae9300f19951a990206cbec8a15d0'
++assessment = (here / 'previous-publication/mcfta-pruning-enumeration-ordinary-branches-20261024-next-assessment.md').read_bytes()
++assert sha(assessment) == 'ac74a3379281e3b270d286fda6e8c8ed7d8859de1853c7d72ab1401ebec5f94f'
+ summary = load('previous-publication/post-publication-summary.json')
+ assert summary['head'] == baseline and summary['goal'] == 'ACTIVE_INCOMPLETE'
+ assert summary['component_status'] == 'PROVED_SEALED_PUSHED_REMOTE_VERIFIED'
+@@ -231,9 +233,9 @@
+ assert (root / summary['sealed_next_assessment_path']).read_bytes() == assessment
+ assert summary['seal_attempt'] == 'archive-1'
+ assert [pin['source'] for pin in custody] == summary['next_custody_inputs']
+-assert summary['final_local_publication_attempt'] == 'local-publication-1'
++assert summary['final_local_publication_attempt'] == 'local-publication-2'
+ assert summary['all_manifest_files_committed'] is True
+-assert sha((here / 'inputs/mcfta-pruning-enumeration-assimilation-20261024-source-review.md').read_bytes()) == 'c5b70697396d13f3cded69f3641fbeb08d87390befb4b9cb14f8e78670c1ca3c'
++assert sha((here / 'inputs/mcfta-pruning-enumeration-intersection-write-20261024-source-review.md').read_bytes()) == 'c5a2b24b86f39d11edd08fe859eafcf6b2f7b91723ccb549abdd3d677cb78942'
+ 
+ print(json.dumps(dict(status='PASS', baseline=baseline, main=main, proof=proof,
+     baseline_files=count, unchanged_files=count - len(changed), exact_changed_files=changed,

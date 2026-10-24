@@ -1,0 +1,7 @@
+import MicroCFTA.SourcePruningEnumerationAssimilation
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+#check @MicroCFTA.SourcePruningEnumerationAssimilation.finish
+#print axioms MicroCFTA.SourcePruningEnumerationAssimilation.finish
+#check @MicroCFTA.SourcePruningEnumerationAssimilation.pending_assimilation_complete
+#print axioms MicroCFTA.SourcePruningEnumerationAssimilation.pending_assimilation_complete

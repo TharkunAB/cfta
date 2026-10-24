@@ -1,0 +1,15 @@
+# Root assimilation review
+
+Recorded: 2026-10-24T16:59:45.443302+00:00. Root authored all bodies after the exact gate. The whole goal stays ACTIVE and incomplete.
+
+The 112-line production source is exact strict-2 input cd4687d427310fa9999c9c47a1efe145866cc0bc8c25dc11950e6b02ea77c822. Six literal contracts, all 104 scoped types,22 obtained fields, five constructor cases and the unused-written metadata overlay match. Root read all 355 owner cut lines and the additional actual binder definitions. All source/cut/import hashes and exact forward/inverse script patches pass. The original owner and all prospective files remain unchanged. The complete separately frozen overlay is retained under work/metadata-overlay.
+
+One computed checked query retains its actual inventory, result, complete Receipt and native/operation state. Empty rejects before enum writes. Nonempty executes target replacement, source elimination and ancestry in order; direct reduction yields the exact singleton at the existing assimilated record. Both stored slots and all final PendingRealized follow. No desired success, result, Graph law, closure helper, carrier or post-state premise is added.
+
+Strict-1 genuinely failed on one record-lambda parse error with four cascading raw-reduction errors. Its complete 307-line raw/source/report and exact two-parenthesis patch remain. Strict-2 has a literal empty log under all linters/warnings-as-errors. Installed 1245 and Audit 3701 jobs pass with 76215 dependency checks and only the older inputs warning. All 81 public lines are complete. Actual finish axioms are propext; the theorem has propext, Classical.choice and Quot.sound. No project axiom or proof-limit change is present. No passing check was repeated.
+
+Root verified all nine exact additive document inverses against baseline, current-note equality and six Haskell repair rows before the new status. The new prose states the false-flag/distinct/two-present scope and omits count/native index, runtime flag and extraction claims. No Haskell source changes. The strongest combined H6 claim keeps valid initial caches, sufficient mathematical width/fuels, empty inherited payload and covered closed construction. Full driver correctness and convergence remain open.
+
+The prospective next assessment corrects the earlier missing checked-lift recommendation. Root read the 451-word report and all actual cited cuts, verified 18 whole and 27 cut hashes, and preserved the old assessment unchanged. Current checked fourth-memo APIs already exist. The next scope must derive post-query caller Context from genuine pre-query Context; no new owner or enabled body is selected here. This checkpoint does not claim that proposed integration proved.
+
+All 26 prior custody inputs are byte-exact. The approved five scripts retain baseline blobs/modes, references/stashes/worktrees, resource families, exact manifests and every manifest path in HEAD before ordinary authorized formalize publication. Seal and push outcomes remain pending at this review. No goal completion follows from this component.

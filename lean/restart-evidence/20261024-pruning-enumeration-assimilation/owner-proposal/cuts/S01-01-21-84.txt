@@ -1,0 +1,64 @@
+/-- Install the computed checked intersection of two actual pending slots. -/
+theorem pending_intersection_write
+    [DecidableEq Symbol] [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : SourceCurrentAllocatedNativeInventoryState.Inventory)
+    (nativeBefore : SourceEqualityNativeDemand.State width)
+    (before : EnumerationState.State Symbol EnumGuard)
+    (source target sourceHandle targetHandle : Nat)
+    (sourceScs targetScs : List EnumerationState.Suspended)
+    (ready : SourceCurrentConjunctionClassScan.Ready nativeBefore)
+    (admitted : SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory nativeBefore)
+    (memos : EndpointMemoGateTrace.Memos)
+    (globals : EndpointMemoGateTrace.Valid nativeBefore.native.machine.heap memos)
+    (realized : PendingRealized nativeBefore.native.machine.heap before)
+    (sourceStored : before.values[source]? = some (.unenumerated (some sourceHandle) sourceScs))
+    (targetStored : before.values[target]? = some (.unenumerated (some targetHandle) targetScs))
+    (ranges : match lookupNode nativeBefore.native.machine.heap sourceHandle,
+        lookupNode nativeBefore.native.machine.heap targetHandle with
+      | some left, some right => SourceCurrentAllocatedNativeRequestBounds.WordRanges
+          (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right)) nativeBefore
+      | _, _ => True) :
+    ∃ (left right : InternedConstructorTemplates.Value Symbol Constraint)
+      (next : SourceCurrentAllocatedNativeInventoryState.Inventory)
+      (result : InternedConstructorTemplates.Value Symbol Constraint)
+      (nativeAfter : SourceEqualityNativeDemand.State width) (resultHandle : Nat)
+      (after : EnumerationState.State Symbol EnumGuard),
+      lookupNode nativeBefore.native.machine.heap sourceHandle = some left ∧
+      lookupNode nativeBefore.native.machine.heap targetHandle = some right ∧
+      next.source = nativeBefore.native.machine.heap ∧ next.roots = inventory.roots ++ [left, right] ∧
+      SourceCurrentAllocatedTargetQuery.Receipt formulas solver next left right nativeBefore result nativeAfter memos ∧
+      encodeNode result = some resultHandle ∧ lookupNode nativeAfter.native.machine.heap resultHandle = some result ∧
+      Success (setValue target (.unenumerated (some resultHandle) (sourceScs ++ targetScs))) before () after ∧
+      after = {before with values := before.values.set target (.unenumerated (some resultHandle) (sourceScs ++ targetScs))} ∧
+      after.values[target]? = some (.unenumerated (some resultHandle) (sourceScs ++ targetScs)) ∧
+      PendingRealized nativeAfter.native.machine.heap after := by
+  obtain ⟨left, leftDecoded, leftAvailable, leftClosed⟩ :=
+    realized source sourceHandle sourceScs sourceStored
+  obtain ⟨right, rightDecoded, rightAvailable, rightClosed⟩ :=
+    realized target targetHandle targetScs targetStored
+  have decodedRanges : SourceCurrentAllocatedNativeRequestBounds.WordRanges
+      (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right)) nativeBefore := by
+    simpa only [leftDecoded, rightDecoded] using ranges
+  obtain ⟨next, result, nativeAfter, nextSource, nextRoots, receipt⟩ :=
+    SourceCurrentAllocatedTargetQuery.finite formulas solver inventory left right nativeBefore
+      ready admitted leftAvailable rightAvailable leftClosed rightClosed decodedRanges memos globals
+  have atReturned : PendingRealized nativeAfter.native.machine.heap before := by
+    exact realized_preserved nativeBefore.native.machine.heap nativeAfter.native.machine.heap
+      before before realized (EnumerationCompressionFrame.Frame.refl before) receipt.effects.keeps
+  obtain ⟨resultHandle, resultEncoded, resultDecoded⟩ :=
+    available_readback nativeAfter.native.machine.heap result
+      receipt.effects.keeps.ready.semantic.1.normal.facts.coherent receipt.available receipt.closed
+  obtain ⟨writtenHandle, after, writtenEncoded, written, afterSame, afterStored, finalRealized⟩ :=
+    SourcePruningEnumerationWrites.write_available_realized nativeAfter.native.machine.heap before
+      result target (sourceScs ++ targetScs) receipt.effects.keeps.ready.semantic.1.normal.facts.coherent
+      receipt.available receipt.closed atReturned
+      ((List.getElem?_eq_some_iff.mp targetStored).elim (fun bound _ => bound))
+  have sameHandle : writtenHandle = resultHandle := by
+    exact Option.some.inj (writtenEncoded.symm.trans resultEncoded)
+  subst writtenHandle
+  exact ⟨left, right, next, result, nativeAfter, resultHandle, after, leftDecoded, rightDecoded,
+    nextSource, nextRoots, receipt, resultEncoded, resultDecoded, written, afterSame, afterStored, finalRealized⟩
+
+end MicroCFTA.SourcePruningEnumerationIntersectionWrite

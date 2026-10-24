@@ -1,0 +1,23 @@
+open Cache
+
+/-- A finite effect tree records key requests, delayed identification, and result-dependent continuations. -/
+inductive Work (Key : Type) : Type → Type 1 where
+  | pure (value : Result) : Work Key Result
+  | intern (key : Key) (identify : Nat → Work Key Unit)
+      (next : Interned Key → Work Key Result) : Work Key Result
+
+/-- Sequence probe results while preserving the delayed identification branch. -/
+def Work.bind (work : Work Key First) (next : First → Work Key Result) : Work Key Result :=
+  match work with
+  | .pure value => next value
+  | .intern key identify resume => .intern key identify (fun entry => (resume entry).bind next)
+
+/-- Execute lookup before reservation, and install before forcing the winning body. -/
+def run [DecidableEq Key] (work : Work Key Result) (state : State Key) : Result × State Key :=
+  match work with
+  | .pure value => (value, state)
+  | .intern key identify resume =>
+      match state.table key with
+      | some entry => run (resume entry) state
+      | none =>
+          let reserved := Cache.intern state key

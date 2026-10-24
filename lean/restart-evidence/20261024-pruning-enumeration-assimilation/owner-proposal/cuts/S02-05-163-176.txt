@@ -1,0 +1,14 @@
+    | .eliminated => pure ()
+    | _ =>
+        let targetValue ← rawValue target
+        match intersectValues graph sourceValue targetValue with
+        | none => failure .invalidIntersection
+        | some merged =>
+            require (!hasEmptyContents graph merged)
+            setValue target merged
+            setValue source .eliminated
+            modify fun state => {state with recursionAncestry := (fun other =>
+              if other = target then
+                (state.recursionAncestry source ++ state.recursionAncestry target).eraseDups
+              else state.recursionAncestry other)}
+
