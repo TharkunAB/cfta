@@ -1,5 +1,34 @@
 # cfta formalization restart handoff
 
+## Concrete template oracle observation proof
+
+Updated: 2026-10-24. Proof: `eae961a679a76ce4c94cea3cad3fd90ae99eb404`.
+Start: `b6ab4f035cc`. Main remains `0db62d26b` and is incorporated.
+Read `lean/notes-current-template-oracle.md`.
+
+The actual templateOracle callback now has checked frame, agreement, fuel
+retention and finite-transport proofs. Its pure fast paths and actual partial
+render followed by every ordered resume read retain the source branch order.
+The result keeps exact prune flags, ordered checks, raw IDs and duplicates.
+Full labels retain refinements. Candidate buckets use original positions and
+the ascending generic/fixed union. No arbitrary matcher or selector is supplied.
+No Safe, completion, canonical-current or desired right-success premise is added.
+
+Both final sources passed strict Lean checks. Audit passed: 3675 jobs and
+75838 dependency checks, one older warning and no new-source warning.
+All 27 public signatures and 13 axiom reports were read. Only the existing
+core axioms propext, Classical.choice and Quot.sound occur. Earlier drafts,
+full-symbol corrections and both failed check attempts remain in the evidence.
+No Haskell source changed. FINDINGS keeps the external repair index FIRST.
+Both recorded LPO repairs remain merged. General order/pruning proofs stay open.
+
+Next, model recordTypes and typedTypes and their ordered node observations.
+Complete canonical mutation histories, selected-current protection and the
+cached-driver bridge remain open. H6 remains strongest combined; H23 is queued.
+Full-pipeline, resources, practical width, Haskell/solver, phase-4 and convergence
+remain open. The full goal is ACTIVE and incomplete. This precedes the push.
+
+
 ## Ordered pruning resume and main LPO repairs
 
 Updated: 2026-10-24. Proof: `6b168d41cc9a5e7c1a7f2eb0db6f0e395edebe32`.
