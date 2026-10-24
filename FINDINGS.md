@@ -74,6 +74,52 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## Checked intersection result in an actual pending slot
+
+Updated: 2026-10-24. Main `74250bd88` is incorporated.
+Proof: `bb7518dce77692cbd50e25339a7540d78207637d`.
+Read `lean/notes-current-pruning-enumeration-intersection-write.md`.
+
+Two actual pending-slot equations and PendingRealized derive the complete
+closed available operands. Only their computed lookup pair needs WordRanges.
+TargetQuery.finite runs once and supplies its actual result, complete checked
+endpoint, next inventory and full Receipt. The computed handle has exact
+readback. The actual raw target write stores sourceScs ++ targetScs and
+retains the exact final record, target slot and all-slot PendingRealized.
+No desired success, result, output heap or callback law is assumed.
+No new action, helper, type, predicate, instance or induction is added.
+
+The prior prospective assessment missed existing checked closure APIs.
+ActualScope.step, TargetQuery.finite and TargetWorkerNative.of_done already
+provide the relevant checked routes. The proof reuses them. The historical
+assessment and all three source correction reports remain unchanged.
+
+This is the result-write stage. It is not full assimilation. Equal raw IDs
+and Empty results are allowed here. Native assimilation skips equal IDs and
+rejects Empty before writing. Conservative emptiness, source elimination,
+ancestry, waiting counts and expandable indexes remain. Raw setValue covers
+only the value-list update. Native NodeId extraction remains separate.
+
+The first strict input passes with a literal empty log under all linters and warnings as errors. The installed build, complete public readback and Audit pass. All 67 public-output lines retain the complete signature without display omissions. No proof limit changed or passing build was repeated. One read-only metadata preflight detected the separate top-level source-cut array. The original reader and raw diagnostic remain. A separately reviewed minimal reader correction was installed before the body gate. This was not a Lean, cap-setup or seal failure. Both script preparations and exact patches remain.
+The installed build passes 1244 jobs. Audit passes 3700 jobs and
+76214 dependency checks, with the unchanged older warning.
+pending_intersection_write reports exactly propext, Classical.choice and Quot.sound. No project axiom is added.
+Exact frozen contracts, scoped inventories, reviews and actual raw evidence
+remain. All 39 preceding publication-custody inputs remain. The stronger
+publication guard checks every manifest path in the final commit tree.
+No Haskell changes. Six imported repair handoffs stay first in FINDINGS.
+
+H6 stays strongest combined: covered closed construction supports any chosen
+finite number of node-reduction calls and preserves exact finite-tree
+language with the empty inherited payload. Sufficient mathematical width
+and finite fuels are derived. Whole-library correctness and convergence do
+not follow. All-producer origins/edits, terminal composition, native order/
+IDs/containers/index/memo2, extraction/signed bounds, cutoff language and
+full typing/pruning/driver/runtime/solver/resources/convergence remain.
+H23, all older work and the optimized core remain. The full goal stays
+ACTIVE and incomplete. This record precedes evidence and push.
+
 ## Ordered selected-edge branch body
 
 Updated: 2026-10-24. Main `74250bd88` is incorporated.
