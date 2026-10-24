@@ -1,5 +1,49 @@
 # Public API and source correspondence
 
+## Existing assimilation after the derived replacement
+
+Updated: 2026-10-24. Main `74250bd88` is incorporated.
+Proof: `7f297d268ea6fc9a822e24c31598daae4152b89f`.
+Read `lean/notes-current-pruning-enumeration-finish.md`.
+
+finish_complete consumes an already-derived replacement and handle at the
+actual returned heap. Coherence, availability, closedness, encoding,
+PendingRealized, actual slot equations and distinct raw IDs are explicit.
+No successful suffix, final state, query result or Graph law is assumed.
+Empty gives exact raw[] before either write. Other values give the exact
+raw singleton at existing assimilated: target write, source elimination,
+then ancestry transfer. Source suspended parts precede target parts.
+Both final slot reads and all-slot realization follow at the same native heap.
+
+Existing write_available_realized derives the target state. Two actual encoding
+equations identify the existing handle. Its intermediate Success is explicitly
+marked unused; the final raw equation reduces the existing finish action.
+No query is repeated, and no native Receipt/Post packet is copied.
+One theorem adds no action, instance, helper, type, predicate or induction.
+Native caller/operations/fourth/global receipts and exact intersection meaning
+remain with the enabled producer. Full caller composition and flag/optional-slot
+dispatch stay separate. Actual Empty is tested even after a false emptiness
+answer. Waiting/expandable indexes, native IDs/containers/extraction, lazy
+publication and full terminal/driver behavior remain open. No compression
+Frame across changed values/ancestry is claimed.
+
+The first strict input passes with a literal empty log under all linters and warnings as errors. No proof limit or frozen type changed. The source is 69 ordinary lines, below the soft estimate without padding. The installed build, complete public readback and Audit pass. All 40 public-output lines retain the complete signature without display omissions. No passing check was repeated. There is no failed Lean, display or seal input in this checkpoint. The original owner explicitly marks the intermediate write Success unused; no correction overlay is needed.
+The installed build passes 1246 jobs. Audit passes 3703 jobs and
+76218 dependency checks, with the unchanged older warning.
+finish_complete reports exactly propext and Quot.sound. It adds no project axiom.
+Frozen exact types, scoped inventories, reviews and complete raw evidence
+remain. All 26 preceding publication-custody inputs remain byte-exact.
+No Haskell source change occurs. Six repair handoffs stay first in FINDINGS.
+
+H6 stays strongest combined: covered closed construction with valid initial
+caches/allocation history supports any chosen finite number of node-reduction
+calls at derived sufficient mathematical width/fuels and exact finite-tree
+language with the empty inherited payload. All-producer origins/edits, native
+order/IDs/containers/indexes/memo2, signed extraction bounds, cutoff language
+and full typing/pruning/driver/runtime/solver/resources/convergence remain.
+H23, older proofs and the optimized core remain. The whole goal stays ACTIVE
+and incomplete. This record precedes evidence and push.
+
 ## Checked enabled emptiness after pending intersections
 
 Updated: 2026-10-24. Main `74250bd88` is incorporated.
