@@ -20,6 +20,11 @@
   exactly. Add `Data.CFTA.Refinement.SmtLib`: SMT-LIB text for a theory and
   for an entailment. `Data.CFTA.Refinement.Definition` exports its sort
   check, `checkFormula` and `termSort`.
+- Add `Data.CFTA.Refinement.Z3Process`: `withZ3Theory` decides the
+  entailments of a theory with one Z3 process, and `withZ3TheoryTimeout`
+  sets the time limit of each query. `cfta` depends on `process`
+  (ADR 0009). `entailmentCommands` gives the commands of one query without
+  the theory.
 
 Before release, the package was called `microcfta`.
 

@@ -1,7 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 {- | The checks of a theory, ground evaluation from a theory, the predicate
-definitions of a theory, and the SMT-LIB text of a theory.
+definitions of a theory, the SMT-LIB text of a theory, and a Z3 process for a
+theory.
 -}
 module Data.CFTA.Refinement.TheorySpec (spec) where
 
@@ -12,12 +13,13 @@ import qualified Data.Text as Text
 import Test.Hspec
 
 import Data.CFTA.Formula (Formula (..), Name, Relation (..), Sort (..), Term (..))
-import Data.CFTA.Refinement (Entailment (entails), Verdict (..))
+import Data.CFTA.Refinement (Entailment (entails), Verdict (..), entailsWithBindings)
 import Data.CFTA.Refinement.Definition (Definition (..), DefinitionError (..))
 import Data.CFTA.Refinement.Ground (groundEntailment)
-import Data.CFTA.Refinement.LiquidFixpoint (withZ3Definitions)
+import Data.CFTA.Refinement.LiquidFixpoint (TimeLimitReached (..), withZ3Definitions)
 import Data.CFTA.Refinement.SmtLib (SmtLibError (..), entailmentScript, theoryCommands)
 import Data.CFTA.Refinement.Theory
+import Data.CFTA.Refinement.Z3Process (withZ3Theory, withZ3TheoryTimeout)
 import Data.CFTA.Symbol (valueName)
 
 -- | The sort of integer lists.
@@ -227,6 +229,36 @@ spec = do
 
         it "rejects a query that fails the sort check" $
             script (Atom Eq (Var value) (Lit 3)) Top `shouldBe` Left (IllSortedQuery (IllSortedAtom Eq (Var value) (Lit 3)))
+
+    describe "withZ3Theory" $ do
+        let lowered = unsafeTheory [lists] [append]
+            computed xs ys = Atom Eq (Var value) (App "append" [listTerm xs, listTerm ys])
+            is xs = Atom Eq (Var value) (listTerm xs)
+
+        it "decides the queries of a theory with one process" $
+            withZ3Theory lowered [(value, list)] [] $ \z3 -> do
+                entails z3 (computed [1] [2]) (is [1, 2]) >>= (`shouldBe` Yes)
+                entails z3 (computed [2] [1]) (is [1, 2]) >>= (`shouldBe` No)
+                entails z3 (computed [] []) (is []) >>= (`shouldBe` Yes)
+
+        it "declares a fresh value with the sort of the name that it stands for" $
+            withZ3Theory lowered [(value, list)] [] $ \z3 -> do
+                let chain = And [Atom Eq (Var value) (App "append" [Var "a", listTerm [2]]), Atom Eq (Var "a") (listTerm [1])]
+                entailsWithBindings z3 [("a", value)] chain (is [1, 2]) >>= (`shouldBe` Yes)
+
+        it "raises TimeLimitReached at the time limit, and decides the next query" $
+            withZ3TheoryTimeout 1000 lowered [(value, list)] [] $ \z3 -> do
+                let rightUnit = Forall [("xs", list)] (Atom Eq (App "append" [Var "xs", listTerm []]) (Var "xs"))
+                entails z3 Top rightUnit `shouldThrow` (== TimeLimitReached 1000)
+                entails z3 (computed [1] [2]) (is [1, 2]) >>= (`shouldBe` Yes)
+
+        it "gives Unknown for a query that fails the sort check" $
+            withZ3Theory lowered [(value, list)] [] $ \z3 ->
+                entails z3 (Atom Eq (Var value) (Lit 3)) Top >>= (`shouldBe` Unknown)
+
+        it "gives Unknown for each query of a theory with a datatype without values" $
+            withZ3Theory (unsafeTheory [lists, streams] [append]) [(value, list)] [] $ \z3 ->
+                entails z3 (computed [1] [2]) (is [1, 2]) >>= (`shouldBe` Unknown)
 
 -- | A theory that the test expects 'theory' to accept.
 unsafeTheory :: [Datatype] -> [(Name, TheoryDefinition)] -> Theory
