@@ -1,3 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationSetChildrenArity
 import MicroCFTA.SourcePruningEnumerationOwnArity
 import MicroCFTA.SourcePruningEnumerationEdgeTraversal
 import MicroCFTA.SourcePruningEnumerationEdgePrefix
