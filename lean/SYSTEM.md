@@ -1,5 +1,35 @@
 # Constrained languages, indexing, and distributions
 
+## Actual pending-node observations
+
+Updated: 2026-10-24. Main `74250bd88` is incorporated.
+Proof: `aa500886fa742522bf8e8c0fd884c0eaa8c286a1`.
+Read `lean/notes-current-pruning-enumeration-observation.md`.
+
+Closed available input under Coherent derives its initial pending-slot handle.
+Realized slots and actual getUnexpandedNode reads derive complete available
+closed Values and the full compression frame. StorageValid and allocated UVars derive finite
+actual observations. Actual reads retain StorageValid for later observations.
+Realization persists through full frames and actual native cache growth.
+
+Strict checking and the installed build pass. Audit passes 3681 jobs and
+76100 dependency checks, with one older warning and no new-source warning.
+All six signatures and five actual axiom reports were read. Each reports only
+propext and Quot.sound. Five failed strict inputs and all reviews remain.
+The original frozen 58-payload proposal and separate storage header remain.
+
+Next prove realization through actual allocation, intersection/assimilation and
+narrowed slot writes. The pure intersection handle needs an actual native heap
+connection. Prove open-hole bounds, then compose ordered reads and lazy emptiness
+with typing, outer narrow, memo2 and typedTypes. Native extraction, global helper
+canonicality, mutation histories, selected-current protection, cached scheduling,
+semantic pruning, phase 4, resources, practical width, runtime/solver and
+convergence stay open. H6 remains strongest combined. H23 stays queued.
+No Haskell source changes. FINDINGS keeps its external repair index FIRST.
+All six recorded fixes are on main. The full goal is ACTIVE and incomplete.
+This record precedes evidence creation and the authorized push.
+
+
 ## Stored enumeration-node handles
 
 Updated: 2026-10-24. Main `74250bd88` is incorporated.
