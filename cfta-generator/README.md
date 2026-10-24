@@ -291,6 +291,56 @@ arity, symbol, and the classes of their children; the children of a
 transition by the size of the earlier children, in ascending order; and a
 term that several transitions accept at its first place.
 
+### Resume a listing from a checkpoint
+
+`Data.CFTA.Sized.Checkpoint` lists the terms of each size from one to a bound,
+in the order above, and keeps the position of the next term in a checkpoint.
+A checkpoint holds the graph, the query route `sized` and its version, the
+bound, and the sized rank of the next term. `start` gives the checkpoint
+before the first term. `resume` gives the terms from a checkpoint on, each
+with the checkpoint after it.
+
+```haskell
+{-# LANGUAGE OverloadedStrings #-}
+
+module Main (main) where
+
+import qualified Data.CFTA as FTA
+import Data.CFTA.Constraint (noConstraint)
+import qualified Data.CFTA.Sized.Checkpoint as Checkpoint
+
+-- | List three binary trees, then resume after the third.
+main :: IO ()
+main = do
+    automaton <-
+        either (fail . show) pure $
+            FTA.mkFTA ("tree" :: String) [("tree", [FTA.Transition "leaf" [] noConstraint, FTA.Transition "node" ["tree", "tree"] noConstraint])]
+    listing <- either (fail . show) pure $ Checkpoint.resume (Checkpoint.start 7 automaton) automaton
+    let seen = map fst (take 3 listing)
+        saved = snd (listing !! 2)
+    print (Checkpoint.checkpointNext saved)
+    rest <- either (fail . show) pure $ Checkpoint.resume saved automaton
+    print (seen <> map fst rest == map fst listing)
+```
+
+The output is:
+
+```text
+(5,1)
+True
+```
+
+`resume` builds the size classes of the graph again, so a checkpoint also
+resumes in a new process. `printCheckpoint` of
+[cfta-serialization](../cfta-serialization/README.md) saves it with its graph.
+`resume` rejects a checkpoint of another route version: a new version can
+have a different order. It rejects another graph as stale, and names the
+first state whose row differs (`StaleRow`). To continue in an edited graph,
+`relocate` finds a term and gives a checkpoint at that term. The new listing
+can repeat or skip terms of the old one. The route decides equality
+constraints. A guard beyond equality constraints needs a solver, and `resume`
+rejects it with `QueryFailed ResidualGuard`.
+
 ## Equality-constrained generators
 
 An equality generator is a `Gen Symbol`, with the name `ECTAGen`. Each

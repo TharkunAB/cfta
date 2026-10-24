@@ -1,5 +1,6 @@
 module Data.CFTA.SizedSpec (spec) where
 
+import Control.Monad (forM_, void)
 import Data.Containers.ListUtils (nubOrd)
 import Data.List (sort)
 import qualified Data.Map.Strict as Map
@@ -19,6 +20,8 @@ import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), Size (..))
 import Data.CFTA.Interned (toFTA)
 import Data.CFTA.Refinement (Entailment (Entailment))
 import Data.CFTA.Sized
+import Data.CFTA.Sized.Checkpoint (Checkpoint (..), CheckpointError (..))
+import qualified Data.CFTA.Sized.Checkpoint as Checkpoint
 import Data.CFTA.Symbol (Symbol (Symbol))
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
@@ -72,6 +75,56 @@ spec = describe "Data.CFTA.Sized" $ do
         it "agrees with the cyclic import wherever the import accepts the automaton" $ QC.property importAgreement
         it "gives the sequence of the reference, also where it uses the count table" $ QC.property referenceAgreement
         it "decides the classes up to a bound as the reference builds them" $ QC.property boundedAgreement
+    describe "Data.CFTA.Sized.Checkpoint" $ do
+        it "resumes at every cut as the listing without a cut" $
+            forM_ listings $ \graph -> do
+                let entries = listing graph
+                    classes = either (error . show) id $ sized graph
+                map fst entries `shouldBe` concatMap (termsOfSize classes) [1 .. listingBound]
+                forM_ (zip [0 ..] $ Checkpoint.start listingBound graph : map snd entries) $ \(cut, checkpoint) ->
+                    map fst <$> Checkpoint.resume checkpoint graph `shouldBe` Right (drop cut $ map fst entries)
+        it "rejects an edited graph as stale" $ do
+            let graph = automaton "s" deadRow
+                edited = either (error . show) id $ FTA.replaceRows (Map.singleton "q" $ Just [node "n" ["leaf"]]) graph
+                checkpoint = Checkpoint.start listingBound graph
+            void (Checkpoint.resume checkpoint edited) `shouldBe` Left (StaleRow "q")
+            void (Checkpoint.resume checkpoint $ automaton "q" deadRow) `shouldBe` Left (StaleStart "s" "q")
+        it "rejects another route and another version of the route" $ do
+            let graph = automaton "s" binary
+                checkpoint = Checkpoint.start 3 graph
+            void (Checkpoint.resume checkpoint{checkpointVersion = 2} graph) `shouldBe` Left (UnknownRoute Checkpoint.route 2)
+            void (Checkpoint.resume checkpoint{checkpointRoute = Text.pack "other"} graph)
+                `shouldBe` Left (UnknownRoute (Text.pack "other") 1)
+        it "rejects a position outside the listing" $ do
+            -- Up to size three, one binary tree has size one and one has size three.
+            let graph = automaton "s" binary
+                from next = map fst <$> Checkpoint.resume (Checkpoint.start 3 graph){checkpointNext = next} graph
+            forM_ [(0, 0), (1, -1), (1, 2), (2, 1), (4, 1)] $ \next@(size, rank) ->
+                from next `shouldBe` Left (OutsideListing size rank)
+            from (1, 1) `shouldBe` Right [term "g" [term "a" [], term "a" []]]
+            from (2, 0) `shouldBe` Right [term "g" [term "a" [], term "a" []]]
+            from (3, 1) `shouldBe` Right []
+            from (4, 0) `shouldBe` Right []
+        it "relocates a term, and resuming gives the term" $ do
+            let graph = automaton "s" deadRow
+                edit row = either (error . show) id $ FTA.replaceRows (Map.singleton "q" $ Just row) graph
+                added = edit [node "n" ["leaf"], node "m" ["leaf"]]
+                checkpoint = Checkpoint.start listingBound graph
+                firstAfter target found = take 1 . map fst <$> (Checkpoint.relocate checkpoint target found >>= (`Checkpoint.resume` target))
+            forM_ [graph, added] $ \target ->
+                forM_ (map fst $ listing target) $ \found -> firstAfter target found `shouldBe` Right [found]
+            let removed = term "f" [term "m" [term "k" []]]
+                larger = term "g" [term "a" [], term "g" [term "a" [], term "a" []]]
+            void (Checkpoint.relocate checkpoint (edit [node "n" ["leaf"]]) removed) `shouldBe` Left (MissingTerm removed)
+            void (Checkpoint.relocate (Checkpoint.start 3 $ automaton "s" binary) (automaton "s" binary) larger)
+                `shouldBe` Left (MissingTerm larger)
+        it "rejects a guard beyond equality constraints" $ do
+            let different = semanticConstraint $ Not $ Same (ECTA.path [0]) (ECTA.path [1])
+                graph = automaton "s" [("s", [FTA.Transition (sym "g") ["q", "q"] different]), ("q", [leaf "a", leaf "b"])]
+                checkpoint = Checkpoint.start 3 graph
+            void (Checkpoint.resume checkpoint graph) `shouldBe` Left (QueryFailed ResidualGuard)
+            void (Checkpoint.relocate checkpoint graph $ term "g" [term "a" [], term "b" []])
+                `shouldBe` Left (QueryFailed ResidualGuard)
 
 -- | The classes of size one to 'sizeBound' are the accepted terms of each size, each once, and the ranks invert.
 exactClasses :: SizedAutomaton -> Property
@@ -89,6 +142,10 @@ exactClasses (SizedAutomaton description) =
                         | (rank, found') <- zip [0 ..] found
                         ]
                     .&&. unrankOfSize classes (Size size) (ClassRank $ toInteger $ length found) === Nothing
+                    .&&. QC.conjoin
+                        [ termsOfSizeFrom classes (Size size) (ClassRank $ toInteger from) === drop from found
+                        | from <- [-1 .. length found + 1]
+                        ]
             | size <- [1 .. sizeBound]
             , let found = termsOfSize classes (Size size)
             , let expected = filter (FTA.accepts graph) (allTerms size)
@@ -231,6 +288,49 @@ allTerms size =
         , first <- allTerms firstSize
         , rest <- spread (arity - 1) (remaining - firstSize)
         ]
+
+-- | The largest size of the listings of the checkpoint tests.
+listingBound :: Size
+listingBound = 7
+
+-- | The listing of the terms of a graph up to 'listingBound', each with the checkpoint after it.
+listing :: FTA.FTA String Symbol Constraint -> [(Term Symbol, Checkpoint String)]
+listing graph = either (error . show) id $ Checkpoint.resume (Checkpoint.start listingBound graph) graph
+
+{- | Graphs with recursion, empty size classes, a dead and a repeated
+transition, and equality constraints, and a graph without terms.
+-}
+listings :: [FTA.FTA String Symbol Constraint]
+listings =
+    [ automaton "s" binary
+    , automaton "s" deadRow
+    , automaton
+        "s"
+        [ ("s", [node "f" ["p", "r"], node "f" ["q", "t"]])
+        , ("p", [leaf "a", leaf "a", leaf "z"])
+        , ("q", [leaf "a", leaf "m"])
+        , ("r", [leaf "r"])
+        , ("t", [leaf "t"])
+        ]
+    , automaton "s" [("s", [leaf "a", leaf "b", FTA.Transition (sym "g") ["s", "s"] equalChildren, node "f" ["s"]])]
+    , automaton "e" [("e", [])]
+    ]
+  where
+    equalChildren = equalityConstraint $ ECTA.mkEqConstraints [[ECTA.path [0], ECTA.path [1]]]
+
+-- | Binary trees: a leaf, or a node with two trees.
+binary :: [(String, [FTA.Transition String Symbol Constraint])]
+binary = [("s", [leaf "a", node "g" ["s", "s"]])]
+
+-- | Rows with a dead transition: the child state of @a@ has no transitions.
+deadRow :: [(String, [FTA.Transition String Symbol Constraint])]
+deadRow =
+    [ ("s", [node "f" ["p"], node "f" ["q"]])
+    , ("p", [node "a" ["dead"], node "z" ["leaf"]])
+    , ("q", [node "m" ["leaf"]])
+    , ("leaf", [leaf "k"])
+    , ("dead", [])
+    ]
 
 -- | An automaton from rows of named states.
 automaton :: String -> [(String, [FTA.Transition String Symbol Constraint])] -> FTA.FTA String Symbol Constraint
