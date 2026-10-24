@@ -1,4 +1,57 @@
 # Full formalization coverage
+
+## Ordered checked pending-slot assimilation
+
+Updated: 2026-10-24. Main `74250bd88` is incorporated.
+Proof: `a90eeedd3ca92d315cc59989f0693efc88d5bba9`.
+Read `lean/notes-current-pruning-enumeration-fold.md`.
+
+The suffix retains the original recorded order, duplicates and winner.
+For the native terminal caller it starts after a supplied observed prefix.
+It does not construct representative/union/count-transfer completion or merge
+the incoming node. Existing conditional prefix results remain conditional.
+
+Each reached occurrence computes Dispatch once and executes its captured
+action once at the current enum state. Only the exact successful singleton
+continues. Rejection, enum errors, mixed/multiple rows and other raw lists
+remain unchanged, with no later occurrence. Native/worker interruptions and
+missing actions stay distinct. The returned Caller and query pair retain
+reached effects; the outer enum field is the last completed prefix state.
+Returning these observations does not implement whole-fold resume.
+
+A genuine Context, all-slot realization, actual pending target and selected
+pending/eliminated source slots support the finite theorem. The recursive
+Ranges Prop constrains reached WordRanges through literal transition
+implications; it does not assume success exists. Common bounds derive actual
+processing, full Post/query identity and all-slot realization. Completion
+retains a pending target and eliminates processed non-target sources.
+The named state fields and off-target recursion ancestry remain unchanged.
+No full compression Frame across value/ancestry edits is claimed.
+
+First rejection has an actual successful-prefix/action witness at the same
+global bounds. It preserves the reached native effects and exact enum prefix,
+without inventing a completed suffix or assuming a successful fold.
+
+The first strict input failed because the public binder prefix is a reserved Lean token. V2 quotes that identifier. The second input failed at an implicit slot-index type and three default-heartbeat limits. V3 states the existing Nat index type explicitly in three contracts. The third input failed at an equality substitution and two rewrites inside an unreduced tuple match. The fourth input reverses that equality and reduces the tuple before each rewrite. It passes with a literal empty log under all linters and warnings as errors. All three failed sources, complete raw outputs and exact patches remain. V1/V2 owners and reviews remain immutable. The changes add no premise and change no mathematical result or proof limit. The source has 353 ordinary lines, within the soft estimate and hard cap. The installed build, complete public readback and Audit pass. All 126 public-output lines retain three complete signatures without display omissions. No passing check was repeated. Separate read-only metadata comparison diagnostics remain recorded; they are not Lean or seal attempts.
+The installed build passes 1293 jobs. Audit passes 3705 jobs and
+76258 dependency checks, with the unchanged older warning.
+run, Ranges and run_complete each report exactly propext, Classical.choice and Quot.sound. No project axiom is added.
+Frozen contracts, inventories, reviews and complete raw attempts remain.
+All 26 prior custody inputs and the sealed next-assessment review remain.
+No Haskell changes. Six repair handoffs stay first in FINDINGS.
+
+Two definitions and one theorem add no instance, helper theorem or carrier.
+One recursive range Prop and one list induction support the selected suffix.
+Native root flags, full prefix construction, indexes/containers, extraction,
+incoming-node merging, code generation and whole-driver language stay open.
+H6 stays strongest combined. Covered construction with valid initial caches
+and allocation history supports any chosen finite number of modeled node
+reductions at derived mathematical width/fuels, with exact finite-tree language
+for the empty inherited payload. All-producer origins/edits, cutoff language
+and full typing/pruning/runtime/solver/resources/convergence remain open.
+H23, older proofs and the optimized core remain. The whole goal stays ACTIVE
+and incomplete. This record precedes evidence and push.
+
 ## Raw pending-slot assimilation dispatch
 
 Updated: 2026-10-24. Main `74250bd88` is incorporated.
