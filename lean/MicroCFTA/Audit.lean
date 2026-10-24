@@ -1,3 +1,4 @@
+import MicroCFTA.EnumerationPartialRoot
 import MicroCFTA.EnumerationNodeObservation
 import MicroCFTA.EnumerationPartialObservation
 import MicroCFTA.EnumerationCanonicalUnion
