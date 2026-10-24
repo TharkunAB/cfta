@@ -1,0 +1,5 @@
+noncomputable def positiveNormalized : Guard Formula → Option (Option (List (List Path)))
+  | .top => some (some [])
+  | .same left right => if left ≠ right then some (normalize [[left, right]]) else none
+  | .and parts => positiveNormalizedList parts
+  | _ => none

@@ -1,0 +1,4 @@
+noncomputable def sourceEqualities (constraint : Constraint Formula) : Option (List (List Path)) :=
+  match positiveNormalized constraint.guard with
+  | none | some (some []) => constraint.equalities
+  | some added => combineEqualities constraint.equalities added

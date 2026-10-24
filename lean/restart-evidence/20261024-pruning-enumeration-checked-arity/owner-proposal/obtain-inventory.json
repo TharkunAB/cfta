@@ -1,0 +1,157 @@
+{
+  "packets": [
+    {
+      "owner": "checked_projected_arity",
+      "scope": "common actual check",
+      "api": "SourceEqualityMkEdgeAllocation.check_correct stored original.guard children.length before valid storedReady",
+      "fields": [
+        {
+          "name": "checkedExact",
+          "type": "(SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).1 = .ok (SourceEqualityMkEdgeAllocation.accepted (SourceEqualityAccessorAllocation.constraint stored original.guard) children.length)"
+        },
+        {
+          "name": "checkedValid",
+          "type": "SourceEqualityConstraintMemoAllocation.Valid (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).2"
+        },
+        {
+          "name": "checkedGrowth",
+          "type": "SourceEqualityConstraintMemoAllocation.Grows before (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).2"
+        }
+      ],
+      "normalization": "Rewrite reconstructed in checkedExact to derive .ok(accepted original children.length). Neither .ok nor a Boolean answer is a premise."
+    },
+    {
+      "owner": "checked_projected_arity",
+      "scope": "common actual selected build/output operations",
+      "api": "SourceEqualityMkEdgeAllocation.build_receipt symbol stored original.guard children before heap valid storedReady",
+      "fields": [
+        {
+          "name": "receipt",
+          "type": "SourceEqualityMkEdgeAllocation.build symbol stored original.guard children before heap = (.ok actualBuilt.1, actualOperations, actualBuilt.2)"
+        },
+        {
+          "name": "receiptValid",
+          "type": "SourceEqualityConstraintMemoAllocation.Valid (SourceEqualityMkEdgeAllocation.build symbol stored original.guard children before heap).2.1",
+          "after_receipt_rewrite_type": "SourceEqualityConstraintMemoAllocation.Valid actualOperations"
+        },
+        {
+          "name": "receiptGrowth",
+          "type": "SourceEqualityConstraintMemoAllocation.Grows before (SourceEqualityMkEdgeAllocation.build symbol stored original.guard children before heap).2.1",
+          "after_receipt_rewrite_type": "SourceEqualityConstraintMemoAllocation.Grows before actualOperations"
+        }
+      ],
+      "normalization": "Raw API has accessor.constraint and its computed accepted Boolean. Rewrite reconstructed and unfold only actualBuilt/actualOperations aliases. The last two fields rewrite by receipt to actualOperations; its exact post-check state is retained."
+    },
+    {
+      "owner": "checked_projected_arity",
+      "scope": "true: same accepted-origin producer (one invocation)",
+      "api": "SourcePruningEnumerationOwnArity.accepted_projected_arity symbol original stored children before heap cached physical storedReady valid heapReady (available keepEq) checkedTrue",
+      "fields": [
+        {
+          "name": "acceptedReceipt",
+          "type": "SourceEqualityMkEdgeAllocation.build symbol stored original.guard children before heap = (.ok actualBuilt.1, (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).2, actualBuilt.2)"
+        },
+        {
+          "name": "_acceptedValid",
+          "type": "SourceEqualityConstraintMemoAllocation.Valid (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).2"
+        },
+        {
+          "name": "_acceptedGrowth",
+          "type": "SourceEqualityConstraintMemoAllocation.Grows before (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).2"
+        },
+        {
+          "name": "acceptedKept",
+          "type": "SourceEqualityRequiredCache.Keeps heap actualBuilt.2"
+        },
+        {
+          "name": "acceptedSymbol",
+          "type": "actualBuilt.1.entry.key.symbol = symbol"
+        },
+        {
+          "name": "acceptedGuard",
+          "type": "actualBuilt.1.entry.key.constraint = original"
+        },
+        {
+          "name": "acceptedChildren",
+          "type": "actualBuilt.1.children = children"
+        },
+        {
+          "name": "classes",
+          "type": "EqualityNormalize.Constraints"
+        },
+        {
+          "name": "source",
+          "type": "SourceCompactGuards.sourceEqualities actualBuilt.1.entry.key.constraint = some classes"
+        },
+        {
+          "name": "projected",
+          "type": "SourcePruningEnumerationConstraint.project actualBuilt.1.entry.key.constraint = some (EnumerationEquality.readClasses classes, if (SourceCompactGuards.positive original.guard).isSome then none else some original)"
+        },
+        {
+          "name": "validTries",
+          "type": "∀ trie ∈ EnumerationEquality.readClasses classes, EqualityTrie.Valid trie"
+        },
+        {
+          "name": "pathReadback",
+          "type": "∀ paths ∈ classes, ∀ path, path ∈ EqualityTrie.fromPathTrie (EnumerationEquality.classTrie paths) ↔ path ∈ paths"
+        },
+        {
+          "name": "ownArity",
+          "type": "∀ start : Nat, arityAllows actualBuilt.1.children.length (suspendedVars start (EnumerationEquality.readClasses classes)) = true"
+        }
+      ],
+      "normalization": "Raw packet uses run(makeEdge symbol original children) heap. Under actual keepEq=true, work reduces to that SAME run. Only alias/work rewriting occurs; no second runtime constructor call is introduced."
+    },
+    {
+      "owner": "checked_projected_arity",
+      "scope": "false: actual sentinel cache packet",
+      "api": "SourceEqualityRequiredCache.edge symbol (top : Constraint) [.empty] heap heapReady emptyAvailable",
+      "fields": [
+        {
+          "name": "rejectedKept",
+          "type": "SourceEqualityRequiredCache.Keeps heap actualBuilt.2"
+        },
+        {
+          "name": "rejectedResident",
+          "type": "InternedEdgeResidency.EdgeResident actualBuilt.2 actualBuilt.1"
+        },
+        {
+          "name": "_rejectedChildReadback",
+          "type": "actualBuilt.1.children = ([.empty] : List (InternedConstructorTemplates.Value Symbol Constraint))"
+        }
+      ],
+      "normalization": "Under actual keepEq=false, work reduces to SAME run(makeEdge symbol top [.empty]) heap. No availability of discarded original children is used."
+    },
+    {
+      "owner": "checked_projected_arity",
+      "scope": "false: actual sentinel complete fields",
+      "api": "MergedPhysicalGroupEdges.makeEdge_fields heap heapReady.semantic.1.normal.facts symbol (top : Constraint) [.empty] emptyAvailable",
+      "fields": [
+        {
+          "name": "rejectedSymbol",
+          "type": "actualBuilt.1.entry.key.symbol = symbol"
+        },
+        {
+          "name": "rejectedGuard",
+          "type": "actualBuilt.1.entry.key.constraint = (top : Constraint)"
+        },
+        {
+          "name": "rejectedChildren",
+          "type": "actualBuilt.1.children = ([.empty] : List (InternedConstructorTemplates.Value Symbol Constraint))"
+        }
+      ],
+      "normalization": "Same work/false rewriting; cache-hit complete fields are exact."
+    }
+  ],
+  "packet_count": 5,
+  "field_count": 25,
+  "direct_api_projections": [
+    {
+      "owner": "checked_projected_arity",
+      "scope": "true branch",
+      "expression": "(SourceEqualityRequiredCache.edge symbol original children heap heapReady (available keepEq)).2.1",
+      "type": "InternedEdgeResidency.EdgeResident actualBuilt.2 actualBuilt.1",
+      "normalization": "Reduce actual work with keepEq=true; no new binder/obtain/helper."
+    }
+  ]
+}

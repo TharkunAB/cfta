@@ -1,0 +1,4 @@
+structure Valid (state : State) : Prop where
+  constraints : Cache.Valid state.constraints
+  combinations : ∀ key cell, state.combinations key = some cell → CombineGood state.constraints key cell
+  descents : ∀ key cell, state.descents key = some cell → DescendGood state.constraints key cell

@@ -1,0 +1,9 @@
+  ((records key).getD (identify entry.1), {state with nodes := entry.2, nodeRecords := records})
+
+/-- Finite generated computations can alternate between the two independent caches. -/
+inductive Work (Symbol Guard : Type) : Type → Type 1 where
+  | pure (value : Result) : Work Symbol Guard Result
+  | edge (key : EdgeKey Symbol Guard) (identify : Interned (EdgeKey Symbol Guard) → EdgeValue Symbol Guard)
+      (next : EdgeValue Symbol Guard → Work Symbol Guard Result) : Work Symbol Guard Result
+  | node (key : NodeKey) (identify : Interned NodeKey → Value Symbol Guard)
+      (next : Value Symbol Guard → Work Symbol Guard Result) : Work Symbol Guard Result

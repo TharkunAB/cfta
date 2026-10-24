@@ -1,0 +1,5 @@
+import MicroCFTA.SourcePruningEnumerationCheckedArity
+set_option pp.deepTerms true
+set_option pp.maxSteps 100000
+#check @MicroCFTA.SourcePruningEnumerationCheckedArity.checked_projected_arity
+#print axioms MicroCFTA.SourcePruningEnumerationCheckedArity.checked_projected_arity

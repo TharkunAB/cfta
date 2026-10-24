@@ -1,0 +1,10 @@
+/-- The source equality-free Top transition constraint. -/
+def top : Constraint Formula := ⟨some [], .top⟩
+
+/-- Actual conjoinConstraints combines stored equalities and canonical source guard conjunction. -/
+noncomputable def conjoin [DecidableEq (Guard Formula)] (le : Guard Formula → Guard Formula → Bool)
+    (first second : Constraint Formula) : Constraint Formula :=
+  ⟨combineEqualities first.equalities second.equalities, GuardConjunction.merge le first.guard second.guard⟩
+
+/-- Top retains the physical cached-payload invariant. -/
+theorem top_cached : Cached (top (Formula := Formula)).equalities := empty_cached

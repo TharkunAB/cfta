@@ -1,0 +1,29 @@
+# CheckedArity: final static adapter/schema/template review
+
+2026-10-24 14:46:32 CEST — SOURCE_REVIEW_CLEAR. I read all five current464 source lines, immediate predecessor470 lines, both complete unpublished templates, actual public/local schema and complete source-route review. No blocker remains. Root owns bodies/scripts/docs; Arity owns declarations. This report clears source/schema only, not a body/compiler, rendered-document, archive/seal or publication outcome.
+
+The actual owner has84payloads/86physical, FLAT pins_count/pins_bytes/pins_sha256. I independently checked the exact safe file set and EVERY payload byte/hash,22 full live source/snapshot identities,34 cuts495 lines and65 defining-import identities across22 routes. Ten STRING fragments total61 lines=context7/public39/local15. One theorem checked_projected_arity/no definitions/helpers/types/instances/IH; five haves/two proof lets/three public computed lets;62 scoped entries/five obtains25 fields;hard180. Existing actual public_heads/count/kind/flat-pin/source-index/LIST-import accesses fit; no stale preliminary6-obtain/28-field count remains in selected script logic. FROZEN/body-gate, literal contract, complete owner controls and imported source guards remain mandatory.
+
+The generic algorithms are preserved: captured inputs/-R/raw hashes/exit propagation; complete manifest;131871 baseline blobs/Git executable modes; nine exact document inverses+single Audit import; exact runtime proof parent/new-module+Audit paths; refs/stashes/worktrees/backup; source/strict/installed/archive identity; actual report/failed/public selector sets; literal-empty selected strict log; complete public/noellipsis; exact owner-derived signatures/kinds/axiom SUBSETS including empty; distinct strict/Lake olean handling; six-artifact receipt sets with4GiBmax/high/swap0/fresh usage. The ONLY transient ref exception remains refs/codex/turn-diffs/; all project refs remain checked. New failed_seal_attempts stays actual-only, not an inherited old failure. No prior expected runtime count or result is copied.
+
+Baseline is actual a8db15aceddb83c54bc74ff480e37e90f5d5edbb/main74250bd889685da436cdbfe32ac4b5a0878ffd09,131871 paths, backup1437; tree SHA64b9ae3de962255e260d2ca04305e9c719cc188d70e51493fb3807683b3f6740. The added refresh-1 cap family correctly precedes baseline-1+ALL actual checks+failed seals in the exact resource set. I checked BOTH existing preparation families have all six files, actual exit0,4GiBmax/high/swap0 and recorded age0/83percent. These are retained launch observations, not a present usage assertion. Future checks/failures/build/Audit/proof/docs results remain unbound.
+
+The archive now copies precisely the immediate SetChildrenArity26: first successful archive1/local/push18, six area records, publication.py and already-sealed assessment. It correctly removes ONLY the active previous erratum27/archive2 requirements; older OwnArity failures/erratum remain in baseline. All26 exist and assessmentba0201ca... equals its sealed bytes. The verifier keeps the true sealed flag/path equality and source-review exact SHA df1048029d75aa246b57a31fb5b9d1f6bc4bc9c8048f1e5dfdc7e76e7de7a460. Prechecks precede mkdir; only active current archive1 is excluded. Full current history/controls/manifest remain retained.
+
+Both complete templates (note52lines/prefix40) accurately distinguish derived check answer, original Cached+physical+storedReady+operationValid+nativeReady, and child Values ONLY under computed true. Actual build/work/native endpoint and outputState use the SAME POST-CHECK cache. Accepted output retains original constraint/children; rejected output is Top/[Empty], with ITS Some projection/valid paths/empty own tries and all-start arity. Rejection retains any live-accessor effects plus canonical empty-field/sentinel construction; it is not effect-free and gives no discarded requested-guard bound. Noncomputable normalization/extraction and universal resident-origin/changed-arity caller/terminal/native/full-driver obligations remain open. H6 strongest/goal ACTIVE/no Haskell change/six fixes FIRST remain. Validation/count/proof placeholders are still UNRENDERED and claim no actual future success.
+
+FINDINGS inserts before the preceding child-replacement heading, below the six-fix index. Publication preserves formalize, explicit git@github.com:TharkunAB/cfta.git fetch+singleton --push --all URL, clean state/full filesystem=index=HEAD blobs+modes, exact runtime commit range and ordinary non-force push+remoteSHA check. No guessed commit or new execution authorization is introduced.
+
+Exact external scripts share `/tmp/mcfta-pruning-enumeration-checked-arity-20261024-`:
+
+| File | Lines/bytes | SHA256 |
+|---|---:|---|
+| check.py |33/1641|`b68561e04db6ef0c91b9464bab9f537e04c6e88b7e5895951aede323a0030266`|
+| documents.py |51/2700|`37f82cb257808d5e5daf9944a4d3349f2e5729580699ce64166aee2ac4dbb3e3`|
+| archive.py |84/5451|`dbfd79758047b110c017f2f49f5e8232848a89d809001d771ab4ba8b17784791`|
+| verify.py |222/13588|`afe05fd25c2d6fd12848381d5f59af6af3107352922bae6e66ef80b14f9a2dcb`|
+| publication.py |74/3866|`56dbbf037250a75b225e42e9f74de5361bfd39cd6be6b2a307ef174e2910020b`|
+
+Owner FROZEN1598B/SHA `a1c781ca7c4bba673531cc12db0dbccde81582f511b4bb12bd04c3d0da7af4b7`; pins11423B/SHA `accd442484ca081c18a6eb19fcdbdbe6970c96e0dc8b8397b9b1f370f0d5db11`. Unpublished note3099B/SHA `e34f946272506f52871f0671e7ec023b77de9321769ce04fe0528ad8fb9bbaae`; prefix2256B/SHA `273fd160cc547fe57e3d9f2378003e6e18afa1b1794abf825522fcc0b2ac7497`.
+
+Only source/data/hash/JSON reads and this immutable /tmp report write occurred. No prepared script/import/parser/compiler/Git/network/board or repository/owner/prior-report mutation. Actual final source/public outputs/rendered documents require their later independent review; no future PASS is inferred.

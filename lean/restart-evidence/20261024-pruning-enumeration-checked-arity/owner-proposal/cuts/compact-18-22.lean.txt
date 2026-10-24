@@ -1,0 +1,5 @@
+def positive : Guard Formula → Option (List (List Path))
+  | .top => some []
+  | .same left right => if left ≠ right then some [[left, right]] else none
+  | .and parts => positiveList parts
+  | _ => none

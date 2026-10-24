@@ -1,0 +1,20 @@
+--- strict-2/source.lean
++++ strict-3/source.lean
+@@ -75,7 +75,7 @@
+       validTries, pathReadback, ownArity⟩ :=
+       SourcePruningEnumerationOwnArity.accepted_projected_arity symbol original stored children
+         before heap cached physical storedReady valid heapReady (available keepEq) checkedTrue
+-    simp only [actualBuilt, SourceEqualityMkEdgeAllocation.work, keepEq, ↓reduceIte]
++    simp only [SourceEqualityMkEdgeAllocation.work, ↓reduceIte]
+     refine ⟨acceptedKept,
+       (SourceEqualityRequiredCache.edge symbol original children heap heapReady (available keepEq)).2.1,
+       acceptedSymbol, acceptedGuard, acceptedChildren, classes, source, ?_, validTries, pathReadback, ownArity⟩
+@@ -94,7 +94,7 @@
+         symbol (top : Constraint) [.empty] emptyAvailable
+     have topSource : SourceCompactGuards.sourceEqualities (top : Constraint) = some [] := by rfl
+     have topProjected : SourcePruningEnumerationConstraint.project (top : Constraint) = some ([], none) := by rfl
+-    simp only [actualBuilt, SourceEqualityMkEdgeAllocation.work, keepEq, Bool.false_eq_true, ↓reduceIte]
++    simp only [SourceEqualityMkEdgeAllocation.work, Bool.false_eq_true, ↓reduceIte]
+     refine ⟨rejectedKept, rejectedResident, rejectedSymbol, rejectedGuard, rejectedChildren,
+       [], ?_, ?_, ?_, ?_, ?_⟩
+     · rw [rejectedGuard]
