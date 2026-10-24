@@ -25,8 +25,9 @@ The result has one parameter: the type of a child observation or premise.
 
 Accept ordinary `data` and `newtype` declarations with named constructors.
 Reject datatype contexts, existential or constrained constructors, GADTs,
-symbolic names, type synonyms, and data families with an explanation at the
-splice. Such types need a manual view where the existing APIs support them.
+symbolic names, names ending in `#`, type synonyms, and data families with an
+explanation at the splice. Such types need a manual view where the existing
+APIs support them.
 Views with records of measures also remain manual; this operation generates
 the scalar views used by typing rules and single-measure invariants.
 

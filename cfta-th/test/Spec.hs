@@ -4,6 +4,7 @@
 {-# LANGUAGE EmptyDataDeriving #-}
 {-# LANGUAGE ExistentialQuantification #-}
 {-# LANGUAGE GADTs #-}
+{-# LANGUAGE MagicHash #-}
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE TypeApplications #-}
 {-# LANGUAGE TypeOperators #-}
@@ -77,6 +78,12 @@ data Clash = Clash
 -- | The name that the view of 'Clash' would have.
 data ClashNode = ClashNode
 
+-- | A source type name that cannot take the Node suffix.
+data HashName# = HashName
+
+-- | A source constructor name that cannot take the Node suffix.
+data HashConstructor = HashConstructor#
+
 $(deriveNode ''Expr)
 $(deriveNode ''Amount)
 $(deriveNode ''Record)
@@ -119,8 +126,10 @@ spec = describe "deriveNode" $ do
         , $(recover [|True|] (deriveNode ''(:+:) >> [|False|]))
         , $(recover [|True|] (deriveNode ''Synonym >> [|False|]))
         , $(recover [|True|] (deriveNode ''Clash >> [|False|]))
+        , $(recover [|True|] (deriveNode ''HashName# >> [|False|]))
+        , $(recover [|True|] (deriveNode ''HashConstructor >> [|False|]))
         ]
-            `shouldBe` replicate 5 True
+            `shouldBe` replicate 7 True
   where
     typed rules = either (error . show) id (fromTypingRules (Typing (Nesting 2) [] [()] rules)) :: Gen.Gen Symbol Expr
     refined measured = LTA.compile $ either (error . show) id $ deriveLTAFrom @Amount 0 (atom @Integer LTA.every) measured
