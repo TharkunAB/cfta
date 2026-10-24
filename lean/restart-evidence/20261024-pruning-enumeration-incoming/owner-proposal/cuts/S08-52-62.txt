@@ -1,0 +1,11 @@
+theorem call_lift {p h budget : Nat} {query : Value Symbol Guard} {before : Checked width}
+    {memo saved : Memo} {answer : Bool} {after : Physical}
+    (done : SourceCurrentConjunctionWorker.call p h budget memo query (physical before) = .done (answer, saved) after) :
+    call p h budget query before memo = .done answer (advancePhysical before after) saved := by
+  simp only [call, done]
+
+/-- A physical failure retains its exact reached state and installs no fourth-memo entry. -/
+theorem call_failed_lift {p h budget : Nat} {query : Value Symbol Guard} {before : Checked width}
+    {memo : Memo} {fault : Fault} {after : Physical}
+    (failed : SourceCurrentConjunctionWorker.call p h budget memo query (physical before) = .failed fault after) :
+    call p h budget query before memo = .failed fault (advancePhysical before after) memo := by

@@ -1,0 +1,34 @@
+import MicroCFTA.SourcePruningEnumerationObservation
+import MicroCFTA.SourceCurrentAllocatedTargetQuery
+import MicroCFTA.SourceCurrentAllocatedConjunctionCaller
+import MicroCFTA.SourceCurrentConjunctionWorkerCompletion
+import MicroCFTA.SourceCurrentAllocatedConjunctionWorker
+import MicroCFTA.SourceEndpointMemoCorrect
+
+namespace MicroCFTA.SourcePruningEnumerationEnabledEmpty
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+open SourceCurrentAllocatedNativeEffects (physical)
+open SourceCurrentAllocatedQueryMemo (advancePhysical)
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedPartialInvariant (Context Post)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => InternedConstructorTemplates.Value Symbol Constraint
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Fourth" => SourceCurrentEmptinessMemo.Memo
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "reaches" => SourceEndpointReachability.reaches SourceMemoGate.unconstrained
+variable {EnumGuard : Type} {width : Nat}
+
+/-- Run the actual descendant memo before the enabled fourth-memo check. -/
+noncomputable def check
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (p h : Nat) (query : Node) (before : Checked width) (memo : Fourth)
+    (queries : Queries) : SourceCurrentAllocatedConjunctionWorker.Outcome width × Queries :=
+  let guardResult : Bool × Queries := SourceEndpointMemo.run query queries
+  if guardResult.1 then
+    (SourceCurrentAllocatedConjunctionWorker.call p h 1000 query before memo, guardResult.2)
+  else (.done false before memo, guardResult.2)

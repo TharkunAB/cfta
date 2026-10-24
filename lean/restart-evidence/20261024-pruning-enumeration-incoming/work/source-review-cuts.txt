@@ -1,0 +1,351 @@
+cfta/src/Data/CFTA/Enumeration.hs [[200, 218], [512, 525]]
+-}
+intersectUVarValue ::
+    (Hashable symbol, Typeable symbol) =>
+    Bool -> UVarValue symbol -> UVarValue symbol -> UVarValue symbol
+intersectUVarValue checkEmpty (UVarUnenumerated mn1 scs1) (UVarUnenumerated mn2 scs2) =
+    let newContents = case (mn1, mn2) of
+            (Nothing, x) -> x
+            (x, Nothing) -> x
+            (Just n1, Just n2) -> Just (emptyIfProvably (n1 `intersect` n2))
+        newConstraints = scs1 <> scs2
+     in UVarUnenumerated newContents newConstraints
+  where
+    -- An intersection can unfold a recursive node with constraints into a
+    -- node that needs itself again with no base case. Enumeration of such a
+    -- node would not end, so the merge makes it 'EmptyNode', and the caller
+    -- ends the branch.
+    emptyIfProvably n
+        | checkEmpty, reachesConstrainedMu n, provablyEmpty n = EmptyNode
+        | otherwise = n
+-- | Intersect a node and inherited constraints into the value for a UVar.
+mergeNodeIntoUVarVal ::
+    (Hashable symbol, Typeable symbol) =>
+    UVar -> Node symbol -> Seq SuspendedConstraint -> EnumerateM symbol ()
+mergeNodeIntoUVarVal uv n scs = do
+    uv' <- getUVarRepresentative uv
+    let idx = uvarToInt uv'
+    values <- gets _uvarValues
+    checkEmpty <- gets _constrainedRecursion
+    let new = intersectUVarValue checkEmpty (UVarUnenumerated (Just n) scs) (values IntMap.! idx)
+    -- The slot keeps its suspended constraints and gains these.
+    writeUVarValue scs Sequence.Empty uv' new
+    inheritAncestry idx
+    guard $ not $ hasEmptyContents new
+
+lean/MicroCFTA/SourcePruningEnumerationEnabledEmpty.lean [[27, 34], [93, 118], [137, 164], [167, 190]]
+noncomputable def check
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (p h : Nat) (query : Node) (before : Checked width) (memo : Fourth)
+    (queries : Queries) : SourceCurrentAllocatedConjunctionWorker.Outcome width × Queries :=
+  let guardResult : Bool × Queries := SourceEndpointMemo.run query queries
+  if guardResult.1 then
+    (SourceCurrentAllocatedConjunctionWorker.call p h 1000 query before memo, guardResult.2)
+  else (.done false before memo, guardResult.2)
+  obtain ⟨next, query, queried, nextSource, nextRoots, receipt⟩ :=
+    SourceCurrentAllocatedTargetQuery.finite formulas solver inventory left right beforeCaller.checked
+      initial.ready initial.admitted leftAvailable rightAvailable leftClosed rightClosed decodedRanges
+      memos initial.globals
+  have queryProbes : InternedFreshOrdinaryProbeHeap.Heap queried.native.machine.heap := by
+    cases receipt.actual with
+    | run trace =>
+        exact SourceCurrentAllocatedMuRebuild.trace_heap trace initial.ready.semantic initial.probes
+  cases guardRun : SourceEndpointMemo.run query memos.query with
+  | mk reached guardSaved =>
+    have guardChecked : SourceEndpointMemoCorrect.Checked queried.native.machine.heap
+        memos.query (reaches query) (reached, guardSaved) := by
+      simpa only [guardRun] using SourceEndpointMemoCorrect.run_checked query queried.native.machine.heap
+        receipt.effects.keeps.ready.semantic.1.normal.facts.coherent receipt.available memos.query receipt.globals.query
+    have queryContext : Context formulas solver next
+        (SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge)
+        {memos with query := guardSaved} := by
+      exact ⟨receipt.ready, receipt.admitted,
+        initial.sound.advance formulas solver queried beforeCaller.fourth beforeCaller.merge receipt.effects,
+        initial.stored.grows receipt.effects.keeps, initial.covered,
+        SourceCurrentEmptinessMemo.grows formulas solver receipt.effects.keeps beforeCaller.fourth initial.correct,
+        ⟨receipt.globals.unfolding, guardChecked.valid⟩, queryProbes⟩
+    have queryPost : Post formulas solver next beforeCaller
+        (SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge)
+        {memos with query := guardSaved} := by
+      exact ⟨queryContext, receipt.effects, Cache.extends_refl _, fun key entry found => found⟩
+      cases reached with
+      | false =>
+          refine ⟨false, queried, beforeCaller.fourth, {memos with query := guardSaved}, 0, 0,
+            ?_, Post.refl queryContext, ?_, ?_, ?_, receipt.available, Cache.extends_refl _, rfl⟩
+          · intro P H enoughP enoughH
+            simp only [check, guardRun, Bool.false_eq_true, ↓reduceIte]
+          · intro notReached
+            exact ⟨rfl, rfl, rfl, rfl⟩
+          · intro isReached
+            cases isReached
+          · refine ⟨fun opened => rfl, ?_⟩
+            intro impossible
+            cases impossible
+      | true =>
+          obtain ⟨workerAnswer, workerPhysical, workerSaved, workerFinal, actualCall, actualReads,
+            workerPost, workerSound, workerAvailable, workerUnfolding, workerQuerySame⟩ :=
+            SourceCurrentAllocatedConjunctionCaller.finite formulas solver 1000 queryContext receipt.available
+          obtain ⟨p, h, physicalStable⟩ := SourceCurrentConjunctionWorkerCompletion.call_complete actualCall
+          refine ⟨workerAnswer, advancePhysical queried workerPhysical, workerSaved, workerFinal, p, h,
+            ?_, workerPost, ?_, ?_, workerSound, workerAvailable, workerUnfolding, workerQuerySame⟩
+          · intro P H enoughP enoughH
+            simp only [check, guardRun, ↓reduceIte]
+            exact Prod.ext (SourceCurrentAllocatedConjunctionWorker.call_lift
+              (physicalStable P H enoughP enoughH)) rfl
+          · intro notReached
+            cases notReached
+          · intro isReached
+            exact ⟨workerPhysical, rfl, actualCall, actualReads⟩
+    have finalPost : Post formulas solver next beforeCaller
+        (SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge) final := by
+      exact queryPost.trans checkPost
+    have replacementFacts : Available checkedAfter.native.machine.heap (if answer then .empty else query) ∧
+        (if answer then .empty else query).free = [] ∧
+        (∀ ambient term,
+          InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient
+            (if answer then .empty else query) term ↔
+          InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient query term) := by
+      cases answer with
+      | false =>
+          exact ⟨queryAvailable, receipt.closed, fun ambient term => Iff.rfl⟩
+      | true =>
+          refine ⟨empty_available _, rfl, ?_⟩
+          intro ambient term
+          constructor
+          · intro accepted
+            simp only [↓reduceIte, InternedGuardedLanguage.meaning] at accepted
+          · intro accepted
+            exact False.elim (sound.2 rfl ambient term accepted)
+    obtain ⟨replacementAvailable, replacementClosed, replacementMeaning⟩ := replacementFacts
+    obtain ⟨handle, encoded, decoded⟩ := available_readback checkedAfter.native.machine.heap
+      (if answer then .empty else query) finalPost.effects.keeps.ready.semantic.1.normal.facts.coherent
+      replacementAvailable replacementClosed
+
+lean/MicroCFTA/SourceCurrentAllocatedTargetQuery.lean [[31, 45], [58, 99]]
+/-- One actual checked intersection retains its complete returned state. -/
+inductive Step [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (left right : Value Symbol Guard) (before : Checked width) :
+    Value Symbol Guard → Checked width → Prop where
+  | run {fuel : Nat}
+      (trace : Trace fuel (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before
+        (.code (.pure value)) after) : Step left right before value after
+
+/-- A raw completed step has a literal finite checked execution. -/
+theorem Step.done [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    {left right value : Value Symbol Guard} {before after : Checked width}
+    (actual : Step left right before value after) :
+    ∃ fuel, execute fuel (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before = .done value after := by
+  cases actual with
+  | run trace => exact ⟨_, trace_done _ _ before after value trace.steps⟩
+structure Receipt [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (left right : Value Symbol Guard) (before : Checked width)
+    (value : Value Symbol Guard) (after : Checked width) (memos : Memos) : Prop where
+  actual : Step left right before value after
+  ready : Ready after
+  admitted : At formulas solver inventory after
+  effects : SourceCurrentConjunctionRowsAllocation.Effects (physical before) (physical after)
+  extension : Extension before.native.machine after.native.machine
+  available : Available after.native.machine.heap value
+  closed : value.free = []
+  meaning : ∀ ambient term,
+    InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient value term ↔
+      InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient left term ∧
+      InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient right term
+  globals : Valid after.native.machine.heap memos
+  events : ∃ events, SourceGlobalUnfold.Runs ⟨before.native.machine.heap, memos.unfolding⟩
+    ⟨after.native.machine.heap, memos.unfolding⟩ events ∧ SourceGlobalUnfold.NoGlobal events
+
+/-- Initial admission constructs the actual query, its next inventory, and every returned receipt. -/
+theorem finite [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (left right : Value Symbol Guard) (before : Checked width)
+    (ready : Ready before) (admitted : At formulas solver inventory before)
+    (leftAvailable : Available before.native.machine.heap left) (rightAvailable : Available before.native.machine.heap right)
+    (leftClosed : left.free = []) (rightClosed : right.free = [])
+    (ranges : WordRanges (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before)
+    (memos : Memos) (valid : Valid before.native.machine.heap memos) :
+    ∃ next : Inventory, ∃ value after,
+      next.source = before.native.machine.heap ∧ next.roots = inventory.roots ++ [left, right] ∧
+      Receipt formulas solver next left right before value after memos := by
+  obtain ⟨next, fuel, value, after, source, roots, query, current⟩ :=
+    SourceCurrentAllocatedNativeInventoryState.query_complete inventory formulas solver before ready.good admitted
+      ready.scopedCache ready.semantic ready.idle left right leftAvailable rightAvailable leftClosed rightClosed ranges
+  have checked := SourceCurrentAllocatedNativeTraceEffects.effects query.trace ready.good ready.semantic ready.costs
+    (fun _ => trivial)
+  obtain ⟨events, runs, silent, finalValid⟩ := SourceCurrentAllocatedNativeGlobalMemos.trace_memos
+    query.trace ready.good ready.semantic ready.costs (fun _ => trivial) memos valid
+  exact ⟨next, value, after, source, roots, ⟨.run query.trace,
+    ⟨checked.1, checked.2.1.ready.semantic, checked.2.1.ready.costs, query.scopedCache, query.idle⟩,
+    current, checked.2.1, checked.2.2, query.result, query.closed, query.meaning,
+    finalValid, events, runs, silent⟩⟩
+
+lean/MicroCFTA/SourceCurrentAllocatedPartialInvariant.lean [[25, 44], [65, 75]]
+structure Context (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (state : Caller width) (memos : Memos) : Prop where
+  ready : SourceCurrentConjunctionClassScan.Ready state.checked
+  admitted : At formulas solver inventory state.checked
+  sound : SourceCurrentAllocatedPartialMemoSound.Sound formulas solver state
+  stored : SourceCurrentMemoMergeEffects.Stored state.checked.native.machine.heap state.merge
+  covered : ∀ ambient, SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient state.merge
+  correct : SourceCurrentEmptinessMemo.Correct formulas solver state.checked.native.machine.heap state.fourth
+  globals : EndpointMemoGateTrace.Valid state.checked.native.machine.heap memos
+  probes : InternedFreshOrdinaryProbeHeap.Heap state.checked.native.machine.heap
+
+/-- A returned caller retains its actual current context and completed table history. -/
+structure Post (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (next : Inventory)
+    (before after : Caller width) (final : Memos) : Prop where
+  context : Context formulas solver next after final
+  effects : SourceCurrentConjunctionRowsAllocation.Effects (physical before.checked) (physical after.checked)
+  retained : Cache.Extends before.merge after.merge
+  fourthRetained : SourceCurrentEmptinessMemo.Extends before.fourth after.fourth
+theorem Post.refl (context : Context formulas solver inventory before memos) :
+    Post formulas solver inventory before before memos := by
+  have ready := SourceCurrentAllocatedConjunctionMemo.ready before.checked context.ready.good
+    context.ready.semantic context.ready.costs
+  exact ⟨context, .refl _ ready, Cache.extends_refl _, fun _ _ found => found⟩
+
+/-- Ordered caller stages compose even when they compute different inventories. -/
+theorem Post.trans (first : Post formulas solver inventory before middle memos)
+    (last : Post formulas solver next middle after final) : Post formulas solver next before after final :=
+  ⟨last.context, first.effects.trans last.effects, Cache.extends_trans first.retained last.retained,
+    fun key value found => last.fourthRetained key value (first.fourthRetained key value found)⟩
+
+lean/MicroCFTA/SourceEqualityNativeDemand.lean [[138, 143]]
+theorem done_stable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel extra : Nat) (control : Control Output) (before after : State width) (value : Output)
+    (done : execute fuel control before = .done value after) :
+    execute (fuel + extra) control before = .done value after := by
+  rw [execute_add, done]
+  rfl
+
+lean/MicroCFTA/SourceCurrentAllocatedConjunctionCaller.lean [[73, 87]]
+theorem finite {inventory : Inventory} {before : Caller width} {query : Value Symbol Guard} {memos : Memos}
+    (budget : Nat) (initial : Context formulas solver inventory before memos)
+    (available : Available before.checked.native.machine.heap query) :
+    ∃ answer after saved final, ∃ call : Call budget before.fourth query (physical before.checked) answer after saved,
+      CallReads call memos final ∧
+      Post formulas solver inventory before
+        (SourceCurrentAllocatedPartialState.advance before (advancePhysical before.checked after) saved before.merge) final ∧
+      SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer ∧ Available after.heap query ∧
+      Extends memos.unfolding final.unfolding ∧ final.query = memos.query := by
+  have ready := SourceCurrentAllocatedConjunctionMemo.ready before.checked initial.ready.good
+    initial.ready.semantic initial.ready.costs
+  obtain ⟨answer, after, saved, call, _⟩ := SourceCurrentConjunctionMemo.complete budget before.fourth query
+    (physical before.checked) ready available
+  obtain ⟨final, reads, post⟩ := actual formulas solver call initial available
+  exact ⟨answer, after, saved, final, call, reads, post⟩
+
+lean/MicroCFTA/SourceCurrentConjunctionWorkerCompletion.lean [[161, 171]]
+theorem call_complete [DecidableEq ConcreteSymbol] [DecidableEq (EdgeKey ConcreteSymbol ConcreteGuard)]
+    [DecidableEq (Value ConcreteSymbol ConcreteGuard)]
+    {budget : Nat} {memo saved : Memo} {query : Value ConcreteSymbol ConcreteGuard}
+    {before after : Physical ConcreteSymbol FullSyntax.Formula} {answer : Bool}
+    (actual : SourceCurrentConjunctionMemo.Call budget memo query before answer after saved) :
+    StableRun (fun p h => call p h budget memo query before) (answer, saved) after := by
+  cases actual with
+  | hit found => exact ⟨0, 0, by intros; simp only [call, found]⟩
+  | miss absent body =>
+      obtain ⟨p, h, later⟩ := decision_complete body
+      exact ⟨p, h, by intro P H enoughP enoughH; simp only [call, absent, later P H enoughP enoughH, Outcome.bind]⟩
+
+lean/MicroCFTA/SourceCurrentAllocatedConjunctionWorker.lean [[24, 41], [52, 62]]
+/-- Success and failure retain the full checked state and actual fourth memo. -/
+inductive Outcome (width : Nat) : Type 1 where
+  | done (answer : Bool) (checked : Checked width) (memo : Memo)
+  | failed (fault : Fault) (checked : Checked width) (memo : Memo)
+
+def Outcome.state : Outcome width → Checked width
+  | .done _ checked _ | .failed _ checked _ => checked
+
+def Outcome.memo : Outcome width → Memo
+  | .done _ _ memo | .failed _ _ memo => memo
+
+/-- Lift the literal physical call at its exact returned heap and operation cache. -/
+noncomputable def call [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    [DecidableEq (Value Symbol Guard)] (p h budget : Nat) (query : Value Symbol Guard)
+    (before : Checked width) (memo : Memo) : Outcome width :=
+  match SourceCurrentConjunctionWorker.call p h budget memo query (physical before) with
+  | .done (answer, saved) after => .done answer (advancePhysical before after) saved
+  | .failed fault after => .failed fault (advancePhysical before after) memo
+theorem call_lift {p h budget : Nat} {query : Value Symbol Guard} {before : Checked width}
+    {memo saved : Memo} {answer : Bool} {after : Physical}
+    (done : SourceCurrentConjunctionWorker.call p h budget memo query (physical before) = .done (answer, saved) after) :
+    call p h budget query before memo = .done answer (advancePhysical before after) saved := by
+  simp only [call, done]
+
+/-- A physical failure retains its exact reached state and installs no fourth-memo entry. -/
+theorem call_failed_lift {p h budget : Nat} {query : Value Symbol Guard} {before : Checked width}
+    {memo : Memo} {fault : Fault} {after : Physical}
+    (failed : SourceCurrentConjunctionWorker.call p h budget memo query (physical before) = .failed fault after) :
+    call p h budget query before memo = .failed fault (advancePhysical before after) memo := by
+
+lean/MicroCFTA/SourceEndpointMemoCorrect.lean [[39, 52]]
+theorem run_checked (value : Value Symbol Guard) (heap : State Symbol Guard) (coherent : Coherent heap)
+    (available : Available heap value) (memos : Memos) (valid : SourceEndpointMemo.Valid heap memos) :
+    Checked heap memos (SourceEndpointReachability.reaches source value) (SourceEndpointMemo.run value memos) := by
+  cases found : memos.descendants value.referenceOf with
+  | some pair =>
+      rcases pair with ⟨original, answer⟩
+      obtain ⟨identity, resident, actual⟩ := valid.descendants _ original answer found
+      have same := InternedFreshProbeKeys.resident_reference_injective heap coherent original value
+        resident.resident available.resident identity
+      subst original
+      have checked : Checked heap memos (SourceEndpointReachability.reaches source value) (answer, memos) :=
+        ⟨actual, valid, keeps_refl memos⟩
+      rw [SourceEndpointMemo.run.eq_def, found]
+      exact checked
+
+lean/MicroCFTA/SourceCurrentEmptinessMemo.lean [[28, 31]]
+def AnswerSound (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (input : Value) (answer : Bool) : Prop :=
+  (input.free ≠ [] → answer = false) ∧
+    (answer = true → ∀ ambient term, ¬meaning (SourceEqualityPCSGuard.holds formulas solver) ambient input term)
+
+lean/MicroCFTA/SourcePruningEnumerationDispatch.lean [[30, 46], [293, 318]]
+noncomputable def afterQuery
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (p h : Nat) (source target : Nat)
+    (sourceScs targetScs : List EnumerationState.Suspended)
+    (query : Node) (queried : Checked width) (beforeCaller : Caller width) (queries : Queries) :
+    (Except (SourceCurrentAllocatedConjunctionWorker.Outcome width)
+      (Option (EnumerateM Symbol EnumGuard Unit))) × Caller width × Queries :=
+  let phase : SourceCurrentAllocatedConjunctionWorker.Outcome width × Queries :=
+    if checkEmpty then
+      SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries
+    else (.done false queried beforeCaller.fourth, queries)
+  match phase.1 with
+  | .done answer checkedAfter saved =>
+      let replacement : Node := if answer then .empty else query
+      (.ok ((encodeNode replacement).map (fun handle =>
+          SourcePruningEnumerationAssimilation.finish source target handle sourceScs targetScs replacement)),
+        SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge, phase.2)
+            exact SourceCurrentAllocatedMuRebuild.trace_heap trace initial.ready.semantic initial.probes
+      have queryContext : Context formulas solver next
+        (SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge) memos := by
+        exact ⟨receipt.ready, receipt.admitted,
+          initial.sound.advance formulas solver queried beforeCaller.fourth beforeCaller.merge receipt.effects,
+          initial.stored.grows receipt.effects.keeps, initial.covered,
+          SourceCurrentEmptinessMemo.grows formulas solver receipt.effects.keeps beforeCaller.fourth initial.correct,
+          receipt.globals, queryProbes⟩
+      have queryPost : Post formulas solver next beforeCaller
+        (SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge) memos := by
+        exact ⟨queryContext, receipt.effects, Cache.extends_refl _, (Post.refl initial).fourthRetained⟩
+      obtain ⟨handle, encoded, decoded⟩ := available_readback queried.native.machine.heap query
+        receipt.effects.keeps.ready.semantic.1.normal.facts.coherent receipt.available receipt.closed
+      have finalRealized : PendingRealized queried.native.machine.heap before := by
+        exact realized_preserved beforeCaller.checked.native.machine.heap queried.native.machine.heap
+          before before realized (EnumerationCompressionFrame.Frame.refl before) receipt.effects.keeps
+      refine ⟨left, right, query, query, queried, handle,
+        SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge,
+        memos.query, memos, next, 0, 0, leftDecoded, rightDecoded, nextSource, nextRoots, receipt,
+        ?_, queryPost, rfl, finalRealized, encoded, decoded, receipt.available, receipt.closed, receipt.meaning, ?_, ?_⟩
+      · intro P H enoughP enoughH
+        simp only [afterQuery, Bool.false_eq_true, ↓reduceIte, encoded, Option.map_some]
+      · intro _
+        exact ⟨rfl, rfl, rfl⟩
+      · intro impossible
+        cases impossible
+

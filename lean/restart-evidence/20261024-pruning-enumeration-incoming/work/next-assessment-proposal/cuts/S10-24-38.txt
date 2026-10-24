@@ -1,0 +1,15 @@
+def count (roots : Nat → Nat) (change : Int) (scs : List Suspended)
+    (waiting : EnumerationWaitingIndex.Waiting) : EnumerationWaitingIndex.Waiting :=
+  EnumerationWaitingIndex.count change
+    (scs.map fun sc => {sc with var := roots sc.var}) waiting
+
+/-- Remove the old slot references before adding its replacement references. -/
+def replace (roots : Nat → Nat) (old new : UVarValue Symbol)
+    (waiting : EnumerationWaitingIndex.Waiting) : EnumerationWaitingIndex.Waiting :=
+  count roots 1 (references new) (count roots (-1) (references old) waiting)
+
+/-- Every stored count is the exact number of references to its current class. -/
+def Correct (roots : Nat → Nat) (values : List (UVarValue Symbol))
+    (waiting : EnumerationWaitingIndex.Waiting) : Prop :=
+  EnumerationWaitingIndex.Correct (values.map (canonicalValue roots)) waiting
+

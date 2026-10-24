@@ -1,0 +1,11 @@
+theorem call_complete [DecidableEq ConcreteSymbol] [DecidableEq (EdgeKey ConcreteSymbol ConcreteGuard)]
+    [DecidableEq (Value ConcreteSymbol ConcreteGuard)]
+    {budget : Nat} {memo saved : Memo} {query : Value ConcreteSymbol ConcreteGuard}
+    {before after : Physical ConcreteSymbol FullSyntax.Formula} {answer : Bool}
+    (actual : SourceCurrentConjunctionMemo.Call budget memo query before answer after saved) :
+    StableRun (fun p h => call p h budget memo query before) (answer, saved) after := by
+  cases actual with
+  | hit found => exact ⟨0, 0, by intros; simp only [call, found]⟩
+  | miss absent body =>
+      obtain ⟨p, h, later⟩ := decision_complete body
+      exact ⟨p, h, by intro P H enoughP enoughH; simp only [call, absent, later P H enoughP enoughH, Outcome.bind]⟩

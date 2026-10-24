@@ -1,0 +1,83 @@
+{
+  "definition_cases": [],
+  "proof_cases": [
+    {
+      "scope": "complete",
+      "expression": "checkEmpty",
+      "type": "Bool",
+      "constructors": [
+        "false",
+        "true"
+      ],
+      "fields": []
+    },
+    {
+      "scope": "queryProbes",
+      "expression": "receipt.actual",
+      "type": "SourceCurrentAllocatedTargetQuery.Step left right beforeCaller.checked query queried",
+      "constructors": [
+        "@run traceFuel trace"
+      ],
+      "fields": [
+        {
+          "name": "traceFuel",
+          "type": "Nat"
+        },
+        {
+          "name": "trace",
+          "type": "SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace traceFuel (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right)) beforeCaller.checked (.code (.pure query)) queried"
+        }
+      ]
+    },
+    {
+      "scope": "enabled",
+      "equation": "guardRun",
+      "expression": "SourceEndpointMemo.run query memos.query",
+      "type": "Bool × Queries",
+      "constructors": [
+        "mk reached guardSaved"
+      ],
+      "fields": [
+        {
+          "name": "reached",
+          "type": "Bool"
+        },
+        {
+          "name": "guardSaved",
+          "type": "Queries"
+        }
+      ]
+    },
+    {
+      "scope": "phase",
+      "expression": "reached",
+      "type": "Bool",
+      "constructors": [
+        "false",
+        "true"
+      ],
+      "fields": []
+    },
+    {
+      "scope": "replacementFacts",
+      "expression": "answer",
+      "type": "Bool",
+      "constructors": [
+        "false",
+        "true"
+      ],
+      "fields": []
+    }
+  ],
+  "equations": [
+    "guardRun : SourceEndpointMemo.run query memos.query = (reached, guardSaved)"
+  ],
+  "contradiction_proof_cases": [
+    "isReached : false = true",
+    "notReached : true = false",
+    "impossible : false = true",
+    "enabled : false = true",
+    "disabled : true = false"
+  ],
+  "no_Value_constructor_cases": true
+}

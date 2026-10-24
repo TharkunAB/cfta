@@ -1,0 +1,6 @@
+theorem done_stable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel extra : Nat) (control : Control Output) (before after : State width) (value : Output)
+    (done : execute fuel control before = .done value after) :
+    execute (fuel + extra) control before = .done value after := by
+  rw [execute_add, done]
+  rfl

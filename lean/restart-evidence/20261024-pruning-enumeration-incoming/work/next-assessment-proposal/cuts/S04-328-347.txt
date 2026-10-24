@@ -1,0 +1,20 @@
+  {state with
+    representatives := found.forest
+    values := state.values.set found.representative merged
+    recursionAncestry := fun other => if other = found.representative then
+      (state.expansionAncestry ++ state.recursionAncestry found.representative).eraseDups
+      else state.recursionAncestry other}
+
+/-- The actual node-merge action performs the representative lookup, payload intersection, and ancestry update. -/
+theorem mergeNode_exact (graph : Graph Symbol Guard) (state : State Symbol Guard) (fuel uv node : Nat)
+    (scs : List Suspended) (found : UnionFind.Result) (previous merged : UVarValue Symbol)
+    (lookup : UnionFind.findRoot fuel state.representatives uv = some found)
+    (stored : state.values[found.representative]? = some previous)
+    (intersection : intersectValues graph (.unenumerated (some node) scs) previous = some merged)
+    (notEmpty : hasEmptyContents graph merged = false) :
+    mergeNode graph fuel uv node scs state = [.ok ((), nodeMerged state found merged)] := by
+  simp [mergeNode, representative, lookup, rawValue, stored, intersection, require, notEmpty,
+    setValue, inheritAncestry, nodeMerged, bind, get, getThe, MonadStateOf.get, set, pure,
+    modify, modifyGet, MonadStateOf.modifyGet, StateT.bind, StateT.pure, StateT.get, StateT.set, StateT.modifyGet,
+    ExceptT.bind, ExceptT.pure, ExceptT.bindCont, ExceptT.mk]
+

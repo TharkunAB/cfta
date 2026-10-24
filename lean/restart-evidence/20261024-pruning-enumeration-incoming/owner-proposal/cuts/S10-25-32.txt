@@ -1,0 +1,8 @@
+abbrev Memo := NodeRef → Option (Value × Bool)
+
+/-- Each stored answer rejects open queries and soundly certifies true answers. -/
+def AnswerSound (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (input : Value) (answer : Bool) : Prop :=
+  (input.free ≠ [] → answer = false) ∧
+    (answer = true → ∀ ambient term, ¬meaning (SourceEqualityPCSGuard.holds formulas solver) ambient input term)
+

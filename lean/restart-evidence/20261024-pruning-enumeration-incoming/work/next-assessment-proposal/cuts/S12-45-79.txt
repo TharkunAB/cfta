@@ -1,0 +1,35 @@
+/-- Genuine initial invariants derive the exact prefix at every sufficient fuel. -/
+theorem run_complete
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (before : EnumerationState.State Symbol EnumGuard)
+    (first : EnumerationState.Suspended) (rest : List EnumerationState.Suspended)
+    (waiting : EnumerationWaitingIndex.Waiting) (roots : Nat → Nat)
+    (paths : Roots before.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.values waiting)
+    (safe : Safe before)
+    (bounded : ∀ sc ∈ first :: rest, sc.var < before.counter)
+    (pending : InputsPending before (first :: rest))
+    (realized : PendingRealized heap before) :
+    ∃ (fuel : Nat) (recorded : List Nat) (winner : Nat) (saved : EnumerationWaitingIndex.Waiting)
+      (scanned united after : EnumerationState.State Symbol EnumGuard),
+      (∀ (extra : Nat), ExceptT.run (run (fuel + extra) first rest waiting before) =
+        [.ok ((recorded, winner, saved), after)]) ∧
+      (∀ (extra : Nat), ExceptT.run (((first :: rest).mapM fun sc =>
+        representative (fuel + extra) sc.var) before) = [.ok (recorded, scanned)]) ∧
+      (∀ (extra : Nat), ExceptT.run ((rest.forM fun sc =>
+        unionVariables (fuel + extra) first.var sc.var) scanned) = [.ok ((), united)]) ∧
+      (∀ (extra : Nat), ExceptT.run (representative (fuel + extra) first.var united) = [.ok (winner, after)]) ∧
+      recorded = (first :: rest).map (fun sc => roots sc.var) ∧
+      saved = EnumerationCanonicalWaiting.moveMany winner
+        (EnumerationBuilderCaches.canonicalIds (recorded.filter (fun key => key != winner))) waiting ∧
+      winner ∈ recorded ∧ roots winner = winner ∧
+      Roots after.representatives (EnumerationCanonicalUnion.mergedRoots roots recorded winner) ∧
+      EnumerationCanonicalWaiting.Correct (EnumerationCanonicalUnion.mergedRoots roots recorded winner)
+        after.values saved ∧
+      after = {before with representatives := after.representatives} ∧
+      StorageValid after ∧ PendingRealized heap after ∧ PendingAt after winner ∧
+      (∀ (source : Nat), source ∈ recorded → PendingAt after source) ∧
+      (EnumerationBuilderCaches.canonicalIds (recorded.filter (fun key => key != winner))).Nodup ∧
+      (EnumerationBuilderCaches.canonicalIds (recorded.filter (fun key => key != winner))).Pairwise (· ≤ ·) ∧
+      (∀ (key : Nat), key ∈ EnumerationBuilderCaches.canonicalIds (recorded.filter (fun key => key != winner)) ↔
+        key ∈ recorded ∧ key ≠ winner) := by

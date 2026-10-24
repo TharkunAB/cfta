@@ -1,0 +1,14 @@
+theorem run_checked (value : Value Symbol Guard) (heap : State Symbol Guard) (coherent : Coherent heap)
+    (available : Available heap value) (memos : Memos) (valid : SourceEndpointMemo.Valid heap memos) :
+    Checked heap memos (SourceEndpointReachability.reaches source value) (SourceEndpointMemo.run value memos) := by
+  cases found : memos.descendants value.referenceOf with
+  | some pair =>
+      rcases pair with ⟨original, answer⟩
+      obtain ⟨identity, resident, actual⟩ := valid.descendants _ original answer found
+      have same := InternedFreshProbeKeys.resident_reference_injective heap coherent original value
+        resident.resident available.resident identity
+      subst original
+      have checked : Checked heap memos (SourceEndpointReachability.reaches source value) (answer, memos) :=
+        ⟨actual, valid, keeps_refl memos⟩
+      rw [SourceEndpointMemo.run.eq_def, found]
+      exact checked

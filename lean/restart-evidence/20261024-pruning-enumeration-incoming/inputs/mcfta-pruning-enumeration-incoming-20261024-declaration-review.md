@@ -1,0 +1,15 @@
+# IncomingQuery exact declaration review
+
+Reviewed: 2026-10-24 22:31:19 CEST. Verdict: CLEAR for the frozen exact declaration scope only. Root owns the body/compiler gate.
+
+Owner: `/tmp/mcfta-pruning-enumeration-incoming-20261024-proposal`. All 62 safe relative object pins and the complete 64-file set pass independent byte/SHA-256 checks. Pins `f9d73d958a9fb304491f546970be4a9bc9bfb80b27eba46312851ee9404f394c`; FROZEN `c08f95d696497c524a31b149cbdc490fa93f925c1e381031501c676f99151810`. Contracts `cd1e89e368cb5f0f99b1fe6dcbceae2cca70cb4a423c80f2d131c155d9ab489d`.
+
+I read all 11 exact STRING contracts/112 lines: context20, Root-selected public52 and nine typed local haves40. The public fragment equals the retained original Root header byte-for-byte. I read all 144 scoped entries, eight obtain packets/45 fields, all intro/case/lambda types, insertion/layout rules, provenance and proof route. One theorem complete; zero new actions, definitions, helpers, carriers, lets, instances or induction. The three anonymous existing equality dictionaries are public inputs, not new global instances. First-line indentation and literal deeper continuations align. Target180–260/hard340 is realistic without padding.
+
+All 15 whole source snapshots match live files; all 21 cuts/413 lines match their exact ranges, bytes and hashes. I read every cut. All 16 project routes and 26 defining-source identities match actual imports: 45 adjacent occurrences/25 distinct edges. Source index `4ecaaac41a3ef1e2e6d8ff7881b0fd1bb2f1b7420a94368ef9cf8ddc12426ef8`. No complete manual reread of all whole snapshots is claimed.
+
+The header takes two genuine available closed Nodes in the same current heap, existing Context/memos and current WordRanges. No pending slots or desired query/result is supplied. TargetQuery.finite constructs the single complete Receipt; actual.done and done_stable expose the same query/checked endpoint at all sufficient native bounds. Query Context/Post with original memos is distinct from guard Context/Post with guardSaved. The enabled branch preserves the exact guard run/Checked pair and one Caller Call/CallReads, then derives independent stable p/h bounds through the existing completion/lift APIs.
+
+The disabled branch still performs the checked intersection and preserves its effects. It skips only guard/fourth checking and retains original query/fourth/global memos. A true answer selects Empty; false retains query, which may already be Empty. Replacement availability, closure, encoding, same-heap lookup and exact intersection language are derived. Full Post and unfolding/query provenance remain explicit. No copied receipt, Graph law, supplied post-Context or hidden future-range premise occurs.
+
+Actual incoming root/pending read, optional-old bypass, enum write, ancestry, final Empty rejection and full terminal composition remain separate. H6 and native extraction/resource boundaries stay unchanged. No body, compiler/parser, selected program/import, Git/network/board action or repository mutation was performed.

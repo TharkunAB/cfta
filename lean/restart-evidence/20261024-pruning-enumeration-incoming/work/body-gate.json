@@ -1,0 +1,64 @@
+{
+  "accepted_at": "2026-10-24T22:35:20.771569+02:00",
+  "status": "ROOT_BODY_GATE_ACCEPTED",
+  "owner": "/tmp/mcfta-pruning-enumeration-incoming-20261024-proposal",
+  "frozen_sha256": "c08f95d696497c524a31b149cbdc490fa93f925c1e381031501c676f99151810",
+  "contracts": {
+    "complete-header.lean.txt": "theorem complete\n    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]\n    (formulas : SourceGuards.Formulas FullSyntax.Formula)\n    (solver : SourceGuards.Entailment FullSyntax.Formula)\n    (inventory : Inventory) (beforeCaller : Caller width)\n    (left right : Node) (checkEmpty : Bool) (memos : Memos)\n    (initial : Context formulas solver inventory beforeCaller memos)\n    (leftAvailable : Available beforeCaller.checked.native.machine.heap left)\n    (rightAvailable : Available beforeCaller.checked.native.machine.heap right)\n    (leftClosed : left.free = []) (rightClosed : right.free = [])\n    (ranges : SourceCurrentAllocatedNativeRequestBounds.WordRanges\n      (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))\n      beforeCaller.checked) :\n    \u2203 (next : Inventory) (query : Node) (queried : Checked width)\n      (answer : Bool) (checkedAfter : Checked width) (saved : Fourth)\n      (final : Memos) (queries : Queries) (replacement : Node) (handle fuel p h : Nat),\n      next.source = beforeCaller.checked.native.machine.heap \u2227 next.roots = inventory.roots ++ [left, right] \u2227\n      SourceCurrentAllocatedTargetQuery.Receipt formulas solver next left right\n        beforeCaller.checked query queried memos \u2227\n      (\u2200 extra, SourceEqualityNativeDemand.execute (fuel + extra)\n        (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))\n        beforeCaller.checked = .done query queried) \u2227\n      (\u2200 P H, p \u2264 P \u2192 h \u2264 H \u2192\n        (if checkEmpty then\n          SourcePruningEnumerationEnabledEmpty.check P H query queried beforeCaller.fourth memos.query\n        else (.done false queried beforeCaller.fourth, memos.query)) =\n          (.done answer checkedAfter saved, queries)) \u2227\n      Post formulas solver next beforeCaller\n        (SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge) final \u2227\n      final.query = queries \u2227 Cache.Extends memos.unfolding final.unfolding \u2227\n      SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer \u2227\n      replacement = (if answer then .empty else query) \u2227\n      Available checkedAfter.native.machine.heap replacement \u2227 replacement.free = [] \u2227\n      encodeNode replacement = some handle \u2227 lookupNode checkedAfter.native.machine.heap handle = some replacement \u2227\n      (\u2200 ambient term,\n        InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term \u2194\n          InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient left term \u2227\n          InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient right term) \u2227\n      (checkEmpty = false \u2192 answer = false \u2227 replacement = query \u2227 checkedAfter = queried \u2227\n        saved = beforeCaller.fourth \u2227 queries = memos.query \u2227 final = memos) \u2227\n      (checkEmpty = true \u2192 \u2203 reached,\n        SourceEndpointMemo.run query memos.query = (reached, queries) \u2227\n        SourceEndpointMemoCorrect.Checked queried.native.machine.heap memos.query\n          (SourceEndpointReachability.reaches SourceMemoGate.unconstrained query) (reached, queries) \u2227\n        (reached = false \u2192 answer = false \u2227 checkedAfter = queried \u2227 saved = beforeCaller.fourth \u2227\n          final = {memos with query := queries}) \u2227\n        (reached = true \u2192\n          \u2203 reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula,\n            checkedAfter = advancePhysical queried reachedPhysical \u2227\n            \u2203 actual : SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query\n                (physical queried) answer reachedPhysical saved,\n              SourceCurrentConjunctionGlobalMemos.CallReads actual {memos with query := queries} final))\n",
+    "context.lean.txt": "import MicroCFTA.SourcePruningEnumerationEnabledEmpty\n\nnamespace MicroCFTA.SourcePruningEnumerationIncomingQuery\nopen InternedConstructorTemplates InternedProbeProvenance\nopen SourcePruningEnumerationNodes SourcePruningEnumerationObservation\nopen SourceCurrentAllocatedNativeEffects (physical)\nopen SourceCurrentAllocatedQueryMemo (advancePhysical)\nopen SourceCurrentAllocatedNativeInventoryState (Inventory)\nopen SourceCurrentAllocatedPartialInvariant (Context Post)\nlocal notation \"Symbol\" => SourcePruningTemplates.Symbol\nlocal notation \"Constraint\" => SourceSymbolicIndex.Constraint FullSyntax.Formula\nlocal notation \"Node\" => InternedConstructorTemplates.Value Symbol Constraint\nlocal notation \"Checked\" => SourceEqualityNativeDemand.State\nlocal notation \"Caller\" => SourceCurrentAllocatedPartialState.State\nlocal notation \"Memos\" => EndpointMemoGateTrace.Memos\nlocal notation \"Fourth\" => SourceCurrentEmptinessMemo.Memo\nlocal notation \"Queries\" => SourceEndpointMemo.Memos\nlocal notation \"reaches\" => SourceEndpointReachability.reaches SourceMemoGate.unconstrained\nvariable {width : Nat}\n\n",
+    "local-final-post.lean.txt": "have finalPost : Post formulas solver next beforeCaller\n          (SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge) final\n",
+    "local-guard-checked.lean.txt": "have guardChecked : SourceEndpointMemoCorrect.Checked queried.native.machine.heap\n          memos.query (reaches query) (reached, guardSaved)\n",
+    "local-guard-context.lean.txt": "have guardContext : Context formulas solver next\n          (SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge)\n          {memos with query := guardSaved}\n",
+    "local-guard-post.lean.txt": "have guardPost : Post formulas solver next beforeCaller\n          (SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge)\n          {memos with query := guardSaved}\n",
+    "local-phase.lean.txt": "have phase : \u2203 (answer : Bool) (checkedAfter : Checked width) (saved : Fourth)\n          (final : Memos) (p h : Nat),\n          (\u2200 P H, p \u2264 P \u2192 h \u2264 H \u2192\n            SourcePruningEnumerationEnabledEmpty.check P H query queried beforeCaller.fourth memos.query =\n              (.done answer checkedAfter saved, guardSaved)) \u2227\n          Post formulas solver next\n            (SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge)\n            (SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge) final \u2227\n          (reached = false \u2192 answer = false \u2227 checkedAfter = queried \u2227 saved = beforeCaller.fourth \u2227\n            final = {memos with query := guardSaved}) \u2227\n          (reached = true \u2192\n            \u2203 reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula,\n              checkedAfter = advancePhysical queried reachedPhysical \u2227\n              \u2203 actual : SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query\n                  (physical queried) answer reachedPhysical saved,\n                SourceCurrentConjunctionGlobalMemos.CallReads actual {memos with query := guardSaved} final) \u2227\n          SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer \u2227\n          Available checkedAfter.native.machine.heap query \u2227\n          Cache.Extends memos.unfolding final.unfolding \u2227 final.query = guardSaved\n",
+    "local-query-context.lean.txt": "have queryContext : Context formulas solver next\n      (SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge) memos\n",
+    "local-query-post.lean.txt": "have queryPost : Post formulas solver next beforeCaller\n      (SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge) memos\n",
+    "local-query-probes.lean.txt": "have queryProbes : InternedFreshOrdinaryProbeHeap.Heap queried.native.machine.heap\n",
+    "local-replacement-facts.lean.txt": "have replacementFacts : Available checkedAfter.native.machine.heap (if answer then .empty else query) \u2227\n          (if answer then .empty else query).free = [] \u2227\n          (\u2200 ambient term,\n            InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient\n              (if answer then .empty else query) term \u2194\n            InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient query term)\n"
+  },
+  "reviews": {
+    "source": {
+      "path": "/tmp/mcfta-pruning-enumeration-incoming-20261024-source-review.md",
+      "sha256": "220579feb31f7cb4765571fa3fe102420f67664e96e36ce44dae7ba799da1bc4"
+    },
+    "declaration": {
+      "path": "/tmp/mcfta-pruning-enumeration-incoming-20261024-declaration-review.md",
+      "sha256": "84b90dfee769361343c31df17f830000db67d5e6602dcd5e247c16467c1cb6ee"
+    },
+    "seal-script": {
+      "path": "/tmp/mcfta-pruning-enumeration-incoming-20261024-seal-script-review.md",
+      "sha256": "735023aac06e4c1ef6959761fc9076df6624f820f8a31be5ecec533069750ea0"
+    }
+  },
+  "script_frozen_sha256": "fdd62639c57b4f418e0a2969b82d574c7a6fe21b1126fa05fae1e2ea6c384214",
+  "activated_scripts": {
+    "check": {
+      "path": "/tmp/mcfta-pruning-enumeration-incoming-20261024-check.py",
+      "sha256": "446fea28235334a40378f1037a61e268008ff79931329035b78fdae70263c017",
+      "selected_source": "/tmp/mcfta-pruning-enumeration-incoming-20261024/script-proposal/candidate/check.py"
+    },
+    "documents": {
+      "path": "/tmp/mcfta-pruning-enumeration-incoming-20261024-documents.py",
+      "sha256": "e6610dcb9f6bc938e21cdc62ecabc6318caf23f7be652a0a4565328871d117fe",
+      "selected_source": "/tmp/mcfta-pruning-enumeration-incoming-20261024/script-proposal/candidate/documents.py"
+    },
+    "archive": {
+      "path": "/tmp/mcfta-pruning-enumeration-incoming-20261024-archive.py",
+      "sha256": "a2215c80c79e0b792db1179b1b2e2e8f3b67f4df8981b755e62cf246d18cfb8a",
+      "selected_source": "/tmp/mcfta-pruning-enumeration-incoming-20261024/script-proposal/candidate/archive.py"
+    },
+    "verify": {
+      "path": "/tmp/mcfta-pruning-enumeration-incoming-20261024-verify.py",
+      "sha256": "b4d319485a71d21bd3357380802236f062d51485892de36605b98f9576337ea5",
+      "selected_source": "/tmp/mcfta-pruning-enumeration-incoming-20261024/script-proposal/candidate/verify.py"
+    },
+    "publication": {
+      "path": "/tmp/mcfta-pruning-enumeration-incoming-20261024-publication.py",
+      "sha256": "34166cbdfba46eda4e50fec7db4fc46102c343fd5e257d8026590588944925e2",
+      "selected_source": "/tmp/mcfta-pruning-enumeration-incoming-20261024/script-proposal/candidate/publication.py"
+    }
+  },
+  "root_full_read": "All11 literal contracts112lines, all144 scope rows,8obtains45fields, cases/0IHs, all21cuts413lines and16projectroutes26identities. Root verified all62ownerpins, all37scriptpins, all live source bytes/cuts/import edges, fixed Root header, all471selectedscriptlines and templates, full independent source/declaration/script reports. Five exact bidirectional recipes match complete prior active bases. No body or selected compiler/parser execution precedes this gate. Root alone authors bodies.",
+  "hard_cap": 340,
+  "activation_order": "This canonical accepted gate is written before active script copies. Activation bytes are verified separately."
+}
