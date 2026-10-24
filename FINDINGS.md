@@ -67,6 +67,46 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## Accepted native edge own-constraint arity
+
+Updated: 2026-10-24. Main `74250bd88` is incorporated.
+Proof: `1d5fd5d7fae043af3fd2f3fa7766635b940ea175`.
+Read `lean/notes-current-pruning-enumeration-own-arity.md`.
+
+The theorem connects the same accepted checked constructor to its actual
+returned edge and projected own equality tries. The actual physical read and
+original Cached field derive exact constraint reconstruction. Allocation Ready
+supplies its separate storage premise. The actual check .ok true derives
+fits. No desired trie bound, term satisfaction or callback law is assumed.
+
+The result retains the actual build/cache/heap receipt, operation validity and
+growth, native Keeps and exact returned symbol, full constraint and children.
+The actual projection has valid tries and exact class path readback. For every
+starting counter, its own suspended variables fit that returned edge's arity.
+The complete residual choice is retained. This does not run enumeration or
+record the residual.
+
+The first strict input failed in one Boolean simplification. The second input adds only Bool.false_eq_true to that proof step. It passes with a literal empty log under all linters and warnings as errors. The first public readback failed because its display input used the unknown pp.width option. Removing that line gives the complete successful readback. Both failed inputs, full logs and exact corrections remain. No proof limit changed. The installed build and Audit pass with the unchanged older warning. All 315 public-output lines retain the complete theorem signature without display omissions.
+The installed build passes 1052 jobs. Audit passes 3693 jobs and
+76174 dependency checks, with the unchanged older warning.
+accepted_projected_arity reports exactly propext, Classical.choice and Quot.sound. No project axiom is added.
+Frozen declarations, scoped types, reviews and raw evidence remain.
+The preceding traversal checkpoint's 26 actual post-seal inputs remain,
+including its already-sealed prospective assessment and original true flag.
+
+Own-arity checks already exist. This proves accepted-receipt transport.
+A checked-origin invariant for arbitrary resident/selected edges and equal-arity
+setChildren remain separate. Rejection keeps its actual top/[EmptyNode]
+sentinel and accessor/output-state effects; it gets no requested-guard bound.
+Terminal native merging/intersection/assimilation, selector, graph/ID/index/
+memo2, extraction/signed bounds, full typing/pruning/driver, runtime/solver/
+resources and convergence remain. Diagnostic cutoffs have no language claim.
+H6 stays strongest combined. H23 and older constructor/equality work remain.
+No Haskell source changes. FINDINGS keeps the six imported repair handoffs
+first. All earlier work and the optimized core remain. The full goal stays
+ACTIVE and incomplete. This record precedes evidence and push.
+
 ## Ordered native edge child traversal
 
 Updated: 2026-10-24. Main `74250bd88` is incorporated.
