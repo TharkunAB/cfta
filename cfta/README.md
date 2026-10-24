@@ -744,6 +744,20 @@ is not ground, for example a query with a quantifier, gives `Unknown`.
 `TimeLimitReached`. A `No` needs a value of each declared sort, so a named
 sort counts only when `inhabitedSorts` contains it.
 
+`Data.CFTA.Refinement.Theory` gives named functions and predicates their
+meanings as data. A theory declares datatypes, such as integer lists with
+`nil` and `cons`, and defines functions and predicates in the formula
+language. A body can split on a parameter, with one branch for each
+constructor. `theory` checks the sorts, calls to earlier definitions only,
+and structural recursion, so each definition stops on each value.
+`theoryInterpretations` gives `groundEntailment` its interpretations and the
+datatypes that have a value, so the caller writes no Haskell function.
+`Data.CFTA.Refinement.SmtLib` writes the same theory as SMT-LIB
+(`declare-datatypes`, and `define-funs-rec` with `match`), and an entailment
+as a script for a solver such as Z3. It starts no solver process.
+`predicateDefinitions` gives `withZ3Definitions` the theory predicates that
+unfold without names of the theory.
+
 A refinement is a Haskell function of the refined value, as in
 `\v -> v .>= 0`. `Data.CFTA.Refinement.Expression` supplies the terms, which
 take integer literals and arithmetic, the comparisons `.==`, `./=`, `.<`,
