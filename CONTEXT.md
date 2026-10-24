@@ -50,8 +50,8 @@ Wilf, and Feat (ranking).
   a guard.
 - **Contract**: a guard about the children of a constructor, written as a
   function with one term for each child, in order.
-- **Measure**: the integer of each term of a constructor, written as a term
-  of the measures of its children (`measured`). The refinement of a constructed
+- **Measure**: the logical value of each term of a constructor, written as a
+  term of the measures of its children (`measured`). The refinement of a constructed
   term is `v == measure`, so the contract of a parent reads it. Liquid Haskell
   says measure; the LTA paper calls a constructor's refinement its *result
   refinement*.
@@ -63,6 +63,20 @@ Wilf, and Feat (ranking).
   Minimization keeps the **representative** and removes the supertype.
 
 ## Transformations
+
+- **Solver lowering**: a meaning-preserving translation of a logical
+  obligation to a solver's supported representation. It can be partial.
+
+- **Predicate definition**: a global predicate name with parameters and a
+  body in the formula language. **Unfolding** replaces each application by
+  the body, with the arguments in place of the parameters. It is a solver
+  lowering for a solver without predicates.
+
+- **Ground evaluation**: a decision of an entailment by computation. A
+  **ground value** is an integer, or a data constructor applied to ground
+  values. The equalities of the antecedent give names ground values, and
+  fixed interpretations give the meanings of named functions and predicates.
+  A query whose result needs a name without a value stays undecided.
 
 - **Exact transformation**: an operation on an automaton that keeps its
   language, the set of terms it accepts. Equality reduction
