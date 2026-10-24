@@ -1,5 +1,50 @@
 # Proof status at 2026-10-18
 
+## Checked pending-slot assimilation without conservative emptiness
+
+Updated: 2026-10-24. Main `74250bd88` is incorporated.
+Proof: `13c01d1c43da0a076b9b3c9cbdb673da21341ce8`.
+Read `lean/notes-current-pruning-enumeration-assimilation.md`.
+
+Distinct actual pending slots derive one checked intersection through the
+existing pending_intersection_write producer. The same computed result,
+inventory, full Receipt and native/operation state remain in both branches.
+The derived handle has exact encoding and heap readback. No desired result,
+successful suffix, final state or Graph intersection law is assumed.
+
+finish checks Empty before either enumeration write. Empty gives exact raw[];
+the checked query's returned native state remains. Nonempty writes the target,
+eliminates the source, then transfers ancestry. Source suspended parts precede
+target parts. The complete raw output is one successful Unit at the existing
+assimilated state. Both actual slot reads and all-slot PendingRealized follow.
+No receipt or carrier is copied. One action and one local List instance are
+added. There is no new helper theorem, semantic predicate or induction.
+
+This covers distinct IDs, two present nodes and checkEmpty=false. Equal IDs,
+eliminated-source and missing-node dispatch, enabled conservative emptiness
+and its separate memo remain. Raw writes cover only values. Native ancestry
+containers, cached waiting/expandable indexes, representative union, terminal
+folding and the full public driver remain separate. Model handle extraction
+does not certify native NodeId extraction.
+
+The first strict input failed at the ancestry lambda inside a record update. Parentheses fix the syntax; the four raw-reduction errors follow the malformed definition. The second strict input passes with a literal empty log under all linters and warnings as errors. The failed source, all 307 raw lines and exact patch remain. No public/local type or proof limit changed. The installed build, complete public readback and Audit pass. All 81 public-output lines retain both complete signatures without display omissions. No passing build was repeated. A separate source-only metadata overlay records the unused target-write Success witness; the original frozen owner remains unchanged. This correction predates body authorship and is not a compiler or cap failure.
+The installed build passes 1245 jobs. Audit passes 3701 jobs and
+76215 dependency checks, with the unchanged older warning.
+finish reports propext. pending_assimilation_complete reports propext, Classical.choice and Quot.sound. No project axiom is added.
+Frozen contracts, scoped inventories, reviews and actual raw evidence remain.
+All 26 preceding publication-custody inputs remain. No Haskell changes.
+All six imported repair handoffs remain first in FINDINGS.
+
+H6 stays strongest combined: covered closed construction with valid initial
+caches supports any chosen finite number of node-reduction calls and preserves exact finite-tree language
+with the empty inherited payload. Sufficient mathematical width and finite
+fuels are derived. All-producer origins/edits, native order/IDs/containers/
+indexes/memo2, extraction/signed bounds, cutoff language, and full typing/
+pruning/driver/runtime/solver/resources/convergence remain. H23, all older
+work and the optimized core remain. The full goal stays ACTIVE and incomplete.
+This record precedes evidence and push.
+
+
 ## Checked intersection result in an actual pending slot
 
 Updated: 2026-10-24. Main `74250bd88` is incorporated.
