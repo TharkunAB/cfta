@@ -1,0 +1,316 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-R", "/tmp/mcfta-pruning-enumeration-own-arity-20261024/public-2", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-pruning-enumeration-own-arity-20261024/public-2/checked.lean"], "exit_code": 0, "raw_bytes": 25571, "raw_sha256": "25be7685c1034ce066a42b316068c9e7d993026a452cdf96b8e134f53dfbd4d4", "source_sha256": "9906fc824b801152aec0f22243923d50de113bde4c715db689214b43171b3f61"}
+@MicroCFTA.SourcePruningEnumerationOwnArity.accepted_projected_arity : ∀
+  [inst :
+    DecidableEq.{1}
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (symbol : MicroCFTA.SourcePruningTemplates.Symbol)
+  (original : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+  (stored : MicroCFTA.SourceEqualityConstraintAllocation.Value)
+  (children :
+    List.{0}
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (before : MicroCFTA.SourceEqualityConstraintMemoAllocation.State)
+  (heap :
+    MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceEqualityGuardReadback.Cached
+      (@MicroCFTA.SourceSymbolicIndex.Constraint.equalities MicroCFTA.FullSyntax.Formula original) →
+    @Eq.{1} (Except.{0, 0} String MicroCFTA.SourceEqualityPrecheck.Constraint)
+        (MicroCFTA.SourceEqualityPhysicalPayload.read
+          (@MicroCFTA.SourceSymbolicIndex.Constraint.equalities MicroCFTA.FullSyntax.Formula original))
+        (@Except.ok.{0, 0} String MicroCFTA.SourceEqualityPrecheck.Constraint stored.payload) →
+      MicroCFTA.SourceEqualityConstraintAllocation.Ready before.constraints stored →
+        MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid before →
+          @MicroCFTA.SourceEqualityRequiredCache.Ready MicroCFTA.SourcePruningTemplates.Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) heap →
+            @MicroCFTA.InternedNestedProvenance.Values MicroCFTA.SourcePruningTemplates.Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) heap children →
+              @Eq.{1} (Except.{0, 0} String Bool)
+                  (@Prod.fst.{0, 0} (Except.{0, 0} String Bool) MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                    (@MicroCFTA.SourceEqualityMkEdgeAllocation.check MicroCFTA.FullSyntax.Formula stored
+                      (@MicroCFTA.SourceSymbolicIndex.Constraint.guard MicroCFTA.FullSyntax.Formula original)
+                      (@List.length.{0}
+                        (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        children)
+                      before))
+                  (@Except.ok.{0, 0} String Bool true) →
+                have built :=
+                  @MicroCFTA.InternedConstructorTemplates.run MicroCFTA.SourcePruningTemplates.Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    inst
+                    (@MicroCFTA.InternedConstructorTemplates.makeEdge MicroCFTA.SourcePruningTemplates.Symbol
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) symbol original children)
+                    heap;
+                And
+                  (@Eq.{1}
+                    (Prod.{0, 0}
+                      (Except.{0, 0} String
+                        (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                      (Prod.{0, 0} MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                        (MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))
+                    (@MicroCFTA.SourceEqualityMkEdgeAllocation.build MicroCFTA.SourcePruningTemplates.Symbol
+                      MicroCFTA.FullSyntax.Formula inst symbol stored
+                      (@MicroCFTA.SourceSymbolicIndex.Constraint.guard MicroCFTA.FullSyntax.Formula original) children
+                      before heap)
+                    (@Prod.mk.{0, 0}
+                      (Except.{0, 0} String
+                        (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                      (Prod.{0, 0} MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                        (MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                      (@Except.ok.{0, 0} String
+                        (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        (@Prod.fst.{0, 0}
+                          (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          (MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          built))
+                      (@Prod.mk.{0, 0} MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                        (MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        (@Prod.snd.{0, 0} (Except.{0, 0} String Bool)
+                          MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                          (@MicroCFTA.SourceEqualityMkEdgeAllocation.check MicroCFTA.FullSyntax.Formula stored
+                            (@MicroCFTA.SourceSymbolicIndex.Constraint.guard MicroCFTA.FullSyntax.Formula original)
+                            (@List.length.{0}
+                              (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                              children)
+                            before))
+                        (@Prod.snd.{0, 0}
+                          (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          (MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          built))))
+                  (And
+                    (MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid
+                      (@Prod.snd.{0, 0} (Except.{0, 0} String Bool)
+                        MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                        (@MicroCFTA.SourceEqualityMkEdgeAllocation.check MicroCFTA.FullSyntax.Formula stored
+                          (@MicroCFTA.SourceSymbolicIndex.Constraint.guard MicroCFTA.FullSyntax.Formula original)
+                          (@List.length.{0}
+                            (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                            children)
+                          before)))
+                    (And
+                      (MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows before
+                        (@Prod.snd.{0, 0} (Except.{0, 0} String Bool)
+                          MicroCFTA.SourceEqualityConstraintMemoAllocation.State
+                          (@MicroCFTA.SourceEqualityMkEdgeAllocation.check MicroCFTA.FullSyntax.Formula stored
+                            (@MicroCFTA.SourceSymbolicIndex.Constraint.guard MicroCFTA.FullSyntax.Formula original)
+                            (@List.length.{0}
+                              (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                              children)
+                            before)))
+                      (And
+                        (@MicroCFTA.SourceEqualityRequiredCache.Keeps MicroCFTA.SourcePruningTemplates.Symbol
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) heap
+                          (@Prod.snd.{0, 0}
+                            (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                            (MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                            built))
+                        (And
+                          (@Eq.{1} MicroCFTA.SourcePruningTemplates.Symbol
+                            (@MicroCFTA.InternedConstructorTemplates.EdgeKey.symbol
+                              MicroCFTA.SourcePruningTemplates.Symbol
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                              (@MicroCFTA.Cache.Interned.key
+                                (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                                  MicroCFTA.SourcePruningTemplates.Symbol
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                  (@Prod.fst.{0, 0}
+                                    (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                      MicroCFTA.SourcePruningTemplates.Symbol
+                                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                    (MicroCFTA.InternedConstructorTemplates.State
+                                      MicroCFTA.SourcePruningTemplates.Symbol
+                                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                    built))))
+                            symbol)
+                          (And
+                            (@Eq.{1} (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                              (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint
+                                MicroCFTA.SourcePruningTemplates.Symbol
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                (@MicroCFTA.Cache.Interned.key
+                                  (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                                    MicroCFTA.SourcePruningTemplates.Symbol
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                  (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                                    MicroCFTA.SourcePruningTemplates.Symbol
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                    (@Prod.fst.{0, 0}
+                                      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                        MicroCFTA.SourcePruningTemplates.Symbol
+                                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                      (MicroCFTA.InternedConstructorTemplates.State
+                                        MicroCFTA.SourcePruningTemplates.Symbol
+                                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                      built))))
+                              original)
+                            (And
+                              (@Eq.{1}
+                                (List.{0}
+                                  (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+                                  MicroCFTA.SourcePruningTemplates.Symbol
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                  (@Prod.fst.{0, 0}
+                                    (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                      MicroCFTA.SourcePruningTemplates.Symbol
+                                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                    (MicroCFTA.InternedConstructorTemplates.State
+                                      MicroCFTA.SourcePruningTemplates.Symbol
+                                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                    built))
+                                children)
+                              (@Exists.{1} MicroCFTA.EqualityNormalize.Constraints fun classes =>
+                                And
+                                  (@Eq.{1} (Option.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path)))
+                                    (@MicroCFTA.SourceCompactGuards.sourceEqualities MicroCFTA.FullSyntax.Formula
+                                      (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint
+                                        MicroCFTA.SourcePruningTemplates.Symbol
+                                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                        (@MicroCFTA.Cache.Interned.key
+                                          (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                                            MicroCFTA.SourcePruningTemplates.Symbol
+                                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                          (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                                            MicroCFTA.SourcePruningTemplates.Symbol
+                                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                            (@Prod.fst.{0, 0}
+                                              (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                                MicroCFTA.SourcePruningTemplates.Symbol
+                                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                              (MicroCFTA.InternedConstructorTemplates.State
+                                                MicroCFTA.SourcePruningTemplates.Symbol
+                                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                              built)))))
+                                    (@some.{0} MicroCFTA.EqualityNormalize.Constraints classes))
+                                  (And
+                                    (@Eq.{1}
+                                      (Option.{0}
+                                        (Prod.{0, 0} (List.{0} MicroCFTA.EqualityTrie.Trie)
+                                          (Option.{0}
+                                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))
+                                      (@MicroCFTA.SourcePruningEnumerationConstraint.project
+                                        MicroCFTA.FullSyntax.Formula
+                                        (@MicroCFTA.InternedConstructorTemplates.EdgeKey.constraint
+                                          MicroCFTA.SourcePruningTemplates.Symbol
+                                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                          (@MicroCFTA.Cache.Interned.key
+                                            (MicroCFTA.InternedConstructorTemplates.EdgeKey
+                                              MicroCFTA.SourcePruningTemplates.Symbol
+                                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                            (@MicroCFTA.InternedConstructorTemplates.EdgeValue.entry
+                                              MicroCFTA.SourcePruningTemplates.Symbol
+                                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                              (@Prod.fst.{0, 0}
+                                                (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                                  MicroCFTA.SourcePruningTemplates.Symbol
+                                                  (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                    MicroCFTA.FullSyntax.Formula))
+                                                (MicroCFTA.InternedConstructorTemplates.State
+                                                  MicroCFTA.SourcePruningTemplates.Symbol
+                                                  (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                    MicroCFTA.FullSyntax.Formula))
+                                                built)))))
+                                      (@some.{0}
+                                        (Prod.{0, 0} (List.{0} MicroCFTA.EqualityTrie.Trie)
+                                          (Option.{0}
+                                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                                        (@Prod.mk.{0, 0} (List.{0} MicroCFTA.EqualityTrie.Trie)
+                                          (Option.{0}
+                                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                          (MicroCFTA.EnumerationEquality.readClasses classes)
+                                          (@ite.{1}
+                                            (Option.{0}
+                                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                            (@Eq.{1} Bool
+                                              (@Option.isSome.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                                                (@MicroCFTA.SourceCompactGuards.positive MicroCFTA.FullSyntax.Formula
+                                                  (@MicroCFTA.SourceSymbolicIndex.Constraint.guard
+                                                    MicroCFTA.FullSyntax.Formula original)))
+                                              true)
+                                            (instDecidableEqBool
+                                              (@Option.isSome.{0} (List.{0} (List.{0} MicroCFTA.SourceGuards.Path))
+                                                (@MicroCFTA.SourceCompactGuards.positive MicroCFTA.FullSyntax.Formula
+                                                  (@MicroCFTA.SourceSymbolicIndex.Constraint.guard
+                                                    MicroCFTA.FullSyntax.Formula original)))
+                                              true)
+                                            (@none.{0}
+                                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                            (@some.{0}
+                                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                              original)))))
+                                    (And
+                                      (∀ (trie : MicroCFTA.EqualityTrie.Trie),
+                                        @Membership.mem.{0, 0} MicroCFTA.EqualityTrie.Trie
+                                            (List.{0} MicroCFTA.EqualityTrie.Trie)
+                                            (@List.instMembership.{0} MicroCFTA.EqualityTrie.Trie)
+                                            (MicroCFTA.EnumerationEquality.readClasses classes) trie →
+                                          MicroCFTA.EqualityTrie.Valid trie)
+                                      (And
+                                        (∀ (paths : MicroCFTA.EqualityNormalize.Class),
+                                          @Membership.mem.{0, 0} MicroCFTA.EqualityNormalize.Class
+                                              MicroCFTA.EqualityNormalize.Constraints
+                                              (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Class) classes
+                                              paths →
+                                            ∀ (path : MicroCFTA.EqualityTrie.Path),
+                                              Iff
+                                                (@Membership.mem.{0, 0} MicroCFTA.EqualityTrie.Path
+                                                  (List.{0} MicroCFTA.EqualityTrie.Path)
+                                                  (@List.instMembership.{0} MicroCFTA.EqualityTrie.Path)
+                                                  (MicroCFTA.EqualityTrie.fromPathTrie
+                                                    (MicroCFTA.EnumerationEquality.classTrie paths))
+                                                  path)
+                                                (@Membership.mem.{0, 0} MicroCFTA.EqualityTrie.Path
+                                                  MicroCFTA.EqualityNormalize.Class
+                                                  (@List.instMembership.{0} MicroCFTA.EqualityNormalize.Path) paths
+                                                  path))
+                                        (∀ (start : Nat),
+                                          @Eq.{1} Bool
+                                            (MicroCFTA.EnumerationState.arityAllows
+                                              (@List.length.{0}
+                                                (MicroCFTA.InternedConstructorTemplates.Value
+                                                  MicroCFTA.SourcePruningTemplates.Symbol
+                                                  (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                    MicroCFTA.FullSyntax.Formula))
+                                                (@MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+                                                  MicroCFTA.SourcePruningTemplates.Symbol
+                                                  (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                    MicroCFTA.FullSyntax.Formula)
+                                                  (@Prod.fst.{0, 0}
+                                                    (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                                      MicroCFTA.SourcePruningTemplates.Symbol
+                                                      (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                        MicroCFTA.FullSyntax.Formula))
+                                                    (MicroCFTA.InternedConstructorTemplates.State
+                                                      MicroCFTA.SourcePruningTemplates.Symbol
+                                                      (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                        MicroCFTA.FullSyntax.Formula))
+                                                    built)))
+                                              (MicroCFTA.EnumerationCorrectness.suspendedVars start
+                                                (MicroCFTA.EnumerationEquality.readClasses classes)))
+                                            true)))))))))))
+'MicroCFTA.SourcePruningEnumerationOwnArity.accepted_projected_arity' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u}]

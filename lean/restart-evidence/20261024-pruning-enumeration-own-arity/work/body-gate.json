@@ -1,0 +1,38 @@
+{
+  "status": "ROOT_EXACT_SOURCE_BODY_GATE_PASS",
+  "recorded_at": "2026-10-24T12:04:02.102967+02:00",
+  "body_or_compiler_started": false,
+  "owner": "/tmp/mcfta-pruning-enumeration-own-arity-20261024-proposal",
+  "frozen_sha256": "3e9b9b3a84e2509ba68c3a50b323ed59258fcee0e983184cdbc121787641fe5e",
+  "pins_sha256": "57ab679907d22536b9aca5c4a1216a0bcf55fd59d9e13506c9d49d6b7ed7d595",
+  "contracts": {
+    "context.lean.txt": "import MicroCFTA.SourceEqualityMkEdgeArity\nimport MicroCFTA.MergedPhysicalGroupEdges\nimport MicroCFTA.SourcePruningEnumerationConstraint\nimport MicroCFTA.SourcePruningTemplates\n\nnamespace MicroCFTA.SourcePruningEnumerationOwnArity\nopen InternedConstructorTemplates EnumerationState EnumerationCorrectness\nlocal notation \"Symbol\" => SourcePruningTemplates.Symbol\nlocal notation \"Constraint\" => SourceSymbolicIndex.Constraint FullSyntax.Formula\n",
+    "public-header.lean.txt": "/-- The same accepted checked edge supplies valid own tries within its actual returned arity. -/\ntheorem accepted_projected_arity [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)]\n    (symbol : Symbol) (original : Constraint) (stored : SourceEqualityConstraintAllocation.Value)\n    (children : List (InternedConstructorTemplates.Value Symbol Constraint))\n    (before : SourceEqualityConstraintMemoAllocation.State)\n    (heap : InternedConstructorTemplates.State Symbol Constraint)\n    (cached : SourceEqualityGuardReadback.Cached original.equalities)\n    (physical : SourceEqualityPhysicalPayload.read original.equalities = .ok stored.payload)\n    (storedReady : SourceEqualityConstraintAllocation.Ready before.constraints stored)\n    (valid : SourceEqualityConstraintMemoAllocation.Valid before)\n    (heapReady : SourceEqualityRequiredCache.Ready heap)\n    (available : InternedNestedProvenance.Values heap children)\n    (checked : (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).1 = .ok true) :\n    let built := InternedConstructorTemplates.run (InternedConstructorTemplates.makeEdge symbol original children) heap\n    SourceEqualityMkEdgeAllocation.build symbol stored original.guard children before heap =\n      (.ok built.1, (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).2, built.2) \u2227\n    SourceEqualityConstraintMemoAllocation.Valid\n      (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).2 \u2227\n    SourceEqualityConstraintMemoAllocation.Grows before\n      (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).2 \u2227\n    SourceEqualityRequiredCache.Keeps heap built.2 \u2227\n    built.1.entry.key.symbol = symbol \u2227 built.1.entry.key.constraint = original \u2227 built.1.children = children \u2227\n    \u2203 classes : EqualityNormalize.Constraints,\n      SourceCompactGuards.sourceEqualities built.1.entry.key.constraint = some classes \u2227\n      SourcePruningEnumerationConstraint.project built.1.entry.key.constraint =\n        some (EnumerationEquality.readClasses classes,\n          if (SourceCompactGuards.positive original.guard).isSome then none else some original) \u2227\n      (\u2200 trie \u2208 EnumerationEquality.readClasses classes, EqualityTrie.Valid trie) \u2227\n      (\u2200 paths \u2208 classes, \u2200 path,\n        path \u2208 EqualityTrie.fromPathTrie (EnumerationEquality.classTrie paths) \u2194 path \u2208 paths) \u2227\n      \u2200 start : Nat, arityAllows built.1.children.length\n        (suspendedVars start (EnumerationEquality.readClasses classes)) = true\n",
+    "local-reconstructed.lean.txt": "have reconstructed : SourceEqualityAccessorAllocation.constraint stored original.guard = original\n",
+    "local-accepted.lean.txt": "have accepted : SourceEqualityMkEdgeAllocation.accepted original children.length = true\n",
+    "local-fits.lean.txt": "have fits : SourceEqualityMkEdgeAllocation.fits children.length\n        (SourceCompactGuards.sourceEqualities original) = true\n",
+    "local-built.lean.txt": "let actualBuilt : InternedConstructorTemplates.EdgeValue Symbol Constraint \u00d7\n        InternedConstructorTemplates.State Symbol Constraint :=\n      InternedConstructorTemplates.run (InternedConstructorTemplates.makeEdge symbol original children) heap\n",
+    "condition-rejected.lean.txt": "by_cases rejected : SourceEqualityMkEdgeAllocation.contradictory original = true\n"
+  },
+  "review_sha256": "72d9f33227af4c9cc5afb19b96b0e9c229dcaafef26ee80e6ba60693972543f0",
+  "source_review_sha256": "d0ed800c8b62d78dcb9fee62f2fd076f6394698d732ec418de52c6a0502fdefd",
+  "sources_live_checked": 16,
+  "cuts_live_checked": 22,
+  "defining_import_sources": 59,
+  "root_full_read": [
+    "all seven literal contracts",
+    "all39 scoped types",
+    "six complete obtain packets19 fields",
+    "case/induction/scope/budget/schema/insertion map/proof route",
+    "all22 exact source cuts",
+    "independent exact review and initial source review"
+  ],
+  "hard_cap": 180,
+  "new_local_instances": 0,
+  "new_global_instances": 0,
+  "new_helpers": 0,
+  "new_types": 0,
+  "induction_count": 0,
+  "goal": "ACTIVE_INCOMPLETE",
+  "boundary": "Accepted same checked constructor receipt only. Arbitrary resident selected edge origin remains open."
+}

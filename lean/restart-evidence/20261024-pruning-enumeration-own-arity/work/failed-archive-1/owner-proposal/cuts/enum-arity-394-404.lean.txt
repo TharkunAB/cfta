@@ -1,0 +1,11 @@
+theorem arityAllows_correct (arity : Nat) (scs : List Suspended) :
+    arityAllows arity scs = true ↔
+      ∀ sc ∈ scs, ∀ index suffix,
+        index :: suffix ∈ EqualityTrie.fromPathTrie sc.trie → index < arity := by
+  simp only [arityAllows, List.all_eq_true]
+  constructor
+  · intro bound sc member index suffix path
+    simpa using bound sc member (index :: suffix) path
+  · intro bound sc member path present
+    cases path with
+    | nil => rfl

@@ -1,0 +1,11 @@
+def constraint (stored : Value) (guard : SourceGuards.Guard Formula) : SourceSymbolicIndex.Constraint Formula :=
+  ⟨SourceEqualityInheritedPayload.classes stored.payload, guard⟩
+
+/-- Demand positive equalities and retain the source accessor's two stored-value shortcuts. -/
+noncomputable def equalities (stored : Value) (guard : SourceGuards.Guard Formula) (before : State) :
+    Except String Value × State :=
+  let positive := SourceEqualityGuardAllocation.demandPositive guard before
+  match positive.1 with
+  | .error message => (.error message, positive.2)
+  | .ok none | .ok (some (.live _ [])) => (.ok stored, positive.2)
+  | .ok (some added) => SourceEqualityConstraintMemoAllocation.combine stored added positive.2

@@ -1,0 +1,9 @@
+def read : Option Constraints → Except String SourceEqualityPrecheck.Constraint
+  | none => .ok none
+  | some classes => match recordsOf classes with
+    | none => .error "toPathTrie: input paths must be distinct, with none a prefix of another"
+    | some records => .ok (some records)
+
+/-- The source edge accessor builds physical records from its actual complete constraint. -/
+noncomputable def own (constraint : Constraint Formula) : Except String SourceEqualityPrecheck.Constraint :=
+  read (sourceEqualities constraint)

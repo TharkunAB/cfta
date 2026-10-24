@@ -1,0 +1,16 @@
+  simpa only [built, InternedNestedConstruction.Outcome.state] using InternedOpenDepthExecution.closed_heap expression
+
+/-- Actual edge rebuilding retains all invariants and the exact ordered child payload. -/
+theorem edge [DecidableEq (EdgeKey Symbol Guard)] (symbol : Symbol) (guard : Guard)
+    (values : List (Value Symbol Guard)) (state : State Symbol Guard) (ready : Ready state)
+    (available : Values state values) :
+    Keeps state (run (makeEdge symbol guard values) state).2 ∧
+      EdgeResident (run (makeEdge symbol guard values) state).2 (run (makeEdge symbol guard values) state).1 ∧
+      (run (makeEdge symbol guard values) state).1.children = values := by
+  have facts := ready.semantic.1.normal.facts
+  have checked := InternedNestedFacts.edge_verified symbol guard values state facts available
+  refine ⟨⟨⟨SourceRecursiveIntersectionSemanticHeap.edge symbol guard values state ready.semantic available,
+    InternedNestedCoverage.run_covered _ state facts.coherent.valid ready.covered, ready.depth⟩,
+    checked.growth, checked.history⟩, ?_, ?_⟩
+  · exact checked.result _ _ rfl
+  · exact InternedShallowValues.makeEdge_children symbol guard values state facts.coherent facts.cached available

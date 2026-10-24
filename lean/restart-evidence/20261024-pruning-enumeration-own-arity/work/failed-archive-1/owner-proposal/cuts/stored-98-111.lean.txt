@@ -1,0 +1,14 @@
+theorem read_classes (equalities : Option EqualityNormalize.Constraints)
+    (cached : SourceEqualityGuardReadback.Cached equalities) (payload : SourceEqualityPrecheck.Constraint)
+    (read : SourceEqualityPhysicalPayload.read equalities = .ok payload) :
+    SourceEqualityInheritedPayload.classes payload = equalities := by
+  cases equalities with
+  | none =>
+      have same : payload = none := by simpa only [SourceEqualityPhysicalPayload.read, Except.ok.injEq] using read.symm
+      rw [same]
+      rfl
+  | some classes =>
+      obtain ⟨records, built, _, paths⟩ := SourceEqualityPhysicalPayload.normal_records classes (cached classes rfl)
+      have same : payload = some records := by simpa only [SourceEqualityPhysicalPayload.read, built, Except.ok.injEq] using read.symm
+      rw [same]
+      exact congrArg some paths

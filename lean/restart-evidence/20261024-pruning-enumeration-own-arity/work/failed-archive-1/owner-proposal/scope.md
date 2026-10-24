@@ -1,0 +1,9 @@
+# Scope and boundaries
+
+This single theorem consumes a genuine Cached original constraint, the SAME successful physical read into stored.payload, stored Ready in the actual operation cache, operation Valid, native Ready/Available actual children, and the actual check's .ok true branch. These are representation/state/observed branch inputs, not a desired arity or term-satisfaction law.
+
+The result derives the SAME computed actual makeEdge run, full actual build receipt and operation/native histories, returned symbol/constraint/ordered children, actual Some projection/valid tries/per-class membership and own suspended arity for every starting ID. Stored Ready and original Cached remain distinct. FormulaExecutable's existing imported concrete formula equality is reused; only the existing native EdgeKey DecidableEq API premise is explicit. No new local/global instance is added.
+
+The false branch is excluded by the actual checked input. Its original emptyEdge sentinel remains top/[empty] with real accessor/outputState/emptyField effects. No rejected-guard bounds or effect-free rejection claim is made. Generic native Ready or arbitrary edge residency does not establish checked mkEdge origin. Equal-length setChildren transport of a known origin may follow later.
+
+No executable model/action/type/carrier/helper, enumeration state or full Frame is added. Projection/acceptance retain inherited noncomputable source-model boundaries. Physical Nat handles/natural-to-signed path casts do not establish native ID extraction, signed machine capacity or Int overflow safety. Terminal merging/native intersection, Graph/index/selection realization, recursive truncation-language preservation, whole-driver language/termination/resources, solver soundness and H6 remain separate. The whole goal remains active.

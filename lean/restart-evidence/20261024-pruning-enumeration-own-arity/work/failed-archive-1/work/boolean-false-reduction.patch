@@ -1,0 +1,11 @@
+--- strict-1
++++ strict-2
+@@ -55,7 +55,7 @@
+     by_cases rejected : SourceEqualityMkEdgeAllocation.contradictory original = true
+     · simp only [SourceEqualityMkEdgeAllocation.accepted, rejected, ↓reduceIte,
+         Bool.false_eq_true] at accepted
+-    · simpa only [SourceEqualityMkEdgeAllocation.accepted, rejected, ↓reduceIte] using accepted
++    · simpa only [SourceEqualityMkEdgeAllocation.accepted, rejected, Bool.false_eq_true, ↓reduceIte] using accepted
+   obtain ⟨classes, source, rootBounds⟩ :=
+     (SourceEqualityMkEdgeArity.fits_exact children.length
+       (SourceCompactGuards.sourceEqualities original)).mp fits

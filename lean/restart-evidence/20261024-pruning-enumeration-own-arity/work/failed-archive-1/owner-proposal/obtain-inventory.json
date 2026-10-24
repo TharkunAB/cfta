@@ -1,0 +1,125 @@
+{
+  "packets": [
+    {
+      "owner": "accepted_projected_arity",
+      "scope": "actual constructor check",
+      "api": "SourceEqualityMkEdgeAllocation.check_correct stored original.guard children.length before valid storedReady",
+      "fields": [
+        {
+          "name": "checkedExact",
+          "type": "(SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).1 = .ok (SourceEqualityMkEdgeAllocation.accepted (SourceEqualityAccessorAllocation.constraint stored original.guard) children.length)"
+        },
+        {
+          "name": "checkedValid",
+          "type": "SourceEqualityConstraintMemoAllocation.Valid (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).2"
+        },
+        {
+          "name": "checkedGrowth",
+          "type": "SourceEqualityConstraintMemoAllocation.Grows before (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).2"
+        }
+      ]
+    },
+    {
+      "owner": "accepted_projected_arity",
+      "scope": "actual fits result",
+      "api": "(SourceEqualityMkEdgeArity.fits_exact children.length (SourceCompactGuards.sourceEqualities original)).mp fits",
+      "fields": [
+        {
+          "name": "classes",
+          "type": "EqualityNormalize.Constraints"
+        },
+        {
+          "name": "source",
+          "type": "SourceCompactGuards.sourceEqualities original = some classes"
+        },
+        {
+          "name": "rootBounds",
+          "type": "∀ paths ∈ classes, ∀ path ∈ paths, match path with | [] => True | first :: _ => first < children.length"
+        }
+      ]
+    },
+    {
+      "owner": "accepted_projected_arity",
+      "scope": "same actual build after reconstructed/accepted reduction",
+      "api": "SourceEqualityMkEdgeAllocation.build_receipt symbol stored original.guard children before heap valid storedReady; rewrite reconstructed/accepted/work/outputState",
+      "fields": [
+        {
+          "name": "receipt",
+          "type": "SourceEqualityMkEdgeAllocation.build symbol stored original.guard children before heap = (.ok actualBuilt.1, (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).2, actualBuilt.2)"
+        },
+        {
+          "name": "_receiptValid",
+          "type": "SourceEqualityConstraintMemoAllocation.Valid (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).2"
+        },
+        {
+          "name": "_receiptGrowth",
+          "type": "SourceEqualityConstraintMemoAllocation.Grows before (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).2"
+        }
+      ]
+    },
+    {
+      "owner": "accepted_projected_arity",
+      "scope": "same actual complete edge fields",
+      "api": "MergedPhysicalGroupEdges.makeEdge_fields heap heapReady.semantic.1.normal.facts symbol original children available",
+      "fields": [
+        {
+          "name": "symbolSame",
+          "type": "actualBuilt.1.entry.key.symbol = symbol"
+        },
+        {
+          "name": "guardSame",
+          "type": "actualBuilt.1.entry.key.constraint = original"
+        },
+        {
+          "name": "childrenSame",
+          "type": "actualBuilt.1.children = children"
+        }
+      ]
+    },
+    {
+      "owner": "accepted_projected_arity",
+      "scope": "same original projected payload",
+      "api": "SourcePruningEnumerationConstraint.project_complete original cached; rewrite source",
+      "fields": [
+        {
+          "name": "projected",
+          "type": "SourcePruningEnumerationConstraint.project original = some (EnumerationEquality.readClasses classes, if (SourceCompactGuards.positive original.guard).isSome then none else some original)"
+        },
+        {
+          "name": "validTries",
+          "type": "∀ trie ∈ EnumerationEquality.readClasses classes, EqualityTrie.Valid trie"
+        },
+        {
+          "name": "pathReadback",
+          "type": "∀ paths ∈ classes, ∀ path, path ∈ EqualityTrie.fromPathTrie (EnumerationEquality.classTrie paths) ↔ path ∈ paths"
+        },
+        {
+          "name": "_meaning",
+          "type": "∀ (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula) (term : Language.Term (SourceObservations.Label FullSyntax.Formula)), SourceEqualityPCSGuard.holds formulas solver original term = true ↔ (∀ trie ∈ EnumerationEquality.readClasses classes, EnumerationCorrectness.EqualityHolds term trie) ∧ EnumerationCorrectness.ResidualHolds (fun complete candidate => SourceEqualityPCSGuard.holds formulas solver complete candidate = true) (if (SourceCompactGuards.positive original.guard).isSome then none else some original) term"
+        }
+      ]
+    },
+    {
+      "owner": "accepted_projected_arity",
+      "scope": "concrete class for actual trie",
+      "api": "List.mem_map.mp trieMember; EnumerationEquality.readClasses",
+      "fields": [
+        {
+          "name": "paths",
+          "type": "EqualityNormalize.Class"
+        },
+        {
+          "name": "pathsMember",
+          "type": "paths ∈ classes"
+        },
+        {
+          "name": "same",
+          "type": "EnumerationEquality.classTrie paths = trie"
+        }
+      ]
+    }
+  ],
+  "packet_count": 6,
+  "field_count": 19,
+  "note": "Every returned proof field is inventoried, including unused semantic and receipt fields. No semantic term/satisfaction input or desired arity output is assumed."
+}

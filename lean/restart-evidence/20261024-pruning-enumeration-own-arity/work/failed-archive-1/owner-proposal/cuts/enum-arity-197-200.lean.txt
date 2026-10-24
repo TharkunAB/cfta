@@ -1,0 +1,4 @@
+def arityAllows (arity : Nat) (scs : List Suspended) : Bool :=
+  scs.all fun sc => (EqualityTrie.fromPathTrie sc.trie).all fun path =>
+    match path with | [] => true | child :: _ => decide (child < arity)
+

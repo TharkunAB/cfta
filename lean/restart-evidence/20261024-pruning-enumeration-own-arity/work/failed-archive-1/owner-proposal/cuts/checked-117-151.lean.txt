@@ -1,0 +1,35 @@
+theorem build_receipt [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol (Constraint Formula))]
+    (symbol : Symbol) (stored : Value) (guard : SourceGuards.Guard Formula)
+    (children : List (InternedConstructorTemplates.Value Symbol (Constraint Formula))) (before : OpState)
+    (heap : InternedConstructorTemplates.State Symbol (Constraint Formula))
+    (valid : Valid before) (ready : Ready before.constraints stored) :
+    let constraint := SourceEqualityAccessorAllocation.constraint stored guard
+    let built := InternedConstructorTemplates.run (work symbol constraint children (accepted constraint children.length)) heap
+    build symbol stored guard children before heap =
+      (.ok built.1, outputState (check stored guard children.length before).2 (accepted constraint children.length), built.2) ∧
+      Valid (build symbol stored guard children before heap).2.1 ∧
+      Grows before (build symbol stored guard children before heap).2.1 := by
+  obtain ⟨done, afterValid, growth⟩ := check_correct stored guard children.length before valid ready
+  have after := outputState_correct _ (accepted (SourceEqualityAccessorAllocation.constraint stored guard) children.length) afterValid
+  simp only [build, done]
+  exact ⟨trivial, after.1, ⟨steps_trans growth.constraints after.2.constraints,
+    Cache.extends_trans growth.combinations after.2.combinations,
+    Cache.extends_trans growth.descents after.2.descents⟩⟩
+
+/-- Either selected source edge request preserves the complete constructor heap. -/
+theorem work_keeps [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol (Constraint Formula))]
+    (symbol : Symbol) (constraint : Constraint Formula)
+    (children : List (InternedConstructorTemplates.Value Symbol (Constraint Formula))) (keep : Bool)
+    (heap : InternedConstructorTemplates.State Symbol (Constraint Formula))
+    (ready : SourceEqualityRequiredCache.Ready heap) (available : InternedNestedProvenance.Values heap children) :
+    SourceEqualityRequiredCache.Keeps heap (InternedConstructorTemplates.run (work symbol constraint children keep) heap).2 := by
+  cases keep with
+  | true => exact (SourceEqualityRequiredCache.edge symbol constraint children heap ready available).1
+  | false =>
+      apply (SourceEqualityRequiredCache.edge symbol SourceEqualityConstraintConstructors.top [.empty] heap ready ?_).1
+      intro child member
+      simp only [List.mem_singleton] at member
+      subst child
+      exact InternedProbeProvenance.empty_available heap
+
+end MicroCFTA.SourceEqualityMkEdgeAllocation

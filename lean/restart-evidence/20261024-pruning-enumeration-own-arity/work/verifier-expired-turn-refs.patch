@@ -1,0 +1,38 @@
+--- verify-1.py
++++ verify-2.py
+@@ -84,7 +84,7 @@
+     b'HEAD ' + baseline.encode(), b'HEAD ' + git('rev-parse', 'HEAD').strip(), 1)
+ for line in (here / 'work/baseline-refs.txt').read_text().splitlines():
+     value, ref = line.split()
+-    if ref not in ['refs/heads/formalize', 'refs/remotes/origin/formalize']:
++    if ref not in ['refs/heads/formalize', 'refs/remotes/origin/formalize'] and not ref.startswith('refs/codex/turn-diffs/'):
+         assert git('rev-parse', ref).decode().strip() == value, ref
+ assert git('rev-parse', 'codex/backup-pruning-enumeration-own-arity-20261024-1150').decode().strip() == baseline
+ 
+@@ -179,7 +179,16 @@
+ assert set(decls['definitions'] + decls['theorems']) == set(decls['declarations'])
+ for names in axioms.values():
+     assert set(names) <= {'Classical.choice', 'Quot.sound', 'propext'}
+-receipt_stems = ['baseline-1'] + checks['attempts']
++failed_seals = checks['failed_seal_attempts']
++assert failed_seals == ['archive-1']
++old = here / 'work/failed-archive-1'
++old_seal = load('work/failed-seal-result-1.json')
++assert old_seal['exit_code'] == 1 and 'refs/codex/turn-diffs/' in old_seal['stderr']
++assert sha((old / 'SHA256SUMS').read_bytes()) == old_seal['manifest_sha256']
++for line in (old / 'SHA256SUMS').read_text().splitlines():
++    digest, name = line.split('  ', 1)
++    assert sha((old / name).read_bytes()) == digest
++receipt_stems = ['baseline-1'] + checks['attempts'] + failed_seals
+ prefix = 'mcfta-pruning-enumeration-own-arity-20261024-'
+ expected_stems = {prefix + stem for stem in receipt_stems}
+ for suffix in ['limits.json', 'usage.json']:
+@@ -189,7 +198,7 @@
+     for suffix in ['json', 'log', 'limits.json', 'usage.json', 'source.py', 'peaks.txt']:
+         assert (here / 'inputs' / (prefix + stem + '.' + suffix)).is_file()
+     receipt = load('inputs/' + prefix + stem + '.json')
+-    assert receipt['exit_code'] == (1 if stem in failed else 0)
++    assert receipt['exit_code'] == (1 if stem in failed or stem in failed_seals else 0)
+     limits = load('inputs/' + prefix + stem + '.limits.json')
+     assert limits == {'memory.max': '4294967296', 'memory.high': '4294967296', 'memory.swap.max': '0'}
+     usage = load('inputs/' + prefix + stem + '.usage.json')

@@ -1,0 +1,14 @@
+theorem fresh_arity_iff (arity start : Nat) (tries : List EqualityTrie.Trie) :
+    arityAllows arity (suspendedVars start tries) = true ↔
+      ∀ trie ∈ tries, ∀ index suffix, index :: suffix ∈ EqualityTrie.fromPathTrie trie → index < arity := by
+  rw [arityAllows_correct]
+  constructor
+  · intro allows trie member index suffix path
+    have presented : trie ∈ (suspendedVars start tries).map EqualityTrie.Suspended.trie := by simpa [suspendedVars_tries] using member
+    obtain ⟨sc, scMember, same⟩ := List.mem_map.mp presented
+    exact allows sc scMember index suffix (by simpa [same] using path)
+  · intro allows sc member index suffix path
+    have present : sc.trie ∈ tries := by
+      rw [← suspendedVars_tries start tries]
+      exact List.mem_map.mpr ⟨sc, member, rfl⟩
+    exact allows sc.trie present index suffix path
