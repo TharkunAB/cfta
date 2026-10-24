@@ -1,0 +1,536 @@
+{
+  "imports": [
+    "MicroCFTA.SourceCurrentAllocatedTargetQuery",
+    "MicroCFTA.SourcePruningEnumerationWrites"
+  ],
+  "routes": [
+    {
+      "target": "MicroCFTA.SourceCurrentAllocatedTargetQuery",
+      "route": [
+        "MicroCFTA.SourceCurrentAllocatedTargetQuery"
+      ]
+    },
+    {
+      "target": "MicroCFTA.SourcePruningEnumerationWrites",
+      "route": [
+        "MicroCFTA.SourcePruningEnumerationWrites"
+      ]
+    },
+    {
+      "target": "MicroCFTA.SourcePruningEnumerationObservation",
+      "route": [
+        "MicroCFTA.SourcePruningEnumerationWrites",
+        "MicroCFTA.SourcePruningEnumerationObservation"
+      ]
+    },
+    {
+      "target": "MicroCFTA.SourcePruningEnumerationNodes",
+      "route": [
+        "MicroCFTA.SourcePruningEnumerationWrites",
+        "MicroCFTA.SourcePruningEnumerationObservation",
+        "MicroCFTA.SourcePruningEnumerationNodes"
+      ]
+    },
+    {
+      "target": "MicroCFTA.EnumerationCompressionFrame",
+      "route": [
+        "MicroCFTA.SourcePruningEnumerationWrites",
+        "MicroCFTA.SourcePruningEnumerationObservation",
+        "MicroCFTA.EnumerationNodeObservation",
+        "MicroCFTA.EnumerationObservations",
+        "MicroCFTA.EnumerationCompressionFrame"
+      ]
+    },
+    {
+      "target": "MicroCFTA.EnumerationCorrectness",
+      "route": [
+        "MicroCFTA.SourcePruningEnumerationWrites",
+        "MicroCFTA.SourcePruningEnumerationObservation",
+        "MicroCFTA.EnumerationNodeObservation",
+        "MicroCFTA.EnumerationObservations",
+        "MicroCFTA.EnumerationCompressionFrame",
+        "MicroCFTA.EnumerationDriver",
+        "MicroCFTA.EnumerationSchedule",
+        "MicroCFTA.EnumerationCorrectness"
+      ]
+    },
+    {
+      "target": "MicroCFTA.EnumerationState",
+      "route": [
+        "MicroCFTA.SourcePruningEnumerationWrites",
+        "MicroCFTA.SourcePruningEnumerationObservation",
+        "MicroCFTA.SourcePruningEnumerationNodes",
+        "MicroCFTA.SourcePruningNativeView",
+        "MicroCFTA.SourcePruningTemplates",
+        "MicroCFTA.SourcePruningPartialMatch",
+        "MicroCFTA.EnumerationState"
+      ]
+    },
+    {
+      "target": "MicroCFTA.SourceEqualityRequiredCache",
+      "route": [
+        "MicroCFTA.SourcePruningEnumerationWrites",
+        "MicroCFTA.SourcePruningEnumerationObservation",
+        "MicroCFTA.SourcePruningEnumerationNodes",
+        "MicroCFTA.SourcePruningNativeView",
+        "MicroCFTA.SourceEqualityRequiredCache"
+      ]
+    },
+    {
+      "target": "MicroCFTA.SourceCurrentConjunctionClassScan",
+      "route": [
+        "MicroCFTA.SourceCurrentAllocatedTargetQuery",
+        "MicroCFTA.SourceCurrentConjunctionClassScan"
+      ]
+    },
+    {
+      "target": "MicroCFTA.SourceCurrentAllocatedNativeInventoryState",
+      "route": [
+        "MicroCFTA.SourceCurrentAllocatedTargetQuery",
+        "MicroCFTA.SourceCurrentAllocatedNativeInventoryState"
+      ]
+    },
+    {
+      "target": "MicroCFTA.EndpointMemoGateTrace",
+      "route": [
+        "MicroCFTA.SourceCurrentAllocatedTargetQuery",
+        "MicroCFTA.SourceCurrentAllocatedNativeGlobalMemos",
+        "MicroCFTA.SourceQueryUnfoldMemo",
+        "MicroCFTA.EndpointMemoGateTrace"
+      ]
+    },
+    {
+      "target": "MicroCFTA.SourceCurrentAllocatedNativeRequestBounds",
+      "route": [
+        "MicroCFTA.SourceCurrentAllocatedTargetQuery",
+        "MicroCFTA.SourceCurrentAllocatedNativeInventoryState",
+        "MicroCFTA.SourceCurrentAllocatedNativeCoveredQuery",
+        "MicroCFTA.SourceCurrentAllocatedNativeAdmissionEdgeCertificates",
+        "MicroCFTA.SourceCurrentAllocatedNativeCodeProgress",
+        "MicroCFTA.SourceCurrentAllocatedNativeRequestBounds"
+      ]
+    },
+    {
+      "target": "MicroCFTA.SourceCurrentConjunctionRowsAllocation",
+      "route": [
+        "MicroCFTA.SourceCurrentAllocatedTargetQuery",
+        "MicroCFTA.SourceCurrentConjunctionClassScan",
+        "MicroCFTA.SourceCurrentAllocatedGateFields",
+        "MicroCFTA.SourceCurrentConjunctionRowsAllocation"
+      ]
+    },
+    {
+      "target": "MicroCFTA.SourceCurrentAllocatedNativeEffects",
+      "route": [
+        "MicroCFTA.SourceCurrentAllocatedTargetQuery",
+        "MicroCFTA.SourceCurrentAllocatedNativeInventoryState",
+        "MicroCFTA.SourceCurrentAllocatedQueryMemo",
+        "MicroCFTA.SourceCurrentAllocatedNativeEffects"
+      ]
+    },
+    {
+      "target": "MicroCFTA.SourceRecursiveIntersectionCompile",
+      "route": [
+        "MicroCFTA.SourceCurrentAllocatedTargetQuery",
+        "MicroCFTA.SourceCurrentAllocatedNativeGlobalMemos",
+        "MicroCFTA.SourceNativeGlobalUnfold",
+        "MicroCFTA.SourceRecursiveIntersectionNative",
+        "MicroCFTA.SourceRecursiveIntersectionCompile"
+      ]
+    },
+    {
+      "target": "MicroCFTA.SourceEqualityNativeDemand",
+      "route": [
+        "MicroCFTA.SourceCurrentAllocatedTargetQuery",
+        "MicroCFTA.SourceCurrentAllocatedNativeGlobalMemos",
+        "MicroCFTA.SourceEqualityNativeDemandOperations",
+        "MicroCFTA.SourceEqualityNativeDemand"
+      ]
+    },
+    {
+      "target": "MicroCFTA.SourcePruningTemplates",
+      "route": [
+        "MicroCFTA.SourcePruningEnumerationWrites",
+        "MicroCFTA.SourcePruningEnumerationObservation",
+        "MicroCFTA.SourcePruningEnumerationNodes",
+        "MicroCFTA.SourcePruningNativeView",
+        "MicroCFTA.SourcePruningTemplates"
+      ]
+    }
+  ],
+  "defining_import_sources": [
+    {
+      "module": "MicroCFTA.SourceCurrentAllocatedTargetQuery",
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedTargetQuery.lean",
+      "bytes": 8024,
+      "sha256": "20231be214e9d62e97f92b41d32fce62be959e78e24141c9a7fe73dd2060e9a6",
+      "imports": [
+        "MicroCFTA.SourceCurrentAllocatedNativeInventoryState",
+        "MicroCFTA.SourceCurrentAllocatedNativeGlobalMemos",
+        "MicroCFTA.SourceCurrentConjunctionClassScan"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourcePruningEnumerationWrites",
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationWrites.lean",
+      "bytes": 4216,
+      "sha256": "32864f9158615ee7787c7490356471489978a5622ea984d904f7b03329510a7e",
+      "imports": [
+        "MicroCFTA.SourcePruningEnumerationObservation"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourcePruningEnumerationObservation",
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationObservation.lean",
+      "bytes": 7357,
+      "sha256": "5a7b858adc4febb75621b9836053f308924c22d5fd7662741da61cbdab629bf4",
+      "imports": [
+        "MicroCFTA.SourcePruningEnumerationNodes",
+        "MicroCFTA.EnumerationNodeObservation"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourcePruningEnumerationNodes",
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationNodes.lean",
+      "bytes": 3546,
+      "sha256": "1fb4077739402c31ec48d4bfa8254ef9c1b7453601290dfcd1c0c0031eeee8a4",
+      "imports": [
+        "MicroCFTA.SourcePruningNativeView"
+      ]
+    },
+    {
+      "module": "MicroCFTA.EnumerationNodeObservation",
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationNodeObservation.lean",
+      "bytes": 4323,
+      "sha256": "0dc7f259885a4c5a914aed2d7a62030b18cc87fc37962ffe438c146b6459d06d",
+      "imports": [
+        "MicroCFTA.EnumerationObservations"
+      ]
+    },
+    {
+      "module": "MicroCFTA.EnumerationObservations",
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationObservations.lean",
+      "bytes": 6136,
+      "sha256": "ebc891e8461c7b545d55f6823322789f19635e2d1c58a5551307b621079ba0ab",
+      "imports": [
+        "MicroCFTA.EnumerationCompressionFrame",
+        "MicroCFTA.EnumerationExecution"
+      ]
+    },
+    {
+      "module": "MicroCFTA.EnumerationCompressionFrame",
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationCompressionFrame.lean",
+      "bytes": 8220,
+      "sha256": "5b6e6a4b11c21b949874db500e23aa074fcdd4e0de683f46f33863113dc91375",
+      "imports": [
+        "MicroCFTA.EnumerationDriver"
+      ]
+    },
+    {
+      "module": "MicroCFTA.EnumerationDriver",
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationDriver.lean",
+      "bytes": 52410,
+      "sha256": "0769d78e4d3c01d959cf21c5a59642fee164dc60655e86601458a799da72bbcf",
+      "imports": [
+        "MicroCFTA.EnumerationSchedule"
+      ]
+    },
+    {
+      "module": "MicroCFTA.EnumerationSchedule",
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationSchedule.lean",
+      "bytes": 86287,
+      "sha256": "3e84f2059725b3c0392d4df005574fde2918290cb393c4be0d549a62ad4a4e45",
+      "imports": [
+        "MicroCFTA.EnumerationCorrectness"
+      ]
+    },
+    {
+      "module": "MicroCFTA.EnumerationCorrectness",
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationCorrectness.lean",
+      "bytes": 76898,
+      "sha256": "087b96d593bb42cea0b61b2742b43d4a41ce5a2d990e300c8d15700e2eb0672d",
+      "imports": [
+        "MicroCFTA.EnumerationState"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourcePruningNativeView",
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningNativeView.lean",
+      "bytes": 10881,
+      "sha256": "0cf2d0d30d1a231dd6a1c53dc8a78bc0b8c37972ff5fe3d55b2767e9f6f98571",
+      "imports": [
+        "MicroCFTA.SourcePruningTemplates",
+        "MicroCFTA.SourceEqualityRequiredCache",
+        "MicroCFTA.MergedFreshOrdinaryExposureLive",
+        "MicroCFTA.EqualityLeafProjectionPhysical",
+        "MicroCFTA.InternedEmptyNormalization"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourcePruningTemplates",
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningTemplates.lean",
+      "bytes": 8380,
+      "sha256": "1890878e308ec4debe67d6e74755bc00d93898f59a3a4ed1e5fa188c02899156",
+      "imports": [
+        "MicroCFTA.SourcePruningPartialMatch",
+        "MicroCFTA.Fragments",
+        "MicroCFTA.SourceObservations",
+        "MicroCFTA.FormulaExecutable"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourcePruningPartialMatch",
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningPartialMatch.lean",
+      "bytes": 3692,
+      "sha256": "08c3662ac9bc664eb809448522505834105fb173b05971a432f9741c2e275509",
+      "imports": [
+        "MicroCFTA.Template",
+        "MicroCFTA.EnumerationState"
+      ]
+    },
+    {
+      "module": "MicroCFTA.EnumerationState",
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationState.lean",
+      "bytes": 33489,
+      "sha256": "83a898b883ec7b52469bccd87e8afa4f7abb320e3c935bf48f3d80ad77003cc4",
+      "imports": [
+        "MicroCFTA.Fragments",
+        "MicroCFTA.EqualityTrie"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourceEqualityRequiredCache",
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceEqualityRequiredCache.lean",
+      "bytes": 6081,
+      "sha256": "7cfdad372cba5716c4dc32a7097af8060a27e903fe334f89a2062757b664a733",
+      "imports": [
+        "MicroCFTA.MergedFreshOrdinaryColdTermination",
+        "MicroCFTA.InternedNormalizationFree"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourceCurrentConjunctionClassScan",
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConjunctionClassScan.lean",
+      "bytes": 11284,
+      "sha256": "46edf035a9e6890053ccd6caee25052ca293e42277e10bbba75529f84fdd5cd1",
+      "imports": [
+        "MicroCFTA.SourceCurrentAllocatedConjunctionMemo",
+        "MicroCFTA.SourceCurrentAllocatedGateFields",
+        "MicroCFTA.SourceCurrentAllocatedSeededQuery"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourceCurrentAllocatedNativeInventoryState",
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedNativeInventoryState.lean",
+      "bytes": 7743,
+      "sha256": "4944b25b19d4a897a49faedff94205058d4fbcf0e0fecafbcc40bb3d026998fc",
+      "imports": [
+        "MicroCFTA.SourceCurrentAllocatedNativeCoveredQuery",
+        "MicroCFTA.SourceCurrentAllocatedQueryMemo"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourceCurrentAllocatedNativeGlobalMemos",
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedNativeGlobalMemos.lean",
+      "bytes": 6542,
+      "sha256": "fa20921764a5bceb96fae1d3007e9ca9fafd2f39b346f11e4c9da46f984980fb",
+      "imports": [
+        "MicroCFTA.SourceNativeGlobalUnfold",
+        "MicroCFTA.SourceQueryUnfoldMemo",
+        "MicroCFTA.SourceCurrentAllocatedNativeTraceEffects",
+        "MicroCFTA.SourceEqualityNativeDemandOperations"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourceQueryUnfoldMemo",
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceQueryUnfoldMemo.lean",
+      "bytes": 6335,
+      "sha256": "65aecf5846d46cfdf692518329f3b969cbb1b2bb0e081fa6a6eb2a5abd369e5e",
+      "imports": [
+        "MicroCFTA.EndpointMemoGateTrace",
+        "MicroCFTA.SourceEqualityOpenOrdinaryHead",
+        "MicroCFTA.InternedFreshOrdinaryStoredCosts"
+      ]
+    },
+    {
+      "module": "MicroCFTA.EndpointMemoGateTrace",
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EndpointMemoGateTrace.lean",
+      "bytes": 7134,
+      "sha256": "aa3143137ffbb97668de830e87c55977e4b0daccb447efb296cbddb7f9c7930f",
+      "imports": [
+        "MicroCFTA.EndpointStatefulGateGraph",
+        "MicroCFTA.InternedFreshOrdinaryMemoGateTrace",
+        "MicroCFTA.SourceEndpointMemoCorrect"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourceCurrentAllocatedNativeCoveredQuery",
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedNativeCoveredQuery.lean",
+      "bytes": 11371,
+      "sha256": "aaacfcfbe966ff0f90cefbf9d7e5f6580e27684af1725a79af801c19e16de30d",
+      "imports": [
+        "MicroCFTA.SourceCurrentAllocatedNativeAdmissionTrace",
+        "MicroCFTA.SourceCurrentAllocatedNativeAdmissionNodeCertificates",
+        "MicroCFTA.SourceCurrentAllocatedNativeAdmissionEdgeCertificates",
+        "MicroCFTA.SourceCurrentAllocatedNativeWarmQuery",
+        "MicroCFTA.SourceCurrentAllocatedNativeAdmittedQuery"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourceCurrentAllocatedNativeAdmissionEdgeCertificates",
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedNativeAdmissionEdgeCertificates.lean",
+      "bytes": 7969,
+      "sha256": "e9b59bec554c83387b6627ca78c75528432dc83bf1e94eaad44ce4d428dcb4a2",
+      "imports": [
+        "MicroCFTA.SourceCurrentAllocatedNativeAdmissionCode",
+        "MicroCFTA.SourceCurrentAllocatedNativeRequestAdmission",
+        "MicroCFTA.SourceCurrentAllocatedNativeCodeProgress"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourceCurrentAllocatedNativeCodeProgress",
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedNativeCodeProgress.lean",
+      "bytes": 31825,
+      "sha256": "35f942dcd7caa97253a5d3d29cf26f5a5042044cde40c853497357c4b31c0d6f",
+      "imports": [
+        "MicroCFTA.SourceRecursiveIntersectionCompileNodeBounds",
+        "MicroCFTA.SourceRecursiveIntersectionCompileSafety",
+        "MicroCFTA.SourceCurrentAllocatedNativeRequestBounds",
+        "MicroCFTA.SourceCurrentAllocatedNativeFieldClosure"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourceCurrentAllocatedNativeRequestBounds",
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedNativeRequestBounds.lean",
+      "bytes": 11750,
+      "sha256": "a839f5aec103d0965a9b97b7cbf476293d927b01edc15bc96ed54dd0cfc7636d",
+      "imports": [
+        "MicroCFTA.SourceRecursiveIntersectionCodeBounds",
+        "MicroCFTA.SourceEqualityNativeDemandOperations",
+        "MicroCFTA.SourceEqualityNativeDemandTrace"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourceCurrentAllocatedGateFields",
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedGateFields.lean",
+      "bytes": 13352,
+      "sha256": "6e2fa64de724b6e153b2744f2b2c9ecccb68f7a077143490c8f67a7e47e218ac",
+      "imports": [
+        "MicroCFTA.SourceCurrentConjunctionRowsAllocation",
+        "MicroCFTA.SourceCurrentClassGateCompletion",
+        "MicroCFTA.SourceCurrentOpenExposureFields",
+        "MicroCFTA.SourceCurrentSecondaryProjectionScoped"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourceCurrentConjunctionRowsAllocation",
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentConjunctionRowsAllocation.lean",
+      "bytes": 12076,
+      "sha256": "08dcbbbf50ececa84dc2d7328100ddc50074c88ee76bd5c7e121c08d1527ca88",
+      "imports": [
+        "MicroCFTA.SourceCurrentConjunctionTuplesCoverage",
+        "MicroCFTA.SourceCurrentConjunctionEquality",
+        "MicroCFTA.SourceCurrentConjunctionRequirements"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourceCurrentAllocatedQueryMemo",
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedQueryMemo.lean",
+      "bytes": 13970,
+      "sha256": "9805dc0f2d8baba8b2ea90a9acd271757fe9e23adb506ecdc9bc21050f1959ae",
+      "imports": [
+        "MicroCFTA.SourceCurrentAllocatedNativeEffects",
+        "MicroCFTA.SourceCurrentConjunctionMemo",
+        "MicroCFTA.SourceEqualityNativeDemandRunning",
+        "MicroCFTA.SourceEqualityNativeDemandRequestExact",
+        "MicroCFTA.SourceCurrentAllocatedNativeRunning"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourceCurrentAllocatedNativeEffects",
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentAllocatedNativeEffects.lean",
+      "bytes": 3465,
+      "sha256": "d90350c9733ba254823c600f1839e1e9444638ee1ec675a4a24494e27e6c5f82",
+      "imports": [
+        "MicroCFTA.SourceCurrentAllocatedNativeSemanticHeap",
+        "MicroCFTA.SourceCurrentAllocatedNativeCosts",
+        "MicroCFTA.SourceCurrentConjunctionRowsAllocation"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourceNativeGlobalUnfold",
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceNativeGlobalUnfold.lean",
+      "bytes": 16080,
+      "sha256": "2f542d9e093106444abc35a14e4136ae737ab6619b47fe801794bd118098c5e7",
+      "imports": [
+        "MicroCFTA.SourceConstructorGlobalUnfoldBuild",
+        "MicroCFTA.SourceRecursiveIntersectionNative"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourceRecursiveIntersectionNative",
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionNative.lean",
+      "bytes": 8388,
+      "sha256": "662608e418e37f4b8c9ae8e07020ea60ece2440801c5b4cca21754f65be55e5e",
+      "imports": [
+        "MicroCFTA.SourceRecursiveIntersectionCompile"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourceRecursiveIntersectionCompile",
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceRecursiveIntersectionCompile.lean",
+      "bytes": 12453,
+      "sha256": "ec6f7b8726e12c94e7931024078c2e6dabc55a216a3f8ff6ea98befa4f00dfeb",
+      "imports": [
+        "MicroCFTA.SourceRecursiveIntersectionCode"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourceEqualityNativeDemandOperations",
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceEqualityNativeDemandOperations.lean",
+      "bytes": 8995,
+      "sha256": "7f74e5f2cc5d4d7dcee28401ebeff2e91f0a4c7c8ed74afb97dc62cfb0aef7bd",
+      "imports": [
+        "MicroCFTA.SourceEqualityNativeDemand"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourceEqualityNativeDemand",
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceEqualityNativeDemand.lean",
+      "bytes": 9454,
+      "sha256": "52a9245b76437a5646a07055c67e0f757d16fdf0f1f7f7f0928e8d6992e1ff97",
+      "imports": [
+        "MicroCFTA.SourceEqualityConstraintFieldLookup",
+        "MicroCFTA.SourceEqualityNativeCheckedCode",
+        "MicroCFTA.SourceEqualityIntersectionEdgeAllocation",
+        "MicroCFTA.SourceRecursiveIntersectionNative",
+        "MicroCFTA.SourceEqualityPCSNativeEdge"
+      ]
+    }
+  ],
+  "route_count": 17,
+  "route_source_count": 33,
+  "instance_routes": {
+    "inline_only": [
+      "DecidableEq Symbol",
+      "DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)"
+    ],
+    "new_local_instances": [],
+    "new_global_instances": [],
+    "EnumGuard_instance": null,
+    "proof_no_classical_command_planned": true
+  },
+  "library_api": {
+    "name": "List.getElem?_eq_some_iff",
+    "source": {
+      "id": "S19",
+      "path": "/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/src/lean/Init/Data/List/Lemmas.lean",
+      "snapshot": "sources/S19-Lemmas.lean",
+      "bytes": 152710,
+      "sha256": "9f9177396114b7b5898b0c4ac95f91bb3ee139f16dcde3becabdf9f948170dda",
+      "line_count": 3852
+    },
+    "implicit_import": "Init/List through existing imports"
+  },
+  "method": "Literal top-level import scan; shortest existing module routes; all route-file bytes and SHA retained. No compiler/parser/import evaluation."
+}

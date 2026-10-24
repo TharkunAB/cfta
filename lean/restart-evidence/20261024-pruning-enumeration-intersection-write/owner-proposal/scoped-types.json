@@ -1,0 +1,477 @@
+{
+  "entries": [
+    {
+      "scope": "context implicit",
+      "name": "EnumGuard",
+      "type": "Type",
+      "kind": "binder"
+    },
+    {
+      "scope": "context implicit",
+      "name": "width",
+      "type": "Nat",
+      "kind": "binder"
+    },
+    {
+      "scope": "context notation",
+      "name": "Symbol",
+      "type": "Type := SourcePruningTemplates.Symbol",
+      "kind": "notation"
+    },
+    {
+      "scope": "context notation",
+      "name": "Constraint",
+      "type": "Type := SourceSymbolicIndex.Constraint FullSyntax.Formula",
+      "kind": "notation"
+    },
+    {
+      "scope": "public input",
+      "name": "_symbolDecidableEq",
+      "type": "DecidableEq Symbol",
+      "kind": "inline typeclass"
+    },
+    {
+      "scope": "public input",
+      "name": "_edgeDecidableEq",
+      "type": "DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)",
+      "kind": "inline typeclass"
+    },
+    {
+      "scope": "public input",
+      "name": "formulas",
+      "type": "SourceGuards.Formulas FullSyntax.Formula",
+      "kind": "binder"
+    },
+    {
+      "scope": "public input",
+      "name": "solver",
+      "type": "SourceGuards.Entailment FullSyntax.Formula",
+      "kind": "binder"
+    },
+    {
+      "scope": "public input",
+      "name": "inventory",
+      "type": "SourceCurrentAllocatedNativeInventoryState.Inventory",
+      "kind": "binder"
+    },
+    {
+      "scope": "public input",
+      "name": "nativeBefore",
+      "type": "SourceEqualityNativeDemand.State width",
+      "kind": "binder"
+    },
+    {
+      "scope": "public input",
+      "name": "before",
+      "type": "EnumerationState.State Symbol EnumGuard",
+      "kind": "binder"
+    },
+    {
+      "scope": "public input",
+      "name": "source",
+      "type": "Nat",
+      "kind": "binder"
+    },
+    {
+      "scope": "public input",
+      "name": "target",
+      "type": "Nat",
+      "kind": "binder"
+    },
+    {
+      "scope": "public input",
+      "name": "sourceHandle",
+      "type": "Nat",
+      "kind": "binder"
+    },
+    {
+      "scope": "public input",
+      "name": "targetHandle",
+      "type": "Nat",
+      "kind": "binder"
+    },
+    {
+      "scope": "public input",
+      "name": "sourceScs",
+      "type": "List EnumerationState.Suspended",
+      "kind": "binder"
+    },
+    {
+      "scope": "public input",
+      "name": "targetScs",
+      "type": "List EnumerationState.Suspended",
+      "kind": "binder"
+    },
+    {
+      "scope": "public input",
+      "name": "ready",
+      "type": "SourceCurrentConjunctionClassScan.Ready nativeBefore",
+      "kind": "binder"
+    },
+    {
+      "scope": "public input",
+      "name": "admitted",
+      "type": "SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory nativeBefore",
+      "kind": "binder"
+    },
+    {
+      "scope": "public input",
+      "name": "memos",
+      "type": "EndpointMemoGateTrace.Memos",
+      "kind": "binder"
+    },
+    {
+      "scope": "public input",
+      "name": "globals",
+      "type": "EndpointMemoGateTrace.Valid nativeBefore.native.machine.heap memos",
+      "kind": "binder"
+    },
+    {
+      "scope": "public input",
+      "name": "realized",
+      "type": "PendingRealized nativeBefore.native.machine.heap before",
+      "kind": "binder"
+    },
+    {
+      "scope": "public input",
+      "name": "sourceStored",
+      "type": "before.values[source]? = some (.unenumerated (some sourceHandle) sourceScs)",
+      "kind": "binder"
+    },
+    {
+      "scope": "public input",
+      "name": "targetStored",
+      "type": "before.values[target]? = some (.unenumerated (some targetHandle) targetScs)",
+      "kind": "binder"
+    },
+    {
+      "scope": "public input",
+      "name": "ranges",
+      "type": "match lookupNode nativeBefore.native.machine.heap sourceHandle, lookupNode nativeBefore.native.machine.heap targetHandle with | some left, some right => SourceCurrentAllocatedNativeRequestBounds.WordRanges (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right)) nativeBefore | _, _ => True",
+      "kind": "binder"
+    },
+    {
+      "scope": "public ranges SOME/SOME pattern",
+      "name": "left",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint",
+      "kind": "pattern binder"
+    },
+    {
+      "scope": "public ranges SOME/SOME pattern",
+      "name": "right",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint",
+      "kind": "pattern binder"
+    },
+    {
+      "scope": "public existential conclusion",
+      "name": "left",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint",
+      "kind": "existential"
+    },
+    {
+      "scope": "public existential conclusion",
+      "name": "right",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint",
+      "kind": "existential"
+    },
+    {
+      "scope": "public existential conclusion",
+      "name": "next",
+      "type": "SourceCurrentAllocatedNativeInventoryState.Inventory",
+      "kind": "existential"
+    },
+    {
+      "scope": "public existential conclusion",
+      "name": "result",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint",
+      "kind": "existential"
+    },
+    {
+      "scope": "public existential conclusion",
+      "name": "nativeAfter",
+      "type": "SourceEqualityNativeDemand.State width",
+      "kind": "existential"
+    },
+    {
+      "scope": "public existential conclusion",
+      "name": "resultHandle",
+      "type": "Nat",
+      "kind": "existential"
+    },
+    {
+      "scope": "public existential conclusion",
+      "name": "after",
+      "type": "EnumerationState.State Symbol EnumGuard",
+      "kind": "existential"
+    },
+    {
+      "scope": "proof obtain sourceOperand",
+      "name": "left",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint",
+      "kind": "obtain field"
+    },
+    {
+      "scope": "proof obtain sourceOperand",
+      "name": "leftDecoded",
+      "type": "lookupNode nativeBefore.native.machine.heap sourceHandle = some left",
+      "kind": "obtain field"
+    },
+    {
+      "scope": "proof obtain sourceOperand",
+      "name": "leftAvailable",
+      "type": "InternedProbeProvenance.Available nativeBefore.native.machine.heap left",
+      "kind": "obtain field"
+    },
+    {
+      "scope": "proof obtain sourceOperand",
+      "name": "leftClosed",
+      "type": "left.free = []",
+      "kind": "obtain field"
+    },
+    {
+      "scope": "proof obtain targetOperand",
+      "name": "right",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint",
+      "kind": "obtain field"
+    },
+    {
+      "scope": "proof obtain targetOperand",
+      "name": "rightDecoded",
+      "type": "lookupNode nativeBefore.native.machine.heap targetHandle = some right",
+      "kind": "obtain field"
+    },
+    {
+      "scope": "proof obtain targetOperand",
+      "name": "rightAvailable",
+      "type": "InternedProbeProvenance.Available nativeBefore.native.machine.heap right",
+      "kind": "obtain field"
+    },
+    {
+      "scope": "proof obtain targetOperand",
+      "name": "rightClosed",
+      "type": "right.free = []",
+      "kind": "obtain field"
+    },
+    {
+      "scope": "proof obtain computedQuery",
+      "name": "next",
+      "type": "SourceCurrentAllocatedNativeInventoryState.Inventory",
+      "kind": "obtain field"
+    },
+    {
+      "scope": "proof obtain computedQuery",
+      "name": "result",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint",
+      "kind": "obtain field"
+    },
+    {
+      "scope": "proof obtain computedQuery",
+      "name": "nativeAfter",
+      "type": "SourceEqualityNativeDemand.State width",
+      "kind": "obtain field"
+    },
+    {
+      "scope": "proof obtain computedQuery",
+      "name": "nextSource",
+      "type": "next.source = nativeBefore.native.machine.heap",
+      "kind": "obtain field"
+    },
+    {
+      "scope": "proof obtain computedQuery",
+      "name": "nextRoots",
+      "type": "next.roots = inventory.roots ++ [left, right]",
+      "kind": "obtain field"
+    },
+    {
+      "scope": "proof obtain computedQuery",
+      "name": "receipt",
+      "type": "SourceCurrentAllocatedTargetQuery.Receipt formulas solver next left right nativeBefore result nativeAfter memos",
+      "kind": "obtain field"
+    },
+    {
+      "scope": "proof obtain resultReadback",
+      "name": "resultHandle",
+      "type": "Nat",
+      "kind": "obtain field"
+    },
+    {
+      "scope": "proof obtain resultReadback",
+      "name": "resultEncoded",
+      "type": "encodeNode result = some resultHandle",
+      "kind": "obtain field"
+    },
+    {
+      "scope": "proof obtain resultReadback",
+      "name": "resultDecoded",
+      "type": "lookupNode nativeAfter.native.machine.heap resultHandle = some result",
+      "kind": "obtain field"
+    },
+    {
+      "scope": "proof obtain targetWrite",
+      "name": "writtenHandle",
+      "type": "Nat",
+      "kind": "obtain field"
+    },
+    {
+      "scope": "proof obtain targetWrite",
+      "name": "after",
+      "type": "EnumerationState.State Symbol EnumGuard",
+      "kind": "obtain field"
+    },
+    {
+      "scope": "proof obtain targetWrite",
+      "name": "writtenEncoded",
+      "type": "encodeNode result = some writtenHandle",
+      "kind": "obtain field"
+    },
+    {
+      "scope": "proof obtain targetWrite",
+      "name": "written",
+      "type": "Success (setValue target (.unenumerated (some writtenHandle) (sourceScs ++ targetScs))) before () after",
+      "kind": "obtain field"
+    },
+    {
+      "scope": "proof obtain targetWrite",
+      "name": "afterSame",
+      "type": "after = {before with values := before.values.set target (.unenumerated (some writtenHandle) (sourceScs ++ targetScs))}",
+      "kind": "obtain field"
+    },
+    {
+      "scope": "proof obtain targetWrite",
+      "name": "afterStored",
+      "type": "after.values[target]? = some (.unenumerated (some writtenHandle) (sourceScs ++ targetScs))",
+      "kind": "obtain field"
+    },
+    {
+      "scope": "proof obtain targetWrite",
+      "name": "finalRealized",
+      "type": "PendingRealized nativeAfter.native.machine.heap after",
+      "kind": "obtain field"
+    },
+    {
+      "scope": "proof local have",
+      "name": "decodedRanges",
+      "type": "SourceCurrentAllocatedNativeRequestBounds.WordRanges (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right)) nativeBefore",
+      "kind": "typed have"
+    },
+    {
+      "scope": "proof local have",
+      "name": "atReturned",
+      "type": "PendingRealized nativeAfter.native.machine.heap before",
+      "kind": "typed have"
+    },
+    {
+      "scope": "proof local have",
+      "name": "sameHandle",
+      "type": "writtenHandle = resultHandle",
+      "kind": "typed have"
+    },
+    {
+      "scope": "inline target bound Exists.elim",
+      "name": "bound",
+      "type": "target < before.values.length",
+      "kind": "lambda binder"
+    },
+    {
+      "scope": "inline target bound Exists.elim",
+      "name": "_",
+      "type": "before.values[target]'bound = .unenumerated (some targetHandle) targetScs",
+      "kind": "ignored lambda binder"
+    },
+    {
+      "scope": "inline target bound Exists.elim",
+      "name": "return",
+      "type": "target < before.values.length",
+      "kind": "expression result"
+    },
+    {
+      "scope": "inline API argument",
+      "name": "targetInside",
+      "type": "target < before.values.length",
+      "kind": "expression label, not a proof local declaration"
+    },
+    {
+      "scope": "inline API argument",
+      "name": "entryFrame",
+      "type": "EnumerationCompressionFrame.Frame before before",
+      "kind": "expression label, not a proof local declaration"
+    },
+    {
+      "scope": "inline API argument",
+      "name": "nativeKeeps",
+      "type": "SourceEqualityRequiredCache.Keeps nativeBefore.native.machine.heap nativeAfter.native.machine.heap",
+      "kind": "expression label, not a proof local declaration"
+    },
+    {
+      "scope": "inline API argument",
+      "name": "finalCoherent",
+      "type": "InternedRecordCoherence.Coherent nativeAfter.native.machine.heap",
+      "kind": "expression label, not a proof local declaration"
+    },
+    {
+      "scope": "inline API argument",
+      "name": "resultAvailable",
+      "type": "InternedProbeProvenance.Available nativeAfter.native.machine.heap result",
+      "kind": "expression label, not a proof local declaration"
+    },
+    {
+      "scope": "inline API argument",
+      "name": "resultClosed",
+      "type": "result.free = []",
+      "kind": "expression label, not a proof local declaration"
+    },
+    {
+      "scope": "inline API argument",
+      "name": "encodedIdentity",
+      "type": "writtenHandle = resultHandle",
+      "kind": "expression label, not a proof local declaration"
+    }
+  ],
+  "entry_count": 71,
+  "inline_arguments": [
+    {
+      "label": "targetInside",
+      "expression": "(List.getElem?_eq_some_iff.mp targetStored).elim (fun bound _ => bound)",
+      "type": "target < before.values.length"
+    },
+    {
+      "label": "entryFrame",
+      "expression": "EnumerationCompressionFrame.Frame.refl before",
+      "type": "EnumerationCompressionFrame.Frame before before"
+    },
+    {
+      "label": "nativeKeeps",
+      "expression": "receipt.effects.keeps",
+      "type": "SourceEqualityRequiredCache.Keeps nativeBefore.native.machine.heap nativeAfter.native.machine.heap"
+    },
+    {
+      "label": "finalCoherent",
+      "expression": "receipt.effects.keeps.ready.semantic.1.normal.facts.coherent",
+      "type": "InternedRecordCoherence.Coherent nativeAfter.native.machine.heap"
+    },
+    {
+      "label": "resultAvailable",
+      "expression": "receipt.available",
+      "type": "InternedProbeProvenance.Available nativeAfter.native.machine.heap result"
+    },
+    {
+      "label": "resultClosed",
+      "expression": "receipt.closed",
+      "type": "result.free = []"
+    },
+    {
+      "label": "encodedIdentity",
+      "expression": "Option.some.inj (writtenEncoded.symm.trans resultEncoded)",
+      "type": "writtenHandle = resultHandle"
+    }
+  ],
+  "local_have_count": 3,
+  "local_let_count": 0,
+  "proof_intro_count": 0,
+  "obtain_count": 5,
+  "obtain_field_count": 24,
+  "inline_lambda_count": 1,
+  "inline_lambda_binder_count": 2,
+  "explicit_substitution": "writtenHandle; no new binder introduced",
+  "skipped_fields": []
+}

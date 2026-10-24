@@ -1,0 +1,29 @@
+--- author-drafts/first-substitution-pass/verify.py
++++ selected/verify.py
+@@ -10,7 +10,7 @@
+ parser = argparse.ArgumentParser(description=__doc__)
+ parser.add_argument('--root', type=Path, required=True)
+ root = parser.parse_args().root.resolve()
+-here = root / 'lean/restart-evidence/20261024-pruning-enumeration-ordinary-branches'
++here = root / 'lean/restart-evidence/20261024-pruning-enumeration-intersection-write'
+ baseline = '5678ef1bbd33a9acc0c016ea9bde0debda4922e3'
+ main = '74250bd889685da436cdbfe32ac4b5a0878ffd09'
+ 
+@@ -86,7 +86,7 @@
+     value, ref = line.split()
+     if ref not in ['refs/heads/formalize', 'refs/remotes/origin/formalize'] and not ref.startswith('refs/codex/turn-diffs/'):
+         assert git('rev-parse', ref).decode().strip() == value, ref
+-assert git('rev-parse', 'BACKUP_REF_PENDING').decode().strip() == baseline
++assert git('rev-parse', 'codex/backup-checked-native-result-20261024-1755').decode().strip() == baseline
+ 
+ checks = load('work/build-summary.json')
+ source = (root / 'lean/MicroCFTA/SourcePruningEnumerationIntersectionWrite.lean').read_bytes()
+@@ -199,7 +199,7 @@
+     assert 0 <= usage['age_seconds'] <= 600 and usage['remaining_percent'] > 1
+ for name in ['declaration', 'model', 'public', 'document', 'seal-script', 'root']:
+     assert (here / 'inputs' / ('mcfta-pruning-enumeration-intersection-write-20261024-' + name + '-review.md')).is_file()
+-assert (root / 'lean/notes-current-pruning-enumeration-ordinary-branches.md').read_bytes() == (here / 'current-note.md').read_bytes()
++assert (root / 'lean/notes-current-pruning-enumeration-intersection-write.md').read_bytes() == (here / 'current-note.md').read_bytes()
+ findings = (root / 'FINDINGS.md').read_text().split('## Checked native intersection write into a pending slot', 1)[0]
+ assert '## Haskell fix handoff for external work' in findings and findings.count('| Fixed by ') == 6
+ assert 'All six repairs are in the imported main history.' in findings

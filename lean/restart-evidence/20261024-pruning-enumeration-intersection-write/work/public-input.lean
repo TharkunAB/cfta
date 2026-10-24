@@ -1,0 +1,5 @@
+import MicroCFTA.SourcePruningEnumerationIntersectionWrite
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+#check @MicroCFTA.SourcePruningEnumerationIntersectionWrite.pending_intersection_write
+#print axioms MicroCFTA.SourcePruningEnumerationIntersectionWrite.pending_intersection_write

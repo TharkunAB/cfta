@@ -1,0 +1,35 @@
+--- verify-flat-cuts-candidate.py
++++ verify-before-flat-cuts.py
+@@ -121,27 +121,19 @@
+     data = (here / 'owner-proposal' / name).read_bytes()
+     assert data.decode() == literal
+     assert text.count(literal.rstrip('\n')) == 1
+-source_index = load('owner-proposal/source-index.json')
+-sources = source_index['sources']
++sources = load('owner-proposal/source-index.json')['sources']
+ assert len(sources) == frozen['source_count']
+-source_ids = {}
+ for pin in sources:
+-    assert pin['id'] not in source_ids
+     pinned_path = Path(pin['path'])
+     if pinned_path.is_relative_to('/home/tritlo/Code/mcfta'):
+         pinned_path = root / pinned_path.relative_to('/home/tritlo/Code/mcfta')
+     data = pinned_path.read_bytes()
+     assert data == (here / 'owner-proposal' / pin['snapshot']).read_bytes()
+     assert len(data) == pin['bytes'] and sha(data) == pin['sha256']
+-    source_ids[pin['id']] = (pin['path'], data)
+-assert len(source_index['cuts']) == frozen['cut_count']
+-for cut in source_index['cuts']:
+-    source_path, data = source_ids[cut['source']]
+-    assert cut['path'] == source_path
+-    assert 1 <= cut['start'] <= cut['end'] <= len(data.splitlines())
+-    part = b''.join(data.splitlines(keepends=True)[cut['start'] - 1:cut['end']])
+-    assert part == (here / 'owner-proposal' / cut['snapshot']).read_bytes()
+-    assert len(part) == cut['bytes'] and sha(part) == cut['sha256']
++    for cut in pin['cuts']:
++        part = b''.join(data.splitlines(keepends=True)[cut['start'] - 1:cut['end']])
++        assert part == (here / 'owner-proposal' / cut['snapshot']).read_bytes()
++        assert len(part) == cut['bytes'] and sha(part) == cut['sha256']
+ for pin in load('owner-proposal/import-routes.json')['defining_import_sources']:
+     data = (root / Path(pin['path']).relative_to('/home/tritlo/Code/mcfta')).read_bytes()
+     assert len(data) == pin['bytes'] and sha(data) == pin['sha256']

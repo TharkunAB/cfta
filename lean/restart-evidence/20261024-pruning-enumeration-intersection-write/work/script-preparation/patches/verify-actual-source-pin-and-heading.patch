@@ -1,0 +1,20 @@
+--- author-drafts/before-actual-source-pin-and-heading/verify.py
++++ selected/verify.py
+@@ -200,7 +200,7 @@
+ for name in ['declaration', 'model', 'public', 'document', 'seal-script', 'root']:
+     assert (here / 'inputs' / ('mcfta-pruning-enumeration-intersection-write-20261024-' + name + '-review.md')).is_file()
+ assert (root / 'lean/notes-current-pruning-enumeration-intersection-write.md').read_bytes() == (here / 'current-note.md').read_bytes()
+-findings = (root / 'FINDINGS.md').read_text().split('## Checked native intersection write into a pending slot', 1)[0]
++findings = (root / 'FINDINGS.md').read_text().split('## Checked intersection result in an actual pending slot', 1)[0]
+ assert '## Haskell fix handoff for external work' in findings and findings.count('| Fixed by ') == 6
+ assert 'All six repairs are in the imported main history.' in findings
+ prior = load('previous-publication/remote-publication.json')
+@@ -227,7 +227,7 @@
+ assert [pin['source'] for pin in custody] == summary['next_custody_inputs']
+ assert summary['final_local_publication_attempt'] == 'local-publication-2'
+ assert summary['all_manifest_files_committed'] is True
+-assert sha((here / 'inputs/mcfta-pruning-enumeration-intersection-write-20261024-source-review.md').read_bytes()) == 'SOURCE_REVIEW_SHA_PENDING'
++assert sha((here / 'inputs/mcfta-pruning-enumeration-intersection-write-20261024-source-review.md').read_bytes()) == 'c5a2b24b86f39d11edd08fe859eafcf6b2f7b91723ccb549abdd3d677cb78942'
+ 
+ print(json.dumps(dict(status='PASS', baseline=baseline, main=main, proof=proof,
+     baseline_files=count, unchanged_files=count - len(changed), exact_changed_files=changed,

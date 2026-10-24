@@ -1,0 +1,163 @@
+{
+  "obtain_count": 5,
+  "field_count": 24,
+  "packets": [
+    {
+      "name": "sourceOperand",
+      "api": "PendingRealized applied to sourceStored",
+      "fields": [
+        {
+          "name": "left",
+          "type": "InternedConstructorTemplates.Value Symbol Constraint",
+          "used": true
+        },
+        {
+          "name": "leftDecoded",
+          "type": "lookupNode nativeBefore.native.machine.heap sourceHandle = some left",
+          "used": true
+        },
+        {
+          "name": "leftAvailable",
+          "type": "InternedProbeProvenance.Available nativeBefore.native.machine.heap left",
+          "used": true
+        },
+        {
+          "name": "leftClosed",
+          "type": "left.free = []",
+          "used": true
+        }
+      ],
+      "scope": "pending_intersection_write proof; no separate helper"
+    },
+    {
+      "name": "targetOperand",
+      "api": "PendingRealized applied to targetStored",
+      "fields": [
+        {
+          "name": "right",
+          "type": "InternedConstructorTemplates.Value Symbol Constraint",
+          "used": true
+        },
+        {
+          "name": "rightDecoded",
+          "type": "lookupNode nativeBefore.native.machine.heap targetHandle = some right",
+          "used": true
+        },
+        {
+          "name": "rightAvailable",
+          "type": "InternedProbeProvenance.Available nativeBefore.native.machine.heap right",
+          "used": true
+        },
+        {
+          "name": "rightClosed",
+          "type": "right.free = []",
+          "used": true
+        }
+      ],
+      "scope": "pending_intersection_write proof; no separate helper"
+    },
+    {
+      "name": "computedQuery",
+      "api": "SourceCurrentAllocatedTargetQuery.finite ONCE",
+      "fields": [
+        {
+          "name": "next",
+          "type": "SourceCurrentAllocatedNativeInventoryState.Inventory",
+          "used": true
+        },
+        {
+          "name": "result",
+          "type": "InternedConstructorTemplates.Value Symbol Constraint",
+          "used": true
+        },
+        {
+          "name": "nativeAfter",
+          "type": "SourceEqualityNativeDemand.State width",
+          "used": true
+        },
+        {
+          "name": "nextSource",
+          "type": "next.source = nativeBefore.native.machine.heap",
+          "used": true
+        },
+        {
+          "name": "nextRoots",
+          "type": "next.roots = inventory.roots ++ [left, right]",
+          "used": true
+        },
+        {
+          "name": "receipt",
+          "type": "SourceCurrentAllocatedTargetQuery.Receipt formulas solver next left right nativeBefore result nativeAfter memos",
+          "used": true
+        }
+      ],
+      "scope": "pending_intersection_write proof; no separate helper"
+    },
+    {
+      "name": "resultReadback",
+      "api": "SourcePruningEnumerationNodes.available_readback",
+      "fields": [
+        {
+          "name": "resultHandle",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "resultEncoded",
+          "type": "encodeNode result = some resultHandle",
+          "used": true
+        },
+        {
+          "name": "resultDecoded",
+          "type": "lookupNode nativeAfter.native.machine.heap resultHandle = some result",
+          "used": true
+        }
+      ],
+      "scope": "pending_intersection_write proof; no separate helper"
+    },
+    {
+      "name": "targetWrite",
+      "api": "SourcePruningEnumerationWrites.write_available_realized",
+      "fields": [
+        {
+          "name": "writtenHandle",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "after",
+          "type": "EnumerationState.State Symbol EnumGuard",
+          "used": true
+        },
+        {
+          "name": "writtenEncoded",
+          "type": "encodeNode result = some writtenHandle",
+          "used": true
+        },
+        {
+          "name": "written",
+          "type": "Success (setValue target (.unenumerated (some writtenHandle) (sourceScs ++ targetScs))) before () after",
+          "used": true
+        },
+        {
+          "name": "afterSame",
+          "type": "after = {before with values := before.values.set target (.unenumerated (some writtenHandle) (sourceScs ++ targetScs))}",
+          "used": true
+        },
+        {
+          "name": "afterStored",
+          "type": "after.values[target]? = some (.unenumerated (some writtenHandle) (sourceScs ++ targetScs))",
+          "used": true
+        },
+        {
+          "name": "finalRealized",
+          "type": "PendingRealized nativeAfter.native.machine.heap after",
+          "used": true
+        }
+      ],
+      "scope": "pending_intersection_write proof; no separate helper"
+    }
+  ],
+  "unused_obtain_fields": [],
+  "inline_bound_is_not_obtain": true
+}

@@ -1,0 +1,20 @@
+--- author-drafts/first-substitution-pass/archive.py
++++ selected/archive.py
+@@ -7,7 +7,7 @@
+ 
+ root = Path('/home/tritlo/Code/mcfta')
+ area = Path('/tmp/mcfta-checked-native-result-20261024')
+-evidence = root / 'lean/restart-evidence/20261024-pruning-enumeration-ordinary-branches'
++evidence = root / 'lean/restart-evidence/20261024-pruning-enumeration-intersection-write'
+ assert not evidence.exists()
+ custody = json.loads((area / 'prior-custody-index.json').read_text())
+ assert len(custody) == 39 and len({pin['target'] for pin in custody}) == 39
+@@ -48,7 +48,7 @@
+ production = evidence / 'production-sources'
+ production.mkdir()
+ shutil.copyfile(root / 'lean/MicroCFTA/SourcePruningEnumerationIntersectionWrite.lean', production / 'SourcePruningEnumerationIntersectionWrite.lean')
+-shutil.copyfile(root / 'lean/notes-current-pruning-enumeration-ordinary-branches.md', evidence / 'current-note.md')
++shutil.copyfile(root / 'lean/notes-current-pruning-enumeration-intersection-write.md', evidence / 'current-note.md')
+ shutil.copyfile('/tmp/mcfta-pruning-enumeration-intersection-write-20261024-verify.py', evidence / 'verify-checkpoint.py')
+ (evidence / 'INDEX.md').write_text('# Checked native intersection write into a pending slot\n\nThe producer reads two actual present pending raw slots. It uses the existing\nchecked TargetQuery.finite request once. It writes the computed result handle\nat the actual target slot with source suspended parts before target parts.\nThe same returned native receipt, computed inventory and all PendingRealized\nslots remain. This is a write stage. It does not eliminate the source slot,\nupdate ancestry or waiting state, prove native cached-index extraction, or\ncomplete the terminal callback or shared enumeration driver.\n\nWork retains the exact baseline, actual source and public attempts, complete\nfailed inputs, raw logs, cap receipts and all independent reviews. A failed\nsetup is separate from a Lean attempt. Owner-proposal retains the actual\nfrozen declarations, literal contracts, scoped inventories and source cuts.\nPrevious-publication retains all39 immediate prior custody inputs, including\nboth successful local publication records and the seven log-tracking\ncorrection inputs. The earlier narrower local1 PASS remains historical.\nOnly refs/codex/turn-diffs/ is excluded from fixed-reference equality.\n\nRun verify-checkpoint.py with --root set to the repository root. It checks\nall baseline blobs and modes, nine exact document inverses, one Audit prefix,\nfrozen owner contracts, actual public axiom subsets, receipt sets and the\ncomplete manifest. Stage every manifest path and SHA256SUMS, including\nignored raw logs, before publication. The publication check requires every\nsealed path to be in the actual commit tree and keeps index, HEAD and file\ncontents and modes equal. No future commit or successful check is assumed.\n\nNo Haskell source changes. The six repair handoffs remain first in FINDINGS.\nH6 stays the strongest combined result. The full goal remains ACTIVE and\nincomplete. This producer does not establish the whole native runtime,\nsolver, resource or convergence claim.\n')
+ 

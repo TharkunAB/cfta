@@ -1,0 +1,8 @@
+/-- Physical readiness includes the scope needed by subsequent generated native operands. -/
+structure Ready (state : Checked width) : Prop where
+  good : Good state
+  semantic : SemanticReady state.native.machine.heap
+  costs : CostHeap state.native.machine.heap
+  scopedCache : SourceCurrentAllocatedNativeScopeCache.Scoped state.native
+  idle : SourceRecursiveIntersectionNative.Idle state.native
+

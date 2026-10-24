@@ -1,0 +1,39 @@
+{
+  "status": "ROOT_EXACT_SOURCE_BODY_GATE_PASS",
+  "recorded_at": "2026-10-24T18:22:05.039635+02:00",
+  "owner": "/tmp/mcfta-pruning-enumeration-intersection-write-20261024-proposal",
+  "frozen_sha256": "f9b30ac7057dd0c225f25ba5611104eeb394a958f20d4c6a70c922c7188ad280",
+  "pins_sha256": "55433f2e96a80a857337d5e176d11b486ba9766de127ae09dda20121c8c003f0",
+  "contracts": {
+    "context.lean.txt": "import MicroCFTA.SourceCurrentAllocatedTargetQuery\nimport MicroCFTA.SourcePruningEnumerationWrites\n\nnamespace MicroCFTA.SourcePruningEnumerationIntersectionWrite\nopen EnumerationState EnumerationCorrectness\nopen SourcePruningEnumerationNodes SourcePruningEnumerationObservation\nlocal notation \"Symbol\" => SourcePruningTemplates.Symbol\nlocal notation \"Constraint\" => SourceSymbolicIndex.Constraint FullSyntax.Formula\nvariable {EnumGuard : Type} {width : Nat}\n",
+    "public-complete.lean.txt": "/-- Install the computed checked intersection of two actual pending slots. -/\ntheorem pending_intersection_write\n    [DecidableEq Symbol] [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)]\n    (formulas : SourceGuards.Formulas FullSyntax.Formula)\n    (solver : SourceGuards.Entailment FullSyntax.Formula)\n    (inventory : SourceCurrentAllocatedNativeInventoryState.Inventory)\n    (nativeBefore : SourceEqualityNativeDemand.State width)\n    (before : EnumerationState.State Symbol EnumGuard)\n    (source target sourceHandle targetHandle : Nat)\n    (sourceScs targetScs : List EnumerationState.Suspended)\n    (ready : SourceCurrentConjunctionClassScan.Ready nativeBefore)\n    (admitted : SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory nativeBefore)\n    (memos : EndpointMemoGateTrace.Memos)\n    (globals : EndpointMemoGateTrace.Valid nativeBefore.native.machine.heap memos)\n    (realized : PendingRealized nativeBefore.native.machine.heap before)\n    (sourceStored : before.values[source]? = some (.unenumerated (some sourceHandle) sourceScs))\n    (targetStored : before.values[target]? = some (.unenumerated (some targetHandle) targetScs))\n    (ranges : match lookupNode nativeBefore.native.machine.heap sourceHandle,\n        lookupNode nativeBefore.native.machine.heap targetHandle with\n      | some left, some right => SourceCurrentAllocatedNativeRequestBounds.WordRanges\n          (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right)) nativeBefore\n      | _, _ => True) :\n    \u2203 (left right : InternedConstructorTemplates.Value Symbol Constraint)\n      (next : SourceCurrentAllocatedNativeInventoryState.Inventory)\n      (result : InternedConstructorTemplates.Value Symbol Constraint)\n      (nativeAfter : SourceEqualityNativeDemand.State width) (resultHandle : Nat)\n      (after : EnumerationState.State Symbol EnumGuard),\n      lookupNode nativeBefore.native.machine.heap sourceHandle = some left \u2227\n      lookupNode nativeBefore.native.machine.heap targetHandle = some right \u2227\n      next.source = nativeBefore.native.machine.heap \u2227 next.roots = inventory.roots ++ [left, right] \u2227\n      SourceCurrentAllocatedTargetQuery.Receipt formulas solver next left right nativeBefore result nativeAfter memos \u2227\n      encodeNode result = some resultHandle \u2227 lookupNode nativeAfter.native.machine.heap resultHandle = some result \u2227\n      Success (setValue target (.unenumerated (some resultHandle) (sourceScs ++ targetScs))) before () after \u2227\n      after = {before with values := before.values.set target (.unenumerated (some resultHandle) (sourceScs ++ targetScs))} \u2227\n      after.values[target]? = some (.unenumerated (some resultHandle) (sourceScs ++ targetScs)) \u2227\n      PendingRealized nativeAfter.native.machine.heap after\n",
+    "local-ranges.lean.txt": "have decodedRanges : SourceCurrentAllocatedNativeRequestBounds.WordRanges\n      (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right)) nativeBefore\n",
+    "local-realized.lean.txt": "have atReturned : PendingRealized nativeAfter.native.machine.heap before\n",
+    "local-handle.lean.txt": "have sameHandle : writtenHandle = resultHandle\n"
+  },
+  "reviews": {
+    "declaration": "bc85c5c749fe6691d6d40e7d23e676f884db6b56a3ff01b100345de90114a254",
+    "source": "c5a2b24b86f39d11edd08fe859eafcf6b2f7b91723ccb549abdd3d677cb78942",
+    "seal-script": "53a3e1bf1a8a662b1bdd26f58f648dd07a4bd250c573ac62127acddba36359f2"
+  },
+  "root_integrity_record_sha256": "dc2ace6f47f4ee1a4f14c0d7b358a6f5e330817580aca5aa96b7b9fa0d902438",
+  "root_full_read": [
+    "all5 literal contracts49lines",
+    "all71 scoped types and5obtains24fields",
+    "all24 source cuts347lines and actual19wholes",
+    "all17 routes33 defining identities",
+    "all468 selected script lines by exact unchanged-source and patch reconstruction",
+    "complete declaration/source/script reviews",
+    "original frozen preparation and separate exact schema correction",
+    "three corrective preflights and Root document templates"
+  ],
+  "hard_cap": 180,
+  "new_helpers": 0,
+  "new_instances": 0,
+  "new_actions": 0,
+  "induction_count": 0,
+  "body_or_compiler_started": false,
+  "active_verifier_sha256": "00533e3308632e5fc4ae71b4929bb32f29ab4d637b1530f82eda4da51da468e6",
+  "metadata_diagnostic_retained": true,
+  "goal": "ACTIVE_INCOMPLETE"
+}
