@@ -1,0 +1,9 @@
+# Exact public consumer
+
+The input has the incoming Metadata Typing, original raw uv, native Ready heap, PendingRealized before, genuine Total before.representatives, actual pending getValue success before→readAfter and full Frame readAfter→entry. EnumGuard and NativeGuard remain independent. No oldValue, desired result, next heap, encoding law, second success, typing law or final certificate is supplied.
+
+The conclusion derives the complete oldValue, its actual lookup/encoding/availability/closedness, one outer narrow done run and same chosen-run larger-fuel law, actual nextHeap/Keeps, complete result availability/closedness and computed readback, retained old lookup, first-read Frame and all realized entry slots. It retains the entire existing inner Empty/equal/changed packet: Empty rejects, surviving equal handles imply full Value equality plus pure at entry, and surviving changed handles expose the actual second read Q and actual write F, exact slot/bound/final state, realization and literal bind success. No full Frame crosses the changed values write.
+
+Mu is classified before raw type membership, after deriving oldValue from the actual first read. Each bypass returns the original native heap/value/handle and actual entry state; neither invokes native narrowing or the inner theorem. Only fallback invokes the existing inner theorem, on the same observed read. Its oldValue witness is identified by the same lookup. No native construction, observer or changed-write proof is duplicated.
+
+This is a pre-oracle explicit-heap consumer. It does not claim native NodeId extraction, real IntSet/cache maintenance, whole graph/Until coupling, concrete typing/key/unifier/fits/admits soundness, full typedTypes/pruning/driver correctness, resources or convergence. H6 and the full goal remain unchanged.

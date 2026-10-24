@@ -1,0 +1,19 @@
+    (observed : Success (EnumerationDriver.checkRepeated graph fuel uv node scs) before false after) :
+    Frame before after := by
+  cases view : graph.node node with
+  | empty | alternatives _ | unresolved _ =>
+      exact pure_frame false false before after (by
+        simpa only [EnumerationDriver.checkRepeated, view] using observed)
+  | recursive _ =>
+      simp only [EnumerationDriver.checkRepeated, view] at observed
+      obtain ⟨root, resolved, resolution, continued⟩ := (success_bind _ _ _ _ _).mp observed
+      by_cases seen : recursionKey node scs ∈ resolved.recursionAncestry root
+      · simp [Success, setValue, get, getThe, MonadStateOf.get, modify, modifyGet,
+          MonadStateOf.modifyGet, bind, pure, StateT.pure, StateT.bind, StateT.get, StateT.modifyGet,
+          ExceptT.bind, ExceptT.pure, ExceptT.bindCont, ExceptT.mk, ExceptT.run, seen] at continued
+      · have same : after = resolved := by
+          simpa [Success, get, getThe, MonadStateOf.get, bind, pure, StateT.pure, StateT.bind,
+            StateT.get, ExceptT.bind, ExceptT.pure, ExceptT.bindCont, ExceptT.mk,
+            ExceptT.run, seen, eq_comm] using continued
+        subst after
+        exact representative_frame fuel uv root before resolved total resolution

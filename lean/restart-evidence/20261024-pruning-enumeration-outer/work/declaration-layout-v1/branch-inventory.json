@@ -1,0 +1,80 @@
+{
+  "prefix_order": [
+    "actual getValue_success inversion",
+    "realized gives oldValue/lookup/Available/closed",
+    "oldEncoded via genuine Ready coherence",
+    "firstFrame from actual read",
+    "entryRealized for unchanged native heap via full Frame B E"
+  ],
+  "branches": [
+    {
+      "scope": "mu.pos",
+      "fact": "∃ entry body depthShape ordinaryShape, oldValue = .mu entry body depthShape ordinaryShape",
+      "introduced_fields": [
+        [
+          "muEntry",
+          "Cache.Interned InternedBinderProtocol.NodeKey"
+        ],
+        [
+          "muBody",
+          "InternedConstructorTemplates.Value Symbol NativeGuard"
+        ],
+        [
+          "muDepthShape",
+          "InternedConstructorTemplates.Value Symbol NativeGuard"
+        ],
+        [
+          "muOrdinaryShape",
+          "InternedConstructorTemplates.Value Symbol NativeGuard"
+        ],
+        [
+          "oldShape",
+          "oldValue = .mu muEntry muBody muDepthShape muOrdinaryShape"
+        ]
+      ],
+      "native_result": "oldValue",
+      "native_fuel": 0,
+      "native_after": "heap",
+      "encoded_handle": "oldHandle",
+      "enumeration_effects": "Empty rejects; surviving equal uses pure at entry; changed implication is impossible by changed rfl.",
+      "allowed_native_calls": [],
+      "outer_run_equation": "Mu-only outer equation using oldShape",
+      "keep_source": "pure_keeps heap ready"
+    },
+    {
+      "scope": "mu.neg/inTypes.pos",
+      "facts": [
+        "¬ ∃ entry body depthShape ordinaryShape, oldValue = .mu entry body depthShape ordinaryShape",
+        "uv ∈ metadata.types"
+      ],
+      "native_result": "oldValue",
+      "native_fuel": 0,
+      "native_after": "heap",
+      "encoded_handle": "oldHandle",
+      "enumeration_effects": "Empty rejects FIRST; surviving equal uses pure at entry; changed implication is impossible.",
+      "allowed_native_calls": [],
+      "outer_run_equation": "outer narrow_type for arbitrary actual oldValue",
+      "keep_source": "pure_keeps heap ready"
+    },
+    {
+      "scope": "mu.neg/inTypes.neg",
+      "facts": [
+        "¬ ∃ entry body depthShape ordinaryShape, oldValue = .mu entry body depthShape ordinaryShape",
+        "uv ∉ metadata.types"
+      ],
+      "native_run_source": "ONE inner narrow_pending_complete at holeKey metadata.typing uv",
+      "old_value_identification": "innerDecoded and oldDecoded of the SAME lookupNode heap oldHandle; then subst innerOld only",
+      "retained_packet": "All inner fields; only narrowAt run/stable equations are rewritten to outer.narrow",
+      "Q_and_F": "Only surviving changedBranch has actual second read Q and actual write final F; preserve both whole.",
+      "frame_boundary": "Frame entry Q and before Q, never Frame entry final or before final."
+    }
+  ],
+  "calls_forbidden": [
+    "inner theorem or narrowAt on either bypass",
+    "outer narrow_complete in addition to fallback packet",
+    "second physical getValue observation",
+    "new representative execution outside retained changed branch",
+    "assuming final desired run/heap or graph classification equality"
+  ],
+  "proof_only_classification": "Exact Mu existential, then incoming raw uv membership. No new predicate or action is defined."
+}

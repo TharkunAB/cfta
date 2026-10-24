@@ -1,0 +1,34 @@
+theorem pending_reread_complete (readFuel uv oldHandle : Nat) (scs : List EnumerationState.Suspended)
+    (before readAfter entry : EnumerationState.State Symbol Guard)
+    (total : UnionFind.Total before.representatives)
+    (observed : Success (getValue readFuel uv) before (.unenumerated (some oldHandle) scs) readAfter)
+    (entered : Frame readAfter entry) :
+    ∃ (root size rereadFuel : Nat) (after : EnumerationState.State Symbol Guard),
+      Frame before readAfter ∧ UnionFind.Reaches before.representatives uv root size ∧
+      Success (representative rereadFuel uv) entry root after ∧
+      Frame entry after ∧ Frame before after ∧
+      after.values[root]? = some (.unenumerated (some oldHandle) scs) ∧ root < after.values.length := by
+  obtain ⟨found, lookup, initialStored, readState⟩ :=
+    (getValue_success readFuel uv before readAfter (.unenumerated (some oldHandle) scs)).mp observed
+  have firstRepresentative : Success (representative readFuel uv) before found.representative readAfter := by
+    exact (EnumerationSchedule.representative_success readFuel uv before readAfter found.representative).mpr
+      ⟨found, lookup, rfl, readState⟩
+  have firstFrame : Frame before readAfter := by
+    exact representative_frame readFuel uv found.representative before readAfter total firstRepresentative
+  obtain ⟨rereadFuel, after, second, finalFrame⟩ :=
+    representative_transport readFuel uv before entry readAfter found.representative
+      (firstFrame.trans entered) total firstRepresentative
+  have rereadFrame : Frame entry after := by
+    exact representative_frame rereadFuel uv found.representative entry after
+      ((firstFrame.trans entered).total total) second
+  have stored : after.values[found.representative]? = some (.unenumerated (some oldHandle) scs) := by
+    simpa only [(firstFrame.trans finalFrame).values] using initialStored
+  refine ⟨found.representative, found.size, rereadFuel, after, firstFrame,
+    (UnionFind.findRoot_correct readFuel before.representatives uv found lookup).1,
+    second, rereadFrame, firstFrame.trans finalFrame, stored, ?_⟩
+  exact (List.getElem?_eq_some_iff.mp stored).elim (fun bound _ => bound)
+
+/-- An actual false recursion check retains the complete compression frame. -/
+theorem checkRepeated_false_frame (graph : EnumerationState.Graph Symbol Guard)
+    (fuel uv node : Nat) (scs : List EnumerationState.Suspended)
+    (before after : EnumerationState.State Symbol Guard) (total : UnionFind.Total before.representatives)

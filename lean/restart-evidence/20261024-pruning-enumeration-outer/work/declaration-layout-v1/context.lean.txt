@@ -1,0 +1,14 @@
+import MicroCFTA.SourcePruningOuterNarrow
+import MicroCFTA.SourcePruningEnumerationNarrowing
+
+namespace MicroCFTA.SourcePruningEnumerationOuter
+open EnumerationState EnumerationCorrectness EnumerationCompressionFrame
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+open SourcePruningRecordTypes (Metadata)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+variable {EnumGuard NativeGuard Typing Key : Type}
+
+local instance outerMonadList : Monad List where
+  pure value := [value]
+  bind values continuation := values.flatMap continuation

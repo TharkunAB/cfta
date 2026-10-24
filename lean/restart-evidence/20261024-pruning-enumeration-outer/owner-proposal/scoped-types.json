@@ -1,0 +1,331 @@
+{
+  "all_public_parameters": "Exact typed context/public-header STRING fragments",
+  "haves": [
+    {
+      "name": "oldEncoded",
+      "type": "encodeNode oldValue = some oldHandle",
+      "scope": "common prefix after oldValue derived",
+      "fragment": "local-oldEncoded.lean.txt",
+      "api": "SourcePruningEnumerationIdentity.lookup_encode heap oldHandle oldValue ready.semantic.1.normal.facts.coherent oldDecoded"
+    },
+    {
+      "name": "firstFrame",
+      "type": "Frame before readAfter",
+      "scope": "common prefix after actual first observation",
+      "fragment": "local-firstFrame.lean.txt",
+      "api": "(EnumerationCompressionFrame.getValue_frame readFuel uv before readAfter (.unenumerated (some oldHandle) scs) total observed).1"
+    },
+    {
+      "name": "entryRealized",
+      "type": "PendingRealized heap entry",
+      "scope": "common prefix, used by bypasses",
+      "fragment": "local-entryRealized.lean.txt",
+      "api": "realized_preserved heap heap before entry realized (firstFrame.trans entered) (SourceEqualityRequiredCache.pure_keeps heap ready)"
+    },
+    {
+      "name": "notMu",
+      "type": "∀ entry body depthShape ordinaryShape, oldValue ≠ .mu entry body depthShape ordinaryShape",
+      "scope": "mu.neg/inTypes.neg",
+      "fragment": "local-notMu.lean.txt",
+      "derived_from": "negative Mu existential condition"
+    },
+    {
+      "name": "oldSame",
+      "type": "innerOld = oldValue",
+      "scope": "mu.neg/inTypes.neg after same inner packet",
+      "fragment": "local-oldSame.lean.txt",
+      "api": "Option.some.inj (innerDecoded.symm.trans oldDecoded)"
+    },
+    {
+      "name": "narrowed",
+      "type": "SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue heap = .done result nextHeap",
+      "scope": "mu.neg/inTypes.neg after subst innerOld",
+      "fragment": "local-narrowed.lean.txt",
+      "api": "outer narrow_fallback plus innerNarrowed"
+    },
+    {
+      "name": "stable",
+      "type": "∀ extra, SourcePruningOuterNarrow.narrow holeKey fits admits metadata (nativeFuel + extra) uv oldValue heap = .done result nextHeap",
+      "scope": "mu.neg/inTypes.neg after subst innerOld",
+      "fragment": "local-stable.lean.txt",
+      "api": "outer narrow_fallback for nativeFuel+extra plus innerStable extra"
+    }
+  ],
+  "obtains_reference": "obtain-inventory.json contains all36 exact introduced fields and post-substitution packet types",
+  "condition_facts": [
+    {
+      "name": "mu",
+      "positive_type": "∃ entry body depthShape ordinaryShape, oldValue = .mu entry body depthShape ordinaryShape",
+      "negative_type": "¬ ∃ entry body depthShape ordinaryShape, oldValue = .mu entry body depthShape ordinaryShape",
+      "existential_binder_types": [
+        {
+          "name": "entry",
+          "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+        },
+        {
+          "name": "body",
+          "type": "InternedConstructorTemplates.Value Symbol NativeGuard"
+        },
+        {
+          "name": "depthShape",
+          "type": "InternedConstructorTemplates.Value Symbol NativeGuard"
+        },
+        {
+          "name": "ordinaryShape",
+          "type": "InternedConstructorTemplates.Value Symbol NativeGuard"
+        }
+      ],
+      "activation": "AFTER actual oldValue derive and prefix haves",
+      "fragment": "condition-mu.lean.txt",
+      "order": 1
+    },
+    {
+      "name": "inTypes",
+      "positive_type": "uv ∈ metadata.types",
+      "negative_type": "uv ∉ metadata.types",
+      "activation": "Only mu.neg",
+      "fragment": "condition-inTypes.lean.txt",
+      "order": 2
+    }
+  ],
+  "intros_and_lambdas": [
+    {
+      "scope": "mu.pos/fuel-retention",
+      "name": "extra",
+      "type": "Nat",
+      "role": "proof intro/lambda"
+    },
+    {
+      "scope": "mu.pos/surviving-old",
+      "name": "survives",
+      "type": "oldValue ≠ .empty",
+      "role": "proof intro/lambda"
+    },
+    {
+      "scope": "mu.pos/Empty-reject",
+      "name": "_emptyResult",
+      "type": "oldValue = .empty",
+      "role": "proof intro/lambda"
+    },
+    {
+      "scope": "mu.pos/equal-surviving",
+      "name": "_nonempty",
+      "type": "oldValue ≠ .empty",
+      "role": "proof intro/lambda"
+    },
+    {
+      "scope": "mu.pos/equal-surviving",
+      "name": "_sameHandle",
+      "type": "oldHandle = oldHandle",
+      "role": "proof intro/lambda"
+    },
+    {
+      "scope": "mu.pos/changed-surviving",
+      "name": "_nonempty",
+      "type": "oldValue ≠ .empty",
+      "role": "proof intro/lambda"
+    },
+    {
+      "scope": "mu.pos/changed-surviving",
+      "name": "changed",
+      "type": "oldHandle ≠ oldHandle",
+      "role": "proof intro/lambda"
+    },
+    {
+      "scope": "mu.neg/inTypes.pos/fuel-retention",
+      "name": "extra",
+      "type": "Nat",
+      "role": "proof intro/lambda"
+    },
+    {
+      "scope": "mu.neg/inTypes.pos/surviving-old",
+      "name": "survives",
+      "type": "oldValue ≠ .empty",
+      "role": "proof intro/lambda"
+    },
+    {
+      "scope": "mu.neg/inTypes.pos/Empty-reject",
+      "name": "_emptyResult",
+      "type": "oldValue = .empty",
+      "role": "proof intro/lambda"
+    },
+    {
+      "scope": "mu.neg/inTypes.pos/equal-surviving",
+      "name": "_nonempty",
+      "type": "oldValue ≠ .empty",
+      "role": "proof intro/lambda"
+    },
+    {
+      "scope": "mu.neg/inTypes.pos/equal-surviving",
+      "name": "_sameHandle",
+      "type": "oldHandle = oldHandle",
+      "role": "proof intro/lambda"
+    },
+    {
+      "scope": "mu.neg/inTypes.pos/changed-surviving",
+      "name": "_nonempty",
+      "type": "oldValue ≠ .empty",
+      "role": "proof intro/lambda"
+    },
+    {
+      "scope": "mu.neg/inTypes.pos/changed-surviving",
+      "name": "changed",
+      "type": "oldHandle ≠ oldHandle",
+      "role": "proof intro/lambda"
+    },
+    {
+      "scope": "mu.neg/inTypes.neg/notMu proof",
+      "name": "muEntry",
+      "type": "Cache.Interned InternedBinderProtocol.NodeKey",
+      "role": "proof intro"
+    },
+    {
+      "scope": "mu.neg/inTypes.neg/notMu proof",
+      "name": "muBody",
+      "type": "InternedConstructorTemplates.Value Symbol NativeGuard",
+      "role": "proof intro"
+    },
+    {
+      "scope": "mu.neg/inTypes.neg/notMu proof",
+      "name": "muDepthShape",
+      "type": "InternedConstructorTemplates.Value Symbol NativeGuard",
+      "role": "proof intro"
+    },
+    {
+      "scope": "mu.neg/inTypes.neg/notMu proof",
+      "name": "muOrdinaryShape",
+      "type": "InternedConstructorTemplates.Value Symbol NativeGuard",
+      "role": "proof intro"
+    },
+    {
+      "scope": "mu.neg/inTypes.neg/notMu proof",
+      "name": "sameShape",
+      "type": "oldValue = .mu muEntry muBody muDepthShape muOrdinaryShape",
+      "role": "proof intro"
+    },
+    {
+      "scope": "mu.neg/inTypes.neg/stable proof",
+      "name": "extra",
+      "type": "Nat",
+      "role": "proof intro"
+    }
+  ],
+  "public_result_binders": [
+    {
+      "scope": "public existential output",
+      "name": "oldValue",
+      "type": "InternedConstructorTemplates.Value Symbol NativeGuard"
+    },
+    {
+      "scope": "public existential output",
+      "name": "result",
+      "type": "InternedConstructorTemplates.Value Symbol NativeGuard"
+    },
+    {
+      "scope": "public existential output",
+      "name": "nativeFuel",
+      "type": "Nat"
+    },
+    {
+      "scope": "public existential output",
+      "name": "nextHeap",
+      "type": "InternedConstructorTemplates.State Symbol NativeGuard"
+    },
+    {
+      "scope": "public existential output",
+      "name": "newHandle",
+      "type": "Nat"
+    },
+    {
+      "scope": "public larger-fuel forall",
+      "name": "extra",
+      "type": "Nat"
+    },
+    {
+      "scope": "public Empty-rejection existential",
+      "name": "final",
+      "type": "EnumerationState.State Symbol EnumGuard"
+    },
+    {
+      "scope": "public changed result existential",
+      "name": "root",
+      "type": "Nat"
+    },
+    {
+      "scope": "public changed result existential",
+      "name": "size",
+      "type": "Nat"
+    },
+    {
+      "scope": "public changed result existential",
+      "name": "rereadFuel",
+      "type": "Nat"
+    },
+    {
+      "scope": "public changed result existential",
+      "name": "rereadAfter",
+      "type": "EnumerationState.State Symbol EnumGuard"
+    },
+    {
+      "scope": "public changed result existential",
+      "name": "final",
+      "type": "EnumerationState.State Symbol EnumGuard"
+    },
+    {
+      "scope": "public literal bind lambda",
+      "name": "selected",
+      "type": "Nat"
+    }
+  ],
+  "local_instances": [
+    {
+      "name": "outerMonadList",
+      "type": "Monad.{u, u} List",
+      "universe_parameters": [
+        "u"
+      ],
+      "scope": "namespace LOCAL only",
+      "fragment": "context.lean.txt",
+      "fields": [
+        {
+          "name": "pure",
+          "type": "{α : Type u} → α → List α",
+          "binders": [
+            {
+              "name": "value",
+              "type": "α"
+            }
+          ]
+        },
+        {
+          "name": "bind",
+          "type": "{α β : Type u} → List α → (α → List β) → List β",
+          "binders": [
+            {
+              "name": "values",
+              "type": "List α"
+            },
+            {
+              "name": "continuation",
+              "type": "α → List β"
+            }
+          ]
+        }
+      ],
+      "source_convention": "Existing SourcePruningEnumerationNarrowing context and EnumerationCorrectness/State singleton+flatMap instances; no LawfulMonad proof needed for the retained Success terms."
+    }
+  ],
+  "classical_tactic": {
+    "fragment": "local-classical.lean.txt",
+    "scope": "theorem body only; supplies proposition decidability for the derived Mu existential",
+    "new_instance_declarations": 0,
+    "new_public_premises": 0
+  },
+  "lets": [],
+  "typed_show": [],
+  "constructor_case_analysis": [],
+  "named_case_equations": [],
+  "IH": null,
+  "induction": null,
+  "recursion": null
+}

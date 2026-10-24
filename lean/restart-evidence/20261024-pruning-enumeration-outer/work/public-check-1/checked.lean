@@ -1,0 +1,7 @@
+import MicroCFTA.SourcePruningEnumerationOuter
+
+set_option pp.deepTerms true
+set_option pp.maxSteps 100000
+
+#check @MicroCFTA.SourcePruningEnumerationOuter.narrow_pending_complete
+#print axioms MicroCFTA.SourcePruningEnumerationOuter.narrow_pending_complete
