@@ -1,0 +1,7 @@
+import MicroCFTA.SourcePruningEnumerationOrdinaryBranches
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+#check @MicroCFTA.SourcePruningEnumerationOrdinaryBranches.run
+#print axioms MicroCFTA.SourcePruningEnumerationOrdinaryBranches.run
+#check @MicroCFTA.SourcePruningEnumerationOrdinaryBranches.run_complete
+#print axioms MicroCFTA.SourcePruningEnumerationOrdinaryBranches.run_complete

@@ -1,0 +1,1 @@
+Before freeze, extend the actual PendingRealized definition cut9–22 to9–25 so the existential complete-value/lookup/Available/free tail is included. Keep the original shorter cut and source-index here. Full source snapshot and all declarations/types remain unchanged. No compiler/parser ran.

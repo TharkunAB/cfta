@@ -1,0 +1,8 @@
+-- | One branch for each element, in order.
+branches :: [a] -> EnumerateM symbol a
+{-# INLINE branches #-}
+branches xs = EnumerateM $ \s success later -> foldr (\x rest -> success x s rest) later xs
+
+-- | The result and the final state of every branch, in order, lazily.
+allBranches :: EnumerateM symbol a -> EnumerationState symbol -> [(a, EnumerationState symbol)]
+allBranches (EnumerateM m) s = m s (\a s' rest -> (a, s') : rest) []

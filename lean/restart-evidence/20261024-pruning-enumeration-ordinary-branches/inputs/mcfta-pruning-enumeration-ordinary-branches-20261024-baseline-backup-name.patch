@@ -1,0 +1,13 @@
+--- before-execution
++++ exact-new-backup
+@@ -14,8 +14,8 @@
+ assert head == 'f1fa0c1da7a6f9a0bf9948b1a328249a25907fe7'
+ assert main == '74250bd889685da436cdbfe32ac4b5a0878ffd09'
+ assert not git('status', '--porcelain')
+-git('branch', 'codex/backup-pruning-enumeration-raw-exact-20261024-1654', head)
+-assert git('rev-parse', 'codex/backup-pruning-enumeration-raw-exact-20261024-1654').decode().strip() == head
++git('branch', 'codex/backup-pruning-enumeration-ordinary-branches-20261024-1654', head)
++assert git('rev-parse', 'codex/backup-pruning-enumeration-ordinary-branches-20261024-1654').decode().strip() == head
+ tree = git('ls-tree', '-r', '-z', head)
+ (area / 'baseline-tree.txt').write_bytes(tree)
+ for name, args in [('refs', ('for-each-ref', '--format=%(objectname) %(refname)')),

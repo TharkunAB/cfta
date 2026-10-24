@@ -1,0 +1,14 @@
+Storage bounds supply finite observations and persist through actual reads.
+Slot-write producers and native representation correspondence remain separate.
+-/
+namespace MicroCFTA.SourcePruningEnumerationObservation
+open EnumerationState EnumerationCorrectness EnumerationCompressionFrame EnumerationObservations
+open SourcePruningEnumerationNodes
+local notation "Symbol" => SourcePruningTemplates.Symbol
+variable {EnumGuard NativeGuard : Type}
+
+/-- Each stored pending handle decodes to a closed available interned value. -/
+def PendingRealized (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (state : EnumerationState.State Symbol EnumGuard) : Prop :=
+  ∀ (slot node : Nat) (scs : List EnumerationState.Suspended),
+    state.values[slot]? = some (.unenumerated (some node) scs) →

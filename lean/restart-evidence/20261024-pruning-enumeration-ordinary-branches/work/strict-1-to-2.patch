@@ -1,0 +1,54 @@
+--- strict-1.lean
++++ strict-2.lean
+@@ -48,7 +48,7 @@
+                 SourcePruningEnumerationObservation.PendingRealized heap after
+         else rows = []) selectedEdges branchRows ∧
+       run scs selectedEdges before = branchRows.flatten := by
+-  induction selectedEdges generalizing selected with
++  induction selectedEdges with
+   | nil => exact ⟨[], .nil, rfl⟩
+   | cons edge rest ih =>
+     have selectedHead : edge ∈ storedEdges := by
+@@ -57,19 +57,20 @@
+       intro edge member
+       exact selected edge (List.mem_cons_of_mem _ member)
+     obtain ⟨tailRows, tailRelated, tailRaw⟩ := ih selectedTail
+-    have consRaw : run scs (edge :: rest) before =
+-      ((match SourcePruningEnumerationEdgeTraversal.prepare scs edge with
++    have consRaw : ExceptT.run (run scs (edge :: rest) before) =
++      ExceptT.run ((match SourcePruningEnumerationEdgeTraversal.prepare scs edge with
+         | none => (pure none : EnumerateM Symbol Constraint (Option (Option (Fragments.Fragment Symbol))))
+         | some action => action >>= fun result => pure (some result)) before) ++
+-      run scs rest before := by
+-      rfl
++      ExceptT.run (run scs rest before) := by
++      simp only [run, run_bind, choose, ExceptT.run, List.map_cons, List.flatMap_cons]
+     by_cases allowed : arityAllows edge.children.length scs = true
+     ·
+       cases projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+       | none =>
+         refine ⟨[.ok (none, before)] :: tailRows, .cons ?_ tailRelated, ?_⟩
+         · simp only [allowed, ↓reduceIte, projected]
+-        · rw [consRaw, tailRaw]
++        · change ExceptT.run (run scs (edge :: rest) before) = _
++          rw [consRaw, tailRaw]
+           simp only [SourcePruningEnumerationEdgeTraversal.prepare,
+             SourcePruningEnumerationEdgePrefix.prepare, allowed, ↓reduceIte, projected]
+           rfl
+@@ -90,12 +91,14 @@
+           .cons ?_ tailRelated, ?_⟩
+         · simp only [allowed, ↓reduceIte, projected]
+           exact ⟨action, _, after, prepared, observed, rfl, afterAligned, afterRealized⟩
+-        · rw [consRaw, prepared]
++        · change ExceptT.run (run scs (edge :: rest) before) = _
++          rw [consRaw, prepared]
+           rw [bind_single _ _ before after _ actionRaw, tailRaw]
+           rfl
+     · refine ⟨[] :: tailRows, .cons ?_ tailRelated, ?_⟩
+       · simp only [allowed, Bool.false_eq_true, ↓reduceIte]
+-      · rw [consRaw, tailRaw]
++      · change ExceptT.run (run scs (edge :: rest) before) = _
++        rw [consRaw, tailRaw]
+         simp only [SourcePruningEnumerationEdgeTraversal.prepare,
+           SourcePruningEnumerationEdgePrefix.prepare, allowed, Bool.false_eq_true, ↓reduceIte]
+         rfl

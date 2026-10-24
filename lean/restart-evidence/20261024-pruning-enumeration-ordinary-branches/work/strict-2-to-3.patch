@@ -1,0 +1,22 @@
+--- strict-2.lean
++++ strict-3.lean
+@@ -62,7 +62,9 @@
+         | none => (pure none : EnumerateM Symbol Constraint (Option (Option (Fragments.Fragment Symbol))))
+         | some action => action >>= fun result => pure (some result)) before) ++
+       ExceptT.run (run scs rest before) := by
+-      simp only [run, run_bind, choose, ExceptT.run, List.map_cons, List.flatMap_cons]
++      unfold run
++      rw [run_bind, run_bind]
++      simp only [choose, ExceptT.run, List.map_cons, List.flatMap_cons]
+     by_cases allowed : arityAllows edge.children.length scs = true
+     ·
+       cases projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+@@ -93,6 +95,8 @@
+           exact ⟨action, _, after, prepared, observed, rfl, afterAligned, afterRealized⟩
+         · change ExceptT.run (run scs (edge :: rest) before) = _
+           rw [consRaw, prepared]
++          change ExceptT.run ((action >>= fun result => pure (some result)) before) ++
++            ExceptT.run (run scs rest before) = _
+           rw [bind_single _ _ before after _ actionRaw, tailRaw]
+           rfl
+     · refine ⟨[] :: tailRows, .cons ?_ tailRelated, ?_⟩

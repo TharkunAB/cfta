@@ -1,0 +1,22 @@
+@[simp, grind =] theorem flatten_nil : List.flatten ([] : List (List α)) = [] := rfl
+@[simp, grind =] theorem flatten_cons : (l :: L).flatten = l ++ L.flatten := rfl
+
+/-! ### singleton -/
+
+/--
+Constructs a single-element list.
+
+Examples:
+ * `List.singleton 5 = [5]`.
+ * `List.singleton "green" = ["green"]`.
+ * `List.singleton [1, 2, 3] = [[1, 2, 3]]`
+-/
+@[inline] protected def singleton {α : Type u} (a : α) : List α := [a]
+
+/-! ### flatMap -/
+
+@[simp, grind =] theorem flatMap_nil {f : α → List β} : List.flatMap f [] = [] := by simp [List.flatMap]
+@[simp, grind =] theorem flatMap_cons {x : α} {xs : List α} {f : α → List β} :
+  List.flatMap f (x :: xs) = f x ++ List.flatMap f xs := by simp [List.flatMap]
+
+@[simp, grind _=_] theorem flatMap_append {xs ys : List α} {f : α → List β} :

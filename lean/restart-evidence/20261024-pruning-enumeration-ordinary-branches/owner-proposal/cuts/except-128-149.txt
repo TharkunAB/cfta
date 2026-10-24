@@ -1,0 +1,22 @@
+/--
+Adds exceptions of type `ε` to a monad `m`.
+-/
+@[implicit_reducible] def ExceptT (ε : Type u) (m : Type u → Type v) (α : Type u) : Type v :=
+  m (Except ε α)
+
+/--
+Use a monadic action that may return an exception's value as an action in the transformed monad that
+may throw the corresponding exception.
+
+This is the inverse of `ExceptT.run`.
+-/
+@[always_inline, inline]
+def ExceptT.mk {ε : Type u} {m : Type u → Type v} {α : Type u} (x : m (Except ε α)) : ExceptT ε m α := x
+
+/--
+Use a monadic action that may throw an exception as an action that may return an exception's value.
+
+This is the inverse of `ExceptT.mk`.
+-/
+@[always_inline, inline]
+def ExceptT.run {ε : Type u} {m : Type u → Type v} {α : Type u} (x : ExceptT ε m α) : m (Except ε α) := x

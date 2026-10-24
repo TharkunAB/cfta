@@ -1,0 +1,31 @@
+--- v1/mcfta-pruning-enumeration-ordinary-branches-20261024-archive.py
++++ v2/mcfta-pruning-enumeration-ordinary-branches-20261024-archive.py
+@@ -31,7 +31,8 @@
+ for path in sorted(Path('/tmp').glob('mcfta-pruning-enumeration-ordinary-branches-20261024-*')):
+     if path.is_file() and not path.name.startswith('mcfta-pruning-enumeration-ordinary-branches-20261024-archive-1.'):
+         shutil.copyfile(path, inputs / path.name)
+-shutil.copytree('/tmp/mcfta-pruning-enumeration-ordinary-branches-20261024-proposal', evidence / 'owner-proposal')
++shutil.copytree('/tmp/mcfta-pruning-enumeration-ordinary-branches-20261024-proposal-v2', evidence / 'owner-proposal')
++shutil.copytree('/tmp/mcfta-pruning-enumeration-ordinary-branches-20261024-proposal', evidence / 'owner-proposal-v1')
+ prior = evidence / 'previous-publication'
+ prior.mkdir()
+ for stem in ['archive-1', 'local-publication-1', 'authorized-push-1']:
+--- v1/mcfta-pruning-enumeration-ordinary-branches-20261024-verify.py
++++ v2/mcfta-pruning-enumeration-ordinary-branches-20261024-verify.py
+@@ -108,14 +108,14 @@
+ assert len(re.findall(rb'^local instance ', source, re.M)) == frozen['local_instance_count']
+ assert frozen['global_instance_count'] == 0
+ assert len(source.splitlines()) <= frozen['proposed_hard_cap']
+-assert sha((here / 'owner-proposal/FROZEN.json').read_bytes()) == load('work/body-gate.json')['frozen_sha256']
++assert sha((here / 'owner-proposal/FROZEN.json').read_bytes()) == load('work/body-gate-v2.json')['frozen_sha256']
+ assert {p.relative_to(here / 'owner-proposal').as_posix() for p in (here / 'owner-proposal').rglob('*') if p.is_file()} == set(pins) | {'pins.json', 'FROZEN.json'}
+ for name, pin in pins.items():
+     assert not Path(name).is_absolute() and '..' not in Path(name).parts
+     data = (here / 'owner-proposal' / name).read_bytes()
+     assert len(data) == pin['bytes'] and sha(data) == pin['sha256']
+ contracts = load('owner-proposal/contracts.json')
+-assert contracts == load('work/body-gate.json')['contracts']
++assert contracts == load('work/body-gate-v2.json')['contracts']
+ for name, literal in contracts.items():
+     assert isinstance(literal, str)
+     data = (here / 'owner-proposal' / name).read_bytes()

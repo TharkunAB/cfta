@@ -1,0 +1,5 @@
+have consRaw : ExceptT.run (run scs (edge :: rest) before) =
+      ExceptT.run ((match SourcePruningEnumerationEdgeTraversal.prepare scs edge with
+        | none => (pure none : EnumerateM Symbol Constraint (Option (Option (Fragments.Fragment Symbol))))
+        | some action => action >>= fun result => pure (some result)) before) ++
+      ExceptT.run (run scs rest before)

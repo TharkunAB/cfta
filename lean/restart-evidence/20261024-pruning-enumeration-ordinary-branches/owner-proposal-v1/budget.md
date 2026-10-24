@@ -1,0 +1,3 @@
+# Ordinary source budget
+
+Root's provisional target140–220 ordinary source lines, hard260. Scope is one concrete action, one theorem, four typed local haves, no proof let, one proper-tail list IH and one named LOCAL standard List Monad. Exact context/public/instance headers are52contract lines total with local/condition/case fragments included. Existing completion supplies the full child/residual packet and RawExact supplies uniqueness, so no duplicate proof packet or helper is justified. Shorter source is allowed without padding. Report any genuine need for a new scoped declaration or cap change before body authoring; no proof-limit override is authorized. Instance/proof/action bodies are Root-only after the gate.

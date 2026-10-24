@@ -1,0 +1,29 @@
+/-- Raw interned order uses the supplied node read and ignores the original root. -/
+def internedEdgesOf (nodeEdges : Node → List Edge) (_root node : Node) : List Edge := nodeEdges node
+
+/-- Raw edge selection requires no order instance on symbols or nodes. -/
+theorem interned_exact (nodeEdges : Node → List Edge) (root node : Node) :
+    internedEdgesOf nodeEdges root node = nodeEdges node := rfl
+
+/-- At the actual ordinary branch, the raw source accessor returns the stored edge list. -/
+theorem interned_ordinary (root : InternedConstructorTemplates.Value Symbol Guard)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (edges : List (InternedConstructorTemplates.EdgeValue Symbol Guard)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference) :
+    internedEdgesOf InternedEdgeResidency.nodeEdges root (.node entry edges depth free) = edges := rfl
+
+/-- Actual finite CPS branching retains raw edge order, duplicates, and the same input state. -/
+theorem interned_branches (nodeEdges : Node → List Edge) (root node : Node) (state : BranchState) :
+    EnumerationCPS.allBranches (EnumerationCPS.branches (internedEdgesOf nodeEdges root node)) state =
+      (nodeEdges node).map (fun edge => (edge, state)) :=
+  EnumerationCPS.allBranches_exact _ _ (EnumerationCPS.branches_represents _) state
+
+/-- Canonical closure branching retains the selected weighted rows in their exact order. -/
+theorem canonical_branches (identity : Node → Int) (canonicalOrder : Node → Cache.Table Int (List Edge))
+    (canonicalEdges : Node → List Edge) (le : Weight → Weight → Bool) (weights : Option (Edge → Weight))
+    (root node : Node) (state : BranchState) :
+    EnumerationCPS.allBranches
+      (EnumerationCPS.branches (canonicalEdgesOf identity canonicalOrder canonicalEdges le weights root node)) state =
+      (byWeights le weights ((canonicalOrder root (identity node)).getD (canonicalEdges node))).map
+        (fun edge => (edge, state)) := by
+  rw [EnumerationCPS.allBranches_exact _ _ (EnumerationCPS.branches_represents _) state, weights_after_lookup]

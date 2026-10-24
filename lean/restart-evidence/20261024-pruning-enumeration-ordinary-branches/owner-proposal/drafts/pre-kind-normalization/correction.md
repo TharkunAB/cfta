@@ -1,0 +1,1 @@
+Root prefreeze schema review: normalize public run kind to def and retain noncomputable:true separately, as the existing verifier/public ledger captures def/theorem and permits the modifier. The exact noncomputable def literal header, all types/scopes and behavior are unchanged. No previously frozen owner existed or was mutated.

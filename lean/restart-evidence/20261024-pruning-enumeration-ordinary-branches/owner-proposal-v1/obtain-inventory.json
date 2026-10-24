@@ -1,0 +1,107 @@
+{
+  "packets": [
+    {
+      "owner": "run_complete",
+      "scope": "cons",
+      "api": "ih selectedTail",
+      "fields": [
+        {
+          "name": "tailRows",
+          "type": "List (List (Except EnumerationState.Error (Option (Option (Fragments.Fragment Symbol)) × EnumerationState.State Symbol Constraint)))"
+        },
+        {
+          "name": "tailRelated",
+          "type": "Language.All₂ (fun edge rows =>\n        if arityAllows edge.children.length scs then\n          match SourcePruningEnumerationConstraint.project edge.entry.key.constraint with\n          | none => rows = [.ok (none, before)]\n          | some _ =>\n              ∃ (action : EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol)))\n                (result : Option (Fragments.Fragment Symbol))\n                (after : EnumerationState.State Symbol Constraint),\n                SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action ∧\n                Success action before result after ∧ rows = [.ok (some result, after)] ∧\n                after.counter = after.values.length ∧\n                SourcePruningEnumerationObservation.PendingRealized heap after\n        else rows = []) rest tailRows"
+        },
+        {
+          "name": "tailRaw",
+          "type": "run scs rest before = tailRows.flatten"
+        }
+      ]
+    },
+    {
+      "owner": "run_complete",
+      "scope": "allowed/project some",
+      "api": "Prod cases on actual project pair",
+      "fields": [
+        {
+          "name": "tries",
+          "type": "List EqualityTrie.Trie"
+        },
+        {
+          "name": "residual",
+          "type": "Option Constraint"
+        }
+      ]
+    },
+    {
+      "owner": "run_complete",
+      "scope": "allowed/project some actual completion",
+      "api": "SourcePruningEnumerationEdgeTraversal.prepare_complete scs edge heap entry storedEdges depth free ready parentAvailable parentClosed selectedHead before realized aligned allowed, reduced only by actual projected equality and its statement-local lets",
+      "fields": [
+        {
+          "name": "action",
+          "type": "EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol))"
+        },
+        {
+          "name": "childrenResult",
+          "type": "Option (List (Fragments.Fragment Symbol))"
+        },
+        {
+          "name": "childrenAfter",
+          "type": "EnumerationState.State Symbol Constraint"
+        },
+        {
+          "name": "after",
+          "type": "EnumerationState.State Symbol Constraint"
+        },
+        {
+          "name": "prepared",
+          "type": "SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action"
+        },
+        {
+          "name": "_childrenSuccess",
+          "type": "Success (SourcePruningEnumerationEdgeTraversal.runStaged (edge.children.zipIdx.map (fun indexed => (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries), SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) (descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries)) indexed.1)))) (suspendedState tries.length before) childrenResult childrenAfter"
+        },
+        {
+          "name": "_completedPrefixSuccess",
+          "type": "Success (SourcePruningEnumerationEdgeTraversal.runStaged ((edge.children.zipIdx.map (fun indexed => (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries), SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) (descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries)) indexed.1))).take ((edge.children.zipIdx.map (fun indexed => (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries), SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) (descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries)) indexed.1))).findIdx (fun stage => stage.2.2.isNone)))) (suspendedState tries.length before) (some ((List.range' (before.counter + tries.length) ((edge.children.zipIdx.map (fun indexed => (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries), SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) (descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries)) indexed.1))).findIdx (fun stage => stage.2.2.isNone))).map (fun uv => (Fragments.Fragment.hole uv : Fragments.Fragment Symbol)))) childrenAfter"
+        },
+        {
+          "name": "_childrenShape",
+          "type": "childrenResult = (if ((edge.children.zipIdx.map (fun indexed => (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries), SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) (descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries)) indexed.1))).findIdx (fun stage => stage.2.2.isNone)) < (edge.children.zipIdx.map (fun indexed => (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries), SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) (descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries)) indexed.1))).length then none else some ((List.range' (before.counter + tries.length) (edge.children.zipIdx.map (fun indexed => (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries), SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) (descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries)) indexed.1))).length).map (fun uv => (Fragments.Fragment.hole uv : Fragments.Fragment Symbol))))"
+        },
+        {
+          "name": "_afterShape",
+          "type": "after = (match childrenResult with | none => childrenAfter | some fragments => match residual with | none => childrenAfter | some guard => {childrenAfter with obligations := (guard, Fragments.Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations})"
+        },
+        {
+          "name": "observed",
+          "type": "Success action before (childrenResult.map (fun fragments => Fragments.Fragment.node edge.entry.key.symbol fragments)) after"
+        },
+        {
+          "name": "_afterCounter",
+          "type": "after.counter = before.counter + tries.length + ((edge.children.zipIdx.map (fun indexed => (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries), SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) (descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries)) indexed.1))).findIdx (fun stage => stage.2.2.isNone))"
+        },
+        {
+          "name": "afterAligned",
+          "type": "after.counter = after.values.length"
+        },
+        {
+          "name": "afterRealized",
+          "type": "SourcePruningEnumerationObservation.PendingRealized heap after"
+        }
+      ]
+    }
+  ],
+  "packet_count": 3,
+  "field_count": 18,
+  "all_fields_including_skipped": true,
+  "expansions": {
+    "own": "suspendedVars before.counter tries",
+    "staged": "edge.children.zipIdx.map (fun indexed => (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries), SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) (descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries)) indexed.1))",
+    "stop": "(edge.children.zipIdx.map (fun indexed => (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries), SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) (descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries)) indexed.1))).findIdx (fun stage => stage.2.2.isNone)",
+    "result": "childrenResult.map (fun fragments => Fragments.Fragment.node edge.entry.key.symbol fragments)"
+  },
+  "expansion_status": "These are review-only repeated exact API term expansions, NOT new proof lets/helpers/types/predicates or supplied packet parameters. The existing13-field packet is consumed once, then only actual action/Success/raw/alignment/realization witnesses enter public relation."
+}

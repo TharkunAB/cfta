@@ -1,0 +1,299 @@
+--- raw-exact-basis/check.py
++++ ordinary-branches/check.py
+@@ -2,7 +2,7 @@
+ from pathlib import Path
+ 
+ root = Path('/home/tritlo/Code/mcfta')
+-area = Path('/tmp/mcfta-pruning-enumeration-raw-exact-20261024')
++area = Path('/tmp/mcfta-pruning-enumeration-ordinary-branches-20261024')
+ kind, attempt, *paths = sys.argv[1:]
+ target = area / attempt
+ target.mkdir()
+--- raw-exact-basis/documents.py
++++ ordinary-branches/documents.py
+@@ -4,8 +4,8 @@
+ from pathlib import Path
+ 
+ root = Path('/home/tritlo/Code/mcfta')
+-area = Path('/tmp/mcfta-pruning-enumeration-raw-exact-20261024')
+-baseline = '2542d12ff44d450b15f6e510962457678f90699c'
++area = Path('/tmp/mcfta-pruning-enumeration-ordinary-branches-20261024')
++baseline = 'f1fa0c1da7a6f9a0bf9948b1a328249a25907fe7'
+ proof = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=root).decode().strip()
+ assert subprocess.check_output(['git', 'rev-list', '--parents', '-n', '1', proof], cwd=root).decode().split() == [proof, baseline]
+ checks = json.loads((area / 'build-summary.json').read_text())
+@@ -25,7 +25,7 @@
+ note = expand((area / 'current-note.md').read_text())
+ note = note.replace('Main: `74250bd889685da436cdbfe32ac4b5a0878ffd09`, incorporated.',
+     'Main: `74250bd889685da436cdbfe32ac4b5a0878ffd09`, incorporated.\nProof: `' + proof + '`.')
+-destination = root / 'lean/notes-current-pruning-enumeration-raw-exact.md'
++destination = root / 'lean/notes-current-pruning-enumeration-ordinary-branches.md'
+ assert not destination.exists()
+ destination.write_text(note)
+ (area / 'current-note.md').write_text(note)
+@@ -39,7 +39,7 @@
+     path = root / name
+     before = path.read_text()
+     assert path.read_bytes() == subprocess.check_output(['git', 'show', baseline + ':' + name], cwd=root)
+-    position = before.index('## Finite checked-row construction histories') if name == 'FINDINGS.md' else before.index('\n') + 1
++    position = before.index('## Exact raw results of native edge traversal') if name == 'FINDINGS.md' else before.index('\n') + 1
+     after = before[:position] + prefix + before[position:]
+     path.write_text(after)
+     changes[name] = dict(insertion_character=position, inserted=prefix,
+@@ -47,5 +47,5 @@
+         after_sha256=hashlib.sha256(after.encode()).hexdigest())
+ (area / 'document-changes.json').write_text(json.dumps(changes, indent=2) + '\n')
+ (area / 'proof-commit.json').write_text(json.dumps(dict(commit=proof, baseline=baseline,
+-    paths=['lean/MicroCFTA/SourcePruningEnumerationRawExact.lean', 'lean/MicroCFTA/Audit.lean']), indent=2) + '\n')
++    paths=['lean/MicroCFTA/SourcePruningEnumerationOrdinaryBranches.lean', 'lean/MicroCFTA/Audit.lean']), indent=2) + '\n')
+ print(json.dumps(dict(documents=paths, note=str(destination), proof=proof)))
+--- raw-exact-basis/archive.py
++++ ordinary-branches/archive.py
+@@ -6,16 +6,16 @@
+ from pathlib import Path
+ 
+ root = Path('/home/tritlo/Code/mcfta')
+-area = Path('/tmp/mcfta-pruning-enumeration-raw-exact-20261024')
+-evidence = root / 'lean/restart-evidence/20261024-pruning-enumeration-raw-exact'
++area = Path('/tmp/mcfta-pruning-enumeration-ordinary-branches-20261024')
++evidence = root / 'lean/restart-evidence/20261024-pruning-enumeration-ordinary-branches'
+ assert not evidence.exists()
+-assert Path('/tmp/mcfta-pruning-enumeration-checked-rows-20261024-next-assessment.md').is_file()
+-assert Path('/tmp/mcfta-pruning-enumeration-checked-rows-20261024/post-publication-summary.json').is_file()
+-assert Path('/tmp/mcfta-pruning-enumeration-raw-exact-20261024-source-review.md').is_file()
++assert Path('/tmp/mcfta-pruning-enumeration-raw-exact-20261024-next-assessment.md').is_file()
++assert Path('/tmp/mcfta-pruning-enumeration-raw-exact-20261024/post-publication-summary.json').is_file()
++assert Path('/tmp/mcfta-pruning-enumeration-ordinary-branches-20261024-source-review.md').is_file()
+ for args in [('diff', '--quiet'), ('diff', '--cached', '--quiet')]:
+     subprocess.run(['git', *args], cwd=root, check=True)
+ for name in ['declaration', 'model', 'public', 'document', 'seal-script', 'root']:
+-    assert Path('/tmp/mcfta-pruning-enumeration-raw-exact-20261024-' + name + '-review.md').is_file()
++    assert Path('/tmp/mcfta-pruning-enumeration-ordinary-branches-20261024-' + name + '-review.md').is_file()
+ evidence.mkdir()
+ for path in sorted(area.rglob('*')):
+     if not path.is_file():
+@@ -28,55 +28,62 @@
+         target.write_bytes(path.read_bytes())
+ inputs = evidence / 'inputs'
+ inputs.mkdir()
+-for path in sorted(Path('/tmp').glob('mcfta-pruning-enumeration-raw-exact-20261024-*')):
+-    if path.is_file() and not path.name.startswith('mcfta-pruning-enumeration-raw-exact-20261024-archive-1.'):
++for path in sorted(Path('/tmp').glob('mcfta-pruning-enumeration-ordinary-branches-20261024-*')):
++    if path.is_file() and not path.name.startswith('mcfta-pruning-enumeration-ordinary-branches-20261024-archive-1.'):
+         shutil.copyfile(path, inputs / path.name)
+-shutil.copytree('/tmp/mcfta-pruning-enumeration-raw-exact-20261024-proposal', evidence / 'owner-proposal')
++shutil.copytree('/tmp/mcfta-pruning-enumeration-ordinary-branches-20261024-proposal', evidence / 'owner-proposal')
+ prior = evidence / 'previous-publication'
+ prior.mkdir()
+ for stem in ['archive-1', 'local-publication-1', 'authorized-push-1']:
+     for suffix in ['json', 'log', 'limits.json', 'usage.json', 'source.py', 'peaks.txt']:
+-        path = Path('/tmp/mcfta-pruning-enumeration-checked-rows-20261024-' + stem + '.' + suffix)
++        path = Path('/tmp/mcfta-pruning-enumeration-raw-exact-20261024-' + stem + '.' + suffix)
+         assert path.is_file()
+         shutil.copyfile(path, prior / path.name)
+ for name in ['seal-result.json', 'local-publication.json', 'remote-publication.json', 'push.log', 'publication-spec.json', 'post-publication-summary.json']:
+-    shutil.copyfile(Path('/tmp/mcfta-pruning-enumeration-checked-rows-20261024') / name, prior / name)
+-shutil.copyfile('/tmp/mcfta-pruning-enumeration-checked-rows-20261024-publication.py', prior / 'publication.py')
+-shutil.copyfile('/tmp/mcfta-pruning-enumeration-checked-rows-20261024-next-assessment.md', prior / 'next-assessment.md')
++    shutil.copyfile(Path('/tmp/mcfta-pruning-enumeration-raw-exact-20261024') / name, prior / name)
++shutil.copyfile('/tmp/mcfta-pruning-enumeration-raw-exact-20261024-publication.py', prior / 'publication.py')
++shutil.copyfile('/tmp/mcfta-pruning-enumeration-raw-exact-20261024-next-assessment.md', prior / 'next-assessment.md')
+ production = evidence / 'production-sources'
+ production.mkdir()
+-shutil.copyfile(root / 'lean/MicroCFTA/SourcePruningEnumerationRawExact.lean', production / 'SourcePruningEnumerationRawExact.lean')
+-shutil.copyfile(root / 'lean/notes-current-pruning-enumeration-raw-exact.md', evidence / 'current-note.md')
+-shutil.copyfile('/tmp/mcfta-pruning-enumeration-raw-exact-20261024-verify.py', evidence / 'verify-checkpoint.py')
+-(evidence / 'INDEX.md').write_text("""# Exact raw results of native edge traversal
++shutil.copyfile(root / 'lean/MicroCFTA/SourcePruningEnumerationOrdinaryBranches.lean', production / 'SourcePruningEnumerationOrdinaryBranches.lean')
++shutil.copyfile(root / 'lean/notes-current-pruning-enumeration-ordinary-branches.md', evidence / 'current-note.md')
++shutil.copyfile('/tmp/mcfta-pruning-enumeration-ordinary-branches-20261024-verify.py', evidence / 'verify-checkpoint.py')
++(evidence / 'INDEX.md').write_text("""# Ordered selected-edge branch body
+ 
+-Read current-note.md for source-specific uniqueness of the actual captured
+-child traversal and selected concrete edge action. Existing completion
+-producers supply the same observed Success, result and final state. The
+-new facts exclude extra raw successes, errors and duplicate results.
+-No native validity premise or supplied callback/singleton law is needed.
+-No new action or duplicate completion packet is added.
++The concrete branch body chooses one selected edge first. It then uses its
++actual captured edge preparation once. A derived Language.All₂ certificate
++pairs each selected occurrence with its complete raw list. The whole stream
++is their ordered flatten. Each alternative starts from the same before.
++Duplicate edges and outputs remain. False inherited arity contributes raw[].
++Projection absence is a partial-model domain signal. It stays distinct from
++successful unsupported-child none. It is no invented Haskell return or error.
+ 
+-Work retains the full baseline, actual checks, complete public types,
+-axiom reports, resource receipts and every actual failure. Inputs retain
+-reviews. Owner-proposal retains literal declarations, complete scoped
+-inventories and exact source cuts. Previous-publication retains all26
+-post-seal inputs of the checked-row history checkpoint. Its prospective
+-assessment was already sealed. All earlier failures, proofs, drafts and
+-repairs remain protected in the baseline. Only refs/codex/turn-diffs/ is
+-excluded from fixed-reference checks.
++Work retains the baseline, actual checks, complete public types, axiom reports,
++resource receipts and all actual failures. Inputs retain independent reviews.
++Owner-proposal retains exact declarations, scoped inventories and source cuts.
++Previous-publication retains all26 post-seal RawExact custody records. Its
++prospective assessment was already sealed. Earlier failures, proofs, drafts,
++repairs and both verifier corrections remain in the protected baseline.
++Only refs/codex/turn-diffs/ is excluded from fixed-reference checks.
+ 
+ Run verify-checkpoint.py with --root set to the repository root. It checks
+-every baseline blob/mode, exact document inverses, one Audit import,
++every baseline blob/mode, nine exact document inverses, one Audit prefix,
+ frozen contracts, actual reports/receipts and the complete manifest set.
+-Observed-success uniqueness does not establish existence or native safety.
+-The existing producers retain those separate conditions. Ordinary choice,
+-native ordering/IDs/containers, terminal intersection/assimilation/emptiness,
+-index/memo2, extraction/signed bounds, cutoff language and full typing/
+-pruning/driver/runtime/solver/resources/convergence remain. H6 stays
+-strongest combined. H23 and older work remain. No Haskell source changes.
+-FINDINGS keeps all six imported repair handoffs first. The complete goal
+-stays ACTIVE and incomplete.
++Ready, the same available closed ordinary parent, selected-row membership,
++PendingRealized and aligned supply are actual producer inputs. No desired
++Success or arbitrary deterministic callback law is assumed. The worker takes
++a concrete selected list. Canonical callers must derive its actual order and
++membership; no synthetic reordered parent or new Graph is introduced.
++
++This is the shallow branch BODY. Actual terminal-root dispatch remains separate.
++Public runsInterned uses eager traversal; termsPruneUntil uses canonical order.
++This result proves neither full public entry point. Native canonical sorting,
++containers/IDs, terminal intersection/assimilation/emptiness and slot/count/
++ancestry, all-producer edits, selector/index/memo2, extraction/signed bounds,
++cutoff language and full typing/pruning/driver/runtime/solver/resources/
++convergence remain. H6 stays strongest combined; H23 and older work remain.
++No Haskell source changes. Six repair handoffs stay first in FINDINGS.
++The full goal stays ACTIVE and incomplete.
+ """)
+ 
+ files = sorted(p for p in evidence.rglob('*') if p.is_file())
+--- raw-exact-basis/verify.py
++++ ordinary-branches/verify.py
+@@ -1,4 +1,4 @@
+-"""Verify concrete native traversal raw-result uniqueness and the complete preserved baseline."""
++"""Verify ordered selected-edge branch execution and the complete preserved baseline."""
+ import argparse
+ import gzip
+ import hashlib
+@@ -10,8 +10,8 @@
+ parser = argparse.ArgumentParser(description=__doc__)
+ parser.add_argument('--root', type=Path, required=True)
+ root = parser.parse_args().root.resolve()
+-here = root / 'lean/restart-evidence/20261024-pruning-enumeration-raw-exact'
+-baseline = '2542d12ff44d450b15f6e510962457678f90699c'
++here = root / 'lean/restart-evidence/20261024-pruning-enumeration-ordinary-branches'
++baseline = 'f1fa0c1da7a6f9a0bf9948b1a328249a25907fe7'
+ main = '74250bd889685da436cdbfe32ac4b5a0878ffd09'
+ 
+ def sha(data):
+@@ -40,7 +40,7 @@
+     subprocess.run(['git', *args], cwd=root, check=True)
+ assert git('rev-list', '--parents', '-n', '1', proof).decode().split() == [proof, baseline]
+ assert set(git('diff-tree', '--no-commit-id', '--name-only', '-r', proof).decode().splitlines()) == {
+-    'lean/MicroCFTA/SourcePruningEnumerationRawExact.lean', 'lean/MicroCFTA/Audit.lean'}
++    'lean/MicroCFTA/SourcePruningEnumerationOrdinaryBranches.lean', 'lean/MicroCFTA/Audit.lean'}
+ tree = gzip.decompress((here / 'work/baseline-tree.txt.gz').read_bytes())
+ assert tree == git('ls-tree', '-r', '-z', baseline)
+ assert sha(tree) == load('work/baseline.json')['tree_sha256']
+@@ -70,15 +70,14 @@
+         changed.append(name)
+     elif name == 'lean/MicroCFTA/Audit.lean':
+         addition = audit_change['prefix'].encode()
+-        assert addition == b'import MicroCFTA.SourcePruningEnumerationRawExact\n'
+-        preceding = b'import MicroCFTA.SourcePruningEnumerationCheckedRows\n'
+-        assert sha(data) == audit_change['after_sha256'] and data.startswith(preceding + addition)
+-        data = preceding + data[len(preceding) + len(addition):]
++        assert addition == b'import MicroCFTA.SourcePruningEnumerationOrdinaryBranches\n'
++        assert sha(data) == audit_change['after_sha256'] and data.startswith(addition)
++        data = data[len(addition):]
+         assert sha(data) == audit_change['before_sha256']
+         changed.append(name)
+     assert hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\0' + data).hexdigest() == blob, name
+     count += 1
+-assert count == 132637 and len(changed) == 10
++assert count == 132893 and len(changed) == 10
+ assert git('stash', 'list', '--format=%gd %H %s') == (here / 'work/baseline-stashes.txt').read_bytes()
+ worktrees = (here / 'work/baseline-worktrees.txt').read_bytes()
+ assert git('worktree', 'list', '--porcelain') == worktrees.replace(
+@@ -87,12 +86,12 @@
+     value, ref = line.split()
+     if ref not in ['refs/heads/formalize', 'refs/remotes/origin/formalize'] and not ref.startswith('refs/codex/turn-diffs/'):
+         assert git('rev-parse', ref).decode().strip() == value, ref
+-assert git('rev-parse', 'codex/backup-pruning-enumeration-raw-exact-20261024-1618').decode().strip() == baseline
++assert git('rev-parse', 'codex/backup-pruning-enumeration-ordinary-branches-20261024-1654').decode().strip() == baseline
+ 
+ checks = load('work/build-summary.json')
+-source = (root / 'lean/MicroCFTA/SourcePruningEnumerationRawExact.lean').read_bytes()
+-assert source == (here / 'production-sources/SourcePruningEnumerationRawExact.lean').read_bytes()
+-assert source == (here / 'work' / checks['successful_source_attempt'] / 'MicroCFTA/SourcePruningEnumerationRawExact.lean').read_bytes()
++source = (root / 'lean/MicroCFTA/SourcePruningEnumerationOrdinaryBranches.lean').read_bytes()
++assert source == (here / 'production-sources/SourcePruningEnumerationOrdinaryBranches.lean').read_bytes()
++assert source == (here / 'work' / checks['successful_source_attempt'] / 'MicroCFTA/SourcePruningEnumerationOrdinaryBranches.lean').read_bytes()
+ assert sha(source) == load('work/installation.json')['source_sha256']
+ assert len(source.splitlines()) == checks['source_lines']
+ assert not re.search(rb'\b(?:sorry|admit|axiom|unsafe|set_option)\b', source)
+@@ -174,7 +173,7 @@
+ assert axioms == decls['axioms']
+ assert len(decls['theorems']) == sum(item['kind'] == 'theorem' for item in headers)
+ assert len(decls['definitions']) == sum(item['kind'] == 'def' for item in headers)
+-namespace = 'MicroCFTA.SourcePruningEnumerationRawExact.'
++namespace = 'MicroCFTA.SourcePruningEnumerationOrdinaryBranches.'
+ assert decls['definitions'] == [namespace + item['name'] for item in headers if item['kind'] == 'def']
+ assert decls['theorems'] == [namespace + item['name'] for item in headers if item['kind'] == 'theorem']
+ assert set(decls['definitions'] + decls['theorems']) == set(decls['declarations'])
+@@ -182,7 +181,7 @@
+     assert set(names) <= {'Classical.choice', 'Quot.sound', 'propext'}
+ failed_seals = checks['failed_seal_attempts']
+ receipt_stems = ['refresh-1', 'baseline-1'] + checks['attempts'] + failed_seals
+-prefix = 'mcfta-pruning-enumeration-raw-exact-20261024-'
++prefix = 'mcfta-pruning-enumeration-ordinary-branches-20261024-'
+ expected_stems = {prefix + stem for stem in receipt_stems}
+ for suffix in ['limits.json', 'usage.json']:
+     paths = list((here / 'inputs').glob('*.' + suffix))
+@@ -197,16 +196,16 @@
+     usage = load('inputs/' + prefix + stem + '.usage.json')
+     assert 0 <= usage['age_seconds'] <= 600 and usage['remaining_percent'] > 1
+ for name in ['declaration', 'model', 'public', 'document', 'seal-script', 'root']:
+-    assert (here / 'inputs' / ('mcfta-pruning-enumeration-raw-exact-20261024-' + name + '-review.md')).is_file()
+-assert (root / 'lean/notes-current-pruning-enumeration-raw-exact.md').read_bytes() == (here / 'current-note.md').read_bytes()
+-findings = (root / 'FINDINGS.md').read_text().split('## Exact raw results of native edge traversal', 1)[0]
++    assert (here / 'inputs' / ('mcfta-pruning-enumeration-ordinary-branches-20261024-' + name + '-review.md')).is_file()
++assert (root / 'lean/notes-current-pruning-enumeration-ordinary-branches.md').read_bytes() == (here / 'current-note.md').read_bytes()
++findings = (root / 'FINDINGS.md').read_text().split('## Ordered selected-edge branch body', 1)[0]
+ assert '## Haskell fix handoff for external work' in findings and findings.count('| Fixed by ') == 6
+ assert 'All six repairs are in the imported main history.' in findings
+ prior = load('previous-publication/remote-publication.json')
+ assert prior['status'] == 'PUSHED_AND_REMOTE_VERIFIED' and prior['remote_head'] == baseline
+ assert load('previous-publication/publication-spec.json')['head'] == baseline
+ assessment = (here / 'previous-publication/next-assessment.md').read_bytes()
+-assert sha(assessment) == '6206bce8997d2dad22e194f7c580cfb00e75be33baeaa53a3ce85a59a3176dfa'
++assert sha(assessment) == '02d99914ac3b01e6c407b7bc60a11c3fce2264b3f164a517aa77a9adc1bc8bed'
+ summary = load('previous-publication/post-publication-summary.json')
+ assert summary['head'] == baseline and summary['goal'] == 'ACTIVE_INCOMPLETE'
+ assert summary['component_status'] == 'PROVED_SEALED_PUSHED_REMOTE_VERIFIED'
+@@ -215,7 +214,7 @@
+ assert (root / summary['sealed_next_assessment_path']).read_bytes() == assessment
+ assert summary['seal_attempt'] == 'archive-1' and len(summary['next_custody_inputs']) == 26
+ assert len(list((here / 'previous-publication').iterdir())) == 26
+-assert sha((here / 'inputs/mcfta-pruning-enumeration-raw-exact-20261024-source-review.md').read_bytes()) == '02dbfe23585d8c32045f732cd2b633dd0530e1fc518d456ceacc9f39444c8ccd'
++assert sha((here / 'inputs/mcfta-pruning-enumeration-ordinary-branches-20261024-source-review.md').read_bytes()) == '99a4778660b44b1260ea4264dd15c2792e381bc713611b1ab6bf0c8649e9234b'
+ 
+ print(json.dumps(dict(status='PASS', baseline=baseline, main=main, proof=proof,
+     baseline_files=count, unchanged_files=count - len(changed), exact_changed_files=changed,
+--- raw-exact-basis/publication.py
++++ ordinary-branches/publication.py
+@@ -5,9 +5,9 @@
+ from pathlib import Path
+ 
+ root = Path('/home/tritlo/Code/mcfta')
+-area = Path('/tmp/mcfta-pruning-enumeration-raw-exact-20261024')
+-evidence = root / 'lean/restart-evidence/20261024-pruning-enumeration-raw-exact'
+-previous = '2542d12ff44d450b15f6e510962457678f90699c'
++area = Path('/tmp/mcfta-pruning-enumeration-ordinary-branches-20261024')
++evidence = root / 'lean/restart-evidence/20261024-pruning-enumeration-ordinary-branches'
++previous = 'f1fa0c1da7a6f9a0bf9948b1a328249a25907fe7'
+ destination = 'git@github.com:TharkunAB/cfta.git'
+ 
+ def git(*args):

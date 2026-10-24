@@ -1,0 +1,5 @@
+class Monad (m : Type u → Type v) : Type (max (u+1) v) extends Applicative m, Bind m where
+  map      f x := bind x (Function.comp pure f)
+  seq      f x := bind f fun y => Functor.map y (x ())
+  seqLeft  x y := bind x fun a => bind (y ()) (fun _ => pure a)
+  seqRight x y := bind x fun _ => y ()

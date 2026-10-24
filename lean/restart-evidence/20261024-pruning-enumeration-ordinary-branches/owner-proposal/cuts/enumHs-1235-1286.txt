@@ -1,0 +1,52 @@
+runs ::
+    (Hashable symbol, Ord symbol, Typeable symbol) =>
+    symbol -> Node symbol -> [(Term symbol, [(Constraint, Term symbol)])]
+runs = runsFrom (canonicalEdgesOf Nothing)
+
+{- | 'runs' with a weight for each edge. The enumeration tries the edges of a
+node with larger weights first, and edges with equal weights in the order of
+'runs'. The weights only change the order of the edges of each node, so the
+result has the runs of 'runs', in another order. A weight must not be NaN.
+-}
+runsBy ::
+    (Hashable symbol, Ord symbol, Typeable symbol) =>
+    (Edge symbol -> Double) -> symbol -> Node symbol -> [(Term symbol, [(Constraint, Term symbol)])]
+runsBy weight = runsFrom (canonicalEdgesOf (Just weight))
+
+{- | 'runsBy' with a function on the edges of each node, which the
+enumeration applies before it tries them. It sees the node of the current
+run: in a run, a node that an equality constraint reaches is the
+intersection of the nodes of all the paths of its class, because the
+enumeration expands it only after all of them. A function that keeps a
+subset of the edges keeps a subset of the runs.
+-}
+runsNarrowedBy ::
+    (Hashable symbol, Ord symbol, Typeable symbol) =>
+    (Edge symbol -> Double) ->
+    ([Edge symbol] -> [Edge symbol]) ->
+    symbol ->
+    Node symbol ->
+    [(Term symbol, [(Constraint, Term symbol)])]
+runsNarrowedBy weight narrowing = runsFrom (\root -> narrowing . canonicalEdgesOf (Just weight) root)
+
+{- | 'runs' in the order of the edges in the automaton, without
+'canonicalOrder'. The result has the runs of 'runs', in another order, which
+depends on the automata that the process built before. It is for a caller
+that sorts the runs itself, and it saves the canonical classes of the graph.
+-}
+runsInterned ::
+    (Hashable symbol, Typeable symbol) =>
+    symbol -> Node symbol -> [(Term symbol, [(Constraint, Term symbol)])]
+runsInterned = runsFrom (const nodeEdges)
+
+-- | 'runs' with the order of the edges of each node, from the root.
+runsFrom ::
+    (Hashable symbol, Typeable symbol) =>
+    (Node symbol -> Node symbol -> [Edge symbol]) -> symbol -> Node symbol -> [(Term symbol, [(Constraint, Term symbol)])]
+runsFrom order recursionSymbol n =
+    map fst $ flip allBranches (initEnumerationState (order n) n) $ do
+        enumerateFully
+        term <- expandUVarWith recursionSymbol (intToUVar 0)
+        obligations <- gets _obligations
+        pending <- mapM (\(constraint, fragment) -> (constraint,) <$> expandTermFragWith recursionSymbol fragment) obligations
+        return (term, pending)

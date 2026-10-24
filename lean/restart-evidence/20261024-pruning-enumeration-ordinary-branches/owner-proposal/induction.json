@@ -1,0 +1,64 @@
+{
+  "owner": "run_complete",
+  "kind": "structural List induction",
+  "count": 1,
+  "target": "selectedEdges",
+  "generalized": [
+    "selected"
+  ],
+  "fixed": [
+    "scs",
+    "heap",
+    "entry",
+    "storedEdges",
+    "depth",
+    "free",
+    "ready",
+    "parentAvailable",
+    "parentClosed",
+    "before",
+    "realized",
+    "aligned"
+  ],
+  "full_IH_type": "(∀ edge ∈ rest, edge ∈ storedEdges) → ∃ branchRows : List (List (Except EnumerationState.Error (Option (Option (Fragments.Fragment Symbol)) × EnumerationState.State Symbol Constraint))), Language.All₂ (fun edge rows =>\n        if arityAllows edge.children.length scs then\n          match SourcePruningEnumerationConstraint.project edge.entry.key.constraint with\n          | none => rows = [.ok (none, before)]\n          | some _ =>\n              ∃ (action : EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol)))\n                (result : Option (Fragments.Fragment Symbol))\n                (after : EnumerationState.State Symbol Constraint),\n                SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action ∧\n                Success action before result after ∧ rows = [.ok (some result, after)] ∧\n                after.counter = after.values.length ∧\n                SourcePruningEnumerationObservation.PendingRealized heap after\n        else rows = []) rest branchRows ∧ run scs rest before = branchRows.flatten",
+  "branches": [
+    {
+      "name": "nil",
+      "binders": []
+    },
+    {
+      "name": "cons",
+      "binders": [
+        {
+          "name": "edge",
+          "type": "InternedConstructorTemplates.EdgeValue Symbol Constraint"
+        },
+        {
+          "name": "rest",
+          "type": "List (InternedConstructorTemplates.EdgeValue Symbol Constraint)"
+        },
+        {
+          "name": "ih",
+          "type": "(∀ edge ∈ rest, edge ∈ storedEdges) → ∃ branchRows : List (List (Except EnumerationState.Error (Option (Option (Fragments.Fragment Symbol)) × EnumerationState.State Symbol Constraint))), Language.All₂ (fun edge rows =>\n        if arityAllows edge.children.length scs then\n          match SourcePruningEnumerationConstraint.project edge.entry.key.constraint with\n          | none => rows = [.ok (none, before)]\n          | some _ =>\n              ∃ (action : EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol)))\n                (result : Option (Fragments.Fragment Symbol))\n                (after : EnumerationState.State Symbol Constraint),\n                SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action ∧\n                Success action before result after ∧ rows = [.ok (some result, after)] ∧\n                after.counter = after.values.length ∧\n                SourcePruningEnumerationObservation.PendingRealized heap after\n        else rows = []) rest branchRows ∧ run scs rest before = branchRows.flatten"
+        }
+      ]
+    }
+  ],
+  "restricted_calls": [
+    {
+      "callee": "ih",
+      "arguments": [
+        "selectedTail"
+      ],
+      "restriction": "rest is immediate proper tail of edge :: rest; SAME fixed before; membership is derived from actual selected, not supplied Success/output"
+    }
+  ],
+  "IH_call_count": 1,
+  "termination": "Core structural List recursor, no recursive declaration or forall-list oracle",
+  "command": "induction selectedEdges with",
+  "explicit_generalizing": [],
+  "automatic_generalized": [
+    "selected"
+  ],
+  "generalization_mode": "The dependent selected premise is generalized automatically by induction; explicit generalizing selected is rejected. before and every nondependent context parameter remain fixed."
+}

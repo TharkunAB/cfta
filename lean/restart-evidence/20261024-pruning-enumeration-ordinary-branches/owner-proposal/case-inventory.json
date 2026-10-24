@@ -1,0 +1,57 @@
+{
+  "definition_cases": [
+    {
+      "owner": "run",
+      "scope": "after actual choose of one edge occurrence",
+      "family": "Option actual EdgeTraversal.prepare",
+      "expression": "SourcePruningEnumerationEdgeTraversal.prepare scs edge",
+      "none_payloads": [],
+      "some_payloads": [
+        {
+          "name": "action",
+          "type": "EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol))"
+        }
+      ],
+      "result": "outer none domain marker vs some existing action result; no fabricated native Nothing/error/reject"
+    }
+  ],
+  "proof_cases": [
+    {
+      "owner": "run_complete",
+      "scope": "cons, only after arity condition",
+      "family": "Option actual project",
+      "file": "case-projected.lean.txt",
+      "actual_type": "SourcePruningEnumerationConstraint.project edge.entry.key.constraint = projectChoice",
+      "specializations": [
+        {
+          "case": "none",
+          "type": "SourcePruningEnumerationConstraint.project edge.entry.key.constraint = none",
+          "binders": []
+        },
+        {
+          "case": "some pair",
+          "type": "SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some pair",
+          "binders": [
+            {
+              "name": "pair",
+              "type": "List EqualityTrie.Trie × Option Constraint"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "conditions": [
+    {
+      "owner": "run_complete",
+      "file": "condition-allowed.lean.txt",
+      "scope": "cons before project",
+      "positive_type": "arityAllows edge.children.length scs = true",
+      "negative_type": "¬ arityAllows edge.children.length scs = true"
+    }
+  ],
+  "induction": "induction.json",
+  "Value_constructor_case_count": 0,
+  "extra_residual_or_child_result_split_count": 0,
+  "reason": "Same parent is a literal .node public premise; existing completion handles geometry/child/residual cases. No duplicated packet proof."
+}

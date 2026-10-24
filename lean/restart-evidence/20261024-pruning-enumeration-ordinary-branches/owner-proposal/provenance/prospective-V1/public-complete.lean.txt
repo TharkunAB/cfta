@@ -1,0 +1,29 @@
+/-- Derive the complete ordered raw branch stream from the same available ordinary parent. -/
+theorem prepare_complete
+    (scs : List EnumerationState.Suspended)
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (edges : List (InternedConstructorTemplates.EdgeValue Symbol Constraint))
+    (depth : Nat) (free : List InternedBinderProtocol.Reference)
+    (ready : SourceEqualityRequiredCache.Ready heap)
+    (parentAvailable : InternedProbeProvenance.Available heap (.node entry edges depth free))
+    (parentClosed : free = [])
+    (before : EnumerationState.State Symbol Constraint)
+    (realized : SourcePruningEnumerationObservation.PendingRealized heap before)
+    (aligned : before.counter = before.values.length) :
+    ∃ branchRows : List (List (Except EnumerationState.Error
+        (Option (Option (Fragments.Fragment Symbol)) × EnumerationState.State Symbol Constraint))),
+      Language.All₂ (fun edge rows =>
+        if arityAllows edge.children.length scs then
+          match SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+          | none => rows = [.ok (none, before)]
+          | some _ =>
+              ∃ (action : EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol)))
+                (result : Option (Fragments.Fragment Symbol))
+                (after : EnumerationState.State Symbol Constraint),
+                SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action ∧
+                Success action before result after ∧ rows = [.ok (some result, after)] ∧
+                after.counter = after.values.length ∧
+                SourcePruningEnumerationObservation.PendingRealized heap after
+        else rows = []) edges branchRows ∧
+      prepare scs edges before = branchRows.flatten

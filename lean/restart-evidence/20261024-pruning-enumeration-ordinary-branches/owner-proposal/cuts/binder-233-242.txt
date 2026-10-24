@@ -1,0 +1,10 @@
+/-- All fields of UninternedNode equality, with already interned edge identities. -/
+inductive NodeKey where
+  | node (edges : List Nat)
+  | empty
+  | union (members : List NodeRef)
+  | mu (probes : MuKey NodeRef)
+  deriving DecidableEq, Repr
+
+/-- The actual Mu constructor distinguishes different pairs of probe identities. -/
+theorem mu_key_injective : Function.Injective NodeKey.mu := by

@@ -1,0 +1,43 @@
+{
+  "status": "ROOT_REVISED_EXACT_SOURCE_BODY_GATE_PASS",
+  "recorded_at": "2026-10-24T17:30:51.240502+02:00",
+  "owner": "/tmp/mcfta-pruning-enumeration-ordinary-branches-20261024-proposal-v2",
+  "frozen_sha256": "1fd433fecbfa94330c6e7fced1f4370e2b7ad3719c98fab33d01d9784643cc5f",
+  "pins_sha256": "3c0bb2dd51b25855a698ecd76132cc9c632584106f4995ab38ecbbd02af727e7",
+  "contracts": {
+    "context.lean.txt": "import MicroCFTA.SourcePruningEnumerationRawExact\n\nnamespace MicroCFTA.SourcePruningEnumerationOrdinaryBranches\nopen EnumerationState EnumerationCorrectness\nlocal notation \"Symbol\" => SourcePruningTemplates.Symbol\nlocal notation \"Constraint\" => SourceSymbolicIndex.Constraint FullSyntax.Formula\n",
+    "instance.lean.txt": "local instance ordinaryMonadList : Monad List\n",
+    "public-run.lean.txt": "/-- Run the stored edge branch body and keep the two unsupported stages distinct. -/\nnoncomputable def run (scs : List EnumerationState.Suspended)\n    (selectedEdges : List (InternedConstructorTemplates.EdgeValue Symbol Constraint)) :\n    EnumerateM Symbol Constraint (Option (Option (Fragments.Fragment Symbol)))\n",
+    "public-complete.lean.txt": "/-- Derive the complete ordered raw branch stream from the same available ordinary parent. -/\ntheorem run_complete\n    (scs : List EnumerationState.Suspended)\n    (heap : InternedConstructorTemplates.State Symbol Constraint)\n    (entry : Cache.Interned InternedBinderProtocol.NodeKey)\n    (storedEdges selectedEdges : List (InternedConstructorTemplates.EdgeValue Symbol Constraint))\n    (depth : Nat) (free : List InternedBinderProtocol.Reference)\n    (ready : SourceEqualityRequiredCache.Ready heap)\n    (parentAvailable : InternedProbeProvenance.Available heap (.node entry storedEdges depth free))\n    (parentClosed : free = [])\n    (selected : \u2200 edge \u2208 selectedEdges, edge \u2208 storedEdges)\n    (before : EnumerationState.State Symbol Constraint)\n    (realized : SourcePruningEnumerationObservation.PendingRealized heap before)\n    (aligned : before.counter = before.values.length) :\n    \u2203 branchRows : List (List (Except EnumerationState.Error\n        (Option (Option (Fragments.Fragment Symbol)) \u00d7 EnumerationState.State Symbol Constraint))),\n      Language.All\u2082 (fun edge rows =>\n        if arityAllows edge.children.length scs then\n          match SourcePruningEnumerationConstraint.project edge.entry.key.constraint with\n          | none => rows = [.ok (none, before)]\n          | some _ =>\n              \u2203 (action : EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol)))\n                (result : Option (Fragments.Fragment Symbol))\n                (after : EnumerationState.State Symbol Constraint),\n                SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action \u2227\n                Success action before result after \u2227 rows = [.ok (some result, after)] \u2227\n                after.counter = after.values.length \u2227\n                SourcePruningEnumerationObservation.PendingRealized heap after\n        else rows = []) selectedEdges branchRows \u2227\n      run scs selectedEdges before = branchRows.flatten\n",
+    "local-selected-head.lean.txt": "have selectedHead : edge \u2208 storedEdges\n",
+    "local-selected-tail.lean.txt": "have selectedTail : \u2200 edge \u2208 rest, edge \u2208 storedEdges\n",
+    "local-cons-raw.lean.txt": "have consRaw : ExceptT.run (run scs (edge :: rest) before) =\n      ExceptT.run ((match SourcePruningEnumerationEdgeTraversal.prepare scs edge with\n        | none => (pure none : EnumerateM Symbol Constraint (Option (Option (Fragments.Fragment Symbol))))\n        | some action => action >>= fun result => pure (some result)) before) ++\n      ExceptT.run (run scs rest before)\n",
+    "condition-allowed.lean.txt": "by_cases allowed : arityAllows edge.children.length scs = true\n",
+    "case-projected.lean.txt": "cases projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint with\n",
+    "local-action-raw.lean.txt": "have actionRaw : action before =\n          [.ok (childrenResult.map (fun fragments => Fragments.Fragment.node edge.entry.key.symbol fragments), after)]\n"
+  },
+  "reviews": {
+    "declaration": "775025cb491ee8835b1fe65fd8efc889d948f788e0612d6ca00001b4b29945bf",
+    "seal-script": "8b16d8052576977faf9ab226ae53afa54259f2aad77ccd272dac9c717c5c2aa1"
+  },
+  "prior_gate_sha256": "0cb7a06233641d602cd674a6b8cdd3f93ac13b393330c3db7f41df401138dff6",
+  "prior_actual_failed_attempt": "strict-1",
+  "prior_actual_failed_input_sha256": "e04a6696d37614bee3ded56b1cda19045c24729261e475cd00a6f4d4c485ed91",
+  "revised_scoped_body_or_compiler_started": false,
+  "root_full_read": [
+    "complete earlier V1 gate source/type/script reads reused by exact identity",
+    "all12 affected metadata and literal diffs",
+    "new22line ExceptT cut and explicit raw-view typing",
+    "complete strict1 raw/input/report, original review and gate",
+    "exact V1 reconstruction95payloads, all121 V2 payloads21livewholes30cuts491",
+    "full independent V2 declaration and script supplements",
+    "full2217B script delta and preserved originals"
+  ],
+  "hard_cap": 260,
+  "public_headers_unchanged": true,
+  "IH_type_unchanged": true,
+  "before_fixed": true,
+  "new_instances": 0,
+  "new_helpers": 0,
+  "goal": "ACTIVE_INCOMPLETE"
+}

@@ -1,0 +1,527 @@
+
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationRawExact.lean:8-10
+local instance rawMonadList : Monad List where
+  pure value := [value]
+  bind values continuation := values.flatMap continuation
+
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationRawExact.lean:83-91
+theorem prepare_exact
+    (scs : List EnumerationState.Suspended)
+    (edge : InternedConstructorTemplates.EdgeValue Symbol Constraint)
+    (action : EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol)))
+    (before after : EnumerationState.State Symbol Constraint)
+    (result : Option (Fragments.Fragment Symbol))
+    (prepared : SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action)
+    (observed : Success action before result after) :
+    action before = [.ok (result, after)] := by
+
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationEdgeTraversal.lean:105-161
+noncomputable def prepare (scs : List EnumerationState.Suspended)
+    (edge : InternedConstructorTemplates.EdgeValue Symbol Constraint) :
+    Option (EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol)))
+ :=
+  match SourcePruningEnumerationEdgePrefix.prepare scs edge with
+  | none => none
+  | some prefixAction => some (prefixAction >>= fun packet =>
+      runStaged packet.2.1 >>= fun childrenResult =>
+        match childrenResult with
+        | none => pure none
+        | some fragments =>
+            let fragment := Fragments.Fragment.node packet.1 fragments
+            EnumerationSchedule.recordResidual packet.2.2 fragment >>= fun _ => pure (some fragment))
+
+/-- Derive the actual edge traversal and its exact residual update from the same ordinary parent. -/
+theorem prepare_complete (scs : List EnumerationState.Suspended)
+    (edge : InternedConstructorTemplates.EdgeValue Symbol Constraint)
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (edges : List (InternedConstructorTemplates.EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference)
+    (ready : SourceEqualityRequiredCache.Ready heap)
+    (parentAvailable : InternedProbeProvenance.Available heap (.node parentEntry edges depth free))
+    (parentClosed : free = []) (selected : edge ∈ edges)
+    (before : EnumerationState.State Symbol Constraint) (realized : PendingRealized heap before)
+    (aligned : before.counter = before.values.length)
+    (allowed : arityAllows edge.children.length scs = true) :
+    match SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+    | none => prepare scs edge = none
+    | some (tries, residual) =>
+        let own : List EnumerationState.Suspended := suspendedVars before.counter tries
+        let staged := edge.children.zipIdx.map (fun indexed =>
+          (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 own,
+            SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint)
+              (descendScs indexed.2 scs ++ descendScs indexed.2 own) indexed.1))
+        let stop := staged.findIdx (fun stage => stage.2.2.isNone)
+        ∃ (action : EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol)))
+          (childrenResult : Option (List (Fragments.Fragment Symbol)))
+          (childrenAfter after : EnumerationState.State Symbol Constraint),
+          prepare scs edge = some action ∧
+          Success (runStaged staged) (suspendedState tries.length before) childrenResult childrenAfter ∧
+          Success (runStaged (staged.take stop)) (suspendedState tries.length before)
+            (some ((List.range' (before.counter + tries.length) stop).map
+              (fun uv => (Fragments.Fragment.hole uv : Fragments.Fragment Symbol)))) childrenAfter ∧
+          childrenResult = (if stop < staged.length then none else
+            some ((List.range' (before.counter + tries.length) staged.length).map
+              (fun uv => (Fragments.Fragment.hole uv : Fragments.Fragment Symbol)))) ∧
+          after = (match childrenResult with
+            | none => childrenAfter
+            | some fragments => match residual with
+              | none => childrenAfter
+              | some guard => {childrenAfter with obligations :=
+                  (guard, Fragments.Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations}) ∧
+          Success action before (childrenResult.map (fun fragments =>
+            Fragments.Fragment.node edge.entry.key.symbol fragments)) after ∧
+          after.counter = before.counter + tries.length + stop ∧
+          after.counter = after.values.length ∧ PendingRealized heap after
+
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationEdgePrefix.lean:15-32
+noncomputable def prepare (scs : List EnumerationState.Suspended)
+    (edge : InternedConstructorTemplates.EdgeValue Symbol Constraint) :
+    Option (EnumerateM Symbol Constraint
+      (Symbol × List (InternedConstructorTemplates.Value Symbol Constraint ×
+        List EnumerationState.Suspended ×
+        Option (EnumerateM Symbol Constraint (Fragments.Fragment Symbol))) × Option Constraint))
+ :=
+  if arityAllows edge.children.length scs then
+    match SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+    | none => none
+    | some (tries, residual) =>
+        some (tries.mapM suspend >>= fun own =>
+          pure (edge.entry.key.symbol,
+            edge.children.zipIdx.map (fun indexed =>
+              (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 own,
+                SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint)
+                  (descendScs indexed.2 scs ++ descendScs indexed.2 own) indexed.1)), residual))
+  else some reject
+
+/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationState.lean:67-98
+structure State (Symbol Guard : Type) where
+  counter : Nat
+  representatives : UnionFind.Forest
+  values : List (UVarValue Symbol)
+  obligations : List (Guard × Fragment Symbol)
+  recursionAncestry : Nat → List RecursionKey
+  expansionAncestry : List RecursionKey
+
+/-- The root starts in UVar zero. -/
+def initial (root : Nat) : State Symbol Guard :=
+  ⟨1, UnionFind.withInitialValues [0], [.unenumerated (some root) []], [], fun _ => [], []⟩
+
+/-- Source invariant failures and explicit finite execution bounds. -/
+inductive Error where
+  | fuelExhausted | representativeFuel | invalidSlot | invalidIntersection
+  | unresolvedReference | unfinishedFragment
+  deriving DecidableEq, Repr
+
+/-- State and errors are local to each nondeterministic alternative. -/
+abbrev EnumerateM (Symbol Guard : Type) := StateT (State Symbol Guard) (ExceptT Error List)
+
+/-- Reject one branch, as the list monad does. -/
+def reject : EnumerateM Symbol Guard α := fun _ => []
+
+/-- Choose each alternative with the same input state. -/
+def choose (values : List α) : EnumerateM Symbol Guard α := fun state =>
+  values.map fun value => .ok (value, state)
+
+/-- Report an execution limit or source invariant failure. -/
+def failure (error : Error) : EnumerateM Symbol Guard α := fun _ => [.error error]
+
+/-- Retain a branch exactly when its Boolean guard is true. -/
+
+/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationCorrectness.lean:35-79
+
+/-- A successful branch of an actual state action. Errors remain separate list entries. -/
+def Success (action : EnumerateM Symbol Guard α) (before : State Symbol Guard)
+    (value : α) (after : State Symbol Guard) : Prop :=
+  Except.ok (value, after) ∈ ExceptT.run (action before)
+
+/-- Binding runs each successful branch in its own stored state and retains error branches. -/
+theorem run_bind (action : EnumerateM Symbol Guard α) (next : α → EnumerateM Symbol Guard β)
+    (state : State Symbol Guard) :
+    ExceptT.run ((action >>= next) state) = (ExceptT.run (action state)).flatMap
+      (fun result => match result with
+        | .error error => [.error error]
+        | .ok (value, after) => ExceptT.run (next value after)) := by
+  simp only [bind, StateT.bind, ExceptT.run, ExceptT.bind, ExceptT.mk]
+  congr 1
+  funext result
+  cases result with
+  | error error => rfl
+  | ok pair => cases pair; rfl
+
+/-- Successful sequential execution is exactly composition through one successful intermediate state. -/
+theorem success_bind (action : EnumerateM Symbol Guard α) (next : α → EnumerateM Symbol Guard β)
+    (before : State Symbol Guard) (value : β) (after : State Symbol Guard) :
+    Success (action >>= next) before value after ↔
+      ∃ middle intermediate, Success action before middle intermediate ∧ Success (next middle) intermediate value after := by
+  simp only [Success, run_bind, List.mem_flatMap]
+  constructor
+  · rintro ⟨result, member, continued⟩
+    cases result with
+    | error error => simp at continued
+    | ok pair => exact ⟨pair.1, pair.2, member, continued⟩
+  · rintro ⟨middle, intermediate, member, continued⟩
+    exact ⟨.ok (middle, intermediate), member, continued⟩
+
+/-- A deterministic first step supplies exactly its returned state to the next step. -/
+theorem bind_single (action : EnumerateM Symbol Guard α) (next : α → EnumerateM Symbol Guard β)
+    (before after : State Symbol Guard) (value : α)
+    (result : action before = [.ok (value, after)]) :
+    (action >>= next) before = next value after := by
+  change ExceptT.run ((action >>= next) before) = ExceptT.run (next value after)
+  rw [run_bind]
+  change (action before : List (Except Error (α × State Symbol Guard))).flatMap _ = _
+  rw [result]
+  simp
+
+
+/home/tritlo/Code/mcfta/lean/MicroCFTA/Language.lean:26-43
+/-- Relate the entries of two lists at the same positions. -/
+inductive All₂ {α β : Type} (R : α → β → Prop) : List α → List β → Prop where
+  | nil : All₂ R [] []
+  | cons : R a b → All₂ R as bs → All₂ R (a :: as) (b :: bs)
+
+/-- Replace a pointwise relation by a weaker relation. -/
+theorem All₂.imp {α β : Type} {R S : α → β → Prop}
+    (f : ∀ a b, R a b → S a b) {as bs} (h : All₂ R as bs) : All₂ S as bs := by
+  induction h with
+  | nil => exact .nil
+  | cons h hs ih => exact .cons (f _ _ h) ih
+
+/-- Pointwise related lists have the same length. -/
+theorem All₂.length_eq {α β : Type} {R : α → β → Prop}
+    {as bs} (h : All₂ R as bs) : as.length = bs.length := by
+  induction h with
+  | nil => rfl
+  | cons _ _ ih => simpa using ih
+
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedConstructorTemplates.lean:13-32
+/-- Complete nonrecursive edge keys retain the symbol, ordered child references, and constraint. -/
+structure EdgeKey (Symbol Guard : Type) where
+  symbol : Symbol
+  children : List NodeRef
+  constraint : Guard
+  deriving DecidableEq
+
+mutual
+/-- Stored node records retain the source constructor data and cached free/depth fields. -/
+inductive Value (Symbol Guard : Type) where
+  | empty
+  | reference (name : Reference)
+  | node (entry : Interned NodeKey) (edges : List (EdgeValue Symbol Guard)) (depth : Nat) (free : List Reference)
+  | union (entry : Interned NodeKey) (members : List (Value Symbol Guard)) (depth : Nat) (free : List Reference)
+  | mu (entry : Interned NodeKey) (body depthShape ordinaryShape : Value Symbol Guard)
+
+/-- Stored edge records retain the canonical key and complete immutable child records. -/
+inductive EdgeValue (Symbol Guard : Type) where
+  | mk (entry : Interned (EdgeKey Symbol Guard)) (children : List (Value Symbol Guard))
+end
+
+/home/tritlo/Code/mcfta/lean/MicroCFTA/Fragments.lean:20-25
+
+/-- An ordered symbol fragment or a hole named by a union-find variable. -/
+inductive Fragment (Symbol : Type) where
+  | node (symbol : Symbol) (children : List (Fragment Symbol))
+  | hole (uv : Nat)
+
+
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationConstraint.lean:7-17
+variable {Formula : Type}
+
+/-- Read the actual source equalities and retain the complete residual constraint. -/
+noncomputable def project (constraint : SourceSymbolicIndex.Constraint Formula) :
+    Option (List EqualityTrie.Trie × Option (SourceSymbolicIndex.Constraint Formula))
+ :=
+  match sourceEqualities constraint with
+  | none => none
+  | some classes =>
+      some (EnumerationEquality.readClasses classes,
+        if (positive constraint.guard).isSome then none else some constraint)
+
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningTemplates.lean:13-17
+open Language Fragments EnumerationState SourcePruningPartialMatch
+attribute [local instance] FormulaExecutable.formulaDecidableEq
+
+/-- The existing complete source alphabet, including refinements. -/
+abbrev Symbol := SourceObservations.Label FullSyntax.Formula
+
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceSymbolicIndex.lean:17-20
+structure Constraint (Formula : Type) where
+  equalities : Option (List (List Path))
+  guard : Guard Formula
+
+
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationObservation.lean:9-25
+Storage bounds supply finite observations and persist through actual reads.
+Slot-write producers and native representation correspondence remain separate.
+-/
+namespace MicroCFTA.SourcePruningEnumerationObservation
+open EnumerationState EnumerationCorrectness EnumerationCompressionFrame EnumerationObservations
+open SourcePruningEnumerationNodes
+local notation "Symbol" => SourcePruningTemplates.Symbol
+variable {EnumGuard NativeGuard : Type}
+
+/-- Each stored pending handle decodes to a closed available interned value. -/
+def PendingRealized (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (state : EnumerationState.State Symbol EnumGuard) : Prop :=
+  ∀ (slot node : Nat) (scs : List EnumerationState.Suspended),
+    state.values[slot]? = some (.unenumerated (some node) scs) →
+      ∃ value : InternedConstructorTemplates.Value Symbol NativeGuard,
+        lookupNode heap node = some value ∧
+        InternedProbeProvenance.Available heap value ∧ value.free = []
+
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceEqualityRequiredCache.lean:18-22
+/-- A worker cache supports complete closed recursive head exposure. -/
+structure Ready (state : State Symbol Guard) : Prop where
+  semantic : SemanticHeap state
+  covered : Covered [] state
+  depth : InternedOpenDepthReadback.Heap state
+
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedBinderProtocol.lean:146-153
+inductive Reference where
+  | interned (identity : Nat)
+  | uninterned (depth : Nat)
+  | depth
+  | intersection (first second : Nat)
+  | state (position : Nat)
+  deriving DecidableEq, Ord, Repr
+
+
+/home/tritlo/Code/mcfta/lean/MicroCFTA/InternedBinderProtocol.lean:233-242
+/-- All fields of UninternedNode equality, with already interned edge identities. -/
+inductive NodeKey where
+  | node (edges : List Nat)
+  | empty
+  | union (members : List NodeRef)
+  | mu (probes : MuKey NodeRef)
+  deriving DecidableEq, Repr
+
+/-- The actual Mu constructor distinguishes different pairs of probe identities. -/
+theorem mu_key_injective : Function.Injective NodeKey.mu := by
+
+/home/tritlo/Code/mcfta/lean/MicroCFTA/Cache.lean:123-127
+/-- A canonical interned entry retains both its identity and its structural key. -/
+structure Interned (Key : Type) where
+  identity : Nat
+  key : Key
+deriving DecidableEq
+
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentEnumerationOrder.lean:100-128
+/-- Raw interned order uses the supplied node read and ignores the original root. -/
+def internedEdgesOf (nodeEdges : Node → List Edge) (_root node : Node) : List Edge := nodeEdges node
+
+/-- Raw edge selection requires no order instance on symbols or nodes. -/
+theorem interned_exact (nodeEdges : Node → List Edge) (root node : Node) :
+    internedEdgesOf nodeEdges root node = nodeEdges node := rfl
+
+/-- At the actual ordinary branch, the raw source accessor returns the stored edge list. -/
+theorem interned_ordinary (root : InternedConstructorTemplates.Value Symbol Guard)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (edges : List (InternedConstructorTemplates.EdgeValue Symbol Guard)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference) :
+    internedEdgesOf InternedEdgeResidency.nodeEdges root (.node entry edges depth free) = edges := rfl
+
+/-- Actual finite CPS branching retains raw edge order, duplicates, and the same input state. -/
+theorem interned_branches (nodeEdges : Node → List Edge) (root node : Node) (state : BranchState) :
+    EnumerationCPS.allBranches (EnumerationCPS.branches (internedEdgesOf nodeEdges root node)) state =
+      (nodeEdges node).map (fun edge => (edge, state)) :=
+  EnumerationCPS.allBranches_exact _ _ (EnumerationCPS.branches_represents _) state
+
+/-- Canonical closure branching retains the selected weighted rows in their exact order. -/
+theorem canonical_branches (identity : Node → Int) (canonicalOrder : Node → Cache.Table Int (List Edge))
+    (canonicalEdges : Node → List Edge) (le : Weight → Weight → Bool) (weights : Option (Edge → Weight))
+    (root node : Node) (state : BranchState) :
+    EnumerationCPS.allBranches
+      (EnumerationCPS.branches (canonicalEdgesOf identity canonicalOrder canonicalEdges le weights root node)) state =
+      (byWeights le weights ((canonicalOrder root (identity node)).getD (canonicalEdges node))).map
+        (fun edge => (edge, state)) := by
+  rw [EnumerationCPS.allBranches_exact _ _ (EnumerationCPS.branches_represents _) state, weights_after_lookup]
+
+/home/tritlo/Code/mcfta/cfta/src/Data/CFTA/Enumeration.hs:371-378
+-- | One branch for each element, in order.
+branches :: [a] -> EnumerateM symbol a
+{-# INLINE branches #-}
+branches xs = EnumerateM $ \s success later -> foldr (\x rest -> success x s rest) later xs
+
+-- | The result and the final state of every branch, in order, lazily.
+allBranches :: EnumerateM symbol a -> EnumerationState symbol -> [(a, EnumerationState symbol)]
+allBranches (EnumerateM m) s = m s (\a s' rest -> (a, s') : rest) []
+
+/home/tritlo/Code/mcfta/cfta/src/Data/CFTA/Enumeration.hs:761-787
+enumerateEdgeWith prepareChild scs e = do
+    let inherited = descendScs IntMap.empty scs
+    -- The inherited obligations must fit the edge. Its own classes fit it.
+    guard $ maybe True (\(highest, _) -> compareLength (edgeChildren e) highest == GT) (IntMap.lookupMax inherited)
+
+    newScs <- mapM pecToSuspendedConstraint (unsafeGetEclasses $ equalities $ edgeConstraint e)
+    let children = descendScs inherited newScs
+    fragment <-
+        TermFragmentNode (edgeSymbol e)
+            <$> zipWithM (\i n -> prepareChild (IntMap.findWithDefault Sequence.Empty i children) n) [0 ..] (edgeChildren e)
+    when (residual (edgeConstraint e)) $
+        modify' $
+            \s -> s{_obligations = (edgeConstraint e, fragment) : _obligations s}
+    return fragment
+
+{- | Expand one ordinary node and defer its eligible children.
+Keep the existing preparation of terminal equality endpoints and recursive
+boundaries. A selected root must not defer itself into another fresh slot.
+-}
+enumerateShallowHere ::
+    (Hashable symbol, Typeable symbol) =>
+    Seq SuspendedConstraint -> Node symbol -> EnumerateM symbol (TermFragment symbol)
+enumerateShallowHere scs n@(Node _)
+    | not (any (isTerminalPathTrie . scGetPathTrie) scs) = do
+        edgesOf <- gets _edgesOf
+        enumerateEdgeWith prepareShallowChild scs =<< branches (edgesOf n)
+enumerateShallowHere scs n = enumerateNode scs n
+
+/home/tritlo/Code/mcfta/cfta/src/Data/CFTA/Enumeration.hs:1180-1193
+termsPruneUntil ::
+    forall symbol a.
+    (Hashable symbol, Ord symbol, Typeable symbol) =>
+    a ->
+    ExpansionOrder a ->
+    (a -> UVar -> Node symbol -> Node symbol) ->
+    (a -> UVar -> Bool) ->
+    (a -> UVar -> Either (TermFragment symbol) (Node symbol) -> EnumerateM symbol (Bool, a)) ->
+    Node symbol ->
+    [Term (PartialSymbol symbol)]
+termsPruneUntil ost order narrow stop oracle n =
+    map fst $ flip allBranches (initEnumerationState (canonicalEdgesOf Nothing n) n) $ do
+        _ <- enumerateUntil' (Just stop) narrow enumerateShallowHere ost order oracle
+        rootTermFrag >>= expandPartialTermFrag
+
+/home/tritlo/Code/mcfta/cfta/src/Data/CFTA/Enumeration.hs:1235-1286
+runs ::
+    (Hashable symbol, Ord symbol, Typeable symbol) =>
+    symbol -> Node symbol -> [(Term symbol, [(Constraint, Term symbol)])]
+runs = runsFrom (canonicalEdgesOf Nothing)
+
+{- | 'runs' with a weight for each edge. The enumeration tries the edges of a
+node with larger weights first, and edges with equal weights in the order of
+'runs'. The weights only change the order of the edges of each node, so the
+result has the runs of 'runs', in another order. A weight must not be NaN.
+-}
+runsBy ::
+    (Hashable symbol, Ord symbol, Typeable symbol) =>
+    (Edge symbol -> Double) -> symbol -> Node symbol -> [(Term symbol, [(Constraint, Term symbol)])]
+runsBy weight = runsFrom (canonicalEdgesOf (Just weight))
+
+{- | 'runsBy' with a function on the edges of each node, which the
+enumeration applies before it tries them. It sees the node of the current
+run: in a run, a node that an equality constraint reaches is the
+intersection of the nodes of all the paths of its class, because the
+enumeration expands it only after all of them. A function that keeps a
+subset of the edges keeps a subset of the runs.
+-}
+runsNarrowedBy ::
+    (Hashable symbol, Ord symbol, Typeable symbol) =>
+    (Edge symbol -> Double) ->
+    ([Edge symbol] -> [Edge symbol]) ->
+    symbol ->
+    Node symbol ->
+    [(Term symbol, [(Constraint, Term symbol)])]
+runsNarrowedBy weight narrowing = runsFrom (\root -> narrowing . canonicalEdgesOf (Just weight) root)
+
+{- | 'runs' in the order of the edges in the automaton, without
+'canonicalOrder'. The result has the runs of 'runs', in another order, which
+depends on the automata that the process built before. It is for a caller
+that sorts the runs itself, and it saves the canonical classes of the graph.
+-}
+runsInterned ::
+    (Hashable symbol, Typeable symbol) =>
+    symbol -> Node symbol -> [(Term symbol, [(Constraint, Term symbol)])]
+runsInterned = runsFrom (const nodeEdges)
+
+-- | 'runs' with the order of the edges of each node, from the root.
+runsFrom ::
+    (Hashable symbol, Typeable symbol) =>
+    (Node symbol -> Node symbol -> [Edge symbol]) -> symbol -> Node symbol -> [(Term symbol, [(Constraint, Term symbol)])]
+runsFrom order recursionSymbol n =
+    map fst $ flip allBranches (initEnumerationState (order n) n) $ do
+        enumerateFully
+        term <- expandUVarWith recursionSymbol (intToUVar 0)
+        obligations <- gets _obligations
+        pending <- mapM (\(constraint, fragment) -> (constraint,) <$> expandTermFragWith recursionSymbol fragment) obligations
+        return (term, pending)
+
+/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/src/lean/Init/Prelude.lean:2981-2986
+inductive List (α : Type u) where
+  /-- The empty list, usually written `[]`. -/
+  | nil : List α
+  /--
+  The list whose first element is `head`, where `tail` is the rest of the list.
+  Usually written `head :: tail`.
+
+/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/src/lean/Init/Prelude.lean:3733-3741
+class Bind (m : Type u → Type v) where
+  /--
+  Sequences two computations, allowing the second to depend on the value computed by the first.
+
+  If `x : m α` and `f : α → m β`, then `x >>= f : m β` represents the result of executing `x` to get
+  a value of type `α` and then passing it to `f`.
+  -/
+  bind : {α β : Type u} → m α → (α → m β) → m β
+
+
+/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/src/lean/Init/Prelude.lean:3749-3764
+class Pure (f : Type u → Type v) where
+  /--
+  Given `a : α`, then `pure a : f α` represents an action that does nothing and returns `a`.
+
+  Examples:
+  * `(pure "hello" : Option String) = some "hello"`
+  * `(pure "hello" : Except (Array String) String) = Except.ok "hello"`
+  * `(pure "hello" : StateM Nat String).run 105 = ("hello", 105)`
+  -/
+  pure {α : Type u} : α → f α
+
+export Pure (pure)
+
+/--
+A functor in the sense used in functional programming, which means a function `f : Type u → Type v`
+has a way of mapping a function over its contents. This `map` operator is written `<$>`, and
+
+/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/src/lean/Init/Prelude.lean:3893-3897
+class Monad (m : Type u → Type v) : Type (max (u+1) v) extends Applicative m, Bind m where
+  map      f x := bind x (Function.comp pure f)
+  seq      f x := bind f fun y => Functor.map y (x ())
+  seqLeft  x y := bind x fun a => bind (y ()) (fun _ => pure a)
+  seqRight x y := bind x fun _ => y ()
+
+/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/src/lean/Init/Data/List/Basic.lean:671-692
+@[simp, grind =] theorem flatten_nil : List.flatten ([] : List (List α)) = [] := rfl
+@[simp, grind =] theorem flatten_cons : (l :: L).flatten = l ++ L.flatten := rfl
+
+/-! ### singleton -/
+
+/--
+Constructs a single-element list.
+
+Examples:
+ * `List.singleton 5 = [5]`.
+ * `List.singleton "green" = ["green"]`.
+ * `List.singleton [1, 2, 3] = [[1, 2, 3]]`
+-/
+@[inline] protected def singleton {α : Type u} (a : α) : List α := [a]
+
+/-! ### flatMap -/
+
+@[simp, grind =] theorem flatMap_nil {f : α → List β} : List.flatMap f [] = [] := by simp [List.flatMap]
+@[simp, grind =] theorem flatMap_cons {x : α} {xs : List α} {f : α → List β} :
+  List.flatMap f (x :: xs) = f x ++ List.flatMap f xs := by simp [List.flatMap]
+
+@[simp, grind _=_] theorem flatMap_append {xs ys : List α} {f : α → List β} :
+
+/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/src/lean/Init/Data/List/Lemmas.lean:418-419
+theorem mem_singleton {a b : α} : a ∈ [b] ↔ a = b := by
+  simp
+
+/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/src/lean/Init/Data/List/Lemmas.lean:1956-1961
+@[simp] theorem mem_flatten : ∀ {L : List (List α)}, a ∈ L.flatten ↔ ∃ l, l ∈ L ∧ a ∈ l
+  | [] => by simp
+  | _ :: _ => by simp [mem_flatten, or_and_right, exists_or]
+
+@[simp] theorem flatten_eq_nil_iff {L : List (List α)} : L.flatten = [] ↔ ∀ l ∈ L, l = [] := by
+  induction L <;> simp_all
