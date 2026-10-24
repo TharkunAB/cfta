@@ -2,6 +2,12 @@
 
 ## 0.1.0.0 - Unreleased
 
+- `Data.CFTA.Trace`: `determinize` makes the automaton of a trace language
+  with one run for each trace (the subset construction, at most `2^n - 1`
+  states for an input of `n` states). `concatenate` gives the traces of one
+  automaton followed by the traces of another, and `project` replaces each
+  step by its image in a coarser alphabet. Both results come from the subset
+  construction, so `Data.CFTA.Sized` counts them with its count table.
 - Add `Data.CFTA.Trace`: the trace languages of state machines. A
   `StateMachine` gives the precondition and the next state of each step over
   a finite abstract state, and the final states. `traceAutomaton` builds the
