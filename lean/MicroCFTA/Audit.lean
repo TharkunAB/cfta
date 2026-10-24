@@ -1,4 +1,5 @@
 import MicroCFTA.SourcePruningEnumerationCheckedRows
+import MicroCFTA.SourcePruningEnumerationRawExact
 import MicroCFTA.SourcePruningEnumerationSelectedRow
 import MicroCFTA.SourcePruningEnumerationCheckedArity
 import MicroCFTA.SourcePruningEnumerationSetChildrenArity
