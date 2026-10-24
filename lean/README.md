@@ -1,5 +1,46 @@
 # cfta formal model
 
+## Accepted edge arity after equal-length child replacement
+
+Updated: 2026-10-24. Main `74250bd88` is incorporated.
+Proof: `cf6887b092929486f40104675da093487a64f98f`.
+Read `lean/notes-current-pruning-enumeration-set-children-arity.md`.
+
+The theorem starts from the same genuine accepted checked-constructor receipt.
+It retains its operation/cache/heap receipt and returned fields. The actual
+setChildren rebuild runs in a current ready heap with available replacements.
+Their list must have the original child count. No history between the origin
+and current heaps is assumed or proved. Actual child-work callers keep that
+trace separately. The current heap can include allocations by those children.
+
+The theorem derives the actual equal-length direct request and rebuilt run.
+It assumes no behavior of the unused length-changing fallback. The result
+retains current-heap Keeps, residency and canonical full returned fields.
+Original and rebuilt edges have the same projected classes, valid tries,
+per-class path readback and complete residual choice. Their own suspended
+variables fit their actual arities for every starting counter. No desired
+trie bound, output state, term satisfaction or callback law is assumed.
+No enumeration allocation or residual evaluation/insertion runs here.
+
+The first strict input failed because simplification did not identify the expanded rebuilt child list. The second input makes that goal explicit and rewrites the exact returned children before the arity transfer. It passes with a literal empty log under all linters and warnings as errors. The original input, full failed output and exact correction remain. No proof limit changed. The public readback, installed build and Audit pass. All 129 public-output lines retain the complete theorem signature without display omissions.
+The installed build passes 1053 jobs. Audit passes 3694 jobs and
+76175 dependency checks, with the unchanged older warning.
+accepted_setChildren_arity reports exactly propext, Classical.choice and Quot.sound. No project axiom is added.
+Frozen declarations, scoped types, reviews and all actual raw evidence remain.
+The prior own-arity checkpoint's27 post-seal inputs remain, including its
+successful second seal, already-sealed assessment and separate citation
+erratum. Its failed first seal remains in the preserved baseline.
+
+Universal checked origin for arbitrary resident/selected edges, changed-arity
+rechecks and rejected sentinels remain separate. Terminal native merging,
+selector, graph/ID/index/memo2, extraction/signed bounds, cutoff language,
+full typing/pruning/driver, runtime/solver/resources and convergence remain.
+H6 stays strongest combined. H23 and older constructor/equality work remain.
+No Haskell source changes. FINDINGS keeps all six repair handoffs first.
+All earlier work and the optimized core remain. The full goal stays ACTIVE
+and incomplete. This record precedes evidence and push.
+
+
 ## Accepted native edge own-constraint arity
 
 Updated: 2026-10-24. Main `74250bd88` is incorporated.
