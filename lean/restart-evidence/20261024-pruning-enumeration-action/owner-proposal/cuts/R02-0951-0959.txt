@@ -1,0 +1,9 @@
+    forall symbol a.
+    (Hashable symbol, Typeable symbol) =>
+    Maybe (a -> UVar -> Bool) ->
+    (a -> UVar -> Node symbol -> Node symbol) ->
+    (Seq SuspendedConstraint -> Node symbol -> EnumerateM symbol (TermFragment symbol)) ->
+    a ->
+    ExpansionOrder a ->
+    (a -> UVar -> Either (TermFragment symbol) (Node symbol) -> EnumerateM symbol (Bool, a)) ->
+    EnumerateM symbol (Maybe a)

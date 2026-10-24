@@ -1,0 +1,43 @@
+    (stop : Option (OracleState → Nat → Bool))
+    (narrow : OracleState → Nat → Nat → Nat)
+    (expandAt : Nat → NodeExpansion Symbol Guard)
+    (order : OracleState → List Nat → Option Nat)
+    (oracle : Oracle Symbol Guard OracleState) :
+    Nat → OracleState → EnumerateM Symbol Guard (Option OracleState)
+  | 0, _ => failure .fuelExhausted
+  | fuel + 1, oracleState => do
+      let step : EnumerateM Symbol Guard (Option OracleState) := do
+        let next := pickNext (order oracleState) (← findExpandable graph (fuel + 1))
+        match next with
+        | .done => pure none
+        | .stuck => reject
+        | .expand uv =>
+            match ← getValue (fuel + 1) uv with
+            | .unenumerated (some node) scs =>
+                let repeated ← checkRepeated graph (fuel + 1) uv node scs
+                if repeated then
+                  enumerateUntil graph stop narrow expandAt order oracle fuel oracleState
+                else
+                  let narrowed := narrow oracleState uv node
+                  match graph.node narrowed with
+                  | .empty => reject
+                  | _ =>
+                      if narrowed = node then pure ()
+                      else
+                        let root ← representative (fuel + 1) uv
+                        setValue root (.unenumerated (some narrowed) scs)
+                      let (beforeReject, beforeState) ← oracle oracleState uv (.inr narrowed)
+                      require (!beforeReject)
+                      let fragment ← enumerateOutWith graph (expandAt (fuel + 1)) (fuel + 1) uv
+                      let (afterReject, afterState) ← oracle beforeState uv (.inl fragment)
+                      require (!afterReject)
+                      enumerateUntil graph stop narrow expandAt order oracle fuel afterState
+            | _ => reject
+      match stop with
+      | none => step
+      | some rule =>
+          let pending := remaining graph (← get)
+          if !pending.isEmpty && pending.all (rule oracleState) then
+            pure (some oracleState)
+          else step
+

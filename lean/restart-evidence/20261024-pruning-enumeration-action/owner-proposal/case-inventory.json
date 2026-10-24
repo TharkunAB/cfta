@@ -1,0 +1,319 @@
+{
+  "prepare_native_match": {
+    "scrutinee": "SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue heap",
+    "type": "MergedSourceComparison.Result Symbol NativeGuard (InternedConstructorTemplates.Value Symbol NativeGuard)",
+    "cases": [
+      {
+        "pattern": "failed fault after",
+        "fields": [
+          {
+            "name": "fault",
+            "type": "MergedSourceComparison.Fault"
+          },
+          {
+            "name": "after",
+            "type": "InternedConstructorTemplates.State Symbol NativeGuard"
+          }
+        ],
+        "effect": "Forward exact failed fault/after; no action."
+      },
+      {
+        "pattern": "done result nextHeap",
+        "fields": [
+          {
+            "name": "result",
+            "type": "InternedConstructorTemplates.Value Symbol NativeGuard"
+          },
+          {
+            "name": "nextHeap",
+            "type": "InternedConstructorTemplates.State Symbol NativeGuard"
+          }
+        ]
+      }
+    ]
+  },
+  "prepare_Empty_first_match": {
+    "scope": "native.done",
+    "target": "result",
+    "type": "InternedConstructorTemplates.Value Symbol NativeGuard",
+    "patterns": [
+      {
+        "pattern": ".empty",
+        "binders": []
+      },
+      {
+        "pattern": "_",
+        "binders": []
+      }
+    ],
+    "Value_DecidableEq_required": false
+  },
+  "prepare_encode_match": {
+    "scope": "native.done.nonempty",
+    "scrutinee": "encodeNode result",
+    "type": "Option Nat",
+    "cases": [
+      {
+        "pattern": "none",
+        "binders": []
+      },
+      {
+        "pattern": "some newHandle",
+        "binders": [
+          {
+            "name": "newHandle",
+            "type": "Nat"
+          }
+        ]
+      }
+    ]
+  },
+  "prepare_handle_condition": {
+    "file": "condition-same.lean.txt",
+    "type": "Prop",
+    "proposition": "newHandle = oldHandle",
+    "Decidable": "existing Nat equality only",
+    "named_proof_binders": [],
+    "true_scope": "pure Unit",
+    "false_scope": "actual representative-bind-setValue"
+  },
+  "proof_case_splits": [
+    {
+      "scope": "equal.prepare_equation",
+      "target": "result",
+      "target_type": "InternedConstructorTemplates.Value Symbol NativeGuard",
+      "command": "cases result with",
+      "named_equation": null,
+      "induction": false,
+      "constructors": [
+        {
+          "constructor": "empty",
+          "pattern": "empty",
+          "fields": [],
+          "value": ".empty",
+          "result_replaced_by": ".empty",
+          "inherited_narrowed_type": "SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue heap = .done (.empty) nextHeap",
+          "inherited_newEncoded_type": "encodeNode (.empty) = some newHandle",
+          "inherited_nonempty_type": "(.empty : InternedConstructorTemplates.Value Symbol NativeGuard) ≠ .empty"
+        },
+        {
+          "constructor": "reference",
+          "pattern": "reference name",
+          "fields": [
+            {
+              "name": "name",
+              "type": "InternedBinderProtocol.Reference"
+            }
+          ],
+          "value": ".reference name",
+          "result_replaced_by": ".reference name",
+          "inherited_narrowed_type": "SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue heap = .done (.reference name) nextHeap",
+          "inherited_newEncoded_type": "encodeNode (.reference name) = some newHandle",
+          "inherited_nonempty_type": "(.reference name : InternedConstructorTemplates.Value Symbol NativeGuard) ≠ .empty"
+        },
+        {
+          "constructor": "node",
+          "pattern": "node nodeEntry edges depth free",
+          "fields": [
+            {
+              "name": "nodeEntry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+            },
+            {
+              "name": "edges",
+              "type": "List (InternedConstructorTemplates.EdgeValue Symbol NativeGuard)"
+            },
+            {
+              "name": "depth",
+              "type": "Nat"
+            },
+            {
+              "name": "free",
+              "type": "List InternedBinderProtocol.Reference"
+            }
+          ],
+          "value": ".node nodeEntry edges depth free",
+          "result_replaced_by": ".node nodeEntry edges depth free",
+          "inherited_narrowed_type": "SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue heap = .done (.node nodeEntry edges depth free) nextHeap",
+          "inherited_newEncoded_type": "encodeNode (.node nodeEntry edges depth free) = some newHandle",
+          "inherited_nonempty_type": "(.node nodeEntry edges depth free : InternedConstructorTemplates.Value Symbol NativeGuard) ≠ .empty"
+        },
+        {
+          "constructor": "union",
+          "pattern": "union unionEntry members depth free",
+          "fields": [
+            {
+              "name": "unionEntry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+            },
+            {
+              "name": "members",
+              "type": "List (InternedConstructorTemplates.Value Symbol NativeGuard)"
+            },
+            {
+              "name": "depth",
+              "type": "Nat"
+            },
+            {
+              "name": "free",
+              "type": "List InternedBinderProtocol.Reference"
+            }
+          ],
+          "value": ".union unionEntry members depth free",
+          "result_replaced_by": ".union unionEntry members depth free",
+          "inherited_narrowed_type": "SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue heap = .done (.union unionEntry members depth free) nextHeap",
+          "inherited_newEncoded_type": "encodeNode (.union unionEntry members depth free) = some newHandle",
+          "inherited_nonempty_type": "(.union unionEntry members depth free : InternedConstructorTemplates.Value Symbol NativeGuard) ≠ .empty"
+        },
+        {
+          "constructor": "mu",
+          "pattern": "mu muEntry body depthShape ordinaryShape",
+          "fields": [
+            {
+              "name": "muEntry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+            },
+            {
+              "name": "body",
+              "type": "InternedConstructorTemplates.Value Symbol NativeGuard"
+            },
+            {
+              "name": "depthShape",
+              "type": "InternedConstructorTemplates.Value Symbol NativeGuard"
+            },
+            {
+              "name": "ordinaryShape",
+              "type": "InternedConstructorTemplates.Value Symbol NativeGuard"
+            }
+          ],
+          "value": ".mu muEntry body depthShape ordinaryShape",
+          "result_replaced_by": ".mu muEntry body depthShape ordinaryShape",
+          "inherited_narrowed_type": "SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue heap = .done (.mu muEntry body depthShape ordinaryShape) nextHeap",
+          "inherited_newEncoded_type": "encodeNode (.mu muEntry body depthShape ordinaryShape) = some newHandle",
+          "inherited_nonempty_type": "(.mu muEntry body depthShape ordinaryShape : InternedConstructorTemplates.Value Symbol NativeGuard) ≠ .empty"
+        }
+      ]
+    },
+    {
+      "scope": "changed.prepare_equation",
+      "target": "result",
+      "target_type": "InternedConstructorTemplates.Value Symbol NativeGuard",
+      "command": "cases result with",
+      "named_equation": null,
+      "induction": false,
+      "constructors": [
+        {
+          "constructor": "empty",
+          "pattern": "empty",
+          "fields": [],
+          "value": ".empty",
+          "result_replaced_by": ".empty",
+          "inherited_narrowed_type": "SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue heap = .done (.empty) nextHeap",
+          "inherited_newEncoded_type": "encodeNode (.empty) = some newHandle",
+          "inherited_nonempty_type": "(.empty : InternedConstructorTemplates.Value Symbol NativeGuard) ≠ .empty"
+        },
+        {
+          "constructor": "reference",
+          "pattern": "reference name",
+          "fields": [
+            {
+              "name": "name",
+              "type": "InternedBinderProtocol.Reference"
+            }
+          ],
+          "value": ".reference name",
+          "result_replaced_by": ".reference name",
+          "inherited_narrowed_type": "SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue heap = .done (.reference name) nextHeap",
+          "inherited_newEncoded_type": "encodeNode (.reference name) = some newHandle",
+          "inherited_nonempty_type": "(.reference name : InternedConstructorTemplates.Value Symbol NativeGuard) ≠ .empty"
+        },
+        {
+          "constructor": "node",
+          "pattern": "node nodeEntry edges depth free",
+          "fields": [
+            {
+              "name": "nodeEntry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+            },
+            {
+              "name": "edges",
+              "type": "List (InternedConstructorTemplates.EdgeValue Symbol NativeGuard)"
+            },
+            {
+              "name": "depth",
+              "type": "Nat"
+            },
+            {
+              "name": "free",
+              "type": "List InternedBinderProtocol.Reference"
+            }
+          ],
+          "value": ".node nodeEntry edges depth free",
+          "result_replaced_by": ".node nodeEntry edges depth free",
+          "inherited_narrowed_type": "SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue heap = .done (.node nodeEntry edges depth free) nextHeap",
+          "inherited_newEncoded_type": "encodeNode (.node nodeEntry edges depth free) = some newHandle",
+          "inherited_nonempty_type": "(.node nodeEntry edges depth free : InternedConstructorTemplates.Value Symbol NativeGuard) ≠ .empty"
+        },
+        {
+          "constructor": "union",
+          "pattern": "union unionEntry members depth free",
+          "fields": [
+            {
+              "name": "unionEntry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+            },
+            {
+              "name": "members",
+              "type": "List (InternedConstructorTemplates.Value Symbol NativeGuard)"
+            },
+            {
+              "name": "depth",
+              "type": "Nat"
+            },
+            {
+              "name": "free",
+              "type": "List InternedBinderProtocol.Reference"
+            }
+          ],
+          "value": ".union unionEntry members depth free",
+          "result_replaced_by": ".union unionEntry members depth free",
+          "inherited_narrowed_type": "SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue heap = .done (.union unionEntry members depth free) nextHeap",
+          "inherited_newEncoded_type": "encodeNode (.union unionEntry members depth free) = some newHandle",
+          "inherited_nonempty_type": "(.union unionEntry members depth free : InternedConstructorTemplates.Value Symbol NativeGuard) ≠ .empty"
+        },
+        {
+          "constructor": "mu",
+          "pattern": "mu muEntry body depthShape ordinaryShape",
+          "fields": [
+            {
+              "name": "muEntry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+            },
+            {
+              "name": "body",
+              "type": "InternedConstructorTemplates.Value Symbol NativeGuard"
+            },
+            {
+              "name": "depthShape",
+              "type": "InternedConstructorTemplates.Value Symbol NativeGuard"
+            },
+            {
+              "name": "ordinaryShape",
+              "type": "InternedConstructorTemplates.Value Symbol NativeGuard"
+            }
+          ],
+          "value": ".mu muEntry body depthShape ordinaryShape",
+          "result_replaced_by": ".mu muEntry body depthShape ordinaryShape",
+          "inherited_narrowed_type": "SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue heap = .done (.mu muEntry body depthShape ordinaryShape) nextHeap",
+          "inherited_newEncoded_type": "encodeNode (.mu muEntry body depthShape ordinaryShape) = some newHandle",
+          "inherited_nonempty_type": "(.mu muEntry body depthShape ordinaryShape : InternedConstructorTemplates.Value Symbol NativeGuard) ≠ .empty"
+        }
+      ]
+    }
+  ],
+  "proof_cases_count": 2,
+  "proof_constructor_branches": 10,
+  "named_case_equations": [],
+  "induction": null,
+  "extra_by_cases": []
+}

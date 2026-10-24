@@ -1,0 +1,35 @@
+def replaceWord (bits : Nat) (old new : UVarValue Symbol) (waiting : Waiting) : Waiting :=
+  countWord bits 1 (references new) (countWord bits (-1) (references old) waiting)
+
+/-- Bounds on the two actual slot scans derive exact machine replacement at every intermediate update. -/
+theorem replaceWord_exact (bits : Nat) (values : List (UVarValue Symbol)) (index : Nat)
+    (old new : UVarValue Symbol) (stored : values[index]? = some old)
+    (waiting : Waiting) (correct : Correct values waiting)
+    (beforeBound : ∀ uv, total uv values < (2 : Int) ^ bits)
+    (afterBound : ∀ uv, total uv (values.set index new) < (2 : Int) ^ bits) :
+    replaceWord bits old new waiting = replace old new waiting := by
+  have removal (uv : Nat) := remove_nonnegative values index old stored waiting correct uv
+  have subtract : countWord bits (-1) (references old) waiting = count (-1) (references old) waiting := by
+    apply decrement_exact
+    intro uv
+    have lower := removal uv
+    simp only [count_read, Int.neg_one_mul] at lower
+    exact ⟨by omega, by rw [correct.facts.2 uv]; exact beforeBound uv⟩
+  unfold replaceWord replace
+  rw [subtract]
+  apply increment_exact
+  intro uv
+  refine ⟨removal uv, ?_⟩
+  have final := afterBound uv
+  rw [total_set uv index values old new stored] at final
+  simpa only [count_read, Int.neg_one_mul, correct.facts.2 uv, Int.sub_eq_add_neg] using final
+
+/-- A bounded machine replacement retains the exact sparse waiting invariant. -/
+theorem replaceWord_correct (bits : Nat) (values : List (UVarValue Symbol)) (index : Nat)
+    (old new : UVarValue Symbol) (stored : values[index]? = some old)
+    (waiting : Waiting) (correct : Correct values waiting)
+    (beforeBound : ∀ uv, total uv values < (2 : Int) ^ bits)
+    (afterBound : ∀ uv, total uv (values.set index new) < (2 : Int) ^ bits) :
+    Correct (values.set index new) (replaceWord bits old new waiting) := by
+  rw [replaceWord_exact bits values index old new stored waiting correct beforeBound afterBound]
+  exact replace_correct values index old new stored waiting correct

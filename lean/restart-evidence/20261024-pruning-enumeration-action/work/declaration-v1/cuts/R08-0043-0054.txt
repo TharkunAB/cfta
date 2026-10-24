@@ -1,0 +1,12 @@
+def Value.depth : Value Symbol Guard → Nat
+  | .empty | .reference _ => 0
+  | .node _ _ depth _ | .union _ _ depth _ => depth
+  | .mu _ body _ _ => body.depth + 1
+
+/-- Read cached free references and remove the local reference of a Mu. -/
+def Value.free : Value Symbol Guard → List Reference
+  | .empty => []
+  | .reference name => [name]
+  | .node _ _ _ free | .union _ _ _ free => free
+  | .mu entry body _ _ => body.free.filter (· != .interned entry.identity)
+

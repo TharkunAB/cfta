@@ -1,0 +1,6 @@
+def graph (state : State Symbol Guard) (meet : Nat → Nat → Nat) : Graph Symbol Guard where
+  node identity := match rows state.caches identity with | [] => .empty | first :: rest => .alternatives (first :: rest)
+  intersect := meet
+
+theorem graph_rows (state : State Symbol Guard) (meet : Nat → Nat → Nat) (identity : Nat) :
+    nodeRows (graph state meet) identity = rows state.caches identity := by

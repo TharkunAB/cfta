@@ -1,0 +1,11 @@
+/-- Read an arbitrary integer count as its signed machine representation. -/
+def wrap (bits : Nat) (value : Int) : Int := (BitVec.ofInt (bits + 1) value).toInt
+
+/-- Previously wrapped counts retain exact modular addition. -/
+theorem add_wrap (bits : Nat) (value change : Int) :
+    wordAdd bits (wrap bits value) change = wrap bits (value + change) := by
+  simp only [wordAdd, wrap, BitVec.ofInt_toInt, BitVec.ofInt_add]
+
+/-- A sparse machine map represents the modular image of each mathematical count. -/
+def Represents (bits : Nat) (counts : Nat → Int) (waiting : Waiting) : Prop :=
+  ∀ uv, waiting uv = encode (wrap bits (counts uv))

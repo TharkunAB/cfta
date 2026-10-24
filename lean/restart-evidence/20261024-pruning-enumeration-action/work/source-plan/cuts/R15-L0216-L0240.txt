@@ -1,0 +1,25 @@
+theorem scan_agrees (graph : Graph Symbol Guard) (roots : Nat → Nat) (state : Cached Symbol Guard)
+    (correct : Correct graph roots state) (paths : Roots state.core.representatives roots)
+    (fuel : Nat) (result : Option (List Nat)) (after : State Symbol Guard)
+    (success : Success (findExpandable graph fuel) state.core result after) :
+    result = find state ∧ EnumerationCompressionFrame.Frame state.core after := by
+  have total : UnionFind.Total state.core.representatives := by
+    intro uv
+    obtain ⟨size, path⟩ := paths uv
+    exact ⟨roots uv, size, path⟩
+  exact ⟨(findExpandable_exact graph fuel roots state.core after result paths success).2.trans
+    (find_exact graph roots state correct).symm,
+    EnumerationCompressionFrame.findExpandable_frame graph fuel state.core after result total success⟩
+
+/-- A total representative interpretation supplies a finite old scan for the same pure selection. -/
+theorem scan_complete (graph : Graph Symbol Guard) (roots : Nat → Nat) (state : Cached Symbol Guard)
+    (correct : Correct graph roots state) (paths : Roots state.core.representatives roots) :
+    ∃ fuel after, Success (findExpandable graph fuel) state.core (find state) after ∧
+      EnumerationCompressionFrame.Frame state.core after := by
+  have total : UnionFind.Total state.core.representatives := by
+    intro uv
+    obtain ⟨size, path⟩ := paths uv
+    exact ⟨roots uv, size, path⟩
+  obtain ⟨fuel, result, after, success⟩ := EnumerationExecution.findExpandable_terminates graph state.core total
+  obtain ⟨same, frame⟩ := scan_agrees graph roots state correct paths fuel result after success
+  exact ⟨fuel, after, same ▸ success, frame⟩

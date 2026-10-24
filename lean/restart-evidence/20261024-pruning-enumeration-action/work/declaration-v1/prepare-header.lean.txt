@@ -1,0 +1,9 @@
+/-- Narrow once and retain the complete value beside the actual enumeration action. -/
+def prepare [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol NativeGuard)]
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
+    (admits : Key → InternedConstructorTemplates.Value Symbol NativeGuard → Bool)
+    (metadata : Metadata Typing) (nativeFuel representativeFuel uv oldHandle : Nat)
+    (scs : List EnumerationState.Suspended) (oldValue : InternedConstructorTemplates.Value Symbol NativeGuard)
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard) :
+    MergedSourceComparison.Result Symbol NativeGuard
+      (InternedConstructorTemplates.Value Symbol NativeGuard × Option (EnumerateM Symbol EnumGuard Unit))

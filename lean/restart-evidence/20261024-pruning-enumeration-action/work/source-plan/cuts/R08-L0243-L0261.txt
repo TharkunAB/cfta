@@ -1,0 +1,19 @@
+/-- Slots that can initiate work, before suspended dependencies are removed. -/
+def candidate (graph : Graph Symbol Guard) : UVarValue Symbol → Bool
+  | .unenumerated (some node) scs =>
+      match graph.node node with | .recursive _ => !scs.isEmpty | _ => true
+  | _ => false
+
+/-- Scan live slots and resolve the suspended variables that block expansion. -/
+def findExpandable (graph : Graph Symbol Guard) (fuel : Nat) :
+    EnumerateM Symbol Guard (Option (List Nat)) := do
+  let values := (← get).values
+  let (candidates, blocked) ← values.zipIdx.foldlM
+    (fun (candidates, blocked) (value, index) => do
+      match value with
+      | .unenumerated _ scs =>
+          let blocked ← scs.foldlM (fun blocked sc => do
+            pure ((← representative fuel sc.var) :: blocked)) blocked
+          pure (if candidate graph value then candidates ++ [index] else candidates, blocked)
+      | _ => pure (candidates, blocked)) ([], [])
+  if candidates.isEmpty then pure none

@@ -1,0 +1,9 @@
+
+/-- A bounded traversal retains the two constructor caches and its memo table. -/
+structure State (Symbol Guard : Type) where
+  caches : Caches Symbol Guard
+  memo : Cache.Table Key Nat
+
+def encode (state : State Symbol Guard) (key : Key) : Nat := (state.memo key).getD 0
+
+def Scope (state : State Symbol Guard) (key : Key) : Prop := ∃ identity, state.memo key = some identity

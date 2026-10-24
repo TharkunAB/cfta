@@ -1,0 +1,23 @@
+theorem candidates_exact (graph : Graph Symbol Guard) (roots : Nat → Nat) (state : Cached Symbol Guard)
+    (correct : Correct graph roots state) :
+    EnumerationIndexSelection.candidates state = EnumerationUntil.remaining graph state.core := by
+  unfold EnumerationIndexSelection.candidates EnumerationUntil.remaining
+  rw [correct.aligned, List.range_eq_range', ← List.zipIdx_map_snd 0 state.core.values, List.filter_map]
+  congr 1
+  apply List.filter_congr
+  intro entry member
+  have stored := List.mem_zipIdx_iff_getElem?.mp member
+  simp only [Function.comp_def, correct.expandable, stored, Option.map_some, Option.getD_some]
+
+/-- Subtract canonical waiting keys without a lookup or a compression write. -/
+def find (state : Cached Symbol Guard) : Option (List Nat) :=
+  let candidates := EnumerationIndexSelection.candidates state
+  if candidates.isEmpty then none
+  else some (candidates.filter fun uv => (state.waiting uv).isNone)
+
+/-- Apply the source preference rule to the pure candidate-minus-waiting result. -/
+def next (preference : List Nat → Option Nat) (state : Cached Symbol Guard) : Next :=
+  pickNext preference (find state)
+
+/-- Execute the pure lookup through the existing source CPS state operation. -/
+def findAction : EnumerationCPS.Computation (Cached Symbol Guard) (Option (List Nat)) :=

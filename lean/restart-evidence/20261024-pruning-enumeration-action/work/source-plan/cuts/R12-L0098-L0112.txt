@@ -1,0 +1,15 @@
+/-- Representative lookup retains its exact compression state at larger bounds. -/
+theorem representative_moreFuel (fuel extra uv : Nat) :
+    Retains (representative (Symbol := Symbol) (Guard := Guard) fuel uv) (representative (fuel + extra) uv) := by
+  intro before root after success
+  obtain ⟨found, lookup, rfl, rfl⟩ := (representative_success fuel uv before after root).mp success
+  exact (representative_success (fuel + extra) uv before _ _).mpr
+    ⟨found, UnionFind.findRoot_moreFuel fuel extra before.representatives uv found lookup, rfl, rfl⟩
+
+/-- Reading a representative value retains its successful slot result. -/
+theorem getValue_moreFuel (fuel extra uv : Nat) :
+    Retains (getValue (Symbol := Symbol) (Guard := Guard) fuel uv) (getValue (fuel + extra) uv) := by
+  unfold getValue
+  exact retains_bind _ _ _ _ (representative_moreFuel fuel extra uv) (fun _ => retains_refl _)
+
+/-- An equality-variable union retains its exact successful state. -/

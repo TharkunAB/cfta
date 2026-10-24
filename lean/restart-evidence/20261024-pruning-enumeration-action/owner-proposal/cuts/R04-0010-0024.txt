@@ -1,0 +1,15 @@
+/-- Retain Mu and raw type positions. Narrow each other value at its original key. -/
+def narrow [DecidableEq (EdgeKey Symbol Guard)]
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
+    (admits : Key → Value Symbol Guard → Bool) (metadata : Metadata Typing)
+    (fuel uv : Nat) (value : Value Symbol Guard) (before : State Symbol Guard) :
+    MergedSourceComparison.Result Symbol Guard (Value Symbol Guard)
+ :=
+  match value with
+  | .mu .. => .done value before
+  | _ =>
+      if metadata.types.contains uv then .done value before
+      else SourcePruningNativeView.narrowAt fits admits fuel (holeKey metadata.typing uv) value before
+
+/-- Every fuel retains the complete Mu value and the same heap. -/
+theorem narrow_mu [DecidableEq (EdgeKey Symbol Guard)]

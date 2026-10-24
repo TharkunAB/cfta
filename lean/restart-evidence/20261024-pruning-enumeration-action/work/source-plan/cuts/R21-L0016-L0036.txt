@@ -1,0 +1,21 @@
+
+/-- Copy the ordered children and retain all source constraints. -/
+def copyEdge (encode : Nat × Nat → Nat) (remaining : Nat) (edge : EnumerationState.Edge Symbol Guard) : EnumerationState.Edge Symbol Guard :=
+  {edge with children := edge.children.map (fun child => encode (remaining, child))}
+
+/-- The constructor branch of `boundDepth`, including source empty-child cleanup. -/
+def rows (encode : Nat × Nat → Nat) (source : Nat → List (EnumerationState.Edge Symbol Guard)) :
+    Nat → Nat → List (EnumerationState.Edge Symbol Guard)
+  | 0, _ => []
+  | remaining + 1, node =>
+      (((source node).filter (fun edge => decide (0 < remaining) || edge.children.isEmpty)).filter
+        (fun edge => edge.children.all (fun child => !(rows encode source remaining child).isEmpty))).map
+        (copyEdge encode remaining)
+
+/-- Read the constructed rows as source enumeration nodes. -/
+def graph (encode : Nat × Nat → Nat) (decode : Nat → Nat × Nat)
+    (source : Nat → List (EnumerationState.Edge Symbol Guard)) (meet : Nat → Nat → Nat) : Graph Symbol Guard where
+  node identity := match rows encode source (decode identity).1 (decode identity).2 with
+    | [] => .empty
+    | edge :: rest => .alternatives (edge :: rest)
+  intersect := meet

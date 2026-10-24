@@ -1,0 +1,13 @@
+    narrow (_, types, _, typing) uv n = case n of
+        Mu _ -> n
+        _
+            | uvarToInt uv `IntSet.member` types -> n
+            | otherwise -> narrowAt n (holeKey typing (uvarToInt uv))
+    emptyAt typing h n = case n of
+        Mu _ -> False
+        _ -> null (nodeEdges (narrowAt n (holeKey typing h)))
+    -- One table for each call.
+    narrowAt = memo2 (\n k -> Node [e | e <- nodeEdges n, keeps k e])
+    keeps k e = case (edgeSymbol e, edgeChildren e) of
+        ("app", [annotation, _, _, _]) -> admits k annotation
+        ("filter", [annotation, _]) -> admits k annotation

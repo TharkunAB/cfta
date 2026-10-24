@@ -1,0 +1,26 @@
+theorem write_correct (graph : Graph Symbol Guard) (roots : Nat → Nat) (uv : Nat) (value : UVarValue Symbol)
+    (before after : Cached Symbol Guard) (correct : Correct graph roots before)
+    (done : write graph roots uv value before = some after) : Correct graph roots after := by
+  cases stored : before.core.values[uv]? with
+  | none => simp [write, stored] at done
+  | some old =>
+      simp [write, stored] at done
+      subst after
+      refine ⟨by simpa using correct.aligned, ?_,
+        EnumerationCanonicalWaiting.replace_correct roots before.core.values uv old value stored before.waiting correct.waiting⟩
+      intro other
+      by_cases same : other = uv
+      · subst other
+        have bound := (List.getElem?_eq_some_iff.mp stored).1
+        simp [bound]
+      · simp [same, Ne.symm same, correct.expandable other]
+
+/-- Slot and supply preservation retains the index equations at a fixed root map. -/
+theorem frame_correct (graph : Graph Symbol Guard) (roots : Nat → Nat) (state : Cached Symbol Guard)
+    (core : State Symbol Guard) (correct : Correct graph roots state)
+    (values : core.values = state.core.values) (counter : core.counter = state.core.counter) :
+    Correct graph roots (EnumerationExpandableIndex.frame core state) := by
+  refine ⟨counter.trans (correct.aligned.trans (congrArg List.length values.symm)), ?_, ?_⟩
+  · intro uv; simpa [EnumerationExpandableIndex.frame, values] using correct.expandable uv
+  · simpa [EnumerationExpandableIndex.frame, values] using correct.waiting
+

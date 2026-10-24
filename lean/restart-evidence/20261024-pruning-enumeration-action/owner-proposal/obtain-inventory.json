@@ -1,0 +1,199 @@
+{
+  "patterns": [
+    {
+      "name": "actualOuter",
+      "scope": "common proof prefix",
+      "api": "SourcePruningEnumerationOuter.narrow_pending_complete",
+      "application": "SourcePruningEnumerationOuter.narrow_pending_complete holeKey fits admits metadata heap before readAfter entry readFuel uv oldHandle scs ready realized total observed entered",
+      "fields": [
+        {
+          "name": "oldValue",
+          "type": "InternedConstructorTemplates.Value Symbol NativeGuard"
+        },
+        {
+          "name": "result",
+          "type": "InternedConstructorTemplates.Value Symbol NativeGuard"
+        },
+        {
+          "name": "nativeFuel",
+          "type": "Nat"
+        },
+        {
+          "name": "nextHeap",
+          "type": "InternedConstructorTemplates.State Symbol NativeGuard"
+        },
+        {
+          "name": "newHandle",
+          "type": "Nat"
+        },
+        {
+          "name": "oldDecoded",
+          "type": "lookupNode heap oldHandle = some oldValue"
+        },
+        {
+          "name": "oldEncoded",
+          "type": "encodeNode oldValue = some oldHandle"
+        },
+        {
+          "name": "oldAvailable",
+          "type": "Available heap oldValue"
+        },
+        {
+          "name": "oldClosed",
+          "type": "oldValue.free = []"
+        },
+        {
+          "name": "narrowed",
+          "type": "SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue heap = .done result nextHeap"
+        },
+        {
+          "name": "stable",
+          "type": "∀ extra : Nat, SourcePruningOuterNarrow.narrow holeKey fits admits metadata (nativeFuel + extra) uv oldValue heap = .done result nextHeap"
+        },
+        {
+          "name": "kept",
+          "type": "SourceEqualityRequiredCache.Keeps heap nextHeap"
+        },
+        {
+          "name": "resultAvailable",
+          "type": "Available nextHeap result"
+        },
+        {
+          "name": "resultClosed",
+          "type": "result.free = []"
+        },
+        {
+          "name": "newEncoded",
+          "type": "encodeNode result = some newHandle"
+        },
+        {
+          "name": "newDecoded",
+          "type": "lookupNode nextHeap newHandle = some result"
+        },
+        {
+          "name": "oldRetained",
+          "type": "lookupNode nextHeap oldHandle = some oldValue"
+        },
+        {
+          "name": "firstFrame",
+          "type": "Frame before readAfter"
+        },
+        {
+          "name": "entryRealized",
+          "type": "PendingRealized nextHeap entry"
+        },
+        {
+          "name": "survivingOld",
+          "type": "result ≠ .empty → oldValue ≠ .empty"
+        },
+        {
+          "name": "emptyBranch",
+          "type": "result = .empty → ¬ ∃ final : EnumerationState.State Symbol EnumGuard, Success (reject : EnumerateM Symbol EnumGuard Unit) entry () final"
+        },
+        {
+          "name": "equalBranch",
+          "type": "result ≠ .empty → newHandle = oldHandle → result = oldValue ∧ Success (pure () : EnumerateM Symbol EnumGuard Unit) entry () entry"
+        },
+        {
+          "name": "changedBranch",
+          "type": "result ≠ .empty → newHandle ≠ oldHandle →\n  ∃ (root size rereadFuel : Nat) (rereadAfter final : EnumerationState.State Symbol EnumGuard),\n    UnionFind.Reaches before.representatives uv root size ∧\n    Success (representative rereadFuel uv) entry root rereadAfter ∧\n    Frame entry rereadAfter ∧ Frame before rereadAfter ∧\n    rereadAfter.values[root]? = some (.unenumerated (some oldHandle) scs) ∧\n    root < rereadAfter.values.length ∧ PendingRealized nextHeap rereadAfter ∧\n    Success (setValue root (.unenumerated (some newHandle) scs)) rereadAfter () final ∧\n    final = {rereadAfter with values := rereadAfter.values.set root (.unenumerated (some newHandle) scs)} ∧\n    final.values[root]? = some (.unenumerated (some newHandle) scs) ∧ PendingRealized nextHeap final ∧\n    Success (representative rereadFuel uv >>= fun selected =>\n      setValue selected (.unenumerated (some newHandle) scs)) entry () final"
+        }
+      ]
+    },
+    {
+      "name": "equalEffects",
+      "scope": "equal branch after nonempty and sameHandle",
+      "api": "equalBranch nonempty sameHandle",
+      "fields": [
+        {
+          "name": "equalValue",
+          "type": "result = oldValue"
+        },
+        {
+          "name": "equalSuccess",
+          "type": "Success (pure () : EnumerateM Symbol EnumGuard Unit) entry () entry"
+        }
+      ]
+    },
+    {
+      "name": "changedEffects",
+      "scope": "changed branch after nonempty and changedHandle",
+      "api": "changedBranch nonempty changedHandle",
+      "fields": [
+        {
+          "name": "root",
+          "type": "Nat"
+        },
+        {
+          "name": "size",
+          "type": "Nat"
+        },
+        {
+          "name": "rereadFuel",
+          "type": "Nat"
+        },
+        {
+          "name": "rereadAfter",
+          "type": "EnumerationState.State Symbol EnumGuard"
+        },
+        {
+          "name": "final",
+          "type": "EnumerationState.State Symbol EnumGuard"
+        },
+        {
+          "name": "rootPath",
+          "type": "UnionFind.Reaches before.representatives uv root size"
+        },
+        {
+          "name": "secondRead",
+          "type": "Success (representative rereadFuel uv) entry root rereadAfter"
+        },
+        {
+          "name": "secondFrame",
+          "type": "Frame entry rereadAfter"
+        },
+        {
+          "name": "wholeFrame",
+          "type": "Frame before rereadAfter"
+        },
+        {
+          "name": "oldStored",
+          "type": "rereadAfter.values[root]? = some (.unenumerated (some oldHandle) scs)"
+        },
+        {
+          "name": "bound",
+          "type": "root < rereadAfter.values.length"
+        },
+        {
+          "name": "rereadRealized",
+          "type": "PendingRealized nextHeap rereadAfter"
+        },
+        {
+          "name": "written",
+          "type": "Success (setValue root (.unenumerated (some newHandle) scs)) rereadAfter () final"
+        },
+        {
+          "name": "finalShape",
+          "type": "final = {rereadAfter with values := rereadAfter.values.set root (.unenumerated (some newHandle) scs)}"
+        },
+        {
+          "name": "finalStored",
+          "type": "final.values[root]? = some (.unenumerated (some newHandle) scs)"
+        },
+        {
+          "name": "finalRealized",
+          "type": "PendingRealized nextHeap final"
+        },
+        {
+          "name": "boundRun",
+          "type": "Success (representative rereadFuel uv >>= fun selected => setValue selected (.unenumerated (some newHandle) scs)) entry () final"
+        }
+      ]
+    }
+  ],
+  "pattern_count": 3,
+  "field_count": 42,
+  "outer_completion_calls": 1,
+  "same_witness_rule": "The prepare equation in changed uses the obtained rereadFuel, rereadAfter, final, result and nextHeap. No second completion or representative success assumption.",
+  "no_operation_reexecution_by_proof": true
+}

@@ -1,0 +1,11 @@
+--- V1/public-header.lean.txt
++++ V2/public-header.lean.txt
+@@ -43,7 +43,7 @@
+           Success (setValue root (.unenumerated (some newHandle) scs)) rereadAfter () final ∧
+           final = {rereadAfter with values := rereadAfter.values.set root (.unenumerated (some newHandle) scs)} ∧
+           final.values[root]? = some (.unenumerated (some newHandle) scs) ∧ PendingRealized nextHeap final ∧
+-          prepare holeKey fits admits metadata nativeFuel rereadFuel uv oldHandle scs oldValue heap =
++          prepare (EnumGuard := EnumGuard) holeKey fits admits metadata nativeFuel rereadFuel uv oldHandle scs oldValue heap =
+             .done (result, some (representative rereadFuel uv >>= fun selected =>
+               setValue selected (.unenumerated (some newHandle) scs))) nextHeap ∧
+           Success (representative rereadFuel uv >>= fun selected =>

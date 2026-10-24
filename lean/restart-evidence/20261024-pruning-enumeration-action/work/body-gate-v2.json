@@ -1,0 +1,49 @@
+{
+  "status": "ROOT_ACCEPTED_EXACT_V2_DECLARATIONS_BEFORE_REVISED_BODY",
+  "recorded_at": "2026-10-24T08:43:26.070562+02:00",
+  "baseline": "c1e7bc23c9abb7783f6a28faa9e556b242775980",
+  "frozen_sha256": "bb4bc039328a38c6f56e22c43d61d2ccb2e9fbacb99abe2487f6416589b483e1",
+  "pins_sha256": "1658800a4f46de7f99f1a70e402c6bfd0c5942dbafe4a796c14cf2a0f32363eb",
+  "contracts_sha256": "d21f4d83bf10124c00551cc45b88436508e073a9e1ae771c45675fc094f37b04",
+  "contracts": {
+    "context.lean.txt": "import MicroCFTA.SourcePruningEnumerationOuter\n\nnamespace MicroCFTA.SourcePruningEnumerationAction\nopen EnumerationState EnumerationCorrectness EnumerationCompressionFrame\nopen InternedConstructorTemplates InternedProbeProvenance\nopen SourcePruningEnumerationNodes SourcePruningEnumerationObservation\nopen SourcePruningRecordTypes (Metadata)\nlocal notation \"Symbol\" => SourcePruningTemplates.Symbol\nvariable {EnumGuard NativeGuard Typing Key : Type}\n\nlocal instance actionMonadList : Monad List where\n  pure value := [value]\n  bind values continuation := values.flatMap continuation\n",
+    "prepare-header.lean.txt": "/-- Narrow once and retain the complete value beside the actual enumeration action. -/\ndef prepare [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol NativeGuard)]\n    (holeKey : Typing \u2192 Nat \u2192 Key) (fits : Key \u2192 Symbol \u2192 Bool)\n    (admits : Key \u2192 InternedConstructorTemplates.Value Symbol NativeGuard \u2192 Bool)\n    (metadata : Metadata Typing) (nativeFuel representativeFuel uv oldHandle : Nat)\n    (scs : List EnumerationState.Suspended) (oldValue : InternedConstructorTemplates.Value Symbol NativeGuard)\n    (heap : InternedConstructorTemplates.State Symbol NativeGuard) :\n    MergedSourceComparison.Result Symbol NativeGuard\n      (InternedConstructorTemplates.Value Symbol NativeGuard \u00d7 Option (EnumerateM Symbol EnumGuard Unit))\n",
+    "public-header.lean.txt": "/-- Connect the computed action to the same actual pending observation and branch states. -/\ntheorem prepare_pending_complete\n    [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol NativeGuard)]\n    (holeKey : Typing \u2192 Nat \u2192 Key) (fits : Key \u2192 Symbol \u2192 Bool)\n    (admits : Key \u2192 InternedConstructorTemplates.Value Symbol NativeGuard \u2192 Bool)\n    (metadata : Metadata Typing) (heap : InternedConstructorTemplates.State Symbol NativeGuard)\n    (before readAfter entry : EnumerationState.State Symbol EnumGuard)\n    (readFuel uv oldHandle : Nat) (scs : List EnumerationState.Suspended)\n    (ready : SourceEqualityRequiredCache.Ready heap) (realized : PendingRealized heap before)\n    (total : UnionFind.Total before.representatives)\n    (observed : Success (getValue readFuel uv) before (.unenumerated (some oldHandle) scs) readAfter)\n    (entered : Frame readAfter entry) :\n    \u2203 (oldValue result : InternedConstructorTemplates.Value Symbol NativeGuard) (nativeFuel : Nat)\n      (nextHeap : InternedConstructorTemplates.State Symbol NativeGuard) (newHandle : Nat),\n      lookupNode heap oldHandle = some oldValue \u2227 encodeNode oldValue = some oldHandle \u2227\n      Available heap oldValue \u2227 oldValue.free = [] \u2227\n      SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue heap = .done result nextHeap \u2227\n      (\u2200 extra, SourcePruningOuterNarrow.narrow holeKey fits admits metadata (nativeFuel + extra) uv oldValue heap =\n        .done result nextHeap) \u2227\n      SourceEqualityRequiredCache.Keeps heap nextHeap \u2227 Available nextHeap result \u2227 result.free = [] \u2227\n      encodeNode result = some newHandle \u2227 lookupNode nextHeap newHandle = some result \u2227\n      lookupNode nextHeap oldHandle = some oldValue \u2227\n      Frame before readAfter \u2227 PendingRealized nextHeap entry \u2227\n      (result \u2260 .empty \u2192 oldValue \u2260 .empty) \u2227\n      (result = .empty \u2192 \u2200 representativeFuel,\n        prepare holeKey fits admits metadata nativeFuel representativeFuel uv oldHandle scs oldValue heap =\n          .done (result, some (reject : EnumerateM Symbol EnumGuard Unit)) nextHeap \u2227\n        \u00ac \u2203 final : EnumerationState.State Symbol EnumGuard,\n          Success (reject : EnumerateM Symbol EnumGuard Unit) entry () final) \u2227\n      (result \u2260 .empty \u2192 newHandle = oldHandle \u2192\n        result = oldValue \u2227\n        (\u2200 representativeFuel,\n          prepare holeKey fits admits metadata nativeFuel representativeFuel uv oldHandle scs oldValue heap =\n            .done (result, some (pure () : EnumerateM Symbol EnumGuard Unit)) nextHeap) \u2227\n        Success (pure () : EnumerateM Symbol EnumGuard Unit) entry () entry) \u2227\n      (result \u2260 .empty \u2192 newHandle \u2260 oldHandle \u2192\n        \u2203 (root size rereadFuel : Nat) (rereadAfter final : EnumerationState.State Symbol EnumGuard),\n          UnionFind.Reaches before.representatives uv root size \u2227\n          Success (representative rereadFuel uv) entry root rereadAfter \u2227\n          Frame entry rereadAfter \u2227 Frame before rereadAfter \u2227\n          rereadAfter.values[root]? = some (.unenumerated (some oldHandle) scs) \u2227\n          root < rereadAfter.values.length \u2227 PendingRealized nextHeap rereadAfter \u2227\n          Success (setValue root (.unenumerated (some newHandle) scs)) rereadAfter () final \u2227\n          final = {rereadAfter with values := rereadAfter.values.set root (.unenumerated (some newHandle) scs)} \u2227\n          final.values[root]? = some (.unenumerated (some newHandle) scs) \u2227 PendingRealized nextHeap final \u2227\n          prepare (EnumGuard := EnumGuard) holeKey fits admits metadata nativeFuel rereadFuel uv oldHandle scs oldValue heap =\n            .done (result, some (representative rereadFuel uv >>= fun selected =>\n              setValue selected (.unenumerated (some newHandle) scs))) nextHeap \u2227\n          Success (representative rereadFuel uv >>= fun selected =>\n            setValue selected (.unenumerated (some newHandle) scs)) entry () final)\n",
+    "condition-same.lean.txt": "if newHandle = oldHandle then\n"
+  },
+  "independent_declaration_review_sha256": "23acd30112b92b99a012fbd294b79ee02a424f86284dd044dda8672b309c251e",
+  "root_read": {
+    "contract_lines": 73,
+    "obtained_fields": 42,
+    "proof_intros": 7,
+    "result_case_splits": 2,
+    "constructor_case_branches": 10,
+    "local_haves": 0,
+    "helpers": 0,
+    "sources": 18,
+    "cuts": 25,
+    "cut_lines": 391,
+    "import_identities": 35,
+    "routes": 16,
+    "checked_adjacent_import_edges": 79
+  },
+  "budget": {
+    "target": [
+      150,
+      205
+    ],
+    "hard_cap": 220
+  },
+  "local_instance_count": 1,
+  "global_instance_count": 0,
+  "prebody_schema_adapters": "Actual FROZEN.pins is nested and import identities are a list. A read-only walker was corrected before all 35 identities and 79 route edge occurrences passed. No compiler or candidate program has run.",
+  "prior_goal_turn": "PROGRESS: proof, documentation, evidence and verified ordinary formalize push at c1e7bc23c.",
+  "goal": "ACTIVE_INCOMPLETE",
+  "independent_v2_review_sha256": "703ec0ab88f7ebf554ed1086fad4ae613b8397e3608af853357b0c987a552ef2",
+  "original_body_gate_sha256": "66a5d9bffe6a1fb24f24095638a2cf534785ad66a1dfce6b3fd31170e4f1bca4",
+  "actual_failed_source_sha256": "7d1a1e1b6b4549ee29338f01227dda6987c13a39f0aa27b3024728cdbb7101e2",
+  "actual_failed_raw_sha256": "1477c4ff3660c471782742943fe34a8e26925deca898d5ea5a3af43c604813a3",
+  "declaration_delta": "Exactly one 25-byte explicit EnumGuard argument at changed prepare equation; public line COUNT stays50, all other public lines and scoped data remain exact. The delta note all50lines phrase is read as the unchanged line count, not full public byte identity.",
+  "body_delta": "Replace three deprecated if_pos aliases with ite_eq_left and three if_neg with ite_eq_right. Exact supported types read in pinned Init.Core1169-1199; no new local/binder/helper/premise/limit.",
+  "original_owner_preserved": "work/declaration-v1; source-check-1 retains the original full135-line source."
+}

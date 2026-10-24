@@ -1,0 +1,261 @@
+{
+  "aliases": {
+    "Symbol": "SourcePruningTemplates.Symbol = SourceObservations.Label FullSyntax.Formula",
+    "scope": "fixed existing full Symbol; no new type"
+  },
+  "prepare_binders": [
+    {
+      "name": "EnumGuard",
+      "type": "Type"
+    },
+    {
+      "name": "NativeGuard",
+      "type": "Type"
+    },
+    {
+      "name": "Typing",
+      "type": "Type"
+    },
+    {
+      "name": "Key",
+      "type": "Type"
+    },
+    {
+      "name": null,
+      "type": "DecidableEq (InternedConstructorTemplates.EdgeKey Symbol NativeGuard)",
+      "review_label": "edgeEq",
+      "role": "anonymous inline instance; no named Lean binder promised"
+    },
+    {
+      "name": "holeKey",
+      "type": "Typing → Nat → Key"
+    },
+    {
+      "name": "fits",
+      "type": "Key → Symbol → Bool"
+    },
+    {
+      "name": "admits",
+      "type": "Key → InternedConstructorTemplates.Value Symbol NativeGuard → Bool"
+    },
+    {
+      "name": "metadata",
+      "type": "Metadata Typing"
+    },
+    {
+      "name": "nativeFuel",
+      "type": "Nat"
+    },
+    {
+      "name": "representativeFuel",
+      "type": "Nat"
+    },
+    {
+      "name": "uv",
+      "type": "Nat"
+    },
+    {
+      "name": "oldHandle",
+      "type": "Nat"
+    },
+    {
+      "name": "scs",
+      "type": "List EnumerationState.Suspended"
+    },
+    {
+      "name": "oldValue",
+      "type": "InternedConstructorTemplates.Value Symbol NativeGuard"
+    },
+    {
+      "name": "heap",
+      "type": "InternedConstructorTemplates.State Symbol NativeGuard"
+    }
+  ],
+  "theorem_binders": [
+    {
+      "name": "EnumGuard",
+      "type": "Type"
+    },
+    {
+      "name": "NativeGuard",
+      "type": "Type"
+    },
+    {
+      "name": "Typing",
+      "type": "Type"
+    },
+    {
+      "name": "Key",
+      "type": "Type"
+    },
+    {
+      "name": null,
+      "type": "DecidableEq (InternedConstructorTemplates.EdgeKey Symbol NativeGuard)",
+      "review_label": "edgeEq",
+      "role": "anonymous inline instance; no named Lean binder promised"
+    },
+    {
+      "name": "holeKey",
+      "type": "Typing → Nat → Key"
+    },
+    {
+      "name": "fits",
+      "type": "Key → Symbol → Bool"
+    },
+    {
+      "name": "admits",
+      "type": "Key → InternedConstructorTemplates.Value Symbol NativeGuard → Bool"
+    },
+    {
+      "name": "metadata",
+      "type": "Metadata Typing"
+    },
+    {
+      "name": "heap",
+      "type": "InternedConstructorTemplates.State Symbol NativeGuard"
+    },
+    {
+      "name": "before",
+      "type": "EnumerationState.State Symbol EnumGuard"
+    },
+    {
+      "name": "readAfter",
+      "type": "EnumerationState.State Symbol EnumGuard"
+    },
+    {
+      "name": "entry",
+      "type": "EnumerationState.State Symbol EnumGuard"
+    },
+    {
+      "name": "readFuel",
+      "type": "Nat"
+    },
+    {
+      "name": "uv",
+      "type": "Nat"
+    },
+    {
+      "name": "oldHandle",
+      "type": "Nat"
+    },
+    {
+      "name": "scs",
+      "type": "List EnumerationState.Suspended"
+    },
+    {
+      "name": "ready",
+      "type": "SourceEqualityRequiredCache.Ready heap"
+    },
+    {
+      "name": "realized",
+      "type": "PendingRealized heap before"
+    },
+    {
+      "name": "total",
+      "type": "UnionFind.Total before.representatives"
+    },
+    {
+      "name": "observed",
+      "type": "Success (getValue readFuel uv) before (.unenumerated (some oldHandle) scs) readAfter"
+    },
+    {
+      "name": "entered",
+      "type": "Frame readAfter entry"
+    }
+  ],
+  "proof_intros": [
+    {
+      "scope": "empty",
+      "name": "emptyResult",
+      "type": "result = .empty"
+    },
+    {
+      "scope": "empty",
+      "name": "representativeFuel",
+      "type": "Nat"
+    },
+    {
+      "scope": "equal",
+      "name": "nonempty",
+      "type": "result ≠ .empty"
+    },
+    {
+      "scope": "equal",
+      "name": "sameHandle",
+      "type": "newHandle = oldHandle"
+    },
+    {
+      "scope": "equal.prepare_equation",
+      "name": "representativeFuel",
+      "type": "Nat"
+    },
+    {
+      "scope": "changed",
+      "name": "nonempty",
+      "type": "result ≠ .empty"
+    },
+    {
+      "scope": "changed",
+      "name": "changedHandle",
+      "type": "newHandle ≠ oldHandle"
+    }
+  ],
+  "proof_intro_count": 7,
+  "lambda_binders": [
+    {
+      "owner": "prepare",
+      "scope": "done.nonempty.encoded.changed",
+      "name": "selected",
+      "type": "Nat"
+    },
+    {
+      "owner": "prepare_pending_complete",
+      "scope": "changed.prepare_equation RHS",
+      "name": "selected",
+      "type": "Nat"
+    },
+    {
+      "owner": "prepare_pending_complete",
+      "scope": "changed.literal_bind_success",
+      "name": "selected",
+      "type": "Nat"
+    }
+  ],
+  "all_obtain_fields": "obtain-inventory.json",
+  "local_haves": [],
+  "local_lets": [],
+  "typed_shows": [],
+  "local_instance": {
+    "name": "actionMonadList",
+    "type": "Monad List",
+    "universe": "u; implicit α β : Type u for fields",
+    "scope": "module-local only",
+    "pure": {
+      "binders": [
+        {
+          "name": "value",
+          "type": "α"
+        }
+      ],
+      "type": "{α : Type u} → α → List α",
+      "definition": "pure value := [value]"
+    },
+    "bind": {
+      "binders": [
+        {
+          "name": "values",
+          "type": "List α"
+        },
+        {
+          "name": "continuation",
+          "type": "α → List β"
+        }
+      ],
+      "type": "{α β : Type u} → List α → (α → List β) → List β",
+      "definition": "bind values continuation := values.flatMap continuation"
+    }
+  },
+  "global_instance_count": 0,
+  "Value_DecidableEq": false,
+  "classical": false
+}

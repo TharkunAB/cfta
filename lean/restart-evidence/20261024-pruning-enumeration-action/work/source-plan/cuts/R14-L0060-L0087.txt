@@ -1,0 +1,28 @@
+@[simp] theorem references_canonicalValue (roots : Nat → Nat) (value : UVarValue Symbol) :
+    references (canonicalValue roots value) =
+      (references value).map (fun sc => {sc with var := roots sc.var}) := by
+  cases value <;> rfl
+
+/-- Renaming suspended variable IDs does not change candidate membership. -/
+@[simp] theorem candidate_canonicalValue (graph : Graph Symbol Guard) (roots : Nat → Nat)
+    (value : UVarValue Symbol) : candidate graph (canonicalValue roots value) = candidate graph value := by
+  cases value with
+  | unenumerated node scs =>
+      cases node with
+      | none => rfl
+      | some node => cases view : graph.node node <;> simp [canonicalValue, candidate, view]
+  | enumerated fragment => rfl
+  | eliminated => rfl
+
+private theorem replace_eq (roots : Nat → Nat) (old new : UVarValue Symbol)
+    (waiting : EnumerationWaitingIndex.Waiting) :
+    replace roots old new waiting = EnumerationWaitingIndex.replace
+      (canonicalValue roots old) (canonicalValue roots new) waiting := by
+  simp only [replace, count, EnumerationWaitingIndex.replace, references_canonicalValue]
+
+/-- A fixed class map gives exact replacement counts at a stored raw slot. -/
+theorem replace_correct (roots : Nat → Nat) (values : List (UVarValue Symbol)) (index : Nat)
+    (old new : UVarValue Symbol) (stored : values[index]? = some old)
+    (waiting : EnumerationWaitingIndex.Waiting) (correct : Correct roots values waiting) :
+    Correct roots (values.set index new) (replace roots old new waiting) := by
+  unfold Correct at *

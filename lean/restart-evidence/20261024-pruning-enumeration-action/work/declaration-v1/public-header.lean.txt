@@ -1,0 +1,50 @@
+/-- Connect the computed action to the same actual pending observation and branch states. -/
+theorem prepare_pending_complete
+    [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol NativeGuard)]
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
+    (admits : Key → InternedConstructorTemplates.Value Symbol NativeGuard → Bool)
+    (metadata : Metadata Typing) (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (before readAfter entry : EnumerationState.State Symbol EnumGuard)
+    (readFuel uv oldHandle : Nat) (scs : List EnumerationState.Suspended)
+    (ready : SourceEqualityRequiredCache.Ready heap) (realized : PendingRealized heap before)
+    (total : UnionFind.Total before.representatives)
+    (observed : Success (getValue readFuel uv) before (.unenumerated (some oldHandle) scs) readAfter)
+    (entered : Frame readAfter entry) :
+    ∃ (oldValue result : InternedConstructorTemplates.Value Symbol NativeGuard) (nativeFuel : Nat)
+      (nextHeap : InternedConstructorTemplates.State Symbol NativeGuard) (newHandle : Nat),
+      lookupNode heap oldHandle = some oldValue ∧ encodeNode oldValue = some oldHandle ∧
+      Available heap oldValue ∧ oldValue.free = [] ∧
+      SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue heap = .done result nextHeap ∧
+      (∀ extra, SourcePruningOuterNarrow.narrow holeKey fits admits metadata (nativeFuel + extra) uv oldValue heap =
+        .done result nextHeap) ∧
+      SourceEqualityRequiredCache.Keeps heap nextHeap ∧ Available nextHeap result ∧ result.free = [] ∧
+      encodeNode result = some newHandle ∧ lookupNode nextHeap newHandle = some result ∧
+      lookupNode nextHeap oldHandle = some oldValue ∧
+      Frame before readAfter ∧ PendingRealized nextHeap entry ∧
+      (result ≠ .empty → oldValue ≠ .empty) ∧
+      (result = .empty → ∀ representativeFuel,
+        prepare holeKey fits admits metadata nativeFuel representativeFuel uv oldHandle scs oldValue heap =
+          .done (result, some (reject : EnumerateM Symbol EnumGuard Unit)) nextHeap ∧
+        ¬ ∃ final : EnumerationState.State Symbol EnumGuard,
+          Success (reject : EnumerateM Symbol EnumGuard Unit) entry () final) ∧
+      (result ≠ .empty → newHandle = oldHandle →
+        result = oldValue ∧
+        (∀ representativeFuel,
+          prepare holeKey fits admits metadata nativeFuel representativeFuel uv oldHandle scs oldValue heap =
+            .done (result, some (pure () : EnumerateM Symbol EnumGuard Unit)) nextHeap) ∧
+        Success (pure () : EnumerateM Symbol EnumGuard Unit) entry () entry) ∧
+      (result ≠ .empty → newHandle ≠ oldHandle →
+        ∃ (root size rereadFuel : Nat) (rereadAfter final : EnumerationState.State Symbol EnumGuard),
+          UnionFind.Reaches before.representatives uv root size ∧
+          Success (representative rereadFuel uv) entry root rereadAfter ∧
+          Frame entry rereadAfter ∧ Frame before rereadAfter ∧
+          rereadAfter.values[root]? = some (.unenumerated (some oldHandle) scs) ∧
+          root < rereadAfter.values.length ∧ PendingRealized nextHeap rereadAfter ∧
+          Success (setValue root (.unenumerated (some newHandle) scs)) rereadAfter () final ∧
+          final = {rereadAfter with values := rereadAfter.values.set root (.unenumerated (some newHandle) scs)} ∧
+          final.values[root]? = some (.unenumerated (some newHandle) scs) ∧ PendingRealized nextHeap final ∧
+          prepare holeKey fits admits metadata nativeFuel rereadFuel uv oldHandle scs oldValue heap =
+            .done (result, some (representative rereadFuel uv >>= fun selected =>
+              setValue selected (.unenumerated (some newHandle) scs))) nextHeap ∧
+          Success (representative rereadFuel uv >>= fun selected =>
+            setValue selected (.unenumerated (some newHandle) scs)) entry () final)
