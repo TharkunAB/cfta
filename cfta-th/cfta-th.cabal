@@ -1,0 +1,64 @@
+cabal-version: 3.0
+name: cfta-th
+version: 0.1.0.0
+synopsis: Generated node views for constrained tree automata
+description:
+  Template Haskell support for the typing and refinement APIs of
+  cfta-generator. Generate scalar node views from source datatypes.
+
+homepage: https://github.com/TharkunAB/cfta/tree/main/cfta-th#readme
+bug-reports: https://github.com/TharkunAB/cfta/issues
+category: Code Generation
+author: Matthias Pall Gissurarson
+maintainer: mpg@mpg.is
+copyright: 2026 Tharkun AB
+license: BSD-3-Clause
+license-file: LICENSE
+build-type: Simple
+tested-with: ghc ==9.14.1
+extra-doc-files:
+  CHANGELOG.md
+  README.md
+
+source-repository head
+  type: git
+  location: https://github.com/TharkunAB/cfta.git
+  subdir: cfta-th
+
+library
+  hs-source-dirs: src
+  exposed-modules: Data.CFTA.TH
+  default-language: Haskell2010
+  ghc-options:
+    -Wall
+    -Wcompat
+    -Widentities
+    -Wincomplete-record-updates
+    -Wincomplete-uni-patterns
+    -Wpartial-fields
+    -Wredundant-constraints
+    -Wno-pattern-namespace-specifier
+
+  build-depends:
+    base >=4.22 && <4.23,
+    cfta-generator >=0.1.0.0 && <0.2,
+    template-haskell >=2.24 && <2.25,
+
+test-suite node-views
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  hs-source-dirs: test
+  default-language: Haskell2010
+  ghc-options:
+    -Wall
+    -Wcompat
+    -threaded
+    -rtsopts
+
+  build-depends:
+    base >=4.22 && <4.23,
+    cfta >=0.1.0.0 && <0.2,
+    cfta-generator >=0.1.0.0 && <0.2,
+    cfta-th,
+    hspec >=2.11 && <2.12,
+    template-haskell >=2.24 && <2.25,
