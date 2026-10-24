@@ -1,5 +1,35 @@
 # cfta formalization restart handoff
 
+## Ordered pruning resume and main LPO repairs
+
+Updated: 2026-10-24. Proof: `6b168d41cc9a5e7c1a7f2eb0db6f0e395edebe32`.
+Main: `0db62d26b`. Merge: `504523e47a`. Start: `74104221af`.
+Read `lean/notes-current-pruning-resume.md` and `lean/notes-current-upstream-lpo.md`.
+
+The actual partial matcher and ordered Pruning.resume are now modeled.
+Successful resumes preserve the complete compression frame. Framed inputs give
+exactly equal ordered optional results at independent successful bounds.
+One actual success constructs a finite matching run in the related input.
+All representative reads precede pure Option sequencing, including after none.
+Raw current and hole IDs, pending order and duplicates remain explicit.
+No canonical-current, Safe, completion or desired right-success premise is added.
+
+Both final sources passed strict Lean checks. Audit passed: 3673 jobs and
+75792 dependency checks, one older warning and no new-source warning.
+All 11 public signatures and eight axiom reports were read in full.
+PR #169 repairs both recorded LPO failure mechanisms. Goldens, formatting and
+focused public-API repair probes passed. The application comparator reversal
+remains; contextual rewriting and template admissibility prevent its unsafe use.
+FINDINGS keeps the external repair index FIRST and marks both repairs merged.
+General order laws and pruning soundness remain unproved. No local Haskell patch.
+
+Next, compose actual templateOracle behavior and typedTypes observations.
+Complete canonical mutation histories and the cached-driver bridge remain open.
+H6 remains strongest combined. H23 remains queued. Full-pipeline, resource,
+practical-width, Haskell/solver, phase-4 and convergence gaps remain.
+The full goal is ACTIVE and incomplete. This record precedes the authorized push.
+
+
 ## Partial rendering: agreement and finite transport
 
 Updated: 2026-10-24. Proof: `29776e8b6fcff0fecc34061775933646da576a70`.
